@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="sdkTemplates" name="%sdk.templates.name" schema="schema/sdkTemplates.exsd"/>
-   <extension-point id="portletFrameworkWizardProviders" name="%portlet.plugin.framework.wizard.providers.name" schema="schema/portletFrameworkWizardProviders.exsd"/>
+   <extension-point id="portletFrameworks" name="%portlet.plugin.frameworks.name" schema="schema/portletFrameworks.exsd"/>
 
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">
@@ -423,9 +422,12 @@
    <extension
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
-            class="com.liferay.ide.project.core.LiferayRuntimeProjectProvider"
+            class="com.liferay.ide.project.core.PluginsSDKProjectProvider"
+            default="true"
+            displayName="Ant (liferay-plugins-sdk)"
             id="com.liferay.ide.project.core.runtimeProjectProvider"
-            priority="normal">
+            priority="normal"
+            shortName="ant">
       </liferayProjectProvider>
    </extension>
    <extension

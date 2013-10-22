@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <wizard>
+        <id>NewLiferayPluginProjectWizard</id>
+        <element-type>com.liferay.ide.project.core.model.NewLiferayPluginProjectOp</element-type>
+        <label>New Liferay Plugin Project</label>
+        <page>
+            <id>LiferayPluginProjectWizardPage</id>
+            <label>Liferay Plugin Project</label>
+            <content>
+                <property-editor>ProjectName</property-editor>
+                <property-editor>DisplayName</property-editor>
+                <spacer></spacer>
+                <property-editor>UseDefaultLocation</property-editor>
+                <property-editor>Location</property-editor>
+                <separator></separator>
+                <property-editor>
+                    <property>ProjectProvider</property>
+                    <action>
+                        <id>UseSdkLocation</id>
+                        <label>Use Eclipse workspace</label>
+                        <type>TOGGLE</type>
+                        <tooltip>Use Eclipse workspace as base for project location.</tooltip>
+                        <image>workspace_obj_16x16.gif</image>
+                    </action>
+                    <action-handler>
+                        <action>UseSdkLocation</action>
+                        <id>UseSdkLocationHandler</id>
+                        <impl>UseSdkLocationAction</impl>
+                    </action-handler>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                </property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'ant' }</visible-when>
+                    <property>PluginsSDKName</property>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <action>
+                        <id>ConfigureSDKs</id>
+                        <label>Configure SDKs...</label>
+                        <image>configure_16x16.gif</image>
+                    </action>
+                    <action-handler>
+                        <action>ConfigureSDKs</action>
+                        <id>ConfigureSDKsHandler</id>
+                        <impl>ConfigureSDKsAction</impl>
+                    </action-handler>
+                </property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'ant' }</visible-when>
+                    <property>RuntimeName</property>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <label>Liferay runtime</label>
+                    <action>
+                        <id>NewLiferayRuntime</id>
+                        <label>New Liferay runtime...</label>
+                        <image>server_new.png</image>
+                    </action>
+                    <action-handler>
+                        <action>NewLiferayRuntime</action>
+                        <id>NewLiferayRuntimeHandler</id>
+                        <impl>NewLiferayRuntimeAction</impl>
+                    </action-handler>
+                </property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'maven' }</visible-when>
+                    <property>Version</property>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Editable</style>
+                </property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'maven' }</visible-when>
+                    <property>GroupId</property>
+                </property-editor>
+                <separator></separator>
+                <group>
+                    <indent>false</indent>
+                    <content>
+                        <property-editor>
+                            <hint>
+                                <name>prefer.vertical.radio.buttons</name>
+                                <value>true</value>
+                            </hint>
+                            <property>PluginType</property>
+                            <show-label>false</show-label>
+                            <hint>
+                                <name>aux.text.portlet</name>
+                                <value>Create a Liferay application using the portlet framework.</value>
+                            </hint>
+                            <hint>
+                                <name>aux.text.hook</name>
+                                <value>Override or extend Liferay's default behavior and functionality.</value>
+                            </hint>
+                            <hint>
+                                <name>aux.text.layouttpl</name>
+                                <value>Add new custom layouts for Liferay pages.</value>
+                            </hint>
+                            <hint>
+                                <name>aux.text.theme</name>
+                                <value>Build a custom look and feel for the portal.</value>
+                            </hint>
+                            <hint>
+                                <name>aux.text.ext</name>
+                                <value>Light-weight extension environment for Liferay as a plugin.</value>
+                            </hint>
+                        </property-editor>
+                    </content>
+                    <label>Select the plugin type</label>
+                </group>
+            </content>
+            <description>Create a new project configured as a Liferay plugin</description>
+            <height>500</height>
+        </page>
+        <description>Create a new project configured as a Liferay plugin</description>
+        <page>
+            <id>LiferayPortletPluginProjectWizardPage</id>
+            <label>Liferay Portlet Plugin Project</label>
+            <description>Choose from available portlet frameworks depending on which technology is most appropriate for this project.</description>
+            <visible-when>${ PluginType == 'portlet' }</visible-when>
+            <content>
+                <group>
+                    <label>Select portlet framework</label>
+                    <content>
+                        <property-editor>
+                            <property>PortletFramework</property>
+                            <show-label>false</show-label>
+                            <hint>
+                                <name>factory</name>
+                                <value>PortletFrameworkPropertyEditorPresentationFactory</value>
+                            </hint>
+                            <hint>
+                                <name>possible.values.aux.text.provider</name>
+                                <value>com.liferay.ide.project.ui.wizard.PortletFrameworkPropertyAuxTextProvider</value>
+                            </hint>
+                        </property-editor>
+                    </content>
+                </group>
+            </content>
+        </page>
+        <page>
+            <id>LiferayJSFPortletPluginProjectWizardPage</id>
+            <label>Liferay JSF Portlet Plugin Project</label>
+            <description>Choose from available portlet frameworks depending on which technology is most appropriate for this project.</description>
+            <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>
+            <content>
+                <group>
+                    <label>JSF Component Suite</label>
+                    <content>
+                        <property-editor>
+                            <property>PortletFrameworkAdvanced</property>
+                            <hint>
+                                <name>factory</name>
+                                <value>PortletFrameworkPropertyEditorPresentationFactory</value>
+                            </hint>
+                            <hint>
+                                <name>possible.values.aux.text.provider</name>
+                                <value>com.liferay.ide.project.ui.wizard.PortletFrameworkPropertyAuxTextProvider</value>
+                            </hint>
+                            <show-label>false</show-label>
+                        </property-editor>
+                    </content>
+                </group>
+            </content>
+        </page>
+        <page>
+            <id>LiferayThemePluginProjectWizardPage</id>
+            <label>Liferay Theme Plugin Project</label>
+            <description>Select options for creating new theme project.</description>
+            <visible-when>${ PluginType == 'theme' }</visible-when>
+            <content>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>ThemeParent</property>
+                </property-editor>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>ThemeFramework</property>
+                </property-editor>
+            </content>
+        </page>
+        <image>NewLiferayPluginProjectWizard.png</image>
+    </wizard>
+    <import>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>com.liferay.ide.project.ui.action</package>
+        <package>com.liferay.ide.project.ui.wizard</package>
+    </import>
+</definition>

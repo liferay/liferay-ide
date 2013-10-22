@@ -84,7 +84,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction
 
                             Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( p );
 
-                            sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties );
+                            sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties, monitor );
 
                             p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
                         }

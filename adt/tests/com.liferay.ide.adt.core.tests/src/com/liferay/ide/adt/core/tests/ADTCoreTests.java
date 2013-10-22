@@ -54,7 +54,7 @@ public class ADTCoreTests extends BaseTests
 
         assertNotNull( status );
 
-        assertEquals( true, status.ok() );
+        assertEquals( Status.createOkStatus().message(), status.message() );
 
         final IProject newLiferayAndroidProject = project( op.getProjectName().content() );
 
@@ -121,11 +121,6 @@ public class ADTCoreTests extends BaseTests
         assertEquals(
             stripCarriageReturns( expectedProjectPropertiesContent ),
             stripCarriageReturns( projectPropertiesContent ) );
-    }
-
-    private String stripCarriageReturns( String value )
-    {
-        return value.replaceAll( "\r", "" );
     }
 
     private IEclipsePreferences getADTCorePrefs()

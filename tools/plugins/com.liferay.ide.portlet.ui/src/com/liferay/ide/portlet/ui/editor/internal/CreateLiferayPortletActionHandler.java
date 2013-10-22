@@ -24,7 +24,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
  * @author Kamesh Sampath
@@ -48,7 +48,7 @@ public class CreateLiferayPortletActionHandler extends SapphireActionHandler
         }
 
         NewPortletWizard newPortletWizard = new NewPortletWizard( currentProject );
-        WizardDialog wizardDialog = new WizardDialog( ((SwtPresentation)context).shell(), newPortletWizard );
+        WizardDialog wizardDialog = new WizardDialog( ( (SwtPresentation) context ).shell(), newPortletWizard );
         wizardDialog.create();
         wizardDialog.open();
 

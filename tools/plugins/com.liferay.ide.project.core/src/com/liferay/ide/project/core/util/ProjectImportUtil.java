@@ -20,7 +20,7 @@ package com.liferay.ide.project.core.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
-import com.liferay.ide.project.core.IPortletFrameworkWizardProvider;
+import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -130,48 +130,65 @@ public class ProjectImportUtil
             // Create Project
             if( pluginBinaryRecord.isHook() )
             {
-                projectPath = liferaySDK.createNewHookProject( displayName, displayName, npm );
-
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER );
+
+                projectPath =
+                    liferaySDK.createNewHookProject(
+                        displayName, displayName, true, sdkPluginProjectFolder.toOSString(),
+                        sdkPluginProjectFolder.toOSString(), npm );
+
                 webappRootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isPortlet() )
             {
-                IPortletFrameworkWizardProvider[] portletFrameworks = LiferayProjectCore.getPortletFrameworks();
+                final IPortletFramework[] portletFrameworks = LiferayProjectCore.getPortletFrameworks();
                 String portletFrameworkName = null;
 
                 for( int i = 0; i < portletFrameworks.length; i++ )
                 {
-                    IPortletFrameworkWizardProvider portletFramework = portletFrameworks[i];
+                    IPortletFramework portletFramework = portletFrameworks[i];
 
-                    if( portletFramework.isDefault() )
+                    if( portletFramework.isDefault() && ( !portletFramework.isAdvanced() ) )
                     {
                         portletFrameworkName = portletFramework.getShortName();
                         break;
                     }
                 }
+
+                sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER );
+
                 projectPath =
                     liferaySDK.createNewPortletProject(
-                        displayName, displayName, portletFrameworkName, appServerProperties, new NullProgressMonitor() );
-                sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER );
+                        displayName, displayName, portletFrameworkName, appServerProperties, true,
+                        sdkPluginProjectFolder.toOSString(), sdkPluginProjectFolder.toOSString(), npm );
+
                 webappRootFolder = IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isTheme() )
             {
-                projectPath = liferaySDK.createNewThemeProject( displayName, displayName, npm );
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER );
+                projectPath =
+                    liferaySDK.createNewThemeProject(
+                        displayName, displayName, true, sdkPluginProjectFolder.toOSString(),
+                        sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isLayoutTpl() )
             {
-                projectPath = liferaySDK.createNewLayoutTplProject( displayName, displayName, appServerProperties, npm );
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER );
+                projectPath =
+                    liferaySDK.createNewLayoutTplProject(
+                        displayName, displayName, appServerProperties, true, sdkPluginProjectFolder.toOSString(),
+                        sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isExt() )
             {
-                projectPath = liferaySDK.createNewExtProject( displayName, displayName, appServerProperties, npm );
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER );
+                projectPath =
+                    liferaySDK.createNewExtProject(
+                        displayName, displayName, appServerProperties, true, sdkPluginProjectFolder.toOSString(),
+                        sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER;
             }
 

@@ -42,7 +42,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaProject;
@@ -367,29 +366,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
             (LibraryInstallDelegate) this.model.getProperty( IPluginProjectDataModelProperties.LIFERAY_PLUGIN_LIBRARY_DELEGATE );
 
         libraryDelegate.execute( monitor );
-    }
-
-    protected void installThemeTemplate() throws CoreException
-    {
-        // get the template zip for portlets and extract into the project
-        SDK sdk = getSDK();
-        String themeName = this.masterModel.getStringProperty( THEME_NAME );
-        String displayName = this.masterModel.getStringProperty( DISPLAY_NAME );
-        IPath newThemePath = sdk.createNewThemeProject( themeName, displayName, new NullProgressMonitor() );
-
-        processNewFiles( newThemePath.append( themeName + ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) );
-
-        // cleanup portlet files
-        newThemePath.toFile().delete();
-
-        try
-        {
-            this.project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        }
-        catch( Exception e )
-        {
-            LiferayProjectCore.logError( e );
-        }
     }
 
     protected boolean isProjectInSDK()

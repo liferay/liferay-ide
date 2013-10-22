@@ -22,7 +22,7 @@ import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
@@ -38,9 +38,10 @@ public class AddPortletActionHandler extends SapphireActionHandler
     protected Object run( Presentation context )
     {
         NewPortletWizard newPortletWizard = new NewPortletWizard();
-        WizardDialog wizardDialog = new WizardDialog( ((SwtPresentation)context).shell(), newPortletWizard );
+        WizardDialog wizardDialog = new WizardDialog( ( (SwtPresentation) context ).shell(), newPortletWizard );
         wizardDialog.create();
         wizardDialog.open();
+
         return null;
     }
 }

@@ -136,7 +136,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
 
         Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
 
-        IStatus status = sdk.directDeploy( project, null, true, appServerProperties );
+        IStatus status = sdk.directDeploy( project, null, true, appServerProperties, monitor );
 
         assertStatus( status );
 

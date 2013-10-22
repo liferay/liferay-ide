@@ -69,9 +69,9 @@ public class SDK
         return new InstanceScope().getNode( SDKCorePlugin.PREFERENCE_ID );
     }
 
-    protected boolean contributed;
-
     // private String runtime;
+
+    protected boolean contributed;
 
     protected boolean defaultSDK;
 
@@ -121,9 +121,9 @@ public class SDK
 
     public IStatus buildLanguage(
         IProject project, IFile langFile, Map<String, String> overrideProperties,
-        Map<String, String> appServerProperties )
+        Map<String, String> appServerProperties, IProgressMonitor monitor )
     {
-        SDKHelper antHelper = new SDKHelper( this );
+        SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
@@ -143,9 +143,11 @@ public class SDK
             properties.put( ISDKConstants.PROPERTY_LANG_DIR, langDirLocation );
             properties.put( ISDKConstants.PROPERTY_LANG_FILE, langFileName );
 
-            antHelper.runTarget(
-                project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(),
-                ISDKConstants.TARGET_BUILD_LANG_CMD, properties, true );
+            final IPath buildFile = project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation();
+
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, ISDKConstants.TARGET_BUILD_LANG_CMD, properties, true, workingDir );
         }
         catch( Exception e )
         {
@@ -177,9 +179,10 @@ public class SDK
             properties.put( ISDKConstants.PROPERTY_SERVICE_FILE, serviceXmlFile.getRawLocation().toOSString() );
             properties.put( ISDKConstants.PROPERTY_SERVICE_INPUT_FILE, serviceFile );
 
-            antHelper.runTarget(
-                project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(),
-                ISDKConstants.TARGET_BUILD_SERVICE, properties, true );
+            final IPath buildFile = project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation();
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, ISDKConstants.TARGET_BUILD_SERVICE, properties, true, workingDir );
         }
         catch( Exception e )
         {
@@ -211,9 +214,10 @@ public class SDK
             properties.put( ISDKConstants.PROPERTY_SERVICE_FILE, serviceXmlFile.getRawLocation().toOSString() );
             properties.put( ISDKConstants.PROPERTY_SERVICE_INPUT_FILE, serviceFile );
 
-            antHelper.runTarget(
-                project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(), ISDKConstants.TARGET_BUILD_WSDD,
-                properties, true );
+            final IPath buildFile = project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation();
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, ISDKConstants.TARGET_BUILD_WSDD, properties, true, workingDir );
         }
         catch( Exception e )
         {
@@ -223,7 +227,9 @@ public class SDK
         return Status.OK_STATUS;
     }
 
-    public IStatus cleanAppServer( IProject project, IPath bundleZipLocation, String appServerDir, Map<String, String> appServerProperties )
+    public IStatus cleanAppServer(
+        IProject project, IPath bundleZipLocation, String appServerDir, Map<String, String> appServerProperties,
+        IProgressMonitor monitor )
     {
         try
         {
@@ -236,7 +242,7 @@ public class SDK
             properties.put( ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation.toOSString() );
             properties.put( ISDKConstants.PROPERTY_EXT_WORK_DIR, workPath.toOSString() );
 
-            IStatus status = runTarget( project, properties, "clean-app-server", true ); //$NON-NLS-1$
+            IStatus status = runTarget( project, properties, "clean-app-server", true, monitor ); //$NON-NLS-1$
 
             if( !status.isOK() )
             {
@@ -267,9 +273,10 @@ public class SDK
                 properties.putAll( overrideProperties );
             }
 
-            antHelper.runTarget(
-                project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(), ISDKConstants.TARGET_COMPILE,
-                properties, true );
+            final IPath buildFile = project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation();
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, ISDKConstants.TARGET_COMPILE, properties, true, workingDir );
         }
         catch( Exception e )
         {
@@ -279,8 +286,20 @@ public class SDK
         return Status.OK_STATUS;
     }
 
+    public SDK copy()
+    {
+        SDK copy = new SDK( this.getLocation() );
+
+        copy.setContributed( isContributed() );
+        copy.setDefault( isDefault() );
+        copy.setName( getName() );
+        copy.setVersion( getVersion() );
+
+        return copy;
+    }
+
     public IPath createNewExtProject( String extName, String extDisplayName, Map<String, String> appServerProperties,
-        IProgressMonitor monitor )
+        boolean separateJRE, String workingDir, String baseDir, IProgressMonitor monitor )
     {
         try
         {
@@ -306,8 +325,13 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_EXT_PARENT_DIR, tempPath.toOSString() );
 
+            if( baseDir != null )
+            {
+                properties.put( "plugin.type.dir", baseDir ); //$NON-NLS-1$
+            }
+
             antHelper.runTarget( getLocation().append( ISDKConstants.EXT_PLUGIN_ANT_BUILD ),
-                ISDKConstants.TARGET_CREATE, properties, true );
+                ISDKConstants.TARGET_CREATE, properties, separateJRE, workingDir );
 
             return tempPath;
         }
@@ -319,7 +343,9 @@ public class SDK
         return null;
     }
 
-    public IPath createNewHookProject( String hookName, String hookDisplayName, IProgressMonitor monitor )
+    public IPath createNewHookProject(
+        String hookName, String hookDisplayName, boolean separateJRE, String workingDir, String baseDir,
+        IProgressMonitor monitor )
     {
         SDKHelper antHelper = new SDKHelper( this, monitor );
 
@@ -336,8 +362,14 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_HOOK_PARENT_DIR, newHookPath.toOSString() );
 
-            antHelper.runTarget(
-                getLocation().append( ISDKConstants.HOOK_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE, properties, true );
+            final IPath buildLocation = getLocation().append( ISDKConstants.HOOK_PLUGIN_ANT_BUILD );
+
+            if( baseDir != null )
+            {
+                properties.put( "plugin.type.dir", baseDir ); //$NON-NLS-1$
+            }
+
+            antHelper.runTarget( buildLocation, ISDKConstants.TARGET_CREATE, properties, separateJRE, workingDir );
 
             return newHookPath;
         }
@@ -350,7 +382,7 @@ public class SDK
     }
 
     public IPath createNewLayoutTplProject( String layoutTplName, String layoutTplDisplayName,
-        Map<String, String> appServerProperties, IProgressMonitor monitor )
+        Map<String, String> appServerProperties, boolean separateJRE, String workingDir, String baseDir, IProgressMonitor monitor )
     {
         SDKHelper antHelper = new SDKHelper( this, monitor );
 
@@ -372,9 +404,14 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_LAYOUTTPL_PARENT_DIR, newLayoutTplPath.toOSString() );
 
+            if( baseDir != null )
+            {
+                properties.put( "plugin.type.dir", baseDir ); //$NON-NLS-1$
+            }
+
             antHelper.runTarget(
                 getLocation().append( ISDKConstants.LAYOUTTPL_PLUGIN_ANT_BUILD ), ISDKConstants.TARGET_CREATE,
-                properties, true );
+                properties, separateJRE, workingDir );
 
             return newLayoutTplPath;
         }
@@ -387,7 +424,7 @@ public class SDK
     }
 
     public IPath createNewPortletProject( String portletName, String portletDisplayName, String portletFramework,
-        Map<String, String> appServerProperties, IProgressMonitor monitor )
+        Map<String, String> appServerProperties,  boolean separateJRE, String workingDir, String baseDir, IProgressMonitor monitor )
     {
         SDKHelper antHelper = new SDKHelper( this, monitor );
 
@@ -408,8 +445,13 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_PORTLET_PARENT_DIR, newPortletPath.toOSString() );
 
+            if( baseDir != null )
+            {
+                properties.put( "plugin.type.dir", baseDir ); //$NON-NLS-1$
+            }
+
             antHelper.runTarget( getLocation().append( ISDKConstants.PORTLET_PLUGIN_ANT_BUILD ),
-                ISDKConstants.TARGET_CREATE, properties, true );
+                ISDKConstants.TARGET_CREATE, properties, separateJRE, workingDir );
 
             return newPortletPath;
         }
@@ -421,7 +463,9 @@ public class SDK
         return null;
     }
 
-    public IPath createNewThemeProject( String themeName, String themeDisplayName, IProgressMonitor monitor )
+    public IPath createNewThemeProject(
+        String themeName, String themeDisplayName, boolean separateJRE, String workingDir, String baseDir,
+        IProgressMonitor monitor )
     {
         SDKHelper antHelper = new SDKHelper( this, monitor );
 
@@ -438,8 +482,13 @@ public class SDK
 
             properties.put( ISDKConstants.PROPERTY_THEME_PARENT_DIR, tempPath.toOSString() );
 
+            if( baseDir != null )
+            {
+                properties.put( "plugin.type.dir", baseDir ); //$NON-NLS-1$
+            }
+
             antHelper.runTarget( getLocation().append( ISDKConstants.THEME_PLUGIN_ANT_BUILD ),
-                ISDKConstants.TARGET_CREATE, properties, true );
+                ISDKConstants.TARGET_CREATE, properties, separateJRE, workingDir );
 
             return tempPath;
         }
@@ -451,26 +500,22 @@ public class SDK
         return null;
     }
 
-    public SDK copy()
-    {
-        SDK copy = new SDK( this.getLocation() );
-
-        copy.setContributed( isContributed() );
-        copy.setDefault( isDefault() );
-        copy.setName( getName() );
-        copy.setVersion( getVersion() );
-
-        return copy;
-    }
+//    This code is not used since IDE-810 and it may cause the new identical sdk checking state covers the old one's.
+//    @Override
+//    public boolean equals( Object obj )
+//    {
+//        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
+//            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
+//    }
 
     public IStatus directDeploy(
         IProject project, Map<String, String> overrideProperties, boolean separateJRE,
-        Map<String, String> appServerProperties )
+        Map<String, String> appServerProperties, IProgressMonitor monitor )
     {
 
         try
         {
-            SDKHelper antHelper = new SDKHelper( this );
+            SDKHelper antHelper = new SDKHelper( this, monitor );
 
             persistAppServerProperties( appServerProperties );
 
@@ -481,9 +526,10 @@ public class SDK
                 properties.putAll( overrideProperties );
             }
 
-            antHelper.runTarget(
-                project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(),
-                ISDKConstants.TARGET_DIRECT_DEPLOY, properties, separateJRE );
+            final IPath buildFile = project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation();
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, ISDKConstants.TARGET_DIRECT_DEPLOY, properties, separateJRE, workingDir );
         }
         catch( Exception e )
         {
@@ -493,14 +539,6 @@ public class SDK
         return Status.OK_STATUS;
 
     }
-
-//    This code is not used since IDE-810 and it may cause the new identical sdk checking state covers the old one's.
-//    @Override
-//    public boolean equals( Object obj )
-//    {
-//        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
-//            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
-//    }
 
     public IPath[] getAntLibraries()
     {
@@ -512,6 +550,11 @@ public class SDK
         }
 
         return antLibs.toArray( new IPath[0] );
+    }
+
+    private String getDefaultWorkingDir( final IPath buildFile )
+    {
+        return buildFile.removeLastSegments( 1 ).toOSString();
     }
 
     public IPath getLocation()
@@ -650,9 +693,10 @@ public class SDK
                                 IFile buildXmlFile,
                                 String command,
                                 Map<String, String> overrideProperties,
-                                Map<String, String> appServerProperties )
+                                Map<String, String> appServerProperties,
+                                IProgressMonitor monitor )
     {
-        final SDKHelper antHelper = new SDKHelper( this );
+        final SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
@@ -665,7 +709,10 @@ public class SDK
                 properties.putAll( overrideProperties );
             }
 
-            antHelper.runTarget( buildXmlFile.getRawLocation(), command, properties, true );
+            final IPath buildFile = buildXmlFile.getRawLocation();
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, command, properties, true, workingDir );
         }
         catch( Exception e )
         {
@@ -675,14 +722,17 @@ public class SDK
         return Status.OK_STATUS;
     }
 
-    protected IStatus runTarget( IProject project, Map<String, String> properties, String target, boolean separateJRE )
+    protected IStatus runTarget(
+        IProject project, Map<String, String> properties, String target, boolean separateJRE, IProgressMonitor monitor )
     {
-        SDKHelper antHelper = new SDKHelper( this );
+        SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
-            antHelper.runTarget(
-                project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(), target, properties, separateJRE );
+            final IPath buildFile = project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation();
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, target, properties, separateJRE, workingDir );
         }
         catch( CoreException e )
         {
@@ -767,18 +817,18 @@ public class SDK
 
     public IStatus war(
         IProject project, Map<String, String> overrideProperties, boolean separateJRE,
-        Map<String, String> appServerProperties )
+        Map<String, String> appServerProperties, IProgressMonitor monitor )
     {
-        return war( project, overrideProperties, separateJRE, appServerProperties, null );
+        return war( project, overrideProperties, separateJRE, appServerProperties, null, monitor );
     }
 
     public IStatus war(
         IProject project, Map<String, String> overrideProperties, boolean separateJRE,
-        Map<String, String> appServerProperties, String[] vmargs )
+        Map<String, String> appServerProperties, String[] vmargs, IProgressMonitor monitor )
     {
         try
         {
-            SDKHelper antHelper = new SDKHelper( this );
+            SDKHelper antHelper = new SDKHelper( this, monitor );
             antHelper.setVMArgs( vmargs );
 
             persistAppServerProperties( appServerProperties );
@@ -790,9 +840,10 @@ public class SDK
                 properties.putAll( overrideProperties );
             }
 
-            antHelper.runTarget(
-                project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation(), ISDKConstants.TARGET_WAR,
-                properties, separateJRE );
+            final IPath buildFile = project.getFile( ISDKConstants.PROJECT_BUILD_XML ).getRawLocation();
+            final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.runTarget( buildFile, ISDKConstants.TARGET_WAR, properties, separateJRE, workingDir );
         }
         catch( Exception e )
         {

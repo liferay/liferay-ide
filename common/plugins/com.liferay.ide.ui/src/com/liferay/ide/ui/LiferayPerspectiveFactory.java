@@ -53,7 +53,7 @@ public class LiferayPerspectiveFactory implements IPerspectiveFactory
     public static final String ID_NEW_LAYOUT_TEMPLATE_WIZARD =
         "com.liferay.ide.eclipse.layouttpl.ui.wizard.layouttemplate"; //$NON-NLS-1$
 
-    public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.eclipse.project.ui.newProjectWizard"; //$NON-NLS-1$
+    public static final String ID_NEW_PLUGIN_PROJECT_WIZARD = "com.liferay.ide.project.ui.newPluginProjectWizard"; //$NON-NLS-1$
 
     public static final String ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE =
         "com.liferay.ide.eclipse.project.ui.newProjectWizardExistingSource"; //$NON-NLS-1$

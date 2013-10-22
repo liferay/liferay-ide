@@ -194,14 +194,6 @@
       </page>
    </extension>
    <extension
-       point="com.liferay.ide.project.ui.portletFrameworkDelegates">
-     <portletFrameworkDelegate
-          class="com.liferay.ide.portlet.ui.MVCPortletFrameworkDelegate"
-          icon="icons/e16/portlet.png"
-          frameworkId="com.liferay.ide.project.core.framework.mvc">
-     </portletFrameworkDelegate>
-   </extension>
-   <extension
          point="org.eclipse.wst.xml.core.catalogContributions">
       <catalogContribution></catalogContribution>
    </extension>

@@ -53,7 +53,8 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
 
     public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
     {
-        return sdk.buildLanguage( getProject(), langFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
+        return sdk.buildLanguage(
+            getProject(), langFile, null, ServerUtil.configureAppServerProperties( getProject() ), monitor );
     }
 
     public IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException

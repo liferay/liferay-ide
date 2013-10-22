@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.layouttpl.core;bundle-version="2.0.0",
  com.liferay.ide.theme.core;bundle-version="2.0.0",
  org.eclipse.m2e.maven.runtime,
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ org.eclipse.m2e.archetype.common
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,

@@ -25,14 +25,21 @@ import org.eclipse.core.runtime.IConfigurationElement;
  */
 public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjectProvider>
 {
-
+    private static final String ATTRIBUTE_DEFAULT = "default"; //$NON-NLS-1$
+    private static final String ATTRIBUTE_DISPLAYNAME = "displayName"; //$NON-NLS-1$
     private static final String ATTRIBUTE_PRIORITY = "priority"; //$NON-NLS-1$
+    private static final String ATTRIBUTE_SHORTNAME = "shortName"; //$NON-NLS-1$
     private static final String EXTENSION = "liferayProjectProviders"; //$NON-NLS-1$
     private static final String PROVIDER_ELEMENT = "liferayProjectProvider"; //$NON-NLS-1$
 
     public LiferayProjectProviderReader()
     {
         super( LiferayCore.PLUGIN_ID, EXTENSION, PROVIDER_ELEMENT );
+    }
+
+    public ILiferayProjectProvider[] getProviders()
+    {
+        return getExtensions().toArray( new ILiferayProjectProvider[0] );
     }
 
     public ILiferayProjectProvider[] getProviders( Class<?> type )
@@ -53,7 +60,16 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
     @Override
     protected ILiferayProjectProvider initElement( IConfigurationElement configElement, ILiferayProjectProvider provider )
     {
+        final String shortName = configElement.getAttribute( ATTRIBUTE_SHORTNAME );
+        final String displayName = configElement.getAttribute( ATTRIBUTE_DISPLAYNAME );
         final String priority = configElement.getAttribute( ATTRIBUTE_PRIORITY );
+        final boolean isDefault = Boolean.parseBoolean( configElement.getAttribute( ATTRIBUTE_DEFAULT ) );
+
+        final AbstractLiferayProjectProvider projectProvider = (AbstractLiferayProjectProvider) provider;
+
+        projectProvider.setShortName( shortName );
+        projectProvider.setDisplayName( displayName );
+
         int priorityValue = 10;
 
         if( "lowest".equals( priority ) ) //$NON-NLS-1$
@@ -77,7 +93,8 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
             priorityValue = 5;
         }
 
-        ( (AbstractLiferayProjectProvider) provider ).setPriority( priorityValue );
+        projectProvider.setPriority( priorityValue );
+        projectProvider.setDefault( isDefault );
 
         return provider;
     }

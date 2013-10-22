@@ -17,13 +17,15 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.ISDKTemplate;
+import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -92,24 +94,6 @@ public class ProjectUtil
 {
 
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
-
-    //IDE-815 no need for this method anymore
-//    public static void addTldToWebXml( final IProject project, String uriValue, String taglibLocation )
-//    {
-//        WebXMLDescriptorHelper webXmlHelper = new WebXMLDescriptorHelper( project );
-//        TagLibRefType tagLibRefType = JspFactory.eINSTANCE.createTagLibRefType();
-//        tagLibRefType.setTaglibURI( uriValue );
-//        tagLibRefType.setTaglibLocation( taglibLocation );
-//
-//        try
-//        {
-//            webXmlHelper.addTagLib( tagLibRefType );
-//        }
-//        catch( Exception e )
-//        {
-//            LiferayProjectCore.logError( "Failed to add taglib reference " + uriValue + ":" + taglibLocation, e ); //$NON-NLS-1$ //$NON-NLS-2$
-//        }
-//    }
 
     public static boolean collectProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -312,7 +296,9 @@ public class ProjectUtil
 
         FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, sdkLocation, record );
+        String pluginType = guessPluginType( fpwc );
+
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, pluginType, sdkLocation, record );
 
         fpwc.commitChanges( monitor );
 
@@ -340,15 +326,46 @@ public class ProjectUtil
         return project;
     }
 
-    public static IProject createNewSDKProject(
-        ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
+    public static IProject createNewSDKProject( ProjectRecord projectRecord,
+                                                IRuntime runtime,
+                                                String sdkLocation,
+                                                NewLiferayPluginProjectOp op,
+                                                IProgressMonitor monitor )
         throws CoreException
     {
-        IDataModel newProjectDataModel =
+        final IDataModel newProjectDataModel =
             DataModelFactory.createDataModel( new PluginFacetProjectCreationDataModelProvider() );
 
         // we are importing so set flag to not create anything
         newProjectDataModel.setBooleanProperty( IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false );
+
+        final IDataModel nestedModel = newProjectDataModel.getNestedModel( IPluginProjectDataModelProperties.NESTED_PROJECT_DM );
+
+        if( op != null )
+        {
+            if( op.getUseDefaultLocation().content( true ) && !op.getUseSdkLocation().content( true ) )
+            {
+                // using Eclipse workspace location
+                nestedModel.setBooleanProperty( IPluginProjectDataModelProperties.USE_DEFAULT_LOCATION, true );
+                newProjectDataModel.setBooleanProperty(
+                    IPluginProjectDataModelProperties.LIFERAY_USE_SDK_LOCATION, false );
+                newProjectDataModel.setBooleanProperty(
+                    IPluginProjectDataModelProperties.LIFERAY_USE_WORKSPACE_LOCATION, true );
+            }
+            else
+            {
+                nestedModel.setBooleanProperty( IPluginProjectDataModelProperties.USE_DEFAULT_LOCATION, false );
+                nestedModel.setStringProperty(
+                    IPluginProjectDataModelProperties.USER_DEFINED_LOCATION,
+                    op.getLocation().content( true ).toOSString() );
+
+                if( !op.getUseDefaultLocation().content( true ) )
+                {
+                    newProjectDataModel.setBooleanProperty(
+                        IPluginProjectDataModelProperties.LIFERAY_USE_CUSTOM_LOCATION, true );
+                }
+            }
+        }
 
         String sdkName = SDKPluginFacetUtil.getSDKName( sdkLocation );
         // if the get sdk from the location
@@ -398,16 +415,49 @@ public class ProjectUtil
             newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true );
         }
 
-        IFacetedProjectWorkingCopy fpjwc =
+        IFacetedProjectWorkingCopy fpwc =
             (IFacetedProjectWorkingCopy) newProjectDataModel.getProperty( IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY );
-        fpjwc.setProjectName( projectRecord.getProjectName() );
-        fpjwc.setProjectLocation( projectRecord.getProjectLocation() );
+        fpwc.setProjectName( projectRecord.getProjectName() );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpjwc, runtime, sdkLocation, projectRecord );
+        final IPath projectLocation = projectRecord.getProjectLocation();
 
-        fpjwc.commitChanges( monitor );
+        final String projectDirName = projectLocation.lastSegment();
 
-        return fpjwc.getProject();
+        if ( ! CoreUtil.getWorkspaceRoot().getLocation().append(projectDirName).equals( projectLocation ) )
+        {
+            fpwc.setProjectLocation( projectRecord.getProjectLocation() );
+        }
+
+        String pluginType = null;
+
+        if( op != null )
+        {
+            pluginType = op.getPluginType().content().name();
+
+            if( PluginType.theme.name().equals( pluginType ) )
+            {
+                newProjectDataModel.setProperty(
+                    IPluginProjectDataModelProperties.THEME_PARENT, op.getThemeParent().content( true ) );
+                newProjectDataModel.setProperty(
+                    IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK, op.getThemeFramework().content( true ) );
+            }
+        }
+        else
+        {
+            pluginType = guessPluginType( fpwc );
+        }
+
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, pluginType, sdkLocation, projectRecord );
+
+        if( op != null && PluginType.portlet.name().equals( pluginType ) )
+        {
+            IPortletFramework portletFramework = op.getPortletFramework().content( true );
+            portletFramework.configureNewProject( newProjectDataModel, fpwc );
+        }
+
+        fpwc.commitChanges( monitor );
+
+        return fpwc.getProject();
     }
 
     public static IFile findServiceJarForContext( String context )
@@ -838,6 +888,47 @@ public class ProjectUtil
         return sourceFolders.toArray( new IFolder[sourceFolders.size()] );
     }
 
+    public static String guessPluginType( IFacetedProjectWorkingCopy fpwc )
+    {
+        String pluginType = null;
+
+        String projName = fpwc.getProjectName();
+        IPath location = fpwc.getProjectLocation();
+        String directoryName = StringPool.EMPTY;
+
+        if( location != null )
+        {
+            directoryName = location.lastSegment();
+        }
+
+        if( projName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
+            directoryName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            pluginType = "portlet";
+        }
+        else if( projName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
+            directoryName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            pluginType = "hook";
+        }
+        else if( projName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
+            directoryName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            pluginType = "ext";
+        }
+        else if( projName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ||
+            directoryName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            pluginType = "layouttpl";
+        }
+        else if( projName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
+            directoryName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            pluginType = "theme";
+        }
+        return pluginType;
+    }
+
     public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet )
     {
         boolean retval = false;
@@ -898,8 +989,20 @@ public class ProjectUtil
         return retval;
     }
 
-    public static IProject importProject(
-        ProjectRecord projectRecord, IRuntime runtime, String sdkLocation, IProgressMonitor monitor )
+    public static IProject importProject( ProjectRecord projectRecord,
+                                          IRuntime runtime,
+                                          String sdkLocation,
+                                          IProgressMonitor monitor )
+        throws CoreException
+    {
+        return importProject( projectRecord, runtime, sdkLocation, null, monitor );
+    }
+
+    public static IProject importProject( ProjectRecord projectRecord,
+                                          IRuntime runtime,
+                                          String sdkLocation,
+                                          NewLiferayPluginProjectOp op,
+                                          IProgressMonitor monitor )
         throws CoreException
     {
         IProject project = null;
@@ -919,7 +1022,7 @@ public class ProjectUtil
         {
             try
             {
-                project = createNewSDKProject( projectRecord, runtime, sdkLocation, monitor );
+                project = createNewSDKProject( projectRecord, runtime, sdkLocation, op, monitor );
             }
             catch( CoreException e )
             {
@@ -968,13 +1071,12 @@ public class ProjectUtil
 
     public static boolean isLiferayFacet( IProjectFacet projectFacet )
     {
-        return LiferayProjectCore.getSDKTemplate( projectFacet ) != null;
+        return projectFacet != null && projectFacet.getId().startsWith( "liferay." );
     }
 
     public static boolean isLiferayFacet( IProjectFacetVersion projectFacetVersion )
     {
-        return projectFacetVersion != null &&
-            LiferayProjectCore.getSDKTemplate( projectFacetVersion.getProjectFacet() ) != null;
+        return projectFacetVersion != null && isLiferayFacet( projectFacetVersion.getProjectFacet() );
     }
 
     public static boolean isLiferayFacetedProject( IProject project )
@@ -995,9 +1097,8 @@ public class ProjectUtil
                 for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
                 {
                     IProjectFacet projectFacet = facet.getProjectFacet();
-                    ISDKTemplate sdkTemplate = LiferayProjectCore.getSDKTemplate( projectFacet );
 
-                    if( sdkTemplate != null )
+                    if( isLiferayFacet( projectFacet ) )
                     {
                         retval = true;
                         break;

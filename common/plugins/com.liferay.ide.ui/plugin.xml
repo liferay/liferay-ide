@@ -50,7 +50,7 @@
                id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.project.ui.newProjectWizard">
+               id="com.liferay.ide.eclipse.project.ui.newPluginProjectWizard">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
@@ -71,7 +71,7 @@
                id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.project.ui.newProjectWizard">
+               id="com.liferay.ide.eclipse.project.ui.newPluginProjectWizard">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">

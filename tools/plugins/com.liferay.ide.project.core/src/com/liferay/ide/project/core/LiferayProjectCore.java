@@ -28,7 +28,6 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -39,19 +38,17 @@ import org.osgi.framework.BundleContext;
 public class LiferayProjectCore extends LiferayCore
 {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.project.core"; //$NON-NLS-1$
-
-    public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
-
     // The shared instance
     private static LiferayProjectCore plugin;
 
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.project.core"; //$NON-NLS-1$
+
     private static PluginPackageResourceListener pluginPackageResourceListener;
 
-    private static IPortletFrameworkWizardProvider[] portletFrameworks;
+    private static IPortletFramework[] portletFrameworks;
 
-    private static ISDKTemplate[] sdkTemplates = null;
+    public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
 
     /**
      * Returns the shared instance
@@ -63,11 +60,11 @@ public class LiferayProjectCore extends LiferayCore
         return plugin;
     }
 
-    public static IPortletFrameworkWizardProvider getPortletFramework( String id )
+    public static IPortletFramework getPortletFramework( String name )
     {
-        for( IPortletFrameworkWizardProvider framework : getPortletFrameworks() )
+        for( IPortletFramework framework : getPortletFrameworks() )
         {
-            if( framework.getId().equals( id ) )
+            if( framework.getShortName().equals( name ) )
             {
                 return framework;
             }
@@ -76,39 +73,40 @@ public class LiferayProjectCore extends LiferayCore
         return null;
     }
 
-    public static IPortletFrameworkWizardProvider[] getPortletFrameworks()
-    {
-        return getPortletFrameworks( false );
-    }
-
-    public static IPortletFrameworkWizardProvider[] getPortletFrameworks( boolean reinitialize )
+    public static synchronized IPortletFramework[] getPortletFrameworks()
     {
         if( portletFrameworks == null )
         {
             IConfigurationElement[] elements =
-                Platform.getExtensionRegistry().getConfigurationElementsFor(
-                    IPortletFrameworkWizardProvider.EXTENSION_ID );
+                Platform.getExtensionRegistry().getConfigurationElementsFor( IPortletFramework.EXTENSION_ID );
 
             if( !CoreUtil.isNullOrEmpty( elements ) )
             {
-                List<IPortletFrameworkWizardProvider> frameworks = new ArrayList<IPortletFrameworkWizardProvider>();
+                List<IPortletFramework> frameworks = new ArrayList<IPortletFramework>();
 
                 for( IConfigurationElement element : elements )
                 {
-                    String id = element.getAttribute( IPortletFrameworkWizardProvider.ID );
-                    String shortName = element.getAttribute( IPortletFrameworkWizardProvider.SHORT_NAME );
-                    String displayName = element.getAttribute( IPortletFrameworkWizardProvider.DISPLAY_NAME );
-                    String description = element.getAttribute( IPortletFrameworkWizardProvider.DESCRIPTION );
+                    String id = element.getAttribute( IPortletFramework.ID );
+                    String shortName = element.getAttribute( IPortletFramework.SHORT_NAME );
+                    String displayName = element.getAttribute( IPortletFramework.DISPLAY_NAME );
+                    String description = element.getAttribute( IPortletFramework.DESCRIPTION );
                     String requiredSDKVersion =
-                        element.getAttribute( IPortletFrameworkWizardProvider.REQUIRED_SDK_VERSION );
+                        element.getAttribute( IPortletFramework.REQUIRED_SDK_VERSION );
+
                     boolean isDefault =
-                        Boolean.parseBoolean( element.getAttribute( IPortletFrameworkWizardProvider.DEFAULT ) );
+                        Boolean.parseBoolean( element.getAttribute( IPortletFramework.DEFAULT ) );
+
+                    boolean isAdvanced =
+                        Boolean.parseBoolean( element.getAttribute( IPortletFramework.ADVANCED ) );
+
+                    boolean isRequiresAdvanced =
+                        Boolean.parseBoolean( element.getAttribute( IPortletFramework.REQUIRES_ADVANCED ) );
 
                     URL helpUrl = null;
 
                     try
                     {
-                        helpUrl = new URL( element.getAttribute( IPortletFrameworkWizardProvider.HELP_URL ) );
+                        helpUrl = new URL( element.getAttribute( IPortletFramework.HELP_URL ) );
                     }
                     catch( Exception e1 )
                     {
@@ -116,8 +114,8 @@ public class LiferayProjectCore extends LiferayCore
 
                     try
                     {
-                        AbstractPortletFrameworkWizardProvider framework =
-                            (AbstractPortletFrameworkWizardProvider) element.createExecutableExtension( "class" ); //$NON-NLS-1$
+                        AbstractPortletFramework framework =
+                                (AbstractPortletFramework) element.createExecutableExtension( "class" ); //$NON-NLS-1$
                         framework.setId( id );
                         framework.setShortName( shortName );
                         framework.setDisplayName( displayName );
@@ -125,6 +123,8 @@ public class LiferayProjectCore extends LiferayCore
                         framework.setRequiredSDKVersion( requiredSDKVersion );
                         framework.setHelpUrl( helpUrl );
                         framework.setDefault( isDefault );
+                        framework.setAdvanced( isAdvanced );
+                        framework.setRequiresAdvanced( isRequiresAdvanced );
                         framework.setBundleId( element.getContributor().getName() );
 
                         frameworks.add( framework );
@@ -135,14 +135,14 @@ public class LiferayProjectCore extends LiferayCore
                     }
                 }
 
-                portletFrameworks = frameworks.toArray( new IPortletFrameworkWizardProvider[0] );
+                portletFrameworks = frameworks.toArray( new IPortletFramework[0] );
 
                 // sort the array so that the default template is first
                 Arrays.sort(
-                    portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFrameworkWizardProvider>()
+                    portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFramework>()
                     {
 
-                        public int compare( IPortletFrameworkWizardProvider o1, IPortletFrameworkWizardProvider o2 )
+                        public int compare( IPortletFramework o1, IPortletFramework o2 )
                         {
                             if( o1.isDefault() && ( !o2.isDefault() ) )
                             {
@@ -160,107 +160,7 @@ public class LiferayProjectCore extends LiferayCore
             }
         }
 
-        if( reinitialize )
-        {
-            for( IPortletFrameworkWizardProvider portletFramework : portletFrameworks )
-            {
-                portletFramework.reinitialize();
-            }
-        }
-
         return portletFrameworks;
-    }
-
-    public static ISDKTemplate getSDKTemplate( IProjectFacet projectFacet )
-    {
-        ISDKTemplate[] templates = getSDKTemplates();
-
-        if( templates != null )
-        {
-            for( ISDKTemplate tmpl : templates )
-            {
-                if( tmpl != null && tmpl.getFacet() != null && tmpl.getFacet().equals( projectFacet ) )
-                {
-                    return tmpl;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static ISDKTemplate getSDKTemplate( String type )
-    {
-        ISDKTemplate[] tmpls = getSDKTemplates();
-
-        if( tmpls != null && tmpls.length > 0 )
-        {
-            for( ISDKTemplate tmpl : tmpls )
-            {
-                if( tmpl != null && tmpl.getFacetId().equals( type ) )
-                {
-                    return tmpl;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static ISDKTemplate[] getSDKTemplates()
-    {
-        if( sdkTemplates == null )
-        {
-            IConfigurationElement[] elements =
-                Platform.getExtensionRegistry().getConfigurationElementsFor( ISDKTemplate.ID );
-
-            try
-            {
-                List<ISDKTemplate> templates = new ArrayList<ISDKTemplate>();
-
-                for( IConfigurationElement element : elements )
-                {
-                    final Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
-
-                    if( o instanceof AbstractSDKTemplate )
-                    {
-                        AbstractSDKTemplate template = (AbstractSDKTemplate) o;
-                        template.setFacetId( element.getAttribute( "facetId" ) ); //$NON-NLS-1$
-                        template.setShortName( element.getAttribute( "shortName" ) ); //$NON-NLS-1$
-                        template.setDisplayName( element.getAttribute( "displayName" ) ); //$NON-NLS-1$
-                        template.setFacetedProjectTemplateId( element.getAttribute( "facetedProjectTemplateId" ) ); //$NON-NLS-1$
-
-                        int menuIndex = Integer.MAX_VALUE;
-
-                        try
-                        {
-                            String intVal = element.getAttribute( "menuIndex" ); //$NON-NLS-1$
-
-                            if( intVal != null )
-                            {
-                                menuIndex = Integer.parseInt( intVal );
-                            }
-                        }
-                        catch( Exception e )
-                        {
-                            LiferayProjectCore.logError( "Error reading project definition.", e ); //$NON-NLS-1$
-                        }
-
-                        template.setMenuIndex( menuIndex );
-
-                        templates.add( template );
-                    }
-                }
-
-                sdkTemplates = templates.toArray( new ISDKTemplate[0] );
-            }
-            catch( Exception e )
-            {
-                logError( e );
-            }
-        }
-
-        return sdkTemplates;
     }
 
     public static void logError( String msg, Exception e )

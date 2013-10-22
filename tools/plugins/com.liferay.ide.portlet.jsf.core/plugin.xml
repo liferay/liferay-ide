@@ -2,17 +2,69 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
-      <portletFrameworkWizardProvider
-            class="com.liferay.ide.portlet.jsf.core.JSFPortletFrameworkWizardProvider"
+         point="com.liferay.ide.project.core.portletFrameworks">
+      <portletFramework
+            advanced="false"
+            class="com.liferay.ide.portlet.jsf.core.JSFPortletFramework"
             default="false"
             description="%jsf.portlet.framework.description"
             displayName="%jsf.portlet.framework.display.name"
             helpUrl="http://www.liferay.com/community/liferay-projects/liferay-faces/overview"
-            id="com.liferay.ide.project.core.template.jsf"
+            id="com.liferay.ide.project.core.framework.jsf"
+            requiredSDKVersion="6.1.0"
+            requiresAdvanced="true"
+            shortName="jsf-2.x">
+      </portletFramework>
+      <portletFramework
+            advanced="true"
+            class="com.liferay.ide.portlet.jsf.core.JSFPortletFramework"
+            default="true"
+            description="Standard UI components provided by the JSF runtime"
+            displayName="JSF standard"
+            id="com.liferay.ide.project.core.framework.jsf-standard"
             requiredSDKVersion="6.1.0"
             shortName="jsf">
-      </portletFrameworkWizardProvider>
+      </portletFramework>
+      <portletFramework
+            advanced="true"
+            class="com.liferay.ide.portlet.jsf.core.JSFPortletFramework"
+            default="false"
+            description="Components that utilize Liferay&apos;s Alloy UI technology based on YUI3"
+            displayName="Liferay Faces Alloy"
+            id="com.liferay.ide.project.core.framework.liferay-faces-alloy"
+            requiredSDKVersion="6.1.0"
+            shortName="liferay_faces_alloy">
+      </portletFramework>
+      <portletFramework
+            advanced="true"
+            class="com.liferay.ide.portlet.jsf.core.JSFPortletFramework"
+            default="false"
+            description="Components based in part on YUI and jQuery with automatic Ajax and Ajax Push support"
+            displayName="ICEfaces"
+            id="com.liferay.ide.project.core.framework.icefaces"
+            requiredSDKVersion="6.1.0"
+            shortName="icefaces">
+      </portletFramework>
+      <portletFramework
+            advanced="true"
+            class="com.liferay.ide.portlet.jsf.core.JSFPortletFramework"
+            default="false"
+            description="Lightweight, zero-configuration JSF UI framework built on jQuery"
+            displayName="PrimeFaces"
+            id="com.liferay.ide.project.core.framework.primefaces"
+            requiredSDKVersion="6.1.0"
+            shortName="primefaces">
+      </portletFramework>
+      <portletFramework
+            advanced="true"
+            class="com.liferay.ide.portlet.jsf.core.JSFPortletFramework"
+            default="false"
+            description="Next-generation JSF component framework by JBoss"
+            displayName="RichFaces"
+            id="com.liferay.ide.project.core.framework.richfaces"
+            requiredSDKVersion="6.1.0"
+            shortName="richfaces">
+      </portletFramework>
    </extension>
 
 </plugin>

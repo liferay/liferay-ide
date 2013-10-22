@@ -99,7 +99,8 @@ public class CleanAppServerJob extends SDKJob
             String appServerDir =
                 ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, portalTomcatRuntime );
 
-            IStatus status = getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, appServerProperties );
+            IStatus status =
+                getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, appServerProperties, monitor );
 
             assertStatus( status );
 

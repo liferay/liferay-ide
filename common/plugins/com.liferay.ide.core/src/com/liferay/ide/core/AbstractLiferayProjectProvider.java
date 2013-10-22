@@ -21,16 +21,34 @@ package com.liferay.ide.core;
 public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider
 {
     private Class<?>[] classTypes;
+    private String displayName;
+    private boolean isDefault;
     private int priority;
+    private String shortName;
 
     public AbstractLiferayProjectProvider( Class<?>[] types )
     {
         this.classTypes = types;
     }
 
+    public String getDisplayName()
+    {
+        return this.displayName;
+    }
+
     public int getPriority()
     {
         return this.priority;
+    }
+
+    public String getShortName()
+    {
+        return this.shortName;
+    }
+
+    public boolean isDefault()
+    {
+        return this.isDefault;
     }
 
     public boolean provides( Class<?> type )
@@ -49,8 +67,23 @@ public abstract class AbstractLiferayProjectProvider implements ILiferayProjectP
         return false;
     }
 
+    public void setDefault( boolean isDefault )
+    {
+        this.isDefault = isDefault;
+    }
+
+    public void setDisplayName( String displayName )
+    {
+        this.displayName = displayName;
+    }
+
     public void setPriority( int priority )
     {
         this.priority = priority;
+    }
+
+    public void setShortName( String shortName )
+    {
+        this.shortName = shortName;
     }
 }

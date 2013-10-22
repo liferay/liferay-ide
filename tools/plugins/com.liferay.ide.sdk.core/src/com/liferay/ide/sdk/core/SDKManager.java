@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -35,21 +36,11 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public final class SDKManager
 {
+    private static final byte EVENT_ADDED = 0;
+    private static final byte EVENT_CHANGED = 1;
+    private static final byte EVENT_REMOVED = 2;
 
     private static SDKManager instance;
-
-    public SDK getDefaultSDK()
-    {
-        for( SDK sdk : getSDKs() )
-        {
-            if( sdk.isDefault() )
-            {
-                return sdk;
-            }
-        }
-
-        return null;
-    }
 
     public static SDKManager getInstance()
     {
@@ -66,28 +57,12 @@ public final class SDKManager
         return ISDKConstants.LEAST_SUPPORTED_SDK_VERSION;
     }
 
-    public SDK getSDK( IPath sdkLocation )
-    {
-        for( SDK sdk : getSDKs() )
-        {
-            if( sdk.getLocation().equals( sdkLocation ) )
-            {
-                return sdk;
-            }
-        }
-
-        return null;
-    }
-
-    public void saveSDKs( SDK[] sdks )
-    {
-        setSDKs( sdks );
-    }
-
     private boolean initialized = false;
 
     // current list of available sdks
     private ArrayList<SDK> sdkList;
+
+    protected List<ISDKListener> sdkListeners = new ArrayList<ISDKListener>(3);
 
     private SDKManager()
     {
@@ -109,6 +84,96 @@ public final class SDKManager
         }
 
         saveSDKs();
+
+        fireSDKEvent( new SDK[] { sdk }, EVENT_ADDED );
+    }
+
+    public void addSDKListener( ISDKListener listener )
+    {
+        synchronized ( sdkListeners )
+        {
+            sdkListeners.add( listener );
+        }
+    }
+
+    public boolean containsSDK( SDK theSDK )
+    {
+        if( theSDK != null && getSDKs().length > 0 )
+        {
+            for( SDK sdk : getSDKs() )
+            {
+                if( theSDK.equals( sdk ) )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void fireSDKEvent( SDK[] sdks, byte event )
+    {
+        if( !sdkListeners.isEmpty() )
+        {
+            List<ISDKListener> clone = new ArrayList<ISDKListener>();
+            clone.addAll( sdkListeners );
+
+            for( ISDKListener listener : clone )
+            {
+                try
+                {
+                    if( event == EVENT_ADDED )
+                    {
+                        listener.sdksAdded( sdks );
+                    }
+                    else if( event == EVENT_CHANGED )
+                    {
+                        listener.sdksChanged( sdks );
+                    }
+                    else if( event == EVENT_REMOVED )
+                    {
+                        listener.sdksRemoved( sdks );
+                    }
+                }
+                catch( Exception e )
+                {
+                    SDKCorePlugin.logError( "error in sdk listener.", e ); //$NON-NLS-1$
+                }
+            }
+        }
+    }
+
+    public SDK getDefaultSDK()
+    {
+        for( SDK sdk : getSDKs() )
+        {
+            if( sdk.isDefault() )
+            {
+                return sdk;
+            }
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings( "deprecation" )
+    private IEclipsePreferences getPrefs()
+    {
+        return new InstanceScope().getNode( SDKCorePlugin.PREFERENCE_ID );
+    }
+
+    public SDK getSDK( IPath sdkLocation )
+    {
+        for( SDK sdk : getSDKs() )
+        {
+            if( sdk.getLocation().equals( sdkLocation ) )
+            {
+                return sdk;
+            }
+        }
+
+        return null;
     }
 
     public SDK getSDK( String sdkName )
@@ -137,24 +202,6 @@ public final class SDKManager
         }
 
         return sdkList.toArray( new SDK[0] );
-    }
-
-    public void setSDKs( SDK[] sdks )
-    {
-        this.sdkList.clear();
-
-        for( SDK sdk : sdks )
-        {
-            sdkList.add( sdk );
-        }
-
-        saveSDKs();
-    }
-
-    @SuppressWarnings( "deprecation" )
-    private IEclipsePreferences getPrefs()
-    {
-        return new InstanceScope().getNode( SDKCorePlugin.PREFERENCE_ID );
     }
 
     private void initialize()
@@ -209,6 +256,14 @@ public final class SDKManager
         }
     }
 
+    public void removeSDKListener( ISDKListener listener )
+    {
+        synchronized ( sdkListeners )
+        {
+            sdkListeners.remove( listener );
+        }
+    }
+
     private void saveSDKs()
     {
         XMLMemento root = XMLMemento.createWriteRoot( "sdks" ); //$NON-NLS-1$
@@ -240,20 +295,23 @@ public final class SDKManager
         }
     }
 
-    public boolean containsSDK( SDK theSDK )
+    public void saveSDKs( SDK[] sdks )
     {
-        if( theSDK != null && getSDKs().length > 0 )
+        setSDKs( sdks );
+    }
+
+    public void setSDKs( SDK[] sdks )
+    {
+        this.sdkList.clear();
+
+        for( SDK sdk : sdks )
         {
-            for( SDK sdk : getSDKs() )
-            {
-                if( theSDK.equals( sdk ) )
-                {
-                    return true;
-                }
-            }
+            sdkList.add( sdk );
         }
 
-        return false;
+        saveSDKs();
+
+        fireSDKEvent( sdks, EVENT_CHANGED );
     }
 
 }

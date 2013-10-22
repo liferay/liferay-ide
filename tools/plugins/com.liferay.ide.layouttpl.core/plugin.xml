@@ -99,17 +99,6 @@
    </extension>
 
    <extension
-         point="com.liferay.ide.project.core.sdkTemplates">
-      <sdkTemplate
-            class="com.liferay.ide.layouttpl.core.LayoutTplSDKTemplate"
-            displayName="Liferay Layout Template"
-            facetId="liferay.layouttpl"
-            facetedProjectTemplateId="liferay.layouttpl.template"
-            menuIndex="40"
-            shortName="layouttpl">
-      </sdkTemplate>
-   </extension>
-   <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <file-association
             content-type="org.eclipse.wst.html.core.htmlsource"

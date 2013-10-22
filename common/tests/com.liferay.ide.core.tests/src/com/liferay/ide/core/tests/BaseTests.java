@@ -139,6 +139,11 @@ public class BaseTests
         return workspaceRoot().getProject( name );
     }
 
+    protected String stripCarriageReturns( String value )
+    {
+        return value.replaceAll( "\r", "" );
+    }
+
     protected IWorkspace workspace()
     {
         return ResourcesPlugin.getWorkspace();

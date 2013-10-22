@@ -144,39 +144,19 @@
    </extension>
 
    <extension
-         point="com.liferay.ide.project.core.sdkTemplates">
-      <sdkTemplate
-            class="com.liferay.ide.portlet.core.PortletSDKTemplate"
-            displayName="Liferay Portlet"
-            facetId="liferay.portlet"
-            facetedProjectTemplateId="liferay.portlet.template"
-            menuIndex="10"
-            shortName="portlet">
-      </sdkTemplate>
-      <sdkTemplate
-            class="com.liferay.ide.portlet.core.ExtSDKTemplate"
-            displayName="Liferay Ext"
-            facetId="liferay.ext"
-            facetedProjectTemplateId="liferay.ext.template"
-            menuIndex="30"
-            shortName="ext">
-      </sdkTemplate>
+         point="com.liferay.ide.project.core.portletFrameworks">
+      <portletFramework
+            class="com.liferay.ide.portlet.core.MVCPortletFramework"
+            default="true"
+            description="%portlet.framework.description"
+            displayName="%portlet.framework.display.name"
+            helpUrl="http://www.liferay.com/documentation/liferay-portal/6.1/development"
+            id="com.liferay.ide.project.core.framework.mvc"
+            requiredSDKVersion="6.0.1"
+            shortName="mvc">
+      </portletFramework>
    </extension>
 
-
-   <extension
-       point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
-    <portletFrameworkWizardProvider
-          class="com.liferay.ide.portlet.core.MVCPortletFrameworkWizardProvider"
-          default="true"
-          description="%portlet.framework.description"
-          displayName="%portlet.framework.display.name"
-          helpUrl="http://www.liferay.com/documentation/liferay-portal/6.1/development"
-          id="com.liferay.ide.project.core.framework.mvc"
-          requiredSDKVersion="6.0.1"
-          shortName="mvc">
-    </portletFrameworkWizardProvider>
-    </extension>
    <extension
          point="org.eclipse.wst.xml.core.catalogContributions">
       <catalogContribution

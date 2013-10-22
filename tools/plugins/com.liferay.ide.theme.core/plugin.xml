@@ -107,17 +107,6 @@
    </extension>
 
    <extension
-         point="com.liferay.ide.project.core.sdkTemplates">
-      <sdkTemplate
-            class="com.liferay.ide.theme.core.ThemeSDKTemplate"
-            displayName="Liferay Theme"
-            facetId="liferay.theme"
-            facetedProjectTemplateId="liferay.theme.template"
-            menuIndex="50"
-            shortName="theme">
-      </sdkTemplate>
-   </extension>
-   <extension
          id="com.liferay.ide.eclipse.theme.core.cssBuilder"
          name="%theme.css.builder.name"
          point="org.eclipse.core.resources.builders">

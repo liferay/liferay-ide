@@ -30,7 +30,7 @@ import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.MasterDetailsContentNodePart;
 import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPagePart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
-import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
  * @author Kamesh Sampath
@@ -49,11 +49,9 @@ public class CreatePortletActionHandler extends SapphireActionHandler
         PortletApp rootModel = (PortletApp) context.part().getModelElement();
         Portlet portlet = rootModel.getPortlets().insert();
         // Open the dialog to capture the mandatory properties
-        final SapphireDialog dialog = new SapphireDialog
-        (
-            ((SwtPresentation)context).shell(), portlet,
-            DefinitionLoader.sdef( PortletXmlEditor.class ).dialog()
-        );
+        final SapphireDialog dialog =
+            new SapphireDialog( ( (SwtPresentation) context ).shell(), portlet, DefinitionLoader.sdef(
+                PortletXmlEditor.class ).dialog() );
 
         if( dialog != null && Dialog.OK == dialog.open() )
         {

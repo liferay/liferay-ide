@@ -154,7 +154,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
             javaProject.setRawClasspath(
                 newRawClasspath.toArray( new IClasspathEntry[0] ),
-                this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_SDK_OUTPUT_FOLDERS[0] ).getFullPath(), null );
+                this.project.getFolder( IPluginFacetConstants.EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER ).getFullPath(), null );
 
             ProjectUtil.fixExtProjectSrcFolderLinks( this.project );
             // fixTilesDefExtFile();

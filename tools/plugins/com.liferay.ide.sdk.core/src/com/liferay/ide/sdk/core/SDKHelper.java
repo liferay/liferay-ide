@@ -80,14 +80,13 @@ public class SDKHelper extends LaunchHelper
     }
 
     public ILaunchConfiguration createLaunchConfiguration(
-        IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE ) throws CoreException
+        IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE, String workingDir ) throws CoreException
     {
         ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
 
         launchConfig.setAttribute( IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString() );
 
-        launchConfig.setAttribute(
-            IExternalToolConstants.ATTR_WORKING_DIRECTORY, buildFile.removeLastSegments( 1 ).toOSString() );
+        launchConfig.setAttribute( IExternalToolConstants.ATTR_WORKING_DIRECTORY, workingDir );
 
         launchConfig.setAttribute( IAntLaunchConstants.ATTR_ANT_TARGETS, targets );
 
@@ -181,7 +180,7 @@ public class SDKHelper extends LaunchHelper
         return buffer.toString();
     }
 
-    public void runTarget( IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE )
+    public void runTarget( IPath buildFile, String targets, Map<String, String> properties, boolean separateJRE, String workingDir )
         throws CoreException
     {
         if( isLaunchRunning() )
@@ -193,7 +192,7 @@ public class SDKHelper extends LaunchHelper
 
         this.currentTargets = targets;
 
-        ILaunchConfiguration launchConfig = createLaunchConfiguration( buildFile, targets, properties, separateJRE );
+        ILaunchConfiguration launchConfig = createLaunchConfiguration( buildFile, targets, properties, separateJRE, workingDir );
 
         launch( launchConfig, ILaunchManager.RUN_MODE, monitor );
 

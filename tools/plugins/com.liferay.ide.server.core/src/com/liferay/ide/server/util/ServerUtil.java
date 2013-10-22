@@ -185,6 +185,11 @@ public class ServerUtil
         }
     }
 
+    public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
+    {
+        return getSDKRequiredProperties( liferayRuntime );
+    }
+
     public static Map<String, String> configureAppServerProperties( IProject project ) throws CoreException
     {
         try
@@ -195,11 +200,6 @@ public class ServerUtil
         {
             throw new CoreException( LiferayServerCore.createErrorStatus( e1 ) );
         }
-    }
-
-    public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
-    {
-        return getSDKRequiredProperties( liferayRuntime );
     }
 
     public static IStatus createErrorStatus( String msg )
@@ -331,42 +331,6 @@ public class ServerUtil
         return null;
     }
 
-    public static IPath getAppServerDir( org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime )
-    {
-        ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter( serverRuntime, ILiferayRuntime.class );
-
-        return runtime != null ? runtime.getAppServerDir() : null;
-    }
-
-    public static String getAppServerPropertyKey( String propertyAppServerDeployDir, ILiferayRuntime runtime )
-    {
-        String retval = null;
-
-        try
-        {
-            final Version version = new Version( runtime.getPortalVersion() );
-            final String type = runtime.getAppServerType();
-
-            if( ( CoreUtil.compareVersions( version, v620 ) >= 0 ) ||
-                ( CoreUtil.compareVersions( version, v612 ) >= 0 && CoreUtil.compareVersions( version, v6110 ) < 0 ) )
-            {
-                retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-        }
-        catch( Exception e )
-        {
-        }
-        finally
-        {
-            if( retval == null )
-            {
-                retval = MessageFormat.format( propertyAppServerDeployDir, "." ); //$NON-NLS-1$
-            }
-        }
-
-        return retval;
-    }
-
     public static Properties getAllCategories( IPath portalDir )
     {
         Properties retval = null;
@@ -405,46 +369,40 @@ public class ServerUtil
         return retval;
     }
 
-    public static Properties getPortletCategories( IPath portalDir )
+    public static IPath getAppServerDir( org.eclipse.wst.common.project.facet.core.runtime.IRuntime serverRuntime )
     {
-        Properties props = getAllCategories( portalDir );
-        Properties categories = new Properties();
-        Enumeration<?> names = props.propertyNames();
+        ILiferayRuntime runtime = (ILiferayRuntime) getRuntimeAdapter( serverRuntime, ILiferayRuntime.class );
 
-        String[] controlPanelCategories = 
-        {   "category.my", //$NON-NLS-1$
-            "category.users", //$NON-NLS-1$
-            "category.apps", //$NON-NLS-1$
-            "category.configuration", //$NON-NLS-1$
-            "category.sites", //$NON-NLS-1$
-            "category.site_administration.configuration", //$NON-NLS-1$
-            "category.site_administration.content", //$NON-NLS-1$
-            "category.site_administration.pages", //$NON-NLS-1$
-            "category.site_administration.users" //$NON-NLS-1$
-        };
+        return runtime != null ? runtime.getAppServerDir() : null;
+    }
 
-        while( names.hasMoreElements() )
+    public static String getAppServerPropertyKey( String propertyAppServerDeployDir, ILiferayRuntime runtime )
+    {
+        String retval = null;
+
+        try
         {
-            boolean isControlPanelCategory = false;
+            final Version version = new Version( runtime.getPortalVersion() );
+            final String type = runtime.getAppServerType();
 
-            String name = names.nextElement().toString();
-
-            for( String category : controlPanelCategories )
+            if( ( CoreUtil.compareVersions( version, v620 ) >= 0 ) ||
+                ( CoreUtil.compareVersions( version, v612 ) >= 0 && CoreUtil.compareVersions( version, v6110 ) < 0 ) )
             {
-                if( name.equals( category ) )
-                {
-                    isControlPanelCategory = true;
-                    break;
-                }
+                retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
             }
-
-            if( !isControlPanelCategory )
+        }
+        catch( Exception e )
+        {
+        }
+        finally
+        {
+            if( retval == null )
             {
-                categories.put( name, props.getProperty( name ) );
+                retval = MessageFormat.format( propertyAppServerDeployDir, "." ); //$NON-NLS-1$
             }
         }
 
-        return categories;
+        return retval;
     }
 
     public static Properties getEntryCategories( IPath portalDir, String portalVersion )
@@ -594,6 +552,48 @@ public class ServerUtil
         return retval;
     }
 
+    public static Properties getPortletCategories( IPath portalDir )
+    {
+        Properties props = getAllCategories( portalDir );
+        Properties categories = new Properties();
+        Enumeration<?> names = props.propertyNames();
+
+        String[] controlPanelCategories =
+        {   "category.my", //$NON-NLS-1$
+            "category.users", //$NON-NLS-1$
+            "category.apps", //$NON-NLS-1$
+            "category.configuration", //$NON-NLS-1$
+            "category.sites", //$NON-NLS-1$
+            "category.site_administration.configuration", //$NON-NLS-1$
+            "category.site_administration.content", //$NON-NLS-1$
+            "category.site_administration.pages", //$NON-NLS-1$
+            "category.site_administration.users" //$NON-NLS-1$
+        };
+
+        while( names.hasMoreElements() )
+        {
+            boolean isControlPanelCategory = false;
+
+            String name = names.nextElement().toString();
+
+            for( String category : controlPanelCategories )
+            {
+                if( name.equals( category ) )
+                {
+                    isControlPanelCategory = true;
+                    break;
+                }
+            }
+
+            if( !isControlPanelCategory )
+            {
+                categories.put( name, props.getProperty( name ) );
+            }
+        }
+
+        return categories;
+    }
+
     public static IRuntime getRuntime( IProject project ) throws CoreException
     {
         return (IRuntime) getRuntimeAdapter( ProjectFacetsManager.create( project ).getPrimaryRuntime(), IRuntime.class );
@@ -602,6 +602,30 @@ public class ServerUtil
     public static IRuntime getRuntime( org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime )
     {
         return ServerCore.findRuntime( runtime.getProperty( "id" ) ); //$NON-NLS-1$
+    }
+
+    public static IRuntime getRuntime( String runtimeName )
+    {
+        IRuntime retval = null;
+
+        if( ! CoreUtil.isNullOrEmpty( runtimeName ) )
+        {
+            final IRuntime[] runtimes = ServerCore.getRuntimes();
+
+            if( runtimes != null )
+            {
+                for( final IRuntime runtime : runtimes )
+                {
+                    if( runtimeName.equals( runtime.getName() ) )
+                    {
+                        retval = runtime;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return retval;
     }
 
     public static IRuntimeWorkingCopy getRuntime( String runtimeTypeId, IPath location )
@@ -824,7 +848,6 @@ public class ServerUtil
     {
         return getLiferayRuntime( runtime ) != null;
     }
-
     public static boolean isLiferayRuntime( IServer server )
     {
         return getLiferayRuntime( server ) != null;
@@ -848,6 +871,7 @@ public class ServerUtil
         return true;
 
     }
+
     private static void processResourceDeltasZip(
         IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
         String deltaPrefix, boolean adjustGMTOffset ) throws IOException, CoreException

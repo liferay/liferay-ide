@@ -19,6 +19,7 @@ package com.liferay.ide.hook.ui.action;
 
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.model.ServiceWrapper;
+import com.liferay.ide.hook.ui.HookUI;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
@@ -42,8 +43,7 @@ import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.forms.BrowseActionHandler;
-import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
-import org.eclipse.sapphire.ui.internal.SapphireUiFrameworkPlugin;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
 /**
@@ -131,7 +131,7 @@ public final class ServiceTypeImplBrowseActionHandler extends BrowseActionHandle
         }
         catch( JavaModelException e )
         {
-            SapphireUiFrameworkPlugin.log( e );
+            HookUI.logError( e );
         }
 
         return null;

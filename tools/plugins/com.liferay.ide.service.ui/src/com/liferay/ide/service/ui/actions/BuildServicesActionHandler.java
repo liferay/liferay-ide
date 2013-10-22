@@ -24,7 +24,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
-import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
  * @author Gregory Amerson

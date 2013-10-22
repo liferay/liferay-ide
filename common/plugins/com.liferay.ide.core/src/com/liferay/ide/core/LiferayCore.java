@@ -142,6 +142,29 @@ public class LiferayCore extends Plugin
         return adapterReader.getExtensions().toArray( new ILiferayProjectAdapter[0] );
     }
 
+    public static synchronized ILiferayProjectProvider getProvider( String shortName )
+    {
+        for( ILiferayProjectProvider provider : getProviders() )
+        {
+            if( provider.getShortName().equals( shortName ) )
+            {
+                return provider;
+            }
+        }
+
+        return null;
+    }
+
+    public static synchronized ILiferayProjectProvider[] getProviders()
+    {
+        if( providerReader == null )
+        {
+            providerReader = new LiferayProjectProviderReader();
+        }
+
+        return providerReader.getProviders();
+    }
+
     public static synchronized ILiferayProjectProvider[] getProviders( Class<?> type )
     {
         if( providerReader == null )

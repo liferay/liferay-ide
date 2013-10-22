@@ -672,7 +672,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( moduleProject );
 
         IStatus directDeployStatus =
-            sdk.war( moduleProject, properties, true, appServerProperties, new String[] { "-Duser.timezone=GMT" } ); //$NON-NLS-1$
+            sdk.war( moduleProject, properties, true, appServerProperties, new String[] { "-Duser.timezone=GMT" }, monitor ); //$NON-NLS-1$
 
         if( !directDeployStatus.isOK() || ( !warFile.exists() ) )
         {

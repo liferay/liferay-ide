@@ -24,8 +24,10 @@
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
             class="com.liferay.ide.maven.core.LiferayMavenProjectProvider"
+            displayName="Maven (liferay-maven-plugin)"
             id="com.liferay.ide.maven.core.mavenProjectProvider"
-            priority="high">
+            priority="high"
+            shortName="maven">
       </liferayProjectProvider>
    </extension>
    <extension

@@ -33,6 +33,11 @@ public class LiferayMavenCore extends Plugin
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.maven.core"; //$NON-NLS-1$
 
+    public static Status createErrorStatus( String msg )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, null );
+    }
+
     public static Status createErrorStatus( String msg, Throwable t )
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, t );

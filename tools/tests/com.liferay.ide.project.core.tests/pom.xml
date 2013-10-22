@@ -30,4 +30,28 @@
 
     <name>Liferay IDE Project Core Tests</name>
 
+    <properties>
+        <liferay.plugin.project.tests.tempdir>${java.io.tmpdir}</liferay.plugin.project.tests.tempdir>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <configuration>
+                    <!--<argLine>-Xdebug -Xrunjdwp:transport=dt_socket,address=8100,server=y,suspend=y</argLine>-->
+                    <systemProperties>
+                        <liferay.plugin.project.tests.tempdir>${liferay.plugin.project.tests.tempdir}</liferay.plugin.project.tests.tempdir>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

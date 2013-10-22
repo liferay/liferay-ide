@@ -16,7 +16,6 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -206,31 +205,14 @@ public class SDKPluginFacetUtil
 
     public static void configureProjectAsPlugin( final IFacetedProjectWorkingCopy fpjwc,
                                                  final IRuntime runtime,
+                                                 final String pluginType,
                                                  final String sdkLocation,
                                                  final ProjectRecord projectRecord ) throws CoreException
     {
-        // final IPreset preset = template.getInitialPreset();
-        // final IRuntime runtime = (IRuntime)
-        // model.getProperty(IFacetProjectCreationDataModelProperties.FACET_RUNTIME);
-
         fpjwc.setTargetedRuntimes( Collections.<IRuntime> emptySet() );
 
         if( runtime != null )
         {
-            // final Set<IProjectFacetVersion> minFacets = new
-            // HashSet<IProjectFacetVersion>();
-            //
-            // try {
-            // for( IProjectFacet f : fpjwc.getFixedProjectFacets() ) {
-            // minFacets.add( f.getLatestSupportedVersion( runtime ) );
-            // }
-            // }
-            // catch( CoreException e ) {
-            // throw new RuntimeException( e );
-            // }
-            //
-            // fpjwc.setProjectFacets( minFacets );
-
             fpjwc.setTargetedRuntimes( Collections.singleton( runtime ) );
         }
 
@@ -239,8 +221,8 @@ public class SDKPluginFacetUtil
         // fpjwc.setSelectedPreset(
         // FacetedProjectFramework.DEFAULT_CONFIGURATION_PRESET_ID );
 
-        IFacetedProjectTemplate template = getLiferayTemplateForProject( fpjwc );
-        IPreset preset = getLiferayPresetForProject( fpjwc );
+        IFacetedProjectTemplate template = getLiferayTemplateForProject( pluginType );
+        IPreset preset = getLiferayPresetForProject( pluginType );
 
         if( preset == null )
         {
@@ -306,6 +288,10 @@ public class SDKPluginFacetUtil
                 {
                     configureLiferayFacet( fpjwc, requiredFacet, sdkLocation );
                 }
+                else if( ProjectUtil.isDynamicWebFacet( requiredFacet ) )
+                {
+                    configureWebFacet( fpjwc, requiredFacet, preset );
+                }
             }
         }
     }
@@ -314,11 +300,10 @@ public class SDKPluginFacetUtil
         throws CoreException
     {
         Action action = fpjwc.getProjectFacetAction( requiredFacet );
-        Object config = action.getConfig();
 
-        if( config instanceof IDataModel )
+        if( action != null )
         {
-            IDataModel dm = (IDataModel) config;
+            IDataModel dm = (IDataModel) action.getConfig();
 
             if( preset.getId().contains( "portlet" ) ) //$NON-NLS-1$
             {
@@ -348,6 +333,10 @@ public class SDKPluginFacetUtil
                     IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
                     IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER );
 
+                dm.setStringProperty(
+                    IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
+                    IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+
                 addDefaultWebXml( fpjwc, dm );
             }
             else if( preset.getId().contains( "layouttpl" ) ) //$NON-NLS-1$
@@ -355,6 +344,11 @@ public class SDKPluginFacetUtil
                 dm.setStringProperty(
                     IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
                     IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER );
+
+                dm.setStringProperty(
+                    IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
+                    IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER );
+
                 ProjectUtil.setGenerateDD( dm, false );
             }
             else if( preset.getId().contains( "theme" ) ) //$NON-NLS-1$
@@ -364,45 +358,30 @@ public class SDKPluginFacetUtil
                     IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER );
                 ProjectUtil.setGenerateDD( dm, false );
             }
-
         }
     }
 
-    public static IPreset getLiferayPresetForProject( IFacetedProjectWorkingCopy fpjwc )
+    public static IPreset getLiferayPresetForProject( String pluginType )
     {
         IPreset preset = null;
-        String projName = fpjwc.getProjectName();
-        IPath location = fpjwc.getProjectLocation();
 
-        String directoryName = StringPool.EMPTY;
-
-        if( location != null )
-        {
-            directoryName = location.lastSegment();
-        }
-
-        if( projName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+        if( "portlet".equals( pluginType ) )
         {
             preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_PORTLET_PRESET );
         }
-        else if( projName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "hook".equals( pluginType ) )
         {
             preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_HOOK_PRESET );
         }
-        else if( projName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "ext".equals( pluginType ) )
         {
             preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_EXT_PRESET );
         }
-        else if( projName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "layouttpl".equals( pluginType ) )
         {
             preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_LAYOUTTPL_PRESET );
         }
-        else if( projName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "theme".equals( pluginType ) )
         {
             preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_THEME_PRESET );
         }
@@ -410,40 +389,27 @@ public class SDKPluginFacetUtil
         return preset;
     }
 
-    public static IFacetedProjectTemplate getLiferayTemplateForProject( IFacetedProjectWorkingCopy fpjwc )
+    public static IFacetedProjectTemplate getLiferayTemplateForProject( String pluginType )
     {
         IFacetedProjectTemplate template = null;
-        String projName = fpjwc.getProjectName();
-        IPath location = fpjwc.getProjectLocation();
-        String directoryName = StringPool.EMPTY;
 
-        if( location != null )
-        {
-            directoryName = location.lastSegment();
-        }
-
-        if( projName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+        if( "portlet".equals( pluginType ) )
         {
             template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_PORTLET_FACET_TEMPLATE_ID );
         }
-        else if( projName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "hook".equals( pluginType ) )
         {
             template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_HOOK_FACET_TEMPLATE_ID );
         }
-        else if( projName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "ext".equals( pluginType ) )
         {
             template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_EXT_FACET_TEMPLATE_ID );
         }
-        else if( projName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "layouttpl".equals( pluginType ) )
         {
             template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_LAYOUTTPL_FACET_TEMPLATE_ID );
         }
-        else if( projName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
-            directoryName.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+        else if( "theme".equals( pluginType ) )
         {
             template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_THEME_FACET_TEMPLATE_ID );
         }

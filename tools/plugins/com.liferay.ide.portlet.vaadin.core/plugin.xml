@@ -2,9 +2,9 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="com.liferay.ide.project.core.portletFrameworkWizardProviders">
-      <portletFrameworkWizardProvider
-            class="com.liferay.ide.portlet.vaadin.core.VaadinPortletFrameworkWizardProvider"
+         point="com.liferay.ide.project.core.portletFrameworks">
+      <portletFramework
+            class="com.liferay.ide.portlet.vaadin.core.VaadinPortletFramework"
             default="false"
             description="%vaadin.portlet.framework.description"
             displayName="%vaadin.portlet.framework.display.name"
@@ -12,7 +12,7 @@
             id="com.liferay.ide.project.core.framework.vaadin"
             requiredSDKVersion="6.0.5"
             shortName="vaadin">
-      </portletFrameworkWizardProvider>
+      </portletFramework>
    </extension>
 
 </plugin>

@@ -15,8 +15,6 @@
 
 package com.liferay.ide.server.ui;
 
-import com.liferay.ide.project.core.ISDKTemplate;
-import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -67,9 +65,12 @@ public class PluginsCustomLabelProvider extends LabelProvider
                     if( facetedProject != null )
                     {
                         IProjectFacet liferayFacet = ProjectUtil.getLiferayFacet( facetedProject );
-                        ISDKTemplate sdkTemplate = LiferayProjectCore.getSDKTemplate( liferayFacet );
 
-                        imageKey = sdkTemplate.getShortName();
+                        if( liferayFacet != null )
+                        {
+                            final String id = liferayFacet.getId();
+                            imageKey = id.substring( id.indexOf( '.' ) + 1, id.length() );
+                        }
                     }
                     else
                     {

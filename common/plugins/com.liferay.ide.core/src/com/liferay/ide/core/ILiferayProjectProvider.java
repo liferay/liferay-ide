@@ -14,15 +14,24 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+
 /**
  * @author Gregory Amerson
  */
 public interface ILiferayProjectProvider
 {
+    IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException;
+
+    String getDisplayName();
+
     int getPriority();
+
+    String getShortName();
 
     ILiferayProject provide( Object type );
 
     boolean provides( Class<?> type );
-
 }

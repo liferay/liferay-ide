@@ -47,16 +47,4 @@
             type="org.eclipse.wst.validation.problemmarker">
       </super>
    </extension>
-   <extension
-         point="com.liferay.ide.project.core.sdkTemplates">
-      <sdkTemplate
-            class="com.liferay.ide.hook.core.HookSDKTemplate"
-            displayName="Liferay Hook"
-            facetId="liferay.hook"
-            facetedProjectTemplateId="liferay.hook.template"
-            menuIndex="20"
-            shortName="hook">
-      </sdkTemplate>
-   </extension>
-
 </plugin>

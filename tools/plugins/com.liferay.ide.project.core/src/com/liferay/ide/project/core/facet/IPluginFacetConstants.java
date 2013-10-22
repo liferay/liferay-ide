@@ -27,7 +27,7 @@ public class IPluginFacetConstants
 {
 
     public static final String EXT_PLUGIN_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
-        "/WEB-INF/classes"; //$NON-NLS-1$
+        "/WEB-INF/ext-web/docroot/WEB-INF/classes"; //$NON-NLS-1$
 
     public static final String EXT_PLUGIN_SDK_CONFIG_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
         "/WEB-INF/ext-web/" + ISDKConstants.DEFAULT_DOCROOT_FOLDER; //$NON-NLS-1$

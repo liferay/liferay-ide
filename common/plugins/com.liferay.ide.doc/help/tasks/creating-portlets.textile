@@ -13,5 +13,5 @@ h2. New Liferay Portlet Wizard
 
 p. Use this procedure below to create a new Liferay Portlet wizard and add it to a Liferay project.
 
-# From the workbench window select !../images/command_link.png!<a href="javascript:executeCommand('org.eclipse.ui.newWizard(newWizardId=com.liferay.ide.eclipse.project.ui.newProjectWizard)')">File > New > Project... > Liferay > New Liferay Project</a>
+# From the workbench window select !../images/command_link.png!<a href="javascript:executeCommand('org.eclipse.ui.newWizard(newWizardId=com.liferay.ide.eclipse.project.ui.newPluginProjectWizard)')">File > New > Project... > Liferay > New Liferay Project</a>
 # 

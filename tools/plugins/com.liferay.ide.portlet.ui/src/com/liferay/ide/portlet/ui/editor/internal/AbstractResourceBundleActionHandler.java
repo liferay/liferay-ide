@@ -51,7 +51,7 @@ import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
-import org.eclipse.sapphire.ui.forms.swt.presentation.SwtPresentation;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
  * @author Kamesh Sampath
@@ -194,7 +194,8 @@ public abstract class AbstractResourceBundleActionHandler extends PropertyEditor
 
             try
             {
-                ( new ProgressMonitorDialog( ((SwtPresentation)context).shell() ) ).run( false, false, rbCreationProc );
+                ( new ProgressMonitorDialog( ( (SwtPresentation) context ).shell() ) ).run(
+                    false, false, rbCreationProc );
                 rbFiles.clear();
             }
             catch( InvocationTargetException e )

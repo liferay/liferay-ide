@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,6 +168,26 @@ public class FileUtil
             }
         }
 
+    }
+
+    public static void downloadFile( String url, File outputFile ) throws IOException
+    {
+        final URL u = new URL( url );
+        final URLConnection connection = u.openConnection();
+        final InputStream is = connection.getInputStream();
+        final FileOutputStream fos = new FileOutputStream( outputFile );
+
+        final byte[] buffer = new byte[1024];
+        int read = 0;
+
+        while( ( read = is.read( buffer, 0, buffer.length ) ) >= 0 )
+        {
+            fos.write( buffer, 0, read );
+        }
+
+        fos.flush();
+        fos.close();
+        is.close();
     }
 
     public static String readContents( File file )

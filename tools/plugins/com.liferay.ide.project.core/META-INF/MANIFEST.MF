@@ -29,12 +29,14 @@ Require-Bundle: org.eclipse.wst.common.project.facet.core;bundle-version="[1.4.1
  org.eclipse.jdt.launching,
  org.eclipse.jst.jsp.core,
  org.eclipse.core.commands;visibility:=reexport,
- org.eclipse.sapphire.modeling.xml;bundle-version="0.7.0",
- org.eclipse.sapphire.modeling;bundle-version="0.7.0",
- org.eclipse.wst.common.core
+ org.eclipse.sapphire.modeling;bundle-version="0.7.0";visibility:=reexport,
+ org.eclipse.wst.common.core,
+ org.eclipse.sapphire.platform;bundle-version="0.7.0";visibility:=reexport,
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.7.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.facet,
  com.liferay.ide.project.core.library,
+ com.liferay.ide.project.core.model,
  com.liferay.ide.project.core.util

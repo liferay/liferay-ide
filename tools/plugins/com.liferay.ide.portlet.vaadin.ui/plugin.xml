@@ -2,17 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="com.liferay.ide.project.ui.portletFrameworkDelegates">
-      <portletFrameworkDelegate
-            class="com.liferay.ide.portlet.vaadin.ui.VaadinPortletFrameworkDelegate"
-            frameworkId="com.liferay.ide.project.core.framework.vaadin"
-            icon="icons/e16/vaadin.png">
-      </portletFrameworkDelegate>
-   </extension>
-   
-   <extension
          point="org.eclipse.ui.newWizards">
-         
       <category
             id="com.liferay.ide.newWizards"
             name="%category.name">
@@ -23,7 +13,7 @@
             id="com.liferay.ide.eclipse.portlet.vaadin.ui.wizard.portlet"
             name="%vaadin.portlet.wizard.name">
          <class class="com.liferay.ide.portlet.vaadin.ui.wizard.NewVaadinPortletWizard">
-         	<parameter name="liferay_extra_artifact" value="true"/>
+            <parameter name="liferay_extra_artifact" value="true"/>
             <parameter name="menuIndex" value="20" />
             <parameter name="validProjectTypes" value="portlet" />
          </class>
@@ -31,8 +21,5 @@
             %vaadin.wizard.description
          </description>
       </wizard>
-      
    </extension>
-   
-
 </plugin>
