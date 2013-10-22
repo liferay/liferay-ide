@@ -15,6 +15,10 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.util.ServerUtil;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -22,10 +26,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectValidator;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
-
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Kuo Zhang
@@ -102,9 +102,7 @@ public class PluginsSDKProjectValidator implements IFacetedProjectValidator
 
     private static class Msgs extends NLS
     {
-
         public static String primaryRuntimeNotSet;
-
         public static String primaryRuntimeNotLiferayRuntime;
 
         static

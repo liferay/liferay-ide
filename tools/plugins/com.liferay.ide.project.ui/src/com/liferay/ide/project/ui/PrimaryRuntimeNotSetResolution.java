@@ -15,6 +15,9 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.util.ServerUtil;
+
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -30,9 +33,6 @@ import org.eclipse.ui.internal.dialogs.PropertyDialog;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.server.ui.ServerUIUtil;
-
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Kuo Zhang
@@ -65,17 +65,17 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution
              */
             if( ServerUtil.getAvailableLiferayRuntimes().size() == 0 )
             {
-                boolean openNewServerWizard = MessageDialog.openQuestion( null, null, Msgs.noLiferayRuntimeAvailable );
+                boolean openNewRuntimeWizard = MessageDialog.openQuestion( null, null, Msgs.noLiferayRuntimeAvailable );
 
-                if( openNewServerWizard )
+                if( openNewRuntimeWizard )
                 {
-                    ServerUIUtil.showNewServerWizard( null, null, null, "com.liferay." ); //$NON-NLS-1$
+                    ServerUIUtil.showNewRuntimeWizard( null, null, null, "com.liferay." ); //$NON-NLS-1$
                 }
             }
 
             /*
              * Let users confirm when there is only one available Liferay runtime.
-             * 
+             *
              * If the previous judgment block is executed, the size of available targeted runtimes will increase to 1.
              */
             if( ServerUtil.getAvailableLiferayRuntimes().size() == 1 )
