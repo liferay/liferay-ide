@@ -39,7 +39,6 @@ public class DebugPreferencePage extends FieldEditorPreferencePage implements IW
 {
     private class MyIntegerFieldEditor extends IntegerFieldEditor
     {
-
         public MyIntegerFieldEditor( String name, String labelText, Composite parent )
         {
             super( name, labelText, parent );
@@ -65,7 +64,6 @@ public class DebugPreferencePage extends FieldEditorPreferencePage implements IW
 
     private class MyStringFieldEditor extends StringFieldEditor
     {
-
         public MyStringFieldEditor( String name, String string, Composite composite )
         {
             super( name, string, composite );
@@ -90,9 +88,7 @@ public class DebugPreferencePage extends FieldEditorPreferencePage implements IW
     }
 
     private ScopedPreferenceStore prefStore;
-
     private MyStringFieldEditor passwordEditor;
-
     private MyIntegerFieldEditor portEditor;
 
     public DebugPreferencePage()
