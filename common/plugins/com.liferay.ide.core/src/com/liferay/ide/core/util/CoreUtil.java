@@ -52,7 +52,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -60,6 +59,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jst.j2ee.componentcore.J2EEModuleVirtualComponent;
 import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
@@ -314,18 +314,19 @@ public class CoreUtil
     {
         if( project != null )
         {
-            IVirtualFolder webappRoot = getDocroot( project );
+            final IVirtualFolder webappRoot = getDocroot( project );
 
             if( webappRoot != null )
             {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                final IPath defaultFolder = J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder( webappRoot );
+
+                if( defaultFolder != null )
                 {
-                    if( container != null && container.exists() )
+                    final IFolder folder = project.getFolder( defaultFolder );
+
+                    if( folder.exists() )
                     {
-                        if( container.getFolder( new Path( "WEB-INF" ) ).exists() ) //$NON-NLS-1$
-                        {
-                            return container instanceof IFolder ? (IFolder) container : null;
-                        }
+                        return folder;
                     }
                 }
             }

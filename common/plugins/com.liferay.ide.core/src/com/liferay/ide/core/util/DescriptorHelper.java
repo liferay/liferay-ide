@@ -169,7 +169,22 @@ public class DescriptorHelper
 
     public static IFile getDescriptorFile( IProject project, String fileName )
     {
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        IFile retval = null;
+
+        final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( project );
+
+        if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
+        {
+            final IFile file = defaultDocrootFolder.getFile( new Path( "WEB-INF" ).append( fileName ) );
+
+            if( file.exists() )
+            {
+                retval = file;
+            }
+        }
+
+        // fallback to looping through all virtual folders
+        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
         if( webappRoot != null )
         {
@@ -177,17 +192,18 @@ public class DescriptorHelper
             {
                 if( container != null && container.exists() )
                 {
-                    IFolder webInf = container.getFolder( new Path( "WEB-INF" ) ); //$NON-NLS-1$
+                    final IFile descriptorFile = container.getFile( new Path( "WEB-INF" ).append( fileName ) );
 
-                    if( webInf.exists() )
+                    if( descriptorFile.exists() )
                     {
-                        return webInf.getFile( fileName );
+                        retval = descriptorFile;
+                        break;
                     }
                 }
             }
         }
 
-        return null;
+        return retval;
     }
 
     protected String descriptorPath;
