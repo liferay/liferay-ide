@@ -32,21 +32,14 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.Event;
-import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
-import org.eclipse.sapphire.PropertyEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.ui.Presentation;
-import org.eclipse.sapphire.ui.SapphireAction;
-import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
 import org.eclipse.sapphire.ui.forms.PropertyEditorCondition;
 import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
@@ -57,6 +50,101 @@ import org.eclipse.sapphire.ui.forms.PropertyEditorPart;
  */
 public class CreateSrcFileActionHandler extends PropertyEditorActionHandler
 {
+    private String refreshOnRunProperty;
+
+    @Override
+    protected final boolean computeEnablementState()
+    {
+        boolean isEnabled = super.computeEnablementState();
+
+        if( this.getModelElement() != null && isEnabled )
+        {
+            // check for existence of the file
+            final IFile srcFile = getSrcFile();
+
+            if( srcFile != null && srcFile.exists() )
+            {
+                isEnabled = false;
+            }
+        }
+
+        return isEnabled;
+    }
+
+    private IPath getDefaultSrcFolderPath()
+    {
+        final IProject project = this.getModelElement().adapt( IProject.class );
+
+        final IFolder[] folders = ProjectUtil.getSourceFolders( project );
+
+        if( !CoreUtil.isNullOrEmpty( folders ) )
+        {
+            return folders[0].getFullPath();
+        }
+
+        return null;
+    }
+
+    private IFile getSrcFile()
+    {
+        IFile retval = null;
+
+        final ValueProperty valueProperty = ValueProperty.class.cast( this.property().definition() );
+        final Value<Path> value = this.getModelElement().property( valueProperty );
+
+        if( value != null && !CoreUtil.isNullOrEmpty( value.text() ) )
+        {
+            final IPath defaultSrcFolderPath = getDefaultSrcFolderPath();
+
+            if( defaultSrcFolderPath != null )
+            {
+                final IPath filePath = defaultSrcFolderPath.append( value.text() );
+                retval = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
+            }
+        }
+
+        return retval;
+    }
+
+    @Override
+    public Object run( Presentation context )
+    {
+        final IFile file = getSrcFile();
+
+        try
+        {
+            if( ! file.exists() )
+            {
+                InputStream defaultContentStream = new ByteArrayInputStream( StringPool.EMPTY.getBytes() );
+
+                file.create( defaultContentStream, true, null );
+
+                try
+                {
+                    file.refreshLocal( IResource.DEPTH_INFINITE, null );
+                }
+                catch( Exception e )
+                {
+                    HookUI.logError( e );
+                }
+
+                final ValueProperty valueProperty = ValueProperty.class.cast( this.property().definition() );
+
+                // do this so that the downstream properties can update their enablement/validation/etc.
+                this.getModelElement().property( valueProperty ).clear();
+                this.getModelElement().property( valueProperty ).write( "portal.properties" );
+
+                refreshEnablementState();
+            }
+        }
+        catch( Exception e )
+        {
+            HookUI.logError( "Unable to create src file: " + file.getName(), e );
+        }
+
+        return null;
+    }
+
     public static class Condition extends PropertyEditorCondition
     {
         @Override
@@ -78,140 +166,5 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler
 
             return false;
         }
-    }
-
-    private Listener listener;
-    private Element modelElement;
-
-    private Property _property;
-
-    @Override
-    protected final boolean computeEnablementState()
-    {
-        boolean isEnabled = super.computeEnablementState();
-
-        if( modelElement != null && isEnabled )
-        {
-            // check for existence of the file
-            IFile srcFile = getSrcFile();
-
-            if( srcFile != null && srcFile.exists() )
-            {
-                isEnabled = false;
-            }
-        }
-
-        return isEnabled;
-    }
-
-    private IPath getDefaultSrcFolderPath()
-    {
-        IProject project = this.modelElement.adapt( IProject.class );
-
-        IFolder[] folders = ProjectUtil.getSourceFolders( project );
-
-        if( !CoreUtil.isNullOrEmpty( folders ) )
-        {
-            return folders[0].getFullPath();
-        }
-
-        return null;
-    }
-
-    private IFile getSrcFile()
-    {
-        IFile retval = null;
-
-        if( _property.definition() instanceof ValueProperty )
-        {
-            ValueProperty valueProperty = (ValueProperty) _property.definition();
-            final Value<Path> value = modelElement.property( valueProperty );
-
-            if( value != null && !CoreUtil.isNullOrEmpty( value.text() ) )
-            {
-                final IPath defaultSrcFolderPath = getDefaultSrcFolderPath();
-
-                if( defaultSrcFolderPath != null )
-                {
-                    final IPath filePath = defaultSrcFolderPath.append( value.text() );
-                    retval = ResourcesPlugin.getWorkspace().getRoot().getFile( filePath );
-                }
-            }
-        }
-
-        return retval;
-    }
-
-    @Override
-    public void init( final SapphireAction action, ActionHandlerDef def )
-    {
-        super.init( action, def );
-        modelElement = getModelElement();
-        _property = property();
-
-        this.listener = new FilteredListener<PropertyEvent>()
-        {
-            @Override
-            public void handleTypedEvent( final PropertyEvent event )
-            {
-                refreshEnablementState();
-            }
-
-        };
-
-        modelElement.attach( this.listener, _property.name() );
-
-        attach
-        (
-            new Listener()
-            {
-                @Override
-                public void handle( Event event )
-                {
-                    if( event instanceof DisposeEvent )
-                    {
-                        getModelElement().detach( listener, _property.name() );
-                    }
-                }
-            }
-        );
-    }
-
-    @Override
-    public Object run( Presentation context )
-    {
-        if( _property.definition() instanceof ValueProperty )
-        {
-            final IFile file = getSrcFile();
-
-            try
-            {
-                if( !file.exists() )
-                {
-                    InputStream defaultContentStream = new ByteArrayInputStream( StringPool.EMPTY.getBytes() );
-
-                    file.create( defaultContentStream, true, null );
-
-                    try
-                    {
-                        file.refreshLocal( IResource.DEPTH_INFINITE, null );
-                    }
-                    catch( Exception e )
-                    {
-                        HookUI.logError( e );
-                    }
-
-                    modelElement.refresh();
-                    // write the property again with the same value to force
-                    // modelElement.write( valueProperty, value.getContent() );
-                    refreshEnablementState();
-                }
-            }
-            catch( Exception e )
-            {
-            }
-        }
-
-        return null;
     }
 }
