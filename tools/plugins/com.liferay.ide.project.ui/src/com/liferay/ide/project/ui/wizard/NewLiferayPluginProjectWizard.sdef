@@ -101,13 +101,16 @@
                                 <name>aux.text.ext</name>
                                 <value>Light-weight extension environment for Liferay as a plugin.</value>
                             </hint>
+                            <scale-vertically>false</scale-vertically>
                         </property-editor>
                     </content>
                     <label>Select the plugin type</label>
+                    <scale-vertically>false</scale-vertically>
                 </group>
             </content>
             <description>Create a new project configured as a Liferay plugin</description>
-            <height>500</height>
+            <height>525</height>
+            <scale-vertically>true</scale-vertically>
         </page>
         <description>Create a new project configured as a Liferay plugin</description>
         <page>
