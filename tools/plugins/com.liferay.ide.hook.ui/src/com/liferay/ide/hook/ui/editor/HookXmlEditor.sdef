@@ -97,10 +97,6 @@
                                     <name>factory</name>
                                 </hint>
                             </property-editor>
-
-                            <separator>
-                                <label>Details</label>
-                            </separator>
                             <switching-panel>
                                 <list-selection-controller>
                                     <property>../PortalPropertiesOverrides</property>

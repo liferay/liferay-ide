@@ -12,7 +12,7 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
@@ -47,11 +47,9 @@ import org.eclipse.sapphire.ValuePropertyBinding;
 public class PortalPropertiesBindingImpl extends HookListBindingImpl
 {
 
-    private List<NameValueObject> properties = new ArrayList<NameValueObject>();
 
     private class PortalPropertyResource extends Resource
     {
-
         private NameValueObject nameValue;
 
         public PortalPropertyResource( Resource parent, NameValueObject nameValue )
@@ -61,11 +59,6 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
             this.nameValue = nameValue;
         }
 
-        public NameValueObject getNameValue()
-        {
-            return this.nameValue;
-        }
-
         @Override
         protected PropertyBinding createBinding( Property property )
         {
@@ -73,7 +66,6 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
             {
                 return new ValuePropertyBinding()
                 {
-
                     @Override
                     public String read()
                     {
@@ -91,7 +83,6 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
             {
                 return new ValuePropertyBinding()
                 {
-
                     @Override
                     public String read()
                     {
@@ -114,65 +105,66 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
             return this.nameValue.getName();
         }
 
+        public NameValueObject getNameValue()
+        {
+            return this.nameValue;
+        }
+
         public Object getValue()
         {
-            if( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
-            {
-                return PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.getProperty( getName() );
-            }
-
-            return null;
+            return this.nameValue.getValue();
         }
 
         public void setName( String name )
         {
-            Object oldValue = getValue();
+            String oldName = this.nameValue.getName();
 
-            if( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
+            // check for dups, if there are none then clear the old name
+            int found = findDuplicates( oldName );
+
+            if( found <=1 )
             {
-                PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.clearProperty( getName() );
+                PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.clearProperty( oldName );
             }
 
             this.nameValue.setName( name );
-            setValue( oldValue );
+            // set the value again incase the name is being switched to a valid name
+            setValue( this.nameValue.getValue() );
         }
 
         public void setValue( Object value )
         {
             this.nameValue.setValue( value );
 
-            if( PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
+            int found = findDuplicates( getName() );
+
+            if( found <= 1 && PortalPropertiesBindingImpl.this.portalPropertiesConfiguration != null )
             {
                 PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.setProperty( getName(), value );
-                flushProperties();
             }
         }
 
     }
 
     private PropertiesConfiguration portalPropertiesConfiguration;
+    private List<NameValueObject> properties = new ArrayList<NameValueObject>();
 
-    @Override
-    protected Object insertUnderlyingObject( ElementType type, int position )
+    private int findDuplicates( String oldName )
     {
-        Object retval = null;
+        int found = 0;
 
-        if( type.equals( PortalProperty.TYPE ) )
+        for( NameValueObject prop : properties )
         {
-            retval = new NameValueObject();
-            this.properties.add( (NameValueObject) retval );
+            if( prop.getName() != null && prop.getName().equals( oldName ) )
+            {
+                found++;
+            }
         }
 
-        return retval;
+        return found;
     }
 
-    @Override
-    protected Resource resource( Object obj )
-    {
-        return new PortalPropertyResource( this.property().element().resource(), (NameValueObject) obj );
-    }
-
-    protected void flushProperties()
+    public void flush()
     {
         StringWriter output = new StringWriter();
 
@@ -212,7 +204,6 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 
         Listener listener = new FilteredListener<PropertyContentEvent>()
         {
-
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
@@ -223,6 +214,20 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
         hook().attach( listener, Hook.PROP_PORTAL_PROPERTIES_FILE.name() + "/*" ); //$NON-NLS-1$
 
         updateConfigurationForFile();
+    }
+
+    @Override
+    protected Object insertUnderlyingObject( ElementType type, int position )
+    {
+        NameValueObject retval = null;
+
+        if( type.equals( PortalProperty.TYPE ) )
+        {
+            retval = new NameValueObject();
+            this.properties.add( retval );
+        }
+
+        return retval;
     }
 
     @Override
@@ -238,11 +243,20 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
         {
             PortalPropertyResource ppResource = (PortalPropertyResource) resource;
             this.properties.remove( ppResource.getNameValue() );
-            this.portalPropertiesConfiguration.clearProperty( ppResource.getName() );
-            flushProperties();
-        }
 
-        // this.element().notifyPropertyChangeListeners( this.property() );
+            int found = findDuplicates( ppResource.getName() );
+
+            if( found < 1 )
+            {
+                this.portalPropertiesConfiguration.clearProperty( ppResource.getName() );
+            }
+        }
+    }
+
+    @Override
+    protected Resource resource( Object obj )
+    {
+        return new PortalPropertyResource( this.property().element().resource(), (NameValueObject) obj );
     }
 
     @Override

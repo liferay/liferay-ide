@@ -55,4 +55,10 @@ public class NameValueObject
     {
         this.value = v;
     }
+
+    @Override
+    public String toString()
+    {
+        return new StringBuilder().append( getName() ).append( '=' ).append( getValue() ).toString();
+    }
 }
