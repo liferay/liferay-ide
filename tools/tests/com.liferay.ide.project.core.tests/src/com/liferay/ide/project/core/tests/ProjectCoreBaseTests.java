@@ -28,7 +28,7 @@ public class ProjectCoreBaseTests extends BaseTests
             status.toString(),
             Status.createOkStatus().message().toLowerCase(), status.message().toLowerCase() );
 
-        final IProject newLiferayPluginProject = project( op.getProjectName().content() );
+        final IProject newLiferayPluginProject = project( op.getFinalProjectName().content() );
 
         assertNotNull( newLiferayPluginProject );
 

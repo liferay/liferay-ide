@@ -225,7 +225,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
         newProject.open( monitor );
 
         // need to update project name incase the suffix was not correct
-        op.setProjectName( newProject.getName() );
+        op.setFinalProjectName( newProject.getName() );
 
         switch( op.getPluginType().content() )
         {

@@ -285,6 +285,16 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
 
     void setGroupId( String value );
 
+
+    // *** FinalProjectName ***
+
+    @DefaultValue( text = "${ProjectName}" )
+    ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty( TYPE, "FinalProjectName" );
+
+    Value<String> getFinalProjectName();
+
+    void setFinalProjectName( String value );
+
     // *** Method: execute ***
 
     @DelegateImplementation( NewLiferayPluginProjectOpMethods.class )

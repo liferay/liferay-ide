@@ -51,10 +51,10 @@ public class NewLiferayPluginProjectOpMethods
         }
         catch( Exception e )
         {
-            final String msg = "Error creating Liferay plugin project"; //$NON-NLS-1$
+            final String msg = "Error creating Liferay plugin project."; //$NON-NLS-1$
             LiferayProjectCore.logError( msg, e );
 
-            return Status.createErrorStatus( msg, e );
+            return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );
         }
 
         return retval;
