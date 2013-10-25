@@ -314,10 +314,15 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                                 NLS.bind(
                                     "Could not add remote breakpoint: {0}:{1}",
                                     new Object[] { bp.getTemplateName(), bp.getLine() } ), e );
+
+                        if( retval != Status.OK_STATUS )
+                        {
+                            LiferayDebugCore.logError( retval.getMessage() );
+                        }
                     }
                 }
 
-                return retval == null ? Status.OK_STATUS : retval;
+                return Status.OK_STATUS;
             }
         };
 
@@ -674,10 +679,15 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                                 NLS.bind(
                                     "Unable to get debug client to remove breakpoint: {0}:{1}",
                                     new Object[] { bp.getTemplateName(), bp.getLine() } ), e );
+
+                        if( retval != Status.OK_STATUS )
+                        {
+                            LiferayDebugCore.logError( retval.getMessage() );
+                        }
                     }
                 }
 
-                return retval == null ? Status.OK_STATUS : retval;
+                return Status.OK_STATUS;
             }
         };
 
@@ -703,11 +713,11 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
 
                     for( Iterator i = getDebuggerClient().getSuspendedEnvironments().iterator(); i.hasNext(); )
                     {
-                        DebuggedEnvironment debuged = (DebuggedEnvironment) i.next();
+                        DebuggedEnvironment env = (DebuggedEnvironment) i.next();
 
                         try
                         {
-                            debuged.resume();
+                            env.resume();
                         }
                         catch( Exception e )
                         {
@@ -724,7 +734,7 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                     LiferayDebugCore.logError( "Could not fully resume suspended environments", e );
                 }
 
-                return null;
+                return Status.OK_STATUS;
             }
         };
 
