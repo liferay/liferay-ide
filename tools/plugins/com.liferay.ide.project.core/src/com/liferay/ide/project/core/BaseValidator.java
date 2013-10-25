@@ -152,7 +152,7 @@ public abstract class BaseValidator extends AbstractValidator
                     {
                         try
                         {
-                            IType checkType = javaProject.findType( superType );
+                            IType checkType = javaProject.findType( superType.trim() );
 
                             if( checkType != null )
                             {
