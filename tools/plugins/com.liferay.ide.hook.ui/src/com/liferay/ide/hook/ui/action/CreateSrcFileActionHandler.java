@@ -131,8 +131,9 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler
                 final ValueProperty valueProperty = ValueProperty.class.cast( this.property().definition() );
 
                 // do this so that the downstream properties can update their enablement/validation/etc.
+                Object content = this.getModelElement().property( valueProperty ).content();
                 this.getModelElement().property( valueProperty ).clear();
-                this.getModelElement().property( valueProperty ).write( "portal.properties" );
+                this.getModelElement().property( valueProperty ).write( content );
 
                 refreshEnablementState();
             }

@@ -34,29 +34,13 @@
         <page-name>Overview</page-name>
         <page-header-text>Liferay Hook Configuration</page-header-text>
         <root-node>
-            <node>
-                <image>icons/e16/hook.png</image>
-                <section>
-                    <label>Internationalization</label>
-                    <scale-vertically>true</scale-vertically>
-                    <collapsible>false</collapsible>
-                    <content>
-                        <property-editor>
-                            <property>LanguageProperties</property>
-                            <show-label>false</show-label>
-                            <child-property>Value</child-property>
-                        </property-editor>
-                    </content>
-                </section>
-                <label>Hook Configuration</label>
-                <node-include>PortalPropertiesNode</node-include>
-                <node-include>CustomJSPsNode</node-include>
-                <node-include>ServicesNode</node-include>
-                <node-include>FiltersAndMappingsNode</node-include>
-                <node-include>StrutsActionsNode</node-include>
-                <node-include>IndexersNode</node-include>
-
-            </node>
+            <node-include>PortalPropertiesNode</node-include>
+            <node-include>CustomJSPsNode</node-include>
+            <node-include>ServicesNode</node-include>
+            <node-include>FiltersAndMappingsNode</node-include>
+            <node-include>StrutsActionsNode</node-include>
+            <node-include>IndexersNode</node-include>
+            <node-include>LanguagePropertiesNode</node-include>
         </root-node>
         <page-header-image>images/hook.png</page-header-image>
         <element-type>Hook6xx</element-type>
@@ -201,6 +185,11 @@
                     <show-image></show-image>
                     <label>Add a Service Wrapper</label>
                 </action-link>
+                <actuator>
+                    <action-id>Sapphire.Add</action-id>
+                    <label>Add a Service Wrapper</label>
+                    <show-image>true</show-image>
+                </actuator>
             </content>
         </section>
         <node-include>ServicesNodeList</node-include>
@@ -280,6 +269,22 @@
                     <action-id>Sapphire.Add</action-id>
                     <action-handler-id>Sapphire.Add.IServletFilterMapping</action-handler-id>
                 </action-link>
+                <actuator>
+                    <action-id>Sapphire.Add</action-id>
+                    <show-image>true</show-image>
+                    <label>Add a Servlet Filter</label>
+                </actuator>
+                <actuator>
+                    <action-id>Sapphire.Add</action-id>
+                    <action-handler>
+                        <action>Sapphire.Add</action>
+                        <id>Sapphire.Add.ServletFilterMapping</id>
+                        <impl>AddServletFilterMappingAction</impl>
+                    </action-handler>
+                    <label>Add a Servlet Filter Mapping</label>
+                    <show-image>true</show-image>
+                    <action-handler-id>Sapphire.Add.ServletFilterMapping</action-handler-id>
+                </actuator>
             </content>
         </section>
     </node>
@@ -359,6 +364,10 @@
                     <show-image></show-image>
                     <action-id>Sapphire.Add</action-id>
                 </action-link>
+                <actuator>
+                    <action-id>Sapphire.Add</action-id>
+                    <show-image>true</show-image>
+                </actuator>
             </content>
         </section>
     </node>
@@ -398,6 +407,10 @@
                     <show-image></show-image>
                     <action-id>Sapphire.Add</action-id>
                 </action-link>
+                <actuator>
+                    <action-id>Sapphire.Add</action-id>
+                    <show-image>true</show-image>
+                </actuator>
             </content>
         </section>
         <node-include>IndexerPostProcessorsList</node-include>
@@ -459,4 +472,18 @@
             </section>
         </case>
     </node-factory>
+    <node>
+        <id>LanguagePropertiesNode</id>
+        <image>icons/e16/properties_16x16.gif</image>
+        <label>Language Properties</label>
+        <section>
+            <content>
+                <property-editor>
+                    <show-label>false</show-label>
+                    <property>LanguageProperties</property>
+                    <span>false</span>
+                </property-editor>
+            </content>
+        </section>
+    </node>
 </definition>
