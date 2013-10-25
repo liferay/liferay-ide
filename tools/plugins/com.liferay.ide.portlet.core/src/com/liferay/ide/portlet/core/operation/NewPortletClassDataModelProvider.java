@@ -804,14 +804,17 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             {
                 final IType portletType = JavaModelUtil.findType( javaProject, "javax.portlet.Portlet" ); //$NON-NLS-1$
 
-                final IJavaSearchScope scope =
-                    BasicSearchEngine.createStrictHierarchyScope( javaProject, portletType, true, true, null );
-
-                final IType classType = JavaModelUtil.findType( javaProject, qualifiedClassName );
-
-                if( classType != null && scope.encloses( classType ) )
+                if( portletType != null )
                 {
-                    return true;
+                    final IJavaSearchScope scope =
+                        BasicSearchEngine.createStrictHierarchyScope( javaProject, portletType, true, true, null );
+
+                    final IType classType = JavaModelUtil.findType( javaProject, qualifiedClassName );
+
+                    if( classType != null && scope.encloses( classType ) )
+                    {
+                        return true;
+                    }
                 }
             }
         }
