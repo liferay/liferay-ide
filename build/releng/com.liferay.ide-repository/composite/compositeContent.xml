@@ -8,5 +8,6 @@
     <children size='3'>
         <child location='tools/' />
         <child location='maven/' />
+        <child location='adt/' />
     </children>
 </repository>

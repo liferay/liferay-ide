@@ -45,6 +45,7 @@
         <!-- all repositories included in composite need to be built before the com.liferay.ide-repository -->
         <module>com.liferay.ide.maven-repository</module>
         <module>com.liferay.ide.tools-repository</module>
+        <module>com.liferay.ide.adt-repository</module>
         <module>com.liferay.ide.velocity-repository</module>
         <module>com.liferay.ide-repository</module>
     </modules>

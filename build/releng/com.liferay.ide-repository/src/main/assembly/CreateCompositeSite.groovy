@@ -8,6 +8,7 @@ def compositeDir = new File( basedir, "target/composite" )
 def toolsTargetRepository = new File( basedir, "../com.liferay.ide.tools-repository/target/" )
 def toolsRepository = new File( toolsTargetRepository, "repository" )
 def mavenRepository = new File( basedir, "../com.liferay.ide.maven-repository/target/repository" )
+def adtRepository = new File( basedir, "../com.liferay.ide.adt-repository/target/repository" )
 //def velocityRepository = new File( basedir, "../com.liferay.ide.velocity-repository/target/repository" )
 
 compositeDir.delete()
@@ -37,6 +38,14 @@ ant.sequential
     copy( todir:"${compositeDir}/maven" )
     {
         fileset( dir:mavenRepository )
+        {
+            include( name:"**/*" )
+        }
+    }
+
+    copy( todir:"${compositeDir}/adt" )
+    {
+        fileset( dir:adtRepository )
         {
             include( name:"**/*" )
         }
