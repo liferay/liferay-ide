@@ -19,11 +19,6 @@ package com.liferay.ide.portlet.core.model.internal;
 
 import static com.liferay.ide.core.model.internal.GenericResourceBundlePathService.RB_FILE_EXTENSION;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.portlet.core.model.Portlet;
-import com.liferay.ide.portlet.core.model.SupportedLocales;
-import com.liferay.ide.portlet.core.util.PortletUtil;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -34,13 +29,17 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.portlet.core.model.Portlet;
+import com.liferay.ide.portlet.core.model.SupportedLocales;
+import com.liferay.ide.portlet.core.util.PortletUtil;
 
 /**
  * @author Kamesh Sampath
@@ -49,13 +48,15 @@ import org.eclipse.sapphire.services.ValidationService;
 public class LocaleBundleValidationService extends ValidationService
 {
 
+    private FilteredListener<PropertyContentEvent> listener;
+    
     /*
      * IDE-1132 ,Add a listener to Property ResourceBundle, so LocaleBundle can be validated once ResourceBundle
      * gets changed.
      */
     protected void initValidationService()
     {
-        final Listener listener = new FilteredListener<PropertyContentEvent>()
+        this.listener = new FilteredListener<PropertyContentEvent>()
         {
 
             protected void handleTypedEvent( final PropertyContentEvent event )
@@ -67,11 +68,11 @@ public class LocaleBundleValidationService extends ValidationService
             }
         };
 
-        context( SupportedLocales.class ).nearest( Portlet.class ).getResourceBundle().attach( listener );
+        context( SupportedLocales.class ).nearest( Portlet.class ).getResourceBundle().attach( this.listener );
     }
 
 
-    public void refreshFromOutside()
+    public void forceRefresh()
     {
         if( !context( SupportedLocales.class ).disposed() )
         {
@@ -132,6 +133,12 @@ public class LocaleBundleValidationService extends ValidationService
         return Status.createOkStatus();
     }
 
+    @Override
+    public void dispose()
+    {
+        context( SupportedLocales.class ).nearest( Portlet.class ).getResourceBundle().detach( this.listener );
+    }
+    
     private static final class Resources extends NLS
     {
         public static String localeMustNotEmpty;

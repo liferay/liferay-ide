@@ -197,7 +197,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
 
         for( SupportedLocales sl : getModelElement().nearest( Portlet.class ).getSupportedLocales() )
         {
-            sl.getSupportedLocale().service( LocaleBundleValidationService.class ).refreshFromOutside();
+            sl.getSupportedLocale().service( LocaleBundleValidationService.class ).forceRefresh();
         }
 
         return null;
