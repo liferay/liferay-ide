@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.common.emfworkbench.integration,
  com.liferay.ide.layouttpl.core;bundle-version="2.0.0",
  com.liferay.ide.theme.core;bundle-version="2.0.0",
- org.eclipse.m2e.maven.runtime,
+ org.eclipse.m2e.maven.runtime;bundle-version="1.5.0",
  org.eclipse.emf.ecore,
  org.eclipse.m2e.archetype.common
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
