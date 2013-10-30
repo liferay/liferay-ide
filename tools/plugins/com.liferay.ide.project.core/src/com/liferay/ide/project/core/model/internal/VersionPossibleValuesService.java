@@ -14,6 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+
+import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.sapphire.modeling.Status.Severity;
@@ -29,17 +33,16 @@ public class VersionPossibleValuesService extends PossibleValuesService
     @Override
     protected void fillPossibleValues( Set<String> values )
     {
-        values.add( "6.0.5" ); //$NON-NLS-1$
-        values.add( "6.0.6" ); //$NON-NLS-1$
-        values.add( "6.1.0" ); //$NON-NLS-1$
-        values.add( "6.1.1" ); //$NON-NLS-1$
-        values.add( "6.1.2" ); //$NON-NLS-1$
-        values.add( "6.2.0-RC1" ); //$NON-NLS-1$
-        values.add( "6.2.0-RC2" ); //$NON-NLS-1$
-        values.add( "6.2.0-RC3" ); //$NON-NLS-1$
-        values.add( "6.2.0-RC4" ); //$NON-NLS-1$
-        values.add( "6.2.0-RC5" ); //$NON-NLS-1$
-        values.add( "6.2.0-SNAPSHOT" ); //$NON-NLS-1$
+        final ILiferayProjectProvider projectProvider = op().getProjectProvider().content();
+
+        final String[] versions = projectProvider.getPossibleVersions();
+
+        Collections.addAll( values, versions );
+    }
+
+    private NewLiferayPluginProjectOp op()
+    {
+        return context( NewLiferayPluginProjectOp.class );
     }
 
     @Override

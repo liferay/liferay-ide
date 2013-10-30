@@ -14,17 +14,30 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.maven.core.aether.AetherUtil;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.apache.maven.cli.MavenCli;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.VersionRangeRequest;
+import org.eclipse.aether.resolution.VersionRangeResolutionException;
+import org.eclipse.aether.resolution.VersionRangeResult;
+import org.eclipse.aether.version.Version;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -38,7 +51,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
+import org.eclipse.m2e.core.embedder.MavenRuntimeManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
@@ -103,6 +118,7 @@ public class MavenUtil
         return retval == null ? Status.OK_STATUS : retval;
     }
 
+
     public static MojoExecution getExecution( MavenExecutionPlan plan, String artifactId )
     {
         if( plan != null )
@@ -124,6 +140,47 @@ public class MavenUtil
         IPath m2eLiferayFolder = getM2eLiferayFolder( mavenProject, project );
 
         return project.getFolder( m2eLiferayFolder ).getFolder( ILiferayMavenConstants.THEME_RESOURCES_FOLDER );
+    }
+
+    public static String getLatestVersion(
+        String group, String artifactId, String startVersion, RepositorySystem system, RepositorySystemSession session )
+    {
+        String retval = null;
+
+        Artifact artifact = new DefaultArtifact( group + ":" + artifactId + ":[" + startVersion + ",)" );
+
+        RemoteRepository repo = AetherUtil.newCentralRepository();
+
+        VersionRangeRequest rangeRequest = new VersionRangeRequest();
+        rangeRequest.setArtifact( artifact );
+        rangeRequest.addRepository( repo );
+
+        try
+        {
+            final VersionRangeResult rangeResult = system.resolveVersionRange( session, rangeRequest );
+            final Version newestVersion = rangeResult.getHighestVersion();
+            final List<Version> versions = rangeResult.getVersions();
+
+            if( versions.size() > 1 && newestVersion.toString().endsWith( "-SNAPSHOT" ) )
+            {
+                retval = versions.get( versions.size() - 2 ).toString();
+            }
+            else if( newestVersion != null )
+            {
+                retval = newestVersion.toString();
+            }
+        }
+        catch( VersionRangeResolutionException e )
+        {
+            LiferayMavenCore.logError( "Unable to get latest artifact version.", e );
+        }
+
+        if( retval == null )
+        {
+            retval = "6.2.0-RC5";
+        }
+
+        return retval;
     }
 
     public static Plugin getLiferayMavenPlugin( MavenProject mavenProject )
@@ -193,6 +250,42 @@ public class MavenUtil
         }
 
         return pluginType;
+    }
+
+    public static String getLocalRepositoryDir()
+    {
+        String retval = null;
+
+        final IMavenConfiguration mavenConfiguration = MavenPlugin.getMavenConfiguration();
+        String userSettings = mavenConfiguration.getUserSettingsFile();
+
+        if( userSettings == null || userSettings.length() == 0 )
+        {
+            userSettings = MavenCli.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
+        }
+
+        final MavenRuntimeManager runtimeManager = MavenPlugin.getMavenRuntimeManager();
+
+        final String globalSettings = runtimeManager.getGlobalSettingsFile();
+
+        final IMaven maven = MavenPlugin.getMaven();
+
+        try
+        {
+            final Settings settings = maven.buildSettings( globalSettings, userSettings );
+            retval = settings.getLocalRepository();
+        }
+        catch( CoreException e )
+        {
+            LiferayMavenCore.logError( "Unable to get local repository dir.", e );
+        }
+
+        if( retval == null )
+        {
+            retval = org.apache.maven.repository.RepositorySystem.defaultUserLocalRepository.getAbsolutePath();
+        }
+
+        return retval;
     }
 
     public static IPath getM2eLiferayFolder( MavenProject mavenProject, IProject project )

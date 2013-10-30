@@ -17,16 +17,28 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.archetype.catalog.Archetype;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.repository.RemoteRepository;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResolutionException;
+import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.resolution.VersionRangeRequest;
+import org.eclipse.aether.resolution.VersionRangeResolutionException;
+import org.eclipse.aether.resolution.VersionRangeResult;
+import org.eclipse.aether.version.Version;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -34,9 +46,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.internal.MavenPluginActivator;
-import org.eclipse.m2e.core.internal.archetype.ArchetypeCatalogFactory;
-import org.eclipse.m2e.core.internal.archetype.ArchetypeManager;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -44,7 +53,6 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
 public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 {
 
@@ -96,52 +104,39 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         }
 
         final String archetypeArtifactId = "liferay-" + archetypeType + "-archetype"; //$NON-NLS-1$ //$NON-NLS-2$
-        final String archetypeVersion = "6.2.0-RC4"; //$NON-NLS-1$
 
-        Archetype archetype = null;
+        final RepositorySystem system = AetherUtil.newRepositorySystem();
 
-        monitor.beginTask( "Searching for liferay maven archetypes from all catalogs.", IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
+        final RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
 
-        final List<Archetype> allArchetypes = getAllArchetypes();
+        // get latest liferay archetype
+        monitor.beginTask( "Determining latest Liferay maven plugin archetype version.", IProgressMonitor.UNKNOWN ); //$NON-NLS-1$
+        final String archetypeVersion = getLatestLiferayArchetype( archetypeArtifactId, system, session ).getVersion();
 
-        monitor.done();
+        Archetype archetype = new Archetype();
 
-        for( Archetype arc : allArchetypes )
+        archetype.setArtifactId( archetypeArtifactId );
+        archetype.setGroupId( archetypeGroupId );
+        archetype.setModelEncoding( "UTF-8" );
+        archetype.setVersion( archetypeVersion );
+
+        final Properties properties = new Properties();
+
+        final ProjectImportConfiguration configuration = new ProjectImportConfiguration();
+
+        final List<IProject> newProjects =
+            MavenPlugin.getProjectConfigurationManager().createArchetypeProjects(
+                location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
+
+        if( CoreUtil.isNullOrEmpty( newProjects ) )
         {
-            if( archetypeGroupId.equals( arc.getGroupId() ) && archetypeArtifactId.equals( arc.getArtifactId() ) &&
-                archetypeVersion.equals( arc.getVersion() ) )
-            {
-                archetype = arc;
-                break;
-            }
-        }
-
-        if( archetype == null )
-        {
-            retval =
-                LiferayMavenCore.createErrorStatus( "Unable to find archetype " + archetypeGroupId + ":" +
-                    archetypeArtifactId );
+            retval = LiferayMavenCore.createErrorStatus( "New project was not created due to unknown error" );
         }
         else
         {
-            final Properties properties = new Properties();
-
-            final ProjectImportConfiguration configuration = new ProjectImportConfiguration();
-
-            final List<IProject> newProjects =
-                MavenPlugin.getProjectConfigurationManager().createArchetypeProjects(
-                    location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
-
-            if( CoreUtil.isNullOrEmpty( newProjects ) )
+            if( op.getPluginType().content().equals( PluginType.portlet ) )
             {
-                retval = LiferayMavenCore.createErrorStatus( "New project was not created due to unknown error" );
-            }
-            else
-            {
-                if( op.getPluginType().content().equals( PluginType.portlet ) )
-                {
-                    retval = op.getPortletFramework().content().postProjectCreated( newProjects.get( 0 ), monitor );
-                }
+                retval = op.getPortletFramework().content().postProjectCreated( newProjects.get( 0 ), monitor );
             }
         }
 
@@ -153,37 +148,75 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         return retval;
     }
 
-    @SuppressWarnings( { "unchecked", "rawtypes" } )
-    private List<Archetype> getAllArchetypes()
+    private Artifact getLatestLiferayArchetype( String archetypeArtifactId, RepositorySystem system, RepositorySystemSession session )
     {
-        ArchetypeManager manager = MavenPluginActivator.getDefault().getArchetypeManager();
-        Collection<ArchetypeCatalogFactory> archetypeCatalogs = manager.getArchetypeCatalogs();
-        ArrayList<Archetype> list = new ArrayList<Archetype>();
+        final String groupId = "com.liferay.maven.archetypes";
 
-        for( ArchetypeCatalogFactory catalog : archetypeCatalogs )
+        String latestVersion = MavenUtil.getLatestVersion( groupId, archetypeArtifactId, "6", system, session );
+
+        Artifact artifact = new DefaultArtifact( "com.liferay.maven.archetypes:" + archetypeArtifactId + ":" + latestVersion );
+
+        ArtifactRequest artifactRequest = new ArtifactRequest();
+        artifactRequest.setArtifact( artifact );
+        artifactRequest.addRepository( AetherUtil.newCentralRepository() );
+
+        try
         {
-            try
-            {
-                // temporary hack to get around 'Test Remote Catalog' blowing up on download
-                // described in https://issues.sonatype.org/browse/MNGECLIPSE-1792
-                if( catalog.getDescription().startsWith( "Test" ) ) //$NON-NLS-1$
-                {
-                    continue;
-                }
-
-                List arcs = catalog.getArchetypeCatalog().getArchetypes();
-                if( arcs != null )
-                {
-                    list.addAll( arcs );
-                }
-            }
-            catch( Exception ce )
-            {
-                LiferayMavenCore.logError( "Unable to read archetype catalog: " + catalog.getId(), ce ); //$NON-NLS-1$
-            }
+            ArtifactResult artifactResult = system.resolveArtifact( session, artifactRequest );
+            artifact = artifactResult.getArtifact();
+        }
+        catch( ArtifactResolutionException e )
+        {
+            e.printStackTrace();
         }
 
-        return list;
+        return artifact;
+    }
+
+    @Override
+    public String[] getPossibleVersions()
+    {
+        String[] retval = new String[0];
+
+        List<String> possibleVersions = new ArrayList<String>();
+
+        RepositorySystem system = AetherUtil.newRepositorySystem();
+
+        RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
+
+        Artifact artifact = new DefaultArtifact( "com.liferay.portal:portal-service:[6,)" );
+
+        RemoteRepository repo = AetherUtil.newCentralRepository();
+
+        VersionRangeRequest rangeRequest = new VersionRangeRequest();
+        rangeRequest.setArtifact( artifact );
+        rangeRequest.addRepository( repo );
+
+        try
+        {
+            final VersionRangeResult rangeResult = system.resolveVersionRange( session, rangeRequest );
+
+            final List<Version> versions = rangeResult.getVersions();
+
+            for( Version version : versions )
+            {
+                final String val = version.toString();
+
+                if( ! "6.2.0".equals( val ) )
+                {
+                    possibleVersions.add( val );
+                }
+            }
+
+            retval = possibleVersions.toArray( new String[0] );
+
+//            Arrays.sort( retval );
+        }
+        catch( VersionRangeResolutionException e )
+        {
+        }
+
+        return retval;
     }
 
     public ILiferayProject provide( Object type )

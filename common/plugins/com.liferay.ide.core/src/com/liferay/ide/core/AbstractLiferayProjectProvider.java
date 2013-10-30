@@ -15,6 +15,7 @@
 package com.liferay.ide.core;
 
 
+
 /**
  * @author Gregory Amerson
  */
@@ -34,6 +35,11 @@ public abstract class AbstractLiferayProjectProvider implements ILiferayProjectP
     public String getDisplayName()
     {
         return this.displayName;
+    }
+
+    public String[] getPossibleVersions()
+    {
+        return new String[] {};
     }
 
     public int getPriority()

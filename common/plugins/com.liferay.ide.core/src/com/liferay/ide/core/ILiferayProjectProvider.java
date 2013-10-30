@@ -27,6 +27,8 @@ public interface ILiferayProjectProvider
 
     String getDisplayName();
 
+    String[] getPossibleVersions();
+
     int getPriority();
 
     String getShortName();
