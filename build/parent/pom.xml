@@ -12,8 +12,8 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <tycho-version>0.18.0</tycho-version>
-        <tycho-extras-version>0.18.0</tycho-extras-version>
+        <tycho-version>0.19.0</tycho-version>
+        <tycho-extras-version>0.19.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/</orbit-site>
         <sapphire-site>https://hudson.eclipse.org/sapphire/job/0.7.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
         <ivyde-site>https://builds.apache.org/job/IvyDE-updatesite/676/artifact/trunk/build/</ivyde-site>
@@ -63,7 +63,6 @@
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-source-plugin</artifactId>
             </plugin>
-
         </plugins>
 
         <pluginManagement>
@@ -71,7 +70,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.5.1</version>
+                    <version>3.1</version>
                     <configuration>
                         <source>1.6</source>
                         <target>1.6</target>
