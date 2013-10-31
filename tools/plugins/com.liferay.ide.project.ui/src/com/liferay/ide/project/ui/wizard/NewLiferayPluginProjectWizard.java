@@ -101,7 +101,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
     {
         super.performPostFinish();
 
-        final IProject project = CoreUtil.getProject( element().getProjectName().content( true ) );
+        final IProject project = CoreUtil.getProject( element().getFinalProjectName().content() );
 
         addToWorkingSets( project );
 
