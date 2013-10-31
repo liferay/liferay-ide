@@ -31,6 +31,7 @@
 
    <features>
       <feature id="org.eclipse.m2e.feature" />
+      <feature id="org.eclipse.m2e.logback.feature" />
       <feature id="org.eclipse.m2e.wtp.feature" />
       <feature id="org.eclipse.m2e.wtp.jsf.feature" />
       <feature id="org.sonatype.m2e.mavenarchiver.feature" />
