@@ -109,7 +109,6 @@
                 </group>
             </content>
             <description>Create a new project configured as a Liferay plugin</description>
-            <height>525</height>
             <scale-vertically>true</scale-vertically>
         </page>
         <description>Create a new project configured as a Liferay plugin</description>

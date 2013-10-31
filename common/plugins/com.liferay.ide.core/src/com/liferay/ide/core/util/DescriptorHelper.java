@@ -175,29 +175,27 @@ public class DescriptorHelper
 
         if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
         {
-            final IFile file = defaultDocrootFolder.getFile( new Path( "WEB-INF" ).append( fileName ) );
-
-            if( file.exists() )
-            {
-                retval = file;
-            }
+            retval = defaultDocrootFolder.getFile( new Path( "WEB-INF" ).append( fileName ) );
         }
 
-        // fallback to looping through all virtual folders
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-        if( webappRoot != null )
+        if( retval == null )
         {
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
-            {
-                if( container != null && container.exists() )
-                {
-                    final IFile descriptorFile = container.getFile( new Path( "WEB-INF" ).append( fileName ) );
+         // fallback to looping through all virtual folders
+            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-                    if( descriptorFile.exists() )
+            if( webappRoot != null )
+            {
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                {
+                    if( container != null && container.exists() )
                     {
-                        retval = descriptorFile;
-                        break;
+                        final IFile descriptorFile = container.getFile( new Path( "WEB-INF" ).append( fileName ) );
+
+                        if( descriptorFile.exists() )
+                        {
+                            retval = descriptorFile;
+                            break;
+                        }
                     }
                 }
             }
