@@ -15,11 +15,16 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import java.util.Collections;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.services.PossibleValuesService;
 
@@ -30,14 +35,47 @@ import org.eclipse.sapphire.services.PossibleValuesService;
 public class VersionPossibleValuesService extends PossibleValuesService
 {
 
+    private String[] versions = null;
+    private Job versionsJob = null;
+
     @Override
     protected void fillPossibleValues( Set<String> values )
     {
-        final ILiferayProjectProvider projectProvider = op().getProjectProvider().content();
+        if( this.versions != null )
+        {
+            Collections.addAll( values, this.versions );
+        }
+        else if ( this.versionsJob == null )
+        {
+            this.versionsJob = new Job("Determining possible Liferay versions.")
+            {
+                @Override
+                protected IStatus run( IProgressMonitor monitor )
+                {
+                    final NewLiferayPluginProjectOp op = op();
 
-        final String[] versions = projectProvider.getPossibleVersions();
+                    if( ! op.disposed() )
+                    {
+                        final ILiferayProjectProvider projectProvider = op.getProjectProvider().content();
 
-        Collections.addAll( values, versions );
+                        try
+                        {
+                            versions = projectProvider.getPossibleVersions();
+                        }
+                        catch( Exception e )
+                        {
+                            LiferayProjectCore.logError( "Could not determine possible versions.", e );
+                        }
+
+                        broadcast();
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            };
+
+            this.versionsJob.schedule();
+        }
     }
 
     private NewLiferayPluginProjectOp op()
