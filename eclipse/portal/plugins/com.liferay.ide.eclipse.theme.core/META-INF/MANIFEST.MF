@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Theme Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.theme.core;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.theme.core.ThemeCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -17,7 +17,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.j2ee.web
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.theme.core,
- com.liferay.ide.eclipse.theme.core.facet,
- com.liferay.ide.eclipse.theme.core.operation,
- com.liferay.ide.eclipse.theme.core.util
+Export-Package: com.liferay.ide.eclipse.theme.core,com.liferay.ide.ecl
+ ipse.theme.core.facet,com.liferay.ide.eclipse.theme.core.operation,co
+ m.liferay.ide.eclipse.theme.core.util

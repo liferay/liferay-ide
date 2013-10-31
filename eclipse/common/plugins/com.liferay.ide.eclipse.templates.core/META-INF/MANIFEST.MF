@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Templates Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.templates.core;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.templates.core.TemplatesCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -12,31 +12,18 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.eclipse.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.templates.core,
- org.apache.velocity,
- org.apache.velocity.anakia,
- org.apache.velocity.app,
- org.apache.velocity.app.event,
- org.apache.velocity.app.event.implement,
- org.apache.velocity.app.tools,
- org.apache.velocity.context,
- org.apache.velocity.convert,
- org.apache.velocity.exception,
- org.apache.velocity.io,
- org.apache.velocity.runtime,
- org.apache.velocity.runtime.directive,
- org.apache.velocity.runtime.log,
- org.apache.velocity.runtime.parser,
- org.apache.velocity.runtime.parser.node,
- org.apache.velocity.runtime.resource,
- org.apache.velocity.runtime.resource.loader,
- org.apache.velocity.runtime.resource.util,
- org.apache.velocity.runtime.visitor,
- org.apache.velocity.servlet,
- org.apache.velocity.texen,
- org.apache.velocity.texen.ant,
- org.apache.velocity.texen.util,
- org.apache.velocity.util,
- org.apache.velocity.util.introspection
+Export-Package: com.liferay.ide.eclipse.templates.core,org.apache.velo
+ city,org.apache.velocity.anakia,org.apache.velocity.app,org.apache.ve
+ locity.app.event,org.apache.velocity.app.event.implement,org.apache.v
+ elocity.app.tools,org.apache.velocity.context,org.apache.velocity.con
+ vert,org.apache.velocity.exception,org.apache.velocity.io,org.apache.
+ velocity.runtime,org.apache.velocity.runtime.directive,org.apache.vel
+ ocity.runtime.log,org.apache.velocity.runtime.parser,org.apache.veloc
+ ity.runtime.parser.node,org.apache.velocity.runtime.resource,org.apac
+ he.velocity.runtime.resource.loader,org.apache.velocity.runtime.resou
+ rce.util,org.apache.velocity.runtime.visitor,org.apache.velocity.serv
+ let,org.apache.velocity.texen,org.apache.velocity.texen.ant,org.apach
+ e.velocity.texen.util,org.apache.velocity.util,org.apache.velocity.ut
+ il.introspection
 Bundle-ClassPath: .,
  lib/velocity-1.6.4.jar

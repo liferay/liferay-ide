@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.ui;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.ui.LiferayUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -39,13 +39,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.navigator.resources
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.ui,
- com.liferay.ide.eclipse.ui.action,
- com.liferay.ide.eclipse.ui.dialog,
- com.liferay.ide.eclipse.ui.editor,
- com.liferay.ide.eclipse.ui.form,
- com.liferay.ide.eclipse.ui.navigator,
- com.liferay.ide.eclipse.ui.pref,
- com.liferay.ide.eclipse.ui.toolbar,
- com.liferay.ide.eclipse.ui.util,
- com.liferay.ide.eclipse.ui.wizard
+Export-Package: com.liferay.ide.eclipse.ui,com.liferay.ide.eclipse.ui.
+ action,com.liferay.ide.eclipse.ui.dialog,com.liferay.ide.eclipse.ui.e
+ ditor,com.liferay.ide.eclipse.ui.form,com.liferay.ide.eclipse.ui.navi
+ gator,com.liferay.ide.eclipse.ui.pref,com.liferay.ide.eclipse.ui.tool
+ bar,com.liferay.ide.eclipse.ui.util,com.liferay.ide.eclipse.ui.wizard

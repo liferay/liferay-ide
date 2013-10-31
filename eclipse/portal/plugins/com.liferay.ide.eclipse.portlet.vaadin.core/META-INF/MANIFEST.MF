@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Vaadin Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.portlet.vaadin.core;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.portlet.vaadin.core.VaadinCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
@@ -18,6 +18,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.portlet.vaadin.core,
- com.liferay.ide.eclipse.portlet.vaadin.core.dd,
- com.liferay.ide.eclipse.portlet.vaadin.core.operation
+Export-Package: com.liferay.ide.eclipse.portlet.vaadin.core,com.lifera
+ y.ide.eclipse.portlet.vaadin.core.dd,com.liferay.ide.eclipse.portlet.
+ vaadin.core.operation

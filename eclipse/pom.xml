@@ -26,7 +26,7 @@
 
     <groupId>com.liferay.ide.eclipse</groupId>
     <artifactId>ide-parent</artifactId>
-    <version>1.6.2-SNAPSHOT</version>
+    <version>1.6.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
@@ -448,6 +448,11 @@
                     </environments>
                 </configuration>
             </plugin>
+		<plugin>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>tycho-versions-plugin</artifactId>
+			<version>${tycho-version}</version>
+	      	</plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -495,6 +500,11 @@
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>1.6</version>
                 </plugin>
+		<plugin>	
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>tycho-versions-plugin</artifactId>
+			<version>${tycho-version}</version>
+		</plugin>
             </plugins>
         </pluginManagement>
     </build>

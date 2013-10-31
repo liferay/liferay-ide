@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Snippets
 Bundle-SymbolicName: com.liferay.ide.eclipse.ui.snippets;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.ui.snippets.SnippetsUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -19,8 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.jsf.common
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.ui.snippets,
- com.liferay.ide.eclipse.ui.snippets.util,
- com.liferay.ide.eclipse.ui.snippets.wizard
+Export-Package: com.liferay.ide.eclipse.ui.snippets,com.liferay.ide.ec
+ lipse.ui.snippets.util,com.liferay.ide.eclipse.ui.snippets.wizard
 Bundle-ClassPath: .
 Import-Package: org.apache.commons.lang

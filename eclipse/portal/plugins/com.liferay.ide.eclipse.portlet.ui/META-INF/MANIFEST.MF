@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Portlet UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.portlet.ui;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.portlet.ui.PortletUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.eclipse.core,
@@ -52,14 +52,11 @@ Require-Bundle: com.liferay.ide.eclipse.core,
  org.eclipse.ui.navigator
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.portlet.ui,
- com.liferay.ide.eclipse.portlet.ui.action,
- com.liferay.ide.eclipse.portlet.ui.action.filters,
- com.liferay.ide.eclipse.portlet.ui.editor,
- com.liferay.ide.eclipse.portlet.ui.editor.internal,
- com.liferay.ide.eclipse.portlet.ui.navigator,
- com.liferay.ide.eclipse.portlet.ui.navigator.actions,
- com.liferay.ide.eclipse.portlet.ui.pref,
- com.liferay.ide.eclipse.portlet.ui.template,
- com.liferay.ide.eclipse.portlet.ui.util,
- com.liferay.ide.eclipse.portlet.ui.wizard
+Export-Package: com.liferay.ide.eclipse.portlet.ui,com.liferay.ide.ecl
+ ipse.portlet.ui.action,com.liferay.ide.eclipse.portlet.ui.action.filt
+ ers,com.liferay.ide.eclipse.portlet.ui.editor,com.liferay.ide.eclipse
+ .portlet.ui.editor.internal,com.liferay.ide.eclipse.portlet.ui.naviga
+ tor,com.liferay.ide.eclipse.portlet.ui.navigator.actions,com.liferay.
+ ide.eclipse.portlet.ui.pref,com.liferay.ide.eclipse.portlet.ui.templa
+ te,com.liferay.ide.eclipse.portlet.ui.util,com.liferay.ide.eclipse.po
+ rtlet.ui.wizard

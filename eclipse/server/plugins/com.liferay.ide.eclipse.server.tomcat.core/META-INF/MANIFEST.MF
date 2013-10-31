@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Tomcat Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.server.tomcat.core;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -23,6 +23,6 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.eclipse.sdk
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.server.tomcat.core,
- com.liferay.ide.eclipse.server.tomcat.core.job,
- com.liferay.ide.eclipse.server.tomcat.core.util
+Export-Package: com.liferay.ide.eclipse.server.tomcat.core,com.liferay
+ .ide.eclipse.server.tomcat.core.job,com.liferay.ide.eclipse.server.to
+ mcat.core.util

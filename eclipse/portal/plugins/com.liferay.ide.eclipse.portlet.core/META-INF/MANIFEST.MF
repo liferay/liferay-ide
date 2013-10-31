@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Portlet Core
 Bundle-SymbolicName: com.liferay.ide.eclipse.portlet.core;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.portlet.core.PortletCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: com.liferay.ide.eclipse.core,
@@ -35,15 +35,12 @@ Require-Bundle: com.liferay.ide.eclipse.core,
  org.eclipse.sapphire.java.jdt;bundle-version="0.3.1"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.portlet.core,
- com.liferay.ide.eclipse.portlet.core.dd,
- com.liferay.ide.eclipse.portlet.core.descriptor,
- com.liferay.ide.eclipse.portlet.core.display.model,
- com.liferay.ide.eclipse.portlet.core.job,
- com.liferay.ide.eclipse.portlet.core.model,
- com.liferay.ide.eclipse.portlet.core.model.lfrportlet.common,
- com.liferay.ide.eclipse.portlet.core.model.lfrportlet600,
- com.liferay.ide.eclipse.portlet.core.model.lfrportlet610,
- com.liferay.ide.eclipse.portlet.core.operation,
- com.liferay.ide.eclipse.portlet.core.servicebuilder,
- com.liferay.ide.eclipse.portlet.core.util
+Export-Package: com.liferay.ide.eclipse.portlet.core,com.liferay.ide.e
+ clipse.portlet.core.dd,com.liferay.ide.eclipse.portlet.core.descripto
+ r,com.liferay.ide.eclipse.portlet.core.display.model,com.liferay.ide.
+ eclipse.portlet.core.job,com.liferay.ide.eclipse.portlet.core.model,c
+ om.liferay.ide.eclipse.portlet.core.model.lfrportlet.common,com.lifer
+ ay.ide.eclipse.portlet.core.model.lfrportlet600,com.liferay.ide.eclip
+ se.portlet.core.model.lfrportlet610,com.liferay.ide.eclipse.portlet.c
+ ore.operation,com.liferay.ide.eclipse.portlet.core.servicebuilder,com
+ .liferay.ide.eclipse.portlet.core.util

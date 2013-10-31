@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Server UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.server.ui;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.server.ui.LiferayServerUIPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -32,7 +32,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.server.ui,
- com.liferay.ide.eclipse.server.ui.action,
- com.liferay.ide.eclipse.server.ui.cmd,
- com.liferay.ide.eclipse.server.ui.wizard
+Export-Package: com.liferay.ide.eclipse.server.ui,com.liferay.ide.ecli
+ pse.server.ui.action,com.liferay.ide.eclipse.server.ui.cmd,com.lifera
+ y.ide.eclipse.server.ui.wizard

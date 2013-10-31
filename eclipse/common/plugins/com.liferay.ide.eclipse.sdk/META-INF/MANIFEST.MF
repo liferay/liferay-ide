@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Plugins SDK
 Bundle-SymbolicName: com.liferay.ide.eclipse.sdk;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.sdk.SDKPlugin
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -21,7 +21,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ant.launching
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.sdk,
- com.liferay.ide.eclipse.sdk.job,
- com.liferay.ide.eclipse.sdk.pref,
- com.liferay.ide.eclipse.sdk.util
+Export-Package: com.liferay.ide.eclipse.sdk,com.liferay.ide.eclipse.sd
+ k.job,com.liferay.ide.eclipse.sdk.pref,com.liferay.ide.eclipse.sdk.ut
+ il

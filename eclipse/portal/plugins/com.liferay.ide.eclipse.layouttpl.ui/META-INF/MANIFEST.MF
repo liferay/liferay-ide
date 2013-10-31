@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Layout Template UI
 Bundle-SymbolicName: com.liferay.ide.eclipse.layouttpl.ui;singleton:=true
-Bundle-Version: 1.6.2.qualifier
+Bundle-Version: 1.6.3.qualifier
 Bundle-Activator: com.liferay.ide.eclipse.layouttpl.ui.LayoutTplUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
@@ -25,13 +25,10 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.eclipse.project.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.eclipse.layouttpl.ui,
- com.liferay.ide.eclipse.layouttpl.ui.cmd,
- com.liferay.ide.eclipse.layouttpl.ui.draw2d,
- com.liferay.ide.eclipse.layouttpl.ui.editor,
- com.liferay.ide.eclipse.layouttpl.ui.gef,
- com.liferay.ide.eclipse.layouttpl.ui.model,
- com.liferay.ide.eclipse.layouttpl.ui.parts,
- com.liferay.ide.eclipse.layouttpl.ui.policies,
- com.liferay.ide.eclipse.layouttpl.ui.util,
- com.liferay.ide.eclipse.layouttpl.ui.wizard
+Export-Package: com.liferay.ide.eclipse.layouttpl.ui,com.liferay.ide.e
+ clipse.layouttpl.ui.cmd,com.liferay.ide.eclipse.layouttpl.ui.draw2d,c
+ om.liferay.ide.eclipse.layouttpl.ui.editor,com.liferay.ide.eclipse.la
+ youttpl.ui.gef,com.liferay.ide.eclipse.layouttpl.ui.model,com.liferay
+ .ide.eclipse.layouttpl.ui.parts,com.liferay.ide.eclipse.layouttpl.ui.
+ policies,com.liferay.ide.eclipse.layouttpl.ui.util,com.liferay.ide.ec
+ lipse.layouttpl.ui.wizard
