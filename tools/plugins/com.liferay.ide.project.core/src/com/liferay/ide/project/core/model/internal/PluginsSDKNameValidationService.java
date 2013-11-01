@@ -47,7 +47,7 @@ public class PluginsSDKNameValidationService extends ValidationService
             }
         };
 
-        context( NewLiferayPluginProjectOp.class ).getProjectProvider().attach( this.listener );;
+        context( NewLiferayPluginProjectOp.class ).getProjectProvider().attach( this.listener );
     }
 
     @Override
