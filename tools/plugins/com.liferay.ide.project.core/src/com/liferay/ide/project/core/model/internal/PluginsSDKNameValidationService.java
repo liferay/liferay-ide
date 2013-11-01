@@ -12,21 +12,43 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
-
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class PluginsSDKNameValidationService extends ValidationService
 {
+
+    private Listener listener = null;
+
+    @Override
+    protected void initValidationService()
+    {
+        super.initValidationService();
+
+        this.listener = new FilteredListener<Event>()
+        {
+            protected void handleTypedEvent( Event event )
+            {
+                refresh();
+            }
+        };
+
+        context( NewLiferayPluginProjectOp.class ).getProjectProvider().attach( this.listener );;
+    }
 
     @Override
     protected Status compute()
@@ -52,6 +74,12 @@ public class PluginsSDKNameValidationService extends ValidationService
         }
 
         return retval;
+    }
+
+    @Override
+    public void dispose()
+    {
+        context( NewLiferayPluginProjectOp.class ).getProjectProvider().detach( this.listener );
     }
 
 }
