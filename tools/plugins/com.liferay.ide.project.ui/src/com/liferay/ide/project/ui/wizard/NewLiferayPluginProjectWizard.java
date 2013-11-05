@@ -55,7 +55,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPluginProjectOp>
+public class NewLiferayPluginProjectWizard extends SapphireWizard
     implements IWorkbenchWizard, INewWizard
 {
     private boolean firstErrorMessageRemoved = false;
@@ -101,7 +101,8 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
     {
         super.performPostFinish();
 
-        final IProject project = CoreUtil.getProject( element().getFinalProjectName().content() );
+        final NewLiferayPluginProjectOp op = element().nearest( NewLiferayPluginProjectOp.class );
+        final IProject project = CoreUtil.getProject( op.getFinalProjectName().content() );
 
         addToWorkingSets( project );
 

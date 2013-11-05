@@ -29,7 +29,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAndroidProjectOp>
+public class NewLiferayAndroidProjectWizard extends SapphireWizard
     implements IWorkbenchWizard, INewWizard
 {
 
