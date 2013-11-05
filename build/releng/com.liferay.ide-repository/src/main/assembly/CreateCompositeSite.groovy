@@ -4,30 +4,30 @@ def basedir = project.basedir.canonicalPath
 
 // Create composite repository
 
-def compositeDir = new File( basedir, "target/composite" )
+def updatesiteDir = new File( basedir, "target/updatesite" )
 def toolsTargetRepository = new File( basedir, "../com.liferay.ide.tools-repository/target/" )
 def toolsRepository = new File( toolsTargetRepository, "repository" )
 def mavenRepository = new File( basedir, "../com.liferay.ide.maven-repository/target/repository" )
 def adtRepository = new File( basedir, "../com.liferay.ide.adt-repository/target/repository" )
 //def velocityRepository = new File( basedir, "../com.liferay.ide.velocity-repository/target/repository" )
 
-compositeDir.delete()
-compositeDir.mkdirs()
+updatesiteDir.delete()
+updatesiteDir.mkdirs()
 
 def timestamp = System.currentTimeMillis()
 
 ant.sequential
 {
-    copy( todir:compositeDir )
+    copy( todir:updatesiteDir )
     {
-        fileset( dir:"${basedir}/composite", includes:"*" )
+        fileset( dir:"${basedir}/updatesite", includes:"*" )
         filterset()
         {
             filter( token:"timestamp", value:timestamp )
         }
     }
 
-    copy( todir:"${compositeDir}/tools" )
+    copy( todir:"${updatesiteDir}/tools" )
     {
         fileset( dir:toolsRepository )
         {
@@ -35,7 +35,7 @@ ant.sequential
         }
     }
 
-    copy( todir:"${compositeDir}/maven" )
+    copy( todir:"${updatesiteDir}/maven" )
     {
         fileset( dir:mavenRepository )
         {
@@ -43,7 +43,7 @@ ant.sequential
         }
     }
 
-    copy( todir:"${compositeDir}/adt" )
+    copy( todir:"${updatesiteDir}/adt" )
     {
         fileset( dir:adtRepository )
         {
@@ -51,7 +51,7 @@ ant.sequential
         }
     }
 
-    //copy( todir:"${compositeDir}/velocity" )
+    //copy( todir:"${updatesiteDir}/velocity" )
     //{
     //    fileset( dir:velocityRepository )
     //    {
@@ -68,4 +68,4 @@ toolsTargetRepository.eachFileMatch FILES, ~/Liferay_IDE_Tools_.*-updatesite.zip
 
 println 'Zipping updated site'
 File zipSite = new File( basedir + "/target/Liferay_IDE_${version}-updatesite.zip" )
-ant.zip( destFile: zipSite, baseDir:compositeDir )
+ant.zip( destFile: zipSite, baseDir:updatesiteDir )
