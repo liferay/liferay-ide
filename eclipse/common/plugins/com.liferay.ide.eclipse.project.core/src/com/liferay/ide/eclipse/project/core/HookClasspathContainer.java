@@ -32,7 +32,6 @@ public class HookClasspathContainer extends PluginClasspathContainer
         "util-bridges.jar",
         "util-java.jar", 
         "util-taglib.jar", 
-        "portal-impl.jar", 
         "struts.jar", 
         "struts-el.jar" 
     };
