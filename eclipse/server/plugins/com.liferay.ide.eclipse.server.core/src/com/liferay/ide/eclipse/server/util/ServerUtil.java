@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.server.util;
 
+import com.liferay.ide.eclipse.core.ILiferayConstants;
 import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
@@ -24,6 +25,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -68,6 +70,7 @@ import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -174,11 +177,20 @@ public class ServerUtil {
 		String portalDir = appServer.getPortalDir().toOSString();
 
 		properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DIR, dir );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployDir );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, libGlobalDir );
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, portalDir );
+		
+		final String appServerDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
+        final String appServerDeployDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, appServer );
+        final String appServerLibGlobalDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, appServer );
+        final String appServerPortalDirKey =
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, appServer );
 
+        properties.put( appServerDirKey, dir );
+        properties.put( appServerDeployDirKey, deployDir );
+        properties.put( appServerLibGlobalDirKey, libGlobalDir );
+        properties.put( appServerPortalDirKey, portalDir );
 		return properties;
 	}
 
@@ -636,4 +648,33 @@ public class ServerUtil {
 			}
 		}
 	}
+	
+	public static String getAppServerPropertyKey( String propertyAppServerDeployDir, ILiferayRuntime runtime )
+    {
+        String retval = null;
+
+        try
+        {
+            final Version version = new Version( runtime.getPortalVersion() );
+            final String type = runtime.getAppServerType();
+
+            if( ( CoreUtil.compareVersions( version, ILiferayConstants.V6130 ) >= 0 ) ||
+                ( CoreUtil.compareVersions( version, ILiferayConstants.V612 ) >= 0 && CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0 ) )
+            {
+                retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+        }
+        catch( Exception e )
+        {
+        }
+        finally
+        {
+            if( retval == null )
+            {
+                retval = MessageFormat.format( propertyAppServerDeployDir, "." ); //$NON-NLS-1$
+            }
+        }
+
+        return retval;
+    }
 }

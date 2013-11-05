@@ -81,13 +81,13 @@ public interface ISDKConstants {
 
 	public static final String PROJECT_BUILD_XML = __defaultPrefs.get( "project.build.xml", null );
 
-	public static final String PROPERTY_APP_SERVER_DEPLOY_DIR = "app.server.deploy.dir";
+	public static final String PROPERTY_APP_SERVER_DEPLOY_DIR = "app.server{0}deploy.dir"; //$NON-NLS-1$
 
-	public static final String PROPERTY_APP_SERVER_DIR = "app.server.dir";
+    public static final String PROPERTY_APP_SERVER_DIR = "app.server{0}dir"; //$NON-NLS-1$
 
-	public static final String PROPERTY_APP_SERVER_LIB_GLOBAL_DIR = "app.server.lib.global.dir";
+    public static final String PROPERTY_APP_SERVER_LIB_GLOBAL_DIR = "app.server{0}lib.global.dir"; //$NON-NLS-1$
 
-	public static final String PROPERTY_APP_SERVER_PORTAL_DIR = "app.server.portal.dir";
+    public static final String PROPERTY_APP_SERVER_PORTAL_DIR = "app.server{0}portal.dir"; //$NON-NLS-1$
 
 	public static final String PROPERTY_APP_SERVER_TYPE = "app.server.type";
 

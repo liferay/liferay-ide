@@ -15,6 +15,7 @@
 
 package com.liferay.ide.eclipse.server.tomcat.core.job;
 
+import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.job.SDKJob;
 import com.liferay.ide.eclipse.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.eclipse.server.tomcat.core.LiferayTomcatPlugin;
@@ -85,7 +86,10 @@ public class CleanAppServerJob extends SDKJob {
 
 			Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
 
-			IStatus status = getSDK().cleanAppServer( project, bundleZipLocation, appServerProperties );
+			String appServerDir =
+	                ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, portalTomcatRuntime );
+
+            IStatus status = getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, appServerProperties );
 
 			assertStatus(status);
 

@@ -199,13 +199,12 @@ public class SDK {
 		return Status.OK_STATUS;
 	}
 
-	public IStatus cleanAppServer( IProject project, IPath bundleZipLocation, Map<String, String> appServerProperties ) {
+	public IStatus cleanAppServer( IProject project, IPath bundleZipLocation, String appServerDir, Map<String, String> appServerProperties ) {
 		try {
 			persistAppServerProperties( appServerProperties );
 
 			Map<String, String> properties = new HashMap<String, String>();
 
-			String appServerDir = appServerProperties.get( ISDKConstants.PROPERTY_APP_SERVER_DIR );
 			IPath workPath = new Path(appServerDir).removeLastSegments(2);
 
 			properties.put(ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation.toOSString());
@@ -273,7 +272,7 @@ public class SDK {
 			properties.put(ISDKConstants.PROPERTY_EXT_PARENT_DIR, tempPath.toOSString());
 
 			antHelper.runTarget(
-				getLocation().append(ISDKConstants.EXT_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties);
+				getLocation().append(ISDKConstants.EXT_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties, true);
 
 			return tempPath;
 		}
@@ -300,7 +299,7 @@ public class SDK {
 			properties.put(ISDKConstants.PROPERTY_HOOK_PARENT_DIR, newHookPath.toOSString());
 
 			antHelper.runTarget(
-				getLocation().append(ISDKConstants.HOOK_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties);
+				getLocation().append(ISDKConstants.HOOK_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties, true);
 
 			return newHookPath;
 		}
@@ -333,7 +332,7 @@ public class SDK {
 			properties.put(ISDKConstants.PROPERTY_LAYOUTTPL_PARENT_DIR, newLayoutTplPath.toOSString());
 
 			antHelper.runTarget(
-				getLocation().append(ISDKConstants.LAYOUTTPL_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties);
+				getLocation().append(ISDKConstants.LAYOUTTPL_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties, true);
 
 			return newLayoutTplPath;
 		}
@@ -371,7 +370,7 @@ public class SDK {
 			properties.put(ISDKConstants.PROPERTY_PORTLET_PARENT_DIR, newPortletPath.toOSString());
 
 			antHelper.runTarget(
-				getLocation().append(ISDKConstants.PORTLET_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties);
+				getLocation().append(ISDKConstants.PORTLET_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties, true);
 
 			return newPortletPath;
 		}
@@ -398,7 +397,7 @@ public class SDK {
 			properties.put(ISDKConstants.PROPERTY_THEME_PARENT_DIR, tempPath.toOSString());
 
 			antHelper.runTarget(
-				getLocation().append(ISDKConstants.THEME_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties);
+				getLocation().append(ISDKConstants.THEME_PLUGIN_ANT_BUILD), ISDKConstants.TARGET_CREATE, properties, true);
 
 			return tempPath;
 		}

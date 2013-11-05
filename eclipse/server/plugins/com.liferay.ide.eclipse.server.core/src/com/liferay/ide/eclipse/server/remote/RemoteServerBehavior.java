@@ -20,6 +20,7 @@ import com.liferay.ide.eclipse.core.util.CoreUtil;
 import com.liferay.ide.eclipse.sdk.ISDKConstants;
 import com.liferay.ide.eclipse.sdk.SDK;
 import com.liferay.ide.eclipse.sdk.util.SDKUtil;
+import com.liferay.ide.eclipse.server.core.ILiferayRuntime;
 import com.liferay.ide.eclipse.server.core.ILiferayServerBehavior;
 import com.liferay.ide.eclipse.server.core.LiferayServerCorePlugin;
 import com.liferay.ide.eclipse.server.util.LiferayPublishHelper;
@@ -525,7 +526,12 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
 		IPath deployPath = LiferayServerCorePlugin.getTempLocation( "direct-deploy", "" );
 
-		properties.put( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, deployPath.toOSString() );
+		final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( moduleProject );
+
+        final String appServerDeployDirProp =
+            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtime );
+
+        properties.put( appServerDeployDirProp, deployPath.toOSString() );
 
 		File warFile = deployPath.append( moduleProject.getName() + ".war" ).toFile();
 		warFile.getParentFile().mkdirs();
