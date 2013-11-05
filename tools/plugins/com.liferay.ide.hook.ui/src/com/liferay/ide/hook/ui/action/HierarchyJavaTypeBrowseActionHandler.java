@@ -119,8 +119,14 @@ public final class HierarchyJavaTypeBrowseActionHandler extends BrowseActionHand
                 }
             }
 
-            final IJavaSearchScope scope =
-                SearchEngine.createHierarchyScope( JavaCore.create( project ).findType( this.typeName ) );
+            IJavaSearchScope scope = null;
+
+            final IType type = JavaCore.create( project ).findType( this.typeName );
+
+            if( type != null )
+            {
+                scope = SearchEngine.createHierarchyScope( type );
+            }
 
             SwtPresentation swt = (SwtPresentation) context;
 
