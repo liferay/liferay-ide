@@ -60,8 +60,21 @@ public class UseSdkLocationAction extends SapphireActionHandler
                 {
                     final SDK sdk = SDKManager.getInstance().getSDK( op.getPluginsSDKName().content( true ) );
 
-                    action.setEnabled( sdk != null &&
-                        CoreUtil.compareVersions( new Version( sdk.getVersion() ), ILiferayConstants.V620 ) >= 0 );
+                    if( sdk != null )
+                    {
+                        Version version = new Version( sdk.getVersion() );
+
+                        if( ( CoreUtil.compareVersions( version, ILiferayConstants.V611 ) > 0 && CoreUtil.compareVersions(
+                            version, ILiferayConstants.V6110 ) < 0 ) ||
+                            ( CoreUtil.compareVersions( version, ILiferayConstants.V6120 ) >= 0 ) )
+                        {
+                            action.setEnabled( true );
+                        }
+                        else
+                        {
+                            action.setEnabled( false );
+                        }
+                    }
                 }
                 else
                 {
