@@ -35,4 +35,18 @@
              supportsArgument="true">
        </variable>
     </extension>
+    <extension
+          point="org.eclipse.ant.core.extraClasspathEntries">
+       <extraClasspathEntry
+             eclipseRuntime="false"
+             library="extra/ecj.jar">
+       </extraClasspathEntry>
+    </extension>
+    <extension
+          point="org.eclipse.ant.core.antProperties">
+       <antProperty
+             name="env.ANT_OPTS"
+             value="-Xmx1024m -XX:MaxPermSize=512m">
+       </antProperty>
+    </extension>
 </plugin>
