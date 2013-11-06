@@ -114,7 +114,6 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
             deleteFolder( webappRoot.getFolder( "WEB-INF/src" ) ); //$NON-NLS-1$
             deleteFolder( webappRoot.getFolder( "WEB-INF/classes" ) ); //$NON-NLS-1$
-            deleteFolder( webappRoot.getFolder( "WEB-INF/ext-web/docroot/WEB-INF/lib" ) ); //$NON-NLS-1$
         }
 
         if( shouldSetupExtClasspath() )
@@ -159,6 +158,16 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             ProjectUtil.fixExtProjectSrcFolderLinks( this.project );
             // fixTilesDefExtFile();
         }
+
+        //IDE-1239 need to make sure and delete docroot/WEB-INF/ext-web/docroot/WEB-INF/lib
+        removeUnneededFolders( this.project );
+    }
+
+    private void removeUnneededFolders( IProject project ) throws CoreException
+    {
+        final IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( this.project );
+
+        deleteFolder( webappRoot.getFolder( "WEB-INF/lib" ) ); //$NON-NLS-1$
     }
 
     protected void deleteFolder( IFolder folder ) throws CoreException
