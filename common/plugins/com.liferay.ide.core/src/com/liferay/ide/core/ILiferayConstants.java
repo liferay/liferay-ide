@@ -39,6 +39,7 @@ public interface ILiferayConstants
     Version V610 = new Version( 6, 1, 0 );
     Version V6110 = new Version( 6, 1, 10 );
     Version V6120 = new Version( 6, 1, 20 );
+    Version V6130 = new Version( 6, 1, 30 );
     Version V611 = new Version( 6, 1, 1 );
     Version V612 = new Version( 6, 1, 2 );
     Version V620 = new Version( 6, 2, 0 );

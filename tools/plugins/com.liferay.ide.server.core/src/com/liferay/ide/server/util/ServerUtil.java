@@ -15,6 +15,15 @@
 
 package com.liferay.ide.server.util;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.LiferayServerCore;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -76,15 +85,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.LiferayServerCore;
-
 /**
  * @author Gregory Amerson
  * @author Cindy Li
@@ -94,13 +94,6 @@ import com.liferay.ide.server.core.LiferayServerCore;
 @SuppressWarnings( "restriction" )
 public class ServerUtil
 {
-
-    private static final Version v6110 = ILiferayConstants.V6110;
-//    private static final Version v6120 = new Version( 6, 1, 20 );
-
-    private static final Version v612 = ILiferayConstants.V612;
-
-    private static final Version v620 = ILiferayConstants.V620;
 
     private static void addRemoveProps(
         IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
@@ -388,8 +381,8 @@ public class ServerUtil
             final Version version = new Version( runtime.getPortalVersion() );
             final String type = runtime.getAppServerType();
 
-            if( ( CoreUtil.compareVersions( version, v620 ) >= 0 ) ||
-                ( CoreUtil.compareVersions( version, v612 ) >= 0 && CoreUtil.compareVersions( version, v6110 ) < 0 ) )
+            if( ( CoreUtil.compareVersions( version, ILiferayConstants.V6130 ) >= 0 ) ||
+                ( CoreUtil.compareVersions( version, ILiferayConstants.V612 ) >= 0 && CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0 ) )
             {
                 retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
             }
@@ -417,7 +410,7 @@ public class ServerUtil
         final String myKey = "category.my"; //$NON-NLS-1$
         final String categoryMy = categories.getProperty( myKey );
 
-        if( ( portalVersion == null ) || ( CoreUtil.compareVersions( new Version( portalVersion ), v620 ) < 0 ) )
+        if( ( portalVersion == null ) || ( CoreUtil.compareVersions( new Version( portalVersion ), ILiferayConstants.V620 ) < 0 ) )
         {
             final String portalKey = "category.portal"; //$NON-NLS-1$
             final String serverKey = "category.server"; //$NON-NLS-1$

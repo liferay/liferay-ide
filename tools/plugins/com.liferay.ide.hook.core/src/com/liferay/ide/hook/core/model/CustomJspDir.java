@@ -25,8 +25,8 @@ import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
+import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
@@ -50,7 +50,7 @@ public interface CustomJspDir extends Element
     @XmlBinding( path = "" )
     @Service( impl = DocrootRelativePathService.class )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @DefaultValue( text = "/META-INF/custom_jsps" )
+    @InitialValue( text = "/META-INF/custom_jsps" )
     @MustExist
     @Listeners( CustomJspDirListener.class )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$

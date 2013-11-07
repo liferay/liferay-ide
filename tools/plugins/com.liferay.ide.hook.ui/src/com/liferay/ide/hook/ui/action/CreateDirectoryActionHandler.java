@@ -101,7 +101,7 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler
             final Path path = value.content();
             final Path absolutePath = property().service( RelativePathService.class ).convertToAbsolute( path );
 
-            enabled = !absolutePath.toFile().exists();
+            enabled = absolutePath != null && ( ! absolutePath.toFile().exists() );
         }
 
         return enabled;
@@ -138,7 +138,10 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler
 
                 CoreUtil.makeFolders( customJspFolder );
 
-                element.refresh();
+                // force a refresh of validation
+                customJspDir.setValue( (Path) null );
+                customJspDir.setValue( customJspDirValue );
+
                 refreshEnablementState();
             }
         }

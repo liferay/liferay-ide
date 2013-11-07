@@ -38,7 +38,7 @@ public class HookUtil
     {
         CustomJspDir element = hook.getCustomJspDir().content();
 
-        if( element != null )
+        if( element != null && ( ! element.getValue().empty() ) )
         {
             // IDE-110 IDE-648
             IVirtualFolder webappRoot = CoreUtil.getDocroot( project );

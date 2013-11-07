@@ -18,6 +18,7 @@
 
 package com.liferay.ide.hook.core.model;
 
+import com.liferay.ide.hook.core.model.internal.CustomJspDirListener;
 import com.liferay.ide.hook.core.model.internal.CustomJspsBindingImpl;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesBindingImpl;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesFileListener;
@@ -101,6 +102,7 @@ public interface Hook extends Element
     @Type( base = CustomJspDir.class )
     @Label( standard = "Custom JSP Dir" )
     @XmlBinding( path = "custom-jsp-dir" )
+    @Listeners( CustomJspDirListener.class )
     ElementProperty PROP_CUSTOM_JSP_DIR = new ElementProperty( TYPE, "CustomJspDir" ); //$NON-NLS-1$
 
     ElementHandle<CustomJspDir> getCustomJspDir();
