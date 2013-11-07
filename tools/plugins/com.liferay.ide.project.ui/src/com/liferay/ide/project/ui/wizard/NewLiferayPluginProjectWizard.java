@@ -55,7 +55,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class NewLiferayPluginProjectWizard extends SapphireWizard
+public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPluginProjectOp>
     implements IWorkbenchWizard, INewWizard
 {
     private boolean firstErrorMessageRemoved = false;

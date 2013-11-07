@@ -64,11 +64,14 @@
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'maven' }</visible-when>
                     <property>Version</property>
-                    <style>Sapphire.PropertyEditor.PopUpListField.Editable</style>
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'maven' }</visible-when>
                     <property>GroupId</property>
+                </property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'maven' }</visible-when>
+                    <property>Profiles</property>
                 </property-editor>
                 <separator></separator>
                 <group>

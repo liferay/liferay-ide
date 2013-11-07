@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
+import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.platform.PathBridge;
 
 
@@ -76,6 +77,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         final String artifactId = op.getProjectName().content();
         final String version = op.getVersion().content();
         final String javaPackage = op.getGroupId().content();
+        final String profiles = op.getProfiles().content();
 
         IPath location = PathBridge.create( op.getLocation().content() );
         // for location we should use the parent location
@@ -122,7 +124,14 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
         final Properties properties = new Properties();
 
-        final ProjectImportConfiguration configuration = new ProjectImportConfiguration();
+        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
+
+        if( ! CoreUtil.isNullOrEmpty( profiles ) )
+        {
+            resolverConfig.setSelectedProfiles( profiles );
+        }
+
+        final ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
 
         final List<IProject> newProjects =
             MavenPlugin.getProjectConfigurationManager().createArchetypeProjects(

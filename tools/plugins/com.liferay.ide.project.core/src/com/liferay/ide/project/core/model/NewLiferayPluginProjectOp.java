@@ -38,7 +38,6 @@ import com.liferay.ide.project.core.model.internal.RuntimeNameValidationService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationEnablementService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationListener;
 import com.liferay.ide.project.core.model.internal.UseSdkLocationListener;
-import com.liferay.ide.project.core.model.internal.VersionPossibleValuesService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -194,9 +193,8 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
 
     // *** Version ***
 
-    @Label( standard = "liferay version" )
-    @Service( impl = VersionPossibleValuesService.class )
-    @DefaultValue( text = "6.1.2" )
+    @Label( standard = "version" )
+    @DefaultValue( text = "1.0.0-SNAPSHOT" )
     ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" ); //$NON-NLS-1$
 
     Value<String> getVersion();
@@ -284,6 +282,16 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     Value<String> getGroupId();
 
     void setGroupId( String value );
+
+
+    // *** Profiles ***
+
+    @Label( standard = "profiles" )
+    ValueProperty PROP_PROFILES = new ValueProperty( TYPE, "Profiles" );
+
+    Value<String> getProfiles();
+
+    void setProfiles( String value );
 
 
     // *** FinalProjectName ***
