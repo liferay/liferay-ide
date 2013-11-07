@@ -52,7 +52,10 @@ public class PortalFilterNamesPossibleValuesService extends PossibleValuesServic
                     {
                         final IPath appServerPortalDir = liferayProject.getAppServerPortalDir();
 
-                        this.servletFilterNames = ServerUtil.getServletFilterNames( appServerPortalDir );
+                        if( appServerPortalDir != null )
+                        {
+                            this.servletFilterNames = ServerUtil.getServletFilterNames( appServerPortalDir );
+                        }
                     }
                 }
                 catch( Exception e )

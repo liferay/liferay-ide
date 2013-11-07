@@ -234,12 +234,8 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
         return Status.OK_STATUS;
     }
 
-    protected IFile copyPortalJSPToProject( String portalJsp, IFolder customFolder ) throws Exception
+    protected IFile copyPortalJSPToProject( IPath portalDir, String portalJsp, IFolder customFolder ) throws Exception
     {
-        ILiferayProject liferayProject = LiferayCore.create( getTargetProject() );
-
-        IPath portalDir = liferayProject.getAppServerPortalDir();
-
         IPath portalJspPath = new Path( portalJsp );
 
         IPath originalPortalJspPath = portalDir.append( portalJsp );
@@ -284,15 +280,17 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
             return HookCore.createErrorStatus( e );
         }
 
-        List<String[]> customJsps = (List<String[]>) dm.getProperty( CUSTOM_JSPS_ITEMS );
+        final List<String[]> customJsps = (List<String[]>) dm.getProperty( CUSTOM_JSPS_ITEMS );
+        final ILiferayProject liferayProject = LiferayCore.create( getTargetProject() );
+        final IPath portalDir = liferayProject.getAppServerPortalDir();
 
-        if( customJsps != null )
+        if( customJsps != null && portalDir != null )
         {
             for( String[] customJsp : customJsps )
             {
                 try
                 {
-                    IFile copiedFile = copyPortalJSPToProject( customJsp[0], customFolder );
+                    IFile copiedFile = copyPortalJSPToProject( portalDir, customJsp[0], customFolder );
 
                     if( copiedFile != null )
                     {

@@ -19,6 +19,7 @@ package com.liferay.ide.hook.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.util.HookUtil;
 
@@ -68,24 +69,27 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
             if( liferayProject != null )
             {
                 this.portalDir = new Path( liferayProject.getAppServerPortalDir().toPortableString() );
+
+                if( this.portalDir != null )
+                {
+                    final File portalDirFile = portalDir.toFile();
+                    final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
+
+                    final List<File> fileValues = new LinkedList<File>();
+
+                    if( htmlDirFile.exists() )
+                    {
+                        findJSPFiles( new File[] { htmlDirFile }, fileValues );
+                    }
+                    else
+                    {
+                        final File[] files = portalDirFile.listFiles( jspfilter );
+                        findJSPFiles( files, fileValues );
+                    }
+
+                    this.possibleValues = fileValues.toArray( new File[0] );
+                }
             }
-
-            final File portalDirFile = portalDir.toFile();
-            final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
-
-            final List<File> fileValues = new LinkedList<File>();
-
-            if( htmlDirFile.exists() )
-            {
-                findJSPFiles( new File[] { htmlDirFile }, fileValues );
-            }
-            else
-            {
-                final File[] files = portalDirFile.listFiles( jspfilter );
-                findJSPFiles( files, fileValues );
-            }
-
-            this.possibleValues = fileValues.toArray( new File[0] );
         }
 
         if( possibleValues != null )
@@ -99,15 +103,18 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 
     private void findJSPFiles( final File[] files, final List<File> fileValues )
     {
-        for( File file : files )
+        if( ! CoreUtil.isNullOrEmpty( files ) )
         {
-            if( file.isDirectory() )
+            for( File file : files )
             {
-                findJSPFiles( file.listFiles( jspfilter ), fileValues );
-            }
-            else
-            {
-                fileValues.add( file );
+                if( file.isDirectory() )
+                {
+                    findJSPFiles( file.listFiles( jspfilter ), fileValues );
+                }
+                else
+                {
+                    fileValues.add( file );
+                }
             }
         }
     }

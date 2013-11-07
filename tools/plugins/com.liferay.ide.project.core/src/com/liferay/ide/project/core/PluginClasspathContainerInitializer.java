@@ -169,12 +169,15 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
             }
         }
 
-        IClasspathContainer newContainer =
-            getCorrectContainer(
-                containerPath, containerPath.segment( 1 ), project, portalDir, javadocURL, sourceLocation );
+        if( portalDir != null )
+        {
+            IClasspathContainer newContainer =
+                getCorrectContainer(
+                    containerPath, containerPath.segment( 1 ), project, portalDir, javadocURL, sourceLocation );
 
-        JavaCore.setClasspathContainer(
-            containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { newContainer }, null );
+            JavaCore.setClasspathContainer(
+                containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { newContainer }, null );
+        }
     }
 
     protected IClasspathContainer getCorrectContainer(

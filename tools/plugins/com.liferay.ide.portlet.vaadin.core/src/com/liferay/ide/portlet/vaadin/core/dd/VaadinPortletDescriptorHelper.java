@@ -26,9 +26,6 @@ import com.liferay.ide.portlet.core.PluginPropertiesConfiguration;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.portlet.vaadin.core.VaadinCore;
 import com.liferay.ide.portlet.vaadin.core.operation.INewVaadinPortletClassDataModelProperties;
-import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -52,7 +49,7 @@ import org.w3c.dom.NodeList;
 /**
  * Helper for editing various portlet configuration XML files, to add Vaadin portlet configuration to them. Also
  * supports adding a dependency to Vaadin in liferay-plugin-package.properties (if necessary).
- * 
+ *
  * @author Henri Sara
  * @author Tao Tao
  */
@@ -78,10 +75,9 @@ public class VaadinPortletDescriptorHelper extends PortletDescriptorHelper
 
         ILiferayProject liferayProject = LiferayCore.create( this.project );
 
-        if( liferayProject != null )
+        if( liferayProject != null && liferayProject.getPortalVersion() != null )
         {
-            String version = liferayProject.getPortalVersion();
-            Version runtimeVersion = new Version( version );
+            final Version runtimeVersion = new Version( liferayProject.getPortalVersion() );
 
             // Runtime version should be equal or greater than 6.2.
             if( CoreUtil.compareVersions( runtimeVersion, ILiferayConstants.V620 ) >= 0 )

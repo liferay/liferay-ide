@@ -38,7 +38,8 @@ public class MavenProjectAdapter implements ILiferayProjectAdapter
         if( liferayProject instanceof LiferayMavenProject && IProjectBuilder.class.equals( adapterType ) )
         {
             // only use this builder for versions of Liferay less than 6.2
-            String version = liferayProject.getPortalVersion();
+            final LiferayMavenProject liferayMavenProject = LiferayMavenProject.class.cast( liferayProject );
+            final String version = liferayMavenProject.getLiferayMavenPluginVersion();
 
             if( ! CoreUtil.isNullOrEmpty( version ) )
             {

@@ -48,12 +48,17 @@ public class MinimumRequiredPortalVersion extends PropertyTester
 
             if( lProject != null && args[0] != null )
             {
-                final Version version = new Version( lProject.getPortalVersion() );
-                Version minimumRequiredPortalVersion = new Version( (String) args[0] );
+                final String portalVersion = lProject.getPortalVersion();
 
-                if( CoreUtil.compareVersions( version, minimumRequiredPortalVersion ) >= 0 )
+                if( portalVersion != null )
                 {
-                    return true;
+                    final Version version = new Version( portalVersion );
+                    Version minimumRequiredPortalVersion = new Version( (String) args[0] );
+
+                    if( CoreUtil.compareVersions( version, minimumRequiredPortalVersion ) >= 0 )
+                    {
+                        return true;
+                    }
                 }
             }
         }

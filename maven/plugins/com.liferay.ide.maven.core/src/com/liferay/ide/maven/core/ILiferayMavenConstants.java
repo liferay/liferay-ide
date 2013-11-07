@@ -40,7 +40,7 @@ public interface ILiferayMavenConstants
 
     String LAYOUTTPL_PLUGIN_TYPE = "layouttpl"; //$NON-NLS-1$
 
-    String LIFERAY_MAVEN_MARKER_CONFIGURATION_ERROR_ID = LiferayMavenCore.PLUGIN_ID + ".configurationProblem";//$NON-NLS-1$
+    String LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID = LiferayMavenCore.PLUGIN_ID + ".configurationProblem";//$NON-NLS-1$
 
     String LIFERAY_MAVEN_PLUGIN = "liferay-maven-plugin"; //$NON-NLS-1$
 
@@ -52,19 +52,7 @@ public interface ILiferayMavenConstants
 
     String PLUGIN_CONFIG_API_BASE_DIR = "apiBaseDir"; //$NON-NLS-1$
 
-    String PLUGIN_CONFIG_APP_AUTO_DEPLOY_DIR = "autoDeployDir"; //$NON-NLS-1$
-
-    String PLUGIN_CONFIG_APP_SERVER_CLASSES_PORTAL_DIR = "appServerClassesPortalDir"; //$NON-NLS-1$
-
-    String PLUGIN_CONFIG_APP_SERVER_DEPLOY_DIR = "appServerDeployDir"; //$NON-NLS-1$
-
-    String PLUGIN_CONFIG_APP_SERVER_LIB_GLOBAL_DIR = "appServerLibGlobalDir"; //$NON-NLS-1$
-
-    String PLUGIN_CONFIG_APP_SERVER_LIB_PORTAL_DIR = "appServerLibPortalDir"; //$NON-NLS-1$
-
     String PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR = "appServerPortalDir"; //$NON-NLS-1$
-
-    String PLUGIN_CONFIG_APP_SERVER_TLD_PORTAL_DIR = "appServerTldPortalDir"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_LIFERAY_VERSION = "liferayVersion"; //$NON-NLS-1$
 

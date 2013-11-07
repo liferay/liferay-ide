@@ -100,7 +100,7 @@ public class HookXmlEditor extends SapphireEditorForXml
         this.ignoreCustomModelChanges = false;
     }
 
-    private void copyCustomJspsToProject( ElementList<CustomJsp> customJsps )
+    private void copyCustomJspsToProject( IPath portalDir, ElementList<CustomJsp> customJsps )
     {
         try
         {
@@ -111,9 +111,6 @@ public class HookXmlEditor extends SapphireEditorForXml
                 Path customJspDir = customJspDirElement.getValue().content();
                 IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getProject() );
                 IFolder customJspFolder = defaultDocroot.getFolder( customJspDir.toPortableString() );
-
-                final ILiferayProject liferayProject = LiferayCore.create( getProject() );
-                final IPath portalDir = liferayProject.getAppServerPortalDir();
 
                 for( CustomJsp customJsp : customJsps )
                 {
@@ -155,7 +152,13 @@ public class HookXmlEditor extends SapphireEditorForXml
             final Hook hook = getModelElement().nearest( Hook.class );
             final ElementList<CustomJsp> customJsps = hook.getCustomJsps();
 
-            copyCustomJspsToProject( customJsps );
+            final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+            IPath portalDir = liferayProject.getAppServerPortalDir();
+
+            if( portalDir != null )
+            {
+                copyCustomJspsToProject( portalDir, customJsps );
+            }
 
             final PropertyBinding binding =
                 hook.resource().adapt( XmlResource.class ).binding( hook.getPortalPropertiesOverrides() );

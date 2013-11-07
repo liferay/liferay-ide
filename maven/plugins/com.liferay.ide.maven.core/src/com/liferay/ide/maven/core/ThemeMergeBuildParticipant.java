@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.osgi.util.NLS;
 
@@ -31,6 +32,7 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
 {
 
@@ -71,7 +73,7 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
 
         //TODO don't hard code path of src/main/webapp/css
         if( delta != null && ( delta.findMember( new Path( "src/main/webapp" ) ) != null || //$NON-NLS-1$
-            delta.findMember( new Path( "pom.xml" ) ) != null ) ) //$NON-NLS-1$
+            delta.findMember( new Path( IMavenConstants.POM_FILE_NAME ) ) != null ) ) //$NON-NLS-1$
         {
             retval = true;
         }

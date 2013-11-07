@@ -80,20 +80,24 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 			return fTlds.toArray();
 		}
 	}
-	
+
 	protected void createTldsArray() {
 		fTlds = new Vector<File>();
 		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
 		String[] portalTlds = model.getPortalDependencyTlds();
 		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
-		for (String portalTld : portalTlds) {
-			File tldFile = new File(portalDir.append("WEB-INF/tld").toFile(), portalTld.trim()); //$NON-NLS-1$
-			if (tldFile.isFile() && tldFile.exists()) {
-				fTlds.add(tldFile);
+
+		if( portalDir != null )
+		{
+			for (String portalTld : portalTlds) {
+				File tldFile = new File(portalDir.append("WEB-INF/tld").toFile(), portalTld.trim()); //$NON-NLS-1$
+				if (tldFile.isFile() && tldFile.exists()) {
+					fTlds.add(tldFile);
+				}
 			}
 		}
 	}
-	
+
 	class PortalTldsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -107,7 +111,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 			}
 			return StringPool.EMPTY;
 		}
-		
+
 	}
 
 	public PortalTldsSection(IDEFormPage page, Composite parent, String[] labels) {
@@ -215,7 +219,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 
 
 	public void dispose() {
-		
+
 		IBaseModel model =  getPage().getModel();
 		if (model != null) {
 			model.dispose();
@@ -253,7 +257,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	 * @see org.eclipse.pde.internal.ui.editor.StructuredViewerSection#canPaste(java.lang.Object, java.lang.Object[])
 	 */
 	protected boolean canPaste(Object targetObject, Object[] sourceObjects) {
-		
+
 		return false;
 	}
 
@@ -262,7 +266,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	 */
 	protected void doPaste(Object targetObject, Object[] sourceObjects) {
 		// Get the model
-		
+
 	}
 
 	public boolean setFormInput(Object object) {
@@ -275,7 +279,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	}
 
 	protected void fillContextMenu(IMenuManager manager) {
-		
+
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -287,7 +291,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		for (Iterator iter = ssel.iterator(); iter.hasNext(); i++) {
 			removedFiles[i] = ((File)iter.next()).getName();
 		}
-		
+
 		model.removePortalDependencyTlds(removedFiles);
 		updateButtons();
 	}
@@ -297,7 +301,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		String[] existingTlds = model.getPortalDependencyTlds();
 		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
 		IPath portalDir = editor.getPortalDir();
-        
+
 		if( portalDir != null )
 		{
 		    ExternalFileSelectionDialog dialog =
@@ -324,7 +328,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
                 getPage().getShell(), Msgs.liferayPluginPackageEditor, Msgs.notDeterminePortalDirectory );
         }
 	}
-	
+
 	private void handleUp() {
 		int index = getTablePart().getTableViewer().getTable().getSelectionIndex();
 		if (index < 1)
@@ -361,13 +365,13 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 				handleAdd();
 			}
 		};
-		
+
 		fRemoveAction = new Action(Msgs.remove) {
 			public void run() {
 				handleRemove();
 			}
 		};
-		
+
 	}
 
 	public void refresh() {
@@ -381,7 +385,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 			markStale();
 			return;
 		}
-		
+
 		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS) {
 			refresh();
 			updateButtons();
@@ -406,7 +410,7 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		if (fViewer != null)
 			fViewer.getTable().setFocus();
 	}
-	
+
 	protected boolean createCount() {
 		return true;
 	}

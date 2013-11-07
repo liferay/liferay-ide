@@ -15,8 +15,6 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -270,18 +268,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
     protected IFacetedProjectWorkingCopy getFacetedProject()
     {
         return (IFacetedProjectWorkingCopy) this.model.getProperty( IFacetDataModelProperties.FACETED_PROJECT_WORKING_COPY );
-    }
-
-    protected IPath getPortalDir()
-    {
-        final ILiferayProject liferayProject = LiferayCore.create( getFacetedProject().getProject() );
-
-        if( liferayProject != null )
-        {
-            return liferayProject.getAppServerPortalDir();
-        }
-
-        return null;
     }
 
     protected String getRuntimeLocation()

@@ -72,7 +72,7 @@ public class CustomJspValidationService extends ValidationService
 
         IPath customJspPath = getPortalDir().append( customJsp );
 
-        if( customJspPath.toFile().exists() )
+        if( customJspPath != null && customJspPath.toFile().exists() )
         {
             return true;
         }

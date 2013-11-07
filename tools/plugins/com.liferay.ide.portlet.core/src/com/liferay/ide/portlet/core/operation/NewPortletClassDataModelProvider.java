@@ -327,14 +327,18 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             ILiferayProject liferayProject = LiferayCore.create( getProject() );
             String version = liferayProject.getPortalVersion();
-            Version portalVersion = Version.parseVersion( version );
 
-            if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V610 ) < 0 )
+            if( version != null )
             {
-                initParameterName = "jsp"; //$NON-NLS-1$
-            }
+                Version portalVersion = Version.parseVersion( version );
 
-            return initParameterName;
+                if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V610 ) < 0 )
+                {
+                    initParameterName = "jsp"; //$NON-NLS-1$
+                }
+
+                return initParameterName;
+            }
         }
 
         return super.getDefaultProperty( propertyName );

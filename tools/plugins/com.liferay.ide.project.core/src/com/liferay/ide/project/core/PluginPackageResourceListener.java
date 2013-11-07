@@ -265,17 +265,20 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
 
                 final List<IPath> tldFilesToCopy = new ArrayList<IPath>();
 
-                for( String portalTld : portalTlds )
+                if( portalDir != null )
                 {
-                    IFile tldFile = tldFolder.getFile( portalTld );
-
-                    if( !tldFile.exists() )
+                    for( String portalTld : portalTlds )
                     {
-                        IPath realPortalTld = portalDir.append( "WEB-INF/tld/" + portalTld ); //$NON-NLS-1$
+                        IFile tldFile = tldFolder.getFile( portalTld );
 
-                        if( realPortalTld.toFile().exists() )
+                        if( !tldFile.exists() )
                         {
-                            tldFilesToCopy.add( realPortalTld );
+                            IPath realPortalTld = portalDir.append( "WEB-INF/tld/" + portalTld ); //$NON-NLS-1$
+
+                            if( realPortalTld.toFile().exists() )
+                            {
+                                tldFilesToCopy.add( realPortalTld );
+                            }
                         }
                     }
                 }
