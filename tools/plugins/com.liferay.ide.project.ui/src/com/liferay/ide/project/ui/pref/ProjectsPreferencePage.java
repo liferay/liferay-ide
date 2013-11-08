@@ -15,23 +15,25 @@
 
 package com.liferay.ide.project.ui.pref;
 
-import java.net.MalformedURLException;
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.ui.util.SWTUtil;
+
 import java.net.URL;
+import java.util.Arrays;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -40,11 +42,6 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.service.prefs.BackingStoreException;
-
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.ui.util.SWTUtil;
 
 /**
  * @author Simon Jiang
@@ -65,7 +62,10 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
     @Override
     protected void createFieldEditors()
     {
-        ILiferayProjectProvider[] providers = LiferayCore.getProviders();
+        final ILiferayProjectProvider[] providers = LiferayCore.getProviders();
+
+        Arrays.sort( providers );
+
         if( providers != null )
         {
             String[][] labelAndValues = new String[providers.length][2];
@@ -82,7 +82,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
 
             radioGroupEditor =
                 new RadioGroupFieldEditor(
-                    LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, "Default Project Build Type", 1,
+                    LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, "Default new project build type", 1,
                     labelAndValues, c, true );
 
             radioGroupEditor.fillIntoGrid( c, 1 );
@@ -91,43 +91,30 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
 
             if( LiferayCore.getProvider( LiferayProjectCore.VALUE_PROJECT_MAVEN_BUILD_TYPE ) == null )
             {
-                Group group = new Group( c, SWT.NONE );
-                group.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
-                group.setText( "Maven Install shortcuts" );
-                group.setLayout( new GridLayout( 1, false ) );
-
-                Hyperlink link = new Hyperlink( group, SWT.NULL );
+                Hyperlink link = new Hyperlink( radioGroupEditor.getRadioBoxControl( c ), SWT.NULL );
                 link.setForeground( c.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
                 link.setUnderlined( true );
-                link.setText( "Maven Integration (m2e) HomePage" );
+                link.setText( "To add support for maven, please install the m2e-liferay feature." );
                 link.addHyperlinkListener
-                ( 
+                (
                     new HyperlinkAdapter()
                     {
-                        public void linkActivated( HyperlinkEvent e )
+                        public void linkActivated( HyperlinkEvent event )
                         {
                             try
                             {
                                 IWorkbenchBrowserSupport supoprt = PlatformUI.getWorkbench().getBrowserSupport();
                                 IWebBrowser browser =
                                     supoprt.createBrowser(
-                                        0, "Maven Integration HomePage", "Maven Integration (m2e) HomePage", null );
-                                browser.openURL( new URL( "http://www.eclipse.org/m2e/" ) );
+                                        0, "Liferay IDE Download", "Liferay IDE Download Page", null );
+                                browser.openURL( new URL( "https://www.liferay.com/downloads/liferay-projects/liferay-ide" ) );
                             }
-                            catch( MalformedURLException malformException )
+                            catch( Exception e )
                             {
-                                MessageDialog.openError(
-                                    ProjectsPreferencePage.this.getShell(), "Liferay Project Preferences",
-                                    "Unable open maven integration page." );
-                            }
-                            catch( PartInitException partInitException )
-                            {
-                                MessageDialog.openError(
-                                    ProjectsPreferencePage.this.getShell(), "Liferay Project Preferences",
-                                    "Unable initialize workbench." );
+                                ProjectUIPlugin.logError( "Unable to open Liferay IDE download page", e );
                             }
                         }
-                    } 
+                    }
                 );
             }
         }

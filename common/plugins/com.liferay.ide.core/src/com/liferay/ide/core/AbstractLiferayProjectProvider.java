@@ -19,7 +19,7 @@ package com.liferay.ide.core;
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider
+public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider, Comparable<ILiferayProjectProvider>
 {
     private Class<?>[] classTypes;
     private String displayName;
@@ -30,6 +30,16 @@ public abstract class AbstractLiferayProjectProvider implements ILiferayProjectP
     public AbstractLiferayProjectProvider( Class<?>[] types )
     {
         this.classTypes = types;
+    }
+
+    public int compareTo( ILiferayProjectProvider provider )
+    {
+        if( provider != null )
+        {
+            return this.shortName.compareTo( provider.getShortName() );
+        }
+
+        return 0;
     }
 
     public String getDisplayName()
