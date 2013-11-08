@@ -30,6 +30,7 @@ import com.liferay.ide.project.core.model.internal.PortletFrameworkPossibleValue
 import com.liferay.ide.project.core.model.internal.PortletFrameworkValidationService;
 import com.liferay.ide.project.core.model.internal.ProjectNameListener;
 import com.liferay.ide.project.core.model.internal.ProjectNameValidationService;
+import com.liferay.ide.project.core.model.internal.ProjectProviderDefaultValueService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderListener;
 import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.RuntimeNameDefaultValueService;
@@ -63,6 +64,7 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public interface NewLiferayPluginProjectOp extends ExecutableElement
 {
@@ -128,9 +130,15 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
 
     @Type( base = ILiferayProjectProvider.class )
     @Label( standard = "build type" )
-    @DefaultValue( text = "ant" )
     @Listeners( ProjectProviderListener.class )
-    @Service( impl = ProjectProviderPossibleValuesService.class )
+    @Services
+    (
+        value=
+        {
+            @Service( impl = ProjectProviderPossibleValuesService.class ),
+            @Service( impl = ProjectProviderDefaultValueService.class )
+        }
+    )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$
 
     Value<ILiferayProjectProvider> getProjectProvider();

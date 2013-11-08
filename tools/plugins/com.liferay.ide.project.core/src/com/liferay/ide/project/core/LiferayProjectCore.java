@@ -34,6 +34,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plugin life cycle
  *
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class LiferayProjectCore extends LiferayCore
 {
@@ -50,6 +51,15 @@ public class LiferayProjectCore extends LiferayCore
 
     public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
 
+    // The key of default project build type for creating a new liferay plug in project
+    public static final String PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION = "project-default-build-type-option";
+
+    // The value of maven build type 
+    public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
+
+    // The value of ant build type
+    public static final String VALUE_PROJECT_ANT_BUILD_TYPE = "ant";
+    
     /**
      * Returns the shared instance
      *
