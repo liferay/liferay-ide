@@ -31,7 +31,7 @@ import com.liferay.ide.project.core.model.internal.PortletFrameworkValidationSer
 import com.liferay.ide.project.core.model.internal.ProjectNameListener;
 import com.liferay.ide.project.core.model.internal.ProjectNameValidationService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderListener;
-import com.liferay.ide.project.core.model.internal.ProjectProvidersPossibleValuesService;
+import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.RuntimeNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.RuntimeNamePossibleValuesService;
 import com.liferay.ide.project.core.model.internal.RuntimeNameValidationService;
@@ -130,7 +130,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     @Label( standard = "build type" )
     @DefaultValue( text = "ant" )
     @Listeners( ProjectProviderListener.class )
-    @Service( impl = ProjectProvidersPossibleValuesService.class )
+    @Service( impl = ProjectProviderPossibleValuesService.class )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$
 
     Value<ILiferayProjectProvider> getProjectProvider();

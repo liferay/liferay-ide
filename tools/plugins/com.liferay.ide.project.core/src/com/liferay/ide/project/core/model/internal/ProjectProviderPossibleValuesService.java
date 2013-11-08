@@ -28,7 +28,7 @@ import org.eclipse.sapphire.services.PossibleValuesService;
 /**
  * @author Gregory Amerson
  */
-public class ProjectProvidersPossibleValuesService extends PossibleValuesService
+public class ProjectProviderPossibleValuesService extends PossibleValuesService
 {
 
     private List<String> possibleValues;

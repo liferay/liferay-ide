@@ -4,11 +4,13 @@ package com.liferay.ide.project.core.tests;
 import com.liferay.ide.project.core.LiferayProjectCore;
 
 import org.eclipse.core.runtime.IPath;
+import org.junit.Test;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
-public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOpBaseTests
+public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOpBase
 {
 
     @Override
@@ -59,4 +61,21 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
         return "6.1.2";
     }
 
+    @Test
+    public void testPluginTypeListener() throws Exception
+    {
+        super.testPluginTypeListener();
+    }
+
+    @Test
+    public void testUseDefaultLocationEnablement() throws Exception
+    {
+        super.testPluginTypeListener();
+    }
+
+    @Test
+    public void testUseDefaultLocationListener() throws Exception
+    {
+        super.testUseDefaultLocationListener();
+    }
 }

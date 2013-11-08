@@ -1,14 +1,16 @@
 
 package com.liferay.ide.project.core.tests;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
-
 import org.eclipse.core.runtime.IPath;
+import org.junit.Test;
+
+import com.liferay.ide.project.core.LiferayProjectCore;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
-public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOpBaseTests
+public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOpBase
 {
 
     @Override
@@ -59,4 +61,57 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         return "6.2.0";
     }
 
+    @Test
+    public void testLocationListener() throws Exception
+    {
+        super.testLocationListener();
+    }
+
+    @Test
+    public void testNewProjectCustomLocationPortlet() throws Exception
+    {
+        super.testNewProjectCustomLocationPortlet();
+    }
+
+    @Test
+    public void testNewProjectCustomLocationWrongSuffix() throws Exception
+    {
+        super.testNewProjectCustomLocationWrongSuffix();
+    }
+
+    @Test
+    public void testNewSDKProjectCustomLocation() throws Exception
+    {
+        super.testNewSDKProjectCustomLocation();
+    }
+
+    @Test
+    public void testNewSDKProjectEclipseWorkspace() throws Exception
+    {
+        super.testNewSDKProjectEclipseWorkspace();
+    }
+
+    @Test
+    public void testPluginTypeListener() throws Exception
+    {
+        super.testPluginTypeListener( true );
+    }
+
+    @Test
+    public void testUseDefaultLocationEnablement() throws Exception
+    {
+        super.testUseDefaultLocationEnablement( true );
+    }
+
+    @Test
+    public void testUseDefaultLocationListener() throws Exception
+    {
+        super.testUseDefaultLocationListener( true );
+    }
+
+    @Test
+    public void testUseSdkLocationListener() throws Exception
+    {
+        super.testUseSdkLocationListener();
+    }
 }

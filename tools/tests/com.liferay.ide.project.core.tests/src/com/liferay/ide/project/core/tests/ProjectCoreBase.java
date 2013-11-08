@@ -15,7 +15,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
 
-public class ProjectCoreBaseTests extends BaseTests
+public class ProjectCoreBase extends BaseTests
 {
 
     protected IProject createProject( NewLiferayPluginProjectOp op )

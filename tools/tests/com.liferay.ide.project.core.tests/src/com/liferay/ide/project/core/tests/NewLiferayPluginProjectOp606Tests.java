@@ -24,12 +24,46 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.junit.Test;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
-public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOpBaseTests
+public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOpBase
 {
+
+    @Override
+    protected IProject checkNewJsfAntProjectIvyFile( IProject jsfProject, String jsfSuite ) throws Exception
+    {
+        // ivy not supported in 6.0.6
+        return jsfProject;
+    }
+
+    @Override
+    protected IProject checkNewThemeAntProject( NewLiferayPluginProjectOp op, IProject project, String expectedBuildFile )
+        throws Exception
+    {
+        final String themeParent = op.getThemeParent().content();
+        final String themeFramework = op.getThemeFramework().content();
+        final IFile buildXml = project.getFile( "build.xml" );
+
+        final String buildXmlContent = CoreUtil.readStreamToString( buildXml.getContents() );
+
+        if( expectedBuildFile == null )
+        {
+            expectedBuildFile = "build-theme-" + themeParent + "-" + themeFramework + ".xml";
+        }
+
+        final String expectedbuildXmlContent =
+            CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/" + expectedBuildFile ) );
+
+        final String expectedContent = stripCarriageReturns( expectedbuildXmlContent ).replace( "<!DOCTYPE project>\n", "" );
+
+        assertEquals( expectedContent, stripCarriageReturns( buildXmlContent ) );
+
+        return project;
+    }
 
     @Override
     protected IPath getLiferayPluginsSdkDir()
@@ -80,77 +114,57 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
     }
 
     @Override
-    public void testCreateNewSDKProjectCustomLocation() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    public void testCreateNewSDKProjectEclipseWorkspace() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    public void testCreateProjectCustomLocationPortlet() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    public void testCreateProjectCustomLocationWrongSuffix() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    public void testCreateProjectCustomLocationWrongSuffixPortlet() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    protected IProject checkNewJsfAntProjectIvyFile( IProject jsfProject, String jsfSuite ) throws Exception
-    {
-        // ivy not supported in 6.1.1
-        return jsfProject;
-    }
-
-    @Override
-    public void testCreateNewJsfAntProjects() throws Exception
+    public void testNewJsfAntProjects() throws Exception
     {
         // jsf projects not supported in 6.0.6
     }
 
     @Override
-    public void testCreateNewVaadinAntProject() throws Exception
+    public void testNewProjectCustomLocationPortlet() throws Exception
+    {
+        // not supported in 6.0.6
+    }
+
+    @Override
+    public void testNewProjectCustomLocationWrongSuffix() throws Exception
+    {
+        // not supported in 6.0.6
+    }
+
+    @Override
+    public void testNewSDKProjectCustomLocation() throws Exception
+    {
+        // not supported in 6.0.6
+    }
+
+    @Override
+    public void testNewSDKProjectEclipseWorkspace() throws Exception
+    {
+        // not supported in 6.0.6
+    }
+
+    @Override
+    public void testNewVaadinAntProject() throws Exception
     {
         // vaadin projets not supported in 6.0.6
     }
 
-    @Override
-    protected IProject checkNewThemeAntProject( NewLiferayPluginProjectOp op, IProject project, String expectedBuildFile )
-        throws Exception
+    @Test
+    public void testPluginTypeListener() throws Exception
     {
-        final String themeParent = op.getThemeParent().content();
-        final String themeFramework = op.getThemeFramework().content();
-        final IFile buildXml = project.getFile( "build.xml" );
+        super.testPluginTypeListener();
+    }
 
-        final String buildXmlContent = CoreUtil.readStreamToString( buildXml.getContents() );
+    @Test
+    public void testUseDefaultLocationEnablement() throws Exception
+    {
+        super.testPluginTypeListener();
+    }
 
-        if( expectedBuildFile == null )
-        {
-            expectedBuildFile = "build-theme-" + themeParent + "-" + themeFramework + ".xml";
-        }
-
-        final String expectedbuildXmlContent =
-            CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/" + expectedBuildFile ) );
-
-        final String expectedContent = stripCarriageReturns( expectedbuildXmlContent ).replace( "<!DOCTYPE project>\n", "" );
-
-        assertEquals( expectedContent, stripCarriageReturns( buildXmlContent ) );
-
-        return project;
+    @Test
+    public void testUseDefaultLocationListener() throws Exception
+    {
+        super.testUseDefaultLocationListener();
     }
 
 }

@@ -19,12 +19,21 @@ import com.liferay.ide.project.core.LiferayProjectCore;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.junit.Test;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
-public class NewLiferayPluginProjectOp611Tests extends NewLiferayPluginProjectOpBaseTests
+public class NewLiferayPluginProjectOp611Tests extends NewLiferayPluginProjectOpBase
 {
+
+    @Override
+    protected IProject checkNewJsfAntProjectIvyFile( IProject jsfProject, String jsfSuite ) throws Exception
+    {
+        // ivy not supported in 6.1.1
+        return jsfProject;
+    }
 
     @Override
     protected IPath getLiferayPluginsSdkDir()
@@ -75,40 +84,45 @@ public class NewLiferayPluginProjectOp611Tests extends NewLiferayPluginProjectOp
     }
 
     @Override
-    public void testCreateNewSDKProjectCustomLocation() throws Exception
+    public void testNewProjectCustomLocationPortlet() throws Exception
     {
         // not supported in 6.1.1
     }
 
     @Override
-    public void testCreateNewSDKProjectEclipseWorkspace() throws Exception
+    public void testNewProjectCustomLocationWrongSuffix() throws Exception
     {
         // not supported in 6.1.1
     }
 
     @Override
-    public void testCreateProjectCustomLocationPortlet() throws Exception
+    public void testNewSDKProjectCustomLocation() throws Exception
     {
         // not supported in 6.1.1
     }
 
     @Override
-    public void testCreateProjectCustomLocationWrongSuffix() throws Exception
+    public void testNewSDKProjectEclipseWorkspace() throws Exception
     {
         // not supported in 6.1.1
     }
 
-    @Override
-    public void testCreateProjectCustomLocationWrongSuffixPortlet() throws Exception
+    @Test
+    public void testPluginTypeListener() throws Exception
     {
-        // not supported in 6.1.1
+        super.testPluginTypeListener();
     }
 
-    @Override
-    protected IProject checkNewJsfAntProjectIvyFile( IProject jsfProject, String jsfSuite ) throws Exception
+    @Test
+    public void testUseDefaultLocationEnablement() throws Exception
     {
-        // ivy not supported in 6.1.1
-        return jsfProject;
+        super.testPluginTypeListener();
+    }
+
+    @Test
+    public void testUseDefaultLocationListener() throws Exception
+    {
+        super.testUseDefaultLocationListener();
     }
 
 }
