@@ -92,7 +92,6 @@ Test).[/li][/ul]</content>
                                                 </hint>
                                             </property-editor>
                                             <property-editor>
-                                                <visible-when>${ VersionMatches( Root().Version, '[6.1' ) }</visible-when>
                                                 <property>uuidAccessor</property>
                                                 <hint>
                                                     <name>checkbox.layout</name>
@@ -117,8 +116,14 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
-                                             <property-editor>
-                                                <visible-when>${ VersionMatches( Root().Version, '[6.2' ) }</visible-when>
+                                            <property-editor>
+                                                <property>trashEnabled</property>
+                                                <hint>
+                                                    <name>checkbox.layout</name>
+                                                    <value>leading.label</value>
+                                                </hint>
+                                            </property-editor>
+                                            <property-editor>
                                                 <property>deprecated</property>
                                                 <hint>
                                                     <name>checkbox.layout</name>
@@ -166,6 +171,8 @@ The [b]cache-enabled[/b] value specifies whether or not to cache this queries fo
 The [b]json-enabled[/b] value specifies whether or not the entity should be annotated
 for JSON serialization. By default, if the remote-service value is true, then
 the json-enabled value is true.
+[br/][br/]
+The [b]trash-enabled[/b] value specifies whether trash related methods should be generated or not.
 [br/][br/]
 The [b]deprecated[/b] value specifies whether the entity's services are deprecated.</content>
                                     <title>Entity</title>
@@ -229,7 +236,6 @@ The [b]deprecated[/b] value specifies whether the entity's services are deprecat
                                                         <property-editor>mappingTable</property-editor>
                                                         <property-editor>idType</property-editor>
                                                         <property-editor>
-                                                            <visible-when>${ VersionMatches( Root().Version, '[6.1' ) }</visible-when>
                                                             <property>Accessor</property>
                                                             <hint>
                                                                 <name>checkbox.layout</name>

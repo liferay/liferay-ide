@@ -99,7 +99,7 @@ public interface Entity extends Element
 
     void setUuidAccessor( Boolean value );
 
-    // *** LocalService
+    // *** LocalService ***
 
     @Type( base = Boolean.class )
     @Label( standard = "&local service" )
@@ -113,7 +113,7 @@ public interface Entity extends Element
 
     void setLocalService( Boolean value );
 
-    // *** RemoteService
+    // *** RemoteService ***
 
     @Type( base = Boolean.class )
     @Label( standard = "&remote service" )
@@ -167,7 +167,7 @@ public interface Entity extends Element
 
     void setTxManager( String value );
 
-    // *** Cache Enabled
+    // *** Cache Enabled ***
 
     @Type( base = Boolean.class )
     @Label( standard = "&cache enabled" )
@@ -181,7 +181,7 @@ public interface Entity extends Element
 
     void setCacheEnabled( Boolean value );
 
-    // *** Json Enabled
+    // *** Json Enabled ***
 
     @Type( base = Boolean.class )
     @Label( standard = "&JSON enabled" )
@@ -194,6 +194,39 @@ public interface Entity extends Element
     void setJsonEnabled( String value );
 
     void setJsonEnabled( Boolean value );
+
+    // *** Trash Enabled ***
+
+    @Type( base = Boolean.class )
+    @Label( standard = "&Trash Enabled" )
+    @XmlBinding( path = "@trash-enabled" )
+    @DefaultValue( text = "false" )
+    @Since( "6.2" )
+    ValueProperty PROP_TRASH_ENABLED= new ValueProperty( TYPE, "TrashEnabled" ); //$NON-NLS-1$
+
+    Value<Boolean> getTrashEnabled();
+
+    void setTrashEnabled( String value );
+
+    void setTrashEnabled( Boolean value );
+
+    // *** Deprecated ***
+
+    @Type( base = Boolean.class )
+    @XmlBinding( path = "@deprecated" )
+    @Label( standard = "&deprecated" )
+    @DefaultValue( text = "false" )
+    @Since( "6.2" )
+    ValueProperty PROP_DEPRECATED = new ValueProperty( TYPE, "Deprecated" ); //$NON-NLS-1$
+
+    Value<Boolean> getDeprecated();
+
+    void setDeprecated( String value );
+
+    void setDeprecated( Boolean value );
+
+    // *** Columns ***
+
     @Type( base = Column.class )
     @Label( standard = "column" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "column", type = Column.class ) )
@@ -238,20 +271,4 @@ public interface Entity extends Element
 
     ElementList<TxRequired> getTxRequireds();
 
-    // *** Deprecated ***
-
-    @Type( base = Boolean.class )
-    @XmlBinding( path = "@deprecated" )
-    @Label( standard = "&deprecated" )
-    @DefaultValue( text = "false" )
-    @Documentation( content = "The [b]deprecated[/b] value specifies whether the entity's services are deprecated." )
-    @Since( "6.2" )
-    ValueProperty PROP_DEPRECATED = new ValueProperty( TYPE, "Deprecated" ); //$NON-NLS-1$
-
-    Value<Boolean> getDeprecated();
-
-    void setDeprecated( String value );
-
-    void setDeprecated( Boolean value );
-    
 }
