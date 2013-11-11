@@ -61,12 +61,13 @@ public class LiferayLanguageFileDescriber implements ITextContentDescriber
 
             final IFileStore fileStore = (IFileStore) fileStoreField.get( inputStream );
 
-            if( fileStore != null && CoreUtil.isValidLiferayLanguageFileName( fileStore.fetchInfo().getName() ) )
+            if( fileStore != null )
             {
                 final IFile iFile =
                     ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( FileUtil.toPath( fileStore.toURI() ) );
 
-                if( iFile != null && iFile.getProject() != null && CoreUtil.isLiferayProject( iFile.getProject() ) )
+                if( iFile != null && iFile.getProject() != null && CoreUtil.isLiferayProject( iFile.getProject() ) &&
+                    CoreUtil.isInSrcFolders( iFile ) )
                 {
                     retval = VALID;
                 }

@@ -42,14 +42,13 @@ public class LiferayProjectLanguageFileValidator implements IFacetedProjectValid
 
         ProjectUtil.deleteProjectMarkers( proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, getMarkerSourceIds() );
 
-        if( proj != null && ProjectUtil.hasNonDefaultEncodingLanguageFile( proj ) )
+        if( proj != null && ProjectUtil.hasNonLiferayDefaultEncodingPropertyFile( proj ) )
         {
             ProjectUtil.setProjectMarker(
                 proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_WARNING,
                 MSG_LANGUAGE_FILE_ENCCODING_NOT_DEFAULT, "", ID_LANGUAGE_FILE_Encoding_NOT_DEFAULT );
         }
     }
-
 
     private Set<String> getMarkerSourceIds()
     {
@@ -70,7 +69,5 @@ public class LiferayProjectLanguageFileValidator implements IFacetedProjectValid
             initializeMessages( LiferayProjectLanguageFileValidator.class.getName(), Msgs.class );
         }
     }
-
-
 
 }

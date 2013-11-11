@@ -31,6 +31,7 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -458,6 +459,26 @@ public class CoreUtil
         return retval;
     }
 
+    public static IFolder[] getSrcFolders( IProject project )
+    {
+        List<IFolder> retval = new ArrayList<IFolder>();
+
+        final IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
+
+        if( sourceFolders != null && sourceFolders.length > 0 )
+        {
+            for( IPackageFragmentRoot sourceFolder : sourceFolders )
+            {
+                if( sourceFolder.getResource() instanceof IFolder )
+                {
+                    retval.add( (IFolder) sourceFolder.getResource() );
+                }
+            }
+        }
+
+        return retval.toArray( new IFolder[retval.size()] );
+    }
+
     public static IWorkspace getWorkspace()
     {
         return ResourcesPlugin.getWorkspace();
@@ -547,6 +568,19 @@ public class CoreUtil
         return true;
     }
 
+    public static boolean isInSrcFolders( IFile iFile )
+    {
+        for( IFolder srcFolder : getSrcFolders( iFile.getProject() ) )
+        {
+            if( srcFolder.getFile( iFile.getFullPath() ) != null  )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static boolean isResourceInDocroot( IModuleResource resource )
     {
         IFile file = (IFile) resource.getAdapter( IFile.class );
@@ -566,11 +600,6 @@ public class CoreUtil
         }
 
         return false;
-    }
-
-    public static boolean isValidLiferayLanguageFileName( String name )
-    {
-        return name.matches( "Language.*\\.properties" );
     }
 
     public static void makeFolders( IFolder folder ) throws CoreException

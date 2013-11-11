@@ -35,7 +35,7 @@ public class HasNonDefaultEncodingLanguageFileTester extends PropertyTester
     {
         if( receiver instanceof IProject )
         {
-           return ProjectUtil.hasNonDefaultEncodingLanguageFile( (IProject) receiver );
+           return ProjectUtil.hasNonLiferayDefaultEncodingPropertyFile( (IProject) receiver );
         }
 
         return false;

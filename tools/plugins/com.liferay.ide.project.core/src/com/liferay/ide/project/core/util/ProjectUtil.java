@@ -33,6 +33,7 @@ import com.liferay.ide.server.util.ServerUtil;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -49,6 +50,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
+import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -207,40 +209,79 @@ public class ProjectUtil
     }
 
     // IDE-1129
-    public static void encodeLanguageFilesToDefault( IProject proj, final IProgressMonitor monitor )
+    public static void encodePropertyFilesToLiferayDefault( IProject proj, final IProgressMonitor monitor )
     {
         final IFolder[] sourceFolders = getSourceFolders( proj );
+
+        IResourceProxyVisitor resourceProxyVisitor = new IResourceProxyVisitor()
+        {
+
+            public boolean visit( IResourceProxy proxy ) throws CoreException
+            {
+                if( proxy.getType() == IResource.FILE && proxy.getName().matches( ".*\\.properties" ) )
+                {
+                    final IFile file = (IFile) proxy.requestResource();
+
+                    if( ! file.getCharset( true ).equals( ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
+                    {
+                        file.setCharset( null, monitor );
+                    }
+                }
+
+                return true;
+            }
+        };
+
+        IResourceVisitor resourceVisitor = new IResourceVisitor()
+        {
+
+            public boolean visit( IResource resource ) throws CoreException
+            {
+                if( resource.getType() == IResource.FILE && resource.getName().matches( ".*\\.properties" ) )
+                {
+                    final IFile file = (IFile) resource;
+
+                    if( ! file.getCharset( true ).equals( ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
+                    {
+                        file.setCharset( null, monitor );
+                    }
+                }
+                return true;
+            }
+        };
 
         for( IFolder sourceFolder : sourceFolders )
         {
             try
             {
-                sourceFolder.accept( new IResourceProxyVisitor()
+                Method acceptMethod = sourceFolder.getClass().getMethod( "accept",
+                    new Class<?>[] { IResourceProxyVisitor.class, int.class, int.class } );
+
+                if( acceptMethod != null )
                 {
-                    public boolean visit( IResourceProxy proxy ) throws CoreException
+                    acceptMethod.setAccessible( true );
+                    acceptMethod.invoke( sourceFolder, new Object[] { resourceProxyVisitor, IResource.DEPTH_INFINITE,
+                        IContainer.EXCLUDE_DERIVED } );
+                }
+                else
+                {
+                    acceptMethod = sourceFolder.getClass().getMethod( "accept",
+                        new Class<?>[] { IResourceVisitor.class, int.class, int.class } );
+
+                    if( acceptMethod != null )
                     {
-                        if( proxy.getType() == IResource.FILE &&
-                            CoreUtil.isValidLiferayLanguageFileName( proxy.getName() ) )
-                        {
-                            final IFile file = (IFile) proxy.requestResource();
-
-                            if( ! file.getCharset( true ).equals(
-                                ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
-                            {
-                                file.setCharset(
-                                    ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET, monitor );
-                            }
-                        }
-
-                        return true;
+                        acceptMethod.setAccessible( true );
+                        acceptMethod.invoke( sourceFolder, new Object[] { resourceVisitor, IResource.DEPTH_INFINITE,
+                            IContainer.EXCLUDE_DERIVED } );
                     }
-                }, IResource.DEPTH_INFINITE, IContainer.EXCLUDE_DERIVED );
+                }
             }
-            catch( CoreException e )
+            catch( Exception e )
             {
                 LiferayProjectCore.logError( e );
             }
         }
+
     }
 
     public static String convertToDisplayName( String name )
@@ -1036,38 +1077,80 @@ public class ProjectUtil
     }
 
     // IDE-1229
-    public static boolean hasNonDefaultEncodingLanguageFile( IProject proj )
+    public static boolean hasNonLiferayDefaultEncodingPropertyFile( IProject proj )
     {
         final IFolder[] sourceFolders = ProjectUtil.getSourceFolders( proj );
 
         final boolean[] retval = { false };
 
+        IResourceProxyVisitor resourceProxyVisitor = new IResourceProxyVisitor()
+        {
+
+            public boolean visit( IResourceProxy proxy ) throws CoreException
+            {
+                if( proxy.getType() == IResource.FILE && proxy.getName().matches( ".*\\.properties" ) )
+                {
+                    final IFile file = (IFile) proxy.requestResource();
+
+                    if( ! file.getCharset( true ).equals( ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
+                    {
+                        retval[0] = true;
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        };
+
+        IResourceVisitor resourceVisitor = new IResourceVisitor()
+        {
+
+            public boolean visit( IResource resource ) throws CoreException
+            {
+                if( resource.getType() == IResource.FILE && resource.getName().matches( ".*\\.properties" ))
+                {
+                    final IFile file = (IFile) resource;
+
+                    if( ! file.getCharset( true ).equals( ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
+                    {
+                        retval[0] = true;
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
+
         for( IFolder sourceFolder : sourceFolders )
         {
             try
             {
-                sourceFolder.accept( new IResourceProxyVisitor()
+                Method acceptMethod =
+                    sourceFolder.getClass().getMethod(
+                        "accept", new Class<?>[] { IResourceProxyVisitor.class, int.class, int.class } );
+
+                if( acceptMethod != null )
                 {
-                    public boolean visit( IResourceProxy proxy ) throws CoreException
+                    acceptMethod.setAccessible( true );
+                    acceptMethod.invoke( sourceFolder, new Object[] { resourceProxyVisitor, IResource.DEPTH_INFINITE,
+                        IContainer.EXCLUDE_DERIVED } );
+                }
+                else
+                {
+                    acceptMethod =
+                        sourceFolder.getClass().getMethod(
+                            "accept", new Class<?>[] { IResourceVisitor.class, int.class, int.class } );
+
+                    if( acceptMethod != null )
                     {
-                        if( proxy.getType() == IResource.FILE &&
-                            CoreUtil.isValidLiferayLanguageFileName( proxy.getName() ) )
-                        {
-                            final IFile file = (IFile) proxy.requestResource();
-
-                            if( ! file.getCharset( true ).equals(
-                                ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
-                            {
-                                retval[0] = true;
-                                return false;
-                            }
-                        }
-
-                        return true;
+                        acceptMethod.setAccessible( true );
+                        acceptMethod.invoke( sourceFolder, new Object[] { resourceVisitor, IResource.DEPTH_INFINITE,
+                            IContainer.EXCLUDE_DERIVED } );
                     }
-                }, IResource.DEPTH_INFINITE, IContainer.EXCLUDE_DERIVED);
+                }
             }
-            catch( CoreException e )
+            catch( Exception e )
             {
                 LiferayProjectCore.logError( e );
             }
