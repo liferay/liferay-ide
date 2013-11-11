@@ -12,14 +12,15 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <tycho-packaging-format>yyyyMMddHHmm'-m2'</tycho-packaging-format>
+        <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
         <tycho-version>0.19.0</tycho-version>
         <tycho-extras-version>0.19.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/</orbit-site>
         <sapphire-site>https://hudson.eclipse.org/sapphire/job/0.7.x/lastSuccessfulBuild/artifact/build/repository/</sapphire-site>
-        <ivyde-site>https://builds.apache.org/job/IvyDE-updatesite/676/artifact/trunk/build/</ivyde-site>
+        <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.3.0.final_20130110142753/</ivy-site>
+        <ivyde-site>https://dist.apache.org/repos/dist/dev/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
 
-        <m2e-site>http://nexus.tesla.io:8081/nexus/content/sites/m2e.extras/m2e/1.5.0/N/LATEST/</m2e-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.5/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/snapshots/kepler/</m2e-wtp-site>
         <adt-site>http://vm-32.liferay.com/adt-repository/</adt-site>
         <gmaven.runtime>1.8</gmaven.runtime>
