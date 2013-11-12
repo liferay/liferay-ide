@@ -63,7 +63,7 @@
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'maven' }</visible-when>
-                    <property>Version</property>
+                    <property>ArtifactVersion</property>
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'maven' }</visible-when>
@@ -71,7 +71,28 @@
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'maven' }</visible-when>
-                    <property>Profiles</property>
+                    <property>ActiveProfilesValue</property>
+                    <action>
+                        <id>Select.Active.Profiles</id>
+                        <label>Select active profiles...</label>
+                        <image>Browse.png</image>
+                    </action>
+                    <action-handler>
+                        <action>Select.Active.Profiles</action>
+                        <id>Select.Active.Profiles</id>
+                        <impl>SelectActiveProfilesActionHandler</impl>
+                        <label>Select active profiles...</label>
+                    </action-handler>
+                    <action>
+                        <id>Sapphire.Add</id>
+                        <label>Create New Liferay Profile...</label>
+                        <image>new_liferay_profile.gif</image>
+                    </action>
+                    <action-handler>
+                        <action>Sapphire.Add</action>
+                        <id>Sapphire.Add.Maven.Profile</id>
+                        <impl>NewLiferayProfileActionHandler</impl>
+                    </action-handler>
                 </property-editor>
                 <separator></separator>
                 <group>
@@ -187,5 +208,64 @@
         <package>org.eclipse.sapphire.ui.renderers.swt</package>
         <package>com.liferay.ide.project.ui.action</package>
         <package>com.liferay.ide.project.ui.wizard</package>
+        <package>org.eclipse.sapphire.ui.forms.swt</package>
     </import>
+    <dialog>
+        <id>SelectActiveProfiles</id>
+        <label>Select Active Profiles</label>
+        <content>
+            <label>Any profile that is activated by default will not be displayed below.</label>
+            <property-editor>
+                <show-label>false</show-label>
+                <property>SelectedProfiles</property>
+                <width>400</width>
+                <height>200</height>
+                <hint>
+                    <name>factory</name>
+                    <value>SlushBucketPropertyEditorPresentation.Factory</value>
+                </hint>
+            </property-editor>
+        </content>
+    </dialog>
+    <dialog>
+        <id>NewLiferayProfile</id>
+        <label>Create New Liferay Profile</label>
+        <content>
+            <property-editor>Id</property-editor>
+            <separator></separator>
+            <label>Use the following Liferay runtime to automatically popular this new profile with useful properties.</label>
+            <spacer></spacer>
+            <property-editor>
+                <label>Liferay runtime</label>
+                <property>RuntimeName</property>
+                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                <action>
+                    <id>NewLiferayRuntime</id>
+                    <label>New Liferay runtime...</label>
+                    <image>server_new.png</image>
+                </action>
+                <action-handler>
+                    <action>NewLiferayRuntime</action>
+                    <id>NewLiferayRuntimeHandler</id>
+                    <impl>NewLiferayRuntimeAction</impl>
+                </action-handler>
+            </property-editor>
+            <separator></separator>
+            <group>
+                <label>Select new profile location</label>
+                <content>
+                    <property-editor>
+                        <property>ProfileLocation</property>
+                        <property>ProfileLocation</property>
+                        <show-label>false</show-label>
+                        <hint>
+                            <name>prefer.vertical.radio.buttons</name>
+                            <value>true</value>
+                        </hint>
+                    </property-editor>
+                </content>
+            </group>
+        </content>
+        <initial-focus>RuntimeName</initial-focus>
+    </dialog>
 </definition>

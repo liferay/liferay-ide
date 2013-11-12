@@ -15,11 +15,16 @@
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -60,32 +65,6 @@ public class NewLiferayPluginProjectOpMethods
         return retval;
     }
 
-    public static void updateLocation( final NewLiferayPluginProjectOp op, final Path baseLocation )
-    {
-        final String projectName = op.getProjectName().content();
-
-        String suffix = null;
-
-        if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
-        {
-            suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
-
-            if( suffix != null )
-            {
-                // check if project name already contains suffix
-                if( projectName.endsWith( suffix ) )
-                {
-                    suffix = null;
-                }
-            }
-        }
-
-        final String dirName = projectName + ( suffix == null ? StringPool.EMPTY : suffix );
-        final Path newLocation = baseLocation.append( dirName );
-
-        op.setLocation( newLocation );
-    }
-
     public static String getPluginTypeSuffix( final PluginType pluginType )
     {
         String suffix = null;
@@ -112,4 +91,109 @@ public class NewLiferayPluginProjectOpMethods
         return suffix;
     }
 
+    public static Set<String> getPossibleProfileIds( NewLiferayPluginProjectOp op, boolean includeNewProfiles )
+    {
+        final String activeProfilesValue = op.getActiveProfilesValue().content();
+
+        final Object[] systemProfileIds = op.getProjectProvider().content().getData( "profileIds" );
+
+        final ElementList<NewLiferayProfile> newLiferayProfiles = op.getNewLiferayProfiles();
+
+        // TODO get profileIds from project's new pom parent
+
+        final Set<String> possibleProfileIds = new HashSet<String>();
+
+        if( ! CoreUtil.isNullOrEmpty( activeProfilesValue ) )
+        {
+            final String[] vals = activeProfilesValue.split( "," );
+
+            if( ! CoreUtil.isNullOrEmpty( vals ) )
+            {
+                for( String val : vals )
+                {
+                    if( ! possibleProfileIds.contains( val ) )
+                    {
+                        possibleProfileIds.add( val );
+                    }
+                }
+            }
+        }
+
+        if( ! CoreUtil.isNullOrEmpty( systemProfileIds ) )
+        {
+            for( Object systemProfileId : systemProfileIds )
+            {
+                if( systemProfileId != null )
+                {
+                    final String val = systemProfileId.toString();
+
+                    if( ! possibleProfileIds.contains( val ) )
+                    {
+                       possibleProfileIds.add( val );
+                    }
+                }
+            }
+        }
+
+        if( includeNewProfiles )
+        {
+            for( NewLiferayProfile newLiferayProfile : newLiferayProfiles )
+            {
+                final String newId = newLiferayProfile.getId().content();
+
+                if( ( ! CoreUtil.isNullOrEmpty( newId ) ) && ( ! possibleProfileIds.contains( newId ) ) )
+                {
+                    possibleProfileIds.add( newId );
+                }
+            }
+        }
+
+        return possibleProfileIds;
+    }
+
+    public static void updateActiveProfilesValue( final NewLiferayPluginProjectOp op, final ElementList<Profile> profiles )
+    {
+        final StringBuilder sb = new StringBuilder();
+
+        if( profiles.size() > 0 )
+        {
+            for( Profile profile : profiles )
+            {
+                if( ! profile.getId().empty() )
+                {
+                    sb.append( profile.getId().content() );
+                    sb.append( ',' );
+                }
+            }
+        }
+
+        // remove trailing ','
+        op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
+    }
+
+    public static void updateLocation( final NewLiferayPluginProjectOp op, final Path baseLocation )
+    {
+        final String projectName = op.getProjectName().content();
+
+        String suffix = null;
+
+        if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
+        {
+            suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
+
+            if( suffix != null )
+            {
+                // check if project name already contains suffix
+                if( projectName.endsWith( suffix ) )
+                {
+                    suffix = null;
+                }
+            }
+        }
+
+        final String dirName = projectName + ( suffix == null ? StringPool.EMPTY : suffix );
+        final Path newLocation = baseLocation.append( dirName );
+
+        op.setLocation( newLocation );
+    }
 }

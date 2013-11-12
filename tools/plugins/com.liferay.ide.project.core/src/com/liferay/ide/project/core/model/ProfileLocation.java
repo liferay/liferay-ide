@@ -12,28 +12,22 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
+package com.liferay.ide.project.core.model;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.modeling.annotations.Label;
+
 
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProjectProvider
+public enum ProfileLocation
 {
-    IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException;
+    @Label(standard="Project pom.xml")
+    projectPom,
 
-    Object[] getData( String key, Object... params );
+//    @Label(standard="Parent pom.xml")
+//    parentPom,
 
-    String getDisplayName();
-
-    int getPriority();
-
-    String getShortName();
-
-    ILiferayProject provide( Object type );
-
-    boolean provides( Class<?> type );
+    @Label(standard="User settings at ${user.home}/.m2/settings.xml")
+    userSettings,
 }

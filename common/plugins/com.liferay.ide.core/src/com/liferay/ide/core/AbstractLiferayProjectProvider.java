@@ -14,12 +14,11 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-
-
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractLiferayProjectProvider implements ILiferayProjectProvider, Comparable<ILiferayProjectProvider>
+public abstract class AbstractLiferayProjectProvider
+    implements ILiferayProjectProvider, Comparable<ILiferayProjectProvider>
 {
     private Class<?>[] classTypes;
     private String displayName;
@@ -42,14 +41,14 @@ public abstract class AbstractLiferayProjectProvider implements ILiferayProjectP
         return 0;
     }
 
+    public Object[] getData( String key, Object... params )
+    {
+        return new Object[0];
+    }
+
     public String getDisplayName()
     {
         return this.displayName;
-    }
-
-    public String[] getPossibleVersions()
-    {
-        return new String[] {};
     }
 
     public int getPriority()

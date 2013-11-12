@@ -18,7 +18,7 @@ package com.liferay.ide.maven.core.tests;
 import static org.junit.Assert.assertEquals;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.tests.ProjectCoreBaseTests;
+import com.liferay.ide.project.core.tests.ProjectCoreBase;
 
 import org.eclipse.core.resources.IProject;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import org.junit.Test;
 /**
  * @author Gregory Amerson
  */
-public class MavenProjectCoreTests extends ProjectCoreBaseTests
+public class MavenProjectCoreTests extends ProjectCoreBase
 {
     @Test
     public void testCreateNewxMavenProject() throws Exception

@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.HasLiferayRuntime;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,7 +56,7 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
         String value = null;
 
         final RuntimeNamePossibleValuesService service =
-            context( NewLiferayPluginProjectOp.class ).property( NewLiferayPluginProjectOp.PROP_RUNTIME_NAME ).service(
+            context( HasLiferayRuntime.class ).property( HasLiferayRuntime.PROP_RUNTIME_NAME ).service(
                 RuntimeNamePossibleValuesService.class );
 
         final Set<String> values = new HashSet<String>();

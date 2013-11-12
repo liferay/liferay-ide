@@ -28,20 +28,21 @@ import com.liferay.ide.project.core.model.internal.PluginsSDKNameValidationServi
 import com.liferay.ide.project.core.model.internal.PortletFrameworkAdvancedPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkValidationService;
+import com.liferay.ide.project.core.model.internal.ProfileIdPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.ProjectNameListener;
 import com.liferay.ide.project.core.model.internal.ProjectNameValidationService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderDefaultValueService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderListener;
 import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
-import com.liferay.ide.project.core.model.internal.RuntimeNameDefaultValueService;
-import com.liferay.ide.project.core.model.internal.RuntimeNamePossibleValuesService;
 import com.liferay.ide.project.core.model.internal.RuntimeNameValidationService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationEnablementService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationListener;
 import com.liferay.ide.project.core.model.internal.UseSdkLocationListener;
 
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
+import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
@@ -51,6 +52,7 @@ import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
+import org.eclipse.sapphire.modeling.annotations.Fact;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
@@ -66,9 +68,8 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public interface NewLiferayPluginProjectOp extends ExecutableElement
+public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferayRuntime
 {
-
     ElementType TYPE = new ElementType( NewLiferayPluginProjectOp.class );
 
     // *** ProjectName ***
@@ -80,8 +81,8 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" ); //$NON-NLS-1$
 
     Value<String> getProjectName();
-
     void setProjectName( String value );
+
 
     // *** DisplayName ***
 
@@ -90,8 +91,8 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_DISPLAY_NAME = new ValueProperty( TYPE, "DisplayName" ); //$NON-NLS-1$
 
     Value<String> getDisplayName();
-
     void setDisplayName( String value );
+
 
     // *** UseDefaultLocation ***
 
@@ -103,10 +104,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" ); //$NON-NLS-1$
 
     Value<Boolean> getUseDefaultLocation();
-
     void setUseDefaultLocation( String value );
-
     void setUseDefaultLocation( Boolean value );
+
 
     // *** ProjectLocation ***
 
@@ -120,9 +120,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" ); //$NON-NLS-1$
 
     Value<Path> getLocation();
-
     void setLocation( String value );
-
     void setLocation( Path value );
 
 
@@ -142,10 +140,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$
 
     Value<ILiferayProjectProvider> getProjectProvider();
-
     void setProjectProvider( String value );
-
     void setProjectProvider( ILiferayProjectProvider value );
+
 
     // *** UseSDKLocation ***
 
@@ -156,9 +153,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_USE_SDK_LOCATION = new ValueProperty( TYPE, "UseSdkLocation" ); //$NON-NLS-1$
 
     Value<Boolean> getUseSdkLocation();
-
     void setUseSdkLocation( String value );
-
     void setUseSdkLocation( Boolean value );
 
 
@@ -178,36 +173,14 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_PLUGINS_SDK_NAME = new ValueProperty( TYPE, "PluginsSDKName" ); //$NON-NLS-1$
 
     Value<String> getPluginsSDKName();
-
     void setPluginsSDKName( String value );
+
 
     // *** RuntimeName ***
 
-    @Label( standard = "runtime" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = RuntimeNamePossibleValuesService.class ),
-            @Service( impl = RuntimeNameDefaultValueService.class ),
-            @Service( impl = RuntimeNameValidationService.class )
-        }
-    )
-    ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, "RuntimeName" ); //$NON-NLS-1$
+    @Service( impl = RuntimeNameValidationService.class )
+    ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME ); //$NON-NLS-1$
 
-    Value<String> getRuntimeName();
-
-    void setRuntimeName( String value );
-
-    // *** Version ***
-
-    @Label( standard = "version" )
-    @DefaultValue( text = "1.0.0-SNAPSHOT" )
-    ValueProperty PROP_VERSION = new ValueProperty( TYPE, "Version" ); //$NON-NLS-1$
-
-    Value<String> getVersion();
-
-    void setVersion( String value );
 
     // *** PluginType ***
 
@@ -218,10 +191,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
 
     Value<PluginType> getPluginType();
-
     void setPluginType( String value );
-
     void setPluginType( PluginType value );
+
 
     // *** PortletFramework ***
 
@@ -239,10 +211,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_PORTLET_FRAMEWORK = new ValueProperty( TYPE, "PortletFramework" ); //$NON-NLS-1$
 
     Value<IPortletFramework> getPortletFramework();
-
     void setPortletFramework( String value );
-
     void setPortletFramework( IPortletFramework value );
+
 
     // *** PortletFrameworkAdvanced ***
 
@@ -252,10 +223,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_PORTLET_FRAMEWORK_ADVANCED = new ValueProperty( TYPE, "PortletFrameworkAdvanced" ); //$NON-NLS-1$
 
     Value<IPortletFramework> getPortletFrameworkAdvanced();
-
     void setPortletFrameworkAdvanced( String value );
-
     void setPortletFrameworkAdvanced( IPortletFramework value );
+
 
     // *** ThemeParent ***
 
@@ -265,8 +235,8 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_THEME_PARENT = new ValueProperty( TYPE, "ThemeParent" ); //$NON-NLS-1$
 
     Value<String> getThemeParent();
-
     void setThemeParent( String value );
+
 
     // *** ThemeFramework ***
 
@@ -276,8 +246,21 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_THEME_FRAMEWORK = new ValueProperty( TYPE, "ThemeFramework" ); //$NON-NLS-1$
 
     Value<String> getThemeFramework();
-
     void setThemeFramework( String value );
+
+
+    // *** Maven settings ***
+    // TODO move this to maven.core plugin
+
+    // *** ArtifactVersion ***
+
+    @Label( standard = "artifact version" )
+    @DefaultValue( text = "1.0.0-SNAPSHOT" )
+    ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty( TYPE, "ArtifactVersion" ); //$NON-NLS-1$
+
+    Value<String> getArtifactVersion();
+    void setArtifactVersion( String value );
+
 
     // *** GroupId ***
 
@@ -288,18 +271,36 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_GROUP_ID = new ValueProperty( TYPE, "GroupId" ); //$NON-NLS-1$
 
     Value<String> getGroupId();
-
     void setGroupId( String value );
 
 
-    // *** Profiles ***
+    // *** ActiveProfiles ***
 
-    @Label( standard = "profiles" )
-    ValueProperty PROP_PROFILES = new ValueProperty( TYPE, "Profiles" );
+    @Label( standard = "active profiles" )
+    @Fact( statement = "Supports comma separated list of active profiles" )
+    @Whitespace( trim = false )
+    ValueProperty PROP_ACTIVE_PROFILES_VALUE = new ValueProperty( TYPE, "ActiveProfilesValue" );
 
-    Value<String> getProfiles();
+    Value<String> getActiveProfilesValue();
+    void setActiveProfilesValue( String value );
 
-    void setProfiles( String value );
+
+    // *** SelectedProfiles ***
+
+    @Type( base = Profile.class )
+    @Label( standard = "selected profiles" )
+    @Service( impl = ProfileIdPossibleValuesService.class )
+    ListProperty PROP_SELECTED_PROFILES = new ListProperty( TYPE, "SelectedProfiles" );
+
+    ElementList<Profile> getSelectedProfiles();
+
+
+    // *** NewLiferayProfiles ***
+
+    @Type( base = NewLiferayProfile.class )
+    ListProperty PROP_NEW_LIFERAY_PROFILES = new ListProperty( TYPE, "NewLiferayProfiles" );
+
+    ElementList<NewLiferayProfile> getNewLiferayProfiles();
 
 
     // *** FinalProjectName ***
@@ -308,12 +309,11 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty( TYPE, "FinalProjectName" );
 
     Value<String> getFinalProjectName();
-
     void setFinalProjectName( String value );
+
 
     // *** Method: execute ***
 
     @DelegateImplementation( NewLiferayPluginProjectOpMethods.class )
     Status execute( ProgressMonitor monitor );
-
 }
