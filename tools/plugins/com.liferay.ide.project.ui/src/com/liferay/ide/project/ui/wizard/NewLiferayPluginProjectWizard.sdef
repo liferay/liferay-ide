@@ -159,14 +159,6 @@
                         </property-editor>
                     </content>
                 </group>
-            </content>
-        </page>
-        <page>
-            <id>LiferayJSFPortletPluginProjectWizardPage</id>
-            <label>Liferay JSF Portlet Plugin Project</label>
-            <description>Choose from available portlet frameworks depending on which technology is most appropriate for this project.</description>
-            <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>
-            <content>
                 <group>
                     <label>JSF Component Suite</label>
                     <content>
@@ -183,6 +175,7 @@
                             <show-label>false</show-label>
                         </property-editor>
                     </content>
+                    <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>
                 </group>
             </content>
         </page>
