@@ -32,7 +32,7 @@
     	<antcall target="bundle"/>
     </target>
 
-    <target name="maven-build" if="create.bundles">
+    <target name="maven-build">
     	<property name="rootdir" value="${basedir}/bundle"/>
 
     	<property name="target.dir" value="${basedir}/target"/>
@@ -43,6 +43,37 @@
     </target>
 
     <target name="bundle">
+		<if>
+			<isset property="create.bundles"/>
+			<then>
+				<property name="output.win32.zip.name" value="liferay-ide-eclipse-windows-x32-QUALIFIED_VERSION.zip"/>
+				<property name="output.linux.tar.name" value="liferay-ide-eclipse-linux-x32-QUALIFIED_VERSION.tar"/>
+				<property name="output.linux.gz.name" value="liferay-ide-eclipse-linux-x32-QUALIFIED_VERSION.tar.gz"/>
+				<property name="output.macosx.tar.name" value="liferay-ide-eclipse-macosx-x32-QUALIFIED_VERSION.tar"/>
+				<property name="output.macosx.gz.name" value="liferay-ide-eclipse-macosx-x32-QUALIFIED_VERSION.tar.gz"/>
+				<property name="output.win64.zip.name" value="liferay-ide-eclipse-windows-x64-QUALIFIED_VERSION.zip"/>
+				<property name="output.linux64.tar.name" value="liferay-ide-eclipse-linux-x64-QUALIFIED_VERSION.tar"/>
+				<property name="output.linux64.gz.name" value="liferay-ide-eclipse-linux-x64-QUALIFIED_VERSION.tar.gz"/>
+				<property name="output.macosx64.tar.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar"/>
+				<property name="output.macosx64.gz.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar.gz"/>
+			</then>
+			<elseif>
+				<isset property="create.adt.bundles"/>
+				<then>
+					<property name="output.win32.zip.name" value="liferay-ide-mobile-sdk-windows-x32-QUALIFIED_VERSION.zip"/>
+					<property name="output.linux.tar.name" value="liferay-ide-mobile-sdk-linux-x32-QUALIFIED_VERSION.tar"/>
+					<property name="output.linux.gz.name" value="liferay-ide-mobile-sdk-linux-x32-QUALIFIED_VERSION.tar.gz"/>
+					<property name="output.macosx.tar.name" value="liferay-ide-mobile-sdk-macosx-x32-QUALIFIED_VERSION.tar"/>
+					<property name="output.macosx.gz.name" value="liferay-ide-mobile-sdk-macosx-x32-QUALIFIED_VERSION.tar.gz"/>
+					<property name="output.win64.zip.name" value="liferay-ide-mobile-sdk-windows-x64-QUALIFIED_VERSION.zip"/>
+					<property name="output.linux64.tar.name" value="liferay-ide-mobile-sdk-linux-x64-QUALIFIED_VERSION.tar"/>
+					<property name="output.linux64.gz.name" value="liferay-ide-mobile-sdk-linux-x64-QUALIFIED_VERSION.tar.gz"/>
+					<property name="output.macosx64.tar.name" value="liferay-ide-mobile-sdk-macosx-x64-QUALIFIED_VERSION.tar"/>
+					<property name="output.macosx64.gz.name" value="liferay-ide-mobile-sdk-macosx-x64-QUALIFIED_VERSION.tar.gz"/>
+				</then>
+			</elseif>
+		</if>
+
         <antcall target="win64" />
         <antcall target="win32" />
 
@@ -61,8 +92,28 @@
 	</target>
 
 	<target name="create-bundle">
-		<antcallback target="install-features" return="version" />
-		<antcallback target="${package.target}" return="final.name" />
+		<delete dir="${work.dir}" />
+		<mkdir dir="${work.dir}" />
+
+		<if>
+			<isset property="create.bundles"/>
+			<then>
+				<antcall target="clean-eclipse"/>
+				<antcall target="setup-eclipse"/>
+				<antcallback target="install-tools-features" return="version" />
+				<antcall target="install-maven-features" />
+				<antcallback target="${package.target}" return="final.name" />
+			</then>
+			<elseif>
+				<isset property="create.adt.bundles"/>
+				<then>
+					<antcall target="copy-liferay-mobile-sdk" />
+					<antcall target="install-adt-ide-features" />
+					<antcallback target="install-tools-features" return="version" />
+					<antcallback target="install-adt-features" return="final.name"/>
+				</then>
+			</elseif>
+		</if>
 
 		<propertyregex property="final.name.versioned" input="${final.name}"
 			regexp="(.*)QUALIFIED_VERSION(.*)" replace="\1${version}\2" />
@@ -89,12 +140,25 @@
 			</then>
 		</if>
 
-		<if>
-			<isset property="upload"/>
-			<then>
-				<antcall target="upload-output-file" />
-			</then>
-		</if>
+	</target>
+
+	<target name="copy-liferay-mobile-sdk" depends="download-liferay-mobile-sdk">
+		<unzip src="${downloads.dir}/${liferay.mobile.sdk.zip}" dest="${work.dir}/" />
+	</target>
+
+	<target name="download-liferay-mobile-sdk" depends="create-downloads-dir">
+        <if>
+            <not>
+                <available file="${downloads.dir}/${liferay.mobile.sdk.zip}" />
+            </not>
+            <then>
+                <get
+                    dest="${downloads.dir}/${liferay.mobile.sdk.zip}"
+                    src="${liferay.mobile.sdk.url}"
+                    verbose="true"
+                />
+            </then>
+        </if>
 	</target>
 
 	<target name="win32">
@@ -301,7 +365,27 @@
     	</exec>
 	</target>
 
-    <target name="install-features" depends="setup-builder,clean-eclipse,setup-eclipse">
+	<target name="install-adt-ide-features" depends="setup-builder">
+		<if>
+			<available file="${builder.dir}/eclipse" />
+			<then>
+				<chmod file="${builder.dir}/eclipse" perm="+x" />
+			</then>
+		</if>
+
+		<antcall target="clean-eclipse"/>
+		<antcall target="setup-eclipse"/>
+
+		<echo>adt-site: ${google-adt-repository}</echo>
+		<antcallback target="install-feature" return="output">
+			<param name="repositoryURL" value="${google-adt-repository}"/>
+			<param name="featureId" value="${adt.ide.features}"/>
+		</antcallback>
+
+		<echo>${output}</echo>
+	</target>
+
+    <target name="install-tools-features" depends="setup-builder">
     	<if>
     		<available file="${builder.dir}/eclipse" />
     		<then>
@@ -319,8 +403,9 @@
     		</else>
     	</if>
 
+    	<echo>${repositoryURL}</echo>
     	<antcallback target="install-feature" return="output">
-    		<param name="featureId" value="${features}"/>
+    		<param name="featureId" value="${tools.features}"/>
     	</antcallback>
 
     	<echo>${output}</echo>
@@ -356,6 +441,50 @@
 
     	<delete file="${target.dir}/temp.txt"/>
    	</target>
+
+	<target name="install-adt-features" depends="setup-builder">
+		<if>
+			<available file="${builder.dir}/eclipse" />
+			<then>
+				<chmod file="${builder.dir}/eclipse" perm="+x"/>
+			</then>
+		</if>
+
+		<echo>${adt.updatesite}</echo>
+		<antcallback target="install-feature" return="output">
+			<param name="repositoryURL" value="file://${adt.updatesite}"/>
+			<param name="featureId" value="${adt.features}"/>
+		</antcallback>
+
+		<echo>${output}</echo>
+		<antcallback target="${package.target}" return="final.name"/>
+		<echo>${final.name}</echo>
+	</target>
+
+	<target name="install-maven-features" depends="setup-builder">
+		<if>
+			<available file="${builder.dir}/eclipse" />
+			<then>
+				<chmod file="${builder.dir}/eclipse" perm="+x" />
+			</then>
+		</if>
+
+    	<if>
+    		<available file="${updatesite}" />
+    		<then>
+    			<property name="repositoryURL" value="file://${updatesite}" />
+    		</then>
+    		<else>
+    			<property name="repositoryURL" value="${updatesite}" />
+    		</else>
+    	</if>
+
+		<antcallback target="install-feature" return="output">
+			<param name="featureId" value="${maven.features}"/>
+		</antcallback>
+
+		<echo>${output}</echo>
+	</target>
 
 	<target name="clean-output-dir">
 		<delete file="${output.dir}/${output.tar.name}" failonerror="false" />
