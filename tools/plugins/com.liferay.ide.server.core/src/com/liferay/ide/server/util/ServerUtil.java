@@ -711,6 +711,8 @@ public class ServerUtil
 
         String libGlobalDir = appServer.getAppServerLibGlobalDir().toOSString();
 
+        String parentDir = new File( dir ).getParent();
+
         String portalDir = appServer.getAppServerPortalDir().toOSString();
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
@@ -727,6 +729,8 @@ public class ServerUtil
         properties.put( appServerDirKey, dir );
         properties.put( appServerDeployDirKey, deployDir );
         properties.put( appServerLibGlobalDirKey, libGlobalDir );
+        //IDE-1268 need to always specify app.server.parent.dir, even though it is only useful in 6.1.2/6.2.0 or greater
+        properties.put( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR, parentDir );
         properties.put( appServerPortalDirKey, portalDir );
 
         return properties;
