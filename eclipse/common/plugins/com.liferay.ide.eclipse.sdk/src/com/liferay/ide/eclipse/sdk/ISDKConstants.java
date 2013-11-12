@@ -87,6 +87,8 @@ public interface ISDKConstants {
 
     public static final String PROPERTY_APP_SERVER_LIB_GLOBAL_DIR = "app.server{0}lib.global.dir"; //$NON-NLS-1$
 
+    public static final String PROPERTY_APP_SERVER_PARENT_DIR = "app.server.parent.dir"; //$NON-NLS-1$
+
     public static final String PROPERTY_APP_SERVER_PORTAL_DIR = "app.server{0}portal.dir"; //$NON-NLS-1$
 
 	public static final String PROPERTY_APP_SERVER_TYPE = "app.server.type";
