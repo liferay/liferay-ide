@@ -311,7 +311,7 @@
                 <content>
                     <with>
                         <path>Supports</path>
-                        <default-panel>
+                        <case>
                             <content>
                                 <property-editor>MimeType</property-editor>
                                 <property-editor>
@@ -329,7 +329,7 @@
                                     </hint>
                                 </property-editor>
                             </content>
-                        </default-panel>
+                        </case>
                     </with>
                 </content>
                 <collapsible>true</collapsible>
@@ -341,13 +341,13 @@
                 <content>
                     <with>
                         <path>PortletInfo</path>
-                        <default-panel>
+                        <case>
                             <content>
                                 <property-editor>Title</property-editor>
                                 <property-editor>ShortTitle</property-editor>
                                 <property-editor>Keywords</property-editor>
                             </content>
-                        </default-panel>
+                        </case>
                     </with>
                 </content>
                 <collapsed-initially>true</collapsed-initially>
@@ -381,7 +381,7 @@
                     <content>
                         <with>
                             <path>PortletPreference</path>
-                            <default-panel>
+                            <case>
                                 <content>
                                     <property-editor>
                                         <property>PortletPreferences</property>
@@ -392,7 +392,7 @@
                                         <span>true</span>
                                     </property-editor>
                                 </content>
-                            </default-panel>
+                            </case>
                         </with>
                     </content>
                     <collapsible>true</collapsible>

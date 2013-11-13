@@ -52,7 +52,7 @@
             <content>
                 <with>
                     <path>PortalPropertiesFile</path>
-                    <panel>
+                    <case>
                         <key>PortalPropertiesFile</key>
                         <content>
                             <property-editor>
@@ -64,14 +64,6 @@
                                     <condition>CreateSrcFileActionHandler$Condition</condition>
                                     <id>Sapphire.Create.Properties.File</id>
                                 </action-handler>
-                                <!-- TODO IDE-806
-                                <action-handler>
-                                    <action>Sapphire.Jump</action>
-                                    <id>Sapphire.Jump.Path.Relative</id>
-                                    <impl>RelativePathJumpActionHandler</impl>
-                                    <label>Open Properties File</label>
-                                </action-handler>
-                                -->
                             </property-editor>
                             <separator></separator>
                             <property-editor>
@@ -81,12 +73,10 @@
                                     <name>factory</name>
                                 </hint>
                             </property-editor>
-                            <switching-panel>
-                                <list-selection-controller>
-                                    <property>../PortalPropertiesOverrides</property>
-                                </list-selection-controller>
-                                <panel>
-                                    <key>PortalProperty</key>
+                            <detail-section>
+                                <property>../PortalPropertiesOverrides</property>
+                                <case>
+                                    <element-type>PortalProperty</element-type>
                                     <content>
                                         <property-editor>
                                             <property>Name</property>
@@ -97,16 +87,16 @@
                                             <label>Override Value</label>
                                         </property-editor>
                                     </content>
-                                </panel>
-                                <default-panel>
+                                </case>
+                                <case>
                                     <content>
                                         <label>Select a portal property item above to view or edit additional
                                             parameters.</label>
                                     </content>
-                                </default-panel>
-                            </switching-panel>
+                                </case>
+                            </detail-section>
                         </content>
-                    </panel>
+                    </case>
                     <label>Customize Liferay Portal Properties</label>
                 </with>
             </content>
@@ -120,7 +110,7 @@
                 <with>
                     <path>CustomJspDir</path>
                     <label>Customize Liferay Portal JSPs</label>
-                    <panel>
+                    <case>
                         <key>CustomJspDir</key>
                         <content>
                             <property-editor>
@@ -145,28 +135,26 @@
                             <separator>
                                 <label>Details</label>
                             </separator>
-                            <switching-panel>
-                                <list-selection-controller>
-                                    <property>../CustomJsps</property>
-                                </list-selection-controller>
-                                <default-panel>
-                                    <content>
-                                        <label>Select a custom jsp item above to view or edit additional parameters.
-                                        </label>
-                                    </content>
-                                </default-panel>
-                                <panel>
-                                    <key>CustomJsp</key>
+                            <detail-section>
+                                <property>../CustomJsps</property>
+                                <case>
+                                    <element-type>CustomJsp</element-type>
                                     <content>
                                         <property-editor>
                                             <property>Value</property>
                                             <show-label>true</show-label>
                                         </property-editor>
                                     </content>
-                                </panel>
-                            </switching-panel>
+                                </case>
+                                <case>
+                                    <content>
+                                        <label>Select a custom jsp item above to view or edit additional parameters.
+                                        </label>
+                                    </content>
+                                </case>
+                            </detail-section>
                         </content>
-                    </panel>
+                    </case>
                 </with>
             </content>
         </section>
