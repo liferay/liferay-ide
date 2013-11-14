@@ -21,109 +21,105 @@
     </import>
     <editor></editor>
     <dialog>
-     	<id>tagInsertDialog</id>
+        <id>tagInsertDialog</id>
         <label>Insert Alloy Tag</label>
         <content>
             <label>Tag: &lt;b&gt;${Name}&lt;/b&gt;</label>
             <label>Double-click any cell in value column to set the attribute value.</label>
             <spacer></spacer>
             <composite>
-            	<content>
-            		<tab-group>
-		                <tab>
-		                    <label>Attributes</label>
-		                    <content>
-		                        
-		                        
-		                        <composite>
-		                            <content>
-		                            <property-editor>
-		                            <property>OtherAttributes</property>
-		                            <child-property>Name</child-property>
-		                            <child-property>Type</child-property>
-		                            <child-property>DefaultValue</child-property>
-		                            <show-label>false</show-label>
-		                            <span>true</span>
-		                            <child-property>Value</child-property>
-		                        </property-editor>
-		                                <composite>
-		                            <content>
-		                                <switching-panel>
-		                            <list-selection-controller>
-		                                <property>OtherAttributes</property>
-		                            </list-selection-controller>
-		                            <panel>
-		                                <key>IAttribute</key>
-		                                <content>
-		                                            <label>Description:</label>
-		                                            <html>
-		                                                <content>${description}</content>
-                                                                <height>150</height>
-		                                            </html>
-		                                </content>
-		                            </panel>
-		                        </switching-panel>
-		                            </content>
-		                            <indent>false</indent>
-		                        </composite>
-		                            </content>
-		                            <margin-right>10</margin-right>
-		                            <margin-top>10</margin-top>
-		                            <margin-left>0</margin-left>
-		                            <margin-bottom>10</margin-bottom>
-		                        </composite>
-		                    </content>
-		                    <image>images/attributes.gif</image>
-		                    <indent>false</indent>
-		                    <margin-left>0</margin-left>
-		                </tab>
-		                <tab>
-		                    <label>Events</label>
-		                    <content>
-		                        
-		                        
-		                        <composite>
-		                        	<content>
-		                        	<property-editor>
-		                            <property>Events</property>
-		                            <child-property>Name</child-property>
-		                            <child-property>Value</child-property>
-		                            <show-label>false</show-label>
-		                            <span>true</span>
-		                        </property-editor>
-		                        	<composite>
-		                            <content>
-		                                <switching-panel>
-		                            <list-selection-controller>
-		                                <property>Events</property>
-		                            </list-selection-controller>
-		                            <panel>
-		                                <key>IAttribute</key>
-		                                <content>
-		                                            <label>Description:</label>
+                <content>
+                    <tab-group>
+                        <tab>
+                            <label>Attributes</label>
+                            <content>
+
+
+                                <composite>
+                                    <content>
+                                        <property-editor>
+                                            <property>OtherAttributes</property>
+                                            <child-property>Name</child-property>
+                                            <child-property>Type</child-property>
+                                            <child-property>DefaultValue</child-property>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
+                                            <child-property>Value</child-property>
+                                        </property-editor>
+                                        <composite>
+                                            <content>
+                                                <detail-section>
+                                                    <property>OtherAttributes</property>
+                                                    <case>
+                                                        <element-type>Attribute</element-type>
+                                                        <content>
+                                                            <label>Description:</label>
                                                             <html>
-		                                                <content>${Description}</content>
+                                                                <content>${description}</content>
                                                                 <height>150</height>
-		                                            </html>
-		                                </content>
-		                            </panel>
-		                        </switching-panel>
-		                            </content>
-		                            <indent>false</indent>
-		                        </composite>
-		                        	</content>
-		                            <margin-left>0</margin-left>
-		                            <margin-right>10</margin-right>
-		                            <margin-top>10</margin-top>
-		                            <margin-bottom>10</margin-bottom>
-		                        </composite>
-		                    </content>
-		                    <image>images/events.gif</image>
-		                    <indent>false</indent>
-		                    <margin-left>0</margin-left>
-		                </tab>
-		            </tab-group>
-            	</content>
+                                                            </html>
+                                                        </content>
+                                                    </case>
+                                                </detail-section>
+                                            </content>
+                                            <indent>false</indent>
+                                        </composite>
+                                    </content>
+                                    <margin-right>10</margin-right>
+                                    <margin-top>10</margin-top>
+                                    <margin-left>0</margin-left>
+                                    <margin-bottom>10</margin-bottom>
+                                </composite>
+                            </content>
+                            <image>images/attributes.gif</image>
+                            <indent>false</indent>
+                            <margin-left>0</margin-left>
+                        </tab>
+                        <tab>
+                            <label>Events</label>
+                            <content>
+
+
+                                <composite>
+                                    <content>
+                                        <property-editor>
+                                            <property>Events</property>
+                                            <child-property>Name</child-property>
+                                            <child-property>Value</child-property>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
+                                        </property-editor>
+                                        <composite>
+                                            <content>
+                                                <detail-section>
+                                                    <property>Events</property>
+                                                    <case>
+                                                        <element-type>Attribute</element-type>
+                                                        <content>
+                                                            <label>Description:</label>
+                                                            <html>
+                                                                <content>${Description}</content>
+                                                                <height>150</height>
+                                                            </html>
+                                                        </content>
+                                                    </case>
+                                                </detail-section>
+                                            </content>
+                                            <indent>false</indent>
+                                        </composite>
+                                    </content>
+                                    <margin-left>0</margin-left>
+                                    <margin-right>10</margin-right>
+                                    <margin-top>10</margin-top>
+                                    <margin-bottom>10</margin-bottom>
+                                </composite>
+                            </content>
+                            <image>images/events.gif</image>
+                            <indent>false</indent>
+                            <margin-left>0</margin-left>
+                        </tab>
+                    </tab-group>
+                </content>
                 <margin-left>10</margin-left>
             </composite>
             <composite>
@@ -141,5 +137,5 @@
         <margin-left>-10</margin-left>
 
     </dialog>
-	
+
 </definition>

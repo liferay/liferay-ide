@@ -34,207 +34,175 @@
         <page-header-text>Portlet Application</page-header-text>
         <root-node>
             <node>
-                <label>Portlet Application</label>
+                <label>Portlets</label>
+                <node-include>PortletsNodeList</node-include>
                 <section>
-                    <label>Portlet Application</label>
+                    <label>Portlets Quick Edit</label>
                     <content>
-                        <property-editor>DefaultNameSpace
-                        </property-editor>
                         <property-editor>
-                            <property>ResourceBundle</property>
-                            <action>
-                                <id>LiferayIDE.PortletApp.RB.Create</id>
-                                <label>Create Bundle</label>
-                                <image>icons/elcl16/new_doc_16x16.png</image>
-                                <hint>
-                                    <name>style</name>
-                                    <value>image</value>
-                                </hint>
-                                <context>Sapphire.ValuePropertyEditor</context>
-                                <location>after:Sapphire.Browse</location>
-                            </action>
-                            <action-handler>
-                                <action>LiferayIDE.PortletApp.RB.Create</action>
-                                <id>LiferayIDE.PortletApp.RB.Create</id>
-                                <impl>CreatePortletAppResourceBundleActionHandler</impl>
-                            </action-handler>
+                            <property>Portlets</property>
+                            <child-property>
+                                <property>PortletName</property>
+                            </child-property>
+                            <child-property>DisplayName
+                            </child-property>
+                            <child-property>
+                                <property>PortletClass</property>
+                            </child-property>
+                            <show-label>false</show-label>
+                            <span>true</span>
                         </property-editor>
                     </content>
-                    <collapsible>false</collapsible>
                 </section>
-                <node>
-                    <label>Portlets</label>
-                    <node-include>PortletsNodeList</node-include>
-                    <section>
-                        <label>Portlets Quick Edit</label>
-                        <content>
-                            <property-editor>
-                                <property>Portlets</property>
-                                <child-property>
-                                    <property>PortletName</property>
-                                </child-property>
-                                <child-property>DisplayName
-                                </child-property>
-                                <child-property>
-                                    <property>PortletClass</property>
-                                </child-property>
-                                <show-label>false</show-label>
-                                <span>true</span>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <image>icons/e16/portlets_16x16.png</image>
+                <image>icons/e16/portlets_16x16.png</image>
+            </node>
+            <node>
+                <label>Filters and Mappings</label>
+                <section>
+                    <label>Filters and Mappings Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>Filters</property>
+                            <child-property>Name</child-property>
+                            <child-property>
+                                <property>Implementation</property>
+                            </child-property>
+                        </property-editor>
+                        <property-editor>
+                            <property>FilterMappings</property>
+                            <child-property>Filter</child-property>
+                            <child-property>Portlet</child-property>
+                        </property-editor>
+                    </content>
+                </section>
+                <node-include>FiltersNodeList</node-include>
+                <node-include>FilterMappingsNodeList</node-include>
+                <image>images/filters_mappings_16x16.png</image>
+            </node>
+            <node>
+                <label>Events</label>
+                <node-include>EventDefinitionsList</node-include>
+                <section>
+                    <label>Events Quick Edit</label>
+                    <content>
+                        <include>event.def.quickedit.composite
+                        </include>
+                    </content>
+                </section>
+                <image>images/events_16x16.png</image>
+            </node>
+            <node>
+                <label>Public Render Parameters</label>
+                <section>
+                    <label>Public Render Parameters Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>PublicRenderParameters</property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                            <child-property>Identifier</child-property>
+                            <child-property>NamespaceURI</child-property>
+                            <child-property>LocalPart</child-property>
+                        </property-editor>
+                    </content>
+                </section>
+                <node-include>PublicRenderParametersList</node-include>
+                <image>images/parameters_16x16.png</image>
+            </node>
+            <node>
+                <label>Listeners</label>
+                <section>
+                    <label>Listeners Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>Listeners</property>
+                            <child-property>DisplayName</child-property>
+                            <child-property>Description</child-property>
+                            <child-property>Implementation</child-property>
+                            <show-label>false</show-label>
+                        </property-editor>
+                    </content>
+                </section>
+                <image>icons/elcl16/listener_16x16.gif</image>
+                <node-include>ListenersNodeList</node-include>
+            </node>
+            <node>
+                <label>Security Constraints</label>
+                <node-include>SecurityConstraintNodeList</node-include>
+                <section>
+                    <label>Security Constraints Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>SecurityConstraints</property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                            <child-property>DisplayName</child-property>
+                        </property-editor>
+                    </content>
+                </section>
+                <image>images/constraints_16x16.png</image>
+            </node>
+            <node>
+                <label>Customizations</label>
+                <section>
+                    <label>Custom Portlet Modes</label>
+                    <content>
+                        <property-editor>
+                            <property>CustomPortletModes</property>
+                            <child-property>
+                                <property>PortletMode</property>
+                                <hint>
+                                    <name>column.widths</name>
+                                    <value>40</value>
+                                </hint>
+                            </child-property>
+                            <child-property>
+                                <property>PortletManaged</property>
+                                <hint>
+                                    <name>column.widths</name>
+                                    <value>30</value>
+                                </hint>
+                            </child-property>
+                            <child-property>Description</child-property>
+                            <show-label>false</show-label>
+                        </property-editor>
+                    </content>
+                </section>
+                <section>
+                    <label>Custom Window States</label>
+                    <content>
+                        <property-editor>
+                            <property>CustomWindowStates</property>
+                            <child-property>
+                                <property>WindowState</property>
+                                <hint>
+                                    <name>column.widths</name>
+                                    <value>40</value>
+                                </hint>
+                            </child-property>
+                            <child-property>Description</child-property>
+                            <show-label>false</show-label>
+                        </property-editor>
+                    </content>
+                </section>
+                <image>images/customizations_16x16.gif</image>
 
-                </node>
-                <node>
-                    <label>Filters and Mappings</label>
-                    <section>
-                        <label>Filters and Mappings Quick Edit</label>
-                        <content>
-                            <property-editor>
-                                <property>Filters</property>
-                                <child-property>Name</child-property>
-                                <child-property>
-                                    <property>Implementation</property>
-                                </child-property>
-                            </property-editor>
-                            <property-editor>
-                                <property>FilterMappings</property>
-                                <child-property>Filter</child-property>
-                                <child-property>Portlet</child-property>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <node-include>FiltersNodeList</node-include>
-                    <node-include>FilterMappingsNodeList</node-include>
-                    <image>images/filters_mappings_16x16.png</image>
-                </node>
-                <node>
-                    <label>Events</label>
-                    <node-include>EventDefinitionsList</node-include>
-                    <section>
-                        <label>Events Quick Edit</label>
-                        <content>
-                            <include>event.def.quickedit.composite
-                            </include>
-                        </content>
-                    </section>
-                    <image>images/events_16x16.png</image>
-                </node>
-                <node>
-                    <label>Public Render Parameters</label>
-                    <section>
-                        <label>Public Render Parameters Quick Edit</label>
-                        <content>
-                            <property-editor>
-                                <property>PublicRenderParameters</property>
-                                <show-label>false</show-label>
-                                <span>true</span>
-                                <child-property>Identifier</child-property>
-                                <child-property>NamespaceURI</child-property>
-                                <child-property>LocalPart</child-property>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <node-include>PublicRenderParametersList</node-include>
-                    <image>images/parameters_16x16.png</image>
-                </node>
-                <node>
-                    <label>Listeners</label>
-                    <section>
-                        <label>Listeners Quick Edit</label>
-                        <content>
-                            <property-editor>
-                                <property>Listeners</property>
-                                <child-property>DisplayName</child-property>
-                                <child-property>Description</child-property>
-                                <child-property>Implementation</child-property>
-                                <show-label>false</show-label>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <image>icons/elcl16/listener_16x16.gif</image>
-                    <node-include>ListenersNodeList</node-include>
-                </node>
-                <node>
-                    <label>Security Constraints</label>
-                    <node-include>SecurityConstraintNodeList</node-include>
-                    <section>
-                        <label>Security Constraints Quick Edit</label>
-                        <content>
-                            <property-editor>
-                                <property>SecurityConstraints</property>
-                                <show-label>false</show-label>
-                                <span>true</span>
-                                <child-property>DisplayName</child-property>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <image>images/constraints_16x16.png</image>
-                </node>
-                <node>
-                    <label>Customizations</label>
-                    <section>
-                        <label>Custom Portlet Modes</label>
-                        <content>
-                            <property-editor>
-                                <property>CustomPortletModes</property>
-                                <child-property>
-                                    <property>PortletMode</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>40</value>
-                                    </hint>
-                                </child-property>
-                                <child-property>
-                                    <property>PortletManaged</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>30</value>
-                                    </hint>
-                                </child-property>
-                                <child-property>Description</child-property>
-                                <show-label>false</show-label>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <section>
-                        <label>Custom Window States</label>
-                        <content>
-                            <property-editor>
-                                <property>CustomWindowStates</property>
-                                <child-property>
-                                    <property>WindowState</property>
-                                    <hint>
-                                        <name>column.widths</name>
-                                        <value>40</value>
-                                    </hint>
-                                </child-property>
-                                <child-property>Description</child-property>
-                                <show-label>false</show-label>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <image>images/customizations_16x16.gif</image>
-
-                </node>
-                <node>
-                    <label>Container Runtime Options</label>
-                    <section>
-                        <label>Container Runtime Options Quick Edit</label>
-                        <content>
-                            <property-editor>
-                                <property>ContainerRuntimeOptions</property>
-                                <show-label>false</show-label>
-                                <span>true</span>
-                                <child-property>Name</child-property>
-                            </property-editor>
-                        </content>
-                    </section>
-                    <node-include>ContainerRuntimeOptionsNodeList</node-include>
-                    <image>images/options_16x16.gif</image>
-                </node>
-                <image>images/portlet.png</image>
+            </node>
+            <node>
+                <label>Container Runtime Options</label>
+                <section>
+                    <label>Container Runtime Options Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>ContainerRuntimeOptions</property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                            <child-property>Name</child-property>
+                        </property-editor>
+                    </content>
+                </section>
+                <node-include>ContainerRuntimeOptionsNodeList</node-include>
+                <image>images/options_16x16.gif</image>
             </node>
         </root-node>
         <initial-selection>Portlets</initial-selection>
@@ -678,17 +646,18 @@
                 <label>User Data Constraint</label>
                 <content>
                     <with>
-                        <panel>
+                        <case>
                             <content>
                                 <property-editor>Description</property-editor>
                                 <property-editor>TransportGuarantee</property-editor>
                             </content>
                             <key>UserDataConstraint</key>
-                        </panel>
+                        </case>
                         <path>UserDataConstraint</path>
                     </with>
                 </content>
             </section>
+            <element-type>com.liferay.ide.portlet.core.model.SecurityConstraint</element-type>
         </case>
     </node-factory>
     <node-factory>
@@ -749,22 +718,4 @@
             </section>
         </case>
     </node-factory>
-    <dialog>
-        <id>new.portlet.wizard</id>
-        <content>
-            <property-editor>PortletName</property-editor>
-            <property-editor>PortletClass</property-editor>
-            <with>
-                <path>Supports</path>
-                <label>Supports</label>
-                <default-panel>
-                    <content>
-                        <property-editor>MimeType</property-editor>
-                    </content>
-                </default-panel>
-            </with>
-        </content>
-        <label>Create new Portlet</label>
-        <initial-focus>PortletName</initial-focus>
-    </dialog>
 </definition>
