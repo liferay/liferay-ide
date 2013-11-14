@@ -27,7 +27,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
 public class SDKCorePlugin extends Plugin
@@ -38,6 +38,7 @@ public class SDKCorePlugin extends Plugin
     public static final String PREFERENCE_ID = "com.liferay.ide.eclipse.sdk"; //$NON-NLS-1$
 
     public static final String PREF_KEY_OVERWRITE_USER_BUILD_FILE = "OVERWRITE_USER_BUILD_FILE"; //$NON-NLS-1$
+    public static final String PREF_KEY_SDK_NAME = "sdk-name"; //$NON-NLS-1$
 
     // The shared instance
     private static SDKCorePlugin plugin;
@@ -59,7 +60,7 @@ public class SDKCorePlugin extends Plugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static SDKCorePlugin getDefault()

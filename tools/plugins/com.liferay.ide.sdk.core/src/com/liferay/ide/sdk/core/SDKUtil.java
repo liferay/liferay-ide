@@ -24,9 +24,12 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.osgi.framework.Version;
 
 /**
@@ -82,6 +85,19 @@ public class SDKUtil
                 }
             }
         }
+
+        if( retval == null )
+        {
+            // this means the sdk could not be determined by location (user is using out-of-sdk style projects)
+            // so we should check to see if the sdk name is persisted to the project prefs
+            final IScopeContext[] context = new IScopeContext[] { new ProjectScope( project ) };
+            final String sdkName =
+                Platform.getPreferencesService().getString(
+                    SDKCorePlugin.PLUGIN_ID, SDKCorePlugin.PREF_KEY_SDK_NAME, null, context );
+
+            retval = SDKManager.getInstance().getSDK( sdkName );
+        }
+
 
         return retval;
     }

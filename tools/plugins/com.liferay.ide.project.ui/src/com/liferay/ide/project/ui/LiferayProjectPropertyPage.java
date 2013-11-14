@@ -18,6 +18,7 @@ package com.liferay.ide.project.ui;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.sdk.ui.SDKsPreferencePage;
 import com.liferay.ide.server.core.ILiferayRuntime;
@@ -182,6 +183,17 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
         if( SDKUtil.isSDKProject( getProject() ) )
         {
+            final SDK projectSdk = SDKUtil.getSDK( getProject() );
+
+            if( projectSdk != null )
+            {
+                new Label( parent, SWT.LEFT ).setText( Msgs.liferaySdkLabel );
+
+                final Text sdkLabel = new Text( parent, SWT.READ_ONLY | SWT.BORDER );
+                sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
+                sdkLabel.setText( projectSdk.getName() );
+            }
+
             new Label( parent, SWT.LEFT ).setText( Msgs.liferayRuntimeLabel );
 
             this.runtimeCombo = new Combo( parent, SWT.DROP_DOWN | SWT.READ_ONLY );
@@ -256,6 +268,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
     {
         public static String liferayPluginTypeLabel;
         public static String liferayRuntimeLabel;
+        public static String liferaySdkLabel;
 
         static
         {

@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.HasLiferayRuntime;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,7 +66,11 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
         if( values.size() > 0 )
         {
-            value = values.iterator().next();
+            final String[] vals = values.toArray( new String[0] );
+
+            Arrays.sort( vals );
+
+            value = vals[ vals.length - 1 ];
         }
         else
         {

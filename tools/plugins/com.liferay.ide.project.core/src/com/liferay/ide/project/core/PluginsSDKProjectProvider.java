@@ -22,6 +22,7 @@ import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
@@ -34,15 +35,18 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
+import org.osgi.service.prefs.BackingStoreException;
 
 
 /**
@@ -224,6 +228,21 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
 
         newProject.open( monitor );
 
+        if( baseDir != null )
+        {
+            try
+            {
+                // we have an 'out-of-sdk' style project so we need to persist the SDK name
+                final IEclipsePreferences prefs = new ProjectScope( newProject ).getNode( SDKCorePlugin.PLUGIN_ID );
+                prefs.put( SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName );
+                prefs.flush();
+            }
+            catch( BackingStoreException e )
+            {
+                LiferayProjectCore.logError( "Unable to persist sdk name to project " + projectName, e );
+            }
+        }
+
         // need to update project name incase the suffix was not correct
         op.setFinalProjectName( newProject.getName() );
 
@@ -232,10 +251,11 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
             case portlet:
                 final IStatus status = op.getPortletFramework().content().postProjectCreated( newProject, monitor );
 
-                if( !status.isOK() )
+                if( ! status.isOK() )
                 {
                     throw new CoreException( status );
                 }
+
                 break;
             case theme:
                 Map<String, String> args = new HashMap<String, String>();
