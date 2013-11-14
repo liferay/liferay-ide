@@ -455,8 +455,7 @@ element is true, then the json-enabled value in the column element is true.
                                         <with>
                                             <path>Order</path>
                                             <label>Specify ordering</label>
-                                            <panel>
-                                                <key>Order</key>
+                                            <case>
                                                 <content>
                                                     <property-editor>by</property-editor>
                                                     <property-editor>
@@ -503,7 +502,7 @@ The above settings will order by articleId in an ascending manner and then by ve
                                                         </child-property>
                                                     </property-editor>
                                                 </content>
-                                            </panel>
+                                            </case>
                                             <hint>
                                                 <name>checkbox.layout</name>
                                                 <value>leading.label</value>
