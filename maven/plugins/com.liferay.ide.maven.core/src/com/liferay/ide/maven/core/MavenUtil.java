@@ -14,7 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.maven.core.aether.AetherUtil;
+import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.project.core.model.NewLiferayProfile;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,15 +32,6 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
-import org.eclipse.aether.artifact.Artifact;
-import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.VersionRangeRequest;
-import org.eclipse.aether.resolution.VersionRangeResolutionException;
-import org.eclipse.aether.resolution.VersionRangeResult;
-import org.eclipse.aether.version.Version;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -59,6 +53,9 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 
 /**
@@ -140,47 +137,6 @@ public class MavenUtil
         IPath m2eLiferayFolder = getM2eLiferayFolder( mavenProject, project );
 
         return project.getFolder( m2eLiferayFolder ).getFolder( ILiferayMavenConstants.THEME_RESOURCES_FOLDER );
-    }
-
-    public static String getLatestVersion(
-        String group, String artifactId, String startVersion, RepositorySystem system, RepositorySystemSession session )
-    {
-        String retval = null;
-
-        Artifact artifact = new DefaultArtifact( group + ":" + artifactId + ":[" + startVersion + ",)" );
-
-        RemoteRepository repo = AetherUtil.newCentralRepository();
-
-        VersionRangeRequest rangeRequest = new VersionRangeRequest();
-        rangeRequest.setArtifact( artifact );
-        rangeRequest.addRepository( repo );
-
-        try
-        {
-            final VersionRangeResult rangeResult = system.resolveVersionRange( session, rangeRequest );
-            final Version newestVersion = rangeResult.getHighestVersion();
-            final List<Version> versions = rangeResult.getVersions();
-
-            if( versions.size() > 1 && newestVersion.toString().endsWith( "-SNAPSHOT" ) )
-            {
-                retval = versions.get( versions.size() - 2 ).toString();
-            }
-            else if( newestVersion != null )
-            {
-                retval = newestVersion.toString();
-            }
-        }
-        catch( VersionRangeResolutionException e )
-        {
-            LiferayMavenCore.logError( "Unable to get latest artifact version.", e );
-        }
-
-        if( retval == null )
-        {
-            retval = "6.2.0-RC5";
-        }
-
-        return retval;
     }
 
     public static Plugin getLiferayMavenPlugin( MavenProject mavenProject )
@@ -410,6 +366,85 @@ public class MavenUtil
         }
 
         childNode.setValue( ( value == null ) ? null : value.toString() );
+    }
+
+
+    public static Node createNewLiferayProfileNode(
+        Document pomDocument, NewLiferayProfile newLiferayProfile, final String pluginVersion )
+    {
+        Node newNode = null;
+
+        final String liferayVersion = newLiferayProfile.getLiferayVersion().content();
+
+        try
+        {
+            final String runtimeName = newLiferayProfile.getRuntimeName().content();
+            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( ServerUtil.getRuntime( runtimeName ) );
+
+            final Element root = pomDocument.getDocumentElement();
+
+            Element profiles = NodeUtil.findChildElement( root, "profiles" );
+
+            if( profiles == null )
+            {
+                newNode = profiles = NodeUtil.appendChildElement( root, "profiles" );
+            }
+
+            Element newProfile = null;
+
+            if( profiles != null )
+            {
+                NodeUtil.appendTextNode( profiles, "\n" );
+                newProfile = NodeUtil.appendChildElement( profiles, "profile" );
+                NodeUtil.appendTextNode( profiles, "\n" );
+
+                if( newNode == null )
+                {
+                    newNode = newProfile;
+                }
+            }
+
+            if( newProfile != null )
+            {
+                final IPath autoDeployDir =
+                    liferayRuntime.getAppServerDir().removeLastSegments( 1 ).append( "deploy" );
+
+                NodeUtil.appendTextNode( newProfile, "\n\t" );
+
+                NodeUtil.appendChildElement( newProfile, "id", newLiferayProfile.getId().content() );
+                NodeUtil.appendTextNode( newProfile, "\n\t" );
+
+                final Element propertiesElement = NodeUtil.appendChildElement( newProfile, "properties" );
+
+                NodeUtil.appendTextNode( newProfile, "\n\t" );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement( propertiesElement, "liferay.version", liferayVersion );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement( propertiesElement, "liferay.maven.plugin.version", pluginVersion );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.auto.deploy.dir", autoDeployDir.toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t");
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.app.server.deploy.dir",
+                    liferayRuntime.getAppServerDeployDir().toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.app.server.lib.global.dir",
+                    liferayRuntime.getAppServerLibGlobalDir().toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.app.server.portal.dir",
+                    liferayRuntime.getAppServerPortalDir().toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t" );
+            }
+        }
+        catch( Exception e )
+        {
+            LiferayMavenCore.logError( "Unable to add new liferay profile.", e );
+        }
+
+        return newNode;
     }
 
 }

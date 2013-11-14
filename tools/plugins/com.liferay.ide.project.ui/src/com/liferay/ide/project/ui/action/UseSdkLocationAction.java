@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.FilteredListener;
@@ -49,13 +48,13 @@ public class UseSdkLocationAction extends PropertyEditorActionHandler
     {
         super.init( action, def );
 
-        final NewLiferayPluginProjectOp op = op( action );
+        final NewLiferayPluginProjectOp op = op();
 
         final FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>()
         {
             protected void handleTypedEvent( PropertyContentEvent event )
             {
-                computeEnablement( op, action );
+                refreshEnablementState();
             }
         };
 
@@ -73,22 +72,15 @@ public class UseSdkLocationAction extends PropertyEditorActionHandler
         };
 
         action.attach( disposeListener );
-
-        // run this async since disabling during init() doesn't seem to work.
-        UIUtil.async
-        (
-            new Runnable()
-            {
-                public void run()
-                {
-                    computeEnablement( op, action );
-                }
-            }
-        );
     }
 
-    protected void computeEnablement( final NewLiferayPluginProjectOp op, final SapphireAction action )
+    @Override
+    protected boolean computeEnablementState()
     {
+        boolean enabled = false;
+
+        final NewLiferayPluginProjectOp op = op();
+
         final boolean ant = op.getProjectProvider().content( true ).getShortName().equals( "ant" ); //$NON-NLS-1$
 
         if( ant )
@@ -105,23 +97,17 @@ public class UseSdkLocationAction extends PropertyEditorActionHandler
 
                 if( ( greaterThan611 && lessThan6110 ) || greaterThanEqualTo6120 )
                 {
-                    action.setEnabled( true );
-                }
-                else
-                {
-                    action.setEnabled( false );
+                    enabled = true;
                 }
             }
         }
-        else
-        {
-            action.setEnabled( false );
-        }
+
+        return enabled;
     }
 
-    private NewLiferayPluginProjectOp op( final SapphireAction action )
+    private NewLiferayPluginProjectOp op()
     {
-        return action.getPart().getModelElement().nearest( NewLiferayPluginProjectOp.class );
+        return this.getPart().getModelElement().nearest( NewLiferayPluginProjectOp.class );
     }
 
     @Override

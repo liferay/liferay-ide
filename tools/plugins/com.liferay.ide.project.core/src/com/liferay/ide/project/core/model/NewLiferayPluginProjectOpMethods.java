@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -95,7 +96,7 @@ public class NewLiferayPluginProjectOpMethods
     {
         final String activeProfilesValue = op.getActiveProfilesValue().content();
 
-        final Object[] systemProfileIds = op.getProjectProvider().content().getData( "profileIds" );
+        final List<String> systemProfileIds = op.getProjectProvider().content().getData( "profileIds", String.class );
 
         final ElementList<NewLiferayProfile> newLiferayProfiles = op.getNewLiferayProfiles();
 

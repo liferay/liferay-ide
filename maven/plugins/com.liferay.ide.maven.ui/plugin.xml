@@ -27,7 +27,7 @@
             </groupMarker>
          </menu>
          <menu
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="liferayPopupMenuMavenCategory"
                label="%maven.menu.label"
                path="liferayPopupMenuCategory/maven">
@@ -71,7 +71,7 @@
           <action
                class="com.liferay.ide.maven.ui.action.BuildCSSGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-css"
                label="liferay:build-css"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-css">
@@ -79,7 +79,7 @@
           <action
                class="com.liferay.ide.maven.ui.action.BuildDBGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-db"
                label="liferay:build-db"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-db">
@@ -87,7 +87,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.BuildExtGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-ext"
                label="liferay:build-ext"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-ext">
@@ -95,7 +95,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.BuildLangGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-lang"
                label="liferay:build-lang"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-lang">
@@ -103,7 +103,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.BuildServiceGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-service"
                label="liferay:build-service"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-service">
@@ -111,7 +111,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.BuildThumbnailGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-thumbnail"
                label="liferay:build-thumbnail"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-thumbnail">
@@ -119,7 +119,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.BuildWSDDGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.build-wsdd"
                label="liferay:build-wsdd"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/build-wsdd">
@@ -127,7 +127,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.DeployGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.deploy"
                label="liferay:deploy"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/deploy">
@@ -135,7 +135,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.DirectDeployGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.direct-deploy"
                label="liferay:direct-deploy"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/direct-deploy">
@@ -143,7 +143,7 @@
          <action
                class="com.liferay.ide.maven.ui.action.ThemeMergeGoalAction"
                enablesFor="1"
-               icon="icons/e16/m2.gif"
+               icon="icons/e16/m2e-liferay.png"
                id="com.liferay.ide.maven.popup.action.theme-merge"
                label="liferay:theme-merge"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuMavenCategory/theme-merge">
@@ -184,5 +184,12 @@
             properties="isPomFile"
             type="org.eclipse.core.resources.IFile">
       </propertyTester>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="com.liferay.ide.maven.ui.ConfigProblemMarkerResolutionGenerator"
+            markerType="com.liferay.ide.maven.core.configurationProblem">
+      </markerResolutionGenerator>
    </extension>
 </plugin>

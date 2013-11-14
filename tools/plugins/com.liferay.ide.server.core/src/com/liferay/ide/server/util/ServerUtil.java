@@ -526,6 +526,11 @@ public class ServerUtil
         return retval;
     }
 
+    public static ILiferayRuntime getLiferayRuntime( String name )
+    {
+        return getLiferayRuntime( getRuntime( name ) );
+    }
+
     public static ILiferayRuntime getLiferayRuntime( IRuntime runtime )
     {
         if( runtime != null )

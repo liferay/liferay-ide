@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,7 +27,7 @@ public interface ILiferayProjectProvider
 {
     IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException;
 
-    Object[] getData( String key, Object... params );
+    <T> List<T> getData( String key, Class<T> type, Object... params );
 
     String getDisplayName();
 

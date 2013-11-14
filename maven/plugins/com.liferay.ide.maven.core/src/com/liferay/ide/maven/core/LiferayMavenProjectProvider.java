@@ -17,15 +17,12 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProfileLocation;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,10 +47,6 @@ import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.aether.artifact.Artifact;
 import org.eclipse.aether.artifact.DefaultArtifact;
-import org.eclipse.aether.repository.RemoteRepository;
-import org.eclipse.aether.resolution.ArtifactRequest;
-import org.eclipse.aether.resolution.ArtifactResolutionException;
-import org.eclipse.aether.resolution.ArtifactResult;
 import org.eclipse.aether.resolution.VersionRangeRequest;
 import org.eclipse.aether.resolution.VersionRangeResolutionException;
 import org.eclipse.aether.resolution.VersionRangeResult;
@@ -78,7 +71,6 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 
@@ -94,81 +86,6 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
     public LiferayMavenProjectProvider()
     {
         super( new Class<?>[] { IProject.class } );
-    }
-
-    private Node createNewLiferayProfile( Document pomDocument, NewLiferayProfile newLiferayProfile, String pluginVersion )
-    {
-        Node newNode = null;
-
-        try
-        {
-            final String runtimeName = newLiferayProfile.getRuntimeName().content();
-            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( ServerUtil.getRuntime( runtimeName ) );
-
-            final Element root = pomDocument.getDocumentElement();
-
-            Element profiles = NodeUtil.findChildElement( root, "profiles" );
-
-            if( profiles == null )
-            {
-                newNode = profiles = NodeUtil.appendChildElement( root, "profiles" );
-            }
-
-            Element newProfile = null;
-
-            if( profiles != null )
-            {
-                NodeUtil.appendTextNode( profiles, "\n" );
-                newProfile = NodeUtil.appendChildElement( profiles, "profile" );
-                NodeUtil.appendTextNode( profiles, "\n" );
-
-                if( newNode == null )
-                {
-                    newNode = newProfile;
-                }
-            }
-
-            if( newProfile != null )
-            {
-                final IPath autoDeployDir =
-                    liferayRuntime.getAppServerDir().removeLastSegments( 1 ).append( "deploy" );
-
-                NodeUtil.appendTextNode( newProfile, "\n\t" );
-
-                NodeUtil.appendChildElement( newProfile, "id", newLiferayProfile.getId().content() );
-                NodeUtil.appendTextNode( newProfile, "\n\t" );
-
-                final Element propertiesElement = NodeUtil.appendChildElement( newProfile, "properties" );
-
-                NodeUtil.appendTextNode( newProfile, "\n\t" );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement( propertiesElement, "liferay.version", pluginVersion );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement( propertiesElement, "liferay.maven.plugin.version", pluginVersion );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.auto.deploy.dir", autoDeployDir.toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t");
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.app.server.deploy.dir",
-                    liferayRuntime.getAppServerDeployDir().toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.app.server.lib.global.dir",
-                    liferayRuntime.getAppServerLibGlobalDir().toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.app.server.portal.dir",
-                    liferayRuntime.getAppServerPortalDir().toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t" );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayMavenCore.logError( "Unable to add new liferay profile.", e );
-        }
-
-        return newNode;
     }
 
     public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
@@ -220,7 +137,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
         // get latest liferay archetype
         monitor.beginTask( "Determining latest Liferay maven plugin archetype version.", IProgressMonitor.UNKNOWN );
-        final String archetypeVersion = getLatestLiferayArchetype( archetypeArtifactId ).getVersion();
+        final String archetypeVersion =
+            AetherUtil.getLatestAvailableLiferayArtifact( LIFERAY_ARCHETYPES_GROUP_ID, archetypeArtifactId ).getVersion();
 
         final Archetype archetype = new Archetype();
         archetype.setArtifactId( archetypeArtifactId );
@@ -287,7 +205,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
                         for( NewLiferayProfile newProfile : newUserSettingsProfiles )
                         {
-                            createNewLiferayProfile( pomDocument, newProfile, archetypeVersion );
+                            MavenUtil.createNewLiferayProfileNode( pomDocument, newProfile, archetypeVersion );
                         }
 
                         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -320,7 +238,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
                     for( final NewLiferayProfile newProfile : newProjectPomProfiles )
                     {
-                        Node newNode = createNewLiferayProfile( domModel.getDocument(), newProfile, archetypeVersion );
+                        final Node newNode =
+                            MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newProfile, archetypeVersion );
                         FormatProcessorXML formatter = new FormatProcessorXML();
                         formatter.formatNode( newNode );
                     }
@@ -369,18 +288,19 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
     }
 
     @Override
-    public Object[] getData( String key, Object... params )
+    public <T> List<T> getData( String key, Class<T> type, Object... params )
     {
-        Object[] retval = null;
+        List<T> retval = null;
 
         if( "profileIds".equals( key ) )
         {
-            final List<String> profileIds = new ArrayList<String>();
+            final List<T> profileIds = new ArrayList<T>();
+
             try
             {
-                List<Profile> profiles = MavenPlugin.getMaven().getSettings().getProfiles();
+                final List<Profile> profiles = MavenPlugin.getMaven().getSettings().getProfiles();
 
-                for( Profile profile : profiles )
+                for( final Profile profile : profiles )
                 {
                     if( profile.getActivation() != null )
                     {
@@ -390,7 +310,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
                         }
                     }
 
-                    profileIds.add( profile.getId() );
+                    profileIds.add( type.cast( profile.getId() ) );
                 }
             }
             catch( CoreException e )
@@ -398,30 +318,29 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
                 e.printStackTrace();
             }
 
-            retval = profileIds.toArray();
+            retval = profileIds;
         }
-        else if( "getPossibleVersions".equals( key ) )
+        else if( "liferayVersions".equals( key ) )
         {
-            List<String> possibleVersions = new ArrayList<String>();
+            final List<T> possibleVersions = new ArrayList<T>();
 
-            RepositorySystem system = AetherUtil.newRepositorySystem();
+//            MavenUtil.getLatestVersion( group, artifactId, startVersion, system, session );
 
-            RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
+            final RepositorySystem system = AetherUtil.newRepositorySystem();
 
-            String coords = "com.liferay.portal:portal-service:[6,)";
+            final RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
 
-            if( params != null && params.length > 0 )
-            {
-                coords = params[0].toString();
-            }
+            final String groupId = params[0].toString();
+            final String artifactId = params[1].toString();
 
-            Artifact artifact = new DefaultArtifact( coords );
+            final String coords = groupId + ":" + artifactId + ":[6,)";
 
-            RemoteRepository repo = AetherUtil.newCentralRepository();
+            final Artifact artifact = new DefaultArtifact( coords );
 
-            VersionRangeRequest rangeRequest = new VersionRangeRequest();
+            final VersionRangeRequest rangeRequest = new VersionRangeRequest();
             rangeRequest.setArtifact( artifact );
-            rangeRequest.addRepository( repo );
+            rangeRequest.addRepository( AetherUtil.newCentralRepository() );
+            rangeRequest.addRepository( AetherUtil.newLiferayRepository() );
 
             try
             {
@@ -435,11 +354,11 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
                     if( ! "6.2.0".equals( val ) )
                     {
-                        possibleVersions.add( val );
+                        possibleVersions.add( type.cast( val ) );
                     }
                 }
 
-                retval = possibleVersions.toArray( new String[0] );
+                retval = possibleVersions;
             }
             catch( VersionRangeResolutionException e )
             {
@@ -449,39 +368,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         return retval;
     }
 
-    private Artifact getLatestLiferayArchetype( String archetypeArtifactId )
-    {
-        Artifact retval = null;
-
-        final String groupId = LIFERAY_ARCHETYPES_GROUP_ID;
-
-        final RepositorySystem system = AetherUtil.newRepositorySystem();
-
-        final RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
-
-        final String latestVersion = MavenUtil.getLatestVersion( groupId, archetypeArtifactId, "6", system, session );
-
-        final Artifact defaultArtifact =
-            new DefaultArtifact( LIFERAY_ARCHETYPES_GROUP_ID + ":" + archetypeArtifactId + ":" + latestVersion );
-
-        ArtifactRequest artifactRequest = new ArtifactRequest();
-        artifactRequest.setArtifact( defaultArtifact );
-        artifactRequest.addRepository( AetherUtil.newCentralRepository() );
-
-        try
-        {
-            ArtifactResult artifactResult = system.resolveArtifact( session, artifactRequest );
-            retval = artifactResult.getArtifact();
-        }
-        catch( ArtifactResolutionException e )
-        {
-            LiferayMavenCore.logError( "Unable to get latest Liferay archetype", e );
-        }
-
-        return retval;
-    }
-
-    private List<NewLiferayProfile> getNewProfilesToSave( String[] activeProfiles, List<NewLiferayProfile> newLiferayProfiles, ProfileLocation location )
+    private List<NewLiferayProfile> getNewProfilesToSave(
+        String[] activeProfiles, List<NewLiferayProfile> newLiferayProfiles, ProfileLocation location )
     {
         List<NewLiferayProfile> profilesToSave = new ArrayList<NewLiferayProfile>();
 

@@ -14,6 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * @author Gregory Amerson
  */
@@ -41,9 +44,9 @@ public abstract class AbstractLiferayProjectProvider
         return 0;
     }
 
-    public Object[] getData( String key, Object... params )
+    public <T> List<T> getData( String key, Class<T> type, Object... params )
     {
-        return new Object[0];
+        return Collections.emptyList();
     }
 
     public String getDisplayName()

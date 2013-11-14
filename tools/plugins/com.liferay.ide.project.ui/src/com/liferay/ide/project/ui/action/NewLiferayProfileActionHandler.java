@@ -52,20 +52,7 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler
 
             if( result == SapphireDialog.OK )
             {
-                // should append to current list
-                final String activeProfilesValue = op.getActiveProfilesValue().content();
-
-                final StringBuilder sb = new StringBuilder();
-
-                if( ! CoreUtil.isNullOrEmpty( activeProfilesValue ) )
-                {
-                    sb.append( activeProfilesValue );
-                    sb.append( ',' );
-                }
-
-                sb.append( newLiferayProfile.getId().content() );
-
-                op.setActiveProfilesValue( sb.toString() );
+                addToActiveProfiles( op, newLiferayProfile );
             }
             else
             {
@@ -74,6 +61,24 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler
         }
 
         return null;
+    }
+
+    public static void addToActiveProfiles( final NewLiferayPluginProjectOp op, final NewLiferayProfile newLiferayProfile )
+    {
+        // should append to current list
+        final String activeProfilesValue = op.getActiveProfilesValue().content();
+
+        final StringBuilder sb = new StringBuilder();
+
+        if( ! CoreUtil.isNullOrEmpty( activeProfilesValue ) )
+        {
+            sb.append( activeProfilesValue );
+            sb.append( ',' );
+        }
+
+        sb.append( newLiferayProfile.getId().content() );
+
+        op.setActiveProfilesValue( sb.toString() );
     }
 
     private NewLiferayPluginProjectOp op( Presentation context )

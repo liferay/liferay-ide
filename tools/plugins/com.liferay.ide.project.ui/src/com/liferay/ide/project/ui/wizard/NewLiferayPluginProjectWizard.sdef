@@ -222,10 +222,8 @@
     </dialog>
     <dialog>
         <id>NewLiferayProfile</id>
-        <label>Create New Liferay Profile</label>
+        <label>Create New Maven Profile</label>
         <content>
-            <property-editor>Id</property-editor>
-            <separator></separator>
             <label>Use the following Liferay runtime to automatically popular this new profile with useful properties.</label>
             <spacer></spacer>
             <property-editor>
@@ -242,6 +240,12 @@
                     <id>NewLiferayRuntimeHandler</id>
                     <impl>NewLiferayRuntimeAction</impl>
                 </action-handler>
+            </property-editor>
+            <separator></separator>
+            <property-editor>Id</property-editor>
+            <property-editor>
+                <style>Sapphire.PropertyEditor.PopUpListField.Editable</style>
+                <property>LiferayVersion</property>
             </property-editor>
             <separator></separator>
             <group>

@@ -1,5 +1,7 @@
 package com.liferay.ide.project.core.model;
 
+import com.liferay.ide.project.core.model.internal.LiferayVersionDefaultValueService;
+import com.liferay.ide.project.core.model.internal.LiferayVersionPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.NewLiferayProfileIdDefaultValueService;
 import com.liferay.ide.project.core.model.internal.NewLiferayProfileIdValidationService;
 
@@ -44,4 +46,30 @@ public interface NewLiferayProfile extends Profile, HasLiferayRuntime
     Value<ProfileLocation> getProfileLocation();
     void setProfileLocation( String value );
     void setProfileLocation( ProfileLocation value );
+
+
+    // *** LiferayVersion ***
+
+    @Label( standard = "liferay version" )
+    @Services
+    (
+        value =
+        {
+            @Service
+            (
+                impl = LiferayVersionPossibleValuesService.class,
+                params =
+                {
+                    @Service.Param( name = "groupId", value = "com.liferay.portal" ),
+                    @Service.Param( name = "artifactId", value = "portal-service" ),
+                }
+            ),
+            @Service( impl = LiferayVersionDefaultValueService.class )
+        }
+    )
+    ValueProperty PROP_LIFERAY_VERSION = new ValueProperty( TYPE, "LiferayVersion" );
+
+    Value<String> getLiferayVersion();
+    void setLiferayVersion( String value );
+
 }
