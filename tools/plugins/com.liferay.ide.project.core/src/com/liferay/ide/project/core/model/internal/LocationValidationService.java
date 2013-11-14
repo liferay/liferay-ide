@@ -14,12 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import java.io.File;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
@@ -74,8 +72,6 @@ public class LocationValidationService extends ValidationService
                 {
                     final String currentPath = currentProjectLocation.toOSString();
 
-                    final IProject handle = CoreUtil.getWorkspaceRoot().getProject( currentProjectName );
-
                     if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
                     {
                         retval = Status.createErrorStatus( "\"" + currentPath + "\" is not a valid path." ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -84,13 +80,13 @@ public class LocationValidationService extends ValidationService
                     {
                         IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
 
-                        if( !osPath.toFile().isAbsolute() )
+                        if( ! osPath.toFile().isAbsolute() )
                         {
                             retval = Status.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." ); //$NON-NLS-1$ //$NON-NLS-2$
                         }
                         else
                         {
-                            if( !osPath.toFile().exists() )
+                            if( ! osPath.toFile().exists() )
                             {
                                 // check non-existing external location
                                 if( !canCreate( osPath.toFile() ) )
@@ -101,15 +97,13 @@ public class LocationValidationService extends ValidationService
                                 }
                             }
 
-                            // validate the location
                             final IStatus locationStatus =
-                                CoreUtil.getWorkspace().validateProjectLocation( handle, osPath );
+                                op().getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
 
-                            if( !locationStatus.isOK() )
+                            if( ! locationStatus.isOK() )
                             {
                                 retval =
-                                    Status.createErrorStatus( "\"" + currentPath + //$NON-NLS-1$
-                                        "\" is not a valid project location." ); //$NON-NLS-1$
+                                    Status.createErrorStatus( locationStatus.getMessage() ); //$NON-NLS-1$
                             }
                         }
                     }

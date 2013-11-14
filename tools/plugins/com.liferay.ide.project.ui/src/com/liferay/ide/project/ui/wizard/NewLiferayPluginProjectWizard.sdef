@@ -81,11 +81,11 @@
                         <action>Select.Active.Profiles</action>
                         <id>Select.Active.Profiles</id>
                         <impl>SelectActiveProfilesActionHandler</impl>
-                        <label>Select active profiles...</label>
+                        <label>Select existing maven profiles...</label>
                     </action-handler>
                     <action>
                         <id>Sapphire.Add</id>
-                        <label>Create New Liferay Profile...</label>
+                        <label>Create New Maven Profile based on Liferay runtime...</label>
                         <image>new_liferay_profile.gif</image>
                     </action>
                     <action-handler>

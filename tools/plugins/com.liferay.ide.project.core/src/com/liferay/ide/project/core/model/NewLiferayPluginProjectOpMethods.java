@@ -96,11 +96,12 @@ public class NewLiferayPluginProjectOpMethods
     {
         final String activeProfilesValue = op.getActiveProfilesValue().content();
 
-        final List<String> systemProfileIds = op.getProjectProvider().content().getData( "profileIds", String.class );
+        final Path currentLocation = op.getLocation().content();
+
+        final List<String> systemProfileIds =
+            op.getProjectProvider().content().getData( "profileIds", String.class, currentLocation.toFile() );
 
         final ElementList<NewLiferayProfile> newLiferayProfiles = op.getNewLiferayProfiles();
-
-        // TODO get profileIds from project's new pom parent
 
         final Set<String> possibleProfileIds = new HashSet<String>();
 

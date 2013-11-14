@@ -19,8 +19,6 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
-import java.io.File;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -96,20 +94,11 @@ public class ProjectNameValidationService extends ValidationService
                     final String currentPath = currentProjectLocation.toOSString();
                     final IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
 
-                    if( osPath.append(".project").toFile().exists() ) //$NON-NLS-1$
-                    {
-                        retval = Status.createErrorStatus( "\"" + currentPath + //$NON-NLS-1$
-                                "\" is not a valid because a project already exists at that location." ); //$NON-NLS-1$
-                    }
-                    else
-                    {
-                        final File pathFile = osPath.toFile();
+                    final IStatus projectStatus = op.getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
 
-                        if( pathFile.exists() && pathFile.isDirectory() && pathFile.listFiles().length > 0 )
-                        {
-                            retval = Status.createErrorStatus( "\"" + currentPath + //$NON-NLS-1$
-                                    "\" is not a valid because it already contains files." ); //$NON-NLS-1$
-                        }
+                    if( ! projectStatus.isOK() )
+                    {
+                        retval = StatusBridge.create( projectStatus );
                     }
                 }
             }

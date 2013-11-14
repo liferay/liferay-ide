@@ -16,6 +16,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
@@ -285,6 +286,35 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
     private static ILiferayRuntime getLiferayRuntime( IRuntime runtime, IProgressMonitor monitor )
     {
         return (ILiferayRuntime) runtime.loadAdapter( ILiferayRuntime.class, monitor );
+    }
+
+    public IStatus validateProjectLocation( String name, IPath path )
+    {
+         // validate the location
+        final IProject handle = CoreUtil.getWorkspaceRoot().getProject( name );
+
+        IStatus retval = CoreUtil.getWorkspace().validateProjectLocation( handle, path );
+
+        if( retval.isOK() )
+        {
+            if( path.append(".project").toFile().exists() ) //$NON-NLS-1$
+            {
+                retval = LiferayProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
+                        "\" is not a valid because a project already exists at that location." ); //$NON-NLS-1$
+            }
+            else
+            {
+                final File pathFile = path.toFile();
+
+                if( pathFile.exists() && pathFile.isDirectory() && pathFile.listFiles().length > 0 )
+                {
+                    retval = LiferayProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
+                            "\" is not a valid because it already contains files." ); //$NON-NLS-1$
+                }
+            }
+        }
+
+        return retval;
     }
 
 }

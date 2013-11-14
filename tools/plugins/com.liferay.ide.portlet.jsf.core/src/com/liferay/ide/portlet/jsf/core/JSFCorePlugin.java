@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
 public class JSFCorePlugin extends Plugin
@@ -52,12 +52,17 @@ public class JSFCorePlugin extends Plugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static JSFCorePlugin getDefault()
     {
         return plugin;
+    }
+
+    public static void logError( String msg )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, null ) );
     }
 
     public static void logError( String msg, Exception e )

@@ -131,25 +131,27 @@ public class JSFPortletFramework extends AbstractPortletFramework
 
         SDK sdk = SDKUtil.getSDK( project );
 
-        if( sdk == null )
+        if( sdk != null )
         {
-            return JSFCorePlugin.createErrorStatus( "Could not get SDK from newly created project." ); //$NON-NLS-1$
+            try
+            {
+                //TODO IDE-648
+                File originalWebXmlFile =
+                    sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile(); //$NON-NLS-1$
+
+                IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
+
+                defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents( //$NON-NLS-1$
+                    new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
+            }
+            catch( Exception e )
+            {
+                return JSFCorePlugin.createErrorStatus( "Could not copy original web.xml from JSF template in SDK.", e ); //$NON-NLS-1$
+            }
         }
-
-        try
+        else
         {
-            //TODO IDE-648
-            File originalWebXmlFile =
-                sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile(); //$NON-NLS-1$
-
-            IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
-
-            defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents( //$NON-NLS-1$
-                new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
-        }
-        catch( Exception e )
-        {
-            return JSFCorePlugin.createErrorStatus( "Could not copy original web.xml from JSF template in SDK.", e ); //$NON-NLS-1$
+            JSFCorePlugin.logError( "Could not modify web.xml in new project" );
         }
 
         return Status.OK_STATUS;

@@ -17,6 +17,7 @@ package com.liferay.ide.core;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
@@ -38,4 +39,6 @@ public interface ILiferayProjectProvider
     ILiferayProject provide( Object type );
 
     boolean provides( Class<?> type );
+
+    IStatus validateProjectLocation( String projectName, IPath path );
 }

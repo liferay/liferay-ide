@@ -76,6 +76,5 @@ public class LocationListener extends ProjectNameListener
                 }
             }
         }
-
     }
 }

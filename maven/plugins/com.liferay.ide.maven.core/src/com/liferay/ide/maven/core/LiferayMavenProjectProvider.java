@@ -42,6 +42,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.cli.MavenCli;
+import org.apache.maven.model.Model;
 import org.apache.maven.settings.Profile;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -59,7 +60,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
@@ -312,10 +315,54 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
                     profileIds.add( type.cast( profile.getId() ) );
                 }
+
+                if( params[0] != null && params[0] instanceof File )
+                {
+                    final File locationDir = (File) params[0];
+
+                    File pomFile = new File( locationDir, IMavenConstants.POM_FILE_NAME );
+
+                    if( ! pomFile.exists() && locationDir.getParentFile().exists() )
+                    {
+                        // try one level up for when user is adding new module
+                        pomFile = new File( locationDir.getParentFile(), IMavenConstants.POM_FILE_NAME );
+                    }
+
+                    if( pomFile.exists() )
+                    {
+                        final IMaven maven = MavenPlugin.getMaven();
+
+                        Model model = maven.readModel( pomFile );
+
+                        File parentDir = pomFile.getParentFile();
+
+                        while( model != null )
+                        {
+                            for( org.apache.maven.model.Profile p : model.getProfiles() )
+                            {
+                                profileIds.add( type.cast( p.getId() ) );
+                            }
+
+                            parentDir = parentDir.getParentFile();
+
+                            if( parentDir != null && parentDir.exists() )
+                            {
+                                try
+                                {
+                                    model = maven.readModel( new File( parentDir, IMavenConstants.POM_FILE_NAME ) );
+                                }
+                                catch( Exception e)
+                                {
+                                    model = null;
+                                }
+                            }
+                        }
+                    }
+                }
             }
             catch( CoreException e )
             {
-                e.printStackTrace();
+                LiferayMavenCore.logError( e );
             }
 
             retval = profileIds;
@@ -323,8 +370,6 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         else if( "liferayVersions".equals( key ) )
         {
             final List<T> possibleVersions = new ArrayList<T>();
-
-//            MavenUtil.getLatestVersion( group, artifactId, startVersion, system, session );
 
             final RepositorySystem system = AetherUtil.newRepositorySystem();
 
@@ -410,6 +455,58 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         }
 
         return null;
+    }
+
+    public IStatus validateProjectLocation( String projectName, IPath path )
+    {
+        IStatus retval = Status.OK_STATUS;
+        // if the path is a folder and it has a pom.xml that is a package type of 'pom' then this is a valid location
+
+        final File dir = path.toFile();
+
+        if( dir.exists() )
+        {
+            final File pomFile = path.append( IMavenConstants.POM_FILE_NAME ).toFile();
+
+            if( pomFile.exists() )
+            {
+                final IMaven maven = MavenPlugin.getMaven();
+
+                try
+                {
+                    final Model result = maven.readModel( pomFile );
+
+                    if( ! "pom".equals( result.getPackaging() ) )
+                    {
+                        retval =
+                            LiferayMavenCore.createErrorStatus( "\"" + pomFile.getParent() +
+                                "\" contains a non-parent maven project." );
+                    }
+                    else
+                    {
+                        final IPath newProjectPath = path.append( projectName );
+
+                        retval = validateProjectLocation( projectName, newProjectPath );
+                    }
+                }
+                catch( CoreException e )
+                {
+                    retval = LiferayMavenCore.createErrorStatus( "Invalid project location.", e );
+                    LiferayMavenCore.log( retval );
+                }
+            }
+            else
+            {
+                final File[] files = dir.listFiles();
+
+                if( files.length > 0 )
+                {
+                    retval = LiferayMavenCore.createErrorStatus( "Project location is not empty or a parent pom." );
+                }
+            }
+        }
+
+        return retval;
     }
 
 }
