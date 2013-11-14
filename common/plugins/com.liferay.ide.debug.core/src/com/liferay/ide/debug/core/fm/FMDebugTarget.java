@@ -335,13 +335,15 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
      */
     public void breakpointAdded( IBreakpoint breakpoint )
     {
-        if( supportsBreakpoint( breakpoint ) && ! this.launch.isTerminated() )
+        if( supportsBreakpoint( breakpoint ) && !this.launch.isTerminated() )
         {
             try
             {
-                if( breakpoint.isEnabled() )
+                Debugger debugger = getDebuggerClient();
+
+                if( debugger != null && breakpoint.isEnabled() )
                 {
-                    addRemoteBreakpoints( getDebuggerClient(), new IBreakpoint[] { breakpoint } );
+                    addRemoteBreakpoints( debugger, new IBreakpoint[] { breakpoint } );
                 }
             }
             catch( Exception e )
@@ -705,29 +707,34 @@ public class FMDebugTarget extends FMDebugElement implements IDebugTarget, IDebu
                 try
                 {
                     // need to check to see if current thread is stepping and then remove the step breakpoint
-                    if( fmThread.isStepping() )
+                    Debugger debugger = getDebuggerClient();
+
+                    if( debugger != null )
                     {
-                        Breakpoint stepBp = fmThread.getStepBreakpoint();
-                        getDebuggerClient().removeBreakpoint( stepBp );
-                    }
-
-                    for( Iterator i = getDebuggerClient().getSuspendedEnvironments().iterator(); i.hasNext(); )
-                    {
-                        DebuggedEnvironment env = (DebuggedEnvironment) i.next();
-
-                        try
+                        if( fmThread.isStepping() )
                         {
-                            env.resume();
+                            Breakpoint stepBp = fmThread.getStepBreakpoint();
+                            debugger.removeBreakpoint( stepBp );
                         }
-                        catch( Exception e )
+
+                        for( Iterator i = debugger.getSuspendedEnvironments().iterator(); i.hasNext(); )
                         {
-                            LiferayDebugCore.logError( "Could not resume suspended environment", e );
+                            DebuggedEnvironment env = (DebuggedEnvironment) i.next();
+
+                            try
+                            {
+                                env.resume();
+                            }
+                            catch( Exception e )
+                            {
+                                LiferayDebugCore.logError( "Could not resume suspended environment", e );
+                            }
                         }
+
+                        fmStackFrames = EMPTY_STACK_FRAMES;
+
+                        resumed( DebugEvent.CLIENT_REQUEST );
                     }
-
-                    fmStackFrames = EMPTY_STACK_FRAMES;
-
-                    resumed( DebugEvent.CLIENT_REQUEST );
                 }
                 catch( RemoteException e )
                 {
