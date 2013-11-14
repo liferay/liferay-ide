@@ -52,7 +52,7 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
     {
         final PropertyEditorPart part = part();
 
-        final boolean showLabel = part.getShowLabel();
+        final boolean showLabel = part.label() != null;
         final int leftMargin = part.getMarginLeft();
 
         PropertyEditorAssistDecorator decorator = null;
@@ -92,7 +92,7 @@ public final class PossibleValuesRadioPropertyEditorPresentation<T> extends Valu
             {
                 public void run()
                 {
-                    label.setText( part.getLabel( CapitalizationType.FIRST_WORD_ONLY, true ) );
+                    label.setText( part.label( CapitalizationType.FIRST_WORD_ONLY, true ) );
                 }
             };
 
