@@ -35,6 +35,7 @@ import com.liferay.ide.project.core.model.internal.ProjectProviderDefaultValueSe
 import com.liferay.ide.project.core.model.internal.ProjectProviderListener;
 import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.RuntimeNameValidationService;
+import com.liferay.ide.project.core.model.internal.ThemeFrameworkValidationService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationEnablementService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationListener;
 import com.liferay.ide.project.core.model.internal.UseSdkLocationListener;
@@ -243,6 +244,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     @Label( standard = "theme framework" )
     @DefaultValue( text = "Freemarker" )
     @PossibleValues( ordered = true, values = { "Velocity", "Freemarker", "JSP" } )
+    @Service( impl = ThemeFrameworkValidationService.class )
     ValueProperty PROP_THEME_FRAMEWORK = new ValueProperty( TYPE, "ThemeFramework" ); //$NON-NLS-1$
 
     Value<String> getThemeFramework();
