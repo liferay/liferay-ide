@@ -74,20 +74,36 @@
 			</elseif>
 		</if>
 
-        <antcall target="win64" />
-        <antcall target="win32" />
+		<condition property="checkParameters" value="true">
+			<or>
+				<isset property="create.bundles" />
+				<isset property="create.adt.bundles" />
+			</or>
+		</condition>
 
-		<condition property="isLinux" value="true">
-	            <os family="unix" />
-	    </condition>
 		<if>
-			<isset property="isLinux"/>
+			<isset property="checkParameters"/>
 			<then>
-				<antcall target="linux" />
-				<antcall target="macosx" />
-				<antcall target="linux64" />
-				<antcall target="macosx64" />
+				<antcall target="win64" />
+				<antcall target="win32" />
+
+				<condition property="isLinux" value="true">
+					<os family="unix" />
+				</condition>
+
+				<if>
+					<isset property="isLinux"/>
+					<then>
+						<antcall target="linux" />
+						<antcall target="macosx" />
+						<antcall target="linux64" />
+						<antcall target="macosx64" />
+					</then>
+				</if>
 			</then>
+			<else>
+				<echo>No parameters are specified.</echo>
+			</else>
 		</if>
 	</target>
 
