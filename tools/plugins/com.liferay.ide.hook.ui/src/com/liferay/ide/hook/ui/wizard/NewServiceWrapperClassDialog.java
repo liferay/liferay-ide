@@ -15,15 +15,14 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.hook.core.operation.NewServiceWrapperClassDataModelProvider;
-import com.liferay.ide.hook.core.operation.NewServiceWrapperClassOperation;
-
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -32,12 +31,17 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
+import com.liferay.ide.hook.core.operation.NewServiceWrapperClassDataModelProvider;
+import com.liferay.ide.hook.core.operation.NewServiceWrapperClassOperation;
+
 /**
- * @author Greg Amerson
+ * @author Greg Amerson 
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
 {
+
     protected String serviceType;
     protected Text superclassText;
     protected String wrapperType;
@@ -51,14 +55,25 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
     }
 
     @Override
+    protected Button createButton( Composite parent, int id, String label, boolean defaultButton )
+    {
+        Button button = super.createButton( parent, id, label, defaultButton );
+
+        if( IDialogConstants.OK_ID == id )
+        {
+            String defaultClassname =
+                "Ext" + this.serviceType.substring( this.serviceType.lastIndexOf( '.' ) + 1, this.serviceType.length() ); //$NON-NLS-1$
+
+            classText.setText( defaultClassname );
+        }
+
+        return button;
+    }
+
+    @Override
     protected Control createDialogArea( Composite parent )
     {
         Control control = super.createDialogArea( parent );
-
-        String defaultClassname =
-            "Ext" + this.serviceType.substring( this.serviceType.lastIndexOf( '.' ) + 1, this.serviceType.length() ); //$NON-NLS-1$
-
-        classText.setText( defaultClassname );
 
         return control;
     }
@@ -83,7 +98,10 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
 
         } );
 
+        superclassText.setEditable( false );
+
         new Label( parent, SWT.NONE );
+
     }
 
     @Override

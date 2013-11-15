@@ -15,15 +15,14 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.hook.core.operation.NewEventActionClassDataModelProvider;
-import com.liferay.ide.hook.core.operation.NewEventActionClassOperation;
-
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -32,6 +31,7 @@ import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelPro
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,16 +46,24 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.operation.NewEventActionClassDataModelProvider;
+import com.liferay.ide.hook.core.operation.NewEventActionClassOperation;
+
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class NewEventActionClassDialog extends Dialog
 {
+
     protected Label classLabel;
     protected Text classText;
     protected IDataModel model;
@@ -66,21 +74,72 @@ public class NewEventActionClassDialog extends Dialog
     protected String qualifiedSuperclassname;
     protected Combo superCombo;
     protected Label superLabel;
+    protected CLabel errorMessageLabel;
 
     protected NewEventActionClassDialog( Shell parentShell, IDataModel model )
     {
         super( parentShell );
         this.model = model;
+
     }
 
-    public String getQualifiedClassname()
+    @Override
+    protected Button createButton( Composite parent, int id, String label, boolean defaultButton )
     {
-        return this.qualifiedClassname;
+        if( IDialogConstants.OK_ID == id )
+        {
+            return super.createButton( parent, id, Msgs.create, defaultButton );
+        }
+        
+        return super.createButton( parent, id, label, defaultButton );
     }
 
-    public String getQualifiedSuperclassname()
+    protected void createClassnameGroup( Composite parent )
     {
-        return this.qualifiedSuperclassname;
+        // class name
+        classLabel = new Label( parent, SWT.LEFT );
+        classLabel.setText( Msgs.classname );
+        classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
+
+        classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
+        classText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        classText.addModifyListener( new ModifyListener()
+        {
+
+            public void modifyText( ModifyEvent e )
+            {
+                updateQualifiedClassname();
+            }
+        } );
+
+        new Label( parent, SWT.LEFT );
+    }
+
+    @Override
+    protected Control createDialogArea( Composite parent )
+    {
+        Composite areaParent = (Composite) super.createDialogArea( parent );
+        areaParent.setLayout( new GridLayout( 3, false ) );
+
+        createClassnameGroup( areaParent );
+
+        createPackageGroup( areaParent );
+
+        createSuperclassGroup( areaParent );
+
+        createErrorMessageGroup( areaParent );
+
+        return areaParent;
+    }
+
+    private void createErrorMessageGroup( Composite parent )
+    {
+        errorMessageLabel = new CLabel( parent, SWT.LEFT_TO_RIGHT );
+        errorMessageLabel.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
+        errorMessageLabel.setImage( PlatformUI.getWorkbench().getSharedImages().getImage(
+            ISharedImages.IMG_OBJS_ERROR_TSK ) );
+        errorMessageLabel.setVisible( false );
+
     }
 
     private void createPackageGroup( Composite parent )
@@ -119,53 +178,6 @@ public class NewEventActionClassDialog extends Dialog
         } );
     }
 
-    @Override
-    protected Button createButton( Composite parent, int id, String label, boolean defaultButton )
-    {
-        if( IDialogConstants.OK_ID == id )
-        {
-            return super.createButton( parent, id, Msgs.create, defaultButton );
-        }
-
-        return super.createButton( parent, id, label, defaultButton );
-    }
-
-    protected void createClassnameGroup( Composite parent )
-    {
-        // class name
-        classLabel = new Label( parent, SWT.LEFT );
-        classLabel.setText( Msgs.classname );
-        classLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
-
-        classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
-        classText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        classText.addModifyListener( new ModifyListener()
-        {
-
-            public void modifyText( ModifyEvent e )
-            {
-                updateQualifiedClassname();
-            }
-        } );
-
-        new Label( parent, SWT.LEFT );
-    }
-
-    @Override
-    protected Control createDialogArea( Composite parent )
-    {
-        Composite areaParent = (Composite) super.createDialogArea( parent );
-        areaParent.setLayout( new GridLayout( 3, false ) );
-
-        createClassnameGroup( areaParent );
-
-        createPackageGroup( areaParent );
-
-        createSuperclassGroup( areaParent );
-
-        return areaParent;
-    }
-
     protected void createSuperclassGroup( Composite parent )
     {
         // superclass
@@ -189,6 +201,16 @@ public class NewEventActionClassDialog extends Dialog
         superCombo.select( 0 );
 
         new Label( parent, SWT.NONE );
+    }
+
+    public String getQualifiedClassname()
+    {
+        return this.qualifiedClassname;
+    }
+
+    public String getQualifiedSuperclassname()
+    {
+        return this.qualifiedSuperclassname;
     }
 
     protected void handlePackageButtonPressed()
@@ -272,18 +294,49 @@ public class NewEventActionClassDialog extends Dialog
 
     protected void updateQualifiedClassname()
     {
-        if( ! CoreUtil.isNullOrEmpty( packageText.getText() ) )
+        int packageNameStatus =
+            JavaConventions.validatePackageName(
+                packageText.getText(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+
+        int classNmaeStatus =
+            JavaConventions.validateJavaTypeName(
+                classText.getText(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();;
+
+        if( !CoreUtil.isNullOrEmpty( packageText.getText() ) )
         {
             this.qualifiedClassname = packageText.getText() + "." + classText.getText(); //$NON-NLS-1$
         }
         else
         {
             this.qualifiedClassname = classText.getText();
+            packageNameStatus = IStatus.WARNING;
         }
+
+        boolean isPackageNameAndClassNameValid =
+            ( ( packageNameStatus != IStatus.ERROR ) && ( classNmaeStatus != IStatus.ERROR ) );
+
+        this.getButton( IDialogConstants.OK_ID ).setEnabled( isPackageNameAndClassNameValid );
+
+        if( classNmaeStatus == IStatus.ERROR && packageNameStatus == IStatus.ERROR )
+        {
+            this.errorMessageLabel.setText( "Invalid package and class name" );
+        }
+        else if( classNmaeStatus == IStatus.ERROR )
+        {
+            this.errorMessageLabel.setText( "Invalid class name" );
+        }
+        else if( packageNameStatus == IStatus.ERROR )
+        {
+            this.errorMessageLabel.setText( "Invalid package name" );
+        }
+
+        this.errorMessageLabel.setVisible( ! isPackageNameAndClassNameValid );
+
     }
 
     private static class Msgs extends NLS
     {
+
         public static String classname;
         public static String create;
 
@@ -292,4 +345,5 @@ public class NewEventActionClassDialog extends Dialog
             initializeMessages( NewEventActionClassDialog.class.getName(), Msgs.class );
         }
     }
+
 }
