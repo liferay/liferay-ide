@@ -20,12 +20,14 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.FacetProjectCreationDataModelProvider;
@@ -80,9 +82,14 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
             try
             {
-                String sdkVersionValue = SDKUtil.readSDKVersion( sdkLoc );
-                Version v = new Version( sdkVersionValue );
-                return v.toString();
+                SDK sdk = SDKUtil.createSDKFromLocation( new Path( sdkLoc ) );
+
+                if( sdk != null )
+                {
+                    Version v = new Version( sdk.getVersion() );
+
+                    return v.toString();
+                }
             }
             catch( Exception e )
             {
@@ -199,7 +206,16 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
             if( SDKUtil.isValidSDKVersion( sdkVersion, SDKManager.getLeastValidVersion() ) )
             {
-                return Status.OK_STATUS;
+                Object runtime = getProperty( FACET_RUNTIME );
+
+                if( compareSDKRuntimeVersion( sdkVersion, runtime ) )
+                {
+                    return Status.OK_STATUS;
+                }
+                else
+                {
+                    return LiferayProjectCore.createWarningStatus( Msgs.versionUnequal );
+                }
             }
             else
             {
@@ -234,7 +250,16 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return Status.OK_STATUS;
+                String sdkVersion = getStringProperty( SDK_VERSION );
+
+                if( compareSDKRuntimeVersion( sdkVersion, runtime ) )
+                {
+                    return Status.OK_STATUS;
+                }
+                else
+                {
+                    return LiferayProjectCore.createWarningStatus( Msgs.versionUnequal );
+                }
             }
         }
         else if( FACET_PROJECT_NAME.equals( name ) )
@@ -243,6 +268,21 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
         }
 
         return super.validate( name );
+    }
+
+    private boolean compareSDKRuntimeVersion( String sdkVersion, Object runtime )
+    {
+        if( sdkVersion != null && runtime != null )
+        {
+            String runtimeVersion = ServerUtil.getLiferayRuntime( (BridgedRuntime) runtime ).getPortalVersion();
+
+            if( sdkVersion.equals( runtimeVersion ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -277,6 +317,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
         public static String invalidPluginSDKVersion;
         public static String selectOneLiferayProject;
         public static String selectValidLiferayRuntime;
+        public static String versionUnequal;
 
         static
         {

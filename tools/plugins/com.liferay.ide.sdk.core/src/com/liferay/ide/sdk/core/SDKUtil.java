@@ -44,7 +44,6 @@ public class SDKUtil
         {
             SDK sdk = new SDK( path );
 
-            sdk.setVersion( readSDKVersion( path.toString() ) );
             sdk.setName( path.lastSegment() );
 
             return sdk;
@@ -174,9 +173,14 @@ public class SDKUtil
 
         try
         {
-            String version = SDKUtil.readSDKVersion( loc );
+            SDK sdk = createSDKFromLocation( new Path( loc ) );
 
-            new Version( version );
+            if( sdk != null )
+            {
+                String version = sdk.getVersion();
+
+                new Version( version );
+            }
 
             File sdkDir = new File( loc );
 
@@ -215,7 +219,7 @@ public class SDKUtil
         return false;
     }
 
-    public static String readSDKVersion( String path ) throws FileNotFoundException, IOException
+    static String readSDKVersion( String path ) throws FileNotFoundException, IOException
     {
         Properties properties = new Properties();
         properties.load( new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ) ); //$NON-NLS-1$

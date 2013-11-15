@@ -18,6 +18,7 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 
@@ -92,11 +93,16 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
 
                 if( validSDKLocation )
                 {
-                    String sdkVersionValue = SDKUtil.readSDKVersion( sdkLoc );
+                    SDK sdk = SDKUtil.createSDKFromLocation( new Path( sdkLoc ) );
 
-                    Version v = new Version( sdkVersionValue );
+                    if( sdk != null )
+                    {
+                        String sdkVersionValue = sdk.getVersion();
 
-                    return v.toString();
+                        Version v = new Version( sdkVersionValue );
+
+                        return v.toString();
+                    }
                 }
                 else
                 {

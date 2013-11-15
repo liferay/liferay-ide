@@ -15,15 +15,19 @@
 
 package com.liferay.ide.sdk.core;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -574,7 +578,79 @@ public class SDK
 
     public String getVersion()
     {
+        if( version == null )
+        {
+            IPath sdkLocation = getLocation().makeAbsolute();
+
+            if( !sdkLocation.isEmpty() )
+            {
+                try
+                {
+                    version = SDKUtil.readSDKVersion( sdkLocation.toOSString() );
+
+                    if( version.equals( ILiferayConstants.V611.toString() ) )
+                    {
+                        Properties buildProperties = getProperties( sdkLocation.append( "build.properties" ).toFile() ); //$NON-NLS-1$
+
+                        if( hasAppServerSpecificProps( buildProperties ) )
+                        {
+                            version = ILiferayConstants.V612.toString();
+                        }
+                    }
+
+                    if( version.equals( ILiferayConstants.V6120.toString() ) )
+                    {
+                        Properties buildProperties = getProperties( sdkLocation.append( "build.properties" ).toFile() ); //$NON-NLS-1$
+
+                        if( hasAppServerSpecificProps( buildProperties ) )
+                        {
+                            version = ILiferayConstants.V6130.toString();
+                        }
+                    }
+                }
+                catch( Exception e )
+                {
+                    SDKCorePlugin.logError( "Could not detect the sdk version.", e); //$NON-NLS-1$
+                }
+            }
+        }
+
         return version;
+    }
+
+    private boolean hasAppServerSpecificProps( Properties props )
+    {
+        Enumeration<?> names = props.propertyNames();
+
+        while( names.hasMoreElements() )
+        {
+            String name = names.nextElement().toString();
+
+            if( name.matches( "app.server.tomcat.*" ) ) //$NON-NLS-1$
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Properties getProperties( File file )
+    {
+        Properties properties = new Properties();
+
+        try
+        {
+            InputStream propertiesInput = new FileInputStream( file );
+            properties.load( propertiesInput );
+            propertiesInput.close();
+        }
+        catch( Exception e )
+        {
+            SDKCorePlugin.logError( e );
+        }
+
+        return properties;
     }
 
     public boolean hasProjectFile()
@@ -618,7 +694,6 @@ public class SDK
     {
         setName( sdkElement.getString( "name" ) ); //$NON-NLS-1$
         setLocation( Path.fromPortableString( sdkElement.getString( "location" ) ) ); //$NON-NLS-1$
-        setVersion( sdkElement.getString( "version" ) ); //$NON-NLS-1$
         // setRuntime(sdkElement.getString("runtime"));
     }
 
