@@ -15,6 +15,10 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.hook.core.operation.NewServiceWrapperClassDataModelProvider;
+import com.liferay.ide.hook.core.operation.NewServiceWrapperClassOperation;
+import com.liferay.ide.hook.ui.HookUI;
+
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
@@ -24,18 +28,14 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
-import com.liferay.ide.hook.core.operation.NewServiceWrapperClassDataModelProvider;
-import com.liferay.ide.hook.core.operation.NewServiceWrapperClassOperation;
-
 /**
- * @author Greg Amerson 
+ * @author Greg Amerson
  * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
@@ -70,14 +70,6 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
         return button;
     }
 
-    @Override
-    protected Control createDialogArea( Composite parent )
-    {
-        Control control = super.createDialogArea( parent );
-
-        return control;
-    }
-
     protected void createSuperclassGroup( Composite parent )
     {
         // superclass
@@ -88,20 +80,20 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
         superclassText = new Text( parent, SWT.SINGLE | SWT.BORDER );
         superclassText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         superclassText.setText( this.wrapperType );
-        superclassText.addModifyListener( new ModifyListener()
-        {
-
-            public void modifyText( ModifyEvent e )
+        superclassText.addModifyListener
+        (
+            new ModifyListener()
             {
-                qualifiedSuperclassname = classText.getText();
+                public void modifyText( ModifyEvent e )
+                {
+                    qualifiedSuperclassname = classText.getText();
+                }
             }
-
-        } );
+        );
 
         superclassText.setEditable( false );
 
         new Label( parent, SWT.NONE );
-
     }
 
     @Override
@@ -120,7 +112,7 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
         }
         catch( ExecutionException e )
         {
-            e.printStackTrace();
+            HookUI.logError( "Unable to create class", e );
         }
 
         setReturnCode( OK );

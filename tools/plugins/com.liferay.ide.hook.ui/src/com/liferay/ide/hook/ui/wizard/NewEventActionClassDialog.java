@@ -15,6 +15,11 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.operation.NewEventActionClassDataModelProvider;
+import com.liferay.ide.hook.core.operation.NewEventActionClassOperation;
+import com.liferay.ide.hook.ui.HookUI;
+
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaElement;
@@ -52,10 +57,6 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.hook.core.operation.NewEventActionClassDataModelProvider;
-import com.liferay.ide.hook.core.operation.NewEventActionClassOperation;
-
 /**
  * @author Greg Amerson
  * @author Simon Jiang
@@ -80,7 +81,6 @@ public class NewEventActionClassDialog extends Dialog
     {
         super( parentShell );
         this.model = model;
-
     }
 
     @Override
@@ -88,9 +88,12 @@ public class NewEventActionClassDialog extends Dialog
     {
         if( IDialogConstants.OK_ID == id )
         {
-            return super.createButton( parent, id, Msgs.create, defaultButton );
+            final Button button = super.createButton( parent, id, Msgs.create, defaultButton );
+            button.setEnabled( false );
+
+            return button;
         }
-        
+
         return super.createButton( parent, id, label, defaultButton );
     }
 
@@ -103,14 +106,16 @@ public class NewEventActionClassDialog extends Dialog
 
         classText = new Text( parent, SWT.SINGLE | SWT.BORDER );
         classText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        classText.addModifyListener( new ModifyListener()
-        {
-
-            public void modifyText( ModifyEvent e )
+        classText.addModifyListener
+        (
+            new ModifyListener()
             {
-                updateQualifiedClassname();
+                public void modifyText( ModifyEvent e )
+                {
+                    updateQualifiedClassname();
+                }
             }
-        } );
+        );
 
         new Label( parent, SWT.LEFT );
     }
@@ -139,7 +144,6 @@ public class NewEventActionClassDialog extends Dialog
         errorMessageLabel.setImage( PlatformUI.getWorkbench().getSharedImages().getImage(
             ISharedImages.IMG_OBJS_ERROR_TSK ) );
         errorMessageLabel.setVisible( false );
-
     }
 
     private void createPackageGroup( Composite parent )
@@ -151,31 +155,34 @@ public class NewEventActionClassDialog extends Dialog
 
         packageText = new Text( parent, SWT.SINGLE | SWT.BORDER );
         packageText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        packageText.addModifyListener( new ModifyListener()
-        {
-
-            public void modifyText( ModifyEvent e )
+        packageText.addModifyListener
+        (
+            new ModifyListener()
             {
-                updateQualifiedClassname();
+                public void modifyText( ModifyEvent e )
+                {
+                    updateQualifiedClassname();
+                }
             }
-        } );
+        );
 
         packageButton = new Button( parent, SWT.PUSH );
         packageButton.setText( J2EEUIMessages.BROWSE_BUTTON_LABEL );
         packageButton.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_FILL ) );
-        packageButton.addSelectionListener( new SelectionListener()
-        {
-
-            public void widgetDefaultSelected( SelectionEvent e )
+        packageButton.addSelectionListener
+        (
+            new SelectionListener()
             {
-                // Do nothing
-            }
+                public void widgetDefaultSelected( SelectionEvent e )
+                {
+                }
 
-            public void widgetSelected( SelectionEvent e )
-            {
-                handlePackageButtonPressed();
+                public void widgetSelected( SelectionEvent e )
+                {
+                    handlePackageButtonPressed();
+                }
             }
-        } );
+        );
     }
 
     protected void createSuperclassGroup( Composite parent )
@@ -189,15 +196,18 @@ public class NewEventActionClassDialog extends Dialog
         superCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         superCombo.setItems( new String[] { "com.liferay.portal.kernel.events.SimpleAction", //$NON-NLS-1$
             "com.liferay.portal.kernel.events.SessionAction", "com.liferay.portal.kernel.events.Action" } ); //$NON-NLS-1$ //$NON-NLS-2$
-        superCombo.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
+        superCombo.addSelectionListener
+        (
+            new SelectionAdapter()
             {
-                qualifiedSuperclassname = superCombo.getItem( superCombo.getSelectionIndex() );
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    qualifiedSuperclassname = superCombo.getItem( superCombo.getSelectionIndex() );
+                }
             }
-        } );
+        );
+
         superCombo.select( 0 );
 
         new Label( parent, SWT.NONE );
@@ -286,7 +296,7 @@ public class NewEventActionClassDialog extends Dialog
         }
         catch( ExecutionException e )
         {
-            e.printStackTrace();
+            HookUI.logError( "Error creating class", e );
         }
 
         super.okPressed();
@@ -331,12 +341,10 @@ public class NewEventActionClassDialog extends Dialog
         }
 
         this.errorMessageLabel.setVisible( ! isPackageNameAndClassNameValid );
-
     }
 
     private static class Msgs extends NLS
     {
-
         public static String classname;
         public static String create;
 
