@@ -42,11 +42,14 @@ public class SDKUtil
     {
         try
         {
-            SDK sdk = new SDK( path );
+            if( isValidSDKLocation( path.toOSString() ) )
+            {
+                SDK sdk = new SDK( path );
 
-            sdk.setName( path.lastSegment() );
+                sdk.setName( path.lastSegment() );
 
-            return sdk;
+                return sdk;
+            }
         }
         catch( Exception e )
         {
@@ -169,26 +172,17 @@ public class SDKUtil
     {
         boolean retval = false;
 
-        // try to look for build.properties file with property lp.version
-
         try
         {
-            SDK sdk = createSDKFromLocation( new Path( loc ) );
-
-            if( sdk != null )
-            {
-                String version = sdk.getVersion();
-
-                new Version( version );
-            }
-
             File sdkDir = new File( loc );
 
+            File buildProperties = new File( sdkDir, ISDKConstants.BUILD_PROPERTIES );
             File portletsBuildXml = new File( sdkDir, ISDKConstants.PORTLET_PLUGIN_ANT_BUILD );
             File hooksBuildXml = new File( sdkDir, ISDKConstants.HOOK_PLUGIN_ANT_BUILD );
             File extBuildXml = new File( sdkDir, ISDKConstants.EXT_PLUGIN_ANT_BUILD );
 
-            retval = portletsBuildXml.exists() && hooksBuildXml.exists() && extBuildXml.exists();
+            retval =
+                buildProperties.exists() && portletsBuildXml.exists() && hooksBuildXml.exists() && extBuildXml.exists();
         }
         catch( Exception e )
         {
