@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -98,8 +99,10 @@ public class NewLiferayPluginProjectOpMethods
 
         final Path currentLocation = op.getLocation().content();
 
+        final File param = currentLocation != null ? currentLocation.toFile() : null;
+
         final List<String> systemProfileIds =
-            op.getProjectProvider().content().getData( "profileIds", String.class, currentLocation.toFile() );
+            op.getProjectProvider().content().getData( "profileIds", String.class, param );
 
         final ElementList<NewLiferayProfile> newLiferayProfiles = op.getNewLiferayProfiles();
 
