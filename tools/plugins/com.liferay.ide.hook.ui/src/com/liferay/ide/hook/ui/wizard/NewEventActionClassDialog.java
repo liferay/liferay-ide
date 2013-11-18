@@ -308,7 +308,7 @@ public class NewEventActionClassDialog extends Dialog
             JavaConventions.validatePackageName(
                 packageText.getText(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
 
-        int classNmaeStatus =
+        int classNameStatus =
             JavaConventions.validateJavaTypeName(
                 classText.getText(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();;
 
@@ -323,15 +323,15 @@ public class NewEventActionClassDialog extends Dialog
         }
 
         boolean isPackageNameAndClassNameValid =
-            ( ( packageNameStatus != IStatus.ERROR ) && ( classNmaeStatus != IStatus.ERROR ) );
+            ( ( packageNameStatus != IStatus.ERROR ) && ( classNameStatus != IStatus.ERROR ) );
 
         this.getButton( IDialogConstants.OK_ID ).setEnabled( isPackageNameAndClassNameValid );
 
-        if( classNmaeStatus == IStatus.ERROR && packageNameStatus == IStatus.ERROR )
+        if( classNameStatus == IStatus.ERROR && packageNameStatus == IStatus.ERROR )
         {
             this.errorMessageLabel.setText( "Invalid package and class name" );
         }
-        else if( classNmaeStatus == IStatus.ERROR )
+        else if( classNameStatus == IStatus.ERROR )
         {
             this.errorMessageLabel.setText( "Invalid class name" );
         }
@@ -340,11 +340,13 @@ public class NewEventActionClassDialog extends Dialog
             this.errorMessageLabel.setText( "Invalid package name" );
         }
 
-        this.errorMessageLabel.setVisible( ! isPackageNameAndClassNameValid );
+        this.errorMessageLabel.setVisible( !isPackageNameAndClassNameValid );
+
     }
 
     private static class Msgs extends NLS
     {
+
         public static String classname;
         public static String create;
 

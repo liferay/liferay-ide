@@ -65,6 +65,7 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
                 "Ext" + this.serviceType.substring( this.serviceType.lastIndexOf( '.' ) + 1, this.serviceType.length() ); //$NON-NLS-1$
 
             classText.setText( defaultClassname );
+            button.setEnabled( true );
         }
 
         return button;
@@ -93,7 +94,10 @@ public class NewServiceWrapperClassDialog extends NewEventActionClassDialog
 
         superclassText.setEditable( false );
 
+        superclassText.setEditable( false );
+
         new Label( parent, SWT.NONE );
+
     }
 
     @Override
