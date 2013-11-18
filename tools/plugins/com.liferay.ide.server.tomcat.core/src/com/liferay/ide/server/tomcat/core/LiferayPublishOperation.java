@@ -15,6 +15,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -144,8 +145,8 @@ public class LiferayPublishOperation extends PublishOperation {
 	}
 
 	private void publishDir(IModule module2, List status, IProgressMonitor monitor) throws CoreException {
-		IPath path = server.getModuleDeployDirectory(module2);
-		
+		final IPath path = server.getModuleDeployDirectory(module2);
+
 		// Remove if requested or if previously published and are now serving without publishing
 		if (kind == IServer.PUBLISH_CLEAN || deltaKind == ServerBehaviourDelegate.REMOVED
 				|| server.getTomcatServer().isServeModulesWithoutPublish()) {
@@ -201,10 +202,48 @@ public class LiferayPublishOperation extends PublishOperation {
 		}
         
 		IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
-				
+
+		// check if we have a anti*Locking directory temp files and copy the resources out there as well
+        File[] antiDirs = new File[0];
+		try
+        {
+            File tempDir =
+                server.getLiferayTomcatServer().getTomcatRuntime().getRuntime().getLocation().append( "temp" ).toFile(); //$NON-NLS-1$
+            antiDirs = tempDir.listFiles
+            (
+                new FilenameFilter()
+                {
+                    public boolean accept( File dir, String name )
+                    {
+                        return name.endsWith( path.lastSegment() );
+                    }
+                }
+            );
+        }
+        catch( Exception e )
+        {
+        }
+
+
 		int size = delta.length;
 		for (int i = 0; i < size; i++) {
 			IStatus[] stat = helper.publishDelta(delta[i], path, monitor);
+
+			for( File antiDir : antiDirs )
+			{
+			    if( antiDir.exists() )
+			    {
+			        try
+	                {
+	                    helper.publishDelta(delta[i], new Path( antiDir.getCanonicalPath() ), monitor);
+	                }
+	                catch( Exception e)
+	                {
+	                    // best effort
+	                }
+			    }
+			}
+
 			addArrayToList(status, stat);
 		}
 
