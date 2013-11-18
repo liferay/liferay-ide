@@ -17,26 +17,19 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import com.liferay.ide.portlet.core.model.internal.NameAndQNameChoiceValueBinding;
-import com.liferay.ide.portlet.core.model.internal.NameOrQnameValidationService;
-
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.ReferenceValue;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Reference;
-import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -49,19 +42,6 @@ public interface EventDefinition extends QName, Identifiable, Describeable
 {
 
     ElementType TYPE = new ElementType( EventDefinition.class );
-
-    // *** Name ***
-
-    @Label( standard = "Name" )
-    @XmlBinding( path = "name" )
-    @Service( impl = NameOrQnameValidationService.class )
-    @Enablement( expr = "${(NamespaceURI == 'NAMESPACE_URI' && LocalPart == 'LOCAL_PART') || (empty NamespaceURI && empty LocalPart) }" )
-    @CustomXmlValueBinding( impl = NameAndQNameChoiceValueBinding.class, params = { "name" } )
-    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
-
-    Value<String> getName();
-
-    void setName( String value );
 
     // *** Aliases ***
 

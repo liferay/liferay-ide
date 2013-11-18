@@ -504,17 +504,7 @@
                 <collapsible>false</collapsible>
                 <indent>true</indent>
             </section>
-            <label>${( (empty Name AND empty NamespaceURI AND empty LocalPart )
-                ||
-                (Name=='EVENT_NAME' &amp;&amp;
-                NamespaceURI
-                =='NAMESPACE_URI'
-                &amp;&amp;
-                LocalPart=='LOCAL_PART') ) ? '&lt;event-definition&gt;'
-                :
-                ((empty Name || Name ==
-                'EVENT_NAME')?(concat('{',NamespaceURI,'}',LocalPart)):Name)}
-            </label>
+            <label>${( empty NamespaceURI AND empty LocalPart )}</label>
         </case>
     </node-factory>
     <composite>
