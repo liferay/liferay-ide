@@ -60,6 +60,9 @@ public class LiferayProjectCore extends LiferayCore
     // The value of maven build type
     public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
 
+    // The key of using snapshot vresion stored in prefernce store
+    public static final String PREF_USE_SNAPSHOT_VERSION = "use-snapshot-version";
+
     /**
      * Returns the shared instance
      *

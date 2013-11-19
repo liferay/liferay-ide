@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
@@ -53,6 +54,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
 
     private ScopedPreferenceStore prefStore;
     private RadioGroupFieldEditor radioGroupEditor;
+    private BooleanFieldEditor useSnapshotVersion;
 
     public ProjectsPreferencePage()
     {
@@ -96,7 +98,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
                 link.setUnderlined( true );
                 link.setText( "To add support for maven, please install the m2e-liferay feature." );
                 link.addHyperlinkListener
-                (
+                ( 
                     new HyperlinkAdapter()
                     {
                         public void linkActivated( HyperlinkEvent event )
@@ -114,10 +116,19 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
                                 ProjectUIPlugin.logError( "Unable to open Liferay IDE download page", e );
                             }
                         }
-                    }
+                    } 
                 );
             }
         }
+
+        useSnapshotVersion =
+            new BooleanFieldEditor(
+                LiferayProjectCore.PREF_USE_SNAPSHOT_VERSION, "Allow snapshot versions for new maven projects",
+                getFieldEditorParent() );
+
+        useSnapshotVersion.fillIntoGrid( getFieldEditorParent(), 1 );
+
+        addField( useSnapshotVersion );
     }
 
     @Override

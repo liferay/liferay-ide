@@ -8,10 +8,12 @@
  * Contributors:
  *    Sonatype, Inc. - initial API and implementation
  *******************************************************************************/
+
 package com.liferay.ide.maven.core.aether;
 
 import com.liferay.ide.maven.core.LiferayMavenCore;
 import com.liferay.ide.maven.core.MavenUtil;
+import com.liferay.ide.project.core.LiferayProjectCore;
 
 import java.util.List;
 
@@ -30,6 +32,10 @@ import org.eclipse.aether.resolution.VersionRangeRequest;
 import org.eclipse.aether.resolution.VersionRangeResolutionException;
 import org.eclipse.aether.resolution.VersionRangeResult;
 import org.eclipse.aether.version.Version;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 
 /**
@@ -124,7 +130,8 @@ public class AetherUtil
             final Version newestVersion = rangeResult.getHighestVersion();
             final List<Version> versions = rangeResult.getVersions();
 
-            if( versions.size() > 1 && newestVersion.toString().endsWith( "-SNAPSHOT" ) )
+            if( versions.size() > 1 && newestVersion.toString().endsWith( "-SNAPSHOT" ) &&
+                shouldUseSnapshotVersions() == false )
             {
                 retval = versions.get( versions.size() - 2 ).toString();
             }
@@ -146,4 +153,12 @@ public class AetherUtil
         return retval;
     }
 
+    private static boolean shouldUseSnapshotVersions()
+    {
+        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+        
+        return Platform.getPreferencesService().getBoolean(
+                LiferayProjectCore.PLUGIN_ID, LiferayProjectCore.PREF_USE_SNAPSHOT_VERSION, false, prefContexts );
+    }
+    
 }
