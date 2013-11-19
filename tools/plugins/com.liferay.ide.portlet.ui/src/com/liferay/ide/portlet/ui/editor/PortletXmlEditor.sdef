@@ -505,7 +505,7 @@
                 <indent>true</indent>
             </section>
             <label>${( empty NamespaceURI AND empty LocalPart ) ? '&lt;event-definition&gt;'
-            : ( ( empty NamespaceURI ) ? LocalPart : ( concat( '{', NamespaceURI, '}' , LocalPart ) ) ) }
+                : ( ( empty NamespaceURI ) ? LocalPart : ( concat( '{', NamespaceURI, '}' , LocalPart ) ) ) }
             </label>
         </case>
     </node-factory>
