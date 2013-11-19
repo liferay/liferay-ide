@@ -60,8 +60,10 @@ public class LocationValidationService extends ValidationService
         final Path currentProjectLocation = op().getLocation().content( true );
         final String currentProjectName = op().getProjectName().content();
 
-        // Location won't be validated if the UseDefaultLocation has an error.
-        if( ! op().getUseDefaultLocation().content( true ) && op().getUseDefaultLocation().validation().ok() )
+        // Location won't be validated if the UseDefaultLocation has an error. Get the validation of the property might 
+        // not work as excepted, let's use call the validation service manually.
+        if( ! op().getUseDefaultLocation().content( true ) &&
+            op().getUseDefaultLocation().service( UseDefaultLocationValidationService.class ).validation().ok() )
         {
             /*
              * IDE-1150, instead of using annotation "@Required",use this service to validate the custom project
