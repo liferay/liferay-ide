@@ -103,6 +103,7 @@ public class AetherUtil
             LiferayMavenCore.logError( "Unable to get latest Liferay archetype", e );
         }
 
+
         if( retval == null )
         {
             retval = defaultArtifact;
@@ -153,12 +154,11 @@ public class AetherUtil
         return retval;
     }
 
-    private static boolean shouldUseSnapshotVersions()
-    {
+    private static boolean shouldUseSnapshotVersions(){
         final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        
-        return Platform.getPreferencesService().getBoolean(
+
+        return  Platform.getPreferencesService().getBoolean(
                 LiferayProjectCore.PLUGIN_ID, LiferayProjectCore.PREF_USE_SNAPSHOT_VERSION, false, prefContexts );
     }
-    
+
 }

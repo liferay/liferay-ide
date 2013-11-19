@@ -101,15 +101,16 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
                 ( 
                     new HyperlinkAdapter()
                     {
+                        @Override
                         public void linkActivated( HyperlinkEvent event )
                         {
                             try
                             {
                                 IWorkbenchBrowserSupport supoprt = PlatformUI.getWorkbench().getBrowserSupport();
                                 IWebBrowser browser =
-                                    supoprt.createBrowser(
-                                        0, "Liferay IDE Download", "Liferay IDE Download Page", null );
-                                browser.openURL( new URL( "https://www.liferay.com/downloads/liferay-projects/liferay-ide" ) );
+                                    supoprt.createBrowser( 0, "Liferay IDE Download", "Liferay IDE Download Page", null );
+                                browser.openURL( 
+                                    new URL( "https://www.liferay.com/downloads/liferay-projects/liferay-ide" ) );
                             }
                             catch( Exception e )
                             {
