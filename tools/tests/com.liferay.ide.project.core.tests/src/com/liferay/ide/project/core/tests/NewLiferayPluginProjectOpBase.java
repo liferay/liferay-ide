@@ -18,6 +18,20 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.IPortletFramework;
+import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
+import com.liferay.ide.server.util.ServerUtil;
+
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -45,20 +59,6 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 /**
  * @author Gregory Amerson
@@ -206,7 +206,13 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         assertEquals( true, newSDKLocation.toFile().exists() );
 
-        final SDK newSDK = SDKUtil.createSDKFromLocation( newSDKLocation );
+        SDK newSDK = SDKUtil.createSDKFromLocation( newSDKLocation );
+
+        if( newSDK == null )
+        {
+            FileUtils.copyDirectory( getLiferayPluginsSdkDir().toFile(), newSDKLocation.toFile() );
+            newSDK = SDKUtil.createSDKFromLocation( newSDKLocation );
+        }
 
         SDKManager.getInstance().addSDK( newSDK );
 
@@ -442,35 +448,14 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         final ValidationService vs = op.getGroupId().service( ValidationService.class );
 
         op.setGroupId( ".com.liferay.test" );
-        assertEquals( "A package name cannot start or end with a dot", vs.validation().message() );
-        assertEquals( "A package name cannot start or end with a dot", op.getGroupId().validation().message() );
-
-        op.setGroupId( "com.liferay.test." );
-        assertEquals( "A package name cannot start or end with a dot", vs.validation().message() );
-        assertEquals( "A package name cannot start or end with a dot", op.getGroupId().validation().message() );
-
-        op.setGroupId( "com..liferay.test" );
-        assertEquals( "A package name must not contain two consecutive dots", vs.validation().message() );
-        assertEquals( "A package name must not contain two consecutive dots", op.getGroupId().validation().message() );
-
-        op.setGroupId( " com.lifey.test" );
-        assertEquals( "A package name must not start or end with a blank", vs.validation().message() );
-        assertEquals( "A package name must not start or end with a blank", op.getGroupId().validation().message() );
-
-        op.setGroupId( "com.liferay.test " );
-        assertEquals( "A package name must not start or end with a blank", vs.validation().message() );
-        assertEquals( "A package name must not start or end with a blank", op.getGroupId().validation().message() );
+        final String expected = "A package name cannot start or end with a dot";
+        assertEquals( expected, vs.validation().message() );
+        assertEquals( expected, op.getGroupId().validation().message() );
 
         op.setGroupId( "com.life*ray.test" );
-        assertEquals( "'life*ray' is not a valid Java identifier", vs.validation().message() );
-        assertEquals( "'life*ray' is not a valid Java identifier", op.getGroupId().validation().message() );
-
-        op.setGroupId( "Com.liferay.test" );
-        assertEquals( "By convention, package names usually start with a lowercase letter", vs.validation().message() );
-        assertEquals(
-            "By convention, package names usually start with a lowercase letter",
-            op.getGroupId().validation().message() );
-
+        final String expected2 = "'life*ray' is not a valid Java identifier";
+        assertEquals( expected2, vs.validation().message() );
+        assertEquals( expected2, op.getGroupId().validation().message() );
     }
 
     protected void testLocationListener() throws Exception
@@ -507,7 +492,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     {
         final NewLiferayPluginProjectOp op = newProjectOp( "test-location-validation-service" );
         op.setProjectProvider( "maven" );
-        op.setPluginType( "protlet" );
+        op.setPluginType( "portlet" );
         op.setUseDefaultLocation( false );
 
         final ValidationService vs = op.getLocation().service( ValidationService.class );
@@ -515,8 +500,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         String invalidLocation = null;
         invalidLocation = "not-absolute-location";
         op.setLocation( invalidLocation );
-        assertEquals( "\"" + invalidLocation + "\" is not an absolute path.", vs.validation().message() );
-        assertEquals( "\"" + invalidLocation + "\" is not an absolute path.", op.getLocation().validation().message() );
+
+        final String expected = "\"" + invalidLocation + "\" is not an absolute path.";
+
+        assertEquals( expected, vs.validation().message() );
+        assertEquals( expected, op.getLocation().validation().message() );
 
         if( Platform.getOS().equals( Platform.OS_WIN32 ) )
         {
@@ -528,20 +516,23 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         }
 
         op.setLocation( invalidLocation );
-        assertEquals( "Cannot create project content at " + "\"" + invalidLocation + "\"", vs.validation().message() );
-        assertEquals(
-            "Cannot create project content at " + "\"" + invalidLocation + "\"",
-            op.getLocation().validation().message() );
+        final String expected2 = "Cannot create project content at " + "\"" + invalidLocation + "\"";
+        assertEquals( expected2, vs.validation().message() );
+        assertEquals( expected2, op.getLocation().validation().message() );
 
         invalidLocation = CoreUtil.getWorkspaceRoot().getLocation().getDevice() + "\\";
         op.setLocation( invalidLocation );
-        assertEquals( "\"" + invalidLocation + "\" is not a valid project location.", vs.validation().message() );
-        assertEquals(
-            "\"" + invalidLocation + "\" is not a valid project location.", op.getLocation().validation().message() );
+
+        final String expected3 = "Project location is not empty or a parent pom.";
+
+        assertEquals( expected3, vs.validation().message() );
+        assertEquals( expected3, op.getLocation().validation().message() );
 
         op.setLocation( "" );
-        assertEquals( "Location must be specified.", vs.validation().message() );
-        assertEquals( "Location must be specified.", op.getLocation().validation().message() );
+
+        final String expected4 = "Location must be specified.";
+        assertEquals( expected4, vs.validation().message() );
+        assertEquals( expected4, op.getLocation().validation().message() );
 
     }
 
@@ -1133,11 +1124,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals( "A project with that name already exists.", op.getProjectName().validation().message() );
 
         op.setProjectName( validProjectName );
-        assertEquals( "\"" + op.getLocation().content().toOSString() +
-            "\" is not a valid because a project already exists at that location.", vs.validation().message() );
+        assertEquals( "\"" + op.getLocation().content().toOSString().replace( '\\', '/' ) +
+            "\" is not valid because a project already exists at that location.", vs.validation().message() );
         assertEquals(
-            "\"" + op.getLocation().content().toOSString() +
-                "\" is not a valid because a project already exists at that location.",
+            "\"" + op.getLocation().content().toOSString().replace( '\\', '/' ) +
+                "\" is not valid because a project already exists at that location.",
             op.getProjectName().validation().message() );
 
         final IPath dotProjectLocation = proj.getLocation().append( ".project" );
@@ -1152,10 +1143,10 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         vs = op.getProjectName().service( ValidationService.class );
 
         op.setProjectName( validProjectName );
-        assertEquals( "\"" + op.getLocation().content().toOSString() +
-            "\" is not a valid because it already contains files.", vs.validation().message() );
-        assertEquals( "\"" + op.getLocation().content().toOSString() +
-            "\" is not a valid because it already contains files.", op.getProjectName().validation().message() );
+        assertEquals( "\"" + op.getLocation().content().toOSString().replace( '\\', '/' ) +
+            "\" is not valid because it already contains files.", vs.validation().message() );
+        assertEquals( "\"" + op.getLocation().content().toOSString().replace( '\\', '/' ) +
+            "\" is not valid because it already contains files.", op.getProjectName().validation().message() );
 
         String invalidProjectName = validProjectName + "*";
         op.setProjectName( invalidProjectName );
