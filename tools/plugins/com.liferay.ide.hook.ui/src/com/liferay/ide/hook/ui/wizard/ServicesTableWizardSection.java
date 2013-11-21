@@ -28,19 +28,27 @@ import java.io.File;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.jdt.internal.core.search.BasicSearchEngine;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties;
 import org.eclipse.jst.j2ee.internal.plugin.J2EEUIMessages;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -48,13 +56,17 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class ServicesTableWizardSection extends StringArrayTableWizardSection
@@ -63,6 +75,8 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
     public class AddServiceDialog extends AddStringArrayDialog
     {
         protected String[] buttonLabels;
+        protected CLabel errorMessageLabel;
+        
 
         public AddServiceDialog( Shell shell, String windowTitle, String[] labelsForTextField, String[] buttonLabels )
         {
@@ -73,6 +87,28 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             this.buttonLabels = buttonLabels;
 
             setWidthHint( 450 );
+        }
+
+        @Override
+        protected Control createContents(Composite parent) 
+        {
+            Composite composite = (Composite) super.createContents(parent);
+            getButton(IDialogConstants.OK_ID).setEnabled(false);
+            return composite;
+        }
+
+        @Override
+        public Control createDialogArea(Composite parent) 
+        {
+            super.createDialogArea( parent );
+
+            errorMessageLabel = new CLabel( parent, SWT.LEFT_TO_RIGHT );
+            errorMessageLabel.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
+            errorMessageLabel.setImage( PlatformUI.getWorkbench().getSharedImages().getImage(
+                ISharedImages.IMG_OBJS_ERROR_TSK ) );
+            errorMessageLabel.setVisible( false );
+
+            return parent;
         }
 
         @Override
@@ -258,6 +294,110 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             }
         }
 
+        @Override
+        public void modifyText(ModifyEvent e) 
+        {
+            boolean serviceTypeValid = false;
+            boolean implClassValid = false;
+
+            if ( texts[0].getText().trim().length() > 0 )
+            {
+                int serviceTypeStatus =
+                                JavaConventions.validateJavaTypeName(
+                                    texts[0].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                serviceTypeValid = ( serviceTypeStatus != IStatus.ERROR )?true:false;
+            }
+
+            if ( texts[1].getText().trim().length() > 0 )
+            {
+                int implClasseStatus =
+                                JavaConventions.validateJavaTypeName(
+                                    texts[1].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                implClassValid = ( implClasseStatus != IStatus.ERROR )?true:false;
+            }
+
+            if ( !( serviceTypeValid ^ implClassValid ) )
+            {
+                errorMessageLabel.setText( "Invalid service name and class name" );
+            }
+            else if ( !serviceTypeValid )
+            {
+                errorMessageLabel.setText( "Invalid service type name" );
+            }
+            else if ( !implClassValid )
+            {
+                errorMessageLabel.setText( "Invalid class name" );
+            }
+
+            this.errorMessageLabel.setVisible( !( serviceTypeValid && implClassValid ) );
+            getButton(IDialogConstants.OK_ID).setEnabled( serviceTypeValid && implClassValid );
+        }
+    }
+
+    public class EditServiceDialog extends EditStringArrayDialog
+    {
+        protected CLabel errorMessageLabel;
+
+        public EditServiceDialog(
+            Shell shell, String windowTitle, String[] labelsForTextField, String[] valuesForTextField )
+        {
+            super( shell, windowTitle, labelsForTextField, valuesForTextField );
+
+        }
+
+        @Override
+        public Control createDialogArea(Composite parent) 
+        {
+
+            super.createDialogArea( parent );
+
+            errorMessageLabel = new CLabel( parent, SWT.LEFT_TO_RIGHT );
+            errorMessageLabel.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
+            errorMessageLabel.setImage( PlatformUI.getWorkbench().getSharedImages().getImage(
+                ISharedImages.IMG_OBJS_ERROR_TSK ) );
+            errorMessageLabel.setVisible( false );
+
+            return parent;
+        }
+
+        @Override
+        public void modifyText(ModifyEvent e) 
+        {
+            boolean serviceTypeValid = false;
+            boolean implClassValid = false;
+
+            if ( texts[0].getText().trim().length() > 0 )
+            {
+                int serviceTypeStatus =
+                                JavaConventions.validateJavaTypeName(
+                                    texts[0].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                serviceTypeValid = ( serviceTypeStatus != IStatus.ERROR )?true:false;
+            }
+
+            if ( texts[1].getText().trim().length() > 0 )
+            {
+                int implClasseStatus =
+                                JavaConventions.validateJavaTypeName(
+                                    texts[1].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                implClassValid = ( implClasseStatus != IStatus.ERROR )?true:false;
+            }
+
+            if ( !( serviceTypeValid ^ implClassValid ) )
+            {
+                errorMessageLabel.setText( "Invalid service name and class name" );
+            }
+            else if ( !serviceTypeValid )
+            {
+                errorMessageLabel.setText( "Invalid service type name" );
+            }
+            else if ( !implClassValid )
+            {
+                errorMessageLabel.setText( "Invalid class name" );
+            }
+
+            this.errorMessageLabel.setVisible( !( serviceTypeValid && implClassValid ) );
+            getButton(IDialogConstants.OK_ID).setEnabled( serviceTypeValid && implClassValid );
+        }
     }
 
     protected String[] buttonLabels;
@@ -296,6 +436,26 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
         }
     }
 
+    @Override
+    protected void handleEditButtonSelected() 
+    {
+        ISelection s = viewer.getSelection();
+        if (!(s instanceof IStructuredSelection))
+            return;
+        IStructuredSelection selection = (IStructuredSelection) s;
+        if (selection.size() != 1)
+            return;
+        
+        Object selectedObj = selection.getFirstElement();
+        String[] valuesForText = (String[]) selectedObj;
+        
+        EditServiceDialog dialog = new EditServiceDialog(getShell(), dialogTitle, fieldLabels, valuesForText);
+        dialog.open();
+        String[] stringArray = dialog.getStringArray();
+        editStringArray(valuesForText, stringArray);
+    }   
+    
+    
     private static class Msgs extends NLS
     {
         public static String addService;
