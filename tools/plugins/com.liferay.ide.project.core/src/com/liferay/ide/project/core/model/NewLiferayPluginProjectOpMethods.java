@@ -59,7 +59,7 @@ public class NewLiferayPluginProjectOpMethods
 
             if ( status.isOK() )
             {
-                updateProjectDefaultBuildType( op );
+                updateDefaultProjectBuildType( op );
             }
 
             retval = StatusBridge.create( status );
@@ -74,7 +74,7 @@ public class NewLiferayPluginProjectOpMethods
 
         return retval;
     }
-    
+
     public static String getPluginTypeSuffix( final PluginType pluginType )
     {
         String suffix = null;
@@ -210,7 +210,7 @@ public class NewLiferayPluginProjectOpMethods
         op.setLocation( newLocation );
     }
 
-    private static void updateProjectDefaultBuildType( final NewLiferayPluginProjectOp op )
+    private static void updateDefaultProjectBuildType( final NewLiferayPluginProjectOp op )
     {
         try
         {
@@ -220,7 +220,7 @@ public class NewLiferayPluginProjectOpMethods
         }
         catch( Exception e )
         {
-            final String msg = "Error update project default build type."; //$NON-NLS-1$
+            final String msg = "Error updating default project build type."; //$NON-NLS-1$
             LiferayProjectCore.logError( msg, e );
         }
     }

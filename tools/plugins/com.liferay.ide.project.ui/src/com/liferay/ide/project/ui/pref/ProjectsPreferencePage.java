@@ -45,7 +45,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
     @Override
     protected void createFieldEditors()
     {
-/*      
+/*
         final ILiferayProjectProvider[] providers = LiferayCore.getProviders();
 
         Arrays.sort( providers );
@@ -80,7 +80,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
                 link.setUnderlined( true );
                 link.setText( "To add support for maven, please install the m2e-liferay feature." );
                 link.addHyperlinkListener
-                ( 
+                (
                     new HyperlinkAdapter()
                     {
                         @Override
@@ -91,7 +91,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
                                 IWorkbenchBrowserSupport supoprt = PlatformUI.getWorkbench().getBrowserSupport();
                                 IWebBrowser browser =
                                     supoprt.createBrowser( 0, "Liferay IDE Download", "Liferay IDE Download Page", null );
-                                browser.openURL( 
+                                browser.openURL(
                                     new URL( "https://www.liferay.com/downloads/liferay-projects/liferay-ide" ) );
                             }
                             catch( Exception e )
@@ -99,7 +99,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
                                 ProjectUIPlugin.logError( "Unable to open Liferay IDE download page", e );
                             }
                         }
-                    } 
+                    }
                 );
             }
         }
