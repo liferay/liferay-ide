@@ -14,10 +14,13 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
 
 import java.io.File;
 import java.util.HashSet;
@@ -34,6 +37,7 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
+import org.osgi.framework.Version;
 
 
 /**
@@ -42,6 +46,37 @@ import org.eclipse.sapphire.platform.StatusBridge;
  */
 public class NewLiferayPluginProjectOpMethods
 {
+
+    public static boolean canUseCustomLocation( NewLiferayPluginProjectOp op )
+    {
+        boolean retval = false;
+
+        if( op.getProjectProvider().content( true ).getShortName().equals( "maven" ) )
+        {
+            retval = true;
+        }
+        else
+        {
+            final SDK sdk = SDKManager.getInstance().getSDK( op.getPluginsSDKName().content( true ) );
+
+            if( sdk != null )
+            {
+                final Version version = new Version( sdk.getVersion() );
+
+                final boolean greaterThan611 = CoreUtil.compareVersions( version, ILiferayConstants.V611 ) > 0;
+                final boolean lessThan6110 = CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0;
+                final boolean greaterThanEqualTo6130 =
+                    CoreUtil.compareVersions( version, ILiferayConstants.V6130 ) >= 0;
+
+                if( ( greaterThan611 && lessThan6110 ) || greaterThanEqualTo6130 )
+                {
+                    retval = true;
+                }
+            }
+        }
+
+        return retval;
+    }
 
     public static final Status execute( final NewLiferayPluginProjectOp op, final ProgressMonitor pm )
     {
@@ -184,6 +219,21 @@ public class NewLiferayPluginProjectOpMethods
         op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
     }
 
+    private static void updateDefaultProjectBuildType( final NewLiferayPluginProjectOp op )
+    {
+        try
+        {
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayProjectCore.PLUGIN_ID );
+            prefs.put( LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+            prefs.flush();
+        }
+        catch( Exception e )
+        {
+            final String msg = "Error updating default project build type."; //$NON-NLS-1$
+            LiferayProjectCore.logError( msg, e );
+        }
+    }
+
     public static void updateLocation( final NewLiferayPluginProjectOp op, final Path baseLocation )
     {
         final String projectName = op.getProjectName().content();
@@ -208,20 +258,5 @@ public class NewLiferayPluginProjectOpMethods
         final Path newLocation = baseLocation.append( dirName );
 
         op.setLocation( newLocation );
-    }
-
-    private static void updateDefaultProjectBuildType( final NewLiferayPluginProjectOp op )
-    {
-        try
-        {
-            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayProjectCore.PLUGIN_ID );
-            prefs.put( LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
-            prefs.flush();
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error updating default project build type."; //$NON-NLS-1$
-            LiferayProjectCore.logError( msg, e );
-        }
     }
 }

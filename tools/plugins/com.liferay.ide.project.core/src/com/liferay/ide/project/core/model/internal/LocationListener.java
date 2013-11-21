@@ -64,7 +64,7 @@ public class LocationListener extends ProjectNameListener
 
                     final Path currentLocation = op.getLocation().content( true );
 
-                    if( currentLocation != null )
+                    if( currentLocation != null && currentLocation.segmentCount() > 0 )
                     {
                         final String lastSegment = currentLocation.lastSegment();
 

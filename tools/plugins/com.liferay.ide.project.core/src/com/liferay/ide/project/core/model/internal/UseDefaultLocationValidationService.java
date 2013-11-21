@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
@@ -43,9 +43,11 @@ public class UseDefaultLocationValidationService extends ValidationService
             }
         };
 
-        context( NewLiferayPluginProjectOp.class ).getProjectProvider().attach( this.listener );
-        context( NewLiferayPluginProjectOp.class ).getPluginsSDKName().attach( this.listener );
-        context( NewLiferayPluginProjectOp.class ).getProjectName().attach( this.listener );
+        final NewLiferayPluginProjectOp op = op();
+
+        op.getProjectProvider().attach( this.listener );
+        op.getPluginsSDKName().attach( this.listener );
+        op.getProjectName().attach( this.listener );
     }
 
     @Override
@@ -53,13 +55,13 @@ public class UseDefaultLocationValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final NewLiferayPluginProjectOp op = context( NewLiferayPluginProjectOp.class );
+        final NewLiferayPluginProjectOp op = op();
 
-        if( op.getProjectName().content() != null && 
+        if( op.getProjectName().content() != null &&
             "ant".equals( op.getProjectProvider().content().getShortName() ) &&
             ! op.getUseDefaultLocation().content() )
         {
-            if( ! ProjectUtil.canUseCustomLocation( op ) )
+            if( ! NewLiferayPluginProjectOpMethods.canUseCustomLocation( op ) )
             {
                 retval = Status.createErrorStatus( "The sdk of lower version is not allowed to use custom location." );
             }
@@ -71,10 +73,15 @@ public class UseDefaultLocationValidationService extends ValidationService
     @Override
     public void dispose()
     {
-        context( NewLiferayPluginProjectOp.class ).getProjectProvider().detach( this.listener );
-        context( NewLiferayPluginProjectOp.class ).getPluginsSDKName().detach( this.listener );
-        context( NewLiferayPluginProjectOp.class ).getProjectName().detach( this.listener );
-        
+        final NewLiferayPluginProjectOp op = op();
+
+        op.getProjectProvider().detach( this.listener );
+        op.getPluginsSDKName().detach( this.listener );
+        op.getProjectName().detach( this.listener );
     }
 
+    private NewLiferayPluginProjectOp op()
+    {
+        return context( NewLiferayPluginProjectOp.class );
+    }
 }

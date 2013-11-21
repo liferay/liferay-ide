@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
@@ -45,8 +45,10 @@ public class UseSdkLocationValidationService extends ValidationService
             }
         };
 
-      context( NewLiferayPluginProjectOp.class ).getPluginsSDKName().attach( this.listener);
-      context( NewLiferayPluginProjectOp.class ).getUseSdkLocation().attach( this.listener);
+      final NewLiferayPluginProjectOp op = op();
+
+      op.getPluginsSDKName().attach( this.listener);
+      op.getUseSdkLocation().attach( this.listener);
     }
 
     @Override
@@ -54,13 +56,13 @@ public class UseSdkLocationValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final NewLiferayPluginProjectOp op = context( NewLiferayPluginProjectOp.class );
+        final NewLiferayPluginProjectOp op = op();
 
         if( "ant".equals( op.getProjectProvider().content().getShortName() ) && ! op.getUseSdkLocation().content() ) //$NON-NLS-1$
         {
-            if( ! ProjectUtil.canUseCustomLocation( op ) )
+            if( ! NewLiferayPluginProjectOpMethods.canUseCustomLocation( op ) )
             {
-                retval = 
+                retval =
                     Status.createErrorStatus( "The lower version SDK is not allowed to use Eclipse workspace as base for project location." );
             }
         }
@@ -71,8 +73,15 @@ public class UseSdkLocationValidationService extends ValidationService
     @Override
     public void dispose()
     {
-        context( NewLiferayPluginProjectOp.class ).getUseSdkLocation().detach( this.listener );
-        context( NewLiferayPluginProjectOp.class ).getPluginsSDKName().detach( this.listener);
+        final NewLiferayPluginProjectOp op = op();
+
+        op.getUseSdkLocation().detach( this.listener );
+        op.getPluginsSDKName().detach( this.listener);
+    }
+
+    private NewLiferayPluginProjectOp op()
+    {
+        return context( NewLiferayPluginProjectOp.class );
     }
 
 }
