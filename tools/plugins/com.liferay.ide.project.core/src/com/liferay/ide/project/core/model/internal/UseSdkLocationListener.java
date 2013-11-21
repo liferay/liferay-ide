@@ -20,9 +20,11 @@ import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class UseSdkLocationListener extends ProjectNameListener
 {
+
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
@@ -30,12 +32,12 @@ public class UseSdkLocationListener extends ProjectNameListener
 
         if( op.getUseDefaultLocation().content( true ) )
         {
-            super.handleTypedEvent( event );
-        }
-        else
-        {
-            op.setLocation( (String) null );
-        }
+            if( op.getUseSdkLocation().content() ||
+                op.getProjectProvider().service( UseSdkLocationValidationService.class ).validation().ok() )
+            {
+                super.handleTypedEvent( event );
 
+            }
+        }
     }
 }

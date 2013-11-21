@@ -36,9 +36,10 @@ import com.liferay.ide.project.core.model.internal.ProjectProviderListener;
 import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.RuntimeNameValidationService;
 import com.liferay.ide.project.core.model.internal.ThemeFrameworkValidationService;
-import com.liferay.ide.project.core.model.internal.UseDefaultLocationEnablementService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationListener;
+import com.liferay.ide.project.core.model.internal.UseDefaultLocationValidationService;
 import com.liferay.ide.project.core.model.internal.UseSdkLocationListener;
+import com.liferay.ide.project.core.model.internal.UseSdkLocationValidationService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -68,6 +69,7 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
 public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferayRuntime
 {
@@ -101,7 +103,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     @DefaultValue( text = "true" )
     @Label( standard = "use default location" )
     @Listeners( UseDefaultLocationListener.class )
-    @Service( impl = UseDefaultLocationEnablementService.class )
+    @Service( impl = UseDefaultLocationValidationService.class )
     ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" ); //$NON-NLS-1$
 
     Value<Boolean> getUseDefaultLocation();
@@ -135,7 +137,8 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
         value=
         {
             @Service( impl = ProjectProviderPossibleValuesService.class ),
-            @Service( impl = ProjectProviderDefaultValueService.class )
+            @Service( impl = ProjectProviderDefaultValueService.class ),
+            @Service( impl = UseSdkLocationValidationService.class )
         }
     )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$

@@ -30,6 +30,7 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class LocationValidationService extends ValidationService
 {
@@ -59,7 +60,9 @@ public class LocationValidationService extends ValidationService
         final Path currentProjectLocation = op().getLocation().content( true );
         final String currentProjectName = op().getProjectName().content();
 
-        if( ! op().getUseDefaultLocation().content( true ) )
+        // Location won't be validated if the UseDefaultLocation has an error.
+        if( ! op().getUseDefaultLocation().content( true ) &&
+            op().getUseDefaultLocation().service( UseDefaultLocationValidationService.class ).validation().ok() )
         {
             /*
              * IDE-1150, instead of using annotation "@Required",use this service to validate the custom project
@@ -143,6 +146,8 @@ public class LocationValidationService extends ValidationService
         };
 
         op().getProjectName().attach( this.listener );
+        op().getPluginsSDKName().attach( this.listener );
+        op().getProjectProvider().attach( this.listener );
     }
 
     private NewLiferayPluginProjectOp op()

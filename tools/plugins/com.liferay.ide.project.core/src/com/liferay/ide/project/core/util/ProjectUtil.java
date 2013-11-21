@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -27,6 +28,8 @@ import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelPro
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
@@ -86,6 +89,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -96,6 +100,37 @@ public class ProjectUtil
 {
 
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
+
+    public static boolean canUseCustomLocation( NewLiferayPluginProjectOp op )
+    {
+        boolean retval = false;
+
+        if( op.getProjectProvider().content( true ).getShortName().equals( "maven" ) )
+        {
+            retval = true;
+        }
+        else
+        {
+            final SDK sdk = SDKManager.getInstance().getSDK( op.getPluginsSDKName().content( true ) );
+
+            if( sdk != null )
+            {
+                final Version version = new Version( sdk.getVersion() );
+
+                final boolean greaterThan611 = CoreUtil.compareVersions( version, ILiferayConstants.V611 ) > 0;
+                final boolean lessThan6110 = CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0;
+                final boolean greaterThanEqualTo6130 =
+                    CoreUtil.compareVersions( version, ILiferayConstants.V6130 ) >= 0;
+
+                if( ( greaterThan611 && lessThan6110 ) || greaterThanEqualTo6130 )
+                {
+                    retval = true;
+                }
+            }
+        }
+
+        return retval;
+    }
 
     public static boolean collectProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,

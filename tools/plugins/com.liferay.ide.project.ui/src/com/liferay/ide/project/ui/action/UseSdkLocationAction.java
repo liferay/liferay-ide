@@ -14,11 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.action;
 
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
 
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.FilteredListener;
@@ -29,11 +25,11 @@ import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
-import org.osgi.framework.Version;
 
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class UseSdkLocationAction extends PropertyEditorActionHandler
 {
@@ -59,7 +55,7 @@ public class UseSdkLocationAction extends PropertyEditorActionHandler
         };
 
         op.property( NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER ).attach( listener );
-        op.property( NewLiferayPluginProjectOp.PROP_PLUGINS_SDK_NAME ).attach( listener );
+        op.property( NewLiferayPluginProjectOp.PROP_USE_DEFAULT_LOCATION).attach( listener );
 
         final Listener disposeListener = new FilteredListener<DisposeEvent>()
         {
@@ -67,7 +63,7 @@ public class UseSdkLocationAction extends PropertyEditorActionHandler
             protected void handleTypedEvent( final DisposeEvent event )
             {
                 op.property( NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER ).detach( listener );
-                op.property( NewLiferayPluginProjectOp.PROP_PLUGINS_SDK_NAME ).detach( listener );
+                op.property( NewLiferayPluginProjectOp.PROP_USE_DEFAULT_LOCATION).detach( listener );
             }
         };
 
@@ -77,32 +73,15 @@ public class UseSdkLocationAction extends PropertyEditorActionHandler
     @Override
     protected boolean computeEnablementState()
     {
-        boolean enabled = false;
-
         final NewLiferayPluginProjectOp op = op();
 
-        final boolean ant = op.getProjectProvider().content( true ).getShortName().equals( "ant" ); //$NON-NLS-1$
-
-        if( ant )
+        if( op.getProjectProvider().content( true ).getShortName().equals( "ant" ) &&
+            op.getUseDefaultLocation().content( true ) )
         {
-            final SDK sdk = SDKManager.getInstance().getSDK( op.getPluginsSDKName().content( true ) );
-
-            if( sdk != null )
-            {
-                final Version version = new Version( sdk.getVersion() );
-
-                final boolean greaterThan611 = CoreUtil.compareVersions( version, ILiferayConstants.V611 ) > 0;
-                final boolean lessThan6110 = CoreUtil.compareVersions( version, ILiferayConstants.V6110 ) < 0;
-                final boolean greaterThanEqualTo6120 = CoreUtil.compareVersions( version, ILiferayConstants.V6120 ) >= 0;
-
-                if( ( greaterThan611 && lessThan6110 ) || greaterThanEqualTo6120 )
-                {
-                    enabled = true;
-                }
-            }
+            return true;
         }
 
-        return enabled;
+        return false;
     }
 
     private NewLiferayPluginProjectOp op()
