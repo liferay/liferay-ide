@@ -431,16 +431,19 @@
       </liferayProjectProvider>
    </extension>
    <extension
-         id="PluginsSDKProjectValidator"
-         name="%plugins.sdk.project.validator.name"
+         id="LiferayProjectValidator"
+         name="%liferay.project.validator.name"
          point="org.eclipse.wst.common.project.facet.core.validators">
       <validator
-            class="com.liferay.ide.project.core.PluginsSDKProjectValidator">
+            class="com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator">
+      </validator>
+      <validator
+            class="com.liferay.ide.project.core.LiferayProjectLanguageFileValidator">
       </validator>
    </extension>
    <extension
-         id="PluginsSDKProjectMarker"
-         name="%plugins.sdk.project.problem.name"
+         id="LiferayProjectMarker"
+         name="%liferay.project.problem.name"
          point="org.eclipse.core.resources.markers">
       <super
             type="org.eclipse.core.resources.problemmarker">

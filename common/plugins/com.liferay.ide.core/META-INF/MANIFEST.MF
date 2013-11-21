@@ -24,7 +24,9 @@ Require-Bundle: org.eclipse.ant.core,
  org.eclipse.core.expressions,
  org.eclipse.core.net,
  org.eclipse.wst.common.project.facet.core,
- org.eclipse.wst.validation
+ org.eclipse.wst.validation,
+ org.eclipse.core.contenttype,
+ org.eclipse.core.filesystem
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core,

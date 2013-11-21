@@ -39,6 +39,9 @@ import org.osgi.framework.BundleContext;
 public class LiferayProjectCore extends LiferayCore
 {
 
+    // The liferay project marker type
+    public static final String LIFERAY_PROJECT_MARKR_TYPE = "com.liferay.ide.project.core.LiferayProjectMarker";
+
     // The shared instance
     private static LiferayProjectCore plugin;
 
@@ -52,6 +55,9 @@ public class LiferayProjectCore extends LiferayCore
     // The key of default project build type for creating a new liferay plug in project
     public static final String PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION = "project-default-build-type-option";
 
+    // The key of using snapshot vresion stored in prefernce store
+    public static final String PREF_USE_SNAPSHOT_VERSION = "use-snapshot-version";
+
     public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
 
     // The value of ant build type
@@ -59,9 +65,6 @@ public class LiferayProjectCore extends LiferayCore
 
     // The value of maven build type
     public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
-
-    // The key of using snapshot vresion stored in prefernce store
-    public static final String PREF_USE_SNAPSHOT_VERSION = "use-snapshot-version";
 
     /**
      * Returns the shared instance

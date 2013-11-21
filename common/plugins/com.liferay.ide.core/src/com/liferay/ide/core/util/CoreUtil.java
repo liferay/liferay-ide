@@ -568,6 +568,11 @@ public class CoreUtil
         return false;
     }
 
+    public static boolean isValidLiferayLanguageFileName( String name )
+    {
+        return name.matches( "Language.*\\.properties" );
+    }
+
     public static void makeFolders( IFolder folder ) throws CoreException
     {
         if( folder == null )
@@ -749,4 +754,5 @@ public class CoreUtil
         out.flush();
         out.close();
     }
+
 }

@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -46,6 +47,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -154,7 +157,7 @@ public class ProjectUtil
             }
             else if( file.isFile() && file.getName().equals( dotProject ) )
             {
-                if( !eclipseProjectFiles.contains( file ) && isLiferaySDKProjectDir( file.getParentFile() ) )
+                if( ! eclipseProjectFiles.contains( file ) && isLiferaySDKProjectDir( file.getParentFile() ) )
                 {
                     eclipseProjectFiles.add( file );
 
@@ -171,13 +174,13 @@ public class ProjectUtil
         {
             if( contents[i].isDirectory() )
             {
-                if( !contents[i].getName().equals( METADATA_FOLDER ) )
+                if( ! contents[i].getName().equals( METADATA_FOLDER ) )
                 {
                     try
                     {
                         String canonicalPath = contents[i].getCanonicalPath();
 
-                        if( !directoriesVisited.add( canonicalPath ) )
+                        if( ! directoriesVisited.add( canonicalPath ) )
                         {
 
                             // already been here --> do not recurse
@@ -191,7 +194,7 @@ public class ProjectUtil
 
                     // dont recurse directories that we have already determined
                     // are Liferay projects
-                    if( !liferayProjectDirs.contains( contents[i] ) && recurse )
+                    if( ! liferayProjectDirs.contains( contents[i] ) && recurse )
                     {
                         collectProjectsFromDirectory(
                             eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, recurse, monitor );
@@ -201,6 +204,43 @@ public class ProjectUtil
         }
 
         return true;
+    }
+
+    // IDE-1129
+    public static void encodeLanguageFilesToDefault( IProject proj, final IProgressMonitor monitor )
+    {
+        final IFolder[] sourceFolders = getSourceFolders( proj );
+
+        for( IFolder sourceFolder : sourceFolders )
+        {
+            try
+            {
+                sourceFolder.accept( new IResourceProxyVisitor()
+                {
+                    public boolean visit( IResourceProxy proxy ) throws CoreException
+                    {
+                        if( proxy.getType() == IResource.FILE &&
+                            CoreUtil.isValidLiferayLanguageFileName( proxy.getName() ) )
+                        {
+                            final IFile file = (IFile) proxy.requestResource();
+
+                            if( ! file.getCharset( true ).equals(
+                                ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
+                            {
+                                file.setCharset(
+                                    ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET, monitor );
+                            }
+                        }
+
+                        return true;
+                    }
+                }, IResource.DEPTH_INFINITE, IContainer.EXCLUDE_DERIVED );
+            }
+            catch( CoreException e )
+            {
+                LiferayProjectCore.logError( e );
+            }
+        }
     }
 
     public static String convertToDisplayName( String name )
@@ -341,11 +381,12 @@ public class ProjectUtil
         // we are importing so set flag to not create anything
         newProjectDataModel.setBooleanProperty( IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false );
 
-        final IDataModel nestedModel = newProjectDataModel.getNestedModel( IPluginProjectDataModelProperties.NESTED_PROJECT_DM );
+        final IDataModel nestedModel =
+            newProjectDataModel.getNestedModel( IPluginProjectDataModelProperties.NESTED_PROJECT_DM );
 
         if( op != null )
         {
-            if( op.getUseDefaultLocation().content( true ) && !op.getUseSdkLocation().content( true ) )
+            if( op.getUseDefaultLocation().content( true ) && ! op.getUseSdkLocation().content( true ) )
             {
                 // using Eclipse workspace location
                 nestedModel.setBooleanProperty( IPluginProjectDataModelProperties.USE_DEFAULT_LOCATION, true );
@@ -361,7 +402,7 @@ public class ProjectUtil
                     IPluginProjectDataModelProperties.USER_DEFINED_LOCATION,
                     op.getLocation().content( true ).toOSString() );
 
-                if( !op.getUseDefaultLocation().content( true ) )
+                if( ! op.getUseDefaultLocation().content( true ) )
                 {
                     newProjectDataModel.setBooleanProperty(
                         IPluginProjectDataModelProperties.LIFERAY_USE_CUSTOM_LOCATION, true );
@@ -375,13 +416,14 @@ public class ProjectUtil
 
         setGenerateDD( newProjectDataModel, false );
 
-        IPath webXmlPath = projectRecord.getProjectLocation().append( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml" ); //$NON-NLS-1$
+        IPath webXmlPath =
+            projectRecord.getProjectLocation().append( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml" ); //$NON-NLS-1$
 
         if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
         {
             newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true );
 
-            if( !( webXmlPath.toFile().exists() ) )
+            if( ! ( webXmlPath.toFile().exists() ) )
             {
                 createDefaultWebXml( webXmlPath.toFile() );
             }
@@ -390,7 +432,7 @@ public class ProjectUtil
         {
             newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true );
 
-            if( !( webXmlPath.toFile().exists() ) )
+            if( ! ( webXmlPath.toFile().exists() ) )
             {
                 createDefaultWebXml( webXmlPath.toFile() );
             }
@@ -403,7 +445,7 @@ public class ProjectUtil
 
             newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true );
 
-            if( !( webXmlPath.toFile().exists() ) )
+            if( ! ( webXmlPath.toFile().exists() ) )
             {
                 createDefaultWebXml( webXmlPath.toFile() );
             }
@@ -418,7 +460,8 @@ public class ProjectUtil
         }
 
         IFacetedProjectWorkingCopy fpwc =
-            (IFacetedProjectWorkingCopy) newProjectDataModel.getProperty( IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY );
+            (IFacetedProjectWorkingCopy) newProjectDataModel. 
+                getProperty( IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY );
         fpwc.setProjectName( projectRecord.getProjectName() );
 
         final IPath projectLocation = projectRecord.getProjectLocation();
@@ -456,7 +499,7 @@ public class ProjectUtil
         }
 
         // if project is located in natural workspace location then don't need to set a project location
-        if ( CoreUtil.getWorkspaceRoot().getLocation().append(projectDirName).equals( projectLocation ) )
+        if( CoreUtil.getWorkspaceRoot().getLocation().append( projectDirName ).equals( projectLocation ) )
         {
             fpwc.setProjectLocation( null );
         }
@@ -466,15 +509,19 @@ public class ProjectUtil
         return fpwc.getProject();
     }
 
-    public static void deleteProjectMarkers( IProject proj, String markerType ) throws CoreException
+    public static void deleteProjectMarkers( IProject proj, String markerType, Set<String> markerSourceIds )
+        throws CoreException
     {
-        if( proj.isOpen())
+        if( proj.isOpen() )
         {
             IMarker[] markers = proj.findMarkers( markerType, true, IResource.DEPTH_INFINITE );
 
             for( IMarker marker : markers )
             {
-                marker.delete();
+                if( markerSourceIds.contains( marker.getAttribute( IMarker.SOURCE_ID ) ) )
+                {
+                    marker.delete();
+                }
             }
         }
 
@@ -535,7 +582,7 @@ public class ProjectUtil
 
                     IClasspathAttribute[] attrs = entry.getExtraAttributes();
 
-                    if( !CoreUtil.isNullOrEmpty( attrs ) )
+                    if( ! CoreUtil.isNullOrEmpty( attrs ) )
                     {
                         for( IClasspathAttribute attr : attrs )
                         {
@@ -854,11 +901,11 @@ public class ProjectUtil
                     IVirtualResource[] vResources = ComponentCore.createResources( resource );
                     boolean found = false;
 
-                    for( int j = 0; !found && j < vResources.length; j++ )
+                    for( int j = 0; ! found && j < vResources.length; j++ )
                     {
                         if( vResources[j].getComponent().equals( vc ) )
                         {
-                            if( !list.contains( roots[i] ) )
+                            if( ! list.contains( roots[i] ) )
                             {
                                 list.add( roots[i] );
                             }
@@ -875,7 +922,7 @@ public class ProjectUtil
                 {
                     if( root.getKind() == IPackageFragmentRoot.K_SOURCE )
                     {
-                        if( !list.contains( root ) )
+                        if( ! list.contains( root ) )
                         {
                             list.add( root );
                         }
@@ -986,6 +1033,52 @@ public class ProjectUtil
     public static boolean hasFacet( IProject project, String facetId )
     {
         return hasFacet( project, ProjectFacetsManager.getProjectFacet( facetId ) );
+    }
+
+    // IDE-1229
+    public static boolean hasNonDefaultEncodingLanguageFile( IProject proj )
+    {
+        final IFolder[] sourceFolders = ProjectUtil.getSourceFolders( proj );
+
+        final boolean[] retval = { false };
+
+        for( IFolder sourceFolder : sourceFolders )
+        {
+            try
+            {
+                sourceFolder.accept( new IResourceProxyVisitor()
+                {
+                    public boolean visit( IResourceProxy proxy ) throws CoreException
+                    {
+                        if( proxy.getType() == IResource.FILE &&
+                            CoreUtil.isValidLiferayLanguageFileName( proxy.getName() ) )
+                        {
+                            final IFile file = (IFile) proxy.requestResource();
+
+                            if( ! file.getCharset( true ).equals(
+                                ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
+                            {
+                                retval[0] = true;
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                }, IResource.DEPTH_INFINITE, IContainer.EXCLUDE_DERIVED);
+            }
+            catch( CoreException e )
+            {
+                LiferayProjectCore.logError( e );
+            }
+
+            if( retval[0] )
+            {
+                return retval[0];
+            }
+        }
+
+        return retval[0];
     }
 
     public static boolean hasProperty( IDataModel model, String propertyName )
@@ -1273,7 +1366,7 @@ public class ProjectUtil
         return string.replaceFirst( regex, StringPool.EMPTY );
     }
 
-    public static void setDefaultRuntime(IDataModel dataModel)
+    public static void setDefaultRuntime( IDataModel dataModel )
     {
         DataModelPropertyDescriptor[] validDescriptors =
             dataModel.getValidPropertyDescriptors( IFacetProjectCreationDataModelProperties.FACET_RUNTIME );
@@ -1288,18 +1381,6 @@ public class ProjectUtil
                 break;
             }
         }
-    }
-
-    public static void setProjectMarker(
-        IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation, String markerSourceId )
-        throws CoreException
-    {
-        IMarker marker = proj.createMarker( markerType );
-
-        marker.setAttribute( IMarker.SEVERITY, markerSeverity );
-        marker.setAttribute( IMarker.MESSAGE, markerMsg );
-        marker.setAttribute( IMarker.LOCATION, markerLocation );
-        marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
     }
 
     public static void setGenerateDD( IDataModel model, boolean generateDD )
@@ -1323,6 +1404,18 @@ public class ProjectUtil
         }
     }
 
+    public static void setProjectMarker(
+        IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
+        String markerSourceId ) throws CoreException
+    {
+        IMarker marker = proj.createMarker( markerType );
+
+        marker.setAttribute( IMarker.SEVERITY, markerSeverity );
+        marker.setAttribute( IMarker.MESSAGE, markerMsg );
+        marker.setAttribute( IMarker.LOCATION, markerLocation );
+        marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
+    }
+
     private static class Msgs extends NLS
     {
         public static String checking;
@@ -1333,4 +1426,5 @@ public class ProjectUtil
             initializeMessages( ProjectUtil.class.getName(), Msgs.class );
         }
     }
+
 }

@@ -15,6 +15,9 @@
 
 package com.liferay.ide.project.core;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -31,10 +34,8 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class PluginsSDKProjectValidator implements IFacetedProjectValidator
+public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidator
 {
-
-    public static final String MARKER_TYPE = "com.liferay.ide.project.core.PluginsSDKProjectMarker"; //$NON-NLS-1$
 
     public static final String LOCATION_TARGETED_RUNTIMES = "Targeted Runtimes"; //$NON-NLS-1$
 
@@ -53,21 +54,23 @@ public class PluginsSDKProjectValidator implements IFacetedProjectValidator
     {
         final IProject proj = fproj.getProject();
 
-        deletePreviousMarkers( proj );
+        ProjectUtil.deleteProjectMarkers( proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, getMarkerSourceIds() );
 
         if( SDKUtil.isSDKProject( fproj.getProject() ) )
         {
             if( fproj.getPrimaryRuntime() == null )
             {
-                setMarker(
-                    proj, MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
+                ProjectUtil.setProjectMarker(
+                    proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR,
+                    MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
             }
             else
             {
-                if( !ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
+                if( ! ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
                 {
-                    setMarker(
-                        proj, MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
+                    ProjectUtil.setProjectMarker(
+                        proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR,
+                        MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
                         ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
                 }
             }
@@ -75,29 +78,14 @@ public class PluginsSDKProjectValidator implements IFacetedProjectValidator
         }
     }
 
-    protected void deletePreviousMarkers( IProject proj )
+    private Set<String> getMarkerSourceIds()
     {
-        try
-        {
-            ProjectUtil.deleteProjectMarkers( proj, MARKER_TYPE );
-        }
-        catch( CoreException e )
-        {
-            LiferayProjectCore.logError( e );
-        }
-    }
+        Set<String> markerSourceIds = new HashSet<String>();
 
-    protected void setMarker( IProject proj, String markerMsg, String markerLocation, String markerSourceId )
-    {
-        try
-        {
-            ProjectUtil.setProjectMarker(
-                proj, MARKER_TYPE, IMarker.SEVERITY_ERROR, markerMsg, markerLocation, markerSourceId );
-        }
-        catch( CoreException e )
-        {
-            LiferayProjectCore.logError( e );
-        }
+        markerSourceIds.add( ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
+        markerSourceIds.add( ID_PRIMARY_RUNTIME_NOT_SET );
+
+        return markerSourceIds;
     }
 
     private static class Msgs extends NLS
@@ -107,7 +95,7 @@ public class PluginsSDKProjectValidator implements IFacetedProjectValidator
 
         static
         {
-            initializeMessages( PluginsSDKProjectValidator.class.getName(), Msgs.class );
+            initializeMessages( PluginsSDKProjectRuntimeValidator.class.getName(), Msgs.class );
         }
     }
 

@@ -20,12 +20,16 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
 
-import com.liferay.ide.project.core.PluginsSDKProjectValidator;
+import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.LiferayProjectLanguageFileValidator;
+import com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator;
 
 /**
+ * 
  * @author Kuo Zhang
+ *
  */
-public class PluginsSDKProjectMarkerResolutionGenerator implements IMarkerResolutionGenerator2
+public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 {
 
     public IMarkerResolution[] getResolutions( IMarker marker )
@@ -36,13 +40,17 @@ public class PluginsSDKProjectMarkerResolutionGenerator implements IMarkerResolu
         {
             final String markerSourceId = (String) marker.getAttribute( IMarker.SOURCE_ID );
 
-            if( markerSourceId.equals( PluginsSDKProjectValidator.ID_PRIMARY_RUNTIME_NOT_SET ) )
+            if( markerSourceId.equals( PluginsSDKProjectRuntimeValidator.ID_PRIMARY_RUNTIME_NOT_SET ) )
             {
                 resolution = new PrimaryRuntimeNotSetResolution();
             }
-            else if( markerSourceId.equals( PluginsSDKProjectValidator.ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME ) )
+            else if( markerSourceId.equals( PluginsSDKProjectRuntimeValidator.ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME ) )
             {
                 resolution = new PrimaryRuntimeNotLiferayRuntimeResolution();
+            }
+            else if( markerSourceId.equals( LiferayProjectLanguageFileValidator.ID_LANGUAGE_FILE_Encoding_NOT_DEFAULT) )
+            {
+                resolution = new LanguageFileEncodingNotDefaultResolution();
             }
 
         }
@@ -58,7 +66,7 @@ public class PluginsSDKProjectMarkerResolutionGenerator implements IMarkerResolu
     {
         try
         {
-            return marker.getType().equals( PluginsSDKProjectValidator.MARKER_TYPE );
+            return marker.getType().equals( LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE );
         }
         catch( CoreException e )
         {
