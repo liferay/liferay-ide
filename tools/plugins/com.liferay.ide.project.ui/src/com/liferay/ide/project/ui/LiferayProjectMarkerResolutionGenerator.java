@@ -15,19 +15,17 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.LiferayProjectLanguageFileValidator;
+import com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator2;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.LiferayProjectLanguageFileValidator;
-import com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator;
-
 /**
- * 
  * @author Kuo Zhang
- *
  */
 public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 {

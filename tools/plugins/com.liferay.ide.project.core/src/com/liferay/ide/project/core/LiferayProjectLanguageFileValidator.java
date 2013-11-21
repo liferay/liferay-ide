@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.project.core.util.ProjectUtil;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,12 +27,8 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectValidator;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
-
 /**
- * 
  * @author Kuo Zhang
- *
  */
 public class LiferayProjectLanguageFileValidator implements IFacetedProjectValidator
 {
@@ -73,6 +71,6 @@ public class LiferayProjectLanguageFileValidator implements IFacetedProjectValid
         }
     }
 
-   
+
 
 }

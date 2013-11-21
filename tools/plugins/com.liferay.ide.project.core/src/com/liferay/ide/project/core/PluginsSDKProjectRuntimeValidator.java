@@ -15,12 +15,12 @@
 
 package com.liferay.ide.project.core;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -36,12 +36,10 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 @SuppressWarnings( "restriction" )
 public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidator
 {
+    public static final String LOCATION_TARGETED_RUNTIMES = "Targeted Runtimes";
 
-    public static final String LOCATION_TARGETED_RUNTIMES = "Targeted Runtimes"; //$NON-NLS-1$
-
-    public static final String ID_PRIMARY_RUNTIME_NOT_SET = "primary-runtime-not-set"; //$NON-NLS-1$
-    public static final String ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME =
-                                                       "primary-runtime-not-liferay-runtime"; //$NON-NLS-1$
+    public static final String ID_PRIMARY_RUNTIME_NOT_SET = "primary-runtime-not-set";
+    public static final String ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = "primary-runtime-not-liferay-runtime";
 
     public static final String MSG_PRIMARY_RUNTIME_NOT_SET = Msgs.primaryRuntimeNotSet;
     public static final String MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = Msgs.primaryRuntimeNotLiferayRuntime;
@@ -74,7 +72,6 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                         ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
                 }
             }
-
         }
     }
 

@@ -40,18 +40,21 @@ public class LanguageFileEncodingNotDefaultResolution implements IMarkerResoluti
 
             try
             {
-                PlatformUI.getWorkbench().getProgressService().run( true, true, new IRunnableWithProgress()
-                {
-
-                    public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                PlatformUI.getWorkbench().getProgressService().run
+                (
+                    true, true,
+                    new IRunnableWithProgress()
                     {
-                        monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
+                        public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                        {
+                            monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
 
-                        ProjectUtil.encodeLanguageFilesToDefault( proj, monitor );
+                            ProjectUtil.encodeLanguageFilesToDefault( proj, monitor );
 
-                        monitor.done();
+                            monitor.done();
+                        }
                     }
-                } );
+                );
             }
             catch( Exception e )
             {

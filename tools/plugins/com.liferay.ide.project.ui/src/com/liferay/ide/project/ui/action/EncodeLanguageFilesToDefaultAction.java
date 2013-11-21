@@ -15,6 +15,9 @@
 
 package com.liferay.ide.project.ui.action;
 
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.ui.ProjectUIPlugin;
+
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IProject;
@@ -28,9 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
-
 /**
  * @author Kuo Zhang
  */
@@ -41,7 +41,7 @@ public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
 
     public EncodeLanguageFilesToDefaultAction()
     {
-
+        super();
     }
 
     public void run( IAction action )
@@ -84,7 +84,6 @@ public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
 
     public void setActivePart( IAction action, IWorkbenchPart targetPart )
     {
-
     }
 
 }
