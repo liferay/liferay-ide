@@ -63,7 +63,7 @@ public class UseSdkLocationValidationService extends ValidationService
             if( ! NewLiferayPluginProjectOpMethods.canUseCustomLocation( op ) )
             {
                 retval =
-                    Status.createErrorStatus( "The lower version SDK is not allowed to use Eclipse workspace as base for project location." );
+                    Status.createErrorStatus( "The selected Plugins SDK does not support using Eclipse workspace as base for project location.  Please configure a higher version." );
             }
         }
 
