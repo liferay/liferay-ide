@@ -26,6 +26,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.internal.utils.FileUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.ITextContentDescriber;
@@ -33,6 +34,7 @@ import org.eclipse.core.runtime.content.ITextContentDescriber;
 /**
  * @author Kuo Zhang
  */
+@SuppressWarnings( "restriction" )
 public class LiferayLanguageFileDescriber implements ITextContentDescriber
 {
 
@@ -41,7 +43,6 @@ public class LiferayLanguageFileDescriber implements ITextContentDescriber
         super();
     }
 
-    @SuppressWarnings( "restriction" )
     public int describe( InputStream contents, IContentDescription description ) throws IOException
     {
         int retval = INVALID;
@@ -70,24 +71,83 @@ public class LiferayLanguageFileDescriber implements ITextContentDescriber
                     retval = VALID;
                 }
             }
-
         }
         catch( Exception e )
         {
-
+            // ignore errors
         }
 
         return retval;
     }
 
+    public int describe( Reader contents, IContentDescription description ) throws IOException
+    {
+        try
+        {
+            final Field documentReaderField = contents.getClass().getDeclaredField( "in" );
+
+            documentReaderField.setAccessible( true );
+
+            final Object documentReader = documentReaderField.get( contents );
+
+            final Field fDocumentField = documentReader.getClass().getDeclaredField( "fDocument" );
+
+            fDocumentField.setAccessible( true );
+
+            final Object fDocument = fDocumentField.get( documentReader );
+
+            final Field fDocumentListenersField = fDocument.getClass().getSuperclass().getSuperclass().getDeclaredField( "fDocumentListeners" );
+
+            fDocumentListenersField.setAccessible( true );
+
+            final ListenerList fDocumentListeners = (ListenerList) fDocumentListenersField.get( fDocument );
+
+            final Object[] listeners = fDocumentListeners.getListeners();
+
+            for( Object listener : listeners )
+            {
+                try
+                {
+                    final Field fFileField = listener.getClass().getEnclosingClass().getSuperclass().getDeclaredField( "fFile" );
+
+                    fFileField.setAccessible( true );
+
+                    // get enclosing instance of listener
+
+                    final Field thisField = listener.getClass().getDeclaredField( "this$0" );
+
+                    thisField.setAccessible( true );
+
+                    Object enclosingObject = thisField.get( listener );
+
+                    Object fFile = fFileField.get( enclosingObject );
+
+                    if( fFile instanceof IFile )
+                    {
+                        IFile file = (IFile) fFile;
+
+                        if( file.getProject() != null && CoreUtil.isLiferayProject( file.getProject() ) )
+                        {
+                            return VALID;
+                        }
+                    }
+                }
+                catch( Exception e )
+                {
+                }
+            }
+        }
+        catch ( Exception e )
+        {
+            // ignore errors
+        }
+
+        return INVALID;
+    }
+
     public QualifiedName[] getSupportedOptions()
     {
         return null;
-    }
-
-    public int describe( Reader contents, IContentDescription description ) throws IOException
-    {
-        return INVALID;
     }
 
 }

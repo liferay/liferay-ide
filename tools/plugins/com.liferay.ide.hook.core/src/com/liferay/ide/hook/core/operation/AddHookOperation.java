@@ -356,8 +356,6 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
                     if( createdFile != null )
                     {
-                        createdFile.setCharset( "UTF-8", null ); //$NON-NLS-1$
-
                         Set<IFile> languageFilesCreated =
                             (Set<IFile>) dm.getProperty( LANGUAGE_PROPERTIES_FILES_CREATED );
 

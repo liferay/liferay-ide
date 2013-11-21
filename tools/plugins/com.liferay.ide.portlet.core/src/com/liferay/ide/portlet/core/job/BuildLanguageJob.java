@@ -146,16 +146,6 @@ public class BuildLanguageJob extends Job
             PortletCore.logError( e );
         }
 
-        // check generated properties files and set to UTF8
-        for( IResource file : langFile.getParent().members() )
-        {
-            if( file.getName().matches( "Language_.*\\.properties" ) ) //$NON-NLS-1$
-            {
-                IFile generatedLangFile = (IFile) file;
-                generatedLangFile.setCharset( "UTF-8", monitor ); //$NON-NLS-1$
-            }
-        }
-
         if( retval == null || ! retval.isOK() )
         {
             throw new CoreException( retval );
