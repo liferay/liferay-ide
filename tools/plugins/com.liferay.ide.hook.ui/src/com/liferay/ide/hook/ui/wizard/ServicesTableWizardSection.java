@@ -76,7 +76,6 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
     {
         protected String[] buttonLabels;
         protected CLabel errorMessageLabel;
-        
 
         public AddServiceDialog( Shell shell, String windowTitle, String[] labelsForTextField, String[] buttonLabels )
         {
@@ -90,7 +89,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
         }
 
         @Override
-        protected Control createContents(Composite parent) 
+        protected Control createContents(Composite parent)
         {
             Composite composite = (Composite) super.createContents(parent);
             getButton(IDialogConstants.OK_ID).setEnabled(false);
@@ -98,7 +97,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
         }
 
         @Override
-        public Control createDialogArea(Composite parent) 
+        public Control createDialogArea(Composite parent)
         {
             super.createDialogArea( parent );
 
@@ -295,7 +294,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
         }
 
         @Override
-        public void modifyText(ModifyEvent e) 
+        public void modifyText(ModifyEvent e)
         {
             boolean serviceTypeValid = false;
             boolean implClassValid = false;
@@ -342,11 +341,10 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             Shell shell, String windowTitle, String[] labelsForTextField, String[] valuesForTextField )
         {
             super( shell, windowTitle, labelsForTextField, valuesForTextField );
-
         }
 
         @Override
-        public Control createDialogArea(Composite parent) 
+        public Control createDialogArea(Composite parent)
         {
 
             super.createDialogArea( parent );
@@ -361,7 +359,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
         }
 
         @Override
-        public void modifyText(ModifyEvent e) 
+        public void modifyText(ModifyEvent e)
         {
             boolean serviceTypeValid = false;
             boolean implClassValid = false;
@@ -437,25 +435,32 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
     }
 
     @Override
-    protected void handleEditButtonSelected() 
+    protected void handleEditButtonSelected()
     {
         ISelection s = viewer.getSelection();
+
         if (!(s instanceof IStructuredSelection))
+        {
             return;
+        }
+
         IStructuredSelection selection = (IStructuredSelection) s;
+
         if (selection.size() != 1)
+        {
             return;
-        
+        }
+
         Object selectedObj = selection.getFirstElement();
         String[] valuesForText = (String[]) selectedObj;
-        
+
         EditServiceDialog dialog = new EditServiceDialog(getShell(), dialogTitle, fieldLabels, valuesForText);
         dialog.open();
+
         String[] stringArray = dialog.getStringArray();
         editStringArray(valuesForText, stringArray);
-    }   
-    
-    
+    }
+
     private static class Msgs extends NLS
     {
         public static String addService;

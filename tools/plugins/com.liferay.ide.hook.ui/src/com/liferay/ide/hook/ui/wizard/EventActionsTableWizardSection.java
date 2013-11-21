@@ -69,7 +69,6 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
     protected class AddEventActionDialog extends AddStringArrayDialog
     {
-
         protected String[] buttonLabels;
         protected CLabel errorMessageLabel;
 
@@ -82,7 +81,6 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
             this.buttonLabels = buttonLabels;
 
             setWidthHint( 450 );
-
         }
 
         @Override
@@ -139,15 +137,17 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
             {
                 Button button = new Button( buttonComposite, SWT.PUSH );
                 button.setText( lbl );
-                button.addSelectionListener( new SelectionAdapter()
-                {
-
-                    @Override
-                    public void widgetSelected( SelectionEvent e )
+                button.addSelectionListener
+                (
+                    new SelectionAdapter()
                     {
-                        handleArrayDialogButtonSelected( index, lbl, text );
+                        @Override
+                        public void widgetSelected( SelectionEvent e )
+                        {
+                            handleArrayDialogButtonSelected( index, lbl, text );
+                        }
                     }
-                } );
+                );
             }
 
             return text;
@@ -248,14 +248,14 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
         protected void handleSelectEventButton( Text text )
         {
             String[] hookProperties = new String[] {};
-            
+
             final ILiferayProject liferayProject = LiferayCore.create( project );
 
             if( liferayProject != null )
             {
                 hookProperties = liferayProject.getHookSupportedProperties();
             }
-            
+
             PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell(), ".*events.*" ); //$NON-NLS-1$
             dialog.setTitle( Msgs.propertySelection );
             dialog.setMessage( Msgs.selectProperty );
@@ -291,17 +291,16 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
             getButton( IDialogConstants.OK_ID ).setEnabled( classNameValid );
         }
     }
-s
-    public class EidtEventActionDialog extends EditStringArrayDialog
+
+    public class EditEventActionDialog extends EditStringArrayDialog
     {
 
         protected CLabel errorMessageLabel;
 
-        public EidtEventActionDialog(
+        public EditEventActionDialog(
             Shell shell, String windowTitle, String[] labelsForTextField, String[] valuesForTextField )
         {
             super( shell, windowTitle, labelsForTextField, valuesForTextField );
-
         }
 
         @Override
@@ -352,7 +351,6 @@ s
         String removeButtonLabel, String[] columnTitles, String[] fieldLabels, Image labelProviderImage,
         IDataModel model, String propertyName )
     {
-
         super( parent, componentLabel, dialogTitle, addButtonLabel, editButtonLabel, removeButtonLabel, columnTitles, fieldLabels, labelProviderImage, model, propertyName );
 
         this.buttonLabels = new String[] { Msgs.select, Msgs.selectNew };
@@ -375,25 +373,33 @@ s
             addStringArray( stringArray );
         }
     }
-s
+
     @Override
-    protected void handleEditButtonSelected() 
+    protected void handleEditButtonSelected()
     {
         ISelection s = viewer.getSelection();
+
         if (!(s instanceof IStructuredSelection))
+        {
             return;
+        }
+
         IStructuredSelection selection = (IStructuredSelection) s;
+
         if (selection.size() != 1)
+        {
             return;
-        
+        }
+
         Object selectedObj = selection.getFirstElement();
         String[] valuesForText = (String[]) selectedObj;
-        
-        EidtEventActionDialog dialog = new EidtEventActionDialog(getShell(), dialogTitle, fieldLabels, valuesForText);
+
+        EditEventActionDialog dialog = new EditEventActionDialog(getShell(), dialogTitle, fieldLabels, valuesForText);
         dialog.open();
+
         String[] stringArray = dialog.getStringArray();
         editStringArray(valuesForText, stringArray);
-    }    
+    }
 
     private static class Msgs extends NLS
     {
