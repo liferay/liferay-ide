@@ -26,6 +26,8 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
@@ -36,6 +38,7 @@ import org.eclipse.sapphire.platform.StatusBridge;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class NewLiferayPluginProjectOpMethods
 {
@@ -54,6 +57,11 @@ public class NewLiferayPluginProjectOpMethods
 
             final IStatus status = projectProvider.createNewProject( op, monitor );
 
+            if ( status.isOK() )
+            {
+                updateProjectDefaultBuildType( op );
+            }
+
             retval = StatusBridge.create( status );
         }
         catch( Exception e )
@@ -66,7 +74,7 @@ public class NewLiferayPluginProjectOpMethods
 
         return retval;
     }
-
+    
     public static String getPluginTypeSuffix( final PluginType pluginType )
     {
         String suffix = null;
@@ -200,5 +208,20 @@ public class NewLiferayPluginProjectOpMethods
         final Path newLocation = baseLocation.append( dirName );
 
         op.setLocation( newLocation );
+    }
+
+    private static void updateProjectDefaultBuildType( final NewLiferayPluginProjectOp op )
+    {
+        try
+        {
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayProjectCore.PLUGIN_ID );
+            prefs.put( LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+            prefs.flush();
+        }
+        catch( Exception e )
+        {
+            final String msg = "Error update project default build type."; //$NON-NLS-1$
+            LiferayProjectCore.logError( msg, e );
+        }
     }
 }

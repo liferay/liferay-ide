@@ -15,34 +15,15 @@
 
 package com.liferay.ide.project.ui.pref;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
-import com.liferay.ide.ui.util.SWTUtil;
 
-import java.net.URL;
-import java.util.Arrays;
-
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.ui.forms.events.HyperlinkAdapter;
-import org.eclipse.ui.forms.events.HyperlinkEvent;
-import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Simon Jiang
@@ -53,7 +34,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
     public static final String ID = "com.liferay.ide.project.ui.ProjectsPreferencePage";
 
     private ScopedPreferenceStore prefStore;
-    private RadioGroupFieldEditor radioGroupEditor;
+    //private RadioGroupFieldEditor radioGroupEditor;
     private BooleanFieldEditor useSnapshotVersion;
 
     public ProjectsPreferencePage()
@@ -64,6 +45,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
     @Override
     protected void createFieldEditors()
     {
+/*      
         final ILiferayProjectProvider[] providers = LiferayCore.getProviders();
 
         Arrays.sort( providers );
@@ -121,6 +103,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
                 );
             }
         }
+*/
 
         useSnapshotVersion =
             new BooleanFieldEditor(
@@ -148,7 +131,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
         noDefaultAndApplyButton();
     }
 
-    @Override
+/*    @Override
     protected void performDefaults()
     {
         final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayProjectCore.PLUGIN_ID );
@@ -164,6 +147,6 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
         }
 
         super.performDefaults();
-    }
+    }*/
 
 }
