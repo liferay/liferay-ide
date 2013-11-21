@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.project.core.tests;
 
@@ -34,7 +48,7 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.2-ce-ga3" );
+        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.2-ce-ga3/tomcat-7.0.40" );
     }
 
     @Override
@@ -77,5 +91,11 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     public void testUseDefaultLocationListener() throws Exception
     {
         super.testUseDefaultLocationListener();
+    }
+
+    @Override
+    protected String getServiceXmlDoctype()
+    {
+        return "service-builder PUBLIC \"-//Liferay//DTD Service Builder 6.1.0//EN\" \"http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd";
     }
 }

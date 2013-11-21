@@ -365,7 +365,7 @@ public class SDKPluginFacetUtil
     {
         IPreset preset = null;
 
-        if( "portlet".equals( pluginType ) )
+        if( "portlet".equals( pluginType ) || "servicebuilder".equals( pluginType ) )
         {
             preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_PORTLET_PRESET );
         }
@@ -393,7 +393,7 @@ public class SDKPluginFacetUtil
     {
         IFacetedProjectTemplate template = null;
 
-        if( "portlet".equals( pluginType ) )
+        if( "portlet".equals( pluginType ) || "servicebuilder".equals( pluginType ) )
         {
             template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_PORTLET_FACET_TEMPLATE_ID );
         }

@@ -151,7 +151,7 @@
  <extension
        point="com.liferay.ide.templates.core.templateDefinition">
     <template
-          id="layouttpl.tpl"
+          id="com.liferay.ide.layouttpl.core.defaultLayoutTemplate"
           name="Default Layout Template"
           resource="layouttpl.ftl">
     </template>

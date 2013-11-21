@@ -107,7 +107,11 @@
                             <show-label>false</show-label>
                             <hint>
                                 <name>aux.text.portlet</name>
-                                <value>Create a Liferay application using the portlet framework.</value>
+                                <value>Create an application to run as a portlet in Liferay portal.</value>
+                            </hint>
+                            <hint>
+                                <name>aux.text.servicebuilder</name>
+                                <value>Create a portlet plugin that uses the Liferay Service Builder framework.</value>
                             </hint>
                             <hint>
                                 <name>aux.text.hook</name>

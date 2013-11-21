@@ -37,6 +37,8 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.ServerCore;
 import org.osgi.framework.Version;
 
 
@@ -117,6 +119,7 @@ public class NewLiferayPluginProjectOpMethods
         switch ( pluginType )
         {
             case portlet:
+            case servicebuilder:
                 suffix = "-portlet"; //$NON-NLS-1$
                 break;
             case ext:
@@ -197,6 +200,13 @@ public class NewLiferayPluginProjectOpMethods
         }
 
         return possibleProfileIds;
+    }
+
+    public static IRuntime getRuntime( NewLiferayPluginProjectOp op )
+    {
+        final String runtimeName = op.getRuntimeName().content( true );
+    
+        return ServerCore.findRuntime( runtimeName );
     }
 
     public static void updateActiveProfilesValue( final NewLiferayPluginProjectOp op, final ElementList<Profile> profiles )

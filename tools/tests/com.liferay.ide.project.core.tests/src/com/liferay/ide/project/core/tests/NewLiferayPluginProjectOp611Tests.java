@@ -56,7 +56,7 @@ public class NewLiferayPluginProjectOp611Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.1-ce-ga2" );
+        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27" );
     }
 
     @Override
@@ -123,6 +123,12 @@ public class NewLiferayPluginProjectOp611Tests extends NewLiferayPluginProjectOp
     public void testUseDefaultLocationListener() throws Exception
     {
         super.testUseDefaultLocationListener();
+    }
+
+    @Override
+    protected String getServiceXmlDoctype()
+    {
+        return "service-builder PUBLIC \"-//Liferay//DTD Service Builder 6.1.0//EN\" \"http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd";
     }
 
 }

@@ -137,7 +137,8 @@ public class LayoutTplUtil
 
         try
         {
-            ITemplateOperation templateOperation = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
+            ITemplateOperation templateOperation =
+                TemplatesCore.getTemplateOperation( "com.liferay.ide.layouttpl.core.defaultLayoutTemplate" );
             createLayoutTplContext( templateOperation, diagram, templateName );
 
             templateOperation.setOutputBuffer( buffer );

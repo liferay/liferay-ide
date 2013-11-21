@@ -27,6 +27,10 @@ public enum PluginType
     @Image( path = "images/portlet.png" )
     portlet,
 
+    @Label( standard = "Service Builder Portlet" )
+    @Image( path = "images/service.png" )
+    servicebuilder,
+
     @Label( standard = "Hook" )
     @Image( path = "images/hook.png" )
     hook,

@@ -33,8 +33,6 @@ public class TemplatesCore extends Plugin
     // The shared instance
     private static TemplatesCore plugin;
 
-    private static Map<String, TemplateModel> pluginModels = new HashMap<String, TemplateModel>();
-
     private static Map<String, TemplateModel> templateModels = new HashMap<String, TemplateModel>();
 
     private static IConfigurationElement[] tplDefinitionElements;
@@ -61,11 +59,6 @@ public class TemplatesCore extends Plugin
 
     public static ITemplateOperation getTemplateOperation( String templateId )
     {
-        return getTemplateOperation( templateId, null );
-    }
-
-    public static ITemplateOperation getTemplateOperation( String templateId, Object context )
-    {
         // look up the template
         // find the plugin
         // if it doesn't have an engine for that plugin, then create one
@@ -86,7 +79,7 @@ public class TemplatesCore extends Plugin
         getDefault().getLog().log( createErrorStatus( msg ) );
     }
 
-    private static TemplateModel createPluginModel( IConfigurationElement element, String pluginName )
+    private static TemplateModel createTemplateModel( IConfigurationElement element, String pluginName )
     {
         TemplateModel templateModel = null;
 
@@ -147,33 +140,21 @@ public class TemplatesCore extends Plugin
         {
             final IConfigurationElement element = getTplDefinitionElement( templateId );
             final String pluginName = element.getContributor().getName();
+            model = createTemplateModel( element, pluginName );
 
-            TemplateModel pluginModel = pluginModels.get( pluginName );
-
-            if( pluginModel == null )
+            try
             {
-                pluginModel = createPluginModel( element, pluginName );
-
-                try
-                {
-                    initializeModel( pluginModel );
-                }
-                catch( Exception e )
-                {
-                    logError( e );
-                    pluginModel = null;
-                }
-
-                if( pluginModel != null )
-                {
-                    pluginModels.put( pluginName, pluginModel );
-                }
+                initializeModel( model );
+            }
+            catch( Exception e )
+            {
+                logError( e );
+                model = null;
             }
 
-            if( pluginModel != null )
+            if( model != null )
             {
-                templateModels.put( templateId, pluginModel );
-                model = pluginModel;
+                templateModels.put( templateId, model );
             }
         }
 

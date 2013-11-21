@@ -47,4 +47,66 @@
             type="org.eclipse.wst.validation.problemmarker">
       </super>
    </extension>
+   <extension
+         point="com.liferay.ide.templates.core.templateDefinition">
+      <template
+            id="com.liferay.ide.service.core.defaultServiceXmlFile"
+            name="Default service.xml file"
+            resource="defaultServiceXmlFile.ftl">
+      </template>
+      <templatesFolder
+            path="templates/">
+      </templatesFolder>
+      <templateVariable
+            name="version"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="version_"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="author"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="namespace"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="package_path"
+            required="true">
+      </templateVariable>
+   </extension>
+   <extension
+         point="com.liferay.ide.templates.core.templateDefinition">
+      <template
+            id="com.liferay.ide.service.core.emptyServiceXmlFile"
+            name="Empty service.xml file"
+            resource="emptyServiceXmlFile.ftl">
+      </template>
+      <templatesFolder
+            path="templates/">
+      </templatesFolder>
+      <templateVariable
+            name="version"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="version_"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="author"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="namespace"
+            required="true">
+      </templateVariable>
+      <templateVariable
+            name="package_path"
+            required="true">
+      </templateVariable>
+   </extension>
 </plugin>

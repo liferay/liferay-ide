@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.WizardUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKCorePlugin;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
@@ -43,9 +45,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.ServerCore;
+import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
 
 
@@ -58,45 +59,6 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
     public PluginsSDKProjectProvider()
     {
         super( new Class<?>[] { IProject.class, IRuntime.class } );
-    }
-
-    public ILiferayProject provide( Object type )
-    {
-        LiferayRuntimeProject retval = null;
-        IProject project = null;
-        ILiferayRuntime liferayRuntime = null;
-
-        if( type instanceof IProject )
-        {
-            project = (IProject) type;
-
-            try
-            {
-                liferayRuntime = ServerUtil.getLiferayRuntime( project );
-            }
-            catch( CoreException e )
-            {
-            }
-        }
-        else if( type instanceof IRuntime )
-        {
-            try
-            {
-                final IRuntime runtime = (IRuntime) type;
-
-                liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
-            }
-            catch( Exception e )
-            {
-            }
-        }
-
-        if( liferayRuntime != null )
-        {
-            retval = new LiferayRuntimeProject( project, liferayRuntime );
-        }
-
-        return retval;
     }
 
     public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
@@ -123,12 +85,11 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
         final String projectName = fixedProjectName;
 
         final String displayName = op.getDisplayName().content( true );
-        final IPortletFramework portletFramework = op.getPortletFramework().content( true );
         final boolean separateJRE = true;
 
         final SDK sdk = SDKManager.getInstance().getSDK( sdkName );
-        final IRuntime runtime = getRuntime( op );
-        final ILiferayRuntime liferayRuntime = getLiferayRuntime( runtime, monitor );
+        final IRuntime runtime = NewLiferayPluginProjectOpMethods.getRuntime( op );
+        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime, monitor );
         final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
 
         // workingDir should always be the directory of the type of plugin /sdk/portlets/ for a portlet, etc
@@ -147,7 +108,11 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
 
         switch( pluginType )
         {
+            case servicebuilder:
+                op.setPortletFramework( "mvc" );
             case portlet:
+                final IPortletFramework portletFramework = op.getPortletFramework().content( true );
+
                 String frameworkName = portletFramework.getShortName();
 
                 if( portletFramework.isRequiresAdvanced() )
@@ -224,7 +189,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
 
         final String sdkLocation = sdk.getLocation().toOSString();
         final IProject newProject =
-            ProjectUtil.importProject( projectRecord, getFacetRuntime( runtime ), sdkLocation, op, monitor );
+            ProjectUtil.importProject( projectRecord, ServerUtil.getFacetRuntime( runtime ), sdkLocation, op, monitor );
 
         newProject.open( monitor );
 
@@ -249,19 +214,20 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
         switch( op.getPluginType().content() )
         {
             case portlet:
-                final IStatus status = op.getPortletFramework().content().postProjectCreated( newProject, monitor );
 
-                if( ! status.isOK() )
-                {
-                    throw new CoreException( status );
-                }
+                portletProjectCreated( op, newProject, monitor );
+
+                break;
+
+            case servicebuilder:
+
+                serviceBuilderProjectCreated( op, liferayRuntime.getPortalVersion(), newProject, monitor );
 
                 break;
             case theme:
-                Map<String, String> args = new HashMap<String, String>();
-                args.put( "force", "true" );
-                newProject.build(
-                    IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
+
+                themeProjectCreated( newProject );
+
                 break;
             default:
                 break;
@@ -270,21 +236,87 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
         return Status.OK_STATUS;
     }
 
-    private static org.eclipse.wst.common.project.facet.core.runtime.IRuntime getFacetRuntime( IRuntime runtime )
+    private void portletProjectCreated( NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor )
+        throws CoreException
     {
-        return RuntimeManager.getRuntime( runtime.getName() );
+        final IStatus status = op.getPortletFramework().content().postProjectCreated( newProject, monitor );
+
+        if( !status.isOK() )
+        {
+            throw new CoreException( status );
+        }
     }
 
-    private static IRuntime getRuntime( NewLiferayPluginProjectOp op )
+    public ILiferayProject provide( Object type )
     {
-        final String runtimeName = op.getRuntimeName().content( true );
+        LiferayRuntimeProject retval = null;
+        IProject project = null;
+        ILiferayRuntime liferayRuntime = null;
 
-        return ServerCore.findRuntime( runtimeName );
+        if( type instanceof IProject )
+        {
+            project = (IProject) type;
+
+            try
+            {
+                liferayRuntime = ServerUtil.getLiferayRuntime( project );
+            }
+            catch( CoreException e )
+            {
+            }
+        }
+        else if( type instanceof IRuntime )
+        {
+            try
+            {
+                final IRuntime runtime = (IRuntime) type;
+
+                liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        if( liferayRuntime != null )
+        {
+            retval = new LiferayRuntimeProject( project, liferayRuntime );
+        }
+
+        return retval;
     }
 
-    private static ILiferayRuntime getLiferayRuntime( IRuntime runtime, IProgressMonitor monitor )
+    private void serviceBuilderProjectCreated(
+        NewLiferayPluginProjectOp op, String version, IProject newProject, IProgressMonitor monitor ) throws CoreException
     {
-        return (ILiferayRuntime) runtime.loadAdapter( ILiferayRuntime.class, monitor );
+        // create a default service.xml file in the project
+        final IFile serviceXmlFile = newProject.getFile( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service.xml" );
+
+        String descriptorVersion = null;
+
+        try
+        {
+            Version portalVersion = new Version( version );
+
+            descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";  //$NON-NLS-1$//$NON-NLS-2$
+        }
+        catch( Exception e )
+        {
+            LiferayProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
+            descriptorVersion = "6.0.0"; //$NON-NLS-1$
+        }
+
+        WizardUtil.createDefaultServiceBuilderFile(
+            serviceXmlFile, descriptorVersion, true, "com.liferay.sample", "SAMPLE", System.getProperty( "user.name" ), monitor );
+    }
+
+    private void themeProjectCreated( IProject newProject ) throws CoreException
+    {
+        final Map<String, String> args = new HashMap<String, String>();
+        args.put( "force", "true" );
+
+        newProject.build(
+            IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
     }
 
     public IStatus validateProjectLocation( String name, IPath path )

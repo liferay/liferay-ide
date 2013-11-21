@@ -55,6 +55,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -71,6 +72,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
+import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
@@ -968,5 +970,15 @@ public class ServerUtil
                 launch.terminate();
             }
         }
+    }
+
+    public static org.eclipse.wst.common.project.facet.core.runtime.IRuntime getFacetRuntime( IRuntime runtime )
+    {
+        return RuntimeManager.getRuntime( runtime.getName() );
+    }
+
+    public static ILiferayRuntime getLiferayRuntime( IRuntime runtime, IProgressMonitor monitor )
+    {
+        return (ILiferayRuntime) runtime.loadAdapter( ILiferayRuntime.class, monitor );
     }
 }

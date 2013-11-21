@@ -398,6 +398,14 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         {
             FileUtil.deleteDir( customBaseDir, true );
 
+            if( customBaseDir.exists() )
+            {
+                for( File f : customBaseDir.listFiles() )
+                {
+                    System.out.println(f.getAbsolutePath());
+                }
+            }
+
             assertEquals( "Unable to delete pre-existing customBaseDir", false, customBaseDir.exists() );
         }
     }
@@ -554,6 +562,50 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         assertEquals( true, extFile.exists() );
     }
+
+    @Test
+    public void testNewPortletAntProject() throws Exception
+    {
+        final String projectName = "test-portlet-without-servicexml";
+        final NewLiferayPluginProjectOp op = newProjectOp();
+        op.setProjectName( projectName );
+        op.setPluginType( PluginType.portlet );
+
+        final IProject portletProject = createAntProject( op );
+
+        final IVirtualFolder webappRoot = CoreUtil.getDocroot( portletProject );
+
+        assertNotNull( webappRoot );
+
+        final IVirtualFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
+
+        assertEquals( false, serviceXml.exists() );
+    }
+
+    @Test
+    public void testNewServiceBuilderPortletAntProject() throws Exception
+    {
+        final String projectName = "test-portlet-with-servicexml";
+        final NewLiferayPluginProjectOp op = newProjectOp();
+        op.setProjectName( projectName );
+        op.setPluginType( PluginType.servicebuilder );
+
+        final IProject portletProject = createAntProject( op );
+
+        final IVirtualFolder webappRoot = CoreUtil.getDocroot( portletProject );
+
+        assertNotNull( webappRoot );
+
+        final IVirtualFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
+
+        assertEquals( true, serviceXml.exists() );
+
+        final String serviceXmlContent = CoreUtil.readStreamToString( serviceXml.getUnderlyingFile().getContents() );
+
+        assertEquals( true, serviceXmlContent.contains( getServiceXmlDoctype() ) );
+    }
+
+    protected abstract String getServiceXmlDoctype();
 
     @Test
     public void testNewHookAntProject() throws Exception
@@ -1247,11 +1299,9 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         runtimeNames.add( originalRuntimeName );
         runtimeNames.add( newRuntimeName );
 
-        final String defaultRuntimeName = runtimeNames.iterator().next();
-
-        assertEquals( defaultRuntimeName, op.getRuntimeName().service( DefaultValueService.class ).value() );
-        assertEquals( defaultRuntimeName, op.getRuntimeName().content() );
-
+        assertEquals(
+            true, op.getRuntimeName().service( DefaultValueService.class ).value().contains( originalRuntimeName ) );
+        assertEquals( true, op.getRuntimeName().content().contains( originalRuntimeName ) );
     }
 
     @Test

@@ -131,7 +131,7 @@ public class ProjectNameValidationService extends ValidationService
     {
         for( PluginType type : PluginType.values() )
         {
-            if( ( "-" + type.name() ).equals( currentProjectName ) )
+            if( ( ( ! type.equals( PluginType.servicebuilder ) ) && ( "-" + type.name() ).equals( currentProjectName ) ) )
             {
                 return true;
             }

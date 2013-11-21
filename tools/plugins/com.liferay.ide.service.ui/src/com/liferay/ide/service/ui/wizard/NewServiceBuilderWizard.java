@@ -19,21 +19,17 @@ import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 import com.liferay.ide.service.core.operation.NewServiceBuilderDataModelProvider;
 import com.liferay.ide.service.ui.ServiceUI;
-import com.liferay.ide.service.ui.template.ServiceBuilderTemplateContextTypeIds;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.text.templates.TemplateContextType;
-import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jst.servlet.ui.internal.wizard.NewWebArtifactWizard;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
 /**
@@ -69,20 +65,7 @@ public class NewServiceBuilderWizard extends NewWebArtifactWizard
     @Override
     protected IDataModelProvider getDefaultProvider()
     {
-        final TemplateStore templateStore = ServiceUI.getDefault().getTemplateStore();
-
-        final TemplateContextType contextType =
-            ServiceUI.getDefault().getTemplateContextRegistry().getContextType(
-                ServiceBuilderTemplateContextTypeIds.NEW );
-
-        return new NewServiceBuilderDataModelProvider()
-        {
-            @Override
-            public IDataModelOperation getDefaultOperation()
-            {
-                return new AddServiceBuilderOperation( getDataModel(), templateStore, contextType );
-            }
-        };
+        return new NewServiceBuilderDataModelProvider();
     }
 
     protected ImageDescriptor getImage()

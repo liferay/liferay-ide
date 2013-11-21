@@ -19,6 +19,7 @@ import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.service.core.AddServiceBuilderOperation;
 import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.util.ServiceUtil;
 
@@ -45,6 +46,7 @@ import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.internal.plugin.WTPCommonPlugin;
 
 /**
@@ -59,6 +61,12 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
     public NewServiceBuilderDataModelProvider()
     {
         super();
+    }
+
+    @Override
+    public IDataModelOperation getDefaultOperation()
+    {
+        return new AddServiceBuilderOperation( getDataModel() );
     }
 
     @Override
