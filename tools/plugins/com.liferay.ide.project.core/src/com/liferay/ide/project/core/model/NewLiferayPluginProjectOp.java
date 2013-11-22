@@ -39,7 +39,7 @@ import com.liferay.ide.project.core.model.internal.ThemeFrameworkValidationServi
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationListener;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationValidationService;
 import com.liferay.ide.project.core.model.internal.UseSdkLocationListener;
-import com.liferay.ide.project.core.model.internal.UseSdkLocationValidationService;
+import com.liferay.ide.project.core.model.internal.ProjectProviderValidationService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -138,7 +138,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
         {
             @Service( impl = ProjectProviderPossibleValuesService.class ),
             @Service( impl = ProjectProviderDefaultValueService.class ),
-            @Service( impl = UseSdkLocationValidationService.class )
+            @Service( impl = ProjectProviderValidationService.class )
         }
     )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$

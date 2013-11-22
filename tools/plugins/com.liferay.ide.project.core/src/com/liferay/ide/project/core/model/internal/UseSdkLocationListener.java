@@ -33,7 +33,7 @@ public class UseSdkLocationListener extends ProjectNameListener
         if( op.getUseDefaultLocation().content( true ) )
         {
             if( op.getUseSdkLocation().content() ||
-                op.getProjectProvider().service( UseSdkLocationValidationService.class ).validation().ok() )
+                op.getProjectProvider().service( ProjectProviderValidationService.class ).validation().ok() )
             {
                 super.handleTypedEvent( event );
             }

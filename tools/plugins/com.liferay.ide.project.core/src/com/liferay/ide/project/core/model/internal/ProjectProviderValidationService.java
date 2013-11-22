@@ -26,8 +26,9 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Kuo Zhang
+ * @author Tao Tao
  */
-public class UseSdkLocationValidationService extends ValidationService
+public class ProjectProviderValidationService extends ValidationService
 {
 
     private Listener listener = null;
@@ -48,6 +49,7 @@ public class UseSdkLocationValidationService extends ValidationService
       final NewLiferayPluginProjectOp op = op();
 
       op.getPluginsSDKName().attach( this.listener);
+      op.getRuntimeName().attach( this.listener );
       op.getUseSdkLocation().attach( this.listener);
     }
 
@@ -58,12 +60,26 @@ public class UseSdkLocationValidationService extends ValidationService
 
         final NewLiferayPluginProjectOp op = op();
 
-        if( "ant".equals( op.getProjectProvider().content().getShortName() ) && ! op.getUseSdkLocation().content() ) //$NON-NLS-1$
+        if( "ant".equals( op.getProjectProvider().content().getShortName() ) && !op.getUseSdkLocation().content() ) //$NON-NLS-1$
         {
-            if( ! NewLiferayPluginProjectOpMethods.canUseCustomLocation( op ) )
+            if( !NewLiferayPluginProjectOpMethods.canUseCustomLocation( op ) )
             {
                 retval =
                     Status.createErrorStatus( "The selected Plugins SDK does not support using Eclipse workspace as base for project location.  Please configure a higher version." );
+            }
+        }
+
+        final Status sdkNameStatus = op.getPluginsSDKName().validation();
+
+        if( retval.ok() && !sdkNameStatus.ok() )
+        {
+            retval = sdkNameStatus;
+
+            final Status runtimeNameStatus = op.getRuntimeName().validation();
+
+            if( retval.ok() && !runtimeNameStatus.ok() )
+            {
+                retval = runtimeNameStatus;
             }
         }
 
@@ -76,6 +92,7 @@ public class UseSdkLocationValidationService extends ValidationService
         final NewLiferayPluginProjectOp op = op();
 
         op.getUseSdkLocation().detach( this.listener );
+        op.getRuntimeName().detach( this.listener );
         op.getPluginsSDKName().detach( this.listener);
     }
 
