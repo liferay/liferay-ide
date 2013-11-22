@@ -74,7 +74,9 @@ public class ProjectProviderValidationService extends ValidationService
         if( retval.ok() && !sdkNameStatus.ok() )
         {
             retval = sdkNameStatus;
-
+        }
+        else
+        {
             final Status runtimeNameStatus = op.getRuntimeName().validation();
 
             if( retval.ok() && !runtimeNameStatus.ok() )
