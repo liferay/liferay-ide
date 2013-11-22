@@ -21,6 +21,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.LiferayMavenProject;
 import com.liferay.ide.project.core.IProjectBuilder;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.osgi.framework.Version;
 
 
@@ -32,6 +35,7 @@ import org.osgi.framework.Version;
  */
 public class MavenProjectAdapter implements ILiferayProjectAdapter
 {
+    private static Pattern majorMinor = Pattern.compile( "([0-9]+)\\.([0-9]+).*" );
 
     public <T> T adapt( ILiferayProject liferayProject, Class<T> adapterType )
     {
@@ -43,7 +47,17 @@ public class MavenProjectAdapter implements ILiferayProjectAdapter
 
             if( ! CoreUtil.isNullOrEmpty( version ) )
             {
-                final Version portalVersion = new Version( version );
+                // we only need to match the first 2 characters
+                final Matcher matcher = majorMinor.matcher( version );
+
+                String matchedVersion = null;
+
+                if( matcher.find() && matcher.groupCount() == 2 )
+                {
+                    matchedVersion = matcher.group( 1 ) + "." + matcher.group( 2 ) + ".0";
+                }
+
+                final Version portalVersion = new Version( matchedVersion != null ? matchedVersion : version );
 
                 if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) < 0 )
                 {
