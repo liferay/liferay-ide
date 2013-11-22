@@ -1,3 +1,3 @@
-/**
- * Control panel entry class <%= model.getClassName() %>
- */
+    /**
+     * Control panel entry class <%= model.getClassName() %>
+    */

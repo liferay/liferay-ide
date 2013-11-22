@@ -40,21 +40,21 @@ public class EntryTemplate
   protected final String TEXT_3 = NL;
   protected final String TEXT_4 = NL + "import ";
   protected final String TEXT_5 = ";";
-  protected final String TEXT_6 = NL;
-  protected final String TEXT_7 = NL;
-  protected final String TEXT_8 = "/**" + NL + " * Control panel entry class ";
-  protected final String TEXT_9 = NL + " */";
-  protected final String TEXT_10 = NL + NL + "    /**" + NL + "     * Default constructor. " + NL + "     */" + NL + "    public ";
-  protected final String TEXT_11 = "() {" + NL + "    }";
-  protected final String TEXT_12 = NL + "       " + NL + "    /**" + NL + "     * @see ";
-  protected final String TEXT_13 = "#";
-  protected final String TEXT_14 = "(";
-  protected final String TEXT_15 = ")" + NL + "     */" + NL + "    public ";
-  protected final String TEXT_16 = "(";
-  protected final String TEXT_17 = ") {" + NL + "        super(";
-  protected final String TEXT_18 = ");" + NL + "    }";
-  protected final String TEXT_19 = NL + NL + "public class ";
-  protected final String TEXT_20 = " extends BaseControlPanelEntry {" + NL + "" + NL + "    @Override" + NL + "    public boolean isVisible(PermissionChecker permissionChecker, Portlet portlet)" + NL + "            throws Exception {" + NL + "        return false;" + NL + "    }" + NL + "" + NL + "}";
+  protected final String TEXT_6 = NL + NL + NL + NL + "public class ";
+  protected final String TEXT_7 = " extends BaseControlPanelEntry {";
+  protected final String TEXT_8 = NL;
+  protected final String TEXT_9 = "    /**" + NL + "     * Control panel entry class ";
+  protected final String TEXT_10 = NL + "    */";
+  protected final String TEXT_11 = NL + NL + "    /**" + NL + "     * Default constructor. " + NL + "     */" + NL + "    public ";
+  protected final String TEXT_12 = "() {" + NL + "    }";
+  protected final String TEXT_13 = NL + "       " + NL + "    /**" + NL + "     * @see ";
+  protected final String TEXT_14 = "#";
+  protected final String TEXT_15 = "(";
+  protected final String TEXT_16 = ")" + NL + "     */" + NL + "    public ";
+  protected final String TEXT_17 = "(";
+  protected final String TEXT_18 = ") {" + NL + "        super(";
+  protected final String TEXT_19 = ");" + NL + "    }";
+  protected final String TEXT_20 = NL + NL + "    @Override" + NL + "    public boolean isVisible(PermissionChecker permissionChecker, Portlet portlet)" + NL + "            throws Exception {" + NL + "        return false;" + NL + "    }" + NL + "" + NL + "}";
 
    public String generate(Object argument)
   {
@@ -81,16 +81,18 @@ public class EntryTemplate
 	}
 
     stringBuffer.append(TEXT_6);
+    stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_7);
     stringBuffer.append(TEXT_8);
-    stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_9);
+    stringBuffer.append( model.getClassName() );
+    stringBuffer.append(TEXT_10);
      
 	if (!model.hasEmptySuperclassConstructor()) { 
 
-    stringBuffer.append(TEXT_10);
-    stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_11);
+    stringBuffer.append( model.getClassName() );
+    stringBuffer.append(TEXT_12);
      
 	} 
 
@@ -99,26 +101,24 @@ public class EntryTemplate
 		for (Constructor constructor : constructors) {
 			if (constructor.isPublic() || constructor.isProtected()) { 
 
-    stringBuffer.append(TEXT_12);
-    stringBuffer.append( model.getSuperclassName() );
     stringBuffer.append(TEXT_13);
     stringBuffer.append( model.getSuperclassName() );
     stringBuffer.append(TEXT_14);
-    stringBuffer.append( constructor.getParamsForJavadoc() );
+    stringBuffer.append( model.getSuperclassName() );
     stringBuffer.append(TEXT_15);
-    stringBuffer.append( model.getClassName() );
+    stringBuffer.append( constructor.getParamsForJavadoc() );
     stringBuffer.append(TEXT_16);
-    stringBuffer.append( constructor.getParamsForDeclaration() );
+    stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_17);
-    stringBuffer.append( constructor.getParamsForCall() );
+    stringBuffer.append( constructor.getParamsForDeclaration() );
     stringBuffer.append(TEXT_18);
+    stringBuffer.append( constructor.getParamsForCall() );
+    stringBuffer.append(TEXT_19);
     
 			} 
 		} 
 	} 
 
-    stringBuffer.append(TEXT_19);
-    stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_20);
     return stringBuffer.toString();
   }
