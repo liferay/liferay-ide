@@ -40,11 +40,11 @@ public class EntryTemplate
   protected final String TEXT_3 = NL;
   protected final String TEXT_4 = NL + "import ";
   protected final String TEXT_5 = ";";
-  protected final String TEXT_6 = NL + NL + NL + NL + "public class ";
-  protected final String TEXT_7 = " extends BaseControlPanelEntry {";
-  protected final String TEXT_8 = NL;
-  protected final String TEXT_9 = "    /**" + NL + "     * Control panel entry class ";
-  protected final String TEXT_10 = NL + "    */";
+  protected final String TEXT_6 = NL + NL;
+  protected final String TEXT_7 = NL;
+  protected final String TEXT_8 = "/**" + NL + " * Control panel entry class ";
+  protected final String TEXT_9 = NL + " */" + NL + "public class ";
+  protected final String TEXT_10 = " extends BaseControlPanelEntry {";
   protected final String TEXT_11 = NL + NL + "    /**" + NL + "     * Default constructor. " + NL + "     */" + NL + "    public ";
   protected final String TEXT_12 = "() {" + NL + "    }";
   protected final String TEXT_13 = NL + "       " + NL + "    /**" + NL + "     * @see ";
@@ -81,9 +81,9 @@ public class EntryTemplate
 	}
 
     stringBuffer.append(TEXT_6);
-    stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_7);
     stringBuffer.append(TEXT_8);
+    stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_9);
     stringBuffer.append( model.getClassName() );
     stringBuffer.append(TEXT_10);

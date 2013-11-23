@@ -7,9 +7,8 @@
 <%@ include file="_package.template" %>
 <%@ include file="_imports.template" %>
 
-
-public class <%= model.getClassName() %> extends BaseControlPanelEntry {
 <%@ include file="entry_classHeader.template" %>
+public class <%= model.getClassName() %> extends BaseControlPanelEntry {
 <%@ include file="_constructors.template" %>
 
     @Override
