@@ -14,7 +14,7 @@
             id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet"
             name="%lifeay.portlet.wizard.name">
          <class class="com.liferay.ide.portlet.ui.wizard.NewPortletWizard">
-         	<parameter name="liferay_artifact" value="true"/>
+            <parameter name="liferay_artifact" value="true"/>
             <parameter name="menuIndex" value="10" />
             <parameter name="validProjectTypes" value="portlet" />
          </class>
@@ -102,10 +102,10 @@
                tooltip="%portlet.action.tooltip">
          </action>
          <enablement>
-         	<adapt type="org.eclipse.core.resources.IResource">
-         		<or>
-         			<adapt type="org.eclipse.core.resources.IFile">
-			  			<test forcePluginActivation="true"
+             <adapt type="org.eclipse.core.resources.IResource">
+                 <or>
+                     <adapt type="org.eclipse.core.resources.IFile">
+                         <test forcePluginActivation="true"
 							property="com.liferay.ide.portlet.ui.isLangFile"
 							value="true" />
 					</adapt>
@@ -303,4 +303,8 @@
          </includes>
       </viewerContentBinding>
    </extension>
+
+   <extension point="org.eclipse.ui.editors.templates">
+    <include file="templates/portlet-java-templates.xml" /> 
+  </extension>
 </plugin>
