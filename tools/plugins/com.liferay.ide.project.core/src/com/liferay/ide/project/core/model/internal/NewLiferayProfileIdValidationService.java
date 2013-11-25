@@ -27,7 +27,6 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Gregory Amerson
- * @author Tao Tao
  */
 public class NewLiferayProfileIdValidationService extends ValidationService
 {

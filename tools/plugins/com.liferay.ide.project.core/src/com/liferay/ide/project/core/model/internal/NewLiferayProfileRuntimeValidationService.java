@@ -36,7 +36,6 @@ public class NewLiferayProfileRuntimeValidationService extends ValidationService
 
         final NewLiferayPluginProjectOp op = context( NewLiferayPluginProjectOp.class );
 
-
         if( "maven".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
         {
             final NewLiferayProfile newLiferayProfile = context( NewLiferayProfile.class );
