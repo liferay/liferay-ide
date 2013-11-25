@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
@@ -26,6 +27,7 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Gregory Amerson
+ * @author Tao Tao
  */
 public class NewLiferayProfileIdValidationService extends ValidationService
 {
@@ -49,10 +51,25 @@ public class NewLiferayProfileIdValidationService extends ValidationService
         Status retval = Status.createOkStatus();
 
         final NewLiferayProfile newLiferayProfile = profile();
+        String profileId = newLiferayProfile.getId().content( true );
+
+        if( profileId == null || profileId.isEmpty() )
+        {
+            retval = Status.createErrorStatus( "Profile id can not be empty." );
+        }
+        else if( profileId.contains( StringPool.SPACE ) )
+        {
+            retval = Status.createErrorStatus( "No spaces are allowed in profile id." );
+        }
+
+        if( existingValues.isEmpty() )
+        {
+            retval = Status.createErrorStatus( "Profile id must be specified." );
+        }
 
         for( String val : this.existingValues )
         {
-            if( val != null && val.equals( newLiferayProfile.getId().content() ) )
+            if( val != null && val.equals( profileId ) )
             {
                 retval = Status.createErrorStatus( "Profile already exists." );
                 break;

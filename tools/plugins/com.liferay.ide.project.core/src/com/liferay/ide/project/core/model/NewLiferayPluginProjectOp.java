@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.IPortletFramework;
+import com.liferay.ide.project.core.model.internal.ActiveProfilesValidationService;
 import com.liferay.ide.project.core.model.internal.DisplayNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
 import com.liferay.ide.project.core.model.internal.LocationListener;
@@ -70,6 +71,7 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Kuo Zhang
+ * @author Tao Tao
  */
 public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferayRuntime
 {
@@ -283,6 +285,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
 
     @Label( standard = "active profiles" )
     @Fact( statement = "Supports comma separated list of active profiles" )
+    @Service( impl = ActiveProfilesValidationService.class )
     @Whitespace( trim = false )
     ValueProperty PROP_ACTIVE_PROFILES_VALUE = new ValueProperty( TYPE, "ActiveProfilesValue" );
 

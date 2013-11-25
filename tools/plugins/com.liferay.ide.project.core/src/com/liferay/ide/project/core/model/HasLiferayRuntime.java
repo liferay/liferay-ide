@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.project.core.model.internal.RuntimeNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.RuntimeNamePossibleValuesService;
+import com.liferay.ide.project.core.model.internal.NewLiferayProfileRuntimeValidationService;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;

@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
@@ -66,6 +67,11 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
 
         String data = defaultRuntimeName;
 
+        if( data.equals( "<None>" ) )
+        {
+            return new DefaultValueServiceData( StringPool.EMPTY );
+        }
+
         final Set<String> possibleValues =
             NewLiferayPluginProjectOpMethods.getPossibleProfileIds(
                 newLiferayProfile.nearest( NewLiferayPluginProjectOp.class ), false );
@@ -80,6 +86,8 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
             {
             }
         }
+
+        data = data.replaceAll( StringPool.SPACE, StringPool.DASH );
 
         return new DefaultValueServiceData( data );
     }

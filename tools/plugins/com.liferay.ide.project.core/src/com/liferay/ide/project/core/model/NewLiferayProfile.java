@@ -4,12 +4,14 @@ import com.liferay.ide.project.core.model.internal.LiferayVersionDefaultValueSer
 import com.liferay.ide.project.core.model.internal.LiferayVersionPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.NewLiferayProfileIdDefaultValueService;
 import com.liferay.ide.project.core.model.internal.NewLiferayProfileIdValidationService;
+import com.liferay.ide.project.core.model.internal.NewLiferayProfileRuntimeValidationService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -20,12 +22,17 @@ import org.eclipse.sapphire.modeling.annotations.Type;
  */
 public interface NewLiferayProfile extends Profile, HasLiferayRuntime
 {
+
     ElementType TYPE = new ElementType( NewLiferayProfile.class );
+
+    // *** RuntimeName ***
+
+    @Service( impl = NewLiferayProfileRuntimeValidationService.class )
+    ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME ); //$NON-NLS-1$
 
     // *** Id ***
 
-    @Services
-    (
+    @Services(
         value =
         {
             @Service( impl = NewLiferayProfileIdDefaultValueService.class ),
@@ -67,6 +74,7 @@ public interface NewLiferayProfile extends Profile, HasLiferayRuntime
             @Service( impl = LiferayVersionDefaultValueService.class )
         }
     )
+    @Required
     ValueProperty PROP_LIFERAY_VERSION = new ValueProperty( TYPE, "LiferayVersion" );
 
     Value<String> getLiferayVersion();

@@ -12,44 +12,40 @@
  * details.
  *
  *******************************************************************************/
-
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jdt.core.JavaConventions;
-import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
+import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
- * @author Gregory Amerson
+ * @author Tao Tao
  */
-@SuppressWarnings( "restriction" )
-public class GroupIdValidationService extends ValidationService
+public class ActiveProfilesValidationService extends ValidationService
 {
 
-    private Listener listener;
+    private Listener listener = null;
 
     @Override
     protected Status compute()
     {
+        String activeProfileId = op().getActiveProfilesValue().content();
+        Status retval = Status.createOkStatus();
+
         if( "maven".equals( op().getProjectProvider().content( true ).getShortName() ) )
         {
-            final String groupId = op().getGroupId().content( true );
-
-            final IStatus javaStatus =
-                JavaConventions.validatePackageName( groupId, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
-
-            return StatusBridge.create( javaStatus );
+            if( activeProfileId != null && activeProfileId.contains( StringPool.SPACE ) )
+            {
+                retval = Status.createErrorStatus( "No spaces are allowed in profile id values." );
+            }
         }
 
-        return StatusBridge.create( org.eclipse.core.runtime.Status.OK_STATUS );
+        return retval;
     }
 
     @Override
@@ -57,10 +53,9 @@ public class GroupIdValidationService extends ValidationService
     {
         super.initValidationService();
 
-        this.listener = new FilteredListener<PropertyContentEvent>()
+        this.listener = new FilteredListener<Event>()
         {
-
-            protected void handleTypedEvent( final PropertyContentEvent event )
+            protected void handleTypedEvent( Event event )
             {
                 refresh();
             }
