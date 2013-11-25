@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
@@ -91,6 +92,9 @@ public class NewLiferayPluginProjectOpMethods
         try
         {
             final ILiferayProjectProvider projectProvider = op.getProjectProvider().content( true );
+
+            //IDE-1306  If the user types too quickly all the model changes may not have propagated
+            LocationListener.updateLocation( op );
 
             final IStatus status = projectProvider.createNewProject( op, monitor );
 
@@ -205,7 +209,7 @@ public class NewLiferayPluginProjectOpMethods
     public static IRuntime getRuntime( NewLiferayPluginProjectOp op )
     {
         final String runtimeName = op.getRuntimeName().content( true );
-    
+
         return ServerCore.findRuntime( runtimeName );
     }
 

@@ -66,6 +66,7 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
                     switch ( op.getPluginType().content( true ) )
                     {
                         case portlet:
+                        case servicebuilder:
                             newLocationBase = sdkLocation.append( "portlets" ); //$NON-NLS-1$
                             break;
                         case ext:

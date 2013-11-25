@@ -46,6 +46,7 @@ public class LocationListener extends ProjectNameListener
                     switch( op.getPluginType().content( true ) )
                     {
                         case portlet:
+                        case servicebuilder:
                             suffix = "-portlet"; //$NON-NLS-1$
                             break;
                         case hook:
