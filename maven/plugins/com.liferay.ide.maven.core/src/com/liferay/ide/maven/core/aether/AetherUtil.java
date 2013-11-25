@@ -84,14 +84,14 @@ public class AetherUtil
         final RepositorySystem system = newRepositorySystem();
         final RepositorySystemSession session = newRepositorySystemSession( system );
 
-        final String latestVersion = AetherUtil.getLatestVersion( groupId, artifactId, "6", "6.2.0-GA1", system, session );
+        final String latestVersion = AetherUtil.getLatestVersion( groupId, artifactId, "6", "6.2.0-ga1", system, session );
 
         final Artifact defaultArtifact = new DefaultArtifact( groupId + ":" + artifactId + ":" + latestVersion );
 
         ArtifactRequest artifactRequest = new ArtifactRequest();
         artifactRequest.setArtifact( defaultArtifact );
         artifactRequest.addRepository( newCentralRepository() );
-        artifactRequest.addRepository( newLiferayRepository() );
+//        artifactRequest.addRepository( newLiferayRepository() );
 
         try
         {
@@ -123,7 +123,7 @@ public class AetherUtil
         final VersionRangeRequest rangeRequest = new VersionRangeRequest();
         rangeRequest.setArtifact( artifact );
         rangeRequest.addRepository( newCentralRepository() );
-        rangeRequest.addRepository( newLiferayRepository() );
+//        rangeRequest.addRepository( newLiferayRepository() );
 
         try
         {
