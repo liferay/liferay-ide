@@ -134,4 +134,10 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     {
         return "service-builder PUBLIC \"-//Liferay//DTD Service Builder 6.2.0//EN\" \"http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd";
     }
+
+    @Test
+    public void testNewJsfRichfacesProjects() throws Exception
+    {
+        super.testNewJsfRichfacesProjects();
+    }
 }

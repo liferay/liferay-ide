@@ -3,6 +3,7 @@
 .resources/
 .springBeans
 *.swp
+hs_err_pid*.log
 bin/
 rebel.xml
 target/

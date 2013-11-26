@@ -49,6 +49,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 public class JSFPortletFramework extends AbstractPortletFramework
     implements IJSFPortletFrameworkProperties, IJSFFacetInstallDataModelProperties
 {
+    public static final String DEFAULT_FRAMEWORK_NAME = "jsf-2.x";
     public static final String JSF_FACET_SUPPORTED_VERSION = "2.0"; //$NON-NLS-1$
 
     public JSFPortletFramework()
@@ -122,7 +123,7 @@ public class JSFPortletFramework extends AbstractPortletFramework
 
 
     //TODO add support for maven projects
-    public IStatus postProjectCreated( IProject project, IProgressMonitor monitor )
+    public IStatus postProjectCreated( IProject project, String frameworkName, IProgressMonitor monitor )
     {
         /*
          * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer
@@ -131,7 +132,7 @@ public class JSFPortletFramework extends AbstractPortletFramework
 
         SDK sdk = SDKUtil.getSDK( project );
 
-        if( sdk != null )
+        if( sdk != null && DEFAULT_FRAMEWORK_NAME.equals( frameworkName ) )
         {
             try
             {

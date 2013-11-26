@@ -14,11 +14,11 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.IPortletFramework;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.PluginType;
@@ -81,7 +81,7 @@ import org.w3c.dom.Node;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
+public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 {
 
     private static final String LIFERAY_ARCHETYPES_GROUP_ID = "com.liferay.maven.archetypes";
@@ -91,20 +91,13 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         super( new Class<?>[] { IProject.class } );
     }
 
-    public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
+    public IStatus doCreateNewProject( final NewLiferayPluginProjectOp op, IProgressMonitor monitor ) throws CoreException
     {
-        if( ! (operation instanceof NewLiferayPluginProjectOp ) )
-        {
-            throw new IllegalArgumentException( "Operation must be of type NewLiferayPluginProjectOp" ); //$NON-NLS-1$
-        }
-
         IStatus retval = null;
 
         final IMavenConfiguration mavenConfiguration = MavenPlugin.getMavenConfiguration();
         final IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
         final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
-
-        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.class.cast( operation );
 
         final String groupId = op.getGroupId().content();
         final String artifactId = op.getProjectName().content();
@@ -113,6 +106,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
         final String activeProfilesValue = op.getActiveProfilesValue().content();
         final PluginType pluginType = op.getPluginType().content( true );
         final IPortletFramework portletFramework = op.getPortletFramework().content( true );
+        final String frameworkName = getFrameworkName( op );
 
         IPath location = PathBridge.create( op.getLocation().content() );
 
@@ -127,8 +121,6 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
         if( pluginType.equals( PluginType.portlet ) && portletFramework.isRequiresAdvanced() )
         {
-            final String frameworkName = op.getPortletFrameworkAdvanced().content( true ).getShortName();
-
             archetypeType = "portlet-" + frameworkName.replace( "_", "-" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         }
         else
@@ -272,7 +264,7 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
 
             if( op.getPluginType().content().equals( PluginType.portlet ) )
             {
-                retval = op.getPortletFramework().content().postProjectCreated( newProjects.get( 0 ), monitor );
+                retval = op.getPortletFramework().content().postProjectCreated( newProjects.get( 0 ), frameworkName, monitor );
             }
         }
 

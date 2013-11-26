@@ -14,7 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -53,7 +52,7 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * @author Gregory Amerson
  */
-public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
+public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 {
 
     public PluginsSDKProjectProvider()
@@ -61,15 +60,8 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
         super( new Class<?>[] { IProject.class, IRuntime.class } );
     }
 
-    public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
+    public IStatus doCreateNewProject( NewLiferayPluginProjectOp op, IProgressMonitor monitor ) throws CoreException
     {
-        if( ! ( operation instanceof NewLiferayPluginProjectOp ) )
-        {
-            throw new IllegalArgumentException( "Operation must be of type NewLiferayPluginProjectOp" ); //$NON-NLS-1$
-        }
-
-        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.class.cast( operation );
-
         final String sdkName = op.getPluginsSDKName().content( true );
         final PluginType pluginType = op.getPluginType().content( true );
         final String originalProjectName = op.getProjectName().content();
@@ -111,14 +103,7 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
             case servicebuilder:
                 op.setPortletFramework( "mvc" );
             case portlet:
-                final IPortletFramework portletFramework = op.getPortletFramework().content( true );
-
-                String frameworkName = portletFramework.getShortName();
-
-                if( portletFramework.isRequiresAdvanced() )
-                {
-                    frameworkName = op.getPortletFrameworkAdvanced().content( true ).getShortName();
-                }
+                final String frameworkName = getFrameworkName( op );
 
                 workingDir = sdk.getLocation().append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER ).toOSString();
                 baseDir = updateBaseDir ? workingDir : null;
@@ -239,9 +224,12 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider
     private void portletProjectCreated( NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor )
         throws CoreException
     {
-        final IStatus status = op.getPortletFramework().content().postProjectCreated( newProject, monitor );
+        final IPortletFramework portletFramework = op.getPortletFramework().content();
+        final String frameworkName = getFrameworkName( op );
 
-        if( !status.isOK() )
+        final IStatus status = portletFramework.postProjectCreated( newProject, frameworkName, monitor );
+
+        if( ! status.isOK() )
         {
             throw new CoreException( status );
         }

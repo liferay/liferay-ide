@@ -142,9 +142,9 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         return project;
     }
 
-    protected IProject createNewJsfAntProject( String jsfSuite ) throws Exception
+    protected IProject createNewJsfAntProject( String jsfSuite, String suffix ) throws Exception
     {
-        final String projectName = "test-" + jsfSuite + "-sdk-project";
+        final String projectName = "test-" + jsfSuite + suffix + "-sdk-project";
         final NewLiferayPluginProjectOp op = newProjectOp();
         op.setProjectName( projectName );
         op.setPortletFramework( "jsf-2.x" );
@@ -629,11 +629,10 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewJsfAntProjects() throws Exception
     {
-        createNewJsfAntProject( "jsf" );
-        createNewJsfAntProject( "liferay_faces_alloy" );
-        createNewJsfAntProject( "icefaces" );
-        createNewJsfAntProject( "primefaces" );
-        createNewJsfAntProject( "richfaces" );
+        createNewJsfAntProject( "jsf", "" );
+        createNewJsfAntProject( "liferay_faces_alloy", "" );
+        createNewJsfAntProject( "icefaces", "" );
+        createNewJsfAntProject( "primefaces", "" );
     }
 
     @Test
@@ -1427,6 +1426,24 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         op.setUseSdkLocation( false );
         exceptedLocation = CoreUtil.getWorkspaceRoot().getLocation().append( projectName + "-portlet" );
         assertEquals( exceptedLocation, PathBridge.create( op.getLocation().content() ) );
+    }
+
+    protected void testNewJsfRichfacesProjects() throws Exception
+    {
+        testNewJsfRichfacesProject( "primefaces", false );
+        testNewJsfRichfacesProject( "richfaces", true );
+    }
+
+    private void testNewJsfRichfacesProject( String framework, boolean richfacesEnabled ) throws Exception
+    {
+        final IProject project = createNewJsfAntProject( framework, "rf" );
+
+        final String contents =
+            CoreUtil.readStreamToString( project.getFile( "docroot/WEB-INF/web.xml" ).getContents( true ) );
+
+        assertEquals( richfacesEnabled, contents.contains( "org.richfaces.resourceMapping.enabled" ) );
+
+        assertEquals( richfacesEnabled, contents.contains( "org.richfaces.webapp.ResourceServlet" ) );
     }
 
 }

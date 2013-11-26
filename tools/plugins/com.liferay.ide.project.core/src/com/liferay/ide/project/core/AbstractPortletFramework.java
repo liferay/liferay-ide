@@ -16,6 +16,10 @@ package com.liferay.ide.project.core;
 
 import java.net.URL;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
 
@@ -89,6 +93,12 @@ public abstract class AbstractPortletFramework implements IPortletFramework
     public boolean isRequiresAdvanced()
     {
         return this.requiresAdvanced;
+    }
+
+    public IStatus postProjectCreated( IProject project, String frameworkName, IProgressMonitor monitor )
+    {
+        // by default do nothing;
+        return Status.OK_STATUS;
     }
 
     public void setAdvanced( boolean adv )

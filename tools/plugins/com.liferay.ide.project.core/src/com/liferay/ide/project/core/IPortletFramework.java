@@ -75,7 +75,7 @@ public interface IPortletFramework
 
     boolean isRequiresAdvanced();
 
-    IStatus postProjectCreated( IProject project, IProgressMonitor monitor );
+    IStatus postProjectCreated( IProject project, String frameworkName, IProgressMonitor monitor );
 
     boolean supports( ILiferayProjectProvider provider );
 }

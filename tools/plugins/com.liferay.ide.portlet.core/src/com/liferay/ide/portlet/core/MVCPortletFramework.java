@@ -18,8 +18,6 @@ package com.liferay.ide.portlet.core;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.AbstractPortletFramework;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -40,12 +38,6 @@ public class MVCPortletFramework extends AbstractPortletFramework
     {
         // nothing to do for MVCPortlet projects its already properly configured.
 
-        return Status.OK_STATUS;
-    }
-
-    public IStatus postProjectCreated( IProject project, IProgressMonitor monitor )
-    {
-        // do nothing;
         return Status.OK_STATUS;
     }
 
