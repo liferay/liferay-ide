@@ -64,20 +64,12 @@ public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescr
 
             if( fileStore != null )
             {
-                final IFile iFile =
+                final IFile file =
                     ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( FileUtil.toPath( fileStore.toURI() ) );
 
-                if( iFile != null && iFile.getProject() != null && CoreUtil.isLiferayProject( iFile.getProject() ) )
+                if( isValidFile( file ) )
                 {
-                    final IFile[] languagePropertiesFiles = PropertiesUtil.getLanguagePropertiesFiles( iFile.getProject() );
-
-                    for( IFile propertiesFile : languagePropertiesFiles )
-                    {
-                        if( iFile.equals( propertiesFile ) )
-                        {
-                            return VALID;
-                        }
-                    }
+                    return VALID;
                 }
             }
         }
@@ -135,7 +127,7 @@ public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescr
                     {
                         IFile file = (IFile) fFile;
 
-                        if( file.getProject() != null && CoreUtil.isLiferayProject( file.getProject() ) )
+                        if( isValidFile( file ) )
                         {
                             return VALID;
                         }
@@ -157,6 +149,24 @@ public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescr
     public QualifiedName[] getSupportedOptions()
     {
         return null;
+    }
+
+    private boolean isValidFile( IFile file )
+    {
+        if( file != null && file.getProject() != null && CoreUtil.isLiferayProject( file.getProject() ) )
+        {
+            final IFile[] languagePropertiesFiles = PropertiesUtil.getLanguagePropertiesFiles( file.getProject() );
+
+            for( IFile propertiesFile : languagePropertiesFiles )
+            {
+                if( file.equals( propertiesFile ) )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

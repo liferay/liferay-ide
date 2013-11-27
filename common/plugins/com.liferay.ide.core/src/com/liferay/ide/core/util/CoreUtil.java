@@ -31,6 +31,7 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -462,7 +463,7 @@ public class CoreUtil
 
     public static IFolder[] getSrcFolders( IProject project )
     {
-        Set<IFolder> retval = new HashSet<IFolder>();
+        List<IFolder> retval = new ArrayList<IFolder>();
 
         @SuppressWarnings( "deprecation" )
         IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );

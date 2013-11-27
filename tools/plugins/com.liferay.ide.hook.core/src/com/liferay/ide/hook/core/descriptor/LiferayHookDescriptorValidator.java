@@ -63,6 +63,7 @@ import org.w3c.dom.NodeList;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayHookDescriptorValidator extends BaseValidator
@@ -319,7 +320,6 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                                     }
                                 }
                             }
-
                         }
                         else
                         {

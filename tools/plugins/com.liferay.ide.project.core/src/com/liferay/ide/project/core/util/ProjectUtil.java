@@ -15,9 +15,7 @@
 
 package com.liferay.ide.project.core.util;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -280,26 +278,6 @@ public class ProjectUtil
         }
 
     }*/
-
-    public static void encodeLanguagePropertiesFilesToDefault( IProject proj, final IProgressMonitor monitor )
-    {
-        final IFile[] languagePropertiesFiles = PropertiesUtil.getLanguagePropertiesFiles( proj );
-
-        try 
-        {
-            for( IFile file : languagePropertiesFiles )
-            {
-                if( ! file.getCharset().equals( ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET ) )
-                {
-                    file.setCharset( null, monitor );
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayProjectCore.logError( e );
-        }
-    }
 
     public static String convertToDisplayName( String name )
     {
@@ -1173,28 +1151,6 @@ public class ProjectUtil
 
         return retval[0];
     }*/
-
-    public static boolean hasNonDefaultEncodingLanguagePropertiesFile( IProject proj )
-    {
-        IFile[] languageFiles = PropertiesUtil.getLanguagePropertiesFiles( proj );
-
-        try
-        {
-            for( IFile file : languageFiles )
-            {
-                if( ! file.getCharset().equals( ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET ) )
-                {
-                    return true;
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayProjectCore.logError( e );
-        }
-
-        return false;
-    }
 
     public static boolean hasProperty( IDataModel model, String propertyName )
     {

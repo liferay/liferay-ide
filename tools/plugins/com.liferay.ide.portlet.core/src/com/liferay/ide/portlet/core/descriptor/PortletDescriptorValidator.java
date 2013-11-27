@@ -142,6 +142,7 @@ public class PortletDescriptorValidator extends BaseValidator
                             resourceBundle = allResourceBundles.item( j );
                         }
                     }
+
                     if( allSupportedLocales.getLength() > 0 )
                     {
                         for( int k = 0; k < allSupportedLocales.getLength(); k++ )
@@ -170,8 +171,7 @@ public class PortletDescriptorValidator extends BaseValidator
                                         resourceBundleVal.replaceAll( "\\.", "/" ) + ".properties" ) );
 
                                 if( resourceBundleFile.exists() &&
-                                    ! resourceBundleFile.getCharset().equals(
-                                        ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET ) )
+                                    ! ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( resourceBundleFile.getCharset() ) )
                                 {
                                     String msg =
                                         MessageFormat.format(

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.action;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 
 import java.lang.reflect.InvocationTargetException;
@@ -62,7 +62,7 @@ public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
                         {
                             monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
 
-                            ProjectUtil.encodeLanguagePropertiesFilesToDefault( (IProject) elem, monitor );
+                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IProject) elem, monitor );
 
                             monitor.done();
                         }

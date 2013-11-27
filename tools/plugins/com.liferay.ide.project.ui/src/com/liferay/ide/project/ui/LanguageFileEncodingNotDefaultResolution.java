@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -49,7 +49,7 @@ public class LanguageFileEncodingNotDefaultResolution implements IMarkerResoluti
                         {
                             monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
 
-                            ProjectUtil.encodeLanguagePropertiesFilesToDefault( proj, monitor );
+                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( proj, monitor );
 
                             monitor.done();
                         }

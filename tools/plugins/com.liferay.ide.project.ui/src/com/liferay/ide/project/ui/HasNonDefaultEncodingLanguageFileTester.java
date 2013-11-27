@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
@@ -35,7 +35,7 @@ public class HasNonDefaultEncodingLanguageFileTester extends PropertyTester
     {
         if( receiver instanceof IProject )
         {
-           return ProjectUtil.hasNonDefaultEncodingLanguagePropertiesFile( (IProject) receiver );
+           return PropertiesUtil.hasNonDefaultEncodingLanguagePropertiesFile( (IProject) receiver );
         }
 
         return false;
