@@ -19,11 +19,11 @@
             base-type="org.eclipse.jdt.core.javaProperties"
             default-charset="UTF-8"
             file-extensions="properties"
-            id="liferaylanguagefile"
-            name="%liferay.language.file.name"
+            id="liferaylanguagepropertiesfile"
+            name="%liferay.language.properties.file.name"
             priority="high">
          <describer
-               class="com.liferay.ide.core.describer.LiferayLanguageFileDescriber">
+               class="com.liferay.ide.core.describer.LiferayLanguagePropertiesFileDescriber">
          </describer>
       </content-type>
    </extension>

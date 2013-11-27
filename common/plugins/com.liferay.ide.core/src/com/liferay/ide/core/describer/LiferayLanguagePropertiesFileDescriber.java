@@ -16,6 +16,7 @@
 package com.liferay.ide.core.describer;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,10 +36,10 @@ import org.eclipse.core.runtime.content.ITextContentDescriber;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayLanguageFileDescriber implements ITextContentDescriber
+public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescriber
 {
 
-    public LiferayLanguageFileDescriber()
+    public LiferayLanguagePropertiesFileDescriber()
     {
         super();
     }
@@ -66,10 +67,17 @@ public class LiferayLanguageFileDescriber implements ITextContentDescriber
                 final IFile iFile =
                     ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( FileUtil.toPath( fileStore.toURI() ) );
 
-                if( iFile != null && iFile.getProject() != null && CoreUtil.isLiferayProject( iFile.getProject() ) &&
-                    CoreUtil.isInSrcFolders( iFile ) )
+                if( iFile != null && iFile.getProject() != null && CoreUtil.isLiferayProject( iFile.getProject() ) )
                 {
-                    retval = VALID;
+                    final IFile[] languagePropertiesFiles = PropertiesUtil.getLanguagePropertiesFiles( iFile.getProject() );
+
+                    for( IFile propertiesFile : languagePropertiesFiles )
+                    {
+                        if( iFile.equals( propertiesFile ) )
+                        {
+                            return VALID;
+                        }
+                    }
                 }
             }
         }

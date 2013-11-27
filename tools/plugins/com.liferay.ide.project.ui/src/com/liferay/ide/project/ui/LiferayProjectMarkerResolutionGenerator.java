@@ -16,7 +16,6 @@
 package com.liferay.ide.project.ui;
 
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.LiferayProjectLanguageFileValidator;
 import com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator;
 
 import org.eclipse.core.resources.IMarker;
@@ -45,10 +44,6 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
             else if( markerSourceId.equals( PluginsSDKProjectRuntimeValidator.ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME ) )
             {
                 resolution = new PrimaryRuntimeNotLiferayRuntimeResolution();
-            }
-            else if( markerSourceId.equals( LiferayProjectLanguageFileValidator.ID_LANGUAGE_FILE_Encoding_NOT_DEFAULT) )
-            {
-                resolution = new LanguageFileEncodingNotDefaultResolution();
             }
 
         }

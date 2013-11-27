@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jem.util;visibility:=reexport,
  org.eclipse.jem.workbench;visibility:=reexport,
  org.eclipse.jst.j2ee.web,
- org.eclipse.core.commands
+ org.eclipse.core.commands,
+ org.eclipse.jdt.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.hook.core,

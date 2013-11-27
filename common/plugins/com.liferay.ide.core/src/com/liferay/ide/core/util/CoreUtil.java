@@ -31,7 +31,6 @@ import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -77,10 +76,12 @@ import org.eclipse.wst.validation.internal.ValidationRunner;
 import org.osgi.framework.Version;
 import org.w3c.dom.Node;
 
+
 /**
  * Core Utility methods
  *
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class CoreUtil
@@ -461,9 +462,10 @@ public class CoreUtil
 
     public static IFolder[] getSrcFolders( IProject project )
     {
-        List<IFolder> retval = new ArrayList<IFolder>();
+        Set<IFolder> retval = new HashSet<IFolder>();
 
-        final IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
+        @SuppressWarnings( "deprecation" )
+        IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
 
         if( sourceFolders != null && sourceFolders.length > 0 )
         {
@@ -474,6 +476,7 @@ public class CoreUtil
                     retval.add( (IFolder) sourceFolder.getResource() );
                 }
             }
+
         }
 
         return retval.toArray( new IFolder[retval.size()] );
@@ -566,19 +569,6 @@ public class CoreUtil
         }
 
         return true;
-    }
-
-    public static boolean isInSrcFolders( IFile iFile )
-    {
-        for( IFolder srcFolder : getSrcFolders( iFile.getProject() ) )
-        {
-            if( srcFolder.getFile( iFile.getFullPath() ) != null  )
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static boolean isResourceInDocroot( IModuleResource resource )

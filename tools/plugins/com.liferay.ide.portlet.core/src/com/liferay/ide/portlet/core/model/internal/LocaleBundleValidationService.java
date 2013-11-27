@@ -117,12 +117,17 @@ public class LocaleBundleValidationService extends ValidationService
                                 IPath entryPath = wroot.getFolder( iClasspathEntry.getPath() ).getLocation();
                                 entryPath = entryPath.append( ioFileName );
                                 IFile resourceBundleFile = wroot.getFileForLocation( entryPath );
-                                if( resourceBundleFile != null && !resourceBundleFile.exists() )
+                                if( resourceBundleFile != null && resourceBundleFile.exists() )
+                                {
+                                    return Status.createOkStatus();
+                                }
+                                else
                                 {
                                     return Status.createWarningStatus( Resources.bind(
                                         StringEscapeUtils.unescapeJava( Resources.noResourceBundle ), new Object[] {
                                             locale, bundleName, localeString } ) );
                                 }
+
                             }
                         }
                     }

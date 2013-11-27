@@ -49,7 +49,7 @@ public class LanguageFileEncodingNotDefaultResolution implements IMarkerResoluti
                         {
                             monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
 
-                            ProjectUtil.encodePropertyFilesToLiferayDefault( proj, monitor );
+                            ProjectUtil.encodeLanguagePropertiesFilesToDefault( proj, monitor );
 
                             monitor.done();
                         }

@@ -62,7 +62,7 @@ public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
                         {
                             monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
 
-                            ProjectUtil.encodePropertyFilesToLiferayDefault( (IProject) elem, monitor );
+                            ProjectUtil.encodeLanguagePropertiesFilesToDefault( (IProject) elem, monitor );
 
                             monitor.done();
                         }

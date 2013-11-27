@@ -35,6 +35,9 @@ public class ValidationPreferences
     public static final String LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND =
         "validation-liferay-hook-xml-language-properties-not-found"; //$NON-NLS-1$
 
+    public static final String LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT=
+                    "validation-liferay-hook-xml-language-properties-encoding-not-found"; //$NON-NLS-1$
+
     public static final String LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND =
         "validation-liferay-hook-xml-portal-properties-not-found"; //$NON-NLS-1$
 
@@ -91,6 +94,12 @@ public class ValidationPreferences
 
     public static final String PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND =
         "validation-portlet-xml-resource-bundle-not-found"; //$NON-NLS-1$
+
+    public static final String PORTLET_XML_RESOURCE_BUNDLE_ENCODING_NOT_DEFAULT  =
+                    "validation-portlet-xml-resource-bundle-encoding-not-default"; //$NON-NLS-1$
+
+    public static final String PORTLET_XML_SUPPORTED_LOCALE_ENCODING_NOT_DEFAULT  =
+                    "validation-portlet-xml-supported-locale-encoding-not-default"; //$NON-NLS-1$
 
     public static final String SERVICE_XML_NAMESPACE_INVALID = "validation-service-xml-namespace-invalid"; //$NON-NLS-1$
 

@@ -437,9 +437,6 @@
       <validator
             class="com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator">
       </validator>
-      <validator
-            class="com.liferay.ide.project.core.LiferayProjectLanguageFileValidator">
-      </validator>
    </extension>
    <extension
          id="LiferayProjectMarker"
