@@ -30,6 +30,7 @@ import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -38,6 +39,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author Kamesh Sampath
+ * @author Simon Jiang
  */
 @Image( path = "images/elcl16/filter_16x16.gif" )
 public interface Filter extends Describeable, Displayable
@@ -62,6 +64,7 @@ public interface Filter extends Describeable, Displayable
     @Reference( target = JavaType.class )
     @Label( standard = "implementation class", full = "Filter implementation class" )
     @Required
+    @MustExist
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.filter.ResourceFilter",
         "javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter", "javax.portlet.filter.EventFilter" } )
     @XmlBinding( path = "filter-class" )

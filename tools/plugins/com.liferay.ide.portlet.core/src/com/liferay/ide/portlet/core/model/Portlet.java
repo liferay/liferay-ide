@@ -41,6 +41,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
 /**
  * @author Kamesh Sampath
+ * @author Simon Jiang
  */
 @Image( path = "images/elcl16/portlet_16x16.png" )
 public interface Portlet extends ResourceBundle, Identifiable, Describeable, Displayable
@@ -67,6 +68,7 @@ public interface Portlet extends ResourceBundle, Identifiable, Describeable, Dis
     @Reference( target = JavaType.class )
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.GenericPortlet" } )
     @Label( standard = "Portlet class" )
+    @MustExist
     @Required
     @XmlBinding( path = "portlet-class" )
     ValueProperty PROP_PORTLET_CLASS = new ValueProperty( TYPE, "PortletClass" ); //$NON-NLS-1$

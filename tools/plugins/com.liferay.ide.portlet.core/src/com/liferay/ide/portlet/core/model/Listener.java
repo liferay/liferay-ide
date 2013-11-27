@@ -29,6 +29,7 @@ import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.annotations.Documentation;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -36,6 +37,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author Kamesh Sampath
+ * @author Simon Jiang
  */
 @Image( path = "images/obj16/portlet_class_obj.gif" )
 public interface Listener extends Element, Describeable, Displayable
@@ -50,6 +52,7 @@ public interface Listener extends Element, Describeable, Displayable
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "javax.portlet.PortletURLGenerationListener" )
     @Label( standard = "Implementation", full = "Listener implementation class" )
     @Required
+    @MustExist
     @XmlBinding( path = "listener-class" )
     @Documentation( content = "The listener implementation class." )
     ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" ); //$NON-NLS-1$
