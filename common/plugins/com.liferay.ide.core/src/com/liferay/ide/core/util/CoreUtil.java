@@ -775,4 +775,10 @@ public class CoreUtil
         out.close();
     }
 
+    public static boolean isFileInLiferayProject( IFile file )
+    {
+        // TODO finish isFileInLiferayProject
+        return false;
+    }
+
 }

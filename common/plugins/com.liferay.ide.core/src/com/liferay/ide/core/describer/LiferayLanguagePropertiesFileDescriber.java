@@ -153,7 +153,7 @@ public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescr
 
     private boolean isValidFile( IFile file )
     {
-        if( file != null && file.getProject() != null && CoreUtil.isLiferayProject( file.getProject() ) )
+        if( file != null && CoreUtil.isLiferayProject( file.getProject() ) )
         {
             final IFile[] languagePropertiesFiles = PropertiesUtil.getLanguagePropertiesFiles( file.getProject() );
 

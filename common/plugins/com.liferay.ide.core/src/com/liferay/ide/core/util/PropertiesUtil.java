@@ -34,8 +34,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -141,8 +139,8 @@ public class PropertiesUtil
             {
                 if( ! ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( file.getCharset() ) )
                 {
-                    IContentType contentType = Platform.getContentTypeManager().findContentTypeFor( file.getContents(), file.getName() );
                     file.setCharset( null, monitor );
+                    file.setContents( file.getContents(), IResource.FORCE, monitor );
                 }
             }
             catch( Exception e )
@@ -150,6 +148,8 @@ public class PropertiesUtil
                 LiferayCore.logError( e );
             }
         }
+
+        //TODO check the project for either portlet.xml or liferay-hook.xml and validate that one file
     }
 
     private static LanguageFileInfo getLanguageFileInfo( IFile liferayHookXml )
