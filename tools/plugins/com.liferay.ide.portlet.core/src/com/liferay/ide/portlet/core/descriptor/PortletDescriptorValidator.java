@@ -72,6 +72,10 @@ public class PortletDescriptorValidator extends BaseValidator
     public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.portletDescriptorMarker"; //$NON-NLS-1$
 
     public static final String MESSAGE_RESOURCE_BUNDLE_NOT_FOUND = Msgs.resourceBundleNotFound;
+    
+    public static final String MESSAGE_RESOURCE_BUNDLE_ENCODING_NOT_DEFAULT = Msgs.resourceBundleEncodingNotDefault;
+    
+    public static final String MESSAGE_SUPPORTED_LOCALE_ENCODING_NOT_DEFAULT = Msgs.supportedLocaleEncodingNotDefault;
 
     public static final String PORTLET_CLASS_ELEMENT = "portlet-class"; //$NON-NLS-1$
 
@@ -142,7 +146,6 @@ public class PortletDescriptorValidator extends BaseValidator
                             resourceBundle = allResourceBundles.item( j );
                         }
                     }
-
                     if( allSupportedLocales.getLength() > 0 )
                     {
                         for( int k = 0; k < allSupportedLocales.getLength(); k++ )
@@ -174,8 +177,7 @@ public class PortletDescriptorValidator extends BaseValidator
                                     ! ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( resourceBundleFile.getCharset() ) )
                                 {
                                     String msg =
-                                        MessageFormat.format(
-                                            Msgs.resourceBundleEncodingNotDefault,
+                                        MessageFormat.format( MESSAGE_RESOURCE_BUNDLE_ENCODING_NOT_DEFAULT,
                                             new Object[] { resourceBundleFile.getName() } );
 
                                     problems.add( createMarkerValues(
@@ -199,8 +201,7 @@ public class PortletDescriptorValidator extends BaseValidator
                                                 ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET ) )
                                         {
                                             String msg =
-                                                MessageFormat.format(
-                                                    Msgs.supportedLocaleEncodingNotDefault,
+                                                MessageFormat.format( MESSAGE_SUPPORTED_LOCALE_ENCODING_NOT_DEFAULT,
                                                     new Object[] { supportedLocaleFile.getName() } );
 
                                             problems.add( createMarkerValues(

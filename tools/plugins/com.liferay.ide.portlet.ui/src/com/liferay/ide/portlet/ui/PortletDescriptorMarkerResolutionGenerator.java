@@ -13,31 +13,25 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui;
+package com.liferay.ide.portlet.ui;
 
-import com.liferay.ide.core.util.PropertiesUtil;
-
-import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.ui.IMarkerResolution;
+import org.eclipse.ui.IMarkerResolutionGenerator2;
 
 /**
  * @author Kuo Zhang
  */
-public class HasNonDefaultEncodingLanguageFileTester extends PropertyTester
+public class PortletDescriptorMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 {
 
-    public HasNonDefaultEncodingLanguageFileTester()
+    public IMarkerResolution[] getResolutions( IMarker marker )
     {
-        super();
+        return null;
     }
 
-    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
+    public boolean hasResolutions( IMarker marker )
     {
-        if( receiver instanceof IProject )
-        {
-           return PropertiesUtil.hasNonDefaultEncodingLanguagePropertiesFile( (IProject) receiver );
-        }
-
         return false;
     }
 

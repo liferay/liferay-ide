@@ -20,7 +20,7 @@ import com.liferay.ide.project.ui.ProjectUIPlugin;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -34,12 +34,12 @@ import org.eclipse.ui.IWorkbenchPart;
 /**
  * @author Kuo Zhang
  */
-public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
+public class EncodeLanguagePropertiesFilesToDefaultAction implements IObjectActionDelegate
 {
 
     private ISelection selection;
 
-    public EncodeLanguageFilesToDefaultAction()
+    public EncodeLanguagePropertiesFilesToDefaultAction()
     {
         super();
     }
@@ -50,9 +50,9 @@ public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
         {
             final Object elem = ( (IStructuredSelection) selection ).toArray()[0];
 
-            if( elem instanceof IProject )
+            try
             {
-                try
+                if( elem instanceof IResource )
                 {
                     new ProgressMonitorDialog( new Shell() ).run( true, false, new IRunnableWithProgress()
                     {
@@ -62,17 +62,16 @@ public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
                         {
                             monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
 
-                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IProject) elem, monitor );
+                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IResource) elem, monitor );
 
                             monitor.done();
                         }
-
                     } );
                 }
-                catch( Exception e )
-                {
-                    ProjectUIPlugin.logError( e );
-                }
+            }
+            catch( Exception e )
+            {
+                ProjectUIPlugin.logError( e );
             }
         }
     }
