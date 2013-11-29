@@ -12,7 +12,7 @@
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <tycho-packaging-format>yyyyMMddHHmm'-m3'</tycho-packaging-format>
+        <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
         <tycho-version>0.19.0</tycho-version>
         <tycho-extras-version>0.19.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/</orbit-site>

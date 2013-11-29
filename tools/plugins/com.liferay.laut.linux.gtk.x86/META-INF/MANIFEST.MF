@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay AUI Upgrade Tool Linux32
+Bundle-SymbolicName: com.liferay.laut.linux.gtk.x86;singleton:=true
+Bundle-Version: 1.0.2.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-BundleShape: dir
+Eclipse-PlatformFilter: (& (osgi.ws=gtk)(osgi.os=linux)(osgi.arch=x86))
+Bundle-Vendor: Liferay, Inc.
