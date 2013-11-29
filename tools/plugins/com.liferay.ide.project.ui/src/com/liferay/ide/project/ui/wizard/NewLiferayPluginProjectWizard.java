@@ -35,6 +35,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.ui.DelayedTasksExecutor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
@@ -60,14 +62,21 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 {
     private boolean firstErrorMessageRemoved = false;
 
-    private static NewLiferayPluginProjectOp createDefaultOp()
-    {
-        return NewLiferayPluginProjectOp.TYPE.instantiate();
-    }
-
     public NewLiferayPluginProjectWizard()
     {
         super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayPluginProjectWizard.class ).wizard() );
+    }
+
+    private void addToWorkingSets( IProject newProject )
+    {
+        // TODO add to the selected working sets
+//        if (newProject != null )
+//        {
+//            IWorkbench workbench = PlatformUI.getWorkbench();
+//
+//            IWorkingSet[] workingSets = null;//mainPage.getSelectedWorkingSets();
+//            workbench.getWorkingSetManager().addToWorkingSets(newProject, workingSets);
+//        }
     }
 
     @Override
@@ -94,6 +103,45 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
+    }
+
+    private void openLiferayPerspective( IProject newProject )
+    {
+        final IWorkbench workbench = PlatformUI.getWorkbench();
+        // open the "final" perspective
+        final IConfigurationElement element = new DelegateConfigurationElement( null )
+        {
+            public String getAttribute( String aName )
+            {
+                if( aName.equals( "finalPerspective" ) )
+                {
+                    return LiferayPerspectiveFactory.ID;
+                }
+
+                return super.getAttribute( aName );
+            }
+        };
+
+        BasicNewProjectResourceWizard.updatePerspective( element );
+
+        // select and reveal
+        BasicNewResourceWizard.selectAndReveal( newProject, workbench.getActiveWorkbenchWindow() );
+    }
+
+    @Override
+    protected org.eclipse.sapphire.modeling.Status performFinish( ProgressMonitor monitor )
+    {
+        //IDE-1312 this can be removed once https://bugs.eclipse.org/bugs/show_bug.cgi?id=422437 is finished
+        DelayedTasksExecutor.sweep();
+
+        final org.eclipse.sapphire.modeling.Status status = element().validation();
+
+        if( !status.ok() )
+        {
+            return org.eclipse.sapphire.modeling.Status.createErrorStatus( "Wizard still contains errors. please correct and try again." );
+        }
+
+        return super.performFinish( monitor );
     }
 
     @Override
@@ -134,98 +182,70 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
     private void showInAntView( final IProject project )
     {
-        Display.getDefault().asyncExec( new Runnable()
-        {
-            private void addBuildInAntView()
+        Display.getDefault().asyncExec
+        (
+            new Runnable()
             {
-                if( project != null )
+                private void addBuildInAntView()
                 {
-                    IFile buildXmlFile = project.getFile( "build.xml" ); //$NON-NLS-1$
-
-                    if( buildXmlFile.exists() )
+                    if( project != null )
                     {
-                        String buildFileName = buildXmlFile.getFullPath().toString();
-                        final AntProjectNode antProject = new AntProjectNodeProxy( buildFileName );
-                        project.getName();
+                        IFile buildXmlFile = project.getFile( "build.xml" ); //$NON-NLS-1$
 
-                        IViewPart antView =
-                            PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-                                "org.eclipse.ant.ui.views.AntView" ); //$NON-NLS-1$
-
-                        if( antView instanceof AntView )
+                        if( buildXmlFile.exists() )
                         {
-                            ( (AntView) antView ).addProject( antProject );
+                            String buildFileName = buildXmlFile.getFullPath().toString();
+                            final AntProjectNode antProject = new AntProjectNodeProxy( buildFileName );
+                            project.getName();
+
+                            IViewPart antView =
+                                PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+                                    "org.eclipse.ant.ui.views.AntView" ); //$NON-NLS-1$
+
+                            if( antView instanceof AntView )
+                            {
+                                ( (AntView) antView ).addProject( antProject );
+                            }
                         }
                     }
                 }
-            }
 
-            private void refreshProjectExplorer()
-            {
-                IViewPart view = null;
-
-                try
+                private void refreshProjectExplorer()
                 {
-                    view =
-                        PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-                            IPageLayout.ID_PROJECT_EXPLORER );
+                    IViewPart view = null;
+
+                    try
+                    {
+                        view =
+                            PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+                                IPageLayout.ID_PROJECT_EXPLORER );
+                    }
+                    catch( Exception e )
+                    {
+                        // Just bail and return if there is no view
+                    }
+
+                    if( view == null )
+                    {
+                        return;
+                    }
+
+                    CommonViewer viewer = (CommonViewer) view.getAdapter( CommonViewer.class );
+
+                    viewer.refresh( true );
                 }
-                catch( Exception e )
+
+                public void run()
                 {
-                    // Just bail and return if there is no view
+                    refreshProjectExplorer();
+                    addBuildInAntView();
                 }
-
-                if( view == null )
-                {
-                    return;
-                }
-
-                CommonViewer viewer = (CommonViewer) view.getAdapter( CommonViewer.class );
-
-                viewer.refresh( true );
             }
-
-            public void run()
-            {
-                refreshProjectExplorer();
-                addBuildInAntView();
-            }
-        } );
+        );
     }
 
-    private void addToWorkingSets( IProject newProject )
+    private static NewLiferayPluginProjectOp createDefaultOp()
     {
-        // TODO add to the selected working sets
-//        if (newProject != null )
-//        {
-//            IWorkbench workbench = PlatformUI.getWorkbench();
-//
-//            IWorkingSet[] workingSets = null;//mainPage.getSelectedWorkingSets();
-//            workbench.getWorkingSetManager().addToWorkingSets(newProject, workingSets);
-//        }
+        return NewLiferayPluginProjectOp.TYPE.instantiate();
     }
-
-    private void openLiferayPerspective( IProject newProject )
-    {
-        final IWorkbench workbench = PlatformUI.getWorkbench();
-        // open the "final" perspective
-        final IConfigurationElement element = new DelegateConfigurationElement( null )
-        {
-            public String getAttribute( String aName )
-            {
-                if( aName.equals( "finalPerspective" ) )
-                {
-                    return LiferayPerspectiveFactory.ID;
-                }
-
-                return super.getAttribute( aName );
-            }
-        };
-
-        BasicNewProjectResourceWizard.updatePerspective( element );
-
-        // select and reveal
-        BasicNewResourceWizard.selectAndReveal( newProject, workbench.getActiveWorkbenchWindow() );
-    }
-
 }

@@ -20,6 +20,7 @@ import com.liferay.ide.maven.core.MavenUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.ui.action.NewLiferayProfileActionHandler;
+import com.liferay.ide.project.ui.dialog.SafeSapphireDialog;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -63,7 +64,7 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 
         final Reference<DialogDef> dialogRef = DefinitionLoader.sdef(
             NewLiferayPluginProjectWizard.class ).dialog( "NewLiferayProfile" );
-        final SapphireDialog dialog = new SapphireDialog( UIUtil.getActiveShell(), newLiferayProfile, dialogRef );
+        final SapphireDialog dialog = new SafeSapphireDialog( UIUtil.getActiveShell(), newLiferayProfile, dialogRef );
 
         dialog.setBlockOnOpen( true );
         final int result = dialog.open();

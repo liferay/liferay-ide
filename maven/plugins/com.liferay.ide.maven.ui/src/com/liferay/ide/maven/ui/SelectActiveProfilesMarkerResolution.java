@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.ui.dialog.SafeSapphireDialog;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -40,7 +41,7 @@ public class SelectActiveProfilesMarkerResolution extends AbstractProjectMarkerR
     {
         final Reference<DialogDef> dialogRef =
             DefinitionLoader.sdef( NewLiferayPluginProjectWizard.class ).dialog( "SelectActiveProfiles" );
-        final SapphireDialog dialog = new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
+        final SapphireDialog dialog = new SafeSapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
 
         dialog.setBlockOnOpen( true );
         return dialog.open();

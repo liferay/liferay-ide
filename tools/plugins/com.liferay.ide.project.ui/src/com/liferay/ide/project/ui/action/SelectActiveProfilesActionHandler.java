@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.Profile;
+import com.liferay.ide.project.ui.dialog.SafeSapphireDialog;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
 
 import org.eclipse.sapphire.ElementList;
@@ -81,7 +82,7 @@ public class SelectActiveProfilesActionHandler extends PropertyEditorActionHandl
             }
 
             final SapphireDialog dialog =
-                new SapphireDialog( swt.shell(), op, DefinitionLoader.sdef(
+                new SafeSapphireDialog( swt.shell(), op, DefinitionLoader.sdef(
                     NewLiferayPluginProjectWizard.class ).dialog( "SelectActiveProfiles" ) );
 
             dialog.setBlockOnOpen( true );
