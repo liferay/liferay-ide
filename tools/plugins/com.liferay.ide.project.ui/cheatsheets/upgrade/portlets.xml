@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Upgrading portlet projects">
+   <intro>
+      <description>
+         Some intro text
+      </description>
+   </intro>
+   <item
+         title="Select portlet projects to upgrade">
+      <description>
+         <b>Body</b>
+      </description>
+      <command
+            required="false"
+            serialization="com.liferay.ide.project.ui.upgrade.portlets.selectProjects"/>
+   </item>
+</cheatsheet>

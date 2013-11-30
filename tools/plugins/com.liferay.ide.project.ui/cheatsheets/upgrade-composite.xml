@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compositeCheatsheet name="Upgrading Liferay projects to Liferay Portal 6.2">
+   <taskGroup kind="choice" name="Upgrading Liferay projects to Liferay Portal 6.2" skip="false">
+      <intro>
+         This cheat sheet will guide you through the individual steps necessary to update Liferay portlets, hooks, layout templates, themes to the latest version of Liferay Portal version 6.2.
+<br/>
+<br/>
+To assist you along the way, wizards and commands
+         will be available for you to launch automatically.  If at any time you run into issues, please visit the Liferay IDE forums url listed below:<br/>
+<br/>
+http://www.liferay.com/community/forums/-/message_boards/category/4627757
+      </intro>
+      <onCompletion>
+         Congratulations!  You have just updated your projects to Liferay Portal 6.2.  For any issues please visit the Liferay IDE community forums page listed below and post a new thread with any issues encountered.
+
+http://www.liferay.com/community/forums/-/message_boards/category/4627757
+      </onCompletion>
+      <task kind="cheatsheet" name="Upgrading portlet projects" skip="false">
+         <intro>
+            This cheat sheet will walk you through all of the steps necessary to upgrade your Liferay portlet projects to use Liferay Portal 6.2.
+         </intro>
+         <onCompletion>
+            <b>Congratulations!</b> You have not finished upgrading your Liferay portlet projects to Liferay Portal 6.2
+         </onCompletion>
+         <param name="path" value="upgrade/portlets.xml">
+         </param>
+      </task>
+      <task kind="cheatsheet" name="Upgrading hook projects" skip="false">
+         <intro>
+            This cheat sheet will walk you through all of the steps necessary to upgrade your Liferay hooks projects to use Liferay Portal 6.2.
+         </intro>
+         <onCompletion>
+            <b>Congratulations!</b> You have not finished upgrading your Liferay hook  projects to Liferay Portal 6.2
+         </onCompletion>
+         <param name="path" value="upgrade/hooks.xml">
+         </param>
+      </task>
+      <task kind="cheatsheet" name="Upgrading layout templates" skip="false">
+         <intro>
+            This cheat sheet will walk you through all of the steps necessary to upgrade your Liferay layout templates to use Liferay Portal 6.2 bootstrap style layout templates.
+         </intro>
+         <onCompletion>
+            <b>Congratulations!</b> You have not finished upgrading your layout templates to Liferay Portal 6.2
+         </onCompletion>
+         <param name="path" value="upgrade/layout-templates.xml">
+         </param>
+      </task>
+   </taskGroup>
+</compositeCheatsheet>
