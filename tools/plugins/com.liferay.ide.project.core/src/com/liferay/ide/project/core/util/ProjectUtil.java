@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -295,14 +296,14 @@ public class ProjectUtil
         return displayName;
     }
 
-    public static void createDefaultWebXml( File webxmlFile )
+    public static void createDefaultWebXml( final File webxmlFile, final String expectedContainingProjectName )
     {
         final String webXmlContents = // "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE web-app PUBLIC \"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN\" \"http://java.sun.com/dtd/web-app_2_3.dtd\">\n<web-app>\n</web-app>";
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<web-app id=\"WebApp_ID\" version=\"2.5\" xmlns=\"http://java.sun.com/xml/ns/javaee\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd\">\n</web-app>"; //$NON-NLS-1$
 
         try
         {
-            org.eclipse.wst.common.project.facet.core.util.internal.FileUtil.writeFile( webxmlFile, webXmlContents );
+            FileUtil.writeFile( webxmlFile, webXmlContents, expectedContainingProjectName );
         }
         catch( Exception e )
         {
@@ -461,7 +462,7 @@ public class ProjectUtil
 
             if( ! ( webXmlPath.toFile().exists() ) )
             {
-                createDefaultWebXml( webXmlPath.toFile() );
+                createDefaultWebXml( webXmlPath.toFile(), projectRecord.getProjectName() );
             }
         }
         else if( projectRecord.getProjectName().endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
@@ -470,7 +471,7 @@ public class ProjectUtil
 
             if( ! ( webXmlPath.toFile().exists() ) )
             {
-                createDefaultWebXml( webXmlPath.toFile() );
+                createDefaultWebXml( webXmlPath.toFile(), projectRecord.getProjectName() );
             }
         }
         else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
@@ -483,7 +484,7 @@ public class ProjectUtil
 
             if( ! ( webXmlPath.toFile().exists() ) )
             {
-                createDefaultWebXml( webXmlPath.toFile() );
+                createDefaultWebXml( webXmlPath.toFile(), projectRecord.getProjectName() );
             }
         }
         else if( projectRecord.getProjectName().endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
@@ -496,7 +497,7 @@ public class ProjectUtil
         }
 
         IFacetedProjectWorkingCopy fpwc =
-            (IFacetedProjectWorkingCopy) newProjectDataModel. 
+            (IFacetedProjectWorkingCopy) newProjectDataModel.
                 getProperty( IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY );
         fpwc.setProjectName( projectRecord.getProjectName() );
 

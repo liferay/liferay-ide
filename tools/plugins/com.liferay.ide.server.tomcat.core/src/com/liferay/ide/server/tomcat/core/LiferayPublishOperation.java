@@ -65,7 +65,7 @@ public class LiferayPublishOperation extends PublishOperation {
 	/**
 	 * Construct the operation object to publish the specified module
 	 * to the specified server.
-	 * 
+	 *
 	 * @param server server to which the module will be published
 	 * @param kind kind of publish
 	 * @param module module to publish
@@ -107,7 +107,7 @@ public class LiferayPublishOperation extends PublishOperation {
 	 */
 	public void execute(IProgressMonitor monitor, IAdaptable info) throws CoreException {
 		List status = new ArrayList();
-		
+
 		// If parent web module
 		if (module.length == 1) {
 			if ( !ServerUtil.isExtProject( module[0].getProject() ) )
@@ -179,28 +179,28 @@ public class LiferayPublishOperation extends PublishOperation {
 				IStatus[] stat = PublishHelper.deleteDirectory(f, monitor);
 				addArrayToList(status, stat);
 			}
-			
+
 			if (deltaKind == ServerBehaviourDelegate.REMOVED
 					|| server.getTomcatServer().isServeModulesWithoutPublish())
 				return;
 		}
-		
+
 		IPath baseDir = server.getTomcatServer().getRuntimeBaseDirectory();
 		IPath autoDeployDir = new Path(server.getLiferayTomcatServer().getAutoDeployDirectory());
 		boolean serverStopped = server.getServer().getServerState() == IServer.STATE_STOPPED;
-		
+
 		if (kind == IServer.PUBLISH_CLEAN || kind == IServer.PUBLISH_FULL) {
 			IModuleResource[] mr = server.getResources(module);
 			IStatus[] stat = helper.publishFull(mr, path, monitor);
 			addArrayToList(status, stat);
-			
+
 			clearWebXmlDescriptors(module2.getProject(), path, monitor);
-			
+
 			server.moveContextToAutoDeployDir(module2, path, baseDir, autoDeployDir, true, serverStopped);
 
 			return;
 		}
-        
+
 		IModuleResourceDelta[] delta = server.getPublishedResourceDelta(module);
 
 		// check if we have a anti*Locking directory temp files and copy the resources out there as well
@@ -286,7 +286,7 @@ public class LiferayPublishOperation extends PublishOperation {
             {
                 if ( !webXmlFile.delete() )
                 {
-                    ProjectUtil.createDefaultWebXml( webXmlFile );
+                    ProjectUtil.createDefaultWebXml( webXmlFile, project.getName() );
                 }
             }
 
@@ -294,7 +294,7 @@ public class LiferayPublishOperation extends PublishOperation {
             {
                 if ( !liferayWebXmlFile.delete() )
                 {
-                    ProjectUtil.createDefaultWebXml( liferayWebXmlFile );
+                    ProjectUtil.createDefaultWebXml( liferayWebXmlFile, project.getName() );
                 }
             }
         }
@@ -354,7 +354,7 @@ public class LiferayPublishOperation extends PublishOperation {
 		}
 		// Establish the destination directory
 		path = jarPath.removeLastSegments(1);
-		
+
 		// Remove if requested or if previously published and are now serving without publishing
 		if (moving || kind == IServer.PUBLISH_CLEAN || deltaKind == ServerBehaviourDelegate.REMOVED
 				|| server.getTomcatServer().isServeModulesWithoutPublish()) {
@@ -373,7 +373,7 @@ public class LiferayPublishOperation extends PublishOperation {
 			if (delta == null || delta.length == 0)
 				return;
 		}
-		
+
 		// make directory if it doesn't exist
 		if (!path.toFile().exists())
 			path.toFile().mkdirs();
@@ -416,7 +416,7 @@ public class LiferayPublishOperation extends PublishOperation {
 				file.delete();
 			}
 			p.remove(module[1].getId());
-			
+
 			if (deltaKind == ServerBehaviourDelegate.REMOVED
 					|| server.getTomcatServer().isServeModulesWithoutPublish())
 				return;
@@ -441,14 +441,14 @@ public class LiferayPublishOperation extends PublishOperation {
 	/**
 	 * Utility method to throw a CoreException based on the contents of a list of
 	 * error and warning status.
-	 * 
+	 *
 	 * @param status a List containing error and warning IStatus
 	 * @throws CoreException
 	 */
 	protected static void throwException(List status) throws CoreException {
 		if (status == null || status.size() == 0)
 			return;
-		
+
 		if (status.size() == 1) {
 			IStatus status2 = (IStatus) status.get(0);
 			throw new CoreException(status2);
@@ -463,7 +463,7 @@ public class LiferayPublishOperation extends PublishOperation {
 	protected static void addArrayToList(List list, IStatus[] a) {
 		if (list == null || a == null || a.length == 0)
 			return;
-		
+
 		int size = a.length;
 		for (int i = 0; i < size; i++)
 			list.add(a[i]);

@@ -85,7 +85,7 @@ public class SDKPluginFacetUtil
             {
                 ProjectUtil.setGenerateDD( dm, false );
 
-                ProjectUtil.createDefaultWebXml( webXml );
+                ProjectUtil.createDefaultWebXml( webXml, fpjwc.getProjectName() );
 
                 IProject project = fpjwc.getProject();
 

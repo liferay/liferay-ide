@@ -166,7 +166,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         return false;
     }
 
-    @SuppressWarnings( "deprecation" )
     public void execute( IProject project, IProjectFacetVersion fv, Object config, IProgressMonitor monitor )
         throws CoreException
     {
@@ -185,7 +184,6 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         // IDE-195
         // If the user has the plugins sdk in the workspace, trying to write to the P/foo-portlet/.settings/ will find
         // the file first in the the plugins-sdk that is in the workspace and will fail to find the file.
-        // lets do a research
 
         try
         {
@@ -194,7 +192,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
             final IWorkspace ws = ResourcesPlugin.getWorkspace();
             final IWorkspaceRoot wsroot = ws.getRoot();
             final IPath path = new Path( file.getAbsolutePath() );
-            final IFile[] wsFiles = wsroot.findFilesForLocation( path );
+            final IFile[] wsFiles = wsroot.findFilesForLocationURI( path.toFile().toURI() );
             if( !CoreUtil.isNullOrEmpty( wsFiles ) )
             {
                 for( IFile wsFile : wsFiles )
