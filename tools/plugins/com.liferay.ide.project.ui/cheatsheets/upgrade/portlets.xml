@@ -15,4 +15,24 @@
             required="false"
             serialization="com.liferay.ide.project.ui.upgrade.portlets.selectProjects"/>
    </item>
+   <item
+         title="ActionTest">
+      <description>
+         <b>testtest</b>
+      </description>
+      <action
+            required="false"
+            pluginId="com.liferay.ide.project.ui"
+            class="com.liferay.ide.project.ui.action.SelectProjectsAction"/>
+   </item>
+   <item
+         title="ActionTest2">
+      <description>
+         <b>testtest2</b>
+      </description>
+      <action
+            required="false"
+            pluginId="com.liferay.ide.project.ui"
+            class="com.liferay.ide.project.ui.action.DetectProjectsAction"/>
+   </item>
 </cheatsheet>
