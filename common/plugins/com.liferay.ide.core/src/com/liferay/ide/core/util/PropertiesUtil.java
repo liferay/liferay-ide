@@ -90,9 +90,9 @@ public class PropertiesUtil
     {
         final List<IFile> retval = new ArrayList<IFile>();
 
-        IFile[] resourceFiles = getResourceFiles( proj );
+        IFile[] resourceFiles = getLanguagePropertiesFromPortletXml( getPortletXml( proj ) );
 
-        IFile[] languagenFiles = getLanguageFiles( proj );
+        IFile[] languagenFiles = getLanguagePropertiesFromLiferayHookXml( getLiferayHookXml( proj ) );
 
         if( resourceFiles.length > 0 )
         {
@@ -145,11 +145,13 @@ public class PropertiesUtil
     }
 
     // Search all language properties files referenced by liferay-hook.xml
-    public static IFile[] getLanguageFiles( IProject proj )
+    public static IFile[] getLanguagePropertiesFromLiferayHookXml( IFile liferayHookXml )
     {
         final List<IFile> retval = new ArrayList<IFile>();
 
-        if( ! CoreUtil.isLiferayProject( proj ) )
+        final IProject proj = CoreUtil.getLiferayProject( liferayHookXml );
+
+        if( proj == null )
         {
             return new IFile[0];
         }
@@ -160,8 +162,6 @@ public class PropertiesUtil
         {
             return new IFile[0];
         }
-
-        final IFile liferayHookXml = getLiferayHookXml( proj );
 
         final IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
@@ -246,11 +246,13 @@ public class PropertiesUtil
     }
 
     // Search all resource bundle and supported locale files referenced by portlet.xml.
-    public static IFile[] getResourceFiles( IProject proj )
+    public static IFile[] getLanguagePropertiesFromPortletXml( IFile portletXml )
     {
         final List<IFile> retval = new ArrayList<IFile>();
 
-        if( ! CoreUtil.isLiferayProject( proj ) )
+        final IProject proj = CoreUtil.getLiferayProject( portletXml );
+
+        if( proj == null )
         {
             return new IFile[0];
         }
@@ -261,8 +263,6 @@ public class PropertiesUtil
         {
             return new IFile[0];
         }
-
-        final IFile portletXml = getPortletXml( proj );
 
         final IWorkspaceRoot root = CoreUtil.getWorkspaceRoot();
 
@@ -386,7 +386,7 @@ public class PropertiesUtil
     {
         try
         {
-            final IFile[] resourceFiles = getResourceFiles( proj );
+            final IFile[] resourceFiles = getLanguagePropertiesFromPortletXml( getPortletXml( proj ) );
 
             for( IFile file : resourceFiles )
             {
@@ -396,7 +396,7 @@ public class PropertiesUtil
                 }
             }
 
-            final IFile[] languageFiles = getLanguageFiles( proj );
+            final IFile[] languageFiles = getLanguagePropertiesFromLiferayHookXml( getLiferayHookXml( proj ) );
 
             for( IFile file : languageFiles )
             {

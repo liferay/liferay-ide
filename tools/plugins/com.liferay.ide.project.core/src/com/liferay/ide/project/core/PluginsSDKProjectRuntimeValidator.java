@@ -15,15 +15,12 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -44,21 +41,17 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
     public static final String MSG_PRIMARY_RUNTIME_NOT_SET = Msgs.primaryRuntimeNotSet;
     public static final String MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = Msgs.primaryRuntimeNotLiferayRuntime;
 
-    /*
-     * This method validates the SDK project's primary runtime is set and a liferay runtime, if necessary, more
-     * validation jobs will be added into it in the future.
-     */
     public void validate( IFacetedProject fproj ) throws CoreException
     {
         final IProject proj = fproj.getProject();
 
-        ProjectUtil.deleteProjectMarkers( proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, getMarkerSourceIds() );
+        clearMarkers( proj );
 
         if( SDKUtil.isSDKProject( fproj.getProject() ) )
         {
             if( fproj.getPrimaryRuntime() == null )
             {
-                ProjectUtil.setProjectMarker(
+                setMarker(
                     proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR,
                     MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
             }
@@ -66,7 +59,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
             {
                 if( ! ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
                 {
-                    ProjectUtil.setProjectMarker(
+                    setMarker(
                         proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR,
                         MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
                         ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
@@ -75,14 +68,50 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
         }
     }
 
-    private Set<String> getMarkerSourceIds()
+    private void clearMarkers( IProject proj )
     {
-        Set<String> markerSourceIds = new HashSet<String>();
+        try
+        {
+            if( proj.isOpen() )
+            {
+                IMarker[] markers =
+                    proj.findMarkers( LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, true, IResource.DEPTH_INFINITE );
 
-        markerSourceIds.add( ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
-        markerSourceIds.add( ID_PRIMARY_RUNTIME_NOT_SET );
+                for( IMarker marker : markers )
+                {
+                    for( String id : getMarkerSourceIds() )
+                    {
+                        if( marker.getAttribute( IMarker.SOURCE_ID ).equals( id ) )
+                        {
+                            marker.delete();
+                        }
+                    }
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+            LiferayProjectCore.logError( e );
+        }
+    }
 
-        return markerSourceIds;
+    private String[] getMarkerSourceIds()
+    {
+        String[] retval = {ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME,ID_PRIMARY_RUNTIME_NOT_SET};
+
+        return retval;
+    }
+
+    private void setMarker(
+        IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
+        String markerSourceId ) throws CoreException
+    {
+        IMarker marker = proj.createMarker( markerType );
+
+        marker.setAttribute( IMarker.SEVERITY, markerSeverity );
+        marker.setAttribute( IMarker.MESSAGE, markerMsg );
+        marker.setAttribute( IMarker.LOCATION, markerLocation );
+        marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
     }
 
     private static class Msgs extends NLS

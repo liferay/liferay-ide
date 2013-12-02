@@ -410,6 +410,11 @@ public class CoreUtil
     {
         IProject retval = null;
 
+        if( resource == null || ! resource.exists() )
+        {
+            return retval;
+        }
+
         if( CoreUtil.isLiferayProject( resource.getProject() ) )
         {
             retval = resource.getProject();

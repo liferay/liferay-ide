@@ -43,8 +43,6 @@ public class LiferayProjectCore extends LiferayCore
     // The liferay project marker type
     public static final String LIFERAY_PROJECT_MARKR_TYPE = "com.liferay.ide.project.core.LiferayProjectMarker";
 
-    public static LanguagePropertiesResourceListener languagePropertiesResourceListener;
-    
     // The shared instance
     private static LiferayProjectCore plugin;
 
@@ -193,7 +191,6 @@ public class LiferayProjectCore extends LiferayCore
     public LiferayProjectCore()
     {
         pluginPackageResourceListener = new PluginPackageResourceListener();
-        languagePropertiesResourceListener = new LanguagePropertiesResourceListener();
     }
 
     /*
@@ -209,8 +206,6 @@ public class LiferayProjectCore extends LiferayCore
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
             pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );
 
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(
-            languagePropertiesResourceListener, IResourceChangeEvent.POST_CHANGE);
     }
 
     /*
@@ -226,11 +221,6 @@ public class LiferayProjectCore extends LiferayCore
         if( pluginPackageResourceListener != null )
         {
             ResourcesPlugin.getWorkspace().removeResourceChangeListener( pluginPackageResourceListener );
-        }
-
-        if( languagePropertiesResourceListener != null )
-        {
-            ResourcesPlugin.getWorkspace().removeResourceChangeListener( languagePropertiesResourceListener );
         }
     }
 

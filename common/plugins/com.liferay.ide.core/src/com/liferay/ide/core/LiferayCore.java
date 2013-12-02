@@ -20,6 +20,7 @@ import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.JavaCore;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -36,6 +37,8 @@ public class LiferayCore extends Plugin
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.core"; //$NON-NLS-1$
+
+    public static LiferayLanguagePropertiesListener liferayLanguagePropertiesListener;
 
     private static LiferayProjectProviderReader providerReader;
 
@@ -225,6 +228,7 @@ public class LiferayCore extends Plugin
      */
     public LiferayCore()
     {
+        liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
     }
 
     /*
@@ -235,6 +239,8 @@ public class LiferayCore extends Plugin
     {
         super.start( context );
         plugin = this;
+
+        JavaCore.addElementChangedListener( liferayLanguagePropertiesListener );
     }
 
     /*
@@ -245,6 +251,11 @@ public class LiferayCore extends Plugin
     {
         plugin = null;
         super.stop( context );
+
+        if( liferayLanguagePropertiesListener != null )
+        {
+            JavaCore.removeElementChangedListener( liferayLanguagePropertiesListener );
+        }
     }
 
 }

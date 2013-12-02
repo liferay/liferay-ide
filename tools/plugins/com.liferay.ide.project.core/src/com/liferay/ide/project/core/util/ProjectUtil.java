@@ -43,7 +43,6 @@ import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -473,19 +472,7 @@ public class ProjectUtil
     public static void deleteProjectMarkers( IProject proj, String markerType, Set<String> markerSourceIds )
         throws CoreException
     {
-        if( proj.isOpen() )
-        {
-            IMarker[] markers = proj.findMarkers( markerType, true, IResource.DEPTH_INFINITE );
-
-            for( IMarker marker : markers )
-            {
-                if( markerSourceIds.contains( marker.getAttribute( IMarker.SOURCE_ID ) ) )
-                {
-                    marker.delete();
-                }
-            }
-        }
-
+        
     }
 
     public static IFile findServiceJarForContext( String context )
@@ -1398,18 +1385,6 @@ public class ProjectUtil
         {
             ddModel.setBooleanProperty( IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD );
         }
-    }
-
-    public static void setProjectMarker(
-        IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
-        String markerSourceId ) throws CoreException
-    {
-        IMarker marker = proj.createMarker( markerType );
-
-        marker.setAttribute( IMarker.SEVERITY, markerSeverity );
-        marker.setAttribute( IMarker.MESSAGE, markerMsg );
-        marker.setAttribute( IMarker.LOCATION, markerLocation );
-        marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
     }
 
     private static class Msgs extends NLS

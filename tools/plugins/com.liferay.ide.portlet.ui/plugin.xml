@@ -306,11 +306,4 @@
    <extension point="org.eclipse.ui.editors.templates">
     <include file="templates/portlet-java-templates.xml" /> 
   </extension>
-   <extension
-         point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            class="com.liferay.ide.portlet.ui.PortletDescriptorMarkerResolutionGenerator"
-            markerType="com.liferay.ide.portlet.core.portletDescriptorMarker">
-      </markerResolutionGenerator>
-   </extension>
 </plugin>
