@@ -28,13 +28,6 @@ import org.eclipse.swt.widgets.Composite;
 public final class PortletFrameworkPropertyEditorPresentationFactory extends PropertyEditorPresentationFactory
 {
     @Override
-    public boolean isApplicableTo( final PropertyEditorPart propertyEditorPart )
-    {
-        // only manually referenced via hint so don't need this check
-        return false;
-    }
-
-    @Override
     public PropertyEditorPresentation create( PropertyEditorPart part, SwtPresentation parent, Composite composite )
     {
         return new PossibleValuesRadioPropertyEditorPresentation<IPortletFramework>( part, parent, composite );

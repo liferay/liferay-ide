@@ -99,10 +99,6 @@
                     <indent>false</indent>
                     <content>
                         <property-editor>
-                            <hint>
-                                <name>prefer.vertical.radio.buttons</name>
-                                <value>true</value>
-                            </hint>
                             <property>PluginType</property>
                             <show-label>false</show-label>
                             <hint>
@@ -130,6 +126,7 @@
                                 <value>Light-weight extension environment for Liferay as a plugin.</value>
                             </hint>
                             <scale-vertically>false</scale-vertically>
+                            <style>Sapphire.PropertyEditor.RadioButtonGroup.Vertical</style>
                         </property-editor>
                     </content>
                     <label>Select the plugin type</label>
@@ -259,10 +256,7 @@
                         <property>ProfileLocation</property>
                         <property>ProfileLocation</property>
                         <show-label>false</show-label>
-                        <hint>
-                            <name>prefer.vertical.radio.buttons</name>
-                            <value>true</value>
-                        </hint>
+                        <style>Sapphire.PropertyEditor.RadioButtonGroup.Vertical</style>
                     </property-editor>
                 </content>
             </group>
