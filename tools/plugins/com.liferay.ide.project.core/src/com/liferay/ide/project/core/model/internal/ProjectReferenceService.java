@@ -12,22 +12,22 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model;
 
-import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.Validation;
-import org.eclipse.sapphire.ValueProperty;
+package com.liferay.ide.project.core.model.internal;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.sapphire.services.ReferenceService;
 
 /**
  * @author Gregory Amerson
  */
-public interface NewLiferayProfileOp extends NewLiferayPluginProjectOp
+public class ProjectReferenceService extends ReferenceService
 {
-    ElementType TYPE = new ElementType( NewLiferayProfileOp.class );
 
-    // we don't want to validated for missing project names
-    @Validation( rule = "true", message = ""  )
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" ); //$NON-NLS-1$
+    @Override
+    public Object resolve( String reference )
+    {
+        return ResourcesPlugin.getWorkspace().getRoot().getProject( reference );
+    }
 
 }

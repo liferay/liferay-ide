@@ -1,4 +1,4 @@
-package com.liferay.ide.project.ui.action;
+package com.liferay.ide.project.ui.upgrade;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.ui.cheatsheets.ICheatSheetAction;

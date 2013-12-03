@@ -1,4 +1,4 @@
-package com.liferay.ide.project.ui.action;
+package com.liferay.ide.project.ui.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
 
