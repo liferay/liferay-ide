@@ -36,6 +36,7 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.ui.DelayedTasksExecutor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
@@ -136,7 +137,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
         final org.eclipse.sapphire.modeling.Status status = element().validation();
 
-        if( !status.ok() )
+        if( status.severity() == Severity.ERROR )
         {
             return org.eclipse.sapphire.modeling.Status.createErrorStatus( "Wizard still contains errors. please correct and try again." );
         }

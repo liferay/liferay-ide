@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.ui.DelayedTasksExecutor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
@@ -44,7 +45,7 @@ public class SafeSapphireDialog extends SapphireDialog
 
         final Status status = element().validation();
 
-        if( ! status.ok() )
+        if( status.severity() == Severity.ERROR )
         {
             MessageDialog.openError( getParentShell(), "Validation Error", status.message() );
 
