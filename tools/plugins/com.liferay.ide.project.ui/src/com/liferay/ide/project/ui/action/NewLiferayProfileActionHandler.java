@@ -17,7 +17,6 @@ package com.liferay.ide.project.ui.action;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
-import com.liferay.ide.project.ui.dialog.SafeSapphireDialog;
 import com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard;
 
 import org.eclipse.sapphire.ui.Presentation;
@@ -45,7 +44,7 @@ public class NewLiferayProfileActionHandler extends PropertyEditorActionHandler
             final NewLiferayProfile newLiferayProfile = op.getNewLiferayProfiles().insert();
 
             final SapphireDialog dialog =
-                new SafeSapphireDialog( swt.shell(), newLiferayProfile, DefinitionLoader.sdef(
+                new SapphireDialog( swt.shell(), newLiferayProfile, DefinitionLoader.sdef(
                     NewLiferayPluginProjectWizard.class ).dialog( "NewLiferayProfile" ) );
 
             dialog.setBlockOnOpen( true );
