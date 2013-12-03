@@ -52,6 +52,7 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.internal.StructureEdit;
 import org.eclipse.wst.common.componentcore.internal.WorkbenchComponent;
+import org.eclipse.wst.common.componentcore.internal.util.ComponentUtilities;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -235,6 +236,36 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         else
         {
             final String pluginType = MavenUtil.getLiferayMavenPluginType( mavenProject );
+
+            // IDE-817 we need to mak sure that on deployment it will have the correct suffix for project name
+            final IVirtualComponent projectComponent = ComponentCore.createComponent( project );
+
+            try
+            {
+                if( projectComponent != null )
+                {
+                    final String deployedName = projectComponent.getDeployedName();
+
+                    final String deployedFileName = project.getName() + "-" + pluginType; //$NON-NLS-1$
+
+                    if( deployedName == null || ( deployedName != null && !deployedName.endsWith( pluginType ) ) )
+                    {
+                        configureDeployedName( project, deployedFileName );
+                    }
+
+                    final String oldContextRoot = ComponentUtilities.getServerContextRoot( project );
+
+                    if( oldContextRoot == null || ( oldContextRoot != null && ! oldContextRoot.endsWith( pluginType ) ) )
+                    {
+                        ComponentUtilities.setServerContextRoot( project, deployedFileName );
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+                LiferayMavenCore.logError(
+                    "Unable to configure deployed name for project " + project.getName(), e );
+            }
 
             if( ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE.equals( pluginType ) )
             {
@@ -447,29 +478,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             final IProject project = facetedProject.getProject();
 
-            try
-            {
-                // IDE-817 we need to mak sure that on deployment it will have the correct suffix for project name
-                final IVirtualComponent projectComponent = ComponentCore.createComponent( project );
 
-                if( projectComponent != null )
-                {
-                    final String deployedName = projectComponent.getDeployedName();
-
-                    if( deployedName == null || ( deployedName != null && !deployedName.endsWith( pluginType ) ) )
-                    {
-                        final String deployedFileName = project.getName() + "-" + pluginType; //$NON-NLS-1$
-
-                        configureDeployedName( project, deployedFileName );
-                        projectComponent.setMetaProperty( "context-root", deployedFileName ); //$NON-NLS-1$
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                LiferayMavenCore.logError(
-                    "Unable to configure component for liferay deployment." + project.getName(), e );
-            }
         }
 
         return retval;
