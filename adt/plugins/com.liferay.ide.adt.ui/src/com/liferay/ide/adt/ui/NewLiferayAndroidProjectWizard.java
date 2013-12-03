@@ -18,6 +18,9 @@ import com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status.Severity;
+import org.eclipse.sapphire.ui.DelayedTasksExecutor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
@@ -29,7 +32,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 /**
  * @author Gregory Amerson
  */
-public class NewLiferayAndroidProjectWizard extends SapphireWizard
+public class NewLiferayAndroidProjectWizard extends SapphireWizard<NewLiferayAndroidProjectOp>
     implements IWorkbenchWizard, INewWizard
 {
 
@@ -78,6 +81,22 @@ public class NewLiferayAndroidProjectWizard extends SapphireWizard
     @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
+    }
+
+    @Override
+    protected org.eclipse.sapphire.modeling.Status performFinish( ProgressMonitor monitor )
+    {
+        //IDE-1312 this can be removed once https://bugs.eclipse.org/bugs/show_bug.cgi?id=422437 is finished
+        DelayedTasksExecutor.sweep();
+
+        final org.eclipse.sapphire.modeling.Status status = element().validation();
+
+        if( status.severity() == Severity.ERROR )
+        {
+            return org.eclipse.sapphire.modeling.Status.createErrorStatus( "Wizard still contains errors. please correct and try again." );
+        }
+
+        return super.performFinish( monitor );
     }
 
 }
