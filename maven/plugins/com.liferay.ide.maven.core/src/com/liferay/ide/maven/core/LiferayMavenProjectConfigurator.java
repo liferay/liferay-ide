@@ -475,10 +475,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                 LiferayMavenCore.logError(
                     "Unable to install liferay facet " + action.getProjectFacetVersion(), e.getCause() ); //$NON-NLS-1$
             }
-
-            final IProject project = facetedProject.getProject();
-
-
         }
 
         return retval;

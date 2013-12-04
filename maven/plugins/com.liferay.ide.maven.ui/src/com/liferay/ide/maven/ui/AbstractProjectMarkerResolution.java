@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.NewLiferayProfileOp;
 import com.liferay.ide.project.core.model.Profile;
 
 import java.net.URL;
@@ -61,7 +62,7 @@ public abstract class AbstractProjectMarkerResolution implements IMarkerResoluti
         final ResolverConfiguration configuration = projectManager.getResolverConfiguration( project );
         final List<String> currentProfiles = configuration.getActiveProfileList();
 
-        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+        final NewLiferayProfileOp op = NewLiferayProfileOp.TYPE.instantiate();
         final ElementList<Profile> selectedProfiles = op.getSelectedProfiles();
 
         for( final String currentProfile : currentProfiles )
