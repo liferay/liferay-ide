@@ -301,11 +301,16 @@ public class LiferayPublishOperation extends PublishOperation {
     }
 
     private boolean isHookProjectDelta( IModuleResourceDelta del )
-	{
-		IProject project = ( (IResource) del.getModuleResource().getAdapter( IResource.class ) ).getProject();
+    {
+        final IResource resource = (IResource) del.getModuleResource().getAdapter( IResource.class );
 
-		return ProjectUtil.isHookProject( project );
-	}
+        if( resource != null )
+        {
+            return ProjectUtil.isHookProject( resource.getProject() );
+        }
+
+        return false;
+    }
 
 	private IModuleResource getWebXmlFile( IProject project, IPath modelDeployDirectory )
 	{

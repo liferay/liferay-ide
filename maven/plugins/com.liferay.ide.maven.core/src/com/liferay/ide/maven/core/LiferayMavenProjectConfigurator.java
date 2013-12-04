@@ -246,16 +246,18 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                 {
                     final String deployedName = projectComponent.getDeployedName();
 
-                    final String deployedFileName = project.getName() + "-" + pluginType; //$NON-NLS-1$
+                    final String pluginTypeSuffix = "-" + pluginType;
 
-                    if( deployedName == null || ( deployedName != null && !deployedName.endsWith( pluginType ) ) )
+                    final String deployedFileName = project.getName() + pluginTypeSuffix; //$NON-NLS-1$
+
+                    if( deployedName == null || ( deployedName != null && ! deployedName.endsWith( pluginTypeSuffix ) ) )
                     {
                         configureDeployedName( project, deployedFileName );
                     }
 
                     final String oldContextRoot = ComponentUtilities.getServerContextRoot( project );
 
-                    if( oldContextRoot == null || ( oldContextRoot != null && ! oldContextRoot.endsWith( pluginType ) ) )
+                    if( oldContextRoot == null || ( oldContextRoot != null && ! oldContextRoot.endsWith( pluginTypeSuffix ) ) )
                     {
                         ComponentUtilities.setServerContextRoot( project, deployedFileName );
                     }
