@@ -26,7 +26,6 @@ public interface NewLiferayProfileOp extends NewLiferayPluginProjectOp
 {
     ElementType TYPE = new ElementType( NewLiferayProfileOp.class );
 
-
     // we don't want to validated for missing project names
     @Validation( rule = "true", message = ""  )
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" ); //$NON-NLS-1$

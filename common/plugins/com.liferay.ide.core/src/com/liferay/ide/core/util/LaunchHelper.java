@@ -41,7 +41,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
  * @author Greg Amerson
  */
 @SuppressWarnings( { "restriction" } )
-public abstract class LaunchHelper implements IDebugEventSetListener
+public class LaunchHelper implements IDebugEventSetListener
 {
 
     protected String[] launchArgs = new String[0];
@@ -61,6 +61,10 @@ public abstract class LaunchHelper implements IDebugEventSetListener
     protected String mode = ILaunchManager.RUN_MODE;
 
     protected ILaunch runningLaunch;
+
+    public LaunchHelper()
+    {
+    }
 
     public LaunchHelper( String launchConfigTypeId )
     {
@@ -265,7 +269,9 @@ public abstract class LaunchHelper implements IDebugEventSetListener
         this.mode = mode;
     }
 
-    protected abstract void addUserEntries( RuntimeClasspathModel model ) throws CoreException;
+    protected void addUserEntries( RuntimeClasspathModel model ) throws CoreException
+    {
+    }
 
     protected IRuntimeClasspathEntry[] getClasspath( ILaunchConfigurationWorkingCopy config ) throws CoreException
     {

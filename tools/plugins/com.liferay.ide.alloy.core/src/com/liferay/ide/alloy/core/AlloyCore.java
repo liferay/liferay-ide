@@ -15,17 +15,9 @@
 
 package com.liferay.ide.alloy.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -36,11 +28,13 @@ import org.osgi.framework.BundleContext;
 public class AlloyCore extends Plugin
 {
 
-    // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.alloy.core"; //$NON-NLS-1$
+    private static LautRunner lautRunner;
 
     // The shared instance
     private static AlloyCore plugin;
+
+    // The plugin ID
+    public static final String PLUGIN_ID = "com.liferay.ide.alloy.core"; //$NON-NLS-1$
 
     public static IStatus createErrorStatus( Exception ex )
     {
@@ -73,9 +67,29 @@ public class AlloyCore extends Plugin
     }
 
 
+    public static LautRunner getLautRunner()
+    {
+        if( lautRunner == null )
+        {
+            lautRunner = new LautRunner();
+        }
+
+        return lautRunner;
+    }
+
     public static void logError( Exception ex )
     {
         getDefault().getLog().log( createErrorStatus( ex ) );
+    }
+
+    public static void logError( String msg )
+    {
+        getDefault().getLog().log( createErrorStatus( msg ) );
+    }
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
     }
 
     /**
@@ -103,52 +117,5 @@ public class AlloyCore extends Plugin
     {
         plugin = null;
         super.stop( context );
-    }
-
-    public static void logError( String msg )
-    {
-        getDefault().getLog().log( createErrorStatus( msg ) );
-    }
-
-    public static void logError( String msg, Exception e )
-    {
-        getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
-
-    //TODO finish
-    public static IPath getLautToolPath()
-    {
-        IPath retval = null;
-
-        final String bundleId = "com.liferay.laut." + Platform.getOS() + "." + Platform.getWS() + "." + Platform.getOSArch();
-
-         Bundle lautBundle = Platform.getBundle( bundleId );
-
-
-
-         if( lautBundle != null )
-         {
-             URL exe = lautBundle.getEntry( "laut/run.bat" );
-
-             try
-             {
-                 File lautBundleDir = new File( FileLocator.toFileURL( lautBundle.getEntry( "" ) ).getFile() );
-
-                 File lautDir = new File( lautBundleDir.getParentFile(), "laut" );
-
-                 if( lautDir.canWrite() )
-                 {
-                     File stateDir = AlloyCore.getDefault().getStateLocation().toFile();
-                 }
-
-             }
-             catch( IOException e )
-             {
-                 // TODO Auto-generated catch block
-                 e.printStackTrace();
-             }
-         }
-
-        return retval;
     }
 }
