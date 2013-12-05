@@ -18,6 +18,7 @@ package com.liferay.ide.core;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -44,12 +45,17 @@ public class LiferayLanguagePropertiesListener implements IElementChangedListene
 
         getChangedFiles( event.getDelta(), changedFiles );
 
-        for( IFile changedFile : changedFiles )
+        if( changedFiles.size() > 0 )
         {
-            if( PropertiesUtil.isLanguagePropertiesFile( changedFile ) )
+            for( Iterator<IFile> iterator = changedFiles.iterator(); iterator.hasNext(); )
             {
-                validateLanguagePropertiesEncoding( changedFile );
+                if( ! PropertiesUtil.isLanguagePropertiesFile( iterator.next() ) )
+                {
+                    iterator.remove();
+                }
             }
+
+            validateLanguagePropertiesEncoding( changedFiles.toArray( new IFile[0] ) );
         }
     }
 
@@ -80,18 +86,17 @@ public class LiferayLanguagePropertiesListener implements IElementChangedListene
 
     }
 
-    private void validateLanguagePropertiesEncoding( final IFile file )
+    private void validateLanguagePropertiesEncoding( final IFile[] files )
     {
-
-        final LiferayLanguagePropertiesValidator validator =
-            LiferayLanguagePropertiesValidator.getValidator( file );
-
         new WorkspaceJob( "Valiting the encoding of liferay language properties." )
         {
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
             {
-                validator.validateEncoding();
+                for( IFile file : files )
+                {
+                    LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
+                }
 
                 return Status.OK_STATUS;
             }

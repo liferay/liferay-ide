@@ -18,6 +18,7 @@ package com.liferay.ide.core.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,10 +60,11 @@ public class PropertiesUtil
             {
                 try
                 {
+                    String contents = CoreUtil.readStreamToString( file.getContents() );
                     file.setCharset( null, monitor );
-                    file.setContents( file.getContents(), IResource.FORCE, monitor );
+                    file.setContents( new ByteArrayInputStream( contents.getBytes( "UTF-8" ) ), IResource.FORCE, monitor );
                 }
-                catch( CoreException e )
+                catch( Exception e )
                 {
                     LiferayCore.logError( e );
                 }
@@ -75,10 +77,11 @@ public class PropertiesUtil
             {
                 final IFile file = (IFile) resource;
 
+                String contents = CoreUtil.readStreamToString( file.getContents() );
                 file.setCharset( null, monitor );
-                file.setContents( file.getContents(), IResource.FORCE, monitor );
+                file.setContents( new ByteArrayInputStream( contents.getBytes( "UTF-8" ) ), IResource.FORCE, monitor );
             }
-            catch( CoreException e )
+            catch( Exception e )
             {
                 LiferayCore.logError( e );
             }

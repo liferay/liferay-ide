@@ -228,7 +228,6 @@ public class LiferayCore extends Plugin
      */
     public LiferayCore()
     {
-        liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
     }
 
     /*
@@ -240,6 +239,7 @@ public class LiferayCore extends Plugin
         super.start( context );
         plugin = this;
 
+        liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
         JavaCore.addElementChangedListener( liferayLanguagePropertiesListener );
     }
 

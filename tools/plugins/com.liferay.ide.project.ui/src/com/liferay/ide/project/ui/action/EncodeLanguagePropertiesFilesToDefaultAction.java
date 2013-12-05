@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -27,7 +28,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -54,13 +54,13 @@ public class EncodeLanguagePropertiesFilesToDefaultAction implements IObjectActi
             {
                 if( elem instanceof IResource )
                 {
-                    new ProgressMonitorDialog( new Shell() ).run( true, false, new IRunnableWithProgress()
+                    new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
                     {
 
                         public void run( IProgressMonitor monitor ) throws InvocationTargetException,
                             InterruptedException
                         {
-                            monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
+                            monitor.beginTask( "Encoding Liferay Language Properties Files to Default (UTF-8)... ", 10 );
 
                             PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IResource) elem, monitor );
 

@@ -38,11 +38,4 @@
             value="true">
       </persistent>
    </extension>
-   <extension
-         point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            class="com.liferay.ide.core.LiferayLanguagePropertiesMarkerResolutionGenerator"
-            markerType="com.liferay.ide.core.LiferayLanguagePropertiesMarker">
-      </markerResolutionGenerator>
-   </extension>
 </plugin>
