@@ -47,7 +47,7 @@
                 <configuration>
                     <!--<argLine>-Xdebug -Xrunjdwp:transport=dt_socket,address=8100,server=y,suspend=y</argLine>-->
                     <systemProperties>
-                        <liferay.plugin.project.tests.tempdir>${liferay.plugin.project.tests.tempdir}</liferay.plugin.project.tests.tempdir>
+                        <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                     </systemProperties>
                 </configuration>
             </plugin>

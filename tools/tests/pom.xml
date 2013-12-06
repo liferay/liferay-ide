@@ -33,7 +33,7 @@
 
     <packaging>pom</packaging>
 
-	<build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
@@ -43,19 +43,18 @@
                     <useUIHarness>false</useUIHarness>
                     <useUIThread>false</useUIThread>
                     <includes>
-                      <include>**/*Test*.class</include>
+                        <include>**/*Test*.class</include>
                     </includes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
-	<modules>
-		<module>com.liferay.ide.hook.core.tests</module>
-		<module>com.liferay.ide.layouttpl.core.tests</module>
+    <modules>
+        <module>com.liferay.ide.hook.core.tests</module>
+        <module>com.liferay.ide.layouttpl.core.tests</module>
         <module>com.liferay.ide.portlet.core.tests</module>
         <module>com.liferay.ide.service.core.tests</module>
-		<!--<module>com.liferay.ide.project.core.tests</module>-->
-	</modules>
+        <module>com.liferay.ide.project.core.tests</module>
+    </modules>
 </project>
-	

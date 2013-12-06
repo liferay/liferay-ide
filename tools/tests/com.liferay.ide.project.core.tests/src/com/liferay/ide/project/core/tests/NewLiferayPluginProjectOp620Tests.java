@@ -34,33 +34,27 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     }
 
     @Override
-    protected IPath getLiferayPluginsSDKZip()
+    protected String getLiferayPluginsSdkZipFolder()
     {
-        return tempDownloadsPath.append( "liferay-plugins-sdk-6.2.0-ce-rc5-with-ivy-cache.zip" );
+        return "liferay-plugins-sdk-6.2.0/";
     }
 
     @Override
-    protected String getLiferayPluginsSDKZipUrl()
+    protected IPath getLiferayPluginsSDKZip()
     {
-        return "http://vm-32.liferay.com/files/liferay-plugins-sdk-6.2.0-ce-rc5-with-ivy-cache.zip";
+        return portalBundlesPath.append( "liferay-plugins-sdk-6.2.0-ce-ga1-20131101192857659.zip" );
     }
 
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-rc5/tomcat-7.0.40" );
+        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
     }
 
     @Override
     protected IPath getLiferayRuntimeZip()
     {
-        return tempDownloadsPath.append( "liferay-portal-tomcat-6.2.0-ce-rc5-20131017114004875.zip" );
-    }
-
-    @Override
-    protected String getLiferayRuntimeZipUrl()
-    {
-        return "http://vm-32.liferay.com/files/liferay-portal-tomcat-6.2.0-ce-rc5-20131017114004875.zip";
+        return portalBundlesPath.append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
     }
 
     @Override

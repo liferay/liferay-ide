@@ -74,13 +74,13 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return tempDownloadsPath.append( "liferay-plugins-sdk-6.0.6.zip" );
+        return portalBundlesPath.append( "liferay-plugins-sdk-6.0.6.zip" );
     }
 
     @Override
-    protected String getLiferayPluginsSDKZipUrl()
+    protected String getLiferayPluginsSdkZipFolder()
     {
-        return "http://vm-32.liferay.com/files/liferay-plugins-sdk-6.0.6.zip";
+        return "liferay-plugins-sdk-6.0.6/";
     }
 
     @Override
@@ -92,13 +92,7 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayRuntimeZip()
     {
-        return tempDownloadsPath.append( "liferay-portal-tomcat-6.0.6-20110225.zip" );
-    }
-
-    @Override
-    protected String getLiferayRuntimeZipUrl()
-    {
-        return "http://vm-32.liferay.com/files/liferay-portal-tomcat-6.0.6-20110225.zip";
+        return portalBundlesPath.append( "liferay-portal-tomcat-6.0.6-20110225.zip" );
     }
 
     @Override

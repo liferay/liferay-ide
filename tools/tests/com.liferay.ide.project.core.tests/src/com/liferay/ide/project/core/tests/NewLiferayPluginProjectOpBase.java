@@ -67,8 +67,8 @@ import org.junit.Test;
 public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 {
 
-    final static IPath tempDownloadsPath = new Path( System.getProperty(
-        "liferay.plugin.project.tests.tempdir", System.getProperty( "java.io.tmpdir" ) ) );
+    final static IPath portalBundlesPath = new Path( System.getProperty(
+        "liferay.bundles.dir", System.getProperty( "java.io.tmpdir" ) ) );
 
     protected IProject checkNewJsfAntProjectIvyFile( IProject jsfProject, String jsfSuite ) throws Exception
     {
@@ -280,13 +280,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
     protected abstract IPath getLiferayPluginsSDKZip();
 
-    protected abstract String getLiferayPluginsSDKZipUrl();
+    protected abstract String getLiferayPluginsSdkZipFolder();
 
     protected abstract IPath getLiferayRuntimeDir();
 
     protected abstract IPath getLiferayRuntimeZip();
-
-    protected abstract String getLiferayRuntimeZipUrl();
 
     protected abstract String getRuntimeId();
 
@@ -295,6 +293,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     protected NewLiferayPluginProjectOp newProjectOp()
     {
         return NewLiferayPluginProjectOp.TYPE.instantiate();
+    }
+
+    protected IPath getIvyCacheZip()
+    {
+        return portalBundlesPath.append( "ivy-cache.zip" );
     }
 
     protected NewLiferayPluginProjectOp newProjectOp( final String projectName ) throws Exception
@@ -317,17 +320,33 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         {
             final File liferayPluginsSDKZipFile = getLiferayPluginsSDKZip().toFile();
 
-            if( ! liferayPluginsSDKZipFile.exists() )
-            {
-                FileUtil.downloadFile( getLiferayPluginsSDKZipUrl(), getLiferayPluginsSDKZip().toFile() );
-            }
+            assertEquals(
+                "Expected file to exist " + liferayPluginsSDKZipFile.getAbsolutePath(), true,
+                liferayPluginsSDKZipFile.exists() );
 
-            assertEquals( true, liferayPluginsSDKZipFile.exists() );
+            liferayPluginsSdkDirFile.mkdirs();
 
-            ZipUtil.unzip( liferayPluginsSDKZipFile, LiferayProjectCore.getDefault().getStateLocation().toFile() );
+            ZipUtil.unzip(
+                liferayPluginsSDKZipFile, getLiferayPluginsSdkZipFolder(), liferayPluginsSdkDirFile,
+                new NullProgressMonitor() );
         }
 
         assertEquals( true, liferayPluginsSdkDirFile.exists() );
+
+        final File ivyCacheDir = new File( liferayPluginsSdkDirFile, ".ivy" );
+
+        if( ! ivyCacheDir.exists() )
+        {
+         // setup ivy cache
+
+            final File ivyCacheZipFile = getIvyCacheZip().toFile();
+
+            assertEquals( "Expected ivy-cache.zip to be here: " + ivyCacheZipFile.getAbsolutePath(), true, ivyCacheZipFile.exists() );
+
+            ZipUtil.unzip( ivyCacheZipFile, liferayPluginsSdkDirFile );
+        }
+
+        assertEquals( "Expected .ivy folder to be here: " + ivyCacheDir.getAbsolutePath(), true, ivyCacheDir.exists() );
 
         SDK sdk = null;
 
@@ -354,12 +373,9 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         {
             final File liferayRuntimeZipFile = getLiferayRuntimeZip().toFile();
 
-            if( ! liferayRuntimeZipFile.exists() )
-            {
-                FileUtil.downloadFile( getLiferayRuntimeZipUrl(), getLiferayRuntimeZip().toFile() );
-            }
-
-            assertEquals( true, liferayRuntimeZipFile.exists() );
+            assertEquals(
+                "Expected file to exist " + liferayRuntimeZipFile.getAbsolutePath(), true,
+                liferayRuntimeZipFile.exists() );
 
             ZipUtil.unzip( liferayRuntimeZipFile, LiferayProjectCore.getDefault().getStateLocation().toFile() );
         }
