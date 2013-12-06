@@ -318,17 +318,26 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         if( ! liferayPluginsSdkDirFile.exists() )
         {
-            final File liferayPluginsSDKZipFile = getLiferayPluginsSDKZip().toFile();
+            final File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
 
             assertEquals(
-                "Expected file to exist " + liferayPluginsSDKZipFile.getAbsolutePath(), true,
-                liferayPluginsSDKZipFile.exists() );
+                "Expected file to exist " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
+                liferayPluginsSdkZipFile.exists() );
 
             liferayPluginsSdkDirFile.mkdirs();
 
-            ZipUtil.unzip(
-                liferayPluginsSDKZipFile, getLiferayPluginsSdkZipFolder(), liferayPluginsSdkDirFile,
-                new NullProgressMonitor() );
+            final String liferayPluginsSdkZipFolder = getLiferayPluginsSdkZipFolder();
+
+            if( CoreUtil.isNullOrEmpty( liferayPluginsSdkZipFolder ) )
+            {
+                ZipUtil.unzip( liferayPluginsSdkZipFile, liferayPluginsSdkDirFile );
+            }
+            else
+            {
+                ZipUtil.unzip(
+                    liferayPluginsSdkZipFile, liferayPluginsSdkZipFolder, liferayPluginsSdkDirFile,
+                    new NullProgressMonitor() );
+            }
         }
 
         assertEquals( true, liferayPluginsSdkDirFile.exists() );

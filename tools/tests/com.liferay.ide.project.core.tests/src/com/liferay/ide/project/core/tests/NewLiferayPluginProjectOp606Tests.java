@@ -74,13 +74,13 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return portalBundlesPath.append( "liferay-plugins-sdk-6.0.6.zip" );
+        return portalBundlesPath.append( "liferay-plugins-sdk-6.0.6-20110225.zip" );
     }
 
     @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "liferay-plugins-sdk-6.0.6/";
+        return "";
     }
 
     @Override
