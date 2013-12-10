@@ -856,4 +856,32 @@
             name="Projects">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <category
+            id="com.liferay.ide.project.ui.category"
+            name="Liferay IDE">
+      </category>
+      <cheatsheet
+            category="com.liferay.ide.project.ui.category"
+            composite="true"
+            contentFile="cheatsheets/upgrade-composite.xml"
+            id="com.liferay.ide.project.ui.upgrade"
+            listener="com.liferay.ide.project.ui.cheatsheet.TestCheatSheetListener"
+            name="Upgrade Liferay Plugin Projects">
+      </cheatsheet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="com.liferay.ide.project.ui.commands"
+            defaultHandler="com.liferay.ide.project.ui.cmd.SelectPortletProjectsToUpgrade"
+            id="com.liferay.ide.project.ui.upgrade.portlets.selectProjects"
+            name="Select portlet projects to upgrade to Liferay Portal 6.2">
+      </command>
+      <category
+            id="com.liferay.ide.project.ui.commands"
+            name="Liferay IDE Projects">
+      </category>
+   </extension>
 </plugin>
