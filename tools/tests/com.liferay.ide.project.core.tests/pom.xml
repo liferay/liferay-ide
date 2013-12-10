@@ -30,10 +30,6 @@
 
     <name>Liferay IDE Project Core Tests</name>
 
-    <properties>
-        <liferay.plugin.project.tests.tempdir>${java.io.tmpdir}</liferay.plugin.project.tests.tempdir>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
@@ -49,6 +45,13 @@
                     <systemProperties>
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                     </systemProperties>
+                    <dependencies>
+                        <dependency>
+                            <type>eclipse-feature</type>
+                            <artifactId>org.eclipse.sapphire.osgi</artifactId>
+                            <version>0.0.0</version>
+                        </dependency>
+                    </dependencies>
                 </configuration>
             </plugin>
         </plugins>

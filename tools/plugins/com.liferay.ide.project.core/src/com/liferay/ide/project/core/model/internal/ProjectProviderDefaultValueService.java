@@ -47,11 +47,7 @@ public class ProjectProviderDefaultValueService extends DefaultValueService
         {
             final ILiferayProjectProvider provider = LiferayCore.getProvider( defaultProjectBuildType );
 
-            if (provider == null)
-            {
-                retval = "ant";
-            }
-            else
+            if (provider != null)
             {
                 retval = defaultProjectBuildType;
             }
