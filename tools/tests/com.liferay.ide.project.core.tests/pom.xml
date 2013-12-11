@@ -53,6 +53,31 @@
                             <artifactId>org.eclipse.sapphire.osgi</artifactId>
                             <version>0.0.0</version>
                         </dependency>
+                        <dependency>
+                            <type>eclipse-feature</type>
+                            <artifactId>org.eclipse.jst.enterprise_core.feature</artifactId>
+                            <version>0.0.0</version>
+                        </dependency>
+                        <dependency>
+                            <type>eclipse-feature</type>
+                            <artifactId>org.eclipse.jst.common.fproj.enablement.jdt</artifactId>
+                            <version>0.0.0</version>
+                        </dependency>
+                        <dependency>
+                            <type>eclipse-feature</type>
+                            <artifactId>org.eclipse.jst.web_core.feature</artifactId>
+                            <version>0.0.0</version>
+                        </dependency>
+                        <dependency>
+                            <type>eclipse-feature</type>
+                            <artifactId>org.eclipse.jsf.feature</artifactId>
+                            <version>0.0.0</version>
+                        </dependency>
+                        <dependency>
+                            <type>eclipse-feature</type>
+                            <artifactId>org.eclipse.jst.web_core.feature</artifactId>
+                            <version>0.0.0</version>
+                        </dependency>
                     </dependencies>
                 </configuration>
             </plugin>

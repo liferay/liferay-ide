@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests;
 import com.liferay.ide.project.core.LiferayProjectCore;
 
 import org.eclipse.core.runtime.IPath;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -70,6 +71,7 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     }
 
     @Test
+    @Ignore
     public void testPluginTypeListener() throws Exception
     {
         super.testPluginTypeListener();
@@ -82,6 +84,7 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     }
 
     @Test
+    @Ignore
     public void testNewJsfRichfacesProjects() throws Exception
     {
         super.testNewJsfRichfacesProjects();

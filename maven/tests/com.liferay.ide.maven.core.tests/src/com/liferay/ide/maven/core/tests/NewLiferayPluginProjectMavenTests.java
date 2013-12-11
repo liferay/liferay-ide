@@ -295,7 +295,6 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         this.testUseDefaultLocationEnablement( true );
     }
 
-    @Test
     public void testUseDefaultLocationEnablement( boolean versionRestriction ) throws Exception
     {
         final NewLiferayPluginProjectOp op = newProjectOp( "test-use-default-location-enablement" );
