@@ -37,11 +37,19 @@
                 <artifactId>tycho-surefire-plugin</artifactId>
                 <version>${tycho-version}</version>
                 <configuration>
-                    <useUIHarness>false</useUIHarness>
-                    <useUIThread>false</useUIThread>
-                    <includes>
-                      <include>**/*Test*.class</include>
-                    </includes>
+                    <!--<argLine>-Xmx1024m -XX:MaxPermSize=512m -Xdebug -Xrunjdwp:transport=dt_socket,address=8100,server=y,suspend=y</argLine>-->
+                    <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+                    <systemProperties>
+                        <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
+                        <osgi.console>1234</osgi.console>
+                    </systemProperties>
+                    <dependencies>
+                        <dependency>
+                            <type>eclipse-feature</type>
+                            <artifactId>org.eclipse.sapphire.osgi</artifactId>
+                            <version>0.0.0</version>
+                        </dependency>
+                    </dependencies>
                 </configuration>
             </plugin>
         </plugins>

@@ -75,18 +75,6 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
         super.testPluginTypeListener();
     }
 
-    @Test
-    public void testUseDefaultLocationEnablement() throws Exception
-    {
-        super.testPluginTypeListener();
-    }
-
-    @Test
-    public void testUseDefaultLocationListener() throws Exception
-    {
-        super.testUseDefaultLocationListener();
-    }
-
     @Override
     protected String getServiceXmlDoctype()
     {

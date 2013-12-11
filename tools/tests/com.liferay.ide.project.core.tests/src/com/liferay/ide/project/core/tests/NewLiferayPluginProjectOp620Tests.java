@@ -106,18 +106,6 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     }
 
     @Test
-    public void testUseDefaultLocationEnablement() throws Exception
-    {
-        super.testUseDefaultLocationEnablement( true );
-    }
-
-    @Test
-    public void testUseDefaultLocationListener() throws Exception
-    {
-        super.testUseDefaultLocationListener( true );
-    }
-
-    @Test
     public void testUseSdkLocationListener() throws Exception
     {
         super.testUseSdkLocationListener();
