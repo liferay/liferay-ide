@@ -945,6 +945,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testRuntimeNameDefaultValue() throws Exception
     {
         final NewLiferayPluginProjectOp op = newProjectOp( "test-runtime-name-default-value" );
