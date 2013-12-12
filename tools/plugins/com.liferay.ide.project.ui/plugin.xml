@@ -856,6 +856,7 @@
             name="Projects">
       </page>
    </extension>
+   <!--
    <extension
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
       <category
@@ -884,4 +885,5 @@
             name="Liferay IDE Projects">
       </category>
    </extension>
+   -->
 </plugin>
