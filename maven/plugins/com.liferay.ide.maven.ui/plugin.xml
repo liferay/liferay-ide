@@ -192,4 +192,10 @@
             markerType="com.liferay.ide.maven.core.configurationProblem">
       </markerResolutionGenerator>
    </extension>
+   <extension
+         point="org.eclipse.m2e.core.mavenProjectChangedListeners">
+      <listener
+            class="com.liferay.ide.maven.ui.LiferayMavenProjectChangedListener">
+      </listener>
+   </extension>
 </plugin>
