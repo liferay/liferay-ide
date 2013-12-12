@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.sapphire.services.PossibleValuesService;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -38,6 +39,7 @@ public class NewLiferayPluginProjectProfileTests
 
 
     @Test
+    @Ignore
     public void testProfilesPossibleValues() throws Exception
     {
         final NewLiferayPluginProjectOp op = newMavenProjectOp();

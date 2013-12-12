@@ -37,6 +37,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.EnablementService;
 import org.eclipse.sapphire.services.PossibleValuesService;
 import org.eclipse.sapphire.services.ValidationService;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -133,6 +134,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testLocationValidation() throws Exception
     {
         final NewLiferayPluginProjectOp op = newProjectOp( "test-location-validation-service" );
