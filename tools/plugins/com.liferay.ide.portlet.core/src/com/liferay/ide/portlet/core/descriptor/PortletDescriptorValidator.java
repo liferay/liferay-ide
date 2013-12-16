@@ -15,8 +15,6 @@
 
 package com.liferay.ide.portlet.core.descriptor;
 
-import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
-import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -53,7 +51,6 @@ import org.w3c.dom.NodeList;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
- * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class PortletDescriptorValidator extends BaseValidator
@@ -61,17 +58,11 @@ public class PortletDescriptorValidator extends BaseValidator
 
     public static final String FILTER_CLASS_ELEMENT = "filter-class"; //$NON-NLS-1$
     
-    public static final String ID_RESOURCE_PROPERTIES_ENCODING_NOT_DEFAULT="resource-properties-encoding-not-default"; //$NON-NLS-1$
-
     public static final String LISTENER_CLASS_ELEMENT = "listener-class"; //$NON-NLS-1$
 
     public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.portletDescriptorMarker"; //$NON-NLS-1$
 
     public static final String MESSAGE_RESOURCE_BUNDLE_NOT_FOUND = Msgs.resourceBundleNotFound;
-
-    public static final String MESSAGE_RESOURCE_BUNDLE_ENCODING_NOT_DEFAULT = Msgs.resourceBundleEncodingNotDefault;
-
-    public static final String MESSAGE_SUPPORTED_LOCALE_ENCODING_NOT_DEFAULT = Msgs.supportedLocaleEncodingNotDefault;
 
     public static final String PORTLET_CLASS_ELEMENT = "portlet-class"; //$NON-NLS-1$
 
@@ -80,8 +71,6 @@ public class PortletDescriptorValidator extends BaseValidator
     public static final String PREFERENCE_NODE_QUALIFIER = LiferayProjectCore.getDefault().getBundle().getSymbolicName();
 
     public static final String RESOURCE_BUNDLE_ELEMENT = "resource-bundle"; //$NON-NLS-1$
-
-    public static final String SUPPORTED_LOCALE_ELEMENT = "supported-locale"; //$NON-NLS-1$
 
     public PortletDescriptorValidator()
     {
@@ -135,8 +124,6 @@ public class PortletDescriptorValidator extends BaseValidator
                     PREFERENCE_NODE_QUALIFIER, problems );
 
                 checkResourceBundleElements( document, javaProject, preferenceScopes, problems );
-
-                checkResourceBundleAndSupportedLocaleEncoding( portletXml );
             }
 
         }
@@ -155,18 +142,6 @@ public class PortletDescriptorValidator extends BaseValidator
         Map<String, Object>[] retval = new Map[problems.size()];
 
         return (Map<String, Object>[]) problems.toArray( retval );
-    }
-
-    protected void checkResourceBundleAndSupportedLocaleEncoding( IFile portletXml )
-    {
-        final IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( portletXml );
-
-        for( IFile file : files )
-        {
-            LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
-        }
-
-        LiferayLanguagePropertiesValidator.clearUnusedValidators();
     }
 
     @SuppressWarnings( "deprecation" )
@@ -227,8 +202,6 @@ public class PortletDescriptorValidator extends BaseValidator
     private static class Msgs extends NLS
     {
         public static String resourceBundleNotFound;
-        public static String resourceBundleEncodingNotDefault;
-        public static String supportedLocaleEncodingNotDefault;
 
         static
         {

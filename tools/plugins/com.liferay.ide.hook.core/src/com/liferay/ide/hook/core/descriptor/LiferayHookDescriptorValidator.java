@@ -15,9 +15,7 @@
 
 package com.liferay.ide.hook.core.descriptor;
 
-import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -60,7 +58,6 @@ import org.w3c.dom.NodeList;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
- * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayHookDescriptorValidator extends BaseValidator
@@ -297,8 +294,6 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                     map, javaProject, liferayHookXml, ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
                     ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
                     PREFERENCE_NODE_QUALIFIER, problems );
-
-                checkLanguagePropertiesEncoding( liferayHookXml );
             }
 
         }
@@ -317,18 +312,6 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         Map<String, Object>[] retval = new Map[problems.size()];
 
         return (Map<String, Object>[]) problems.toArray( retval );
-    }
-
-    protected void checkLanguagePropertiesEncoding( IFile liferayHookXml )
-    {
-        final IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
-
-        for( IFile file : files )
-        {
-            LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
-        }
-
-        LiferayLanguagePropertiesValidator.clearUnusedValidators();
     }
 
     @SuppressWarnings( "deprecation" )

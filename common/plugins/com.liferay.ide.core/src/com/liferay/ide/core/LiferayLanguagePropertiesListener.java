@@ -15,91 +15,125 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.ElementChangedEvent;
-import org.eclipse.jdt.core.IElementChangedListener;
-import org.eclipse.jdt.core.IJavaElementDelta;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Kuo Zhang
  */
-public class LiferayLanguagePropertiesListener implements IElementChangedListener
+public class LiferayLanguagePropertiesListener implements IResourceChangeListener, IResourceDeltaVisitor
 {
+    private static int eventHashCode = 0;
 
-    public void elementChanged( ElementChangedEvent event )
+    protected void processFile( IFile file ) throws CoreException
     {
-        List<IFile> changedFiles = new ArrayList<IFile>();
-
-        getChangedFiles( event.getDelta(), changedFiles );
-
-        if( changedFiles.size() > 0 )
+        if( file != null && file.exists() )
         {
-            for( Iterator<IFile> iterator = changedFiles.iterator(); iterator.hasNext(); )
+            if( PropertiesUtil.isLanguagePropertiesFile( file ) )
             {
-                if( ! PropertiesUtil.isLanguagePropertiesFile( iterator.next() ) )
-                {
-                    iterator.remove();
-                }
+                validateLanguagePropertiesEncoding( new IFile[]{file}, false );
+                return;
             }
 
-            validateLanguagePropertiesEncoding( changedFiles.toArray( new IFile[0] ) );
+            final IFile portletXml = PropertiesUtil.getPortletXml( CoreUtil.getLiferayProject( file ) );
+            if( file.equals( portletXml ) )
+            {
+                IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
+                validateLanguagePropertiesEncoding( files, true );
+                return;
+            }
+
+            final IFile liferayHookXml = PropertiesUtil.getLiferayHookXml( CoreUtil.getLiferayProject( file ) );
+            if( ( file ).equals( liferayHookXml ) )
+            {
+                IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
+                validateLanguagePropertiesEncoding( files, true );
+                return;
+            }
         }
     }
 
-    private void getChangedFiles( IJavaElementDelta delta, List<IFile> changedFiles )
+    public void resourceChanged( IResourceChangeEvent event )
     {
-
-        if( delta.getFlags() == IJavaElementDelta.F_CONTENT )
+        if( event == null )
         {
-            IResourceDelta[] resourceDeltas = delta.getResourceDeltas();
-
-            for( IResourceDelta resourceDelta : resourceDeltas )
-            {
-                if( resourceDelta.getResource().getType() == IResource.FILE )
-                {
-                    changedFiles.add( (IFile) resourceDelta.getResource() );
-                }
-            }
-        }
-        else
-        {
-            IJavaElementDelta[] deltas = delta.getAffectedChildren();
-
-            for( IJavaElementDelta childDelta : deltas )
-            {
-                getChangedFiles( childDelta, changedFiles );
-            }
+            return;
         }
 
+        if( eventHashCode == event.hashCode() )
+        {
+            return;
+        }
+        else 
+        {
+            eventHashCode = event.hashCode();
+        }
+
+        try
+        {
+            event.getDelta().accept( this );
+        }
+        catch( CoreException e )
+        {
+        }
     }
 
-    private void validateLanguagePropertiesEncoding( final IFile[] files )
+    public boolean visit( final IResourceDelta delta ) throws CoreException
     {
-        new WorkspaceJob( "Valiting the encoding of liferay language properties." )
+        switch( delta.getResource().getType() )
         {
+            case IResource.ROOT:
+            case IResource.PROJECT:
+            case IResource.FOLDER:
+                return true;
+
+            case IResource.FILE:
+            {
+                processFile( (IFile) delta.getResource() );
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private void validateLanguagePropertiesEncoding( final IFile[] files, final boolean clearUnusedMarkers )
+    {
+        Job job = new WorkspaceJob( "Valiting the encoding of Liferay language properties." )
+        {
+
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
             {
                 for( IFile file : files )
                 {
-                    LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
+                    LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding(); 
+                }
+
+                if( clearUnusedMarkers )
+                {
+                    LiferayLanguagePropertiesValidator.clearUnusedValidators();
                 }
 
                 return Status.OK_STATUS;
             }
-        }.schedule();
+        };
+
+        job.setRule( CoreUtil.getWorkspaceRoot() );
+        job.schedule();
     }
+
 }

@@ -17,11 +17,11 @@ package com.liferay.ide.core;
 
 import com.liferay.ide.core.util.PropertiesUtil;
 
-import java.util.HashMap;
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -34,13 +34,17 @@ import org.eclipse.osgi.util.NLS;
  */
 public class LiferayLanguagePropertiesValidator
 {
+
     public final static String ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT = "language-properties-encoding-not-defalut";
 
-    public final static String LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE = "com.liferay.ide.core.LiferayLanguagePropertiesMarker";
+    public final static String LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE =
+        "com.liferay.ide.core.LiferayLanguagePropertiesMarker";
 
-    private static Map<IFile, LiferayLanguagePropertiesValidator> fileAndValidators = new HashMap<IFile, LiferayLanguagePropertiesValidator>();
+    private static WeakHashMap<IFile, WeakReference<LiferayLanguagePropertiesValidator>> filesAndValidators =
+        new WeakHashMap<IFile, WeakReference<LiferayLanguagePropertiesValidator>>();
 
-    public final static String MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT = Msgs.languagePropertiesEncodingNotDefault;
+    public final static String MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT =
+        Msgs.languagePropertiesEncodingNotDefault;
 
     private IFile file;
 
@@ -48,36 +52,55 @@ public class LiferayLanguagePropertiesValidator
 
     public static void clearUnusedValidators()
     {
-        Set<IFile> files = fileAndValidators.keySet();
-
-        for( Iterator<IFile> iterator = files.iterator(); iterator.hasNext(); )
+        synchronized( filesAndValidators )
         {
-            IFile file = iterator.next();
-
-            if( ! PropertiesUtil.isLanguagePropertiesFile( file ) )
+            try
             {
-                LiferayLanguagePropertiesValidator validator = (LiferayLanguagePropertiesValidator) fileAndValidators.get( file );
+                Set<IFile> files = filesAndValidators.keySet();
 
-                validator.clearAllMarkers();
+                for( Iterator<IFile> iterator = files.iterator(); iterator.hasNext(); )
+                {
+                    IFile file = iterator.next();
 
-                iterator.remove();
+                    if( ! PropertiesUtil.isLanguagePropertiesFile( file ) )
+                    {
+                        LiferayLanguagePropertiesValidator validator = filesAndValidators.get( file ).get();
+
+                        validator.clearAllMarkers();
+
+                        iterator.remove();
+                    }
+                }
+            }
+            catch( Exception e )
+            {
             }
         }
     }
 
-    public synchronized static LiferayLanguagePropertiesValidator getValidator( IFile file )
+    public static LiferayLanguagePropertiesValidator getValidator( IFile file )
     {
-        if( fileAndValidators.containsKey( file ) )
+        synchronized( filesAndValidators )
         {
-            return (LiferayLanguagePropertiesValidator) fileAndValidators.get( file );
-        }
-        else
-        {
-              LiferayLanguagePropertiesValidator validator = new LiferayLanguagePropertiesValidator( file );
+            try
+            {
+                if( filesAndValidators.get( file ).get() != null )
+                {
+                    return filesAndValidators.get( file ).get();
+                }
+                else
+                {
+                    throw new NullPointerException();
+                }
+            }
+            catch( NullPointerException e )
+            {
+                LiferayLanguagePropertiesValidator validator = new LiferayLanguagePropertiesValidator( file );
 
-              fileAndValidators.put( file, validator );
+                filesAndValidators.put( file, new WeakReference<LiferayLanguagePropertiesValidator>( validator ) );
 
-              return validator;
+                return validator;
+            }
         }
     }
 
@@ -87,14 +110,18 @@ public class LiferayLanguagePropertiesValidator
 
         try
         {
-            for( IMarker marker : file.findMarkers( LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE ,false, IResource.DEPTH_INFINITE ) )
+            for( IMarker marker : file.findMarkers(
+                LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_INFINITE ) )
             {
-                markers.add( marker );
+                if( ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
+                {
+                    markers.add( marker );
+                }
             }
         }
         catch( CoreException e )
         {
-           LiferayCore.logError( e );
+            LiferayCore.logError( e );
         }
     }
 
@@ -102,7 +129,7 @@ public class LiferayLanguagePropertiesValidator
     {
         synchronized( markers )
         {
-            for( IMarker marker: markers )
+            for( IMarker marker : markers )
             {
                 if( marker != null && marker.exists() )
                 {
@@ -128,7 +155,8 @@ public class LiferayLanguagePropertiesValidator
             {
                 for( IMarker marker : markers )
                 {
-                    if( marker != null && marker.exists() && markerSourceId.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
+                    if( marker != null && marker.exists() &&
+                        markerSourceId.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
                     {
                         markers.remove( marker );
 
@@ -143,15 +171,15 @@ public class LiferayLanguagePropertiesValidator
         }
     }
 
-    private void setMarker(
-        String markerType, String markerSourceId, int markerSeverity, String markerMsg )
+    private void setMarker( String markerType, String markerSourceId, int markerSeverity, String markerMsg )
         throws CoreException, InterruptedException
     {
         synchronized( markers )
         {
             for( IMarker marker : markers )
             {
-                if( marker != null && marker.exists() && markerSourceId.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
+                if( marker != null && marker.exists() &&
+                    markerSourceId.equals( marker.getAttribute( IMarker.SOURCE_ID ) ) )
                 {
                     return;
                 }
@@ -168,7 +196,7 @@ public class LiferayLanguagePropertiesValidator
 
     }
 
-    public void validateEncoding( )
+    public void validateEncoding()
     {
         if( PropertiesUtil.isLanguagePropertiesFile( file ) )
         {
@@ -203,4 +231,5 @@ public class LiferayLanguagePropertiesValidator
             initializeMessages( LiferayLanguagePropertiesValidator.class.getName(), Msgs.class );
         }
     }
+
 }

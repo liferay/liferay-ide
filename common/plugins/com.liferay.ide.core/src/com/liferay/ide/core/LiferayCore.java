@@ -17,10 +17,11 @@ package com.liferay.ide.core;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.net.proxy.IProxyService;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.JavaCore;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -240,7 +241,9 @@ public class LiferayCore extends Plugin
         plugin = this;
 
         liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
-        JavaCore.addElementChangedListener( liferayLanguagePropertiesListener );
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+            liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE);
+
     }
 
     /*
@@ -254,7 +257,7 @@ public class LiferayCore extends Plugin
 
         if( liferayLanguagePropertiesListener != null )
         {
-            JavaCore.removeElementChangedListener( liferayLanguagePropertiesListener );
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener( liferayLanguagePropertiesListener );
         }
     }
 
