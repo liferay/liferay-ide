@@ -225,7 +225,7 @@
         <id>NewLiferayProfile</id>
         <label>Create New Maven Profile</label>
         <content>
-            <label>Use the following Liferay runtime to automatically popular this new profile with useful properties.</label>
+            <label>Use the following Liferay runtime to automatically populate this new profile with useful properties.</label>
             <spacer></spacer>
             <property-editor>
                 <label>Liferay runtime</label>
