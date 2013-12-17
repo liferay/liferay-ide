@@ -43,7 +43,6 @@ import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
- * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class PortletValidationSettingsPage extends AbstractValidationSettingsPage
@@ -154,10 +153,6 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
         createCombo( inner, Msgs.resourceBundleNotFound, ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND );
 
-        createCombo( inner, Msgs.resourceBundleEncodingNotDefault, ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_ENCODING_NOT_DEFAULT );
-
-        createCombo( inner, Msgs.supportedLocaleEncodingNotDefault, ValidationPreferences.PORTLET_XML_SUPPORTED_LOCALE_ENCODING_NOT_DEFAULT );
-
         twistie = createTwistie( body, Msgs.liferayPortletXMLDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
@@ -207,9 +202,6 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         createCombo(
             inner, Msgs.languagePropertiesResourceNotFound,
             ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND );
-        createCombo(
-            inner, Msgs.languagePropertiesEncodingNotDefault,
-            ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT );
         createCombo(
             inner, Msgs.customJspDirectoryNotFound, ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND );
 
@@ -329,7 +321,6 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         public static String ignore;
         public static String incorrectClassHierarchy;
         public static String languagePropertiesResourceNotFound;
-        public static String languagePropertiesEncodingNotDefault;
         public static String liferayDisplayXMLDescriptor;
         public static String liferayHookXMLDescriptor;
         public static String liferayLayoutTemplatesDescriptor;
@@ -341,10 +332,8 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         public static String portletNameNotFound;
         public static String portletXMLDescriptor;
         public static String resourceBundleNotFound;
-        public static String resourceBundleEncodingNotDefault;
         public static String selectSeverityLevel;
         public static String serviceXMLDescriptor;
-        public static String supportedLocaleEncodingNotDefault;
         public static String templatePathResourceNotFound;
         public static String thumbnailPathResourceNotFound;
         public static String wapTemplatePathResourceNotFound;

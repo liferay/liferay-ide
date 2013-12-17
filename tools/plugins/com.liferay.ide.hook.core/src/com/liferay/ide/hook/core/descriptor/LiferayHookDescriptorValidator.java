@@ -15,10 +15,7 @@
 
 package com.liferay.ide.hook.core.descriptor;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -35,14 +32,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -63,7 +58,6 @@ import org.w3c.dom.NodeList;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
- * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayHookDescriptorValidator extends BaseValidator
@@ -266,89 +260,6 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         }
     }
 
-    protected void checkLanguagePropertiesEncoding(
-        IDOMDocument document, IJavaProject javaProject, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String languagePropertiesEncodingPreferenceKey,
-        List<Map<String, Object>> problems )
-    {
-        final NodeList languagePropertiesNodes = document.getElementsByTagName( LANGUAGE_PROPERTIES_ELEMENT );
-
-        for( int i = 0; i < languagePropertiesNodes.getLength(); i++ )
-        {
-            Node languageProperties = languagePropertiesNodes.item( i );
-
-            try
-            {
-                final IWorkspaceRoot workspaceRoot = javaProject.getJavaModel().getWorkspace().getRoot();
-
-                final IClasspathEntry[] classpathEntrys = javaProject.getResolvedClasspath( true );
-
-                for( IClasspathEntry entry : classpathEntrys )
-                {
-                    if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
-                    {
-                        String languagePropertiesVal = NodeUtil.getTextContent( languageProperties );
-
-                        if( languagePropertiesVal.contains( StringPool.ASTERISK ) )
-                        {
-                            String languagePropertiesValRegex = languagePropertiesVal.replaceAll( "\\*", ".*" ); //$NON-NLS-1$ //$NON-NLS-2$
-
-                            IResource entryResource = workspaceRoot.findMember( entry.getPath().toString() );
-
-                            if( entryResource != null )
-                            {
-                                IFile[] languagePropertiesFiles = PropertiesUtil.visitPropertiesFiles(
-                                    entryResource, languagePropertiesValRegex );
-
-                                if( languagePropertiesFiles != null && languagePropertiesFiles.length > 0 )
-                                {
-                                    for( IFile file : languagePropertiesFiles )
-                                    {
-                                        if( file.exists() &&
-                                            ! file.getCharset().equals(
-                                                ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET ) )
-                                        {
-                                            String msg =
-                                                MessageFormat.format(
-                                                    Msgs.languagePropertiesEncodingNotDefault,
-                                                    new Object[] { file.getName() } );
-
-                                            problems.add( createMarkerValues(
-                                                preferenceNodeQualifier, preferenceScopes,
-                                                languagePropertiesEncodingPreferenceKey, (IDOMNode) languageProperties, msg ) );
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            IFile languagePropertiesFile =
-                                workspaceRoot.getFile( entry.getPath().append( languagePropertiesVal ) );
-
-                            if( languagePropertiesFile.exists() &&
-                                ! languagePropertiesFile.getCharset().equals(
-                                    ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET ) )
-                            {
-                                String msg =
-                                    MessageFormat.format(
-                                        Msgs.languagePropertiesEncodingNotDefault,
-                                        new Object[] { languagePropertiesFile.getName() } );
-
-                                problems.add( createMarkerValues(
-                                    preferenceNodeQualifier, preferenceScopes, languagePropertiesEncodingPreferenceKey,
-                                    (IDOMNode) languageProperties, msg ) );
-                            }
-                        }
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                HookCore.logError( e );
-            }
-        }
-    }
 
     @SuppressWarnings( "unchecked" )
     protected Map<String, Object>[] detectProblems( IFile liferayHookXml, IScopeContext[] preferenceScopes )
@@ -383,10 +294,6 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                     map, javaProject, liferayHookXml, ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
                     ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
                     PREFERENCE_NODE_QUALIFIER, problems );
-
-                checkLanguagePropertiesEncoding(
-                    liferayHookXmlDocument, javaProject, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-                    ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT, problems );
             }
 
         }
@@ -469,7 +376,6 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         public static String serviceTypeInvalid;
         public static String serviceTypeNotFound;
         public static String serviceTypeNotInterface;
-        public static String languagePropertiesEncodingNotDefault;
 
         static
         {

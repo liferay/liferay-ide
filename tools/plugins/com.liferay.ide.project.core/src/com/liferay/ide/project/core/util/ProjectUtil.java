@@ -43,7 +43,6 @@ import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -203,82 +202,6 @@ public class ProjectUtil
 
         return true;
     }
-
-    // IDE-1129
-    /*public static void encodeLanguageFilesToDefault( IProject proj, final IProgressMonitor monitor )
-    {
-        final IFolder[] sourceFolders = getSourceFolders( proj );
-
-        IResourceProxyVisitor resourceProxyVisitor = new IResourceProxyVisitor()
-        {
-
-            public boolean visit( IResourceProxy proxy ) throws CoreException
-            {
-                if( proxy.getType() == IResource.FILE && proxy.getName().matches( ".*\\.properties" ) )
-                {
-                    final IFile file = (IFile) proxy.requestResource();
-
-                    if( ! file.getCharset( true ).equals( ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
-                    {
-                        file.setCharset( null, monitor );
-                    }
-                }
-
-                return true;
-            }
-        };
-
-        IResourceVisitor resourceVisitor = new IResourceVisitor()
-        {
-
-            public boolean visit( IResource resource ) throws CoreException
-            {
-                if( resource.getType() == IResource.FILE && resource.getName().matches( ".*\\.properties" ) )
-                {
-                    final IFile file = (IFile) resource;
-
-                    if( ! file.getCharset( true ).equals( ILiferayConstants.LIFERAY_LANGUAGE_FILE_ENCODING_CHARSET ) )
-                    {
-                        file.setCharset( null, monitor );
-                    }
-                }
-                return true;
-            }
-        };
-
-        for( IFolder sourceFolder : sourceFolders )
-        {
-            try
-            {
-                Method acceptMethod = sourceFolder.getClass().getMethod( "accept",
-                    new Class<?>[] { IResourceProxyVisitor.class, int.class, int.class } );
-
-                if( acceptMethod != null )
-                {
-                    acceptMethod.setAccessible( true );
-                    acceptMethod.invoke( sourceFolder, new Object[] { resourceProxyVisitor, IResource.DEPTH_INFINITE,
-                        IContainer.EXCLUDE_DERIVED } );
-                }
-                else
-                {
-                    acceptMethod = sourceFolder.getClass().getMethod( "accept",
-                        new Class<?>[] { IResourceVisitor.class, int.class, int.class } );
-
-                    if( acceptMethod != null )
-                    {
-                        acceptMethod.setAccessible( true );
-                        acceptMethod.invoke( sourceFolder, new Object[] { resourceVisitor, IResource.DEPTH_INFINITE,
-                            IContainer.EXCLUDE_DERIVED } );
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                LiferayProjectCore.logError( e );
-            }
-        }
-
-    }*/
 
     public static String convertToDisplayName( String name )
     {
@@ -549,19 +472,7 @@ public class ProjectUtil
     public static void deleteProjectMarkers( IProject proj, String markerType, Set<String> markerSourceIds )
         throws CoreException
     {
-        if( proj.isOpen() )
-        {
-            IMarker[] markers = proj.findMarkers( markerType, true, IResource.DEPTH_INFINITE );
-
-            for( IMarker marker : markers )
-            {
-                if( markerSourceIds.contains( marker.getAttribute( IMarker.SOURCE_ID ) ) )
-                {
-                    marker.delete();
-                }
-            }
-        }
-
+        
     }
 
     public static IFile findServiceJarForContext( String context )
@@ -1474,18 +1385,6 @@ public class ProjectUtil
         {
             ddModel.setBooleanProperty( IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD );
         }
-    }
-
-    public static void setProjectMarker(
-        IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
-        String markerSourceId ) throws CoreException
-    {
-        IMarker marker = proj.createMarker( markerType );
-
-        marker.setAttribute( IMarker.SEVERITY, markerSeverity );
-        marker.setAttribute( IMarker.MESSAGE, markerMsg );
-        marker.setAttribute( IMarker.LOCATION, markerLocation );
-        marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
     }
 
     private static class Msgs extends NLS

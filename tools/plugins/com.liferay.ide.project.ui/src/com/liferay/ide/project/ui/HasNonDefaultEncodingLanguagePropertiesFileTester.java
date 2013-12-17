@@ -15,30 +15,50 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Kuo Zhang
  */
-public class HasNonDefaultEncodingLanguageFileTester extends PropertyTester
+public class HasNonDefaultEncodingLanguagePropertiesFileTester extends PropertyTester
 {
 
-    public HasNonDefaultEncodingLanguageFileTester()
+    public HasNonDefaultEncodingLanguagePropertiesFileTester()
     {
         super();
     }
 
     public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
     {
+        boolean retval = false;
+
         if( receiver instanceof IProject )
         {
-           return PropertiesUtil.hasNonDefaultEncodingLanguagePropertiesFile( (IProject) receiver );
+            retval = PropertiesUtil.hasNonDefaultEncodingLanguagePropertiesFile( (IProject) receiver );
+        }
+        else if( receiver instanceof IFile )
+        {
+            try
+            {
+                if( ! ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( ( (IFile) receiver ).getCharset() ) && 
+                    PropertiesUtil.isLanguagePropertiesFile( (IFile) receiver ) )
+                {
+                    retval = true;
+                }
+            }
+            catch( CoreException e )
+            {
+                LiferayCore.logError( e );
+            }
         }
 
-        return false;
+        return retval;
     }
-
 }

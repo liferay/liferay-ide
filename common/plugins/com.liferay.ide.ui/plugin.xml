@@ -90,5 +90,12 @@
             class="com.liferay.ide.ui.LiferayUIPlugin">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="com.liferay.ide.ui.LiferayLanguagePropertiesMarkerResolutionGenerator"
+            markerType="com.liferay.ide.core.LiferayLanguagePropertiesMarker">
+      </markerResolutionGenerator>
+   </extension>
 
 </plugin>

@@ -303,7 +303,6 @@
          </includes>
       </viewerContentBinding>
    </extension>
-
    <extension point="org.eclipse.ui.editors.templates">
     <include file="templates/portlet-java-templates.xml" /> 
   </extension>
