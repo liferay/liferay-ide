@@ -61,7 +61,6 @@ public class ArtifactVersionDefaultValueService extends DefaultValueService
 
         final Listener listener = new FilteredListener<PropertyContentEvent>()
         {
-
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {

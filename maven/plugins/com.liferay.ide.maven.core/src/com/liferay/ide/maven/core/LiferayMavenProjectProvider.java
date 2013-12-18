@@ -407,7 +407,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
             final File locationDir = (File) params[0];
 
-            File parentPom = new File( locationDir, IMavenConstants.POM_FILE_NAME );
+            final File parentPom = new File( locationDir, IMavenConstants.POM_FILE_NAME );
 
             if( parentPom.exists() )
             {
@@ -415,7 +415,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 {
                     final IMaven maven = MavenPlugin.getMaven();
 
-                    Model model = maven.readModel( parentPom );
+                    final Model model = maven.readModel( parentPom );
 
                     version.add( type.cast( model.getVersion() ) );
 
@@ -423,7 +423,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 }
                 catch( CoreException e )
                 {
-                    e.printStackTrace();
+                    LiferayMavenCore.logError( "unable to get parent version", e );
                 }
             }
         }
