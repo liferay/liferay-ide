@@ -20,6 +20,7 @@ package com.liferay.ide.hook.core.model;
 
 import com.liferay.ide.hook.core.model.internal.CustomJspDirListener;
 import com.liferay.ide.hook.core.model.internal.CustomJspsBindingImpl;
+import com.liferay.ide.hook.core.model.internal.CustomJspsEnablementService;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesBindingImpl;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesFileListener;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesOverridesEnablementService;
@@ -93,6 +94,7 @@ public interface Hook extends Element
     @Label( standard = "custom jsps" )
     @FixedOrderList
     @CustomXmlListBinding( impl = CustomJspsBindingImpl.class )
+    @Service( impl = CustomJspsEnablementService.class )
     ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJsps" ); //$NON-NLS-1$
 
     ElementList<CustomJsp> getCustomJsps();
