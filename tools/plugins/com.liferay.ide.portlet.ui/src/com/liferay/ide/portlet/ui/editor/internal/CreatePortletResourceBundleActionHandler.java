@@ -49,6 +49,7 @@ import org.eclipse.sapphire.ui.def.ActionHandlerDef;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 public class CreatePortletResourceBundleActionHandler extends AbstractResourceBundleActionHandler
 {
@@ -106,6 +107,14 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
         if( isEnabled )
         {
             final Portlet portlet = (Portlet) getModelElement();
+
+            if( portlet.getResourceBundle() != null && !portlet.getResourceBundle().empty() )
+            {
+                if( portlet.getResourceBundle().validation().severity() == Severity.ERROR )
+                {
+                    isEnabled = false;
+                }                
+            }
 
             if( portlet.getSupportedLocales() != null && !portlet.getSupportedLocales().isEmpty() )
             {

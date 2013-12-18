@@ -19,7 +19,7 @@
 package com.liferay.ide.portlet.core.model;
 
 import com.liferay.ide.core.model.internal.GenericResourceBundlePathService;
-import com.liferay.ide.portlet.core.model.internal.ResourceBundleValueBinding;
+import com.liferay.ide.portlet.core.model.internal.ResourceBundleValidationService;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
@@ -30,13 +30,15 @@ import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
+
 
 /**
  * @author Kamesh Sampath
+ * @author Simon Jiang 
  */
 @Image( path = "images/elcl16/resources_16x16.gif" )
 public interface ResourceBundle extends Element
@@ -47,11 +49,17 @@ public interface ResourceBundle extends Element
     // *** ResourceBundle ***
 
     @Type( base = Path.class )
-    @Service( impl = GenericResourceBundlePathService.class )
+    @Services
+    (
+        value =
+        {
+            @Service( impl = GenericResourceBundlePathService.class ),
+            @Service( impl = ResourceBundleValidationService.class )
+        }
+    )    
     @FileExtensions( expr = "properties" )
     @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @XmlBinding( path = "resource-bundle" )
-    @CustomXmlValueBinding( impl = ResourceBundleValueBinding.class, params = { "resource-bundle" } )
     ValueProperty PROP_RESOURCE_BUNDLE = new ValueProperty( TYPE, "ResourceBundle" ); //$NON-NLS-1$
 
     Value<Path> getResourceBundle();
