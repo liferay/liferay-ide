@@ -11,21 +11,18 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
-
  ******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.hook.core.model.Hook;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
 
@@ -35,21 +32,21 @@ import org.eclipse.sapphire.services.RelativePathService;
 public class SrcFoldersRelativePathService extends RelativePathService
 {
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.sapphire.services.RelativePathService#roots()
-     */
     @Override
     public List<Path> roots()
     {
-        List<Path> roots = new ArrayList<Path>();
-        Element modelElement = context( Hook.class );
-        IProject project = modelElement.adapt( IProject.class );
-        IFolder[] folders = ProjectUtil.getSourceFolders( project );
+        final List<Path> roots = new ArrayList<Path>();
+        final Hook hook = context( Hook.class );
 
-        for( IFolder folder : folders )
+        if( hook != null )
         {
-            roots.add( new Path( folder.getLocation().toPortableString() ) );
+            final IProject project = hook.adapt( IProject.class );
+            final IFolder[] folders = ProjectUtil.getSourceFolders( project );
+
+            for( final IFolder folder : folders )
+            {
+                roots.add( new Path( folder.getLocation().toPortableString() ) );
+            }
         }
 
         return roots;
