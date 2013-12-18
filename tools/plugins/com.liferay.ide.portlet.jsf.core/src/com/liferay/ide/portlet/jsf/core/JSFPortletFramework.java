@@ -44,6 +44,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
 /**
  * @author Gregory Amerson
+ * @author Tao Tao
  */
 @SuppressWarnings("restriction")
 public class JSFPortletFramework extends AbstractPortletFramework
@@ -123,6 +124,7 @@ public class JSFPortletFramework extends AbstractPortletFramework
 
 
     //TODO add support for maven projects
+    //TODO IDE-1334 check the web.xml for jsf frameworks.
     public IStatus postProjectCreated( IProject project, String frameworkName, IProgressMonitor monitor )
     {
         /*
@@ -132,18 +134,21 @@ public class JSFPortletFramework extends AbstractPortletFramework
 
         SDK sdk = SDKUtil.getSDK( project );
 
-        if( sdk != null && DEFAULT_FRAMEWORK_NAME.equals( frameworkName ) )
+        if( sdk != null )
         {
             try
             {
                 //TODO IDE-648
                 File originalWebXmlFile =
-                    sdk.getLocation().append( "tools/portlet_jsf_tmpl/docroot/WEB-INF/web.xml" ).toFile(); //$NON-NLS-1$
+                    sdk.getLocation().append( "tools/portlet_" + frameworkName + "_tmpl/docroot/WEB-INF/web.xml" ).toFile(); //$NON-NLS-1$
 
-                IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
+                if( originalWebXmlFile.exists() )
+                {
+                    IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
 
-                defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents( //$NON-NLS-1$
-                    new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
+                    defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents( //$NON-NLS-1$
+                        new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
+                }
             }
             catch( Exception e )
             {
