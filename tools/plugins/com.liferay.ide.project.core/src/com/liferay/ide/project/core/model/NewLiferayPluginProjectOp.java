@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.model;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.internal.ActiveProfilesValidationService;
+import com.liferay.ide.project.core.model.internal.ArtifactVersionDefaultValueService;
 import com.liferay.ide.project.core.model.internal.DisplayNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
 import com.liferay.ide.project.core.model.internal.LocationListener;
@@ -262,7 +263,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     // *** ArtifactVersion ***
 
     @Label( standard = "artifact version" )
-    @DefaultValue( text = "1.0.0-SNAPSHOT" )
+    @Service( impl = ArtifactVersionDefaultValueService.class )
     ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty( TYPE, "ArtifactVersion" ); //$NON-NLS-1$
 
     Value<String> getArtifactVersion();

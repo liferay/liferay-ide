@@ -401,6 +401,32 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             {
             }
         }
+        else if( "parentVersion".equals( key ) )
+        {
+            final List<T> version = new ArrayList<T>();
+
+            final File locationDir = (File) params[0];
+
+            File parentPom = new File( locationDir, IMavenConstants.POM_FILE_NAME );
+
+            if( parentPom.exists() )
+            {
+                try
+                {
+                    final IMaven maven = MavenPlugin.getMaven();
+
+                    Model model = maven.readModel( parentPom );
+
+                    version.add( type.cast( model.getVersion() ) );
+
+                    retval = version;
+                }
+                catch( CoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         return retval;
     }

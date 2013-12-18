@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -46,6 +47,7 @@ import org.osgi.framework.Version;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Tao Tao
  */
 public class NewLiferayPluginProjectOpMethods
 {
@@ -111,6 +113,27 @@ public class NewLiferayPluginProjectOpMethods
             LiferayProjectCore.logError( msg, e );
 
             return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );
+        }
+
+        return retval;
+    }
+
+    public static String getMavenParentPomVersion( NewLiferayPluginProjectOp op, String projectName, IPath path )
+    {
+        String retval = null;
+
+        final File parentProjectDir = path.toFile();
+        final IStatus locationStatus = op.getProjectProvider().content().validateProjectLocation( projectName, path );
+
+        if( locationStatus.isOK() && parentProjectDir.exists() )
+        {
+            List<String> version =
+                op.getProjectProvider().content().getData( "parentVersion", String.class, parentProjectDir );
+
+            if( !version.isEmpty() )
+            {
+                retval = version.get( 0 );
+            }
         }
 
         return retval;
