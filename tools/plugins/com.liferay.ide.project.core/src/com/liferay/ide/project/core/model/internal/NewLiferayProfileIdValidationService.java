@@ -61,17 +61,15 @@ public class NewLiferayProfileIdValidationService extends ValidationService
             retval = Status.createErrorStatus( "No spaces are allowed in profile id." );
         }
 
-        if( existingValues.isEmpty() )
+        if( !existingValues.isEmpty() )
         {
-            retval = Status.createErrorStatus( "Profile id must be specified." );
-        }
-
-        for( String val : this.existingValues )
-        {
-            if( val != null && val.equals( profileId ) )
+            for( String val : this.existingValues )
             {
-                retval = Status.createErrorStatus( "Profile already exists." );
-                break;
+                if( val != null && val.equals( profileId ) )
+                {
+                    retval = Status.createErrorStatus( "Profile already exists." );
+                    break;
+                }
             }
         }
 
