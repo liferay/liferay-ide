@@ -71,6 +71,11 @@ public class PortletRowLayoutLayoutEditPolicy extends ConstrainedLayoutEditPolic
 
     protected IFigure createLayoutFeedbackFigure( Request request )
     {
+        if( ! ( request instanceof CreateRequest ) )
+        {
+            return null;
+        }
+
         LayoutConstraint constraint = (LayoutConstraint) getConstraintFor( (CreateRequest) request );
 
         if( constraint == null )//XXX non-parent column should go here

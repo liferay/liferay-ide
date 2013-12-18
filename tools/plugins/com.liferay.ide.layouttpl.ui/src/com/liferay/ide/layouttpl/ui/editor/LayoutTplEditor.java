@@ -74,6 +74,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
@@ -81,16 +82,12 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
     protected static PaletteRoot PALETTE_MODEL;
     protected LayoutTplDiagramElement diagram;
     protected StructuredTextEditor sourceEditor;
+    protected boolean visualEditorSupported;
 
-    public LayoutTplEditor()
+    public LayoutTplEditor( StructuredTextEditor sourceEditor, boolean supported )
     {
-        super();
+        visualEditorSupported = supported;
         setEditDomain( new DefaultEditDomain( this ) );
-    }
-
-    public LayoutTplEditor( StructuredTextEditor sourceEditor )
-    {
-        this();
         this.sourceEditor = sourceEditor;
     }
 
@@ -191,6 +188,11 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 
     public void refreshSourceModel()
     {
+        if( ! visualEditorSupported )
+        {
+            return;
+        }
+
         IDOMModel domModel = getSourceModel();
         domModel.aboutToChangeModel();
         String name = getSourceFileName();
@@ -203,16 +205,22 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 
     public void refreshVisualModel()
     {
-        IDOMModel domModel = getSourceModel( true );
+        diagram = null;
 
-        if( domModel != null )
+        if( visualEditorSupported )
         {
-            diagram = LayoutTplDiagramElement.createFromModel( domModel, LayoutTplDiagramUIFactory.INSTANCE );
-            domModel.releaseFromRead();
+            IDOMModel domModel = getSourceModel( true );
+
+            if( domModel != null )
+            {
+                diagram = LayoutTplDiagramElement.createFromModel( domModel, LayoutTplDiagramUIFactory.INSTANCE );
+                domModel.releaseFromRead();
+            }
         }
-        else
+
+        if( diagram == null )
         {
-            diagram = LayoutTplDiagram.createDefaultDiagram();
+            diagram = LayoutTplDiagram.createDefaultDiagram( visualEditorSupported );
         }
 
         final GraphicalViewer viewer = getGraphicalViewer();
@@ -337,9 +345,13 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 
     protected PaletteRoot getPaletteRoot()
     {
-        if( PALETTE_MODEL == null )
+        if( visualEditorSupported )
         {
             PALETTE_MODEL = LayoutTplEditorPaletteFactory.createPalette();
+        }
+        else
+        {
+            PALETTE_MODEL = new PaletteRoot();
         }
 
         return PALETTE_MODEL;

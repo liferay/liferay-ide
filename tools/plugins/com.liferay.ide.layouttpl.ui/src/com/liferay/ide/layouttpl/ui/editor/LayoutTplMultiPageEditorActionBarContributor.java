@@ -107,7 +107,7 @@ public class LayoutTplMultiPageEditorActionBarContributor extends MultiPageEdito
         }
 
         IActionBars actionBars = getActionBars();
-        if( actionBars != null )
+        if( actionBars != null && layoutTplMultiPageEditor != null)
         {
             actionBars.clearGlobalActionHandlers();
 

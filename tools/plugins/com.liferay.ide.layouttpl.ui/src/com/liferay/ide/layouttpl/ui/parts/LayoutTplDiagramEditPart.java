@@ -17,25 +17,46 @@ package com.liferay.ide.layouttpl.ui.parts;
 
 import com.liferay.ide.layouttpl.ui.policies.LayoutTplDiagramLayoutEditPolicy;
 
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Panel;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.graphics.Color;
 
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart
 {
     public static final int DIAGRAM_MARGIN = 10;
+    public boolean visualEditorSupported;
+
+    public LayoutTplDiagramEditPart()
+    {
+    }
+
+    public LayoutTplDiagramEditPart( boolean supported )
+    {
+        this.visualEditorSupported = supported;
+    }
 
     @Override
     protected void configurePanel( Panel panel )
     {
         super.configurePanel( panel );
 
-        panel.setBackgroundColor( new Color( null, 10, 10, 10 ) );
+        if( visualEditorSupported )
+        {
+            panel.setBackgroundColor( new Color( null, 10, 10, 10 ) );
+        }
+        else
+        {
+            panel.setBackgroundColor( new Color( null, 196, 196, 196 ) );
+            panel.add( new Label( Msgs.layoutTplNotSupported ) );
+        }
     }
 
     protected void createEditPolicies()
@@ -54,4 +75,13 @@ public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart
         return DIAGRAM_MARGIN;
     }
 
+    private static class Msgs extends NLS
+    {
+        public static String layoutTplNotSupported;
+
+        static
+        {
+            initializeMessages( LayoutTplDiagramEditPart.class.getName(), Msgs.class );
+        }
+    }
 }
