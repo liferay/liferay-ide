@@ -17,7 +17,6 @@
 
 package com.liferay.ide.portlet.core.model.internal;
 
-import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.ResourceBundle;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -34,7 +33,6 @@ import org.eclipse.sapphire.services.ValidationService;
  */
 public class ResourceBundleValidationService extends ValidationService
 {
-
     private FilteredListener<PropertyContentEvent> listener;
 
     public Status compute()
@@ -44,22 +42,22 @@ public class ResourceBundleValidationService extends ValidationService
         if( ! modelElement.disposed() && modelElement instanceof ResourceBundle )
         {
             final String bundle = modelElement.property( context( ValueProperty.class ) ).text( false );
+
             if ( bundle != null && bundle.indexOf( "/" ) != -1 )
             {
-                final String correctBundle = bundle.replace( "/", "." ); 
+                final String correctBundle = bundle.replace( "/", "." );
+
                 return Status.createErrorStatus( Resources.bind(
                     StringEscapeUtils.unescapeJava( Resources.invalidResourceBundleWithSlash ), new Object[] {
                         "'" + bundle + "'", "'" + correctBundle + "'" } ) );
             }
-            else if ( bundle != null && ( bundle.startsWith( "." ) || bundle.contains( ".." ) ) ) 
+            else if ( bundle != null && ( bundle.startsWith( "." ) || bundle.contains( ".." ) ) )
             {
                 return Status.createErrorStatus( Resources.bind(
                     StringEscapeUtils.unescapeJava( Resources.invalidResourceBundleFileName ), new Object[] {
                         "'" + bundle + "'" } ) );
             }
-
         }
-
 
         return Status.createOkStatus();
     }
@@ -68,17 +66,16 @@ public class ResourceBundleValidationService extends ValidationService
     {
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
-
             protected void handleTypedEvent( final PropertyContentEvent event )
             {
-                if( !context( ResourceBundle.class ).disposed() )
+                if( ! context( ResourceBundle.class ).disposed() )
                 {
                     refresh();
                 }
             }
         };
 
-        context( ResourceBundle.class ).nearest( Portlet.class ).getResourceBundle().attach( this.listener );
+        context( ResourceBundle.class ).attach( this.listener );
     }
 
     private static final class Resources extends NLS

@@ -38,7 +38,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author Kamesh Sampath
- * @author Simon Jiang 
+ * @author Simon Jiang
  */
 @Image( path = "images/elcl16/resources_16x16.gif" )
 public interface ResourceBundle extends Element
@@ -56,7 +56,7 @@ public interface ResourceBundle extends Element
             @Service( impl = GenericResourceBundlePathService.class ),
             @Service( impl = ResourceBundleValidationService.class )
         }
-    )    
+    )
     @FileExtensions( expr = "properties" )
     @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @XmlBinding( path = "resource-bundle" )
