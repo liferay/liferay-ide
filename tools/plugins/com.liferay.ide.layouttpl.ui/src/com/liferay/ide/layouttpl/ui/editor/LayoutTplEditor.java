@@ -220,7 +220,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 
         if( diagram == null )
         {
-            diagram = LayoutTplDiagram.createDefaultDiagram( visualEditorSupported );
+            diagram = LayoutTplDiagram.createDefaultDiagram();
         }
 
         final GraphicalViewer viewer = getGraphicalViewer();
@@ -258,7 +258,7 @@ public class LayoutTplEditor extends GraphicalEditorWithFlyoutPalette
 
         GraphicalViewer viewer = getGraphicalViewer();
 
-        viewer.setEditPartFactory( new LayoutTplEditPartFactory() );
+        viewer.setEditPartFactory( new LayoutTplEditPartFactory( this.visualEditorSupported ) );
 
         // viewer.setRootEditPart(new ScalableRootEditPart());
         viewer.setRootEditPart( new LayoutTplRootEditPart() );

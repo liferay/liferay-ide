@@ -27,6 +27,12 @@ import org.eclipse.gef.EditPartFactory;
  */
 public class LayoutTplEditPartFactory implements EditPartFactory
 {
+    private final boolean visualEditorSupported;
+
+    public LayoutTplEditPartFactory( boolean visualEditorSupported )
+    {
+        this.visualEditorSupported = visualEditorSupported;
+    }
 
     public EditPart createEditPart( EditPart context, Object modelElement )
     {
@@ -43,7 +49,7 @@ public class LayoutTplEditPartFactory implements EditPartFactory
     {
         if( modelElement instanceof LayoutTplDiagram )
         {
-            return new LayoutTplDiagramEditPart();
+            return new LayoutTplDiagramEditPart( this.visualEditorSupported );
         }
 
         if( modelElement instanceof PortletLayout )

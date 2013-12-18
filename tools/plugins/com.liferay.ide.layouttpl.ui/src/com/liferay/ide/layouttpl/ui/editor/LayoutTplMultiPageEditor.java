@@ -99,7 +99,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
 
     protected LayoutTplEditor visualEditor;
 
-    protected boolean visualEditorSuppoted;
+    protected boolean visualEditorSupported;
 
     public LayoutTplMultiPageEditor()
     {
@@ -288,7 +288,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
 
             int activePageIndex = 0;
 
-            if( visualEditorSuppoted )
+            if( visualEditorSupported )
             {
                 activePageIndex = getPreferenceStore().getInt( ILayoutTplUIPreferenceNames.LAST_ACTIVE_PAGE );
             }
@@ -367,7 +367,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
 
     protected LayoutTplEditor createVisualEditor()
     {
-        this.visualEditor = new LayoutTplEditor( this.sourceEditor, visualEditorSuppoted );
+        this.visualEditor = new LayoutTplEditor( this.sourceEditor, visualEditorSupported );
 
         return this.visualEditor;
     }
@@ -422,7 +422,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
     // (bootstrap 12 column). It will be removed in the future when 6.2 style layouts are supported.
     protected void setVisualEditorSupported()
     {
-        visualEditorSuppoted = true;
+        visualEditorSupported = true;
 
         try
         {
@@ -446,7 +446,7 @@ public class LayoutTplMultiPageEditor extends MultiPageEditorPart implements ISe
 
                 if( CoreUtil.compareVersions( ILiferayConstants.V620, new Version( lproj.getPortalVersion() ) ) <= 0 )
                 {
-                    visualEditorSuppoted = false;
+                    visualEditorSupported = false;
                 }
             }
         }

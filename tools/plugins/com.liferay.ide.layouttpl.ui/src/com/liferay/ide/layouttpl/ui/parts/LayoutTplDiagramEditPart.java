@@ -17,8 +17,10 @@ package com.liferay.ide.layouttpl.ui.parts;
 
 import com.liferay.ide.layouttpl.ui.policies.LayoutTplDiagramLayoutEditPolicy;
 
-import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.Panel;
+import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.text.FlowPage;
+import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.osgi.util.NLS;
@@ -55,7 +57,10 @@ public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart
         else
         {
             panel.setBackgroundColor( new Color( null, 196, 196, 196 ) );
-            panel.add( new Label( Msgs.layoutTplNotSupported ) );
+            panel.setLayoutManager( new ToolbarLayout() );
+            FlowPage fp = new FlowPage();
+            fp.add( new TextFlow( Msgs.layoutTplNotSupported ) );
+            panel.add( fp );
         }
     }
 
