@@ -36,32 +36,35 @@ public class CustomJspDirListener extends FilteredListener<PropertyContentEvent>
     {
         final Property prop = event.property();
 
-        // IDE-1132, Listen the change of Property CustomJspDir, and refresh the Property CustomJsps.
-        if( CustomJspDir.PROP_VALUE.equals( prop.definition() ) )
-        {
-            prop.element().nearest( Hook.class ).property( Hook.PROP_CUSTOM_JSPS ).refresh();
-        }
-        // IDE-1251 listen for changes to custom_jsp_dir and if it is empty initialize initial content @InitialValue
-        else if( Hook.PROP_CUSTOM_JSP_DIR.equals( prop.definition() ) )
-        {
-            final Hook hook = prop.element().nearest( Hook.class );
-            CustomJspDir customJspDir = hook.getCustomJspDir().content( false );
+        final Hook hook = prop.element().nearest( Hook.class );
 
-            if( customJspDir != null )
+        if( hook != null )
+        {
+            // IDE-1132, Listen the change of Property CustomJspDir, and refresh the Property CustomJsps.
+            if( CustomJspDir.PROP_VALUE.equals( prop.definition() ) )
             {
-                Value<Path> value = customJspDir.getValue();
+                hook.property( Hook.PROP_CUSTOM_JSPS ).refresh();
+            }
+            // IDE-1251 listen for changes to custom_jsp_dir and if it is empty initialize initial content @InitialValue
+            else if( Hook.PROP_CUSTOM_JSP_DIR.equals( prop.definition() ) )
+            {
+                CustomJspDir customJspDir = hook.getCustomJspDir().content( false );
 
-                if( value != null )
+                if( customJspDir != null )
                 {
-                    Path path = value.content( false );
+                    Value<Path> value = customJspDir.getValue();
 
-                    if( path == null )
+                    if( value != null )
                     {
-                        customJspDir.initialize();
+                        Path path = value.content( false );
+
+                        if( path == null )
+                        {
+                            customJspDir.initialize();
+                        }
                     }
                 }
             }
         }
     }
-
 }
