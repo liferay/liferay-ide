@@ -166,35 +166,36 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 
     public void flush()
     {
-        StringWriter output = new StringWriter();
-
-        try
+        if( this.portalPropertiesConfiguration != null )
         {
-            this.portalPropertiesConfiguration.save( output );
-
-            IFile propsFile = HookMethods.getPortalPropertiesFile( hook(), false );
-
-            if( propsFile != null )
+            try
             {
-                ByteArrayInputStream contents = new ByteArrayInputStream( output.toString().getBytes() );
+                final StringWriter output = new StringWriter();
+                this.portalPropertiesConfiguration.save( output );
 
-                if( propsFile.exists() )
-                {
-                    propsFile.setContents( contents, IResource.FORCE, null );
-                }
-                else
-                {
-                    propsFile.create( contents, true, null );
-                }
+                IFile propsFile = HookMethods.getPortalPropertiesFile( hook(), false );
 
-                propsFile.refreshLocal( IResource.DEPTH_ONE, null );
+                if( propsFile != null )
+                {
+                    ByteArrayInputStream contents = new ByteArrayInputStream( output.toString().getBytes() );
+
+                    if( propsFile.exists() )
+                    {
+                        propsFile.setContents( contents, IResource.FORCE, null );
+                    }
+                    else
+                    {
+                        propsFile.create( contents, true, null );
+                    }
+
+                    propsFile.refreshLocal( IResource.DEPTH_ONE, null );
+                }
+            }
+            catch( Exception e )
+            {
+                HookCore.logError( e );
             }
         }
-        catch( Exception e )
-        {
-            HookCore.logError( e );
-        }
-
     }
 
     @Override
