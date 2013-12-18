@@ -42,7 +42,7 @@ public class ConfigProblemMarkerResolutionGenerator implements IMarkerResolution
 
             final String pluginVersion =
                 AetherUtil.getLatestVersion(
-                    "com.liferay.maven.plugins", "liferay-maven-plugin", "6", "6.2.0-GA1", system, session );
+                    "com.liferay.maven.plugins", "liferay-maven-plugin", "6", "6.2.0-ga1", system, session );
 
             retval = new IMarkerResolution[]
             {
@@ -59,7 +59,7 @@ public class ConfigProblemMarkerResolutionGenerator implements IMarkerResolution
         return correctMarker( marker );
     }
 
-    private boolean correctMarker( IMarker marker )
+    protected boolean correctMarker( IMarker marker )
     {
         try
         {
