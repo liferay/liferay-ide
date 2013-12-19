@@ -12,4 +12,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.alloy.core
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/jna.jar

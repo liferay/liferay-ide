@@ -16,6 +16,8 @@ package com.liferay.ide.alloy.core;
 
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.ZipUtil;
+import com.sun.jna.Library;
+import com.sun.jna.Native;
 
 import java.io.File;
 import java.net.URL;
@@ -23,6 +25,7 @@ import java.net.URL;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -38,13 +41,39 @@ import org.osgi.framework.Bundle;
  */
 public class LautRunner
 {
+    static interface CLibrary extends Library
+    {
+        public int chmod( String path, int mode );
+    }
+
     private static final String LAUT_ENTRY = "/laut";
     private static final String LAUT_PATH = "com.liferay.laut.LautRunnerPath";
     private static final String LAUT_ZIP = LAUT_ENTRY + ".zip";
 
+    private final static String[] lautExeFiles = new String[] { "run.sh", "node/bin/node" };
+
+    private static CLibrary libc = null;
+
     static
     {
         initializeLautRunner();
+    }
+
+    private static CLibrary getLibC()
+    {
+        if( libc == null && ! com.sun.jna.Platform.isWindows() )
+        {
+            try
+            {
+                libc = (CLibrary) Native.loadLibrary( "c", CLibrary.class );
+            }
+            catch( Exception e )
+            {
+                AlloyCore.logError( e );
+            }
+        }
+
+        return libc;
     }
 
     private static void initializeLautRunner()
@@ -105,7 +134,10 @@ public class LautRunner
                             if( lautUrl != null )
                             {
                                 final File lautRunnerDir = new File( FileLocator.toFileURL( lautUrl ).getFile() );
-                                System.setProperty( LAUT_PATH, lautRunnerDir.getAbsolutePath() );
+                                final String lautRunnerDirPath = lautRunnerDir.getAbsolutePath();
+
+                                System.setProperty( LAUT_PATH, lautRunnerDirPath );
+                                setSDKExecutableFlags( new Path( lautRunnerDirPath ) );
                             }
                         }
                         catch( Exception e )
@@ -115,6 +147,19 @@ public class LautRunner
                     }
                 }
             }
+        }
+    }
+
+    public static void setSDKExecutableFlags( IPath lautDir )
+    {
+        if( getLibC() == null )
+        {
+            return;
+        }
+
+        for( String exeFile : lautExeFiles )
+        {
+            getLibC().chmod( lautDir.append( exeFile ).toOSString(), 0755 );
         }
     }
 
