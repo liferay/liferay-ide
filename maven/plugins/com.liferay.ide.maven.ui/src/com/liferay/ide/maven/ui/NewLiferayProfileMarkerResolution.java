@@ -32,11 +32,10 @@ import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.format.FormatProcessorXML;
-import org.w3c.dom.Node;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerResolution
@@ -77,12 +76,7 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
                 final IDOMModel domModel =
                     (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
 
-                final Node newNode =
-                    MavenUtil.createNewLiferayProfileNode(
-                        domModel.getDocument(), newLiferayProfile, this.pluginVersion );
-
-                final FormatProcessorXML formatter = new FormatProcessorXML();
-                formatter.formatNode( newNode );
+                MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newLiferayProfile, this.pluginVersion );
 
                 domModel.save();
 

@@ -53,6 +53,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
+import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -60,6 +61,7 @@ import org.w3c.dom.Node;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class MavenUtil
@@ -437,6 +439,9 @@ public class MavenUtil
                     propertiesElement, "liferay.app.server.portal.dir",
                     liferayRuntime.getAppServerPortalDir().toOSString() );
                 NodeUtil.appendTextNode( propertiesElement, "\n\t" );
+                
+                NodeFormatter formatter = new NodeFormatter();
+                formatter.format( newNode );
             }
         }
         catch( Exception e )

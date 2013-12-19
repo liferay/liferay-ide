@@ -72,9 +72,7 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 
 /**
@@ -234,10 +232,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                     for( final NewLiferayProfile newProfile : newProjectPomProfiles )
                     {
-                        final Node newNode =
-                            MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newProfile, archetypeVersion );
-                        NodeFormatter formatter = new NodeFormatter();
-                        formatter.format( newNode );
+                        MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newProfile, archetypeVersion );
                     }
 
                     domModel.save();
