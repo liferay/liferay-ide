@@ -42,6 +42,7 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Simon Jiang
  */
 public class LiferayMavenProject extends BaseLiferayProject
 {
@@ -94,15 +95,21 @@ public class LiferayMavenProject extends BaseLiferayProject
 
         if( projectFacade != null )
         {
-            final MavenProject mavenProject = projectFacade.getMavenProject();
-
-            final String appServerPortalDir =
-                MavenUtil.getLiferayMavenPluginConfig(
-                    mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR );
-
-            if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
+            try
             {
-                retval = new Path( appServerPortalDir );
+                final MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
+
+                final String appServerPortalDir =
+                    MavenUtil.getLiferayMavenPluginConfig(
+                        mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR );
+
+                if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
+                {
+                    retval = new Path( appServerPortalDir );
+                }                
+            }
+            catch( CoreException ce )
+            {
             }
         }
 
