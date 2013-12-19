@@ -39,9 +39,7 @@ public class NewLiferayProfileIdValidationService extends ValidationService
         super.initValidationService();
 
         this.existingValues =
-            NewLiferayPluginProjectOpMethods.getPossibleProfileIds( context( NewLiferayPluginProjectOp.class ), true );
-
-        this.existingValues.remove( profile().getId().content() );
+            NewLiferayPluginProjectOpMethods.getPossibleProfileIds( context( NewLiferayPluginProjectOp.class ), false );
     }
 
     @Override
@@ -50,7 +48,7 @@ public class NewLiferayProfileIdValidationService extends ValidationService
         Status retval = Status.createOkStatus();
 
         final NewLiferayProfile newLiferayProfile = profile();
-        String profileId = newLiferayProfile.getId().content( true );
+        final String profileId = newLiferayProfile.getId().content( true );
 
         if( profileId == null || profileId.isEmpty() )
         {
@@ -61,7 +59,7 @@ public class NewLiferayProfileIdValidationService extends ValidationService
             retval = Status.createErrorStatus( "No spaces are allowed in profile id." );
         }
 
-        if( !existingValues.isEmpty() )
+        if( ! existingValues.isEmpty() )
         {
             for( String val : this.existingValues )
             {

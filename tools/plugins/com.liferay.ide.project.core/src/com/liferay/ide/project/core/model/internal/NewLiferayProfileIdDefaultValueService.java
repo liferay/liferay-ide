@@ -72,6 +72,8 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
             return new DefaultValueServiceData( StringPool.EMPTY );
         }
 
+        data = data.replaceAll( StringPool.SPACE, StringPool.DASH );
+
         final Set<String> possibleValues =
             NewLiferayPluginProjectOpMethods.getPossibleProfileIds(
                 newLiferayProfile.nearest( NewLiferayPluginProjectOp.class ), false );
@@ -87,8 +89,6 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
             }
         }
 
-        data = data.replaceAll( StringPool.SPACE, StringPool.DASH );
-
         return new DefaultValueServiceData( data );
     }
 
@@ -103,7 +103,7 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
             return matcher.group( 1 ) + "(" + ( num + 1 ) + ")";
         }
 
-        return val + " (1)";
+        return val + "(1)";
     }
 
     private NewLiferayProfile newLiferayProfile()
