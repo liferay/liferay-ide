@@ -84,7 +84,8 @@ public class AetherUtil
         final RepositorySystem system = newRepositorySystem();
         final RepositorySystemSession session = newRepositorySystemSession( system );
 
-        final String latestVersion = AetherUtil.getLatestVersion( groupId, artifactId, "6", "6.2.0-ga1", system, session );
+        // as of release time 6.2.0-RC5 is the latest available liferay artifacts on maven central
+        final String latestVersion = AetherUtil.getLatestVersion( groupId, artifactId, "6", "6.2.0-RC5", system, session );
 
         final Artifact defaultArtifact = new DefaultArtifact( groupId + ":" + artifactId + ":" + latestVersion );
 
