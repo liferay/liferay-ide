@@ -20,6 +20,8 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
@@ -43,7 +45,15 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
 
             if( projectFacade != null )
             {
-                final MavenProject mavenProject = projectFacade.getMavenProject();
+                MavenProject mavenProject = null;
+
+                try
+                {
+                    mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
+                }
+                catch( CoreException e )
+                {
+                }
 
                 if( mavenProject != null )
                 {
