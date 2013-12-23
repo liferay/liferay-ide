@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.common"
       label="Liferay IDE Common"
-      version="2.0.0.qualifier"
+      version="2.0.1.qualifier"
       provider-name="Liferay, Inc.">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">

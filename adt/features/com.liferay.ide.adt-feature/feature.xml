@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.adt"
       label="Liferay IDE ADT"
-      version="2.0.0.qualifier"
+      version="2.0.1.qualifier"
       provider-name="Liferay, Inc."
       plugin="com.liferay.ide.adt.branding">
 
