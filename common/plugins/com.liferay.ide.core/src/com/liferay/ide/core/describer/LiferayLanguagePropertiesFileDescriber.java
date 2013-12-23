@@ -15,7 +15,6 @@
 
 package com.liferay.ide.core.describer;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.io.IOException;
@@ -34,6 +33,7 @@ import org.eclipse.core.runtime.content.ITextContentDescriber;
 
 /**
  * @author Kuo Zhang
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
 public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescriber
@@ -67,7 +67,7 @@ public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescr
                 final IFile file =
                     ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( FileUtil.toPath( fileStore.toURI() ) );
 
-                if( isValidFile( file ) )
+                if( PropertiesUtil.isLanguagePropertiesFile( file ) )
                 {
                     return VALID;
                 }
@@ -127,7 +127,7 @@ public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescr
                     {
                         IFile file = (IFile) fFile;
 
-                        if( isValidFile( file ) )
+                        if( PropertiesUtil.isLanguagePropertiesFile( file ) )
                         {
                             return VALID;
                         }
@@ -149,24 +149,6 @@ public class LiferayLanguagePropertiesFileDescriber implements ITextContentDescr
     public QualifiedName[] getSupportedOptions()
     {
         return null;
-    }
-
-    private boolean isValidFile( IFile file )
-    {
-        if( file != null && CoreUtil.isLiferayProject( file.getProject() ) )
-        {
-            final IFile[] languagePropertiesFiles = PropertiesUtil.getLanguagePropertiesFiles( file.getProject() );
-
-            for( IFile propertiesFile : languagePropertiesFiles )
-            {
-                if( file.equals( propertiesFile ) )
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
 }

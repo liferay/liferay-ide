@@ -17,29 +17,29 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * @author Kuo Zhang
  */
-public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
+public class EncodeLanguagePropertiesFilesToDefaultAction implements IObjectActionDelegate
 {
 
     private ISelection selection;
 
-    public EncodeLanguageFilesToDefaultAction()
+    public EncodeLanguagePropertiesFilesToDefaultAction()
     {
         super();
     }
@@ -50,29 +50,28 @@ public class EncodeLanguageFilesToDefaultAction implements IObjectActionDelegate
         {
             final Object elem = ( (IStructuredSelection) selection ).toArray()[0];
 
-            if( elem instanceof IProject )
+            try
             {
-                try
+                if( elem instanceof IResource )
                 {
-                    new ProgressMonitorDialog( new Shell() ).run( true, false, new IRunnableWithProgress()
+                    new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
                     {
 
                         public void run( IProgressMonitor monitor ) throws InvocationTargetException,
                             InterruptedException
                         {
-                            monitor.beginTask( "Encoding Liferay Language File to Default (UTF-8)... ", 10 );
+                            monitor.beginTask( "Encoding Liferay Language Properties Files to Default (UTF-8)... ", 10 );
 
-                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IProject) elem, monitor );
+                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IResource) elem, monitor );
 
                             monitor.done();
                         }
-
                     } );
                 }
-                catch( Exception e )
-                {
-                    ProjectUIPlugin.logError( e );
-                }
+            }
+            catch( Exception e )
+            {
+                ProjectUIPlugin.logError( e );
             }
         }
     }

@@ -53,6 +53,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -76,7 +77,6 @@ import org.eclipse.wst.validation.internal.ValType;
 import org.eclipse.wst.validation.internal.ValidationRunner;
 import org.osgi.framework.Version;
 import org.w3c.dom.Node;
-
 
 /**
  * Core Utility methods
@@ -404,6 +404,54 @@ public class CoreUtil
         IProject project = getProject( projectName );
 
         return getFirstSrcFolder( project );
+    }
+
+    public static IProject getLiferayProject( IResource resource )
+    {
+        IProject retval = null;
+
+        if( resource == null || ! resource.exists() )
+        {
+            return retval;
+        }
+
+        if( CoreUtil.isLiferayProject( resource.getProject() ) )
+        {
+            retval = resource.getProject();
+        }
+        else
+        {
+            IContainer container = resource.getParent();
+
+            while( container != null && container.exists() && container.getParent() != null )
+            {
+                IFile projectFile = container.getFile( new Path( ".project" ) );
+
+                if( projectFile != null && projectFile.exists() )
+                {
+                    for( IProject project : getAllProjects() )
+                    {
+                        if( container.getLocation().equals( project.getLocation() ) )
+                        {
+                            if( CoreUtil.isLiferayProject( project ) )
+                            {
+                                retval = project;
+                                break;
+                            }
+                        }
+                    }
+
+                    if( retval != null )
+                    {
+                        break;
+                    }
+                }
+
+                container = container.getParent();
+            }
+        }
+
+        return retval;
     }
 
     public static Object getNewObject( Object[] oldObjects, Object[] newObjects )
@@ -773,12 +821,6 @@ public class CoreUtil
         in.close();
         out.flush();
         out.close();
-    }
-
-    public static boolean isFileInLiferayProject( IFile file )
-    {
-        // TODO finish isFileInLiferayProject
-        return false;
     }
 
 }

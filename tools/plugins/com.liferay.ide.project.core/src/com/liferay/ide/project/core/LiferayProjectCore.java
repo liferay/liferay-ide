@@ -35,6 +35,7 @@ import org.osgi.framework.BundleContext;
  *
  * @author Greg Amerson
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
 public class LiferayProjectCore extends LiferayCore
 {
@@ -204,6 +205,7 @@ public class LiferayProjectCore extends LiferayCore
 
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
             pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );
+
     }
 
     /*
