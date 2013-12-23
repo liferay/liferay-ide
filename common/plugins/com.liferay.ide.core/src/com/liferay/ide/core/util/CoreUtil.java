@@ -338,6 +338,25 @@ public class CoreUtil
         return null;
     }
 
+    public static IFile getDescriptorFile( final IProject project, String descriptorFileName )
+    {
+        IFile retval = null;
+
+        final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( project );
+
+        if( defaultDocrootFolder != null )
+        {
+            final IFile descriptorFile = defaultDocrootFolder.getFile( new Path( "WEB-INF/" + descriptorFileName ) );
+
+            if( descriptorFile != null && descriptorFile.exists() )
+            {
+                retval = descriptorFile;
+            }
+        }
+
+        return retval;
+    }
+
     public static IVirtualFolder getDocroot( IProject project )
     {
         IVirtualFolder retval = null;

@@ -84,25 +84,15 @@ public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMark
         return false;
     }
 
-    private class EncodeAllFilesToDefaultResolution implements IMarkerResolution2
+    private class EncodeAllFilesToDefaultResolution extends EncodeOneFileToDefaultResolution
     {
-
-        public String getDescription()
-        {
-            return getLabel();
-        }
-
-        public Image getImage()
-        {
-            final URL url = LiferayUIPlugin.getDefault().getBundle().getEntry( "/icons/e16/encode.png" );
-            return ImageDescriptor.createFromURL( url ).createImage();
-        }
 
         public String getLabel()
         {
             return Msgs.encodeAllFilesToDefault;
         }
 
+        //TODO combine with run() in EncodeOneFileToDefaultResolution
         public void run( IMarker marker )
         {
             final IProject proj = CoreUtil.getLiferayProject( marker.getResource() );
@@ -113,12 +103,11 @@ public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMark
                 {
                     new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
                     {
-
                         public void run( IProgressMonitor monitor ) throws InvocationTargetException,
                             InterruptedException
                         {
                             monitor.beginTask(
-                                "Encoding All Liferay Language Properties Files of this Project to Default (UTF-8)... ",
+                                "Encoding all Liferay language properties files to Default (UTF-8)... ",
                                 10 );
 
                             PropertiesUtil.encodeLanguagePropertiesFilesToDefault( proj, monitor );
@@ -168,7 +157,7 @@ public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMark
                         public void run( IProgressMonitor monitor ) throws InvocationTargetException,
                             InterruptedException
                         {
-                            monitor.beginTask( "Encoding Liferay Language Properties File to Default (UTF-8)... ", 10 );
+                            monitor.beginTask( "Encoding Liferay language properties file to default (UTF-8)... ", 10 );
 
                             PropertiesUtil.encodeLanguagePropertiesFilesToDefault( file, monitor );
 

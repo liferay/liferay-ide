@@ -202,7 +202,7 @@ public class LiferayLanguagePropertiesValidator
         {
             try
             {
-                if( ! ILiferayConstants.LIFERAY_LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( file.getCharset() ) )
+                if( ! ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( file.getCharset() ) )
                 {
                     setMarker(
                         LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT,

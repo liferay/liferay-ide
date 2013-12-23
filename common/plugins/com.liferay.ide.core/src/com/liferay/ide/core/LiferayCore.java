@@ -39,7 +39,7 @@ public class LiferayCore extends Plugin
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.core"; //$NON-NLS-1$
 
-    public LiferayLanguagePropertiesListener liferayLanguagePropertiesListener;
+    public static LiferayLanguagePropertiesListener liferayLanguagePropertiesListener;
 
     private static LiferayProjectProviderReader providerReader;
 
@@ -240,12 +240,12 @@ public class LiferayCore extends Plugin
         super.start( context );
         plugin = this;
 
-        if( this.liferayLanguagePropertiesListener == null )
+        if( liferayLanguagePropertiesListener == null )
         {
-            this.liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
+            liferayLanguagePropertiesListener = new LiferayLanguagePropertiesListener();
 
             ResourcesPlugin.getWorkspace().addResourceChangeListener(
-                this.liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE );
+                liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE );
         }
 
     }
@@ -262,6 +262,7 @@ public class LiferayCore extends Plugin
         if( liferayLanguagePropertiesListener != null )
         {
             ResourcesPlugin.getWorkspace().removeResourceChangeListener( liferayLanguagePropertiesListener );
+            liferayLanguagePropertiesListener = null;
         }
     }
 

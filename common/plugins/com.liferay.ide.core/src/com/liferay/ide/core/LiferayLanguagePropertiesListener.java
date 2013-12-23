@@ -47,20 +47,35 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
                 return;
             }
 
-            final IFile portletXml = PropertiesUtil.getPortletXml( CoreUtil.getLiferayProject( file ) );
-            if( file.equals( portletXml ) )
+            final String filename = file.getName();
+
+            if( filename.equals( ILiferayConstants.PORTLET_XML_FILE ) )
             {
-                IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
-                validateLanguagePropertiesEncoding( files, true );
-                return;
+                final IFile portletXml =
+                    CoreUtil.getDescriptorFile( CoreUtil.getLiferayProject( file ), ILiferayConstants.PORTLET_XML_FILE );
+
+                if( file.equals( portletXml ) )
+                {
+                    final IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
+                    validateLanguagePropertiesEncoding( files, true );
+
+                    return;
+                }
             }
 
-            final IFile liferayHookXml = PropertiesUtil.getLiferayHookXml( CoreUtil.getLiferayProject( file ) );
-            if( ( file ).equals( liferayHookXml ) )
+            if( filename.equals( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) )
             {
-                IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
-                validateLanguagePropertiesEncoding( files, true );
-                return;
+                final IFile liferayHookXml =
+                    CoreUtil.getDescriptorFile(
+                        CoreUtil.getLiferayProject( file ), ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+
+                if( file.equals( liferayHookXml ) )
+                {
+                    final IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
+                    validateLanguagePropertiesEncoding( files, true );
+
+                    return;
+                }
             }
         }
     }
@@ -102,15 +117,14 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 
     private void validateLanguagePropertiesEncoding( final IFile[] files, final boolean clearUnusedMarkers )
     {
-        Job job = new WorkspaceJob( "Valiting the encoding of Liferay language properties." )
+        final Job job = new WorkspaceJob( "Validate Liferay language properties encoding..." )
         {
-
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
             {
                 for( IFile file : files )
                 {
-                    LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding(); 
+                    LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
                 }
 
                 if( clearUnusedMarkers )

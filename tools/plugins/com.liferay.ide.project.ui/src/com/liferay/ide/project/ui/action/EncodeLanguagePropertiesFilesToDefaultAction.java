@@ -56,11 +56,10 @@ public class EncodeLanguagePropertiesFilesToDefaultAction implements IObjectActi
                 {
                     new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
                     {
-
                         public void run( IProgressMonitor monitor ) throws InvocationTargetException,
                             InterruptedException
                         {
-                            monitor.beginTask( "Encoding Liferay Language Properties Files to Default (UTF-8)... ", 10 );
+                            monitor.beginTask( "Encoding Liferay language properties files to default (UTF-8)... ", 10 );
 
                             PropertiesUtil.encodeLanguagePropertiesFilesToDefault( (IResource) elem, monitor );
 
