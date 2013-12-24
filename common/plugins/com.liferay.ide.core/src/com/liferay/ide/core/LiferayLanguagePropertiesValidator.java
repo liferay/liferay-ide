@@ -15,6 +15,7 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.lang.ref.WeakReference;
@@ -37,18 +38,47 @@ public class LiferayLanguagePropertiesValidator
 
     public final static String ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT = "language-properties-encoding-not-defalut";
 
-    public final static String LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE =
-        "com.liferay.ide.core.LiferayLanguagePropertiesMarker";
+    public final static String LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE = "com.liferay.ide.core.LiferayLanguagePropertiesMarker";
 
     private static WeakHashMap<IFile, WeakReference<LiferayLanguagePropertiesValidator>> filesAndValidators =
         new WeakHashMap<IFile, WeakReference<LiferayLanguagePropertiesValidator>>();
 
-    public final static String MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT =
-        Msgs.languagePropertiesEncodingNotDefault;
+    public static final String LOCATION_ENCODING= "Properties/Resource/Text file encoding";
+
+    public final static String MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT = Msgs.languagePropertiesEncodingNotDefault;
 
     private IFile file;
 
     private Set<IMarker> markers = new HashSet<IMarker>();
+
+    // This is for the case where the workspace is closed accidently, clear those alive but incorrect markers.
+    public static void clearAbandonedMarkers()
+    {
+        try
+        {
+            final IMarker[] markers =
+                CoreUtil.getWorkspaceRoot().findMarkers(
+                    LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+
+            for( IMarker marker : markers )
+            {
+                if( ! marker.getResource().exists() )
+                {
+                    marker.delete();
+                }
+                else
+                {
+                    if( marker.getResource().getType() == IResource.FILE )
+                    {
+                        getValidator( (IFile) marker.getResource() ).validateEncoding();
+                    }
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+        }
+    }
 
     public static void clearUnusedValidators()
     {
@@ -171,7 +201,7 @@ public class LiferayLanguagePropertiesValidator
         }
     }
 
-    private void setMarker( String markerType, String markerSourceId, int markerSeverity, String markerMsg )
+    private void setMarker( String markerType, String markerSourceId, int markerSeverity, String location, String markerMsg )
         throws CoreException, InterruptedException
     {
         synchronized( markers )
@@ -190,6 +220,7 @@ public class LiferayLanguagePropertiesValidator
             marker.setAttribute( IMarker.SEVERITY, markerSeverity );
             marker.setAttribute( IMarker.MESSAGE, markerMsg );
             marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
+            marker.setAttribute( IMarker.LOCATION, location );
 
             markers.add( marker );
         }
@@ -206,7 +237,7 @@ public class LiferayLanguagePropertiesValidator
                 {
                     setMarker(
                         LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT,
-                        IMarker.SEVERITY_WARNING,
+                        IMarker.SEVERITY_WARNING, LOCATION_ENCODING,
                         NLS.bind( MESSAGE_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFALUT, new Object[] { file.getName() } ) );
                 }
                 else

@@ -49,6 +49,16 @@ import org.w3c.dom.NodeList;
 public class PropertiesUtil
 {
 
+    public final static String ELEMENT_LANGUAGE_PROPERTIES = "language-properties";
+
+    public final static String ELEMENT_PORTLET = "portlet";
+
+    public final static String ELEMENT_RESOURCE_BUNDLE = "resource-bundle";
+
+    public final static String ELEMENT_SUPPORTED_LOCALE = "supported-locale";
+
+    public final static String PROPERTIES_FILE_SUFFIX = ".properties";
+
     public static void encodeLanguagePropertiesFilesToDefault( IResource resource, final IProgressMonitor monitor )
     {
         if( resource.getType() == IResource.PROJECT )
@@ -119,7 +129,7 @@ public class PropertiesUtil
             {
                 final IDOMDocument document = ( (IDOMModel) model ).getDocument();
 
-                final NodeList languagePropertiesList = document.getElementsByTagName( "language-properties" );
+                final NodeList languagePropertiesList = document.getElementsByTagName( ELEMENT_LANGUAGE_PROPERTIES );
 
                 if( languagePropertiesList.getLength() > 0 )
                 {
@@ -278,9 +288,9 @@ public class PropertiesUtil
             {
                 final IDOMDocument document = ( (IDOMModel) model ).getDocument();
 
-                final NodeList portlets = document.getElementsByTagName( "portlet" );
-                final NodeList allResourceBundles = document.getElementsByTagName( "resource-bundle" );
-                final NodeList allSupportedLocales = document.getElementsByTagName( "supported-locale" );
+                final NodeList portlets = document.getElementsByTagName( ELEMENT_PORTLET );
+                final NodeList allResourceBundles = document.getElementsByTagName( ELEMENT_RESOURCE_BUNDLE );
+                final NodeList allSupportedLocales = document.getElementsByTagName( ELEMENT_SUPPORTED_LOCALE );
 
                 if( portlets != null && portlets.getLength() > 0 )
                 {
@@ -301,12 +311,12 @@ public class PropertiesUtil
                             }
 
                             // Supported locale depends on resource bundle, if a portlet.xml does't have a resource-bundle element
-                            // then supported locale will be ignored in the encoding validation.
+                            // then supported locales make no sense.
                             if( resourceBundle != null )
                             {
                                 final String resourceBundleVal = NodeUtil.getTextContent( resourceBundle );
 
-                                retval.addResourceBundle( resourceBundleVal.replaceAll( "\\.", "/" ) + ".properties" );
+                                retval.addResourceBundle( resourceBundleVal.replaceAll( "\\.", "/" ) + PROPERTIES_FILE_SUFFIX );
 
                                 if( allSupportedLocales.getLength() > 0 )
                                 {
@@ -327,7 +337,7 @@ public class PropertiesUtil
 
                                         String supportedLocaleResourceVal =
                                             resourceBundleVal.replaceAll( "\\.", "/" ) + "_" + supportedLocaleVal +
-                                                ".properties";
+                                                PROPERTIES_FILE_SUFFIX;
 
                                         retval.addSupportedLocaleVal( supportedLocaleResourceVal );
                                     }
@@ -384,10 +394,10 @@ public class PropertiesUtil
         return false;
     }
 
-    // Check if the file is the language properties files referenced from portlet.xml or liferay-hook.xml
+    // Check if the file is a language properties file referenced from portlet.xml or liferay-hook.xml
     public static boolean isLanguagePropertiesFile( IFile targetFile )
     {
-        if( ! targetFile.getName().endsWith( ".properties" ) )
+        if( ! targetFile.getName().endsWith( PROPERTIES_FILE_SUFFIX ) )
         {
             return false;
         }
@@ -482,7 +492,7 @@ public class PropertiesUtil
 
         public boolean visit( IResourceProxy resourceProxy )
         {
-            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith( ".properties" ) )
+            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith( PROPERTIES_FILE_SUFFIX ) )
             {
                 IResource resource = resourceProxy.requestResource();
 

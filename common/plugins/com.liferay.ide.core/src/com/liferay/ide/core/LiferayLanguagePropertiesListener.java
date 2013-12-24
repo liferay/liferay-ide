@@ -36,6 +36,10 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class LiferayLanguagePropertiesListener implements IResourceChangeListener, IResourceDeltaVisitor
 {
+    public LiferayLanguagePropertiesListener()
+    {
+        LiferayLanguagePropertiesValidator.clearAbandonedMarkers();
+    }
 
     protected void processFile( IFile file ) throws CoreException
     {
@@ -66,8 +70,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
             if( filename.equals( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) )
             {
                 final IFile liferayHookXml =
-                    CoreUtil.getDescriptorFile(
-                        CoreUtil.getLiferayProject( file ), ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+                    CoreUtil.getDescriptorFile( CoreUtil.getLiferayProject( file ), ILiferayConstants.LIFERAY_HOOK_XML_FILE );
 
                 if( file.equals( liferayHookXml ) )
                 {
@@ -122,9 +125,12 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
             {
-                for( IFile file : files )
+                if( files != null && files.length > 0 )
                 {
-                    LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
+                    for( IFile file : files )
+                    {
+                        LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
+                    }
                 }
 
                 if( clearUnusedMarkers )

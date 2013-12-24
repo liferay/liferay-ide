@@ -141,9 +141,15 @@ public class LocaleBundleValidationService extends ValidationService
     @Override
     public void dispose()
     {
-        context( SupportedLocales.class ).nearest( Portlet.class ).getResourceBundle().detach( this.listener );
+        try
+        {
+            context( SupportedLocales.class ).nearest( Portlet.class ).getResourceBundle().detach( this.listener );
+        }
+        catch( Exception ex )
+        {
+        }
     }
-    
+
     private static final class Resources extends NLS
     {
         public static String localeMustNotEmpty;

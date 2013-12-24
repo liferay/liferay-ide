@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -92,35 +91,9 @@ public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMark
             return Msgs.encodeAllFilesToDefault;
         }
 
-        //TODO combine with run() in EncodeOneFileToDefaultResolution
         public void run( IMarker marker )
         {
-            final IProject proj = CoreUtil.getLiferayProject( marker.getResource() );
-
-            if( proj != null && proj.exists() )
-            {
-                try
-                {
-                    new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
-                    {
-                        public void run( IProgressMonitor monitor ) throws InvocationTargetException,
-                            InterruptedException
-                        {
-                            monitor.beginTask(
-                                "Encoding all Liferay language properties files to Default (UTF-8)... ",
-                                10 );
-
-                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( proj, monitor );
-
-                            monitor.done();
-                        }
-                    } );
-                }
-                catch( Exception e )
-                {
-                    LiferayUIPlugin.logError( e );
-                }
-            }
+            encode( CoreUtil.getLiferayProject( marker.getResource() ) );
         }
     }
 
@@ -147,19 +120,24 @@ public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMark
         {
             if( marker.getResource().getType() == IResource.FILE )
             {
-                final IFile file = (IFile) marker.getResource();
+                encode( (IFile) marker.getResource() );
+            }
+        }
 
+        protected void encode( final IResource resource )
+        {
+            if( resource != null && resource.exists() )
+            {
                 try
                 {
                     new ProgressMonitorDialog( UIUtil.getActiveShell() ).run( true, false, new IRunnableWithProgress()
                     {
 
-                        public void run( IProgressMonitor monitor ) throws InvocationTargetException,
-                            InterruptedException
+                        public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                         {
-                            monitor.beginTask( "Encoding Liferay language properties file to default (UTF-8)... ", 10 );
+                            monitor.beginTask( "Encoding Liferay language properties files to default (UTF-8)... ", 10 );
 
-                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( file, monitor );
+                            PropertiesUtil.encodeLanguagePropertiesFilesToDefault( resource, monitor );
 
                             monitor.done();
                         }
@@ -171,7 +149,6 @@ public class LiferayLanguagePropertiesMarkerResolutionGenerator implements IMark
                 }
             }
         }
-
     }
 
     private static class Msgs extends NLS
