@@ -32,7 +32,8 @@ public interface NewLiferayProfile extends Profile, HasLiferayRuntime
 
     // *** Id ***
 
-    @Services(
+    @Services
+    (
         value =
         {
             @Service( impl = NewLiferayProfileIdDefaultValueService.class ),

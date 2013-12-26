@@ -12,11 +12,16 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model;
+package com.liferay.ide.maven.core.model;
+
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Validation;
 import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Type;
 
 
 /**
@@ -28,6 +33,9 @@ public interface NewLiferayProfileOp extends NewLiferayPluginProjectOp
 
     // we don't want to validated for missing project names
     @Validation( rule = "true", message = ""  )
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" ); //$NON-NLS-1$
+    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
 
+    @Type( base = ILiferayProjectProvider.class )
+    @DefaultValue( text = "maven" )
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
 }

@@ -14,8 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.maven.ui;
 
+import com.liferay.ide.maven.core.model.NewLiferayProfileOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.model.NewLiferayProfileOp;
 import com.liferay.ide.project.core.model.Profile;
 
 import java.net.URL;
