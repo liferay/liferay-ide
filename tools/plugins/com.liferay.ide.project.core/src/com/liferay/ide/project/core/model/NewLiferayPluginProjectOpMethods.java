@@ -48,6 +48,7 @@ import org.osgi.framework.Version;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Tao Tao
+ * @author Kuo Zhang
  */
 public class NewLiferayPluginProjectOpMethods
 {
@@ -278,21 +279,26 @@ public class NewLiferayPluginProjectOpMethods
 
         String suffix = null;
 
-        if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
+        if( projectName != null )
         {
-            suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
-
-            if( suffix != null )
+            if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
             {
-                // check if project name already contains suffix
-                if( projectName.endsWith( suffix ) )
+                suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
+
+                if( suffix != null )
                 {
-                    suffix = null;
+                    // check if project name already contains suffix
+                    if( projectName.endsWith( suffix ) )
+                    {
+                        suffix = null;
+                    }
                 }
             }
         }
 
-        final String dirName = projectName + ( suffix == null ? StringPool.EMPTY : suffix );
+        final String dirName = ( projectName == null ? StringPool.EMPTY : projectName )
+                               + ( suffix == null ? StringPool.EMPTY : suffix );
+
         final Path newLocation = baseLocation.append( dirName );
 
         op.setLocation( newLocation );
