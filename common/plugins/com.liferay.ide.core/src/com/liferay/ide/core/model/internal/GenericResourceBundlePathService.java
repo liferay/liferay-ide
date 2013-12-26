@@ -76,13 +76,14 @@ public class GenericResourceBundlePathService extends RelativePathService
     {
         final Path localPath = super.convertToRelative( path );
         final String bundle = localPath.toPortableString();
+
         if ( bundle != null && bundle.indexOf( "/" ) != -1 )
         {
             final String correctBundle = bundle.replace( "/", "." );
             Path newPath = Path.fromPortableString( correctBundle );
             return newPath.removeFileExtension();
         }
-        
+
         return localPath;
     }
 

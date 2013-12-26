@@ -45,7 +45,7 @@ public class ResourceBundleValidationService extends ValidationService
 
             if ( bundle != null && bundle.indexOf( "/" ) != -1 )
             {
-                final String correctBundle = bundle.replace( "/", "." );
+                final String correctBundle = bundle.replace( "/", "." ).replaceAll( "\\.properties$", "" );
 
                 return Status.createErrorStatus( Resources.bind(
                     StringEscapeUtils.unescapeJava( Resources.invalidResourceBundleWithSlash ), new Object[] {
