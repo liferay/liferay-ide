@@ -66,8 +66,8 @@ Test).[/li][/ul]</content>
                                         </content>
                                     </group>
                                     <group>
-                                    	<label>Optional attributes</label>
-                                    	<content>
+                                        <label>Optional attributes</label>
+                                        <content>
                                             <property-editor>
                                                 <property>localService</property>
                                                 <hint>
@@ -82,7 +82,7 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
-		                                    <property-editor>humanName</property-editor>
+                                            <property-editor>humanName</property-editor>
                                             <property-editor>table</property-editor>
                                             <property-editor>
                                                 <property>uuid</property>
@@ -98,8 +98,8 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
-		                                    <property-editor>persistenceClass</property-editor>
-		                                    <property-editor>dataSource</property-editor>
+                                            <property-editor>persistenceClass</property-editor>
+                                            <property-editor>dataSource</property-editor>
                                             <property-editor>sessionFactory</property-editor>
                                             <property-editor>txManager</property-editor>
                                             <property-editor>
@@ -130,7 +130,7 @@ Test).[/li][/ul]</content>
                                                     <value>leading.label</value>
                                                 </hint>
                                             </property-editor>
-                                    	</content>
+                                        </content>
                                     </group>
                                 </content>
                                 <label>Entity</label>
@@ -265,12 +265,12 @@ The [b]deprecated[/b] value specifies whether the entity's services are deprecat
                                                             </hint>
                                                         </property-editor>
                                                         <property-editor>
-		                                                <property>jsonEnabled</property>
-			                                                <hint>
-			                                                    <name>checkbox.layout</name>
-			                                                    <value>leading.label</value>
-			                                                </hint>
-			                                            </property-editor>
+                                                        <property>jsonEnabled</property>
+                                                            <hint>
+                                                                <name>checkbox.layout</name>
+                                                                <value>leading.label</value>
+                                                            </hint>
+                                                        </property-editor>
                                                     </content>
                                                 </group>
                                             </content>
@@ -303,10 +303,10 @@ relationship.
 For example:
 [br/][br/]
 &lt;column
-	name=&quot;shoppingItemPrices&quot;
-	type=&quot;Collection&quot;
-	entity=&quot;ShoppingItemPrice&quot;
-	mapping-key=&quot;itemId&quot;
+    name=&quot;shoppingItemPrices&quot;
+    type=&quot;Collection&quot;
+    entity=&quot;ShoppingItemPrice&quot;
+    mapping-key=&quot;itemId&quot;
 /&gt;
 [br/][br/]
 The above column specifies that there will be a getter called
@@ -320,10 +320,10 @@ relationship.
 For example:
 [br/][br/]
 &lt;column
-	name=&quot;roles&quot;
-	type=&quot;Collection&quot;
-	entity=&quot;Role&quot;
-	mapping-table=&quot;Groups_Roles&quot;
+    name=&quot;roles&quot;
+    type=&quot;Collection&quot;
+    entity=&quot;Role&quot;
+    mapping-table=&quot;Groups_Roles&quot;
 /&gt;
 [br/][br/]
 The above column specifies that there will be a getter called
@@ -337,10 +337,10 @@ service.xml, you need to specify the full package path.
 For example:
 [br/][br/]
 &lt;column
-	name=&quot;organizations&quot;
-	type=&quot;Collection&quot;
-	entity=&quot;com.liferay.portal.Organization&quot;
-	mapping-table=&quot;Foo_Organizations&quot;
+    name=&quot;organizations&quot;
+    type=&quot;Collection&quot;
+    entity=&quot;com.liferay.portal.Organization&quot;
+    mapping-table=&quot;Foo_Organizations&quot;
 /&gt;
 [br/][br/]
 The id-type and id-param values are used in order to create an auto-generated,
@@ -356,11 +356,11 @@ The first implementation uses a class to generate a primary key.
 For example:
 [br/][br/]
 &lt;column
-	name=&quot;id&quot;
-	type=&quot;Integer&quot;
-	primary=&quot;true&quot;
-	id-type=&quot;class&quot;
-	id-param=&quot;com.liferay.counter.service.persistence.IDGenerator&quot;
+    name=&quot;id&quot;
+    type=&quot;Integer&quot;
+    primary=&quot;true&quot;
+    id-type=&quot;class&quot;
+    id-param=&quot;com.liferay.counter.service.persistence.IDGenerator&quot;
 /&gt;
 [br/][br/]
 In this implementation, the class specified in the id-param value will be called
@@ -376,10 +376,10 @@ databases.
 For example:
 [br/][br/]
 &lt;column
-	name=&quot;id&quot;
-	type=&quot;Integer&quot;
-	primary=&quot;true&quot;
-	id-type=&quot;increment&quot;
+    name=&quot;id&quot;
+    type=&quot;Integer&quot;
+    primary=&quot;true&quot;
+    id-type=&quot;increment&quot;
 /&gt;
 [br/][br/]
 The third implementation uses an identity column to generate a primary key.
@@ -387,10 +387,10 @@ The third implementation uses an identity column to generate a primary key.
 For example:
 [br/][br/]
 &lt;column
-	name=&quot;id&quot;
-	type=&quot;Integer&quot;
-	primary=&quot;true&quot;
-	id-type=&quot;identity&quot;
+    name=&quot;id&quot;
+    type=&quot;Integer&quot;
+    primary=&quot;true&quot;
+    id-type=&quot;identity&quot;
 /&gt;
 [br/][br/]
 In this implementation, the create table SQL generated for this entity will
@@ -403,11 +403,11 @@ The fourth implementation uses a sequence to generate a primary key.
 For example:
 [br/][br/]
 &lt;column
-	name=&quot;id&quot;
-	type=&quot;Integer&quot;
-	primary=&quot;true&quot;
-	id-type=&quot;sequence&quot;
-	id-param=&quot;id_sequence&quot;
+    name=&quot;id&quot;
+    type=&quot;Integer&quot;
+    primary=&quot;true&quot;
+    id-type=&quot;sequence&quot;
+    id-param=&quot;id_sequence&quot;
 /&gt;
 [br/][br/]
 In this implementation, a create sequence SQL statement is created based on
@@ -468,8 +468,8 @@ The attributes of the order-column element allows you to fine tune the ordering 
 For example:
 [br/][br/]
 &lt;order by=&quot;asc&quot;&gt;
-	&lt;order-column name=&quot;parentLayoutId&quot; /&gt;
-	&lt;order-column name=&quot;priority&quot; /&gt;
+    &lt;order-column name=&quot;parentLayoutId&quot; /&gt;
+    &lt;order-column name=&quot;priority&quot; /&gt;
 &lt;/order&gt;
 [br/][br/]
 The above settings will order by parentLayoutId and then by priority in an ascending manner.
@@ -477,7 +477,7 @@ The above settings will order by parentLayoutId and then by priority in an ascen
 For example:
 [br/][br/]
 &lt;order by=&quot;asc&quot;&gt;
-	&lt;order-column name=&quot;name&quot; case-sensitive=&quot;false&quot; /&gt;
+    &lt;order-column name=&quot;name&quot; case-sensitive=&quot;false&quot; /&gt;
 &lt;/order&gt;
 [br/][br/]
 The above settings will order by name and will not be case sensitive.
@@ -485,8 +485,8 @@ The above settings will order by name and will not be case sensitive.
 For example:
 [br/][br/]
 &lt;order&gt;
-	&lt;order-column name=&quot;articleId&quot; order-by=&quot;asc&quot; /&gt;
-	&lt;order-column name=&quot;version&quot; order-by=&quot;desc&quot; /&gt;
+    &lt;order-column name=&quot;articleId&quot; order-by=&quot;asc&quot; /&gt;
+    &lt;order-column name=&quot;version&quot; order-by=&quot;desc&quot; /&gt;
 &lt;/order&gt;
 [br/][br/]
 The above settings will order by articleId in an ascending manner and then by version in a descending manner.</content>
@@ -550,7 +550,7 @@ Set the by attribute to &quot;asc&quot; or &quot;desc&quot; to order by ascendin
                                                 <group>
                                                     <label>Required attributes</label>
                                                     <content>
-		                                                <property-editor>name</property-editor>
+                                                        <property-editor>name</property-editor>
                                                         <property-editor>returnType</property-editor>
                                                     </content>
                                                 </group>
@@ -564,7 +564,7 @@ Set the by attribute to &quot;asc&quot; or &quot;desc&quot; to order by ascendin
                                                                 <value>leading.label</value>
                                                             </hint>
                                                         </property-editor>
-		                                                <property-editor>where</property-editor>
+                                                        <property-editor>where</property-editor>
                                                         <property-editor>
                                                             <property>dbIndex</property>
                                                             <hint>
@@ -686,16 +686,16 @@ arrayable-operator of OR will act like an IN clause.</content>
                                 </documentation>
                             </node>
                             <node>
-			                    <label>References</label>
-			                    <section>
-			                        <label>References</label>
-			                        <content>
-			                            <property-editor>
-			                                <property>references</property>
-			                                <show-label>false</show-label>
-			                                <span>true</span>
-			                            </property-editor>
-			                        </content>
+                                <label>References</label>
+                                <section>
+                                    <label>References</label>
+                                    <content>
+                                        <property-editor>
+                                            <property>references</property>
+                                            <show-label>false</show-label>
+                                            <span>true</span>
+                                        </property-editor>
+                                    </content>
                                     <documentation>
                                         <title>References</title>
                                         <content>The reference element allows you to inject services from another service.xml
@@ -705,7 +705,7 @@ implementation via the methods getResourceLocalService and getResourceService.
 You'll also be able to reference the Resource services via the variables
 resourceLocalService and resourceService.</content>
                                     </documentation>
-			                    </section>
+                                </section>
                                 <documentation>
                                     <title>References</title>
                                     <content>The reference element allows you to inject services from another service.xml
@@ -716,7 +716,7 @@ You'll also be able to reference the Resource services via the variables
 resourceLocalService and resourceService.</content>
                                 </documentation>
                                 <image>images/references_16x16.png</image>
-			                </node>
+                            </node>
                             <node>
                                 <label>Tx Requireds</label>
                                 <section>
@@ -862,30 +862,27 @@ development of services.</content>
         </documentation>
         <page-name>Overview</page-name>
         <action-handler>
-	        <action>Liferay.ServiceBuilder.BuildServices</action>
-	        <id>Liferay.ServiceBuilder.BuildServices</id>
-	        <label>Build Services</label>
-	        <impl>BuildServicesActionHandler</impl>
-	    </action-handler>
-	    <action-handler>
-	        <action>Liferay.ServiceBuilder.BuildWSDD</action>
-	        <id>Liferay.ServiceBuilder.BuildWSDD</id>
-	        <label>Build WSDD</label>
-	        <impl>BuildWSDDActionHandler</impl>
-	    </action-handler>
+            <action>Liferay.ServiceBuilder.BuildServices</action>
+            <id>Liferay.ServiceBuilder.BuildServices</id>
+            <label>Build Services</label>
+            <impl>BuildServicesActionHandler</impl>
+        </action-handler>
+        <action-handler>
+            <action>Liferay.ServiceBuilder.BuildWSDD</action>
+            <id>Liferay.ServiceBuilder.BuildWSDD</id>
+            <label>Build WSDD</label>
+            <impl>BuildWSDDActionHandler</impl>
+        </action-handler>
         <element-type>ServiceBuilder6xx</element-type>
     </editor-page>
     <diagram-page>
-    	<id>diagramPage</id>
+        <id>diagramPage</id>
         <node>
             <id>Entity</id>
             <tool-palette-label>entity</tool-palette-label>
             <instance-id>${Name}</instance-id>
             <property>Entities</property>
-            <label>
-                <text>${ Name == null ? &quot;&lt;entity&gt;&quot; : Name }</text>
-                <width>65</width>
-            </label>
+
             <properties-view>
                 <page>
                     <label>required</label>
@@ -896,40 +893,40 @@ development of services.</content>
                 <page>
                     <label>optional</label>
                     <content>
-                    	<property-editor>
-	                              <property>localService</property>
-	                              <hint>
-	                                  <name>checkbox.layout</name>
-	                                  <value>leading.label</value>
-	                              </hint>
-	                          </property-editor>
-	                          <property-editor>
-	                              <property>remoteService</property>
-	                              <hint>
-	                                  <name>checkbox.layout</name>
-	                                  <value>leading.label</value>
-	                              </hint>
-	                          </property-editor>
-	                    <property-editor>humanName</property-editor>
-	                          <property-editor>table</property-editor>
-	                          <property-editor>
-	                              <property>uuid</property>
-	                              <hint>
-	                                  <name>checkbox.layout</name>
-	                                  <value>leading.label</value>
-	                              </hint>
-	                          </property-editor>
-	                    <property-editor>persistenceClass</property-editor>
-	                    <property-editor>dataSource</property-editor>
-	                    <property-editor>sessionFactory</property-editor>
-	                    <property-editor>txManager</property-editor>
-	                          <property-editor>
-	                              <property>cacheEnabled</property>
-	                              <hint>
-	                                  <name>checkbox.layout</name>
-	                                  <value>leading.label</value>
-	                              </hint>
-	                          </property-editor>
+                        <property-editor>
+                                  <property>localService</property>
+                                  <hint>
+                                          <name>checkbox.layout</name>
+                                      <value>leading.label</value>
+                                  </hint>
+                              </property-editor>
+                              <property-editor>
+                                  <property>remoteService</property>
+                                  <hint>
+                                      <name>checkbox.layout</name>
+                                      <value>leading.label</value>
+                                  </hint>
+                              </property-editor>
+                        <property-editor>humanName</property-editor>
+                              <property-editor>table</property-editor>
+                              <property-editor>
+                                  <property>uuid</property>
+                                  <hint>
+                                      <name>checkbox.layout</name>
+                                      <value>leading.label</value>
+                                  </hint>
+                              </property-editor>
+                        <property-editor>persistenceClass</property-editor>
+                        <property-editor>dataSource</property-editor>
+                        <property-editor>sessionFactory</property-editor>
+                        <property-editor>txManager</property-editor>
+                              <property-editor>
+                                  <property>cacheEnabled</property>
+                                  <hint>
+                                      <name>checkbox.layout</name>
+                                      <value>leading.label</value>
+                                  </hint>
+                              </property-editor>
                     </content>
                 </page>
                 <page>
@@ -947,9 +944,25 @@ development of services.</content>
             </properties-view>
             <tool-palette-image>icons/Entity_16x16.gif</tool-palette-image>
             <model-element-type>Entity</model-element-type>
-            <image>
-                <path>icons/e16/entity_55x50.png</path>
-            </image>
+            <rectangle>
+                <content>
+                    <image>
+                        <path>icons/e16/entity_55x50.png</path>
+                        <text>
+                          <content>${ Name == null ? &quot;&lt;entity&gt;&quot; : Name }</content>
+                        </text>
+                    </image>
+                    <text>
+                        <content>${ Name == null ? &quot;&lt;entity&gt;&quot; : Name }</content>
+                        <font>
+                            <size>12</size>
+                        </font>
+                        <sequence-layout-constraint>
+                            <margin>5</margin>
+                        </sequence-layout-constraint>
+                    </text>
+                </content>
+            </rectangle>
         </node>
         <properties-view>
             <page>
@@ -1015,17 +1028,17 @@ development of services.</content>
         <page-header-text>Service Builder Diagram</page-header-text>
         <page-header-image>icons/e16/service.png</page-header-image>
         <action-handler>
-	        <action>Liferay.ServiceBuilder.BuildServices</action>
-	        <id>Liferay.ServiceBuilder.BuildServices</id>
-	        <label>Build Services</label>
-	        <impl>BuildServicesActionHandler</impl>
-	    </action-handler>
-	    <action-handler>
-	        <action>Liferay.ServiceBuilder.BuildWSDD</action>
-	        <id>Liferay.ServiceBuilder.BuildWSDD</id>
-	        <label>Build WSDD</label>
-	        <impl>BuildWSDDActionHandler</impl>
-	    </action-handler>
+            <action>Liferay.ServiceBuilder.BuildServices</action>
+            <id>Liferay.ServiceBuilder.BuildServices</id>
+            <label>Build Services</label>
+            <impl>BuildServicesActionHandler</impl>
+        </action-handler>
+        <action-handler>
+            <action>Liferay.ServiceBuilder.BuildWSDD</action>
+            <id>Liferay.ServiceBuilder.BuildWSDD</id>
+            <label>Build WSDD</label>
+            <impl>BuildWSDDActionHandler</impl>
+        </action-handler>
         <element-type>ServiceBuilder6xx</element-type>
     </diagram-page>
 
