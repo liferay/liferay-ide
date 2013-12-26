@@ -34,6 +34,7 @@ import org.eclipse.sapphire.services.RelativePathService;
 /**
  * @author Kamesh Sampath
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class GenericResourceBundlePathService extends RelativePathService
 {
@@ -69,11 +70,22 @@ public class GenericResourceBundlePathService extends RelativePathService
         return roots;
     }
 
+
     @Override
-    public final Path convertToAbsolute( Path path )
+    public Path convertToRelative( Path path )
     {
-        return path.addFileExtension( RB_FILE_EXTENSION );
+        final Path localPath = super.convertToRelative( path );
+        final String bundle = localPath.toPortableString();
+        if ( bundle != null && bundle.indexOf( "/" ) != -1 )
+        {
+            final String correctBundle = bundle.replace( "/", "." );
+            Path newPath = Path.fromPortableString( correctBundle );
+            return newPath.removeFileExtension();
+        }
+        
+        return localPath;
     }
+
 
     /**
      * This method is used to get the IProject handle of the project relative to which the source paths needs to be
