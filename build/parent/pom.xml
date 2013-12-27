@@ -26,10 +26,6 @@
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
-    <modules>
-        <module>../target-platform</module>
-    </modules>
-
     <repositories>
         <repository>
             <id>orbit</id>
@@ -65,7 +61,7 @@
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-source-plugin</artifactId>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-versions-plugin</artifactId>
@@ -213,6 +209,18 @@
                     <artifactId>tycho-versions-plugin</artifactId>
                     <version>${tycho-version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.eclipse.tycho</groupId>
+                    <artifactId>tycho-surefire-plugin</artifactId>
+                    <version>${tycho-version}</version>
+                    <configuration>
+                        <useUIHarness>false</useUIHarness>
+                        <useUIThread>false</useUIThread>
+                        <includes>
+                            <include>**/*Test*.class</include>
+                        </includes>
+                    </configuration>
+                </plugin>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -242,72 +250,7 @@
         </pluginManagement>
     </build>
 
-    <issueManagement>
-        <system>jira</system>
-        <url>https://issues.liferay.com/</url>
-    </issueManagement>
-
-
-    <scm>
-        <connection>scm:git:http://github.com/liferay/liferay-ide</connection>
-        <developerConnection>scm:git:http://github.com/liferay/liferay-ide</developerConnection>
-        <url>http://github.com/liferay/liferay-ide</url>
-    </scm>
-
     <profiles>
-        <profile>
-            <id>helios</id>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/helios/</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>eclipse-site</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-site}</url>
-                </repository>
-                <repository>
-                    <id>eclipse-project</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-project-update-site}</url>
-                </repository>
-                <repository>
-                    <id>wtp</id>
-                    <layout>p2</layout>
-                    <url>${wtp-site}</url>
-                </repository>
-            </repositories>
-        </profile>
-        <profile>
-            <id>helios-release</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/heilos</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.6</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/repository/helios</wtp-site>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>eclipse-site</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-site}</url>
-                </repository>
-                <repository>
-                    <id>eclipse-project</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-project-update-site}</url>
-                </repository>
-                <repository>
-                    <id>wtp</id>
-                    <layout>p2</layout>
-                    <url>${wtp-site}</url>
-                </repository>
-            </repositories>
-        </profile>
         <profile>
             <id>indigo</id>
             <activation>
@@ -319,91 +262,6 @@
                 <eclipse-site>http://download.eclipse.org/releases/indigo/</eclipse-site>
                 <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
                 <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>eclipse-site</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-site}</url>
-                </repository>
-                <repository>
-                    <id>eclipse-project</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-project-update-site}</url>
-                </repository>
-                <repository>
-                    <id>wtp</id>
-                    <layout>p2</layout>
-                    <url>${wtp-site}</url>
-                </repository>
-            </repositories>
-        </profile>
-        <profile>
-            <id>indigo-release</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/indigo</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>eclipse-site</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-site}</url>
-                </repository>
-                <repository>
-                    <id>eclipse-project</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-project-update-site}</url>
-                </repository>
-                <repository>
-                    <id>wtp</id>
-                    <layout>p2</layout>
-                    <url>${wtp-site}</url>
-                </repository>
-            </repositories>
-        </profile>
-        <profile>
-            <id>juno</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/juno</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.2</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/repository/juno</wtp-site>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>eclipse-site</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-site}</url>
-                </repository>
-                <repository>
-                    <id>eclipse-project</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-project-update-site}</url>
-                </repository>
-                <repository>
-                    <id>wtp</id>
-                    <layout>p2</layout>
-                    <url>${wtp-site}</url>
-                </repository>
-            </repositories>
-        </profile>
-
-        <profile>
-            <id>juno-release</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/juno</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.2</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/repository/juno</wtp-site>
             </properties>
             <repositories>
                 <repository>

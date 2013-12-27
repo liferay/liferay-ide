@@ -33,47 +33,6 @@
                 <module>../velocity</module>
                 <module>../adt</module>
                 <module>releng</module>
-                <!--module>../nls</module-->
-            </modules>
-        </profile>
-
-        <profile>
-            <id>common</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../common</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>tools</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../tools</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>maven</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../maven</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>portal</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../portal</module>
             </modules>
         </profile>
 
@@ -98,28 +57,6 @@
                 <module>releng/com.liferay.ide.adt-repository</module>
             </modules>
         </profile>
-<!--
-        <profile>
-            <id>nls</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../nls</module>
-            </modules>
-        </profile>
--->
-
-        <profile>
-            <id>release</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>releng</module>
-            </modules>
-        </profile>
-
     </profiles>
 
 </project>

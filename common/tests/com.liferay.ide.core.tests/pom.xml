@@ -26,7 +26,7 @@
     </parent>
 
     <artifactId>com.liferay.ide.core.tests</artifactId>
-    <packaging>eclipse-plugin</packaging>
+    <packaging>eclipse-test-plugin</packaging>
 
     <name>Liferay IDE Core Tests</name>
 

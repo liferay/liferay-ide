@@ -20,11 +20,6 @@
             <email>gregory.amerson@liferay.com</email>
         </developer>
         <developer>
-            <name>Tao Tao</name>
-            <id>tao.tao</id>
-            <email>tao.tao@liferay.com</email>
-        </developer>
-        <developer>
             <name>Kuo Zhang</name>
             <id>kuo.zhang</id>
             <email>kuo.zhang@liferay.com</email>
@@ -46,12 +41,18 @@
             <url>http://www.gnu.org/licenses/lgpl-2.1.html</url>
         </license>
     </licenses>
-    <scm>
+
+	<scm>
         <connection>scm:git:git@github.com:liferay/liferay-ide.git</connection>
         <url>https://github.com/liferay/liferay-ide</url>
     </scm>
 
-    <modules>
+    <issueManagement>
+        <system>jira</system>
+        <url>https://issues.liferay.com/</url>
+    </issueManagement>
+
+	<modules>
         <module>build/parent</module>
         <module>build</module>
     </modules>
