@@ -296,8 +296,8 @@ public class NewLiferayPluginProjectOpMethods
             }
         }
 
-        final String dirName = ( projectName == null ? StringPool.EMPTY : projectName )
-                               + ( suffix == null ? StringPool.EMPTY : suffix );
+        final String dirName = ( projectName == null ? StringPool.EMPTY : projectName ) +
+                               ( suffix == null ? StringPool.EMPTY : suffix );
 
         final Path newLocation = baseLocation.append( dirName );
 
