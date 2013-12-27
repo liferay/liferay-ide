@@ -16,6 +16,8 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
+import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 
 import java.io.File;
@@ -66,10 +68,13 @@ import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator
 {
+
+
     private static final IPath ROOT_PATH = new Path("/");  //$NON-NLS-1$
 
     private IMavenMarkerManager mavenMarkerManager;
@@ -286,6 +291,25 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                     WTPProjectsUtil.insertLinkBefore(project, themeFolder, warPath, ROOT_PATH, monitor);
                 }
             }
+        }
+
+        if ( project != null )
+        {
+            HookDescriptorHelper hookDescripor = new HookDescriptorHelper( project );
+            final String customJSPFolder = hookDescripor.getCustomJSPFolder( null );
+            if ( customJSPFolder != null )
+            {
+                IFolder docFolder = CoreUtil.getDefaultDocrootFolder( project );
+                if ( docFolder != null )
+                {
+                    IPath newPath = Path.fromOSString( customJSPFolder.substring( 1 ) );
+                    IPath pathValue = docFolder.getFullPath().append( newPath );
+                    HookUtil.configureJSPSyntaxValidationExclude(
+                        project, project.getFolder( pathValue.makeRelativeTo( project.getFullPath() ) ), false );
+                }
+
+            }
+
         }
 
         monitor.worked( 25 );

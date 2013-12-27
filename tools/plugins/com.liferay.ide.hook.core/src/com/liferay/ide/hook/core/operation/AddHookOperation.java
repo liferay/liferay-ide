@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
+import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
@@ -54,19 +55,10 @@ import org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelPro
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.validation.Validator;
-import org.eclipse.wst.validation.internal.ConfigurationManager;
-import org.eclipse.wst.validation.internal.ProjectConfiguration;
-import org.eclipse.wst.validation.internal.ValManager;
-import org.eclipse.wst.validation.internal.ValManager.UseProjectPreferences;
-import org.eclipse.wst.validation.internal.ValPrefManagerProject;
-import org.eclipse.wst.validation.internal.ValidatorMutable;
-import org.eclipse.wst.validation.internal.model.FilterGroup;
-import org.eclipse.wst.validation.internal.model.FilterRule;
-import org.eclipse.wst.validation.internal.model.ProjectPreferences;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class AddHookOperation extends AbstractDataModelOperation implements INewHookDataModelProperties
@@ -121,82 +113,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
         return ProjectUtil.getProject( projectName );
     }
 
-    protected void addJSPSyntaxValidationExclude( IFolder customFolder )
-    {
-        try
-        {
-            IProject project = getTargetProject();
 
-            Validator[] vals =
-                ValManager.getDefault().getValidatorsConfiguredForProject( project, UseProjectPreferences.MustUse );
-
-            ValidatorMutable[] validators = new ValidatorMutable[vals.length];
-
-            for( int i = 0; i < vals.length; i++ )
-            {
-                validators[i] = new ValidatorMutable( vals[i] );
-
-                if( "org.eclipse.jst.jsp.core.JSPBatchValidator".equals( validators[i].getId() ) ) //$NON-NLS-1$
-                {
-                    // check for exclude group
-                    FilterGroup excludeGroup = null;
-
-                    for( FilterGroup group : validators[i].getGroups() )
-                    {
-                        if( group.isExclude() )
-                        {
-                            excludeGroup = group;
-                            break;
-                        }
-                    }
-
-                    String customJSPFolderPattern =
-                        customFolder.getFullPath().makeRelativeTo( customFolder.getProject().getFullPath() ).toPortableString();
-
-                    FilterRule folderRule =
-                        FilterRule.createFile( customJSPFolderPattern, true, FilterRule.File.FileTypeFolder );
-
-                    if( excludeGroup == null )
-                    {
-                        excludeGroup = FilterGroup.create( true, new FilterRule[] { folderRule } );
-                        validators[i].add( excludeGroup );
-                    }
-                    else
-                    {
-                        boolean hasCustomJSPFolderRule = false;
-
-                        for( FilterRule rule : excludeGroup.getRules() )
-                        {
-                            if( customJSPFolderPattern.equals( rule.getPattern() ) )
-                            {
-                                hasCustomJSPFolderRule = true;
-                                break;
-                            }
-                        }
-
-                        if( !hasCustomJSPFolderRule )
-                        {
-                            validators[i].replaceFilterGroup(
-                                excludeGroup, FilterGroup.addRule( excludeGroup, folderRule ) );
-                        }
-                    }
-
-                }
-            }
-
-            ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration( project );
-            pc.setDoesProjectOverride( true );
-
-            ProjectPreferences pp = new ProjectPreferences( project, true, false, null );
-
-            ValPrefManagerProject vpm = new ValPrefManagerProject( project );
-            vpm.savePreferences( pp, validators );
-        }
-        catch( Exception e )
-        {
-            HookCore.logError( "Unable to add jsp syntax validation folder exclude rule.", e ); //$NON-NLS-1$
-        }
-    }
 
     protected IStatus checkDescriptorFile( IProject project )
     {
@@ -314,7 +231,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         if( this.model.getBooleanProperty( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION ) )
         {
-            addJSPSyntaxValidationExclude( customFolder );
+            HookUtil.configureJSPSyntaxValidationExclude( getTargetProject(), customFolder, true );
         }
 
         return status;
