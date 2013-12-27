@@ -38,7 +38,15 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 {
     public LiferayLanguagePropertiesListener()
     {
-        LiferayLanguagePropertiesValidator.clearAbandonedMarkers();
+        new WorkspaceJob( "clear abondoned liferay language properties markers" )
+        {
+            @Override
+            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            {
+                LiferayLanguagePropertiesValidator.clearAbandonedMarkers();
+                return Status.OK_STATUS;
+            }
+        }.schedule();
     }
 
     protected void processFile( IFile file ) throws CoreException

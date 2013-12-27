@@ -39,7 +39,7 @@ public class LiferayCore extends Plugin
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.core"; //$NON-NLS-1$
 
-    public static LiferayLanguagePropertiesListener liferayLanguagePropertiesListener;
+    private static LiferayLanguagePropertiesListener liferayLanguagePropertiesListener;
 
     private static LiferayProjectProviderReader providerReader;
 
@@ -247,7 +247,6 @@ public class LiferayCore extends Plugin
             ResourcesPlugin.getWorkspace().addResourceChangeListener(
                 liferayLanguagePropertiesListener, IResourceChangeEvent.POST_CHANGE );
         }
-
     }
 
     /*
