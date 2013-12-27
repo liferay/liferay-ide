@@ -295,21 +295,22 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         if ( project != null )
         {
-            HookDescriptorHelper hookDescripor = new HookDescriptorHelper( project );
-            final String customJSPFolder = hookDescripor.getCustomJSPFolder( null );
+            final HookDescriptorHelper hookDescriptor = new HookDescriptorHelper( project );
+            final String customJSPFolder = hookDescriptor.getCustomJSPFolder( null );
+
             if ( customJSPFolder != null )
             {
-                IFolder docFolder = CoreUtil.getDefaultDocrootFolder( project );
+                final IFolder docFolder = CoreUtil.getDefaultDocrootFolder( project );
+
                 if ( docFolder != null )
                 {
-                    IPath newPath = Path.fromOSString( customJSPFolder.substring( 1 ) );
-                    IPath pathValue = docFolder.getFullPath().append( newPath );
+                    final IPath newPath = Path.fromOSString( customJSPFolder.substring( 1 ) );
+                    final IPath pathValue = docFolder.getFullPath().append( newPath );
+
                     HookUtil.configureJSPSyntaxValidationExclude(
                         project, project.getFolder( pathValue.makeRelativeTo( project.getFullPath() ) ), false );
                 }
-
             }
-
         }
 
         monitor.worked( 25 );

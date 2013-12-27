@@ -51,11 +51,10 @@ public class HookUtil
     {
         try
         {
-
-            Validator[] vals =
+            final Validator[] vals =
                 ValManager.getDefault().getValidatorsConfiguredForProject( project, UseProjectPreferences.MustUse );
 
-            ValidatorMutable[] validators = new ValidatorMutable[vals.length];
+            final ValidatorMutable[] validators = new ValidatorMutable[vals.length];
 
             for( int i = 0; i < vals.length; i++ )
             {
@@ -75,10 +74,10 @@ public class HookUtil
                         }
                     }
 
-                    String customJSPFolderPattern =
+                    final String customJSPFolderPattern =
                         customFolder.getFullPath().makeRelativeTo( customFolder.getProject().getFullPath() ).toPortableString();
 
-                    FilterRule folderRule =
+                    final FilterRule folderRule =
                         FilterRule.createFile( customJSPFolderPattern, true, FilterRule.File.FileTypeFolder );
 
                     if( excludeGroup == null )
@@ -87,7 +86,6 @@ public class HookUtil
                         {
                             excludeGroup = FilterGroup.create( true, new FilterRule[] { folderRule } );
                             validators[i].add( excludeGroup );
-
                         }
                     }
                     else
@@ -98,33 +96,33 @@ public class HookUtil
                         {
                             if( customJSPFolderPattern.equals( rule.getPattern() ) )
                             {
-                                if( !isNewRule )
+                                if( ! isNewRule )
                                 {
                                     FilterGroup newExcludeGroup = FilterGroup.removeRule( excludeGroup, rule );
                                     validators[i].replaceFilterGroup( excludeGroup, newExcludeGroup );
                                 }
+
                                 hasCustomJSPFolderRule = true;
                                 break;
                             }
 
                         }
+
                         if( !hasCustomJSPFolderRule )
                         {
                             validators[i].replaceFilterGroup(
                                 excludeGroup, FilterGroup.addRule( excludeGroup, folderRule ) );
                         }
-
                     }
-
                 }
             }
 
-            ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration( project );
+            final ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration( project );
             pc.setDoesProjectOverride( true );
 
-            ProjectPreferences pp = new ProjectPreferences( project, true, false, null );
+            final ProjectPreferences pp = new ProjectPreferences( project, true, false, null );
 
-            ValPrefManagerProject vpm = new ValPrefManagerProject( project );
+            final ValPrefManagerProject vpm = new ValPrefManagerProject( project );
             vpm.savePreferences( pp, validators );
         }
         catch( Exception e )
@@ -132,9 +130,7 @@ public class HookUtil
             HookCore.logError( "Unable to configure jsp syntax validation folder exclude rule.", e ); //$NON-NLS-1$
         }
     }
-    
-    
-    
+
     public static IFolder getCustomJspFolder(Hook hook, IProject project)
     {
         CustomJspDir element = hook.getCustomJspDir().content();
@@ -178,6 +174,7 @@ public class HookUtil
         {
             String publicId = docType.getPublicId();
             String systemId = docType.getSystemId();
+
             if( publicId != null && systemId != null )
             {
                 if( publicId.contains( "6.0.0" ) || systemId.contains( "6.0.0" ) ) //$NON-NLS-1$ //$NON-NLS-2$
