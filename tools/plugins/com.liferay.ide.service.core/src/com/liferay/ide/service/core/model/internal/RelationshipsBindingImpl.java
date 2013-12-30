@@ -65,19 +65,21 @@ public class RelationshipsBindingImpl extends LayeredListPropertyBinding
     {
         super.init( property );
 
-        serviceBuilder().attach( new FilteredListener<PropertyEvent>()
-        {
-            @Override
-            public void handleTypedEvent( final PropertyEvent event )
+        serviceBuilder().attach
+        (
+            new FilteredListener<PropertyEvent>()
             {
-                if( event != null )
+                @Override
+                public void handleTypedEvent( final PropertyEvent event )
                 {
-                    refreshRelationships();
+                    if( event != null )
+                    {
+                        refreshRelationships();
+                    }
                 }
-            }
-        },
-
-        "Entities/*" ); //$NON-NLS-1$
+            },
+            "Entities/*"
+        );
 
         refreshRelationships();
     }

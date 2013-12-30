@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.service.core.model;
 
 import com.liferay.ide.service.core.model.internal.EntityRelationshipService;
@@ -25,29 +26,31 @@ import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
-
 /**
  * @author Gregory Amerson
  */
-@Image(path = "images/references_16x16.png")
+@Image( path = "images/references_16x16.png" )
 public interface Relationship extends Element
 {
-	ElementType TYPE = new ElementType(Relationship.class);
 
-	@Reference(target = Entity.class)
-	@Service(impl = EntityRelationshipService.class)
-	@Required
-	ValueProperty PROP_FROM_ENTITY = new ValueProperty(TYPE, "FromEntity"); //$NON-NLS-1$
+    ElementType TYPE = new ElementType( Relationship.class );
 
-	ReferenceValue<String, Entity> getFromEntity();
-	void setFromEntity(String value);
-
-	@Reference(target = Entity.class)
-    @Service(impl = EntityRelationshipService.class)
+    @Reference( target = Entity.class )
+    @Service( impl = EntityRelationshipService.class )
     @Required
-    ValueProperty PROP_TO_ENTITY = new ValueProperty(TYPE, "ToEntity"); //$NON-NLS-1$
+    ValueProperty PROP_FROM_ENTITY = new ValueProperty( TYPE, "FromEntity" ); //$NON-NLS-1$
+
+    ReferenceValue<String, Entity> getFromEntity();
+
+    void setFromEntity( String value );
+
+    @Reference( target = Entity.class )
+    @Service( impl = EntityRelationshipService.class )
+    @Required
+    ValueProperty PROP_TO_ENTITY = new ValueProperty( TYPE, "ToEntity" ); //$NON-NLS-1$
 
     ReferenceValue<String, Entity> getToEntity();
-    void setToEntity(String value);
+
+    void setToEntity( String value );
 
 }

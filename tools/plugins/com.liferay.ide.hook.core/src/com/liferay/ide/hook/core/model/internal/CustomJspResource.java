@@ -12,17 +12,16 @@
  * details.
  *
  * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
+ *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.hook.core.model.internal;
-
-import com.liferay.ide.hook.core.model.CustomJsp;
+package com.liferay.ide.hook.core.model.internal;import com.liferay.ide.hook.core.model.CustomJsp;
 
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyBinding;
 import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.ValuePropertyBinding;
+g;
 
 /**
  * @author Gregory Amerson
@@ -50,7 +49,6 @@ public class CustomJspResource extends Resource
         {
             ValuePropertyBinding binding = new ValuePropertyBinding()
             {
-
                 @Override
                 public String read()
                 {

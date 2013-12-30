@@ -44,13 +44,11 @@ public class RelationshipResource extends Resource
     protected PropertyBinding createBinding( Property property )
     {
         PropertyBinding binding = null;
-        String[] params = null;
 
-        if( Relationship.PROP_FROM_ENTITY.equals( property ) )
+        if( Relationship.PROP_FROM_ENTITY.equals( property.definition() ) )
         {
             binding = new ValuePropertyBinding()
             {
-
                 @Override
                 public String read()
                 {
@@ -65,11 +63,10 @@ public class RelationshipResource extends Resource
                 }
             };
         }
-        else if( Relationship.PROP_TO_ENTITY.equals( property ) )
+        else if( Relationship.PROP_TO_ENTITY.equals( property.definition() ) )
         {
             binding = new ValuePropertyBinding()
             {
-
                 @Override
                 public String read()
                 {
