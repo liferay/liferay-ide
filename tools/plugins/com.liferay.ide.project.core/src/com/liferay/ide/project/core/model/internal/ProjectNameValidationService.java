@@ -36,9 +36,9 @@ import org.eclipse.sapphire.services.ValidationService;
  */
 public class ProjectNameValidationService extends ValidationService
 {
-    private FilteredListener<PropertyContentEvent> listener;
-
     private static final String MAVEN_PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
+
+    private FilteredListener<PropertyContentEvent> listener;
 
     @Override
     protected void initValidationService()
@@ -89,7 +89,7 @@ public class ProjectNameValidationService extends ValidationService
             }
             else if( isMavenProject( op ) && ! isValidMavenProjectName( currentProjectName ) )
             {
-                retval = Status.createErrorStatus( "The project name is invalid for maven project" );
+                retval = Status.createErrorStatus( "The project name is invalid for a maven project" );
             }
             else
             {
