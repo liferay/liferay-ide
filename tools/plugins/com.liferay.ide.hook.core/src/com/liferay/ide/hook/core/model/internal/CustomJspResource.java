@@ -21,7 +21,6 @@ import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyBinding;
 import org.eclipse.sapphire.Resource;
 import org.eclipse.sapphire.ValuePropertyBinding;
-g;
 
 /**
  * @author Gregory Amerson
