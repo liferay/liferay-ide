@@ -31,9 +31,16 @@ public class TargetSDKPossibleValuesService extends PossibleValuesService
     @Override
     protected void fillPossibleValues( Set<String> values )
     {
-        for( String version : AdtUtils.getKnownVersions() )
+        try
         {
-            values.add( version );
+            for( String version : AdtUtils.getKnownVersions() )
+            {
+                values.add( version );
+            }
+        }
+        catch( Throwable th )
+        {
+            values.add( "API 17: Android 4.2 (Jelly Bean)" );
         }
     }
 
