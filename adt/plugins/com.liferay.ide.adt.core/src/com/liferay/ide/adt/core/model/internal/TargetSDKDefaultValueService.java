@@ -35,14 +35,20 @@ public class TargetSDKDefaultValueService extends DefaultValueService
     {
         String defaultData = "API 17: Android 4.2 (Jelly Bean)" ;
 
-        Sdk currentSdk = Sdk.getCurrent();
-
-        if( currentSdk != null )
+        try
         {
-            IAndroidTarget[] targets = currentSdk.getTargets();
+            Sdk currentSdk = Sdk.getCurrent();
 
-            // The default sdk target should be the one with the max api level.
-            defaultData =  AdtUtils.getAndroidName( getMaxTargetApiLevel( targets ) );
+            if( currentSdk != null )
+            {
+                IAndroidTarget[] targets = currentSdk.getTargets();
+
+                // The default sdk target should be the one with the max api level.
+                defaultData =  AdtUtils.getAndroidName( getMaxTargetApiLevel( targets ) );
+            }
+        }
+        catch( Throwable th )
+        {
         }
 
         return new DefaultValueServiceData( defaultData );
