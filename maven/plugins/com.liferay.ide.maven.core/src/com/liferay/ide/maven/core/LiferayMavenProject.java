@@ -21,6 +21,11 @@ import com.liferay.ide.project.core.BaseLiferayProject;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -118,22 +123,61 @@ public class LiferayMavenProject extends BaseLiferayProject
 
     public String[] getHookSupportedProperties()
     {
-        //TODO fixme IDE-822
         String[] retval = null;
-
         final IPath appServerPortalDir = getAppServerPortalDir();
-//
-//        if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
-//        {
-//            IPath portalImplJar = appServerPortalDir.append( "WEB-INF/lib/portal-impl.jar" ); //$NON-NLS-1$
-//
-//            Class<?>[] interfaces = new Class<?>[] { IPortalSupport.class };
-//
-//            IPortalSupport ps = (IPortalSupport) Proxy.newProxyInstance( IPortalSupport.class.getClassLoader(), interfaces, new MavenPortalSupportProxy( null ));
-//
-//            ps.getHookSupportedProperties();
-//        }
-//
+        final String className = "com.liferay.portal.deploy.hot.HookHotDeployListener";
+        Class<?> hookClass = null;
+        try
+        {
+            File[] portalLibs = appServerPortalDir.append( "WEB-INF/lib" ).toFile().listFiles( new FilenameFilter()
+            {
+                public boolean accept( File dir, String fileName )
+                {
+                    if( !fileName.toLowerCase().endsWith( ".jar" ) )
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            } );
+
+            ArrayList<URL> libUrlList = new ArrayList<URL>();
+            for( File portaLib : portalLibs )
+            {
+                libUrlList.add( portaLib.toURI().toURL() );
+            }
+
+            IPath[] extLibs = getUserLibs();
+            if( extLibs != null )
+            {
+                for( IPath url : extLibs )
+                {
+                    libUrlList.add( new File( url.toOSString() ).toURI().toURL() );
+                }
+            }
+
+            URL[] urls = ( URL[] ) libUrlList.toArray( new URL[libUrlList.size()] );
+
+            URLClassLoader newClassloader = new URLClassLoader( urls );
+            try
+            {
+                hookClass = newClassloader.loadClass( className );
+                Field propertiesField = hookClass.getDeclaredField( "SUPPORTED_PROPERTIES" );
+                retval = ( String[] ) ( propertiesField.get( propertiesField ) );
+            }
+            catch( ClassNotFoundException e1 )
+            {
+                LiferayMavenCore.logError( "Unable to find " + className, e1 ); //$NON-NLS-1$
+            }
+        }
+        catch( Exception e2 )
+        {
+            LiferayMavenCore.logError( "Error to find " + className, e2 ); //$NON-NLS-1$
+        }
+
         return retval;
     }
 
