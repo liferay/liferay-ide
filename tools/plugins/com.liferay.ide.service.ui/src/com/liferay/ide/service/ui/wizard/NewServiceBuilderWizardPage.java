@@ -18,6 +18,7 @@ package com.liferay.ide.service.ui.wizard;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 import com.liferay.ide.service.ui.ServiceUI;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -341,8 +342,8 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
 
     protected boolean isProjectValid( IProject project )
     {
-        return ProjectUtil.isPortletProject( project ) || ProjectUtil.isHookProject( project ) ||
-            ProjectUtil.isExtProject( project );
+        return ( ProjectUtil.isPortletProject( project ) || ProjectUtil.isHookProject( project ) ||
+            ProjectUtil.isExtProject( project ) ) && SDKUtil.isSDKProject( project );
     }
 
     protected void setShellImage()
