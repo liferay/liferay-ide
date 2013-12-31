@@ -159,13 +159,13 @@ public class LiferayMavenProject extends BaseLiferayProject
 
             final URL[] urls = libUrlList.toArray( new URL[libUrlList.size()] );
 
-            final URLClassLoader newClassloader = new URLClassLoader( urls );
+            @SuppressWarnings( "resource" ) final URLClassLoader newClassloader = new URLClassLoader( urls );
 
             final Class<?> hookClass = newClassloader.loadClass( className );
             final Field propertiesField = hookClass.getDeclaredField( "SUPPORTED_PROPERTIES" );
             retval = ( String[] ) ( propertiesField.get( propertiesField ) );
 
-            newClassloader.close();
+            // newClassloader.close();  only available in java 1.7
         }
         catch( Exception e )
         {
