@@ -111,7 +111,7 @@ public class LiferayMavenProject extends BaseLiferayProject
                 if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
                 {
                     retval = new Path( appServerPortalDir );
-                }                
+                }
             }
             catch( CoreException ce )
             {
@@ -126,32 +126,30 @@ public class LiferayMavenProject extends BaseLiferayProject
         String[] retval = null;
         final IPath appServerPortalDir = getAppServerPortalDir();
         final String className = "com.liferay.portal.deploy.hot.HookHotDeployListener";
-        Class<?> hookClass = null;
+
         try
         {
-            File[] portalLibs = appServerPortalDir.append( "WEB-INF/lib" ).toFile().listFiles( new FilenameFilter()
-            {
-                public boolean accept( File dir, String fileName )
+            final File[] portalLibs = appServerPortalDir.append( "WEB-INF/lib" ).toFile().listFiles
+            (
+                new FilenameFilter()
                 {
-                    if( !fileName.toLowerCase().endsWith( ".jar" ) )
+                    public boolean accept( File dir, String fileName )
                     {
-                        return false;
-                    }
-                    else
-                    {
-                        return true;
+                        return fileName.toLowerCase().endsWith( ".jar" );
                     }
                 }
-            } );
+            );
 
-            ArrayList<URL> libUrlList = new ArrayList<URL>();
+            final ArrayList<URL> libUrlList = new ArrayList<URL>();
+
             for( File portaLib : portalLibs )
             {
                 libUrlList.add( portaLib.toURI().toURL() );
             }
 
-            IPath[] extLibs = getUserLibs();
-            if( extLibs != null )
+            final IPath[] extLibs = getUserLibs();
+
+            if( ! CoreUtil.isNullOrEmpty( extLibs ) )
             {
                 for( IPath url : extLibs )
                 {
@@ -159,23 +157,19 @@ public class LiferayMavenProject extends BaseLiferayProject
                 }
             }
 
-            URL[] urls = ( URL[] ) libUrlList.toArray( new URL[libUrlList.size()] );
+            final URL[] urls = libUrlList.toArray( new URL[libUrlList.size()] );
 
-            URLClassLoader newClassloader = new URLClassLoader( urls );
-            try
-            {
-                hookClass = newClassloader.loadClass( className );
-                Field propertiesField = hookClass.getDeclaredField( "SUPPORTED_PROPERTIES" );
-                retval = ( String[] ) ( propertiesField.get( propertiesField ) );
-            }
-            catch( ClassNotFoundException e1 )
-            {
-                LiferayMavenCore.logError( "Unable to find " + className, e1 ); //$NON-NLS-1$
-            }
+            final URLClassLoader newClassloader = new URLClassLoader( urls );
+
+            final Class<?> hookClass = newClassloader.loadClass( className );
+            final Field propertiesField = hookClass.getDeclaredField( "SUPPORTED_PROPERTIES" );
+            retval = ( String[] ) ( propertiesField.get( propertiesField ) );
+
+            newClassloader.close();
         }
-        catch( Exception e2 )
+        catch( Exception e )
         {
-            LiferayMavenCore.logError( "Error to find " + className, e2 ); //$NON-NLS-1$
+            LiferayMavenCore.logError( "Error unable to find " + className, e ); //$NON-NLS-1$
         }
 
         return retval;
