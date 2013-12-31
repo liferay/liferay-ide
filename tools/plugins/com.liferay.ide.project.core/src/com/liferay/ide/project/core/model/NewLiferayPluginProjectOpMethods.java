@@ -119,6 +119,27 @@ public class NewLiferayPluginProjectOpMethods
         return retval;
     }
 
+    public static String getMavenParentPomGroupId( NewLiferayPluginProjectOp op, String projectName, IPath path )
+    {
+        String retval = null;
+
+        final File parentProjectDir = path.toFile();
+        final IStatus locationStatus = op.getProjectProvider().content().validateProjectLocation( projectName, path );
+
+        if( locationStatus.isOK() && parentProjectDir.exists() )
+        {
+            List<String> groupId =
+                op.getProjectProvider().content().getData( "parentGroupId", String.class, parentProjectDir );
+
+            if( ! groupId.isEmpty() )
+            {
+                retval = groupId.get( 0 );
+            }
+        }
+
+        return retval;
+    }
+
     public static String getMavenParentPomVersion( NewLiferayPluginProjectOp op, String projectName, IPath path )
     {
         String retval = null;

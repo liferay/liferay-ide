@@ -26,14 +26,15 @@ import org.eclipse.sapphire.services.DefaultValueService;
 import org.eclipse.sapphire.services.DefaultValueServiceData;
 
 /**
- * @author Tao Tao
+ * @author Kuo Zhang
  */
-public class ArtifactVersionDefaultValueService extends DefaultValueService
+public class GroupIdDefaultValueService extends DefaultValueService
 {
+
     @Override
     protected DefaultValueServiceData compute()
     {
-        String data = null;
+        String groupId = null;
 
         final Path location = op().getLocation().content();
 
@@ -44,15 +45,15 @@ public class ArtifactVersionDefaultValueService extends DefaultValueService
             final IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString( parentProjectLocation );
             final String projectName = op().getProjectName().content();
 
-            data = NewLiferayPluginProjectOpMethods.getMavenParentPomVersion( op, projectName, parentProjectOsPath );
+            groupId = NewLiferayPluginProjectOpMethods.getMavenParentPomGroupId( op, projectName, parentProjectOsPath );
         }
 
-        if( data == null )
+        if( groupId == null )
         {
-            data = "1.0.0-SNAPSHOT";
+            groupId = "com.example.plugins";
         }
 
-        return new DefaultValueServiceData( data );
+        return new DefaultValueServiceData( groupId );
     }
 
     protected void initDefaultValueService()

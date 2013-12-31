@@ -19,6 +19,7 @@ import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.internal.ActiveProfilesValidationService;
 import com.liferay.ide.project.core.model.internal.ArtifactVersionDefaultValueService;
 import com.liferay.ide.project.core.model.internal.DisplayNameDefaultValueService;
+import com.liferay.ide.project.core.model.internal.GroupIdDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
 import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.model.internal.LocationValidationService;
@@ -273,8 +274,14 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     // *** GroupId ***
 
     @Label( standard = "group id" )
-    @DefaultValue( text = "com.example.plugins" )
-    @Service( impl = GroupIdValidationService.class )
+    @Services
+    (
+        value =
+        {
+            @Service( impl = GroupIdValidationService.class ),
+            @Service( impl = GroupIdDefaultValueService.class )
+        }
+    )
     @Whitespace( trim = false )
     ValueProperty PROP_GROUP_ID = new ValueProperty( TYPE, "GroupId" ); //$NON-NLS-1$
 

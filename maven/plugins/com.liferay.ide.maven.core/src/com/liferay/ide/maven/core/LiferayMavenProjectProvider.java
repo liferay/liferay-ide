@@ -78,6 +78,7 @@ import org.w3c.dom.Document;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
@@ -420,6 +421,32 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 catch( CoreException e )
                 {
                     LiferayMavenCore.logError( "unable to get parent version", e );
+                }
+            }
+        }
+        else if( "parentGroupId".equals( key ) )
+        {
+            final List<T> groupId = new ArrayList<T>();
+
+            final File locationDir = (File) params[0];
+
+            final File parentPom = new File( locationDir, IMavenConstants.POM_FILE_NAME );
+
+            if( parentPom.exists() )
+            {
+                try
+                {
+                    final IMaven maven = MavenPlugin.getMaven();
+
+                    final Model model = maven.readModel( parentPom );
+
+                    groupId.add( type.cast( model.getGroupId() ) );
+
+                    retval = groupId;
+                }
+                catch( CoreException e )
+                {
+                    LiferayMavenCore.logError( "unable to get parent groupId", e );
                 }
             }
         }
