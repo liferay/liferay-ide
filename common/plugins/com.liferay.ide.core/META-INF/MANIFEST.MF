@@ -31,11 +31,16 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core,
  com.liferay.ide.core.adapter,
+ com.liferay.ide.core.describer,
+ com.liferay.ide.core.jna,
  com.liferay.ide.core.model,
  com.liferay.ide.core.model.internal,
  com.liferay.ide.core.model.xml.internal,
  com.liferay.ide.core.remote,
  com.liferay.ide.core.util,
+ com.sun.jna,
+ com.sun.jna.ptr,
+ com.sun.jna.win32,
  freemarker.cache,
  freemarker.core,
  freemarker.debug,
@@ -146,4 +151,5 @@ Bundle-ClassPath: .,
  lib/httpclient-4.2.1.jar,
  lib/httpcore-4.2.1.jar,
  lib/httpmime-4.2.1.jar,
- lib/freemarker-2.3.17-patched.jar
+ lib/freemarker-2.3.17-patched.jar,
+ lib/jna.jar

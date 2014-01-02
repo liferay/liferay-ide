@@ -14,10 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.alloy.core;
 
+import com.liferay.ide.core.jna.LibraryUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.ZipUtil;
-import com.sun.jna.Library;
-import com.sun.jna.Native;
 
 import java.io.File;
 import java.net.URL;
@@ -41,39 +40,15 @@ import org.osgi.framework.Bundle;
  */
 public class LautRunner
 {
-    static interface CLibrary extends Library
-    {
-        public int chmod( String path, int mode );
-    }
-
     private static final String LAUT_ENTRY = "/laut";
     private static final String LAUT_PATH = "com.liferay.laut.LautRunnerPath";
     private static final String LAUT_ZIP = LAUT_ENTRY + ".zip";
 
     private final static String[] lautExeFiles = new String[] { "run.sh", "node/bin/node" };
 
-    private static CLibrary libc = null;
-
     static
     {
         initializeLautRunner();
-    }
-
-    private static CLibrary getLibC()
-    {
-        if( libc == null && ! com.sun.jna.Platform.isWindows() )
-        {
-            try
-            {
-                libc = (CLibrary) Native.loadLibrary( "c", CLibrary.class );
-            }
-            catch( Exception e )
-            {
-                AlloyCore.logError( e );
-            }
-        }
-
-        return libc;
     }
 
     private static void initializeLautRunner()
@@ -150,16 +125,16 @@ public class LautRunner
         }
     }
 
-    public static void setSDKExecutableFlags( IPath lautDir )
+    private static void setSDKExecutableFlags( IPath lautDir )
     {
-        if( getLibC() == null )
+        if( LibraryUtil.getLibC() == null )
         {
             return;
         }
 
         for( String exeFile : lautExeFiles )
         {
-            getLibC().chmod( lautDir.append( exeFile ).toOSString(), 0755 );
+            LibraryUtil.getLibC().chmod( lautDir.append( exeFile ).toOSString(), 0755 );
         }
     }
 
@@ -198,7 +173,7 @@ public class LautRunner
         }
     }
 
-    private String getExecPath()
+    public String getExecPath()
     {
         return getWorkingPath().append( Platform.getOS().contains( "win" ) ? "run.bat" : "run.sh" ).toOSString();
     }
