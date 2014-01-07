@@ -55,7 +55,6 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
 import org.eclipse.jst.server.tomcat.core.internal.xml.Factory;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.Context;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IModule;
@@ -420,6 +419,7 @@ public class LiferayTomcatUtil
         {
             try
             {
+                @SuppressWarnings( "resource" )
                 JarFile jar = new JarFile( implJar );
 
                 Manifest manifest = jar.getManifest();
@@ -507,8 +507,14 @@ public class LiferayTomcatUtil
 
             if( version == null )
             {
-                LiferayPortalValueLoader loader = new LiferayPortalValueLoader( portalDir,location );
-                version = loader.loadVersionFromClass().toString();
+                final LiferayPortalValueLoader loader = new LiferayPortalValueLoader( location, portalDir );
+
+                final Version loadedVersion = loader.loadVersionFromClass();
+
+                if( loadedVersion != null )
+                {
+                    version = loadedVersion.toString();
+                }
             }
 
             if( version != null )
@@ -516,6 +522,7 @@ public class LiferayTomcatUtil
                 saveConfigInfoIntoCache( CONFIG_TYPE_VERSION, version, portalDir );
             }
         }
+
         return version;
     }
 
@@ -791,14 +798,4 @@ public class LiferayTomcatUtil
 
     }
 
-    private static class Msgs extends NLS
-    {
-        public static String liferayTomcatServer;
-        public static String notShowMessage;
-
-        static
-        {
-            initializeMessages( LiferayTomcatUtil.class.getName(), Msgs.class );
-        }
-    }
 }

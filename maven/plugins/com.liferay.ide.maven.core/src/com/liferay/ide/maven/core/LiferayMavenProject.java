@@ -72,22 +72,6 @@ public class LiferayMavenProject extends BaseLiferayProject
         return null;
     }
 
-//    class MavenPortalSupportProxy extends PortalSupportProxy
-//    {
-//        private URL[] urls;
-//
-//        public MavenPortalSupportProxy(URL[] urls)
-//        {
-//            this.urls =  urls;
-//        }
-//
-//        @Override
-//        protected URL[] getProxyClasspath() throws CoreException
-//        {
-//            return this.urls;
-//        }
-//    }
-
     public IPath getAppServerPortalDir()
     {
         IPath retval = null;
@@ -119,8 +103,7 @@ public class LiferayMavenProject extends BaseLiferayProject
 
     public String[] getHookSupportedProperties()
     {
-        LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getAppServerPortalDir(), getUserLibs() ); 
-        return loader.loadHookPropertiesFromClass();
+        return new LiferayPortalValueLoader( getAppServerPortalDir(), getUserLibs() ).loadHookPropertiesFromClass();
     }
 
     public IPath getLibraryPath( String filename )

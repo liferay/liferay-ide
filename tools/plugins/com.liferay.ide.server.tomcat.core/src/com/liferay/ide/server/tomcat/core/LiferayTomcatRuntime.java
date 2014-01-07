@@ -22,13 +22,11 @@ import com.liferay.ide.project.core.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
-import com.liferay.ide.server.util.ReleaseHelper;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -63,13 +61,11 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public static final String PROP_SOURCE_LOCATION = "source-location"; //$NON-NLS-1$
 
-    protected HashMap<IPath, ReleaseHelper> releaseHelpers;
-
     private IStatus runtimeDelegateStatus;
 
     public LiferayTomcatRuntime()
     {
-        releaseHelpers = new HashMap<IPath, ReleaseHelper>();
+        super();
     }
 
     private IPath findBundledJREPath( IPath location )
@@ -190,8 +186,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public String[] getHookSupportedProperties()
     {
-        LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getAppServerPortalDir(),getRuntimeLocation() );
-        return loader.loadHookPropertiesFromClass();
+        return new LiferayPortalValueLoader( getRuntimeLocation(), getAppServerPortalDir() ).loadHookPropertiesFromClass();
     }
 
     public String getJavadocURL()
@@ -225,27 +220,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return ServerUtil.getEntryCategories( getAppServerPortalDir(), getPortalVersion() );
     }
 
-    protected ReleaseHelper getReleaseHelper( IPath serviceJar )
-    {
-        if( releaseHelpers == null )
-        {
-            releaseHelpers = new HashMap<IPath, ReleaseHelper>();
-        }
-
-        ReleaseHelper cachedHelper = releaseHelpers.get( serviceJar );
-
-        if( cachedHelper != null )
-        {
-            return cachedHelper;
-        }
-
-        ReleaseHelper newHelper = new ReleaseHelper( serviceJar );
-
-        releaseHelpers.put( serviceJar, newHelper );
-
-        return newHelper;
-    }
-
     public IPath getRuntimeLocation()
     {
         return getRuntime().getLocation();
@@ -268,7 +242,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
                 if( serverInfo == null )
                 {
-                    LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getAppServerPortalDir(),getRuntimeLocation() );
+                    LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getRuntimeLocation(), getAppServerPortalDir() );
                     serverInfo = loader.loadServerInfoFromClass();
                 }
 
@@ -452,6 +426,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
             try
             {
+                @SuppressWarnings( "resource" )
                 ZipInputStream zis = new ZipInputStream( new FileInputStream( bundleZip.toFile() ) );
 
                 ZipEntry rootEntry = zis.getNextEntry();
