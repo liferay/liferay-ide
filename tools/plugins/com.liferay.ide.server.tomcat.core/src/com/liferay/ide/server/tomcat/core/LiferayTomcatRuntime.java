@@ -17,26 +17,22 @@ import static com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin.warning;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
-import com.liferay.ide.server.util.PortalSupportHelper;
 import com.liferay.ide.server.util.ReleaseHelper;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -55,6 +51,7 @@ import org.osgi.framework.Version;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomcatRuntime
@@ -193,14 +190,8 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     public String[] getHookSupportedProperties()
     {
-        try
-        {
-            return LiferayTomcatUtil.getHookSupportedProperties( getRuntimeLocation(), getAppServerPortalDir() );
-        }
-        catch( IOException e )
-        {
-            return new String[0];
-        }
+        LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getAppServerPortalDir(),getRuntimeLocation() );
+        return loader.loadHookPropertiesFromClass();
     }
 
     public String getJavadocURL()
@@ -277,7 +268,8 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
                 if( serverInfo == null )
                 {
-                    serverInfo = getServerInfoFromClass();
+                    LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getAppServerPortalDir(),getRuntimeLocation() );
+                    serverInfo = loader.loadServerInfoFromClass();
                 }
 
                 if( serverInfo != null )
@@ -293,29 +285,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
 
         return serverInfo;
-    }
-
-    public String getServerInfoFromClass()
-    {
-        // check for existing server info
-        IPath location = getRuntime().getLocation();
-
-        File serverInfoFile = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfo.txt" ).toFile(); //$NON-NLS-1$
-
-        if( serverInfoFile.exists() )
-        {
-            FileUtil.clearContents( serverInfoFile );
-        }
-
-        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "serverInfoError.log" ); //$NON-NLS-1$
-
-        File errorFile = errorPath.toFile();
-
-        loadServerInfoFile( location, serverInfoFile, errorFile );
-
-        String serverInfoString = FileUtil.readContents( serverInfoFile );
-
-        return serverInfoString;
     }
 
     public String[] getServletFilterNames()
@@ -391,32 +360,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
             // ignore
         }
         return null;
-    }
-
-    protected void loadServerInfoFile( IPath location, File versionInfoFile, File errorFile )
-    {
-        String portalSupportClass = "com.liferay.ide.server.core.support.ReleaseInfoGetServerInfo"; //$NON-NLS-1$
-
-        IPath[] libRoots = new IPath[] { location.append( "lib" ), location.append( "lib/ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
-
-        IPath portalDir = getAppServerPortalDir();
-
-        try
-        {
-            URL[] supportUrls =
-                new URL[] { FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
-                    "portal-support/portal-support.jar" ) ) }; //$NON-NLS-1$
-
-            PortalSupportHelper helper =
-                new PortalSupportHelper(
-                    libRoots, portalDir, portalSupportClass, versionInfoFile, errorFile, supportUrls, new String[] {} );
-
-            helper.launch( null );
-        }
-        catch( Exception e )
-        {
-            LiferayTomcatPlugin.logError( e );
-        }
     }
 
     public void setBundleZipLocation( IPath path )

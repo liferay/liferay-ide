@@ -19,13 +19,9 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.BaseLiferayProject;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -123,56 +119,8 @@ public class LiferayMavenProject extends BaseLiferayProject
 
     public String[] getHookSupportedProperties()
     {
-        String[] retval = null;
-        final IPath appServerPortalDir = getAppServerPortalDir();
-        final String className = "com.liferay.portal.deploy.hot.HookHotDeployListener";
-
-        try
-        {
-            final File[] portalLibs = appServerPortalDir.append( "WEB-INF/lib" ).toFile().listFiles
-            (
-                new FilenameFilter()
-                {
-                    public boolean accept( File dir, String fileName )
-                    {
-                        return fileName.toLowerCase().endsWith( ".jar" );
-                    }
-                }
-            );
-
-            final ArrayList<URL> libUrlList = new ArrayList<URL>();
-
-            for( File portaLib : portalLibs )
-            {
-                libUrlList.add( portaLib.toURI().toURL() );
-            }
-
-            final IPath[] extLibs = getUserLibs();
-
-            if( ! CoreUtil.isNullOrEmpty( extLibs ) )
-            {
-                for( IPath url : extLibs )
-                {
-                    libUrlList.add( new File( url.toOSString() ).toURI().toURL() );
-                }
-            }
-
-            final URL[] urls = libUrlList.toArray( new URL[libUrlList.size()] );
-
-            @SuppressWarnings( "resource" ) final URLClassLoader newClassloader = new URLClassLoader( urls );
-
-            final Class<?> hookClass = newClassloader.loadClass( className );
-            final Field propertiesField = hookClass.getDeclaredField( "SUPPORTED_PROPERTIES" );
-            retval = ( String[] ) ( propertiesField.get( propertiesField ) );
-
-            // newClassloader.close();  only available in java 1.7
-        }
-        catch( Exception e )
-        {
-            LiferayMavenCore.logError( "Error unable to find " + className, e ); //$NON-NLS-1$
-        }
-
-        return retval;
+        LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getAppServerPortalDir(), getUserLibs() ); 
+        return loader.loadHookPropertiesFromClass();
     }
 
     public IPath getLibraryPath( String filename )

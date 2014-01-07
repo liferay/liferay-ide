@@ -18,8 +18,8 @@ package com.liferay.ide.server.tomcat.core.util;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.util.LiferayPortalValueLoader;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.IPluginPublisher;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -29,7 +29,6 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
-import com.liferay.ide.server.util.PortalSupportHelper;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -37,7 +36,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,7 +46,6 @@ import java.util.jar.Manifest;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -72,6 +69,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatUtil
@@ -499,35 +497,6 @@ public class LiferayTomcatUtil
         return checkAndReturnCustomPortalDir( appServerDir );
     }
 
-    public static String[] getHookSupportedProperties( IPath runtimeLocation, IPath portalDir ) throws IOException
-    {
-        IPath hookPropertiesPath =
-            LiferayTomcatPlugin.getDefault().getStateLocation().append( "hook_properties" ).append( //$NON-NLS-1$
-                runtimeLocation.toPortableString().replaceAll( "\\/", "_" ) + "_hook_properties.txt" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "hookError.log" ); //$NON-NLS-1$
-
-        File hookPropertiesFile = hookPropertiesPath.toFile();
-
-        File errorFile = errorPath.toFile();
-
-        if( !hookPropertiesFile.exists() )
-        {
-            loadHookPropertiesFile( runtimeLocation, portalDir, hookPropertiesFile, errorFile );
-        }
-
-        String[] hookProperties = FileUtil.readLinesFromFile( hookPropertiesFile );
-
-        if( hookProperties.length == 0 )
-        {
-            loadHookPropertiesFile( runtimeLocation, portalDir, hookPropertiesFile, errorFile );
-
-            hookProperties = FileUtil.readLinesFromFile( hookPropertiesFile );
-        }
-
-        return hookProperties;
-    }
-
     public static String getVersion( IPath location, IPath portalDir )
     {
         String version = getConfigInfoFromCache( CONFIG_TYPE_VERSION, portalDir );
@@ -538,7 +507,8 @@ public class LiferayTomcatUtil
 
             if( version == null )
             {
-                version = getVersionFromClass( location, portalDir );
+                LiferayPortalValueLoader loader = new LiferayPortalValueLoader( portalDir,location );
+                version = loader.loadVersionFromClass().toString();
             }
 
             if( version != null )
@@ -546,28 +516,7 @@ public class LiferayTomcatUtil
                 saveConfigInfoIntoCache( CONFIG_TYPE_VERSION, version, portalDir );
             }
         }
-
         return version;
-    }
-
-    public static String getVersionFromClass( IPath location, IPath portalDir )
-    {
-        File versionFile = LiferayTomcatPlugin.getDefault().getStateLocation().append( "version.txt" ).toFile(); //$NON-NLS-1$
-
-        if( versionFile.exists() )
-        {
-            FileUtil.clearContents( versionFile );
-        }
-
-        IPath errorPath = LiferayTomcatPlugin.getDefault().getStateLocation().append( "versionError.log" ); //$NON-NLS-1$
-
-        File errorFile = errorPath.toFile();
-
-        loadVersionInfoFile( location, portalDir, versionFile, errorFile );
-
-        Version version = CoreUtil.readVersionFile( versionFile );
-
-        return version.toString();
     }
 
     public static boolean isExtProjectContext( Context context )
@@ -635,52 +584,8 @@ public class LiferayTomcatUtil
         return context;
     }
 
-    public static void loadHookPropertiesFile(
-        IPath runtimeLocation, IPath portalDir, File hookPropertiesFile, File errorFile ) throws IOException
-    {
-        String portalSupportClass = "com.liferay.ide.server.core.support.GetSupportedHookProperties"; //$NON-NLS-1$
 
-        IPath[] libRoots = new IPath[] { runtimeLocation.append( "lib" ), runtimeLocation.append( "lib/ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
 
-        URL[] urls =
-            new URL[] { FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
-                "portal-support/portal-support.jar" ) ) }; //$NON-NLS-1$
-
-        PortalSupportHelper helper =
-            new PortalSupportHelper(
-                libRoots, portalDir, portalSupportClass, hookPropertiesFile, errorFile, urls, new String[] {} );
-
-        try
-        {
-            helper.launch( null );
-        }
-        catch( CoreException e )
-        {
-            LiferayTomcatPlugin.logError( e );
-        }
-    }
-
-    public static void loadVersionInfoFile( IPath runtimeLocation, IPath portalDir, File versionInfoFile, File errorFile )
-    {
-        String portalSupportClass = "com.liferay.ide.server.core.support.ReleaseInfoGetVersion"; //$NON-NLS-1$
-
-        IPath[] libRoots = new IPath[] { runtimeLocation.append( "lib" ), runtimeLocation.append( "lib/ext" ) }; //$NON-NLS-1$ //$NON-NLS-2$
-
-        try
-        {
-            URL[] urls = { FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
-                    "portal-support/portal-support.jar" ) ) }; //$NON-NLS-1$
-
-            PortalSupportHelper helper =
-                new PortalSupportHelper(
-                    libRoots, portalDir, portalSupportClass, versionInfoFile, errorFile, urls, new String[] {} );
-
-            helper.launch( null );
-        }
-        catch( Exception e1 )
-        {
-        }
-    }
 
     public static IPath modifyLocationForBundle( IPath currentLocation )
     {
