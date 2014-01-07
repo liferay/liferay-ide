@@ -39,15 +39,17 @@
             </plugin>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-surefire-plugin</artifactId>
+                <artifactId>target-platform-configuration</artifactId>
                 <configuration>
-                    <dependencies>
-                        <dependency>
-                            <type>eclipse-plugin</type>
-                            <artifactId>com.liferay.laut.linux.gtk.x86_64</artifactId>
-                            <version>0.0.0</version>
-                        </dependency>
-                    </dependencies>
+                    <dependency-resolution>
+                        <extraRequirements>
+                            <requirement>
+                                <type>eclipse-feature</type>
+                                <id>com.liferay.ide.eclipse.tools</id>
+                                <versionRange>0.0.0</versionRange>
+                            </requirement>
+                        </extraRequirements>
+                    </dependency-resolution>
                 </configuration>
             </plugin>
         </plugins>
