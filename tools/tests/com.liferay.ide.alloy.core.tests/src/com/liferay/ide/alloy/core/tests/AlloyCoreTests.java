@@ -80,7 +80,9 @@ public class AlloyCoreTests extends BaseTests
             CoreUtil.readStreamToString( this.getClass().getResourceAsStream(
                 "files/02_events-display-portlet/docroot/css/main.css" ) );
 
-        assertEquals( expectedMainCss, CoreUtil.readStreamToString( cssFile.getContents() ) );
+        assertEquals(
+            stripCarriageReturns( expectedMainCss ),
+            stripCarriageReturns( CoreUtil.readStreamToString( cssFile.getContents() ) ) );
     }
 
 }
