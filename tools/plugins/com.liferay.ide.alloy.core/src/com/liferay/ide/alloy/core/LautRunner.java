@@ -15,11 +15,13 @@
 package com.liferay.ide.alloy.core;
 
 import com.liferay.ide.core.jna.LibraryUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.ZipUtil;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Enumeration;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -42,7 +44,7 @@ public class LautRunner
 {
     private static final String LAUT_ENTRY = "/laut";
     private static final String LAUT_PATH = "com.liferay.laut.LautRunnerPath";
-    private static final String LAUT_ZIP = LAUT_ENTRY + ".zip";
+    private static final String LAUT_ZIP = "laut.zip";
 
     private final static String[] lautExeFiles = new String[] { "run.sh", "node/bin/node" };
 
@@ -59,7 +61,7 @@ public class LautRunner
         {
             File lautRunnerFile = new File( lautRunnerPath );
 
-            if( ! lautRunnerFile.exists() )
+            if( !lautRunnerFile.exists() )
             {
                 lautRunnerPath = null;
             }
@@ -67,62 +69,70 @@ public class LautRunner
 
         if( lautRunnerPath == null )
         {
-            final String LAUT_RUNNER_BUNDLE =
-                new StringBuffer( "com.liferay.laut" ).append( "." ).append( Platform.getOS() ).append( "." ).append(
-                    Platform.getWS() ).append( "." ).append( Platform.getOSArch() ).toString();
-
-            final Bundle lautRunnerBundle = Platform.getBundle( LAUT_RUNNER_BUNDLE );
-
-            if( lautRunnerBundle == null )
+            try
             {
-                AlloyCore.logError( "Unable to find laut bundle." );
-            }
-            else
-            {
-                URL lautUrl = lautRunnerBundle.getEntry( LAUT_PATH );
+                final Bundle lautRunnerBundle = AlloyCore.getDefault().getBundle();
+                URL lautUrl = null;
 
-                if( lautUrl == null )
+                if( lautRunnerBundle == null )
                 {
-                    final URL lautZipUrl = lautRunnerBundle.getEntry( LAUT_ZIP );
+                    AlloyCore.logError( "Unable to find laut bundle." );
+                }
+                else
+                {
+                    final Enumeration<URL> lautEntries = lautRunnerBundle.findEntries( LAUT_ENTRY, "/", false );
 
-                    if( lautZipUrl != null )
+                    if( lautEntries == null || !lautEntries.hasMoreElements() )
                     {
-                        try
-                        {
-                            final File lautZipFile = new File( FileLocator.toFileURL( lautZipUrl ).getFile() );
+                        final Enumeration<URL> lautZipEntries = lautRunnerBundle.findEntries( "/", LAUT_ZIP, false );
 
-                            final File lautBundleDir = new File( FileLocator.toFileURL( lautRunnerBundle.getEntry( "" ) ).getFile() );
+                        if( lautZipEntries != null && lautZipEntries.hasMoreElements() )
+                        {
+                            final File lautZipFile =
+                                new File( FileLocator.toFileURL( lautZipEntries.nextElement() ).getFile() );
+
+                            final File lautBundleDir = lautZipFile.getParentFile();
 
                             File lautDir = new File( lautBundleDir, "laut" );
 
-                            if( ! lautBundleDir.canWrite() )
+                            if( !lautBundleDir.canWrite() )
                             {
                                 lautDir = AlloyCore.getDefault().getStateLocation().append( "laut" ).toFile();
+
+                                FileUtil.deleteDir( lautDir, true );
                             }
 
                             lautDir.mkdirs();
 
                             ZipUtil.unzip( lautZipFile, lautDir.getParentFile() );
 
-                            lautUrl = lautRunnerBundle.getEntry( LAUT_ENTRY );
-
-                            if( lautUrl != null )
-                            {
-                                final File lautRunnerDir = new File( FileLocator.toFileURL( lautUrl ).getFile() );
-                                final String lautRunnerDirPath = lautRunnerDir.getAbsolutePath();
-
-                                System.setProperty( LAUT_PATH, lautRunnerDirPath );
-                                setSDKExecutableFlags( new Path( lautRunnerDirPath ) );
-                            }
+                            final Enumeration<URL> lautPathEntries =
+                                lautRunnerBundle.findEntries( LAUT_ENTRY, "/", false );
+                            lautUrl = lautPathEntries.nextElement();
                         }
-                        catch( Exception e )
-                        {
-                            AlloyCore.logError( "Unable to intialize Laut bundle", e );
-                        }
+                    }
+                    else
+                    {
+                        lautUrl = lautEntries.nextElement();
+                    }
+
+                    if( lautUrl != null )
+                    {
+                        final File lautRunnerDir = new File( FileLocator.toFileURL( lautUrl ).getFile() );
+                        final String lautRunnerDirPath = lautRunnerDir.getAbsolutePath();
+
+                        System.setProperty( LAUT_PATH, lautRunnerDirPath );
+                        setSDKExecutableFlags( new Path( lautRunnerDirPath ) );
                     }
                 }
             }
+            catch( Exception e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
+
     }
 
     private static void setSDKExecutableFlags( IPath lautDir )
