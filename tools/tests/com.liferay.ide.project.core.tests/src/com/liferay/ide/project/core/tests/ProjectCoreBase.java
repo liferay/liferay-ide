@@ -52,8 +52,8 @@ import org.junit.Before;
  */
 public abstract class ProjectCoreBase extends BaseTests
 {
-    protected final static IPath portalBundlesPath = new Path( System.getProperty(
-        "liferay.bundles.dir", System.getProperty( "java.io.tmpdir" ) ) );
+    private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
+    private static IPath liferayBundlesPath;
 
     protected SDK createNewSDK() throws Exception
     {
@@ -130,7 +130,17 @@ public abstract class ProjectCoreBase extends BaseTests
 
     protected IPath getIvyCacheZip()
     {
-        return portalBundlesPath.append( "ivy-cache.zip" );
+        return getLiferayBundlesPath().append( "ivy-cache.zip" );
+    }
+
+    protected IPath getLiferayBundlesPath()
+    {
+        if( liferayBundlesPath == null )
+        {
+            liferayBundlesPath = new Path( liferayBundlesDir );
+        }
+
+        return liferayBundlesPath;
     }
 
     protected abstract IPath getLiferayPluginsSdkDir();
@@ -167,6 +177,11 @@ public abstract class ProjectCoreBase extends BaseTests
     @Before
     public void setupPluginsSDKAndRuntime() throws Exception
     {
+        assertNotNull( "Expected System.getProperty(\"liferay.bundles.dir\") to not be null", System.getProperty( "liferay.bundles.dir" ) );
+        assertNotNull( "Expected liferayBundlesDir to not be null", liferayBundlesDir );
+
+        assertEquals( "Expected liferayBundlesPath to exist", true, getLiferayBundlesPath().toFile().exists() );
+
         final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
 
         if( ! liferayPluginsSdkDirFile.exists() )

@@ -37,7 +37,7 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return portalBundlesPath.append( "liferay-plugins-sdk-6.1.1-20130816114619181.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.1.1-20130816114619181.zip" );
     }
 
     @Override
@@ -55,7 +55,7 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayRuntimeZip()
     {
-        return portalBundlesPath.append( "liferay-portal-tomcat-6.1.2-ce-ga3-20130816114619181.zip" );
+        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.1.2-ce-ga3-20130816114619181.zip" );
     }
 
     @Override

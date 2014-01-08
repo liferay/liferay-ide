@@ -73,7 +73,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return portalBundlesPath.append( "liferay-plugins-sdk-6.2.0-ce-ga1-20131101192857659.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.0-ce-ga1-20131101192857659.zip" );
     }
 
     @Override
@@ -91,7 +91,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayRuntimeZip()
     {
-        return portalBundlesPath.append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
+        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
     }
 
     @Override

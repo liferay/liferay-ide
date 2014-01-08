@@ -42,9 +42,10 @@ import org.osgi.framework.Bundle;
  */
 public class LautRunner
 {
-    private static final String LAUT_ENTRY = "/laut";
+    private static final String _LAUT_VERSION = "1.0.2";
+    private static final String LAUT_ENTRY = "laut-" + _LAUT_VERSION;
     private static final String LAUT_PATH = "com.liferay.laut.LautRunnerPath";
-    private static final String LAUT_ZIP = "laut.zip";
+    private static final String LAUT_ZIP = "laut-" + _LAUT_VERSION + ".zip";
 
     private final static String[] lautExeFiles = new String[] { "run.sh", "node/bin/node" };
 
@@ -80,7 +81,7 @@ public class LautRunner
                 }
                 else
                 {
-                    final Enumeration<URL> lautEntries = lautRunnerBundle.findEntries( LAUT_ENTRY, "/", false );
+                    final Enumeration<URL> lautEntries = lautRunnerBundle.findEntries( "/" + LAUT_ENTRY, "/", false );
 
                     if( lautEntries == null || !lautEntries.hasMoreElements() )
                     {
@@ -93,21 +94,21 @@ public class LautRunner
 
                             final File lautBundleDir = lautZipFile.getParentFile();
 
-                            File lautDir = new File( lautBundleDir, "laut" );
+                            File lautDir = new File( lautBundleDir, LAUT_ENTRY );
 
                             if( !lautBundleDir.canWrite() )
                             {
-                                lautDir = AlloyCore.getDefault().getStateLocation().append( "laut" ).toFile();
+                                lautDir = AlloyCore.getDefault().getStateLocation().append( LAUT_ENTRY ).toFile();
 
                                 FileUtil.deleteDir( lautDir, true );
                             }
 
-                            lautDir.mkdirs();
-
                             ZipUtil.unzip( lautZipFile, lautDir.getParentFile() );
 
+                            new File( lautBundleDir, "laut" ).renameTo( lautDir );
+
                             final Enumeration<URL> lautPathEntries =
-                                lautRunnerBundle.findEntries( LAUT_ENTRY, "/", false );
+                                lautRunnerBundle.findEntries( "/" + LAUT_ENTRY, "/", false );
                             lautUrl = lautPathEntries.nextElement();
                         }
                     }
@@ -160,7 +161,7 @@ public class LautRunner
             final String projectName = project.getName();
 
             final ILaunchConfigurationWorkingCopy config =
-                configType.newInstance( null, lm.generateLaunchConfigurationName( "laut " + projectName ) );
+                configType.newInstance( null, lm.generateLaunchConfigurationName( LAUT_ENTRY + " " + projectName ) );
 
             config.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
             config.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", true );
