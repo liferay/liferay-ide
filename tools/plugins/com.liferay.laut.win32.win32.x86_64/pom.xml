@@ -62,12 +62,12 @@
 
                                 <if>
                                     <not>
-                                        <available file="${project.basedir}/laut-1.0.2.zip" />
+                                        <available file="${project.basedir}/laut-1.0.5.zip" />
                                     </not>
                                     <then>
                                         <get
-                                            dest="${project.basedir}/laut-1.0.2.zip"
-                                            src="http://vm-32.liferay.com/files/laut/win32/x86_64/laut-1.0.2.zip"
+                                            dest="${project.basedir}/laut-1.0.5.zip"
+                                            src="http://vm-32.liferay.com/files/laut/win32/x86_64/laut-1.0.5.zip"
                                             verbose="true"
                                         />
                                     </then>
