@@ -21,6 +21,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -31,6 +32,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
@@ -71,9 +73,10 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
 
         final IResourceDelta delta = this.getDelta( facade.getProject() );
 
-        //TODO don't hard code path of src/main/webapp/css
-        if( delta != null && ( delta.findMember( new Path( "src/main/webapp" ) ) != null || //$NON-NLS-1$
-            delta.findMember( new Path( IMavenConstants.POM_FILE_NAME ) ) != null ) ) //$NON-NLS-1$
+        IPath  warSourcePath = MavenUtil.getWarSouceFolderPath( facade.getMavenProject(), facade.getProject() );
+        IPath warSourceShortPath = facade.getProject().getFolder( warSourcePath ).getProjectRelativePath();
+        if( delta != null && ( delta.findMember( warSourceShortPath ) != null || 
+            delta.findMember( new Path( IMavenConstants.POM_FILE_NAME ) ) != null ) )
         {
             retval = true;
         }

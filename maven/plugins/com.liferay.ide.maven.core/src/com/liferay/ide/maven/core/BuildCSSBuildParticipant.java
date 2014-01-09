@@ -22,7 +22,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.osgi.util.NLS;
@@ -30,6 +29,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class BuildCSSBuildParticipant extends ThemePluginBuildParticipant
 {
@@ -80,13 +80,14 @@ public class BuildCSSBuildParticipant extends ThemePluginBuildParticipant
 
         final IResourceDelta delta = this.getDelta( facade.getProject() );
 
-        //TODO IDE-935 don't hard code path of src/main/webapp/css
-        if( delta != null && delta.findMember( new Path( "src/main/webapp/css" ) ) != null ) //$NON-NLS-1$
+        IPath  warSourcePath = MavenUtil.getWarSouceFolderPath( facade.getMavenProject(), facade.getProject() );
+        IPath warCssSourceShortPath =
+            facade.getProject().getFolder( warSourcePath.append( "css" ) ).getProjectRelativePath();
+        if( delta != null && delta.findMember( warCssSourceShortPath ) != null )
         {
             //TODO IDE-1319
 //            retval = true;
-        }
-
+        } 
         return retval;
     }
 

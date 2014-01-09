@@ -53,6 +53,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
+import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -450,6 +451,12 @@ public class MavenUtil
         }
 
         return newNode;
+    }
+    
+    
+    public static IPath getWarSouceFolderPath( MavenProject mavenProject, IProject project)
+    {
+        return Path.fromOSString( new WarPluginConfiguration( mavenProject, project ).getWarSourceDirectory() );
     }
 
 }

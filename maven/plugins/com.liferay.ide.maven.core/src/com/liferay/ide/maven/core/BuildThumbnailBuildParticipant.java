@@ -19,8 +19,8 @@ import java.util.Set;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.osgi.util.NLS;
@@ -28,6 +28,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
 {
@@ -65,8 +66,11 @@ public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
 
         final IResourceDelta delta = this.getDelta( facade.getProject() );
 
-        //TODO IDE-935 don't hard code path of src/main/webapp/
-        if( delta != null && delta.findMember( new Path( "src/main/webapp/images/screenshot.png" ) ) != null ) //$NON-NLS-1$
+        
+        IPath  warSourcePath = MavenUtil.getWarSouceFolderPath( facade.getMavenProject(), facade.getProject() );
+        IPath warPngSourceShortPath =
+            facade.getProject().getFolder( warSourcePath.append( "images/screenshot.png" ) ).getProjectRelativePath();
+        if( delta != null && delta.findMember( warPngSourceShortPath ) != null )
         {
             retval = true;
         }
