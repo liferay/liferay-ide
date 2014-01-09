@@ -30,7 +30,7 @@
     <artifactId>com.liferay.laut.macosx.cocoa.x86_64</artifactId>
     <packaging>eclipse-plugin</packaging>
     <name>Liferay AUI Upgrade Tool OSX64</name>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
 
     <build>
         <plugins>
