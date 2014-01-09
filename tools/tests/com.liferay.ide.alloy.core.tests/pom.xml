@@ -39,6 +39,15 @@
             </plugin>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <configuration>
+                    <systemProperties>
+                        <jna.nosys>true</jna.nosys>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
                 <artifactId>target-platform-configuration</artifactId>
                 <configuration>
                     <dependency-resolution>
