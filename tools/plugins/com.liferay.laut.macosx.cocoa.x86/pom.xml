@@ -30,7 +30,7 @@
     <artifactId>com.liferay.laut.macosx.cocoa.x86</artifactId>
     <packaging>eclipse-plugin</packaging>
     <name>Liferay AUI Upgrade Tool OSX32</name>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
 
     <build>
         <plugins>
@@ -62,12 +62,12 @@
 
                                 <if>
                                     <not>
-                                        <available file="${project.basedir}/laut-1.0.5.zip" />
+                                        <available file="${project.basedir}/laut-1.0.6.zip" />
                                     </not>
                                     <then>
                                         <get
-                                            dest="${project.basedir}/laut-1.0.5.zip"
-                                            src="http://vm-32.liferay.com/files/laut/macosx/x86/laut-1.0.5.zip"
+                                            dest="${project.basedir}/laut-1.0.6.zip"
+                                            src="http://vm-32.liferay.com/files/laut/macosx/x86/laut-1.0.6.zip"
                                             verbose="true"
                                         />
                                     </then>
