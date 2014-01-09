@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -55,7 +56,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
         {
             if( PropertiesUtil.isLanguagePropertiesFile( file ) )
             {
-                validateLanguagePropertiesEncoding( new IFile[]{file}, false );
+                validateLanguagePropertiesEncoding( new IFile[]{file}, null );
                 return;
             }
 
@@ -69,7 +70,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
                 if( file.equals( portletXml ) )
                 {
                     final IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
-                    validateLanguagePropertiesEncoding( files, true );
+                    validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
 
                     return;
                 }
@@ -83,7 +84,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
                 if( file.equals( liferayHookXml ) )
                 {
                     final IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
-                    validateLanguagePropertiesEncoding( files, true );
+                    validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
 
                     return;
                 }
@@ -126,7 +127,7 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
         return false;
     }
 
-    private void validateLanguagePropertiesEncoding( final IFile[] files, final boolean clearUnusedMarkers )
+    private void validateLanguagePropertiesEncoding( final IFile[] files, final IProject project )
     {
         final Job job = new WorkspaceJob( "Validate Liferay language properties encoding..." )
         {
@@ -141,9 +142,9 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
                     }
                 }
 
-                if( clearUnusedMarkers )
+                if( project != null )
                 {
-                    LiferayLanguagePropertiesValidator.clearUnusedValidators();
+                    LiferayLanguagePropertiesValidator.clearUnusedValidatorsAndMarkers( project );
                 }
 
                 return Status.OK_STATUS;

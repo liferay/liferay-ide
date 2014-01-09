@@ -32,7 +32,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
@@ -243,11 +242,10 @@ public abstract class BaseValidator extends AbstractValidator
                 return createMarkerValues(
                     preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
             }
-
             try
             {
                 IResource classResourceValue = null;
-                final IWorkspaceRoot workspaceRoot = javaProject.getJavaModel().getWorkspace().getRoot();
+
                 IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath( true );
 
                 for( IClasspathEntry entry : classpathEntries )
@@ -255,74 +253,34 @@ public abstract class BaseValidator extends AbstractValidator
                     if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
                     {
                         IPath entryPath = entry.getPath();
-                        IPath classResourcePath = entryPath.append( classResource );
 
-                        classResourceValue = workspaceRoot.findMember( classResourcePath );
+                        IResource srcFolder = CoreUtil.getWorkspaceRoot().getFolder( entryPath );
 
-                        if( classResourceValue != null )
+                        if( srcFolder != null && srcFolder.exists() )
                         {
-                            break;
-                        }
+                            String[] languagePropertiesVals = PropertiesUtil.
+                                generateLanguagePropertiesPatterns( classResource, classResourceSpecifier.getNodeName() );
 
-                        IPath qualifiedResourcePath = entryPath.append( classResource.replaceAll( "\\.", "/" ) ); //$NON-NLS-1$ //$NON-NLS-2$
-
-                        classResourceValue = workspaceRoot.findMember( qualifiedResourcePath );
-
-                        if( classResourceValue != null )
-                        {
-                            break;
-                        }
-
-                        String resourceName = classResourcePath.lastSegment();
-
-                        if( classResourceValue == null && classResourcePath.segmentCount() > 0 )
-                        {
-                            // check for a .properties of the same resource path in case of a resource bundle element
-                            // that doesn't append the .properties
-                            IPath parent = classResourcePath.removeLastSegments( 1 );
-
-                            IPath propertiesClassResourcePath = parent.append( resourceName + ".properties" ); //$NON-NLS-1$
-
-                            classResourceValue = workspaceRoot.findMember( propertiesClassResourcePath );
-
-                            if( classResourceValue != null )
+                            for( String val : languagePropertiesVals )
                             {
-                                break;
-                            }
-
-                            propertiesClassResourcePath =
-                                parent.append( resourceName.replaceAll( "\\.", "/" ) + ".properties" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-                            classResourceValue = workspaceRoot.findMember( propertiesClassResourcePath );
-
-                            if( classResourceValue != null )
-                            {
-                                break;
-                            }
-                        }
-
-                        // IDE-1105
-                        if( classResource.contains( StringPool.ASTERISK ) )
-                        {
-                            String classResourceRegex = classResource.replaceAll( "\\*", ".*" ); //$NON-NLS-1$ //$NON-NLS-2$
-
-                            IResource entryResource = workspaceRoot.findMember( entryPath );
-
-                            if( entryResource != null )
-                            {
-                                IFile[] propertiesFiles =  PropertiesUtil.visitPropertiesFiles( entryResource, classResourceRegex );
-
-                                if( propertiesFiles != null && propertiesFiles.length > 0 )
+                                if( val != null )
                                 {
-                                    classResourceValue = propertiesFiles[0];
+                                    IFile[] languagePropertiesFiles = PropertiesUtil.visitPropertiesFiles( srcFolder, val );
+
+                                    if( languagePropertiesFiles != null && languagePropertiesFiles.length > 0 )
+                                    {
+                                        classResourceValue = languagePropertiesFiles[0];
+
+                                        break;
+                                    }
                                 }
                             }
-
-                            if( classResourceValue != null )
-                            {
-                                break;
-                            }
                         }
+                    }
+
+                    if( classResourceValue != null )
+                    {
+                        break;
                     }
                 }
 

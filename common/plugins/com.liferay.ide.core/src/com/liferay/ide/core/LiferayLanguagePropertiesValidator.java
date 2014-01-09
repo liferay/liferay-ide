@@ -26,6 +26,7 @@ import java.util.WeakHashMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.osgi.util.NLS;
@@ -80,7 +81,7 @@ public class LiferayLanguagePropertiesValidator
         }
     }
 
-    public static void clearUnusedValidators()
+    public static void clearUnusedValidatorsAndMarkers( IProject project )
     {
         synchronized( filesAndValidators )
         {
@@ -99,6 +100,28 @@ public class LiferayLanguagePropertiesValidator
                         validator.clearAllMarkers();
 
                         iterator.remove();
+                    }
+                }
+
+                final IMarker[] markers =
+                    project.getWorkspace().getRoot().findMarkers(
+                        LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+
+                for( IMarker marker : markers )
+                {
+                    if( ! marker.getResource().exists() )
+                    {
+                        marker.delete();
+                    }
+                    else
+                    {
+                        if( marker.getResource().getType() == IResource.FILE )
+                        {
+                            if( ! files.contains( (IFile) marker.getResource() ) )
+                            {
+                                marker.delete();
+                            }
+                        }
                     }
                 }
             }
@@ -249,6 +272,10 @@ public class LiferayLanguagePropertiesValidator
             {
                 LiferayCore.logError( e );
             }
+        }
+        else
+        {
+            clearMarker( ID_LANGUAGE_PROPERTIES_ENCODING_NOT_DEFAULT );
         }
     }
 
