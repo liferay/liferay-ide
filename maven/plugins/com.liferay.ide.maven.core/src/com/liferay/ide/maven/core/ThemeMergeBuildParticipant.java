@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.theme.core.ThemeCSSBuilder;
 
 import java.util.Set;
@@ -73,12 +74,18 @@ public class ThemeMergeBuildParticipant extends ThemePluginBuildParticipant
 
         final IResourceDelta delta = this.getDelta( facade.getProject() );
 
-        IPath  warSourcePath = MavenUtil.getWarSouceFolderPath( facade.getMavenProject(), facade.getProject() );
-        IPath warSourceShortPath = facade.getProject().getFolder( warSourcePath ).getProjectRelativePath();
-        if( delta != null && ( delta.findMember( warSourceShortPath ) != null || 
-            delta.findMember( new Path( IMavenConstants.POM_FILE_NAME ) ) != null ) )
+        final String warSourceDirectory = MavenUtil.getWarSouceDirectory( facade );
+
+        if( ! CoreUtil.isNullOrEmpty( warSourceDirectory ) )
         {
-            retval = true;
+            final IPath warSourceProjectPath =
+                facade.getProject().getFolder( warSourceDirectory ).getProjectRelativePath();
+
+            if( delta != null && ( delta.findMember( warSourceProjectPath ) != null ||
+                delta.findMember( new Path( IMavenConstants.POM_FILE_NAME ) ) != null ) )
+            {
+                retval = true;
+            }
         }
 
         return retval;

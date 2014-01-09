@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.util.Set;
 
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -66,13 +68,17 @@ public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
 
         final IResourceDelta delta = this.getDelta( facade.getProject() );
 
-        
-        IPath  warSourcePath = MavenUtil.getWarSouceFolderPath( facade.getMavenProject(), facade.getProject() );
-        IPath warPngSourceShortPath =
-            facade.getProject().getFolder( warSourcePath.append( "images/screenshot.png" ) ).getProjectRelativePath();
-        if( delta != null && delta.findMember( warPngSourceShortPath ) != null )
+        final String warSourceDirectory = MavenUtil.getWarSouceDirectory( facade );
+
+        if( ! CoreUtil.isNullOrEmpty( warSourceDirectory ) )
         {
-            retval = true;
+            final IPath screenshotPath =
+                facade.getProject().getFolder( warSourceDirectory + "/images/screenshot.png" ).getProjectRelativePath();
+
+            if( delta != null && delta.findMember( screenshotPath ) != null )
+            {
+                retval = true;
+            }
         }
 
         return retval;

@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.File;
 import java.util.Set;
 
@@ -80,14 +82,20 @@ public class BuildCSSBuildParticipant extends ThemePluginBuildParticipant
 
         final IResourceDelta delta = this.getDelta( facade.getProject() );
 
-        IPath  warSourcePath = MavenUtil.getWarSouceFolderPath( facade.getMavenProject(), facade.getProject() );
-        IPath warCssSourceShortPath =
-            facade.getProject().getFolder( warSourcePath.append( "css" ) ).getProjectRelativePath();
-        if( delta != null && delta.findMember( warCssSourceShortPath ) != null )
+        final String warSourceDirectory = MavenUtil.getWarSouceDirectory( facade );
+
+        if( ! CoreUtil.isNullOrEmpty( warSourceDirectory ) )
         {
-            //TODO IDE-1319
-//            retval = true;
-        } 
+            final IPath cssFolderPath =
+                facade.getProject().getFolder( warSourceDirectory + "/css" ).getProjectRelativePath();
+
+            if( delta != null && delta.findMember( cssFolderPath ) != null )
+            {
+                //TODO IDE-1319
+                //retval = true;
+            }
+        }
+
         return retval;
     }
 

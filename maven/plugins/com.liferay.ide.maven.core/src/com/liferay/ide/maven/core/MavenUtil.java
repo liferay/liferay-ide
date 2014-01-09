@@ -68,6 +68,88 @@ import org.w3c.dom.Node;
 public class MavenUtil
 {
 
+    public static Node createNewLiferayProfileNode(
+        Document pomDocument, NewLiferayProfile newLiferayProfile, final String pluginVersion )
+    {
+        Node newNode = null;
+
+        final String liferayVersion = newLiferayProfile.getLiferayVersion().content();
+
+        try
+        {
+            final String runtimeName = newLiferayProfile.getRuntimeName().content();
+            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( ServerUtil.getRuntime( runtimeName ) );
+
+            final Element root = pomDocument.getDocumentElement();
+
+            Element profiles = NodeUtil.findChildElement( root, "profiles" );
+
+            if( profiles == null )
+            {
+                newNode = profiles = NodeUtil.appendChildElement( root, "profiles" );
+            }
+
+            Element newProfile = null;
+
+            if( profiles != null )
+            {
+                NodeUtil.appendTextNode( profiles, "\n" );
+                newProfile = NodeUtil.appendChildElement( profiles, "profile" );
+                NodeUtil.appendTextNode( profiles, "\n" );
+
+                if( newNode == null )
+                {
+                    newNode = newProfile;
+                }
+            }
+
+            if( newProfile != null )
+            {
+                final IPath autoDeployDir =
+                    liferayRuntime.getAppServerDir().removeLastSegments( 1 ).append( "deploy" );
+
+                NodeUtil.appendTextNode( newProfile, "\n\t" );
+
+                NodeUtil.appendChildElement( newProfile, "id", newLiferayProfile.getId().content() );
+                NodeUtil.appendTextNode( newProfile, "\n\t" );
+
+                final Element propertiesElement = NodeUtil.appendChildElement( newProfile, "properties" );
+
+                NodeUtil.appendTextNode( newProfile, "\n\t" );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement( propertiesElement, "liferay.version", liferayVersion );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement( propertiesElement, "liferay.maven.plugin.version", pluginVersion );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.auto.deploy.dir", autoDeployDir.toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t");
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.app.server.deploy.dir",
+                    liferayRuntime.getAppServerDeployDir().toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.app.server.lib.global.dir",
+                    liferayRuntime.getAppServerLibGlobalDir().toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
+                NodeUtil.appendChildElement(
+                    propertiesElement, "liferay.app.server.portal.dir",
+                    liferayRuntime.getAppServerPortalDir().toOSString() );
+                NodeUtil.appendTextNode( propertiesElement, "\n\t" );
+
+                NodeFormatter formatter = new NodeFormatter();
+                formatter.format( newNode );
+            }
+        }
+        catch( Exception e )
+        {
+            LiferayMavenCore.logError( "Unable to add new liferay profile.", e );
+        }
+
+        return newNode;
+    }
+
+
     public static IStatus executeMojoGoal( final IMavenProjectFacade projectFacade,
                                            final IMavenExecutionContext context,
                                            final String goal,
@@ -117,7 +199,6 @@ public class MavenUtil
 
         return retval == null ? Status.OK_STATUS : retval;
     }
-
 
     public static MojoExecution getExecution( MavenExecutionPlan plan, String artifactId )
     {
@@ -296,6 +377,14 @@ public class MavenUtil
         return v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion(); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    public static String getWarSouceDirectory( IMavenProjectFacade facade )
+    {
+        final MavenProject mavenProject = facade.getMavenProject();
+        final IProject project = facade.getProject();
+
+        return new WarPluginConfiguration( mavenProject, project ).getWarSourceDirectory();
+    }
+
     public static boolean isMavenProject( IProject project ) throws CoreException
     {
         return project != null && project.exists() &&
@@ -307,6 +396,7 @@ public class MavenUtil
         return pomFile != null && pomFile.exists() && IMavenConstants.POM_FILE_NAME.equals( pomFile.getName() ) &&
             pomFile.getParent() instanceof IProject;
     }
+
 
     public static boolean loadParentHierarchy( final IMaven maven,
                                                final IMavenProjectFacade facade,
@@ -369,94 +459,6 @@ public class MavenUtil
         }
 
         childNode.setValue( ( value == null ) ? null : value.toString() );
-    }
-
-
-    public static Node createNewLiferayProfileNode(
-        Document pomDocument, NewLiferayProfile newLiferayProfile, final String pluginVersion )
-    {
-        Node newNode = null;
-
-        final String liferayVersion = newLiferayProfile.getLiferayVersion().content();
-
-        try
-        {
-            final String runtimeName = newLiferayProfile.getRuntimeName().content();
-            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( ServerUtil.getRuntime( runtimeName ) );
-
-            final Element root = pomDocument.getDocumentElement();
-
-            Element profiles = NodeUtil.findChildElement( root, "profiles" );
-
-            if( profiles == null )
-            {
-                newNode = profiles = NodeUtil.appendChildElement( root, "profiles" );
-            }
-
-            Element newProfile = null;
-
-            if( profiles != null )
-            {
-                NodeUtil.appendTextNode( profiles, "\n" );
-                newProfile = NodeUtil.appendChildElement( profiles, "profile" );
-                NodeUtil.appendTextNode( profiles, "\n" );
-
-                if( newNode == null )
-                {
-                    newNode = newProfile;
-                }
-            }
-
-            if( newProfile != null )
-            {
-                final IPath autoDeployDir =
-                    liferayRuntime.getAppServerDir().removeLastSegments( 1 ).append( "deploy" );
-
-                NodeUtil.appendTextNode( newProfile, "\n\t" );
-
-                NodeUtil.appendChildElement( newProfile, "id", newLiferayProfile.getId().content() );
-                NodeUtil.appendTextNode( newProfile, "\n\t" );
-
-                final Element propertiesElement = NodeUtil.appendChildElement( newProfile, "properties" );
-
-                NodeUtil.appendTextNode( newProfile, "\n\t" );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement( propertiesElement, "liferay.version", liferayVersion );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement( propertiesElement, "liferay.maven.plugin.version", pluginVersion );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.auto.deploy.dir", autoDeployDir.toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t");
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.app.server.deploy.dir",
-                    liferayRuntime.getAppServerDeployDir().toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.app.server.lib.global.dir",
-                    liferayRuntime.getAppServerLibGlobalDir().toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement(
-                    propertiesElement, "liferay.app.server.portal.dir",
-                    liferayRuntime.getAppServerPortalDir().toOSString() );
-                NodeUtil.appendTextNode( propertiesElement, "\n\t" );
-                
-                NodeFormatter formatter = new NodeFormatter();
-                formatter.format( newNode );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayMavenCore.logError( "Unable to add new liferay profile.", e );
-        }
-
-        return newNode;
-    }
-    
-    
-    public static IPath getWarSouceFolderPath( MavenProject mavenProject, IProject project)
-    {
-        return Path.fromOSString( new WarPluginConfiguration( mavenProject, project ).getWarSourceDirectory() );
     }
 
 }
