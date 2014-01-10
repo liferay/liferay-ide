@@ -16,13 +16,14 @@
         <tycho-version>0.19.0</tycho-version>
         <tycho-extras-version>0.19.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20130517111416/repository/</orbit-site>
+        <osgi-bundles-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/osgi-bundles-repository/</osgi-bundles-site>
         <sapphire-site>http://download.eclipse.org/sapphire/0.7/repository/</sapphire-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.3.0.final_20130110142753/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
 
         <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.5/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/snapshots/kepler/</m2e-wtp-site>
-        <adt-site>http://vm-32.liferay.com/adt-repository/</adt-site>
+        <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-repository/</adt-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
@@ -31,6 +32,11 @@
             <id>orbit</id>
             <layout>p2</layout>
             <url>${orbit-site}</url>
+        </repository>
+        <repository>
+            <id>lide-deps</id>
+            <layout>p2</layout>
+            <url>${osgi-bundles-site}</url>
         </repository>
         <repository>
             <id>sapphire</id>

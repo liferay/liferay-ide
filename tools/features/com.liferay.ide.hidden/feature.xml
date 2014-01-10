@@ -3,7 +3,7 @@
       id="com.liferay.ide.hidden"
       label="Liferay IDE Hidden"
       version="2.0.1.qualifier"
-      provider-name="Liferay, Inc." >
+      provider-name="Liferay, Inc.">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
       Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
@@ -30,11 +30,50 @@
       Liferay IDE is free software distributed under the terms of the Lesser GNU Public License. See URL for full license text.  http://www.gnu.org/licenses/lgpl-2.1.html
    </license>
 
-   <requires>
-   </requires>
-
    <plugin
          id="org.objectweb.asm"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.json"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.sun.jna"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.java.dev.jna.platform"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.httpcomponents.httpclient"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.httpcomponents.httpcore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.httpcomponents.httpmime"
          download-size="0"
          install-size="0"
          version="0.0.0"

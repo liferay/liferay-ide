@@ -67,7 +67,7 @@
                                     <then>
                                         <get
                                             dest="${project.basedir}/laut-1.0.6.zip"
-                                            src="http://vm-32.liferay.com/files/laut/linux/x86_64/laut-1.0.6.zip"
+                                            src="http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/files/laut/linux/x86_64/laut-1.0.6.zip"
                                             verbose="true"
                                         />
                                     </then>

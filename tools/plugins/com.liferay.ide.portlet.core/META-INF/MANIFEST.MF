@@ -32,7 +32,8 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.sapphire.java.jdt;bundle-version="0.3.1",
  org.eclipse.emf.ecore,
  org.eclipse.jdt.ui,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.apache.commons.lang;bundle-version="2.6.0"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.core,

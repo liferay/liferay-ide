@@ -8,7 +8,8 @@ Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.core;bundle-version="2.0.0";visibility:=reexport,
  org.eclipse.sapphire.modeling;bundle-version="0.5.3",
- org.eclipse.sapphire.modeling.xml;bundle-version="0.5.3"
+ org.eclipse.sapphire.modeling.xml;bundle-version="0.5.3",
+ org.json
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
