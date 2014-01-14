@@ -134,6 +134,11 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
 
         public void setValue( Object value )
         {
+            if( value == null )
+            {
+                value = ""; //$NON-NLS-1$
+            }
+
             this.nameValue.setValue( value );
 
             int found = findDuplicates( getName() );
