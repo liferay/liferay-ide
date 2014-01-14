@@ -277,7 +277,7 @@ public class NewEventActionClassDialog extends Dialog
     {
         super.initializeBounds();
 
-        getShell().setSize( 450, 200 );
+        getShell().setSize( 475, 250 );
     }
 
     @Override
