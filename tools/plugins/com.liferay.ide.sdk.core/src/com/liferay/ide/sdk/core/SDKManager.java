@@ -102,7 +102,7 @@ public final class SDKManager
         {
             for( SDK sdk : getSDKs() )
             {
-                if( theSDK.equals( sdk ) )
+                if( theSDK.getName().equals( sdk.getName() ) && theSDK.getLocation().equals( sdk.getLocation() ) )
                 {
                     return true;
                 }
