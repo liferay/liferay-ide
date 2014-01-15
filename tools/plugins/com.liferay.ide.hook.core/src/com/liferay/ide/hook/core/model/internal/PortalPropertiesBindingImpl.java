@@ -43,6 +43,7 @@ import org.eclipse.sapphire.ValuePropertyBinding;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class PortalPropertiesBindingImpl extends HookListBindingImpl
 {
@@ -125,6 +126,11 @@ public class PortalPropertiesBindingImpl extends HookListBindingImpl
             if( found <=1 )
             {
                 PortalPropertiesBindingImpl.this.portalPropertiesConfiguration.clearProperty( oldName );
+            }
+
+            if( name == null )
+            {
+                name = ""; //$NON-NLS-1$
             }
 
             this.nameValue.setName( name );
