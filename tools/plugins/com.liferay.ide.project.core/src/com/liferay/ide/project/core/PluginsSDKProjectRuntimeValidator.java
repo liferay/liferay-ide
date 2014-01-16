@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -29,6 +30,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 
 /**
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidator
@@ -40,6 +42,10 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
     public static final String MSG_PRIMARY_RUNTIME_NOT_SET = Msgs.primaryRuntimeNotSet;
     public static final String MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = Msgs.primaryRuntimeNotLiferayRuntime;
+
+    public static final String LOCATION_TARGETED_SDK = "Targeted SDK";
+    public static final String ID_PLUGIN_SDK_NOT_SET = "plugin-sdk-not-set";
+    
 
     public void validate( IFacetedProject fproj ) throws CoreException
     {
@@ -65,6 +71,12 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                         ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
                 }
             }
+        }
+        else if ( !ProjectUtil.isMavenProject( proj ) )
+        {
+            setMarker(
+                proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
+                LOCATION_TARGETED_SDK, ID_PLUGIN_SDK_NOT_SET );
         }
     }
 
@@ -97,7 +109,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
     private String[] getMarkerSourceIds()
     {
-        String[] retval = {ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME,ID_PRIMARY_RUNTIME_NOT_SET};
+        String[] retval = {ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME,ID_PRIMARY_RUNTIME_NOT_SET,ID_PLUGIN_SDK_NOT_SET};
 
         return retval;
     }
@@ -118,7 +130,8 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
     {
         public static String primaryRuntimeNotSet;
         public static String primaryRuntimeNotLiferayRuntime;
-
+        public static String pluginSDKNotSet;
+        
         static
         {
             initializeMessages( PluginsSDKProjectRuntimeValidator.class.getName(), Msgs.class );

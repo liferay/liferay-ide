@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <import>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>com.liferay.ide.project.ui.action</package>
+        <package>com.liferay.ide.project.ui.wizard</package>
+        <package>org.eclipse.sapphire.ui.forms.swt</package>
+    </import>
+    <dialog>
+        <id>ConfigureLiferaySDK</id>
+        <label>Configure plugin SDK</label>
+        <content>
+            <label>Use the following Liferay SDK configuration.</label>
+            <spacer></spacer>
+            <property-editor>
+                <property>PluginsSDKName</property>
+                <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                <action>
+                    <id>ConfigureSDKs</id>
+                    <label>Configure SDKs...</label>
+                    <image>configure_16x16.gif</image>
+                </action>
+                <action-handler>
+                    <action>ConfigureSDKs</action>
+                    <id>ConfigureSDKsHandler</id>
+                    <impl>ConfigureSDKsAction</impl>
+                </action-handler>
+            </property-editor>
+         </content>
+    </dialog>
+</definition>

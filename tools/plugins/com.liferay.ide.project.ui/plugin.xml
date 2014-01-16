@@ -839,10 +839,6 @@
    <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
-            markerType="com.liferay.ide.project.core.LiferayProjectMarker"
-            class="com.liferay.ide.project.ui.PluginsSDKProjectMarkerResolutionGenerator">
-      </markerResolutionGenerator>
-      <markerResolutionGenerator
             class="com.liferay.ide.project.ui.LiferayProjectMarkerResolutionGenerator"
             markerType="com.liferay.ide.project.core.LiferayProjectMarker">
       </markerResolutionGenerator>

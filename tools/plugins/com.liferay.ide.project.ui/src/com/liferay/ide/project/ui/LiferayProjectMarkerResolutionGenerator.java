@@ -25,6 +25,7 @@ import org.eclipse.ui.IMarkerResolutionGenerator2;
 
 /**
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 {
@@ -45,6 +46,10 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
             {
                 resolution = new PrimaryRuntimeNotLiferayRuntimeResolution();
             }
+            else if( markerSourceId.equals( PluginsSDKProjectRuntimeValidator.ID_PLUGIN_SDK_NOT_SET ) )
+            {
+                resolution = new PluginProjectSDKNotSetResolution();
+            }            
 
         }
         catch( CoreException e )

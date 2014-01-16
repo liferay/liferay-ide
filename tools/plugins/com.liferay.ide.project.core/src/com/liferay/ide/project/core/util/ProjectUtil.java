@@ -1262,6 +1262,26 @@ public class ProjectUtil
         return false;
     }
 
+    
+    public static boolean isMavenProject( IProject project )
+    {
+        boolean retval = false;
+        
+        try
+        {
+            if( project != null )
+            {
+                retval =
+                    project.hasNature( "org.eclipse.m2e.core.maven2Nature" ) && project.getFile( "pom.xml" ).exists();
+            }
+
+        }
+        catch( Exception e)
+        {
+        }
+        return retval;
+    }
+    
     public static boolean isParent( IFolder folder, IResource resource )
     {
         if( folder == null || resource == null )
