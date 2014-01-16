@@ -39,13 +39,12 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
     public static final String ID_PRIMARY_RUNTIME_NOT_SET = "primary-runtime-not-set";
     public static final String ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = "primary-runtime-not-liferay-runtime";
+    public static final String ID_PLUGINS_SDK_NOT_SET = "plugins-sdk-not-set";
 
     public static final String MSG_PRIMARY_RUNTIME_NOT_SET = Msgs.primaryRuntimeNotSet;
     public static final String MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME = Msgs.primaryRuntimeNotLiferayRuntime;
 
     public static final String LOCATION_TARGETED_SDK = "Targeted SDK";
-    public static final String ID_PLUGIN_SDK_NOT_SET = "plugin-sdk-not-set";
-    
 
     public void validate( IFacetedProject fproj ) throws CoreException
     {
@@ -58,7 +57,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
             if( fproj.getPrimaryRuntime() == null )
             {
                 setMarker(
-                    proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR,
+                    proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
                     MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
             }
             else
@@ -66,7 +65,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                 if( ! ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
                 {
                     setMarker(
-                        proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR,
+                        proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
                         MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
                         ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
                 }
@@ -75,8 +74,8 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
         else if ( !ProjectUtil.isMavenProject( proj ) )
         {
             setMarker(
-                proj, LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
-                LOCATION_TARGETED_SDK, ID_PLUGIN_SDK_NOT_SET );
+                proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
+                LOCATION_TARGETED_SDK, ID_PLUGINS_SDK_NOT_SET );
         }
     }
 
@@ -87,7 +86,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
             if( proj.isOpen() )
             {
                 IMarker[] markers =
-                    proj.findMarkers( LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE, true, IResource.DEPTH_INFINITE );
+                    proj.findMarkers( LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
 
                 for( IMarker marker : markers )
                 {
@@ -109,9 +108,8 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
     private String[] getMarkerSourceIds()
     {
-        String[] retval = {ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME,ID_PRIMARY_RUNTIME_NOT_SET,ID_PLUGIN_SDK_NOT_SET};
-
-        return retval;
+        return new String[] { ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, ID_PRIMARY_RUNTIME_NOT_SET,
+            ID_PLUGINS_SDK_NOT_SET };
     }
 
     private void setMarker(
@@ -131,7 +129,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
         public static String primaryRuntimeNotSet;
         public static String primaryRuntimeNotLiferayRuntime;
         public static String pluginSDKNotSet;
-        
+
         static
         {
             initializeMessages( PluginsSDKProjectRuntimeValidator.class.getName(), Msgs.class );

@@ -41,7 +41,7 @@ public class LiferayProjectCore extends LiferayCore
 {
 
     // The liferay project marker type
-    public static final String LIFERAY_PROJECT_MARKR_TYPE = "com.liferay.ide.project.core.LiferayProjectMarker";
+    public static final String LIFERAY_PROJECT_MARKER_TYPE = "com.liferay.ide.project.core.LiferayProjectMarker";
 
     // The shared instance
     private static LiferayProjectCore plugin;

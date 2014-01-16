@@ -150,6 +150,31 @@ public abstract class ProjectCoreBase extends BaseTests
         return newLiferayPluginProject;
     }
 
+    protected IPath getLiferayPluginsSdkDir()
+    {
+        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
+    }
+
+    protected IPath getLiferayPluginsSDKZip()
+    {
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.0-ce-ga1-20131101192857659.zip" );
+    }
+
+    protected String getLiferayPluginsSdkZipFolder()
+    {
+        return "liferay-plugins-sdk-6.2.0/";
+    }
+
+    protected IPath getLiferayRuntimeDir()
+    {
+        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
+    }
+
+    protected IPath getLiferayRuntimeZip()
+    {
+        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
+    }
+
     @SuppressWarnings( "restriction" )
     protected IPath getCustomLocationBase()
     {
@@ -175,20 +200,15 @@ public abstract class ProjectCoreBase extends BaseTests
         return liferayBundlesPath;
     }
 
-    protected abstract IPath getLiferayPluginsSdkDir();
+    protected String getRuntimeId()
+    {
+        return "com.liferay.ide.server.62.tomcat.runtime.70";
+    }
 
-    protected abstract IPath getLiferayPluginsSDKZip();
-
-    protected abstract String getLiferayPluginsSdkZipFolder();
-
-    protected abstract IPath getLiferayRuntimeDir();
-
-    protected abstract IPath getLiferayRuntimeZip();
-
-
-    protected abstract String getRuntimeId();
-
-    protected abstract String getRuntimeVersion();
+    protected String getRuntimeVersion()
+    {
+        return "6.2.0";
+    }
 
     protected NewLiferayPluginProjectOp newProjectOp()
     {
@@ -333,6 +353,36 @@ public abstract class ProjectCoreBase extends BaseTests
 
             assertEquals( "Unable to delete pre-existing customBaseDir", false, customBaseDir.exists() );
         }
+    }
+
+    protected IProject createAntProject( NewLiferayPluginProjectOp op ) throws Exception
+    {
+        final IProject project = createProject( op );
+
+        assertEquals(
+            "SDK project layout is not standard, /src folder exists.", false, project.getFolder( "src" ).exists() );
+
+        switch( op.getPluginType().content() )
+        {
+            case ext:
+                break;
+            case hook:
+            case portlet:
+
+                assertEquals(
+                    "java source folder docroot/WEB-INF/src doesn't exist.", true,
+                    project.getFolder( "docroot/WEB-INF/src" ).exists() );
+
+                break;
+            case layouttpl:
+                break;
+            case theme:
+                break;
+            default:
+                break;
+        }
+
+        return project;
     }
 
 }

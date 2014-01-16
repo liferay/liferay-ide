@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -42,38 +41,7 @@ import org.junit.Test;
  */
 public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 {
-
     private IRuntime runtime;
-
-    @Override
-    protected IPath getLiferayPluginsSdkDir()
-    {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
-    }
-
-    @Override
-    protected IPath getLiferayPluginsSDKZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.0-ce-ga1-20131101192857659.zip" );
-    }
-
-    @Override
-    protected String getLiferayPluginsSdkZipFolder()
-    {
-        return "liferay-plugins-sdk-6.2.0/";
-    }
-
-    @Override
-    protected IPath getLiferayRuntimeDir()
-    {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
-    }
-
-    @Override
-    protected IPath getLiferayRuntimeZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
-    }
 
     private IRuntime getRuntime() throws Exception
     {
@@ -85,18 +53,6 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         }
 
         return runtime;
-    }
-
-    @Override
-    protected String getRuntimeId()
-    {
-        return "com.liferay.ide.server.62.tomcat.runtime.70";
-    }
-
-    @Override
-    protected String getRuntimeVersion()
-    {
-        return "6.2.0";
     }
 
     private IProject importProject( String path, String name ) throws Exception

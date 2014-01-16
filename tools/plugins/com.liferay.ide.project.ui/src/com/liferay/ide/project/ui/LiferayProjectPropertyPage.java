@@ -84,14 +84,14 @@ public class LiferayProjectPropertyPage extends PropertyPage
 
     private Combo runtimeCombo;
     private Text sdkLabel;
-    
+
     public LiferayProjectPropertyPage()
     {
         super();
 
         setImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
             ProjectUIPlugin.PLUGIN_ID, "/icons/e16/liferay.png" ) ); //$NON-NLS-1$
-        
+
         noDefaultAndApplyButton();
     }
 
@@ -183,11 +183,11 @@ public class LiferayProjectPropertyPage extends PropertyPage
                 {
                     return false;
                 }
-            }            
+            }
         }
 
         final String sdkName = this.sdkLabel.getText();
-        
+
         if ( !CoreUtil.isNullOrEmpty( sdkName ) )
         {
             try
@@ -205,6 +205,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
         return true;
     }
 
+
     protected void createInfoGroup( final Composite parent )
     {
         new Label( parent, SWT.LEFT ).setText( Msgs.liferayPluginTypeLabel );
@@ -220,7 +221,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
         }
 
         final IProject proj = getProject();
-        
+
         if ( proj != null && ProjectUtil.isLiferayFacetedProject( proj ) )
         {
             try
@@ -241,6 +242,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
                     {
                         sdkLabel.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
                         sdkLabel.setText( "" );
+
                         final Hyperlink link = new Hyperlink( parent, SWT.NULL );
                         link.setLayoutData( new GridData( SWT.RIGHT, SWT.TOP, false, false, 1, 1 ) );
                         link.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
@@ -252,18 +254,18 @@ public class LiferayProjectPropertyPage extends PropertyPage
                             {
                                 public void linkActivated( HyperlinkEvent e )
                                 {
-                                LiferayPluginSDKOp op =
-                                    ( (LiferayPluginSDKOp) ( LiferayPluginSDKOp.TYPE.instantiate().initialize() ) );
-                                final Reference<DialogDef> dialogRef =
-                                    DefinitionLoader.sdef( LiferayProjectSelectionDialog.class ).dialog(
-                                        "ConfigureLiferaySDK" );
-                                final SapphireDialog dialog =
-                                    new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
+                                    final LiferayPluginSDKOp op =
+                                        ( (LiferayPluginSDKOp) ( LiferayPluginSDKOp.TYPE.instantiate().initialize() ) );
+                                    final Reference<DialogDef> dialogRef =
+                                        DefinitionLoader.sdef( LiferayProjectSelectionDialog.class ).dialog(
+                                            "ConfigureLiferaySDK" );
+                                    final SapphireDialog dialog =
+                                        new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
 
                                     dialog.setBlockOnOpen( true );
-    
+
                                     final int result = dialog.open();
-                                    
+
                                     if( result != SapphireDialog.CANCEL )
                                     {
                                         sdkLabel.setText( op.getPluginsSDKName().content() );
@@ -283,7 +285,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
                     try
                     {
                         ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getProject() );
-                        
+
                         if ( liferayRuntime != null)
                         {
                             currentRuntimeName = liferayRuntime.getRuntime().getName();

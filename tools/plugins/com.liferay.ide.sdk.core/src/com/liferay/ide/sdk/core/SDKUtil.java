@@ -29,8 +29,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.osgi.framework.Version;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Greg Amerson
@@ -219,5 +221,19 @@ public class SDKUtil
         properties.load( new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ) ); //$NON-NLS-1$
 
         return properties.getProperty( "lp.version" ); //$NON-NLS-1$
+    }
+
+    public static void saveSDKNameSetting( IProject project, String sdkName)
+    {
+        try
+        {
+            final IEclipsePreferences prefs = new ProjectScope( project ).getNode( SDKCorePlugin.PLUGIN_ID );
+            prefs.put( SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName );
+            prefs.flush();
+        }
+        catch( BackingStoreException e )
+        {
+            SDKCorePlugin.logError( "Unable to persist sdk name to project " + project, e );
+        }
     }
 }

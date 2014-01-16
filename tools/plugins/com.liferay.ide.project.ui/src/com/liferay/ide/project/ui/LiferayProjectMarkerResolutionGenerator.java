@@ -46,11 +46,10 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
             {
                 resolution = new PrimaryRuntimeNotLiferayRuntimeResolution();
             }
-            else if( markerSourceId.equals( PluginsSDKProjectRuntimeValidator.ID_PLUGIN_SDK_NOT_SET ) )
+            else if( markerSourceId.equals( PluginsSDKProjectRuntimeValidator.ID_PLUGINS_SDK_NOT_SET ) )
             {
-                resolution = new PluginProjectSDKNotSetResolution();
-            }            
-
+                resolution = new PluginsSDKNotSetResolution();
+            }
         }
         catch( CoreException e )
         {
@@ -64,7 +63,7 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
     {
         try
         {
-            return marker.getType().equals( LiferayProjectCore.LIFERAY_PROJECT_MARKR_TYPE );
+            return marker.getType().equals( LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE );
         }
         catch( CoreException e )
         {

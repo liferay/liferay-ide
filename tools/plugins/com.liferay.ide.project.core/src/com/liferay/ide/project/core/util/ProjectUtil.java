@@ -472,7 +472,7 @@ public class ProjectUtil
     public static void deleteProjectMarkers( IProject proj, String markerType, Set<String> markerSourceIds )
         throws CoreException
     {
-        
+
     }
 
     public static IFile findServiceJarForContext( String context )
@@ -1262,11 +1262,11 @@ public class ProjectUtil
         return false;
     }
 
-    
-    public static boolean isMavenProject( IProject project )
+
+    public static boolean isMavenProject( final IProject project )
     {
         boolean retval = false;
-        
+
         try
         {
             if( project != null )
@@ -1274,14 +1274,14 @@ public class ProjectUtil
                 retval =
                     project.hasNature( "org.eclipse.m2e.core.maven2Nature" ) && project.getFile( "pom.xml" ).exists();
             }
-
         }
         catch( Exception e)
         {
         }
+
         return retval;
     }
-    
+
     public static boolean isParent( IFolder folder, IResource resource )
     {
         if( folder == null || resource == null )

@@ -8,9 +8,9 @@
     </import>
     <dialog>
         <id>ConfigureLiferaySDK</id>
-        <label>Configure plugin SDK</label>
+        <label>Configure Plugins SDK</label>
         <content>
-            <label>Use the following Liferay SDK configuration.</label>
+            <label>Set the following Liferay PluginsSDK as the target SDK.</label>
             <spacer></spacer>
             <property-editor>
                 <property>PluginsSDKName</property>

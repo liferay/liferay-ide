@@ -101,7 +101,6 @@ public class SDKCorePlugin extends Plugin
      */
     public void stop( BundleContext context ) throws Exception
     {
-
         // delete tmp folder
         File createDir = getDefault().getStateLocation().append( "create" ).toFile(); //$NON-NLS-1$
 

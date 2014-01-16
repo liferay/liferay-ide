@@ -99,36 +99,6 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         return project;
     }
 
-    protected IProject createAntProject( NewLiferayPluginProjectOp op ) throws Exception
-    {
-        final IProject project = createProject( op );
-
-        assertEquals(
-            "SDK project layout is not standard, /src folder exists.", false, project.getFolder( "src" ).exists() );
-
-        switch( op.getPluginType().content() )
-        {
-            case ext:
-                break;
-            case hook:
-            case portlet:
-
-                assertEquals(
-                    "java source folder docroot/WEB-INF/src doesn't exist.", true,
-                    project.getFolder( "docroot/WEB-INF/src" ).exists() );
-
-                break;
-            case layouttpl:
-                break;
-            case theme:
-                break;
-            default:
-                break;
-        }
-
-        return project;
-    }
-
     protected IProject createNewJsfAntProject( String jsfSuite, String suffix ) throws Exception
     {
         final String projectName = "test-" + jsfSuite + suffix + "-sdk-project";
