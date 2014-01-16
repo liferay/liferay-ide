@@ -42,10 +42,10 @@ public interface INewHookDataModelProperties extends IArtifactEditOperationDataM
     // new custom jsps properties
     public static final String CUSTOM_JSPS_FOLDER = "INewHookDataModelProperties.CUSTOM_JSPS_FOLDER"; //$NON-NLS-1$
 
+    public static final String CUSTOM_JSPS_ITEMS = "INewHookDataModelProperties.CUSTOM_JSPS_ITEMS"; //$NON-NLS-1$
+
     public static final String DISABLE_CUSTOM_JSP_FOLDER_VALIDATION =
         "INewHookDataModelProperties.DISABLE_CUSTOM_JSP_FOLDER_VALIDATION"; //$NON-NLS-1$
-
-    public static final String CUSTOM_JSPS_ITEMS = "INewHookDataModelProperties.CUSTOM_JSPS_ITEMS"; //$NON-NLS-1$
 
     public static final String LANGUAGE_PROPERTIES_FILES_CREATED =
         "INewHookDataModelProperties.LANGUAGE_PROPERTIES_FILES_CREATED"; //$NON-NLS-1$
@@ -55,17 +55,17 @@ public interface INewHookDataModelProperties extends IArtifactEditOperationDataM
     public static final String PORTAL_PROPERTIES_ACTION_ITEMS =
         "INewHookDataModelProperties.PORTAL_PROPERTIES_ACTIONS_ITEMS"; //$NON-NLS-1$
 
-    public static final String SELECTED_PROJECT = "INewHookDataModelProperties.SELECTED_PROJECT"; //$NON-NLS-1$
-
-    public static final String WEB_ROOT_FOLDER = "INewHookDataModelProperties.WEB_ROOT_FOLDER"; //$NON-NLS-1$
-
     // new portal properties
     public static final String PORTAL_PROPERTIES_FILE = "INewHookDataModelProperties.PORTAL_PROPERTIES_FILE"; //$NON-NLS-1$
 
     public static final String PORTAL_PROPERTIES_OVERRIDE_ITEMS =
         "INewHookDataModelProperties.PORTAL_PROPERTIES_OVERRIDE_ITEMS"; //$NON-NLS-1$
 
+    public static final String SELECTED_PROJECT = "INewHookDataModelProperties.SELECTED_PROJECT"; //$NON-NLS-1$
+
     // new services
     public static final String SERVICES_ITEMS = "INewHookDataModelProperties.SERVICES_ITEMS"; //$NON-NLS-1$
+
+    public static final String WEB_ROOT_FOLDER = "INewHookDataModelProperties.WEB_ROOT_FOLDER"; //$NON-NLS-1$
 
 }
