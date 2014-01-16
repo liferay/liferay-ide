@@ -55,6 +55,38 @@ public abstract class ProjectCoreBase extends BaseTests
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
     private static IPath liferayBundlesPath;
 
+    protected IRuntime createNewRuntime( final String name ) throws Exception
+    {
+        final IPath newRuntimeLocation = new Path( getLiferayRuntimeDir().toString() + "-new" );
+
+        if( ! newRuntimeLocation.toFile().exists() )
+        {
+            FileUtils.copyDirectory( getLiferayRuntimeDir().toFile(), newRuntimeLocation.toFile() );
+        }
+
+        assertEquals( true, newRuntimeLocation.toFile().exists() );
+
+        final NullProgressMonitor npm = new NullProgressMonitor();
+
+        IRuntime runtime = ServerCore.findRuntime( name );
+
+        if( runtime == null )
+        {
+            final IRuntimeWorkingCopy runtimeWC =
+                ServerCore.findRuntimeType( getRuntimeId() ).createRuntime( name, npm );
+
+            runtimeWC.setName( name );
+            runtimeWC.setLocation( newRuntimeLocation );
+
+            runtime = runtimeWC.save( true, npm );
+        }
+
+        ServerCore.getRuntimes();
+        assertNotNull( runtime );
+
+        return runtime;
+    }
+
     protected SDK createNewSDK() throws Exception
     {
         final IPath newSDKLocation = new Path( getLiferayPluginsSdkDir().toString() + "-new" );

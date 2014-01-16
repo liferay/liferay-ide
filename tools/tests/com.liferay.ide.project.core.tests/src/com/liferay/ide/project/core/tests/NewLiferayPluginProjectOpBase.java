@@ -35,12 +35,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.DefaultValueService;
 import org.eclipse.sapphire.services.PossibleValuesService;
@@ -49,7 +46,6 @@ import org.eclipse.sapphire.services.ValueLabelService;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -152,38 +148,6 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals( true, config.exists() );
 
         return checkNewJsfAntProjectIvyFile( jsfProject, jsfSuite );
-    }
-
-    private IRuntime createNewRuntime( final String name ) throws Exception
-    {
-        final IPath newRuntimeLocation = new Path( getLiferayRuntimeDir().toString() + "-new" );
-
-        if( ! newRuntimeLocation.toFile().exists() )
-        {
-            FileUtils.copyDirectory( getLiferayRuntimeDir().toFile(), newRuntimeLocation.toFile() );
-        }
-
-        assertEquals( true, newRuntimeLocation.toFile().exists() );
-
-        final NullProgressMonitor npm = new NullProgressMonitor();
-
-        IRuntime runtime = ServerCore.findRuntime( name );
-
-        if( runtime == null )
-        {
-            final IRuntimeWorkingCopy runtimeWC =
-                ServerCore.findRuntimeType( getRuntimeId() ).createRuntime( name, npm );
-
-            runtimeWC.setName( name );
-            runtimeWC.setLocation( newRuntimeLocation );
-
-            runtime = runtimeWC.save( true, npm );
-        }
-
-        ServerCore.getRuntimes();
-        assertNotNull( runtime );
-
-        return runtime;
     }
 
     protected IProject createNewSDKProjectCustomLocation(
