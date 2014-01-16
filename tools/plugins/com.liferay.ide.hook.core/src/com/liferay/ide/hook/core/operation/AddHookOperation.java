@@ -59,6 +59,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class AddHookOperation extends AbstractDataModelOperation implements INewHookDataModelProperties
@@ -112,8 +113,6 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         return ProjectUtil.getProject( projectName );
     }
-
-
 
     protected IStatus checkDescriptorFile( IProject project )
     {
@@ -184,7 +183,11 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
     {
         IProject project = getTargetProject();
 
-        String customFolderValue = dm.getStringProperty( CUSTOM_JSPS_FOLDER );
+        IFolder defaultWebappRootFolder = CoreUtil.getDefaultDocrootFolder( project );
+
+        String customJSPsFolder = dm.getStringProperty( CUSTOM_JSPS_FOLDER );
+
+        String customFolderValue = defaultWebappRootFolder.getFullPath().append( customJSPsFolder ).toPortableString();
 
         IFolder customFolder = (IFolder) project.getWorkspace().getRoot().getFolder( new Path( customFolderValue ) );
 

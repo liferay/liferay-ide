@@ -19,6 +19,7 @@ import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOper
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public interface INewHookDataModelProperties extends IArtifactEditOperationDataModelProperties
@@ -53,6 +54,10 @@ public interface INewHookDataModelProperties extends IArtifactEditOperationDataM
 
     public static final String PORTAL_PROPERTIES_ACTION_ITEMS =
         "INewHookDataModelProperties.PORTAL_PROPERTIES_ACTIONS_ITEMS"; //$NON-NLS-1$
+
+    public static final String SELECTED_PROJECT = "INewHookDataModelProperties.SELECTED_PROJECT"; //$NON-NLS-1$
+
+    public static final String WEB_ROOT_FOLDER = "INewHookDataModelProperties.WEB_ROOT_FOLDER"; //$NON-NLS-1$
 
     // new portal properties
     public static final String PORTAL_PROPERTIES_FILE = "INewHookDataModelProperties.PORTAL_PROPERTIES_FILE"; //$NON-NLS-1$

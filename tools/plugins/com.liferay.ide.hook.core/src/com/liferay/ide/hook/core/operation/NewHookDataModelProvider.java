@@ -46,6 +46,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( { "restriction", "unchecked", "rawtypes" } )
 public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProvider
@@ -72,6 +73,10 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             // custom_jsps out of that
             IProject targetProject = getTargetProject();
 
+            final IFolder defaultWebappRootFolder = CoreUtil.getDefaultDocrootFolder( targetProject );
+
+            String defaultWebappRootPath = defaultWebappRootFolder.getFullPath().toPortableString();
+
             if( targetProject != null )
             {
                 HookDescriptorHelper hookDescriptorHelper = new HookDescriptorHelper( targetProject );
@@ -91,17 +96,25 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
                         {
                             if( container != null && container.exists() )
                             {
-                                return container.getFullPath().toPortableString();
+                                String containerFullPath = container.getFullPath().toPortableString();
+
+                                int index = containerFullPath.indexOf( defaultWebappRootPath );
+
+                                if( index != -1 )
+                                {
+                                    containerFullPath =
+                                        containerFullPath.substring( index + defaultWebappRootPath.length() );
+                                }
+
+                                return containerFullPath;
                             }
                         }
                     }
                 }
 
-                final IFolder defaultWebappRoot = CoreUtil.getDefaultDocrootFolder( targetProject );
- 
-                if( defaultWebappRoot != null )
+                if( defaultWebappRootFolder != null )
                 {
-                    return defaultWebappRoot.getFullPath().append( "custom_jsps" ).toPortableString(); //$NON-NLS-1$
+                    return "/custom_jsps"; //$NON-NLS-1$
                 }
             }
         }
@@ -121,6 +134,24 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             if( targetProject != null )
             {
                 return CoreUtil.getFirstSrcFolder( targetProject ).getFullPath().append( "content" ).toPortableString(); //$NON-NLS-1$
+            }
+        }
+        else if( SELECTED_PROJECT.equals( propertyName ) )
+        {
+            IProject targetProject = getTargetProject();
+
+            if( targetProject != null )
+            {
+                return targetProject.getName();
+            }
+        }
+        else if( WEB_ROOT_FOLDER.equals( propertyName ) )
+        {
+            IProject targetProject = getTargetProject();
+
+            if( targetProject != null )
+            {
+                return CoreUtil.getDefaultDocrootFolder( targetProject ).getName();
             }
         }
         else if( propertyName.equals( PROJECT ) )
@@ -179,7 +210,9 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
         propertyNames.add( CONTENT_FOLDER );
         propertyNames.add( LANGUAGE_PROPERTIES_ITEMS );
         propertyNames.add( LANGUAGE_PROPERTIES_FILES_CREATED );
+        propertyNames.add( SELECTED_PROJECT );
         propertyNames.add( SOURCE_FOLDER );
+        propertyNames.add( WEB_ROOT_FOLDER );
         propertyNames.add( JAVA_SOURCE_FOLDER );
         propertyNames.add( JAVA_PACKAGE_FRAGMENT_ROOT );
         propertyNames.add( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION );
@@ -397,6 +430,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
     private static class Msgs extends NLS
     {
+
         public static String contentFolderNotConfigured;
         public static String customJSPsFolderNotConfigured;
         public static String portalPropertiesFileNotConfigured;
