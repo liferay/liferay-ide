@@ -16,7 +16,6 @@
 package com.liferay.ide.project.ui;
 
 import com.liferay.ide.project.core.model.LiferayPluginSDKOp;
-import com.liferay.ide.project.ui.dialog.LiferayProjectSelectionDialog;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -48,8 +47,9 @@ public class PluginsSDKNotSetResolution implements IMarkerResolution
 
             final LiferayPluginSDKOp op =
                 ( ( LiferayPluginSDKOp ) ( LiferayPluginSDKOp.TYPE.instantiate().initialize() ) );
-            final Reference<DialogDef> dialogRef = DefinitionLoader.sdef(
-                LiferayProjectSelectionDialog.class ).dialog( "ConfigureLiferaySDK" );
+            final Reference<DialogDef> dialogRef =
+                DefinitionLoader.context( this.getClass().getClassLoader() ).sdef(
+                    "com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog" ).dialog( "ConfigureLiferaySDK" );
             final SapphireDialog dialog = new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
 
             dialog.setBlockOnOpen( true );

@@ -10,7 +10,7 @@
         <id>ConfigureLiferaySDK</id>
         <label>Configure Plugins SDK</label>
         <content>
-            <label>Set the following Liferay PluginsSDK as the target SDK.</label>
+            <label>Set the following SDK as the target SDK.</label>
             <spacer></spacer>
             <property-editor>
                 <property>PluginsSDKName</property>
