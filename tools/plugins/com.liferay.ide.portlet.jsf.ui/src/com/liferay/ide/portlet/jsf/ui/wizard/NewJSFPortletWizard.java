@@ -45,6 +45,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPortletClassDataModelProperties
@@ -142,7 +143,7 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
                     {
                         if( container != null && container.exists() )
                         {
-                            final Path path = new Path( jspsFolder + "/portletViewMode.xhtml" ); //$NON-NLS-1$
+                            final Path path = new Path( jspsFolder + "/view.xhtml" ); //$NON-NLS-1$
                             IFile viewFile = container.getFile( path );
 
                             if( viewFile.exists() )

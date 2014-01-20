@@ -34,6 +34,7 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Simon Jiang
  */
 @SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
 public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataModelProvider
@@ -63,7 +64,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
                 "javax.portlet.faces.defaultViewId.help"  //$NON-NLS-1$
             };
 
-            String[] values = { "/portletViewMode.xhtml", "/portletEditMode.xhtml", "/portletHelpMode.xhtml" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            String[] values = { "/view.xhtml", "/edit.xhtml", "/help.xhtml" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
             ParamValue[] paramVals = createDefaultParamValuesForModes( modes, names, values );
 
@@ -90,7 +91,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
         }
         else if( CREATE_JSPS_FOLDER.equals( propertyName ) )
         {
-            return "/xhtml/" + getProperty( PORTLET_NAME ).toString().toLowerCase(); //$NON-NLS-1$
+            return "/views/" + getProperty( PORTLET_NAME ).toString().toLowerCase(); //$NON-NLS-1$
         }
         else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
         {
