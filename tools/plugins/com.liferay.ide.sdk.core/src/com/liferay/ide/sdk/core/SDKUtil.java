@@ -233,7 +233,7 @@ public class SDKUtil
         }
         catch( BackingStoreException e )
         {
-            SDKCorePlugin.logError( "Unable to persist sdk name to project " + project, e );
+            SDKCorePlugin.logError( "Unable to persist sdk name to project " + project, e );  //$NON-NLS-1$
         }
     }
 }

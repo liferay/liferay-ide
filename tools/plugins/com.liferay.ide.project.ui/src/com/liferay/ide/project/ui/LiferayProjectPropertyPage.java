@@ -20,7 +20,6 @@ import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.model.LiferayPluginSDKOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.ui.dialog.LiferayProjectSelectionDialog;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -257,8 +256,8 @@ public class LiferayProjectPropertyPage extends PropertyPage
                                     final LiferayPluginSDKOp op =
                                         ( (LiferayPluginSDKOp) ( LiferayPluginSDKOp.TYPE.instantiate().initialize() ) );
                                     final Reference<DialogDef> dialogRef =
-                                        DefinitionLoader.sdef( LiferayProjectSelectionDialog.class ).dialog(
-                                            "ConfigureLiferaySDK" );
+                                            DefinitionLoader.context( this.getClass().getClassLoader() ).sdef(
+                                                "com.liferay.ide.project.ui.dialog.SelectPluginsSDKDialog" ).dialog( "ConfigureLiferaySDK" );
                                     final SapphireDialog dialog =
                                         new SapphireDialog( UIUtil.getActiveShell(), op, dialogRef );
 
