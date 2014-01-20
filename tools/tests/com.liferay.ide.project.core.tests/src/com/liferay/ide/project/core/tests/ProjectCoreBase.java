@@ -230,9 +230,12 @@ public abstract class ProjectCoreBase extends BaseTests
     public void setupPluginsSDKAndRuntime() throws Exception
     {
         assertNotNull( "Expected System.getProperty(\"liferay.bundles.dir\") to not be null", System.getProperty( "liferay.bundles.dir" ) );
+
         assertNotNull( "Expected liferayBundlesDir to not be null", liferayBundlesDir );
 
-        assertEquals( "Expected liferayBundlesPath to exist", true, getLiferayBundlesPath().toFile().exists() );
+        assertEquals(
+            "Expected liferayBundlesPath to exist: " + getLiferayBundlesPath().toOSString(), true,
+            getLiferayBundlesPath().toFile().exists() );
 
         final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
 
@@ -241,7 +244,7 @@ public abstract class ProjectCoreBase extends BaseTests
             final File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
 
             assertEquals(
-                "Expected file to exist " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
+                "Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
                 liferayPluginsSdkZipFile.exists() );
 
             liferayPluginsSdkDirFile.mkdirs();
@@ -303,7 +306,7 @@ public abstract class ProjectCoreBase extends BaseTests
             final File liferayRuntimeZipFile = getLiferayRuntimeZip().toFile();
 
             assertEquals(
-                "Expected file to exist " + liferayRuntimeZipFile.getAbsolutePath(), true,
+                "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
                 liferayRuntimeZipFile.exists() );
 
             ZipUtil.unzip( liferayRuntimeZipFile, LiferayProjectCore.getDefault().getStateLocation().toFile() );
