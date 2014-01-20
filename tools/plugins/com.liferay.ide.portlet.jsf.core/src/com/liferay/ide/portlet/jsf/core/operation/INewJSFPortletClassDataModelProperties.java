@@ -19,6 +19,7 @@ import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelPropertie
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public interface INewJSFPortletClassDataModelProperties extends INewPortletClassDataModelProperties
 {
@@ -37,5 +38,5 @@ public interface INewJSFPortletClassDataModelProperties extends INewPortletClass
 
     String JSF_VIEW_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.view"; //$NON-NLS-1$
 
-    String QUALIFIED_JSF_PORTLET = "org.portletfaces.bridge.GenericFacesPortlet"; //$NON-NLS-1$
+    String QUALIFIED_JSF_PORTLET = "javax.portlet.faces.GenericFacesPortlet"; //$NON-NLS-1$
 }
