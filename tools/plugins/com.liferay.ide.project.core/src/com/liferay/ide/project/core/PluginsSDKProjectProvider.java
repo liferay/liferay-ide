@@ -233,6 +233,8 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         {
             throw new CoreException( status );
         }
+
+        // TODO IDE-1386
     }
 
     public ILiferayProject provide( Object type )

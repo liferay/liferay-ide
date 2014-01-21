@@ -37,12 +37,12 @@ import com.liferay.ide.project.core.model.internal.ProjectNameValidationService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderDefaultValueService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderListener;
 import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
+import com.liferay.ide.project.core.model.internal.ProjectProviderValidationService;
 import com.liferay.ide.project.core.model.internal.RuntimeNameValidationService;
 import com.liferay.ide.project.core.model.internal.ThemeFrameworkValidationService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationListener;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationValidationService;
 import com.liferay.ide.project.core.model.internal.UseSdkLocationListener;
-import com.liferay.ide.project.core.model.internal.ProjectProviderValidationService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -326,6 +326,16 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
 
     Value<String> getFinalProjectName();
     void setFinalProjectName( String value );
+
+
+    // *** PortletName ***
+
+    @Label( standard = "portlet name" )
+    @DefaultValue( text = "${ProjectName}" )
+    ValueProperty PROP_PORTLET_NAME = new ValueProperty( TYPE, "PortletName" );
+
+    Value<String> getPortletName();
+    void setPortletName( String value );
 
 
     // *** Method: execute ***

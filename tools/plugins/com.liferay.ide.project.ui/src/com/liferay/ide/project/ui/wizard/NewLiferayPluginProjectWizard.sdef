@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definition>
+    <import>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>com.liferay.ide.project.ui.action</package>
+        <package>com.liferay.ide.project.ui.wizard</package>
+        <package>org.eclipse.sapphire.ui.forms.swt</package>
+    </import>
     <wizard>
         <id>NewLiferayPluginProjectWizard</id>
         <element-type>com.liferay.ide.project.core.model.NewLiferayPluginProjectOp</element-type>
@@ -178,6 +184,14 @@
                     </content>
                     <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>
                 </group>
+                <group>
+                    <label>Additional portlet options</label>
+                    <content>
+                        <property-editor>PortletName</property-editor>
+                        <property-editor>DisplayName</property-editor>
+                    </content>
+                    <visible-when>${ ProjectProvider == 'ant' }</visible-when>
+                </group>
             </content>
         </page>
         <page>
@@ -198,12 +212,6 @@
         </page>
         <image>NewLiferayPluginProjectWizard.png</image>
     </wizard>
-    <import>
-        <package>org.eclipse.sapphire.ui.renderers.swt</package>
-        <package>com.liferay.ide.project.ui.action</package>
-        <package>com.liferay.ide.project.ui.wizard</package>
-        <package>org.eclipse.sapphire.ui.forms.swt</package>
-    </import>
     <dialog>
         <id>SelectActiveProfiles</id>
         <label>Select Active Profiles</label>
