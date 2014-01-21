@@ -52,14 +52,14 @@ public class JSFPortletDescriptorHelper extends PortletDescriptorHelper
     @Override
     public IStatus addNewPortlet( final IDataModel model )
     {
-        IStatus status = super.addNewPortlet( model );
+        final IStatus status = super.addNewPortlet( model );
 
-        if( !status.isOK() )
+        if( ! status.isOK() )
         {
             return status;
         }
 
-        ILiferayProject liferayProject = LiferayCore.create( this.project );
+        final ILiferayProject liferayProject = LiferayCore.create( this.project );
 
         if( liferayProject != null && liferayProject.getPortalVersion() != null )
         {
@@ -72,9 +72,8 @@ public class JSFPortletDescriptorHelper extends PortletDescriptorHelper
 
                 if( descriptorFile != null )
                 {
-                    DOMModelOperation op = new DOMModelEditOperation( descriptorFile )
+                    final DOMModelOperation op = new DOMModelEditOperation( descriptorFile )
                     {
-
                         @Override
                         protected void createDefaultFile()
                         {
@@ -88,9 +87,9 @@ public class JSFPortletDescriptorHelper extends PortletDescriptorHelper
                         }
                     };
 
-                    IStatus opStatus = op.execute();
+                    final IStatus opStatus = op.execute();
 
-                    if( !opStatus.isOK() )
+                    if( ! opStatus.isOK() )
                     {
                         return opStatus;
                     }
@@ -109,18 +108,20 @@ public class JSFPortletDescriptorHelper extends PortletDescriptorHelper
 
     private IStatus updateJSFLiferayPortletXML( IDOMDocument document )
     {
-        Element rootElement = document.getDocumentElement();
+        final Element rootElement = document.getDocumentElement();
 
-        NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
+        final NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
 
         if( portletNodes.getLength() > 1 )
         {
-            FormatProcessorXML processor = new FormatProcessorXML();
-            Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
-            Node headerPortletClassElement = lastPortletElement.getElementsByTagName( "header-portlet-css" ).item( 0 );
+            final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
+            final Node headerPortletClassElement =
+                lastPortletElement.getElementsByTagName( "header-portlet-css" ).item( 0 );
+
             NodeUtil.insertChildElement(
                 lastPortletElement, headerPortletClassElement, "requires-namespaced-parameters", "false" );
-            processor.formatNode( lastPortletElement );
+
+            new FormatProcessorXML().formatNode( lastPortletElement );
         }
 
         return Status.OK_STATUS;
