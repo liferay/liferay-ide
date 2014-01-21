@@ -51,6 +51,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
@@ -387,8 +388,10 @@ public class NewLiferayPortletWizardPage extends LiferayDataModelWizardPage
             CSS_FILE, 
             JAVASCRIPT_FILE,
             CSS_CLASS_WRAPPER, 
+            ADD_TO_CONTROL_PANEL,
             CATEGORY,
             ENTRY_WEIGHT, 
+            CREATE_ENTRY_CLASS,
             ENTRY_CLASS_NAME
         };
     }

@@ -67,6 +67,7 @@ import org.osgi.service.prefs.Preferences;
  * @author Greg Amerson
  * @author Cindy Li
  * @author Tao Tao
+ * @author Terry Jia
  */
 @SuppressWarnings( { "restriction", "unchecked", "rawtypes" } )
 public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvider
@@ -1048,6 +1049,11 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( ENTRY_WEIGHT.equals( propertyName ) )
         {
+            if( !getBooleanProperty( ADD_TO_CONTROL_PANEL ) )
+            {
+                return Status.OK_STATUS;
+            }
+
             String entryweight = getStringProperty( propertyName );
 
             if( !CoreUtil.isNumeric( entryweight ) )
@@ -1059,6 +1065,11 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( ENTRY_CLASS_NAME.equals( propertyName ) )
         {
+            if( !getBooleanProperty( ADD_TO_CONTROL_PANEL ) || !getBooleanProperty( CREATE_ENTRY_CLASS ) )
+            {
+                return Status.OK_STATUS;
+            }
+
             String entryclasswrapper = getStringProperty( propertyName );
 
             if( validateJavaClassName( entryclasswrapper ).getSeverity() != IStatus.ERROR )
