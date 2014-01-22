@@ -7,11 +7,11 @@ applications, e.g. portlets, hooks, themes, etc, for the Liferay Portal platform
 To get started, check out the project's community homepage at
 [http://www.liferay.com/community/liferay-projects/liferay-ide](http://www.liferay.com/community/liferay-projects/liferay-ide)
 
-To install the Liferay IDE plugins into your Eclipse install using the following released versions depending on your Eclipse version:
+To install the Liferay IDE plugins into your Eclipse install using either the stable or milestone updatesite:
 
-- Eclipse Juno: [http://releases.liferay.com/tools/ide/eclipse/juno/stable/](http://releases.liferay.com/tools/ide/eclipse/juno/stable/)
-- Eclipse Indigo: [http://releases.liferay.com/tools/ide/eclipse/indigo/stable/](http://releases.liferay.com/tools/ide/eclipse/indigo/stable/)
-- Eclipse Helios: [http://releases.liferay.com/tools/ide/eclipse/helios/stable/](http://releases.liferay.com/tools/ide/eclipse/helios/stable/)
+- Latest stable release (2.0.x): [http://releases.liferay.com/tools/ide/stable/](http://releases.liferay.com/tools/ide/latest/stable/)
+- Latest milestone release towards 2.1: [http://releases.liferay.com/tools/ide/latest/milestone/](http://releases.liferay.com/tools/ide/latest/milestone/)
+- Additional downloads available here: [https://www.liferay.com/downloads/liferay-projects/liferay-ide](https://www.liferay.com/downloads/liferay-projects/liferay-ide)
  
 
 ## Source Code
