@@ -185,7 +185,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
             defaultSrcFolder.getFile( "FileNameWithStarIncorrectEncoding.properties" );
         assertEquals( true, isLanguagePropertiesFile( fileNameWithStarIncorrectEncoding ) );
 
-        IFile removeThisLineTest = defaultSrcFolder.getFile( "RemoveThisLineTest.properties" );
+        final IFile removeThisLineTest = defaultSrcFolder.getFile( "RemoveThisLineTest.properties" );
         assertEquals( true, isLanguagePropertiesFile( removeThisLineTest ) );
 
         // test the filename without underscore
@@ -213,7 +213,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         assertEquals( false, hasEncodingMarker( removeThisLineTest ) );
 
         /*
-         * Both encoding action and quick fix of the encoding marker invoke method 
+         * Both encoding action and quick fix of the encoding marker invoke method
          * PropertiesUtils.encodeLanguagePropertiesFilesToDefault(),
          * so here we only test this method and re-check the existence of markers.
          */
