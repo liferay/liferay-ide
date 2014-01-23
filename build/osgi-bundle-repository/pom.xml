@@ -35,9 +35,11 @@
                         <id>default-cli</id>
                         <configuration>
                             <artifacts>
+                                <!--
                                 <artifact><id>org.apache.httpcomponents:httpclient:4.2.1</id></artifact>
                                 <artifact><id>org.apache.httpcomponents:httpcore:4.2.1</id></artifact>
                                 <artifact><id>org.apache.httpcomponents:httpmime:4.2.1</id></artifact>
+                                 -->
                                 <artifact><id>net.java.dev.jna:jna:4.0.0</id></artifact>
                                 <artifact><id>net.java.dev.jna:jna-platform:4.0.0</id></artifact>
                                 <artifact><id>org.json:json:20131018</id></artifact>
