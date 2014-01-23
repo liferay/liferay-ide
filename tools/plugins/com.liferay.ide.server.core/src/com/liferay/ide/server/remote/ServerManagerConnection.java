@@ -93,7 +93,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
     {
         String fmDebugPort = getRemoteServerConfig( getFMDebugPortAPI() );
 
-        if(fmDebugPort != null )
+        if( fmDebugPort != null )
         {
             return Integer.parseInt( fmDebugPort );
         }
@@ -111,9 +111,17 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         return managerContextPath + "/status"; //$NON-NLS-1$
     }
 
-    private String getJSONOutput( JSONObject json ) throws JSONException
+    @SuppressWarnings( "unchecked" )
+    private <T> T getJSONOutput( JSONObject jsonObject ) throws JSONException
     {
-        return json.getString( "output" ); //$NON-NLS-1$
+        if( jsonObject.has( "output" ) )
+        {
+            return (T) jsonObject.get( "output" );
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public List<String> getLiferayPlugins()
@@ -139,8 +147,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             {
                 if( isSuccess( json ) )
                 {
-                    String output = getJSONOutput( json );
-                    JSONArray jsonPlugins = new JSONArray( output );
+                    JSONArray jsonPlugins = getJSONOutput( json );
 
                     for( int i = 0; i < jsonPlugins.length(); i++ )
                     {
@@ -180,13 +187,13 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
             if( response instanceof JSONObject )
             {
-                JSONObject debugPort = (JSONObject) response;
+                JSONObject jsonResponse = (JSONObject) response;
 
                 try
                 {
-                    if( isSuccess( debugPort ) )
+                    if( isSuccess( jsonResponse ) )
                     {
-                        return getJSONOutput( debugPort );
+                        return getJSONOutput( jsonResponse );
                     }
                 }
                 catch (JSONException e)
@@ -310,16 +317,10 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             {
                 if( isSuccess( json ) )
                 {
-                    String output = getJSONOutput( json );
-                    JSONObject jsonOutput = new JSONObject( output );
+                    JSONObject output = getJSONOutput( json );
 
-                    Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "installed" ) ); //$NON-NLS-1$
-
-                    if( installed )
-                    {
-                        return true;
-                    }
-                }
+                    return output.getBoolean( "installed" );
+               }
             }
             catch( Exception e )
             {
@@ -357,9 +358,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             {
                 if( isSuccess( json ) )
                 {
-                    String output = getJSONOutput( json );
-
-                    JSONObject jsonOutput = new JSONObject( output );
+                    JSONObject jsonOutput = getJSONOutput( json );
 
                     Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "started" ) ); //$NON-NLS-1$
 
@@ -378,10 +377,17 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
         return false;
     }
 
-    private boolean isSuccess( JSONObject jsonObject ) throws JSONException
+    private boolean isSuccess( JSONObject jsonObject )
     {
-        String success = jsonObject.getString( "status" ); //$NON-NLS-1$
-        return "0".equals( success ); //$NON-NLS-1$
+        try
+        {
+            return 0 == jsonObject.getInt( "status" );
+        }
+        catch( JSONException e )
+        {
+        }
+
+        return false;
     }
 
     public void setManagerContextPath( String managerContextPath )
