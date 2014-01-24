@@ -63,11 +63,7 @@ public class WorkingSetCustomPart extends FormComponentPart
     @Override
     public FormComponentPresentation createPresentation( SwtPresentation parent, Composite composite )
     {
-        if( this.presentation == null )
-        {
-            this.presentation = new WorkingSetPresentation( this, parent, composite, this.workingSets );
-        }
-
+        this.presentation = new WorkingSetPresentation( this, parent, composite, this.workingSets );
         return this.presentation;
     }
 
