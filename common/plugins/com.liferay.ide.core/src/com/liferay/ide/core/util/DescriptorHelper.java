@@ -68,7 +68,9 @@ public class DescriptorHelper
             }
         }
 
-        protected abstract void createDefaultFile();
+        protected void createDefaultFile()
+        {
+        }
 
         public IStatus execute()
         {

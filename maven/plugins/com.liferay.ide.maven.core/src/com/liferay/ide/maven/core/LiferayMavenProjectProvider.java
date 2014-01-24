@@ -162,6 +162,8 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         }
         else
         {
+            final IProject firstProject = newProjects.get( 0 );
+
             // add new profiles if it was specified to add to project or parent poms
             if( ! CoreUtil.isNullOrEmpty( activeProfilesValue ) )
             {
@@ -220,9 +222,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     getNewProfilesToSave( activeProfiles, op.getNewLiferayProfiles(), ProfileLocation.projectPom );
 
                 // only need to set the first project as nested projects should pickup the parent setting
-                final IProject newProject = newProjects.get( 0 );
-
-                final IMavenProjectFacade newMavenProject = mavenProjectRegistry.getProject( newProject );
+                final IMavenProjectFacade newMavenProject = mavenProjectRegistry.getProject( firstProject );
 
                 final IFile pomFile = newMavenProject.getPom();
 
@@ -262,7 +262,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             if( op.getPluginType().content().equals( PluginType.portlet ) )
             {
                 final String portletName = op.getPortletName().content( false );
-                retval = op.getPortletFramework().content().postProjectCreated( newProjects.get( 0 ), frameworkName, portletName, monitor );
+                retval = portletFramework.postProjectCreated( firstProject, frameworkName, portletName, monitor );
             }
         }
 

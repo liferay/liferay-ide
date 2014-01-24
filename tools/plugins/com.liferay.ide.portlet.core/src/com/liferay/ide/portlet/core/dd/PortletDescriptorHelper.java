@@ -139,62 +139,43 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
     {
         final IFile descriptorFile = getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
 
-        DOMModelOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+        final IStatus portletXmlStatus = new DOMModelEditOperation( descriptorFile )
         {
-            protected void createDefaultFile()
-            {
-            }
-
             protected IStatus doExecute( IDOMDocument document )
             {
                 return updatePortletName( document, newPortletName );
             }
-        };
+        }.execute();
 
-        IStatus status = domModelOperation.execute();
-
-        if( !status.isOK() )
+        if( ! portletXmlStatus.isOK() )
         {
-            return status;
+            return portletXmlStatus;
         }
 
-        domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE ) )
+        final IStatus liferayPortletXmlStatus = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE ) )
         {
-            protected void createDefaultFile()
-            {
-            }
-
             protected IStatus doExecute( IDOMDocument document )
             {
                 return updatePortletName( document, newPortletName );
             }
-        };
+        }.execute();
 
-        status = domModelOperation.execute();
-
-        if( !status.isOK() )
+        if( ! liferayPortletXmlStatus.isOK() )
         {
-            return status;
+            return liferayPortletXmlStatus;
         }
 
-        domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE ) )
+        final IStatus displayStatus = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE ) )
         {
-            protected void createDefaultFile()
-            {
-            }
-
             protected IStatus doExecute( IDOMDocument document )
             {
                 return updatePortletId( document, newPortletName );
             }
-        };
+        }.execute();
 
-        status = domModelOperation.execute();
-
-        return status;
+        return displayStatus;
     }
-    
-    
+
     public String[] getAllPortletCategories()
     {
         final List<String> allPortletCategories = new ArrayList<String>();
@@ -306,11 +287,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
         {
-            protected void createDefaultFile()
-            {
-                // we are deleting nodes, no need to create new file
-            }
-
             protected IStatus doExecute( IDOMDocument document )
             {
                 return removeAllElements( document, portletTagName );
@@ -326,11 +302,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE ) )
         {
-            protected void createDefaultFile()
-            {
-                // we are deleting nodes, no need to create new file
-            }
-
             protected IStatus doExecute( IDOMDocument document )
             {
                 return removeAllElements( document, portletTagName );
@@ -346,11 +317,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE ) )
         {
-            protected void createDefaultFile()
-            {
-                // we are deleting nodes, no need to create new file
-            }
-
             protected IStatus doExecute( IDOMDocument document )
             {
                 return removeAllElements( document, categoryTagName );
@@ -499,6 +465,38 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return Status.OK_STATUS;
     }
 
+    public IStatus updatePortletId( IDOMDocument document, final String newPortletName )
+    {
+        final Element rootElement = document.getDocumentElement();
+
+        final NodeList portletNodes = rootElement.getElementsByTagName( "category" );
+
+        if( portletNodes.getLength() > 0 )
+        {
+            final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
+            final Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet" );
+            portletName.setAttribute( "id", newPortletName );
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    public IStatus updatePortletName( IDOMDocument document, final String newPortletName )
+    {
+        final Element rootElement = document.getDocumentElement();
+
+        final NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
+
+        if( portletNodes.getLength() > 0 )
+        {
+            final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
+            final Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet-name" );
+            portletName.replaceChild( document.createTextNode( newPortletName ), portletName.getFirstChild() );
+        }
+
+        return Status.OK_STATUS;
+    }
+
     public IStatus updatePortletXML( IDOMDocument document, IDataModel model )
     {
         // <portlet-app> element
@@ -596,39 +594,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         processor.formatNode( newPortletElement );
 
-        return Status.OK_STATUS;
-    }
-
-    
-    public IStatus updatePortletName( IDOMDocument document, final String newPortletName )
-    {
-
-        final Element rootElement = document.getDocumentElement();
-
-        final NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
-
-        if( portletNodes.getLength() > 0 )
-        {
-            final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
-            Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet-name" );
-            portletName.replaceChild( document.createTextNode( newPortletName ), portletName.getFirstChild() );
-        }
-        return Status.OK_STATUS;
-    }
-
-    public IStatus updatePortletId( IDOMDocument document, final String newPortletName )
-    {
-
-        final Element rootElement = document.getDocumentElement();
-
-        final NodeList portletNodes = rootElement.getElementsByTagName( "category" );
-
-        if( portletNodes.getLength() > 0 )
-        {
-            final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
-            Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet" );
-            portletName.setAttribute( "id", newPortletName );
-        }
         return Status.OK_STATUS;
     }
 }

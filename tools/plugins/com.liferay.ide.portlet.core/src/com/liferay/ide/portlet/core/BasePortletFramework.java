@@ -15,7 +15,8 @@
 
 package com.liferay.ide.portlet.core;
 
-import com.liferay.ide.core.util.CoreUtil;
+import static com.liferay.ide.core.util.CoreUtil.isNullOrEmpty;
+
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.AbstractPortletFramework;
 
@@ -31,13 +32,14 @@ public abstract class BasePortletFramework extends AbstractPortletFramework
 {
 
     @Override
-    public IStatus postProjectCreated( IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
+    public IStatus postProjectCreated(
+        IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
     {
-
-        if ( ! CoreUtil.isNullOrEmpty( portletName ) )
+        if( ! isNullOrEmpty( portletName ) )
         {
-            new PortletDescriptorHelper(project).configurePortletXml(portletName); 
+            new PortletDescriptorHelper( project ).configurePortletXml( portletName );
         }
+
         return Status.OK_STATUS;
     }
 

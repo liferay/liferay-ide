@@ -49,48 +49,11 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
         final IVirtualFile config = webappRoot.getFile( "WEB-INF/faces-config.xml" );
 
         assertEquals( true, config.exists() );
-        
+
         return jsfProject;
     }
-    
-    
-    @Test
-    public void testNewJSFPortletProjectPortletName() throws Exception
-    {
-        final String jsfSuite = "jsf-2.x";
-        final String suffix = "";
-        final String customPortletName = "test111";
-        
-        IProject jsfProject = createNewJSFPortletProjectCustomPortletName(jsfSuite,suffix,customPortletName);
-        
-        final IVirtualFile portletXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/portlet.xml" );
 
-        assertEquals( true, portletXml.exists() );
-
-        final String portletXmlContent = CoreUtil.readStreamToString( portletXml.getUnderlyingFile().getContents() );
-
-        assertEquals( true, portletXmlContent.contains( customPortletName ) );
-        
-        final IVirtualFile liferayPortletXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/liferay-portlet.xml" );
-
-        assertEquals( true, liferayPortletXml.exists() );
-
-        final String liferayPortletXmlContent = CoreUtil.readStreamToString( liferayPortletXml.getUnderlyingFile().getContents() );
-
-        assertEquals( true, liferayPortletXmlContent.contains( customPortletName ) );
-        
-        final IVirtualFile liferayDisplayXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/liferay-display.xml" );
-
-        assertEquals( true, liferayDisplayXml.exists() );
-
-        final String liferayDisplayXmlContent = CoreUtil.readStreamToString( liferayDisplayXml.getUnderlyingFile().getContents() );
-
-        assertEquals( true, liferayDisplayXmlContent.contains( customPortletName ) );
-    }
-    
-
-    protected IProject createNewMVCPortletProjectCustomPortletName(
-        String customPortletName ) throws Exception
+    protected IProject createNewMVCPortletProjectCustomPortletName( String customPortletName ) throws Exception
     {
         final String projectName = "test-mvc-sdk-project";
         final NewLiferayPluginProjectOp op = newProjectOp();
@@ -108,12 +71,14 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     }
 
     @Test
-    public void testNewMVCPortletProjectCustomPortletName() throws Exception
+    public void testNewJSFPortletProjectPortletName() throws Exception
     {
+        final String jsfSuite = "jsf-2.x";
+        final String suffix = "";
         final String customPortletName = "test111";
-        
-        IProject jsfProject = createNewMVCPortletProjectCustomPortletName(customPortletName);
-        
+
+        IProject jsfProject = createNewJSFPortletProjectCustomPortletName(jsfSuite,suffix,customPortletName);
+
         final IVirtualFile portletXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/portlet.xml" );
 
         assertEquals( true, portletXml.exists() );
@@ -121,7 +86,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
         final String portletXmlContent = CoreUtil.readStreamToString( portletXml.getUnderlyingFile().getContents() );
 
         assertEquals( true, portletXmlContent.contains( customPortletName ) );
-        
+
         final IVirtualFile liferayPortletXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/liferay-portlet.xml" );
 
         assertEquals( true, liferayPortletXml.exists() );
@@ -129,7 +94,39 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
         final String liferayPortletXmlContent = CoreUtil.readStreamToString( liferayPortletXml.getUnderlyingFile().getContents() );
 
         assertEquals( true, liferayPortletXmlContent.contains( customPortletName ) );
-        
+
+        final IVirtualFile liferayDisplayXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/liferay-display.xml" );
+
+        assertEquals( true, liferayDisplayXml.exists() );
+
+        final String liferayDisplayXmlContent = CoreUtil.readStreamToString( liferayDisplayXml.getUnderlyingFile().getContents() );
+
+        assertEquals( true, liferayDisplayXmlContent.contains( customPortletName ) );
+    }
+
+    @Test
+    public void testNewMVCPortletProjectCustomPortletName() throws Exception
+    {
+        final String customPortletName = "test111";
+
+        IProject jsfProject = createNewMVCPortletProjectCustomPortletName(customPortletName);
+
+        final IVirtualFile portletXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/portlet.xml" );
+
+        assertEquals( true, portletXml.exists() );
+
+        final String portletXmlContent = CoreUtil.readStreamToString( portletXml.getUnderlyingFile().getContents() );
+
+        assertEquals( true, portletXmlContent.contains( customPortletName ) );
+
+        final IVirtualFile liferayPortletXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/liferay-portlet.xml" );
+
+        assertEquals( true, liferayPortletXml.exists() );
+
+        final String liferayPortletXmlContent = CoreUtil.readStreamToString( liferayPortletXml.getUnderlyingFile().getContents() );
+
+        assertEquals( true, liferayPortletXmlContent.contains( customPortletName ) );
+
         final IVirtualFile liferayDisplayXml = CoreUtil.getDocroot( jsfProject ).getFile( "WEB-INF/liferay-display.xml" );
 
         assertEquals( true, liferayDisplayXml.exists() );
