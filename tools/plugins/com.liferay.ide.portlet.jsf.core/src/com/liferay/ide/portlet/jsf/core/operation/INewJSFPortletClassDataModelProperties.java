@@ -20,6 +20,7 @@ import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelPropertie
 /**
  * @author Greg Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public interface INewJSFPortletClassDataModelProperties extends INewPortletClassDataModelProperties
 {
@@ -30,6 +31,8 @@ public interface INewJSFPortletClassDataModelProperties extends INewPortletClass
         "INewPortletClassDataModelProperties.HELP_MODE",  //$NON-NLS-1$
     };
 
+    String ICE_FACES = "INewJSFPortletClassDataModelProperties.ICE_FACES"; //$NON-NLS-1$
+
     String JSF_EDIT_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.edit"; //$NON-NLS-1$
 
     String JSF_HELP_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.help"; //$NON-NLS-1$
@@ -38,5 +41,14 @@ public interface INewJSFPortletClassDataModelProperties extends INewPortletClass
 
     String JSF_VIEW_MODE_TEMPLATE = "com.liferay.ide.templates.portlet.jsf.view"; //$NON-NLS-1$
 
+    String LIFERAY_FACES_ALLOY = "INewJSFPortletClassDataModelProperties.LIFERAY_FACES_ALLOY"; //$NON-NLS-1$
+
+    String PRIME_FACES = "INewJSFPortletClassDataModelProperties.PRIME_FACES"; //$NON-NLS-1$
+
+    String RICH_FACES = "INewJSFPortletClassDataModelProperties.RICH_FACES"; //$NON-NLS-1$
+
     String QUALIFIED_JSF_PORTLET = "javax.portlet.faces.GenericFacesPortlet"; //$NON-NLS-1$
+
+    String STANDARD_JSF = "INewJSFPortletClassDataModelProperties.STANDARD_JSF"; //$NON-NLS-1$
+
 }

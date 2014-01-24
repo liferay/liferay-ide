@@ -35,6 +35,7 @@ import org.eclipse.osgi.util.NLS;
  * @author Greg Amerson
  * @author Cindy Li
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @SuppressWarnings( { "restriction", "rawtypes", "unchecked" } )
 public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataModelProvider
@@ -97,6 +98,26 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
         {
             return false;
         }
+        else if( ICE_FACES.equals( propertyName ) )
+        {
+            return false;
+        }
+        else if( LIFERAY_FACES_ALLOY.equals( propertyName ) )
+        {
+            return false;
+        }
+        else if( PRIME_FACES.equals( propertyName ) )
+        {
+            return false;
+        }
+        else if( RICH_FACES.equals( propertyName ) )
+        {
+            return false;
+        }
+        else if( STANDARD_JSF.equals( propertyName ) )
+        {
+            return true;
+        }
 
         return super.getDefaultProperty( propertyName );
     }
@@ -106,7 +127,12 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
     {
         Set propertyNames = super.getPropertyNames();
 
+        propertyNames.add( ICE_FACES );
         propertyNames.add( JSF_PORTLET_CLASS );
+        propertyNames.add( LIFERAY_FACES_ALLOY );
+        propertyNames.add( PRIME_FACES );
+        propertyNames.add( RICH_FACES );
+        propertyNames.add( STANDARD_JSF );
 
         return propertyNames;
     }

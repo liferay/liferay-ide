@@ -40,6 +40,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
@@ -233,6 +234,7 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
 
         createJSPsField( group );
         createResourceBundleField( group );
+        createViewTemplateGroup( group );
     }
 
     @Override
@@ -249,6 +251,11 @@ public class NewPortletOptionsWizardPage extends LiferayDataModelWizardPage
         createResourcesGroup( composite );
 
         return composite;
+    }
+
+    protected void createViewTemplateGroup( Composite composite )
+    {
+        // don't create view template section
     }
 
     @Override

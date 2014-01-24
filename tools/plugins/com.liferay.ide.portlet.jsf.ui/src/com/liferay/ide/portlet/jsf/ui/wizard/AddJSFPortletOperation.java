@@ -43,6 +43,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class AddJSFPortletOperation extends AddPortletOperation implements INewJSFPortletClassDataModelProperties
@@ -96,8 +97,37 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
     {
         IDataModel dm = getDataModel();
 
+        StringBuffer jsfNamespaces = new StringBuffer();
+
+        if( getDataModel().getBooleanProperty( ICE_FACES ) )
+        {
+            jsfNamespaces.append( "\txmlns:ace=\"http://www.icefaces.org/icefaces/components\"\n" );
+            jsfNamespaces.append( "\txmlns:icecore=\"http://www.icefaces.org/icefaces/core\"\n" );
+        }
+
+        if( getDataModel().getBooleanProperty( LIFERAY_FACES_ALLOY ) )
+        {
+            jsfNamespaces.append( "\txmlns:aui=\"http://liferay.com/faces/aui\"\n" );
+        }
+
+        if( getDataModel().getBooleanProperty( PRIME_FACES ) )
+        {
+            jsfNamespaces.append( "\txmlns:p=\"http://primefaces.org/ui\"\n" );
+        }
+
+        if( getDataModel().getBooleanProperty( RICH_FACES ) )
+        {
+            jsfNamespaces.append( "\txmlns:rich=\"http://richfaces.org/rich\"\n" );
+        }
+
+        if( getDataModel().getBooleanProperty( STANDARD_JSF ) )
+        {
+            jsfNamespaces.append( "" );
+        }
+
         TemplateContext context = new DocumentTemplateContext( portletContextType, new Document(), 0, 0 );
         context.setVariable( "portlet_name", getDataModel().getStringProperty( PORTLET_NAME ) ); //$NON-NLS-1$
+        context.setVariable( "jsf_namespaces", jsfNamespaces.toString() );
 
         if( dm.getBooleanProperty( VIEW_MODE ) )
         {
