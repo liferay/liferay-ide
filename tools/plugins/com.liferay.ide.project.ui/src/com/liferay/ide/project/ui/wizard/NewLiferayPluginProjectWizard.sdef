@@ -147,6 +147,10 @@
                                 <name>aux.text.ext</name>
                                 <value>Light-weight extension environment for Liferay as a plugin.</value>
                             </hint>
+                            <hint>
+                                <name>aux.text.web</name>
+                                <value>The web plugin for servlet or listener.</value>
+                            </hint>
                             <scale-vertically>false</scale-vertically>
                             <style>Sapphire.PropertyEditor.RadioButtonGroup.Vertical</style>
                         </property-editor>

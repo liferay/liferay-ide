@@ -22,6 +22,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 public class IPluginFacetConstants
 {
@@ -62,6 +63,13 @@ public class IPluginFacetConstants
     public static final String LAYOUTTPL_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
         "/WEB-INF/classes"; //$NON-NLS-1$
 
+    public static final String WEB_PLUGIN_SDK_CONFIG_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER;
+
+    public static final String WEB_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER +
+        "/WEB-INF/classes"; //$NON-NLS-1$
+
+    public static final String WEB_PLUGIN_SDK_SOURCE_FOLDER = ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/src"; //$NON-NLS-1$
+
     public static final String LIFERAY_DEFAULT_FACET_TEMPLATE = "liferay.portlet.template"; //$NON-NLS-1$
 
     public static final String LIFERAY_EXT_FACET_ID = "liferay.ext"; //$NON-NLS-1$
@@ -99,6 +107,15 @@ public class IPluginFacetConstants
 
     public static final IProjectFacet LIFERAY_PORTLET_PROJECT_FACET =
         ProjectFacetsManager.getProjectFacet( LIFERAY_PORTLET_FACET_ID );
+
+    public static final String LIFERAY_WEB_FACET_ID = "liferay.web"; //$NON-NLS-1$
+
+    public static final String LIFERAY_WEB_FACET_TEMPLATE_ID = "liferay.web.template"; //$NON-NLS-1$
+
+    public static final String LIFERAY_WEB_PRESET = "liferay.web.preset"; //$NON-NLS-1$
+
+    public static final IProjectFacet LIFERAY_WEB_PROJECT_FACET =
+        ProjectFacetsManager.getProjectFacet( LIFERAY_WEB_FACET_ID );
 
     public static final String LIFERAY_SDK_NAME_DEFAULT_VALUE = "__NO__SDK__"; //$NON-NLS-1$
 

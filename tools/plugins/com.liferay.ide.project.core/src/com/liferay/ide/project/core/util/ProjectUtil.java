@@ -90,6 +90,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class ProjectUtil
@@ -418,6 +419,10 @@ public class ProjectUtil
         {
             newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true );
         }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_WEB, true );
+        }
 
         IFacetedProjectWorkingCopy fpwc =
             (IFacetedProjectWorkingCopy) newProjectDataModel.
@@ -699,6 +704,10 @@ public class ProjectUtil
             {
                 suffix = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
             }
+            else if( projectLocation.endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                suffix = ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
+            }
 
             return suffix.replace( "-", StringPool.EMPTY ); //$NON-NLS-1$
         }
@@ -934,6 +943,12 @@ public class ProjectUtil
         {
             pluginType = "theme";
         }
+        else if( projName.endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) ||
+            directoryName.endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            pluginType = "web";
+        }
+
         return pluginType;
     }
 
@@ -1216,7 +1231,8 @@ public class ProjectUtil
                 ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
                 ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
                 ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
-                ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith( type ) );
+                ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX.endsWith( type ) ||
+                ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX.endsWith( type ) );
     }
 
     public static boolean isLiferaySDKProject( IFolder folder )
@@ -1316,6 +1332,11 @@ public class ProjectUtil
         return hasFacet( project, IPluginFacetConstants.LIFERAY_THEME_FACET_ID );
     }
 
+    public static boolean isWebProject( IProject project )
+    {
+        return hasFacet( project, IPluginFacetConstants.LIFERAY_WEB_FACET_ID );
+    }
+
     public static boolean isValidLiferayProjectDir( File dir )
     {
         String name = dir.getName();
@@ -1324,7 +1345,8 @@ public class ProjectUtil
             name.endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) ||
             name.endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) ||
             name.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) ||
-            name.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+            name.endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) ||
+            name.endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) )
         {
             return true;
         }
@@ -1360,6 +1382,10 @@ public class ProjectUtil
         else if( string.endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
         {
             regex = ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX + "$"; //$NON-NLS-1$
+        }
+        else if( string.endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            regex = ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX + "$"; //$NON-NLS-1$
         }
         else
         {

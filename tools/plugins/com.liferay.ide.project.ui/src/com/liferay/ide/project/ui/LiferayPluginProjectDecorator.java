@@ -31,6 +31,7 @@ import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 public class LiferayPluginProjectDecorator extends LabelProvider implements ILightweightLabelDecorator
 {
@@ -57,6 +58,10 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
     private static ImageDescriptor THEME;
 
     private static final String THEME_FACET = "liferay.theme"; //$NON-NLS-1$
+
+    private static ImageDescriptor WEB;
+
+    private static final String WEB_FACET = "liferay.web"; //$NON-NLS-1$
 
     private static ImageDescriptor getExt()
     {
@@ -131,6 +136,16 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
         return THEME;
     }
 
+    private static ImageDescriptor getWeb()
+    {
+        if( WEB == null )
+        {
+            WEB = getImageDescriptor( "liferay_ovr" ); //$NON-NLS-1$
+        }
+
+        return WEB;
+    }
+
     public void decorate( Object element, IDecoration decoration )
     {
         if( element instanceof IProject )
@@ -158,6 +173,10 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
             else if( hasFacet( project, THEME_FACET ) )
             {
                 overlay = getTheme();
+            }
+            else if( hasFacet( project, WEB_FACET ) )
+            {
+                overlay = getWeb();
             }
 
             if( overlay != null )

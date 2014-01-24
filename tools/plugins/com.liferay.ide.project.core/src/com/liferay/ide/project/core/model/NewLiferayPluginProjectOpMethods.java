@@ -49,6 +49,7 @@ import org.osgi.framework.Version;
  * @author Simon Jiang
  * @author Tao Tao
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 public class NewLiferayPluginProjectOpMethods
 {
@@ -182,6 +183,9 @@ public class NewLiferayPluginProjectOpMethods
                 break;
             case theme:
                 suffix = "-theme"; //$NON-NLS-1$
+                break;
+            case web:
+                suffix = "-web"; //$NON-NLS-1$
                 break;
         }
 

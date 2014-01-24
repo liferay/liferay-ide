@@ -1160,6 +1160,10 @@
                id="liferay.theme"
                version="6.0">
          </facet>
+         <facet
+               id="liferay.web"
+               version="6.0">
+         </facet>
       </supported>
    </extension>
    <extension
