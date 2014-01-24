@@ -16,7 +16,7 @@ package com.liferay.ide.portlet.jsf.core;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.AbstractPortletFramework;
+import com.liferay.ide.portlet.core.BasePortletFramework;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -45,9 +45,10 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 /**
  * @author Gregory Amerson
  * @author Tao Tao
+ * @author Simon Jiang
  */
 @SuppressWarnings("restriction")
-public class JSFPortletFramework extends AbstractPortletFramework
+public class JSFPortletFramework extends BasePortletFramework
     implements IJSFPortletFrameworkProperties, IJSFFacetInstallDataModelProperties
 {
     public static final String DEFAULT_FRAMEWORK_NAME = "jsf-2.x";
@@ -125,12 +126,14 @@ public class JSFPortletFramework extends AbstractPortletFramework
 
     //TODO add support for maven projects
     //TODO IDE-1334 check the web.xml for jsf frameworks.
-    public IStatus postProjectCreated( IProject project, String frameworkName, IProgressMonitor monitor )
+    @Override
+    public IStatus postProjectCreated( IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
     {
         /*
          * we need to copy the original web.xml from the project template because of bugs in the JSF facet installer
          * will overwrite our web.xml that comes with in the template
          */
+        super.postProjectCreated( project, frameworkName, portletName, monitor );
 
         SDK sdk = SDKUtil.getSDK( project );
 

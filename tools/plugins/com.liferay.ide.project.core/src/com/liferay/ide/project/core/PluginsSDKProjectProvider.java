@@ -51,6 +51,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 {
@@ -225,16 +226,16 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         throws CoreException
     {
         final IPortletFramework portletFramework = op.getPortletFramework().content();
+        final String portletName = op.getPortletName().content( false );
         final String frameworkName = getFrameworkName( op );
 
-        final IStatus status = portletFramework.postProjectCreated( newProject, frameworkName, monitor );
+        final IStatus status = portletFramework.postProjectCreated( newProject, frameworkName, portletName, monitor );
 
         if( ! status.isOK() )
         {
             throw new CoreException( status );
         }
 
-        // TODO IDE-1386
     }
 
     public ILiferayProject provide( Object type )

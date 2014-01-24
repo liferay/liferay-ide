@@ -261,7 +261,8 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
             if( op.getPluginType().content().equals( PluginType.portlet ) )
             {
-                retval = op.getPortletFramework().content().postProjectCreated( newProjects.get( 0 ), frameworkName, monitor );
+                final String portletName = op.getPortletName().content( false );
+                retval = op.getPortletFramework().content().postProjectCreated( newProjects.get( 0 ), frameworkName, portletName, monitor );
             }
         }
 

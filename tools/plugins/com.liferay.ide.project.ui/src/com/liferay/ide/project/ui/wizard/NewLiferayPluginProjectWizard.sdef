@@ -209,7 +209,6 @@
                         <property-editor>PortletName</property-editor>
                         <property-editor>DisplayName</property-editor>
                     </content>
-                    <visible-when>${ ProjectProvider == 'ant' }</visible-when>
                 </group>
             </content>
         </page>

@@ -13,38 +13,32 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.vaadin.core;
+package com.liferay.ide.portlet.core;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.portlet.core.BasePortletFramework;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
+import com.liferay.ide.project.core.AbstractPortletFramework;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
-import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 
 /**
- * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class VaadinPortletFramework extends BasePortletFramework
+public abstract class BasePortletFramework extends AbstractPortletFramework
 {
 
-    public VaadinPortletFramework()
+    @Override
+    public IStatus postProjectCreated( IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
     {
-        super();
-    }
 
-    public IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject )
-    {
-        // nothing todo for vaadin projects
-
+        if ( ! CoreUtil.isNullOrEmpty( portletName ) )
+        {
+            new PortletDescriptorHelper(project).configurePortletXml(portletName); 
+        }
         return Status.OK_STATUS;
-    }
-
-    public boolean supports( ILiferayProjectProvider provider )
-    {
-        return provider != null &&  "ant".equals( provider.getShortName() );
     }
 
 }

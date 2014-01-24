@@ -16,7 +16,6 @@
 package com.liferay.ide.portlet.core;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.AbstractPortletFramework;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,8 +24,9 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
-public class MVCPortletFramework extends AbstractPortletFramework
+public class MVCPortletFramework extends BasePortletFramework
 {
 
     public MVCPortletFramework()

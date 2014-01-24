@@ -28,6 +28,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public interface IPortletFramework
 {
@@ -75,7 +76,7 @@ public interface IPortletFramework
 
     boolean isRequiresAdvanced();
 
-    IStatus postProjectCreated( IProject project, String frameworkName, IProgressMonitor monitor );
+    IStatus postProjectCreated( IProject project, String frameworkName, String portletName, IProgressMonitor monitor );
 
     boolean supports( ILiferayProjectProvider provider );
 }

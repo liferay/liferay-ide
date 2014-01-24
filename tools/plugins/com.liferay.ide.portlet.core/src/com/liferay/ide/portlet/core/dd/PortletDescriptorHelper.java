@@ -41,6 +41,7 @@ import org.w3c.dom.NodeList;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Simon Jiang
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties
@@ -134,6 +135,66 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return status;
     }
 
+    public IStatus configurePortletXml( final String newPortletName )
+    {
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+
+        DOMModelOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+        {
+            protected void createDefaultFile()
+            {
+            }
+
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return updatePortletName( document, newPortletName );
+            }
+        };
+
+        IStatus status = domModelOperation.execute();
+
+        if( !status.isOK() )
+        {
+            return status;
+        }
+
+        domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE ) )
+        {
+            protected void createDefaultFile()
+            {
+            }
+
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return updatePortletName( document, newPortletName );
+            }
+        };
+
+        status = domModelOperation.execute();
+
+        if( !status.isOK() )
+        {
+            return status;
+        }
+
+        domModelOperation = new DOMModelEditOperation( getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE ) )
+        {
+            protected void createDefaultFile()
+            {
+            }
+
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return updatePortletId( document, newPortletName );
+            }
+        };
+
+        status = domModelOperation.execute();
+
+        return status;
+    }
+    
+    
     public String[] getAllPortletCategories()
     {
         final List<String> allPortletCategories = new ArrayList<String>();
@@ -538,4 +599,36 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return Status.OK_STATUS;
     }
 
+    
+    public IStatus updatePortletName( IDOMDocument document, final String newPortletName )
+    {
+
+        final Element rootElement = document.getDocumentElement();
+
+        final NodeList portletNodes = rootElement.getElementsByTagName( "portlet" );
+
+        if( portletNodes.getLength() > 0 )
+        {
+            final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
+            Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet-name" );
+            portletName.replaceChild( document.createTextNode( newPortletName ), portletName.getFirstChild() );
+        }
+        return Status.OK_STATUS;
+    }
+
+    public IStatus updatePortletId( IDOMDocument document, final String newPortletName )
+    {
+
+        final Element rootElement = document.getDocumentElement();
+
+        final NodeList portletNodes = rootElement.getElementsByTagName( "category" );
+
+        if( portletNodes.getLength() > 0 )
+        {
+            final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
+            Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet" );
+            portletName.setAttribute( "id", newPortletName );
+        }
+        return Status.OK_STATUS;
+    }
 }

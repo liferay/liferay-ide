@@ -25,6 +25,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class AbstractPortletFramework implements IPortletFramework
 {
@@ -95,7 +96,7 @@ public abstract class AbstractPortletFramework implements IPortletFramework
         return this.requiresAdvanced;
     }
 
-    public IStatus postProjectCreated( IProject project, String frameworkName, IProgressMonitor monitor )
+    public IStatus postProjectCreated( IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
     {
         // by default do nothing;
         return Status.OK_STATUS;
