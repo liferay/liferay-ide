@@ -60,19 +60,22 @@ public class NewJSFPortletOptionsWizardPage extends NewPortletOptionsWizardPage
         createJspsButton.setText( Msgs.createViewFiles );
         jspLabel.setText( Msgs.viewFolder );
 
-        createJspsButton.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
+        createJspsButton.addSelectionListener
+        (
+            new SelectionAdapter()
             {
-                standardJSFRadio.setEnabled( createJspsButton.getSelection() );
-                iceFacesRadio.setEnabled( createJspsButton.getSelection() );
-                liferayFacesAlloyRadio.setEnabled( createJspsButton.getSelection() );
-                primeFacesRadio.setEnabled( createJspsButton.getSelection() );
-                richFacesRadio.setEnabled( createJspsButton.getSelection() );
+                public void widgetSelected( SelectionEvent e )
+                {
+                    final boolean selection = createJspsButton.getSelection();
+
+                    standardJSFRadio.setEnabled( selection );
+                    iceFacesRadio.setEnabled( selection );
+                    liferayFacesAlloyRadio.setEnabled( selection );
+                    primeFacesRadio.setEnabled( selection );
+                    richFacesRadio.setEnabled( selection );
+                }
             }
-        } );
+        );
     }
 
     @Override
@@ -110,7 +113,7 @@ public class NewJSFPortletOptionsWizardPage extends NewPortletOptionsWizardPage
     @Override
     protected void createViewTemplateGroup( Composite composite )
     {
-        Group group = SWTUtil.createGroup( composite, Msgs.viewTemplate, 1 );
+        final Group group = SWTUtil.createGroup( composite, Msgs.viewTemplate, 1 );
 
         GridData gd = new GridData( GridData.FILL_HORIZONTAL );
         gd.horizontalSpan = 3;
