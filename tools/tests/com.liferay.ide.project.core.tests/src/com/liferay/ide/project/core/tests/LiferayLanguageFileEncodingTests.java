@@ -192,19 +192,26 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         // test the filename without underscore
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore ) );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_CorrectEncoding ) );
+
+        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding ) );
 
         // test the filename with underscore
         assertEquals( false, hasEncodingMarker( fileNameWithUnderscore_CorrectEncoding ) );
+
+        validateEncoding( fileNameWithUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithUnderscore_IncorrectEncoding ) );
 
         // test the filename with a wildcard "*"
         assertEquals( false, hasEncodingMarker( fileNameWithStar ) );
         assertEquals( false, hasEncodingMarker( fileNameWithStarCorrectEncoding ) );
+
+        validateEncoding( fileNameWithStarIncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithStarIncorrectEncoding ) );
 
         // test an incorrect encoding file referenced by liferay-hook.xml
         // remove the reference line, the marker will disappear.
+        validateEncoding( removeThisLineTest );
         assertEquals( true, hasEncodingMarker( removeThisLineTest ) );
 
         final IFile liferayHookXml = CoreUtil.getDescriptorFile( hookProject, ILiferayConstants.LIFERAY_HOOK_XML_FILE );
@@ -287,12 +294,17 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 
         // test filename with underscore
         assertEquals( false, hasEncodingMarker( fileNameWithUnderscore_CorrectEncoding ) );
+
+        validateEncoding( fileNameWithUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithUnderscore_IncorrectEncoding ) );
 
         // test filename without underscore
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore ) );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_CorrectEncoding ) );
+
+        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding ) );
+        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding1 );
         assertEquals( true, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding1 ) );
 
         // test supported locale
