@@ -139,6 +139,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         }
 
         model.save( file );
+        model.releaseFromEdit();
     }
 
     @Test
