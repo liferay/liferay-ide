@@ -360,7 +360,7 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
                 {
                     JSONObject jsonOutput = getJSONOutput( json );
 
-                    Boolean installed = Boolean.parseBoolean( jsonOutput.getString( "started" ) ); //$NON-NLS-1$
+                    boolean installed = jsonOutput.getBoolean( "started" );
 
                     if( installed )
                     {
