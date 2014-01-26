@@ -160,6 +160,7 @@
             </content>
             <description>Create a new project configured as a Liferay plugin</description>
             <scale-vertically>true</scale-vertically>
+            <margin-right>10</margin-right>
         </page>
         <description>Create a new project configured as a Liferay plugin</description>
         <page>
@@ -211,6 +212,7 @@
                     </content>
                 </group>
             </content>
+            <margin-right>10</margin-right>
         </page>
         <page>
             <id>LiferayThemePluginProjectWizardPage</id>
@@ -227,6 +229,7 @@
                     <property>ThemeFramework</property>
                 </property-editor>
             </content>
+            <margin-right>10</margin-right>
         </page>
         <image>NewLiferayPluginProjectWizard.png</image>
     </wizard>
