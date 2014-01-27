@@ -245,7 +245,7 @@ public class LayoutTplUtil
     {
         try
         {
-            ITemplateOperation op = TemplatesCore.getTemplateOperation( "layouttpl.tpl" ); //$NON-NLS-1$
+            ITemplateOperation op = TemplatesCore.getTemplateOperation( "com.liferay.ide.layouttpl.core.defaultLayoutTemplate" ); //$NON-NLS-1$
             String name = file.getFullPath().removeFileExtension().lastSegment();
             createLayoutTplContext( op, diagram, name );
 
