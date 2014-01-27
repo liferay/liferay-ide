@@ -46,6 +46,7 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -143,6 +144,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testHookProjectEncoding() throws Exception
     {
         final IProject hookProject = importProject( "hooks", "Hook-Encoding-Test-hook" );
@@ -243,6 +245,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testPortletProjectEncoding() throws Exception
     {
         final IProject portletProject = importProject( "portlets", "Portlet-Encoding-Test-portlet" );
