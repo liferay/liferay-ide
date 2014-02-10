@@ -45,7 +45,7 @@ public class FMThread extends FMDebugElement implements IThread
     private DebuggedEnvironment suspendedEnvironment;
 
     /**
-     * Cooresponds to the thread id of the originating freemarker engine thre
+     * Corresponds to the thread id of the originating freemarker engine thre
      */
     private long threadId = -1;
 

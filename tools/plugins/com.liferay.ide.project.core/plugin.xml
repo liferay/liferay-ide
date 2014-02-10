@@ -21,7 +21,7 @@
             Liferay Portlet
          </label>
          <description>
-            Portlet plugin for Liferay portal.  Version cooresponds to Portal version.
+            Portlet plugin for Liferay portal.  Version corresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
@@ -89,7 +89,7 @@
             Liferay Hook
          </label>
          <description>
-            Hook plugin for Liferay portal.  Version cooresponds to Portal version.
+            Hook plugin for Liferay portal.  Version corresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
@@ -157,7 +157,7 @@
             Liferay Ext
          </label>
          <description>
-            Ext plugin for Liferay portal.  Version cooresponds to Portal version.
+            Ext plugin for Liferay portal.  Version corresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">

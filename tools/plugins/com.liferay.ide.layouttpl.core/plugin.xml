@@ -9,7 +9,7 @@
             Liferay Layout Template
          </label>
          <description>
-            Layout template plugin for Liferay portal.  Facet version cooresponds to Liferay version.
+            Layout template plugin for Liferay portal.  Facet version corresponds to Liferay version.
          </description>
          <member
                category="liferay.plugins">

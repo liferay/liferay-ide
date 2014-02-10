@@ -10,7 +10,7 @@
             Liferay Theme
          </label>
          <description>
-            Theme plugin for Liferay portal.  Version cooresponds to Portal version.
+            Theme plugin for Liferay portal.  Version corresponds to Portal version.
          </description>
          <member
                category="liferay.plugins">
