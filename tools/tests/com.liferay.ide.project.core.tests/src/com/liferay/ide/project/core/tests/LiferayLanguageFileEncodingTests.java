@@ -144,7 +144,6 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
     }
 
     @Test
-    @Ignore
     public void testHookProjectEncoding() throws Exception
     {
         final IProject hookProject = importProject( "hooks", "Hook-Encoding-Test-hook" );
@@ -245,7 +244,6 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
     }
 
     @Test
-    @Ignore
     public void testPortletProjectEncoding() throws Exception
     {
         final IProject portletProject = importProject( "portlets", "Portlet-Encoding-Test-portlet" );

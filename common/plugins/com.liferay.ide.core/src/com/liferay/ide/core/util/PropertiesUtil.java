@@ -19,9 +19,12 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -33,18 +36,14 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * @author Kuo Zhang
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
 public class PropertiesUtil
 {
 
@@ -57,6 +56,12 @@ public class PropertiesUtil
     public final static String ELEMENT_SUPPORTED_LOCALE = "supported-locale";
 
     public final static String PROPERTIES_FILE_SUFFIX = ".properties";
+
+    private final static SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+
+    private static LanguageFileInfo tmpLanguageFileInfo = null;
+
+    private static ResourceNodeInfo tmpResourceNodeInfo = null;
 
     public static void encodeLanguagePropertiesFilesToDefault( IResource resource, final IProgressMonitor monitor )
     {
@@ -116,53 +121,79 @@ public class PropertiesUtil
         return retval.toArray( new IFile[0] );
     }
 
-    private static LanguageFileInfo getLanguageFileInfo( IFile liferayHookXml )
+    private static synchronized LanguageFileInfo getLanguageFileInfo( IFile liferayHookXml )
     {
-        final LanguageFileInfo retval = new LanguageFileInfo();
-
-        try
+        if( tmpLanguageFileInfo == null || ! tmpLanguageFileInfo.getLiferayHookXml().equals( liferayHookXml ) ||
+            tmpLanguageFileInfo.getModificationStamp() != liferayHookXml.getModificationStamp() )
         {
-            final IStructuredModel model = StructuredModelManager.getModelManager().getModelForRead( liferayHookXml );
+            final LanguageFileInfo retval = new LanguageFileInfo( liferayHookXml );
 
-            if( model instanceof IDOMModel )
+            try
             {
-                final IDOMDocument document = ( (IDOMModel) model ).getDocument();
-
-                final NodeList languagePropertiesList = document.getElementsByTagName( ELEMENT_LANGUAGE_PROPERTIES );
-
-                if( languagePropertiesList.getLength() > 0 )
+                DefaultHandler handler = new DefaultHandler()
                 {
-                    for( int i = 0; i < languagePropertiesList.getLength(); i++ )
+
+                    boolean isLangPropElem = false;
+
+                    public void startElement( String uri, String localName, String qName, Attributes attributes )
+                        throws SAXException
                     {
-                        final Node languageProperties = languagePropertiesList.item( i );
-
-                        final String languagePropertiesValue = NodeUtil.getTextContent( languageProperties );
-                        //If the content of <language-properties> doesn't end with ".properties", we assume the filename is invalid and do nothing. 
-                        if( languagePropertiesValue.endsWith( PROPERTIES_FILE_SUFFIX ) )
+                        if( qName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
                         {
-                            final String[] languagePropertiesPatterns =
-                                generateLanguagePropertiesPatterns( languagePropertiesValue, ELEMENT_LANGUAGE_PROPERTIES );
-
-                            for( String pattern : languagePropertiesPatterns )
-                            {
-                                if( pattern != null )
-                                {
-                                    retval.addLanguagePropertiesPattern( pattern );
-                                }
-                            }
+                            isLangPropElem = true;
                         }
                     }
-                }
+
+                    public void characters( char ch[], int start, int length ) throws SAXException
+                    {
+                        if( isLangPropElem )
+                        {
+                            String languagePropertiesValue = new String( ch, start, length );
+
+                            if( languagePropertiesValue.endsWith( PROPERTIES_FILE_SUFFIX ) )
+                            {
+                                final String[] languagePropertiesPatterns =
+                                    generateLanguagePropertiesPatterns(
+                                        languagePropertiesValue, ELEMENT_LANGUAGE_PROPERTIES );
+
+                                for( String pattern : languagePropertiesPatterns )
+                                {
+                                    if( pattern != null )
+                                    {
+                                        retval.addLanguagePropertiesPattern( pattern );
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+
+                    public void endElement( String uri, String localName, String qName ) throws SAXException
+                    {
+                        if( qName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
+                        {
+                            isLangPropElem = false;
+                        }
+                    }
+                };
+
+                InputStream contents = liferayHookXml.getContents();
+
+                saxParserFactory.newSAXParser().parse( contents, handler );
+
+                contents.close();
+            }
+            catch( Exception e )
+            {
             }
 
-            model.releaseFromRead();
+            tmpLanguageFileInfo = retval;
+            return retval;
         }
-        catch( Exception e )
+        else
         {
-            // ignore errors this is best effort
+            return tmpLanguageFileInfo;
         }
-
-        return retval;
     }
 
     // Search all language properties files referenced by liferay-hook.xml
@@ -255,92 +286,114 @@ public class PropertiesUtil
         return retval.toArray( new IFile[0] );
     }
 
-    private static ResourceNodeInfo getResourceNodeInfo( IFile portletXml )
+    private static synchronized ResourceNodeInfo getResourceNodeInfo( IFile portletXml )
     {
-        final ResourceNodeInfo retval = new ResourceNodeInfo();
-
-        try
+        if( tmpResourceNodeInfo == null || ! tmpResourceNodeInfo.getPortletXml().equals( portletXml ) ||
+            tmpResourceNodeInfo.getModificationStamp() != portletXml.getModificationStamp() )
         {
-            final IStructuredModel model = StructuredModelManager.getModelManager().getModelForRead( portletXml );
+            final ResourceNodeInfo retval = new ResourceNodeInfo( portletXml );
 
-            if( model instanceof IDOMModel )
+            try
             {
-                final IDOMDocument document = ( (IDOMModel) model ).getDocument();
-
-                final NodeList portlets = document.getElementsByTagName( ELEMENT_PORTLET );
-                final NodeList allResourceBundles = document.getElementsByTagName( ELEMENT_RESOURCE_BUNDLE );
-                final NodeList allSupportedLocales = document.getElementsByTagName( ELEMENT_SUPPORTED_LOCALE );
-
-                if( portlets != null && portlets.getLength() > 0 )
+                DefaultHandler handler = new DefaultHandler()
                 {
-                    for( int i = 0; i < portlets.getLength(); i++ )
+
+                    boolean isResourceBundleElem = false;
+                    boolean isSupportedLocaleElem = false;
+
+                    String resourceBundleValue = null;
+                    List<String> supportedLocaleValues = new ArrayList<String>();
+
+                    public void startElement( String uri, String localName, String qName, Attributes attributes )
+                        throws SAXException
                     {
-                        Node portlet = portlets.item( i );
-                        Node resourceBundle = null;
-                        List<Node> supportedLocales = new ArrayList<Node>();
-
-                        if( allResourceBundles.getLength() > 0 )
+                        if( qName.equals( ELEMENT_RESOURCE_BUNDLE ) )
                         {
-                            for( int j = 0; j < allResourceBundles.getLength(); j++ )
-                            {
-                                if( allResourceBundles.item( j ).getParentNode().equals( portlet ) )
-                                {
-                                    resourceBundle = allResourceBundles.item( j );
-                                }
-                            }
+                            isResourceBundleElem = true;
+                        }
 
-                            // Supported locale depends on resource bundle, if a portlet.xml does't have a resource-bundle element
-                            // then supported locales make no sense.
-                            if( resourceBundle != null )
-                            {
-                                final String resourceBundleValue = NodeUtil.getTextContent( resourceBundle );
+                        if( qName.equals( ELEMENT_SUPPORTED_LOCALE ) )
+                        {
+                            isSupportedLocaleElem = true;
+                        }
+                    }
 
-                                final String[] resourceBundlesPatterns = generateLanguagePropertiesPatterns( resourceBundleValue , ELEMENT_RESOURCE_BUNDLE );
+                    public void characters( char ch[], int start, int length ) throws SAXException
+                    {
+                        if( isSupportedLocaleElem )
+                        {
+                            supportedLocaleValues.add( new String( ch, start, length ) );
+                        }
+
+                        if( isResourceBundleElem )
+                        {
+                            resourceBundleValue = new String( ch, start, length );
+                        }
+                    }
+
+                    public void endElement( String uri, String localName, String qName ) throws SAXException
+                    {
+                        if( qName.equals( ELEMENT_RESOURCE_BUNDLE ) )
+                        {
+                            isResourceBundleElem = false;
+                        }
+
+                        if( qName.equals( ELEMENT_SUPPORTED_LOCALE ) )
+                        {
+                            isSupportedLocaleElem = false;
+                        }
+
+                        if( qName.equals( ELEMENT_PORTLET ) )
+                        {
+                            if( !CoreUtil.isNullOrEmpty( resourceBundleValue ) )
+                            {
+                                final String[] resourceBundlesPatterns =
+                                    generateLanguagePropertiesPatterns( resourceBundleValue, ELEMENT_RESOURCE_BUNDLE );
 
                                 for( String pattern : resourceBundlesPatterns )
                                 {
-                                    if( pattern != null )
+                                    if( !CoreUtil.isNullOrEmpty( pattern ) )
                                     {
                                         retval.addResourceBundlePattern( pattern );
                                     }
                                 }
 
-                                final String resourceBundleValBase = resourceBundlesPatterns[0];
-
-                                if( allSupportedLocales.getLength() > 0 )
+                                if( supportedLocaleValues.size() > 0 )
                                 {
-                                    for( int k = 0; k < allSupportedLocales.getLength(); k++ )
-                                    {
-                                        if( allSupportedLocales.item( k ).getParentNode().equals( portlet ) )
-                                        {
-                                            supportedLocales.add( allSupportedLocales.item( k ) );
-                                        }
-                                    }
-                                }
+                                    final String resourceBundleValueBase = resourceBundlesPatterns[0];
 
-                                if( supportedLocales.size() > 0 )
-                                {
-                                    for( Node supportedLocale : supportedLocales )
+                                    for( String supportedLocaleValue : supportedLocaleValues )
                                     {
-                                        String supportedLocaleVal = NodeUtil.getTextContent( supportedLocale );
-
-                                        retval.addSupportedLocalePattern( resourceBundleValBase + "_" + supportedLocaleVal );
+                                        retval.addSupportedLocalePattern( resourceBundleValueBase + "_" +
+                                            supportedLocaleValue );
                                     }
                                 }
                             }
+
+                            resourceBundleValue = null;
+                            supportedLocaleValues.clear();
                         }
                     }
-                }
+                };
 
-                model.releaseFromRead();
+                InputStream contents = portletXml.getContents();
+
+                saxParserFactory.newSAXParser().parse( contents , handler );
+
+                contents.close();
+
             }
-        }
-        catch( Exception e )
-        {
-            // no error this is best effort
-        }
+            catch( Exception e )
+            {
+            }
 
-        return retval;
+            tmpResourceNodeInfo = retval;
+            return retval;
+        }
+        else
+        {
+            return tmpResourceNodeInfo;
+        }
     }
 
     /*
@@ -522,6 +575,25 @@ public class PropertiesUtil
 
     private static class LanguageFileInfo
     {
+        private IFile liferayHookXml;
+        private long modificationStamp;
+
+        public LanguageFileInfo( IFile file )
+        {
+            liferayHookXml = file;
+            modificationStamp = liferayHookXml.getModificationStamp();
+        }
+
+        public IFile getLiferayHookXml()
+        {
+            return liferayHookXml;
+        }
+
+        public long getModificationStamp()
+        {
+            return modificationStamp;
+        }
+
         private final List<String> vals = new ArrayList<String>();
 
         public void addLanguagePropertiesPattern( String languagePropertiesVal )
@@ -582,6 +654,25 @@ public class PropertiesUtil
 
     private static class ResourceNodeInfo
     {
+        private IFile portletXml;
+        private long modificationStamp;
+
+        public ResourceNodeInfo( IFile file )
+        {
+            portletXml = file;
+            modificationStamp = portletXml.getModificationStamp(); 
+        }
+
+        public IFile getPortletXml()
+        {
+            return portletXml;
+        }
+
+        public long getModificationStamp()
+        {
+            return modificationStamp;
+        }
+
         private final List<String> resourceBundlesPatterns = new ArrayList<String>();
         private final List<String> supportedLocalePatterns = new ArrayList<String>();
 

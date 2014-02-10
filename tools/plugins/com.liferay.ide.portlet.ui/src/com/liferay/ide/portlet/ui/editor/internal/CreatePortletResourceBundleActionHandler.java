@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.DisposeEvent;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Event;
@@ -113,7 +114,7 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
                 if( portlet.getResourceBundle().validation().severity() == Severity.ERROR )
                 {
                     isEnabled = false;
-                }                
+                }
             }
 
             if( portlet.getSupportedLocales() != null && !portlet.getSupportedLocales().isEmpty() )
@@ -144,6 +145,8 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
     @Override
     protected Object run( Presentation context )
     {
+        context.part().adapt( org.eclipse.ui.texteditor.ITextEditor.class ).doSave( new NullProgressMonitor() );
+
         final List<IFile> missingRBFiles = new ArrayList<IFile>();
         final Portlet portlet = (Portlet) getModelElement();
         final IProject project = portlet.adapt( IProject.class );
