@@ -22,6 +22,8 @@ import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 
+import java.lang.reflect.Field;
+
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
 import org.eclipse.ant.internal.ui.views.AntView;
@@ -37,6 +39,8 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.FormComponentPart;
+import org.eclipse.sapphire.ui.forms.WizardPart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.swt.widgets.Display;
@@ -45,6 +49,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
@@ -68,27 +73,22 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
     private void addToWorkingSets( IProject newProject ) throws Exception
     {
-//        if (newProject != null )
-//        {
-//            final Field partField = SapphireWizard.class.getDeclaredField( "part" );
-//            partField.setAccessible( true );
-//
-//            final WizardPart wizardPart = (WizardPart) partField.get( this );
-//
-//            for( final FormComponentPart formPart : wizardPart.getPages().get( 0 ).children().all() )
-//            {
-//                if( formPart instanceof WorkingSetCustomPart )
-//                {
-//                    final WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart) formPart;
-//                    final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
-//
-//                    if( ! CoreUtil.isNullOrEmpty( workingSets ) )
-//                    {
-//                        PlatformUI.getWorkbench().getWorkingSetManager().addToWorkingSets(newProject, workingSets);
-//                    }
-//                }
-//            }
-//        }
+        if (newProject != null )
+        {
+            for( final FormComponentPart formPart : part().getPages().get( 0 ).children().all() )
+            {
+                if( formPart instanceof WorkingSetCustomPart )
+                {
+                    final WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart) formPart;
+                    final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
+
+                    if( ! CoreUtil.isNullOrEmpty( workingSets ) )
+                    {
+                        PlatformUI.getWorkbench().getWorkingSetManager().addToWorkingSets(newProject, workingSets);
+                    }
+                }
+            }
+        }
     }
 
     @Override

@@ -154,11 +154,9 @@
                     <label>Select the plugin type</label>
                     <scale-vertically>false</scale-vertically>
                 </group>
-                <!-- 
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
-                -->
             </content>
             <description>Create a new project configured as a Liferay plugin</description>
             <scale-vertically>true</scale-vertically>
