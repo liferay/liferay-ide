@@ -46,7 +46,6 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -79,7 +78,9 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 
     private boolean hasEncodingMarker( IFile file ) throws Exception
     {
-        IMarker[] markers = file.findMarkers( LiferayLanguagePropertiesValidator.LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_ZERO );
+        final IMarker[] markers =
+            file.findMarkers(
+                LiferayLanguagePropertiesValidator.LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_ZERO );
 
         return markers.length > 0;
     }
@@ -125,8 +126,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
     {
         final IStructuredModel model = StructuredModelManager.getModelManager().getModelForEdit( file );
         final IDOMDocument document = ( (IDOMModel) model ).getDocument();
-
-        NodeList elements = document.getElementsByTagName( nodeName );
+        final NodeList elements = document.getElementsByTagName( nodeName );
 
         for( int i = 0; i < elements.getLength(); i++ )
         {

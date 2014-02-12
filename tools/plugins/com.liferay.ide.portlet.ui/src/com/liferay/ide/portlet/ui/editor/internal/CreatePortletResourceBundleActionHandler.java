@@ -45,6 +45,7 @@ import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
  * @author Kamesh Sampath
@@ -145,12 +146,12 @@ public class CreatePortletResourceBundleActionHandler extends AbstractResourceBu
     @Override
     protected Object run( Presentation context )
     {
-        context.part().adapt( org.eclipse.ui.texteditor.ITextEditor.class ).doSave( new NullProgressMonitor() );
+        context.part().adapt( ITextEditor.class ).doSave( new NullProgressMonitor() );
 
         final List<IFile> missingRBFiles = new ArrayList<IFile>();
         final Portlet portlet = (Portlet) getModelElement();
         final IProject project = portlet.adapt( IProject.class );
-        Value<Path> resourceBundle = portlet.getResourceBundle();
+        final Value<Path> resourceBundle = portlet.getResourceBundle();
         final String text = resourceBundle.text();
 
         String defaultRBFileName =

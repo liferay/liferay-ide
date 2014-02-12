@@ -104,7 +104,7 @@ public class PropertiesUtil
         final IFile[] resourceFiles =
             getLanguagePropertiesFromPortletXml( CoreUtil.getDescriptorFile( proj, ILiferayConstants.PORTLET_XML_FILE ) );
 
-        final IFile[] languagenFiles =
+        final IFile[] languageFiles =
             getLanguagePropertiesFromLiferayHookXml( CoreUtil.getDescriptorFile(
                 proj, ILiferayConstants.LIFERAY_HOOK_XML_FILE ) );
 
@@ -113,9 +113,9 @@ public class PropertiesUtil
             retval.addAll( Arrays.asList( resourceFiles ) );
         }
 
-        if( languagenFiles.length > 0 )
+        if( languageFiles.length > 0 )
         {
-            retval.addAll( Arrays.asList( languagenFiles ) );
+            retval.addAll( Arrays.asList( languageFiles ) );
         }
 
         return retval.toArray( new IFile[0] );
@@ -130,9 +130,8 @@ public class PropertiesUtil
 
             try
             {
-                DefaultHandler handler = new DefaultHandler()
+                final DefaultHandler handler = new DefaultHandler()
                 {
-
                     boolean isLangPropElem = false;
 
                     public void startElement( String uri, String localName, String qName, Attributes attributes )
@@ -148,7 +147,7 @@ public class PropertiesUtil
                     {
                         if( isLangPropElem )
                         {
-                            String languagePropertiesValue = new String( ch, start, length );
+                            final String languagePropertiesValue = new String( ch, start, length );
 
                             if( languagePropertiesValue.endsWith( PROPERTIES_FILE_SUFFIX ) )
                             {
@@ -177,7 +176,7 @@ public class PropertiesUtil
                     }
                 };
 
-                InputStream contents = liferayHookXml.getContents();
+                final InputStream contents = liferayHookXml.getContents();
 
                 saxParserFactory.newSAXParser().parse( contents, handler );
 
@@ -188,12 +187,9 @@ public class PropertiesUtil
             }
 
             tmpLanguageFileInfo = retval;
-            return retval;
         }
-        else
-        {
-            return tmpLanguageFileInfo;
-        }
+
+        return tmpLanguageFileInfo;
     }
 
     // Search all language properties files referenced by liferay-hook.xml
@@ -223,7 +219,7 @@ public class PropertiesUtil
             {
                 for( final IFolder srcFolder : srcFolders )
                 {
-                    IFile[] languagePropertiesFiles = visitPropertiesFiles( srcFolder, languagePropertiesVal );
+                    final IFile[] languagePropertiesFiles = visitPropertiesFiles( srcFolder, languagePropertiesVal );
 
                     if( languagePropertiesFiles != null && languagePropertiesFiles.length > 0 )
                     {
@@ -295,14 +291,13 @@ public class PropertiesUtil
 
             try
             {
-                DefaultHandler handler = new DefaultHandler()
+                final DefaultHandler handler = new DefaultHandler()
                 {
-
                     boolean isResourceBundleElem = false;
                     boolean isSupportedLocaleElem = false;
 
                     String resourceBundleValue = null;
-                    List<String> supportedLocaleValues = new ArrayList<String>();
+                    final List<String> supportedLocaleValues = new ArrayList<String>();
 
                     public void startElement( String uri, String localName, String qName, Attributes attributes )
                         throws SAXException
@@ -376,24 +371,20 @@ public class PropertiesUtil
                     }
                 };
 
-                InputStream contents = portletXml.getContents();
+                final InputStream contents = portletXml.getContents();
 
                 saxParserFactory.newSAXParser().parse( contents , handler );
 
                 contents.close();
-
             }
             catch( Exception e )
             {
             }
 
             tmpResourceNodeInfo = retval;
-            return retval;
         }
-        else
-        {
-            return tmpResourceNodeInfo;
-        }
+
+        return tmpResourceNodeInfo;
     }
 
     /*
@@ -660,7 +651,7 @@ public class PropertiesUtil
         public ResourceNodeInfo( IFile file )
         {
             portletXml = file;
-            modificationStamp = portletXml.getModificationStamp(); 
+            modificationStamp = portletXml.getModificationStamp();
         }
 
         public IFile getPortletXml()
