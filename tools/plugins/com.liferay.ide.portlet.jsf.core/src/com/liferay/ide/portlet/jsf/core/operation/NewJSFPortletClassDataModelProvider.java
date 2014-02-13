@@ -181,6 +181,13 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
             }
         }
 
+        //IDE-1412
+        //Because JSF Portlet wizard doesn't need to to check MVCPortlet super class, just return OK.
+        if( SUPERCLASS.equals( propertyName ) )
+        {
+            return Status.OK_STATUS;
+        }
+
         return super.validate( propertyName );
     }
 
