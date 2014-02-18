@@ -493,6 +493,10 @@
                     <property-editor>LocalPart</property-editor>
                     <property-editor>
                         <property>EventValueType</property>
+                        <action-handler-filter>
+                            <impl>NoCreateActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
                     </property-editor>
                     <property-editor>
                         <property>Aliases</property>
