@@ -32,6 +32,7 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class PluginClasspathContainerInitializer extends ClasspathContainerInitializer
@@ -203,6 +204,10 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         else if( ThemeClasspathContainer.SEGMENT_PATH.equals( finalSegment ) )
         {
             classpathContainer = new ThemeClasspathContainer( containerPath, project, portalDir, javadocURL, sourceURL );
+        }
+        else if( WebClasspathContainer.SEGMENT_PATH.equals( finalSegment ) )
+        {
+            classpathContainer = new WebClasspathContainer( containerPath, project, portalDir, javadocURL, sourceURL );
         }
         else
         {

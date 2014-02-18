@@ -52,6 +52,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 public class SDKPluginFacetUtil
 {
@@ -62,7 +63,8 @@ public class SDKPluginFacetUtil
         IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET,
         IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET,
         IPluginFacetConstants.LIFERAY_LAYOUTTPL_PROJECT_FACET,
-        IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET
+        IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET,
+        IPluginFacetConstants.LIFERAY_WEB_PROJECT_FACET
     };
 
     private static void addDefaultWebXml( IFacetedProjectWorkingCopy fpjwc, IDataModel dm ) throws CoreException
@@ -181,6 +183,19 @@ public class SDKPluginFacetUtil
             {
                 removeSrcFolders( dm, javaConfig );
             }
+        }
+        else if( presetId.contains( "web" ) ) //$NON-NLS-1$
+        {
+            javaConfig.setSourceFolder( new Path( IPluginFacetConstants.WEB_PLUGIN_SDK_SOURCE_FOLDER ) );
+            javaConfig.setDefaultOutputFolder( new Path( IPluginFacetConstants.WEB_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER ) );
+
+            dm.setStringProperty(
+                IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME,
+                IPluginFacetConstants.WEB_PLUGIN_SDK_SOURCE_FOLDER );
+
+            dm.setStringProperty(
+                IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME,
+                IPluginFacetConstants.WEB_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER );
         }
     }
 
@@ -358,6 +373,15 @@ public class SDKPluginFacetUtil
                     IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER );
                 ProjectUtil.setGenerateDD( dm, false );
             }
+            else if( preset.getId().contains( "web" ) ) //$NON-NLS-1$
+            {
+                dm.setStringProperty(
+                    IWebFacetInstallDataModelProperties.CONFIG_FOLDER,
+                    IPluginFacetConstants.WEB_PLUGIN_SDK_CONFIG_FOLDER );
+                dm.setStringProperty(
+                    IWebFacetInstallDataModelProperties.SOURCE_FOLDER,
+                    IPluginFacetConstants.WEB_PLUGIN_SDK_SOURCE_FOLDER );
+            }
         }
     }
 
@@ -384,6 +408,10 @@ public class SDKPluginFacetUtil
         else if( "theme".equals( pluginType ) )
         {
             preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_THEME_PRESET );
+        }
+        else if( "web".equals( pluginType ) )
+        {
+            preset = ProjectFacetsManager.getPreset( IPluginFacetConstants.LIFERAY_WEB_PRESET );
         }
 
         return preset;
@@ -412,6 +440,10 @@ public class SDKPluginFacetUtil
         else if( "theme".equals( pluginType ) )
         {
             template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_THEME_FACET_TEMPLATE_ID );
+        }
+        else if( "web".equals( pluginType ) )
+        {
+            template = ProjectFacetsManager.getTemplate( IPluginFacetConstants.LIFERAY_WEB_FACET_TEMPLATE_ID );
         }
 
         return template;

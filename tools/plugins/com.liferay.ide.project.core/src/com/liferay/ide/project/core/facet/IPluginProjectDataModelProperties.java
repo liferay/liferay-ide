@@ -21,6 +21,7 @@ import org.eclipse.wst.common.frameworks.internal.operations.IProjectCreationPro
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public interface IPluginProjectDataModelProperties
@@ -70,6 +71,8 @@ public interface IPluginProjectDataModelProperties
 
     public static final String PLUGIN_TYPE_THEME = "IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME"; //$NON-NLS-1$
 
+    public static final String PLUGIN_TYPE_WEB = "IPluginProjectDataModelProperties.PLUGIN_TYPE_WEB"; //$NON-NLS-1$
+
     public static final String PORTLET_FRAMEWORK_ID = "IPluginProjectDataModelProperties.PORTLET_FRAMEWORK_ID"; //$NON-NLS-1$
 
     public static final String PORTLET_NAME = "IPluginProjectDataModelProperties.PORTLET_NAME"; //$NON-NLS-1$
@@ -94,4 +97,6 @@ public interface IPluginProjectDataModelProperties
     public static final String UPDATE_BUILD_XML = "IPluginProjectDataModelProperties.UPDATE_BUILD_XML";  //$NON-NLS-1$
 
     public static final String LIFERAY_USE_WORKSPACE_LOCATION = "IPluginProjectDataModelProperties.LIFERAY_USE_WORKSPACE_LOCATION"; //$NON-NLS-1$
+
+    public static final String WEB_NAME = "IPluginProjectDataModelProperties.WEB_NAME"; //$NON-NLS-1$
 }

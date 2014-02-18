@@ -28,6 +28,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
 {
@@ -80,6 +81,9 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
                             break;
                         case theme:
                             newLocationBase = sdkLocation.append( "themes" ); //$NON-NLS-1$
+                            break;
+                        case web:
+                            newLocationBase = sdkLocation.append( "webs" ); //$NON-NLS-1$
                             break;
                     }
 

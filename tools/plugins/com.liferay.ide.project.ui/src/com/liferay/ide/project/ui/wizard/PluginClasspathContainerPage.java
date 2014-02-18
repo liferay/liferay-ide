@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Label;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class PluginClasspathContainerPage extends NewElementWizardPage
     implements IClasspathContainerPage, IClasspathContainerPageExtension
@@ -56,7 +57,7 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
         final Label label = new Label( composite, SWT.NONE );
         label.setText( Msgs.liferayPluginTypeLabel );
 
-        final String[] types = new String[] { "portlet", "hook", "ext", "theme" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+        final String[] types = new String[] { "portlet", "hook", "ext", "theme", "web" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
         this.typeCombo = new Combo( composite, SWT.READ_ONLY );
         this.typeCombo.setItems( types );
@@ -84,6 +85,10 @@ public class PluginClasspathContainerPage extends NewElementWizardPage
             else if( ProjectUtil.isThemeProject( this.ownerProject ) )
             {
                 index = 3;
+            }
+            else if( ProjectUtil.isWebProject( this.ownerProject ) )
+            {
+                index = 4;
             }
             else
             {

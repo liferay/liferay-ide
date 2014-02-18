@@ -50,6 +50,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class SDK
@@ -497,6 +498,46 @@ public class SDK
             return tempPath;
         }
         catch( CoreException e )
+        {
+            SDKCorePlugin.logError( e );
+        }
+
+        return null;
+    }
+
+    public IPath createNewWebProject(
+        String webName, String webDisplayName, Map<String, String> appServerProperties, boolean separateJRE,
+        String workingDir, String baseDir, IProgressMonitor monitor )
+    {
+        SDKHelper antHelper = new SDKHelper( this, monitor );
+
+        try
+        {
+            persistAppServerProperties( appServerProperties );
+
+            Map<String, String> properties = new HashMap<String, String>();
+            properties.put( ISDKConstants.PROPERTY_WEB_NAME, webName );
+            properties.put( ISDKConstants.PROPERTY_WEB_DISPLAY_NAME, webDisplayName );
+
+            // create a space for new web template to get built
+            IPath newWebPath =
+                SDKCorePlugin.getDefault().getStateLocation().append( ISDKConstants.TARGET_CREATE ).append(
+                    String.valueOf( System.currentTimeMillis() ) );
+
+            properties.put( ISDKConstants.PROPERTY_WEB_PARENT_DIR, newWebPath.toOSString() );
+
+            final IPath buildLocation = getLocation().append( ISDKConstants.WEB_PLUGIN_ANT_BUILD );
+
+            if( baseDir != null )
+            {
+                properties.put( "plugin.type.dir", baseDir ); //$NON-NLS-1$
+            }
+
+            antHelper.runTarget( buildLocation, ISDKConstants.TARGET_CREATE, properties, separateJRE, workingDir );
+
+            return newWebPath;
+        }
+        catch( Exception e )
         {
             SDKCorePlugin.logError( e );
         }

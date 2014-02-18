@@ -53,6 +53,7 @@ import org.junit.Test;
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 {
@@ -505,6 +506,22 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
             webappRoot.getFile( "WEB-INF/src/testvaadinprojectsdk/TestVaadinProjectSdkApplication.java" );
 
         assertEquals( true, application.exists() );
+    }
+
+    @Test
+    @Ignore
+    public void testNewWebAntProject() throws Exception
+    {
+        final String projectName = "test-web-project-sdk";
+        final NewLiferayPluginProjectOp op = newProjectOp();
+        op.setProjectName( projectName );
+        op.setPluginType( PluginType.web );
+
+        final IProject webProject = createAntProject( op );
+
+        final IVirtualFolder webappRoot = CoreUtil.getDocroot( webProject );
+
+        assertNotNull( webappRoot );
     }
 
     @Test

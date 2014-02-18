@@ -22,11 +22,13 @@ import static com.liferay.ide.sdk.core.ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
 import static com.liferay.ide.sdk.core.ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
 import static com.liferay.ide.sdk.core.ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
 import static com.liferay.ide.sdk.core.ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+import static com.liferay.ide.sdk.core.ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
 
 import java.io.File;
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Terry Jia
  */
 public class BinaryProjectRecord
 {
@@ -42,6 +44,7 @@ public class BinaryProjectRecord
     boolean isPortlet;
     boolean isLayoutTpl;
     boolean isExt;
+    boolean isWeb;
 
     public BinaryProjectRecord( File binaryFile )
     {
@@ -90,11 +93,19 @@ public class BinaryProjectRecord
                 index = binaryName.indexOf( EXT_PLUGIN_PROJECT_SUFFIX );
                 isExt = index != -1 ? true : false;
             }
+            else if( binaryName.contains( WEB_PLUGIN_PROJECT_SUFFIX ) )
+            {
+                index = binaryName.indexOf( WEB_PLUGIN_PROJECT_SUFFIX );
+                isWeb = index != -1 ? true : false;
+            }
+
             if( index != -1 )
             {
                 displayName = binaryName.substring( 0, index );
             }
+
             index = binaryName.lastIndexOf( "-" ); //$NON-NLS-1$
+
             if( index != -1 )
             {
                 liferayVersion = binaryName.substring( index + 1, binaryName.lastIndexOf( "." ) ); //$NON-NLS-1$
@@ -228,6 +239,14 @@ public class BinaryProjectRecord
         return isLayoutTpl;
     }
 
+    /**
+     * @return the isWeb
+     */
+    public boolean isWeb()
+    {
+        return isWeb;
+    }
+
     public String getLiferayPluginName()
     {
         if( isHook )
@@ -250,6 +269,11 @@ public class BinaryProjectRecord
         {
             return getDisplayName() + EXT_PLUGIN_PROJECT_SUFFIX;
         }
+        else if( isWeb )
+        {
+            return getDisplayName() + WEB_PLUGIN_PROJECT_SUFFIX;
+        }
+
         return null;
     }
 
