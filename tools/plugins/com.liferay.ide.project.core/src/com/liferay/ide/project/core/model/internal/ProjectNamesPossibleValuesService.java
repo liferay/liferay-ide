@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Gregory Amerson
@@ -13,7 +13,7 @@ public class ProjectNamesPossibleValuesService extends PossibleValuesService
 {
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         for ( IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects() )
         {

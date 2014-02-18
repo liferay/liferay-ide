@@ -28,9 +28,9 @@ import java.util.TreeSet;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.ElementDisposeEvent;
-import org.eclipse.sapphire.services.PossibleValuesService;
 
 /**
  * @author Kamesh Sampath
@@ -50,7 +50,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( final Set<String> values )
+    protected void compute( final Set<String> values )
     {
         if( ! this.initialized )
         {
@@ -61,9 +61,9 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
     }
 
     @Override
-    protected void init()
+    protected void initPossibleValuesService()
     {
-        super.init();
+        super.initPossibleValuesService();
 
         final PortletApp portletApp = context( PortletApp.class );
 
@@ -72,13 +72,13 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
-                refresh();
+                refreshValues();
             }
         };
 
         portletApp.attach( listener, PortletApp.PROP_CUSTOM_WINDOW_STATES.name() );
 
-        refresh();
+        refreshValues();
 
         portletApp.attach
         (
@@ -101,7 +101,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
         return false;
     }
 
-    private void refresh()
+    private void refreshValues()
     {
         final PortletApp portletApp = context( PortletApp.class );
 
@@ -133,7 +133,7 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
 
             if( this.initialized || this.readPriorToInit )
             {
-                broadcast();
+                refresh();
             }
         }
     }

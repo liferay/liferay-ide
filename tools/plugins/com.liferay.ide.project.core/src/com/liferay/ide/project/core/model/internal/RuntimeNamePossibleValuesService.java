@@ -19,8 +19,9 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Set;
 
-import org.eclipse.sapphire.modeling.Status.Severity;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -32,15 +33,15 @@ import org.eclipse.wst.server.core.ServerCore;
 public class RuntimeNamePossibleValuesService extends PossibleValuesService implements IRuntimeLifecycleListener
 {
     @Override
-    protected void init()
+    protected void initPossibleValuesService()
     {
-        super.init();
+        super.initPossibleValuesService();
 
         ServerCore.addRuntimeLifecycleListener( this );
     }
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         IRuntime[] runtimes = ServerCore.getRuntimes();
 
@@ -57,20 +58,20 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
     }
 
     @Override
-    public Severity getInvalidValueSeverity( String invalidValue )
-    {
-        if( RuntimeNameDefaultValueService.NONE.equals( invalidValue ) ) //$NON-NLS-1$
-        {
-            return Severity.OK;
-        }
-
-        return super.getInvalidValueSeverity( invalidValue );
-    }
-
-    @Override
     public boolean ordered()
     {
         return true;
+    }
+
+    @Override
+    public Status problem( Value<?> value )
+    {
+        if( RuntimeNameDefaultValueService.NONE.equals( value.content() ) )
+        {
+            return Status.createOkStatus();
+        }
+
+        return super.problem( value );
     }
 
     public void runtimeAdded( IRuntime runtime )

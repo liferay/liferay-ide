@@ -23,8 +23,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
+import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Simon Jiang
@@ -33,7 +32,7 @@ public class ProjectProviderDefaultValueService extends DefaultValueService
 {
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         String retval = "ant";
 
@@ -53,7 +52,7 @@ public class ProjectProviderDefaultValueService extends DefaultValueService
             }
         }
 
-        return new DefaultValueServiceData( retval );
+        return retval;
     }
 
 }

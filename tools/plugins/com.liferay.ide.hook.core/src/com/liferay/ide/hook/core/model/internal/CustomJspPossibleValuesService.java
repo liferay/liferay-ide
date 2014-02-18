@@ -11,8 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.hook.core.model.internal;
@@ -33,9 +31,10 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.Status.Severity;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Gregory Amerson
@@ -58,7 +57,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 
 
     @Override
-    protected void fillPossibleValues( final Set<String> values )
+    protected void compute( final Set<String> values )
     {
         if( possibleValues == null )
         {
@@ -120,21 +119,21 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
     }
 
     @Override
-    public Severity getInvalidValueSeverity( String invalidValue )
+    public Status problem( Value<?> value )
     {
-        IFolder customJspFolder = HookUtil.getCustomJspFolder( hook(), project() );
+        final IFolder customJspFolder = HookUtil.getCustomJspFolder( hook(), project() );
 
         if( customJspFolder != null )
         {
-            IFile invalidFile = customJspFolder.getFile( invalidValue );
+            final IFile invalidFile = customJspFolder.getFile( value.text() );
 
             if( invalidFile.exists() )
             {
-                return Severity.OK;
+                return Status.createOkStatus();
             }
         }
 
-        return Severity.ERROR;
+        return Status.createErrorStatus( "invalid value" );
     }
 
     private Hook hook()

@@ -9,7 +9,7 @@ import com.liferay.ide.project.core.model.Profile;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.junit.Ignore;
 import org.junit.Test;
 

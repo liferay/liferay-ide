@@ -22,7 +22,7 @@ import com.liferay.ide.portlet.core.util.PortletUtil;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Kamesh Sampath
@@ -37,7 +37,7 @@ public class LocalePossibleValueService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         for( Locale locale : locales )
         {

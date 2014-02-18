@@ -20,8 +20,9 @@ import com.liferay.ide.sdk.core.SDKManager;
 
 import java.util.Set;
 
-import org.eclipse.sapphire.modeling.Status.Severity;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 
 
 /**
@@ -31,7 +32,7 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
 {
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         SDK[] validSDKs = SDKManager.getInstance().getSDKs();
 
@@ -53,20 +54,9 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
     }
 
     @Override
-    public Severity getInvalidValueSeverity( String invalidValue )
+    protected void initPossibleValuesService()
     {
-        if( PluginsSDKNameDefaultValueService.NONE.equals( invalidValue ) ) //$NON-NLS-1$
-        {
-            return Severity.OK;
-        }
-
-        return super.getInvalidValueSeverity( invalidValue );
-    }
-
-    @Override
-    protected void init()
-    {
-        super.init();
+        super.initPossibleValuesService();
 
         SDKManager.getInstance().addSDKListener( this );
     }
@@ -77,19 +67,30 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
         return true;
     }
 
+    @Override
+    public Status problem( Value<?> value )
+    {
+        if( PluginsSDKNameDefaultValueService.NONE.equals( value.text() ) )
+        {
+            return Status.createOkStatus();
+        }
+
+        return super.problem( value );
+    }
+
     public void sdksAdded( SDK[] sdk )
     {
-        broadcast();
+        refresh();
     }
 
     public void sdksChanged( SDK[] sdk )
     {
-        broadcast();
+        refresh();
     }
 
     public void sdksRemoved( SDK[] sdk )
     {
-        broadcast();
+        refresh();
     }
 
 }

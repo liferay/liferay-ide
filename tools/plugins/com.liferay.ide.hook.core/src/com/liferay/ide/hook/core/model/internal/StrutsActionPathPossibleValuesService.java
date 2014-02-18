@@ -30,7 +30,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -45,7 +45,7 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
     private TreeSet<String> possibleValues;
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         if( this.portalDir != null && this.portalDir.toFile().exists() )
         {
@@ -96,9 +96,9 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
     }
 
     @Override
-    protected void init()
+    protected void initPossibleValuesService()
     {
-        super.init();
+        super.initPossibleValuesService();
 
         final ILiferayProject liferayProject = LiferayCore.create( project() );
 

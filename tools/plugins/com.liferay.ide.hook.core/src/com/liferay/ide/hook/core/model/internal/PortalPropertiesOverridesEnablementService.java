@@ -21,11 +21,10 @@ import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.PortalPropertiesFile;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.sapphire.EnablementService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
-import org.eclipse.sapphire.services.EnablementService;
-import org.eclipse.sapphire.services.EnablementServiceData;
 
 /**
  * @author Gregory Amerson
@@ -48,7 +47,7 @@ public class PortalPropertiesOverridesEnablementService extends EnablementServic
     }
 
     @Override
-    protected EnablementServiceData compute()
+    protected Boolean compute()
     {
         boolean retval = false;
 
@@ -59,7 +58,7 @@ public class PortalPropertiesOverridesEnablementService extends EnablementServic
             retval = true;
         }
 
-        return new EnablementServiceData( retval );
+        return retval;
     }
 
 }

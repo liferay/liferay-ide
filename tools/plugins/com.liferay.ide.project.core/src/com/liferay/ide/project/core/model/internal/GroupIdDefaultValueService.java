@@ -18,12 +18,11 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
 
 /**
  * @author Kuo Zhang
@@ -32,7 +31,7 @@ public class GroupIdDefaultValueService extends DefaultValueService
 {
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         String groupId = null;
 
@@ -53,7 +52,7 @@ public class GroupIdDefaultValueService extends DefaultValueService
             groupId = "com.example.plugins";
         }
 
-        return new DefaultValueServiceData( groupId );
+        return groupId;
     }
 
     protected void initDefaultValueService()

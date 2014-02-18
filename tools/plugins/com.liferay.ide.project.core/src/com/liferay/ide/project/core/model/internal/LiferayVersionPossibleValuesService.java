@@ -26,8 +26,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.sapphire.modeling.Status.Severity;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Gregory Amerson
@@ -41,16 +41,16 @@ public class LiferayVersionPossibleValuesService extends PossibleValuesService
     private String artifactId;
 
     @Override
-    protected void init()
+    protected void initPossibleValuesService()
     {
-        super.init();
+        super.initPossibleValuesService();
 
         this.groupId = this.param( "groupId" );
         this.artifactId = this.param( "artifactId" );
     }
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         if( this.versions != null )
         {
@@ -101,9 +101,9 @@ public class LiferayVersionPossibleValuesService extends PossibleValuesService
     }
 
     @Override
-    public Severity getInvalidValueSeverity( String invalidValue )
+    public org.eclipse.sapphire.modeling.Status problem( Value<?> value )
     {
-        return Severity.OK;
+        return org.eclipse.sapphire.modeling.Status.createOkStatus();
     }
 
 }

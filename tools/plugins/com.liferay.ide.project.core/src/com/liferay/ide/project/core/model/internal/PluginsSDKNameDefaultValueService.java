@@ -18,8 +18,7 @@ import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
+import org.eclipse.sapphire.DefaultValueService;
 
 
 /**
@@ -47,7 +46,7 @@ public class PluginsSDKNameDefaultValueService extends DefaultValueService imple
     }
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         String value = null;
 
@@ -62,7 +61,7 @@ public class PluginsSDKNameDefaultValueService extends DefaultValueService imple
             value = NONE;
         }
 
-        return new DefaultValueServiceData( value );
+        return value;
     }
 
     public void sdksAdded( SDK[] sdk )

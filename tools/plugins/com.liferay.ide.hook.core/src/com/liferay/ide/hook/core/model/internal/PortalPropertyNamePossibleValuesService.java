@@ -28,8 +28,9 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.modeling.Status.Severity;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Gregory Amerson
@@ -39,10 +40,10 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
 {
 
     private String[] hookProperties;
-    private String[] wildCardHookProperties;
+//    private String[] wildCardHookProperties;
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         if( this.hookProperties != null )
         {
@@ -68,8 +69,14 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
     }
 
     @Override
-    public Severity getInvalidValueSeverity( String invalidValue )
+    public Status problem( Value<?> value )
     {
+        return Status.createOkStatus();
+    }
+
+//    @Override
+//    public Severity getInvalidValueSeverity( String invalidValue )
+//    {
 //        if( wildCardHookProperties == null )
 //        {
 //            wildCardHookProperties = getWildCardHookProperties();
@@ -87,8 +94,8 @@ public class PortalPropertyNamePossibleValuesService extends PossibleValuesServi
 //        }
 //
 //        return super.getInvalidValueSeverity( invalidValue );
-        return Severity.OK;
-    }
+//        return Severity.OK;
+//    }
 
     public String[] getWildCardHookProperties()
     {

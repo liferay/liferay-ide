@@ -20,7 +20,7 @@ import com.liferay.ide.service.core.model.ServiceBuilder6xx;
 import java.util.Set;
 
 import org.eclipse.sapphire.Version;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Cindy Li
@@ -30,7 +30,7 @@ public class TypePossibleValuesService extends PossibleValuesService
     private static final String[] DEFAULT_TYPES = { "String", "long", "boolean", "int", "double", "Date", "Collection" }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         for( int i = 0; i < DEFAULT_TYPES.length; i++ )
         {

@@ -22,9 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.modeling.Status.Severity;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 
 
 /**
@@ -46,22 +47,16 @@ public class ProfileIdPossibleValuesService extends PossibleValuesService
     }
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         values.addAll( possibleValues );
     }
 
 
     @Override
-    public Severity getInvalidValueSeverity( String invalidValue )
+    protected void initPossibleValuesService()
     {
-        return Severity.OK;
-    }
-
-    @Override
-    protected void init()
-    {
-        super.init();
+        super.initPossibleValuesService();
 
         final FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>()
         {
@@ -84,5 +79,12 @@ public class ProfileIdPossibleValuesService extends PossibleValuesService
     {
         return context( NewLiferayPluginProjectOp.class );
     }
+
+    @Override
+    public Status problem( Value<?> value )
+    {
+        return Status.createOkStatus();
+    }
+
 
 }

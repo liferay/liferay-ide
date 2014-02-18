@@ -17,10 +17,9 @@ package com.liferay.ide.project.core.model.internal;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
 
 
 /**
@@ -48,9 +47,9 @@ public class DisplayNameDefaultValueService extends DefaultValueService
     }
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
-        return new DefaultValueServiceData( ProjectUtil.convertToDisplayName( op().getProjectName().content() ) );
+        return ProjectUtil.convertToDisplayName( op().getProjectName().content() );
     }
 
     private NewLiferayPluginProjectOp op()

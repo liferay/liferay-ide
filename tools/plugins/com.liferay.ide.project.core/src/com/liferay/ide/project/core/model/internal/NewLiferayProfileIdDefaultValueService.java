@@ -23,11 +23,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
 
 
 /**
@@ -56,7 +55,7 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
     }
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         final NewLiferayProfile newLiferayProfile = newLiferayProfile();
 
@@ -69,7 +68,7 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
 
         if( data.equals( "<None>" ) )
         {
-            return new DefaultValueServiceData( StringPool.EMPTY );
+            return StringPool.EMPTY;
         }
 
         data = data.replaceAll( StringPool.SPACE, StringPool.DASH );
@@ -89,7 +88,7 @@ public class NewLiferayProfileIdDefaultValueService extends DefaultValueService
             }
         }
 
-        return new DefaultValueServiceData( data );
+        return data;
     }
 
     private String nextSuffix( String val )

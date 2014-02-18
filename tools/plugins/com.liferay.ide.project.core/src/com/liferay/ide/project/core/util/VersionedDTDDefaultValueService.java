@@ -19,10 +19,9 @@ import com.liferay.ide.core.util.StringPool;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
 import org.w3c.dom.Document;
 
 
@@ -39,7 +38,7 @@ public class VersionedDTDDefaultValueService extends DefaultValueService
     }
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         String defaultVersion = null;
 
@@ -61,7 +60,7 @@ public class VersionedDTDDefaultValueService extends DefaultValueService
             defaultVersion = "6.0.0"; // default should be 6.0.0 //$NON-NLS-1$
         }
 
-        return new DefaultValueServiceData( defaultVersion.replaceAll( StringPool.UNDERSCORE, "." ) ); //$NON-NLS-1$
+        return defaultVersion.replaceAll( StringPool.UNDERSCORE, "." );
     }
 
 }

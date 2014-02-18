@@ -25,7 +25,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Gregory Amerson
@@ -36,7 +36,7 @@ public class PortalFilterNamesPossibleValuesService extends PossibleValuesServic
     private String[] servletFilterNames;
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         if( this.servletFilterNames == null )
         {

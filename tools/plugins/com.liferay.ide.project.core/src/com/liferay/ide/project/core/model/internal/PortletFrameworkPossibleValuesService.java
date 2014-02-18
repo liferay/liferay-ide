@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 
 /**
@@ -29,13 +29,12 @@ import org.eclipse.sapphire.services.PossibleValuesService;
  */
 public class PortletFrameworkPossibleValuesService extends PossibleValuesService
 {
-
     private List<String> possibleValues;
 
     @Override
-    protected void init()
+    protected void initPossibleValuesService()
     {
-        super.init();
+        super.initPossibleValuesService();
 
         possibleValues = new ArrayList<String>();
 
@@ -49,7 +48,7 @@ public class PortletFrameworkPossibleValuesService extends PossibleValuesService
     }
 
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         values.addAll( this.possibleValues );
     }

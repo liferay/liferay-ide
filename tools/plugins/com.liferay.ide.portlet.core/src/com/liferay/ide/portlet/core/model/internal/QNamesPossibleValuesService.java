@@ -29,7 +29,7 @@ import javax.xml.namespace.QName;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Kamesh Sampath
@@ -42,7 +42,7 @@ public class QNamesPossibleValuesService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         Element Element = context( Element.class );
         // values.add( param( "0" ) );

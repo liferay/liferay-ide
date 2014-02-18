@@ -20,7 +20,7 @@ import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.Text;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.util.MiscUtil;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.services.ValueImageService;
 import org.eclipse.sapphire.services.ValueLabelService;
 import org.eclipse.sapphire.ui.forms.PropertyEditorDef;

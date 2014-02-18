@@ -26,16 +26,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.PropertyDef;
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
-import org.eclipse.sapphire.services.PossibleValuesService;
 
 
 /**
@@ -86,7 +85,7 @@ public class LiferayVersionDefaultValueService extends DefaultValueService
     }
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         String data = null;
 
@@ -150,7 +149,7 @@ public class LiferayVersionDefaultValueService extends DefaultValueService
             }
         }
 
-        return new DefaultValueServiceData( data );
+        return data;
     }
 
     private String checkForSnapshots( final String[] values )

@@ -18,12 +18,11 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
 
 /**
  * @author Tao Tao
@@ -31,7 +30,7 @@ import org.eclipse.sapphire.services.DefaultValueServiceData;
 public class ArtifactVersionDefaultValueService extends DefaultValueService
 {
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         String data = null;
 
@@ -52,7 +51,7 @@ public class ArtifactVersionDefaultValueService extends DefaultValueService
             data = "1.0.0-SNAPSHOT";
         }
 
-        return new DefaultValueServiceData( data );
+        return data;
     }
 
     protected void initDefaultValueService()

@@ -23,7 +23,7 @@ import com.liferay.ide.portlet.core.model.PublicRenderParameter;
 import java.util.Set;
 
 import org.eclipse.sapphire.ElementList;
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Kamesh Sampath
@@ -36,7 +36,7 @@ public class PublicRenderParameterValuesService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         final PortletApp portletApp = context( PortletApp.class );
 

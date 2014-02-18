@@ -20,8 +20,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.sapphire.services.DefaultValueService;
-import org.eclipse.sapphire.services.DefaultValueServiceData;
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -52,7 +51,7 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
     }
 
     @Override
-    protected DefaultValueServiceData compute()
+    protected String compute()
     {
         String value = null;
 
@@ -62,7 +61,7 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
         final Set<String> values = new HashSet<String>();
 
-        service.fillPossibleValues( values );
+        service.compute( values );
 
         if( values.size() > 0 )
         {
@@ -77,7 +76,7 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
             value = NONE; //$NON-NLS-1$
         }
 
-        return new DefaultValueServiceData( value );
+        return value;
     }
 
     public void runtimeAdded( IRuntime runtime )

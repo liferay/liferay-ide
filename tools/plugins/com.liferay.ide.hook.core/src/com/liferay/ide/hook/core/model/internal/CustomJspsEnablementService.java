@@ -20,13 +20,12 @@ import com.liferay.ide.hook.core.model.Hook;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.EnablementService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
-import org.eclipse.sapphire.services.EnablementService;
-import org.eclipse.sapphire.services.EnablementServiceData;
 
 
 /**
@@ -50,7 +49,7 @@ public class CustomJspsEnablementService extends EnablementService
     }
 
     @Override
-    protected EnablementServiceData compute()
+    protected Boolean compute()
     {
         boolean enablement = true;
 
@@ -74,7 +73,7 @@ public class CustomJspsEnablementService extends EnablementService
             }
         }
 
-        return new EnablementServiceData( enablement );
+        return enablement;
     }
 
     private Hook hook()

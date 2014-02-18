@@ -23,7 +23,7 @@ import com.liferay.ide.portlet.core.model.PortletApp;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.sapphire.services.PossibleValuesService;
+import org.eclipse.sapphire.PossibleValuesService;
 
 /**
  * @author Kamesh Sampath
@@ -50,7 +50,7 @@ public class PortletModePossibleValueService extends PossibleValuesService
      * @see org.eclipse.sapphire.modeling.PossibleValuesService#fillPossibleValues(java.util.SortedSet)
      */
     @Override
-    protected void fillPossibleValues( Set<String> values )
+    protected void compute( Set<String> values )
     {
         PortletApp portletApp = context( PortletApp.class );
 

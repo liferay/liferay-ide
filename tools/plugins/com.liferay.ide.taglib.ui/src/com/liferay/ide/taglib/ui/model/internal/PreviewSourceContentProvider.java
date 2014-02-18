@@ -19,10 +19,9 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.taglib.ui.model.Attribute;
 import com.liferay.ide.taglib.ui.model.Tag;
 
+import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Property;
-import org.eclipse.sapphire.services.DerivedValueService;
-import org.eclipse.sapphire.services.DerivedValueServiceData;
 
 /**
  * @author Gregory Amerson
@@ -31,7 +30,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
 {
 
     @Override
-    protected DerivedValueServiceData compute()
+    protected String compute()
     {
         boolean preview = "Preview".equals( context( Property.class ).name() ); //$NON-NLS-1$
 
@@ -94,7 +93,7 @@ public class PreviewSourceContentProvider extends DerivedValueService
             buffer.append( ">" ); //$NON-NLS-1$
         }
 
-        return new DerivedValueServiceData( buffer.toString() );
+        return buffer.toString();
     }
 
     protected void appendAttr( Attribute attr, StringBuffer buffer, boolean preview )
