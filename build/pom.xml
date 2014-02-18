@@ -29,31 +29,21 @@
                 <module>../common</module>
                 <module>../tools</module>
                 <module>../maven</module>
-                <module>../velocity</module>
-                <module>../adt</module>
+                <!--<module>../velocity</module>-->
+                <module>../mobile</module>
                 <module>releng</module>
             </modules>
         </profile>
 
         <profile>
-            <id>velocity</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <modules>
-                <module>../velocity</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>adt</id>
+            <id>mobile</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <modules>
                 <module>../common</module>
-                <module>../adt</module>
-                <module>releng/com.liferay.ide.adt-repository</module>
+                <module>../mobile</module>
+                <module>releng/com.liferay.mobile.sdk-repository</module>
             </modules>
         </profile>
     </profiles>

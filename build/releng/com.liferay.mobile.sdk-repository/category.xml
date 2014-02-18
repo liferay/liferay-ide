@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+    <feature id="com.liferay.mobile.sdk" version="0.0.0">
+        <category name="liferay" />
+    </feature>
+
+    <category-def name="liferay" label="Liferay">
+        <description>
+            Liferay Portal is an complete enterprise web platform for building intuitive, engaging web experiences
+        </description>
+    </category-def>
+</site>

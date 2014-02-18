@@ -8,7 +8,7 @@ def updatesiteDir = new File( basedir, "target/updatesite" )
 def toolsTargetRepository = new File( basedir, "../com.liferay.ide.tools-repository/target/" )
 def toolsRepository = new File( toolsTargetRepository, "repository" )
 def mavenRepository = new File( basedir, "../com.liferay.ide.maven-repository/target/repository" )
-//def adtRepository = new File( basedir, "../com.liferay.ide.adt-repository/target/repository" )
+def mobileRepository = new File( basedir, "../com.liferay.mobile.sdk-repository/target/repository" )
 //def velocityRepository = new File( basedir, "../com.liferay.ide.velocity-repository/target/repository" )
 
 updatesiteDir.delete()
@@ -43,13 +43,13 @@ ant.sequential
         }
     }
 
-    //copy( todir:"${updatesiteDir}/adt" )
-    //{
-    //    fileset( dir:adtRepository )
-    //    {
-    //        include( name:"**/*" )
-    //    }
-    //}
+    copy( todir:"${updatesiteDir}/mobile" )
+    {
+        fileset( dir:mobileRepository )
+        {
+            include( name:"**/*" )
+        }
+    }
 
     //copy( todir:"${updatesiteDir}/velocity" )
     //{

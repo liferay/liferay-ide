@@ -66,13 +66,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.ui.snippets"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.liferay.ide.freemarker"
          download-size="0"
          install-size="0"

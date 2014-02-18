@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <wizard>
+        <id>wizard</id>
+        <page>
+            <id>MobileSDKLibrariesWizardPage</id>
+            <description>Select targeted Liferay Portal server instance</description>
+            <image>MobileSDKLibrariesWizard.png</image>
+            <content>
+                <label>Specify the details of the Liferay Portal server instance to use when building the client library configuration.</label>
+                <property-editor>
+                    <label>URL</label>
+                    <property>URL</property>
+                </property-editor>
+                <property-editor>
+                    <label>OmniUsername</label>
+                    <property>OmniUsername</property>
+                </property-editor>
+                <property-editor>
+                    <label>OmniPassword</label>
+                    <property>OmniPassword</property>
+                </property-editor>
+                <property-editor>Summary</property-editor>
+                <property-editor>Status</property-editor>
+                <separator></separator>
+                <label>Select from previously entered server instances to populate details above.</label>
+                <property-editor>
+                    <show-label>false</show-label>
+                    <property>PreviousServerInstances</property>
+                    <child-property>
+                        <label>URL</label>
+                        <property>URL</property>
+                    </child-property>
+                    <child-property>Summary</child-property>
+                    <listener>com.liferay.ide.adt.ui.wizard.ServerInstancesListener</listener>
+                    <span>true</span>
+                </property-editor>
+            </content>
+            <width>450</width>
+            <height>400</height>
+            <label>Add/Update Liferay Mobile Client Libraries</label>
+            <initial-focus>Foo</initial-focus>
+        </page>
+        <element-type>com.liferay.ide.adt.core.model.MobileSDKLibrariesOp</element-type>
+        <page>
+            <label>Add/Update Liferay Mobile Client Libraries</label>
+            <id>MobileSDKLibrariesWizardPage2</id>
+            <image>MobileSDKLibrariesWizard.png</image>
+            <description>Select component APIs to include as dependencies</description>
+            <visible-when>${Status == 'OK'}</visible-when>
+            <content>
+                <label>Available APIs for server ${Url}</label>
+                <custom>
+                    <scale-vertically>true</scale-vertically>
+                    <class>com.liferay.ide.adt.ui.wizard.ComponentAPIsCustomPart</class>
+                </custom>
+                <label>Select the Java package to be used for the generated code.</label>
+                <property-editor>
+                    <label>Java Package</label>
+                    <property>Package</property>
+                </property-editor>
+                <property-editor>AddSampleCode</property-editor>
+            </content>
+        </page>
+        <label>Liferay Mobile SDK</label>
+    </wizard>
+    <import>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>com.liferay.ide.adt.ui</package>
+    </import>
+</definition>
