@@ -184,7 +184,6 @@ The [b]deprecated[/b] value specifies whether the entity's services are deprecat
                                     <content>
                                         <action-link>
                                             <label>Add a Column</label>
-                                            <show-image></show-image>
                                             <action-id>Sapphire.ADD</action-id>
                                         </action-link>
                                         <separator></separator>
@@ -196,6 +195,22 @@ The [b]deprecated[/b] value specifies whether the entity's services are deprecat
                                             <child-property>type</child-property>
                                             <child-property>primary</child-property>
                                         </property-editor>
+                                        <actuator>
+                                            <label>Add Default Columns</label>
+                                            <show-image>true</show-image>
+                                            <image>icons/e16/add_action.png</image>
+                                            <action-id>Sapphire.Add</action-id>
+                                            <action-handler-id>Sapphire.Add.DefaultColumns</action-handler-id>
+                                            <action>
+                                                <id>Sapphire.Add</id>
+                                                <label>Add Default Columns</label>
+                                            </action>
+                                            <action-handler>
+                                                <action>Sapphire.Add</action>
+                                                <id>Sapphire.Add.DefaultColumns</id>
+                                                <impl>com.liferay.ide.service.ui.actions.AddDefaultColumnsAction</impl>
+                                            </action-handler>
+                                        </actuator>
                                     </content>
                                     <label>Columns</label>
                                 </section>
@@ -767,6 +782,22 @@ resourceLocalService and resourceService.</content>
                                     </hint>
                                 </child-property>
                             </property-editor>
+                            <actuator>
+                                <label>Add a Sample Entity</label>
+                                <show-image>true</show-image>
+                                <action-id>Sapphire.Add</action-id>
+                                <action-handler-id>Sapphire.Add.DefaultEntity</action-handler-id>
+                                <action>
+                                    <id>Sapphire.Add</id>
+                                    <label>Add a Sample Entity</label>
+                                </action>
+                                <action-handler>
+                                    <action>Sapphire.Add</action>
+                                    <id>Sapphire.Add.DefaultEntity</id>
+                                    <impl>com.liferay.ide.service.ui.actions.AddDefaultEntityAction</impl>
+                                </action-handler>
+                                <image>icons/e16/add_action.png</image>
+                            </actuator>
                         </content>
                         <documentation>
                             <content>An entity usually represents a business facade and a table in the database. If an entity does not have any columns, then it only represents a business facade.[br/]

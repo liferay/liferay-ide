@@ -93,7 +93,7 @@ public class QuickActionsHandlerFactory extends SapphireActionHandlerFactory
                 throw new UnsupportedOperationException( Msgs.bind( Msgs.unsuportedOperation, this.strProperty ) );
             }
 
-            // Select the ndoe
+            // Select the node
             final MasterDetailsEditorPagePart page = getPart().nearest( MasterDetailsEditorPagePart.class );
             final MasterDetailsContentNodePart root = page.outline().getRoot();
             final MasterDetailsContentNodePart node = root.findNode( mElement );
