@@ -78,7 +78,7 @@ public class LiferayVersionPossibleValuesService extends PossibleValuesService
                             LiferayProjectCore.logError( "Could not determine possible versions.", e );
                         }
 
-                        broadcast();
+                        refresh();
                     }
 
                     return Status.OK_STATUS;

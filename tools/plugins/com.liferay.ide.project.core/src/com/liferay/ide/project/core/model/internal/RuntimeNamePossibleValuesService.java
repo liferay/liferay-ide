@@ -76,17 +76,17 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
 
     public void runtimeAdded( IRuntime runtime )
     {
-        this.broadcast();
+        refresh();
     }
 
     public void runtimeChanged( IRuntime runtime )
     {
-        this.broadcast();
+        refresh();
     }
 
     public void runtimeRemoved( IRuntime runtime )
     {
-        this.broadcast();
+        refresh();
     }
 
 }
