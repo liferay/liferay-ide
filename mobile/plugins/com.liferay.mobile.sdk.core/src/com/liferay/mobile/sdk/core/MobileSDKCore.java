@@ -15,9 +15,17 @@
 
 package com.liferay.mobile.sdk.core;
 
+
+import com.liferay.mobile.android.service.BaseService;
+import com.liferay.mobile.android.service.Session;
+import com.liferay.mobile.android.service.SessionImpl;
+import com.liferay.mobile.android.v62.portal.PortalService;
+import com.liferay.mobile.android.v62.portlet.PortletService;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.json.JSONArray;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -81,4 +89,48 @@ public class MobileSDKCore extends Plugin
         super.stop( context );
     }
 
+    private static <T extends BaseService> T getService(
+        String server, String username, String password, Class<T> serviceClass ) throws Exception
+    {
+        return serviceClass.getConstructor( Session.class ).newInstance( new SessionImpl( server, username, password ) );
+    }
+
+    public static void asdf( final String server, final String username, final String password )
+    {
+        try
+        {
+            final PortletService portletService = getService( server, username, password, PortletService.class );
+
+            final Object warPortletsObject = portletService.getWarPortlets();
+
+            if( warPortletsObject instanceof JSONArray )
+            {
+                System.out.println(( (JSONArray) warPortletsObject ).length());
+            }
+        }
+        catch( Exception e )
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public static Object checkServerStatus(final String server, final String username, final String password )
+    {
+        Object retval = null;
+
+        try
+        {
+            final PortalService portalService = getService( server, username, password, PortalService.class );
+            retval = portalService.getBuildNumber();
+        }
+        catch( Exception e )
+        {
+            retval = e.getMessage();
+        }
+
+        return retval;
+    }
 }

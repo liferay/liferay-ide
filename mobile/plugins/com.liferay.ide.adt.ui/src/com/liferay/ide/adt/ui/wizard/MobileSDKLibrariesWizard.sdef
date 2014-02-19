@@ -20,8 +20,8 @@
                     <label>OmniPassword</label>
                     <property>OmniPassword</property>
                 </property-editor>
-                <property-editor>Summary</property-editor>
                 <property-editor>Status</property-editor>
+                <property-editor>Summary</property-editor>
                 <separator></separator>
                 <label>Select from previously entered server instances to populate details above.</label>
                 <property-editor>

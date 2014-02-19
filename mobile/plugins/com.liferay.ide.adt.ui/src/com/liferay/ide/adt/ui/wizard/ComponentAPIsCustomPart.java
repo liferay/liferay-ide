@@ -14,7 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.adt.ui.wizard;
 
+import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.mobile.sdk.core.MobileSDKCore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -39,6 +44,12 @@ import org.eclipse.swt.widgets.Tree;
  */
 public class ComponentAPIsCustomPart extends FormComponentPart
 {
+
+
+    class APIInfo
+    {
+
+    }
 
     class APIsContentProvider implements ITreeContentProvider
     {
@@ -108,7 +119,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
             {
                 final Composite parent = SWTUtil.createComposite( composite(), 2, 2, GridData.FILL_BOTH );
 
-                this.apisTreeViewer = new CheckboxTreeViewer(parent, SWT.BORDER);
+                this.apisTreeViewer = new CheckboxTreeViewer( parent, SWT.BORDER );
 
 //                this.apisTreeViewer.addCheckStateListener( null );
 
@@ -137,9 +148,35 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                 refreshButton.setText( "Refresh" );
                 refreshButton.setLayoutData( buttonData );
 
-                final Button addCustomContextButton = new Button( parent, SWT.NONE );
-                addCustomContextButton.setText( "Add custom context" );
-                addCustomContextButton.setLayoutData( buttonData );
+                startAPIUpdateThread();
+            }
+
+            private void startAPIUpdateThread()
+            {
+                final Thread t = new Thread()
+                {
+                    public void run()
+                    {
+                        checkAndUpdateAPIs();
+                    }
+                };
+
+                t.start();
+            }
+
+            private void checkAndUpdateAPIs()
+            {
+                final List<APIInfo> apis = new ArrayList<APIInfo>();
+
+                final MobileSDKLibrariesOp op = getLocalModelElement().nearest( MobileSDKLibrariesOp.class );
+                final String url = op.getUrl().content();
+                final String username = op.getOmniUsername().content();
+                final String password = op.getOmniPassword().content();
+
+                final APIInfo liferayCore = new APIInfo();
+                apis.add( liferayCore );
+
+                MobileSDKCore.asdf( url, username, password );
             }
         };
     }

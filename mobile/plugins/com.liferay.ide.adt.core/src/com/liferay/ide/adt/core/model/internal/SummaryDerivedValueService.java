@@ -14,19 +14,34 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model.internal;
 
-import org.eclipse.sapphire.DerivedValueService;
+import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.mobile.sdk.core.MobileSDKCore;
 
 
 /**
  * @author Gregory Amerson
  */
-public class SummaryDerivedValueService extends DerivedValueService
+public class SummaryDerivedValueService extends StatusDerivedValueService
 {
-
     @Override
-    protected String compute()
+    protected String checkValue()
     {
-        return "N/A";
-    }
+        String retval = null;
 
+        final MobileSDKLibrariesOp op = op();
+
+        final Object serverStatus = MobileSDKCore.checkServerStatus(
+            op.getUrl().content(), op.getOmniUsername().content(), op.getOmniPassword().content() );
+
+        if( serverStatus instanceof String )
+        {
+            retval = "N/A";
+        }
+        else if( serverStatus instanceof Integer )
+        {
+            retval = "Liferay Portal Build: " + serverStatus;
+        }
+
+        return retval;
+    }
 }

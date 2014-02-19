@@ -14,11 +14,13 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model.internal;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.mobile.sdk.core.MobileSDKCore;
+
 import org.eclipse.sapphire.DerivedValueService;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 
 /**
@@ -26,53 +28,79 @@ import org.eclipse.sapphire.DerivedValueService;
  */
 public class StatusDerivedValueService extends DerivedValueService
 {
-    private String status = "OK";
+    private String status = "unknown";
 
     @Override
     protected void initDerivedValueService()
     {
         super.initDerivedValueService();
 
-        new Job( "refresh status" )
+        final MobileSDKLibrariesOp op = op();
+
+        final Listener listener = new FilteredListener<PropertyContentEvent>()
         {
-            @Override
-            protected IStatus run( IProgressMonitor monitor )
+            protected void handleTypedEvent( PropertyContentEvent event )
             {
-                if( ! status.equals( "OK" ) )
-                {
-                    try
-                    {
-                        Thread.sleep( 3000 );
-                    }
-                    catch( InterruptedException e )
-                    {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+                startUpdateThread();
+            };
+        };
 
-                    status = "OK";
+        op.attach( listener, "Url" );
+        op.attach( listener, "OmniUsername" );
+        op.attach( listener, "OmniPassword" );
 
-                    new Job("refresh")
-                    {
-                        @Override
-                        protected IStatus run( IProgressMonitor monitor )
-                        {
-//                            refresh();
-                            return Status.OK_STATUS;
-                        }
+        startUpdateThread();
+    }
 
-                    }.schedule( 100 );
-                }
+    protected String checkValue()
+    {
+        String retval = null;
 
-                return Status.OK_STATUS;
-            }
-        }.schedule(100);
+        final MobileSDKLibrariesOp op = op();
+
+        final Object serverStatus = MobileSDKCore.checkServerStatus(
+            op.getUrl().content(), op.getOmniUsername().content(), op.getOmniPassword().content() );
+
+        if( serverStatus instanceof String )
+        {
+            retval = (String) serverStatus;
+        }
+        else if( serverStatus instanceof Integer )
+        {
+            retval = "OK";
+        }
+
+        return retval;
     }
 
     @Override
     protected String compute()
     {
         return this.status;
+    }
+
+    protected MobileSDKLibrariesOp op()
+    {
+        return context( MobileSDKLibrariesOp.class );
+    }
+
+    protected void startUpdateThread()
+    {
+        final Thread t = new Thread()
+        {
+            public void run()
+            {
+                final String newStatus = checkValue();
+
+                if( ! StatusDerivedValueService.this.status.equals( newStatus ) )
+                {
+                    StatusDerivedValueService.this.status = newStatus;
+                    refresh();
+                }
+            }
+        };
+
+        t.start();
     }
 
 }
