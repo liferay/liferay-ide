@@ -30,7 +30,7 @@
                     </action>
                     <action-handler>
                         <action>LiferayAndroidProjectWizard.Preferences.Link</action>
-                        <impl>OpenMobileSDKPreferencesHandler</impl>
+                        <impl>com.liferay.ide.adt.ui.handlers.OpenMobileSDKPreferencesHandler</impl>
                         <id>LiferayAndroidProjectWizard.Preferences.Link</id>
                     </action-handler>
                     <action-handler-id>LiferayAndroidProjectWizard.Preferences.Link</action-handler-id>

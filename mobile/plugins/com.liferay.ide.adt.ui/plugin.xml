@@ -9,7 +9,7 @@
             id="com.liferay.ide.adt.ui.newLiferayAndroidWizard"
             name="Liferay Android Sample Project"
             project="true">
-         <class class="com.liferay.ide.adt.ui.NewLiferayAndroidProjectWizard">
+         <class class="com.liferay.ide.adt.ui.wizard.NewLiferayAndroidProjectWizard">
             <parameter name="liferay_project" value="true"/>
             <parameter name="menuIndex" value="12" />
          </class>
