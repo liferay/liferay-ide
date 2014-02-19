@@ -134,7 +134,7 @@ public class ProjectImportUtil
 
                 projectPath =
                     liferaySDK.createNewHookProject(
-                        displayName, displayName, true, sdkPluginProjectFolder.toOSString(),
+                        displayName, displayName, appServerProperties, true, sdkPluginProjectFolder.toOSString(),
                         sdkPluginProjectFolder.toOSString(), npm );
 
                 webappRootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;

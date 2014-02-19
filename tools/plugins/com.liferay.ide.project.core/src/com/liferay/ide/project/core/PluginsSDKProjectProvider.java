@@ -120,8 +120,9 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 baseDir = updateBaseDir ? workingDir : null;
 
                 newSDKProjectPath =
-                    sdk.createNewHookProject( projectName, displayName, separateJRE, workingDir, baseDir, monitor );
-                break;
+                    sdk.createNewHookProject(
+                        projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+            break;
 
             case ext:
                 workingDir = sdk.getLocation().append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER ).toOSString();

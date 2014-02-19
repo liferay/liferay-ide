@@ -348,13 +348,15 @@ public class SDK
     }
 
     public IPath createNewHookProject(
-        String hookName, String hookDisplayName, boolean separateJRE, String workingDir, String baseDir,
-        IProgressMonitor monitor )
+        String hookName, String hookDisplayName, Map<String, String> appServerProperties, boolean separateJRE,
+        String workingDir, String baseDir, IProgressMonitor monitor )
     {
         SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
+            persistAppServerProperties( appServerProperties );
+
             Map<String, String> properties = new HashMap<String, String>();
             properties.put( ISDKConstants.PROPERTY_HOOK_NAME, hookName );
             properties.put( ISDKConstants.PROPERTY_HOOK_DISPLAY_NAME, hookDisplayName );
@@ -377,7 +379,7 @@ public class SDK
 
             return newHookPath;
         }
-        catch( CoreException e )
+        catch( Exception e )
         {
             SDKCorePlugin.logError( e );
         }
