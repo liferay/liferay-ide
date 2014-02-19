@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -237,6 +238,22 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
             {
                 return HookCore.createErrorStatus( Msgs.customJSPsFolderNotConfigured );
             }
+
+            IProject project = getTargetProject();
+
+            IFolder defaultWebappRootFolder = CoreUtil.getDefaultDocrootFolder( project );
+
+            if( defaultWebappRootFolder != null )
+            {
+                String jspFolderPath = defaultWebappRootFolder.getFullPath().append( jspFolder ).toPortableString();
+
+                IStatus validateStatus = CoreUtil.getWorkspace().validatePath( jspFolderPath, IResource.FOLDER );
+
+                if( !validateStatus.isOK() )
+                {
+                    return HookCore.createErrorStatus( validateStatus.getMessage() );
+                }
+            }
         }
         else if( CUSTOM_JSPS_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_CUSTOM_JSPS ) )
         {
@@ -352,7 +369,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
     /**
      * Subclasses may extend this method to perform their own retrieval mechanism. This implementation simply returns
      * the JDT package fragment root for the selected source folder. This method may return null.
-     * 
+     *
      * @see IJavaProject#getPackageFragmentRoot(org.eclipse.core.resources.IResource)
      * @return IPackageFragmentRoot
      */
