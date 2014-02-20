@@ -95,6 +95,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                         if( marker.getAttribute( IMarker.SOURCE_ID ).equals( id ) )
                         {
                             marker.delete();
+                            break;
                         }
                     }
                 }
