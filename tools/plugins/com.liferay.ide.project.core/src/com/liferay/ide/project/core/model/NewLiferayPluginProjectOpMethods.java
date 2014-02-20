@@ -88,7 +88,7 @@ public class NewLiferayPluginProjectOpMethods
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay plugin project", 100 ); //$NON-NLS-1$
+        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 100 ); //$NON-NLS-1$
 
         Status retval = null;
 
