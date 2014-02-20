@@ -136,68 +136,73 @@ public class LiferayProjectPropertyPage extends PropertyPage
     @Override
     public boolean performOk()
     {
-        if ( runtimeCombo != null )
+        final IProject proj = getProject();
+
+        if ( SDKUtil.isSDKProject( proj ) )
         {
-            final String selectedRuntimeName = this.runtimeCombo.getText();
-
-            if( !CoreUtil.isNullOrEmpty( selectedRuntimeName ) )
+            if ( runtimeCombo != null )
             {
-                final org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime =
-                    RuntimeManager.getRuntime( selectedRuntimeName );
+                final String selectedRuntimeName = this.runtimeCombo.getText();
 
-                if( runtime != null )
+                if( !CoreUtil.isNullOrEmpty( selectedRuntimeName ) )
                 {
-                    final IFacetedProject fProject = ProjectUtil.getFacetedProject( getProject() );
+                    final org.eclipse.wst.common.project.facet.core.runtime.IRuntime runtime =
+                        RuntimeManager.getRuntime( selectedRuntimeName );
 
-                    final org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
-                        fProject.getPrimaryRuntime();
-
-                    if( !runtime.equals( primaryRuntime ) )
+                    if( runtime != null )
                     {
-                        Job job = new WorkspaceJob("Setting targeted runtime for project.") //$NON-NLS-1$
+                        final IFacetedProject fProject = ProjectUtil.getFacetedProject( getProject() );
+
+                        final org.eclipse.wst.common.project.facet.core.runtime.IRuntime primaryRuntime =
+                            fProject.getPrimaryRuntime();
+
+                        if( !runtime.equals( primaryRuntime ) )
                         {
-                            @Override
-                            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                            Job job = new WorkspaceJob("Setting targeted runtime for project.") //$NON-NLS-1$
                             {
-                                IStatus retval = Status.OK_STATUS;
-
-                                try
+                                @Override
+                                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                                 {
-                                    fProject.setTargetedRuntimes( Collections.singleton( runtime ), monitor );
-                                    fProject.setPrimaryRuntime( runtime, monitor );
-                                }
-                                catch( Exception e )
-                                {
-                                    retval = ProjectUIPlugin.createErrorStatus( "Could not set targeted runtime", e ); //$NON-NLS-1$
-                                }
+                                    IStatus retval = Status.OK_STATUS;
 
-                                return retval;
-                            }
-                        };
+                                    try
+                                    {
+                                        fProject.setTargetedRuntimes( Collections.singleton( runtime ), monitor );
+                                        fProject.setPrimaryRuntime( runtime, monitor );
+                                    }
+                                    catch( Exception e )
+                                    {
+                                        retval = ProjectUIPlugin.createErrorStatus( "Could not set targeted runtime", e ); //$NON-NLS-1$
+                                    }
 
-                        job.schedule();
+                                    return retval;
+                                }
+                            };
+
+                            job.schedule();
+                        }
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
-                else
+            }
+
+            final String sdkName = this.sdkLabel.getText();
+
+            if ( !CoreUtil.isNullOrEmpty( sdkName ) )
+            {
+                try
                 {
-                    return false;
+                    final IEclipsePreferences prefs = new ProjectScope( getProject() ).getNode( SDKCorePlugin.PLUGIN_ID );
+                    prefs.put( SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName );
+                    prefs.flush();
                 }
-            }
-        }
-
-        final String sdkName = this.sdkLabel.getText();
-
-        if ( !CoreUtil.isNullOrEmpty( sdkName ) )
-        {
-            try
-            {
-                final IEclipsePreferences prefs = new ProjectScope( getProject() ).getNode( SDKCorePlugin.PLUGIN_ID );
-                prefs.put( SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName );
-                prefs.flush();
-            }
-            catch( BackingStoreException be )
-            {
-                LiferayProjectCore.logError( "Unable to persist sdk name to project " + getProject(), be );
+                catch( BackingStoreException be )
+                {
+                    LiferayProjectCore.logError( "Unable to persist sdk name to project " + getProject(), be );
+                }
             }
         }
 
