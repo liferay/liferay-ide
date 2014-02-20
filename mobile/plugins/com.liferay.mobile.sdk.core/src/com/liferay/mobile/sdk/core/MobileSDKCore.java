@@ -16,16 +16,26 @@
 package com.liferay.mobile.sdk.core;
 
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.mobile.android.service.BaseService;
 import com.liferay.mobile.android.service.Session;
 import com.liferay.mobile.android.service.SessionImpl;
 import com.liferay.mobile.android.v62.portal.PortalService;
 import com.liferay.mobile.android.v62.portlet.PortletService;
+import com.liferay.mobile.sdk.MobileSDKBuilder;
+import com.liferay.mobile.sdk.http.Action;
+import com.liferay.mobile.sdk.http.Discovery;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -35,16 +45,110 @@ import org.osgi.framework.BundleContext;
  */
 public class MobileSDKCore extends Plugin
 {
-
     // The shared instance
     private static MobileSDKCore plugin;
 
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.mobile.sdk.core"; //$NON-NLS-1$
 
+    public static Object checkServerStatus(final String server, final String username, final String password )
+    {
+        Object retval = null;
+
+        try
+        {
+            final PortalService portalService = getService( server, username, password, PortalService.class );
+            retval = portalService.getBuildNumber();
+        }
+        catch( Exception e )
+        {
+            retval = e.getMessage();
+        }
+
+        return retval;
+    }
+
+    private static boolean containsAPI( List<MobileAPI> apis, String servletContextName )
+    {
+        for( MobileAPI api : apis )
+        {
+            if( api.name.equals( servletContextName ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static IStatus createErrorStatus( String msg, Exception e )
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
+    }
+
+    private static String[] discoverAPIs( String server, String servletContextName ) throws Exception
+    {
+        final Discovery discovery = MobileSDKBuilder.discover( server, servletContextName, null );
+
+        final List<String> entities = new ArrayList<String>();
+
+        for( Action action : discovery.getActions() )
+        {
+            final IPath path = new Path( action.getPath() );
+            final String entity = path.segment( 0 );
+
+            if( ! entities.contains( entity ) )
+            {
+                entities.add( entity );
+            }
+        }
+
+        return entities.toArray( new String[0] );
+    }
+
+    public static MobileAPI[] discoverAPIs( final String server, final String username, final String password )
+    {
+        final List<MobileAPI> apis = new ArrayList<MobileAPI>();
+
+        apis.add( new MobileAPI( "Liferay core" ) );
+
+        try
+        {
+            final PortletService portletService = getService( server, username, password, PortletService.class );
+
+            final JSONArray warPortlets = portletService.getWarPortlets();
+
+            for( int i = 0; i < warPortlets.length(); i++ )
+            {
+                final Object warPortlet = warPortlets.get( i );
+
+                if( warPortlet instanceof JSONObject )
+                {
+                    final String servletContextName = ( (JSONObject) warPortlet ).getString( "servlet_context_name" );
+
+                    if( ! containsAPI( apis, servletContextName ) )
+                    {
+                        try
+                        {
+                            final String[] contextAPIs = discoverAPIs( server, servletContextName );
+
+                            if( ! CoreUtil.isNullOrEmpty( contextAPIs ) )
+                            {
+                                apis.add( new MobileAPI( servletContextName, contextAPIs ) );
+                            }
+                        }
+                        catch( Exception e )
+                        {
+                        }
+                    }
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return apis.toArray( new MobileAPI[0] );
     }
 
     /**
@@ -55,6 +159,12 @@ public class MobileSDKCore extends Plugin
     public static MobileSDKCore getDefault()
     {
         return plugin;
+    }
+
+    private static <T extends BaseService> T getService(
+        String server, String username, String password, Class<T> serviceClass ) throws Exception
+    {
+        return serviceClass.getConstructor( Session.class ).newInstance( new SessionImpl( server, username, password ) );
     }
 
     public static void logError( String msg, Exception e )
@@ -89,48 +199,21 @@ public class MobileSDKCore extends Plugin
         super.stop( context );
     }
 
-    private static <T extends BaseService> T getService(
-        String server, String username, String password, Class<T> serviceClass ) throws Exception
+    public static class MobileAPI
     {
-        return serviceClass.getConstructor( Session.class ).newInstance( new SessionImpl( server, username, password ) );
-    }
+        public String[] apis = new String[0];
+        public String name;
 
-    public static void asdf( final String server, final String username, final String password )
-    {
-        try
+        public MobileAPI( String name )
         {
-            final PortletService portletService = getService( server, username, password, PortletService.class );
-
-            final Object warPortletsObject = portletService.getWarPortlets();
-
-            if( warPortletsObject instanceof JSONArray )
-            {
-                System.out.println(( (JSONArray) warPortletsObject ).length());
-            }
-        }
-        catch( Exception e )
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            this.name = name;
         }
 
-
-    }
-
-    public static Object checkServerStatus(final String server, final String username, final String password )
-    {
-        Object retval = null;
-
-        try
+        public MobileAPI( String name, String[] apis )
         {
-            final PortalService portalService = getService( server, username, password, PortalService.class );
-            retval = portalService.getBuildNumber();
-        }
-        catch( Exception e )
-        {
-            retval = e.getMessage();
+            this.name = name;
+            this.apis = apis;
         }
 
-        return retval;
     }
 }

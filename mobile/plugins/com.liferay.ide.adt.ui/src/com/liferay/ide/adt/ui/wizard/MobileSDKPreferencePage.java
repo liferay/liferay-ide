@@ -150,7 +150,7 @@ public class MobileSDKPreferencePage extends FieldEditorPreferencePage implement
         }
         catch( BackingStoreException e )
         {
-            ADTUI.logError( e );
+            ADTUI.logError( "Unable to restore defaults", e );
         }
 
         super.performDefaults();

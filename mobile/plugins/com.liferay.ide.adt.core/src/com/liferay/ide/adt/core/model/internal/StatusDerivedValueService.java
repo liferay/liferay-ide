@@ -19,7 +19,6 @@ import com.liferay.mobile.sdk.core.MobileSDKCore;
 
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
 
@@ -29,6 +28,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 public class StatusDerivedValueService extends DerivedValueService
 {
     private String status = "unknown";
+    private FilteredListener<PropertyContentEvent> listener;
 
     @Override
     protected void initDerivedValueService()
@@ -37,7 +37,7 @@ public class StatusDerivedValueService extends DerivedValueService
 
         final MobileSDKLibrariesOp op = op();
 
-        final Listener listener = new FilteredListener<PropertyContentEvent>()
+        listener = new FilteredListener<PropertyContentEvent>()
         {
             protected void handleTypedEvent( PropertyContentEvent event )
             {
@@ -50,6 +50,16 @@ public class StatusDerivedValueService extends DerivedValueService
         op.attach( listener, "OmniPassword" );
 
         startUpdateThread();
+    }
+
+    @Override
+    public void dispose()
+    {
+        final MobileSDKLibrariesOp op = op();
+
+        op.detach( listener, "Url" );
+        op.detach( listener, "OmniUsername" );
+        op.detach( listener, "OmniPassword" );
     }
 
     protected String checkValue()
@@ -95,7 +105,11 @@ public class StatusDerivedValueService extends DerivedValueService
                 if( ! StatusDerivedValueService.this.status.equals( newStatus ) )
                 {
                     StatusDerivedValueService.this.status = newStatus;
-                    refresh();
+
+                    if( ! op().disposed() )
+                    {
+                        refresh();
+                    }
                 }
             }
         };

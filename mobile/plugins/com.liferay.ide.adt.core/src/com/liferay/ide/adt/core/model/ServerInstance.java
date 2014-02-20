@@ -14,18 +14,14 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model;
 
-import com.liferay.ide.adt.core.model.internal.SummaryDerivedValueService;
-
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.ReadOnly;
 import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.SensitiveData;
 
 
 /**
@@ -48,15 +44,33 @@ public interface ServerInstance extends Element
     void setUrl( String value );
 
 
+    // *** OmniUsername ***
+
+    @Required
+    @DefaultValue( text = "test@liferay.com")
+    ValueProperty PROP_OMNI_USERNAME = new ValueProperty( TYPE, "OmniUsername" );
+
+    Value<String> getOmniUsername();
+    void setOmniUsername( String value );
+
+
+    // *** OmniPassword ***
+
+    @SensitiveData
+    @Required
+    @DefaultValue( text = "test" )
+    ValueProperty PROP_OMNI_PASSWORD = new ValueProperty( TYPE, "OmniPassword" );
+
+    Value<String> getOmniPassword();
+    void setOmniPassword( String value );
+
+
+
     // *** Summary ***
 
     @Label( standard = "summary" )
-    @Derived
-    @ReadOnly
-    @Service( impl = SummaryDerivedValueService.class )
     ValueProperty PROP_SUMMARY = new ValueProperty( TYPE, "Summary" );
 
     Value<String> getSummary();
-
     void setSummary( String value );
 }

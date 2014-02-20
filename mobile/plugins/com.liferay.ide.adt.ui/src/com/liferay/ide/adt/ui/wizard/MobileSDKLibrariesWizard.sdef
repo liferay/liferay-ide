@@ -34,6 +34,10 @@
                     <child-property>Summary</child-property>
                     <listener>com.liferay.ide.adt.ui.wizard.ServerInstancesListener</listener>
                     <span>true</span>
+                    <hint>
+                        <name>read.only</name>
+                        <value>true</value>
+                    </hint>
                 </property-editor>
             </content>
             <width>450</width>

@@ -16,10 +16,10 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.ui,
  org.eclipse.core.expressions,
  org.eclipse.help,
- com.liferay.mobile.sdk.core
+ com.liferay.mobile.sdk.core,
+ org.eclipse.sapphire.modeling.xml
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.adt.ui,
- com.liferay.ide.adt.ui.actions,
  com.liferay.ide.adt.ui.handlers,
  com.liferay.ide.adt.ui.wizard

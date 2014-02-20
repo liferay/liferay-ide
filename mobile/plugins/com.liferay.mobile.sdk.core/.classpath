@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/liferay-android-sdk-1.0-beta.jar" sourcepath="E:/downloads/liferay-android-sdk-sources-1.0-beta.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src/"/>
+	<classpathentry exported="true" kind="lib" path="lib/liferay-android-sdk.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/liferay-mobile-sdk-builder.jar" sourcepath="/liferay-mobile-sdk"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

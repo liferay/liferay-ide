@@ -16,10 +16,9 @@ package com.liferay.ide.adt.ui.wizard;
 
 import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.liferay.mobile.sdk.core.MobileSDKCore.MobileAPI;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
@@ -36,6 +35,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 
 
@@ -45,11 +45,7 @@ import org.eclipse.swt.widgets.Tree;
 public class ComponentAPIsCustomPart extends FormComponentPart
 {
 
-
-    class APIInfo
-    {
-
-    }
+    private static final String LOADING_MSG = "Loading APIs...";
 
     class APIsContentProvider implements ITreeContentProvider
     {
@@ -59,12 +55,22 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
         public Object[] getChildren( Object parentElement )
         {
+            if( parentElement instanceof MobileAPI )
+            {
+                return ( (MobileAPI) parentElement ).apis;
+            }
+
             return null;
         }
 
         public Object[] getElements( Object inputElement )
         {
-            return null;
+            if( inputElement instanceof MobileAPI[] )
+            {
+                return (MobileAPI[]) inputElement;
+            }
+
+            return new Object[] { inputElement };
         }
 
         public Object getParent( Object element )
@@ -74,6 +80,11 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
         public boolean hasChildren( Object element )
         {
+            if( element instanceof MobileAPI )
+            {
+                return ( (MobileAPI) element ).apis.length > 0;
+            }
+
             return false;
         }
 
@@ -88,16 +99,37 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         @Override
         public String getText( Object element )
         {
+            if( element instanceof MobileAPI )
+            {
+                return ( (MobileAPI) element ).name;
+            }
+
             return super.getText( element );
         }
 
         public StyledString getStyledText( Object element )
         {
-            return null;
+            final StyledString styled = new StyledString();
+
+            if( element instanceof MobileAPI )
+            {
+                styled.append( ( (MobileAPI) element ).name );
+            }
+            else if( element instanceof String )
+            {
+                styled.append( (String) element );
+            }
+
+            return styled;
         }
 
         public Color getForeground( Object element )
         {
+            if( LOADING_MSG.equals( element ) )
+            {
+                return Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+            }
+
             return null;
         }
 
@@ -128,6 +160,8 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                 this.apisTreeViewer.setContentProvider( new APIsContentProvider() );
 
                 this.apisTreeViewer.setLabelProvider( new DelegatingStyledCellLabelProvider( new APIsLabelProvider() ) );
+
+                this.apisTreeViewer.setInput( LOADING_MSG );
 
                 final Tree apisTree = this.apisTreeViewer.getTree();
                 final GridData apisTreeData = new GridData( SWT.FILL, SWT.FILL, true,  true, 1, 4 );
@@ -166,17 +200,24 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
             private void checkAndUpdateAPIs()
             {
-                final List<APIInfo> apis = new ArrayList<APIInfo>();
-
                 final MobileSDKLibrariesOp op = getLocalModelElement().nearest( MobileSDKLibrariesOp.class );
                 final String url = op.getUrl().content();
                 final String username = op.getOmniUsername().content();
                 final String password = op.getOmniPassword().content();
 
-                final APIInfo liferayCore = new APIInfo();
-                apis.add( liferayCore );
+                final MobileAPI[] apis = MobileSDKCore.discoverAPIs( url, username, password );
 
-                MobileSDKCore.asdf( url, username, password );
+                UIUtil.async
+                (
+                    new Runnable()
+                    {
+                        public void run()
+                        {
+                            apisTreeViewer.setInput( apis );
+                            apisTreeViewer.expandAll();
+                        }
+                    }
+                );
             }
         };
     }

@@ -15,6 +15,7 @@
 package com.liferay.ide.adt.core.model;
 
 import com.liferay.ide.adt.core.model.internal.JavaProjectConversionService;
+import com.liferay.ide.adt.core.model.internal.MobileSDKLibrariesOpMethods;
 import com.liferay.ide.adt.core.model.internal.StatusDerivedValueService;
 import com.liferay.ide.adt.core.model.internal.SummaryDerivedValueService;
 
@@ -27,12 +28,12 @@ import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaPackageName;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.ReadOnly;
-import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.SensitiveData;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 
@@ -41,7 +42,7 @@ import org.eclipse.sapphire.modeling.annotations.Type;
  * @author Gregory Amerson
  */
 @Service( impl = JavaProjectConversionService.class )
-public interface MobileSDKLibrariesOp extends ExecutableElement
+public interface MobileSDKLibrariesOp extends ServerInstance, ExecutableElement
 {
 
     ElementType TYPE = new ElementType( MobileSDKLibrariesOp.class );
@@ -54,48 +55,12 @@ public interface MobileSDKLibrariesOp extends ExecutableElement
     void setProjectName( String value );
 
 
-    // *** Url ***
-
-    @Label( standard = "url" )
-    @Required
-    @DefaultValue( text = "http://localhost:8080/" )
-    ValueProperty PROP_URL = new ValueProperty( TYPE, "Url" );
-
-    Value<String> getUrl();
-    void setUrl( String value );
-
-
-    // *** OmniUsername ***
-
-    @Required
-    @DefaultValue( text = "test@liferay.com")
-    ValueProperty PROP_OMNI_USERNAME = new ValueProperty( TYPE, "OmniUsername" );
-
-    Value<String> getOmniUsername();
-    void setOmniUsername( String value );
-
-
-    // *** OmniPassword ***
-
-    @SensitiveData
-    @Required
-    @DefaultValue( text = "test" )
-    ValueProperty PROP_OMNI_PASSWORD = new ValueProperty( TYPE, "OmniPassword" );
-
-    Value<String> getOmniPassword();
-    void setOmniPassword( String value );
-
-
     // *** Summary ***
 
-    @Label( standard = "summary" )
     @Derived
     @ReadOnly
     @Service( impl = SummaryDerivedValueService.class )
-    ValueProperty PROP_SUMMARY = new ValueProperty( TYPE, "Summary" );
-
-    Value<String> getSummary();
-    void setSummary( String value );
+    ValueProperty PROP_SUMMARY = new ValueProperty( TYPE, ServerInstance.PROP_SUMMARY );
 
 
     // *** Status ***
@@ -111,7 +76,6 @@ public interface MobileSDKLibrariesOp extends ExecutableElement
     // *** PreviousServerInstances ***
 
     @Type( base = ServerInstance.class )
-    @ReadOnly
     ListProperty PROP_PREVIOUS_SERVER_INSTANCES = new ListProperty( TYPE, "PreviousServerInstances" );
 
     ElementList<ServerInstance> getPreviousServerInstances();
@@ -147,4 +111,8 @@ public interface MobileSDKLibrariesOp extends ExecutableElement
     void setAddSampleCode( Boolean value );
 
 
+    // *** Method: execute ***
+
+    @DelegateImplementation( MobileSDKLibrariesOpMethods.class )
+    Status execute( ProgressMonitor monitor );
 }

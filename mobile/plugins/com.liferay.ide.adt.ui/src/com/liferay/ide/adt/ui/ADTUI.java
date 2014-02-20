@@ -49,9 +49,9 @@ public class ADTUI extends AbstractUIPlugin
         return plugin;
     }
 
-    public static void logError( Exception e )
+    public static void logError( String msg, Exception e )
     {
-        getDefault().getLog().log( createErrorStatus( e.getMessage(), e ) );
+        getDefault().getLog().log( createErrorStatus( msg, e ) );
     }
 
     /**
