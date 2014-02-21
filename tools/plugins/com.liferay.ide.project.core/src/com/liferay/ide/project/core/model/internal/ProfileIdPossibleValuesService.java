@@ -65,7 +65,7 @@ public class ProfileIdPossibleValuesService extends PossibleValuesService
             {
                 fillPossibleValues();
 
-                broadcast();
+                refresh();
             }
         };
 
