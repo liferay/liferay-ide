@@ -22,7 +22,7 @@ import com.liferay.mobile.android.service.Session;
 import com.liferay.mobile.android.service.SessionImpl;
 import com.liferay.mobile.android.v62.portal.PortalService;
 import com.liferay.mobile.android.v62.portlet.PortletService;
-import com.liferay.mobile.sdk.MobileSDKBuilder;
+import com.liferay.mobile.sdk.SDKBuilder;
 import com.liferay.mobile.sdk.http.Action;
 import com.liferay.mobile.sdk.http.Discovery;
 
@@ -88,7 +88,7 @@ public class MobileSDKCore extends Plugin
 
     private static String[] discoverAPIs( String server, String servletContextName ) throws Exception
     {
-        final Discovery discovery = MobileSDKBuilder.discover( server, servletContextName, null );
+        final Discovery discovery = SDKBuilder.discover( server, servletContextName, null );
 
         final List<String> entities = new ArrayList<String>();
 
