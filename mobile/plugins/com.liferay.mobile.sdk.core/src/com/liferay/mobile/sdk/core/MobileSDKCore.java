@@ -26,6 +26,7 @@ import com.liferay.mobile.sdk.SDKBuilder;
 import com.liferay.mobile.sdk.http.Action;
 import com.liferay.mobile.sdk.http.Discovery;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,13 @@ public class MobileSDKCore extends Plugin
 
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.mobile.sdk.core"; //$NON-NLS-1$
+
+    /**
+     * The constructor
+     */
+    public MobileSDKCore()
+    {
+    }
 
     public static Object checkServerStatus(final String server, final String username, final String password )
     {
@@ -172,27 +180,31 @@ public class MobileSDKCore extends Plugin
         getDefault().getLog().log( createErrorStatus( msg, e ) );
     }
 
-    /**
-     * The constructor
-     */
-    public MobileSDKCore()
+    public static MobileSDKBuilder newSDKBuilder()
     {
+        return new MobileSDKBuilder();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
+    public static File newTempDir()
+    {
+        final File tempDir =
+            getDefault().getStateLocation().append( System.currentTimeMillis() + "" ).toFile();
+        tempDir.mkdirs();
+
+        return tempDir;
+    }
+
+    public static File newTempFile( String fileName )
+    {
+        return getDefault().getStateLocation().append( fileName ).toFile();
+    }
+
     public void start( BundleContext context ) throws Exception
     {
         super.start( context );
         plugin = this;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
     public void stop( BundleContext context ) throws Exception
     {
         plugin = null;
@@ -214,6 +226,5 @@ public class MobileSDKCore extends Plugin
             this.name = name;
             this.apis = apis;
         }
-
     }
 }

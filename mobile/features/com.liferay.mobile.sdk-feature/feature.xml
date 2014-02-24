@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.liferay.mobile.sdk"
-      label="Liferay Mobile SDK (Requires Android IDE)"
+      label="Liferay Mobile SDK (Requires Android Development Tools, ADT)"
       version="1.0.0.qualifier"
       provider-name="Liferay, Inc."
       plugin="com.liferay.mobile.sdk.branding">
