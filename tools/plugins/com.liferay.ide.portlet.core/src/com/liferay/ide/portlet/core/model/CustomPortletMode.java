@@ -21,10 +21,10 @@ import com.liferay.ide.portlet.core.model.internal.InvertingBooleanXmlValueBindi
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -41,7 +41,7 @@ public interface CustomPortletMode extends Element, Describeable, Identifiable
     // *** PortletMode ***
 
     @Required
-    @NoDuplicates
+    @Unique
     @Label( standard = "Portlet Mode" )
     @XmlBinding( path = "portlet-mode" )
     ValueProperty PROP_PORTLET_MODE = new ValueProperty( TYPE, "PortletMode" ); //$NON-NLS-1$

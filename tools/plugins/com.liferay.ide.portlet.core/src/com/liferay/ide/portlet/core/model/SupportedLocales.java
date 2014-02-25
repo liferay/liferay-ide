@@ -23,11 +23,11 @@ import com.liferay.ide.portlet.core.model.internal.LocaleTextNodeValueBinding;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
@@ -45,7 +45,7 @@ public interface SupportedLocales extends Element
     // *** SupportedLocale ***
 
     @Label( standard = "Locale" )
-    @NoDuplicates
+    @Unique
     @XmlBinding( path = "" )
     @Services
     (

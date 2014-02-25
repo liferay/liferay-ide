@@ -21,11 +21,11 @@ import com.liferay.ide.hook.core.model.internal.CustomJspPossibleValuesService;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -42,7 +42,7 @@ public interface CustomJsp extends Element
 
     @Label( standard = "Liferay Portal JSP" )
     @XmlBinding( path = "" )
-    @NoDuplicates
+    @Unique
     @Service( impl = CustomJspPossibleValuesService.class )
     // @Service( impl = CustomJspValidationService.class ) } )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$

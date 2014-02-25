@@ -21,10 +21,10 @@ import com.liferay.ide.hook.core.model.internal.PortalPropertyNamePossibleValues
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
 /**
@@ -38,7 +38,7 @@ public interface PortalProperty extends Element
 
     // *** Name ***
 
-    @NoDuplicates
+    @Unique
     @Service( impl = PortalPropertyNamePossibleValuesService.class )
     ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 

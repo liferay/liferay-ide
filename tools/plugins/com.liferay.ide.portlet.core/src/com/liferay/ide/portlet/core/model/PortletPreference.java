@@ -22,6 +22,7 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
@@ -29,7 +30,6 @@ import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -59,7 +59,7 @@ public interface PortletPreference extends Element, Identifiable
     @Reference( target = JavaType.class )
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.PreferencesValidator" } )
     @Label( standard = "Preference Validator" )
-    @NoDuplicates
+    @Unique
     @XmlBinding( path = "preferences-validator" )
     ValueProperty PROP_PREFERERNCE_VALIDATOR = new ValueProperty( TYPE, "PreferernceValidator" ); //$NON-NLS-1$
 

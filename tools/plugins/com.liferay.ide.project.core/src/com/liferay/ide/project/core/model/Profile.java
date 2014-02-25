@@ -19,11 +19,11 @@ import com.liferay.ide.project.core.model.internal.ProfileIdPossibleValuesServic
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
 
@@ -37,7 +37,7 @@ public interface Profile extends Element
     // *** Id ***
 
     @Label( standard = "profile id" )
-    @NoDuplicates
+    @Unique
     @Service( impl = ProfileIdPossibleValuesService.class )
     @Listeners( value = ProfileIdListener.class )
     ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );

@@ -22,10 +22,10 @@ import com.liferay.ide.portlet.core.model.internal.WindowStateImageService;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -40,7 +40,7 @@ public interface WindowState extends Element
     ElementType TYPE = new ElementType( WindowState.class );
 
     @Label( standard = "state", full = "Window States" )
-    @NoDuplicates
+    @Unique
     @XmlBinding( path = "" )
     ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" ); //$NON-NLS-1$
 

@@ -19,11 +19,11 @@ package com.liferay.ide.portlet.core.model;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.InitialValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -42,7 +42,7 @@ public interface UserDataConstraint extends Element, Identifiable, Describeable
 
     @Type( base = TransportGuarantee.class )
     @Label( standard = "Transport Guarantee" )
-    @NoDuplicates
+    @Unique
     @Required
     @XmlBinding( path = "transport-guarantee" )
     @InitialValue( text = "NONE" )

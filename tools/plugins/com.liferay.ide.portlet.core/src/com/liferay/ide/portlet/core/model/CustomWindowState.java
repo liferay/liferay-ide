@@ -20,10 +20,10 @@ package com.liferay.ide.portlet.core.model;
 import com.liferay.ide.portlet.core.model.internal.WindowStateImageService;
 
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.NoDuplicates;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
@@ -39,7 +39,7 @@ public interface CustomWindowState extends Describeable, Identifiable
 
     // *** WindowState ***
     @Label( standard = "Window State" )
-    @NoDuplicates
+    @Unique
     @XmlBinding( path = "window-state" )
     @Required
     ValueProperty PROP_WINDOW_STATE = new ValueProperty( TYPE, "WindowState" ); //$NON-NLS-1$
