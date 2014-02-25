@@ -76,7 +76,7 @@ public class LiferayMavenProject extends BaseLiferayProject
 
             return adapterType.cast( remoteServerPublisher );
         }
-        
+
         return null;
     }
 

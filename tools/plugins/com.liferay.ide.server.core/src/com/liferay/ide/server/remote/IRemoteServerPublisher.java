@@ -14,7 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.server.remote;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -24,6 +23,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface IRemoteServerPublisher
 {
-    public IPath publishModuleFull( IProject project, IProgressMonitor monitor ) throws CoreException;
+    public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException;
 
 }

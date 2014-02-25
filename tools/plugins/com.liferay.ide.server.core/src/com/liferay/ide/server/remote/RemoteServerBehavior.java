@@ -629,22 +629,23 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             monitor = new NullProgressMonitor();
         }
 
-        IModule publishModule = module[0];
+        final IModule publishModule = module[0];
 
-        IProject moduleProject = publishModule.getProject();
+        final IProject moduleProject = publishModule.getProject();
 
-        IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 100 );
+        final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 100 );
         submon.subTask( "Deploying " + moduleProject.getName() + "  to Liferay..." ); //$NON-NLS-1$ //$NON-NLS-2$
 
         final ILiferayProject liferayProject = LiferayCore.create( moduleProject );
         final IRemoteServerPublisher publisher = liferayProject.adapt( IRemoteServerPublisher.class );
+
         if ( publisher == null )
         {
             setModuleStatus( module, null );
             throw new CoreException( LiferayServerCore.createErrorStatus( Msgs.publishingModuleProject ) );
         }
 
-        IPath warPath = publisher.publishModuleFull( moduleProject, monitor );
+        final IPath warPath = publisher.publishModuleFull( monitor );
 
         submon.worked( 25 ); // 25% complete
 

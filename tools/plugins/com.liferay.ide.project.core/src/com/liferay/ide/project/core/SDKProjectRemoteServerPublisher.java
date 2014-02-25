@@ -46,16 +46,16 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
         this.sdk = sdk;
     }
 
-    public IPath publishModuleFull( IProject project, IProgressMonitor monitor ) throws CoreException
+    public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException
     {
-        IPath deployPath = LiferayServerCore.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
-        File warFile = deployPath.append( project.getName() + ".war" ).toFile(); //$NON-NLS-1$
+        final IPath deployPath = LiferayServerCore.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
+        final File warFile = deployPath.append( getProject().getName() + ".war" ).toFile(); //$NON-NLS-1$
         warFile.getParentFile().mkdirs();
 
-        Map<String, String> properties = new HashMap<String, String>();
+        final Map<String, String> properties = new HashMap<String, String>();
         properties.put( ISDKConstants.PROPERTY_AUTO_DEPLOY_UNPACK_WAR, "false" ); //$NON-NLS-1$
 
-        final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( project );
+        final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( getProject() );
 
         final String appServerDeployDirProp =
             ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtime );
@@ -67,17 +67,18 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
         // IDE-1073 LPS-37923
         properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE_DEFAULT, warFile.getAbsolutePath() );
 
-        Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
+        final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( getProject() );
 
-        IStatus directDeployStatus =
-            sdk.war( project, properties, true, appServerProperties, new String[] { "-Duser.timezone=GMT" }, monitor ); //$NON-NLS-1$
+        final IStatus directDeployStatus =
+            sdk.war(
+                getProject(), properties, true, appServerProperties, new String[] { "-Duser.timezone=GMT" }, monitor );
 
         if( !directDeployStatus.isOK() || ( !warFile.exists() ) )
         {
             throw new CoreException( directDeployStatus );
         }
 
-        return new Path(warFile.getAbsolutePath());
+        return new Path( warFile.getAbsolutePath() );
     }
 
 }

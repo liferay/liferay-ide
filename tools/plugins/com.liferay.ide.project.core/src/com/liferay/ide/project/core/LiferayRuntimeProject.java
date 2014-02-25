@@ -75,6 +75,7 @@ public class LiferayRuntimeProject extends BaseLiferayProject
                 return adapterType.cast( remotePublisher );
             }
         }
+
         return null;
     }
 
