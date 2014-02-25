@@ -39,6 +39,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Terry Jia
  */
 @SuppressWarnings( { "unchecked", "restriction", "rawtypes" } )
 public class PluginFacetProjectCreationDataModelProvider extends WebFacetProjectCreationDataModelProvider
@@ -169,6 +170,10 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         {
             return sdkLoc.append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER ).toOSString();
         }
+        else if( getBooleanProperty( PLUGIN_TYPE_WEB ) )
+        {
+            return sdkLoc.append( ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER ).toOSString();
+        }
 
         return null;
     }
@@ -195,6 +200,11 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         {
             return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
         }
+        else if( getBooleanProperty( PLUGIN_TYPE_WEB ) )
+        {
+            return ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
+        }
+
         return null;
     }
 
@@ -232,6 +242,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         propNames.add( PLUGIN_TYPE_EXT );
         propNames.add( PLUGIN_TYPE_THEME );
         propNames.add( PLUGIN_TYPE_LAYOUTTPL );
+        propNames.add( PLUGIN_TYPE_WEB );
         propNames.add( DISPLAY_NAME );
         propNames.add( PORTLET_NAME );
         propNames.add( HOOK_NAME );

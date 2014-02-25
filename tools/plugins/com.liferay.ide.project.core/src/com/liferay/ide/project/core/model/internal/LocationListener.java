@@ -61,6 +61,9 @@ public class LocationListener extends ProjectNameListener
                         case theme:
                             suffix = "-theme"; //$NON-NLS-1$
                             break;
+                        case web:
+                            suffix = "-web"; //$NON-NLS-1$
+                            break;
                     }
 
                     final Path currentLocation = op.getLocation().content( true );

@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -33,6 +34,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 public class ProjectNameValidationService extends ValidationService
 {
@@ -71,6 +73,8 @@ public class ProjectNameValidationService extends ValidationService
         {
             final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentProjectName, IResource.PROJECT );
 
+            final PluginType pluginType = op.getPluginType().content();
+
             if( ! nameStatus.isOK() )
             {
                 retval = StatusBridge.create( nameStatus );
@@ -90,6 +94,11 @@ public class ProjectNameValidationService extends ValidationService
             else if( isMavenProject( op ) && ! isValidMavenProjectName( currentProjectName ) )
             {
                 retval = Status.createErrorStatus( "The project name is invalid for a maven project" );
+            }
+            else if( pluginType.equals( PluginType.web ) && !NewLiferayPluginProjectOpMethods.supportWebPlugin( op ) )
+            {
+                retval =
+                    Status.createErrorStatus( "The selected Plugins SDK does not support the web plugin type.  Please configure a higher version greater than 700" ); //$NON-NLS-1$ //$NON-NLS-2$
             }
             else
             {

@@ -49,6 +49,7 @@ import org.osgi.framework.Version;
  * @author Simon Jiang
  * @author Tao Tao
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 public class NewLiferayPluginProjectOpMethods
 {
@@ -183,6 +184,9 @@ public class NewLiferayPluginProjectOpMethods
             case theme:
                 suffix = "-theme"; //$NON-NLS-1$
                 break;
+            case web:
+                suffix = "-web"; //$NON-NLS-1$
+                break;
         }
 
         return suffix;
@@ -277,6 +281,34 @@ public class NewLiferayPluginProjectOpMethods
 
         // remove trailing ','
         op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
+    }
+
+    public static boolean supportWebPlugin( NewLiferayPluginProjectOp op )
+    {
+        boolean retval = false;
+
+        if( op.getProjectProvider().content( true ).getShortName().equals( "maven" ) )
+        {
+            retval = true;
+        }
+        else
+        {
+            final SDK sdk = SDKManager.getInstance().getSDK( op.getPluginsSDKName().content( true ) );
+
+            if( sdk != null )
+            {
+                final Version version = new Version( sdk.getVersion() );
+
+                final boolean greaterThan700 = CoreUtil.compareVersions( version, ILiferayConstants.V700 ) >= 0;
+
+                if( greaterThan700 )
+                {
+                    retval = true;
+                }
+            }
+        }
+
+        return retval;
     }
 
     private static void updateDefaultProjectBuildType( final NewLiferayPluginProjectOp op )

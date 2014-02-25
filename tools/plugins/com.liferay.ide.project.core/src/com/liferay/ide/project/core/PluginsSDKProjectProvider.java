@@ -52,6 +52,7 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 {
@@ -148,6 +149,15 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                 newSDKProjectPath =
                     sdk.createNewThemeProject( projectName, displayName, separateJRE, workingDir, baseDir, monitor );
+                break;
+
+            case web:
+                workingDir = sdk.getLocation().append( ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER ).toOSString();
+                baseDir = updateBaseDir ? workingDir : null;
+
+                newSDKProjectPath =
+                    sdk.createNewWebProject(
+                        projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
                 break;
         }
 

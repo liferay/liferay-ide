@@ -167,7 +167,7 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
 
         final String[] pluginTypes = new String[]
         {
-            "portlet", "hook", "ext", "layouttpl", "theme" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$
+            "portlet", "hook", "ext", "layouttpl", "theme", "web" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
         };
 
         for (String type : pluginTypes)

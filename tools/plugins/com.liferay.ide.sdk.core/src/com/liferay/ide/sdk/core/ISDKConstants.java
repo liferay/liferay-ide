@@ -24,6 +24,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface ISDKConstants
 {
@@ -38,6 +39,8 @@ public interface ISDKConstants
     static final String _PORTLET_PLUGIN_PROJECT_SUFFIX = "-portlet"; //$NON-NLS-1$
 
     static final String _THEME_PLUGIN_PROJECT_SUFFIX = "-theme"; //$NON-NLS-1$
+
+    static final String _WEB_PLUGIN_PROJECT_SUFFIX = "-web"; //$NON-NLS-1$
 
     public static final String[] ANT_LIBRARIES = __defaultPrefs.get( "ant.libraries", StringPool.EMPTY ).split( StringPool.COMMA ); //$NON-NLS-1$
 
@@ -165,6 +168,12 @@ public interface ISDKConstants
 
     public static final String PROPERTY_THEME_PARENT_DIR = "theme.parent.dir"; //$NON-NLS-1$
 
+    public static final String PROPERTY_WEB_DISPLAY_NAME = "web.display.name"; //$NON-NLS-1$
+
+    public static final String PROPERTY_WEB_NAME = "web.name"; //$NON-NLS-1$
+
+    public static final String PROPERTY_WEB_PARENT_DIR = "web.parent.dir"; //$NON-NLS-1$
+
     public static final String TARGET_ALL = "all"; //$NON-NLS-1$
 
     public static final String TARGET_BUILD_CLIENT = "build-client"; //$NON-NLS-1$
@@ -210,5 +219,11 @@ public interface ISDKConstants
     public static final String THEME_PLUGIN_PROJECT_SUFFIX = _THEME_PLUGIN_PROJECT_SUFFIX;
 
     public static final String VAR_NAME_LIFERAY_SDK_DIR = "liferay_sdk_dir"; //$NON-NLS-1$
+
+    public static final String WEB_PLUGIN_ANT_BUILD = __defaultPrefs.get( "web.plugin.ant.build", null ); //$NON-NLS-1$
+
+    public static final String WEB_PLUGIN_PROJECT_FOLDER = "webs"; //$NON-NLS-1$
+
+    public static final String WEB_PLUGIN_PROJECT_SUFFIX = _WEB_PLUGIN_PROJECT_SUFFIX;
 
 }

@@ -56,6 +56,7 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 
 /**
  * @author <a href="mailto:kamesh.sampath@hotmail.com">Kamesh Sampath</a>
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class ProjectImportUtil
@@ -190,6 +191,15 @@ public class ProjectImportUtil
                         displayName, displayName, appServerProperties, true, sdkPluginProjectFolder.toOSString(),
                         sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER;
+            }
+            else if( pluginBinaryRecord.isWeb() )
+            {
+                sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER );
+                projectPath =
+                    liferaySDK.createNewWebProject(
+                        displayName, displayName, appServerProperties, true, sdkPluginProjectFolder.toOSString(),
+                        sdkPluginProjectFolder.toOSString(), npm );
+                webappRootFolder = IPluginFacetConstants.WEB_PLUGIN_SDK_CONFIG_FOLDER;
             }
 
             // Move the porject to Liferay SDK location

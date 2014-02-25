@@ -45,5 +45,6 @@ public interface ILiferayConstants
     Version V6120 = new Version( 6, 1, 20 );
     Version V6130 = new Version( 6, 1, 30 );
     Version V620 = new Version( 6, 2, 0 );
+    Version V700 = new Version( 7, 0, 0 );
     String WEB_XML_FILE = "web.xml"; //$NON-NLS-1$
 }

@@ -49,6 +49,7 @@ import org.junit.Before;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public abstract class ProjectCoreBase extends BaseTests
 {
@@ -370,6 +371,7 @@ public abstract class ProjectCoreBase extends BaseTests
             case ext:
                 break;
             case hook:
+            case web:
             case portlet:
 
                 assertEquals(

@@ -11,7 +11,7 @@
             Liferay Plugins
          </label>
          <description>
-            Liferay Portal Plugin facets including, portlets, hooks, ext, themes, and layout templates.
+            Liferay Portal Plugin facets including, portlets, hooks, ext, themes, layout, and web templates.
          </description>
       </category>
 
@@ -218,6 +218,74 @@
                facet="liferay.ext">
          </fixed>
       </template>
+
+      <project-facet
+            id="liferay.web">
+         <label>
+            Liferay Web
+         </label>
+         <description>
+            Web plugin for Liferay portal.  Version corresponds to Portal version.
+         </description>
+         <member
+               category="liferay.plugins">
+         </member>
+         <default-version
+               version="6.0">
+         </default-version>
+      </project-facet>
+      <project-facet-version
+            facet="liferay.web"
+            version="6.0">
+         <constraint>
+            <and>
+               <requires
+                     facet="jst.java"
+                     version="[5.0">
+               </requires>
+               <requires
+                     facet="jst.web"
+                     version="[2.3">
+               </requires>
+            </and>
+         </constraint>
+      </project-facet-version>
+      <action
+            facet="liferay.web"
+            id="liferay.web.install"
+            type="install"
+            version="[6.0">
+         <delegate
+               class="com.liferay.ide.project.core.facet.WebPluginFacetInstall">
+         </delegate>
+         <config-factory
+               class="com.liferay.ide.project.core.facet.WebPluginFacetInstallDataModelProvider">
+         </config-factory>
+      </action>
+      <action
+            facet="liferay.web"
+            id="liferay.web.uninstall"
+            type="uninstall"
+            version="[6.0">
+         <delegate
+               class="com.liferay.ide.project.core.facet.WebPluginFacetUninstall">
+         </delegate>
+      </action>
+      <template
+            id="liferay.web.template">
+         <label>
+            Liferay Web Plugin Project
+         </label>
+         <fixed
+               facet="jst.java">
+         </fixed>
+         <fixed
+               facet="jst.web">
+         </fixed>
+         <fixed
+               facet="liferay.web">
+         </fixed>
+      </template>
    </extension>
 
    <extension
@@ -284,6 +352,28 @@
          </facet>
          <facet
                id="liferay.ext"
+               version="6.0">
+         </facet>
+      </static-preset>
+
+      <static-preset
+            id="liferay.web.preset">
+         <label>
+            Liferay web plugin 6.0 preset
+         </label>
+         <description>
+            Preset for Liferay 6.0 web plugin
+         </description>
+         <facet
+               id="jst.java"
+               version="5.0">
+         </facet>
+         <facet
+               id="jst.web"
+               version="2.5">
+         </facet>
+         <facet
+               id="liferay.web"
                version="6.0">
          </facet>
       </static-preset>
@@ -386,6 +476,40 @@
                type="INSTALL">
             <operation
                   class="com.liferay.ide.project.core.library.ExtPluginLibraryInstallOperation">
+            </operation>
+            <config
+                  class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
+            </config>
+         </action>
+      </provider>
+
+      <provider
+            id="com.liferay.ide.eclipse.plugin.web.libraryProvider">
+         <label>
+            Liferay web plugin library
+         </label>
+         <enablement>
+            <with
+                  variable="requestingProjectFacet">
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                     value="liferay.web">
+               </test>
+            </with>
+            <with
+                  variable="context">
+               <test
+                     forcePluginActivation="true"
+                     property="com.liferay.ide.project.core.isLiferayRuntime"
+                     value="true">
+               </test>
+            </with>
+         </enablement>
+         <action
+               type="INSTALL">
+            <operation
+                  class="com.liferay.ide.project.core.library.WebPluginLibraryInstallOperation">
             </operation>
             <config
                   class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">

@@ -19,6 +19,7 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public enum PluginType
 {
@@ -46,5 +47,9 @@ public enum PluginType
     @Label( standard = "Ext" )
     @Image( path = "images/ext.png" )
     ext,
+
+    @Label( standard = "web" )
+    @Image( path = "images/web.png" )
+    web,
 
 }

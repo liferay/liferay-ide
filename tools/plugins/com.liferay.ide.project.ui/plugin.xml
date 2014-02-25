@@ -245,6 +245,11 @@
 								property="org.eclipse.wst.common.project.facet.core.projectFacet"
 								value="liferay.theme" />
 							</adapt>
+							<adapt type="org.eclipse.core.resources.IProject">
+                            <test forcePluginActivation="true"
+                                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                value="liferay.web" />
+                            </adapt>
 						</or>
 					</not>
 					<and>
@@ -316,6 +321,11 @@
             category="liferay.plugins"
             facet="liferay.ext"
             path="icons/e16/ext.png">
+      </image>
+      <image
+            category="liferay.plugins"
+            facet="liferay.web"
+            path="icons/e16/web.png">
       </image>
       <image
             category="liferay.plugins"
@@ -630,6 +640,11 @@
                                        property="org.eclipse.wst.common.project.facet.core.projectFacet"
                                        value="liferay.theme" />
                                </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
+                                       <test forcePluginActivation="true"
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.web" />
+                               </adapt>
                             </or>
                         </and>
                    </or>
@@ -688,6 +703,11 @@
                                        <test forcePluginActivation="true"
                                        property="org.eclipse.wst.common.project.facet.core.projectFacet"
                                        value="liferay.theme" />
+                               </adapt>
+                               <adapt type="org.eclipse.core.resources.IProject">
+                                       <test forcePluginActivation="true"
+                                       property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                       value="liferay.web" />
                                </adapt>
                            </or>
                         </and>
@@ -791,6 +811,14 @@
                                     forcePluginActivation="true"
                                     property="org.eclipse.wst.common.project.facet.core.projectFacet"
                                     value="liferay.theme">
+                              </test>
+                           </adapt>
+                           <adapt
+                                 type="org.eclipse.core.resources.IProject">
+                              <test
+                                    forcePluginActivation="true"
+                                    property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                                    value="liferay.web">
                               </test>
                            </adapt>
                         </or>
