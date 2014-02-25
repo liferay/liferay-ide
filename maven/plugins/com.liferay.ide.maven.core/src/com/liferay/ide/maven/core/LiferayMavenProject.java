@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.BaseLiferayProject;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.LiferayPortalValueLoader;
+import com.liferay.ide.server.remote.IRemoteServerPublisher;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
@@ -69,6 +70,13 @@ public class LiferayMavenProject extends BaseLiferayProject
             return adapterType.cast( projectBuilder );
         }
 
+        if( IRemoteServerPublisher.class.equals( adapterType ) && MavenUtil.getProjectFacade( getProject() ) != null )
+        {
+            final IRemoteServerPublisher remoteServerPublisher = new MavenProjectRemoteServerPublisher( getProject() );
+
+            return adapterType.cast( remoteServerPublisher );
+        }
+        
         return null;
     }
 

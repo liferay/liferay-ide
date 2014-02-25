@@ -16,13 +16,10 @@
 package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayPublishHelper;
@@ -60,6 +57,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 /**
  * @author Greg Amerson
  * @author Tao Tao
+ * @author Simon Jiang
  */
 public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
@@ -638,48 +636,17 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 100 );
         submon.subTask( "Deploying " + moduleProject.getName() + "  to Liferay..." ); //$NON-NLS-1$ //$NON-NLS-2$
 
-        SDK sdk = SDKUtil.getSDK( moduleProject );
-
-        Map<String, String> properties = new HashMap<String, String>();
-        properties.put( ISDKConstants.PROPERTY_AUTO_DEPLOY_UNPACK_WAR, "false" ); //$NON-NLS-1$
-
-        IPath deployPath = LiferayServerCore.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
-
-        final ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( moduleProject );
-
-        final String appServerDeployDirProp =
-            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtime );
-
-        properties.put( appServerDeployDirProp, deployPath.toOSString() );
-
-        File warFile = deployPath.append( moduleProject.getName() + ".war" ).toFile(); //$NON-NLS-1$
-        warFile.getParentFile().mkdirs();
-
-        properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE, warFile.getAbsolutePath() );
-
-        // IDE-1073 LPS-37923
-        properties.put( ISDKConstants.PROPERTY_PLUGIN_FILE_DEFAULT, warFile.getAbsolutePath() );
-
-        submon.worked( 10 ); // 10% complete
-
-        if( monitor.isCanceled() )
+        final ILiferayProject liferayProject = LiferayCore.create( moduleProject );
+        final IRemoteServerPublisher publisher = liferayProject.adapt( IRemoteServerPublisher.class );
+        if ( publisher == null )
         {
-            return IServer.PUBLISH_STATE_FULL;
+            setModuleStatus( module, null );
+            throw new CoreException( LiferayServerCore.createErrorStatus( Msgs.publishingModuleProject ) );
         }
 
-        submon.subTask( "Deploying " + moduleProject.getName() + "..." ); //$NON-NLS-1$ //$NON-NLS-2$
+        IPath warPath = publisher.publishModuleFull( moduleProject, monitor );
 
-        Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( moduleProject );
-
-        IStatus directDeployStatus =
-            sdk.war( moduleProject, properties, true, appServerProperties, new String[] { "-Duser.timezone=GMT" }, monitor ); //$NON-NLS-1$
-
-        if( !directDeployStatus.isOK() || ( !warFile.exists() ) )
-        {
-            throw new CoreException( directDeployStatus );
-        }
-
-        submon.worked( 15 ); // 25% complete
+        submon.worked( 25 ); // 25% complete
 
         if( monitor.isCanceled() )
         {
@@ -692,7 +659,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.installing ) );
 
-        submon.worked( 15 ); // 50% complete
+        submon.worked( 25 ); // 50% complete
 
         if( monitor.isCanceled() )
         {
@@ -707,11 +674,11 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         {
             if( remoteConnection.isAppInstalled( appName ) )
             {
-                error = remoteConnection.updateApplication( appName, warFile.getAbsolutePath(), submon );
+                error = remoteConnection.updateApplication( appName, warPath.toOSString(), submon );
             }
             else
             {
-                error = remoteConnection.installApplication( warFile.getAbsolutePath(), appName, submon );
+                error = remoteConnection.installApplication( warPath.toOSString(), appName, submon );
             }
         }
         catch( Exception ex )

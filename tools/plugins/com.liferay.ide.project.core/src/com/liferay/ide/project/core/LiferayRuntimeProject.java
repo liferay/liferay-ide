@@ -19,6 +19,7 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.util.Properties;
 
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class LiferayRuntimeProject extends BaseLiferayProject
 {
@@ -62,6 +64,17 @@ public class LiferayRuntimeProject extends BaseLiferayProject
             }
         }
 
+        if( IRemoteServerPublisher.class.equals( adapterType ) )
+        {
+            final SDK sdk = getSDK();
+
+            if( sdk != null )
+            {
+                final IRemoteServerPublisher remotePublisher = new SDKProjectRemoteServerPublisher( getProject(), sdk );
+
+                return adapterType.cast( remotePublisher );
+            }
+        }
         return null;
     }
 
