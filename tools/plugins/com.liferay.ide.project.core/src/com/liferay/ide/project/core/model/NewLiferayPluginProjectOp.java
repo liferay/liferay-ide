@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
 import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.model.internal.LocationValidationService;
 import com.liferay.ide.project.core.model.internal.PluginTypeListener;
+import com.liferay.ide.project.core.model.internal.PluginTypeValidationService;
 import com.liferay.ide.project.core.model.internal.PluginsSDKNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.PluginsSDKNameListener;
 import com.liferay.ide.project.core.model.internal.PluginsSDKNamePossibleValuesService;
@@ -196,6 +197,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     @Label( standard = "plugin type" )
     @DefaultValue( text = "Portlet" )
     @Listeners( PluginTypeListener.class )
+    @Service( impl = PluginTypeValidationService.class )
     ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
 
     Value<PluginType> getPluginType();

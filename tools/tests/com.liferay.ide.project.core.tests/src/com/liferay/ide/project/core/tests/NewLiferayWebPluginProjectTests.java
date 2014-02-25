@@ -56,16 +56,6 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
         return "liferay-plugins-sdk-7.0.0/";
     }
 
-    protected IPath getLiferayRuntimeDir()
-    {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-rc6/tomcat-7.0.42" );
-    }
-
-    protected IPath getLiferayRuntimeZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-rc6-20131028112536986.zip" );
-    }
-
     @Test
     public void testNewWebAntProjectValidation() throws Exception
     {
@@ -121,8 +111,8 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
         op.setPluginType( PluginType.web );
 
         assertEquals(
-            "The selected Plugins SDK does not support the web plugin type.  Please configure a higher version greater than 700",
-            op.getProjectName().validation().message() );
+            "The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0.0 or greater.",
+            op.getPluginType().validation().message() );
     }
 
     @Test

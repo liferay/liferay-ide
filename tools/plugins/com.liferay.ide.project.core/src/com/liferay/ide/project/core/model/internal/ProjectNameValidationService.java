@@ -14,8 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
-import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsWebTypePlugin;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
@@ -74,8 +72,6 @@ public class ProjectNameValidationService extends ValidationService
         {
             final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentProjectName, IResource.PROJECT );
 
-            final PluginType pluginType = op.getPluginType().content();
-
             if( ! nameStatus.isOK() )
             {
                 retval = StatusBridge.create( nameStatus );
@@ -95,12 +91,6 @@ public class ProjectNameValidationService extends ValidationService
             else if( isMavenProject( op ) && ! isValidMavenProjectName( currentProjectName ) )
             {
                 retval = Status.createErrorStatus( "The project name is invalid for a maven project" );
-            }
-            else if( pluginType.equals( PluginType.web ) && ! supportsWebTypePlugin( op ) )
-            {
-                retval =
-                    Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  " +
-                        "Please configure version 7.0.0 or greater." );
             }
             else
             {
