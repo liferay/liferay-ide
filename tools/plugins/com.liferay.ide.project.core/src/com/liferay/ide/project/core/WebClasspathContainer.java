@@ -26,8 +26,8 @@ public class WebClasspathContainer extends PluginClasspathContainer
 {
     public static final String SEGMENT_PATH = "web"; //$NON-NLS-1$
 
-    protected static final String[] portalJars = 
-    { 
+    protected static final String[] portalJars =
+    {
         "commons-logging.jar",  //$NON-NLS-1$
         "log4j.jar",  //$NON-NLS-1$
         "util-bridges.jar", //$NON-NLS-1$
@@ -54,7 +54,6 @@ public class WebClasspathContainer extends PluginClasspathContainer
 
     private static class Msgs extends NLS
     {
-
         public static String liferayWebPluginAPI;
 
         static

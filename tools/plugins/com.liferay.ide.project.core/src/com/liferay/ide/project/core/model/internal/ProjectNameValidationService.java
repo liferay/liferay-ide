@@ -14,9 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
+import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsWebTypePlugin;
+
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -95,10 +96,11 @@ public class ProjectNameValidationService extends ValidationService
             {
                 retval = Status.createErrorStatus( "The project name is invalid for a maven project" );
             }
-            else if( pluginType.equals( PluginType.web ) && !NewLiferayPluginProjectOpMethods.supportWebPlugin( op ) )
+            else if( pluginType.equals( PluginType.web ) && ! supportsWebTypePlugin( op ) )
             {
                 retval =
-                    Status.createErrorStatus( "The selected Plugins SDK does not support the web plugin type.  Please configure a higher version greater than 700" ); //$NON-NLS-1$ //$NON-NLS-2$
+                    Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  " +
+                        "Please configure version 7.0.0 or greater." );
             }
             else
             {
@@ -110,7 +112,8 @@ public class ProjectNameValidationService extends ValidationService
                     final String currentPath = currentProjectLocation.toOSString();
                     final IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
 
-                    final IStatus projectStatus = op.getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
+                    final IStatus projectStatus =
+                        op.getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
 
                     if( ! projectStatus.isOK() )
                     {

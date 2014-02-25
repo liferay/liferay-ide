@@ -183,7 +183,7 @@
                label="%liferay.menu.label">
             <separator name="slot1"/>
          </menu>
-  	</objectContribution>
+    </objectContribution>
       <objectContribution
             adaptable="true"
             id="com.liferay.ide.project.ui.convert.popup"
@@ -198,69 +198,69 @@
                tooltip="%convert.project.action.tooltip">
          </action>
          <enablement>
-         	<adapt type="org.eclipse.core.resources.IProject">
-         		<and>
-         			<or>
-         				<adapt type="org.eclipse.core.resources.IProject">
-				  			<test forcePluginActivation="true"
-								property="org.eclipse.wst.common.project.facet.core.projectFacet"
-								value="jst.web" />
-						</adapt>
-						<adapt type="org.eclipse.core.resources.IProject">
-				  			<test forcePluginActivation="true"
-								property="org.eclipse.wst.common.project.facet.core.projectFacet"
-								value="jst.java" />
-						</adapt>
-						<adapt type="org.eclipse.core.resources.IProject">
-				  			<test forcePluginActivation="true"
-								property="com.liferay.ide.project.ui.hasNature"
-								value="org.eclipse.jdt.core.javanature" />
-						</adapt>
-         			</or>
+           <adapt type="org.eclipse.core.resources.IProject">
+             <and>
+               <or>
+                 <adapt type="org.eclipse.core.resources.IProject">
+                <test forcePluginActivation="true"
+                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                value="jst.web" />
+            </adapt>
+            <adapt type="org.eclipse.core.resources.IProject">
+                <test forcePluginActivation="true"
+                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                value="jst.java" />
+            </adapt>
+            <adapt type="org.eclipse.core.resources.IProject">
+                <test forcePluginActivation="true"
+                property="com.liferay.ide.project.ui.hasNature"
+                value="org.eclipse.jdt.core.javanature" />
+            </adapt>
+               </or>
 
-					<not>
-						<or>
-							<adapt type="org.eclipse.core.resources.IProject">
-							<test forcePluginActivation="true"
-								property="org.eclipse.wst.common.project.facet.core.projectFacet"
-								value="liferay.portlet" />
-							</adapt>
-							<adapt type="org.eclipse.core.resources.IProject">
-							<test forcePluginActivation="true"
-								property="org.eclipse.wst.common.project.facet.core.projectFacet"
-								value="liferay.hook" />
-							</adapt>
-							<adapt type="org.eclipse.core.resources.IProject">
-							<test forcePluginActivation="true"
-								property="org.eclipse.wst.common.project.facet.core.projectFacet"
-								value="liferay.ext" />
-							</adapt>
-							<adapt type="org.eclipse.core.resources.IProject">
-							<test forcePluginActivation="true"
-								property="org.eclipse.wst.common.project.facet.core.projectFacet"
-								value="liferay.layouttpl" />
-							</adapt>
-							<adapt type="org.eclipse.core.resources.IProject">
-							<test forcePluginActivation="true"
-								property="org.eclipse.wst.common.project.facet.core.projectFacet"
-								value="liferay.theme" />
-							</adapt>
-							<adapt type="org.eclipse.core.resources.IProject">
+          <not>
+            <or>
+              <adapt type="org.eclipse.core.resources.IProject">
+              <test forcePluginActivation="true"
+                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                value="liferay.portlet" />
+              </adapt>
+              <adapt type="org.eclipse.core.resources.IProject">
+              <test forcePluginActivation="true"
+                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                value="liferay.hook" />
+              </adapt>
+              <adapt type="org.eclipse.core.resources.IProject">
+              <test forcePluginActivation="true"
+                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                value="liferay.ext" />
+              </adapt>
+              <adapt type="org.eclipse.core.resources.IProject">
+              <test forcePluginActivation="true"
+                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                value="liferay.layouttpl" />
+              </adapt>
+              <adapt type="org.eclipse.core.resources.IProject">
+              <test forcePluginActivation="true"
+                property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                value="liferay.theme" />
+              </adapt>
+              <adapt type="org.eclipse.core.resources.IProject">
                             <test forcePluginActivation="true"
                                 property="org.eclipse.wst.common.project.facet.core.projectFacet"
                                 value="liferay.web" />
                             </adapt>
-						</or>
-					</not>
-					<and>
-						<adapt type="org.eclipse.core.resources.IProject">
-							<test forcePluginActivation="true"
-								property="com.liferay.ide.project.ui.isSDKFolderProject"
-								value="true" />	
-						</adapt>
-					</and>
-				</and>
-			 </adapt>
+            </or>
+          </not>
+          <and>
+            <adapt type="org.eclipse.core.resources.IProject">
+              <test forcePluginActivation="true"
+                property="com.liferay.ide.project.ui.isSDKFolderProject"
+                value="true" />
+            </adapt>
+          </and>
+        </and>
+       </adapt>
          </enablement>
 
       </objectContribution>
@@ -277,10 +277,10 @@
                menubarPath="liferayPopupMenuCategory/slot1">
          </action>
          <enablement>
-         	<adapt type="org.eclipse.core.resources.IProject">
-         		<test
-					property="com.liferay.ide.project.ui.isSDKFolderProject" />
-         	</adapt>
+           <adapt type="org.eclipse.core.resources.IProject">
+             <test
+          property="com.liferay.ide.project.ui.isSDKFolderProject" />
+           </adapt>
          </enablement>
       </objectContribution>
       <objectContribution
@@ -393,7 +393,7 @@
    </extension>
 -->
 
-	<extension
+  <extension
          point="org.eclipse.ui.actionSets">
       <actionSet
             id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"

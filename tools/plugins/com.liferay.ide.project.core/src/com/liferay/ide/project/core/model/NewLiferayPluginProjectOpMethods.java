@@ -263,27 +263,7 @@ public class NewLiferayPluginProjectOpMethods
         return ServerCore.findRuntime( runtimeName );
     }
 
-    public static void updateActiveProfilesValue( final NewLiferayPluginProjectOp op, final ElementList<Profile> profiles )
-    {
-        final StringBuilder sb = new StringBuilder();
-
-        if( profiles.size() > 0 )
-        {
-            for( Profile profile : profiles )
-            {
-                if( ! profile.getId().empty() )
-                {
-                    sb.append( profile.getId().content() );
-                    sb.append( ',' );
-                }
-            }
-        }
-
-        // remove trailing ','
-        op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
-    }
-
-    public static boolean supportWebPlugin( NewLiferayPluginProjectOp op )
+    public static boolean supportsWebTypePlugin( NewLiferayPluginProjectOp op )
     {
         boolean retval = false;
 
@@ -309,6 +289,26 @@ public class NewLiferayPluginProjectOpMethods
         }
 
         return retval;
+    }
+
+    public static void updateActiveProfilesValue( final NewLiferayPluginProjectOp op, final ElementList<Profile> profiles )
+    {
+        final StringBuilder sb = new StringBuilder();
+
+        if( profiles.size() > 0 )
+        {
+            for( Profile profile : profiles )
+            {
+                if( ! profile.getId().empty() )
+                {
+                    sb.append( profile.getId().content() );
+                    sb.append( ',' );
+                }
+            }
+        }
+
+        // remove trailing ','
+        op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
     }
 
     private static void updateDefaultProjectBuildType( final NewLiferayPluginProjectOp op )

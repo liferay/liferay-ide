@@ -371,8 +371,8 @@ public abstract class ProjectCoreBase extends BaseTests
             case ext:
                 break;
             case hook:
-            case web:
             case portlet:
+            case web:
 
                 assertEquals(
                     "java source folder docroot/WEB-INF/src doesn't exist.", true,
