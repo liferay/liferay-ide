@@ -41,15 +41,13 @@ public class StatusDerivedValueService extends DerivedValueService
         {
             protected void handleTypedEvent( PropertyContentEvent event )
             {
-                startUpdateThread();
+                restoreStatus();
             };
         };
 
         op.attach( listener, "Url" );
         op.attach( listener, "OmniUsername" );
         op.attach( listener, "OmniPassword" );
-
-        startUpdateThread();
     }
 
     @Override
@@ -94,27 +92,26 @@ public class StatusDerivedValueService extends DerivedValueService
         return context( MobileSDKLibrariesOp.class );
     }
 
-    protected void startUpdateThread()
+    protected void restoreStatus()
     {
-        final Thread t = new Thread()
+        this.status = "unknown";
+
+        refresh();
+    }
+
+    protected void updateStatus()
+    {
+        final String newStatus = checkValue();
+
+        if( ! StatusDerivedValueService.this.status.equals( newStatus ) )
         {
-            public void run()
+            StatusDerivedValueService.this.status = newStatus;
+
+            if( ! op().disposed() )
             {
-                final String newStatus = checkValue();
-
-                if( ! StatusDerivedValueService.this.status.equals( newStatus ) )
-                {
-                    StatusDerivedValueService.this.status = newStatus;
-
-                    if( ! op().disposed() )
-                    {
-                        refresh();
-                    }
-                }
+                refresh();
             }
-        };
-
-        t.start();
+        }
     }
 
 }

@@ -13,15 +13,31 @@
                     <property>URL</property>
                 </property-editor>
                 <property-editor>
-                    <label>OmniUsername</label>
+                    <label>Username</label>
                     <property>OmniUsername</property>
                 </property-editor>
                 <property-editor>
-                    <label>OmniPassword</label>
+                    <label>Password</label>
                     <property>OmniPassword</property>
                 </property-editor>
                 <property-editor>Status</property-editor>
                 <property-editor>Summary</property-editor>
+                <actuator>
+                    <label>Check Status</label>
+                    <style>Sapphire.Actuator.Button</style>
+                    <action>
+                        <id>Liferay.CheckServerStatus</id>
+                        <label>Check Server Status</label>
+                    </action>
+                    <action-handler>
+                        <action>Liferay.CheckServerStatus</action>
+                        <id>Liferay.CheckServerStatus</id>
+                        <impl>com.liferay.ide.adt.ui.handlers.CheckServerStatusActionHandler</impl>
+                    </action-handler>
+                    <action-id>Liferay.CheckServerStatus</action-id>
+                    <action-handler-id>Liferay.CheckServerStatus</action-handler-id>
+                    <horizontal-align>right</horizontal-align>
+                </actuator>
                 <separator></separator>
                 <label>Select from previously entered server instances to populate details above.</label>
                 <property-editor>
@@ -30,8 +46,19 @@
                     <child-property>
                         <label>URL</label>
                         <property>URL</property>
+                        <hint>
+                            <name>read.only</name>
+                            <value>true</value>
+                        </hint>
                     </child-property>
-                    <child-property>Summary</child-property>
+                    <child-property>
+                        <hint>
+                            <name>read.only</name>
+                            <value>true</value>
+                        </hint>
+                        <property>Summary</property>
+                        <label>Last Avaiable Summary</label>
+                    </child-property>
                     <listener>com.liferay.ide.adt.ui.wizard.ServerInstancesListener</listener>
                     <span>true</span>
                     <hint>
@@ -44,6 +71,7 @@
             <height>400</height>
             <label>Add/Update Liferay Mobile Client Libraries</label>
             <initial-focus>Foo</initial-focus>
+            <margin-right>10</margin-right>
         </page>
         <element-type>com.liferay.ide.adt.core.model.MobileSDKLibrariesOp</element-type>
         <page>
@@ -51,7 +79,6 @@
             <id>MobileSDKLibrariesWizardPage2</id>
             <image>MobileSDKLibrariesWizard.png</image>
             <description>Select component APIs to include as dependencies</description>
-            <visible-when>${Status == 'OK'}</visible-when>
             <content>
                 <label>Available APIs for server ${Url}</label>
                 <custom>
@@ -65,6 +92,9 @@
                 </property-editor>
                 <property-editor>AddSampleCode</property-editor>
             </content>
+            <initial-focus>Foo</initial-focus>
+            <visible-when>${Status == 'OK'}</visible-when>
+            <margin-right>10</margin-right>
         </page>
         <label>Liferay Mobile SDK</label>
     </wizard>

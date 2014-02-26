@@ -31,6 +31,7 @@ import org.eclipse.sapphire.ui.SapphirePart.PartInitializationEvent;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class ServerInstancesListener extends Listener
 {
@@ -79,6 +80,8 @@ public class ServerInstancesListener extends Listener
 
     private void updateSelectedServerInstance( final ServerInstance selectedServer )
     {
-        this.mobileSDKConfigOp.getSelectedServerInstance().content( true ).copy( selectedServer );
+        this.mobileSDKConfigOp.setOmniUsername( selectedServer.getOmniUsername().content() );
+        this.mobileSDKConfigOp.setOmniPassword( selectedServer.getOmniPassword().content() );
+        this.mobileSDKConfigOp.setUrl( selectedServer.getUrl().content() );
     }
 }

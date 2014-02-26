@@ -65,7 +65,6 @@ public interface ServerInstance extends Element
     void setOmniPassword( String value );
 
 
-
     // *** Summary ***
 
     @Label( standard = "summary" )
@@ -73,4 +72,5 @@ public interface ServerInstance extends Element
 
     Value<String> getSummary();
     void setSummary( String value );
+
 }

@@ -15,16 +15,22 @@
 package com.liferay.ide.adt.ui.wizard;
 
 import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.ui.ADTUI;
+import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
 import com.liferay.mobile.sdk.core.MobileSDKCore.MobileAPI;
 
+import java.util.Arrays;
+
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
@@ -32,20 +38,27 @@ import org.eclipse.sapphire.ui.forms.swt.FormComponentPresentation;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class ComponentAPIsCustomPart extends FormComponentPart
 {
 
     private static final String LOADING_MSG = "Loading APIs...";
+    private static final String LIFERAY_CORE_API = "Liferay core";
+    private static final String ROOT_API = "root api";
+    private static final String API = "api";
 
     class APIsContentProvider implements ITreeContentProvider
     {
@@ -93,7 +106,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         }
     }
 
-    class APIsLabelProvider extends LabelProvider
+    class APIsLabelProvider extends AbstractLabelProvider
         implements IColorProvider, DelegatingStyledCellLabelProvider.IStyledLabelProvider
     {
         @Override
@@ -105,6 +118,43 @@ public class ComponentAPIsCustomPart extends FormComponentPart
             }
 
             return super.getText( element );
+        }
+
+
+        @Override
+        protected void initalizeImageRegistry( ImageRegistry imageRegistry )
+        {
+            imageRegistry.put(
+                LIFERAY_CORE_API,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/liferay-core_16x16.png" ) );
+            imageRegistry.put(
+                ROOT_API,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/portlet_16x16.png" ) );
+            imageRegistry.put(
+                API,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/portlet_16x16.png" ) );
+        }
+
+        @Override
+        public Image getImage( Object element )
+        {
+            if( element instanceof MobileAPI )
+            {
+                if( LIFERAY_CORE_API.equals( ( (MobileAPI) element ).name ) )
+                {
+                    return this.getImageRegistry().get( LIFERAY_CORE_API );
+                }
+                else
+                {
+                    return this.getImageRegistry().get( ROOT_API );
+                }
+            }
+            else if( element instanceof String )
+            {
+                return getImageRegistry().get( API );
+            }
+
+            return null;
         }
 
         public StyledString getStyledText( Object element )
@@ -146,6 +196,8 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         {
             private CheckboxTreeViewer apisTreeViewer;
 
+            private MobileAPI[] rootAPIs;
+
             @Override
             public void render()
             {
@@ -153,7 +205,15 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
                 this.apisTreeViewer = new CheckboxTreeViewer( parent, SWT.BORDER );
 
-//                this.apisTreeViewer.addCheckStateListener( null );
+                this.apisTreeViewer.addCheckStateListener
+                (
+                    new ICheckStateListener()
+                    {
+                        public void checkStateChanged( CheckStateChangedEvent event )
+                        {
+                            handleCheckStateChangedEvent( event );
+                        }
+                } );
 
 //                this.apisTreeViewer.addSelectionChangedListener( null );
 
@@ -171,18 +231,96 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
                 final Button selectAllButton = new Button( parent, SWT.NONE );
                 selectAllButton.setText( "Select All" );
-                final GridData buttonData = new GridData( SWT.FILL, SWT.TOP, false, false );
-                selectAllButton.setLayoutData( buttonData );
+                selectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+                selectAllButton.addListener( SWT.Selection, new Listener()
+                {
+                    public void handleEvent( Event event )
+                    {
+                        for( MobileAPI rootAPI : rootAPIs )
+                        {
+                            apisTreeViewer.setGrayed( rootAPI, false );
+                            apisTreeViewer.setSubtreeChecked( rootAPI, true );
+                        }
+                    }
+                } );
 
                 final Button deselectAllButton = new Button( parent, SWT.NONE );
                 deselectAllButton.setText( "Deselect All" );
-                deselectAllButton.setLayoutData( buttonData );
+                deselectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+                deselectAllButton.addListener( SWT.Selection, new Listener()
+                {
+                    public void handleEvent( Event event )
+                    {
+                        for( MobileAPI rootAPI : rootAPIs )
+                        {
+                            apisTreeViewer.setSubtreeChecked( rootAPI, false );
+                        }
+                    }
+                } );
 
                 final Button refreshButton = new Button( parent, SWT.NONE );
                 refreshButton.setText( "Refresh" );
-                refreshButton.setLayoutData( buttonData );
+                refreshButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+                refreshButton.addListener( SWT.Selection, new Listener()
+                {
+                    public void handleEvent( Event event )
+                    {
+                        apisTreeViewer.setInput( LOADING_MSG );
+                        startAPIUpdateThread();
+                    }
+                } );
 
                 startAPIUpdateThread();
+            }
+
+            private void handleCheckStateChangedEvent( CheckStateChangedEvent event )
+            {
+                if( event.getSource().equals( apisTreeViewer ) )
+                {
+                    final Object element = event.getElement();
+
+                    if( element instanceof MobileAPI )
+                    {
+                        apisTreeViewer.setGrayed( element, false );
+                        apisTreeViewer.setSubtreeChecked( element, event.getChecked() );
+                    }
+                    else if( element instanceof String )
+                    {
+                        for( MobileAPI rootAPI : rootAPIs )
+                        {
+                            if( Arrays.asList( rootAPI.apis ).contains( (String) element ) )
+                            {
+                                int apiCount = rootAPI.apis.length;
+
+                                int checkedCount = 0;
+
+                                for( String api : rootAPI.apis )
+                                {
+                                    if( apisTreeViewer.getChecked( api ) )
+                                    {
+                                        checkedCount++;
+                                    }
+                                }
+
+                                if( checkedCount == apiCount )
+                                {
+                                    apisTreeViewer.setChecked( rootAPI, true );
+                                    apisTreeViewer.setGrayed( rootAPI, false );
+                                }
+                                else if( checkedCount == 0 )
+                                {
+                                    apisTreeViewer.setChecked( rootAPI, false );
+                                }
+                                else
+                                {
+                                    apisTreeViewer.setGrayChecked( rootAPI, true );
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             private void startAPIUpdateThread()
@@ -205,7 +343,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                 final String username = op.getOmniUsername().content();
                 final String password = op.getOmniPassword().content();
 
-                final MobileAPI[] apis = MobileSDKCore.discoverAPIs( url, username, password );
+                rootAPIs = MobileSDKCore.discoverAPIs( url, username, password );
 
                 UIUtil.async
                 (
@@ -213,7 +351,20 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                     {
                         public void run()
                         {
-                            apisTreeViewer.setInput( apis );
+                            apisTreeViewer.setInput( rootAPIs );
+
+                            if( rootAPIs != null && rootAPIs.length > 0)
+                            {
+                                for( MobileAPI rootAPI : rootAPIs )
+                                {
+                                    if( LIFERAY_CORE_API.equals( rootAPI.name ) )
+                                    {
+                                        apisTreeViewer.setChecked( rootAPI, true );
+                                        apisTreeViewer.setGrayed( rootAPI, false );
+                                    }
+                                }
+                            }
+
                             apisTreeViewer.expandAll();
                         }
                     }

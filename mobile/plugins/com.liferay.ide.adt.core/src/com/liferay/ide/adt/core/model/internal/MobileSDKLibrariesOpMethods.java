@@ -42,6 +42,7 @@ import org.eclipse.sapphire.platform.StatusBridge;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class MobileSDKLibrariesOpMethods
 {
@@ -140,5 +141,11 @@ public class MobileSDKLibrariesOpMethods
                 ADTCore.logError( "Unable to persist wizard settings", e );
             }
         }
+    }
+
+    public static void updateServerStatus( MobileSDKLibrariesOp op )
+    {
+        op.getStatus().service( StatusDerivedValueService.class ).updateStatus();
+        op.getSummary().service( SummaryDerivedValueService.class ).updateStatus();
     }
 }
