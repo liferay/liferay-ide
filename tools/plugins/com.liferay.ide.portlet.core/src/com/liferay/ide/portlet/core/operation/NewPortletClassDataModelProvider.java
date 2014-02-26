@@ -261,7 +261,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else if( CREATE_RESOURCE_BUNDLE_FILE_PATH.equals( propertyName ) )
         {
-            return "content/Language.properties"; //$NON-NLS-1$
+            return "content.Language"; //$NON-NLS-1$
         }
         else if( ALLOW_MULTIPLE.equals( propertyName ) )
         {
