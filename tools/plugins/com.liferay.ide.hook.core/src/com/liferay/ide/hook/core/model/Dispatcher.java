@@ -18,6 +18,7 @@
 
 package com.liferay.ide.hook.core.model;
 
+import org.eclipse.sapphire.Collation;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.PossibleValues;
@@ -42,7 +43,8 @@ public interface Dispatcher extends Element
     @Label( standard = "Dispatcher" )
     @Unique
     @XmlBinding( path = "" )
-    @PossibleValues( values = { "FORWARD", "REQUEST", "INCLUDE", "ERROR" }, caseSensitive = false )
+    @PossibleValues( values = { "FORWARD", "REQUEST", "INCLUDE", "ERROR" } )
+    @Collation( ignoreCaseDifferences = "true" )
     ValueProperty PROP_DISPATCHER = new ValueProperty( TYPE, "Dispatcher" ); //$NON-NLS-1$
 
     Value<String> getDispatcher();

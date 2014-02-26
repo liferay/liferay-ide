@@ -95,12 +95,6 @@ public class WindowStatesPossibleValueService extends PossibleValuesService
         this.initialized = true;
     }
 
-    @Override
-    public boolean isCaseSensitive()
-    {
-        return false;
-    }
-
     private void refreshValues()
     {
         final PortletApp portletApp = context( PortletApp.class );

@@ -20,6 +20,7 @@ package com.liferay.ide.portlet.core.model;
 import com.liferay.ide.portlet.core.model.internal.PortletModePossibleValueService;
 import com.liferay.ide.portlet.core.model.internal.WindowStatesPossibleValueService;
 
+import org.eclipse.sapphire.Collation;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -62,6 +63,7 @@ public interface Supports extends Element
     @Type( base = PortletMode.class )
     @Label( standard = "Portlet Modes" )
     @Service( impl = PortletModePossibleValueService.class )
+    @Collation( ignoreCaseDifferences = "true" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "portlet-mode", type = PortletMode.class ) )
     ListProperty PROP_PORTLET_MODES = new ListProperty( TYPE, "PortletModes" ); //$NON-NLS-1$
 
@@ -73,6 +75,7 @@ public interface Supports extends Element
     @Label( standard = "Window States" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "window-state", type = WindowState.class ) )
     @Service( impl = WindowStatesPossibleValueService.class )
+    @Collation( ignoreCaseDifferences = "true" )
     ListProperty PROP_WINDOW_STATES = new ListProperty( TYPE, "WindowStates" ); //$NON-NLS-1$
 
     ElementList<WindowState> getWindowStates();
