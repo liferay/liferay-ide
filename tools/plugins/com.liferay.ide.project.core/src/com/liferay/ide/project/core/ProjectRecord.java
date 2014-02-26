@@ -34,7 +34,6 @@ import org.eclipse.osgi.util.NLS;
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
 public class ProjectRecord
 {
 

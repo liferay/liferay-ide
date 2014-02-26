@@ -90,6 +90,15 @@ public interface MobileSDKLibrariesOp extends ServerInstance, ExecutableElement
     ElementHandle<ServerInstance> getSelectedServerInstance();
 
 
+    // *** LibraryNames ***
+
+    @Type( base = Library.class )
+    ListProperty PROP_LIBRARY_NAMES = new ListProperty( TYPE, "LibraryNames" );
+
+    ElementList<Library> getLibraryNames();
+
+
+
     // *** Package ***
 
     @Type( base = JavaPackageName.class )

@@ -15,14 +15,29 @@
 package com.liferay.ide.adt.core.model.internal;
 
 import com.liferay.ide.adt.core.ADTCore;
+import com.liferay.ide.adt.core.model.Library;
 import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 import com.liferay.ide.adt.core.model.ServerInstance;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.mobile.sdk.core.MobileSDKCore;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.eclipse.sapphire.platform.StatusBridge;
 
 
 /**
@@ -31,13 +46,78 @@ import org.eclipse.sapphire.modeling.Status;
 public class MobileSDKLibrariesOpMethods
 {
 
+    private static void addLibsToAndroidProject( final IProject project, List<File[]> filesList, IProgressMonitor monitor )
+        throws CoreException
+    {
+        final IFolder libsFolder = project.getFolder( "libs" );
+
+        CoreUtil.makeFolders( libsFolder );
+
+        final IFolder srcFolder = libsFolder.getFolder( "src" );
+
+        CoreUtil.makeFolders( srcFolder );
+
+        for( File[] files : filesList )
+        {
+            FileUtil.copyFileToIFolder( files[0], libsFolder, monitor );
+            FileUtil.copyFileToIFolder( files[1], srcFolder, monitor );
+
+            final String propsFilename = files[0].getName() + ".properties";
+            final String content = "src=src/" + files[1].getName();
+
+            libsFolder.getFile( propsFilename ).create( new ByteArrayInputStream( content.getBytes() ), true, monitor );
+        }
+    }
+
+    private static boolean containsInstance( MobileSDKLibrariesOp op, ElementList<ServerInstance> instances )
+    {
+        for( ServerInstance instance : instances )
+        {
+            if( instance.getUrl().content().equals( op.getUrl().content() ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static final Status execute( final MobileSDKLibrariesOp op, final ProgressMonitor monitor )
     {
+        Status retval = null;
+
         saveWizardSettings( op );
 
-        // TODO perform op
+        final IProject project = CoreUtil.getProject( op.getProjectName().content() );
 
-        return Status.createOkStatus();
+        final Map<String, File[]> libs = MobileSDKCore.getLibraryMap();
+
+        final ElementList<Library> libraries = op.getLibraryNames();
+
+        final List<File[]> files = new ArrayList<File[]>();
+
+        for( Library library : libraries )
+        {
+            final String libName = library.getName().content();
+
+            if( libs.containsKey( libName ) )
+            {
+                files.add( libs.get( libName ) );
+            }
+        }
+
+        try
+        {
+            addLibsToAndroidProject( project, files, ProgressMonitorBridge.create( monitor ) );
+
+            retval = Status.createOkStatus();
+        }
+        catch( CoreException e )
+        {
+            retval = StatusBridge.create( ADTCore.createErrorStatus( "Could not add mobile sdk libraries.", e ) );
+        }
+
+        return retval;
     }
 
     private static void saveWizardSettings( final MobileSDKLibrariesOp op )
@@ -60,18 +140,5 @@ public class MobileSDKLibrariesOpMethods
                 ADTCore.logError( "Unable to persist wizard settings", e );
             }
         }
-    }
-
-    private static boolean containsInstance( MobileSDKLibrariesOp op, ElementList<ServerInstance> instances )
-    {
-        for( ServerInstance instance : instances )
-        {
-            if( instance.getUrl().content().equals( op.getUrl().content() ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

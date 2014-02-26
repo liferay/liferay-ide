@@ -27,9 +27,13 @@ import com.liferay.mobile.sdk.http.Action;
 import com.liferay.mobile.sdk.http.Discovery;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -49,6 +53,14 @@ public class MobileSDKCore extends Plugin
     // The shared instance
     private static MobileSDKCore plugin;
 
+    private static String[] libNames =
+    {
+        "liferay-android-sdk-1.1-core",
+        "liferay-android-sdk-1.1",
+    };
+
+    private static HashMap<String, File[]> libs;
+
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.mobile.sdk.core"; //$NON-NLS-1$
 
@@ -57,6 +69,32 @@ public class MobileSDKCore extends Plugin
      */
     public MobileSDKCore()
     {
+    }
+
+    public static Map<String, File[]> getLibraryMap()
+    {
+        if( libs == null )
+        {
+            libs = new HashMap<String, File[]>();
+
+            for( String libName : libNames )
+            {
+                try
+                {
+                    final String url =
+                        FileLocator.toFileURL( getDefault().getBundle().getEntry( "lib/" + libName + ".jar" ) ).getFile();
+                    final String srcUrl =
+                        FileLocator.toFileURL( getDefault().getBundle().getEntry( "lib/" + libName + "-sources.jar" ) ).getFile();
+
+                    libs.put( libName, new File[] { new File( url ), new File( srcUrl) } );
+                }
+                catch( IOException e )
+                {
+                }
+            }
+        }
+
+        return libs;
     }
 
     public static Object checkServerStatus(final String server, final String username, final String password )

@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*******************************************************************************
  * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
  *
@@ -14,26 +12,25 @@
  * details.
  *
  *******************************************************************************/
- -->
+package com.liferay.ide.adt.core.model;
 
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+import org.eclipse.sapphire.Element;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
 
-    <parent>
-        <groupId>com.liferay.mobile.sdk</groupId>
-        <artifactId>mobile-sdk</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
-    </parent>
 
-    <groupId>com.liferay.mobile.sdk.tests</groupId>
-    <artifactId>mobile-sdk-tests</artifactId>
+/**
+ * @author Gregory Amerson
+ */
+public interface Library extends Element
+{
+    ElementType TYPE = new ElementType( Library.class );
 
-    <name>Liferay Mobile SDK Tests</name>
+    // *** Name ***
 
-    <packaging>pom</packaging>
+    ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
-    <modules>
-        <module>com.liferay.ide.adt.core.tests</module>
-    </modules>
-</project>
+    Value<String> getName();
+    void setName( String value );
+}

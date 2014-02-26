@@ -133,7 +133,7 @@ public class ADTCoreTests extends BaseTests
         return new File(
             FileLocator.toFileURL(
                 Activator.getDefault().getBundle().getEntry(
-                    "templates/liferay-mobile-sdk-sample-android-custom.zip" ) ).getFile() );
+                    "projects/liferay-mobile-sdk-sample-android-custom.zip" ) ).getFile() );
     }
 
     private IEclipsePreferences getDefaultADTCorePrefs()

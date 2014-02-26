@@ -44,6 +44,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.osgi.util.NLS;
@@ -57,6 +58,8 @@ import org.xml.sax.ErrorHandler;
  */
 public class FileUtil
 {
+
+
 
     public static void clearContents( File versionFile )
     {
@@ -72,6 +75,32 @@ public class FileUtil
             {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    public static void copyFileToIFolder( File file, IFolder folder, IProgressMonitor monitor ) throws CoreException
+    {
+        final IFile iFile = folder.getFile( file.getName() );
+
+        try
+        {
+            final FileInputStream input = new FileInputStream( file );
+
+            if( iFile.exists() )
+            {
+                iFile.setContents( input, true, true, monitor );
+            }
+            else
+            {
+                iFile.create( input, true, monitor );
+            }
+
+            input.close();
+        }
+        catch( Exception e )
+        {
+            throw new CoreException( LiferayCore.createErrorStatus(
+                "Could not copy file to folder " + file.getName(), e ) );
         }
     }
 
