@@ -547,7 +547,9 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             // need to remove .properties off the end of the bundle_file_path
             String bundlePath = model.getStringProperty( CREATE_RESOURCE_BUNDLE_FILE_PATH );
             String bundleValue = bundlePath.replaceAll( "\\.properties$", StringPool.EMPTY ); //$NON-NLS-1$
-            NodeUtil.appendChildElement( newPortletElement, "resource-bundle", bundleValue ); //$NON-NLS-1$
+            String validBuildValue = bundleValue.replaceAll( "\\/", "." ); //$NON-NLS-1$
+
+            NodeUtil.appendChildElement( newPortletElement, "resource-bundle", validBuildValue ); //$NON-NLS-1$
         }
 
         // add portlet-info
