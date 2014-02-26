@@ -54,7 +54,6 @@ import org.eclipse.swt.widgets.Tree;
  */
 public class ComponentAPIsCustomPart extends FormComponentPart
 {
-
     private static final String LOADING_MSG = "Loading APIs...";
     private static final String LIFERAY_CORE_API = "Liferay core";
     private static final String ROOT_API = "root api";
@@ -213,9 +212,8 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                         {
                             handleCheckStateChangedEvent( event );
                         }
-                } );
-
-//                this.apisTreeViewer.addSelectionChangedListener( null );
+                    }
+                );
 
                 this.apisTreeViewer.setContentProvider( new APIsContentProvider() );
 
@@ -232,43 +230,55 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                 final Button selectAllButton = new Button( parent, SWT.NONE );
                 selectAllButton.setText( "Select All" );
                 selectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                selectAllButton.addListener( SWT.Selection, new Listener()
-                {
-                    public void handleEvent( Event event )
+                selectAllButton.addListener
+                (
+                    SWT.Selection,
+                    new Listener()
                     {
-                        for( MobileAPI rootAPI : rootAPIs )
+                        public void handleEvent( Event event )
                         {
-                            apisTreeViewer.setGrayed( rootAPI, false );
-                            apisTreeViewer.setSubtreeChecked( rootAPI, true );
+                            for( MobileAPI rootAPI : rootAPIs )
+                            {
+                                apisTreeViewer.setGrayed( rootAPI, false );
+                                apisTreeViewer.setSubtreeChecked( rootAPI, true );
+                            }
                         }
                     }
-                } );
+                );
 
                 final Button deselectAllButton = new Button( parent, SWT.NONE );
                 deselectAllButton.setText( "Deselect All" );
                 deselectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                deselectAllButton.addListener( SWT.Selection, new Listener()
-                {
-                    public void handleEvent( Event event )
+                deselectAllButton.addListener
+                (
+                    SWT.Selection,
+                    new Listener()
                     {
-                        for( MobileAPI rootAPI : rootAPIs )
+                        public void handleEvent( Event event )
                         {
-                            apisTreeViewer.setSubtreeChecked( rootAPI, false );
+                            for( MobileAPI rootAPI : rootAPIs )
+                            {
+                                apisTreeViewer.setSubtreeChecked( rootAPI, false );
+                            }
                         }
                     }
-                } );
+                );
 
                 final Button refreshButton = new Button( parent, SWT.NONE );
                 refreshButton.setText( "Refresh" );
                 refreshButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                refreshButton.addListener( SWT.Selection, new Listener()
-                {
-                    public void handleEvent( Event event )
+                refreshButton.addListener
+                (
+                    SWT.Selection,
+                    new Listener()
                     {
-                        apisTreeViewer.setInput( LOADING_MSG );
-                        startAPIUpdateThread();
+                         public void handleEvent( Event event )
+                         {
+                            apisTreeViewer.setInput( LOADING_MSG );
+                            startAPIUpdateThread();
+                        }
                     }
-                } );
+                );
 
                 startAPIUpdateThread();
             }

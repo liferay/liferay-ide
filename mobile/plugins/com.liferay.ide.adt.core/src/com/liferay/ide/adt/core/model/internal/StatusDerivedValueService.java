@@ -27,7 +27,9 @@ import org.eclipse.sapphire.PropertyContentEvent;
  */
 public class StatusDerivedValueService extends DerivedValueService
 {
-    private String status = "unknown";
+    private final String DEFAULT_STATUS = "unknown";
+
+    private String status = DEFAULT_STATUS;
     private FilteredListener<PropertyContentEvent> listener;
 
     @Override
@@ -94,7 +96,7 @@ public class StatusDerivedValueService extends DerivedValueService
 
     protected void restoreStatus()
     {
-        this.status = "unknown";
+        this.status = DEFAULT_STATUS;
 
         refresh();
     }
