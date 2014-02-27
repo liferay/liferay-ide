@@ -45,38 +45,11 @@ import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
  */
 public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesOp>
 {
+    private static final String OK_STATUS = "OK";
+
     private static final String WIZARD_SETTINGS_FOLDER = ".metadata/.plugins/com.liferay.ide.adt.ui/wizards";
-    private final String OK_STATUS = "OK";
 
-    private boolean needsUpdate = true;
-
-    public MobileSDKLibrariesWizard( final IJavaProject project )
-    {
-        super( initElement( project ), DefinitionLoader.sdef( MobileSDKLibrariesWizard.class ).wizard( "wizard" ) );
-    }
-
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] pages = super.getPages();
-
-        if( this.needsUpdate )
-        {
-            this.needsUpdate = false;
-
-            new Thread( "status update" )
-            {
-                public void run()
-                {
-                    element().updateServerStatus();
-                }
-            }.start();
-        }
-
-        return pages;
-    }
-
-    protected static void attachSettings( MobileSDKLibrariesOp targetOp )
+    protected static void applySettings( MobileSDKLibrariesOp targetOp )
     {
         final MobileSDKLibrariesWizardSettings settings = loadSettings( targetOp );
 
@@ -93,6 +66,33 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
             MobileSDKLibrariesWizard.class.getName() + project.getProject().getLocationURI().getPath();
 
         return uniquePath != null ? MiscUtil.createStringDigest( uniquePath ) : null;
+    }
+
+    private static boolean containsInstance( MobileSDKLibrariesOp sourceOp, ElementList<ServerInstance> instances )
+    {
+        for( ServerInstance instance : instances )
+        {
+            if( instance.getUrl().content().equals( sourceOp.getUrl().content() ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected static IJavaProject getJavaProject( String projectName )
+    {
+        IJavaProject retval = null;
+
+        final IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
+
+        if( project != null && project.exists() )
+        {
+            retval = JavaCore.create( project );
+        }
+
+        return retval;
     }
 
     private static File getWizardPersistenceFile( String fileName ) throws CoreException
@@ -115,7 +115,7 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
         MobileSDKLibrariesOp op = MobileSDKLibrariesOp.TYPE.instantiate();
 
         op.setProjectName( project.getProject().getName() );
-        attachSettings( op );
+        applySettings( op );
 
         return op;
     }
@@ -146,37 +146,38 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
         return retval;
     }
 
-    private boolean containsInstance( MobileSDKLibrariesOp sourceOp, ElementList<ServerInstance> instances )
+    private boolean needsUpdate = true;
+
+    public MobileSDKLibrariesWizard( final IJavaProject project )
     {
-        for( ServerInstance instance : instances )
+        super( initElement( project ), DefinitionLoader.sdef( MobileSDKLibrariesWizard.class ).wizard( "wizard" ) );
+    }
+
+    @Override
+    public IWizardPage[] getPages()
+    {
+        final IWizardPage[] pages = super.getPages();
+
+        if( this.needsUpdate )
         {
-            if( instance.getUrl().content().equals( sourceOp.getUrl().content() ) )
+            this.needsUpdate = false;
+
+            new Thread( "status update" )
             {
-                return true;
-            }
+                public void run()
+                {
+                    element().updateServerStatus();
+                }
+            }.start();
         }
 
-        return false;
+        return pages;
     }
 
     @Override
     protected void performPostFinish()
     {
         saveSettings( element() );
-    }
-
-    protected static IJavaProject getJavaProject( String projectName )
-    {
-        IJavaProject retval = null;
-
-        final IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
-
-        if( project != null && project.exists() )
-        {
-            retval = JavaCore.create( project );
-        }
-
-        return retval;
     }
 
     protected void saveSettings( MobileSDKLibrariesOp sourceOp )
