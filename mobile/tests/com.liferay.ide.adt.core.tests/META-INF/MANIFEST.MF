@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.android.ide.eclipse.ddms;bundle-version="22.2.0",
  com.android.ide.eclipse.gldebugger;bundle-version="22.2.0",
  com.android.ide.eclipse.hierarchyviewer;bundle-version="22.2.0",
- com.android.ide.eclipse.traceview;bundle-version="22.2.0"
+ com.android.ide.eclipse.traceview;bundle-version="22.2.0",
+ com.liferay.mobile.sdk.core;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.adt.core.tests

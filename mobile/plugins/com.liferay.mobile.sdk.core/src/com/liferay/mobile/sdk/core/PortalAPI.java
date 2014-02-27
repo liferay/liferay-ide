@@ -17,11 +17,11 @@ package com.liferay.mobile.sdk.core;
 /**
  * @author Gregory Amerson
  */
-public class CoreAPI extends MobileAPI
+public class PortalAPI extends MobileAPI
 {
-    public static final String NAME = "Liferay core";
+    public static final String NAME = "Liferay Portal v6.2";
 
-    public CoreAPI()
+    public PortalAPI()
     {
         super( NAME );
     }

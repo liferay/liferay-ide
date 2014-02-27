@@ -167,7 +167,7 @@ public class MobileSDKCore extends Plugin
     {
         final List<MobileAPI> apis = new ArrayList<MobileAPI>();
 
-        apis.add( new CoreAPI() );
+        apis.add( new PortalAPI() );
 
         try
         {
@@ -227,11 +227,6 @@ public class MobileSDKCore extends Plugin
     public static void logError( String msg, Exception e )
     {
         getDefault().getLog().log( createErrorStatus( msg, e ) );
-    }
-
-    public static MobileSDKBuilder newSDKBuilder()
-    {
-        return new MobileSDKBuilder();
     }
 
     public static File newTempDir()

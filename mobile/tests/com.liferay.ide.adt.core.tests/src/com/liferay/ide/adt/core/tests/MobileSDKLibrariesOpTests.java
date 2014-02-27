@@ -23,6 +23,7 @@ import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.mobile.sdk.core.PortalAPI;
 
 import java.io.File;
 import java.io.IOException;
@@ -96,7 +97,7 @@ public class MobileSDKLibrariesOpTests extends BaseTests
 
         op.setProjectName( projectName );
 
-        op.getLibraries().insert().setContext( "Liferay core" );
+        op.getLibraries().insert().setContext( PortalAPI.NAME );
 
         op.execute( npm() );
 

@@ -17,14 +17,16 @@ package com.liferay.ide.adt.core.model.internal;
 import com.liferay.ide.adt.core.ADTCore;
 import com.liferay.ide.adt.core.model.Library;
 import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
-import com.liferay.ide.adt.core.model.ServerInstance;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.mobile.sdk.core.PortalAPI;
+import com.liferay.mobile.sdk.core.MobileSDKBuilder;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
-import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
@@ -70,24 +71,9 @@ public class MobileSDKLibrariesOpMethods
         }
     }
 
-    private static boolean containsInstance( MobileSDKLibrariesOp op, ElementList<ServerInstance> instances )
-    {
-        for( ServerInstance instance : instances )
-        {
-            if( instance.getUrl().content().equals( op.getUrl().content() ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public static final Status execute( final MobileSDKLibrariesOp op, final ProgressMonitor monitor )
     {
         Status retval = null;
-
-        saveWizardSettings( op );
 
         final IProject project = CoreUtil.getProject( op.getProjectName().content() );
 
@@ -95,24 +81,49 @@ public class MobileSDKLibrariesOpMethods
 
         final ElementList<Library> libraries = op.getLibraries();
 
+        if( libraries.size() == 0 )
+        {
+            libraries.insert().setContext( PortalAPI.NAME );
+        }
+
+        final Map<String, String[]> buildSpec = new HashMap<String, String[]>();
+
+        boolean hasPortal = false;
+
+        for( final Library library : libraries )
+        {
+            final String context = library.getContext().content();
+
+            if( PortalAPI.NAME.equals( library.getContext().content() ) )
+            {
+                hasPortal = true;
+                buildSpec.put( context, null );
+            }
+            else if( ! library.getEntity().empty() )
+            {
+                final String entity = library.getEntity().content();
+                final String[] entities = buildSpec.get( context );
+
+                if( CoreUtil.isNullOrEmpty( entities ) )
+                {
+                    buildSpec.put( context, new String[] { entity } );
+                }
+                else
+                {
+                    final String[] newEntities = new String[ entities.length + 1 ];
+                    System.arraycopy( entities, 0, newEntities, 0, entities.length );
+                    newEntities[ entities.length ] = entity;
+
+                    buildSpec.put( context, newEntities );
+                }
+            }
+        }
+
         File[] customJars = null;
 
-        boolean hasCore = false;
-
-        for( Library library : libraries )
+        if( ( hasPortal && buildSpec.keySet().size() > 1 ) || ( !hasPortal && buildSpec.keySet().size() > 0 ) )
         {
-            if( ! library.getEntity().empty() )
-            {
-                customJars =
-                    MobileSDKCore.newSDKBuilder().buildJars(
-                        op.getUrl().content(), library.getContext().content(), op.getPackage().getDefaultText(),
-                        library.getEntity().content() );
-            }
-
-            if( "Liferay core".equals( library.getContext().content() ) )
-            {
-                hasCore = true;
-            }
+            customJars = MobileSDKBuilder.buildJars( op.getUrl().content(), op.getPackage().getDefaultText(), buildSpec );
         }
 
         final List<File[]> files = new ArrayList<File[]>();
@@ -122,7 +133,7 @@ public class MobileSDKLibrariesOpMethods
             files.add( customJars );
         }
 
-        if( hasCore )
+        if( hasPortal )
         {
             // add standard sdk and sources
             files.add( libs.get( "liferay-android-sdk-1.1" ) );
@@ -131,7 +142,6 @@ public class MobileSDKLibrariesOpMethods
         {
             files.add( libs.get( "liferay-android-sdk-1.1-core" ) );
         }
-
 
         try
         {
@@ -145,28 +155,6 @@ public class MobileSDKLibrariesOpMethods
         }
 
         return retval;
-    }
-
-    private static void saveWizardSettings( final MobileSDKLibrariesOp op )
-    {
-        if( ! CoreUtil.isNullOrEmpty( op.getUrl().content() ) )
-        {
-            try
-            {
-                final ElementList<ServerInstance> previousServerInstances = op.getPreviousServerInstances();
-
-                if( ! containsInstance( op, previousServerInstances ) )
-                {
-                    op.getPreviousServerInstances().insert().copy( op );
-                }
-
-                op.resource().save();
-            }
-            catch( ResourceStoreException e )
-            {
-                ADTCore.logError( "Unable to persist wizard settings", e );
-            }
-        }
     }
 
     public static void updateServerStatus( MobileSDKLibrariesOp op )

@@ -21,13 +21,17 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.mobile.sdk.core.PortalAPI;
 import com.liferay.mobile.sdk.core.MobileAPI;
+import com.liferay.mobile.sdk.core.MobileSDKBuilder;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -56,7 +60,7 @@ public class MobileSDKCoreTests extends BaseTests
     {
         final File newTempDir = MobileSDKCore.newTempDir();
 
-        MobileSDKCore.newSDKBuilder().build( server, contextName, packageName, filter, newTempDir.getCanonicalPath() );
+        MobileSDKBuilder.build( server, contextName, packageName, filter, newTempDir.getCanonicalPath() );
 
         return FileUtils.listFiles( newTempDir, null, true );
     }
@@ -140,7 +144,10 @@ public class MobileSDKCoreTests extends BaseTests
     @Test
     public void testMobileSDKBuilderBuildJars() throws Exception
     {
-        final File[] customJars = MobileSDKCore.newSDKBuilder().buildJars( SERVER, CONTEXT, PACKAGE );
+        final Map<String, String[]> buildSpec = new HashMap<String, String[]>();
+        buildSpec.put( PortalAPI.NAME, null );
+
+        final File[] customJars = MobileSDKBuilder.buildJars( SERVER, PACKAGE, buildSpec );
 
         checkJar( customJars[0], false );
         checkJar( customJars[1], true );

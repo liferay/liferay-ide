@@ -23,6 +23,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Jar;
@@ -45,7 +47,7 @@ public class MobileSDKBuilder
         build( server, contextName, packageName, null, buildDir );
     }
 
-    public void build( String server, String contextName, String packageName, String filter, String buildDir )
+    public static void build( String server, String contextName, String packageName, String filter, String buildDir )
     {
         try
         {
@@ -57,25 +59,34 @@ public class MobileSDKBuilder
         }
     }
 
-    public File[] buildJars( String server, String contextName, String packageName )
+    public static File[] buildJars( String server, String packageName, Map<String, String[]> buildSpec )
     {
-        return buildJars( server, contextName, packageName, null );
-    }
+        File[] retval = null;
 
-    public File[] buildJars( String server, String contextName, String packageName, String filter )
-    {
         final File sourceDir = MobileSDKCore.newTempDir();
         final File classDir = MobileSDKCore.newTempDir();
-        File[] retval = null;
 
         try
         {
-            build( server, contextName, packageName, filter, sourceDir.getCanonicalPath() );
+            final Set<String> contexts = buildSpec.keySet();
+
+            for( final String context : contexts )
+            {
+                if( ! context.equals( PortalAPI.NAME ) )
+                {
+                    final String[] filters = buildSpec.get( context );
+
+                    for( final String filter : filters )
+                    {
+                        build( server, context, packageName, filter, sourceDir.getCanonicalPath() );
+                    }
+                }
+            }
 
             if( compile( sourceDir.getCanonicalPath(), classDir.getCanonicalPath() ) )
             {
                 final File customJar = MobileSDKCore.newTempFile( "liferay-android-sdk-custom.jar" );
-                final File customJarSrc = MobileSDKCore.newTempFile( "liferay-android-sdk-custom-src.jar" );
+                final File customJarSrc = MobileSDKCore.newTempFile( "liferay-android-sdk-custom-sources.jar" );
 
                 jar( classDir, "**/*.class", customJar );
                 jar( sourceDir, "**/*.java", customJarSrc );
@@ -99,14 +110,14 @@ public class MobileSDKBuilder
         return retval;
     }
 
-    private String bundlePath( String bundle ) throws MalformedURLException
+    private static String bundlePath( String bundle ) throws MalformedURLException
     {
         final String path = new URL( new URL( Platform.getBundle( bundle ).getLocation() ).getPath() ).getPath();
 
         return path.startsWith( "/" ) ? path.substring( 1, path.length() ) : path;
     }
 
-    private boolean compile( String sourceDir, String destDir ) throws IOException
+    private static boolean compile( String sourceDir, String destDir ) throws IOException
     {
         final List<String> args = new ArrayList<String>();
 
@@ -149,7 +160,7 @@ public class MobileSDKBuilder
             System.err ), progress );
     }
 
-    private void jar( File srcDir, String include, File destFile )
+    private static void jar( File srcDir, String include, File destFile )
     {
         final Jar jar = new Jar();
 
@@ -167,7 +178,7 @@ public class MobileSDKBuilder
         jar.execute();
     }
 
-    private String libPath( String lib ) throws IOException
+    private static String libPath( String lib ) throws IOException
     {
         return FileLocator.toFileURL( MobileSDKCore.getDefault().getBundle().getEntry( "lib/" + lib ) ).getPath();
     }

@@ -20,7 +20,7 @@ import com.liferay.ide.adt.ui.ADTUI;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.mobile.sdk.core.CoreAPI;
+import com.liferay.mobile.sdk.core.PortalAPI;
 import com.liferay.mobile.sdk.core.EntityAPI;
 import com.liferay.mobile.sdk.core.MobileAPI;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
@@ -58,7 +58,7 @@ import org.eclipse.swt.widgets.Tree;
 public class ComponentAPIsCustomPart extends FormComponentPart
 {
     private static final String LOADING_MSG = "Loading APIs...";
-    private static final String ROOT_API = "root api";
+    private static final String ROOT_API = "root-api";
     private static final String API = "api";
 
     class APIsContentProvider implements ITreeContentProvider
@@ -125,12 +125,14 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         @Override
         protected void initalizeImageRegistry( ImageRegistry imageRegistry )
         {
-            imageRegistry.put( CoreAPI.NAME,
+            imageRegistry.put( PortalAPI.NAME,
                 ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/server.png" ) );
             imageRegistry.put( ROOT_API,
                 ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/portlet_16x16.png" ) );
             imageRegistry.put( API,
                 ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/web_services_16x16.gif" ) );
+            imageRegistry.put( LOADING_MSG,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/loading.gif" ) );
         }
 
         @Override
@@ -138,9 +140,9 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         {
             if( element instanceof MobileAPI )
             {
-                if( CoreAPI.NAME.equals( ( (MobileAPI) element ).context ) )
+                if( PortalAPI.NAME.equals( ( (MobileAPI) element ).context ) )
                 {
-                    return this.getImageRegistry().get( CoreAPI.NAME );
+                    return this.getImageRegistry().get( PortalAPI.NAME );
                 }
                 else
                 {
@@ -150,6 +152,10 @@ public class ComponentAPIsCustomPart extends FormComponentPart
             else if( element instanceof EntityAPI )
             {
                 return getImageRegistry().get( API );
+            }
+            else if( element instanceof String )
+            {
+                return getImageRegistry().get( LOADING_MSG );
             }
 
             return null;
@@ -166,6 +172,10 @@ public class ComponentAPIsCustomPart extends FormComponentPart
             else if( element instanceof EntityAPI )
             {
                 styled.append( ( (EntityAPI) element ).name );
+            }
+            else if( element instanceof String )
+            {
+                return styled.append( LOADING_MSG );
             }
 
             return styled;
@@ -334,7 +344,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
                     for( MobileAPI rootAPI : rootAPIs )
                     {
-                        if( rootAPI instanceof CoreAPI )
+                        if( rootAPI instanceof PortalAPI )
                         {
                             if( this.apisTreeViewer.getChecked( rootAPI ) )
                             {
@@ -379,7 +389,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                 final String password = op.getOmniPassword().content();
 
                 op.getLibraries().clear();
-                op.getLibraries().insert().setContext( CoreAPI.NAME );
+                op.getLibraries().insert().setContext( PortalAPI.NAME );
 
                 rootAPIs = MobileSDKCore.discoverAPIs( url, username, password );
 
@@ -395,7 +405,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                             {
                                 for( MobileAPI rootAPI : rootAPIs )
                                 {
-                                    if( CoreAPI.NAME.equals( rootAPI.context ) )
+                                    if( PortalAPI.NAME.equals( rootAPI.context ) )
                                     {
                                         apisTreeViewer.setChecked( rootAPI, true );
                                         apisTreeViewer.setGrayed( rootAPI, false );
