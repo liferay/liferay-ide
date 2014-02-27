@@ -96,7 +96,7 @@ public class MobileSDKLibrariesOpTests extends BaseTests
 
         op.setProjectName( projectName );
 
-        op.getLibraryNames().insert().setName( "liferay-android-sdk-1.1" );
+        op.getLibraries().insert().setContext( "Liferay core" );
 
         op.execute( npm() );
 
