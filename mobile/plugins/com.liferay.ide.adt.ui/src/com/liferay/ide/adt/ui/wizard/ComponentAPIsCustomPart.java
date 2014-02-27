@@ -20,10 +20,10 @@ import com.liferay.ide.adt.ui.ADTUI;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
-import com.liferay.mobile.sdk.core.PortalAPI;
 import com.liferay.mobile.sdk.core.EntityAPI;
 import com.liferay.mobile.sdk.core.MobileAPI;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
+import com.liferay.mobile.sdk.core.PortalAPI;
 
 import java.util.Arrays;
 
