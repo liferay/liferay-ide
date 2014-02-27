@@ -31,9 +31,15 @@ public class CheckServerStatusActionHandler extends SapphireActionHandler
     }
 
     @Override
-    protected Object run( Presentation context )
+    protected Object run( final Presentation context )
     {
-        op( context ).updateServerStatus();
+        new Thread( "server update" )
+        {
+            public void run()
+            {
+                op( context ).updateServerStatus();
+            }
+        }.start();
 
         return null;
     }

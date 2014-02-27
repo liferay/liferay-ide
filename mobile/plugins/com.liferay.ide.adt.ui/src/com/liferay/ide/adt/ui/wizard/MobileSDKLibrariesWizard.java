@@ -17,6 +17,7 @@ package com.liferay.ide.adt.ui.wizard;
 import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 
@@ -29,11 +30,34 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
     private static MobileSDKLibrariesWizardSettings settings;
     private static MobileSDKLibrariesOp op;
 
+    private boolean needsUpdate = true;
+
     public MobileSDKLibrariesWizard( final IJavaProject project )
     {
         super( initElement( project ), DefinitionLoader.sdef( MobileSDKLibrariesWizard.class ).wizard( "wizard" ) );
 
         this.element().setProjectName( project.getProject().getName() );
+    }
+
+    @Override
+    public IWizardPage[] getPages()
+    {
+        final IWizardPage[] pages = super.getPages();
+
+        if( this.needsUpdate )
+        {
+            this.needsUpdate = false;
+
+            new Thread( "status update" )
+            {
+                public void run()
+                {
+                    element().updateServerStatus();
+                }
+            }.start();
+        }
+
+        return pages;
     }
 
     private static MobileSDKLibrariesOp initElement( IJavaProject project )

@@ -21,8 +21,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.mobile.sdk.core.MobileAPI;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
-import com.liferay.mobile.sdk.core.MobileSDKCore.MobileAPI;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,13 +104,13 @@ public class MobileSDKCoreTests extends BaseTests
 
         assertTrue( apis.length > 1 );
 
-        assertEquals( "Liferay core", apis[0].name );
+        assertEquals( "Liferay core", apis[0].context );
 
         boolean foundCalendar = false;
 
         for( final MobileAPI api : apis )
         {
-            if( api.name.equals( CONTEXT ) )
+            if( api.context.equals( CONTEXT ) )
             {
                 foundCalendar = true;
             }

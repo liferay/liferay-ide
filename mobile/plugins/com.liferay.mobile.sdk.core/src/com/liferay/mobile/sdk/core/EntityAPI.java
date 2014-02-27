@@ -12,34 +12,38 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.adt.core.model;
-
-import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.ValueProperty;
-
+package com.liferay.mobile.sdk.core;
 
 /**
  * @author Gregory Amerson
  */
-public interface Library extends Element
+public class EntityAPI
 {
-    ElementType TYPE = new ElementType( Library.class );
+    public String context;
+    public String name;
 
-    // *** Context ***
+    public EntityAPI( String context, String name )
+    {
+        this.context = context;
+        this.name = name;
+    }
 
-    ValueProperty PROP_CONTEXT = new ValueProperty( TYPE, "Context" );
+    @Override
+    public boolean equals( Object obj )
+    {
+        boolean equal = false;
 
-    Value<String> getContext();
-    void setContext( String value );
+        if( obj instanceof EntityAPI )
+        {
+            final EntityAPI other = (EntityAPI) obj;
 
+            if( other.name != null && other.name.equals( name ) && other.context != null &&
+                other.context.equals( context ) )
+            {
+                equal = true;
+            }
+        }
 
-    // *** Entity ***
-
-    ValueProperty PROP_ENTITY = new ValueProperty( TYPE, "Entity" );
-
-    Value<String> getEntity();
-    void setEntity( String value );
-
+        return equal;
+    }
 }

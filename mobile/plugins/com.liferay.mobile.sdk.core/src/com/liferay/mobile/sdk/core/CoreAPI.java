@@ -12,34 +12,17 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.adt.core.model;
-
-import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.Value;
-import org.eclipse.sapphire.ValueProperty;
-
+package com.liferay.mobile.sdk.core;
 
 /**
  * @author Gregory Amerson
  */
-public interface Library extends Element
+public class CoreAPI extends MobileAPI
 {
-    ElementType TYPE = new ElementType( Library.class );
+    public static final String NAME = "Liferay core";
 
-    // *** Context ***
-
-    ValueProperty PROP_CONTEXT = new ValueProperty( TYPE, "Context" );
-
-    Value<String> getContext();
-    void setContext( String value );
-
-
-    // *** Entity ***
-
-    ValueProperty PROP_ENTITY = new ValueProperty( TYPE, "Entity" );
-
-    Value<String> getEntity();
-    void setEntity( String value );
-
+    public CoreAPI()
+    {
+        super( NAME );
+    }
 }

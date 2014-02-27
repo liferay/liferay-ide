@@ -118,7 +118,7 @@ public class MobileSDKCore extends Plugin
     {
         for( MobileAPI api : apis )
         {
-            if( api.name.equals( servletContextName ) )
+            if( api.context.equals( servletContextName ) )
             {
                 return true;
             }
@@ -132,31 +132,42 @@ public class MobileSDKCore extends Plugin
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
     }
 
-    private static String[] discoverAPIs( String server, String servletContextName ) throws Exception
+    private static EntityAPI[] discoverAPIs( String server, String servletContextName ) throws Exception
     {
         final Discovery discovery = SDKBuilder.discover( server, servletContextName, null );
 
-        final List<String> entities = new ArrayList<String>();
+        final List<EntityAPI> entities = new ArrayList<EntityAPI>();
 
         for( Action action : discovery.getActions() )
         {
             final IPath path = new Path( action.getPath() );
             final String entity = path.segment( 0 );
 
-            if( ! entities.contains( entity ) )
+            boolean duplicate = false;
+
+            for( EntityAPI e : entities )
             {
-                entities.add( entity );
+                if( e.name.equals( entity ) )
+                {
+                    duplicate = true;
+                    break;
+                }
+            }
+
+            if( ! duplicate )
+            {
+                entities.add( new EntityAPI( servletContextName, entity ) );
             }
         }
 
-        return entities.toArray( new String[0] );
+        return entities.toArray( new EntityAPI[0] );
     }
 
     public static MobileAPI[] discoverAPIs( final String server, final String username, final String password )
     {
         final List<MobileAPI> apis = new ArrayList<MobileAPI>();
 
-        apis.add( new MobileAPI( "Liferay core" ) );
+        apis.add( new CoreAPI() );
 
         try
         {
@@ -176,7 +187,7 @@ public class MobileSDKCore extends Plugin
                     {
                         try
                         {
-                            final String[] contextAPIs = discoverAPIs( server, servletContextName );
+                            final EntityAPI[] contextAPIs = discoverAPIs( server, servletContextName );
 
                             if( ! CoreUtil.isNullOrEmpty( contextAPIs ) )
                             {
@@ -247,22 +258,5 @@ public class MobileSDKCore extends Plugin
     {
         plugin = null;
         super.stop( context );
-    }
-
-    public static class MobileAPI
-    {
-        public String[] apis = new String[0];
-        public String name;
-
-        public MobileAPI( String name )
-        {
-            this.name = name;
-        }
-
-        public MobileAPI( String name, String[] apis )
-        {
-            this.name = name;
-            this.apis = apis;
-        }
     }
 }

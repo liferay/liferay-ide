@@ -93,19 +93,45 @@ public class MobileSDKLibrariesOpMethods
 
         final Map<String, File[]> libs = MobileSDKCore.getLibraryMap();
 
-        final ElementList<Library> libraries = op.getLibraryNames();
+        final ElementList<Library> libraries = op.getLibraries();
 
-        final List<File[]> files = new ArrayList<File[]>();
+        File[] customJars = null;
+
+        boolean hasCore = false;
 
         for( Library library : libraries )
         {
-            final String libName = library.getName().content();
-
-            if( libs.containsKey( libName ) )
+            if( ! library.getEntity().empty() )
             {
-                files.add( libs.get( libName ) );
+                customJars =
+                    MobileSDKCore.newSDKBuilder().buildJars(
+                        op.getUrl().content(), library.getContext().content(), op.getPackage().getDefaultText(),
+                        library.getEntity().content() );
+            }
+
+            if( "Liferay core".equals( library.getContext().content() ) )
+            {
+                hasCore = true;
             }
         }
+
+        final List<File[]> files = new ArrayList<File[]>();
+
+        if( customJars != null )
+        {
+            files.add( customJars );
+        }
+
+        if( hasCore )
+        {
+            // add standard sdk and sources
+            files.add( libs.get( "liferay-android-sdk-1.1" ) );
+        }
+        else
+        {
+            files.add( libs.get( "liferay-android-sdk-1.1-core" ) );
+        }
+
 
         try
         {

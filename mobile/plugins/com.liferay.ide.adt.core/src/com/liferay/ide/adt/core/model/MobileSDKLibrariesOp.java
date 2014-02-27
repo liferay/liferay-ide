@@ -81,12 +81,12 @@ public interface MobileSDKLibrariesOp extends ServerInstance, ExecutableElement
     ElementList<ServerInstance> getPreviousServerInstances();
 
 
-    // *** LibraryNames ***
+    // *** Libraries ***
 
     @Type( base = Library.class )
-    ListProperty PROP_LIBRARY_NAMES = new ListProperty( TYPE, "LibraryNames" );
+    ListProperty PROP_LIBRARIES = new ListProperty( TYPE, "Libraries" );
 
-    ElementList<Library> getLibraryNames();
+    ElementList<Library> getLibraries();
 
 
     // *** Package ***

@@ -14,13 +14,16 @@
  *******************************************************************************/
 package com.liferay.ide.adt.ui.wizard;
 
+import com.liferay.ide.adt.core.model.Library;
 import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 import com.liferay.ide.adt.ui.ADTUI;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.mobile.sdk.core.CoreAPI;
+import com.liferay.mobile.sdk.core.EntityAPI;
+import com.liferay.mobile.sdk.core.MobileAPI;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
-import com.liferay.mobile.sdk.core.MobileSDKCore.MobileAPI;
 
 import java.util.Arrays;
 
@@ -55,7 +58,6 @@ import org.eclipse.swt.widgets.Tree;
 public class ComponentAPIsCustomPart extends FormComponentPart
 {
     private static final String LOADING_MSG = "Loading APIs...";
-    private static final String LIFERAY_CORE_API = "Liferay core";
     private static final String ROOT_API = "root api";
     private static final String API = "api";
 
@@ -69,7 +71,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         {
             if( parentElement instanceof MobileAPI )
             {
-                return ( (MobileAPI) parentElement ).apis;
+                return ( (MobileAPI) parentElement ).entities;
             }
 
             return null;
@@ -94,7 +96,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         {
             if( element instanceof MobileAPI )
             {
-                return ( (MobileAPI) element ).apis.length > 0;
+                return ( (MobileAPI) element ).entities.length > 0;
             }
 
             return false;
@@ -113,7 +115,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         {
             if( element instanceof MobileAPI )
             {
-                return ( (MobileAPI) element ).name;
+                return ( (MobileAPI) element ).context;
             }
 
             return super.getText( element );
@@ -123,15 +125,12 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         @Override
         protected void initalizeImageRegistry( ImageRegistry imageRegistry )
         {
-            imageRegistry.put(
-                LIFERAY_CORE_API,
-                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/liferay-core_16x16.png" ) );
-            imageRegistry.put(
-                ROOT_API,
+            imageRegistry.put( CoreAPI.NAME,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/server.png" ) );
+            imageRegistry.put( ROOT_API,
                 ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/portlet_16x16.png" ) );
-            imageRegistry.put(
-                API,
-                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/portlet_16x16.png" ) );
+            imageRegistry.put( API,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/web_services_16x16.gif" ) );
         }
 
         @Override
@@ -139,16 +138,16 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         {
             if( element instanceof MobileAPI )
             {
-                if( LIFERAY_CORE_API.equals( ( (MobileAPI) element ).name ) )
+                if( CoreAPI.NAME.equals( ( (MobileAPI) element ).context ) )
                 {
-                    return this.getImageRegistry().get( LIFERAY_CORE_API );
+                    return this.getImageRegistry().get( CoreAPI.NAME );
                 }
                 else
                 {
                     return this.getImageRegistry().get( ROOT_API );
                 }
             }
-            else if( element instanceof String )
+            else if( element instanceof EntityAPI )
             {
                 return getImageRegistry().get( API );
             }
@@ -162,11 +161,11 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
             if( element instanceof MobileAPI )
             {
-                styled.append( ( (MobileAPI) element ).name );
+                styled.append( ( (MobileAPI) element ).context );
             }
-            else if( element instanceof String )
+            else if( element instanceof EntityAPI )
             {
-                styled.append( (String) element );
+                styled.append( ( (EntityAPI) element ).name );
             }
 
             return styled;
@@ -294,17 +293,17 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                         apisTreeViewer.setGrayed( element, false );
                         apisTreeViewer.setSubtreeChecked( element, event.getChecked() );
                     }
-                    else if( element instanceof String )
+                    else if( element instanceof EntityAPI )
                     {
                         for( MobileAPI rootAPI : rootAPIs )
                         {
-                            if( Arrays.asList( rootAPI.apis ).contains( (String) element ) )
+                            if( Arrays.asList( rootAPI.entities ).contains( element ) )
                             {
-                                int apiCount = rootAPI.apis.length;
+                                int apiCount = rootAPI.entities.length;
 
                                 int checkedCount = 0;
 
-                                for( String api : rootAPI.apis )
+                                for( EntityAPI api : rootAPI.entities )
                                 {
                                     if( apisTreeViewer.getChecked( api ) )
                                     {
@@ -330,6 +329,32 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                             }
                         }
                     }
+
+                    op().getLibraries().clear();
+
+                    for( MobileAPI rootAPI : rootAPIs )
+                    {
+                        if( rootAPI instanceof CoreAPI )
+                        {
+                            if( this.apisTreeViewer.getChecked( rootAPI ) )
+                            {
+                                final Library newLib = op().getLibraries().insert();
+                                newLib.setContext( rootAPI.context );
+                            }
+                        }
+                        else
+                        {
+                            for( EntityAPI api : rootAPI.entities )
+                            {
+                                if( this.apisTreeViewer.getChecked( api ) )
+                                {
+                                    final Library newLib = op().getLibraries().insert();
+                                    newLib.setContext( api.context );
+                                    newLib.setEntity( api.name );
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -348,10 +373,13 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
             private void checkAndUpdateAPIs()
             {
-                final MobileSDKLibrariesOp op = getLocalModelElement().nearest( MobileSDKLibrariesOp.class );
+                final MobileSDKLibrariesOp op = op();
                 final String url = op.getUrl().content();
                 final String username = op.getOmniUsername().content();
                 final String password = op.getOmniPassword().content();
+
+                op.getLibraries().clear();
+                op.getLibraries().insert().setContext( CoreAPI.NAME );
 
                 rootAPIs = MobileSDKCore.discoverAPIs( url, username, password );
 
@@ -367,7 +395,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                             {
                                 for( MobileAPI rootAPI : rootAPIs )
                                 {
-                                    if( LIFERAY_CORE_API.equals( rootAPI.name ) )
+                                    if( CoreAPI.NAME.equals( rootAPI.context ) )
                                     {
                                         apisTreeViewer.setChecked( rootAPI, true );
                                         apisTreeViewer.setGrayed( rootAPI, false );
@@ -379,6 +407,11 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                         }
                     }
                 );
+            }
+
+            private MobileSDKLibrariesOp op()
+            {
+                return getLocalModelElement().nearest( MobileSDKLibrariesOp.class );
             }
         };
     }
