@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay ADT Core Tests
 Bundle-SymbolicName: com.liferay.ide.adt.core.tests;singleton:=true
-Bundle-Version: 1.1.0.qualifier
+Bundle-Version: 2.1.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.adt.core,
@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.android.ide.eclipse.gldebugger;bundle-version="22.2.0",
  com.android.ide.eclipse.hierarchyviewer;bundle-version="22.2.0",
  com.android.ide.eclipse.traceview;bundle-version="22.2.0",
- com.liferay.mobile.sdk.core;bundle-version="1.1.0"
+ com.liferay.mobile.sdk.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.adt.core.tests
