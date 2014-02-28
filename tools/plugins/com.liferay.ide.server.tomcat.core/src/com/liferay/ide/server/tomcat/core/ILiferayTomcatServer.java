@@ -21,6 +21,7 @@ import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public interface ILiferayTomcatServer extends ILiferayServer, ITomcatServer
@@ -37,6 +38,8 @@ public interface ILiferayTomcatServer extends ILiferayServer, ITomcatServer
 
     String PROPERTY_MEMORY_ARGS = "memoryArgs"; //$NON-NLS-1$
 
+    String PROPERTY_SERVER_MODE = "serverMode"; //$NON-NLS-1$
+
     String PROPERTY_USER_TIMEZONE = "userTimezone"; //$NON-NLS-1$
 
     String getAutoDeployDirectory();
@@ -46,6 +49,8 @@ public interface ILiferayTomcatServer extends ILiferayServer, ITomcatServer
     String getExternalProperties();
 
     String getMemoryArgs();
+
+    int getServerMode();
 
     String getUserTimezone();
 

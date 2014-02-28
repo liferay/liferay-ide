@@ -12,6 +12,7 @@
 
 package com.liferay.ide.server.tomcat.core;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -36,9 +37,11 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerUtil;
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatServer extends TomcatServer
@@ -68,6 +71,24 @@ public class LiferayTomcatServer extends TomcatServer
     public String getAutoDeployInterval()
     {
         return getAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, ILiferayTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL );
+    }
+
+    public int getDefaultServerMode()
+    {
+        IPath location = getServer().getRuntime().getLocation();
+
+        String version = LiferayTomcatUtil.getVersion( location, LiferayTomcatUtil.getPortalDir( location ) );
+
+        Version portalVersion = Version.parseVersion( version );
+
+        int defaultServerMode = ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE;
+
+        if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) >= 0 )
+        {
+            defaultServerMode = ILiferayTomcatConstants.STANDARD_SERVER_MODE;
+        }
+
+        return defaultServerMode;
     }
 
     public String getExternalProperties()
@@ -128,6 +149,11 @@ public class LiferayTomcatServer extends TomcatServer
     public ILiferayTomcatConfiguration getLiferayTomcatConfiguration() throws CoreException
     {
         return (ILiferayTomcatConfiguration) getTomcatConfiguration();
+    }
+
+    public int getServerMode()
+    {
+        return getAttribute( PROPERTY_SERVER_MODE, getDefaultServerMode() );
     }
 
     @Override
@@ -356,6 +382,11 @@ public class LiferayTomcatServer extends TomcatServer
     public void setMemoryArgs( String memoryArgs )
     {
         setAttribute( PROPERTY_MEMORY_ARGS, memoryArgs );
+    }
+
+    public void setServerMode( int serverMode )
+    {
+        setAttribute( PROPERTY_SERVER_MODE, serverMode );
     }
 
     public void setUserTimezone( String userTimezone )
