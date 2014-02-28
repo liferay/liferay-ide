@@ -69,6 +69,7 @@ import org.osgi.framework.Version;
 /**
  * @author Greg Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatUtil
@@ -272,7 +273,11 @@ public class LiferayTomcatUtil
 
         Properties props = new Properties();
 
-        props.put( "include-and-override", "portal-developer.properties" ); //$NON-NLS-1$ //$NON-NLS-2$
+        if( ( portalServer != null ) &&
+            ( portalServer.getServerMode() == ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE ) )
+        {
+            props.put( "include-and-override", "portal-developer.properties" ); //$NON-NLS-1$ //$NON-NLS-2$
+        }
 
         props.put( "com.liferay.portal.servlet.filters.etag.ETagFilter", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
         props.put( "com.liferay.portal.servlet.filters.header.HeaderFilter", "false" ); //$NON-NLS-1$ //$NON-NLS-2$
