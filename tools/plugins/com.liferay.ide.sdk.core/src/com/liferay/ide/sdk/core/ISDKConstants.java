@@ -53,7 +53,8 @@ public interface ISDKConstants
         StringPool.ASTERISK + _HOOK_PLUGIN_PROJECT_SUFFIX + "*.war", //$NON-NLS-1$
         StringPool.ASTERISK + _THEME_PLUGIN_PROJECT_SUFFIX + "*.war",  //$NON-NLS-1$
         StringPool.ASTERISK + _PORTLET_PLUGIN_PROJECT_SUFFIX + "*.war", //$NON-NLS-1$
-        StringPool.ASTERISK + _LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "*.war"  //$NON-NLS-1$
+        StringPool.ASTERISK + _LAYOUTTPL_PLUGIN_PROJECT_SUFFIX + "*.war",  //$NON-NLS-1$
+        StringPool.ASTERISK + _WEB_PLUGIN_PROJECT_SUFFIX + "*.war"  //$NON-NLS-1$
     };
 
     public static final String BUILD_PROPERTIES = "build.properties"; //$NON-NLS-1$

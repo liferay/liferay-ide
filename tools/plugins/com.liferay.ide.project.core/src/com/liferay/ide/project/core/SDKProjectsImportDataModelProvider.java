@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
@@ -233,7 +235,21 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
                 if( selectedProjects.length >= 1 )
                 {
-                    // return ProjectCorePlugin.createErrorStatus("Only one project can be imported at a time.");
+                    for( Object project : selectedProjects )
+                    {
+                        if( project instanceof BinaryProjectRecord )
+                        {
+                            BinaryProjectRecord binaryProject = (BinaryProjectRecord) project;
+                            Version sdkVersion = new Version( getStringProperty( SDK_VERSION ) );
+
+                            if( binaryProject.isWeb() &&
+                                CoreUtil.compareVersions( sdkVersion, ILiferayConstants.V700 ) < 0 )
+                            {
+                                return LiferayProjectCore.createErrorStatus( Msgs.unableSupportWebPluginType );
+                            }
+                        }
+                    }
+
                     return Status.OK_STATUS;
                 }
             }
@@ -287,7 +303,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
     /**
      * this method needs to be overriden by the subclasses to support custom messages
-     * 
+     *
      * @return an error {@link IStatus}
      */
     public IStatus createSelectedProjectsErrorStatus()
@@ -302,7 +318,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
     /**
      * A small delegation to call super.validate, by passing this class
-     * 
+     *
      * @param name
      * @return
      */
@@ -317,6 +333,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
         public static String invalidPluginSDKVersion;
         public static String selectOneLiferayProject;
         public static String selectValidLiferayRuntime;
+        public static String unableSupportWebPluginType;
         public static String versionUnequal;
 
         static
