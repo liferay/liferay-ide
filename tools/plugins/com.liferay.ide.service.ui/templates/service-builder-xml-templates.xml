@@ -20,6 +20,10 @@
 
 	&lt;column name="${fooId}" type="long" primary="true" /&gt;
 
+	&lt;!-- Group instance --&gt;
+
+	&lt;colunm name="groupId" type="long" /&gt;
+
 	&lt;!-- Audit fields --&gt;
 
 	&lt;column name="companyId" type="long" /&gt;
