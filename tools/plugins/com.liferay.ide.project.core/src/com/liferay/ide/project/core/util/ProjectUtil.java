@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -28,6 +29,7 @@ import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelPro
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
@@ -46,6 +48,8 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -952,6 +956,27 @@ public class ProjectUtil
         return pluginType;
     }
 
+
+    public static IProject[] getAllPluginsSDKProjects()
+    {
+        final List<IProject> sdkProjects = new ArrayList<IProject>();
+
+        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+        for (IProject project : projects)
+        {
+            if ( ProjectUtil.isLiferayFacetedProject( project ) )
+            {
+                if (SDKUtil.isSDKProject( project ) )
+                {
+                    sdkProjects.add( project );
+                }
+            }
+        }
+
+        return sdkProjects.toArray( new IProject[sdkProjects.size()]);
+    }
+
     public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet )
     {
         boolean retval = false;
@@ -1393,6 +1418,43 @@ public class ProjectUtil
         }
 
         return string.replaceFirst( regex, StringPool.EMPTY );
+    }
+
+    public static class SearchFilesVisitor implements IResourceProxyVisitor
+    {
+
+        String searchFileName = null;
+        List<IFile> resources = new ArrayList<IFile>();
+
+        public boolean visit( IResourceProxy resourceProxy )
+        {
+            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().equals( searchFileName ) )
+            {
+                IResource resource = resourceProxy.requestResource();
+
+                if( resource.exists() )
+                {
+                    resources.add( (IFile) resource );
+                }
+            }
+
+            return true;
+        }
+
+        public List<IFile> searchFiles( IResource container, String searchFileName )
+        {
+            this.searchFileName = searchFileName;
+            try
+            {
+                container.accept( this, IContainer.EXCLUDE_DERIVED );
+            }
+            catch( CoreException e )
+            {
+                LiferayCore.logError( e );
+            }
+
+            return resources;
+        }
     }
 
     public static void setDefaultRuntime( IDataModel dataModel )

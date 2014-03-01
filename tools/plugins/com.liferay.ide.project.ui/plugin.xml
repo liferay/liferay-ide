@@ -880,7 +880,68 @@
             name="Projects">
       </page>
    </extension>
-   <!--
+   
+   
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="com.liferay.ide.newWizards"
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.project.ui.wizard.UpgradeLiferayProjectsWizard"
+            name="%upgrade.project.wizard.name"
+            project="true">
+         <class class="com.liferay.ide.project.ui.wizard.UpgradeLiferayProjectsWizard">
+         </class>
+
+         <description>
+            %new.project.wizard.description
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Upgrade Liferay Projects"
+            id="com.liferay.ide.project.ui.handlers.projectUpgrade"
+            name="Upgrade Liferay Projects">
+      </command>
+      <category
+            description="Upgrade Liferay Projectss"
+            id="com.liferay.ide.project.ui.handlers"
+            name="Upgrade Liferay Projects">
+      </category>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:project?after=additions">
+         <command
+               commandId="com.liferay.ide.project.ui.handlers.projectUpgrade"
+               icon="icons/e16/server.png"
+               label="Upgrade Liferay projects..."
+               style="push"
+               tooltip="Upgrade portal runtime to latest.">
+         </command>
+      </menuContribution>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.liferay.ide.project.ui.handlers.UpgradeLiferayProjectsHandler"
+            commandId="com.liferay.ide.project.ui.handlers.projectUpgrade">
+      </handler>
+   </extension>   
+
+<!--  
+
    <extension
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
       <category
