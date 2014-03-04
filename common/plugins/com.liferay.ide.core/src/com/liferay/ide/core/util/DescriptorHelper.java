@@ -22,6 +22,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.internal.content.ContentTypeManager;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -29,6 +30,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
@@ -42,6 +44,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class DescriptorHelper
@@ -173,6 +176,16 @@ public class DescriptorHelper
     {
         IFile retval = null;
 
+        if( ! CoreUtil.isLiferayProject( project ) )
+        {
+            project = CoreUtil.getNestedLiferayProject( project );
+        }
+
+        if( project == null )
+        {
+            return retval;
+        }
+
         final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( project );
 
         if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
@@ -209,6 +222,12 @@ public class DescriptorHelper
     protected String descriptorPath;
 
     protected IProject project;
+
+    protected IContentType contentType;
+
+    public DescriptorHelper()
+    {
+    }
 
     public DescriptorHelper( IProject project )
     {
@@ -255,5 +274,25 @@ public class DescriptorHelper
     public void setDescriptorPath( String path )
     {
         this.descriptorPath = path;
+    }
+
+    public void setProject( IProject project )
+    {
+        this.project = project;
+    }
+
+    public IContentType getContentType()
+    {
+        return this.contentType;
+    }
+
+    public void setContentType( IContentType type )
+    {
+        this.contentType = type;
+    }
+
+    public void setContentType( String type )
+    {
+        this.contentType = ContentTypeManager.getInstance().getContentType( type );
     }
 }

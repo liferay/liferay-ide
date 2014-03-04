@@ -17,17 +17,24 @@ package com.liferay.ide.project.core.model;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.LiferayDescriptorHelperReader;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.model.internal.LocationListener;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -104,7 +111,9 @@ public class NewLiferayPluginProjectOpMethods
 
             if ( status.isOK() )
             {
-                updateDefaultProjectBuildType( op );
+                updateProjectPrefs( op );
+
+                removeSampleCode( op );
             }
 
             retval = StatusBridge.create( status );
@@ -263,6 +272,55 @@ public class NewLiferayPluginProjectOpMethods
         return ServerCore.findRuntime( runtimeName );
     }
 
+    private static void removeSampleCode( NewLiferayPluginProjectOp op )
+    {
+        final boolean includeSampleCode = op.getIncludeSampleCode().content();
+        final PluginType pluginType = op.getPluginType().content();
+
+        // check if sample code is needed, available for projects of portlet and service builder
+        if( includeSampleCode ||
+            ! ( pluginType.equals( PluginType.portlet ) || pluginType.equals( PluginType.servicebuilder ) ) )
+        {
+            return;
+        }
+
+        final IProject project = CoreUtil.getProject( op.getFinalProjectName().content() );
+
+        final LiferayDescriptorHelperReader reader = new LiferayDescriptorHelperReader();
+        final LiferayDescriptorHelper[] helpers = reader.getHelpers();
+
+        List<IFile> descriptorFiles = new ArrayList<IFile>();
+
+        try
+        {
+            // Projects of portlet and service builder contain portlet.xml
+            descriptorFiles.add( DescriptorHelper.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE) );
+
+            if( pluginType.equals( PluginType.servicebuilder ) )
+            {
+                descriptorFiles.add( DescriptorHelper.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ) );
+            }
+
+            for( IFile descriptorFile : descriptorFiles )
+            {
+                for( LiferayDescriptorHelper helper : helpers )
+                {
+                    if( helper.getContentType() != null &&
+                        helper.getContentType().equals( descriptorFile.getContentDescription().getContentType() ) )
+                    {
+                        // the helper is constructed without parameters, have to set project here.
+                        helper.setProject( project );
+                        helper.removeSampleElements();
+                    }
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+            LiferayProjectCore.logError( e );
+        }
+    }
+
     public static boolean supportsWebTypePlugin( NewLiferayPluginProjectOp op )
     {
         boolean retval = false;
@@ -311,12 +369,16 @@ public class NewLiferayPluginProjectOpMethods
         op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
     }
 
-    private static void updateDefaultProjectBuildType( final NewLiferayPluginProjectOp op )
+    private static void updateProjectPrefs( final NewLiferayPluginProjectOp op )
     {
         try
         {
             final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayProjectCore.PLUGIN_ID );
+
             prefs.put( LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+            prefs.putBoolean( LiferayProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
+            prefs.putBoolean( LiferayProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
+
             prefs.flush();
         }
         catch( Exception e )

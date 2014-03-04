@@ -492,6 +492,35 @@ public class CoreUtil
         return retval;
     }
 
+    public static IProject getNestedLiferayProject( IProject project )
+    {
+        if( project == null || project.getLocation() == null )
+        {
+            return null;
+        }
+
+        if( isLiferayProject( project ) )
+        {
+            return project;
+        }
+        else
+        {
+            final IProject[] projects = getAllProjects();
+
+            for( IProject proj : projects )
+            {
+                if( proj.getLocation() != null &&
+                    project.getLocation().isPrefixOf( proj.getLocation() ) &&
+                    isLiferayProject( proj ) )
+                {
+                    return proj;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static Object getNewObject( Object[] oldObjects, Object[] newObjects )
     {
         if( oldObjects != null && newObjects != null && oldObjects.length < newObjects.length )

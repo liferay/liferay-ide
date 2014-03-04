@@ -32,7 +32,8 @@
             <content>
                 <property-editor>ProjectName</property-editor>
                 <property-editor>DisplayName</property-editor>
-                <spacer></spacer>
+                <spacer>
+                </spacer>
                 <property-editor>UseDefaultLocation</property-editor>
                 <property-editor>Location</property-editor>
                 <separator></separator>
@@ -117,47 +118,35 @@
                     </action-handler>
                 </property-editor>
                 <separator></separator>
-                <group>
-                    <indent>false</indent>
+                <property-editor>
+                    <action-handler>
+                        <action>OpenPluginTypeDescriptionDialog</action>
+                        <id>OpenPluginTypeDescriptionDialogActionHandler</id>
+                        <impl>com.liferay.ide.project.ui.action.OpenPluginTypeDescriptionDialogAction</impl>
+                    </action-handler>
+                    <property>PluginType</property>
+                    <scale-vertically>false</scale-vertically>
+                    <show-label>true</show-label>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <action>
+                        <id>OpenPluginTypeDescriptionDialog</id>
+                        <label>Learn more...</label>
+                        <image>icons/e16/help_16x16.gif</image>
+                    </action>
+                </property-editor>
+                <composite>
+                    <indent>true</indent>
                     <content>
                         <property-editor>
-                            <property>PluginType</property>
-                            <show-label>false</show-label>
-                            <hint>
-                                <name>aux.text.portlet</name>
-                                <value>Create an application to run as a portlet in Liferay portal.</value>
-                            </hint>
-                            <hint>
-                                <name>aux.text.servicebuilder</name>
-                                <value>Create a portlet plugin that uses the Liferay Service Builder framework.</value>
-                            </hint>
-                            <hint>
-                                <name>aux.text.hook</name>
-                                <value>Override or extend Liferay's default behavior and functionality.</value>
-                            </hint>
-                            <hint>
-                                <name>aux.text.layouttpl</name>
-                                <value>Add new custom layouts for Liferay pages.</value>
-                            </hint>
-                            <hint>
-                                <name>aux.text.theme</name>
-                                <value>Build a custom look and feel for the portal.</value>
-                            </hint>
-                            <hint>
-                                <name>aux.text.ext</name>
-                                <value>Light-weight extension environment for Liferay as a plugin.</value>
-                            </hint>
-                            <hint>
-                                <name>aux.text.web</name>
-                                <value>A web module that integrates and interfaces with Liferay Portal.</value>
-                            </hint>
-                            <scale-vertically>false</scale-vertically>
-                            <style>Sapphire.PropertyEditor.RadioButtonGroup.Vertical</style>
+                            <visible-when>${ PluginType == 'portlet' || PluginType == 'servicebuilder' }</visible-when>
+                            <property>IncludeSampleCode</property>
+                        </property-editor>
+                        <property-editor>
+                            <visible-when>${PluginType == 'portlet'}</visible-when>
+                            <property>CreateNewPortlet</property>
                         </property-editor>
                     </content>
-                    <label>Select the plugin type</label>
-                    <scale-vertically>false</scale-vertically>
-                </group>
+                </composite>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
@@ -166,6 +155,12 @@
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
+            <margin-left>0</margin-left>
+            <margin-bottom>0</margin-bottom>
+            <margin-top>0</margin-top>
+            <margin-horizontal>0</margin-horizontal>
+            <margin-vertical>0</margin-vertical>
+            <margin>0</margin>
         </page>
         <description>Create a new project configured as a Liferay plugin</description>
         <page>
@@ -192,10 +187,22 @@
                     </content>
                 </group>
                 <group>
-                    <label>JSF Component Suite</label>
+                    <label>Additional portlet options</label>
+                    <content>
+                        <property-editor>PortletName</property-editor>
+                        <property-editor>DisplayName</property-editor>
+                    </content>
+                    <visible-when>${ PluginType == 'portlet' &amp;&amp; IncludeSampleCode == 'true'  }</visible-when>
+                </group>
+            </content>
+            <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
+        </page>
+        <page>
+            <content>
+                <group>
                     <content>
                         <property-editor>
-                            <property>PortletFrameworkAdvanced</property>
                             <hint>
                                 <name>factory</name>
                                 <value>PortletFrameworkPropertyEditorPresentationFactory</value>
@@ -204,20 +211,19 @@
                                 <name>possible.values.aux.text.provider</name>
                                 <value>com.liferay.ide.project.ui.wizard.PortletFrameworkPropertyAuxTextProvider</value>
                             </hint>
+                            <property>PortletFrameworkAdvanced</property>
                             <show-label>false</show-label>
                         </property-editor>
                     </content>
-                    <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>
-                </group>
-                <group>
-                    <label>Additional portlet options</label>
-                    <content>
-                        <property-editor>PortletName</property-editor>
-                        <property-editor>DisplayName</property-editor>
-                    </content>
+                    <label>JSF Component Suite</label>
                 </group>
             </content>
+            <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>
+            <id>LiferayJSFPortletPluginProjectWizardPage</id>
+            <label>Liferay JSF Portlet Plugin Project</label>
+            <description>Choose from available JSF component suites</description>
             <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
         </page>
         <page>
             <id>LiferayThemePluginProjectWizardPage</id>
@@ -235,6 +241,7 @@
                 </property-editor>
             </content>
             <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
         </page>
         <image>NewLiferayPluginProjectWizard.png</image>
     </wizard>
@@ -296,5 +303,221 @@
             </group>
         </content>
         <initial-focus>RuntimeName</initial-focus>
+        <indent>false</indent>
+        <width>325</width>
+        <margin-left>-5</margin-left>
+        <margin-right>5</margin-right>
+    </dialog>
+    <dialog>
+        <id>PluginTypeDescription</id>
+        <label>Plugin Type Description</label>
+        <content>
+            <split-form>
+                <block>
+                    <content>
+                        <label>Portlet:</label>
+                    </content>
+                    <weight>1</weight>
+                </block>
+                <block>
+                    <content>
+                        <label>Create an application to run as a portlet in Liferay portal.</label>
+                        <actuator>
+                            <action-handler-id>Link.Documetation.Portlet</action-handler-id>
+                            <action-handler>
+                                <action>Link.Documetation.Portlet</action>
+                                <id>Link.Documetation.Portlet</id>
+                                <impl>com.liferay.ide.project.ui.action.LinkToPortletDocAction</impl>
+                            </action-handler>
+                            <action-id>Link.Documetation.Portlet</action-id>
+                            <action>
+                                <id>Link.Documetation.Portlet</id>
+                                <label>Link to Portlet Documetation</label>
+                            </action>
+                            <horizontal-align>left</horizontal-align>
+                            <label>Learn More...</label>
+                            <span>false</span>
+                        </actuator>
+                    </content>
+                    <weight>3</weight>
+                    <margin-left>0</margin-left>
+                </block>
+            </split-form>
+            <separator></separator>
+            <split-form>
+                <block>
+                    <content>
+                        <label>Service Builder:</label>
+                    </content>
+                    <weight>1</weight>
+                </block>
+                <block>
+                    <content>
+                        <label>Create a portlet plugin that uses the Liferay Service Builder framework.</label>
+                        <actuator>
+                            <action-handler-id>Link.Documetation.ServiceBuilder</action-handler-id>
+                            <action-handler>
+                                <action>Link.Documetation.ServiceBuilder</action>
+                                <id>Link.Documetation.ServiceBuilder</id>
+                                <impl>com.liferay.ide.project.ui.action.LinkToServiceBuilderDocAction</impl>
+                            </action-handler>
+                            <action-id>Link.Documetation.ServiceBuilder</action-id>
+                            <action>
+                                <id>Link.Documetation.ServiceBuilder</id>
+                                <label>Link to Service Builder Documetation</label>
+                            </action>
+                            <horizontal-align>left</horizontal-align>
+                            <label>Learn More...</label>
+                            <span>false</span>
+                        </actuator>
+                    </content>
+                    <weight>3</weight>
+                </block>
+            </split-form>
+            <separator></separator>
+            <split-form>
+                <block>
+                    <content>
+                        <label>Hook:</label>
+                    </content>
+                    <weight>1</weight>
+                </block>
+                <block>
+                    <content>
+                        <label>Override or extend Liferay's default behavior and functionality.</label>
+                        <actuator>
+                            <action-handler-id>Link.Documetation.Hook</action-handler-id>
+                            <action-handler>
+                                <action>Link.Documetation.Hook</action>
+                                <id>Link.Documetation.Hook</id>
+                                <impl>com.liferay.ide.project.ui.action.LinkToHookDocAction</impl>
+                            </action-handler>
+                            <action-id>Link.Documetation.Hook</action-id>
+                            <action>
+                                <id>Link.Documetation.Hook</id>
+                                <label>Link to Hook Documetation</label>
+                            </action>
+                            <horizontal-align>left</horizontal-align>
+                            <label>Learn More...</label>
+                            <span>false</span>
+                        </actuator>
+                    </content>
+                    <weight>3</weight>
+                </block>
+            </split-form>
+            <separator></separator>
+            <split-form>
+                <block>
+                    <content>
+                        <label>Layout Template:</label>
+                    </content>
+                    <weight>1</weight>
+                </block>
+                <block>
+                    <content>
+                        <label>Add new custom layouts for Liferay pages.</label>
+                        <actuator>
+                            <action-handler-id>Link.Documetation.LayoutTpl</action-handler-id>
+                            <action-handler>
+                                <action>Link.Documetation.LayoutTpl</action>
+                                <id>Link.Documetation.LayoutTpl</id>
+                                <impl>com.liferay.ide.project.ui.action.LinkToLayoutTplDocAction</impl>
+                            </action-handler>
+                            <action-id>Link.Documetation.LayoutTpl</action-id>
+                            <action>
+                                <id>Link.Documetation.LayoutTpl</id>
+                                <label>Link to Layout Template Documetation</label>
+                            </action>
+                            <horizontal-align>left</horizontal-align>
+                            <label>Learn More...</label>
+                            <span>false</span>
+                        </actuator>
+                    </content>
+                    <weight>3</weight>
+                </block>
+            </split-form>
+            <separator></separator>
+            <split-form>
+                <block>
+                    <content>
+                        <label>Theme:</label>
+                    </content>
+                    <weight>1</weight>
+                </block>
+                <block>
+                    <content>
+                        <label>Build a custom look and feel for the portal.</label>
+                        <actuator>
+                            <action-handler-id>Link.Documetation.Theme</action-handler-id>
+                            <action-handler>
+                                <action>Link.Documetation.Theme</action>
+                                <id>Link.Documetation.Theme</id>
+                                <impl>com.liferay.ide.project.ui.action.LinkToThemeDocAction</impl>
+                            </action-handler>
+                            <action-id>Link.Documetation.Theme</action-id>
+                            <action>
+                                <id>Link.Documetation.Theme</id>
+                                <label>Link to Theme Documetation</label>
+                            </action>
+                            <horizontal-align>left</horizontal-align>
+                            <label>Learn More...</label>
+                            <span>false</span>
+                        </actuator>
+                    </content>
+                    <weight>3</weight>
+                </block>
+            </split-form>
+            <separator></separator>
+            <split-form>
+                <block>
+                    <content>
+                        <label>Ext:</label>
+                    </content>
+                    <weight>1</weight>
+                </block>
+                <block>
+                    <content>
+                        <label>Light-weight extension environment for Liferay as a plugin.</label>
+                        <actuator>
+                            <action-handler-id>Link.Documetation.Ext</action-handler-id>
+                            <action-handler>
+                                <action>Link.Documetation.Ext</action>
+                                <id>Link.Documetation.Ext</id>
+                                <impl>com.liferay.ide.project.ui.action.LinkToExtDocAction</impl>
+                            </action-handler>
+                            <action-id>Link.Documetation.Ext</action-id>
+                            <action>
+                                <id>Link.Documetation.Ext</id>
+                                <label>Link to Ext Documetation</label>
+                            </action>
+                            <horizontal-align>left</horizontal-align>
+                            <label>Learn More...</label>
+                            <span>false</span>
+                        </actuator>
+                    </content>
+                    <weight>3</weight>
+                </block>
+            </split-form>
+            <separator></separator>
+            <split-form>
+                <block>
+                    <content>
+                        <label>Web:</label>
+                    </content>
+                    <weight>1</weight>
+                </block>
+                <block>
+                    <content>
+                        <label>A web module that integrates and interfaces with Liferay Portal.</label>
+                    </content>
+                    <weight>3</weight>
+                </block>
+            </split-form>
+        </content>
+        <background-color>#FFFFE1</background-color>
+        <margin-right>5</margin-right>
+        <margin-left>-5</margin-left>
+        <height>450</height>
+        <width>530</width>
     </dialog>
 </definition>

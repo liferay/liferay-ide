@@ -48,7 +48,7 @@ public enum PluginType
     @Image( path = "images/ext.png" )
     ext,
 
-    @Label( standard = "web" )
+    @Label( standard = "Web" )
     @Image( path = "images/web.png" )
     web,
 

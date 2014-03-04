@@ -18,12 +18,15 @@ import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.internal.ActiveProfilesValidationService;
 import com.liferay.ide.project.core.model.internal.ArtifactVersionDefaultValueService;
+import com.liferay.ide.project.core.model.internal.CreateNewPortletDefaultValueService;
 import com.liferay.ide.project.core.model.internal.DisplayNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
+import com.liferay.ide.project.core.model.internal.IncludeSampleCodeDefaultValueService;
 import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.model.internal.LocationValidationService;
 import com.liferay.ide.project.core.model.internal.PluginTypeListener;
+import com.liferay.ide.project.core.model.internal.PluginTypePossibleValuesService;
 import com.liferay.ide.project.core.model.internal.PluginTypeValidationService;
 import com.liferay.ide.project.core.model.internal.PluginsSDKNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.PluginsSDKNameListener;
@@ -195,14 +198,45 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
 
     @Type( base = PluginType.class )
     @Label( standard = "plugin type" )
-    @DefaultValue( text = "Portlet" )
     @Listeners( PluginTypeListener.class )
-    @Service( impl = PluginTypeValidationService.class )
+    @DefaultValue( text = "portlet" )
+    @Services
+    (
+        value =
+        {
+            @Service( impl = PluginTypeValidationService.class ),
+            @Service( impl = PluginTypePossibleValuesService.class ),
+        }
+    )
     ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
 
     Value<PluginType> getPluginType();
     void setPluginType( String value );
     void setPluginType( PluginType value );
+
+
+    // *** IncludeSampleCode ***
+
+    @Type( base = Boolean.class )
+    @Label( standard = "Include Sample Code" )
+    @Service( impl = IncludeSampleCodeDefaultValueService.class )
+    ValueProperty PROP_INCLUDE_SAMPLE_CODE = new ValueProperty( TYPE, "IncludeSampleCode" );
+
+    Value<Boolean> getIncludeSampleCode();
+    void setIncludeSampleCode( String value );
+    void setIncludeSampleCode( Boolean value );
+
+
+    // *** CreateNewPortlet ***
+
+    @Type( base = Boolean.class )
+    @Label( standard = "Create New Portlet" )
+    @Service( impl = CreateNewPortletDefaultValueService.class )
+    ValueProperty PROP_CREATE_NEW_PORTLET = new ValueProperty( TYPE, "CreateNewPortlet" );
+
+    Value<Boolean> getCreateNewPortlet();
+    void setCreateNewPortlet( String value );
+    void setCreateNewPortlet( Boolean value );
 
 
     // *** PortletFramework ***

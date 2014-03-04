@@ -171,5 +171,13 @@
          </system>
       </catalogContribution>
    </extension>
+   <extension
+         point="com.liferay.ide.project.core.liferayDescriptorHelpers">
+      <liferayDescriptorHelper
+            class="com.liferay.ide.portlet.core.dd.PortletDescriptorHelper"
+            contentTypeBinding="com.liferay.ide.portlet.core.portletxml"
+            id="com.liferay.ide.portlet.core.portletDescriptorHelper">
+      </liferayDescriptorHelper>
+   </extension>
 
 </plugin>
