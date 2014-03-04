@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="portletFrameworks" name="%portlet.plugin.frameworks.name" schema="schema/portletFrameworks.exsd"/>
+   <extension-point id="liferayDescriptorHelpers" name="%liferay.descriptor.helpers.name" schema="schema/liferayDescriptorHelpers.exsd"/>
 
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">

@@ -53,6 +53,10 @@ public class LiferayProjectCore extends LiferayCore
 
     private static IPortletFramework[] portletFrameworks;
 
+    public static final String PREF_INCLUDE_SAMPLE_CODE = "include-sample-code";
+
+    public static final String PREF_CREATE_NEW_PORLET = "create-new-portlet";
+
     // The key of default project build type for creating a new liferay plug in project
     public static final String PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION = "project-default-build-type-option";
 

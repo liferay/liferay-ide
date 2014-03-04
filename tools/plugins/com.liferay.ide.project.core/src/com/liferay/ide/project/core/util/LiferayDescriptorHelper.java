@@ -18,15 +18,30 @@ package com.liferay.ide.project.core.util;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.DescriptorHelper;
+import com.liferay.ide.project.core.LiferayProjectCore;
+
+import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.osgi.framework.Version;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Cindy Li
+ * @author Kuo Zhang
  */
+@SuppressWarnings( "restriction" )
 public class LiferayDescriptorHelper extends DescriptorHelper
 {
+
+    public LiferayDescriptorHelper()
+    {
+        super();
+    }
 
     public LiferayDescriptorHelper( IProject project )
     {
@@ -68,5 +83,39 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         final int minor = version.getMinor();
 
         return Integer.toString( major ) + "." + Integer.toString( minor ) + ".0"; //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    protected IStatus removeAllElements( IDOMDocument document, String tagName )
+    {
+        if( document == null )
+        {
+            return LiferayProjectCore.createErrorStatus( MessageFormat.format(
+                "Could not remove {0} elements: null document", tagName ) );
+        }
+
+        NodeList elements = document.getElementsByTagName( tagName );
+
+        try
+        {
+            if( elements != null && elements.getLength() > 0 )
+            {
+                for( int i = 0; i < elements.getLength(); i++ )
+                {
+                    Node element = elements.item( i );
+                    element.getParentNode().removeChild( element );
+                }
+            }
+        }
+        catch( Exception ex )
+        {
+            return LiferayProjectCore.createErrorStatus( MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    public IStatus removeSampleElements()
+    {
+        return null;
     }
 }

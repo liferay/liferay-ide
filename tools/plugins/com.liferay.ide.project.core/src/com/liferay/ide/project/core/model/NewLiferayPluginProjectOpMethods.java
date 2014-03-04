@@ -104,7 +104,7 @@ public class NewLiferayPluginProjectOpMethods
 
             if ( status.isOK() )
             {
-                updateDefaultProjectBuildType( op );
+                updateProjectPrefs( op );
             }
 
             retval = StatusBridge.create( status );
@@ -311,12 +311,16 @@ public class NewLiferayPluginProjectOpMethods
         op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
     }
 
-    private static void updateDefaultProjectBuildType( final NewLiferayPluginProjectOp op )
+    private static void updateProjectPrefs( final NewLiferayPluginProjectOp op )
     {
         try
         {
             final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayProjectCore.PLUGIN_ID );
+
             prefs.put( LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+            prefs.putBoolean( LiferayProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
+            prefs.putBoolean( LiferayProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
+
             prefs.flush();
         }
         catch( Exception e )

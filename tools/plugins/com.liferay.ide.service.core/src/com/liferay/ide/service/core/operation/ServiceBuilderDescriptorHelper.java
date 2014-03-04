@@ -44,6 +44,11 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
 {
     private final String NEW_LINE = System.getProperty("line.separator");
 
+    public ServiceBuilderDescriptorHelper()
+    {
+        super();
+    }
+
     public ServiceBuilderDescriptorHelper( IProject project )
     {
         super( project );
@@ -51,7 +56,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
 
     public IStatus addDefaultColumns( final String elementName )
     {
-        IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
 
         DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
         {
@@ -67,7 +72,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
 
     public IStatus addDefaultEntity()
     {
-        IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
 
         DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
         {
@@ -75,6 +80,23 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
             protected IStatus doExecute( IDOMDocument document )
             {
                 return doAddDefaultEntity( document );
+            }
+        };
+
+        return editOperation.execute();
+    }
+
+    public IStatus removeAllEntities()
+    {
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        final String tagName = "entity";
+
+        DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
+        {
+            @Override
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return removeAllElements( document, tagName );
             }
         };
 
@@ -312,5 +334,11 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
         }
 
         return val + "1";
+    }
+
+    @Override
+    public IStatus removeSampleElements()
+    {
+        return removeAllEntities();
     }
 }
