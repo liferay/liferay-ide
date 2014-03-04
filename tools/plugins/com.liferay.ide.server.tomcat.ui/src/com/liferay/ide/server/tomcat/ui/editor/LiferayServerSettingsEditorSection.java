@@ -514,17 +514,19 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
         data = new GridData( SWT.FILL, SWT.CENTER, false, false );
         standardServerMode.setLayoutData( data );
 
-        standardServerMode.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
+        standardServerMode.addSelectionListener
+        (
+            new SelectionAdapter()
             {
-                updating = true;
-                execute( new SetServerModeCommand( tomcatServer, ILiferayTomcatConstants.STANDARD_SERVER_MODE ) );
-                updating = false;
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    updating = true;
+                    execute( new SetServerModeCommand( tomcatServer, ILiferayTomcatConstants.STANDARD_SERVER_MODE ) );
+                    updating = false;
+                }
             }
-        } );
+        );
 
         label = createLabel(toolkit, composite, StringPool.EMPTY);
         data = new GridData(SWT.BEGINNING, SWT.CENTER, false, false);
@@ -539,17 +541,19 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
         data = new GridData( SWT.FILL, SWT.CENTER, false, false );
         developmentServerMode.setLayoutData( data );
 
-        developmentServerMode.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
+        developmentServerMode.addSelectionListener
+        (
+            new SelectionAdapter()
             {
-                updating = true;
-                execute( new SetServerModeCommand( tomcatServer, ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE ) );
-                updating = false;
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    updating = true;
+                    execute( new SetServerModeCommand( tomcatServer, ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE ) );
+                    updating = false;
+                }
             }
-        } );
+        );
 
 		setDefault = toolkit.createHyperlink(composite, Msgs.restoreDefaultsLink, SWT.WRAP);
 		setDefault.addHyperlinkListener(new HyperlinkAdapter() {

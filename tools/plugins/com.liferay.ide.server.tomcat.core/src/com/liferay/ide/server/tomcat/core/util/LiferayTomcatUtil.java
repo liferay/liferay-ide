@@ -273,10 +273,9 @@ public class LiferayTomcatUtil
 
         Properties props = new Properties();
 
-        if( ( portalServer != null ) &&
-            ( portalServer.getServerMode() == ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE ) )
+        if( portalServer != null && portalServer.getServerMode() == ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE )
         {
-            props.put( "include-and-override", "portal-developer.properties" ); //$NON-NLS-1$ //$NON-NLS-2$
+            props.put( "include-and-override", "portal-developer.properties" );
         }
 
         props.put( "com.liferay.portal.servlet.filters.etag.ETagFilter", "false" ); //$NON-NLS-1$ //$NON-NLS-2$

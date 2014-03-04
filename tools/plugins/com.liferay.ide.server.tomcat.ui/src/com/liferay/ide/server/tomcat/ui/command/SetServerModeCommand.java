@@ -19,6 +19,8 @@ import org.eclipse.jst.server.tomcat.core.internal.command.ServerCommand;
 
 /**
  * Command to change the server model
+ *
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class SetServerModeCommand extends ServerCommand
