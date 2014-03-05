@@ -40,7 +40,7 @@ ${:import(javax.portlet.ActionRequest,javax.portlet.ActionResponse)}
 <template name="lr-themedisplay" autoinsert="true" context="java-statements" id="portlet.themeDisplay" deleted="false" description="access ThemeDisplay object from a scope that has a PortletRequest available" enabled="true">
 ThemeDisplay ${themeDisplay} = (ThemeDisplay) ${request:var(javax.portlet.PortletRequest)}.getAttribute(WebKeys.THEME_DISPLAY);
 
-long groupId = themeDisplay.getScopeGroupId();
+long groupId = ${themeDisplay}.getScopeGroupId();
 
 // now read your parameters, e.g. like this: 
 // long someParameter = ParamUtil.getLong(request, "someParameter");
