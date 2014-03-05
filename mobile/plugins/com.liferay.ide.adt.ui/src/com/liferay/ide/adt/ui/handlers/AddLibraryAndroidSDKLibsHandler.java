@@ -14,29 +14,41 @@
  *******************************************************************************/
 package com.liferay.ide.adt.ui.handlers;
 
-import com.liferay.ide.adt.ui.wizard.MobileSDKLibrariesWizard;
+import com.liferay.ide.adt.core.ADTUtil;
+import com.liferay.ide.adt.ui.ADTUI;
+import com.liferay.mobile.sdk.core.MobileSDKCore;
+
+import java.io.File;
+import java.util.Collections;
+import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 
 /**
  * @author Gregory Amerson
  */
-public class AddUpdateMobileSDKLibrariesHandler extends AbstractHandler
+public class AddLibraryAndroidSDKLibsHandler extends AbstractHandler
 {
 
     @Override
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
+        IStatus retval = null;
+
         final ISelection selection = HandlerUtil.getCurrentSelection( event );
 
         if( selection instanceof IStructuredSelection )
@@ -58,13 +70,31 @@ public class AddUpdateMobileSDKLibrariesHandler extends AbstractHandler
 
             if( project != null )
             {
-                final MobileSDKLibrariesWizard wizard = new MobileSDKLibrariesWizard( project );
+                try
+                {
+                    final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
 
-                new WizardDialog( HandlerUtil.getActiveShellChecked( event ), wizard ).open();
+                    final File[] libs = libmap.get( "liferay-android-sdk-1.1" );
+
+                    final NullProgressMonitor npm = new NullProgressMonitor();
+
+                    ADTUtil.addLibsToAndroidProject(
+                        project.getProject(), Collections.singletonList( libs ), npm );
+
+                    project.getProject().refreshLocal( IResource.DEPTH_INFINITE, npm );
+
+                    MessageDialog.openInformation(
+                        HandlerUtil.getActiveShellChecked( event ), "Liferay Mobile SDK",
+                        "Successfully added Liferay Android SDK libraries to project." );
+                }
+                catch( CoreException e )
+                {
+                    retval = ADTUI.createErrorStatus( "Could not add libraries to Android project", e );
+                }
             }
         }
 
-        return null;
+        return retval == null ? Status.OK_STATUS : retval;
     }
 
 

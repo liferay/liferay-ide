@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 package com.liferay.ide.adt.ui.handlers;
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
@@ -44,9 +44,9 @@ public class CheckServerStatusActionHandler extends SapphireActionHandler
         return null;
     }
 
-    private MobileSDKLibrariesOp op(  Presentation context )
+    private GenerateCustomServicesOp op(  Presentation context )
     {
-        return context.part().getModelElement().nearest( MobileSDKLibrariesOp.class );
+        return context.part().getModelElement().nearest( GenerateCustomServicesOp.class );
     }
 
 }

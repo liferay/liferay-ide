@@ -12,28 +12,32 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.adt.ui.wizard;
 
-import com.liferay.ide.adt.core.model.ServerInstance;
+package com.liferay.ide.adt.ui;
 
-import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.ElementList;
-import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.ListProperty;
-import org.eclipse.sapphire.modeling.annotations.Type;
+import com.liferay.ide.adt.core.ADTUtil;
 
+import org.eclipse.core.expressions.PropertyTester;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 
 /**
- * @author Kuo Zhang
+ * @author Gregory Amerson
  */
-public interface MobileSDKLibrariesWizardSettings extends Element
+public class IsAndroidProjectTester extends PropertyTester
 {
-    ElementType TYPE = new ElementType( MobileSDKLibrariesWizardSettings.class );
 
-    // *** PreviousServerInstances ***
+    @Override
+    public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
+    {
+        if( receiver instanceof IResource )
+        {
+            final IProject project = ( (IResource) receiver ).getProject();
 
-    @Type( base = ServerInstance.class )
-    ListProperty PROP_PREVIOUS_SERVER_INSTANCES = new ListProperty( TYPE, "PreviousServerInstances" );
+            return ADTUtil.isAndroidProject( project );
+        }
 
-    ElementList<ServerInstance> getPreviousServerInstances();
+        return false;
+    }
+
 }

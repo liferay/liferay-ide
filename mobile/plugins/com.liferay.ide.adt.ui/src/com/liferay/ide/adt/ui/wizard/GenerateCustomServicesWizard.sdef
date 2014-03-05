@@ -3,11 +3,11 @@
     <wizard>
         <id>wizard</id>
         <page>
-            <id>MobileSDKLibrariesWizardPage</id>
-            <description>Select targeted Liferay Portal server instance</description>
-            <image>MobileSDKLibrariesWizard.png</image>
+            <id>GenerateCustomServicesWizardPage</id>
+            <description>Select targeted Liferay Portal server containing custom portlets</description>
+            <image>GenerateCustomServicesWizard.png</image>
             <content>
-                <label>Specify the details of the Liferay Portal server instance to use when building the client library configuration.</label>
+                <label>Specify the details of the Liferay Portal server instance to connect to when building the custom services.</label>
                 <property-editor>
                     <label>URL</label>
                     <property>URL</property>
@@ -69,30 +69,30 @@
             </content>
             <width>450</width>
             <height>400</height>
-            <label>Add/Update Liferay Mobile Client Libraries</label>
-            <initial-focus>Foo</initial-focus>
+            <label>Generate Services for Liferay Custom Portlets</label>
+            <initial-focus>NoInitialFocus</initial-focus>
             <margin-right>10</margin-right>
         </page>
-        <element-type>com.liferay.ide.adt.core.model.MobileSDKLibrariesOp</element-type>
+        <element-type>com.liferay.ide.adt.core.model.GenerateCustomServicesOp</element-type>
         <page>
-            <label>Add/Update Liferay Mobile Client Libraries</label>
-            <id>MobileSDKLibrariesWizardPage2</id>
-            <image>MobileSDKLibrariesWizard.png</image>
-            <description>Select component APIs to include as dependencies</description>
+            <label>Generate Services for Liferay Custom Portlets</label>
+            <id>GenerateCustomServicesWizardPage2</id>
+            <image>GenerateCustomServicesWizard.png</image>
+            <description>Select which custom APIs to generate services</description>
             <content>
-                <label>Available APIs for server ${Url}</label>
-                <custom>
-                    <scale-vertically>true</scale-vertically>
-                    <class>com.liferay.ide.adt.ui.wizard.ComponentAPIsCustomPart</class>
-                </custom>
                 <label>Select the Java package to be used for the generated code.</label>
                 <property-editor>
                     <label>Java Package</label>
                     <property>Package</property>
                 </property-editor>
-                <property-editor>AddSampleCode</property-editor>
+                <separator></separator>
+                <label>Available custom APIs from server ${Url}</label>
+                <custom>
+                    <scale-vertically>true</scale-vertically>
+                    <class>com.liferay.ide.adt.ui.wizard.ComponentAPIsCustomPart</class>
+                </custom>
             </content>
-            <initial-focus>Foo</initial-focus>
+            <initial-focus>NoInitialFocus</initial-focus>
             <visible-when>${Status == 'OK'}</visible-when>
             <margin-right>10</margin-right>
         </page>

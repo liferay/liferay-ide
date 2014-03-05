@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.adt.ui.wizard;
 
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.ide.adt.core.model.ServerInstance;
 import com.liferay.ide.adt.ui.ADTUI;
 import com.liferay.ide.core.util.CoreUtil;
@@ -43,15 +43,15 @@ import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesOp>
+public class GenerateCustomServicesWizard extends SapphireWizard<GenerateCustomServicesOp>
 {
     private static final String OK_STATUS = "OK";
 
     private static final String WIZARD_SETTINGS_FOLDER = ".metadata/.plugins/com.liferay.ide.adt.ui/wizards";
 
-    protected static void applySettings( MobileSDKLibrariesOp targetOp )
+    protected static void applySettings( GenerateCustomServicesOp targetOp )
     {
-        final MobileSDKLibrariesWizardSettings settings = loadSettings( targetOp );
+        final GenerateCustomServicesWizardSettings settings = loadSettings( targetOp );
 
         for( ServerInstance instance : settings.getPreviousServerInstances() )
         {
@@ -63,12 +63,12 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
     {
         // Compute a unique path for the settings file based on a hash associated with the project
         final String uniquePath =
-            MobileSDKLibrariesWizard.class.getName() + project.getProject().getLocationURI().getPath();
+            GenerateCustomServicesWizard.class.getName() + project.getProject().getLocationURI().getPath();
 
         return uniquePath != null ? MiscUtil.createStringDigest( uniquePath ) : null;
     }
 
-    private static boolean containsInstance( MobileSDKLibrariesOp sourceOp, ElementList<ServerInstance> instances )
+    private static boolean containsInstance( GenerateCustomServicesOp sourceOp, ElementList<ServerInstance> instances )
     {
         for( ServerInstance instance : instances )
         {
@@ -110,9 +110,9 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
         return layoutFile;
     }
 
-    private static MobileSDKLibrariesOp initElement( IJavaProject project )
+    private static GenerateCustomServicesOp initElement( IJavaProject project )
     {
-        MobileSDKLibrariesOp op = MobileSDKLibrariesOp.TYPE.instantiate();
+        GenerateCustomServicesOp op = GenerateCustomServicesOp.TYPE.instantiate();
 
         op.setProjectName( project.getProject().getName() );
         applySettings( op );
@@ -120,11 +120,11 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
         return op;
     }
 
-    private static MobileSDKLibrariesWizardSettings loadSettings( MobileSDKLibrariesOp op )
+    private static GenerateCustomServicesWizardSettings loadSettings( GenerateCustomServicesOp op )
     {
         final IJavaProject project = getJavaProject( op.getProjectName().content() );
 
-        MobileSDKLibrariesWizardSettings retval = null;
+        GenerateCustomServicesWizardSettings retval = null;
 
         try
         {
@@ -135,7 +135,7 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
                 final File settingsFile = getWizardPersistenceFile( fileName );
                 final XmlResourceStore resourceStore = new XmlResourceStore( new FileResourceStore( settingsFile ) );
 
-                retval = MobileSDKLibrariesWizardSettings.TYPE.instantiate( new RootXmlResource( resourceStore ) );
+                retval = GenerateCustomServicesWizardSettings.TYPE.instantiate( new RootXmlResource( resourceStore ) );
             }
         }
         catch( Exception e )
@@ -148,9 +148,9 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
 
     private boolean needsUpdate = true;
 
-    public MobileSDKLibrariesWizard( final IJavaProject project )
+    public GenerateCustomServicesWizard( final IJavaProject project )
     {
-        super( initElement( project ), DefinitionLoader.sdef( MobileSDKLibrariesWizard.class ).wizard( "wizard" ) );
+        super( initElement( project ), DefinitionLoader.sdef( GenerateCustomServicesWizard.class ).wizard( "wizard" ) );
     }
 
     @Override
@@ -180,9 +180,9 @@ public class MobileSDKLibrariesWizard extends SapphireWizard<MobileSDKLibrariesO
         saveSettings( element() );
     }
 
-    protected void saveSettings( MobileSDKLibrariesOp sourceOp )
+    protected void saveSettings( GenerateCustomServicesOp sourceOp )
     {
-        final MobileSDKLibrariesWizardSettings settings = loadSettings( sourceOp );
+        final GenerateCustomServicesWizardSettings settings = loadSettings( sourceOp );
 
         if( ! CoreUtil.isNullOrEmpty( sourceOp.getUrl().content() ) && OK_STATUS.equals( sourceOp.getStatus().content() ) )
         {

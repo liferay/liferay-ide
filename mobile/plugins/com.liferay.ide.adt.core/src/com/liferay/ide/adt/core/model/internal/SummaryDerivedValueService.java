@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model.internal;
 
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
 
 
@@ -28,7 +28,7 @@ public class SummaryDerivedValueService extends StatusDerivedValueService
     {
         String retval = null;
 
-        final MobileSDKLibrariesOp op = op();
+        final GenerateCustomServicesOp op = op();
 
         final Object serverStatus = MobileSDKCore.checkServerStatus(
             op.getUrl().content(), op.getOmniUsername().content(), op.getOmniPassword().content() );

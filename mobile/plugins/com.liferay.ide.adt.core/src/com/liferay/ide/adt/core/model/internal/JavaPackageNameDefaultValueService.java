@@ -16,7 +16,7 @@
 package com.liferay.ide.adt.core.model.internal;
 
 import com.liferay.ide.adt.core.ADTCore;
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -66,9 +66,9 @@ public class JavaPackageNameDefaultValueService extends DefaultValueService
         return null;
     }
 
-    private MobileSDKLibrariesOp op()
+    private GenerateCustomServicesOp op()
     {
-        return context( MobileSDKLibrariesOp.class );
+        return context( GenerateCustomServicesOp.class );
     }
 
 }

@@ -14,8 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.adt.ui.wizard;
 
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.ide.adt.core.model.Library;
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 import com.liferay.ide.adt.ui.ADTUI;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -36,6 +36,7 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.swt.FormComponentPresentation;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
@@ -57,10 +58,6 @@ import org.eclipse.swt.widgets.Tree;
  */
 public class ComponentAPIsCustomPart extends FormComponentPart
 {
-    private static final String LOADING_MSG = "Loading APIs...";
-    private static final String ROOT_API = "root-api";
-    private static final String API = "api";
-
     class APIsContentProvider implements ITreeContentProvider
     {
         public void dispose()
@@ -106,33 +103,23 @@ public class ComponentAPIsCustomPart extends FormComponentPart
         {
         }
     }
-
     class APIsLabelProvider extends AbstractLabelProvider
         implements IColorProvider, DelegatingStyledCellLabelProvider.IStyledLabelProvider
     {
-        @Override
-        public String getText( Object element )
+        public Color getBackground( Object element )
         {
-            if( element instanceof MobileAPI )
-            {
-                return ( (MobileAPI) element ).context;
-            }
-
-            return super.getText( element );
+            return null;
         }
 
 
-        @Override
-        protected void initalizeImageRegistry( ImageRegistry imageRegistry )
+        public Color getForeground( Object element )
         {
-            imageRegistry.put( PortalAPI.NAME,
-                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/server.png" ) );
-            imageRegistry.put( ROOT_API,
-                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/portlet_16x16.png" ) );
-            imageRegistry.put( API,
-                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/web_services_16x16.gif" ) );
-            imageRegistry.put( LOADING_MSG,
-                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/loading.gif" ) );
+            if( LOADING_MSG.equals( element ) )
+            {
+                return Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+            }
+
+            return null;
         }
 
         @Override
@@ -181,20 +168,41 @@ public class ComponentAPIsCustomPart extends FormComponentPart
             return styled;
         }
 
-        public Color getForeground( Object element )
+        @Override
+        public String getText( Object element )
         {
-            if( LOADING_MSG.equals( element ) )
+            if( element instanceof MobileAPI )
             {
-                return Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+                return ( (MobileAPI) element ).context;
             }
 
-            return null;
+            return super.getText( element );
         }
 
-        public Color getBackground( Object element )
+        @Override
+        protected void initalizeImageRegistry( ImageRegistry imageRegistry )
         {
-            return null;
+            imageRegistry.put( PortalAPI.NAME,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/server.png" ) );
+            imageRegistry.put( ROOT_API,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/portlet_16x16.png" ) );
+            imageRegistry.put( API,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/web_services_16x16.gif" ) );
+            imageRegistry.put( LOADING_MSG,
+                ADTUI.imageDescriptorFromPlugin( ADTUI.PLUGIN_ID, "/icons/e16/loading.gif" ) );
         }
+    }
+
+    private static final String API = "api";
+    private static final String LOADING_MSG = "Loading APIs...";
+    private static final String ROOT_API = "root-api";
+
+    private Status apiStatus = Status.createOkStatus();
+
+    @Override
+    protected Status computeValidation()
+    {
+        return apiStatus;
     }
 
     @Override
@@ -206,90 +214,44 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
             private MobileAPI[] rootAPIs;
 
-            @Override
-            public void render()
+            private void checkAndUpdateAPIs()
             {
-                final Composite parent = SWTUtil.createComposite( composite(), 2, 2, GridData.FILL_BOTH );
+                final GenerateCustomServicesOp op = op();
+                final String url = op.getUrl().content();
+                final String username = op.getOmniUsername().content();
+                final String password = op.getOmniPassword().content();
 
-                this.apisTreeViewer = new CheckboxTreeViewer( parent, SWT.BORDER );
+                op.getLibraries().clear();
+//                op.getLibraries().insert().setContext( PortalAPI.NAME );
 
-                this.apisTreeViewer.addCheckStateListener
+                rootAPIs = MobileSDKCore.discoverAPIs( url, username, password );
+
+                UIUtil.async
                 (
-                    new ICheckStateListener()
+                    new Runnable()
                     {
-                        public void checkStateChanged( CheckStateChangedEvent event )
+                        public void run()
                         {
-                            handleCheckStateChangedEvent( event );
-                        }
-                    }
-                );
+                            apisTreeViewer.setInput( rootAPIs );
 
-                this.apisTreeViewer.setContentProvider( new APIsContentProvider() );
-
-                this.apisTreeViewer.setLabelProvider( new DelegatingStyledCellLabelProvider( new APIsLabelProvider() ) );
-
-                this.apisTreeViewer.setInput( LOADING_MSG );
-
-                final Tree apisTree = this.apisTreeViewer.getTree();
-                final GridData apisTreeData = new GridData( SWT.FILL, SWT.FILL, true,  true, 1, 4 );
-                apisTreeData.heightHint = 150;
-                apisTreeData.widthHint = 400;
-                apisTree.setLayoutData( apisTreeData );
-
-                final Button selectAllButton = new Button( parent, SWT.NONE );
-                selectAllButton.setText( "Select All" );
-                selectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                selectAllButton.addListener
-                (
-                    SWT.Selection,
-                    new Listener()
-                    {
-                        public void handleEvent( Event event )
-                        {
-                            for( MobileAPI rootAPI : rootAPIs )
+                            if( rootAPIs != null && rootAPIs.length > 0)
                             {
-                                apisTreeViewer.setGrayed( rootAPI, false );
-                                apisTreeViewer.setSubtreeChecked( rootAPI, true );
+                                for( MobileAPI rootAPI : rootAPIs )
+                                {
+                                    if( PortalAPI.NAME.equals( rootAPI.context ) )
+                                    {
+                                        apisTreeViewer.setChecked( rootAPI, true );
+                                        apisTreeViewer.setGrayed( rootAPI, false );
+                                    }
+                                }
                             }
+
+                            apisTreeViewer.expandAll();
+
+                            updateValidation();
                         }
                     }
                 );
-
-                final Button deselectAllButton = new Button( parent, SWT.NONE );
-                deselectAllButton.setText( "Deselect All" );
-                deselectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                deselectAllButton.addListener
-                (
-                    SWT.Selection,
-                    new Listener()
-                    {
-                        public void handleEvent( Event event )
-                        {
-                            for( MobileAPI rootAPI : rootAPIs )
-                            {
-                                apisTreeViewer.setSubtreeChecked( rootAPI, false );
-                            }
-                        }
-                    }
-                );
-
-                final Button refreshButton = new Button( parent, SWT.NONE );
-                refreshButton.setText( "Refresh" );
-                refreshButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
-                refreshButton.addListener
-                (
-                    SWT.Selection,
-                    new Listener()
-                    {
-                         public void handleEvent( Event event )
-                         {
-                            apisTreeViewer.setInput( LOADING_MSG );
-                            startAPIUpdateThread();
-                        }
-                    }
-                );
-
-                startAPIUpdateThread();
             }
 
             private void handleCheckStateChangedEvent( CheckStateChangedEvent event )
@@ -365,7 +327,102 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                             }
                         }
                     }
+
+                    updateValidation();
                 }
+            }
+
+            private GenerateCustomServicesOp op()
+            {
+                return getLocalModelElement().nearest( GenerateCustomServicesOp.class );
+            }
+
+            @Override
+            public void render()
+            {
+                final Composite parent = SWTUtil.createComposite( composite(), 2, 2, GridData.FILL_BOTH );
+
+                this.apisTreeViewer = new CheckboxTreeViewer( parent, SWT.BORDER );
+
+                this.apisTreeViewer.addCheckStateListener
+                (
+                    new ICheckStateListener()
+                    {
+                        public void checkStateChanged( CheckStateChangedEvent event )
+                        {
+                            handleCheckStateChangedEvent( event );
+                        }
+                    }
+                );
+
+                this.apisTreeViewer.setContentProvider( new APIsContentProvider() );
+
+                this.apisTreeViewer.setLabelProvider( new DelegatingStyledCellLabelProvider( new APIsLabelProvider() ) );
+
+                this.apisTreeViewer.setInput( LOADING_MSG );
+
+                final Tree apisTree = this.apisTreeViewer.getTree();
+                final GridData apisTreeData = new GridData( SWT.FILL, SWT.FILL, true,  true, 1, 4 );
+                apisTreeData.heightHint = 225;
+                apisTreeData.widthHint = 400;
+                apisTree.setLayoutData( apisTreeData );
+
+                final Button selectAllButton = new Button( parent, SWT.NONE );
+                selectAllButton.setText( "Select All" );
+                selectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+                selectAllButton.addListener
+                (
+                    SWT.Selection,
+                    new Listener()
+                    {
+                        public void handleEvent( Event event )
+                        {
+                            for( MobileAPI rootAPI : rootAPIs )
+                            {
+                                apisTreeViewer.setGrayed( rootAPI, false );
+                                apisTreeViewer.setSubtreeChecked( rootAPI, true );
+                                updateValidation();
+                            }
+                        }
+                    }
+                );
+
+                final Button deselectAllButton = new Button( parent, SWT.NONE );
+                deselectAllButton.setText( "Deselect All" );
+                deselectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+                deselectAllButton.addListener
+                (
+                    SWT.Selection,
+                    new Listener()
+                    {
+                        public void handleEvent( Event event )
+                        {
+                            for( MobileAPI rootAPI : rootAPIs )
+                            {
+                                apisTreeViewer.setSubtreeChecked( rootAPI, false );
+                                updateValidation();
+                            }
+                        }
+                    }
+                );
+
+                final Button refreshButton = new Button( parent, SWT.NONE );
+                refreshButton.setText( "Refresh" );
+                refreshButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+                refreshButton.addListener
+                (
+                    SWT.Selection,
+                    new Listener()
+                    {
+                         public void handleEvent( Event event )
+                         {
+                            apisTreeViewer.setInput( LOADING_MSG );
+                            startAPIUpdateThread();
+                        }
+                    }
+                );
+
+                startAPIUpdateThread();
             }
 
             private void startAPIUpdateThread()
@@ -381,47 +438,19 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                 t.start();
             }
 
-            private void checkAndUpdateAPIs()
+            private void updateValidation()
             {
-                final MobileSDKLibrariesOp op = op();
-                final String url = op.getUrl().content();
-                final String username = op.getOmniUsername().content();
-                final String password = op.getOmniPassword().content();
+                if( op().getLibraries().size() == 0 )
+                {
+                    ComponentAPIsCustomPart.this.apiStatus =
+                        Status.createErrorStatus( "At least one custom API must be selected" );
+                }
+                else
+                {
+                    ComponentAPIsCustomPart.this.apiStatus = Status.createOkStatus();
+                }
 
-                op.getLibraries().clear();
-                op.getLibraries().insert().setContext( PortalAPI.NAME );
-
-                rootAPIs = MobileSDKCore.discoverAPIs( url, username, password );
-
-                UIUtil.async
-                (
-                    new Runnable()
-                    {
-                        public void run()
-                        {
-                            apisTreeViewer.setInput( rootAPIs );
-
-                            if( rootAPIs != null && rootAPIs.length > 0)
-                            {
-                                for( MobileAPI rootAPI : rootAPIs )
-                                {
-                                    if( PortalAPI.NAME.equals( rootAPI.context ) )
-                                    {
-                                        apisTreeViewer.setChecked( rootAPI, true );
-                                        apisTreeViewer.setGrayed( rootAPI, false );
-                                    }
-                                }
-                            }
-
-                            apisTreeViewer.expandAll();
-                        }
-                    }
-                );
-            }
-
-            private MobileSDKLibrariesOp op()
-            {
-                return getLocalModelElement().nearest( MobileSDKLibrariesOp.class );
+                refreshValidation();
             }
         };
     }

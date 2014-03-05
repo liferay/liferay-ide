@@ -15,13 +15,11 @@
 
 package com.liferay.mobile.sdk.core.tests;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.mobile.sdk.core.PortalAPI;
 import com.liferay.mobile.sdk.core.MobileAPI;
 import com.liferay.mobile.sdk.core.MobileSDKBuilder;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
@@ -108,7 +106,7 @@ public class MobileSDKCoreTests extends BaseTests
 
         assertTrue( apis.length > 1 );
 
-        assertEquals( "Liferay core", apis[0].context );
+//        assertEquals( "Liferay core", apis[0].context );
 
         boolean foundCalendar = false;
 
@@ -145,7 +143,7 @@ public class MobileSDKCoreTests extends BaseTests
     public void testMobileSDKBuilderBuildJars() throws Exception
     {
         final Map<String, String[]> buildSpec = new HashMap<String, String[]>();
-        buildSpec.put( PortalAPI.NAME, null );
+        buildSpec.put( "calendar-portlet", new String[] { "calendar" } );
 
         final File[] customJars = MobileSDKBuilder.buildJars( SERVER, PACKAGE, buildSpec );
 

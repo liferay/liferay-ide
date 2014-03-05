@@ -16,7 +16,7 @@ package com.liferay.ide.adt.core.model;
 
 import com.liferay.ide.adt.core.model.internal.JavaPackageNameDefaultValueService;
 import com.liferay.ide.adt.core.model.internal.JavaProjectConversionService;
-import com.liferay.ide.adt.core.model.internal.MobileSDKLibrariesOpMethods;
+import com.liferay.ide.adt.core.model.internal.GenerateCustomServicesOpMethods;
 import com.liferay.ide.adt.core.model.internal.StatusDerivedValueService;
 import com.liferay.ide.adt.core.model.internal.SummaryDerivedValueService;
 
@@ -42,10 +42,10 @@ import org.eclipse.sapphire.modeling.annotations.Type;
  * @author Kuo Zhang
  */
 @Service( impl = JavaProjectConversionService.class )
-public interface MobileSDKLibrariesOp extends ServerInstance, ExecutableElement
+public interface GenerateCustomServicesOp extends ServerInstance, ExecutableElement
 {
 
-    ElementType TYPE = new ElementType( MobileSDKLibrariesOp.class );
+    ElementType TYPE = new ElementType( GenerateCustomServicesOp.class );
 
     // *** ProjectName ***
 
@@ -113,9 +113,9 @@ public interface MobileSDKLibrariesOp extends ServerInstance, ExecutableElement
 
     // *** Method: execute ***
 
-    @DelegateImplementation( MobileSDKLibrariesOpMethods.class )
+    @DelegateImplementation( GenerateCustomServicesOpMethods.class )
     Status execute( ProgressMonitor monitor );
 
-    @DelegateImplementation( MobileSDKLibrariesOpMethods.class )
+    @DelegateImplementation( GenerateCustomServicesOpMethods.class )
     void updateServerStatus();
 }

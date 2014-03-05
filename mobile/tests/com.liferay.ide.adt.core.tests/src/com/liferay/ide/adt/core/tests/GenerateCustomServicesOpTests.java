@@ -19,67 +19,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.mobile.sdk.core.PortalAPI;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.junit.Test;
-import org.osgi.framework.Bundle;
 
 /**
  * @author Gregory Amerson
  */
-public class MobileSDKLibrariesOpTests extends BaseTests
+public class GenerateCustomServicesOpTests extends BaseTests
 {
-
-    protected File getProjectFile( Bundle bundle, String file ) throws IOException
-    {
-        return new File( FileLocator.toFileURL( bundle.getEntry( "projects/" + file ) ).getFile() );
-    }
-
-    protected IProject importAndroidProject( String projectName, String fileName ) throws Exception
-    {
-        final IPath projectPath = Activator.getDefault().getStateLocation().append( projectName );
-
-        final File projectDir = projectPath.toFile();
-
-        if( projectDir.exists() )
-        {
-            projectDir.delete();
-        }
-
-        assertTrue( !projectDir.exists() );
-
-        final File projectZip = getProjectFile( Activator.getDefault().getBundle(), fileName );
-
-        ZipUtil.unzip( projectZip, projectDir.getParentFile() );
-
-        final IProjectDescription projectDescription = CoreUtil.getWorkspace().newProjectDescription( projectName );
-
-        projectDescription.setLocation( projectPath );
-
-        final IProject project = CoreUtil.getProject( projectName );
-
-        final NullProgressMonitor npm = new NullProgressMonitor();
-
-        project.create( projectDescription, npm );
-
-        project.open( npm );
-
-        return project;
-    }
 
     @Test
     public void testMobileLibrariesOpAddDefault() throws Exception
@@ -87,13 +42,13 @@ public class MobileSDKLibrariesOpTests extends BaseTests
         final String projectName = "SampleAndroidApp";
         final String propertiesFileName = "libs/liferay-android-sdk-1.1.jar.properties";
 
-        final IProject sampleProject = importAndroidProject( projectName, projectName + ".zip" );
+        final IProject sampleProject = ADTCoreTests.importAndroidProject( projectName, projectName + ".zip" );
 
         assertNotNull( sampleProject );
 
         assertTrue( sampleProject.exists() );
 
-        final MobileSDKLibrariesOp op = MobileSDKLibrariesOp.TYPE.instantiate();
+        final GenerateCustomServicesOp op = GenerateCustomServicesOp.TYPE.instantiate();
 
         op.setProjectName( projectName );
 

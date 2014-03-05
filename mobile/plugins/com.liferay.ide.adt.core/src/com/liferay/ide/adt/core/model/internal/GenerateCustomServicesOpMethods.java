@@ -15,23 +15,22 @@
 package com.liferay.ide.adt.core.model.internal;
 
 import com.liferay.ide.adt.core.ADTCore;
+import com.liferay.ide.adt.core.ADTUtil;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.ide.adt.core.model.Library;
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.mobile.sdk.core.PortalAPI;
 import com.liferay.mobile.sdk.core.MobileSDKBuilder;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
+import com.liferay.mobile.sdk.core.PortalAPI;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.ElementList;
@@ -45,35 +44,16 @@ import org.eclipse.sapphire.platform.StatusBridge;
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-public class MobileSDKLibrariesOpMethods
+public class GenerateCustomServicesOpMethods
 {
 
-    private static void addLibsToAndroidProject( final IProject project, List<File[]> filesList, IProgressMonitor monitor )
-        throws CoreException
-    {
-        final IFolder libsFolder = project.getFolder( "libs" );
-
-        CoreUtil.makeFolders( libsFolder );
-
-        final IFolder srcFolder = libsFolder.getFolder( "src" );
-
-        CoreUtil.makeFolders( srcFolder );
-
-        for( File[] files : filesList )
-        {
-            FileUtil.copyFileToIFolder( files[0], libsFolder, monitor );
-            FileUtil.copyFileToIFolder( files[1], srcFolder, monitor );
-
-            final String propsFilename = files[0].getName() + ".properties";
-            final String content = "src=src/" + files[1].getName();
-
-            libsFolder.getFile( propsFilename ).create( new ByteArrayInputStream( content.getBytes() ), true, monitor );
-        }
-    }
-
-    public static final Status execute( final MobileSDKLibrariesOp op, final ProgressMonitor monitor )
+    public static final Status execute( final GenerateCustomServicesOp op, final ProgressMonitor monitor )
     {
         Status retval = null;
+
+        final IProgressMonitor pm = ProgressMonitorBridge.create( monitor );
+
+        pm.beginTask( "Generating custom services...", 5 );
 
         final IProject project = CoreUtil.getProject( op.getProjectName().content() );
 
@@ -123,7 +103,8 @@ public class MobileSDKLibrariesOpMethods
 
         if( ( hasPortal && buildSpec.keySet().size() > 1 ) || ( !hasPortal && buildSpec.keySet().size() > 0 ) )
         {
-            customJars = MobileSDKBuilder.buildJars( op.getUrl().content(), op.getPackage().getDefaultText(), buildSpec );
+            customJars =
+                MobileSDKBuilder.buildJars( op.getUrl().content(), op.getPackage().getDefaultText(), buildSpec, pm );
         }
 
         final List<File[]> files = new ArrayList<File[]>();
@@ -133,19 +114,21 @@ public class MobileSDKLibrariesOpMethods
             files.add( customJars );
         }
 
-        if( hasPortal )
-        {
+//        if( hasPortal )
+//        {
             // add standard sdk and sources
             files.add( libs.get( "liferay-android-sdk-1.1" ) );
-        }
-        else
-        {
-            files.add( libs.get( "liferay-android-sdk-1.1-core" ) );
-        }
+//        }
+//        else
+//        {
+//            files.add( libs.get( "liferay-android-sdk-1.1-core" ) );
+//        }
 
         try
         {
-            addLibsToAndroidProject( project, files, ProgressMonitorBridge.create( monitor ) );
+            ADTUtil.addLibsToAndroidProject( project, files, pm );
+
+            project.refreshLocal( IResource.DEPTH_INFINITE, pm );
 
             retval = Status.createOkStatus();
         }
@@ -157,7 +140,7 @@ public class MobileSDKLibrariesOpMethods
         return retval;
     }
 
-    public static void updateServerStatus( MobileSDKLibrariesOp op )
+    public static void updateServerStatus( GenerateCustomServicesOp op )
     {
         op.getStatus().service( StatusDerivedValueService.class ).updateStatus();
         op.getSummary().service( SummaryDerivedValueService.class ).updateStatus();

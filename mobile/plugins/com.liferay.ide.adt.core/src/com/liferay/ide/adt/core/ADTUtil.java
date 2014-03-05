@@ -15,10 +15,19 @@
 
 package com.liferay.ide.adt.core;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * @author Gregory Amerson
@@ -26,6 +35,41 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class ADTUtil
 {
+    public static void addLibsToAndroidProject( final IProject project, List<File[]> filesList, IProgressMonitor monitor )
+        throws CoreException
+    {
+        final IFolder libsFolder = project.getFolder( "libs" );
+
+        CoreUtil.makeFolders( libsFolder );
+
+        final IFolder srcFolder = libsFolder.getFolder( "src" );
+
+        CoreUtil.makeFolders( srcFolder );
+
+        for( File[] files : filesList )
+        {
+            monitor.worked( 1 );
+            monitor.subTask( "Added file " + files[0].getName() );
+
+            FileUtil.copyFileToIFolder( files[0], libsFolder, monitor );
+            FileUtil.copyFileToIFolder( files[1], srcFolder, monitor );
+
+            final String propsFilename = files[0].getName() + ".properties";
+            final String content = "src=src/" + files[1].getName();
+
+            final IFile propsFile = libsFolder.getFile( propsFilename );
+
+            if( propsFile.exists() )
+            {
+                propsFile.setContents( new ByteArrayInputStream( content.getBytes() ), true, true, monitor );
+            }
+            else
+            {
+                propsFile.create( new ByteArrayInputStream( content.getBytes() ), true, monitor );
+            }
+        }
+    }
+
     public static int extractSdkLevel( String content )
     {
         return Integer.parseInt( content.substring( content.indexOf( "API " ) + 4, content.indexOf( ":" ) ) );

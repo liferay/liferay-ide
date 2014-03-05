@@ -167,7 +167,7 @@ public class MobileSDKCore extends Plugin
     {
         final List<MobileAPI> apis = new ArrayList<MobileAPI>();
 
-        apis.add( new PortalAPI() );
+//        apis.add( new PortalAPI() );
 
         try
         {

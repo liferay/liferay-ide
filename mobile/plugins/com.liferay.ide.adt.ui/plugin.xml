@@ -74,19 +74,41 @@
       </propertyTester>
    </extension>
    <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.liferay.ide.adt.ui.IsAndroidProjectTester"
+            id="com.liferay.ide.adt.ui.isAndroidProject"
+            namespace="com.liferay.ide.adt.ui"
+            properties="isAndroidProject"
+            type="org.eclipse.core.resources.IResource">
+      </propertyTester>
+   </extension>
+   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
             locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
          <command
-               commandId="com.liferay.ide.adt.ui.addUpdateMobileSDKLibraries"
+               commandId="com.liferay.ide.adt.ui.addLiferayAndroidSDKLibs"
                icon="icons/e16/mobile-sdk-logo-16x16.png"
-               label="Add/Update Liferay Mobile Client APIs..."
+               label="Add Liferay Android SDK libraries"
                style="push">
             <visibleWhen
                   checkEnabled="false">
                <reference
-                     definitionId="com.liferay.ide.adt.ui.nonliferayandroidproject">
+                     definitionId="com.liferay.ide.adt.ui.isandroidproject">
+               </reference>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.liferay.ide.adt.ui.generateCustomServices"
+               icon="icons/e16/mobile-sdk-logo-new-16x16.png"
+               label="Generate services for Liferay custom portlets..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <reference
+                     definitionId="com.liferay.ide.adt.ui.isandroidproject">
                </reference>
             </visibleWhen>
          </command>
@@ -95,27 +117,35 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            id="com.liferay.ide.adt.ui.addUpdateMobileSDKLibraries"
-            name="Add/Update Liferay Mobile Client APIs">
+            id="com.liferay.ide.adt.ui.addLiferayAndroidSDKLibs"
+            name="Add Liferay Android SDK libraries">
+      </command>
+      <command
+            id="com.liferay.ide.adt.ui.generateCustomServices"
+            name="Generate services for custom Liferay portlets...">
       </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="com.liferay.ide.adt.ui.handlers.AddUpdateMobileSDKLibrariesHandler"
-            commandId="com.liferay.ide.adt.ui.addUpdateMobileSDKLibraries">
+            class="com.liferay.ide.adt.ui.handlers.AddLibraryAndroidSDKLibsHandler"
+            commandId="com.liferay.ide.adt.ui.addLiferayAndroidSDKLibs">
+      </handler>
+      <handler
+            class="com.liferay.ide.adt.ui.handlers.GenerateCustomServicesHandler"
+            commandId="com.liferay.ide.adt.ui.generateCustomServices">
       </handler>
    </extension>
    <extension
          point="org.eclipse.core.expressions.definitions">
       <definition
-            id="com.liferay.ide.adt.ui.nonliferayandroidproject">
+            id="com.liferay.ide.adt.ui.isandroidproject">
           <iterate
                ifEmpty="false"
                operator="or">
           <adapt type="org.eclipse.core.resources.IResource">
                <test forcePluginActivation="true"
-                   property="com.liferay.ide.adt.ui.isNonLiferayAndroidProject" />
+                   property="com.liferay.ide.adt.ui.isAndroidProject" />
            </adapt>
            </iterate>
       </definition>

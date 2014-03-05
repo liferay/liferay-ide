@@ -15,7 +15,7 @@
 
 package com.liferay.ide.adt.ui.wizard;
 
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.ide.adt.core.model.ServerInstance;
 
 import java.util.List;
@@ -35,7 +35,7 @@ import org.eclipse.sapphire.ui.SapphirePart.PartInitializationEvent;
  */
 public class ServerInstancesListener extends Listener
 {
-    private MobileSDKLibrariesOp mobileSDKConfigOp;
+    private GenerateCustomServicesOp mobileSDKConfigOp;
     private ListSelectionService selectionService;
 
     public ServerInstancesListener()
@@ -51,7 +51,7 @@ public class ServerInstancesListener extends Listener
             final SapphirePart part = ( (PartInitializationEvent) event ).part();
             this.selectionService = part.service( ListSelectionService.class );
             this.selectionService.attach( this );
-            this.mobileSDKConfigOp = part.getLocalModelElement().nearest( MobileSDKLibrariesOp.class );
+            this.mobileSDKConfigOp = part.getLocalModelElement().nearest( GenerateCustomServicesOp.class );
         }
         else if( event instanceof ListSelectionChangedEvent )
         {

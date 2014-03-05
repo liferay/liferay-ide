@@ -30,6 +30,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Jar;
 import org.apache.tools.ant.types.FileSet;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.compiler.CompilationProgress;
 import org.eclipse.jdt.core.compiler.batch.BatchCompiler;
@@ -59,7 +60,7 @@ public class MobileSDKBuilder
         }
     }
 
-    public static File[] buildJars( String server, String packageName, Map<String, String[]> buildSpec )
+    public static File[] buildJars( String server, String packageName, Map<String, String[]> buildSpec, IProgressMonitor monitor )
     {
         File[] retval = null;
 
@@ -78,7 +79,9 @@ public class MobileSDKBuilder
 
                     for( final String filter : filters )
                     {
+                        monitor.subTask( "Building services: " + filter );
                         build( server, context, packageName, filter, sourceDir.getCanonicalPath() );
+                        monitor.worked( 1 );
                     }
                 }
             }
@@ -88,8 +91,17 @@ public class MobileSDKBuilder
                 final File customJar = MobileSDKCore.newTempFile( "liferay-android-sdk-custom.jar" );
                 final File customJarSrc = MobileSDKCore.newTempFile( "liferay-android-sdk-custom-sources.jar" );
 
+                monitor.subTask( "Creating jar: " + customJar.getName() );
+
                 jar( classDir, "**/*.class", customJar );
+
+                monitor.worked( 1 );
+
+                monitor.subTask( "Creating jar: " + customJarSrc.getName() );
+
                 jar( sourceDir, "**/*.java", customJarSrc );
+
+                monitor.worked( 1 );
 
                 if( customJar.exists() && customJarSrc.exists() )
                 {

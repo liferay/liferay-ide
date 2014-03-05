@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model.internal;
 
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -34,9 +34,9 @@ public class JavaProjectConversionService extends UniversalConversionService
     {
         T result = null;
 
-        if( object instanceof MobileSDKLibrariesOp && type.equals( IJavaProject.class ) )
+        if( object instanceof GenerateCustomServicesOp && type.equals( IJavaProject.class ) )
         {
-            final MobileSDKLibrariesOp op = (MobileSDKLibrariesOp) object;
+            final GenerateCustomServicesOp op = (GenerateCustomServicesOp) object;
             final String projectName = op.getProjectName().content();
             final IProject project = CoreUtil.getProject( projectName );
 

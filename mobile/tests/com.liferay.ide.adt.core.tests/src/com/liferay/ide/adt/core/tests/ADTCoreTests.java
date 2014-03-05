@@ -17,6 +17,7 @@ package com.liferay.ide.adt.core.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.adt.core.ADTCore;
 import com.liferay.ide.adt.core.ADTUtil;
@@ -24,12 +25,16 @@ import com.liferay.ide.adt.core.model.NewLiferayAndroidProjectOp;
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.mobile.sdk.core.MobileSDKCore;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -40,13 +45,68 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.Before;
 import org.junit.Test;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Gregory Amerson
  */
 public class ADTCoreTests extends BaseTests
 {
+    public static File getProjectFile( Bundle bundle, String file ) throws IOException
+    {
+        return new File( FileLocator.toFileURL( bundle.getEntry( "projects/" + file ) ).getFile() );
+    }
+
+    public static IProject importAndroidProject( String projectName, String fileName ) throws Exception
+    {
+        final IPath projectPath = Activator.getDefault().getStateLocation().append( projectName );
+
+        final File projectDir = projectPath.toFile();
+
+        if( projectDir.exists() )
+        {
+            projectDir.delete();
+        }
+
+        assertTrue( !projectDir.exists() );
+
+        final File projectZip = getProjectFile( Activator.getDefault().getBundle(), fileName );
+
+        ZipUtil.unzip( projectZip, projectDir.getParentFile() );
+
+        final IProjectDescription projectDescription = CoreUtil.getWorkspace().newProjectDescription( projectName );
+
+        projectDescription.setLocation( projectPath );
+
+        final IProject project = CoreUtil.getProject( projectName );
+
+        final NullProgressMonitor npm = new NullProgressMonitor();
+
+        project.create( projectDescription, npm );
+
+        project.open( npm );
+
+        return project;
+    }
+
+    final String projectName = "SampleAndroidApp";
+
+//    protected void createLiferayAndroidProjectExample( boolean createExample )
+//    {
+//        final String projectName = "test-liferay-android-project-example-" + createExample;
+//
+//        final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
+//        op.setProjectName( projectName );
+//        op.setIncludeExample( createExample );
+//
+//        final IProject newProject = createLiferayAndroidProject( op );
+//
+//        final IFile exampleFile = newProject.getFile( "src/com/liferay/mobile/sample/task/UserSitesAsyncTask.java" );
+//
+//        assertEquals( createExample, exampleFile.exists() );
+//    }
 
     protected IProject createLiferayAndroidProject( NewLiferayAndroidProjectOp op )
     {
@@ -64,21 +124,6 @@ public class ADTCoreTests extends BaseTests
 
         return newLiferayAndroidProject;
     }
-
-//    protected void createLiferayAndroidProjectExample( boolean createExample )
-//    {
-//        final String projectName = "test-liferay-android-project-example-" + createExample;
-//
-//        final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
-//        op.setProjectName( projectName );
-//        op.setIncludeExample( createExample );
-//
-//        final IProject newProject = createLiferayAndroidProject( op );
-//
-//        final IFile exampleFile = newProject.getFile( "src/com/liferay/mobile/sample/task/UserSitesAsyncTask.java" );
-//
-//        assertEquals( createExample, exampleFile.exists() );
-//    }
 
     protected void createLiferayAndroidProjectName( final String projectName ) throws Exception
     {
@@ -123,6 +168,17 @@ public class ADTCoreTests extends BaseTests
             stripCarriageReturns( projectPropertiesContent ) );
     }
 
+    @Before
+    public void deleteSampleAndroidProject() throws Exception
+    {
+        final IProject sampleProject = project( projectName );
+
+        if( sampleProject.exists() )
+        {
+            sampleProject.delete( true, new NullProgressMonitor() );
+        }
+    }
+
     private IEclipsePreferences getADTCorePrefs()
     {
         return InstanceScope.INSTANCE.getNode( ADTCore.PLUGIN_ID );
@@ -141,10 +197,56 @@ public class ADTCoreTests extends BaseTests
         return DefaultScope.INSTANCE.getNode( ADTCore.PLUGIN_ID );
     }
 
+
     private void restoreDefaults( final IEclipsePreferences prefs )
     {
         prefs.remove( ADTCore.PREF_PROJECT_TEMPLATE_LOCATION_OPTION );
         prefs.remove( ADTCore.PREF_PROJECT_TEMPLATE_LOCATION );
+    }
+
+    @Test
+    public void testAddLiferayAndroidSDKLibs() throws Exception
+    {
+
+        final String propertiesFileName = "libs/liferay-android-sdk-1.1.jar.properties";
+
+        final IProject sampleProject = ADTCoreTests.importAndroidProject( projectName, projectName + ".zip" );
+
+        final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
+
+        final File[] libs = libmap.get( "liferay-android-sdk-1.1" );
+
+        ADTUtil.addLibsToAndroidProject( sampleProject, Collections.singletonList( libs ), new NullProgressMonitor() );
+
+        assertTrue( sampleProject.getFile( "libs/liferay-android-sdk-1.1.jar" ).exists() );
+
+        assertTrue( sampleProject.getFile( propertiesFileName ).exists() );
+
+        assertTrue( sampleProject.getFile( "libs/src/liferay-android-sdk-1.1-sources.jar" ).exists() );
+
+        final String propertiesContent =
+            CoreUtil.readStreamToString( sampleProject.getFile( propertiesFileName ).getContents(
+                true ) );
+
+        assertEquals(
+            stripCarriageReturns( "src=src/liferay-android-sdk-1.1-sources.jar" ),
+            stripCarriageReturns( propertiesContent ) );
+    }
+
+    @Test
+    public void testAddLiferayAndroidSDKLibsRunTwice() throws Exception
+    {
+        final String projectName = "SampleAndroidApp";
+
+        final IProject sampleProject = ADTCoreTests.importAndroidProject( projectName, projectName + ".zip" );
+
+        final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
+
+        final File[] libs = libmap.get( "liferay-android-sdk-1.1" );
+
+        ADTUtil.addLibsToAndroidProject( sampleProject, Collections.singletonList( libs ), new NullProgressMonitor() );
+
+        ADTUtil.addLibsToAndroidProject( sampleProject, Collections.singletonList( libs ), new NullProgressMonitor() );
     }
 
     @Test
@@ -168,7 +270,6 @@ public class ADTCoreTests extends BaseTests
         assertEquals( projectPath.toFile(), new File( newLiferyAndroidProject.getLocationURI() ) );
     }
 
-
     @Test
     public void testCreateLiferayAndroidProjectCustomTemplate() throws Exception
     {
@@ -190,6 +291,13 @@ public class ADTCoreTests extends BaseTests
 
         assertEquals( true, customFile.exists() );
     }
+
+//    @Test
+//    public void testCreateLiferayAndroidProjectExample() throws Exception
+//    {
+//        createLiferayAndroidProjectExample( true );
+//        createLiferayAndroidProjectExample( false );
+//    }
 
     @Test
     public void testCreateLiferayAndroidProjectDefaultLocation() throws Exception
@@ -249,13 +357,6 @@ public class ADTCoreTests extends BaseTests
 
         assertEquals( new File( ADTCore.getEmbeddedProjectTemplateLocation() ), ADTCore.getProjectTemplateFile() );
     }
-
-//    @Test
-//    public void testCreateLiferayAndroidProjectExample() throws Exception
-//    {
-//        createLiferayAndroidProjectExample( true );
-//        createLiferayAndroidProjectExample( false );
-//    }
 
     @Test
     public void testGetProjectTemplateLocation() throws Exception

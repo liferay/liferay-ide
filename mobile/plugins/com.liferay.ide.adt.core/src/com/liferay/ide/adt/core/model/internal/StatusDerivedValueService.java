@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.adt.core.model.internal;
 
-import com.liferay.ide.adt.core.model.MobileSDKLibrariesOp;
+import com.liferay.ide.adt.core.model.GenerateCustomServicesOp;
 import com.liferay.mobile.sdk.core.MobileSDKCore;
 
 import org.eclipse.sapphire.DerivedValueService;
@@ -37,7 +37,7 @@ public class StatusDerivedValueService extends DerivedValueService
     {
         super.initDerivedValueService();
 
-        final MobileSDKLibrariesOp op = op();
+        final GenerateCustomServicesOp op = op();
 
         listener = new FilteredListener<PropertyContentEvent>()
         {
@@ -55,7 +55,7 @@ public class StatusDerivedValueService extends DerivedValueService
     @Override
     public void dispose()
     {
-        final MobileSDKLibrariesOp op = op();
+        final GenerateCustomServicesOp op = op();
 
         op.detach( listener, "Url" );
         op.detach( listener, "OmniUsername" );
@@ -66,7 +66,7 @@ public class StatusDerivedValueService extends DerivedValueService
     {
         String retval = null;
 
-        final MobileSDKLibrariesOp op = op();
+        final GenerateCustomServicesOp op = op();
 
         final Object serverStatus = MobileSDKCore.checkServerStatus(
             op.getUrl().content(), op.getOmniUsername().content(), op.getOmniPassword().content() );
@@ -89,9 +89,9 @@ public class StatusDerivedValueService extends DerivedValueService
         return this.status;
     }
 
-    protected MobileSDKLibrariesOp op()
+    protected GenerateCustomServicesOp op()
     {
-        return context( MobileSDKLibrariesOp.class );
+        return context( GenerateCustomServicesOp.class );
     }
 
     protected void restoreStatus()
