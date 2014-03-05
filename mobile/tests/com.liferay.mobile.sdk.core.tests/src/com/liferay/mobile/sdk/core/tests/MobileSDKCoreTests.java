@@ -34,6 +34,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Test;
 
 /**
@@ -145,7 +146,7 @@ public class MobileSDKCoreTests extends BaseTests
         final Map<String, String[]> buildSpec = new HashMap<String, String[]>();
         buildSpec.put( "calendar-portlet", new String[] { "calendar" } );
 
-        final File[] customJars = MobileSDKBuilder.buildJars( SERVER, PACKAGE, buildSpec );
+        final File[] customJars = MobileSDKBuilder.buildJars( SERVER, PACKAGE, buildSpec, new NullProgressMonitor() );
 
         checkJar( customJars[0], false );
         checkJar( customJars[1], true );
