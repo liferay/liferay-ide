@@ -55,8 +55,8 @@ public class MobileSDKCore extends Plugin
 
     private static String[] libNames =
     {
-        "liferay-android-sdk-1.1-core",
-        "liferay-android-sdk-1.1",
+        "liferay-android-sdk-1.0-ga-core",
+        "liferay-android-sdk-1.0-ga",
     };
 
     private static HashMap<String, File[]> libs;

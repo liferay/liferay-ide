@@ -117,11 +117,11 @@ public class GenerateCustomServicesOpMethods
 //        if( hasPortal )
 //        {
             // add standard sdk and sources
-            files.add( libs.get( "liferay-android-sdk-1.1" ) );
+            files.add( libs.get( "liferay-android-sdk-1.0-ga" ) );
 //        }
 //        else
 //        {
-//            files.add( libs.get( "liferay-android-sdk-1.1-core" ) );
+//            files.add( libs.get( "liferay-android-sdk-1.0-ga-core" ) );
 //        }
 
         try

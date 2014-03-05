@@ -35,6 +35,7 @@ import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -171,7 +172,12 @@ public class ADTCoreTests extends BaseTests
     @Before
     public void deleteSampleAndroidProject() throws Exception
     {
-        final IProject sampleProject = project( projectName );
+        deleteSampleProject( projectName );
+    }
+
+    public static void deleteSampleProject( String name ) throws CoreException
+    {
+        final IProject sampleProject = project( name );
 
         if( sampleProject.exists() )
         {
@@ -208,28 +214,28 @@ public class ADTCoreTests extends BaseTests
     public void testAddLiferayAndroidSDKLibs() throws Exception
     {
 
-        final String propertiesFileName = "libs/liferay-android-sdk-1.1.jar.properties";
+        final String propertiesFileName = "libs/liferay-android-sdk-1.0-ga.jar.properties";
 
         final IProject sampleProject = ADTCoreTests.importAndroidProject( projectName, projectName + ".zip" );
 
         final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
 
-        final File[] libs = libmap.get( "liferay-android-sdk-1.1" );
+        final File[] libs = libmap.get( "liferay-android-sdk-1.0-ga" );
 
         ADTUtil.addLibsToAndroidProject( sampleProject, Collections.singletonList( libs ), new NullProgressMonitor() );
 
-        assertTrue( sampleProject.getFile( "libs/liferay-android-sdk-1.1.jar" ).exists() );
+        assertTrue( sampleProject.getFile( "libs/liferay-android-sdk-1.0-ga.jar" ).exists() );
 
         assertTrue( sampleProject.getFile( propertiesFileName ).exists() );
 
-        assertTrue( sampleProject.getFile( "libs/src/liferay-android-sdk-1.1-sources.jar" ).exists() );
+        assertTrue( sampleProject.getFile( "libs/src/liferay-android-sdk-1.0-ga-sources.jar" ).exists() );
 
         final String propertiesContent =
             CoreUtil.readStreamToString( sampleProject.getFile( propertiesFileName ).getContents(
                 true ) );
 
         assertEquals(
-            stripCarriageReturns( "src=src/liferay-android-sdk-1.1-sources.jar" ),
+            stripCarriageReturns( "src=src/liferay-android-sdk-1.0-ga-sources.jar" ),
             stripCarriageReturns( propertiesContent ) );
     }
 
@@ -242,7 +248,7 @@ public class ADTCoreTests extends BaseTests
 
         final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
 
-        final File[] libs = libmap.get( "liferay-android-sdk-1.1" );
+        final File[] libs = libmap.get( "liferay-android-sdk-1.0-ga" );
 
         ADTUtil.addLibsToAndroidProject( sampleProject, Collections.singletonList( libs ), new NullProgressMonitor() );
 

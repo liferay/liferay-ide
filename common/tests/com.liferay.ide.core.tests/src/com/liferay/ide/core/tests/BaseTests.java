@@ -134,7 +134,7 @@ public class BaseTests
         return element;
     }
 
-    protected IProject project( final String name )
+    protected static IProject project( final String name )
     {
         return workspaceRoot().getProject( name );
     }
@@ -144,12 +144,12 @@ public class BaseTests
         return value.replaceAll( "\r", "" );
     }
 
-    protected IWorkspace workspace()
+    protected static IWorkspace workspace()
     {
         return ResourcesPlugin.getWorkspace();
     }
 
-    protected IWorkspaceRoot workspaceRoot()
+    protected static IWorkspaceRoot workspaceRoot()
     {
         return workspace().getRoot();
     }

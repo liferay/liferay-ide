@@ -74,7 +74,7 @@ public class AddLibraryAndroidSDKLibsHandler extends AbstractHandler
                 {
                     final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
 
-                    final File[] libs = libmap.get( "liferay-android-sdk-1.1" );
+                    final File[] libs = libmap.get( "liferay-android-sdk-1.0-ga" );
 
                     final NullProgressMonitor npm = new NullProgressMonitor();
 

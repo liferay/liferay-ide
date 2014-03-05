@@ -135,7 +135,7 @@ public class MobileSDKBuilder
 
         args.add( "-cp" );
 
-        args.add( bundlePath( "org.json" ) + ";"  + libPath( "liferay-android-sdk-1.1-core.jar" ) );
+        args.add( bundlePath( "org.json" ) + ";"  + libPath( "liferay-android-sdk-1.0-ga-core.jar" ) );
 
         args.add( "-1.6" );
 
