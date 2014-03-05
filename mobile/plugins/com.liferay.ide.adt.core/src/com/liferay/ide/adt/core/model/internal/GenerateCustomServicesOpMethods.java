@@ -104,7 +104,7 @@ public class GenerateCustomServicesOpMethods
         if( ( hasPortal && buildSpec.keySet().size() > 1 ) || ( !hasPortal && buildSpec.keySet().size() > 0 ) )
         {
             customJars =
-                MobileSDKBuilder.buildJars( op.getUrl().content(), op.getPackage().getDefaultText(), buildSpec, pm );
+                MobileSDKBuilder.buildJars( op.getUrl().content(), op.getPackage().content().toString(), buildSpec, pm );
         }
 
         final List<File[]> files = new ArrayList<File[]>();
