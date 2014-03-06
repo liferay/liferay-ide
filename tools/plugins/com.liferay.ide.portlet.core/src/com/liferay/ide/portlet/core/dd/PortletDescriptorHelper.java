@@ -18,11 +18,9 @@ package com.liferay.ide.portlet.core.dd;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +40,16 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Cindy Li
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties
 {
+
+    public PortletDescriptorHelper()
+    {
+        super();
+    }
 
     public PortletDescriptorHelper( IProject project )
     {
@@ -247,35 +251,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
     protected String getPortletClassText( IDataModel model )
     {
         return model.getStringProperty( QUALIFIED_CLASS_NAME );
-    }
-
-    protected IStatus removeAllElements( IDOMDocument document, String tagName )
-    {
-        if( document == null )
-        {
-            return PortletCore.createErrorStatus( MessageFormat.format(
-                "Could not remove {0} elements: null document", tagName ) ); //$NON-NLS-1$
-        }
-
-        NodeList elements = document.getElementsByTagName( tagName );
-
-        try
-        {
-            if( elements != null && elements.getLength() > 0 )
-            {
-                for( int i = 0; i < elements.getLength(); i++ )
-                {
-                    Node element = elements.item( i );
-                    element.getParentNode().removeChild( element );
-                }
-            }
-        }
-        catch( Exception ex )
-        {
-            return PortletCore.createErrorStatus( MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
-        }
-
-        return Status.OK_STATUS;
     }
 
     public IStatus removeAllPortlets()
@@ -598,4 +573,11 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
 
         return Status.OK_STATUS;
     }
+
+    @Override
+    public IStatus removeSampleElements()
+    {
+        return removeAllPortlets();
+    }
+
 }

@@ -126,4 +126,5 @@ public class JSFPortletDescriptorHelper extends PortletDescriptorHelper
 
         return Status.OK_STATUS;
     }
+
 }

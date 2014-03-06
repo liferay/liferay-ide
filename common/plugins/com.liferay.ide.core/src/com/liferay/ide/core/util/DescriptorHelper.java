@@ -42,6 +42,7 @@ import org.w3c.dom.NodeList;
  *
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class DescriptorHelper
@@ -173,6 +174,16 @@ public class DescriptorHelper
     {
         IFile retval = null;
 
+        if( ! CoreUtil.isLiferayProject( project ) )
+        {
+            project = CoreUtil.getNestedLiferayProject( project );
+        }
+
+        if( project == null )
+        {
+            return retval;
+        }
+
         final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( project );
 
         if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
@@ -209,6 +220,10 @@ public class DescriptorHelper
     protected String descriptorPath;
 
     protected IProject project;
+
+    public DescriptorHelper()
+    {
+    }
 
     public DescriptorHelper( IProject project )
     {
@@ -256,4 +271,10 @@ public class DescriptorHelper
     {
         this.descriptorPath = path;
     }
+
+    public void setProject( IProject project )
+    {
+        this.project = project;
+    }
+
 }

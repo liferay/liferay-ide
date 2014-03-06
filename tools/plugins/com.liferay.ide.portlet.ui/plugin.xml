@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
+         id="com.liferay.ide.portlet.ui.newPortletWizard"
          point="org.eclipse.ui.newWizards">
       <category
             id="com.liferay.ide.newWizards"

@@ -15,14 +15,16 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.LiferayDescriptorHelperReader;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUIPlugin;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
-
-import java.lang.reflect.Field;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
@@ -32,18 +34,23 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.internal.ui.util.CoreUtility;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
-import org.eclipse.sapphire.ui.forms.WizardPart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
@@ -59,6 +66,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPluginProjectOp>
@@ -181,6 +189,100 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                 }
             }.schedule();
         }
+
+        // check if sample code is needed, available for projects of portlet and service builder
+        final boolean includeSampleCode = op.getIncludeSampleCode().content();
+
+        if( ! includeSampleCode )
+        {
+            final PluginType pluginType = op.getPluginType().content();
+
+            removeSampleCode( project, pluginType );
+        }
+
+        // check if a new portlet wizard is needed, available for portlet projects.
+        final boolean createNewPortlet = op.getCreateNewPortlet().content();
+
+        if( createNewPortlet && PluginType.portlet.equals( op.getPluginType().content() ) )
+        {
+            openNewPortletWizard();
+        }
+    }
+
+    private void removeSampleCode( IProject project, PluginType pluginType )
+    {
+        LiferayDescriptorHelperReader reader = new LiferayDescriptorHelperReader();
+
+        final LiferayDescriptorHelper[] helpers = reader.getHelpers();
+
+        if( pluginType.equals( PluginType.portlet ) )
+        {
+            for( LiferayDescriptorHelper helper : helpers )
+            {
+                if( helper.getClass().toString().contains( "PortletDescriptorHelper" ) )
+                {
+                    helper.setProject( project );
+                    helper.removeSampleElements();
+                }
+            }
+        }
+        else if( pluginType.equals( PluginType.servicebuilder ) )
+        {
+            for( LiferayDescriptorHelper helper : helpers )
+            {
+                if( helper.getClass().toString().contains( "PortletDescriptorHelper" ) ||
+                    helper.getClass().toString().contains( "ServiceBuilderDescriptorHelper" ) )
+                {
+                    helper.setProject( project );
+                    helper.removeSampleElements();
+                }
+            }
+        }
+    }
+
+    private void openNewPortletWizard()
+    {
+        final IExtensionRegistry registry = Platform.getExtensionRegistry();
+
+        final String newPortletWizardExtensionId = "com.liferay.ide.portlet.ui.newPortletWizard";
+
+        final IExtension extension = registry.getExtension( newPortletWizardExtensionId );
+
+        final IConfigurationElement[] elements = extension.getConfigurationElements();
+
+        for( final IConfigurationElement element : elements )
+        {
+            if( "wizard".equals( element.getName() ) )
+            {
+                UIUtil.async
+                (
+                    new Runnable()
+                    {
+                        public void run()
+                        {
+                            try
+                            {
+                                INewWizard wizard = (INewWizard) CoreUtility.createExtension( element, "class" );
+
+                                final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+
+                                wizard.init( PlatformUI.getWorkbench(), null );
+
+                                WizardDialog dialog = new WizardDialog( shell, wizard );
+
+                                dialog.create();
+
+                                dialog.open();
+                            }
+                            catch( CoreException ex )
+                            {
+                                LiferayProjectCore.createErrorStatus( ex );
+                            }
+                        }
+                    }
+                );
+            }
+        }
     }
 
     private void showInAntView( final IProject project )
@@ -251,4 +353,5 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
     {
         return NewLiferayPluginProjectOp.TYPE.instantiate();
     }
+
 }
