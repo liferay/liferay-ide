@@ -35,6 +35,12 @@
       <import feature="com.android.ide.eclipse.adt" version="20.0.0" match="greaterOrEqual"/>
       <import feature="com.android.ide.eclipse.ddms" version="20.0.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.common" version="2.1.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.java" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.java.jdt" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.osgi" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.platform" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.sapphire.ui" version="0.7.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
