@@ -116,8 +116,8 @@ public class NewLiferayAndroidProjectOpMethods
         // update project name
         final File dotProject = new File( projectDir, ".project" );
 
-        FileUtil.searchAndReplace(
-            dotProject, "<name>sample-android-app</name>", "<name>" + op.getProjectName().content() + "</name>" );
+        FileUtil.searchAndReplace( dotProject, "<name>liferay-mobile-sdk-sample-android</name>", "<name>" +
+            op.getProjectName().content() + "</name>" );
 
         // update target sdk
         final int sdkLevel = ADTUtil.extractSdkLevel( op.getTargetSDK().content( true ) );

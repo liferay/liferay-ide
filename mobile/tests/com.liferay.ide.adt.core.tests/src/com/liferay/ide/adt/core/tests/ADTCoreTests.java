@@ -126,12 +126,12 @@ public class ADTCoreTests extends BaseTests
         return newLiferayAndroidProject;
     }
 
-    protected void createLiferayAndroidProjectName( final String projectName ) throws Exception
+    protected IProject createLiferayAndroidProjectName( final String projectName ) throws Exception
     {
         final NewLiferayAndroidProjectOp op = NewLiferayAndroidProjectOp.TYPE.instantiate();
         op.setProjectName( projectName );
 
-        createLiferayAndroidProject( op );
+        return createLiferayAndroidProject( op );
     }
 
     protected void createLiferayAndroidProjectSDK( final String targetSdk ) throws Exception
@@ -320,6 +320,15 @@ public class ADTCoreTests extends BaseTests
         final IPath expectedProjectLocation = workspaceLocation.append( projectName );
 
         assertEquals( expectedProjectLocation, newProject.getLocation() );
+    }
+
+    @Test
+    public void testCreateLiferayAndroidProjectMetadata() throws Exception
+    {
+        final String n = "foo";
+        final IFile projectFile = createLiferayAndroidProjectName( n ).getFile( ".project" );
+
+        assertTrue( CoreUtil.readStreamToString( projectFile.getContents() ).contains( n ) );
     }
 
     @Test
