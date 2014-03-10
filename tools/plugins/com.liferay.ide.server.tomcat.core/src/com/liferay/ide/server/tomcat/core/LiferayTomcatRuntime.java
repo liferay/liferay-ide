@@ -18,10 +18,10 @@ import static com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin.warning;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
+import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -242,8 +242,16 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
                 if( serverInfo == null )
                 {
-                    LiferayPortalValueLoader loader = new LiferayPortalValueLoader( getRuntimeLocation(), getAppServerPortalDir() );
-                    serverInfo = loader.loadServerInfoFromClass();
+                    try
+                    {
+                        serverInfo =
+                            new LiferayPortalValueLoader( getRuntimeLocation(), getAppServerPortalDir() ).loadServerInfoFromClass();
+                    }
+                    catch( Exception e )
+                    {
+                        LiferayTomcatPlugin.logError( "Could not load server info at: runtimeLocation=" +
+                            getRuntimeLocation().toOSString() + ", portalDir=" + getAppServerPortalDir(), e );
+                    }
                 }
 
                 if( serverInfo != null )

@@ -537,7 +537,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         op.dispose();
 
-        SDKManager.getInstance().setSDKs( new SDK[] {} );
+        SDKManager.getInstance().clearSDKs();
 
         op = newProjectOp();
         dvs = op.getPluginsSDKName().service( DefaultValueService.class );

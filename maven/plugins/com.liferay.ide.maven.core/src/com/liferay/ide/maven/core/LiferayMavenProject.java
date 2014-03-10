@@ -19,8 +19,8 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.BaseLiferayProject;
 import com.liferay.ide.project.core.IProjectBuilder;
-import com.liferay.ide.project.core.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
+import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;

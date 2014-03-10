@@ -13,29 +13,32 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.server.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
+ * @author Gregory Amerson
  */
 public class LiferayPortalValueLoader
 {
 
-    private IPath[] extraLib;
+    private IPath[] extraLibs;
     private IPath globalDir;
     private IPath portalDir;
 
@@ -45,10 +48,35 @@ public class LiferayPortalValueLoader
         this.globalDir = appServerGlobalDir;
     }
 
-    public LiferayPortalValueLoader( IPath appServerPortalDir, IPath[] extraLib )
+    public LiferayPortalValueLoader( IPath appServerPortalDir, IPath[] extraLibs )
     {
         this.portalDir = appServerPortalDir;
-        this.extraLib = extraLib;
+        this.extraLibs = extraLibs;
+    }
+
+    private void addLibs( File libDir, List<URL> libUrlList ) throws MalformedURLException
+    {
+        if( libDir.exists() )
+        {
+            final File[] libs = libDir.listFiles
+            (
+                new FilenameFilter()
+                {
+                    public boolean accept( File dir, String fileName )
+                    {
+                        return fileName.toLowerCase().endsWith( ".jar" );
+                    }
+                }
+            );
+
+            if( ! CoreUtil.isNullOrEmpty( libs ) )
+            {
+                for( File portaLib : libs )
+                {
+                    libUrlList.add( portaLib.toURI().toURL() );
+                }
+            }
+        }
     }
 
     private Object[] getFieldValuesFromClass( String loadClassName, String fieldName)
@@ -64,7 +92,7 @@ public class LiferayPortalValueLoader
         catch( Exception e )
         {
             retval = new Object[0];
-            LiferayProjectCore.logError( "Error unable to find " + loadClassName, e ); //$NON-NLS-1$
+            LiferayServerCore.logError( "Error unable to find " + loadClassName, e ); //$NON-NLS-1$
         }
 
         return retval;
@@ -82,7 +110,7 @@ public class LiferayPortalValueLoader
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Error unable to find " + loadClassName, e ); //$NON-NLS-1$
+            LiferayServerCore.logError( "Error unable to find " + loadClassName, e ); //$NON-NLS-1$
         }
 
         return retval;
@@ -91,65 +119,30 @@ public class LiferayPortalValueLoader
     @SuppressWarnings( "resource" )
     private Class<?> loadClass( String className ) throws Exception
     {
-        final ArrayList<URL> libUrlList = new ArrayList<URL>();
+        final List<URL> libUrlList = new ArrayList<URL>();
 
         if ( portalDir != null )
         {
-            final File[] portalLibs = portalDir.append( "WEB-INF/lib" ).toFile().listFiles
-            (
-                new FilenameFilter()
-                {
-                    public boolean accept( File dir, String fileName )
-                    {
-                        return fileName.toLowerCase().endsWith( ".jar" );
-                    }
-                }
-            );
+            final File libDir = portalDir.append( "WEB-INF/lib" ).toFile();
 
-            for( File portaLib : portalLibs )
-            {
-                libUrlList.add( portaLib.toURI().toURL() );
-            }
+            addLibs( libDir, libUrlList );
         }
 
+        //TODO this block assumes globaDir points to Tomcat which may not be the case in the future.
         if ( globalDir != null )
         {
-            final File[] libs = globalDir.append( "lib" ).toFile().listFiles
-            (
-                new FilenameFilter()
-                {
-                    public boolean accept( File dir, String fileName )
-                    {
-                        return fileName.toLowerCase().endsWith( ".jar" );
-                    }
-                }
-             );
+            final File libDir = globalDir.append( "lib" ).toFile();
 
-            for( File lib : libs )
-            {
-                libUrlList.add( lib.toURI().toURL() );
-            }
+            addLibs( libDir, libUrlList );
 
-            final File[] extLibs = globalDir.append( "lib/ext" ).toFile().listFiles
-            (
-                new FilenameFilter()
-                {
-                    public boolean accept( File dir, String fileName )
-                    {
-                        return fileName.toLowerCase().endsWith( ".jar" );
-                    }
-                }
-             );
+            final File extLibDir = globalDir.append( "lib/ext" ).toFile();
 
-            for( File extLib : extLibs )
-            {
-                libUrlList.add( extLib.toURI().toURL() );
-            }
+            addLibs( extLibDir, libUrlList );
         }
 
-        if( ! CoreUtil.isNullOrEmpty( extraLib ) )
+        if( ! CoreUtil.isNullOrEmpty( extraLibs ) )
         {
-            for( IPath url : extraLib )
+            for( IPath url : extraLibs )
             {
                 libUrlList.add( new File( url.toOSString() ).toURI().toURL() );
             }
@@ -191,7 +184,7 @@ public class LiferayPortalValueLoader
         catch( Exception e )
         {
             retval = Version.emptyVersion;
-            LiferayProjectCore.logError( "Error unable to find " + loadClassName, e ); //$NON-NLS-1$
+            LiferayServerCore.logError( "Error unable to find " + loadClassName, e ); //$NON-NLS-1$
         }
 
         return retval;

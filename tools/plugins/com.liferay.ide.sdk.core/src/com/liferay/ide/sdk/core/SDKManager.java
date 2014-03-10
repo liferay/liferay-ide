@@ -60,7 +60,7 @@ public final class SDKManager
     private boolean initialized = false;
 
     // current list of available sdks
-    private ArrayList<SDK> sdkList;
+    private List<SDK> sdkList;
 
     protected List<ISDKListener> sdkListeners = new ArrayList<ISDKListener>(3);
 
@@ -71,6 +71,11 @@ public final class SDKManager
 
     public void addSDK( SDK sdk )
     {
+        if( sdk == null )
+        {
+            throw new IllegalArgumentException( "sdk cannot be null" );
+        }
+
         if( !initialized )
         {
             initialize();
@@ -94,6 +99,15 @@ public final class SDKManager
         {
             sdkListeners.add( listener );
         }
+    }
+
+    public void clearSDKs()
+    {
+        this.sdkList.clear();
+
+        saveSDKs();
+
+        fireSDKEvent( new SDK[] {}, EVENT_REMOVED );
     }
 
     public boolean containsSDK( SDK theSDK )
@@ -295,13 +309,18 @@ public final class SDKManager
         }
     }
 
-    public void saveSDKs( SDK[] sdks )
-    {
-        setSDKs( sdks );
-    }
-
     public void setSDKs( SDK[] sdks )
     {
+        if( CoreUtil.isNullOrEmpty( sdks ) )
+        {
+            throw new IllegalArgumentException( "sdk array cannot be null or empty" );
+        }
+
+        if( CoreUtil.containsNullElement( sdks ) )
+        {
+            throw new IllegalArgumentException( "sdk array contains null element" );
+        }
+
         this.sdkList.clear();
 
         for( SDK sdk : sdks )

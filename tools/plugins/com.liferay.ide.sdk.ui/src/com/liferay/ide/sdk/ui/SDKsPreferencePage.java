@@ -94,7 +94,7 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
 
             if( sdks != null )
             {
-                SDKManager.getInstance().saveSDKs( sdks );
+                SDKManager.getInstance().setSDKs( sdks );
             }
 
             return true;

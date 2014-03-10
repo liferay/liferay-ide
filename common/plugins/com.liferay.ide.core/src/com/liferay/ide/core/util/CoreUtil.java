@@ -201,6 +201,24 @@ public class CoreUtil
         return false;
     }
 
+    public static boolean containsNullElement( Object[] array )
+    {
+        if( isNullOrEmpty( array ) )
+        {
+            return true;
+        }
+
+        for( int i = 0; i < array.length; i++ )
+        {
+            if( array[i] == null )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static IStatus createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, LiferayCore.PLUGIN_ID, msg );
