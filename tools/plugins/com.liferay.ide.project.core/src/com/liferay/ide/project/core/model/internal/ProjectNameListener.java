@@ -29,6 +29,7 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Kuo Zhang
  */
 public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
 {
@@ -47,14 +48,20 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
     public static void updateLocation( final NewLiferayPluginProjectOp op )
     {
         final String currentProjectName = op.getProjectName().content();
-        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
 
-        if( currentProjectName != null && useDefaultLocation )
+        if( currentProjectName == null )
+        {
+            return;
+        }
+
+        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+        final String providerShortName = op.getProjectProvider().content( true ).getShortName();
+
+        if( useDefaultLocation )
         {
             Path newLocationBase = null;
 
-            if( op.getProjectProvider().content( true ).getShortName().equals( "ant" ) && //$NON-NLS-1$
-                            op.getUseSdkLocation().content( true ) )
+            if( providerShortName.equals( "ant" ) && op.getUseSdkLocation().content( true ) )
             {
                 String pluginsSdk = op.getPluginsSDKName().content( true );
 
@@ -97,6 +104,26 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
             if( newLocationBase != null )
             {
                 NewLiferayPluginProjectOpMethods.updateLocation( op, newLocationBase );
+            }
+        }
+        else
+        {
+            if( providerShortName.equals( "ant" ) )
+            {
+                final String suffix =
+                    NewLiferayPluginProjectOpMethods.getPluginTypeSuffix( op.getPluginType().content( true ) );
+
+                Path newLocationBase = op.getLocation().content( true );
+
+                if( newLocationBase != null && newLocationBase.segmentCount() > 0 )
+                {
+                    final String lastSegment = newLocationBase.lastSegment();
+
+                    if( ! lastSegment.endsWith( suffix ) )
+                    {
+                        NewLiferayPluginProjectOpMethods.updateLocation( op, newLocationBase );
+                    }
+                }
             }
         }
     }
