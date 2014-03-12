@@ -110,6 +110,12 @@ public class MobileSDKCore extends Plugin
         {
             retval = e.getMessage();
         }
+        catch( Throwable t )
+        {
+            retval = "Unexcepted error, see the Error Log for more details";
+
+            MobileSDKCore.logError( t.getMessage(), new Exception( t ) );
+        }
 
         return retval;
     }
