@@ -14,7 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.alloy.core;
 
-import com.liferay.ide.core.jna.LibraryUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.core.util.ZipUtil;
@@ -138,14 +137,9 @@ public class LautRunner
 
     private static void setSDKExecutableFlags( IPath lautDir )
     {
-        if( LibraryUtil.getLibC() == null )
-        {
-            return;
-        }
-
         for( String exeFile : lautExeFiles )
         {
-            LibraryUtil.getLibC().chmod( lautDir.append( exeFile ).toOSString(), 0755 );
+            lautDir.append( exeFile ).toFile().setExecutable( true );
         }
     }
 

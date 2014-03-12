@@ -31,13 +31,6 @@
    </license>
 
    <plugin
-         id="com.sun.jna"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.liferay.ide.core.tests"
          download-size="0"
          install-size="0"
@@ -53,13 +46,6 @@
 
    <plugin
          id="org.json"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.java.dev.jna.platform"
          download-size="0"
          install-size="0"
          version="0.0.0"

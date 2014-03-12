@@ -32,15 +32,12 @@ Require-Bundle: org.eclipse.ant.core,
  org.apache.commons.logging;bundle-version="1.1.1",
  org.apache.commons.lang;bundle-version="2.6.0",
  org.apache.commons.collections;bundle-version="3.2.0",
- org.json,
- com.sun.jna;bundle-version="4.0.0",
- net.java.dev.jna.platform;bundle-version="4.0.0"
+ org.json
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.core,
  com.liferay.ide.core.adapter,
  com.liferay.ide.core.describer,
- com.liferay.ide.core.jna,
  com.liferay.ide.core.model,
  com.liferay.ide.core.model.internal,
  com.liferay.ide.core.model.xml.internal,

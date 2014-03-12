@@ -54,6 +54,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -628,6 +629,16 @@ public class CoreUtil
         return retval;
     }
 
+    public static boolean isLinux()
+    {
+        return Platform.OS_LINUX.equals( Platform.getOS() );
+    }
+
+    public static boolean isMac()
+    {
+        return Platform.OS_MACOSX.equals( Platform.getOS() );
+    }
+
     public static boolean isNullOrEmpty( List<?> list )
     {
         return list == null || list.size() == 0;
@@ -676,6 +687,11 @@ public class CoreUtil
         }
 
         return false;
+    }
+
+    public static boolean isWindows()
+    {
+        return Platform.OS_WIN32.equals( Platform.getOS() );
     }
 
     public static void makeFolders( IFolder folder ) throws CoreException
