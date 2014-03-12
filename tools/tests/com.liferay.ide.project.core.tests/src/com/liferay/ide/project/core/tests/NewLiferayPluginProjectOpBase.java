@@ -37,7 +37,6 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.PossibleValuesService;
@@ -166,14 +165,6 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     }
 
     protected abstract String getServiceXmlDoctype();
-
-    private void removeAllRuntimes() throws CoreException
-    {
-        for( IRuntime r : ServerCore.getRuntimes() )
-        {
-            r.delete();
-        }
-    }
 
     @Test
     public void testDisplayNameDefaultValue() throws Exception

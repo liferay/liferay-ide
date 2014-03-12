@@ -23,6 +23,7 @@ import com.liferay.ide.server.util.LiferayPortalValueLoader;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.ServerCore;
+import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.Version;
 
@@ -37,9 +38,17 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
         return new LiferayPortalValueLoader( runtimeLocation, runtimeLocation.append( "webapps/ROOT" ) );
     }
 
+    @Before
+    public void removeRuntimes() throws Exception
+    {
+        super.removeAllRuntimes();
+    }
+
     @Test
     public void loadHookPropertiesFromClass() throws Exception
     {
+        setupPluginsSDKAndRuntime();
+
         final IPath runtimeLocation = ServerCore.getRuntimes()[0].getLocation();
 
         final String[] props = loader( runtimeLocation ).loadHookPropertiesFromClass();
@@ -52,6 +61,8 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
     @Test
     public void loadServerInfoFromClass() throws Exception
     {
+        setupPluginsSDKAndRuntime();
+
         final IPath runtimeLocation = ServerCore.getRuntimes()[0].getLocation();
 
         final String info = loader( runtimeLocation ).loadServerInfoFromClass();
@@ -64,6 +75,8 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
     @Test
     public void loadVersionFromClass() throws Exception
     {
+        setupPluginsSDKAndRuntime();
+
         final IPath runtimeLocation = ServerCore.getRuntimes()[0].getLocation();
 
         final Version version = loader( runtimeLocation ).loadVersionFromClass();
