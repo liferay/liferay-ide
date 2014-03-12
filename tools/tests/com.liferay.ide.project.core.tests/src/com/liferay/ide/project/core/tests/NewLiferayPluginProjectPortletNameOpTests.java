@@ -35,8 +35,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
         final String  jsfSuite, String suffix, String customPortletName ) throws Exception
     {
         final String projectName = "test-" + jsfSuite + suffix + "-sdk-project";
-        final NewLiferayPluginProjectOp op = newProjectOp();
-        op.setProjectName( projectName );
+        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
         op.setPortletFramework( "jsf-2.x" );
         op.setPortletFrameworkAdvanced( "liferay_faces_alloy" );
         op.setPortletName( customPortletName );
@@ -56,8 +55,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     protected IProject createNewMVCPortletProjectCustomPortletName( String customPortletName ) throws Exception
     {
         final String projectName = "test-mvc-sdk-project";
-        final NewLiferayPluginProjectOp op = newProjectOp();
-        op.setProjectName( projectName );
+        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
         op.setPortletFramework( "mvc" );
         op.setPortletName( customPortletName );
 

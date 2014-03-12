@@ -33,9 +33,9 @@ import java.util.Set;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.EnablementService;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.ValidationService;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -222,7 +222,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Test
     public void testProjectNameListener() throws Exception
     {
-        final NewLiferayPluginProjectOp op = newProjectOp();
+        final NewLiferayPluginProjectOp op = newProjectOp( "" );
         final SDK sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
 
         final String projectName = "test-project-name-listener";

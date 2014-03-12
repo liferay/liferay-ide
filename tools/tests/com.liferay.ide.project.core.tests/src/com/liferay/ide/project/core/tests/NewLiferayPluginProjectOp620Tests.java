@@ -18,7 +18,6 @@ package com.liferay.ide.project.core.tests;
 import com.liferay.ide.project.core.LiferayProjectCore;
 
 import org.eclipse.core.runtime.IPath;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -35,15 +34,15 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     }
 
     @Override
-    protected String getLiferayPluginsSdkZipFolder()
-    {
-        return "liferay-plugins-sdk-6.2.0/";
-    }
-
-    @Override
     protected IPath getLiferayPluginsSDKZip()
     {
         return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.0-ce-ga1-20131101192857659.zip" );
+    }
+
+    @Override
+    protected String getLiferayPluginsSdkZipFolder()
+    {
+        return "liferay-plugins-sdk-6.2.0/";
     }
 
     @Override
@@ -70,10 +69,28 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         return "6.2.0";
     }
 
+    @Override
+    protected String getServiceXmlDoctype()
+    {
+        return "service-builder PUBLIC \"-//Liferay//DTD Service Builder 6.2.0//EN\" \"http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd";
+    }
+
     @Test
     public void testLocationListener() throws Exception
     {
         super.testLocationListener();
+    }
+
+    @Test
+    public void testNewJsfRichfacesProjects() throws Exception
+    {
+        super.testNewJsfRichfacesProjects();
+    }
+
+    @Test
+    public void testNewLayoutAntProject() throws Exception
+    {
+        super.testNewLayoutAntProject();
     }
 
     @Test
@@ -101,27 +118,32 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     }
 
     @Test
+    public void testNewSDKProjectInSDK() throws Exception
+    {
+        super.testNewSDKProjectInSDK();
+    }
+
+    @Test
+    public void testNewThemeProjects() throws Exception
+    {
+        super.testNewThemeProjects();
+    }
+
+    @Test
     public void testPluginTypeListener() throws Exception
     {
         super.testPluginTypeListener( true );
     }
 
     @Test
-    public void testUseSdkLocationListener() throws Exception
+    public void testProjectNameValidation() throws Exception
     {
-        super.testUseSdkLocationListener();
-    }
-
-    @Override
-    protected String getServiceXmlDoctype()
-    {
-        return "service-builder PUBLIC \"-//Liferay//DTD Service Builder 6.2.0//EN\" \"http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd";
+        super.testProjectNameValidation( "project-name-validation-620" );
     }
 
     @Test
-    @Ignore
-    public void testNewJsfRichfacesProjects() throws Exception
+    public void testUseSdkLocationListener() throws Exception
     {
-        super.testNewJsfRichfacesProjects();
+        super.testUseSdkLocationListener();
     }
 }

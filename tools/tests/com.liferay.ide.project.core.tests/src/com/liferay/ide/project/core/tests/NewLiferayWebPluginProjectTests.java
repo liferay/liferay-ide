@@ -104,10 +104,9 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
 
         final String projectName = "test-web-project-sdk";
 
-        final NewLiferayPluginProjectOp op = newProjectOp();
+        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
 
         op.setPluginsSDKName( sdk.getName() );
-        op.setProjectName( projectName );
         op.setPluginType( PluginType.web );
 
         assertEquals(
@@ -119,9 +118,8 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
     public void testNewWebAntProject() throws Exception
     {
         final String projectName = "test-web-project-sdk";
-        final NewLiferayPluginProjectOp op = newProjectOp();
+        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
 
-        op.setProjectName( projectName );
         op.setPluginType( PluginType.web );
 
         final IProject webProject = createAntProject( op );

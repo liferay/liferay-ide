@@ -47,8 +47,7 @@ public class PluginsSDKNameValidatorTests extends ProjectCoreBase
     public void testSDKProjectsValidator() throws Exception
     {
         final String projectName = "Test2";
-        final NewLiferayPluginProjectOp op = newProjectOp();
-        op.setProjectName( projectName );
+        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
         op.setPluginType( PluginType.portlet );
 
         final IProject portletProject = createAntProject( op );

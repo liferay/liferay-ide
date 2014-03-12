@@ -47,38 +47,21 @@
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <!--osgi.console>1234</osgi.console-->
                     </systemProperties>
-                    <dependencies>
-                        <dependency>
-                            <type>eclipse-feature</type>
-                            <artifactId>org.eclipse.sapphire.osgi</artifactId>
-                            <version>0.0.0</version>
-                        </dependency>
-                        <dependency>
-                            <type>eclipse-feature</type>
-                            <artifactId>org.eclipse.jst.enterprise_core.feature</artifactId>
-                            <version>0.0.0</version>
-                        </dependency>
-                        <dependency>
-                            <type>eclipse-feature</type>
-                            <artifactId>org.eclipse.jst.common.fproj.enablement.jdt</artifactId>
-                            <version>0.0.0</version>
-                        </dependency>
-                        <dependency>
-                            <type>eclipse-feature</type>
-                            <artifactId>org.eclipse.jst.web_core.feature</artifactId>
-                            <version>0.0.0</version>
-                        </dependency>
-                        <dependency>
-                            <type>eclipse-feature</type>
-                            <artifactId>org.eclipse.jsf.feature</artifactId>
-                            <version>0.0.0</version>
-                        </dependency>
-                        <dependency>
-                            <type>eclipse-feature</type>
-                            <artifactId>org.eclipse.jst.web_core.feature</artifactId>
-                            <version>0.0.0</version>
-                        </dependency>
-                    </dependencies>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <configuration>
+                    <dependency-resolution>
+                        <extraRequirements>
+                            <requirement>
+                                <type>eclipse-feature</type>
+                                <id>com.liferay.ide.eclipse.tools</id>
+                                <versionRange>0.0.0</versionRange>
+                            </requirement>
+                        </extraRequirements>
+                    </dependency-resolution>
                 </configuration>
             </plugin>
         </plugins>

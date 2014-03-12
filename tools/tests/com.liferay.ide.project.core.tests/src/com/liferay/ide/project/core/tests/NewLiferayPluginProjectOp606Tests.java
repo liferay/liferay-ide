@@ -24,7 +24,6 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -145,7 +144,6 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
     }
 
     @Test
-    @Ignore
     public void testPluginTypeListener() throws Exception
     {
         super.testPluginTypeListener();

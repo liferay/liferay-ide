@@ -211,15 +211,10 @@ public abstract class ProjectCoreBase extends BaseTests
         return "6.2.0";
     }
 
-    protected NewLiferayPluginProjectOp newProjectOp()
-    {
-        return NewLiferayPluginProjectOp.TYPE.instantiate();
-    }
-
     protected NewLiferayPluginProjectOp newProjectOp( final String projectName ) throws Exception
     {
         final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( projectName );
+        op.setProjectName( projectName + "-" + getRuntimeVersion() );
 
         return op;
     }
