@@ -77,9 +77,9 @@ public class NewLiferayPluginProjectProfileTests
         assertEquals( 0, op.getSelectedProfiles().size() );
     }
 
-    @Test
-    public void testNewLiferayProfileIdDefaultValue() throws Exception
-    {
+//    @Test
+//    public void testNewLiferayProfileIdDefaultValue() throws Exception
+//    {
 //        final NewLiferayPluginProjectOp op = newMavenProjectOp();
 //
 //        op.getSelectedProfiles().insert().setId( "foo" );
@@ -87,7 +87,7 @@ public class NewLiferayPluginProjectProfileTests
 //        final NewLiferayProfile newLiferayProfile = op.getNewLiferayProfiles().insert();
 //
 //        newLiferayProfile.getId().content();
-    }
+//    }
 
     private NewLiferayPluginProjectOp newMavenProjectOp()
     {

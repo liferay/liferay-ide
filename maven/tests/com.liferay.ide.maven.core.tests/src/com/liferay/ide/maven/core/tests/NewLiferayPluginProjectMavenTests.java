@@ -37,7 +37,6 @@ import org.eclipse.sapphire.EnablementService;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.ValidationService;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -134,7 +133,6 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     }
 
     @Test
-    @Ignore
     public void testLocationValidation() throws Exception
     {
         final NewLiferayPluginProjectOp op = newProjectOp( "test-location-validation-service" );
@@ -256,8 +254,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Test
     public void testProjectProviderListener() throws Exception
     {
-        final String projectName = "test-project-provider-listener";
-        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
+        final NewLiferayPluginProjectOp op = newProjectOp( "test-project-provider-listener" );
+        final String projectName = op.getProjectName().content();
         op.setPluginType( "portlet" );
         op.setUseDefaultLocation( true );
 
@@ -322,8 +320,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
     protected void testUseDefaultLocationListener( boolean versionRestriction ) throws Exception
     {
-        final String projectName = "test-use-default-location-listener";
-        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
+        final NewLiferayPluginProjectOp op = newProjectOp( "test-use-default-location-listener" );
+        final String projectName = op.getProjectName().content();
         op.setProjectProvider( "maven" );
 
         IPath exceptedLocation = null;
