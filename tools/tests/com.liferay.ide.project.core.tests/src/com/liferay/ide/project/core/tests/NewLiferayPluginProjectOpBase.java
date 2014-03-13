@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -47,12 +48,16 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
+@SuppressWarnings( "restriction" )
 public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 {
 
@@ -953,6 +958,104 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         op.setUseSdkLocation( false );
         exceptedLocation = CoreUtil.getWorkspaceRoot().getLocation().append( projectName + "-portlet" );
         assertEquals( exceptedLocation, PathBridge.create( op.getLocation().content() ) );
+    }
+
+    @Test
+    public void testIncludeSampleCode() throws Exception
+    {
+        // test portlet project
+        NewLiferayPluginProjectOp op = newProjectOp("test-include-sample-code-portlet");
+
+        // the default value of include-sample-code is true
+        assertEquals( true, op.getIncludeSampleCode().content() );
+
+        op.setIncludeSampleCode( true );
+        op.setPluginType( PluginType.portlet );
+
+        IProject project = createAntProject( op );
+
+        IFile portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+
+        assertEquals( 1, countElements( portletXml, "portlet" ) );
+        assertEquals( 1, countElements( liferayPortletXml, "portlet" ) );
+        assertEquals( 1, countElements( liferayDisplayXml, "category" ) );
+
+        // test service-builder project
+        op = newProjectOp("test-include-sample-code-service-builder");
+
+        op.setIncludeSampleCode( true );
+        op.setPluginType( PluginType.servicebuilder );
+
+        project = createAntProject( op );
+
+        portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
+        liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IFile serviceXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+
+        assertEquals( 1, countElements( portletXml, "portlet" ) );
+        assertEquals( 1, countElements( liferayPortletXml, "portlet" ) );
+        assertEquals( 1, countElements( liferayDisplayXml, "category" ) );
+        assertEquals( 1, countElements( serviceXml, "entity" ) );
+    }
+
+    @Test
+    public void testDontIncludeSampleCode() throws Exception
+    {
+        // test portlet project
+        NewLiferayPluginProjectOp op = newProjectOp("test-dont-include-sample-code-portlet");
+
+        // the default value of include-sample-code is true
+        assertEquals( true, op.getIncludeSampleCode().content() );
+
+        op.setIncludeSampleCode( false );
+        op.setPluginType( PluginType.portlet );
+
+        IProject project = createAntProject( op );
+
+        IFile portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+
+        assertEquals( 0, countElements( portletXml, "portlet" ) );
+        assertEquals( 0, countElements( liferayPortletXml, "portlet" ) );
+        assertEquals( 0, countElements( liferayDisplayXml, "category" ) );
+
+        // test service-builder project
+        op = newProjectOp("test-dont-include-sample-code-service-builder");
+
+        // the default value of include-sample-code is false, because the preference was stored after the last project
+        // was created successfully.
+        assertEquals( false, op.getIncludeSampleCode().content() );
+
+        op.setIncludeSampleCode( false );
+        op.setPluginType( PluginType.servicebuilder );
+
+        project = createAntProject( op );
+
+        portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
+        liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IFile serviceXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+
+        assertEquals( 0, countElements( portletXml, "portlet" ) );
+        assertEquals( 0, countElements( liferayPortletXml, "portlet" ) );
+        assertEquals( 0, countElements( liferayDisplayXml, "category" ) );
+        assertEquals( 0, countElements( serviceXml, "entity" ) );
+    }
+
+    protected int countElements( IFile file, String elementName ) throws Exception
+    {
+        final IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( file );
+        final IDOMDocument document = domModel.getDocument();
+
+        final int count = document.getElementsByTagName( elementName ).getLength();
+
+        domModel.releaseFromRead();
+
+        return count;
     }
 
 }

@@ -140,10 +140,12 @@
                         <property-editor>
                             <visible-when>${ PluginType == 'portlet' || PluginType == 'servicebuilder' }</visible-when>
                             <property>IncludeSampleCode</property>
+                            <label>Include sample code</label>
                         </property-editor>
                         <property-editor>
                             <visible-when>${PluginType == 'portlet'}</visible-when>
                             <property>CreateNewPortlet</property>
+                            <label>Launch New Portlet Wizard after project is created</label>
                         </property-editor>
                     </content>
                 </composite>

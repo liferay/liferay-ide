@@ -218,7 +218,6 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     // *** IncludeSampleCode ***
 
     @Type( base = Boolean.class )
-    @Label( standard = "Include Sample Code" )
     @Service( impl = IncludeSampleCodeDefaultValueService.class )
     ValueProperty PROP_INCLUDE_SAMPLE_CODE = new ValueProperty( TYPE, "IncludeSampleCode" );
 
@@ -230,7 +229,6 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     // *** CreateNewPortlet ***
 
     @Type( base = Boolean.class )
-    @Label( standard = "Create New Portlet" )
     @Service( impl = CreateNewPortletDefaultValueService.class )
     ValueProperty PROP_CREATE_NEW_PORTLET = new ValueProperty( TYPE, "CreateNewPortlet" );
 
