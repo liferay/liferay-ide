@@ -303,6 +303,12 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return status;
     }
 
+    @Override
+    public IStatus removeSampleElements()
+    {
+        return removeAllPortlets();
+    }
+
     public IStatus updateLiferayDisplayXML( IDOMDocument document, final IDataModel model )
     {
         // <display> element
@@ -572,12 +578,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         processor.formatNode( newPortletElement );
 
         return Status.OK_STATUS;
-    }
-
-    @Override
-    public IStatus removeSampleElements()
-    {
-        return removeAllPortlets();
     }
 
 }

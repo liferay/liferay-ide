@@ -50,9 +50,4 @@ public class OpenPluginTypeDescriptionDialogAction extends SapphireActionHandler
 
         return null;
     }
-
-    public OpenPluginTypeDescriptionDialogAction()
-    {
-        super();
-    }
 }

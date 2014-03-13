@@ -20,7 +20,9 @@ import com.liferay.ide.project.ui.ProjectUIPlugin;
 import java.net.URL;
 
 import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.sapphire.ui.SapphireAction;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
@@ -28,8 +30,17 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 /**
  * @author Kuo Zhang
  */
-public abstract class LinkToPluginDocAction extends SapphireActionHandler
+public class LinkToPluginDocAction extends SapphireActionHandler
 {
+    private String url;
+
+    @Override
+    public void init( SapphireAction action, ActionHandlerDef def )
+    {
+        super.init( action, def );
+
+        url = def.getParam( "url" );
+    }
 
     @Override
     protected Object run( Presentation context )
@@ -38,7 +49,7 @@ public abstract class LinkToPluginDocAction extends SapphireActionHandler
 
         try
         {
-            support.getExternalBrowser().openURL( new URL( getDocURL() ) );
+            support.getExternalBrowser().openURL( new URL( url ) );
 
         }
         catch( Exception ex )
@@ -48,7 +59,5 @@ public abstract class LinkToPluginDocAction extends SapphireActionHandler
 
         return null;
     }
-
-    protected abstract String getDocURL();
 
 }

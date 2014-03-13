@@ -23,6 +23,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -37,7 +40,10 @@ public class PluginTypeDescriptionDialog extends SapphireDialog
                                         final DefinitionLoader.Reference<DialogDef> definition )
     {
         super( shell, element, definition );
+
+        setShellStyle( SWT.NO_TRIM );
     }
+
 
     @Override
     protected Control createButtonBar( Composite parent )
@@ -50,9 +56,23 @@ public class PluginTypeDescriptionDialog extends SapphireDialog
     {
         super.configureShell( newShell );
 
-        // TODO, close the dialog when clicking somewhere else;
+        Display.getDefault().addFilter( SWT.MouseUp, new Listener()
+        {
+            @Override
+            public void handleEvent( Event event )
+            {
+                Display.getDefault().removeFilter( SWT.MouseUp, this );
 
-        setShellStyle( SWT.MODELESS );
+                Display.getDefault().asyncExec( new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        close();
+                    }
+                } );
+            }
+        } );
     }
 
     @Override

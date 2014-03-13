@@ -164,7 +164,15 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         assertEquals( expected2, vs.validation().message() );
         assertEquals( expected2, op.getLocation().validation().message() );
 
-        invalidLocation = CoreUtil.getWorkspaceRoot().getLocation().getDevice() + "\\";
+        if( CoreUtil.isWindows() )
+        {
+            invalidLocation = CoreUtil.getWorkspaceRoot().getLocation().getDevice() + "\\";
+        }
+        else
+        {
+            invalidLocation = "/";
+        }
+
         op.setLocation( invalidLocation );
 
         final String expected3 = "Project location is not empty or a parent pom.";

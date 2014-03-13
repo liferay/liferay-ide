@@ -219,11 +219,11 @@ public class DescriptorHelper
         return retval;
     }
 
+    protected IContentType contentType;
+
     protected String descriptorPath;
 
     protected IProject project;
-
-    protected IContentType contentType;
 
     public DescriptorHelper()
     {
@@ -256,6 +256,11 @@ public class DescriptorHelper
         return retval;
     }
 
+    public IContentType getContentType()
+    {
+        return this.contentType;
+    }
+
     protected IFile getDescriptorFile( String fileName )
     {
         return getDescriptorFile( project, fileName );
@@ -271,21 +276,6 @@ public class DescriptorHelper
         return project;
     }
 
-    public void setDescriptorPath( String path )
-    {
-        this.descriptorPath = path;
-    }
-
-    public void setProject( IProject project )
-    {
-        this.project = project;
-    }
-
-    public IContentType getContentType()
-    {
-        return this.contentType;
-    }
-
     public void setContentType( IContentType type )
     {
         this.contentType = type;
@@ -294,5 +284,15 @@ public class DescriptorHelper
     public void setContentType( String type )
     {
         this.contentType = ContentTypeManager.getInstance().getContentType( type );
+    }
+
+    public void setDescriptorPath( String path )
+    {
+        this.descriptorPath = path;
+    }
+
+    public void setProject( IProject project )
+    {
+        this.project = project;
     }
 }

@@ -327,7 +327,11 @@
                             <action-handler>
                                 <action>Link.Documetation.Portlet</action>
                                 <id>Link.Documetation.Portlet</id>
-                                <impl>com.liferay.ide.project.ui.action.LinkToPortletDocAction</impl>
+                                <impl>com.liferay.ide.project.ui.action.LinkToPluginDocAction</impl>
+                                <param>
+                                    <name>url</name>
+                                    <value>http://www.liferay.com/documentation/liferay-portal/6.2/development/-/ai/developing-portlet-applications-liferay-portal-6-2-dev-guide-03-en</value>
+                                </param>
                             </action-handler>
                             <action-id>Link.Documetation.Portlet</action-id>
                             <action>
@@ -359,7 +363,11 @@
                             <action-handler>
                                 <action>Link.Documetation.ServiceBuilder</action>
                                 <id>Link.Documetation.ServiceBuilder</id>
-                                <impl>com.liferay.ide.project.ui.action.LinkToServiceBuilderDocAction</impl>
+                                <impl>com.liferay.ide.project.ui.action.LinkToPluginDocAction</impl>
+                                <param>
+                                    <name>url</name>
+                                    <value>http://www.liferay.com/documentation/liferay-portal/6.2/development/-/ai/generating-your-service-layer-liferay-portal-6-2-dev-guide-04-en</value>
+                                </param>
                             </action-handler>
                             <action-id>Link.Documetation.ServiceBuilder</action-id>
                             <action>
@@ -390,7 +398,11 @@
                             <action-handler>
                                 <action>Link.Documetation.Hook</action>
                                 <id>Link.Documetation.Hook</id>
-                                <impl>com.liferay.ide.project.ui.action.LinkToHookDocAction</impl>
+                                <impl>com.liferay.ide.project.ui.action.LinkToPluginDocAction</impl>
+                                <param>
+                                    <name>url</name>
+                                    <value>http://www.liferay.com/documentation/liferay-portal/6.2/development/-/ai/customize-and-extend-functionality-hooks-liferay-portal-6-2-dev-guide-en</value>
+                                </param>
                             </action-handler>
                             <action-id>Link.Documetation.Hook</action-id>
                             <action>
@@ -421,7 +433,11 @@
                             <action-handler>
                                 <action>Link.Documetation.LayoutTpl</action>
                                 <id>Link.Documetation.LayoutTpl</id>
-                                <impl>com.liferay.ide.project.ui.action.LinkToLayoutTplDocAction</impl>
+                                <impl>com.liferay.ide.project.ui.action.LinkToPluginDocAction</impl>
+                                <param>
+                                    <name>url</name>
+                                    <value>http://www.liferay.com/documentation/liferay-portal/6.2/development/-/ai/creating-themes-and-layout-templates-liferay-portal-6-2-dev-guide-09-en</value>
+                                </param>
                             </action-handler>
                             <action-id>Link.Documetation.LayoutTpl</action-id>
                             <action>
@@ -452,7 +468,11 @@
                             <action-handler>
                                 <action>Link.Documetation.Theme</action>
                                 <id>Link.Documetation.Theme</id>
-                                <impl>com.liferay.ide.project.ui.action.LinkToThemeDocAction</impl>
+                                <impl>com.liferay.ide.project.ui.action.LinkToPluginDocAction</impl>
+                                <param>
+                                    <name>url</name>
+                                    <value>http://www.liferay.com/documentation/liferay-portal/6.2/development/-/ai/creating-themes-and-layout-templates-liferay-portal-6-2-dev-guide-09-en</value>
+                                </param>
                             </action-handler>
                             <action-id>Link.Documetation.Theme</action-id>
                             <action>
@@ -483,7 +503,11 @@
                             <action-handler>
                                 <action>Link.Documetation.Ext</action>
                                 <id>Link.Documetation.Ext</id>
-                                <impl>com.liferay.ide.project.ui.action.LinkToExtDocAction</impl>
+                                <impl>com.liferay.ide.project.ui.action.LinkToPluginDocAction</impl>
+                                <param>
+                                    <name>url</name>
+                                    <value>http://www.liferay.com/documentation/liferay-portal/6.2/development/-/ai/advanced-customization-with-ext-plugins-liferay-portal-6-2-dev-guide-12-en</value>
+                                </param>
                             </action-handler>
                             <action-id>Link.Documetation.Ext</action-id>
                             <action>
