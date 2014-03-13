@@ -825,10 +825,10 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals( "\"" + op3.getLocation().content().toOSString().replace( '\\', '/' ) +
             "\" is not valid because it already contains files.", op3.getProjectName().validation().message() );
 
-        String invalidProjectName = validProjectName + "*";
+        String invalidProjectName = validProjectName + "/";
         op3.setProjectName( invalidProjectName );
         assertEquals(
-            "* is an invalid character in resource name '" + invalidProjectName + "'.", vs.validation().message() );
+            "/ is an invalid character in resource name '" + invalidProjectName + "'.", vs.validation().message() );
 
         invalidProjectName = validProjectName + ".";
         op3.setProjectName( invalidProjectName );
