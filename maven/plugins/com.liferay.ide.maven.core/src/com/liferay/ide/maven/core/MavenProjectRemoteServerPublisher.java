@@ -61,7 +61,7 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 
         if( runMavenGoal( projectFacade, getMavenDeployGoals(), monitor ) )
         {
-            final String targetFolder = projectFacade.getMavenProject().getBuild().getDirectory();
+            final String targetFolder = projectFacade.getMavenProject( monitor ).getBuild().getDirectory();
             final String targetWar = projectFacade.getMavenProject().getBuild().getFinalName() + "." +
                     projectFacade.getMavenProject().getPackaging();
 
