@@ -55,8 +55,7 @@ public class MobileSDKCore extends Plugin
 
     private static String[] libNames =
     {
-        "liferay-android-sdk-1.0-ga-core",
-        "liferay-android-sdk-1.0-ga",
+        "liferay-android-sdk-6.2.0.1",
     };
 
     private static HashMap<String, File[]> libs;
@@ -82,9 +81,9 @@ public class MobileSDKCore extends Plugin
                 try
                 {
                     final String url =
-                        FileLocator.toFileURL( getDefault().getBundle().getEntry( "lib/" + libName + ".jar" ) ).getFile();
+                        FileLocator.toFileURL( getDefault().getBundle().getEntry( "jars/" + libName + ".jar" ) ).getFile();
                     final String srcUrl =
-                        FileLocator.toFileURL( getDefault().getBundle().getEntry( "lib/" + libName + "-sources.jar" ) ).getFile();
+                        FileLocator.toFileURL( getDefault().getBundle().getEntry( "jars/" + libName + "-sources.jar" ) ).getFile();
 
                     libs.put( libName, new File[] { new File( url ), new File( srcUrl) } );
                 }

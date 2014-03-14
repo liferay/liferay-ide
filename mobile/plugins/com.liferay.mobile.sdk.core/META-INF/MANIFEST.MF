@@ -12,13 +12,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.apache.commons.lang,
  org.apache.commons.collections,
- org.apache.ant
+ org.apache.ant,
+ org.eclipse.debug.core,
+ org.eclipse.jdt.launching
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
 Export-Package: com.liferay.mobile.sdk.core
 Bundle-ClassPath: .,
- lib/liferay-android-sdk-1.0-ga.jar,
- lib/liferay-sdk-builder-1.0-ga.jar,
- lib/velocity-1.7.jar,
- lib/velocity-tools-2.0.jar
+ lib/liferay-android-sdk-6.2.0.1-jre16.jar,
+ lib/liferay-sdk-builder-6.2.0.1-jre16.jar

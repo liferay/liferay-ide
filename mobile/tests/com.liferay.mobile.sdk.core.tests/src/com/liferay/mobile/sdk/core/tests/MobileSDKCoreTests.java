@@ -59,7 +59,8 @@ public class MobileSDKCoreTests extends BaseTests
     {
         final File newTempDir = MobileSDKCore.newTempDir();
 
-        MobileSDKBuilder.build( server, contextName, packageName, filter, newTempDir.getCanonicalPath() );
+        MobileSDKBuilder.build(
+            server, contextName, packageName, filter, newTempDir.getCanonicalPath(), new NullProgressMonitor() );
 
         return FileUtils.listFiles( newTempDir, null, true );
     }
@@ -152,4 +153,57 @@ public class MobileSDKCoreTests extends BaseTests
         checkJar( customJars[1], true );
     }
 
+    @Test
+    public void mobileSDKBuilderBuildSingleAPI() throws Exception
+    {
+        final Map<String, String[]> buildSpec = new HashMap<String, String[]>();
+        buildSpec.put( "calendar-portlet", new String[] { "calendar" } );
+
+        final File[] customJars = MobileSDKBuilder.buildJars( SERVER, PACKAGE, buildSpec, new NullProgressMonitor() );
+
+
+        checkJarPaths( customJars[0], new String[] { "foo/bar/v62/calendar" } );
+        checkJarPaths( customJars[1], new String[] { "foo/bar/v62/calendar" } );
+    }
+
+    @Test
+    public void mobileSDKBuilderBuildMultiAPI() throws Exception
+    {
+        final Map<String, String[]> buildSpec = new HashMap<String, String[]>();
+        buildSpec.put( "calendar-portlet", new String[] { "calendar", "calendarbooking" } );
+
+        final File[] customJars = MobileSDKBuilder.buildJars( SERVER, PACKAGE, buildSpec, new NullProgressMonitor() );
+
+        checkJarPaths( customJars[0], new String[] { "foo/bar/v62/calendar", "foo/bar/v62/calendarbooking" } );
+        checkJarPaths( customJars[1], new String[] { "foo/bar/v62/calendar", "foo/bar/v62/calendarbooking" } );
+    }
+
+    @Test
+    public void mobileSDKBuilderMultiContextMultiAPI() throws Exception
+    {
+        final Map<String, String[]> buildSpec = new HashMap<String, String[]>();
+        buildSpec.put( "calendar-portlet", new String[] { "calendar", "calendarbooking" } );
+        buildSpec.put( "opensocial-portlet", new String[] { "gadget" }  );
+
+        final File[] customJars = MobileSDKBuilder.buildJars( SERVER, PACKAGE, buildSpec, new NullProgressMonitor() );
+
+        checkJarPaths( customJars[0], new String[] { "foo/bar/v62/calendar", "foo/bar/v62/calendarbooking", "foo/bar/v62/gadget" } );
+        checkJarPaths( customJars[1], new String[] { "foo/bar/v62/calendar", "foo/bar/v62/calendarbooking", "foo/bar/v62/gadget" } );
+    }
+
+    private void checkJarPaths( File jar, String[] paths ) throws Exception
+    {
+        assertTrue( jar.exists() );
+
+        final ZipFile jarFile = new ZipFile( jar );
+
+        for( String path : paths )
+        {
+            ZipEntry entry = jarFile.getEntry( path );
+
+            assertNotNull( entry );
+        }
+
+        jarFile.close();
+    }
 }

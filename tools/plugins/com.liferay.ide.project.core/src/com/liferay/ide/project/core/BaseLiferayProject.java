@@ -17,6 +17,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectAdapter;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.resources.IProject;
@@ -36,7 +37,7 @@ public abstract class BaseLiferayProject implements ILiferayProject
 
     public <T> T adapt( Class<T> adapterType )
     {
-        final ILiferayProjectAdapter[] adapters = LiferayProjectCore.getProjectAdapters();
+        final ILiferayProjectAdapter[] adapters = LiferayCore.getProjectAdapters();
 
         if( ! CoreUtil.isNullOrEmpty( adapters ) )
         {

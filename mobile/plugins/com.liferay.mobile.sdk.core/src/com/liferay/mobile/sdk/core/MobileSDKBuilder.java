@@ -14,8 +14,6 @@
  *******************************************************************************/
 package com.liferay.mobile.sdk.core;
 
-import com.liferay.mobile.sdk.SDKBuilder;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -43,16 +41,17 @@ public class MobileSDKBuilder
 {
     private static final String PLATFORM = "android";
 
-    public void build( String server, String contextName, String packageName, String buildDir )
+    public void build( String server, String contextName, String packageName, String buildDir, IProgressMonitor pm )
     {
-        build( server, contextName, packageName, null, buildDir );
+        build( server, contextName, packageName, null, buildDir, pm );
     }
 
-    public static void build( String server, String contextName, String packageName, String filter, String buildDir )
+    public static void build(
+        String server, String contextName, String packageName, String filter, String buildDir, IProgressMonitor monitor )
     {
         try
         {
-            SDKBuilder.build( PLATFORM, server, contextName, packageName, filter, buildDir );
+            new SDKBuilderHelper( PLATFORM, server, contextName, packageName, filter, buildDir  ).launch( monitor );
         }
         catch( Exception e )
         {
@@ -80,7 +79,7 @@ public class MobileSDKBuilder
                     for( final String filter : filters )
                     {
                         monitor.subTask( "Building services: " + filter );
-                        build( server, context, packageName, filter, sourceDir.getCanonicalPath() );
+                        build( server, context, packageName, filter, sourceDir.getCanonicalPath(), monitor );
                         monitor.worked( 1 );
                     }
                 }
@@ -135,7 +134,7 @@ public class MobileSDKBuilder
 
         args.add( "-cp" );
 
-        args.add( bundlePath( "org.json" ) + ";"  + libPath( "liferay-android-sdk-1.0-ga-core.jar" ) );
+        args.add( bundlePath( "org.json" ) + ";"  + libPath( "liferay-android-sdk-6.2.0.1-jre16.jar" ) );
 
         args.add( "-1.6" );
 

@@ -15,7 +15,6 @@
 
 package com.liferay.ide.server.core;
 
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -34,6 +33,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
@@ -46,7 +46,7 @@ import org.osgi.framework.BundleContext;
  *
  * @author Greg Amerson
  */
-public class LiferayServerCore extends LiferayCore
+public class LiferayServerCore extends Plugin
 {
 
     private static Map<String, IServerManagerConnection> connections = null;
@@ -63,14 +63,49 @@ public class LiferayServerCore extends LiferayCore
 
     private static ILiferayRuntimeStub[] runtimeStubs;
 
+    public static IStatus createErrorStatus( Exception e )
+    {
+        return createErrorStatus( PLUGIN_ID, e );
+    }
+
     public static IStatus createErrorStatus( String msg )
     {
         return createErrorStatus( PLUGIN_ID, msg );
     }
 
+    public static IStatus createErrorStatus( String pluginId, String msg )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, String msg, Throwable e )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg, e );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, Throwable t )
+    {
+        return new Status( IStatus.ERROR, pluginId, t.getMessage(), t );
+    }
+
     public static IStatus createInfoStatus( String msg )
     {
         return new Status( IStatus.INFO, PLUGIN_ID, msg );
+    }
+
+    public static IStatus createWarningStatus( String message )
+    {
+        return new Status( IStatus.WARNING, PLUGIN_ID, message );
+    }
+
+    public static IStatus createWarningStatus( String message, String id )
+    {
+        return new Status( IStatus.WARNING, id, message );
+    }
+
+    public static IStatus createWarningStatus( String message, String id, Exception e )
+    {
+        return new Status( IStatus.WARNING, id, message, e );
     }
 
     /**
@@ -315,9 +350,24 @@ public class LiferayServerCore extends LiferayCore
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
     }
 
-    public static void logError( String msg, Exception e )
+    public static void logError( IStatus status )
+    {
+        getDefault().getLog().log( status );
+    }
+
+    public static void logError( String msg )
+    {
+        logError( createErrorStatus( msg ) );
+    }
+
+    public static void logError( String msg, Throwable e )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
+    }
+
+    public static void logError( Throwable t )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
     }
 
     public static void updateConnectionSettings( IRemoteServer server )

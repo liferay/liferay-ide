@@ -15,7 +15,6 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.net.URL;
@@ -27,7 +26,10 @@ import java.util.List;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -37,7 +39,7 @@ import org.osgi.framework.BundleContext;
  * @author Simon Jiang
  * @author Kuo Zhang
  */
-public class LiferayProjectCore extends LiferayCore
+public class LiferayProjectCore extends Plugin
 {
 
     // The liferay project marker type
@@ -53,12 +55,12 @@ public class LiferayProjectCore extends LiferayCore
 
     private static IPortletFramework[] portletFrameworks;
 
-    public static final String PREF_INCLUDE_SAMPLE_CODE = "include-sample-code";
-
     public static final String PREF_CREATE_NEW_PORLET = "create-new-portlet";
 
     // The key of default project build type for creating a new liferay plug in project
     public static final String PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION = "project-default-build-type-option";
+
+    public static final String PREF_INCLUDE_SAMPLE_CODE = "include-sample-code";
 
     // The key of using snapshot vresion stored in prefernce store
     public static final String PREF_USE_SNAPSHOT_VERSION = "use-snapshot-version";
@@ -70,6 +72,46 @@ public class LiferayProjectCore extends LiferayCore
 
     // The value of maven build type
     public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
+
+    public static IStatus createErrorStatus( Exception e )
+    {
+        return createErrorStatus( PLUGIN_ID, e );
+    }
+
+    public static IStatus createErrorStatus( String msg )
+    {
+        return createErrorStatus( PLUGIN_ID, msg );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, String msg )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, String msg, Throwable e )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg, e );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, Throwable t )
+    {
+        return new Status( IStatus.ERROR, pluginId, t.getMessage(), t );
+    }
+
+    public static IStatus createWarningStatus( String message )
+    {
+        return new Status( IStatus.WARNING, PLUGIN_ID, message );
+    }
+
+    public static IStatus createWarningStatus( String message, String id )
+    {
+        return new Status( IStatus.WARNING, id, message );
+    }
+
+    public static IStatus createWarningStatus( String message, String id, Exception e )
+    {
+        return new Status( IStatus.WARNING, id, message, e );
+    }
 
     /**
      * Returns the shared instance
@@ -184,9 +226,29 @@ public class LiferayProjectCore extends LiferayCore
         return portletFrameworks;
     }
 
+    public static void logError( IStatus status )
+    {
+        getDefault().getLog().log( status );
+    }
+
+    public static void logError( String msg )
+    {
+        logError( createErrorStatus( msg ) );
+    }
+
     public static void logError( String msg, Exception e )
     {
         getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, e ) );
+    }
+
+    public static void logError( String msg, Throwable t )
+    {
+        getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, t ) );
+    }
+
+    public static void logError( Throwable t )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
     }
 
     /**

@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.ElementList;
@@ -117,18 +116,16 @@ public class GenerateCustomServicesOpMethods
 //        if( hasPortal )
 //        {
             // add standard sdk and sources
-            files.add( libs.get( "liferay-android-sdk-1.0-ga" ) );
+            files.add( libs.get( "liferay-android-sdk-6.2.0.1" ) );
 //        }
 //        else
 //        {
-//            files.add( libs.get( "liferay-android-sdk-1.0-ga-core" ) );
+//            files.add( libs.get( "liferay-android-sdk-6.2.0.1-core" ) );
 //        }
 
         try
         {
             ADTUtil.addLibsToAndroidProject( project, files, pm );
-
-            project.refreshLocal( IResource.DEPTH_INFINITE, pm );
 
             retval = Status.createOkStatus();
         }

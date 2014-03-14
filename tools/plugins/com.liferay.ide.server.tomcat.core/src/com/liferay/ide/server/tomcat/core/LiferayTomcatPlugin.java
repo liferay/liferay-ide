@@ -15,11 +15,11 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.LiferayCore;
-
 import java.io.File;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
@@ -29,7 +29,7 @@ import org.osgi.framework.BundleContext;
  *
  * @author Greg Amerson
  */
-public class LiferayTomcatPlugin extends LiferayCore
+public class LiferayTomcatPlugin extends Plugin
 {
 
     // The shared instance
@@ -47,9 +47,44 @@ public class LiferayTomcatPlugin extends LiferayCore
 
     public static final String PREFERENCES_REMOVE_EXT_PLUGIN_TOGGLE_KEY = "REMOVE_EXT_PLUGIN_TOGGLE_KEY"; //$NON-NLS-1$
 
+    public static IStatus createErrorStatus( Exception e )
+    {
+        return createErrorStatus( PLUGIN_ID, e );
+    }
+
     public static IStatus createErrorStatus( String msg )
     {
         return createErrorStatus( PLUGIN_ID, msg );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, String msg )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, String msg, Throwable e )
+    {
+        return new Status( IStatus.ERROR, pluginId, msg, e );
+    }
+
+    public static IStatus createErrorStatus( String pluginId, Throwable t )
+    {
+        return new Status( IStatus.ERROR, pluginId, t.getMessage(), t );
+    }
+
+    public static IStatus createWarningStatus( String message )
+    {
+        return new Status( IStatus.WARNING, PLUGIN_ID, message );
+    }
+
+    public static IStatus createWarningStatus( String message, String id )
+    {
+        return new Status( IStatus.WARNING, id, message );
+    }
+
+    public static IStatus createWarningStatus( String message, String id, Exception e )
+    {
+        return new Status( IStatus.WARNING, id, message, e );
     }
 
     /**
@@ -68,9 +103,24 @@ public class LiferayTomcatPlugin extends LiferayCore
         return new InstanceScope().getNode( PLUGIN_ID );
     }
 
+    public static void logError( IStatus status )
+    {
+        getDefault().getLog().log( status );
+    }
+
+    public static void logError( String msg )
+    {
+        logError( createErrorStatus( msg ) );
+    }
+
     public static void logError( String msg, Exception e )
     {
         getDefault().getLog().log( createErrorStatus( PLUGIN_ID, msg, e ) );
+    }
+
+    public static void logError( Throwable t )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
     }
 
     public static IStatus warning( String msg )

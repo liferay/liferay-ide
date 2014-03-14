@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -196,7 +197,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         assertEquals( true, vs.validation().ok() );
 
-        final ILiferayProjectProvider maven = LiferayProjectCore.getProvider( "maven" );
+        final ILiferayProjectProvider maven = LiferayCore.getProvider( "maven" );
         op.setProjectProvider( maven );
         op.setPortletFramework( "vaadin" );
         assertEquals(

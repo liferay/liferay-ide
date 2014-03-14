@@ -26,8 +26,15 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.ClasspathContainerInitializer;
+import org.eclipse.jdt.core.IClasspathContainer;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Gregory Amerson
@@ -67,6 +74,26 @@ public class ADTUtil
             {
                 propsFile.create( new ByteArrayInputStream( content.getBytes() ), true, monitor );
             }
+        }
+
+        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+        try
+        {
+            final IJavaProject javaProject = JavaCore.create( project );
+
+            final IPath path = new Path( "com.android.ide.eclipse.adt.LIBRARIES" );
+
+            final IClasspathContainer container = JavaCore.getClasspathContainer( path, javaProject );
+
+            final ClasspathContainerInitializer initializer =
+                JavaCore.getClasspathContainerInitializer( "org.eclipse.jst.j2ee.internal.web.container" ); //$NON-NLS-1$
+
+            initializer.requestClasspathContainerUpdate( container.getPath(), javaProject, container );
+        }
+        catch( Exception e )
+        {
+            // ignore errors since this is best effort
         }
     }
 

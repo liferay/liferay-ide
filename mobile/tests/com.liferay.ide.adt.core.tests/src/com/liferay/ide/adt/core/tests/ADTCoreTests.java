@@ -214,28 +214,28 @@ public class ADTCoreTests extends BaseTests
     public void testAddLiferayAndroidSDKLibs() throws Exception
     {
 
-        final String propertiesFileName = "libs/liferay-android-sdk-1.0-ga.jar.properties";
+        final String propertiesFileName = "libs/liferay-android-sdk-6.2.0.1.jar.properties";
 
         final IProject sampleProject = ADTCoreTests.importAndroidProject( projectName, projectName + ".zip" );
 
         final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
 
-        final File[] libs = libmap.get( "liferay-android-sdk-1.0-ga" );
+        final File[] libs = libmap.get( "liferay-android-sdk-6.2.0.1" );
 
         ADTUtil.addLibsToAndroidProject( sampleProject, Collections.singletonList( libs ), new NullProgressMonitor() );
 
-        assertTrue( sampleProject.getFile( "libs/liferay-android-sdk-1.0-ga.jar" ).exists() );
+        assertTrue( sampleProject.getFile( "libs/liferay-android-sdk-6.2.0.1.jar" ).exists() );
 
         assertTrue( sampleProject.getFile( propertiesFileName ).exists() );
 
-        assertTrue( sampleProject.getFile( "libs/src/liferay-android-sdk-1.0-ga-sources.jar" ).exists() );
+        assertTrue( sampleProject.getFile( "libs/src/liferay-android-sdk-6.2.0.1-sources.jar" ).exists() );
 
         final String propertiesContent =
             CoreUtil.readStreamToString( sampleProject.getFile( propertiesFileName ).getContents(
                 true ) );
 
         assertEquals(
-            stripCarriageReturns( "src=src/liferay-android-sdk-1.0-ga-sources.jar" ),
+            stripCarriageReturns( "src=src/liferay-android-sdk-6.2.0.1-sources.jar" ),
             stripCarriageReturns( propertiesContent ) );
     }
 
@@ -248,7 +248,7 @@ public class ADTCoreTests extends BaseTests
 
         final Map<String, File[]> libmap = MobileSDKCore.getLibraryMap();
 
-        final File[] libs = libmap.get( "liferay-android-sdk-1.0-ga" );
+        final File[] libs = libmap.get( "liferay-android-sdk-6.2.0.1" );
 
         ADTUtil.addLibsToAndroidProject( sampleProject, Collections.singletonList( libs ), new NullProgressMonitor() );
 

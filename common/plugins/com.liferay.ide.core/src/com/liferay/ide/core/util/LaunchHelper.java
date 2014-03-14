@@ -101,9 +101,9 @@ public class LaunchHelper implements IDebugEventSetListener
         launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false );
         launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, mementos );
 
-        if( mainClass != null )
+        if( getMainClass() != null )
         {
-            launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, mainClass );
+            launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, getMainClass() );
         }
 
         if( launchArgs != null && launchArgs.length > 0 )
@@ -229,7 +229,7 @@ public class LaunchHelper implements IDebugEventSetListener
 
     public void launch( IProgressMonitor monitor ) throws CoreException
     {
-        ILaunchConfigurationWorkingCopy config = createLaunchConfiguration();
+        final ILaunchConfigurationWorkingCopy config = createLaunchConfiguration();
 
         launch( config, mode, monitor );
     }
