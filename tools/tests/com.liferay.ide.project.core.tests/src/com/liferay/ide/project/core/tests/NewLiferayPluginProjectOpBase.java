@@ -966,9 +966,6 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         // test portlet project
         NewLiferayPluginProjectOp op = newProjectOp("test-include-sample-code-portlet");
 
-        // the default value of include-sample-code is true
-        assertEquals( true, op.getIncludeSampleCode().content() );
-
         op.setIncludeSampleCode( true );
         op.setPluginType( PluginType.portlet );
 
@@ -1007,9 +1004,6 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         // test portlet project
         NewLiferayPluginProjectOp op = newProjectOp("test-dont-include-sample-code-portlet");
 
-        // the default value of include-sample-code is true
-        assertEquals( true, op.getIncludeSampleCode().content() );
-
         op.setIncludeSampleCode( false );
         op.setPluginType( PluginType.portlet );
 
@@ -1025,10 +1019,6 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         // test service-builder project
         op = newProjectOp("test-dont-include-sample-code-service-builder");
-
-        // the default value of include-sample-code is false, because the preference was stored after the last project
-        // was created successfully.
-        assertEquals( false, op.getIncludeSampleCode().content() );
 
         op.setIncludeSampleCode( false );
         op.setPluginType( PluginType.servicebuilder );

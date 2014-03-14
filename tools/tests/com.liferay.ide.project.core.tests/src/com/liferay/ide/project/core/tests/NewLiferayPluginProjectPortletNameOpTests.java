@@ -36,6 +36,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     {
         final String projectName = "test-" + jsfSuite + suffix + "-sdk-project";
         final NewLiferayPluginProjectOp op = newProjectOp( projectName );
+        op.setIncludeSampleCode( true );
         op.setPortletFramework( "jsf-2.x" );
         op.setPortletFrameworkAdvanced( "liferay_faces_alloy" );
         op.setPortletName( customPortletName );
@@ -56,6 +57,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     {
         final String projectName = "test-mvc-sdk-project";
         final NewLiferayPluginProjectOp op = newProjectOp( projectName );
+        op.setIncludeSampleCode( true );
         op.setPortletFramework( "mvc" );
         op.setPortletName( customPortletName );
 
