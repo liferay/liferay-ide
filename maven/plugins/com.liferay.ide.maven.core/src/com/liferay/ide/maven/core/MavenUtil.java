@@ -159,7 +159,8 @@ public class MavenUtil
         final IMaven maven = MavenPlugin.getMaven();
 
         final List<String> goals = Collections.singletonList( goal );
-        final MavenExecutionPlan plan = maven.calculateExecutionPlan( projectFacade.getMavenProject(), goals, true, monitor );
+        final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+        final MavenExecutionPlan plan = maven.calculateExecutionPlan( mavenProject, goals, true, monitor );
 
 //        context.getExecutionRequest().setOffline( true );
 //        context.getExecutionRequest().setRecursive( false );
@@ -172,7 +173,7 @@ public class MavenUtil
             ResolverConfiguration configuration = projectFacade.getResolverConfiguration();
             configuration.setResolveWorkspaceProjects( true );
 
-            maven.execute( projectFacade.getMavenProject(), liferayMojoExecution, monitor );
+            maven.execute( mavenProject, liferayMojoExecution, monitor );
         }
 
         List<Throwable> exceptions = context.getSession().getResult().getExceptions();
@@ -377,12 +378,23 @@ public class MavenUtil
         return v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion(); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    public static String getWarSouceDirectory( IMavenProjectFacade facade )
+    public static String getWarSourceDirectory( IMavenProjectFacade facade )
     {
-        final MavenProject mavenProject = facade.getMavenProject();
-        final IProject project = facade.getProject();
+        String retval = null;
 
-        return new WarPluginConfiguration( mavenProject, project ).getWarSourceDirectory();
+        try
+        {
+            final MavenProject mavenProject = facade.getMavenProject( new NullProgressMonitor() );
+            final IProject project = facade.getProject();
+
+            retval = new WarPluginConfiguration( mavenProject, project ).getWarSourceDirectory();
+        }
+        catch( CoreException e )
+        {
+            LiferayMavenCore.logError( "Unable to get war source directory", e );
+        }
+
+        return retval;
     }
 
     public static boolean isMavenProject( IProject project ) throws CoreException
@@ -404,7 +416,7 @@ public class MavenUtil
                                                final IProgressMonitor monitor ) throws CoreException
     {
         boolean loadedParent = false;
-        MavenProject mavenProject = facade.getMavenProject();
+        MavenProject mavenProject = facade.getMavenProject( monitor );
 
         try
         {

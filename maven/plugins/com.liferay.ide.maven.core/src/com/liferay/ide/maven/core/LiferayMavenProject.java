@@ -140,13 +140,19 @@ public class LiferayMavenProject extends BaseLiferayProject
 
         if( projectFacade != null )
         {
-            final MavenProject mavenProject = projectFacade.getMavenProject();
-
-            if( mavenProject != null )
+            try
             {
-                final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
+                final MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
 
-                retval = liferayMavenPlugin.getVersion();
+                if( mavenProject != null )
+                {
+                    final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
+
+                    retval = liferayMavenPlugin.getVersion();
+                }
+            }
+            catch( CoreException e )
+            {
             }
         }
 

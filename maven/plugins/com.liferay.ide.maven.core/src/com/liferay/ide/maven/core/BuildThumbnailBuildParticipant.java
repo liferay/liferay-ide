@@ -68,7 +68,7 @@ public class BuildThumbnailBuildParticipant extends ThemePluginBuildParticipant
 
         final IResourceDelta delta = this.getDelta( facade.getProject() );
 
-        final String warSourceDirectory = MavenUtil.getWarSouceDirectory( facade );
+        final String warSourceDirectory = MavenUtil.getWarSourceDirectory( facade );
 
         if( ! CoreUtil.isNullOrEmpty( warSourceDirectory ) )
         {

@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.server.remote.AbstractRemoteServerPublisher;
 
+import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -61,9 +62,9 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 
         if( runMavenGoal( projectFacade, getMavenDeployGoals(), monitor ) )
         {
-            final String targetFolder = projectFacade.getMavenProject( monitor ).getBuild().getDirectory();
-            final String targetWar = projectFacade.getMavenProject().getBuild().getFinalName() + "." +
-                    projectFacade.getMavenProject().getPackaging();
+            final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+            final String targetFolder = mavenProject.getBuild().getDirectory();
+            final String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
 
             retval = new Path( targetFolder ).append( targetWar );
         }
