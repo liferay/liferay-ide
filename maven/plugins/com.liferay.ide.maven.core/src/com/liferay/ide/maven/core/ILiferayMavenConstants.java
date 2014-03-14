@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public interface ILiferayMavenConstants
 {
@@ -89,5 +90,7 @@ public interface ILiferayMavenConstants
     String THEME_PLUGIN_TYPE = "theme"; //$NON-NLS-1$
 
     String THEME_RESOURCES_FOLDER = "theme-resources"; //$NON-NLS-1$
+
+    String WEB_PLUGIN_TYPE = "web";
 
 }

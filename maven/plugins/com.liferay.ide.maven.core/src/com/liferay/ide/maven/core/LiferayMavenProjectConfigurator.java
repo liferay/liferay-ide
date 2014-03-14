@@ -69,6 +69,7 @@ import org.osgi.framework.Version;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator
@@ -461,6 +462,11 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         {
             newFacet = IPluginFacetConstants.LIFERAY_THEME_PROJECT_FACET.getDefaultVersion();
             dataModel = new MavenThemePluginFacetInstallProvider();
+        }
+        else if( ILiferayMavenConstants.WEB_PLUGIN_TYPE.equals( pluginType ) )
+        {
+            newFacet = IPluginFacetConstants.LIFERAY_WEB_PROJECT_FACET.getDefaultVersion();
+            dataModel = new MavenWebPluginFacetInstallProvider();
         }
 
         if( newFacet != null )
