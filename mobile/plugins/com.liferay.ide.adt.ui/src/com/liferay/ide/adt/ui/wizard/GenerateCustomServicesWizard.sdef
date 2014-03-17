@@ -57,7 +57,7 @@
                             <value>true</value>
                         </hint>
                         <property>Summary</property>
-                        <label>Last Avaiable Summary</label>
+                        <label>Last Available Summary</label>
                     </child-property>
                     <listener>com.liferay.ide.adt.ui.wizard.ServerInstancesListener</listener>
                     <span>true</span>
