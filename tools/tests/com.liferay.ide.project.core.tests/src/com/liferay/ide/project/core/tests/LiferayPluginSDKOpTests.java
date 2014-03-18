@@ -36,8 +36,6 @@ import org.junit.Test;
 public class LiferayPluginSDKOpTests extends ProjectCoreBase
 {
 
-
-
     @Test
     public void pluginsSDKNameDefaultValueService() throws Exception
     {
@@ -57,7 +55,6 @@ public class LiferayPluginSDKOpTests extends ProjectCoreBase
         assertEquals( originalSDK.getName(), op1.getPluginsSDKName().content() );
 
         op1.dispose();
-
 
         LiferayPluginSDKOp op2 = LiferayPluginSDKOp.TYPE.instantiate();
         originalSDK.setDefault( false );
