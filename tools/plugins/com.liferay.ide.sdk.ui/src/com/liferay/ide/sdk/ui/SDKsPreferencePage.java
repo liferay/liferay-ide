@@ -15,6 +15,7 @@
 
 package com.liferay.ide.sdk.ui;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -92,7 +93,11 @@ public class SDKsPreferencePage extends FieldEditorPreferencePage implements IWo
         {
             SDK[] sdks = installedSDKsComposite.getSDKs();
 
-            if( sdks != null )
+            if( CoreUtil.isNullOrEmpty( sdks ) )
+            {
+                SDKManager.getInstance().clearSDKs();
+            }
+            else
             {
                 SDKManager.getInstance().setSDKs( sdks );
             }
