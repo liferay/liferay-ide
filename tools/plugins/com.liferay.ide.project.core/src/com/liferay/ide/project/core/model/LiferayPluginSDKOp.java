@@ -14,18 +14,16 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model;
 
+import com.liferay.ide.project.core.model.internal.PluginsSDKNameDefaultValueService;
+import com.liferay.ide.project.core.model.internal.PluginsSDKNamePossibleValuesService;
+
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
-
-import com.liferay.ide.project.core.model.internal.PluginsSDKNameDefaultValueService;
-import com.liferay.ide.project.core.model.internal.PluginsSDKNameListener;
-import com.liferay.ide.project.core.model.internal.PluginsSDKNamePossibleValuesService;
 
 /**
  * @author Simon Jiang
@@ -45,7 +43,7 @@ public interface LiferayPluginSDKOp extends Element
             @Service( impl = PluginsSDKNameDefaultValueService.class ),
         }
     )
-    @Listeners( PluginsSDKNameListener.class )
+
     ValueProperty PROP_PLUGINS_SDK_NAME = new ValueProperty( TYPE, "PluginsSDKName" ); //$NON-NLS-1$
 
     Value<String> getPluginsSDKName();

@@ -48,34 +48,39 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
     public void validate( IFacetedProject fproj ) throws CoreException
     {
+
         final IProject proj = fproj.getProject();
 
-        clearMarkers( proj );
-
-        if( SDKUtil.isSDKProject( fproj.getProject() ) )
+        if ( ProjectUtil.isLiferayFacetedProject( proj ) )
         {
-            if( fproj.getPrimaryRuntime() == null )
+            clearMarkers( proj );
+
+            if( SDKUtil.isSDKProject( fproj.getProject() ) )
             {
-                setMarker(
-                    proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
-                    MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
-            }
-            else
-            {
-                if( ! ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
+                if( fproj.getPrimaryRuntime() == null )
                 {
                     setMarker(
                         proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
-                        MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
-                        ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
+                        MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
+                }
+                else
+                {
+                    if( ! ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
+                    {
+                        setMarker(
+                            proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
+                            MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
+                            ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
+                    }
                 }
             }
-        }
-        else if ( !ProjectUtil.isMavenProject( proj ) )
-        {
-            setMarker(
-                proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
-                LOCATION_TARGETED_SDK, ID_PLUGINS_SDK_NOT_SET );
+            else if ( !ProjectUtil.isMavenProject( proj ) )
+            {
+
+                setMarker(
+                    proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
+                    LOCATION_TARGETED_SDK, ID_PLUGINS_SDK_NOT_SET );
+            }
         }
     }
 
