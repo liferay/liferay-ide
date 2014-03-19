@@ -201,6 +201,7 @@ public class MobileSDKCore extends Plugin
                         }
                         catch( Exception e )
                         {
+                            logError( "Unable to discover APIs for context: " + servletContextName, e );
                         }
                     }
                 }
@@ -208,6 +209,7 @@ public class MobileSDKCore extends Plugin
         }
         catch( Exception e )
         {
+            logError( "Unable to get PortletService for server: " + server, e );
         }
 
         return apis.toArray( new MobileAPI[0] );
