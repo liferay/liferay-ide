@@ -81,52 +81,46 @@ public class LiferayLanguagePropertiesValidator
         }
     }
 
-    public static void clearUnusedValidatorsAndMarkers( IProject project )
+    public static void clearUnusedValidatorsAndMarkers( IProject project ) throws CoreException
     {
         synchronized( filesAndValidators )
         {
-            try
+            Set<IFile> files = filesAndValidators.keySet();
+
+            for( Iterator<IFile> iterator = files.iterator(); iterator.hasNext(); )
             {
-                Set<IFile> files = filesAndValidators.keySet();
+                IFile file = iterator.next();
 
-                for( Iterator<IFile> iterator = files.iterator(); iterator.hasNext(); )
+                if( ! PropertiesUtil.isLanguagePropertiesFile( file ) )
                 {
-                    IFile file = iterator.next();
+                    LiferayLanguagePropertiesValidator validator = filesAndValidators.get( file ).get();
 
-                    if( ! PropertiesUtil.isLanguagePropertiesFile( file ) )
-                    {
-                        LiferayLanguagePropertiesValidator validator = filesAndValidators.get( file ).get();
+                    validator.clearAllMarkers();
 
-                        validator.clearAllMarkers();
-
-                        iterator.remove();
-                    }
+                    iterator.remove();
                 }
+            }
 
-                final IMarker[] markers =
-                    project.getWorkspace().getRoot().findMarkers(
-                        LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+            final IMarker[] markers =
+                project.getWorkspace().getRoot().findMarkers(
+                    LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
 
-                for( IMarker marker : markers )
+            for( IMarker marker : markers )
+            {
+                if( ! marker.getResource().exists() )
                 {
-                    if( ! marker.getResource().exists() )
+                    marker.delete();
+                }
+                else
+                {
+                    if( marker.getResource().getType() == IResource.FILE )
                     {
-                        marker.delete();
-                    }
-                    else
-                    {
-                        if( marker.getResource().getType() == IResource.FILE )
+                        if( ! files.contains( (IFile) marker.getResource() ) )
                         {
-                            if( ! files.contains( (IFile) marker.getResource() ) )
-                            {
-                                marker.delete();
-                            }
+                            marker.delete();
                         }
                     }
                 }
-            }
-            catch( Exception e )
-            {
             }
         }
     }

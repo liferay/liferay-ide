@@ -17,6 +17,7 @@ package com.liferay.ide.alloy.core.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.alloy.core.AlloyCore;
 import com.liferay.ide.alloy.core.LautRunner;
@@ -40,6 +41,7 @@ import org.junit.Test;
 public class AlloyCoreTests extends BaseTests
 {
 
+
     private IProject a;
 
     @Before
@@ -49,6 +51,25 @@ public class AlloyCoreTests extends BaseTests
         this.a = createProject( "a" );
     }
 
+
+    @Test
+    public void fileExecutable() throws Exception
+    {
+        final LautRunner lautRunner = AlloyCore.getLautRunner();
+
+        final String execPath = lautRunner.getExecPath();
+
+        assertNotNull( execPath );
+
+        final File execFile = new Path( execPath ).toFile();
+
+        assertTrue( execFile.exists() );
+
+        if( CoreUtil.isLinux() || CoreUtil.isMac() )
+        {
+            assertTrue( "Expected setExecutable(true) to return true", execFile.setExecutable( true ) );
+        }
+    }
 
     @Test
     public void testLautInstallation() throws Exception

@@ -128,11 +128,9 @@ public class LautRunner
             }
             catch( Exception e )
             {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                AlloyCore.logError( "Unable to inialize laut runner", e );
             }
         }
-
     }
 
     private static void setSDKExecutableFlags( IPath lautDir )
