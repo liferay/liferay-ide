@@ -16,16 +16,15 @@
 package com.liferay.ide.alloy.core.tests;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.alloy.core.AlloyCore;
-import com.liferay.ide.alloy.core.LautRunner;
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -35,7 +34,7 @@ import org.junit.Test;
 /**
  * @author Gregory Amerson
  */
-public class AlloyCoreTests extends BaseTests
+public class LautUpgradeTests extends BaseTests
 {
 
     private IProject a;
@@ -49,44 +48,34 @@ public class AlloyCoreTests extends BaseTests
 
 
     @Test
-    public void fileExecutable() throws Exception
+    public void testUpgrade() throws Exception
     {
-        final LautRunner lautRunner = AlloyCore.getLautRunner();
+        final IFolder cssFolder = this.a.getFolder( new Path( "docroot/css/" ) );
 
-        final String execPath = lautRunner.getExecPath();
+        CoreUtil.prepareFolder( cssFolder );
 
-        assertNotNull( execPath );
+        assertEquals( true, cssFolder.exists() );
 
-        final File execFile = new Path( execPath ).toFile();
+        final IFile cssFile = cssFolder.getFile( "main.css" );
 
-        assertTrue( execFile.exists() );
+        final String originalMainCss = CoreUtil.readStreamToString(
+            this.getClass().getResourceAsStream( "files/01_events-display-portlet/docroot/css/main.cssX" ) );
 
-        if( CoreUtil.isLinux() || CoreUtil.isMac() )
-        {
-            assertTrue( "Expected setExecutable(true) to return true", execFile.setExecutable( true ) );
+        final NullProgressMonitor npm = new NullProgressMonitor();
 
-            final File nodeFile = new Path( execPath ).removeLastSegments( 1 ).append( "node/bin/node" ).toFile();
+        cssFile.create( new ByteArrayInputStream( originalMainCss.getBytes() ), true, npm );
 
-            assertTrue( "Expected setExecutable(true) to return true", nodeFile.setExecutable( true ) );
-        }
-    }
+        assertEquals( true, cssFile.exists() );
 
-    @Test
-    public void testLautInstallation() throws Exception
-    {
-        final LautRunner lautRunner = AlloyCore.getLautRunner();
+        AlloyCore.getLautRunner().exec( a, npm );
 
-        assertNotNull( lautRunner );
+        final String expectedMainCss =
+            CoreUtil.readStreamToString( this.getClass().getResourceAsStream(
+                "files/02_events-display-portlet/docroot/css/main.css" ) );
 
-        final String execPath = lautRunner.getExecPath();
-
-        assertNotNull( execPath );
-
-        final File exec = new File( execPath );
-
-        assertEquals( true, exec.exists() );
-
-        lautRunner.exec( a, new NullProgressMonitor() );
+        assertEquals(
+            stripCarriageReturns( expectedMainCss ),
+            stripCarriageReturns( CoreUtil.readStreamToString( cssFile.getContents() ) ) );
     }
 
 }

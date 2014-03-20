@@ -30,6 +30,19 @@
 
     <name>Liferay IDE Alloy Core Tests</name>
 
+    <properties>
+        <exclude.tests>by-default-nothing-to-exclude</exclude.tests>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>noLautUpgradeTests</id>
+            <properties>
+                <exclude.tests>**/LautUpgradeTests*</exclude.tests>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -44,6 +57,9 @@
                     <systemProperties>
                         <jna.nosys>true</jna.nosys>
                     </systemProperties>
+                    <excludes>
+                        <exclude>${exclude.tests}</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>

@@ -183,7 +183,7 @@ public class LaunchHelper implements IDebugEventSetListener
         return this.launchSync;
     }
 
-    public void launch( ILaunchConfiguration config, String mode, IProgressMonitor monitor ) throws CoreException
+    public void launch( final ILaunchConfiguration config, final String mode, IProgressMonitor monitor ) throws CoreException
     {
         if( config == null )
         {
@@ -195,7 +195,7 @@ public class LaunchHelper implements IDebugEventSetListener
             DebugPlugin.getDefault().addDebugEventListener( this );
         }
 
-        ILaunch launch = config.launch( mode, new NullProgressMonitor() );
+        final ILaunch launch = config.launch( mode, new NullProgressMonitor() );
 
         if( isLaunchSync() )
         {

@@ -42,6 +42,9 @@
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <osgi.console>1234</osgi.console>
                     </systemProperties>
+                    <excludes>
+                        <exclude>**/*ProfilePossibleValuesTests*</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
