@@ -134,7 +134,7 @@ public class MobileSDKBuilder
 
         args.add( "-cp" );
 
-        args.add( bundlePath( "org.json" ) + ";"  + libPath( "liferay-android-sdk-6.2.0.1-jre16.jar" ) );
+        args.add( bundlePath( "org.json" ) + ";"  + libPath( "jars/liferay-android-sdk-6.2.0.1.jar" ) );
 
         args.add( "-1.6" );
 
@@ -189,8 +189,8 @@ public class MobileSDKBuilder
         jar.execute();
     }
 
-    private static String libPath( String lib ) throws IOException
+    private static String libPath( String libPath ) throws IOException
     {
-        return FileLocator.toFileURL( MobileSDKCore.getDefault().getBundle().getEntry( "lib/" + lib ) ).getPath();
+        return FileLocator.toFileURL( MobileSDKCore.getDefault().getBundle().getEntry( libPath ) ).getPath();
     }
 }

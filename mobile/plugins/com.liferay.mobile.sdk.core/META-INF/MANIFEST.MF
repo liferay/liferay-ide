@@ -20,5 +20,5 @@ Bundle-ActivationPolicy: lazy
 Eclipse-BundleShape: dir
 Export-Package: com.liferay.mobile.sdk.core
 Bundle-ClassPath: .,
- lib/liferay-android-sdk-6.2.0.1-jre16.jar,
- lib/liferay-sdk-builder-6.2.0.1-jre16.jar
+ lib/liferay-sdk-builder-6.2.0.1-jre16.jar,
+ jars/liferay-android-sdk-6.2.0.1.jar

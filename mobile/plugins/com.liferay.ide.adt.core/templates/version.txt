@@ -1,1 +1,1 @@
-liferay-mobile-sdk-sample-android-1.0-GA.zip
+liferay-mobile-sdk-sample-android-6.2.0.1.zip
