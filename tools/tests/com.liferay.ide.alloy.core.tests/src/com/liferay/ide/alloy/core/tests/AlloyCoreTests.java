@@ -68,6 +68,10 @@ public class AlloyCoreTests extends BaseTests
         if( CoreUtil.isLinux() || CoreUtil.isMac() )
         {
             assertTrue( "Expected setExecutable(true) to return true", execFile.setExecutable( true ) );
+
+            final File nodeFile = new Path( execPath ).removeLastSegments( 1 ).append( "node/bin/node" ).toFile();
+
+            assertTrue( "Expected setExecutable(true) to return true", nodeFile.setExecutable( true ) );
         }
     }
 
