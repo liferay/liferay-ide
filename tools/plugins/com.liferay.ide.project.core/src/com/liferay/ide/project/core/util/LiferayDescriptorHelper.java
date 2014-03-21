@@ -50,7 +50,12 @@ public class LiferayDescriptorHelper extends DescriptorHelper
 
     public String getDescriptorVersion()
     {
-        String retval = null;
+        return getDescriptorVersion( "6.0.0" );
+    }
+
+    public String getDescriptorVersion( final String defaultValue )
+    {
+        String retval = defaultValue;
 
         try
         {
@@ -65,11 +70,6 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         catch( Exception e )
         {
             LiferayCore.logError( "Could not get liferay runtime.", e ); //$NON-NLS-1$
-        }
-
-        if( retval == null )
-        {
-            retval = "6.0.0"; // use 6.0.0 as the default //$NON-NLS-1$
         }
 
         return retval;

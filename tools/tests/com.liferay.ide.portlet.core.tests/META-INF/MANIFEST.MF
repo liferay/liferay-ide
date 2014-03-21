@@ -11,7 +11,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jem.util,
  org.eclipse.wst.common.project.facet.core,
  org.eclipse.wst.common.frameworks,
- com.liferay.ide.project.core;bundle-version="2.0.0"
+ com.liferay.ide.project.core;bundle-version="2.0.0",
+ org.eclipse.sapphire.modeling.xml,
+ org.eclipse.sapphire.modeling,
+ org.eclipse.sapphire.java
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.core.tests
