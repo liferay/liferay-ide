@@ -78,6 +78,7 @@ servlet.session.create.events
 servlet.session.destroy.events
 servlet.service.events.post
 servlet.service.events.pre
+session.max.allowed
 session.phishing.protected.attributes
 session.store.password
 terms.of.use.required

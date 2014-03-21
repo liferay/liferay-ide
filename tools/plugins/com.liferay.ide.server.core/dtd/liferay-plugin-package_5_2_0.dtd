@@ -173,13 +173,13 @@ the package should be deployed.
 <!--
 The name attribute specifies the name of the setting.
 -->
-<!ATTLIST name
+<!ATTLIST setting
 	name CDATA #IMPLIED
 >
 
 <!--
 The value attribute specifies the value of the setting.
 -->
-<!ATTLIST value
+<!ATTLIST setting
 	value CDATA #IMPLIED
 >

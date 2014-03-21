@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 
 <xs:schema
-	elementFormDefault="qualified"
-	targetNamespace="urn:liferay.com:liferay-ddm-structure_6.2.0"
-	xmlns="urn:liferay.com:liferay-ddm-structure_6.2.0"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 >
 	<xs:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -98,23 +95,7 @@
 	</xs:simpleType>
 	<xs:simpleType name="type">
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="checkbox" />
-			<xs:enumeration value="ddm-date" />
-			<xs:enumeration value="ddm-decimal" />
-			<xs:enumeration value="ddm-documentlibrary" />
-			<xs:enumeration value="ddm-integer" />
-			<xs:enumeration value="ddm-link-to-page" />
-			<xs:enumeration value="ddm-number" />
-			<xs:enumeration value="ddm-paragraph" />
-			<xs:enumeration value="ddm-separator" />
-			<xs:enumeration value="ddm-text-html" />
-			<xs:enumeration value="fieldset" />
-			<xs:enumeration value="option" />
-			<xs:enumeration value="radio" />
-			<xs:enumeration value="select" />
-			<xs:enumeration value="text" />
-			<xs:enumeration value="textarea" />
-			<xs:enumeration value="wcm-image" />
+			<xs:pattern value="(\w|\-|_)+" />
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

@@ -292,7 +292,13 @@
 	<xs:group name="recipients-group">
 		<xs:sequence>
 			<xs:element name="address" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
-			<xs:element name="role" type="role-complex-type" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="roles" minOccurs="0">
+				<xs:complexType>
+					<xs:choice minOccurs="0">
+						<xs:element name="role" type="role-complex-type" maxOccurs="unbounded" />
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="user" type="user-complex-type" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 	</xs:group>

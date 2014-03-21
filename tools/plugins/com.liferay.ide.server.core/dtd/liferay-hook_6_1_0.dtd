@@ -29,6 +29,9 @@ auth.pipeline.pre
 auto.login.hooks
 captcha.check.portal.create_account
 captcha.engine.impl
+com.liferay.portal.servlet.filters.*Filter
+company.default.locale
+company.default.time.zone
 company.settings.form.configuration
 company.settings.form.identification
 company.settings.form.miscellaneous
@@ -64,7 +67,9 @@ layout.user.public.layouts.enabled
 layout.user.public.layouts.modifiable
 layout.user.public.layouts.power.user.required
 ldap.attrs.transformer.impl
+locales
 locales.beta
+lock.listeners
 login.create.account.allow.custom.password
 login.events.post
 login.events.pre
@@ -80,6 +85,10 @@ organizations.form.add.main
 organizations.form.add.miscellaneous
 passwords.passwordpolicytoolkit.generator
 passwords.passwordpolicytoolkit.static
+passwords.toolkit
+phone.number.format.impl
+phone.number.format.international.regexp
+phone.number.format.usa.regexp
 portlet.add.default.resource.check.enabled
 portlet.add.default.resource.check.whitelist
 portlet.add.default.resource.check.whitelist.actions
@@ -88,6 +97,7 @@ servlet.session.create.events
 servlet.session.destroy.events
 servlet.service.events.post
 servlet.service.events.pre
+session.max.allowed
 session.phishing.protected.attributes
 session.store.password
 sites.form.add.advanced
@@ -105,10 +115,12 @@ theme.loader.new.theme.id.on.import
 theme.portlet.decorate.default
 theme.portlet.sharing.default
 theme.shortcut.icon
+time.zones
 upgrade.processes
 user.notification.event.confirmation.enabled
 users.email.address.generator
 users.email.address.required
+users.email.address.validator
 users.form.add.identification
 users.form.add.main
 users.form.add.miscellaneous
