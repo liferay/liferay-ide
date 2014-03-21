@@ -45,20 +45,25 @@ public class VersionedSchemaDefaultValueService extends DefaultValueService
     {
         String version = defaultVersion;
 
-        final Document document = context( Element.class ).resource().adapt( RootXmlResource.class ).getDomDocument();
+        final RootXmlResource resource = context( Element.class ).resource().adapt( RootXmlResource.class );
 
-        if( document != null )
+        if( resource != null )
         {
-            final Node node = document.getDocumentElement();
+            final Document document = resource.getDomDocument();
 
-            if( node != null )
+            if( document != null )
             {
-                final String namespace = node.getNamespaceURI();
-                final Matcher matcher = this.namespacePattern.matcher( namespace );
+                final Node node = document.getDocumentElement();
 
-                if( matcher.matches() )
+                if( node != null )
                 {
-                    version = matcher.group( 1 );
+                    final String namespace = node.getNamespaceURI();
+                    final Matcher matcher = this.namespacePattern.matcher( namespace );
+
+                    if( matcher.matches() )
+                    {
+                        version = matcher.group( 1 );
+                    }
                 }
             }
         }
