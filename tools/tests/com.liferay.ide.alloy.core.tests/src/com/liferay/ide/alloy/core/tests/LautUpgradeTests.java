@@ -59,7 +59,7 @@ public class LautUpgradeTests extends BaseTests
         final IFile cssFile = cssFolder.getFile( "main.css" );
 
         final String originalMainCss = CoreUtil.readStreamToString(
-            this.getClass().getResourceAsStream( "files/01_events-display-portlet/docroot/css/main.cssX" ) );
+            this.getClass().getResourceAsStream( "files/01_events-display-portlet/docroot/css/main.css" ) );
 
         final NullProgressMonitor npm = new NullProgressMonitor();
 
