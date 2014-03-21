@@ -58,7 +58,7 @@ public class SDKBuilderHelper extends LaunchHelper
 
         final String[] mobileLibs =
         {
-            "lib/liferay-sdk-builder-6.2.0.1-jre16.jar",
+            "lib/liferay-sdk-builder-6.2.0.1.jar",
             "lib/velocity-1.7.jar",
             "lib/velocity-tools-2.0.jar",
         };
