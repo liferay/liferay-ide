@@ -64,11 +64,6 @@ public class LiferayPluginSDKOpTests extends ProjectCoreBase
 
         assertEquals( newSDK.getName(), dvs.value() );
         assertEquals( newSDK.getName(), op2.getPluginsSDKName().content() );
-
-        SDKManager.getInstance().clearSDKs();
-
-        assertEquals( "<None>", dvs.value() );
-        assertEquals( "<None>", op2.getPluginsSDKName().content() );
     }
 
     @Test
