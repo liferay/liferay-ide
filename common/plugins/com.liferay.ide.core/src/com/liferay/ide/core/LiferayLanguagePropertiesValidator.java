@@ -93,10 +93,6 @@ public class LiferayLanguagePropertiesValidator
 
                 if( ! PropertiesUtil.isLanguagePropertiesFile( file ) )
                 {
-                    LiferayLanguagePropertiesValidator validator = filesAndValidators.get( file ).get();
-
-                    validator.clearAllMarkers();
-
                     iterator.remove();
                 }
             }
@@ -169,28 +165,6 @@ public class LiferayLanguagePropertiesValidator
         catch( CoreException e )
         {
             LiferayCore.logError( e );
-        }
-    }
-
-    public void clearAllMarkers()
-    {
-        synchronized( markers )
-        {
-            for( IMarker marker : markers )
-            {
-                if( marker != null && marker.exists() )
-                {
-                    try
-                    {
-                        marker.delete();
-                        markers.remove( marker );
-                    }
-                    catch( CoreException e )
-                    {
-                        LiferayCore.logError( e );
-                    }
-                }
-            }
         }
     }
 
