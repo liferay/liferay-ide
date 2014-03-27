@@ -44,6 +44,7 @@
                                 <artifact><id>net.java.dev.jna:jna:4.0.0</id></artifact>
                                 <artifact><id>net.java.dev.jna:jna-platform:4.0.0</id></artifact>
                                 <artifact><id>org.json:json:20131018</id></artifact>
+				<artifact><id>com.googlecode.json-simple:json-simple:1.1.1</id></artifact>
                             </artifacts>
                         </configuration>
                     </execution>
