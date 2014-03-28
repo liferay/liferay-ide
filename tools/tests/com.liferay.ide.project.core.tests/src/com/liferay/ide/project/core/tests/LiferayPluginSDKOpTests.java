@@ -32,6 +32,7 @@ import org.junit.Test;
 
 /**
  * @author Simon Jiang
+ * @author Gregory Amerson
  */
 public class LiferayPluginSDKOpTests extends ProjectCoreBase
 {
@@ -78,9 +79,8 @@ public class LiferayPluginSDKOpTests extends ProjectCoreBase
         exceptedSDKNames.add( originSDK.getName() );
         exceptedSDKNames.add( newSDK.getName() );
 
-        final Set<String> acturalSDKNames = op.getPluginsSDKName().service( PossibleValuesService.class ).values();
+        final Set<String> actualSDKNames = op.getPluginsSDKName().service( PossibleValuesService.class ).values();
 
-        assertEquals( true, exceptedSDKNames.containsAll( acturalSDKNames ) );
-        assertEquals( true, acturalSDKNames.containsAll( exceptedSDKNames ) );
+        assertEquals( true, actualSDKNames.containsAll( exceptedSDKNames ) );
     }
 }
