@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Liferay IDE Maven Hidden Features" uid="com.liferay.ide.maven-repository.hidden.features" id="com.liferay.ide.maven-repository.hidden.features" application="org.eclipse.ui.ide.workbench" version="2.0.1.qualifier" useFeatures="true" includeLaunchers="false">
+<product name="Liferay IDE Maven Hidden Features" uid="com.liferay.ide.maven-repository.hidden.features" id="com.liferay.ide.maven-repository.hidden.features" application="org.eclipse.ui.ide.workbench" version="2.1.0.qualifier" useFeatures="true" includeLaunchers="false">
 
    <aboutInfo>
    </aboutInfo>
@@ -33,6 +33,8 @@
       <feature id="org.eclipse.m2e.feature" />
       <feature id="org.eclipse.m2e.logback.feature" />
       <feature id="org.eclipse.m2e.wtp.feature" />
+      <feature id="org.eclipse.m2e.wtp.jaxrs.feature" />
+      <feature id="org.eclipse.m2e.wtp.jpa.feature" />
       <feature id="org.eclipse.m2e.wtp.jsf.feature" />
       <feature id="org.sonatype.m2e.mavenarchiver.feature" />
    </features>
