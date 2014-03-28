@@ -124,7 +124,10 @@ public class MobileSDKBuilder
 
         args.add( "-cp" );
 
-        args.add( libPath( "jars/org.json_20131018.0.0.jar" ) + ";"  + libPath( "jars/liferay-android-sdk-6.2.0.1.jar" ) );
+        final String jsonPath = libPath( "jars/org.json_20131018.0.0.jar" );
+        final String sdkPath = libPath( "jars/liferay-android-sdk-6.2.0.1.jar" );
+
+        args.add( jsonPath + File.pathSeparatorChar + sdkPath );
 
         args.add( "-1.6" );
 
