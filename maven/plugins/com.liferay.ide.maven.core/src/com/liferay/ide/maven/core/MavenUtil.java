@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.cli.MavenCli;
-import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecution;
@@ -224,9 +223,11 @@ public class MavenUtil
         return project.getFolder( m2eLiferayFolder ).getFolder( ILiferayMavenConstants.THEME_RESOURCES_FOLDER );
     }
 
-    public static Plugin getLiferayMavenPlugin( MavenProject mavenProject )
+    public static Plugin getLiferayMavenPlugin( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
     {
         Plugin retval = null;
+        boolean loadedParent = false;
+        final MavenProject mavenProject = facade.getMavenProject( monitor );
 
         if( mavenProject != null )
         {
@@ -235,9 +236,36 @@ public class MavenUtil
 
         if( retval == null )
         {
-            retval =
-                mavenProject.getPluginManagement().getPluginsAsMap().get(
-                    ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+            // look through all parents to find if the plugin has been declared
+
+            MavenProject parent = mavenProject.getParent();
+
+            if( parent == null )
+            {
+                try
+                {
+                    if( loadParentHierarchy( facade, monitor ) )
+                    {
+                        loadedParent = true;
+                    }
+                }
+                catch( CoreException e )
+                {
+                    LiferayMavenCore.logError( "Error loading parent hierarchy", e );
+                }
+            }
+
+            while( parent != null && retval == null )
+            {
+                retval = parent.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+
+                parent = parent.getParent();
+            }
+        }
+
+        if( loadedParent )
+        {
+            mavenProject.setParent( null );
         }
 
         return retval;
@@ -410,10 +438,7 @@ public class MavenUtil
     }
 
 
-    public static boolean loadParentHierarchy( final IMaven maven,
-                                               final IMavenProjectFacade facade,
-                                               final IMavenExecutionContext context,
-                                               final IProgressMonitor monitor ) throws CoreException
+    public static boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
     {
         boolean loadedParent = false;
         MavenProject mavenProject = facade.getMavenProject( monitor );
@@ -432,8 +457,6 @@ public class MavenUtil
             // The parent can not be loaded properly
         }
 
-        MavenExecutionRequest request = null;
-
         while( mavenProject != null && mavenProject.getModel().getParent() != null )
         {
             if( monitor.isCanceled() )
@@ -441,12 +464,7 @@ public class MavenUtil
                 break;
             }
 
-            if( request == null )
-            {
-                request = context.getExecutionRequest();
-            }
-
-            MavenProject parentProject = maven.resolveParentProject( mavenProject, monitor );
+            MavenProject parentProject = MavenPlugin.getMaven().resolveParentProject( mavenProject, monitor );
 
             if( parentProject != null )
             {

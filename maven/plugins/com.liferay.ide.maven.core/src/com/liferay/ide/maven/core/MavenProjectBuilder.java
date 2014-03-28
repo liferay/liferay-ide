@@ -154,7 +154,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         try
         {
             // not doing any null checks since this is in large try/catch
-            final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade.getMavenProject( monitor ) );
+            final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade, monitor );
             final Xpp3Dom config = (Xpp3Dom) liferayMavenPlugin.getConfiguration();
             final Xpp3Dom apiBaseDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_API_BASE_DIR );
             // this should be the name path of a project that should be in user's workspace that we can refresh

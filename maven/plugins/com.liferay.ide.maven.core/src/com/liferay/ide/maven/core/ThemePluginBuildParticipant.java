@@ -151,7 +151,7 @@ public abstract class ThemePluginBuildParticipant extends AbstractBuildParticipa
 
         try
         {
-            parentHierarchyLoaded = MavenUtil.loadParentHierarchy( this.maven, facade, context, monitor );
+            parentHierarchyLoaded = MavenUtil.loadParentHierarchy( facade, monitor );
 
             monitor.worked( 10 );
 

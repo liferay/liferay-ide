@@ -21,6 +21,7 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
@@ -46,10 +47,11 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
             if( projectFacade != null )
             {
                 MavenProject mavenProject = null;
+                final IProgressMonitor npm = new NullProgressMonitor();
 
                 try
                 {
-                    mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
+                    mavenProject = projectFacade.getMavenProject( npm );
                 }
                 catch( CoreException e )
                 {
@@ -57,11 +59,17 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
 
                 if( mavenProject != null )
                 {
-                    final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
-
-                    if( liferayMavenPlugin != null )
+                    try
                     {
-                        retval = true;
+                        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade, npm );
+
+                        if( liferayMavenPlugin != null )
+                        {
+                            retval = true;
+                        }
+                    }
+                    catch( CoreException e )
+                    {
                     }
                 }
             }

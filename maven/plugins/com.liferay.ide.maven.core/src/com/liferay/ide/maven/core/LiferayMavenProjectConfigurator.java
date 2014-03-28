@@ -75,7 +75,6 @@ import org.osgi.framework.Version;
 public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator
 {
 
-
     private static final IPath ROOT_PATH = new Path("/");  //$NON-NLS-1$
 
     private IMavenMarkerManager mavenMarkerManager;
@@ -187,8 +186,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         monitor.beginTask( NLS.bind( Msgs.configuringLiferayProject, request.getProject() ), 100 );
 
-        final MavenProject mavenProject = request.getMavenProject();
-        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
+        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
 
         if( ! shouldConfigure( liferayMavenPlugin ) )
         {
@@ -204,7 +202,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         monitor.worked( 25 );
 
-        final List<MavenProblemInfo> errors = findLiferayMavenPluginProblems( project, mavenProject );
+        final MavenProject mavenProject = request.getMavenProject();
+        final List<MavenProblemInfo> errors = findLiferayMavenPluginProblems( project, request, monitor );
 
         if( errors.size() > 0 )
         {
@@ -226,7 +225,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         if( shouldInstallNewLiferayFacet( facetedProject ) )
         {
-            installProblem = installNewLiferayFacet( facetedProject, mavenProject, monitor );
+            installProblem = installNewLiferayFacet( facetedProject, request, monitor );
         }
 
         monitor.worked( 25 );
@@ -361,12 +360,14 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     {
     }
 
-    private List<MavenProblemInfo> findLiferayMavenPluginProblems( IProject project, MavenProject mavenProject )
+    private List<MavenProblemInfo> findLiferayMavenPluginProblems( IProject project,
+                                                                   ProjectConfigurationRequest request,
+                                                                   IProgressMonitor monitor ) throws CoreException
     {
         final List<MavenProblemInfo> warnings = new ArrayList<MavenProblemInfo>();
 
         // first check to make sure that the AppServer* properties are available and pointed to valid location
-        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
+        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
 
         if( liferayMavenPlugin != null )
         {
@@ -479,13 +480,13 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     }
 
     private MavenProblemInfo installNewLiferayFacet( IFacetedProject facetedProject,
-                                                     MavenProject mavenProject,
-                                                     IProgressMonitor monitor )
+                                                     ProjectConfigurationRequest request,
+                                                     IProgressMonitor monitor ) throws CoreException
     {
         MavenProblemInfo retval = null;
 
-        final String pluginType = MavenUtil.getLiferayMavenPluginType( mavenProject );
-        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( mavenProject );
+        final String pluginType = MavenUtil.getLiferayMavenPluginType( request.getMavenProject() );
+        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
         final Action action = getNewLiferayFacetInstallAction( pluginType );
 
         if( action != null )
