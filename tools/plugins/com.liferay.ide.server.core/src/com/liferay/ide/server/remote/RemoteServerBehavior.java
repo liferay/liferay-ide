@@ -46,6 +46,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.osgi.util.NLS;
+import org.eclipse.wst.common.componentcore.internal.util.ComponentUtilities;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
@@ -558,6 +559,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         setModulePublishState( module, modulePublishState );
     }
 
+    @SuppressWarnings( "restriction" )
     protected int publishModuleDelta( IModule[] module, IProgressMonitor monitor ) throws CoreException
     {
         if( monitor == null )
@@ -574,7 +576,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             return publishModuleFull( module, CHANGED, monitor );
         }
 
-        String appName = moduleProject.getName();
+        String appName = ComponentUtilities.getServerContextRoot( moduleProject );
 
         monitor.subTask( "Creating partial " + moduleProject.getName() + " update archive..." ); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -616,6 +618,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         return IServer.PUBLISH_STATE_NONE;
     }
 
+    @SuppressWarnings( "restriction" )
     protected int publishModuleFull( IModule[] module, int deltaKind, IProgressMonitor monitor ) throws CoreException
     {
         if( module == null || module.length != 1 )
@@ -654,7 +657,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             return IServer.PUBLISH_STATE_FULL;
         }
 
-        String appName = moduleProject.getName();
+        String appName = ComponentUtilities.getServerContextRoot( moduleProject );
 
         IServerManagerConnection remoteConnection = getServerManagerConnection();
 
