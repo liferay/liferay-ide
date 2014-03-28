@@ -17,8 +17,6 @@ package com.liferay.mobile.sdk.core;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +27,6 @@ import org.apache.tools.ant.taskdefs.Jar;
 import org.apache.tools.ant.types.FileSet;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.compiler.CompilationProgress;
 import org.eclipse.jdt.core.compiler.batch.BatchCompiler;
 
@@ -121,20 +118,13 @@ public class MobileSDKBuilder
         return retval;
     }
 
-    private static String bundlePath( String bundle ) throws MalformedURLException
-    {
-        final String path = new URL( new URL( Platform.getBundle( bundle ).getLocation() ).getPath() ).getPath();
-
-        return path.startsWith( "/" ) ? path.substring( 1, path.length() ) : path;
-    }
-
     private static boolean compile( String sourceDir, String destDir ) throws IOException
     {
         final List<String> args = new ArrayList<String>();
 
         args.add( "-cp" );
 
-        args.add( bundlePath( "org.json" ) + ";"  + libPath( "jars/liferay-android-sdk-6.2.0.1.jar" ) );
+        args.add( libPath( "jars/org.json_20131018.0.0.jar" ) + ";"  + libPath( "jars/liferay-android-sdk-6.2.0.1.jar" ) );
 
         args.add( "-1.6" );
 
