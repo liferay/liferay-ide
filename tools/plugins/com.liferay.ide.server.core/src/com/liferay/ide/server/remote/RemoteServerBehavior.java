@@ -60,6 +60,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
  * @author Tao Tao
  * @author Simon Jiang
  */
+@SuppressWarnings( "restriction" )
 public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
 {
@@ -421,7 +422,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         for( IModule m : module )
         {
-            String appName = m.getProject().getName();
+            final String appName = ComponentUtilities.getServerContextRoot( m.getProject() );
 
             try
             {
@@ -559,7 +560,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         setModulePublishState( module, modulePublishState );
     }
 
-    @SuppressWarnings( "restriction" )
     protected int publishModuleDelta( IModule[] module, IProgressMonitor monitor ) throws CoreException
     {
         if( monitor == null )
@@ -576,7 +576,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             return publishModuleFull( module, CHANGED, monitor );
         }
 
-        String appName = ComponentUtilities.getServerContextRoot( moduleProject );
+        final String appName = ComponentUtilities.getServerContextRoot( moduleProject );
 
         monitor.subTask( "Creating partial " + moduleProject.getName() + " update archive..." ); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -618,7 +618,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         return IServer.PUBLISH_STATE_NONE;
     }
 
-    @SuppressWarnings( "restriction" )
     protected int publishModuleFull( IModule[] module, int deltaKind, IProgressMonitor monitor ) throws CoreException
     {
         if( module == null || module.length != 1 )
@@ -657,7 +656,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             return IServer.PUBLISH_STATE_FULL;
         }
 
-        String appName = ComponentUtilities.getServerContextRoot( moduleProject );
+        final String appName = ComponentUtilities.getServerContextRoot( moduleProject );
 
         IServerManagerConnection remoteConnection = getServerManagerConnection();
 
@@ -763,7 +762,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         monitor.beginTask( NLS.bind( Msgs.undeployingModuleProject, moduleProject.getName() ), 100 );
 
-        String appName = moduleProject.getName();
+        final String appName = ComponentUtilities.getServerContextRoot( moduleProject );
 
         setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.uninstalling ) );
 
@@ -863,7 +862,8 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
     protected IStatus updateModuleState( IModule module )
     {
-        String appName = module.getProject().getName();
+
+        final String appName = ComponentUtilities.getServerContextRoot( module.getProject() );
 
         boolean appStarted =false;
 
@@ -916,7 +916,8 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             {
                 if( CoreUtil.isLiferayProject( module.getProject() ) )
                 {
-                    String appName = module.getProject().getName();
+
+                    final String appName = ComponentUtilities.getServerContextRoot( module.getProject() );
 
                     if( plugins.contains( appName ) )
                     {
