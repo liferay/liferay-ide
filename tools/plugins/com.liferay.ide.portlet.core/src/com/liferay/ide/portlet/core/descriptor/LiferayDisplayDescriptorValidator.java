@@ -17,7 +17,6 @@ package com.liferay.ide.portlet.core.descriptor;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.project.core.BaseValidator;
@@ -94,7 +93,7 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator
         IFile liferayDisplayXml = (IFile) resource;
 
         IFile portletXml =
-            DescriptorHelper.getDescriptorFile( liferayDisplayXml.getProject(), ILiferayConstants.PORTLET_XML_FILE );
+            CoreUtil.getDescriptorFile( liferayDisplayXml.getProject(), ILiferayConstants.PORTLET_XML_FILE );
 
         if( liferayDisplayXml.isAccessible() && portletXml != null && portletXml.isAccessible() &&
             ProjectUtil.isPortletProject( resource.getProject() ) )

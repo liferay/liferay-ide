@@ -110,7 +110,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 
     public void createDefaultDescriptor()
     {
-        final IFile descriptorFile = getDescriptorFile( getProject(), ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
 
         final DOMModelEditOperation operation = new DOMModelEditOperation( descriptorFile )
         {

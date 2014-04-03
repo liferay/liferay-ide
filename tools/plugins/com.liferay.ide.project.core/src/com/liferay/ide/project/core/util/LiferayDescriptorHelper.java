@@ -17,35 +17,211 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.DescriptorHelper;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.LiferayProjectCore;
 
+import java.io.ByteArrayInputStream;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.core.internal.content.ContentTypeManager;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.osgi.framework.Version;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+
 /**
+ * @author Gregory Amerson
  * @author Cindy Li
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayDescriptorHelper extends DescriptorHelper
+public class LiferayDescriptorHelper
 {
+
+    public abstract class DOMModelEditOperation extends DOMModelOperation
+    {
+        public DOMModelEditOperation( IFile descriptorFile )
+        {
+            super( descriptorFile );
+        }
+
+        public void createDefaultDescriptor( String templateString, String version )
+        {
+            String content = MessageFormat.format( templateString, version, version.replace( '.', '_' ) );
+
+            try
+            {
+                this.file.create( new ByteArrayInputStream( content.getBytes( "UTF-8" ) ), IResource.FORCE, null ); //$NON-NLS-1$
+            }
+            catch( Exception e )
+            {
+                LiferayCore.logError( e );
+            }
+        }
+
+        protected void createDefaultFile()
+        {
+        }
+
+        public IStatus execute()
+        {
+            IStatus retval = null;
+
+            if( !this.file.exists() )
+            {
+                createDefaultFile();
+            }
+
+            IDOMModel domModel = null;
+
+            try
+            {
+                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( this.file );
+
+                domModel.aboutToChangeModel();
+
+                IDOMDocument document = domModel.getDocument();
+
+                retval = doExecute( document );
+
+                domModel.changedModel();
+
+                domModel.save();
+            }
+            catch( Exception e )
+            {
+                retval = LiferayCore.createErrorStatus( e );
+            }
+            finally
+            {
+                if( domModel != null )
+                {
+                    domModel.releaseFromEdit();
+                }
+            }
+
+            return retval;
+        }
+    }
+
+    protected static abstract class DOMModelOperation
+    {
+        protected IFile file;
+
+        public DOMModelOperation( IFile descriptorFile )
+        {
+            this.file = descriptorFile;
+        }
+
+        protected abstract IStatus doExecute( IDOMDocument document );
+
+        public abstract IStatus execute();
+    }
+
+    protected abstract class DOMModelReadOperation extends DOMModelOperation
+    {
+        public DOMModelReadOperation( IFile descriptorFile )
+        {
+            super( descriptorFile );
+        }
+
+        public IStatus execute()
+        {
+            IStatus retval = null;
+
+            if( !this.file.exists() )
+            {
+                return LiferayCore.createErrorStatus( this.file.getName() + " doesn't exist" ); //$NON-NLS-1$
+            }
+
+            IDOMModel domModel = null;
+
+            try
+            {
+                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( this.file );
+
+                IDOMDocument document = domModel.getDocument();
+
+                retval = doExecute( document );
+            }
+            catch( Exception e )
+            {
+                retval = LiferayCore.createErrorStatus( e );
+            }
+            finally
+            {
+                if( domModel != null )
+                {
+                    domModel.releaseFromRead();
+                }
+            }
+
+            return retval;
+        }
+    }
+
+    protected IContentType contentType;
+
+    protected String descriptorPath;
+
+    protected IProject project;
 
     public LiferayDescriptorHelper()
     {
-        super();
     }
 
     public LiferayDescriptorHelper( IProject project )
     {
-        super( project );
+        this.project = project;
+    }
+
+    protected List<Element> getChildElements( Element parent )
+    {
+        List<Element> retval = new ArrayList<Element>();
+
+        if( parent != null )
+        {
+            NodeList children = parent.getChildNodes();
+
+            for( int i = 0; i < children.getLength(); i++ )
+            {
+                Node child = children.item( i );
+
+                if( child instanceof Element )
+                {
+                    retval.add( (Element) child );
+                }
+            }
+        }
+
+        return retval;
+    }
+
+    public IContentType getContentType()
+    {
+        return this.contentType;
+    }
+
+    protected IFile getDescriptorFile( String fileName )
+    {
+        return project == null ? null : CoreUtil.getDescriptorFile( project, fileName );
+    }
+
+    public String getDescriptorPath()
+    {
+        return this.descriptorPath;
     }
 
     public String getDescriptorVersion()
@@ -85,6 +261,11 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         return Integer.toString( major ) + "." + Integer.toString( minor ) + ".0"; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    protected IProject getProject()
+    {
+        return project;
+    }
+
     protected IStatus removeAllElements( IDOMDocument document, String tagName )
     {
         if( document == null )
@@ -108,14 +289,30 @@ public class LiferayDescriptorHelper extends DescriptorHelper
         }
         catch( Exception ex )
         {
-            return LiferayProjectCore.createErrorStatus( MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
+            return LiferayProjectCore.
+                createErrorStatus(MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
         }
 
         return Status.OK_STATUS;
     }
 
-    public IStatus removeSampleElements()
+    public void setContentType( IContentType type )
     {
-        return null;
+        this.contentType = type;
+    }
+
+    public void setContentType( String type )
+    {
+        this.contentType = ContentTypeManager.getInstance().getContentType( type );
+    }
+
+    public void setDescriptorPath( String path )
+    {
+        this.descriptorPath = path;
+    }
+
+    public void setProject( IProject project )
+    {
+        this.project = project;
     }
 }

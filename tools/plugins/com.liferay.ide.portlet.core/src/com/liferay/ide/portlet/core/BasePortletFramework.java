@@ -15,8 +15,9 @@
 
 package com.liferay.ide.portlet.core;
 
-import static com.liferay.ide.core.util.CoreUtil.isNullOrEmpty;
-
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.portlet.core.dd.LiferayDisplayDescriptorHelper;
+import com.liferay.ide.portlet.core.dd.LiferayPortletDescriptorHelper;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.AbstractPortletFramework;
 
@@ -27,6 +28,7 @@ import org.eclipse.core.runtime.Status;
 
 /**
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
 public abstract class BasePortletFramework extends AbstractPortletFramework
 {
@@ -35,12 +37,35 @@ public abstract class BasePortletFramework extends AbstractPortletFramework
     public IStatus postProjectCreated(
         IProject project, String frameworkName, String portletName, IProgressMonitor monitor )
     {
-        if( ! isNullOrEmpty( portletName ) )
+        IStatus status = Status.OK_STATUS;
+
+        if( ! CoreUtil.isNullOrEmpty( portletName ) )
         {
-            new PortletDescriptorHelper( project ).configurePortletXml( portletName );
+            final PortletDescriptorHelper portletDH = new PortletDescriptorHelper( project );
+
+            status = portletDH.configurePortletXml( portletName );
+
+            if( !status.isOK() )
+            {
+                return status;
+            }
+
+            final LiferayPortletDescriptorHelper liferayPortletDH = new LiferayPortletDescriptorHelper( project );
+
+            status = liferayPortletDH.configureLiferayPortletXml( portletName );
+
+            if( !status.isOK() )
+            {
+                return status;
+            }
+
+            final LiferayDisplayDescriptorHelper liferayDisplayDH = new LiferayDisplayDescriptorHelper( project );
+
+            status = liferayDisplayDH.configureLiferayDisplayXml( portletName );
+
         }
 
-        return Status.OK_STATUS;
+        return status;
     }
 
 }

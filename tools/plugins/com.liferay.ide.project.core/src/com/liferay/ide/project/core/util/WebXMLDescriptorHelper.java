@@ -16,7 +16,6 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -41,7 +40,7 @@ import org.w3c.dom.NodeList;
  * @author Greg Amerson
  */
 @SuppressWarnings( "restriction" )
-public class WebXMLDescriptorHelper extends DescriptorHelper
+public class WebXMLDescriptorHelper extends LiferayDescriptorHelper
 {
 
     public WebXMLDescriptorHelper( IProject project )

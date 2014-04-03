@@ -16,11 +16,9 @@
 package com.liferay.ide.portlet.jsf.ui.wizard;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.portlet.jsf.core.JSFCorePlugin;
 import com.liferay.ide.portlet.jsf.core.JSFPortletUtil;
 import com.liferay.ide.portlet.jsf.core.operation.INewJSFPortletClassDataModelProperties;
-import com.liferay.ide.portlet.jsf.core.operation.JSFPortletDescriptorHelper;
 import com.liferay.ide.portlet.ui.wizard.AddPortletOperation;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -28,7 +26,6 @@ import java.io.ByteArrayInputStream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
@@ -145,12 +142,6 @@ public class AddJSFPortletOperation extends AddPortletOperation implements INewJ
         }
 
         return Status.OK_STATUS;
-    }
-
-    @Override
-    protected PortletDescriptorHelper createPortletDescriptorHelper( IProject targetProject )
-    {
-        return new JSFPortletDescriptorHelper( targetProject );
     }
 
     @Override

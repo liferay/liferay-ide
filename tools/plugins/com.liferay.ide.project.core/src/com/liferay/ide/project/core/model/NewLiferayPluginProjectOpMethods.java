@@ -17,24 +17,21 @@ package com.liferay.ide.project.core.model;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.DescriptorHelper;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.LiferayDescriptorHelperReader;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelperManager;
+import com.liferay.ide.project.core.util.ISampleElementsOperation;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -272,53 +269,38 @@ public class NewLiferayPluginProjectOpMethods
         return ServerCore.findRuntime( runtimeName );
     }
 
-    private static void removeSampleCode( NewLiferayPluginProjectOp op )
+    public static IStatus removeSampleCode( NewLiferayPluginProjectOp op )
     {
+        IStatus status = org.eclipse.core.runtime.Status.OK_STATUS;
+
         final boolean includeSampleCode = op.getIncludeSampleCode().content();
-        final PluginType pluginType = op.getPluginType().content();
 
-        // check if sample code is needed, available for projects of portlet and service builder
-        if( includeSampleCode ||
-            ! ( pluginType.equals( PluginType.portlet ) || pluginType.equals( PluginType.servicebuilder ) ) )
+        if( ! includeSampleCode )
         {
-            return;
-        }
+            final IProject project = CoreUtil.getLiferayProject( op.getFinalProjectName().content() );
 
-        final IProject project = CoreUtil.getProject( op.getFinalProjectName().content() );
-
-        final LiferayDescriptorHelperReader reader = new LiferayDescriptorHelperReader();
-        final LiferayDescriptorHelper[] helpers = reader.getHelpers();
-
-        List<IFile> descriptorFiles = new ArrayList<IFile>();
-
-        try
-        {
-            // Projects of portlet and service builder contain portlet.xml
-            descriptorFiles.add( DescriptorHelper.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE) );
-
-            if( pluginType.equals( PluginType.servicebuilder ) )
+            if( project != null && project.exists() )
             {
-                descriptorFiles.add( DescriptorHelper.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ) );
-            }
+                final LiferayDescriptorHelper[] helpers =
+                    LiferayDescriptorHelperManager.getInstance().getDescriptorHelpers( project );
 
-            for( IFile descriptorFile : descriptorFiles )
-            {
                 for( LiferayDescriptorHelper helper : helpers )
                 {
-                    if( helper.getContentType() != null &&
-                        helper.getContentType().equals( descriptorFile.getContentDescription().getContentType() ) )
+                    if( helper instanceof ISampleElementsOperation )
                     {
-                        // the helper is constructed without parameters, have to set project here.
-                        helper.setProject( project );
-                        helper.removeSampleElements();
+                        status = ( (ISampleElementsOperation) helper ).removeSampleElements();
+
+                        if( !status.isOK() )
+                        {
+                            LiferayProjectCore.getDefault().getLog().log( status );
+                            return status;
+                        }
                     }
                 }
-            }
+           }
         }
-        catch( CoreException e )
-        {
-            LiferayProjectCore.logError( e );
-        }
+
+        return status;
     }
 
     public static boolean supportsWebTypePlugin( NewLiferayPluginProjectOp op )

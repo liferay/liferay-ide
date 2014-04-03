@@ -13,43 +13,47 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.jsf.core.operation;
+package com.liferay.ide.portlet.core.dd;
 
-import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
+ * @author Cindy Li
  * @author Simon Jiang
  * @author Kuo Zhang
  */
-
-public class JSFPortletDescriptorHelper extends PortletDescriptorHelper
-                                        implements INewJSFPortletClassDataModelProperties
+public class PluginPackagesDescriptorHelper extends LiferayDescriptorHelper implements IPortletElementOperation
 {
-
-    public JSFPortletDescriptorHelper()
+    public PluginPackagesDescriptorHelper()
     {
         super();
     }
 
-    public JSFPortletDescriptorHelper( IProject project )
+    public PluginPackagesDescriptorHelper( IProject project )
     {
         super( project );
     }
 
-    @Override
-    public boolean canAddNewPortlet( IDataModel model )
+    public IFile getDescriptorFile()
     {
-        return model.getID().contains( "NewJSFPortlet" );
+        return this.project == null ? null : getDescriptorFile( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE );
     }
 
-    @Override
-    protected String getPortletClassText( IDataModel model )
+    public IStatus addNewPortlet( IDataModel dataModel )
     {
-        return model.getStringProperty( JSF_PORTLET_CLASS );
+        return Status.OK_STATUS;
     }
 
+    public IStatus removeAllPortlets()
+    {
+        return Status.OK_STATUS;
+    }
 }

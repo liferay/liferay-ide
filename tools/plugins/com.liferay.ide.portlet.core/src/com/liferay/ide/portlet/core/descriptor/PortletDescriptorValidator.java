@@ -55,6 +55,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+
 /**
  * @author Gregory Amerson
  * @author Cindy Li

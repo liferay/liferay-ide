@@ -37,6 +37,31 @@
                 <artifactId>tycho-maven-plugin</artifactId>
                 <extensions>true</extensions>
             </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+                    <systemProperties>
+                        <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <configuration>
+                    <dependency-resolution>
+                        <extraRequirements>
+                            <requirement>
+                                <type>eclipse-feature</type>
+                                <id>com.liferay.ide.eclipse.tools</id>
+                                <versionRange>0.0.0</versionRange>
+                            </requirement>
+                        </extraRequirements>
+                    </dependency-resolution>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

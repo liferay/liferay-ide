@@ -13,25 +13,17 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.service.core.descriptor;
+package com.liferay.ide.portlet.core.dd;
 
-import com.liferay.ide.core.AbstractContentDescriber;
-import com.liferay.ide.core.AbstractDefaultHandler;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
- * @author Cindy Li
+ * @author Kuo Zhang
  */
-public class ServiceBuilderContentDescriber extends AbstractContentDescriber
+public interface IPortletElementOperation
 {
-    public ServiceBuilderContentDescriber()
-    {
-        super();
-    }
+    IStatus addNewPortlet( IDataModel dataModel );
 
-    @Override
-    protected AbstractDefaultHandler createDefaultHandler()
-    {
-        return new ServiceBuilderContentHandler();
-    }
-
+    IStatus removeAllPortlets();
 }

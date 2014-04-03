@@ -500,6 +500,23 @@ public class ServerUtil
         return null;
     }
 
+    public static Version getRuntimeVersion( IProject project )
+    {
+        Version retval = null;
+
+        if( project != null )
+        {
+            final ILiferayProject liferayProject = LiferayCore.create( project );
+
+            if( liferayProject != null && liferayProject.getPortalVersion() != null )
+            {
+                retval = new Version( liferayProject.getPortalVersion() );
+            }
+        }
+
+        return retval;
+    }
+
     public static Map<String, String> getSDKRequiredProperties( ILiferayRuntime appServer )
     {
         Map<String, String> properties = new HashMap<String, String>();

@@ -22,6 +22,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.PortletCore;
+import com.liferay.ide.portlet.core.dd.LiferayDisplayDescriptorHelper;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -165,8 +166,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             {
                 if( ProjectUtil.isPortletProject( workspaceProject ) )
                 {
-                    PortletDescriptorHelper portletDescriptorHelper = new PortletDescriptorHelper( workspaceProject );
-                    String[] portletCategories = portletDescriptorHelper.getAllPortletCategories();
+                    LiferayDisplayDescriptorHelper liferayDisplayDH = new LiferayDisplayDescriptorHelper( workspaceProject );
+                    String[] portletCategories = liferayDisplayDH.getAllPortletCategories();
 
                     if( portletCategories.length > 0 )
                     {

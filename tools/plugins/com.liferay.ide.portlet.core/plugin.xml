@@ -42,6 +42,13 @@
             name="%display.descriptor.name"
             priority="high">
       </content-type>
+      <content-type
+            file-extensions="properties"
+            file-names="liferay-plugin-package.properties"
+            id="liferaypluginpackageproperties"
+            name="%liferay.plugin.package.descriptor.name"
+            priority="normal">
+      </content-type>
    </extension>
    <extension
          id="portletdescriptorvalidator"
@@ -177,6 +184,21 @@
             class="com.liferay.ide.portlet.core.dd.PortletDescriptorHelper"
             contentTypeBinding="com.liferay.ide.portlet.core.portletxml"
             id="com.liferay.ide.portlet.core.portletDescriptorHelper">
+      </liferayDescriptorHelper>
+      <liferayDescriptorHelper
+            class="com.liferay.ide.portlet.core.dd.LiferayPortletDescriptorHelper"
+            contentTypeBinding="com.liferay.ide.portlet.core.liferayportletxml"
+            id="com.liferay.ide.portlet.core.liferayPortletDescriptorHelper">
+      </liferayDescriptorHelper>
+      <liferayDescriptorHelper
+            class="com.liferay.ide.portlet.core.dd.LiferayDisplayDescriptorHelper"
+            contentTypeBinding="com.liferay.ide.portlet.core.liferaydisplayxml"
+            id="com.liferay.ide.portlet.core.liferayDisplayDescriptorHelper">
+      </liferayDescriptorHelper>
+      <liferayDescriptorHelper
+            class="com.liferay.ide.portlet.core.dd.PluginPackagesDescriptorHelper"
+            contentTypeBinding="com.liferay.ide.portlet.core.liferaypluginpackageproperties"
+            id="com.liferay.ide.portlet.core.liferayPluginPackageDescriptorHelper">
       </liferayDescriptorHelper>
    </extension>
 

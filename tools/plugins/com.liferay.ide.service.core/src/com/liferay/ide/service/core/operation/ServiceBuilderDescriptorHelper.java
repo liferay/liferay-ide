@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.util.ISampleElementsOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +41,9 @@ import org.w3c.dom.NodeList;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
+public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper implements ISampleElementsOperation
 {
-    private final String NEW_LINE = System.getProperty("line.separator");
+    private final String NEW_LINE = System.getProperty( "line.separator" );
 
     public ServiceBuilderDescriptorHelper()
     {
@@ -56,7 +57,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
 
     public IStatus addDefaultColumns( final String elementName )
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
         {
@@ -72,31 +73,42 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
 
     public IStatus addDefaultEntity()
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        IStatus status = Status.OK_STATUS;
 
-        DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
+        final IFile descriptorFile = getDescriptorFile();
+
+        if( descriptorFile != null )
         {
-            @Override
-            protected IStatus doExecute( IDOMDocument document )
+            DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
             {
-                return doAddDefaultEntity( document );
-            }
-        };
+                @Override
+                protected IStatus doExecute( IDOMDocument document )
+                {
+                    return doAddDefaultEntity( document );
+                }
+            };
 
-        return editOperation.execute();
+            status = editOperation.execute();
+        }
+
+        return status;
     }
 
-    public IStatus removeAllEntities()
+    public IStatus addEntity( final String entityName )
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
-        final String tagName = "entity";
+        final IFile descriptorFile = getDescriptorFile();
+
+        if( descriptorFile == null || ! descriptorFile.exists() )
+        {
+            return Status.OK_STATUS;
+        }
 
         DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
         {
             @Override
             protected IStatus doExecute( IDOMDocument document )
             {
-                return removeAllElements( document, tagName );
+                return doAddEntity( document, entityName );
             }
         };
 
@@ -112,7 +124,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
         element.appendChild( document.createTextNode( NEW_LINE + NEW_LINE ) );
     }
 
-    protected IStatus doAddDefaultColumns( IDOMDocument document, String entityName)
+    protected IStatus doAddDefaultColumns( IDOMDocument document, String entityName )
     {
         Element entityElement = null;
 
@@ -143,7 +155,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
         appendComment( entityElement, " PK fields " );
 
         Element columnElem = NodeUtil.appendChildElement( entityElement, "column" );
-        columnElem.setAttribute( "name", entityName.toLowerCase() + "Id" );
+        columnElem.setAttribute( "name", generateEntityId( entityName ) );
         columnElem.setAttribute( "type", "long" );
         columnElem.setAttribute( "primary", "true" );
 
@@ -199,7 +211,8 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
         appendComment( entityElement, " PK fields " );
 
         Element columnElem = NodeUtil.appendChildElement( entityElement, "column" );
-        columnElem.setAttribute( "name", entityName.toLowerCase() + "Id" );
+
+        columnElem.setAttribute( "name", generateEntityId( entityName ) );
         columnElem.setAttribute( "type", "long" );
         columnElem.setAttribute( "primary", "true" );
 
@@ -286,6 +299,62 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
         return Status.OK_STATUS;
     }
 
+    protected IStatus doAddEntity( IDOMDocument document, String entityName )
+    {
+        NodeList entities = document.getElementsByTagName( "entity" );
+
+        // If there is entity named "entityName", do nothing
+        for( int i = 0; i < entities.getLength(); ++i )
+        {
+            Node entity = entities.item( i );
+
+            if( entity instanceof Element )
+            {
+                String name = ( (Element) entity ).getAttribute( "name" );
+
+                if( name != null && name.equals( entityName ) )
+                {
+                    return Status.OK_STATUS;
+                }
+            }
+
+        }
+
+        Element rootElement = document.getDocumentElement();
+
+        // new <entity> element
+        Element entityElement = document.createElement( "entity" );
+
+        entityElement.setAttribute( "name", entityName );
+
+        // Insert the <entity> element
+        Node refNode = NodeUtil.findFirstChild( rootElement, "exceptions" );
+
+        if( refNode == null )
+        {
+            NodeUtil.findFirstChild( rootElement, "service-builder-import" );
+        }
+
+        rootElement.insertBefore( entityElement, refNode );
+
+        new FormatProcessorXML().formatNode( entityElement );
+
+        rootElement.appendChild( document.createTextNode( NEW_LINE ) );
+
+        return Status.OK_STATUS;
+    }
+
+    private String generateEntityId( String entityName )
+    {
+        if( entityName == null )
+        {
+            return "Id";
+        }
+
+       return Character.toLowerCase( entityName.charAt( 0 ) ) + 
+                       ( entityName.length() > 1 ? entityName.substring( 1 ) : "" ) + "Id";
+    }
+
     private String generateSampleEntityName( IDOMDocument document )
     {
         String retval = "Sample";
@@ -322,6 +391,11 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
         return retval;
     }
 
+    public IFile getDescriptorFile()
+    {
+        return this.project == null ? null : getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+    }
+
     private String nextSuffix( String val )
     {
         final Matcher matcher = Pattern.compile( "(Sample)([0-9]+)$" ).matcher( val );
@@ -336,7 +410,29 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
         return val + "1";
     }
 
-    @Override
+    public IStatus removeAllEntities()
+    {
+        final IFile descriptorFile = getDescriptorFile();
+
+        if( descriptorFile == null || ! descriptorFile.exists() )
+        {
+            return Status.OK_STATUS;
+        }
+
+        final String tagName = "entity";
+
+        DOMModelEditOperation editOperation = new DOMModelEditOperation( descriptorFile )
+        {
+            @Override
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return removeAllElements( document, tagName );
+            }
+        };
+
+        return editOperation.execute();
+    }
+
     public IStatus removeSampleElements()
     {
         return removeAllEntities();

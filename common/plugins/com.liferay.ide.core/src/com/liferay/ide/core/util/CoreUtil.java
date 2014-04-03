@@ -358,19 +358,47 @@ public class CoreUtil
         return null;
     }
 
-    public static IFile getDescriptorFile( final IProject project, String descriptorFileName )
+    public static IFile getDescriptorFile( IProject project, String descriptorFileName )
     {
         IFile retval = null;
 
+        if( ! CoreUtil.isLiferayProject( project ) )
+        {
+            project = CoreUtil.getLiferayProject( project );
+        }
+
+        if( project == null )
+        {
+            return retval;
+        }
+
         final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( project );
 
-        if( defaultDocrootFolder != null )
+        if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
         {
-            final IFile descriptorFile = defaultDocrootFolder.getFile( new Path( "WEB-INF/" + descriptorFileName ) );
+            retval = defaultDocrootFolder.getFile( new Path( "WEB-INF" ).append( descriptorFileName ) );
+        }
 
-            if( descriptorFile != null && descriptorFile.exists() )
+        if( retval == null )
+        {
+            // fallback to looping through all virtual folders
+            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+
+            if( webappRoot != null )
             {
-                retval = descriptorFile;
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                {
+                    if( container != null && container.exists() )
+                    {
+                        final IFile descriptorFile = container.getFile( new Path( "WEB-INF" ).append( descriptorFileName ) );
+
+                        if( descriptorFile.exists() )
+                        {
+                            retval = descriptorFile;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -447,7 +475,38 @@ public class CoreUtil
 
     public static IProject getLiferayProject( IResource resource )
     {
-        IProject retval = null;
+        IProject project = null;
+
+        if( resource != null && resource.exists() )
+        {
+            project = resource.getProject();
+        }
+
+        if( project != null && project.exists() )
+        {
+            if( CoreUtil.isLiferayProject( project ) )
+            {
+                return project;
+            }
+            else
+            {
+                final IProject[] projects = getAllProjects();
+
+                for( IProject proj : projects )
+                {
+                    if( proj.getLocation() != null &&
+                        project.getLocation().isPrefixOf( proj.getLocation() ) &&
+                        isLiferayProject( proj ) )
+                    {
+                        return proj;
+                    }
+                }
+            }
+        }
+
+        return project;
+
+        /*IProject retval = null;
 
         if( resource == null || ! resource.exists() )
         {
@@ -490,36 +549,12 @@ public class CoreUtil
             }
         }
 
-        return retval;
+        return retval;*/
     }
 
-    public static IProject getNestedLiferayProject( IProject project )
+    public static IProject getLiferayProject( String projectName )
     {
-        if( project == null || project.getLocation() == null )
-        {
-            return null;
-        }
-
-        if( isLiferayProject( project ) )
-        {
-            return project;
-        }
-        else
-        {
-            final IProject[] projects = getAllProjects();
-
-            for( IProject proj : projects )
-            {
-                if( proj.getLocation() != null &&
-                    project.getLocation().isPrefixOf( proj.getLocation() ) &&
-                    isLiferayProject( proj ) )
-                {
-                    return proj;
-                }
-            }
-        }
-
-        return null;
+        return getLiferayProject( getProject( projectName ) );
     }
 
     public static Object getNewObject( Object[] oldObjects, Object[] newObjects )

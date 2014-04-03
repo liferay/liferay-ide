@@ -66,5 +66,18 @@
             shortName="richfaces">
       </portletFramework>
    </extension>
+   <extension
+         point="com.liferay.ide.project.core.liferayDescriptorHelpers">
+      <liferayDescriptorHelper
+            class="com.liferay.ide.portlet.jsf.core.operation.JSFPortletDescriptorHelper"
+            contentTypeBinding="com.liferay.ide.portlet.core.portletxml"
+            id="com.liferay.ide.portlet.jsf.core.jsfPortletDescriptorHelper">
+      </liferayDescriptorHelper>
+      <liferayDescriptorHelper
+            class="com.liferay.ide.portlet.jsf.core.operation.JSFLiferayPortletDescriptorHelper"
+            contentTypeBinding="com.liferay.ide.portlet.core.liferayportletxml"
+            id="com.liferay.ide.portlet.jsf.core.jsfLiferayPortletDescriptorHelper">
+      </liferayDescriptorHelper>
+   </extension>
 
 </plugin>

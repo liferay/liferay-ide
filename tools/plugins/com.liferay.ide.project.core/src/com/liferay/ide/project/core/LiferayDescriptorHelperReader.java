@@ -17,7 +17,11 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.ExtensionReader;
 import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.content.IContentType;
 
 
 /**
@@ -25,11 +29,23 @@ import org.eclipse.core.runtime.IConfigurationElement;
  */
 public class LiferayDescriptorHelperReader extends ExtensionReader<LiferayDescriptorHelper>
 {
+
     private static final String EXTENSION = "liferayDescriptorHelpers";
     private static final String HELPER_ELEMENT = "liferayDescriptorHelper";
     private static final String CONTENTTYPEBINDING_ELEMENT = "contentTypeBinding";
+    private static LiferayDescriptorHelperReader instance;
 
-    public LiferayDescriptorHelperReader()
+    public static LiferayDescriptorHelperReader getInstance()
+    {
+        if( instance == null )
+        {
+            instance = new LiferayDescriptorHelperReader();
+        }
+
+        return instance;
+    }
+
+    private LiferayDescriptorHelperReader()
     {
         super( LiferayProjectCore.PLUGIN_ID, EXTENSION, HELPER_ELEMENT );
     }
@@ -42,8 +58,23 @@ public class LiferayDescriptorHelperReader extends ExtensionReader<LiferayDescri
         return helper;
     }
 
-    public LiferayDescriptorHelper[] getHelpers()
+    public LiferayDescriptorHelper[] getAllHelpers()
     {
         return getExtensions().toArray( new LiferayDescriptorHelper[0] );
+    }
+
+    public LiferayDescriptorHelper[] getHelpers( IContentType contentType )
+    {
+        List<LiferayDescriptorHelper> retval = new ArrayList<LiferayDescriptorHelper>();
+
+        for( LiferayDescriptorHelper helper : getAllHelpers() )
+        {
+            if( contentType.equals( helper.getContentType() ) )
+            {
+                retval.add( helper );
+            }
+        }
+
+        return retval.toArray( new LiferayDescriptorHelper[0] );
     }
 }
