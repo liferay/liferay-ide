@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.eclipse.core.resources.IContainer;
@@ -38,6 +39,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -178,12 +180,19 @@ public class PropertiesUtil
 
                 final InputStream contents = liferayHookXml.getContents();
 
-                saxParserFactory.newSAXParser().parse( contents, handler );
+                final SAXParser saxParser = saxParserFactory.newSAXParser();
+
+                final XMLReader xmlReader = saxParser.getXMLReader();
+                xmlReader.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
+                xmlReader.setFeature( "http://xml.org/sax/features/validation", false );
+
+                saxParser.parse( contents, handler );
 
                 contents.close();
             }
             catch( Exception e )
             {
+                LiferayCore.logError( "Error resolving" + ILiferayConstants.LIFERAY_HOOK_XML_FILE, e );
             }
 
             tmpLanguageFileInfo = retval;
@@ -373,12 +382,19 @@ public class PropertiesUtil
 
                 final InputStream contents = portletXml.getContents();
 
-                saxParserFactory.newSAXParser().parse( contents , handler );
+                final SAXParser saxParser = saxParserFactory.newSAXParser();
+
+                final XMLReader xmlReader = saxParser.getXMLReader();
+                xmlReader.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
+                xmlReader.setFeature( "http://xml.org/sax/features/validation", false );
+
+                saxParser.parse( contents, handler );
 
                 contents.close();
             }
             catch( Exception e )
             {
+                LiferayCore.logError( "Error resolving" + ILiferayConstants.PORTLET_XML_FILE, e );
             }
 
             tmpResourceNodeInfo = retval;
