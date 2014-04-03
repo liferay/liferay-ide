@@ -19,6 +19,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.BaseLiferayProject;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
@@ -155,6 +156,32 @@ public class LiferayMavenProject extends BaseLiferayProject
             }
             catch( CoreException e )
             {
+            }
+        }
+
+        return retval;
+    }
+
+    public String getProperty( String key, String defaultValue )
+    {
+        String retval = defaultValue;
+
+        if( ( "theme.type".equals( key ) || "theme.parent".equals( key ) ) && ProjectUtil.isThemeProject( getProject() ) )
+        {
+            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
+
+            if( projectFacade != null )
+            {
+                final MavenProject mavenProject = projectFacade.getMavenProject();
+
+                if( "theme.type".equals( key ) )
+                {
+                    retval = MavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE );
+                }
+                else
+                {
+                    retval = MavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PARENT_THEME );
+                }
             }
         }
 

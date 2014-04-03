@@ -274,7 +274,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                     "Unable to configure deployed name for project " + project.getName(), e );
             }
 
-            if( ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE.equals( pluginType ) )
+            if( ILiferayMavenConstants.THEME_PLUGIN_TYPE.equals( pluginType ) )
             {
                 final IVirtualComponent component = ComponentCore.createComponent( project, true );
 

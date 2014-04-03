@@ -15,6 +15,8 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -24,19 +26,23 @@ import com.liferay.ide.server.remote.IRemoteServerPublisher;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class LiferayRuntimeProject extends BaseLiferayProject
+public class LiferayPluginsSDKProject extends BaseLiferayProject
 {
 
     private ILiferayRuntime liferayRuntime;
 
-    public LiferayRuntimeProject( IProject project, ILiferayRuntime liferayRuntime )
+    public LiferayPluginsSDKProject( IProject project, ILiferayRuntime liferayRuntime )
     {
         super( project );
 
@@ -105,6 +111,41 @@ public class LiferayRuntimeProject extends BaseLiferayProject
         }
 
         return null;
+    }
+
+    public String getProperty( final String key, final String defaultValue )
+    {
+        String retval = defaultValue;
+
+        if( ( "theme.type".equals( key ) || "theme.parent".equals( key ) ) && ProjectUtil.isThemeProject( getProject() ) )
+        {
+            try
+            {
+                Document buildXmlDoc = FileUtil.readXML( getProject().getFile( "build.xml" ).getContents(), null, null );
+
+                NodeList properties = buildXmlDoc.getElementsByTagName( "property" ); //$NON-NLS-1$
+
+                for( int i = 0; i < properties.getLength(); i++ )
+                {
+                    final Node item = properties.item( i );
+                    Node name = item.getAttributes().getNamedItem( "name" ); //$NON-NLS-1$
+
+                    if( name != null && key.equals( name.getNodeValue() ) )
+                    {
+                        Node value = item.getAttributes().getNamedItem( "value" ); //$NON-NLS-1$
+
+                        retval = value.getNodeValue();
+                        break;
+                    }
+                }
+            }
+            catch( CoreException e )
+            {
+                LiferayProjectCore.logError( "Unable to get property " + key, e );
+            }
+        }
+
+        return retval;
     }
 
     public String getPortalVersion()

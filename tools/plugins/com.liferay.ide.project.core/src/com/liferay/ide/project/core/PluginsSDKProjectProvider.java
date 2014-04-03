@@ -233,6 +233,8 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         return Status.OK_STATUS;
     }
 
+
+
     private void portletProjectCreated( NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor )
         throws CoreException
     {
@@ -250,7 +252,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
     public ILiferayProject provide( Object type )
     {
-        LiferayRuntimeProject retval = null;
+        LiferayPluginsSDKProject retval = null;
         IProject project = null;
         ILiferayRuntime liferayRuntime = null;
 
@@ -281,7 +283,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         if( liferayRuntime != null )
         {
-            retval = new LiferayRuntimeProject( project, liferayRuntime );
+            retval = new LiferayPluginsSDKProject( project, liferayRuntime );
         }
 
         return retval;

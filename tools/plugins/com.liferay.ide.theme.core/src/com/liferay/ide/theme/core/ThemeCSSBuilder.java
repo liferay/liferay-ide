@@ -97,7 +97,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
     public static void ensureLookAndFeelFileExists( IProject project ) throws CoreException
     {
         // IDE-110 IDE-648
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project  );
+        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
         IVirtualFile lookAndFeelFile = null;
 
@@ -137,10 +137,12 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                     final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                    ILiferayProject lProject = LiferayCore.create( project );
+                    final ILiferayProject lProject = LiferayCore.create( project );
 
-                    themeDescriptorHelper.createDefaultFile( underlyingFile.getParent(), lProject.getPortalVersion(), id, name,
-                        ThemeCore.getThemeProperty( "theme.type", project ) ); //$NON-NLS-1$
+                    final String themeType = lProject.getProperty( "theme.type", "vm" );
+
+                    themeDescriptorHelper.createDefaultFile(
+                        underlyingFile.getParent(), lProject.getPortalVersion(), id, name, themeType );
                 }
                 catch( IOException e )
                 {
@@ -172,9 +174,11 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         final IPath path = CoreUtil.getResourceLocation( docroot );
         // final IPath restoreLocation = getRestoreLocation(docroot);
-        String themeParent = ThemeCore.getThemeProperty( "theme.parent", getProject() ); //$NON-NLS-1$
 
-        ILiferayProject liferayProject = LiferayCore.create( getProject() );
+        final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+
+        final String themeParent = liferayProject.getProperty( "theme.parent", "_styled" );
+
         IPath themesPath = liferayProject.getAppServerPortalDir().append( "html/themes" ); //$NON-NLS-1$
 
         final List<IPath> restorePaths = new ArrayList<IPath>();
@@ -273,57 +277,54 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         try
         {
-            delta.accept
-            (
-                new IResourceDeltaVisitor()
+            delta.accept( new IResourceDeltaVisitor()
+            {
+                public boolean visit( IResourceDelta delta )
                 {
-                    public boolean visit( IResourceDelta delta )
+                    final IResource resource = delta.getResource();
+                    IPath fullResourcePath = resource.getFullPath();
+
+                    for( String segment : fullResourcePath.segments() )
                     {
-                        final IResource resource = delta.getResource();
-                        IPath fullResourcePath = resource.getFullPath();
-
-                        for( String segment : fullResourcePath.segments() )
+                        if( "_diffs".equals( segment ) ) //$NON-NLS-1$
                         {
-                            if( "_diffs".equals( segment ) ) //$NON-NLS-1$
+                            // IDE-110 IDE-648
+                            IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
+
+                            if( webappRoot != null )
                             {
-                                // IDE-110 IDE-648
-                                IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
+                                IVirtualFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
 
-                                if( webappRoot != null )
+                                if( diffs != null && diffs.exists() &&
+                                    diffs.getUnderlyingFolder().getFullPath().isPrefixOf( fullResourcePath ) )
                                 {
-                                    IVirtualFolder diffs = webappRoot.getFolder( new Path("_diffs") ); //$NON-NLS-1$
+                                    applyDiffsDeltaToDocroot( delta, diffs.getUnderlyingFolder().getParent(), monitor );
 
-                                    if( diffs != null && diffs.exists() &&
-                                        diffs.getUnderlyingFolder().getFullPath().isPrefixOf( fullResourcePath ) )
-                                    {
-                                        applyDiffsDeltaToDocroot( delta, diffs.getUnderlyingFolder().getParent(), monitor );
-
-                                        return false;
-                                    }
-                                }
-                            }
-                            else if( "build.xml".equals( segment ) ) //IDE-828 //$NON-NLS-1$
-                            {
-                                IPath relPath = resource.getProjectRelativePath();
-
-                                if( relPath != null && relPath.segmentCount() == 1 )
-                                {
-                                    try
-                                    {
-                                        compileTheme( resource.getProject() );
-                                    }
-                                    catch( CoreException e )
-                                    {
-                                        ThemeCore.logError( "Error compiling theme.", e ); //$NON-NLS-1$
-                                    }
+                                    return false;
                                 }
                             }
                         }
+                        else if( "build.xml".equals( segment ) ) //IDE-828 //$NON-NLS-1$
+                        {
+                            IPath relPath = resource.getProjectRelativePath();
 
-                        return true; // visit children too
+                            if( relPath != null && relPath.segmentCount() == 1 )
+                            {
+                                try
+                                {
+                                    compileTheme( resource.getProject() );
+                                }
+                                catch( CoreException e )
+                                {
+                                    ThemeCore.logError( "Error compiling theme.", e ); //$NON-NLS-1$
+                                }
+                            }
+                        }
                     }
+
+                    return true; // visit children too
                 }
-            );
+            } );
         }
         catch( CoreException e )
         {
@@ -333,7 +334,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
     protected boolean shouldFullBuild( Map args ) throws CoreException
     {
-        if( args != null && args.get( "force" ) != null && args.get( "force" ).equals( "true" ) )   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        if( args != null && args.get( "force" ) != null && args.get( "force" ).equals( "true" ) ) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         {
             return true;
         }

@@ -61,7 +61,9 @@ public interface ILiferayMavenConstants
 
     String PLUGIN_CONFIG_SASS_DIR_NAMES = "sassDirNames"; //$NON-NLS-1$
 
-    String PLUGIN_CONFIG_THEME_TYPE = "theme"; //$NON-NLS-1$
+    String PLUGIN_CONFIG_THEME_TYPE = "themeType"; //$NON-NLS-1$
+
+    String PLUGIN_CONFIG_PARENT_THEME = "parentTheme";
 
     String PLUGIN_CONFIG_WEBAPP_DIR = "webappDir"; //$NON-NLS-1$
 

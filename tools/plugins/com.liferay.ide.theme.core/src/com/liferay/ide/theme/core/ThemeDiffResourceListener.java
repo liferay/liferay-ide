@@ -166,13 +166,16 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
                 if( lookAndFeelFile == null )
                 {
-                    String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY );
+                    String id =
+                        project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY );
 
                     for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
                         if( container != null && container.exists() )
                         {
-                            IFile propsFile = container.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
+                            IFile propsFile =
+                                container.getFile( new Path(
+                                    "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
                             String name = id;
 
                             if( propsFile.exists() )
@@ -197,10 +200,12 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
 
                             final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                            IFolder descriptorParent = container.getFolder( new Path( "WEB-INF" ) ); //$NON-NLS-1$
-                            ILiferayProject lProject = LiferayCore.create( project );
+                            final IFolder descriptorParent = container.getFolder( new Path( "WEB-INF" ) );
+                            final ILiferayProject lProject = LiferayCore.create( project );
+                            final String type = lProject.getProperty( "theme.type", "vm" );
+
                             themeDescriptorHelper.createDefaultFile(
-                                descriptorParent, lProject.getPortalVersion(), id, name, ThemeCore.getThemeProperty( "theme.type", project ) ); //$NON-NLS-1$
+                                descriptorParent, lProject.getPortalVersion(), id, name, type );
 
                             try
                             {

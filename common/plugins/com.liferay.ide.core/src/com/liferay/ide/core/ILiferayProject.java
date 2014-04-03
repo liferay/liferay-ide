@@ -39,6 +39,8 @@ public interface ILiferayProject
 
     Properties getPortletEntryCategories();
 
+    String getProperty( String key, String defaultValue );
+
     IPath[] getUserLibs();
 
 }
