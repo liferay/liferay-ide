@@ -38,6 +38,9 @@ public class ValidationPreferences
     public static final String LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND =
         "validation-liferay-hook-xml-portal-properties-not-found"; //$NON-NLS-1$
 
+    public static final String LIFERAY_HOOK_XML_INVALID_PROPERTIES_SYNTAX =
+        "validation-liferay-hook-xml-invalid-properties-syntax"; //$NON-NLS-1$
+
     public static final String LIFERAY_LAYOUTTPL_XML_TEMPLATE_PATH_NOT_FOUND =
         "validation-liferay-layouttpl-xml-template-path-not-found"; //$NON-NLS-1$
 
@@ -88,6 +91,9 @@ public class ValidationPreferences
 
     public static final String PORTLET_XML_INCORRECT_CLASS_HIERARCHY =
         "validation-portlet-xml-incorrect-class-hierarchy"; //$NON-NLS-1$
+
+    public static final String PORTLET_XML_INVALID_RESOURCE_BUNDLE_SYNTAX = 
+        "validation-portlet-xml-invalid-resource-bundle-syntax"; //$NON-NLS-1$
 
     public static final String PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND =
         "validation-portlet-xml-resource-bundle-not-found"; //$NON-NLS-1$

@@ -17,24 +17,41 @@ package com.liferay.ide.portlet.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.tests.BaseTests;
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.portlet.core.descriptor.PortletDescriptorValidator;
 import com.liferay.ide.portlet.core.model.Param;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.PortletApp;
 import com.liferay.ide.portlet.core.model.PortletInfo;
 import com.liferay.ide.portlet.core.model.SecurityRoleRef;
 import com.liferay.ide.portlet.core.model.Supports;
+import com.liferay.ide.project.core.tests.XmlTestsBase;
 
+import java.text.MessageFormat;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.Test;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
-public class PortletXmlTests extends BaseTests
+@SuppressWarnings( "restriction" )
+public class PortletXmlTests extends XmlTestsBase
 {
 
     private static final String PORTLET_XML = "files/portlet.xml";
@@ -101,6 +118,108 @@ public class PortletXmlTests extends BaseTests
     {
         return PortletApp.TYPE.instantiate( new RootXmlResource( new XmlResourceStore(
             getClass().getResourceAsStream( portletXml )) ) );
+    }
+
+    private void setPropertiesValue( IFile descriptorFile, String elementName, String value ) throws Exception
+    {
+        final IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( descriptorFile );
+        final IDOMDocument document = domModel.getDocument();
+        final NodeList elements = document.getElementsByTagName( elementName );
+
+        assertEquals( true, elements.getLength() > 0 );
+
+        final Element element = (Element) elements.item( 0 );
+
+        final NodeList childNodes = element.getChildNodes();
+
+        for( int i = 0; i < childNodes.getLength(); i++ )
+        {
+            element.removeChild( childNodes.item( i ) );
+        }
+
+        element.appendChild( document.createTextNode( value ) );
+
+        domModel.save();
+        domModel.releaseFromEdit();
+
+        descriptorFile.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
+    }
+
+    @Test
+    public void testResourceBundleElementValidation() throws Exception
+    {
+        final IProject project =
+            importProject( "portlets", "com.liferay.ide.portlet.core.tests", "Portlet-Properties-Validation-Test-portlet" );
+        final IFile descriptorFile = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
+        final String markerType = PortletDescriptorValidator.MARKER_TYPE;
+
+        final String elementName = "resource-bundle";
+        String elementValue = null;
+        String markerMessage = null;
+
+        // resource-bundle value ends with ".properties"
+        elementValue = "ResourceBundleEndWithProperties.properties";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+        markerMessage = MessageFormat.format(
+            PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_NOT_END_PROPERTIES, new Object[] { elementValue } );
+
+        waitForBuildAndValidation( project );
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage ) ); 
+
+        // resource-bundle doesn't end with ".properties"
+        elementValue = "ResourceBundleNotEndWithProperties";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+
+        waitForBuildAndValidation( project );
+        assertEquals( false, checkMarker( descriptorFile, markerType, null ) );
+
+        // resource-bundle values contains "/"
+        elementValue = "ResourceBundle/WithSlash";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+        markerMessage = MessageFormat.format(
+            PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_PATH_NOT_CONTAIN_SEPARATOR, new Object[] { elementValue } );
+
+        waitForBuildAndValidation( project );
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage ) ); 
+
+        // resource-bundle values doesn't contain "/"
+        elementValue = "ResourceBundleWithoutSlash";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+
+        waitForBuildAndValidation( project );
+        assertEquals( false, checkMarker( descriptorFile, markerType, null ) );
+
+        // resource bundle file doesn't exist
+        elementValue = "ResourceBundleNotExist";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+        markerMessage = MessageFormat.format(
+            PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_NOT_FOUND, new Object[] { elementValue } );
+
+        waitForBuildAndValidation( project );
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage ) ); 
+
+        // resource bundle file exists
+        elementValue = "ResourceBundleExist";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+
+        waitForBuildAndValidation( project );
+        assertEquals( false, checkMarker( descriptorFile, markerType, null ) );
+
+        // resource bundle file doesn't exist
+        elementValue = "content.ResourceBundleNotExist";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+        markerMessage = MessageFormat.format(
+            PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_NOT_FOUND, new Object[] { elementValue } );
+
+        waitForBuildAndValidation( project );
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage ) ); 
+
+        // resource bundle file exists
+        elementValue = "ResourceBundleExist";
+        setPropertiesValue( descriptorFile, elementName, elementValue );
+
+        waitForBuildAndValidation( project );
+        assertEquals( false, checkMarker( descriptorFile, markerType, null ) );
     }
 
 }

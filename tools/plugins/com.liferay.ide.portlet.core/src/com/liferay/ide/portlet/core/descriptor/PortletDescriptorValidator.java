@@ -15,6 +15,9 @@
 
 package com.liferay.ide.portlet.core.descriptor;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -22,6 +25,7 @@ import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +35,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -45,24 +50,30 @@ import org.eclipse.wst.validation.ValidationState;
 import org.eclipse.wst.validation.ValidatorMessage;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class PortletDescriptorValidator extends BaseValidator
 {
 
     public static final String FILTER_CLASS_ELEMENT = "filter-class"; //$NON-NLS-1$
-    
+
     public static final String LISTENER_CLASS_ELEMENT = "listener-class"; //$NON-NLS-1$
 
     public static final String MARKER_TYPE = "com.liferay.ide.portlet.core.portletDescriptorMarker"; //$NON-NLS-1$
 
     public static final String MESSAGE_RESOURCE_BUNDLE_NOT_FOUND = Msgs.resourceBundleNotFound;
+
+    public static final String MESSAGE_RESOURCE_BUNDLE_NOT_END_PROPERTIES = Msgs.resourceBundleNotEndProperties;
+
+    public static final String MESSAGE_RESOURCE_BUNDLE_PATH_NOT_CONTAIN_SEPARATOR = Msgs.resourceBundlePathNotContainSeparator;
 
     public static final String PORTLET_CLASS_ELEMENT = "portlet-class"; //$NON-NLS-1$
 
@@ -77,9 +88,10 @@ public class PortletDescriptorValidator extends BaseValidator
         super();
     }
 
-    protected void checkResourceBundleElements(
-        IDOMDocument document, IJavaProject javaProject, IScopeContext[] preferenceScopes,
-        List<Map<String, Object>> problems )
+    protected void checkResourceBundleElements( IDOMDocument document,
+                                                IJavaProject javaProject,
+                                                IScopeContext[] preferenceScopes,
+                                                List<Map<String, Object>> problems )
     {
         final NodeList resourceBundles = document.getElementsByTagName( RESOURCE_BUNDLE_ELEMENT );
 
@@ -87,11 +99,8 @@ public class PortletDescriptorValidator extends BaseValidator
         {
             final Node item = resourceBundles.item( i );
 
-            Map<String, Object> problem =
-                checkClassResource(
-                    javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-                    ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND, MESSAGE_RESOURCE_BUNDLE_NOT_FOUND,
-                    true );
+            Map<String, Object> problem = 
+                checkResourceBundle( javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes );
 
             if( problem != null )
             {
@@ -199,9 +208,87 @@ public class PortletDescriptorValidator extends BaseValidator
         return result;
     }
 
+    protected Map<String, Object> checkResourceBundle( IJavaProject javaProject,
+                                                       Node classResourceSpecifier,
+                                                       String preferenceNodeQualifier,
+                                                       IScopeContext[] preferenceScopes )
+    {
+        String classResource = NodeUtil.getTextContent( classResourceSpecifier );
+
+        if( classResource == null || classResource.length() == 0 )
+        {
+            return null;
+        }
+
+        if( classResource.endsWith( ".properties" ) )
+        {
+            final String msg = MessageFormat.format( MESSAGE_RESOURCE_BUNDLE_NOT_END_PROPERTIES, new Object[] { classResource } );
+            final String preferenceKey = ValidationPreferences.PORTLET_XML_INVALID_RESOURCE_BUNDLE_SYNTAX;
+
+            return createMarkerValues( 
+                preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
+        }
+
+        if( classResource.contains( IPath.SEPARATOR + "" ) || ( CoreUtil.isWindows() && classResource.contains( "\\" ) ) )
+        {
+            final String msg = MessageFormat.format( MESSAGE_RESOURCE_BUNDLE_PATH_NOT_CONTAIN_SEPARATOR, new Object[] { classResource } );
+            final String preferenceKey = ValidationPreferences.PORTLET_XML_INVALID_RESOURCE_BUNDLE_SYNTAX;
+
+            return createMarkerValues( 
+                preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
+        }
+
+        final IPath[] entryPaths = getSourceEntries( javaProject );
+
+        IResource classResourceValue = null;
+
+        for( IPath entryPath : entryPaths )
+        {
+            IResource srcFolder = CoreUtil.getWorkspaceRoot().getFolder( entryPath );
+
+            if( srcFolder != null && srcFolder.exists() )
+            {
+                String[] namePatterns = PropertiesUtil.
+                    generatePropertiesNamePatternsForValidation( classResource, classResourceSpecifier.getNodeName() );
+
+                for( String pattern : namePatterns )
+                {
+                    if( pattern != null )
+                    {
+                        IFile[] propertiesFiles = PropertiesUtil.visitPropertiesFiles( srcFolder, pattern );
+
+                        if( propertiesFiles != null && propertiesFiles.length > 0 )
+                        {
+                            classResourceValue = propertiesFiles[0];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if( classResourceValue != null )
+            {
+                break;
+            }
+        }
+
+        if( classResourceValue == null )
+        {
+            final String msg = MessageFormat.format( MESSAGE_RESOURCE_BUNDLE_NOT_FOUND, new Object[] { classResource } );
+            final String preferenceKey = ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND;
+
+            return createMarkerValues(
+                preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
+        }
+
+        return null;
+    }
+
     private static class Msgs extends NLS
     {
         public static String resourceBundleNotFound;
+        public static String resourceBundleNotEndProperties;
+        public static String resourceBundlePathNotContainSeparator;
 
         static
         {

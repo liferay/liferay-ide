@@ -15,7 +15,9 @@
 
 package com.liferay.ide.hook.core.descriptor;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -34,6 +36,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -58,6 +61,7 @@ import org.w3c.dom.NodeList;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayHookDescriptorValidator extends BaseValidator
@@ -71,9 +75,9 @@ public class LiferayHookDescriptorValidator extends BaseValidator
 
     public static final String MESSAGE_CUSTOM_JSP_DIR_NOT_FOUND = Msgs.customJspDirectoryNotFound;
 
-    public static final String MESSAGE_LANGUAGE_PROPERTIES_NOT_FOUND = Msgs.resourceNotFound;
+    public static final String MESSAGE_RESOURCE_NOT_FOUND = Msgs.resourceNotFound;
 
-    public static final String MESSAGE_PORTAL_PROPERTIES_NOT_FOUND = Msgs.resourceNotFound;
+    public static final String MESSAGE_PRORETIES_VALUE_END_WITH_PROPERTIES = Msgs.propertiesValueEndWithProperties;
 
     public static final String MESSAGE_SERVICE_IMPL_NOT_FOUND = Msgs.serviceImplNotFound;
 
@@ -99,10 +103,87 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         super();
     }
 
+    protected Map<String, Object> checkClassResource( IJavaProject javaProject, 
+                                                      Node classResourceSpecifier,
+                                                      String preferenceNodeQualifier,
+                                                      IScopeContext[] preferenceScopes )
+    {
+        String classResource = NodeUtil.getTextContent( classResourceSpecifier );
+
+        if( classResource == null || classResource.length() == 0 )
+        {
+            return null;
+        }
+
+        if( ! classResource.endsWith( ".properties" ) )
+        {
+            final String msg = MessageFormat.format( MESSAGE_PRORETIES_VALUE_END_WITH_PROPERTIES, new Object[] { classResource } );
+            final String preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_INVALID_PROPERTIES_SYNTAX;
+
+            return createMarkerValues( 
+                preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
+        }
+
+        final IPath[] entryPaths = getSourceEntries( javaProject );
+
+        IResource classResourceValue = null;
+
+        for( IPath entryPath : entryPaths )
+        {
+            IResource srcFolder = CoreUtil.getWorkspaceRoot().getFolder( entryPath );
+
+            if( srcFolder != null && srcFolder.exists() )
+            {
+                String[] namePatterns = PropertiesUtil.
+                    generatePropertiesNamePatternsForValidation( classResource, classResourceSpecifier.getNodeName() );
+
+                for( String pattern : namePatterns )
+                {
+                    if( pattern != null )
+                    {
+                        IFile[] propertiesFiles = PropertiesUtil.visitPropertiesFiles( srcFolder, pattern );
+
+                        if( propertiesFiles != null && propertiesFiles.length > 0 )
+                        {
+                            classResourceValue = propertiesFiles[0];
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if( classResourceValue != null )
+            {
+                break;
+            }
+        }
+
+        if( classResourceValue == null )
+        {
+            final String msg = MessageFormat.format( MESSAGE_RESOURCE_NOT_FOUND, new Object[] { classResource } );
+
+            final String elementName = classResourceSpecifier.getLocalName();
+            String preferenceKey = null; 
+
+            if( elementName.equals( PORTAL_PROPERTIES_ELEMENT ) )
+            {
+                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND;
+            }
+            else if( elementName.equals( LANGUAGE_PROPERTIES_ELEMENT ) )
+            {
+                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND;
+            }
+
+            return createMarkerValues(
+                preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
+        }
+
+        return null;
+    }
+
     protected void checkClassResourceElement(
         IDOMDocument document, IJavaProject javaProject, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, List<Map<String, Object>> problems, String elementName, String preferenceKey,
-        String message )
+        IScopeContext[] preferenceScopes, List<Map<String, Object>> problems, String elementName )
     {
         final NodeList elements = document.getElementsByTagName( elementName );
 
@@ -110,9 +191,8 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         {
             final Node item = elements.item( i );
 
-            final Map<String, Object> problem =
-                checkClassResource(
-                    javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes, preferenceKey, message );
+            final Map<String, Object> problem = 
+                checkClassResource( javaProject, item, PREFERENCE_NODE_QUALIFIER, preferenceScopes );
 
             if( problem != null )
             {
@@ -126,12 +206,10 @@ public class LiferayHookDescriptorValidator extends BaseValidator
         IScopeContext[] preferenceScopes, List<Map<String, Object>> problems )
     {
         checkClassResourceElement(
-            document, javaProject, preferenceNodeQualifier, preferenceScopes, problems, PORTAL_PROPERTIES_ELEMENT,
-            ValidationPreferences.LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND, MESSAGE_PORTAL_PROPERTIES_NOT_FOUND );
+            document, javaProject, preferenceNodeQualifier, preferenceScopes, problems, PORTAL_PROPERTIES_ELEMENT );
 
         checkClassResourceElement(
-            document, javaProject, preferenceNodeQualifier, preferenceScopes, problems, LANGUAGE_PROPERTIES_ELEMENT,
-            ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND, MESSAGE_LANGUAGE_PROPERTIES_NOT_FOUND );
+            document, javaProject, preferenceNodeQualifier, preferenceScopes, problems, LANGUAGE_PROPERTIES_ELEMENT );
     }
 
     protected void checkDocrootElements(
@@ -371,6 +449,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
     {
 
         public static String customJspDirectoryNotFound;
+        public static String propertiesValueEndWithProperties;
         public static String resourceNotFound;
         public static String serviceImplNotFound;
         public static String serviceTypeInvalid;

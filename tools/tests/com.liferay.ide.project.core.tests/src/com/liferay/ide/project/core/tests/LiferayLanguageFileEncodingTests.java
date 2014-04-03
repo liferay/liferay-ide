@@ -78,9 +78,8 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 
     private boolean hasEncodingMarker( IFile file ) throws Exception
     {
-        final IMarker[] markers =
-            file.findMarkers(
-                LiferayLanguagePropertiesValidator.LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_ZERO );
+        final IMarker[] markers = file.findMarkers(
+            LiferayLanguagePropertiesValidator.LIFERAY_LANGUAGE_PROPERTIES_MARKER_TYPE, false, IResource.DEPTH_ZERO );
 
         return markers.length > 0;
     }
@@ -190,35 +189,33 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         final IFile removeThisLineTest = defaultSrcFolder.getFile( "RemoveThisLineTest.properties" );
         assertEquals( true, isLanguagePropertiesFile( removeThisLineTest ) );
 
+        waitForBuildAndValidation( hookProject );
+
         // test the filename without underscore
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore ) );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_CorrectEncoding ) );
 
-        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding ) );
 
         // test the filename with underscore
         assertEquals( false, hasEncodingMarker( fileNameWithUnderscore_CorrectEncoding ) );
 
-        validateEncoding( fileNameWithUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithUnderscore_IncorrectEncoding ) );
 
         // test the filename with a wildcard "*"
         assertEquals( false, hasEncodingMarker( fileNameWithStar ) );
         assertEquals( false, hasEncodingMarker( fileNameWithStarCorrectEncoding ) );
 
-        validateEncoding( fileNameWithStarIncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithStarIncorrectEncoding ) );
 
         // test an incorrect encoding file referenced by liferay-hook.xml
         // remove the reference line, the marker will disappear.
-        validateEncoding( removeThisLineTest );
         assertEquals( true, hasEncodingMarker( removeThisLineTest ) );
 
         final IFile liferayHookXml = CoreUtil.getDescriptorFile( hookProject, ILiferayConstants.LIFERAY_HOOK_XML_FILE );
         removeSpecifiedNode( liferayHookXml, "language-properties", "content/RemoveThisLineTest.properties" );
 
-        LiferayLanguagePropertiesValidator.clearUnusedValidatorsAndMarkers( hookProject );
+        waitForBuildAndValidation( hookProject );
         assertEquals( false, hasEncodingMarker( removeThisLineTest ) );
 
         /*
@@ -231,15 +228,14 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         PropertiesUtil.encodeLanguagePropertiesFilesToDefault(
             fileNameWithoutUnderscore_IncorrectEncoding, new NullProgressMonitor() );
 
-        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding );
+        waitForBuildAndValidation( hookProject );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding ) );
 
         // test encoding all properties files of this project to default.
         PropertiesUtil.encodeLanguagePropertiesFilesToDefault( hookProject, new NullProgressMonitor() );
+        waitForBuildAndValidation( hookProject );
 
-        validateEncoding( fileNameWithUnderscore_IncorrectEncoding );
         assertEquals( false, hasEncodingMarker( fileNameWithUnderscore_IncorrectEncoding ) );
-        validateEncoding (fileNameWithStarIncorrectEncoding );
         assertEquals( false, hasEncodingMarker( fileNameWithStarIncorrectEncoding ) );
     }
 
@@ -293,19 +289,17 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
             defaultSrcFolder.getFile( "SupportedLocaleEncoding_zh_CN.properties" );
         assertEquals( true, isLanguagePropertiesFile( supportedLocaleEncoding_zh_CN ) );
 
+        waitForBuildAndValidation( portletProject );
         // test filename with underscore
         assertEquals( false, hasEncodingMarker( fileNameWithUnderscore_CorrectEncoding ) );
 
-        validateEncoding( fileNameWithUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithUnderscore_IncorrectEncoding ) );
 
         // test filename without underscore
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore ) );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_CorrectEncoding ) );
 
-        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding );
         assertEquals( true, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding ) );
-        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding1 );
         assertEquals( true, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding1 ) );
 
         // test supported locale
@@ -317,21 +311,15 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         PropertiesUtil.encodeLanguagePropertiesFilesToDefault(
             fileNameWithUnderscore_IncorrectEncoding, new NullProgressMonitor() );
 
-        validateEncoding( fileNameWithUnderscore_IncorrectEncoding );
+        waitForBuildAndValidation( portletProject );
         assertEquals( false, hasEncodingMarker( fileNameWithUnderscore_IncorrectEncoding ) );
 
         // test encoding all files of this project to default
         PropertiesUtil.encodeLanguagePropertiesFilesToDefault( portletProject, new NullProgressMonitor() );
 
-        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding );
+        waitForBuildAndValidation( portletProject );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding ) );
-        validateEncoding( fileNameWithoutUnderscore_IncorrectEncoding1 );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding1 ) );
-    }
-
-    private void validateEncoding( IFile file )
-    {
-        LiferayLanguagePropertiesValidator.getValidator( file ).validateEncoding();
     }
 
 }

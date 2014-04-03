@@ -16,9 +16,12 @@
 package com.liferay.ide.core.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -26,16 +29,22 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
+import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class BaseTests
 {
 
@@ -154,4 +163,52 @@ public class BaseTests
         return workspace().getRoot();
     }
 
+    protected void waitForBuildAndValidation(IProject project) throws Exception
+    {
+        project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
+        waitForBuildAndValidation();
+        project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+        waitForBuildAndValidation();
+    }
+
+    protected void waitForBuildAndValidation() throws Exception
+    {
+        IWorkspaceRoot root = null;
+
+        try 
+        {
+            ResourcesPlugin.getWorkspace().checkpoint(true);
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
+            Job.getJobManager().join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+            Thread.sleep(200);
+            Job.getJobManager().beginRule(root = ResourcesPlugin.getWorkspace().getRoot(), null);
+        }
+        catch (InterruptedException e)
+        {
+            failTest( e );
+        }
+        catch (IllegalArgumentException e)
+        {
+            failTest( e );
+        }
+        catch (OperationCanceledException e) 
+        {
+            failTest( e );
+        }
+        finally
+        {
+            if (root != null) {
+                Job.getJobManager().endRule(root);
+            }
+        }
+    }
+
+    protected void failTest( Exception e )
+    {
+        StringWriter s = new StringWriter();
+        e.printStackTrace(new PrintWriter(s));
+        fail(s.toString());
+    } 
 }

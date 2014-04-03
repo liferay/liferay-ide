@@ -153,6 +153,8 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
         createCombo( inner, Msgs.resourceBundleNotFound, ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND );
 
+        createCombo( inner, Msgs.invalidResourceBundleSyntax, ValidationPreferences.PORTLET_XML_INVALID_RESOURCE_BUNDLE_SYNTAX );
+
         twistie = createTwistie( body, Msgs.liferayPortletXMLDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
@@ -202,6 +204,9 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         createCombo(
             inner, Msgs.languagePropertiesResourceNotFound,
             ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND );
+        createCombo(
+            inner, Msgs.invalidPropertiesSyntax,
+            ValidationPreferences.LIFERAY_HOOK_XML_INVALID_PROPERTIES_SYNTAX);
         createCombo(
             inner, Msgs.customJspDirectoryNotFound, ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND );
 
@@ -320,6 +325,8 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         public static String iconNotFound;
         public static String ignore;
         public static String incorrectClassHierarchy;
+        public static String invalidPropertiesSyntax;
+        public static String invalidResourceBundleSyntax;
         public static String languagePropertiesResourceNotFound;
         public static String liferayDisplayXMLDescriptor;
         public static String liferayHookXMLDescriptor;

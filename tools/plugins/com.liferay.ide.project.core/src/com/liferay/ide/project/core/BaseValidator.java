@@ -17,12 +17,12 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +31,6 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
@@ -218,90 +217,6 @@ public abstract class BaseValidator extends AbstractValidator
         }
     }
 
-    protected Map<String, Object> checkClassResource(
-        IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage )
-    {
-        return checkClassResource(
-            javaProject, classResourceSpecifier, preferenceNodeQualifier, preferenceScopes, preferenceKey,
-            errorMessage, false );
-    }
-
-    protected Map<String, Object> checkClassResource(
-        IJavaProject javaProject, Node classResourceSpecifier, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String preferenceKey, String errorMessage, boolean warnPropertiesSuffix )
-    {
-        String classResource = NodeUtil.getTextContent( classResourceSpecifier );
-
-        if( classResource != null && classResource.length() > 0 )
-        {
-            if( classResource.endsWith( ".properties" ) && warnPropertiesSuffix ) //$NON-NLS-1$
-            {
-                String msg =
-                    MessageFormat.format( Msgs.classResourceNotEndWithProperties, new Object[] { classResource } );
-                return createMarkerValues(
-                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
-            }
-            try
-            {
-                IResource classResourceValue = null;
-
-                IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath( true );
-
-                for( IClasspathEntry entry : classpathEntries )
-                {
-                    if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
-                    {
-                        IPath entryPath = entry.getPath();
-
-                        IResource srcFolder = CoreUtil.getWorkspaceRoot().getFolder( entryPath );
-
-                        if( srcFolder != null && srcFolder.exists() )
-                        {
-                            String[] languagePropertiesVals = PropertiesUtil.
-                                generateLanguagePropertiesPatterns( classResource, classResourceSpecifier.getNodeName() );
-
-                            for( String val : languagePropertiesVals )
-                            {
-                                if( val != null )
-                                {
-                                    IFile[] languagePropertiesFiles = PropertiesUtil.visitPropertiesFiles( srcFolder, val );
-
-                                    if( languagePropertiesFiles != null && languagePropertiesFiles.length > 0 )
-                                    {
-                                        classResourceValue = languagePropertiesFiles[0];
-
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if( classResourceValue != null )
-                    {
-                        break;
-                    }
-                }
-
-                if( classResourceValue == null )
-                {
-                    String msg = MessageFormat.format( errorMessage, new Object[] { classResource } );
-
-                    return createMarkerValues(
-                        preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier,
-                        msg );
-                }
-            }
-            catch( JavaModelException e1 )
-            {
-                // no error msg
-            }
-        }
-
-        return null;
-    }
-
     protected void checkDocrootElement(
         IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
         IScopeContext[] preferenceScopes, String validationKey, String messageKey, List<Map<String, Object>> problems )
@@ -414,6 +329,30 @@ public abstract class BaseValidator extends AbstractValidator
         return map;
     }
 
+    protected IPath[] getSourceEntries( IJavaProject javaProject )
+    {
+        List<IPath> paths = new ArrayList<IPath>();
+
+        try
+        {
+            final IClasspathEntry[] classpathEntries = javaProject.getResolvedClasspath( true );
+
+            for( IClasspathEntry entry : classpathEntries )
+            {
+                if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE )
+                {
+                    paths.add( entry.getPath() );
+                }
+            }
+        }
+        catch( JavaModelException e )
+        {
+            LiferayProjectCore.logError( "Error resolving classpath.", e );
+        }
+
+        return paths.toArray( new IPath[0] );
+    }
+
     protected Integer getMessageSeverity( String qualifier, IScopeContext[] preferenceScopes, String key )
     {
         int sev = fPreferencesService.getInt( qualifier, key, IMessage.NORMAL_SEVERITY, preferenceScopes );
@@ -472,7 +411,6 @@ public abstract class BaseValidator extends AbstractValidator
     {
 
         public static String classNotFound;
-        public static String classResourceNotEndWithProperties;
         public static String possibleTypes;
         public static String typeLabel;
         public static String typeHierarchyIncorrect;
