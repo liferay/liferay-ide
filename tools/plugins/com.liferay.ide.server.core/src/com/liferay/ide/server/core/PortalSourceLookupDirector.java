@@ -116,6 +116,14 @@ public class PortalSourceLookupDirector extends JavaSourceLookupDirector
         final ISourcePathComputer sourcePathComputer = getLaunchManager().getSourcePathComputer( this.sourceComputerId );
         this.setSourcePathComputer( sourcePathComputer );
         this.initializeDefaults( configuration );
+
+        final String memento = configuration.getAttribute( ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, (String) null);
+
+        if( memento != null )
+        {
+            this.initializeFromMemento( memento, configuration );
+        }
+
         launch.setSourceLocator( this );
     }
 
