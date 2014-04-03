@@ -102,8 +102,18 @@ public class AetherUtil
         catch( ArtifactResolutionException e )
         {
             LiferayMavenCore.logError( "Unable to get latest Liferay archetype", e );
-        }
 
+            artifactRequest.setArtifact( new DefaultArtifact( groupId + ":" + artifactId + ":" + "6.2.0-RC5" ) );
+
+            try
+            {
+                retval = system.resolveArtifact( session, artifactRequest ).getArtifact();
+            }
+            catch( ArtifactResolutionException e1 )
+            {
+                LiferayMavenCore.logError( "Unable to get default Liferay archetype", e1 );
+            }
+        }
 
         if( retval == null )
         {
