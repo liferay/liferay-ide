@@ -1,5 +1,5 @@
 <templates>
-  <template name="aui-ace-editor" description="An embeddable code editor that matches the features of native editors." id="com.liferay.ide.alloyui.templates.ace-editor" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-ace-editor" description="An embeddable code editor that matches the features of native editors." id="com.liferay.ide.alloy.ui.templates.ace-editor" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-ace-editor',
   function(Y) {
@@ -14,7 +14,7 @@
   }
 );
   </template>
-  <template name="aui-audio" description="Creates an interactive audio player in HTML5 with fallback for old browsers." id="com.liferay.ide.alloyui.templates.audio" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-audio" description="Creates an interactive audio player in HTML5 with fallback for old browsers." id="com.liferay.ide.alloy.ui.templates.audio" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-audio',
   function(Y) {
@@ -28,7 +28,7 @@
   }
 );
   </template>
-  <template name="aui-button" description="Enables the creation of rich buttons different from traditional HTML form buttons." id="com.liferay.ide.alloyui.templates.button" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-button" description="Enables the creation of rich buttons different from traditional HTML form buttons." id="com.liferay.ide.alloy.ui.templates.button" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-button',
   function(Y) {
@@ -50,7 +50,7 @@
   }
 );
   </template>
-  <template name="aui-carousel" description="Provides an interactive way of cycling through elements." id="com.liferay.ide.alloyui.templates.carousel" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-carousel" description="Provides an interactive way of cycling through elements." id="com.liferay.ide.alloy.ui.templates.carousel" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-carousel',
   function(Y) {
@@ -64,7 +64,7 @@
   }
 );
   </template>
-  <template name="aui-char-counter" description="Provides a character counter that limits the amount of text in a field." id="com.liferay.ide.alloyui.templates.char-counter" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-char-counter" description="Provides a character counter that limits the amount of text in a field." id="com.liferay.ide.alloy.ui.templates.char-counter" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-char-counter',
   function(Y) {
@@ -78,7 +78,7 @@
   }
 );
   </template>
-  <template name="aui-datatable" description="Provides the user with a method of organizing, arranging, and editing tables of information." id="com.liferay.ide.alloyui.templates.datatable" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-datatable" description="Provides the user with a method of organizing, arranging, and editing tables of information." id="com.liferay.ide.alloy.ui.templates.datatable" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-datatable',
   function(Y) {
@@ -101,7 +101,7 @@
   }
 );
   </template>
-  <template name="aui-datepicker" description="Create a dynamic datepicker that allows users to select the date with a calendar." id="com.liferay.ide.alloyui.templates.datepicker" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-datepicker" description="Create a dynamic datepicker that allows users to select the date with a calendar." id="com.liferay.ide.alloy.ui.templates.datepicker" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-datepicker',
   function(Y) {
@@ -121,7 +121,7 @@
   }
 );
   </template>
-  <template name="aui-diagram-builder" description="Drag and drop diagram elements, create new tasks, draw connectors from node to node." id="com.liferay.ide.alloyui.templates.diagram-builder" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-diagram-builder" description="Drag and drop diagram elements, create new tasks, draw connectors from node to node." id="com.liferay.ide.alloy.ui.templates.diagram-builder" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-diagram-builder',
   function(Y) {
@@ -169,7 +169,7 @@
   }
 );
   </template>
-  <template name="aui-form-builder" description="Provides a graphic user interface method for contructing forms." id="com.liferay.ide.alloyui.templates.form-builder" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-form-builder" description="Provides a graphic user interface method for contructing forms." id="com.liferay.ide.alloy.ui.templates.form-builder" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-form-builder',
   function(Y) {
@@ -263,7 +263,7 @@
   }
 );
   </template>
-  <template name="aui-form-validator" description="Provides a method of ensuring the validity of form entries." id="com.liferay.ide.alloyui.templates.form-validator" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-form-validator" description="Provides a method of ensuring the validity of form entries." id="com.liferay.ide.alloy.ui.templates.form-validator" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-form-validator',
   function(Y) {
@@ -275,7 +275,7 @@
   }
 );
   </template>
-  <template name="aui-image-cropper" description="Provides a draggable/resizable cropper widget to crop image sizes." id="com.liferay.ide.alloyui.templates.image-cropper" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-image-cropper" description="Provides a draggable/resizable cropper widget to crop image sizes." id="com.liferay.ide.alloy.ui.templates.image-cropper" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-image-cropper',
   function(Y) {
@@ -291,7 +291,7 @@
   }
 );
   </template>
-  <template name="aui-image-viewer" description="Allows users to view and navigate through a collection of images." id="com.liferay.ide.alloyui.templates.image-viewer" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-image-viewer" description="Allows users to view and navigate through a collection of images." id="com.liferay.ide.alloy.ui.templates.image-viewer" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-image-viewer-base',
   function(Y) {
@@ -303,7 +303,7 @@
   }
 );
   </template>
-  <template name="aui-io" description="Allows you to make asynchronous HTTP (Ajax) requests." id="com.liferay.ide.alloyui.templates.io" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-io" description="Allows you to make asynchronous HTTP (Ajax) requests." id="com.liferay.ide.alloy.ui.templates.io" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-io-request',
   function (Y) {
@@ -321,7 +321,7 @@
   }
 );
   </template>
-  <template name="aui-modal" description="Provides a resizable, drag and drop window with toolbar functionality." id="com.liferay.ide.alloyui.templates.modal" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-modal" description="Provides a resizable, drag and drop window with toolbar functionality." id="com.liferay.ide.alloy.ui.templates.modal" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-modal',
   function(Y) {
@@ -338,7 +338,7 @@
   }
 );
   </template>
-  <template name="aui-node" description="Allows for interaction with the DOM through a set of utility methods." id="com.liferay.ide.alloyui.templates.node" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-node" description="Allows for interaction with the DOM through a set of utility methods." id="com.liferay.ide.alloy.ui.templates.node" context="javaScript" enabled="true" autoinsert="true">
     // Create an AUI instance and load the 'aui-node' module
 YUI().use(
   'aui-node',
@@ -357,7 +357,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-pagination" description="Provides a set of controls to navigate through paged data." id="com.liferay.ide.alloyui.templates.pagination" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-pagination" description="Provides a set of controls to navigate through paged data." id="com.liferay.ide.alloy.ui.templates.pagination" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-pagination',
   function(Y) {
@@ -398,7 +398,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-popover" description="Provides a positionable pop up box with toggle capabilities." id="com.liferay.ide.alloyui.templates.popover" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-popover" description="Provides a positionable pop up box with toggle capabilities." id="com.liferay.ide.alloy.ui.templates.popover" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-popover',
   function(Y) {
@@ -425,7 +425,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-progress-bar" description="Allows users to view loading progress in real time." id="com.liferay.ide.alloyui.templates.progress-bar" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-progress-bar" description="Allows users to view loading progress in real time." id="com.liferay.ide.alloy.ui.templates.progress-bar" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-progressbar',
   function(Y) {
@@ -439,7 +439,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-rating" description="Allows users to set ratings for content." id="com.liferay.ide.alloyui.templates.rating" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-rating" description="Allows users to set ratings for content." id="com.liferay.ide.alloy.ui.templates.rating" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-rating',
   function(Y) {
@@ -451,7 +451,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-scheduler" description="Allows user to access scheduler widget with built-in calendar." id="com.liferay.ide.alloyui.templates.scheduler" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-scheduler" description="Allows user to access scheduler widget with built-in calendar." id="com.liferay.ide.alloy.ui.templates.scheduler" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-scheduler',
   function(Y) {
@@ -479,7 +479,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-sortable-layout" description="Enables a layout with draggable/droppable functionality." id="com.liferay.ide.alloyui.templates.sortable-layout" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-sortable-layout" description="Enables a layout with draggable/droppable functionality." id="com.liferay.ide.alloy.ui.templates.sortable-layout" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-sortable-layout',
   function(Y) {
@@ -492,7 +492,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-sortable-list" description="Gives the user the ability to interact with a list element." id="com.liferay.ide.alloyui.templates.sortable-list" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-sortable-list" description="Gives the user the ability to interact with a list element." id="com.liferay.ide.alloy.ui.templates.sortable-list" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-sortable-list',
   function(Y) {
@@ -511,7 +511,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-tabview" description="'Allows user to swap content between different sections.'" id="com.liferay.ide.alloyui.templates.tabview" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-tabview" description="'Allows user to swap content between different sections.'" id="com.liferay.ide.alloy.ui.templates.tabview" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-tabview',
   function(Y) {
@@ -523,7 +523,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-timepicker" description="Create a dynamic timepicker that allows users to select the time with a popover." id="com.liferay.ide.alloyui.templates.timepicker" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-timepicker" description="Create a dynamic timepicker that allows users to select the time with a popover." id="com.liferay.ide.alloy.ui.templates.timepicker" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-timepicker',
   function(Y) {
@@ -543,7 +543,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-toggler" description="Allows users to toggle content on and off." id="com.liferay.ide.alloyui.templates.toggler" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-toggler" description="Allows users to toggle content on and off." id="com.liferay.ide.alloy.ui.templates.toggler" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-toggler',
   function(Y) {
@@ -558,7 +558,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-toolbar" description="A collection of buttons that offer the ability of managed user interaction states." id="com.liferay.ide.alloyui.templates.toolbar" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-toolbar" description="A collection of buttons that offer the ability of managed user interaction states." id="com.liferay.ide.alloy.ui.templates.toolbar" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-toolbar',
   function(Y) {
@@ -570,7 +570,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-tooltip" description="Gives users contextual information or content." id="com.liferay.ide.alloyui.templates.tooltip" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-tooltip" description="Gives users contextual information or content." id="com.liferay.ide.alloy.ui.templates.tooltip" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-tooltip',
   function(Y) {
@@ -583,7 +583,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-tree" description="Allows users to view file/folder structure in expandable tree view." id="com.liferay.ide.alloyui.templates.tree" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-tree" description="Allows users to view file/folder structure in expandable tree view." id="com.liferay.ide.alloy.ui.templates.tree" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-tree-view',
   function(Y) {
@@ -616,7 +616,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-video" description="Creates an interactive HTML5 video player with fallback Flash video player." id="com.liferay.ide.alloyui.templates.video" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-video" description="Creates an interactive HTML5 video player with fallback Flash video player." id="com.liferay.ide.alloy.ui.templates.video" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-video',
   function(Y) {
@@ -630,7 +630,7 @@ YUI().use(
   }
 );
   </template>
-  <template name="aui-viewport" description="Provides a cross-browser method of adapting web design to display size." id="com.liferay.ide.alloyui.templates.viewport" context="javaScript" enabled="true" autoinsert="true">
+  <template name="aui-viewport" description="Provides a cross-browser method of adapting web design to display size." id="com.liferay.ide.alloy.ui.templates.viewport" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-viewport'
 );

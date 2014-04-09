@@ -30,7 +30,7 @@ auiExamplesDir.eachDir
         [
             name: "aui-${it.name}",
             description: "${description}",
-            id: "com.liferay.ide.alloyui.templates.${it.name}",
+            id: "com.liferay.ide.alloy.ui.templates.${it.name}",
             context: "javaScript",
             enabled: "true",
             autoinsert: "true"
