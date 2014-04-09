@@ -8,6 +8,8 @@ Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.liferay.ide.ui;bundle-version="2.0.0",
- com.liferay.ide.alloy.core;bundle-version="2.0.0"
+ com.liferay.ide.alloy.core;bundle-version="2.0.0",
+ org.eclipse.wst.jsdt.ui,
+ org.eclipse.ui.editors
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

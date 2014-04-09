@@ -47,5 +47,11 @@
          </enablement>
       </objectContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <include
+            file="templates/aui-js-templates.xml">
+      </include>
+   </extension>
 
 </plugin>
