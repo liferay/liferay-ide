@@ -26,7 +26,6 @@ import com.liferay.ide.server.util.LiferayPublishHelper;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.server.util.SocketUtil;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -536,10 +535,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         {
             // first check to see if this module is even in the list of applications, if it is then we don't need to
             // actually update it
-            if( !isModuleInstalled( module ) )
-            {
-                modulePublishState = publishModuleFull( module, deltaKind, monitor );
-            }
+            modulePublishState = publishModuleFull( module, deltaKind, monitor );
         }
         else if( kind == IServer.PUBLISH_FULL && deltaKind == REMOVED )
         {
@@ -580,7 +576,16 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         monitor.subTask( "Creating partial " + moduleProject.getName() + " update archive..." ); //$NON-NLS-1$ //$NON-NLS-2$
 
-        File partialWar = ServerUtil.createPartialWAR( appName + ".war", delta, "liferay", true ); //$NON-NLS-1$ //$NON-NLS-2$
+        final ILiferayProject liferayProject = LiferayCore.create( moduleProject );
+        final IRemoteServerPublisher publisher = liferayProject.adapt( IRemoteServerPublisher.class );
+
+        if ( publisher == null )
+        {
+            setModuleStatus( module, null );
+            throw new CoreException( LiferayServerCore.createErrorStatus( Msgs.publishingModuleProject ) );
+        }
+
+        final IPath warPath = publisher.publishModuleDelta( appName + ".war", delta, "liferay", true );
 
         monitor.worked( 25 );
 
@@ -599,7 +604,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         try
         {
-            error = connection.updateApplication( appName, partialWar.getAbsolutePath(), monitor );
+            error = connection.updateApplication( appName, warPath.toOSString(), monitor );
         }
         catch( APIException e )
         {

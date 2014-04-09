@@ -14,11 +14,20 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.server.remote.AbstractRemoteServerPublisher;
 
+import java.io.IOException;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import org.apache.maven.project.MavenProject;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,13 +36,17 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.jdt.internal.core.JavaModelManager;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
  * @author Simon Jiang
  */
+@SuppressWarnings( "restriction" )
 public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPublisher
 {
     private final String LAUNCH_CONFIGURATION_TYPE_ID = "org.eclipse.m2e.Maven2LaunchConfigurationType";
@@ -114,4 +127,83 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
         }
     }
 
+    @Override
+    public void processResourceDeltas(
+        final IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, final String deletePrefix,
+        final String deltaPrefix, final boolean adjustGMTOffset ) throws IOException, CoreException
+    {
+        for( final IModuleResourceDelta delta : deltas )
+        {
+            final int deltaKind = delta.getKind();
+            final IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
+
+            final IProject deltaProject = deltaResource.getProject();
+
+            final IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
+
+            boolean deltaZip = false;
+            IPath deltaPath = null;
+
+            final IPath deltaFullPath = deltaResource.getFullPath();
+
+            if( webappRoot != null )
+            {
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                {
+                    if( container != null && container.exists()  )
+                    {
+                        final IPath containerFullPath = container.getFullPath();
+
+                        if ( containerFullPath.isPrefixOf( deltaFullPath ))
+                        {
+                            deltaZip = true;
+                            deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
+                        }
+                    }
+                }
+            }
+
+            if ( deltaZip ==false && new Path("WEB-INF").isPrefixOf( delta.getModuleRelativePath() ))
+            {
+                IFolder[] folders = CoreUtil.getSrcFolders( deltaProject );
+                for( IFolder folder : folders )
+                {
+                    IPath folderPath = folder.getFullPath();
+
+                    if ( folderPath.isPrefixOf( deltaFullPath ) )
+                    {
+                        deltaZip = true;
+                        break;
+                    }
+                }
+            }
+
+            if( deltaZip == false &&  ( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED ||
+                            deltaKind == IModuleResourceDelta.REMOVED ) )
+            {
+                deltaZip = true;
+                final JavaModelManager javaManager = JavaModelManager.getJavaModelManager();
+                final IPath targetPath = javaManager.getJavaModel().getJavaProject( deltaProject.getName() ).getOutputLocation();
+                deltaPath = new Path( "WEB-INF/classes" ).append( deltaFullPath.makeRelativeTo( targetPath ) );
+            }
+
+            if ( deltaZip )
+            {
+                if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
+                {
+                    addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
+                }
+                else if( deltaKind == IModuleResourceDelta.REMOVED )
+                {
+                    addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
+                }
+                else if( deltaKind == IModuleResourceDelta.NO_CHANGE )
+                {
+                    IModuleResourceDelta[] children = delta.getAffectedChildren();
+                    processResourceDeltas( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
+                }
+            }
+
+        }
+    }
 }

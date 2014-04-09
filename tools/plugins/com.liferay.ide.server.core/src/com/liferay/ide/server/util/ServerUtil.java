@@ -19,45 +19,31 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Enumeration;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.io.IOUtils;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -67,7 +53,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.launching.StandardVMType;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
@@ -81,7 +66,6 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
-import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.osgi.framework.Version;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -92,96 +76,15 @@ import org.w3c.dom.NodeList;
  * @author Cindy Li
  * @author Tao Tao
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class ServerUtil
 {
 
-    private static void addRemoveProps(
-        IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
-        String deletePrefix ) throws IOException
-    {
-        String archive = removeArchive( deltaPath.toPortableString() );
 
-        ZipEntry zipEntry = null;
 
-        // check to see if we already have an entry for this archive
-        for( ZipEntry entry : deleteEntries.keySet() )
-        {
-            if( entry.getName().startsWith( archive ) )
-            {
-                zipEntry = entry;
-            }
-        }
 
-        if( zipEntry == null )
-        {
-            zipEntry = new ZipEntry( archive + "META-INF/" + deletePrefix + "-partialapp-delete.props" ); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-
-        String existingFiles = deleteEntries.get( zipEntry );
-
-        // String file = encodeRemovedPath(deltaPath.toPortableString().substring(archive.length()));
-        String file = deltaPath.toPortableString().substring( archive.length() );
-
-        if( deltaResource.getType() == IResource.FOLDER )
-        {
-            file += "/.*"; //$NON-NLS-1$
-        }
-
-        deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : StringPool.EMPTY ) + ( file + "\n" ) ); //$NON-NLS-1$
-    }
-
-    private static void addToZip( IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset )
-        throws IOException, CoreException
-    {
-        switch( resource.getType() )
-        {
-            case IResource.FILE:
-                ZipEntry zipEntry = new ZipEntry( path.toString() );
-
-                zip.putNextEntry( zipEntry );
-
-                InputStream contents = ( (IFile) resource ).getContents();
-
-                if( adjustGMTOffset )
-                {
-                    TimeZone currentTimeZone = TimeZone.getDefault();
-                    Calendar currentDt = new GregorianCalendar( currentTimeZone, Locale.getDefault() );
-
-                    // Get the Offset from GMT taking current TZ into account
-                    int gmtOffset =
-                        currentTimeZone.getOffset(
-                            currentDt.get( Calendar.ERA ), currentDt.get( Calendar.YEAR ),
-                            currentDt.get( Calendar.MONTH ), currentDt.get( Calendar.DAY_OF_MONTH ),
-                            currentDt.get( Calendar.DAY_OF_WEEK ), currentDt.get( Calendar.MILLISECOND ) );
-
-                    zipEntry.setTime( System.currentTimeMillis() + ( gmtOffset * -1 ) );
-                }
-
-                try
-                {
-                    IOUtils.copy( contents, zip );
-                }
-                finally
-                {
-                    contents.close();
-                }
-
-                break;
-
-            case IResource.FOLDER:
-            case IResource.PROJECT:
-                IContainer container = (IContainer) resource;
-
-                IResource[] members = container.members();
-
-                for( IResource res : members )
-                {
-                    addToZip( path.append( res.getName() ), res, zip, adjustGMTOffset );
-                }
-        }
-    }
 
     public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
     {
@@ -203,111 +106,6 @@ public class ServerUtil
     public static IStatus createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, msg );
-    }
-
-    public static File createPartialEAR(
-        String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, String deltaPrefix,
-        boolean adjustGMTOffset )
-    {
-        IPath path = LiferayServerCore.getTempLocation( "partial-ear", archiveName ); //$NON-NLS-1$
-
-        FileOutputStream outputStream = null;
-        ZipOutputStream zip = null;
-        File file = path.toFile();
-
-        file.getParentFile().mkdirs();
-
-        try
-        {
-            outputStream = new FileOutputStream( file );
-            zip = new ZipOutputStream( outputStream );
-
-            Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
-
-            processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
-
-            for( ZipEntry entry : deleteEntries.keySet() )
-            {
-                zip.putNextEntry( entry );
-                zip.write( deleteEntries.get( entry ).getBytes() );
-            }
-
-            // if ((removedResources != null) && (removedResources.size() > 0)) {
-            // writeRemovedResources(removedResources, zip);
-            // }
-        }
-        catch( Exception ex )
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            if( zip != null )
-            {
-                try
-                {
-                    zip.close();
-                }
-                catch( IOException localIOException1 )
-                {
-
-                }
-            }
-        }
-
-        return file;
-    }
-
-    public static File createPartialWAR(
-        String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset )
-    {
-        IPath path = LiferayServerCore.getTempLocation( "partial-war", archiveName ); //$NON-NLS-1$
-
-        FileOutputStream outputStream = null;
-        ZipOutputStream zip = null;
-        File file = path.toFile();
-
-        file.getParentFile().mkdirs();
-
-        try
-        {
-            outputStream = new FileOutputStream( file );
-            zip = new ZipOutputStream( outputStream );
-
-            Map<ZipEntry, String> deleteEntries = new HashMap<ZipEntry, String>();
-
-            processResourceDeltasZip( deltas, zip, deleteEntries, deletePrefix, StringPool.EMPTY, adjustGMTOffset );
-
-            for( ZipEntry entry : deleteEntries.keySet() )
-            {
-                zip.putNextEntry( entry );
-                zip.write( deleteEntries.get( entry ).getBytes() );
-            }
-
-            // if ((removedResources != null) && (removedResources.size() > 0)) {
-            // writeRemovedResources(removedResources, zip);
-            // }
-        }
-        catch( Exception ex )
-        {
-            ex.printStackTrace();
-        }
-        finally
-        {
-            if( zip != null )
-            {
-                try
-                {
-                    zip.close();
-                }
-                catch( IOException localIOException1 )
-                {
-
-                }
-            }
-        }
-
-        return file;
     }
 
     public static IServerWorkingCopy createServerForRuntime( IRuntime runtime )
@@ -356,7 +154,7 @@ public class ServerUtil
                 }
 
                 retval = categories;
-
+                jar.close();
             }
             catch( IOException e )
             {
@@ -894,69 +692,6 @@ public class ServerUtil
 
         return true;
 
-    }
-
-    private static void processResourceDeltasZip(
-        IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
-        String deltaPrefix, boolean adjustGMTOffset ) throws IOException, CoreException
-    {
-        for( IModuleResourceDelta delta : deltas )
-        {
-            int deltaKind = delta.getKind();
-
-            IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
-
-            IProject deltaProject = deltaResource.getProject();
-
-            // IDE-110 IDE-648
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
-
-            IPath deltaPath = null;
-
-            if( webappRoot != null )
-            {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists() )
-                    {
-                        final IPath deltaFullPath = deltaResource.getFullPath();
-                        final IPath containerFullPath = container.getFullPath();
-                        deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
-
-                        if( deltaPath != null && deltaPath.segmentCount() > 0 )
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
-            {
-                addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
-            }
-            else if( deltaKind == IModuleResourceDelta.REMOVED )
-            {
-                addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
-            }
-            else if( deltaKind == IModuleResourceDelta.NO_CHANGE )
-            {
-                IModuleResourceDelta[] children = delta.getAffectedChildren();
-                processResourceDeltasZip( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
-            }
-        }
-    }
-
-    private static String removeArchive( String archive )
-    {
-        int index = Math.max( archive.lastIndexOf( ".war" ), archive.lastIndexOf( ".jar" ) ); //$NON-NLS-1$ //$NON-NLS-2$
-
-        if( index >= 0 )
-        {
-            return archive.substring( 0, index + 5 );
-        }
-
-        return StringPool.EMPTY;
     }
 
     public static void terminateLaunchesForConfig( ILaunchConfigurationWorkingCopy config ) throws DebugException

@@ -12,17 +12,24 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.remote;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
  * @author Simon Jiang
  */
 public interface IRemoteServerPublisher
 {
+
     public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException;
+
+    public IPath publishModuleDelta(
+        String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset )
+        throws CoreException;
 
 }

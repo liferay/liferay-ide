@@ -84,6 +84,7 @@ import org.w3c.dom.Node;
  *
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class CoreUtil
@@ -709,8 +710,12 @@ public class CoreUtil
             {
                 for( IContainer container : webappRoot.getUnderlyingFolders() )
                 {
-                    return container != null && container.exists() &&
+                    boolean isDocrootResource = container != null && container.exists() &&
                         container.getFullPath().isPrefixOf( file.getFullPath() );
+                    if ( isDocrootResource == true )
+                    {
+                        return true;
+                    }
                 }
             }
         }
