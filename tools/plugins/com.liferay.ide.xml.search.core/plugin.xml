@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+    <extension point="org.eclipse.wst.xml.search.core.querySpecifications">
+        <querySpecification id="liferay.liferayportletxml.querySpecification"
+                            class="com.liferay.ide.xml.search.core.LiferayPortletQuerySpecification" />
+    </extension>
+
+    <extension point="org.eclipse.wst.xml.search.core.querySpecifications">
+        <querySpecification id="liferay.portletxml.querySpecification"
+                            class="com.liferay.ide.xml.search.core.PortletQuerySpecification" />
+    </extension>
+
+    <extension point="org.eclipse.wst.xml.search.core.querySpecifications">
+        <querySpecification id="liferay.liferaydisplayxml.querySpecification"
+                            class="com.liferay.ide.xml.search.core.LiferayDisplayQuerySpecification" />
+    </extension>
+
+    <!--==================== Resource Query specification ====================-->
+
+    <extension point="org.eclipse.wst.xml.search.core.resourceQuerySpecifications">
+        <querySpecification id="liferay.webresources.css.querySpecification"
+                            class="com.liferay.ide.xml.search.core.CSSResourcesQuerySpecification" />
+        <querySpecification id="liferay.webresources.js.querySpecification"
+                            class="com.liferay.ide.xml.search.core.JSResourcesQuerySpecification" />
+        <querySpecification id="liferay.webresources.image.querySpecification"
+                            class="com.liferay.ide.xml.search.core.ImageResourcesQuerySpecification" />
+    </extension>	
+
+</plugin>
