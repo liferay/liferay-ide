@@ -690,6 +690,14 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             setModuleState( module, IServer.STATE_UNKNOWN );
             throw new CoreException( LiferayServerCore.createErrorStatus( ex ) );
         }
+        finally
+        {
+            if ( warPath.toFile().exists() )
+            {
+                warPath.toFile().delete();
+            }
+
+        }
 
         if( error != null )
         {
