@@ -692,11 +692,10 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
         finally
         {
-            if ( warPath.toFile().exists() )
+            if( warPath.toFile().exists() )
             {
                 warPath.toFile().delete();
             }
-
         }
 
         if( error != null )
@@ -790,7 +789,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         {
             error = remoteConnection.uninstallApplication( appName, monitor );
         }
-        catch (APIException e)
+        catch( APIException e )
         {
             error = e.getMessage();
         }

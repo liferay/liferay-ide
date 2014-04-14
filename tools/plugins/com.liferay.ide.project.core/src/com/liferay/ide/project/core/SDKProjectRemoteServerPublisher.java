@@ -87,26 +87,25 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
 
         if( !directDeployStatus.isOK() || ( !warFile.exists() ) )
         {
-
             String pluginVersion = "1";
 
-            final Path pluginPropertiesPath = new Path( "WEB-INF/liferay-plugin-package.properties" );
-            IFile propertiesFile = CoreUtil.getDocrootFile( getProject(), pluginPropertiesPath.toOSString() );
+            final IPath pluginPropertiesPath = new Path( "WEB-INF/liferay-plugin-package.properties" );
+            final IFile propertiesFile = CoreUtil.getDocrootFile( getProject(), pluginPropertiesPath.toOSString() );
+
             if( propertiesFile != null )
             {
                 try
                 {
                     if( propertiesFile.exists() )
                     {
-                        PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
-                        InputStream is = propertiesFile.getContents();
+                        final PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
+                        final InputStream is = propertiesFile.getContents();
                         pluginPackageProperties.load( is );
                         pluginVersion = pluginPackageProperties.getString( "module-incremental-version" );
                         is.close();
                     }
-
                 }
-                catch(Exception e)
+                catch( Exception e )
                 {
                     LiferayCore.logError( "error reading module-incremtnal-version. ", e );
                 }
@@ -116,12 +115,13 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
                 sdk.getLocation().append( "dist" ).append(
                     getProject().getName() + "-" + fileTimeStamp + "." + pluginVersion + ".0" + ".war" ).toFile();
 
-            if ( !warFile.exists() )
+            if( !warFile.exists() )
             {
                 throw new CoreException( directDeployStatus );
             }
 
         }
+
         return new Path( warFile.getAbsolutePath() );
     }
 
