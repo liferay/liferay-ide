@@ -289,23 +289,24 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
     private boolean compareSDKRuntimeVersion( String sdkVersion, Object runtime )
     {
-        if( sdkVersion != null && runtime != null )
+        if( sdkVersion != null && runtime instanceof BridgedRuntime )
         {
             try
             {
                 final Version liferaySdkVersion = new Version( sdkVersion );
 
-                String runtimeVersion = ServerUtil.getLiferayRuntime( (BridgedRuntime) runtime ).getPortalVersion();
+                final String runtimeVersion =
+                    ServerUtil.getLiferayRuntime( (BridgedRuntime) runtime ).getPortalVersion();
 
                 final Version liferayRuntimeVersion = new Version( runtimeVersion );
 
                 if( liferaySdkVersion.getMajor() == liferayRuntimeVersion.getMajor() &&
-                                liferaySdkVersion.getMinor()== liferayRuntimeVersion.getMinor() )
+                    liferaySdkVersion.getMinor() == liferayRuntimeVersion.getMinor() )
                 {
                     return true;
                 }
             }
-            catch( Exception e)
+            catch( Exception e )
             {
                 LiferayCore.logError( "invalid sdk or runtime version ", e );
                 return false;
