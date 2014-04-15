@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -290,11 +291,24 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
     {
         if( sdkVersion != null && runtime != null )
         {
-            String runtimeVersion = ServerUtil.getLiferayRuntime( (BridgedRuntime) runtime ).getPortalVersion();
-
-            if( sdkVersion.equals( runtimeVersion ) )
+            try
             {
-                return true;
+                final Version liferaySdkVersion = new Version( sdkVersion );
+
+                String runtimeVersion = ServerUtil.getLiferayRuntime( (BridgedRuntime) runtime ).getPortalVersion();
+
+                final Version liferayRuntimeVersion = new Version( runtimeVersion );
+
+                if( liferaySdkVersion.getMajor() == liferayRuntimeVersion.getMajor() &&
+                                liferaySdkVersion.getMinor()== liferayRuntimeVersion.getMinor() )
+                {
+                    return true;
+                }
+            }
+            catch( Exception e)
+            {
+                LiferayCore.logError( "invalid sdk or runtime version ", e );
+                return false;
             }
         }
 
