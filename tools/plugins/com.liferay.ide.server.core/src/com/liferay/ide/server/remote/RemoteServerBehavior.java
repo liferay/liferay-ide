@@ -675,14 +675,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         try
         {
-            if( remoteConnection.isAppInstalled( appName ) )
-            {
-                error = remoteConnection.updateApplication( appName, warPath.toOSString(), submon );
-            }
-            else
-            {
-                error = remoteConnection.installApplication( warPath.toOSString(), appName, submon );
-            }
+            error = remoteConnection.installApplication( warPath.toOSString(), appName, submon );
         }
         catch( Exception ex )
         {
