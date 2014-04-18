@@ -82,10 +82,6 @@ import org.w3c.dom.NodeList;
 public class ServerUtil
 {
 
-
-
-
-
     public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
     {
         return getSDKRequiredProperties( liferayRuntime );

@@ -712,6 +712,7 @@ public class CoreUtil
                 {
                     boolean isDocrootResource = container != null && container.exists() &&
                         container.getFullPath().isPrefixOf( file.getFullPath() );
+
                     if ( isDocrootResource == true )
                     {
                         return true;

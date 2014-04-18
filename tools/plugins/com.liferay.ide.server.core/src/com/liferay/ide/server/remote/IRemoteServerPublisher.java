@@ -26,10 +26,11 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 public interface IRemoteServerPublisher
 {
 
-    public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException;
+    public IPath publishModuleDelta( String archiveName,
+                                     IModuleResourceDelta[] deltas,
+                                     String deletePrefix,
+                                     boolean adjustGMTOffset ) throws CoreException;
 
-    public IPath publishModuleDelta(
-        String archiveName, IModuleResourceDelta[] deltas, String deletePrefix, boolean adjustGMTOffset )
-        throws CoreException;
+    public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException;
 
 }

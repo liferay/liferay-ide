@@ -54,7 +54,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
         this.project = project;
     }
 
-    public void addRemoveProps(
+    protected void addRemoveProps(
         IPath deltaPath, IResource deltaResource, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries,
         String deletePrefix ) throws IOException
     {
@@ -89,7 +89,7 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
         deleteEntries.put( zipEntry, ( existingFiles != null ? existingFiles : StringPool.EMPTY ) + ( file + "\n" ) ); //$NON-NLS-1$
     }
 
-    public static void addToZip( IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset )
+    protected void addToZip( IPath path, IResource resource, ZipOutputStream zip, boolean adjustGMTOffset )
                     throws IOException, CoreException
     {
         switch( resource.getType() )
@@ -140,9 +140,60 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
         }
     }
 
-    public IProject getProject()
+    protected IProject getProject()
     {
         return this.project;
+    }
+
+    protected void processResourceDeltas(
+        IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
+        String deltaPrefix, boolean adjustGMTOffset ) throws IOException, CoreException
+    {
+        for( IModuleResourceDelta delta : deltas )
+        {
+            int deltaKind = delta.getKind();
+
+            IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
+
+            IProject deltaProject = deltaResource.getProject();
+
+            // IDE-110 IDE-648
+            IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
+
+            IPath deltaPath = null;
+
+            if( webappRoot != null )
+            {
+                for( IContainer container : webappRoot.getUnderlyingFolders() )
+                {
+                    if( container != null && container.exists() )
+                    {
+                        final IPath deltaFullPath = deltaResource.getFullPath();
+                        final IPath containerFullPath = container.getFullPath();
+                        deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
+
+                        if( deltaPath != null && deltaPath.segmentCount() > 0 )
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
+            {
+                addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
+            }
+            else if( deltaKind == IModuleResourceDelta.REMOVED )
+            {
+                addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
+            }
+            else if( deltaKind == IModuleResourceDelta.NO_CHANGE )
+            {
+                IModuleResourceDelta[] children = delta.getAffectedChildren();
+                processResourceDeltas( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
+            }
+        }
     }
 
     public IPath publishModuleDelta(
@@ -196,57 +247,6 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
         }
 
         return new Path( warfile.getAbsolutePath() );
-    }
-
-    public void processResourceDeltas(
-        IModuleResourceDelta[] deltas, ZipOutputStream zip, Map<ZipEntry, String> deleteEntries, String deletePrefix,
-        String deltaPrefix, boolean adjustGMTOffset ) throws IOException, CoreException
-    {
-        for( IModuleResourceDelta delta : deltas )
-        {
-            int deltaKind = delta.getKind();
-
-            IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
-
-            IProject deltaProject = deltaResource.getProject();
-
-            // IDE-110 IDE-648
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
-
-            IPath deltaPath = null;
-
-            if( webappRoot != null )
-            {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists() )
-                    {
-                        final IPath deltaFullPath = deltaResource.getFullPath();
-                        final IPath containerFullPath = container.getFullPath();
-                        deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
-
-                        if( deltaPath != null && deltaPath.segmentCount() > 0 )
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
-            {
-                addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
-            }
-            else if( deltaKind == IModuleResourceDelta.REMOVED )
-            {
-                addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
-            }
-            else if( deltaKind == IModuleResourceDelta.NO_CHANGE )
-            {
-                IModuleResourceDelta[] children = delta.getAffectedChildren();
-                processResourceDeltas( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
-            }
-        }
     }
 
     private String removeArchive( String archive )
