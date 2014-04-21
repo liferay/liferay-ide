@@ -13,22 +13,16 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.server.tomcat.core;
-
-import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
-
-import org.eclipse.jst.server.tomcat.core.internal.ITomcatServerWorkingCopy;
+package com.liferay.ide.server.core;
 
 /**
- * @author Greg Amerson
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
-public interface ILiferayTomcatServerWC extends ITomcatServerWorkingCopy, ILiferayServerWorkingCopy
+public interface ILiferayServerWorkingCopy
 {
 
-    void setMemoryArgs( String memoryArgs );
+    void setPassword( String password );
 
-    void setUserTimezone( String userTimezone );
+    void setUsername( String username );
 
 }

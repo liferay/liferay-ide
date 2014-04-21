@@ -21,6 +21,8 @@ import com.liferay.ide.server.tomcat.ui.command.SetMemoryArgsCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetServerModeCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetUserTimezoneCommand;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.cmd.SetPasswordCommand;
+import com.liferay.ide.server.ui.cmd.SetUsernameCommand;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.beans.PropertyChangeEvent;
@@ -99,6 +101,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 	protected IPublishListener publishListener;
 	protected IPath workspacePath;
 	protected IPath defaultDeployPath;
+    protected Text password;
+    protected Text username;
 
 	protected boolean allowRestrictedEditing;
 	protected IPath tempDirPath;
@@ -555,6 +559,58 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
             }
         );
 
+        label = createLabel( toolkit, composite, StringPool.EMPTY );
+        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        label.setLayoutData( data );
+
+        Label usernameLabel = createLabel( toolkit, composite, Msgs.username );
+        usernameLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
+
+        username = toolkit.createText( composite, null );
+        username.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
+        username.addModifyListener( new ModifyListener()
+        {
+
+            public void modifyText( ModifyEvent e )
+            {
+                if( updating )
+                {
+                    return;
+                }
+
+                updating = true;
+                execute( new SetUsernameCommand( tomcatServer, username.getText().trim() ) );
+                updating = false;
+            }
+
+        } );
+
+        label = createLabel( toolkit, composite, StringPool.EMPTY );
+        data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        label.setLayoutData( data );
+
+        Label passwordLabel = createLabel( toolkit, composite, Msgs.password );
+        passwordLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
+
+        password = toolkit.createText( composite, null, SWT.PASSWORD );
+        password.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
+        password.addModifyListener( new ModifyListener()
+        {
+
+            public void modifyText( ModifyEvent e )
+            {
+                if( updating )
+                {
+                    return;
+                }
+
+                updating = true;
+                execute( new SetPasswordCommand( tomcatServer, password.getText().trim() ) );
+                updating = false;
+            }
+
+        } );
+
 		setDefault = toolkit.createHyperlink(composite, Msgs.restoreDefaultsLink, SWT.WRAP);
 		setDefault.addHyperlinkListener(new HyperlinkAdapter() {
 			public void linkActivated(HyperlinkEvent e) {
@@ -674,6 +730,8 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
             tomcatServer.getServerMode() == ILiferayTomcatConstants.STANDARD_SERVER_MODE );
         developmentServerMode.setSelection(
             tomcatServer.getServerMode() == ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE );
+        username.setText( this.tomcatServer.getUsername() );
+        password.setText( this.tomcatServer.getPassword() );
 
 		// setDefaultDeployDir.setEnabled(allowRestrictedEditing);
 //		deployDir.setEnabled(allowRestrictedEditing);
@@ -950,12 +1008,14 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
         public static String invalidExternalPropertiesFile;
         public static String liferaySettings;
         public static String memoryArgsLabel;
+        public static String password;
 //      public static String millisecondsLabel;
         public static String restoreDefaultsLink;
 //      public static String serverEditorBrowseDeployMessage;
         public static String serverEditorServerDirInstall;
         public static String serverEditorServerDirMetadata;
 //      public static String specifyAutoDeployInterval;
+        public static String username;
         public static String userTimezoneLabel;
 
         static

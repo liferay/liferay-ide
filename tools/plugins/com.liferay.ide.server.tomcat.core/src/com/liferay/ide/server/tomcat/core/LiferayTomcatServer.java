@@ -152,6 +152,11 @@ public class LiferayTomcatServer extends TomcatServer
         }
     }
 
+    public String getPassword()
+    {
+        return getAttribute( ATTR_PASSWORD, DEFAULT_PASSWORD );
+    }
+
     public ILiferayTomcatConfiguration getLiferayTomcatConfiguration() throws CoreException
     {
         return (ILiferayTomcatConfiguration) getTomcatConfiguration();
@@ -215,6 +220,11 @@ public class LiferayTomcatServer extends TomcatServer
             ( (ILiferayTomcatHandler) handler ).setCurrentServer( getServer() );
         }
         return handler;
+    }
+
+    public String getUsername()
+    {
+        return getAttribute( ATTR_USERNAME, DEFAULT_USERNAME );
     }
 
     public String getUserTimezone()
@@ -390,9 +400,19 @@ public class LiferayTomcatServer extends TomcatServer
         setAttribute( PROPERTY_MEMORY_ARGS, memoryArgs );
     }
 
+    public void setPassword( String password )
+    {
+        setAttribute( ATTR_PASSWORD, password );
+    }
+
     public void setServerMode( int serverMode )
     {
         setAttribute( PROPERTY_SERVER_MODE, serverMode );
+    }
+
+    public void setUsername( String username )
+    {
+        setAttribute( ATTR_USERNAME, username );
     }
 
     public void setUserTimezone( String userTimezone )
