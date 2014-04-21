@@ -45,6 +45,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plugin life cycle
  *
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class LiferayServerCore extends Plugin
 {
@@ -239,6 +240,10 @@ public class LiferayServerCore extends Plugin
             updateConnectionSettings( server, service );
 
             connections.put( server.getId(), service );
+        }
+        else
+        {
+            updateConnectionSettings( server, service );
         }
 
         return service;
