@@ -53,6 +53,7 @@ import org.json.JSONObject;
 /**
  * @author Gregory Amerson
  * @author Tao Tao
+ * @author Terry Jia
  */
 public class RemoteConnection implements IRemoteConnection
 {
@@ -153,6 +154,10 @@ public class RemoteConnection implements IRemoteConnection
                     new UsernamePasswordCredentials( getUsername(), getPassword() ) );
 
                 this.httpClient = newDefaultHttpClient;
+            }
+            else
+            {
+                this.httpClient = new DefaultHttpClient();
             }
         }
 
