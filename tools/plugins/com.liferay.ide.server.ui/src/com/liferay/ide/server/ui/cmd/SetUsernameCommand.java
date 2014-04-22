@@ -11,17 +11,18 @@
 
 package com.liferay.ide.server.ui.cmd;
 
-import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
-
 import org.eclipse.osgi.util.NLS;
 
-public class SetUsernameCommand extends RemoteServerCommand
+import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
+import com.liferay.ide.server.core.LiferayServerCommand;
+
+public class SetUsernameCommand extends LiferayServerCommand
 {
 
     protected String oldUsername;
     protected String username;
 
-    public SetUsernameCommand( IRemoteServerWorkingCopy server, String username )
+    public SetUsernameCommand( ILiferayServerWorkingCopy server, String username )
     {
         super( server, Msgs.setUsername );
         this.username = username;

@@ -17,10 +17,7 @@ package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.core.LiferayServerCore;
 
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.wst.server.core.model.IURLProvider;
 
 /**
@@ -28,10 +25,6 @@ import org.eclipse.wst.server.core.model.IURLProvider;
  */
 public interface IRemoteServer extends ILiferayServer, IURLProvider
 {
-
-    @SuppressWarnings( "deprecation" )
-    public static final IEclipsePreferences defaultPrefs =
-        new DefaultScope().getNode( LiferayServerCore.PLUGIN_ID );
 
     String ATTR_ADJUST_DEPLOYMENT_TIMESTAMP = "adjust-deployment-timestamp"; //$NON-NLS-1$
 
@@ -41,11 +34,7 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     String ATTR_LIFERAY_PORTAL_CONTEXT_PATH = "liferay-portal-context-path"; //$NON-NLS-1$
 
-    String ATTR_PASSWORD = "password"; //$NON-NLS-1$
-
     String ATTR_SERVER_MANAGER_CONTEXT_PATH = "server-manager-context-path"; //$NON-NLS-1$
-
-    String ATTR_USERNAME = "username"; //$NON-NLS-1$
 
     boolean DEFAULT_ADJUST_DEPLOYMENT_TIMESTAMP = defaultPrefs.getBoolean( "adjust.deployment.timestamp", true ); //$NON-NLS-1$
 
@@ -53,11 +42,7 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     String DEFAULT_LIFERAY_PORTAL_CONTEXT_PATH = defaultPrefs.get( "default.liferay.portal.context.path", StringPool.EMPTY ); //$NON-NLS-1$
 
-    String DEFAULT_PASSWORD = defaultPrefs.get( "default.password", StringPool.EMPTY ); //$NON-NLS-1$
-
     String DEFAULT_SERVER_MANAGER_CONTEXT_PATH = defaultPrefs.get( "default.server.manager.context.path", StringPool.EMPTY ); //$NON-NLS-1$
-
-    String DEFAULT_USERNAME = defaultPrefs.get( "default.username", StringPool.EMPTY ); //$NON-NLS-1$
 
     boolean getAdjustDeploymentTimestamp();
 
@@ -69,11 +54,7 @@ public interface IRemoteServer extends ILiferayServer, IURLProvider
 
     String getLiferayPortalContextPath();
 
-    String getPassword();
-
     String getServerManagerContextPath();
-
-    String getUsername();
 
     void setAdjustDeploymentTimestamp( boolean adjustDemploymentTimestamp );
 

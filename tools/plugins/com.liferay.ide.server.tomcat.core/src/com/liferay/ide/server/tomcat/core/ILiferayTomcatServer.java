@@ -15,16 +15,16 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.server.core.ILiferayServer;
-
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
+
+import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
 
 /**
  * @author Greg Amerson
  * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public interface ILiferayTomcatServer extends ILiferayServer, ITomcatServer
+public interface ILiferayTomcatServer extends ILiferayServerWorkingCopy, ITomcatServer
 {
 
     /**
