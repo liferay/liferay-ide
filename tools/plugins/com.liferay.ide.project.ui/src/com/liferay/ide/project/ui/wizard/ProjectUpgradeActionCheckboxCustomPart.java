@@ -24,8 +24,6 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Simon Jiang
  */
-
-
 public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCustomPart
 {
 
@@ -39,54 +37,55 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
         actionMaps.put( "AlloyUIExecute", "Run Liferay Alloy UI Upgrade tool" );
     }
 
-    protected class ProjectActionUpgradeLabelProvider extends AbstractLabelProvider
-    implements IColorProvider, IStyledLabelProvider
-{
-    public Color getBackground( Object element )
+    class ProjectActionUpgradeLabelProvider extends AbstractLabelProvider implements IColorProvider, IStyledLabelProvider
     {
-        return null;
-    }
-
-
-    public Color getForeground( Object element )
-    {
-        return null;
-    }
-
-    public StyledString getStyledText( Object element )
-    {
-        if( element instanceof CheckboxElement )
+        public Color getBackground( Object element )
         {
-            return new StyledString( ( ( CheckboxElement ) element ).context );
-        }
-        return null;
-
-    }
-
-    @Override
-    public String getText( Object element )
-    {
-        if( element instanceof CheckboxElement )
-        {
-            return ( (CheckboxElement) element ).context;
+            return null;
         }
 
-        return super.getText( element );
+
+        public Color getForeground( Object element )
+        {
+            return null;
+        }
+
+        public StyledString getStyledText( Object element )
+        {
+            if( element instanceof CheckboxElement )
+            {
+                return new StyledString( ( ( CheckboxElement ) element ).context );
+            }
+            return null;
+
+        }
+
+        @Override
+        public String getText( Object element )
+        {
+            if( element instanceof CheckboxElement )
+            {
+                return ( (CheckboxElement) element ).context;
+            }
+
+            return super.getText( element );
+        }
+
+
+        @Override
+        protected void initalizeImageRegistry( ImageRegistry registry )
+        {
+        }
+
     }
 
-
-    @Override
-    protected void initalizeImageRegistry( ImageRegistry registry )
-    {
-    }
-
-}
     @Override
     protected void checkAndUpdateCheckboxElement()
     {
-        List<CheckboxElement> checkboxElementList = new ArrayList<CheckboxElement>();
+        final List<CheckboxElement> checkboxElementList = new ArrayList<CheckboxElement>();
         actionMaps.keySet().iterator();
         String  context = null;
+
         for (String actionName : actionMaps.keySet())
         {
             context = getProjectAction( actionName );
@@ -104,9 +103,11 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
                 {
                     checkBoxViewer.setInput( checkboxElements );
                     Iterator<NamedItem> iterator = op().getSelectedActions().iterator();
+
                     while( iterator.hasNext() )
                     {
-                        NamedItem upgradeAction = iterator.next();
+                        final NamedItem upgradeAction = iterator.next();
+
                         for( CheckboxElement checkboxElement : checkboxElements )
                         {
                             if ( checkboxElement.name.equals( upgradeAction.getName().content() ))
@@ -160,10 +161,10 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
                 }
 
             }
+
             updateValidation();
         }
     }
-
 
     @Override
     protected ElementList<NamedItem> getCheckboxList()
@@ -182,11 +183,8 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
         return getLocalModelElement().nearest( UpgradeLiferayProjectsOp.class );
     }
 
-
     private static String getProjectAction(String actionName)
     {
         return actionMaps.get( actionName );
     }
-
-
 }

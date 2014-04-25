@@ -32,7 +32,6 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 /**
  * @author Simon Jiang
  */
-
 public interface UpgradeLiferayProjectsOp extends ExecutableElement, HasLiferayRuntime
 {
 

@@ -18,20 +18,17 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.Label;
 
 
 /**
  * @author Simon Jiang
  */
-
 public interface NamedItem extends Element
 {
     ElementType TYPE = new ElementType( NamedItem.class );
 
-    // *** Action Name or Project Name ***
+    // *** Name ***
 
-    @Label( standard = "project name or actione name" )
     ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
     Value<String> getName();

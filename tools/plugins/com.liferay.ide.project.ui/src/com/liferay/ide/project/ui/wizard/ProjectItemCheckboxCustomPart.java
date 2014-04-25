@@ -41,106 +41,102 @@ import org.osgi.framework.Version;
 /**
  * @author Simon Jiang
  */
-
-
 @SuppressWarnings( "restriction" )
 public class ProjectItemCheckboxCustomPart extends AbstractCheckboxCustomPart
 {
 
-    protected class ProjectItemUpgradeLabelProvider extends AbstractLabelProvider
-    implements IColorProvider, IStyledLabelProvider
-{
-    private static final String GREY_COLOR = "actual portal version"; //$NON-NLS-1$
-    private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
-    private final Styler GREYED_STYLER;
-
-    public ProjectItemUpgradeLabelProvider()
+    class ProjectItemUpgradeLabelProvider extends AbstractLabelProvider implements IColorProvider, IStyledLabelProvider
     {
-        COLOR_REGISTRY.put( GREY_COLOR, new RGB( 128, 128, 128 ) );
-        GREYED_STYLER = StyledString.createColorRegistryStyler( GREY_COLOR, null );
-    }
+        private static final String GREY_COLOR = "actual portal version"; //$NON-NLS-1$
+        private final ColorRegistry COLOR_REGISTRY = JFaceResources.getColorRegistry();
+        private final Styler GREYED_STYLER;
 
-    public Color getBackground( Object element )
-    {
-        return null;
-    }
-
-
-    public Color getForeground( Object element )
-    {
-        return null;
-    }
-
-    @Override
-    public Image getImage( Object element )
-    {
-        if( element instanceof CheckboxElement )
+        public ProjectItemUpgradeLabelProvider()
         {
-            String projectName = ( (CheckboxElement) element ).name;
-            IProject project = ProjectUtil.getProject( projectName );
-            if ( project != null)
+            COLOR_REGISTRY.put( GREY_COLOR, new RGB( 128, 128, 128 ) );
+            GREYED_STYLER = StyledString.createColorRegistryStyler( GREY_COLOR, null );
+        }
+
+        public Color getBackground( Object element )
+        {
+            return null;
+        }
+
+        public Color getForeground( Object element )
+        {
+            return null;
+        }
+
+        @Override
+        public Image getImage( Object element )
+        {
+            if( element instanceof CheckboxElement )
             {
-                String suffix = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
-                return this.getImageRegistry().get( suffix );
+                final String projectName = ( (CheckboxElement) element ).name;
+                final IProject project = ProjectUtil.getProject( projectName );
+
+                if ( project != null)
+                {
+                    String suffix = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
+                    return this.getImageRegistry().get( suffix );
+                }
             }
 
+            return null;
         }
 
-        return null;
-    }
-
-    public StyledString getStyledText( Object element )
-    {
-        if( element instanceof CheckboxElement )
+        public StyledString getStyledText( Object element )
         {
-            final String srcLableString = ( (CheckboxElement) element ).context;
-            final String projectName = srcLableString.substring( 0, srcLableString.lastIndexOf( "[" ) );
-            final StyledString styled = new StyledString(projectName);
-            return StyledCellLabelProvider.styleDecoratedString( srcLableString, GREYED_STYLER, styled);
+            if( element instanceof CheckboxElement )
+            {
+                final String srcLableString = ( (CheckboxElement) element ).context;
+                final String projectName = srcLableString.substring( 0, srcLableString.lastIndexOf( "[" ) );
+                final StyledString styled = new StyledString(projectName);
+                return StyledCellLabelProvider.styleDecoratedString( srcLableString, GREYED_STYLER, styled);
+            }
+
+            return new StyledString( ( ( CheckboxElement ) element ).context );
         }
-        return new StyledString( ( ( CheckboxElement ) element ).context );
 
-    }
-
-    @Override
-    public String getText( Object element )
-    {
-        if( element instanceof CheckboxElement )
+        @Override
+        public String getText( Object element )
         {
-            return ( (CheckboxElement) element ).context;
+            if( element instanceof CheckboxElement )
+            {
+                return ( (CheckboxElement) element ).context;
+            }
+
+            return super.getText( element );
         }
 
-        return super.getText( element );
+        @Override
+        protected void initalizeImageRegistry( ImageRegistry imageRegistry )
+        {
+            imageRegistry.put( PluginType.portlet.name(),
+                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/portlet.png" ) );
+            imageRegistry.put( PluginType.hook.name(),
+                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/hook.png" ) );
+            imageRegistry.put( PluginType.layouttpl.name(),
+                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/layout.png" ) );
+            imageRegistry.put( PluginType.servicebuilder.name(),
+                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/portlet.png" ) );
+            imageRegistry.put( PluginType.ext.name(),
+                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/ext.png" ) );
+            imageRegistry.put( PluginType.theme.name(),
+                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/theme.png" ) );
+            imageRegistry.put( PluginType.web.name(),
+                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/web.png" ) );
+        }
     }
-
-    @Override
-    protected void initalizeImageRegistry( ImageRegistry imageRegistry )
-    {
-        imageRegistry.put( PluginType.portlet.name(),
-            ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/portlet.png" ) );
-        imageRegistry.put( PluginType.hook.name(),
-            ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/hook.png" ) );
-        imageRegistry.put( PluginType.layouttpl.name(),
-            ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/layout.png" ) );
-        imageRegistry.put( PluginType.servicebuilder.name(),
-            ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/portlet.png" ) );
-        imageRegistry.put( PluginType.ext.name(),
-            ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/ext.png" ) );
-        imageRegistry.put( PluginType.theme.name(),
-            ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/theme.png" ) );
-        imageRegistry.put( PluginType.web.name(),
-            ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/web.png" ) );
-    }
-}
 
     @Override
     protected void checkAndUpdateCheckboxElement()
     {
-
         List<CheckboxElement> checkboxElementList = new ArrayList<CheckboxElement>();
         IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
         String  context = null;
-        for (IProject project : projects)
+
+        for( IProject project : projects )
         {
             IFacetedProject facetedProject = ProjectUtil.getFacetedProject( project );
 
@@ -166,6 +162,7 @@ public class ProjectItemCheckboxCustomPart extends AbstractCheckboxCustomPart
                 {
                     checkBoxViewer.setInput( checkboxElements );
                     Iterator<NamedItem> iterator = op().getSelectedProjects().iterator();
+
                     while( iterator.hasNext() )
                     {
                         NamedItem projectItem = iterator.next();
@@ -192,18 +189,19 @@ public class ProjectItemCheckboxCustomPart extends AbstractCheckboxCustomPart
 
         if( op().getSelectedProjects().size() < 1 )
         {
-
             retval = Status.createErrorStatus( "At least one project must be specified " );
         }
         else
         {
-            ElementList<NamedItem> projectItems = op().getSelectedProjects();
+            final ElementList<NamedItem> projectItems = op().getSelectedProjects();
+
             for( NamedItem projectItem : projectItems )
             {
                 if( projectItem.getName().content() != null )
                 {
-                    IProject project = ProjectUtil.getProject( projectItem.getName().content().toString() );
+                    final IProject project = ProjectUtil.getProject( projectItem.getName().content().toString() );
                     final ILiferayProject lProject = LiferayCore.create( project );
+
                     if( lProject != null )
                     {
                         final String portalVersion = lProject.getPortalVersion();
@@ -214,16 +212,13 @@ public class ProjectItemCheckboxCustomPart extends AbstractCheckboxCustomPart
 
                             if( CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
                             {
-                                retval = Status.createErrorStatus( "Portal version of " + project.getName() + " is greater than " +
-                                    ILiferayConstants.V620 );
+                                retval =
+                                    Status.createErrorStatus( "Portal version of " + project.getName() +
+                                        " is greater than " + ILiferayConstants.V620 );
                             }
-
                         }
-
                     }
-
                 }
-
             }
         }
 
@@ -253,6 +248,7 @@ public class ProjectItemCheckboxCustomPart extends AbstractCheckboxCustomPart
                 }
 
             }
+
             updateValidation();
         }
     }

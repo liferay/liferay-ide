@@ -40,7 +40,6 @@ import org.eclipse.swt.widgets.Table;
 /**
  * @author Simon Jiang
  */
-
 public abstract class AbstractCheckboxCustomPart extends FormComponentPart
 {
     class CheckboxContentProvider implements IStructuredContentProvider
@@ -186,8 +185,6 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
 
                 t.start();
             }
-
-
         };
     }
 

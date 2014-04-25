@@ -24,7 +24,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.LiferayProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.core.util.ProjectUtil.SearchFilesVisitor;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -48,10 +48,11 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
+import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.sse.core.internal.provisional.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.document.DocumentTypeImpl;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
@@ -59,7 +60,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 /**
  * @author Simon Jiang
  */
-@SuppressWarnings( { "restriction", "deprecation" } )
+@SuppressWarnings( "restriction" )
 public class UpgradeLiferayProjectsOpMethods
 {
 
@@ -76,16 +77,18 @@ public class UpgradeLiferayProjectsOpMethods
 
     public static final Status execute( final UpgradeLiferayProjectsOp op, final ProgressMonitor pm )
     {
+        Status retval = Status.createOkStatus();
+
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 30 ); //$NON-NLS-1$
+        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 30 );
 
-        ElementList<NamedItem> projectItems = op.getSelectedProjects();
-        ElementList<NamedItem> upgradeActions = op.getSelectedActions();
-        String runtimeName = op.getRuntimeName().content();
+        final ElementList<NamedItem> projectItems = op.getSelectedProjects();
+        final ElementList<NamedItem> upgradeActions = op.getSelectedActions();
+        final String runtimeName = op.getRuntimeName().content();
+        final List<String> projectItemNames = new ArrayList<String>();
+        final List<String> projectActionItems = new ArrayList<String>();
 
-        List<String> projectItemNames = new ArrayList<String>();
-        List<String> projectActionItems = new ArrayList<String>();
         for( NamedItem projectItem : projectItems )
         {
             projectItemNames.add( projectItem.getName().content() );
@@ -96,9 +99,18 @@ public class UpgradeLiferayProjectsOpMethods
             projectActionItems.add( upgradeAction.getName().content() );
         }
 
-        runUpgradeJob( projectItemNames, projectActionItems, runtimeName, monitor );;
+        Status[] upgradeStatuses = performUpgrade( projectItemNames, projectActionItems, runtimeName, monitor );
 
-        return Status.createOkStatus();
+
+        for( Status s : upgradeStatuses )
+        {
+            if( !s.ok() )
+            {
+                retval = Status.createErrorStatus( "Some upgrade actions failed, please see Eclipse error log for more details" );
+            }
+        }
+
+        return retval;
     }
 
     private static Status executeServiceBuild( final IProject project, final IFile servcieXml, IProgressMonitor monitor )
@@ -204,8 +216,9 @@ public class UpgradeLiferayProjectsOpMethods
         return files.toArray( new IFile[files.size()] );
     }
 
-    private static void rebuildService( IProject project, IProgressMonitor monitor, int perUnit )
+    private static Status rebuildService( IProject project, IProgressMonitor monitor, int perUnit )
     {
+        Status retval = Status.createOkStatus();
         try
         {
             int worked = 0;
@@ -221,12 +234,18 @@ public class UpgradeLiferayProjectsOpMethods
 
             for( IFile servicesFile : files )
             {
-                Status retval = executeServiceBuild( project, servicesFile, monitor);
-                if ( !retval.ok() )
-                {
-                    LiferayProjectCore.logError( "Service build task execute faild for " + project.getName() ); //$NON-NLS-1$
-                }
+                final Status serviceBuildStatus = executeServiceBuild( project, servicesFile, monitor);
 
+                if ( !serviceBuildStatus.ok() )
+                {
+                    final IStatus error =
+                        LiferayProjectCore.createErrorStatus( "Service build task execute faild for " +
+                            project.getName() );
+                    LiferayProjectCore.logError( error );
+
+                    retval = StatusBridge.create( error );
+                    break;
+                }
             }
 
             worked = worked + perUnit;
@@ -234,12 +253,20 @@ public class UpgradeLiferayProjectsOpMethods
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Unable to run service build task for " + project.getName(), e ); //$NON-NLS-1$
+            final IStatus error =
+                LiferayProjectCore.createErrorStatus( "Unable to run service build task for " + project.getName(), e );
+            LiferayProjectCore.logError( error );
+
+            retval = StatusBridge.create( error );
         }
+
+        return retval;
     }
 
-    private static void runLaut( final IProject project, IProgressMonitor monitor, int perUnit )
+    private static Status runLaut( final IProject project, IProgressMonitor monitor, int perUnit )
     {
+        Status retval = Status.createOkStatus();
+
         try
         {
             int worked = 0;
@@ -266,14 +293,22 @@ public class UpgradeLiferayProjectsOpMethods
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Unable to run LautTunner for " + project.getName(), e ); //$NON-NLS-1$
+            final IStatus error =
+                LiferayProjectCore.createErrorStatus( "Unable to run LautTunner for " + project.getName(), e );
+            LiferayProjectCore.logError( error );
+
+            retval = StatusBridge.create( error );
         }
+
+        return retval;
     }
 
-    public static final void runUpgradeJob(
+    public static final Status[] performUpgrade(
         final List<String> projectItems, final List<String> projectActions, final String runtimeName,
         final IProgressMonitor monitor )
     {
+        final List<Status> retval = new ArrayList<Status>();
+
         int worked = 0;
         int workUnit = projectItems.size();
         int actionUnit = projectActions.size();
@@ -292,34 +327,40 @@ public class UpgradeLiferayProjectsOpMethods
                 {
                     if( action.equals( "RuntimeUpgrade" ) )
                     {
-                        upgradeRuntime( project, runtimeName, monitor, perUnit );
+                        final Status status = upgradeRuntime( project, runtimeName, monitor, perUnit );
+                        retval.add( status );
                         worked = worked + totalWork / ( workUnit * actionUnit );
                         monitor.worked( worked );
                     }
 
                     if( action.equals( "MetadataUpgrade" ) )
                     {
-                        upgradeDTDHeader( project, monitor, perUnit );
+                        final Status status = upgradeDTDHeader( project, monitor, perUnit );
+                        retval.add( status );
                         worked = worked + totalWork / ( workUnit * actionUnit );
                         monitor.worked( worked );
                     }
 
                     if( action.equals( "ServicebuilderUpgrade" ) )
                     {
-                        rebuildService( project, monitor, perUnit );
+                        final Status status = rebuildService( project, monitor, perUnit );
+                        retval.add( status );
                         worked = worked + totalWork / ( workUnit * actionUnit );
                         monitor.worked( worked );
                     }
 
                     if( action.equals( "AlloyUIExecute" ) )
                     {
-                        runLaut( project, monitor, perUnit );
+                        final Status status = runLaut( project, monitor, perUnit );
+                        retval.add( status );
                         worked = worked + totalWork / ( workUnit * actionUnit );
                         monitor.worked( worked );
                     }
                 }
             }
         }
+
+        return retval.toArray( new Status[0] );
     }
 
     private static void updateProperties( IFile file, String propertyName, String propertiesValue ) throws Exception
@@ -342,8 +383,10 @@ public class UpgradeLiferayProjectsOpMethods
 
     }
 
-    private static void upgradeDTDHeader( IProject project, IProgressMonitor monitor, int perUnit )
+    private static Status upgradeDTDHeader( IProject project, IProgressMonitor monitor, int perUnit )
     {
+        Status retval = Status.createOkStatus();
+
         try
         {
             int worked = 0;
@@ -351,9 +394,11 @@ public class UpgradeLiferayProjectsOpMethods
             submon.subTask( "Prograde Upgrade Update DTD Header" );
 
             IFile[] metaFiles = getUpgradeDTDFiles( project );
+
             for( IFile file : metaFiles )
             {
                 IStructuredModel editModel = StructuredModelManager.getModelManager().getModelForEdit( file );
+
                 if( editModel != null && editModel instanceof IDOMModel )
                 {
                     worked = worked + perUnit;
@@ -389,17 +434,25 @@ public class UpgradeLiferayProjectsOpMethods
                 {
                     updateProperties( file, "liferay-versions", "6.2.0+" );
                 }
-
             }
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Unable to upgrade deployment meta file for " + project.getName(), e ); //$NON-NLS-1$
+            final IStatus error =
+                LiferayProjectCore.createErrorStatus(
+                    "Unable to upgrade deployment meta file for " + project.getName(), e );
+            LiferayProjectCore.logError( error );
+
+            retval = StatusBridge.create( error );
         }
+
+        return retval;
     }
 
-    private static void upgradeRuntime( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
+    private static Status upgradeRuntime( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
     {
+        Status retval = Status.createOkStatus();
+
         try
         {
             int worked = 0;
@@ -441,7 +494,13 @@ public class UpgradeLiferayProjectsOpMethods
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Unable to upgrade target runtime for " + project.getName(), e ); //$NON-NLS-1$
+            final IStatus error =
+                LiferayProjectCore.createErrorStatus( "Unable to upgrade target runtime for " + project.getName(), e );
+            LiferayProjectCore.logError( error );
+
+            retval = StatusBridge.create( error );
         }
+
+        return retval;
     }
 }

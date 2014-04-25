@@ -880,27 +880,6 @@
             name="Projects">
       </page>
    </extension>
-   
-   
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <wizard
-            category="com.liferay.ide.newWizards"
-            icon="icons/e16/server.png"
-            id="com.liferay.ide.project.ui.wizard.UpgradeLiferayProjectsWizard"
-            name="%upgrade.project.wizard.name"
-            project="true">
-         <class class="com.liferay.ide.project.ui.wizard.UpgradeLiferayProjectsWizard">
-         </class>
-
-         <description>
-            %new.project.wizard.description
-         </description>
-         <selection
-               class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-   </extension>
 
    <extension
          point="org.eclipse.ui.commands">
@@ -938,7 +917,7 @@
             class="com.liferay.ide.project.ui.handlers.UpgradeLiferayProjectsHandler"
             commandId="com.liferay.ide.project.ui.handlers.projectUpgrade">
       </handler>
-   </extension>   
+   </extension>
 
 <!--  
 

@@ -32,8 +32,6 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 
-
-
 /**
  * @author Simon Jiang
  */
@@ -42,25 +40,30 @@ public class UpgradeLiferayProjectsHandler extends AbstractHandler
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
         final ISelection selection = HandlerUtil.getCurrentSelection( event );
-        ArrayList<IProject> projectList = new ArrayList<IProject>();
+        final ArrayList<IProject> projectList = new ArrayList<IProject>();
+
         if( selection instanceof IStructuredSelection )
         {
             Iterator<?> it = ( (IStructuredSelection) selection ).iterator();
+
             while( it.hasNext() )
             {
                 Object o = it.next();
+
                 if( o instanceof IJavaProject )
                 {
                     final IProject project = ( (IJavaProject) o ).getProject();
-                    if( project != null && project.isAccessible() && !projectList.contains( project ) &&
-                        SDKUtil.isSDKProject( project ) )
+
+                    if( !projectList.contains( project ) && SDKUtil.isSDKProject( project ) )
                     {
                         projectList.add( project );
                     }
                 }
             }
         }
-        final UpgradeLiferayProjectsWizard wizard = new UpgradeLiferayProjectsWizard( projectList.toArray( new IProject[projectList.size()] ) );
+
+        final UpgradeLiferayProjectsWizard wizard =
+            new UpgradeLiferayProjectsWizard( projectList.toArray( new IProject[projectList.size()] ) );
         new WizardDialog( HandlerUtil.getActiveShellChecked( event ), wizard ).open();
 
         return null;
@@ -69,7 +72,7 @@ public class UpgradeLiferayProjectsHandler extends AbstractHandler
     @Override
     public boolean isEnabled()
     {
-        if (ProjectUtil.getAllPluginsSDKProjects().length > 0 )
+        if( ProjectUtil.getAllPluginsSDKProjects().length > 0 )
         {
             return true;
         }

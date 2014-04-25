@@ -33,7 +33,6 @@ import org.osgi.framework.Version;
 /**
  * @author Simon Jiang
  */
-
 public class LeastVersionRuntimeValidationService extends ValidationService
 {
 
@@ -60,9 +59,10 @@ public class LeastVersionRuntimeValidationService extends ValidationService
         }
         else
         {
-            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime(runtime);
-            Version runtimeVersion = new Version( liferayRuntime.getPortalVersion() );
-            if (CoreUtil.compareVersions( runtimeVersion , ILiferayConstants.V620 ) < 0 )
+            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+            final Version runtimeVersion = new Version( liferayRuntime.getPortalVersion() );
+
+            if( CoreUtil.compareVersions( runtimeVersion, ILiferayConstants.V620 ) < 0 )
             {
                 retval = Status.createErrorStatus( "Liferay runtime must be great than 6.2.0." ); //$NON-NLS-1$
             }

@@ -15,7 +15,6 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOp;
 
 import org.eclipse.core.resources.IProject;
@@ -25,18 +24,16 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
-import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 
 /**
  * @author Simon Jiang
  */
-
-public class UpgradeLiferayProjectsWizard extends SapphireWizard<UpgradeLiferayProjectsOp>
-    implements IWorkbenchWizard, INewWizard
+public class UpgradeLiferayProjectsWizard extends SapphireWizard<UpgradeLiferayProjectsOp> implements IWorkbenchWizard
 {
     private boolean firstErrorMessageRemoved = false;
+
     public UpgradeLiferayProjectsWizard(IProject[] projects)
     {
         super( op(projects), DefinitionLoader.sdef( UpgradeLiferayProjectsWizard.class ).wizard() );
@@ -68,13 +65,13 @@ public class UpgradeLiferayProjectsWizard extends SapphireWizard<UpgradeLiferayP
     {
     }
 
-    private static UpgradeLiferayProjectsOp op(IProject[] projects)
+    private static UpgradeLiferayProjectsOp op( IProject[] projects )
     {
-        UpgradeLiferayProjectsOp projectUpgradeOp = UpgradeLiferayProjectsOp.TYPE.instantiate();
-        for(IProject project : projects)
+        final UpgradeLiferayProjectsOp projectUpgradeOp = UpgradeLiferayProjectsOp.TYPE.instantiate();
+
+        for( IProject project : projects )
         {
-            NamedItem instance = (NamedItem) projectUpgradeOp.getSelectedProjects().insert();
-            instance.setName( project.getName() );
+            projectUpgradeOp.getSelectedProjects().insert().setName( project.getName() );
         }
 
         return projectUpgradeOp;
