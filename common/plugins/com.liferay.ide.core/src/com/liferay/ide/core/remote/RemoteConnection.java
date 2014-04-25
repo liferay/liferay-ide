@@ -24,6 +24,7 @@ import com.liferay.ide.core.util.StringPool;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -171,6 +172,12 @@ public class RemoteConnection implements IRemoteConnection
 
     protected String getHttpResponse( HttpUriRequest request ) throws Exception
     {
+        if (getUsername() != null && getPassword() != null) {
+            String encoding = getUsername() + ":" + getPassword();
+
+            request.setHeader( "Authorization", "Basic " + Base64.encodeBase64String( encoding.getBytes() ) );
+        }
+
         HttpResponse response = getHttpClient().execute( request );
         int statusCode = response.getStatusLine().getStatusCode();
 
