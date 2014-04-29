@@ -30,6 +30,10 @@
 
     <name>Liferay IDE Project Core Tests</name>
 
+    <properties>
+        <exclude.tests>by-default-nothing-to-exclude</exclude.tests>
+    </properties>
+
     <profiles>
         <profile>
             <id>noLautUpgradeTests</id>
@@ -37,8 +41,8 @@
                 <exclude.tests>**/UpgradeLiferayProjectsAlloyUIOpTests*</exclude.tests>
             </properties>
         </profile>
-    </profiles>    
-    
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
@@ -56,6 +60,9 @@
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <!--osgi.console>1234</osgi.console-->
                     </systemProperties>
+                    <excludes>
+                        <exclude>${exclude.tests}</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
