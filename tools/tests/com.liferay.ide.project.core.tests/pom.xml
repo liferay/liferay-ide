@@ -30,6 +30,15 @@
 
     <name>Liferay IDE Project Core Tests</name>
 
+    <profiles>
+        <profile>
+            <id>noLautUpgradeTests</id>
+            <properties>
+                <exclude.tests>**/UpgradeLiferayProjectsAlloyUIOpTests*</exclude.tests>
+            </properties>
+        </profile>
+    </profiles>    
+    
     <build>
         <plugins>
             <plugin>

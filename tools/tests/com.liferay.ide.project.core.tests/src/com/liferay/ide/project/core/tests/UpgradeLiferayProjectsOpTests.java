@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
@@ -33,7 +34,6 @@ import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.service.core.operation.ServiceBuilderDescriptorHelper;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -126,7 +126,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
             PropertiesConfiguration  pluginPackageProperties= new PropertiesConfiguration();
             pluginPackageProperties.load( osfile );
             String value = (String) pluginPackageProperties.getProperty( propertyName );
-            assertEquals( propertiesValue , value );
+            assertTrue( value.contains( propertiesValue ) );
             file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
         }
         catch( Exception e )
@@ -345,48 +345,6 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
             (ILiferayTomcatRuntime) ServerCore.findRuntime( runtimeName ).loadAdapter( ILiferayTomcatRuntime.class, npm );
 
         assertNotNull( liferayRuntime );
-    }
-
-
-    @Test
-    public void testExecAlloyUpgradeTool() throws Exception
-    {
-        UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
-
-        IProject project = createServicePluginTypeAntProject( "portlet");
-
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-        assertNotNull( webappRoot );
-
-        final IVirtualFile mainCss = webappRoot.getFile( "css/main.css" );
-
-        assertEquals( true, mainCss.exists() );
-
-        CoreUtil.writeStreamFromString( ".aui-field-select{}", new FileOutputStream( mainCss.getUnderlyingFile().getLocation().toFile() ) );
-
-        List<String> actionString = new ArrayList<String>();
-        List<String> projectString = new ArrayList<String>();
-
-        NamedItem upgradeRuntimAction = op.getSelectedActions().insert();
-        upgradeRuntimAction.setName( "AlloyUIExecute" );
-        actionString.add( upgradeRuntimAction.getName().content() );
-
-        NamedItem upgradeProjectItem = op.getSelectedProjects().insert();
-        upgradeProjectItem.setName( project.getName() );
-        projectString.add( upgradeProjectItem.getName().content() );
-
-        UpgradeLiferayProjectsOpMethods.performUpgrade( projectString, actionString, op.getRuntimeName().content(), new NullProgressMonitor() );
-
-        mainCss.getUnderlyingFile().refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
-
-        final IVirtualFile serviceJarXml = webappRoot.getFile( "css/main.css" );
-
-        assertEquals( true, serviceJarXml.exists() );
-
-        String cssContent = CoreUtil.readStreamToString( mainCss.getUnderlyingFile().getContents() );
-
-        assertEquals( false, cssContent.contains( "aui" ) );
     }
 
     @Test
