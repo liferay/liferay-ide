@@ -117,4 +117,12 @@
             id="com.liferay.ide.service.core.serviceBuilderDescriptorHelper">
       </liferayDescriptorHelper>
    </extension>
+   
+    <extension point="com.liferay.ide.project.core.upgradeLiferayProjectActions">
+      <upgradeLiferayProjectAction
+            class="com.liferay.ide.service.core.util.UpgradeLiferayProjectServiceBuildAction"
+            upgradeActionType="ServicebuilderUpgrade"
+            id="com.liferay.ide.service.core.upgradeLiferayProjectServiceBuildAction">
+      </upgradeLiferayProjectAction>
+   </extension>   
 </plugin>
