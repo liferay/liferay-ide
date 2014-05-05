@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
+      <upgradeProjectHandler
+            class="com.liferay.ide.alloy.core.util.UpgradeLAUTProcess"
+            name="AlloyUIExecute"
+            description="Run Liferay Alloy UI Upgrade tool"
+            id="com.liferay.ide.alloy.core.upgradeLAUTProcess">
+      </upgradeProjectHandler>
+   </extension>
+</plugin>

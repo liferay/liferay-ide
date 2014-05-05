@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="portletFrameworks" name="%portlet.plugin.frameworks.name" schema="schema/portletFrameworks.exsd"/>
    <extension-point id="liferayDescriptorHelpers" name="%liferay.descriptor.helpers.name" schema="schema/liferayDescriptorHelpers.exsd"/>
+   <extension-point id="upgradeProjectHandlers" name="%upgrade.project.handlers.name" schema="schema/upgradeProjectHandlers.exsd"/>
 
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">
@@ -575,6 +576,24 @@
       </persistent>
    </extension>
 
+   <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
+      <upgradeProjectHandler
+            class="com.liferay.ide.project.core.util.UpgradeMetadataProcess"
+            name="MetadataUpgrade"
+            description="Update all deployment descriptor metadata"
+            id="com.liferay.ide.project.core.upgradeMetadataProcess">
+      </upgradeProjectHandler>
+   </extension>
+   
+    <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
+      <upgradeProjectHandler
+            class="com.liferay.ide.project.core.util.UpgradeRuntimeProcess"
+            name="RuntimeUpgrade"
+            description="Update targeted runtime to setting"
+            id="com.liferay.ide.project.core.upgradeRuntimeProces">
+      </upgradeProjectHandler>
+   </extension>
+   
    <!--
    <extension
          point="org.eclipse.wst.common.project.facet.core.listeners">

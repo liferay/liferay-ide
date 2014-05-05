@@ -1,5 +1,21 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.project.core.UpgradeProjectHandler;
+import com.liferay.ide.project.core.UpgradeProjectHandlerReader;
 import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOp;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
@@ -20,21 +36,17 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.swt.graphics.Color;
 
-
 /**
  * @author Simon Jiang
  */
 public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCustomPart
 {
-
-    private final static Map<String,String> actionMaps = new  HashMap<String,String>();
+    private static Map<String,String> handlerMaps = new  HashMap<String,String>();
 
     static
     {
-        actionMaps.put( "RuntimeUpgrade", "Update targeted runtime to setting" );
-        actionMaps.put( "MetadataUpgrade", "Update all deployment descriptor metadata" );
-        actionMaps.put( "ServicebuilderUpgrade", "Rebuild Services for service-builder projects" );
-        actionMaps.put( "AlloyUIExecute", "Run Liferay Alloy UI Upgrade tool" );
+        UpgradeProjectHandlerReader upgradeLiferayProjectActionReader = new UpgradeProjectHandlerReader();
+        handlerMaps = getUpgradeHandlers( upgradeLiferayProjectActionReader.getUpgradeActions() );
     }
 
     class ProjectActionUpgradeLabelProvider extends AbstractLabelProvider implements IColorProvider, IStyledLabelProvider
@@ -79,17 +91,29 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
 
     }
 
+    private static HashMap<String, String> getUpgradeHandlers( List<UpgradeProjectHandler> upgradeActions )
+    {
+        HashMap<String, String> actionMaps = new HashMap<String,String>();
+
+        for( UpgradeProjectHandler upgradeHandler : upgradeActions)
+        {
+            actionMaps.put( upgradeHandler.getName(), upgradeHandler.getDescription() );
+        }
+
+        return actionMaps;
+    }
+
     @Override
     protected void checkAndUpdateCheckboxElement()
     {
         final List<CheckboxElement> checkboxElementList = new ArrayList<CheckboxElement>();
-        actionMaps.keySet().iterator();
+        handlerMaps.keySet().iterator();
         String  context = null;
 
-        for (String actionName : actionMaps.keySet())
+        for (String handlerName : handlerMaps.keySet())
         {
-            context = getProjectAction( actionName );
-            CheckboxElement checkboxElement = new CheckboxElement( actionName, context );
+            context = handlerMaps.get( handlerName );
+            CheckboxElement checkboxElement = new CheckboxElement( handlerName, context );
             checkboxElementList.add( checkboxElement );
         }
 
@@ -125,17 +149,15 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
     }
 
     @Override
-    protected void updateValidation()
+    protected ElementList<NamedItem> getCheckboxList()
     {
-        retval = Status.createOkStatus();
+        return op().getSelectedActions();
+    }
 
-        if( op().getSelectedActions().size() < 1 )
-        {
-
-            retval = Status.createErrorStatus( "At least one upgrade action must be specified " );
-        }
-
-        refreshValidation();
+    @Override
+    protected IStyledLabelProvider getLableProvider()
+    {
+        return new ProjectActionUpgradeLabelProvider();
     }
 
     @Override
@@ -166,25 +188,22 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
         }
     }
 
-    @Override
-    protected ElementList<NamedItem> getCheckboxList()
-    {
-        return op().getSelectedActions();
-    }
-
-    @Override
-    protected IStyledLabelProvider getLableProvider()
-    {
-        return new ProjectActionUpgradeLabelProvider();
-    }
-
     private UpgradeLiferayProjectsOp op()
     {
         return getLocalModelElement().nearest( UpgradeLiferayProjectsOp.class );
     }
 
-    private static String getProjectAction(String actionName)
+    @Override
+    protected void updateValidation()
     {
-        return actionMaps.get( actionName );
+        retval = Status.createOkStatus();
+
+        if( op().getSelectedActions().size() < 1 )
+        {
+
+            retval = Status.createErrorStatus( "At least one upgrade action must be specified " );
+        }
+
+        refreshValidation();
     }
 }
