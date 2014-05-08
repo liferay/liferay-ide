@@ -29,8 +29,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -150,10 +148,6 @@ public class RemoteConnection implements IRemoteConnection
                     newDefaultHttpClient = new DefaultHttpClient();
                 }
 
-                newDefaultHttpClient.getCredentialsProvider().setCredentials(
-                    new AuthScope( getHost(), getHttpPort() ),
-                    new UsernamePasswordCredentials( getUsername(), getPassword() ) );
-
                 this.httpClient = newDefaultHttpClient;
             }
             else
@@ -172,7 +166,8 @@ public class RemoteConnection implements IRemoteConnection
 
     protected String getHttpResponse( HttpUriRequest request ) throws Exception
     {
-        if (getUsername() != null && getPassword() != null) {
+        if( !CoreUtil.isNullOrEmpty( getUsername() ) && !CoreUtil.isNullOrEmpty( getPassword() ) )
+        {
             String encoding = getUsername() + ":" + getPassword();
 
             request.setHeader( "Authorization", "Basic " + Base64.encodeBase64String( encoding.getBytes() ) );
