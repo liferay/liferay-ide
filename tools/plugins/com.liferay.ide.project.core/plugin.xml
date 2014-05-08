@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="portletFrameworks" name="%portlet.plugin.frameworks.name" schema="schema/portletFrameworks.exsd"/>
    <extension-point id="liferayDescriptorHelpers" name="%liferay.descriptor.helpers.name" schema="schema/liferayDescriptorHelpers.exsd"/>
+   <extension-point id="upgradeLiferayProjectActions" name="%liferay.upgrade.actions.name" schema="schema/upgradeLiferayProjectActions.exsd"/>
 
    <extension
          point="org.eclipse.wst.common.project.facet.core.facets">
@@ -575,6 +576,22 @@
       </persistent>
    </extension>
 
+   <extension point="com.liferay.ide.project.core.upgradeLiferayProjectActions">
+      <upgradeLiferayProjectAction
+            class="com.liferay.ide.project.core.util.UpgradeLiferayProjectMetaDataAction"
+            upgradeActionType="MetadataUpgrade"
+            id="com.liferay.ide.project.core.upgradeLiferayProjectMetaDataAction">
+      </upgradeLiferayProjectAction>
+   </extension>
+   
+    <extension point="com.liferay.ide.project.core.upgradeLiferayProjectActions">
+      <upgradeLiferayProjectAction
+            class="com.liferay.ide.project.core.util.UpgradeLiferayProjectRuntimeAction"
+            upgradeActionType="RuntimeUpgrade"
+            id="com.liferay.ide.project.core.upgradeLiferayProjectRuntimeAction">
+      </upgradeLiferayProjectAction>
+   </extension>
+   
    <!--
    <extension
          point="org.eclipse.wst.common.project.facet.core.listeners">
