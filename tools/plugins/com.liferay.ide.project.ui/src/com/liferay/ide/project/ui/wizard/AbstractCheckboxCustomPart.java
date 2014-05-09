@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.project.core.model.NamedItem;
+import com.liferay.ide.project.core.upgrade.NamedItem;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;

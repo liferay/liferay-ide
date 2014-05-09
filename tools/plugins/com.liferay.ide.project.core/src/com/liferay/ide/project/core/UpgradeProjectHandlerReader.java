@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 /**
  * @author Simon Jiang
  */
-public class UpgradeProjectHandlerReader extends ExtensionReader<UpgradeProjectHandler>
+public class UpgradeProjectHandlerReader extends ExtensionReader<AbstractUpgradeProjectHandler>
 {
     private static final String EXTENSION = "upgradeProjectHandlers";
     private static final String UPGRADEACTION_ELEMENT = "upgradeProjectHandler";
@@ -37,7 +37,7 @@ public class UpgradeProjectHandlerReader extends ExtensionReader<UpgradeProjectH
     }
 
     @Override
-    protected UpgradeProjectHandler initElement( IConfigurationElement configElement, UpgradeProjectHandler upgradeHandler )
+    protected AbstractUpgradeProjectHandler initElement( IConfigurationElement configElement, AbstractUpgradeProjectHandler upgradeHandler )
     {
         upgradeHandler.setName(  configElement.getAttribute( UPGRADEHANDLERNAME_ELEMENT ) );
         upgradeHandler.setDescription( configElement.getAttribute( UPGRADEHANDLERDESCRIPTION_ELEMENT ) );
@@ -45,7 +45,7 @@ public class UpgradeProjectHandlerReader extends ExtensionReader<UpgradeProjectH
         return upgradeHandler;
     }
 
-    public List<UpgradeProjectHandler> getUpgradeActions()
+    public List<AbstractUpgradeProjectHandler> getUpgradeActions()
     {
         return getExtensions();
     }

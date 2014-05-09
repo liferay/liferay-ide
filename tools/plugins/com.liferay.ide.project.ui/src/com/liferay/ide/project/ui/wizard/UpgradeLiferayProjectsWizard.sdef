@@ -25,7 +25,7 @@
     </import>
     <wizard>
         <id>UpgradeLiferayProjectsWizard</id>
-        <element-type>com.liferay.ide.project.core.model.UpgradeLiferayProjectsOp</element-type>
+        <element-type>com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp</element-type>
         <label>Upgrade Liferay Plugin Projects</label>
         <page>
             <id>ProjectUpgradeProjectPage</id>

@@ -3,10 +3,10 @@
 <plugin>
    <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
       <upgradeProjectHandler
-            class="com.liferay.ide.alloy.core.util.UpgradeLAUTProcess"
+            class="com.liferay.ide.alloy.core.UpgradeLAUTHandler"
             name="AlloyUIExecute"
             description="Run Liferay Alloy UI Upgrade tool"
-            id="com.liferay.ide.alloy.core.upgradeLAUTProcess">
+            id="com.liferay.ide.alloy.core.upgradeLAUTHandler">
       </upgradeProjectHandler>
    </extension>
 </plugin>

@@ -12,11 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.UpgradeProjectHandler;
+import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.Collections;
 
@@ -31,20 +32,16 @@ import org.eclipse.wst.common.project.facet.core.runtime.RuntimeManager;
 /**
  * @author Simon Jiang
  */
-public class UpgradeRuntimeProcess extends UpgradeProjectHandler
+public class UpgradeRuntimeHandler extends AbstractUpgradeProjectHandler
 {
+
     @Override
-    public Status execute( Object... objects )
+    public Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
     {
         Status retval = Status.createOkStatus();
 
         try
         {
-            final IProject project = ( IProject )objects[0];
-            final String runtimeName = ( String )objects[1];
-            final IProgressMonitor monitor =  ( IProgressMonitor )objects[2];
-            final int perUnit = ( ( Integer )objects[3] ).intValue();
-
             int worked = 0;
             final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
             submon.subTask( "Update project runtime" );
@@ -79,11 +76,8 @@ public class UpgradeRuntimeProcess extends UpgradeProjectHandler
                         worked = worked + perUnit;
                         submon.worked( worked );
                     }
-
                 }
-
             }
-
         }
         catch( Exception e )
         {
@@ -93,6 +87,7 @@ public class UpgradeRuntimeProcess extends UpgradeProjectHandler
 
             retval = StatusBridge.create( error );
         }
+
         return retval;
     }
 }

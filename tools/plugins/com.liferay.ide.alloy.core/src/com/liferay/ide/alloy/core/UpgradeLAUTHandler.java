@@ -12,13 +12,11 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.alloy.core.util;
+package com.liferay.ide.alloy.core;
 
-import com.liferay.ide.alloy.core.AlloyCore;
-import com.liferay.ide.alloy.core.LautRunner;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.UpgradeProjectHandler;
+import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,19 +27,15 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Simon Jiang
  */
-public class UpgradeLAUTProcess extends UpgradeProjectHandler
+public class UpgradeLAUTHandler extends AbstractUpgradeProjectHandler
 {
     @Override
-    public Status execute( Object... objects )
+    public Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
     {
         Status retval = Status.createOkStatus();
 
         try
         {
-            final IProject project = ( IProject )objects[0];
-            final IProgressMonitor monitor =  ( IProgressMonitor )objects[1];
-            final int perUnit = ( ( Integer )objects[2] ).intValue();
-
             int worked = 0;
 
             final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
@@ -72,6 +66,7 @@ public class UpgradeLAUTProcess extends UpgradeProjectHandler
             AlloyCore.logError( e );
             retval = StatusBridge.create( error );
         }
+
         return retval;
     }
 }

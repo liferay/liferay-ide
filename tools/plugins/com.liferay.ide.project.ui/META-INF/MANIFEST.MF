@@ -43,6 +43,9 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,
  com.liferay.ide.project.ui.action,
+ com.liferay.ide.project.ui.action.sdk,
+ com.liferay.ide.project.ui.cmd,
  com.liferay.ide.project.ui.dialog,
+ com.liferay.ide.project.ui.handlers,
  com.liferay.ide.project.ui.pref,
  com.liferay.ide.project.ui.wizard

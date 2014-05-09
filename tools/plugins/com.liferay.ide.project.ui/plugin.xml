@@ -889,11 +889,6 @@
             id="com.liferay.ide.project.ui.handlers.projectUpgrade"
             name="Upgrade Liferay Projects">
       </command>
-      <category
-            description="Upgrade Liferay Projectss"
-            id="com.liferay.ide.project.ui.handlers"
-            name="Upgrade Liferay Projects">
-      </category>
    </extension>
 
    <extension
@@ -906,7 +901,7 @@
                icon="icons/e16/server.png"
                label="Upgrade Liferay projects..."
                style="push"
-               tooltip="Upgrade portal runtime to latest.">
+               tooltip="Upgrade Liferay projects to latest Portal version">
          </command>
       </menuContribution>
    </extension>

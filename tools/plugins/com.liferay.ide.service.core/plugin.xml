@@ -120,10 +120,10 @@
    
     <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
       <upgradeProjectHandler
-            class="com.liferay.ide.service.core.util.UpgradeServiceBuildProcess"
-            name="ServicebuilderUpgrade"
+            class="com.liferay.ide.service.core.UpgradeServiceBuilderHandler"
+            name="ServiceBuilderUpgrade"
             description="Rebuild Services for service-builder projects"
-            id="com.liferay.ide.service.core.upgradeServiceBuildProcess">
+            id="com.liferay.ide.service.core.upgradeServiceBuildHandler">
       </upgradeProjectHandler>
    </extension>   
 </plugin>

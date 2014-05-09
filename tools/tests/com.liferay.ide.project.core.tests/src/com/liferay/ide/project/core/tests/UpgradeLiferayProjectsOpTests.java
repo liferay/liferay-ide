@@ -22,11 +22,11 @@ import static org.junit.Assert.assertTrue;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOp;
-import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOpMethods;
+import com.liferay.ide.project.core.upgrade.NamedItem;
+import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp;
+import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOpMethods;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
@@ -377,7 +377,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
         upgradeRuntimAction.setName( "RuntimeUpgrade" );
         actionString.add( upgradeRuntimAction.getName().content() );
         NamedItem serviceBuilderAction = op.getSelectedActions().insert();
-        serviceBuilderAction.setName( "ServicebuilderUpgrade" );
+        serviceBuilderAction.setName( "ServiceBuilderUpgrade" );
         actionString.add( serviceBuilderAction.getName().content() );
 
 
@@ -439,7 +439,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
 
 
     @Test
-    public void testMetadaUpgrade() throws Exception
+    public void testMetadataUpgrade() throws Exception
     {
         UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
 

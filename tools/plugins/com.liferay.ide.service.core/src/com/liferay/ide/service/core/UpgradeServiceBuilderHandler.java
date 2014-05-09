@@ -12,13 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.service.core.util;
+package com.liferay.ide.service.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.UpgradeProjectHandler;
+import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
-import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.job.BuildServiceJob;
 
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.Status;
@@ -34,33 +34,38 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Simon Jiang
  */
-public class UpgradeServiceBuildProcess extends UpgradeProjectHandler
+public class UpgradeServiceBuilderHandler extends AbstractUpgradeProjectHandler
 {
+
     @Override
-    public Status execute( Object... objects )
+    public Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
     {
         Status retval = Status.createOkStatus();
         try
         {
-            final IProject project = ( IProject )objects[0];
-            final IProgressMonitor monitor =  ( IProgressMonitor )objects[1];
-            final int perUnit = ( ( Integer )objects[2] ).intValue();
-
             int worked = 0;
 
             final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
-            submon.subTask( "Execute service rebuild" );
+            submon.subTask( "Executing build-service for " + project.getName() );
 
-            List<IFile> files = new ArrayList<IFile>();
-            files.addAll( new SearchFilesVisitor().searchFiles( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ) );
+            final List<IFile> files = new ArrayList<IFile>();
+            files.addAll( new SearchFilesVisitor().searchFiles(
+                project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ) );
 
             worked = worked + perUnit;
             submon.worked( worked );
 
             for( IFile servicesFile : files )
             {
-                BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
+                final BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
                 job.schedule();
+                job.join();
+                final IStatus result = job.getResult();
+
+                if( !result.isOK() )
+                {
+                    throw new CoreException( result );
+                }
             }
 
             worked = worked + perUnit;
@@ -74,6 +79,7 @@ public class UpgradeServiceBuildProcess extends UpgradeProjectHandler
 
             retval = StatusBridge.create( error );
         }
+
         return retval;
     }
 }

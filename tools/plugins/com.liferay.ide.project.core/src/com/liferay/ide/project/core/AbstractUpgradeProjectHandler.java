@@ -16,30 +16,24 @@
 package com.liferay.ide.project.core;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Simon Jiang
  */
-public abstract class UpgradeProjectHandler
+public abstract class AbstractUpgradeProjectHandler
 {
-    protected IProject project;
-
     protected String name;
 
     protected String description;
 
-    public UpgradeProjectHandler()
+    public AbstractUpgradeProjectHandler()
     {
         super();
     }
 
-    public UpgradeProjectHandler( IProject project )
-    {
-        this.project = project;
-    }
-
-    public abstract Status execute( Object ...objects );
+    public abstract Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit );
 
     public String getDescription()
     {

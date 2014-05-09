@@ -15,7 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOp;
+import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.dialogs.IMessageProvider;

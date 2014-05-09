@@ -578,22 +578,19 @@
 
    <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
       <upgradeProjectHandler
-            class="com.liferay.ide.project.core.util.UpgradeMetadataProcess"
+            class="com.liferay.ide.project.core.upgrade.UpgradeMetadataHandler"
             name="MetadataUpgrade"
             description="Update all deployment descriptor metadata"
-            id="com.liferay.ide.project.core.upgradeMetadataProcess">
+            id="com.liferay.ide.project.core.upgradeMetadataHandler">
       </upgradeProjectHandler>
-   </extension>
-   
-    <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
       <upgradeProjectHandler
-            class="com.liferay.ide.project.core.util.UpgradeRuntimeProcess"
+            class="com.liferay.ide.project.core.upgrade.UpgradeRuntimeHandler"
             name="RuntimeUpgrade"
-            description="Update targeted runtime to setting"
-            id="com.liferay.ide.project.core.upgradeRuntimeProces">
+            description="Update targeted runtime to selected version"
+            id="com.liferay.ide.project.core.upgradeRuntimeHandler">
       </upgradeProjectHandler>
    </extension>
-   
+
    <!--
    <extension
          point="org.eclipse.wst.common.project.facet.core.listeners">

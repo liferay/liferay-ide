@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model;
+package com.liferay.ide.project.core.upgrade;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;

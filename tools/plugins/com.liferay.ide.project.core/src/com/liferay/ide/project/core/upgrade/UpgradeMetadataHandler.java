@@ -12,11 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.UpgradeProjectHandler;
+import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -44,7 +45,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
  * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
-public class UpgradeMetadataProcess extends UpgradeProjectHandler
+public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler
 {
     private final static String publicid_regrex =
                     "-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)";
@@ -57,36 +58,33 @@ public class UpgradeMetadataProcess extends UpgradeProjectHandler
         "liferay-plugin-package.properties" };
 
     @Override
-    public Status execute( Object... objects )
+    public Status execute( IProject project, String runtimeName, IProgressMonitor monitor, int perUnit )
     {
         Status retval = Status.createOkStatus();
 
         try
         {
-            final IProject project = ( IProject )objects[0];
-            final IProgressMonitor monitor =  ( IProgressMonitor )objects[1];
-            final int perUnit = ( ( Integer )objects[2] ).intValue();
-
             int worked = 0;
             final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
             submon.subTask( "Prograde Upgrade Update DTD Header" );
 
-            IFile[] metaFiles = getUpgradeDTDFiles( project );
+            final IFile[] metaFiles = getUpgradeDTDFiles( project );
 
             for( IFile file : metaFiles )
             {
-                IStructuredModel editModel = StructuredModelManager.getModelManager().getModelForEdit( file );
+                final IStructuredModel editModel = StructuredModelManager.getModelManager().getModelForEdit( file );
 
                 if( editModel != null && editModel instanceof IDOMModel )
                 {
                     worked = worked + perUnit;
                     submon.worked( worked );
 
-                    IDOMDocument xmlDocument = ( (IDOMModel) editModel ).getDocument();
-                    DocumentTypeImpl docType = (DocumentTypeImpl) xmlDocument.getDoctype();
+                    final IDOMDocument xmlDocument = ( (IDOMModel) editModel ).getDocument();
+                    final DocumentTypeImpl docType = (DocumentTypeImpl) xmlDocument.getDoctype();
 
-                    String publicId = docType.getPublicId();
-                    String newPublicId = getNewDoctTypeSetting( publicId, "6.2.0", publicid_regrex );
+                    final String publicId = docType.getPublicId();
+                    final String newPublicId = getNewDoctTypeSetting( publicId, "6.2.0", publicid_regrex );
+
                     if( newPublicId != null )
                     {
                         docType.setPublicId( newPublicId );
@@ -95,8 +93,9 @@ public class UpgradeMetadataProcess extends UpgradeProjectHandler
                     worked = worked + perUnit;
                     submon.worked( worked );
 
-                    String systemId = docType.getSystemId();
-                    String newSystemId = getNewDoctTypeSetting( systemId, "6_2_0", systemid_regrex );
+                    final String systemId = docType.getSystemId();
+                    final String newSystemId = getNewDoctTypeSetting( systemId, "6_2_0", systemid_regrex );
+
                     if( newSystemId != null )
                     {
                         docType.setSystemId( newSystemId );
@@ -123,6 +122,7 @@ public class UpgradeMetadataProcess extends UpgradeProjectHandler
 
             retval = StatusBridge.create( error );
         }
+
         return retval;
     }
 
@@ -131,11 +131,13 @@ public class UpgradeMetadataProcess extends UpgradeProjectHandler
         String newDoctTypeSetting = null;
         Pattern p = Pattern.compile( regrex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL );
         Matcher m = p.matcher( doctypeSetting );
+
         if( m.find() )
         {
             String oldVersionString = m.group( m.groupCount() );
             newDoctTypeSetting = doctypeSetting.replace( oldVersionString, newValue );
         }
+
         return newDoctTypeSetting;
     }
 
@@ -157,7 +159,9 @@ public class UpgradeMetadataProcess extends UpgradeProjectHandler
         PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
         pluginPackageProperties.load( osfile );
         pluginPackageProperties.setProperty( propertyName, propertiesValue );
+
         FileWriter output = new FileWriter( osfile );
+
         try
         {
             pluginPackageProperties.save( output );
@@ -166,6 +170,7 @@ public class UpgradeMetadataProcess extends UpgradeProjectHandler
         {
             output.close();
         }
+
         file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }
 }

@@ -14,10 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.project.core.UpgradeProjectHandler;
+import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.UpgradeProjectHandlerReader;
-import com.liferay.ide.project.core.model.NamedItem;
-import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOp;
+import com.liferay.ide.project.core.upgrade.NamedItem;
+import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -91,11 +91,11 @@ public class ProjectUpgradeActionCheckboxCustomPart extends AbstractCheckboxCust
 
     }
 
-    private static HashMap<String, String> getUpgradeHandlers( List<UpgradeProjectHandler> upgradeActions )
+    private static HashMap<String, String> getUpgradeHandlers( List<AbstractUpgradeProjectHandler> upgradeActions )
     {
         HashMap<String, String> actionMaps = new HashMap<String,String>();
 
-        for( UpgradeProjectHandler upgradeHandler : upgradeActions)
+        for( AbstractUpgradeProjectHandler upgradeHandler : upgradeActions)
         {
             actionMaps.put( upgradeHandler.getName(), upgradeHandler.getDescription() );
         }

@@ -20,11 +20,11 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOp;
-import com.liferay.ide.project.core.model.UpgradeLiferayProjectsOpMethods;
+import com.liferay.ide.project.core.upgrade.NamedItem;
+import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp;
+import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOpMethods;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;

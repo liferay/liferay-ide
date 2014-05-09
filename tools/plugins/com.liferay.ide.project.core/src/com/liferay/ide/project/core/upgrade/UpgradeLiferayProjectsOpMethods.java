@@ -13,9 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.model;
+package com.liferay.ide.project.core.upgrade;
 
-import com.liferay.ide.project.core.UpgradeProjectHandler;
+import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.UpgradeProjectHandlerReader;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -42,7 +42,7 @@ public class UpgradeLiferayProjectsOpMethods
 
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 30 );
+        monitor.beginTask( "Upgrading Liferay plugin projects (this process may take several minutes)", 30 );
 
         final ElementList<NamedItem> projectItems = op.getSelectedProjects();
         final ElementList<NamedItem> upgradeActions = op.getSelectedActions();
@@ -74,12 +74,11 @@ public class UpgradeLiferayProjectsOpMethods
         return retval;
     }
 
-
-    private static HashMap<String, UpgradeProjectHandler> getActionMap( List<UpgradeProjectHandler> upgradeActions )
+    private static HashMap<String, AbstractUpgradeProjectHandler> getActionMap( List<AbstractUpgradeProjectHandler> upgradeActions )
     {
-        HashMap<String, UpgradeProjectHandler> actionMaps = new HashMap<String,UpgradeProjectHandler>();
+        HashMap<String, AbstractUpgradeProjectHandler> actionMaps = new HashMap<String,AbstractUpgradeProjectHandler>();
 
-        for( UpgradeProjectHandler upgradeHandler : upgradeActions)
+        for( AbstractUpgradeProjectHandler upgradeHandler : upgradeActions)
         {
             actionMaps.put( upgradeHandler.getName(), upgradeHandler );
         }
@@ -100,35 +99,24 @@ public class UpgradeLiferayProjectsOpMethods
         int perUnit = totalWork / ( workUnit * actionUnit );
         monitor.beginTask( "Upgrading Project ", totalWork );
 
-        UpgradeProjectHandlerReader upgradeLiferayProjectActionReader = new UpgradeProjectHandlerReader();
-        final HashMap<String, UpgradeProjectHandler> actionMap =
+        final UpgradeProjectHandlerReader upgradeLiferayProjectActionReader = new UpgradeProjectHandlerReader();
+        final HashMap<String, AbstractUpgradeProjectHandler> actionMap =
             getActionMap( upgradeLiferayProjectActionReader.getUpgradeActions() );
 
         for( String projectItem : projectItems )
         {
             if( projectItem != null )
             {
-                IProject project = ProjectUtil.getProject( projectItem );
-                monitor.setTaskName( "Upgrading Project " + project.getName() );
+                final IProject project = ProjectUtil.getProject( projectItem );
+                monitor.setTaskName( "Upgrading project " + project.getName() );
 
                 for( String action : projectActions )
                 {
-                    if( action.equals( "RuntimeUpgrade" ) )
-                    {
-                        UpgradeProjectHandler upgradeLiferayProjectAction = actionMap.get( action );
-                        final Status status = upgradeLiferayProjectAction.execute( project, runtimeName, monitor, perUnit );
-                        retval.add( status );
-                        worked = worked + totalWork / ( workUnit * actionUnit );
-                        monitor.worked( worked );
-                    }
-                    else
-                    {
-                        UpgradeProjectHandler upgradeLiferayProjectAction = actionMap.get( action );
-                        final Status status = upgradeLiferayProjectAction.execute( project, monitor, perUnit );
-                        retval.add( status );
-                        worked = worked + totalWork / ( workUnit * actionUnit );
-                        monitor.worked( worked );
-                    }
+                    final AbstractUpgradeProjectHandler upgradeLiferayProjectAction = actionMap.get( action );
+                    final Status status = upgradeLiferayProjectAction.execute( project, runtimeName, monitor, perUnit );
+                    retval.add( status );
+                    worked = worked + totalWork / ( workUnit * actionUnit );
+                    monitor.worked( worked );
                 }
             }
         }
