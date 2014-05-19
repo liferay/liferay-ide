@@ -23,13 +23,17 @@ import com.liferay.ide.core.util.StringPool;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -42,6 +46,7 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
@@ -249,6 +254,8 @@ public class RemoteConnection implements IRemoteConnection
 
         final HttpRequestBase request = (HttpRequestBase) args[0];
 
+        final boolean isPostRequest = request instanceof HttpPost;
+
         if( args[1] instanceof String )
         {
             api = args[1].toString();
@@ -271,9 +278,11 @@ public class RemoteConnection implements IRemoteConnection
             builder.setPort( getHttpPort() );
             builder.setPath( api );
 
-            if( params.length >= 2 )
+            List<NameValuePair> postParams = new ArrayList<NameValuePair>();
+
+            if( params.length >= 3 )
             {
-                for( int i = 0; i < params.length; i += 2 )
+                for( int i = 1; i < params.length; i += 2 )
                 {
                     String name = null;
                     String value = StringPool.EMPTY;
@@ -288,7 +297,24 @@ public class RemoteConnection implements IRemoteConnection
                         value = params[i + 1].toString();
                     }
 
-                    builder.setParameter( name, value );
+                    if( isPostRequest )
+                    {
+                        postParams.add( new BasicNameValuePair( name, value ) );
+                    }
+                    else
+                    {
+                        builder.setParameter( name, value );
+                    }
+                }
+            }
+
+            if( isPostRequest )
+            {
+                HttpPost postRequest = ( (HttpPost) request );
+
+                if( postRequest.getEntity() == null )
+                {
+                    postRequest.setEntity( new UrlEncodedFormEntity( postParams ) );
                 }
             }
 
