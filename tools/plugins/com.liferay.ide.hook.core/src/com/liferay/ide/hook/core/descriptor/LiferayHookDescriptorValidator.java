@@ -18,6 +18,7 @@ package com.liferay.ide.hook.core.descriptor;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.project.core.BaseValidator;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -108,7 +109,8 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                                                       String preferenceNodeQualifier,
                                                       IScopeContext[] preferenceScopes )
     {
-        String classResource = NodeUtil.getTextContent( classResourceSpecifier );
+        String classResource =
+            NodeUtil.getTextContent( classResourceSpecifier ).replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
 
         if( classResource == null || classResource.length() == 0 )
         {

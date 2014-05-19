@@ -414,8 +414,7 @@ public class PropertiesUtil
      */
     public static String[] generatePropertiesNamePatternsForEncoding( String baseValue, String elementName )
     {
-        baseValue = baseValue.replaceAll( "\\s", StringPool.BLANK );
-
+        baseValue = baseValue.replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
         String regex = null;
 
         if( elementName.equals( ELEMENT_RESOURCE_BUNDLE ) )
@@ -465,37 +464,21 @@ public class PropertiesUtil
 
     public static String[] generatePropertiesNamePatternsForValidation( String baseValue, String elementName )
     {
-        baseValue = baseValue.replaceAll( "\\s", StringPool.BLANK );
+        // Cleaning the baseValue has been done in the validator, no need to do the same as method
+        // generatePropertiesNamePatternsForEncoding()
 
         String regex = null;
 
         if( elementName.equals( ELEMENT_RESOURCE_BUNDLE ) )
         {
-            if( baseValue.endsWith( PROPERTIES_FILE_SUFFIX ) ||
-                baseValue.contains( IPath.SEPARATOR + "" ) ||
-                ( CoreUtil.isWindows() && baseValue.contains( "\\" ) ) )
-            {
-                return new String[0];
-            }
-
             baseValue = new Path( baseValue.replace(".", IPath.SEPARATOR + "" ) ).toString();
         }
         else if( elementName.equals( ELEMENT_PORTAL_PROPERTIES ) )
         {
-            if( ! baseValue.endsWith( PROPERTIES_FILE_SUFFIX ) )
-            {
-                return new String[0];
-            }
-
             baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
         }
         else if( elementName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
         {
-            if( ! baseValue.endsWith( PROPERTIES_FILE_SUFFIX ) )
-            {
-                return new String[0];
-            }
-
             baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
 
             if( baseValue.contains( "*" ) )
