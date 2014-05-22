@@ -91,20 +91,26 @@ import org.w3c.dom.Document;
 public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 {
 
-    private static final String publicid_regrex =
-                    "-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)";
-
-    private static final String systemid_regrex =
-        "^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd";
-
-    private static final String[] fileNames = { "liferay-portlet.xml", "liferay-display.xml", "service.xml",
-        "liferay-hook.xml", "liferay-layout-templates.xml", "liferay-look-and-feel.xml", "liferay-portlet-ext.xml" };
-
-    private static final Pattern publicid_pattern = Pattern.compile( publicid_regrex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL );
-
-    private static final Pattern systemid_pattern = Pattern.compile( systemid_regrex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL );
+    private static final String[] fileNames =
+    {
+        "liferay-portlet.xml",
+        "liferay-display.xml",
+        "service.xml",
+        "liferay-hook.xml",
+        "liferay-layout-templates.xml",
+        "liferay-look-and-feel.xml",
+        "liferay-portlet-ext.xml"
+    };
 
     private static final String LIFERAY_ARCHETYPES_GROUP_ID = "com.liferay.maven.archetypes";
+
+    private static final Pattern publicid_pattern = Pattern.compile(
+        "-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)",
+        Pattern.CASE_INSENSITIVE | Pattern.DOTALL );
+
+    private static final Pattern systemid_pattern = Pattern.compile(
+        "^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd", Pattern.CASE_INSENSITIVE |
+            Pattern.DOTALL );
 
     public LiferayMavenProjectProvider()
     {
@@ -278,9 +284,10 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     }
                 }
 
-                String pluginVersion = getNewLiferayProfilesPluginVersion( activeProfiles, op.getNewLiferayProfiles(), archetypeVersion);
+                final String pluginVersion =
+                    getNewLiferayProfilesPluginVersion( activeProfiles, op.getNewLiferayProfiles(), archetypeVersion );
 
-                updateDtdVersion( firstProject, pluginVersion);
+                updateDtdVersion( firstProject, pluginVersion );
             }
 
             if( op.getPluginType().content().equals( PluginType.portlet ) )
@@ -479,11 +486,24 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         return retval;
     }
 
+    private IFile[] getLiferayMetaFiles( IProject project )
+    {
+        List<IFile> files = new ArrayList<IFile>();
+
+        for( String name : fileNames )
+        {
+            files.addAll( new SearchFilesVisitor().searchFiles( project, name ) );
+        }
+
+        return files.toArray( new IFile[files.size()] );
+    }
+
     private String getNewDoctTypeSetting( String doctypeSetting, String newValue, Pattern p )
     {
         String newDoctTypeSetting = null;
 
         final Matcher m = p.matcher( doctypeSetting );
+
         if( m.find() )
         {
             String oldVersionString = m.group( m.groupCount() );
@@ -495,14 +515,14 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
     private String getNewLiferayProfilesPluginVersion( String[] activeProfiles, List<NewLiferayProfile> newLiferayProfiles, String archetypeVersion )
     {
-        org.osgi.framework.Version minVersion = new org.osgi.framework.Version(archetypeVersion.substring( 0, 3 ));
+        org.osgi.framework.Version minVersion = new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
 
         try
         {
             final List<Profile> profiles = MavenPlugin.getMaven().getSettings().getProfiles();
 
             org.osgi.framework.Version minNewVersion =
-                            new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
+                new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
 
             org.osgi.framework.Version minExistedVersion =
                 new org.osgi.framework.Version( archetypeVersion.substring( 0, 3 ) );
@@ -535,6 +555,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                         final Properties properties = existProfile.getProperties();
                         final String liferayVersion = properties.getProperty( "liferay.version" );
                         final String plugVersion = properties.getProperty( "liferay.maven.plugin.version" );
+
                         if( plugVersion != null && liferayVersion != null )
                         {
                             final org.osgi.framework.Version shortLiferayVersion =
@@ -548,12 +569,14 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                         }
                     }
                 }
+
                 minVersion = minVersion.compareTo( minExistedVersion ) < 0 ? minVersion : minExistedVersion;
             }
         }
         catch(Exception e)
         {
         }
+
         return minVersion.toString();
     }
 
@@ -575,18 +598,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         }
 
         return profilesToSave;
-    }
-
-    private IFile[] getLiferayMetaFiles( IProject project )
-    {
-        List<IFile> files = new ArrayList<IFile>();
-
-        for( String name : fileNames )
-        {
-            files.addAll( new SearchFilesVisitor().searchFiles( project, name ) );
-        }
-
-        return files.toArray( new IFile[files.size()] );
     }
 
     public ILiferayProject provide( Object type )
@@ -613,11 +624,13 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         return null;
     }
 
-    public void updateDtdVersion( IProject project, String dtdVersion )
+    private void updateDtdVersion( IProject project, String dtdVersion )
     {
         final String tmpPublicId = dtdVersion;
         final String tmpSystemId = dtdVersion.replaceAll( "\\.", "_" );
+
         IStructuredModel editModel = null;
+
         try
         {
             final IFile[] metaFiles = getLiferayMetaFiles( project );
@@ -660,7 +673,10 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         }
         finally
         {
-            editModel.releaseFromEdit();
+            if( editModel != null )
+            {
+                editModel.releaseFromEdit();
+            }
         }
     }
 
