@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
-import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 
@@ -58,19 +56,6 @@ public class ProfileIdPossibleValuesService extends PossibleValuesService
     {
         super.initPossibleValuesService();
 
-        final FilteredListener<PropertyContentEvent> listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                fillPossibleValues();
-
-                refresh();
-            }
-        };
-
-        op().getActiveProfilesValue().attach( listener );
-
         fillPossibleValues();
     }
 
@@ -85,6 +70,5 @@ public class ProfileIdPossibleValuesService extends PossibleValuesService
     {
         return Status.createOkStatus();
     }
-
 
 }
