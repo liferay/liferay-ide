@@ -239,7 +239,7 @@ public final class SDKManager
             {
                 XMLMemento root =
                     XMLMemento.createReadRoot( new InputStreamReader( new ByteArrayInputStream(
-                        sdksXmlString.getBytes( "UTF-8" ) ) ) ); //$NON-NLS-1$
+                        sdksXmlString.getBytes( "UTF-8" ) ), "UTF-8" ) ); //$NON-NLS-1$
 
                 String defaultSDKName = root.getString( "default" ); //$NON-NLS-1$
 
