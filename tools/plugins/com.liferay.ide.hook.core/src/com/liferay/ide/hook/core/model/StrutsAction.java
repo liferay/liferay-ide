@@ -18,6 +18,7 @@
 
 package com.liferay.ide.hook.core.model;
 
+import com.liferay.ide.hook.core.model.internal.StrutsActionPathPossibleValuesCacheService;
 import com.liferay.ide.hook.core.model.internal.StrutsActionPathPossibleValuesService;
 
 import org.eclipse.sapphire.Element;
@@ -36,6 +37,8 @@ import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Service.Context;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -53,8 +56,14 @@ public interface StrutsAction extends Element
     @Label( standard = "Struts Action Path" )
     @XmlBinding( path = "struts-action-path" )
     @Required
-    // @Services( { @Service( impl = UrlPathValidationService.class ),
-    @Service( impl = StrutsActionPathPossibleValuesService.class )
+    @Services
+    (
+        value=
+        {
+            @Service( impl = StrutsActionPathPossibleValuesCacheService.class, context = Context.METAMODEL ),
+            @Service( impl = StrutsActionPathPossibleValuesService.class )
+        }
+    )
     ValueProperty PROP_STRUTS_ACTION_PATH = new ValueProperty( TYPE, "StrutsActionPath" ); //$NON-NLS-1$
 
     Value<String> getStrutsActionPath();

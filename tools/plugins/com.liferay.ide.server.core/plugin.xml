@@ -881,8 +881,8 @@
          </public>
          <public
                publicId="-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
-               uri="platform:/plugin/com.liferay.ide.server.core/dtd/spring-beans.dtd"
-               webURL="http://struts.apache.org/dtds/struts-config_1_2.dtd">
+               uri="platform:/plugin/com.liferay.ide.server.core/dtd/struts-config_1_2.dtd"
+               webURL="http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
          </public>
          <public
                publicId="-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
