@@ -43,11 +43,11 @@
             priority="high">
       </content-type>
       <content-type
-            file-extensions="properties"
+            base-type="org.eclipse.jdt.core.javaProperties"
             file-names="liferay-plugin-package.properties"
             id="liferaypluginpackageproperties"
             name="%liferay.plugin.package.descriptor.name"
-            priority="normal">
+            priority="high">
       </content-type>
    </extension>
    <extension
