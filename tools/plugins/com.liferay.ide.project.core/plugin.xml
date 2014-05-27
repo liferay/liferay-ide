@@ -324,7 +324,7 @@
          </description>
          <facet
                id="jst.java"
-               version="5.0">
+               version="1.6">
          </facet>
          <facet
                id="jst.web"
@@ -346,7 +346,7 @@
          </description>
          <facet
                id="jst.java"
-               version="5.0">
+               version="1.6">
          </facet>
          <facet
                id="jst.web"
@@ -368,7 +368,7 @@
          </description>
          <facet
                id="jst.java"
-               version="5.0">
+               version="1.6">
          </facet>
          <facet
                id="jst.web"
