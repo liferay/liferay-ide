@@ -40,7 +40,14 @@ public class JSFLiferayPortletDescriptorHelper extends LiferayPortletDescriptorH
 
     public IStatus addNewPortlet( IDataModel model )
     {
-        IStatus status = super.addNewPortlet( model );
+        IStatus status = Status.OK_STATUS;
+
+        if( ! canAddNewPortlet( model ) )
+        {
+            return status;
+        }
+
+        status = super.addNewPortlet( model );
 
         if( ! status.isOK() )
         {
