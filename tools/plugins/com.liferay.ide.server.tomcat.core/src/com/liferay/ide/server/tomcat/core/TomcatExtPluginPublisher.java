@@ -12,7 +12,6 @@
  * details.
  *
  *******************************************************************************/
-
 package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -29,6 +28,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -37,6 +37,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class TomcatExtPluginPublisher extends AbstractPluginPublisher
 {
@@ -111,7 +112,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
         return true;
     }
 
-    protected void addExtModule( ServerBehaviourDelegate delegate, IModule module, IProgressMonitor monitor )
+    protected void addExtModule( final ServerBehaviourDelegate delegate, IModule module, final IProgressMonitor monitor )
         throws CoreException
     {
 
@@ -126,7 +127,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
                 LiferayTomcatPlugin.createErrorStatus( "No SDK for project configured. Could not deploy ext module" ) ); //$NON-NLS-1$
         }
 
-        String mode =
+        final String mode =
             delegate.getServer().getServerState() == IServer.STATE_STARTED ? delegate.getServer().getMode() : null;
 
         if( mode != null )
@@ -142,7 +143,24 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
 
         if( mode != null )
         {
-            delegate.getServer().start( mode, monitor );
+            new ServerJob( delegate.getServer(), "Starting Liferay server after ext plugin deploy" )
+            {
+
+                @Override
+                protected IStatus run( IProgressMonitor monitor )
+                {
+                    try
+                    {
+                        delegate.getServer().start( mode, monitor );
+                    }
+
+                    catch( CoreException e )
+                    {
+                        LiferayTomcatPlugin.logError( "Failed to restart server for ext module.", e ); //$NON-NLS-1$
+                    }
+                    return Status.OK_STATUS;
+                }
+            }.schedule();
         }
     }
 
@@ -172,6 +190,28 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
         static
         {
             initializeMessages( TomcatExtPluginPublisher.class.getName(), Msgs.class );
+        }
+    }
+    
+    private static abstract class ServerJob extends Job
+    {
+        private IServer server;
+
+        public ServerJob( IServer server, String name )
+        {
+            super( name );
+            this.server = server;
+        }
+
+        public boolean belongsTo( Object family )
+        {
+            return org.eclipse.wst.server.core.ServerUtil.SERVER_JOB_FAMILY.equals( family );
+        }
+
+        @SuppressWarnings( "unused" )
+        public IServer getServer()
+        {
+            return this.server;
         }
     }
 }
