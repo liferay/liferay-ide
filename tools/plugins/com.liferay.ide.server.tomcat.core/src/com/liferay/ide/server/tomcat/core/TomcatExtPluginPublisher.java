@@ -145,7 +145,6 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
         {
             new ServerJob( delegate.getServer(), "Starting Liferay server after ext plugin deploy" )
             {
-
                 @Override
                 protected IStatus run( IProgressMonitor monitor )
                 {
@@ -156,8 +155,9 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
 
                     catch( CoreException e )
                     {
-                        LiferayTomcatPlugin.logError( "Failed to restart server for ext module.", e ); //$NON-NLS-1$
+                        LiferayTomcatPlugin.logError( "Failed to restart server for ext module.", e );
                     }
+
                     return Status.OK_STATUS;
                 }
             }.schedule();
@@ -192,7 +192,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
             initializeMessages( TomcatExtPluginPublisher.class.getName(), Msgs.class );
         }
     }
-    
+
     private static abstract class ServerJob extends Job
     {
         private IServer server;
