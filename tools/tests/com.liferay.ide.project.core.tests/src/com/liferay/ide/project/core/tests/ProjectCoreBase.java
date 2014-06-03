@@ -17,19 +17,6 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.tests.BaseTests;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
-
 import java.io.File;
 
 import org.apache.commons.io.FileUtils;
@@ -46,15 +33,25 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.junit.Before;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.core.tests.ServerCoreBase;
+
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public abstract class ProjectCoreBase extends BaseTests
+public abstract class ProjectCoreBase extends ServerCoreBase
 {
-    private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
-    private static IPath liferayBundlesPath;
 
     protected IProject createAntProject( NewLiferayPluginProjectOp op ) throws Exception
     {
@@ -197,16 +194,6 @@ public abstract class ProjectCoreBase extends BaseTests
         return getLiferayBundlesPath().append( "ivy-cache.zip" );
     }
 
-    protected IPath getLiferayBundlesPath()
-    {
-        if( liferayBundlesPath == null )
-        {
-            liferayBundlesPath = new Path( liferayBundlesDir );
-        }
-
-        return liferayBundlesPath;
-    }
-
     protected IPath getLiferayPluginsSdkDir()
     {
         return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
@@ -220,26 +207,6 @@ public abstract class ProjectCoreBase extends BaseTests
     protected String getLiferayPluginsSdkZipFolder()
     {
         return "liferay-plugins-sdk-6.2.0/";
-    }
-
-    protected IPath getLiferayRuntimeDir()
-    {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
-    }
-
-    protected IPath getLiferayRuntimeZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
-    }
-
-    protected String getRuntimeId()
-    {
-        return "com.liferay.ide.server.62.tomcat.runtime.70";
-    }
-
-    protected String getRuntimeVersion()
-    {
-        return "6.2.0";
     }
 
     protected NewLiferayPluginProjectOp newProjectOp( final String projectName ) throws Exception
@@ -262,16 +229,8 @@ public abstract class ProjectCoreBase extends BaseTests
      * @throws Exception
      */
     @Before
-    public void setupPluginsSDKAndRuntime() throws Exception
+    public void setupPluginsSDK() throws Exception
     {
-        assertNotNull( "Expected System.getProperty(\"liferay.bundles.dir\") to not be null", System.getProperty( "liferay.bundles.dir" ) );
-
-        assertNotNull( "Expected liferayBundlesDir to not be null", liferayBundlesDir );
-
-        assertEquals(
-            "Expected liferayBundlesPath to exist: " + getLiferayBundlesPath().toOSString(), true,
-            getLiferayBundlesPath().toFile().exists() );
-
         final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
 
         if( ! liferayPluginsSdkDirFile.exists() )
@@ -334,45 +293,6 @@ public abstract class ProjectCoreBase extends BaseTests
 
         SDKManager.getInstance().setSDKs( new SDK[] { sdk } );
 
-        final File liferayRuntimeDirFile = getLiferayRuntimeDir().toFile();
-
-        if( ! liferayRuntimeDirFile.exists() )
-        {
-            final File liferayRuntimeZipFile = getLiferayRuntimeZip().toFile();
-
-            assertEquals(
-                "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
-                liferayRuntimeZipFile.exists() );
-
-            ZipUtil.unzip( liferayRuntimeZipFile, LiferayProjectCore.getDefault().getStateLocation().toFile() );
-        }
-
-        assertEquals( true, liferayRuntimeDirFile.exists() );
-
-        final NullProgressMonitor npm = new NullProgressMonitor();
-
-        final String runtimeName = getRuntimeVersion();
-
-        IRuntime runtime = ServerCore.findRuntime( runtimeName );
-
-        if( runtime == null )
-        {
-            final IRuntimeWorkingCopy runtimeWC =
-                ServerCore.findRuntimeType( getRuntimeId() ).createRuntime( runtimeName, npm );
-
-            runtimeWC.setName( runtimeName );
-            runtimeWC.setLocation( getLiferayRuntimeDir() );
-
-            runtime = runtimeWC.save( true, npm );
-        }
-
-        assertNotNull( runtime );
-
-        final ILiferayTomcatRuntime liferayRuntime =
-            (ILiferayTomcatRuntime) ServerCore.findRuntime( runtimeName ).loadAdapter( ILiferayTomcatRuntime.class, npm );
-
-        assertNotNull( liferayRuntime );
-
         final IPath customLocationBase = getCustomLocationBase();
 
         final File customBaseDir = customLocationBase.toFile();
@@ -391,6 +311,11 @@ public abstract class ProjectCoreBase extends BaseTests
 
             assertEquals( "Unable to delete pre-existing customBaseDir", false, customBaseDir.exists() );
         }
+    }
+
+    public void setupPluginsSDKAndRuntime() throws Exception {
+        setupPluginsSDK();
+        setupRuntime();
     }
 
 }
