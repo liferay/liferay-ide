@@ -24,6 +24,9 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProfileLocation;
+import com.liferay.ide.project.core.util.IDescriptorVersionUpdateOperation;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.util.LiferayDescriptorHelperManager;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.File;
@@ -336,7 +339,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 final String pluginVersion =
                     getNewLiferayProfilesPluginVersion( activeProfiles, op.getNewLiferayProfiles(), archetypeVersion );
 
-                updateDtdVersion( firstProject, pluginVersion );
+                updateDtdVersion( firstProject, pluginVersion, archetypeVersion );
             }
 
             if( op.getPluginType().content().equals( PluginType.portlet ) )
@@ -673,7 +676,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         return null;
     }
 
-    private void updateDtdVersion( IProject project, String dtdVersion )
+    private void updateDtdVersion( IProject project, String dtdVersion, String archetypeVesion )
     {
         final String tmpPublicId = dtdVersion;
         final String tmpSystemId = dtdVersion.replaceAll( "\\.", "_" );
@@ -712,6 +715,17 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     editModel.save();
                 }
             }
+
+            for( LiferayDescriptorHelper helper :
+                 LiferayDescriptorHelperManager.getInstance().getDescriptorHelpers( project ) )
+            {
+                if( helper instanceof IDescriptorVersionUpdateOperation )
+                {
+                    ( (IDescriptorVersionUpdateOperation) helper ).update( new org.osgi.framework.Version(
+                        archetypeVesion ), new org.osgi.framework.Version( dtdVersion ) );
+                }
+            }
+
         }
         catch( Exception e )
         {

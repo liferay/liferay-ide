@@ -16,14 +16,23 @@ package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.NewLiferayProfile;
+import com.liferay.ide.project.core.model.ProfileLocation;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.Test;
+import org.w3c.dom.NodeList;
 
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
+@SuppressWarnings( "restriction" )
 public class JSFPortletProjectTests extends LiferayMavenProjectTestCase
 {
 
@@ -111,4 +120,41 @@ public class JSFPortletProjectTests extends LiferayMavenProjectTestCase
         assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
     }
 
+    @Test
+    public void testUpdateLiferayPortletFileDTDVersion() throws Exception
+    {
+        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+        op.setProjectName( "test-update-liferay-portlet-file" );
+        op.setProjectProvider( "maven" );
+        op.setPortletFramework( "jsf-2.x" );
+        op.setPortletFrameworkAdvanced( "jsf" );
+
+        NewLiferayProfile profile = op.getNewLiferayProfiles().insert();
+        profile.setLiferayVersion( "6.1.0" );
+        profile.setId( "test-bundle" );
+        profile.setRuntimeName( "6.1.0" );
+        profile.setProfileLocation( ProfileLocation.projectPom );
+
+        op.setActiveProfilesValue( "test-bundle" );
+
+        final IProject newProject = base.createProject( op );
+
+        assertNotNull( newProject );
+
+        final IFile descriptorFile = CoreUtil.getDescriptorFile( newProject, "liferay-portlet.xml" );
+
+        assertNotNull( descriptorFile );
+        assertTrue( descriptorFile.exists() );
+
+        String contents = CoreUtil.readStreamToString( descriptorFile.getContents() );
+
+        assertTrue( contents.contains( "PUBLIC \"-//Liferay//DTD Portlet Application 6.1.0//EN\"" ) );
+        assertTrue( contents.contains( "http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd" ) );
+
+        final IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( descriptorFile );
+        final IDOMDocument document = domModel.getDocument();
+        NodeList elements = document.getElementsByTagName( "requires-namespaced-parameters" );
+
+        assertEquals( 0, elements.getLength() );
+    }
 }

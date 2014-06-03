@@ -90,7 +90,7 @@ public class VaadinLiferayPortletDescriptorHelper extends LiferayPortletDescript
                     @Override
                     protected IStatus doExecute( IDOMDocument document )
                     {
-                        return updateVaadinLiferayPortletXML( document );
+                        return updateVaadinLiferayPortletXMLTo62( document );
                     }
                 };
 
@@ -107,7 +107,7 @@ public class VaadinLiferayPortletDescriptorHelper extends LiferayPortletDescript
         return model.getID().contains( "NewVaadinPortlet" );
     }
 
-    private IStatus updateVaadinLiferayPortletXML( IDOMDocument document )
+    private IStatus updateVaadinLiferayPortletXMLTo62( IDOMDocument document )
     {
         Element rootElement = document.getDocumentElement();
 
