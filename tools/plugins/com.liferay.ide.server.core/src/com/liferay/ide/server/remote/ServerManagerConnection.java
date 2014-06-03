@@ -405,11 +405,20 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
 
             try
             {
-                if( !isSuccess( json ) )
+                if( isSuccess( json ) )
                 {
-                    System.out.println("uninstallApplication: success"); //$NON-NLS-1$
-
-                    return json;
+                    System.out.println( "uninstallApplication: success\n\n" ); //$NON-NLS-1$
+                }
+                else
+                {
+                    if( isError( json ) )
+                    {
+                        return json.getString( "error" ); //$NON-NLS-1$
+                    }
+                    else
+                    {
+                        return "uninstallApplication error " + getDeployURI( appName ); //$NON-NLS-1$
+                    }
                 }
             }
             catch( Exception e )
@@ -440,13 +449,20 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             {
                 JSONObject json = (JSONObject)response;
 
-                if( isSuccess( json ))
+                if( isSuccess( json ) )
                 {
-                    System.out.println( "updateApplication: success." ); //$NON-NLS-1$
+                    System.out.println( "updateApplication: success.\n\n" ); //$NON-NLS-1$
                 }
                 else
                 {
-                    return "updateApplication: error " + getUpdateURI(appName); //$NON-NLS-1$
+                    if( isError( json ) )
+                    {
+                        return json.getString( "error" ); //$NON-NLS-1$
+                    }
+                    else
+                    {
+                        return "updateApplication error " + getDeployURI( appName ); //$NON-NLS-1$
+                    }
                 }
             }
 
