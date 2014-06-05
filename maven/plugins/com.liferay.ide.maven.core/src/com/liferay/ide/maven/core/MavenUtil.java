@@ -54,6 +54,7 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
 import org.eclipse.wst.xml.core.internal.provisional.format.NodeFormatter;
+import org.osgi.framework.Version;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -401,9 +402,28 @@ public class MavenUtil
 
     public static String getVersion( String version )
     {
-        DefaultArtifactVersion v = new DefaultArtifactVersion( version );
+        String retval = null;
 
-        return v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion(); //$NON-NLS-1$ //$NON-NLS-2$
+        final DefaultArtifactVersion v = new DefaultArtifactVersion( version );
+
+        retval = v.getMajorVersion() + "." + v.getMinorVersion() + "." + v.getIncrementalVersion();
+
+        if( "0.0.0".equals( retval ) )
+        {
+            retval = v.getQualifier();
+        }
+
+        // try to parse as osgi version if it fails then return 0.0.0
+        try
+        {
+            Version.parseVersion( retval );
+        }
+        catch( Exception e )
+        {
+            retval = "0.0.0";
+        }
+
+        return retval;
     }
 
     public static String getWarSourceDirectory( IMavenProjectFacade facade )
