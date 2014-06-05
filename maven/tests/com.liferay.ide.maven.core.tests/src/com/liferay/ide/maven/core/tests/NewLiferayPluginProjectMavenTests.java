@@ -18,8 +18,6 @@ package com.liferay.ide.maven.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.LiferayProjectCore;
@@ -100,13 +98,13 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     }
 
     @Override
-    protected String getRuntimeVersion()
+    public String getRuntimeVersion()
     {
         return "6.2.0";
     }
 
     @Test
-    public void testCreateNewxMavenProject() throws Exception
+    public void testCreateNewMavenProject() throws Exception
     {
         createMavenProjectName( "test-name-1" );
         createMavenProjectName( "Test With Spaces" );
@@ -196,15 +194,6 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         final ValidationService vs = op.getPortletFramework().service( ValidationService.class );
 
         assertEquals( true, vs.validation().ok() );
-
-        final ILiferayProjectProvider maven = LiferayCore.getProvider( "maven" );
-        op.setProjectProvider( maven );
-        op.setPortletFramework( "vaadin" );
-        assertEquals(
-            "Selected portlet framework is not supported with " + maven.getDisplayName(), vs.validation().message() );
-        assertEquals(
-            "Selected portlet framework is not supported with " + maven.getDisplayName(),
-            op.getPortletFramework().validation().message() );
 
         final SDK newSDK = createNewSDK();
         newSDK.setVersion( "6.0.0" );

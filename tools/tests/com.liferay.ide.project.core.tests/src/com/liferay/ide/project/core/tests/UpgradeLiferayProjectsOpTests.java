@@ -276,7 +276,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
     }
 
     @Override
-    protected String getRuntimeVersion()
+    public String getRuntimeVersion()
     {
         return "6.1.1";
     }

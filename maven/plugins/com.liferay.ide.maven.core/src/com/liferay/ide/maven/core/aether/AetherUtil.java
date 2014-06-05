@@ -77,17 +77,18 @@ public class AetherUtil
         return session;
     }
 
-    public static Artifact getLatestAvailableLiferayArtifact( final String groupId, final String artifactId )
+    public static Artifact getLatestAvailableArtifact( final String gavCoords )
     {
         Artifact retval = null;
 
         final RepositorySystem system = newRepositorySystem();
         final RepositorySystemSession session = newRepositorySystemSession( system );
 
-        // as of release time 6.2.0-RC5 is the latest available liferay artifacts on maven central
-        final String latestVersion = AetherUtil.getLatestVersion( groupId, artifactId, "6", "6.2.0-RC5", system, session );
+        final String latestVersion = AetherUtil.getLatestVersion( gavCoords, system, session );
 
-        final Artifact defaultArtifact = new DefaultArtifact( groupId + ":" + artifactId + ":" + latestVersion );
+        final String[] gav = gavCoords.split( ":" );
+
+        final Artifact defaultArtifact = new DefaultArtifact( gav[0] + ":" + gav[1] + ":" + latestVersion );
 
         ArtifactRequest artifactRequest = new ArtifactRequest();
         artifactRequest.setArtifact( defaultArtifact );
@@ -103,7 +104,7 @@ public class AetherUtil
         {
             LiferayMavenCore.logError( "Unable to get latest Liferay archetype", e );
 
-            artifactRequest.setArtifact( new DefaultArtifact( groupId + ":" + artifactId + ":" + "6.2.0-RC5" ) );
+            artifactRequest.setArtifact( new DefaultArtifact( gavCoords ) );
 
             try
             {
@@ -123,13 +124,18 @@ public class AetherUtil
         return retval;
     }
 
-    public static String getLatestVersion(
-        String group, String artifactId, String startVersion, String defaultVersion, RepositorySystem system,
-        RepositorySystemSession session )
+    public static String getLatestVersion( String gavCoords, RepositorySystem system, RepositorySystemSession session )
     {
         String retval = null;
 
-        final Artifact artifact = new DefaultArtifact( group + ":" + artifactId + ":[" + startVersion + ",)" );
+        final String[] gav = gavCoords.split( ":" );
+
+        if( gav == null || gav.length != 3 )
+        {
+            throw new IllegalArgumentException( "gavCoords should be group:artifactId:version" );
+        }
+
+        final Artifact artifact = new DefaultArtifact( gav[0] + ":" + gav[1] + ":[" + gav[2] + ",)" );
 
         final VersionRangeRequest rangeRequest = new VersionRangeRequest();
         rangeRequest.setArtifact( artifact );
@@ -159,7 +165,7 @@ public class AetherUtil
 
         if( retval == null )
         {
-            retval = defaultVersion;
+            retval = gav[2];
         }
 
         return retval;

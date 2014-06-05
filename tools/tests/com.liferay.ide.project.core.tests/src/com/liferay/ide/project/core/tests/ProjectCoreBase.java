@@ -51,7 +51,7 @@ import org.junit.Before;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public abstract class ProjectCoreBase extends BaseTests
+public class ProjectCoreBase extends BaseTests
 {
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
     private static IPath liferayBundlesPath;
@@ -143,7 +143,7 @@ public abstract class ProjectCoreBase extends BaseTests
         return newSDK;
     }
 
-    protected IProject createProject( NewLiferayPluginProjectOp op )
+    public IProject createProject( NewLiferayPluginProjectOp op )
     {
         Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
@@ -237,7 +237,7 @@ public abstract class ProjectCoreBase extends BaseTests
         return "com.liferay.ide.server.62.tomcat.runtime.70";
     }
 
-    protected String getRuntimeVersion()
+    public String getRuntimeVersion()
     {
         return "6.2.0";
     }

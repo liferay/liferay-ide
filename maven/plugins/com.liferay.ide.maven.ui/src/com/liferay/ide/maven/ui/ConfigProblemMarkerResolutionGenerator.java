@@ -41,8 +41,7 @@ public class ConfigProblemMarkerResolutionGenerator implements IMarkerResolution
             final RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
 
             final String pluginVersion =
-                AetherUtil.getLatestVersion(
-                    "com.liferay.maven.plugins", "liferay-maven-plugin", "6", "6.2.0-ga1", system, session );
+                AetherUtil.getLatestVersion( "com.liferay.maven.plugins:liferay-maven-plugin:6.2.1", system, session );
 
             retval = new IMarkerResolution[]
             {

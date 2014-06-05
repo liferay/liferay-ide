@@ -42,9 +42,16 @@ public class VaadinPortletFramework extends BasePortletFramework
         return Status.OK_STATUS;
     }
 
+    @Override
+    public String getArchetypeGAV()
+    {
+        return "com.vaadin:vaadin-archetype-liferay-portlet:7.4.0.alpha2";
+    }
+
     public boolean supports( ILiferayProjectProvider provider )
     {
-        return provider != null &&  "ant".equals( provider.getShortName() );
+        return provider != null &&
+            ( "ant".equals( provider.getShortName() ) || "maven".equals( provider.getShortName() ) );
     }
 
 }

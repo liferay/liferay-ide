@@ -45,6 +45,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.maven.archetype.catalog.Archetype;
+import org.apache.maven.archetype.exception.UnknownArchetype;
+import org.apache.maven.archetype.metadata.RequiredProperty;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.cli.MavenCli;
 import org.apache.maven.model.Model;
 import org.apache.maven.settings.Profile;
@@ -67,6 +70,8 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.m2e.core.internal.MavenPluginActivator;
+import org.eclipse.m2e.core.internal.archetype.ArchetypeManager;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
@@ -143,31 +148,74 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             location = location.removeLastSegments( 1 );
         }
 
+        String archetypeArtifactId = null;
         String archetypeType = null;
 
-        if( pluginType.equals( PluginType.portlet ) && portletFramework.isRequiresAdvanced() )
+        if( pluginType.equals( PluginType.portlet ) )
         {
-            archetypeType = "portlet-" + frameworkName.replace( "_", "-" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            archetypeArtifactId = portletFramework.getArchetypeGAV();
+
+            if( archetypeArtifactId == null )
+            {
+                if( portletFramework.isRequiresAdvanced() )
+                {
+                    archetypeType = "portlet-" + frameworkName.replace( "_", "-" );
+                }
+                else
+                {
+                    archetypeType = pluginType.name();
+                }
+            }
         }
         else
         {
             archetypeType = pluginType.name();
         }
 
-        final String archetypeArtifactId = "liferay-" + archetypeType + "-archetype"; //$NON-NLS-1$ //$NON-NLS-2$
+        if( archetypeArtifactId == null )
+        {
+            archetypeArtifactId = LIFERAY_ARCHETYPES_GROUP_ID + ":liferay-" + archetypeType + "-archetype:6.2.1";
+        }
 
         // get latest liferay archetype
         monitor.beginTask( "Determining latest Liferay maven plugin archetype version.", IProgressMonitor.UNKNOWN );
-        final String archetypeVersion =
-            AetherUtil.getLatestAvailableLiferayArtifact( LIFERAY_ARCHETYPES_GROUP_ID, archetypeArtifactId ).getVersion();
+        final String archetypeVersion = AetherUtil.getLatestAvailableArtifact( archetypeArtifactId ).getVersion();
 
         final Archetype archetype = new Archetype();
-        archetype.setArtifactId( archetypeArtifactId );
-        archetype.setGroupId( LIFERAY_ARCHETYPES_GROUP_ID );
+
+        final String[] gav = archetypeArtifactId.split( ":" );
+
+        archetype.setGroupId( gav[0] );
+        archetype.setArtifactId( gav[1] );
         archetype.setModelEncoding( "UTF-8" );
         archetype.setVersion( archetypeVersion );
 
+        final ArchetypeManager archetypeManager = MavenPluginActivator.getDefault().getArchetypeManager();
+        final ArtifactRepository remoteArchetypeRepository = archetypeManager.getArchetypeRepository( archetype );
         final Properties properties = new Properties();
+
+        try
+        {
+            final List<?> archProps =
+                archetypeManager.getRequiredProperties( archetype, remoteArchetypeRepository, monitor );
+
+           if( ! CoreUtil.isNullOrEmpty( archProps ) )
+           {
+               for( Object prop : archProps )
+               {
+                   if( prop instanceof RequiredProperty )
+                   {
+                       final RequiredProperty rProp = (RequiredProperty) prop;
+
+                       properties.put( rProp.getKey(), rProp.getDefaultValue() );
+                   }
+               }
+           }
+        }
+        catch( UnknownArchetype e1 )
+        {
+            LiferayMavenCore.logError( "Unable to find archetype required properties", e1 );
+        }
 
         final ResolverConfiguration resolverConfig = new ResolverConfiguration();
 
@@ -228,7 +276,8 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                         for( NewLiferayProfile newProfile : newUserSettingsProfiles )
                         {
-                            MavenUtil.createNewLiferayProfileNode( pomDocument, newProfile, archetypeVersion );
+                            MavenUtil.createNewLiferayProfileNode(
+                                pomDocument, newProfile, newProfile.getLiferayVersion().content() );
                         }
 
                         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -554,15 +603,15 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     {
                         final Properties properties = existProfile.getProperties();
                         final String liferayVersion = properties.getProperty( "liferay.version" );
-                        final String plugVersion = properties.getProperty( "liferay.maven.plugin.version" );
+                        final String pluginVersion = properties.getProperty( "liferay.maven.plugin.version" );
 
-                        if( plugVersion != null && liferayVersion != null )
+                        if( pluginVersion != null && liferayVersion != null )
                         {
                             final org.osgi.framework.Version shortLiferayVersion =
                                 new org.osgi.framework.Version( liferayVersion.substring( 0, 3 ) );
 
                             final org.osgi.framework.Version shortPluginVersion =
-                                new org.osgi.framework.Version( plugVersion.substring( 0, 3 ) );
+                                new org.osgi.framework.Version( pluginVersion.substring( 0, 3 ) );
 
                             minExistedVersion = shortLiferayVersion.compareTo( shortPluginVersion ) < 0
                                     ? shortLiferayVersion : shortPluginVersion;

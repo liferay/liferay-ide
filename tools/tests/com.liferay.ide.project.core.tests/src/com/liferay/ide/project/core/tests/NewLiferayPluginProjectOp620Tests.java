@@ -64,7 +64,7 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     }
 
     @Override
-    protected String getRuntimeVersion()
+    public String getRuntimeVersion()
     {
         return "6.2.0";
     }
