@@ -42,16 +42,21 @@ public class VersionedDTDDefaultValueService extends DefaultValueService
     {
         String defaultVersion = null;
 
-        Document document = this.context( Element.class ).resource().adapt( RootXmlResource.class ).getDomDocument();
+        final RootXmlResource xmlResource = this.context( Element.class ).resource().adapt( RootXmlResource.class );
 
-        if( document != null && document.getDoctype() != null )
+        if( xmlResource != null )
         {
-            String systemId = document.getDoctype().getSystemId();
-            Matcher matcher = this.systemIdPattern.matcher( systemId );
+            final Document document = xmlResource.getDomDocument();
 
-            if( matcher.matches() )
+            if( document != null && document.getDoctype() != null )
             {
-                defaultVersion = matcher.group( 1 );
+                String systemId = document.getDoctype().getSystemId();
+                Matcher matcher = this.systemIdPattern.matcher( systemId );
+
+                if( matcher.matches() )
+                {
+                    defaultVersion = matcher.group( 1 );
+                }
             }
         }
 

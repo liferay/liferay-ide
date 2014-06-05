@@ -19,12 +19,13 @@ package com.liferay.ide.service.core.model.internal;
 import com.liferay.ide.service.core.model.Entity;
 import com.liferay.ide.service.core.model.ServiceBuilder;
 
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.services.ReferenceService;
 
 /**
  * @author Gregory Amerson
  */
-public class EntityRelationshipService extends ReferenceService
+public class EntityRelationshipService extends ReferenceService<Entity>
 {
 
     public static Entity findEntity(final String entityName, final ServiceBuilder serviceBuilder)
@@ -47,8 +48,10 @@ public class EntityRelationshipService extends ReferenceService
     }
 
     @Override
-    public Object resolve( final String reference )
+    public Entity compute()
     {
+        final String reference = context( Value.class ).text();
+
         return findEntity( reference, context( ServiceBuilder.class ) );
     }
 

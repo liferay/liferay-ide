@@ -17,15 +17,12 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import com.liferay.ide.portlet.core.model.internal.PortletReferenceService;
-
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.PossibleValues;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -41,7 +38,6 @@ public interface PortletName extends Element
     @Label( standard = "Name" )
     @XmlBinding( path = "" )
     @PossibleValues( property = "/Portlets/PortletName" )
-    @Service( impl = PortletReferenceService.class, params = { @Service.Param( name = "0", value = "portlet-name" ) } )
     ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();

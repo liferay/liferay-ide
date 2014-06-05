@@ -17,19 +17,14 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import com.liferay.ide.portlet.core.model.internal.FilterReferenceService;
-import com.liferay.ide.portlet.core.model.internal.PortletReferenceService;
-
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.PossibleValues;
-import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlValueBinding;
 
@@ -43,31 +38,27 @@ public interface FilterMapping extends Element
 
     ElementType TYPE = new ElementType( FilterMapping.class );
 
-    // *** IFilter ***
+    // *** Filter ***
 
-    @Reference( target = Filter.class )
-    @Service( impl = FilterReferenceService.class )
     @Label( standard = "filter" )
     @Required
     @PossibleValues( property = "/Filters/Name" )
     @XmlBinding( path = "filter-name" )
     ValueProperty PROP_FILTER = new ValueProperty( TYPE, "Filter" ); //$NON-NLS-1$
 
-    ReferenceValue<String, Filter> getFilter();
+    Value<String> getFilter();
 
     void setFilter( String value );
 
     // *** Portlet ***
 
-    @Reference( target = Portlet.class )
-    @Service( impl = PortletReferenceService.class )
     @Label( standard = "portlet" )
     @Required
     @PossibleValues( property = "/Portlets/PortletName" )
     @XmlValueBinding( path = "portlet-name", removeNodeOnSetIfNull = false )
     ValueProperty PROP_PORTLET = new ValueProperty( TYPE, "Portlet" ); //$NON-NLS-1$
 
-    ReferenceValue<String, Portlet> getPortlet();
+    Value<String> getPortlet();
 
     void setPortlet( String value );
 

@@ -17,7 +17,6 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import com.liferay.ide.portlet.core.model.internal.EventDefinitionReferenceService;
 import com.liferay.ide.portlet.core.model.internal.QNameTextNodeValueBinding;
 import com.liferay.ide.portlet.core.model.internal.QNamesPossibleValuesService;
 
@@ -30,7 +29,6 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Service.Param;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -62,7 +60,6 @@ public interface EventDefinitionRef extends Element, Identifiable, Describeable
     @Unique
     @Enablement( expr = "${Qname == 'Q_NAME'}" )
     @PossibleValues( property = "/EventDefinitions/Name" )
-    @Service( impl = EventDefinitionReferenceService.class, params = { @Param( name = "0", value = "name" ) } )
     ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" ); //$NON-NLS-1$
 
     Value<String> getName();
