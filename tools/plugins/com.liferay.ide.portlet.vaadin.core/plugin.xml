@@ -23,7 +23,7 @@
       </liferayDescriptorHelper>
       <liferayDescriptorHelper
             class="com.liferay.ide.portlet.vaadin.core.dd.VaadinLiferayPortletDescriptorHelper"
-            contentTypeBinding="com.liferay.ide.portlet.core.liferaypluginpackageproperties"
+            contentTypeBinding="com.liferay.ide.portlet.core.liferayportletxml"
             id="com.liferay.ide.portlet.vaadin.core.vaadinLiferayPortletDescriptorHelper">
       </liferayDescriptorHelper>
       <liferayDescriptorHelper
