@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jst.common.project.facet.IJavaFacetInstallDataModelProperties;
+import org.eclipse.jst.common.project.facet.core.JavaFacet;
 import org.eclipse.jst.common.project.facet.core.JavaFacetInstallConfig;
 import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
@@ -49,6 +50,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -257,8 +259,9 @@ public class SDKPluginFacetUtil
                 if( currentFacetVersion.getProjectFacet().equals( requiredFacet ) )
                 {
                     boolean supports = runtime.supports( currentFacetVersion );
+                    boolean requiredVersion = isRequiredVersion( currentFacetVersion );
 
-                    if( supports )
+                    if( supports && requiredVersion )
                     {
                         hasRequiredFacet = true;
                     }
@@ -484,6 +487,27 @@ public class SDKPluginFacetUtil
         }
 
         return sdkName;
+    }
+
+    private static boolean isRequiredVersion( IProjectFacetVersion facetVersion )
+    {
+        // java facet must be at least 1.6
+        if( JavaFacet.FACET.equals( facetVersion.getProjectFacet() ) )
+        {
+            try
+            {
+                if( CoreUtil.compareVersions( new Version( facetVersion.getVersionString() ), new Version( 1, 6, 0 ) ) < 0 )
+                {
+                    return false;
+                }
+            }
+            catch( Throwable t )
+            {
+                // ignore
+            }
+        }
+
+        return true;
     }
 
     private static void removeSrcFolders( final IDataModel dm, final JavaFacetInstallConfig javaConfig )
