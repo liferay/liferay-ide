@@ -21,6 +21,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,6 +34,7 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 public class SocketUtil
 {
@@ -130,6 +132,38 @@ public class SocketUtil
         }
 
         return null;
+    }
+
+    public static boolean isPortAvailable( final String port )
+    {
+        ServerSocket serverSocket = null;
+
+        try
+        {
+            serverSocket = new ServerSocket();
+
+            serverSocket.bind( new InetSocketAddress( Integer.parseInt( port ) ) );
+
+            return true;
+        }
+        catch( IOException e )
+        {
+        }
+        finally
+        {
+            if( serverSocket != null )
+            {
+                try
+                {
+                    serverSocket.close();
+                }
+                catch( IOException e )
+                {
+                }
+            }
+        }
+
+        return false;
     }
 
     private static class Msgs extends NLS

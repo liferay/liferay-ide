@@ -18,7 +18,12 @@ package com.liferay.ide.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
+
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -43,6 +48,7 @@ import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class BaseTests
@@ -128,6 +134,13 @@ public class BaseTests
         }
     }
 
+    protected void failTest( Exception e )
+    {
+        StringWriter s = new StringWriter();
+        e.printStackTrace(new PrintWriter(s));
+        fail(s.toString());
+    }
+
     protected Element getElementFromFile( IProject project, IPath filePath, ElementType type ) throws Exception
     {
         final String filePathValue = filePath.toOSString();
@@ -143,6 +156,26 @@ public class BaseTests
         return element;
     }
 
+    protected final File createTempFile( final String fileDir, final String fileName )
+    {
+        try
+        {
+            File tempFile = LiferayCore.getDefault().getStateLocation().append( fileName ).toFile();
+
+            FileUtil.writeFileFromStream( tempFile, getClass().getResourceAsStream( fileDir + "/" + fileName ) );
+
+            if( tempFile.exists() )
+            {
+                return tempFile;
+            }
+        }
+        catch( IOException e )
+        {
+        }
+
+        return null;
+    }
+
     protected static IProject project( final String name )
     {
         return workspaceRoot().getProject( name );
@@ -151,16 +184,6 @@ public class BaseTests
     protected String stripCarriageReturns( String value )
     {
         return value.replaceAll( "\r", "" );
-    }
-
-    protected static IWorkspace workspace()
-    {
-        return ResourcesPlugin.getWorkspace();
-    }
-
-    protected static IWorkspaceRoot workspaceRoot()
-    {
-        return workspace().getRoot();
     }
 
     protected void waitForBuildAndValidation(IProject project) throws Exception
@@ -175,7 +198,7 @@ public class BaseTests
     {
         IWorkspaceRoot root = null;
 
-        try 
+        try
         {
             ResourcesPlugin.getWorkspace().checkpoint(true);
             Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
@@ -193,7 +216,7 @@ public class BaseTests
         {
             failTest( e );
         }
-        catch (OperationCanceledException e) 
+        catch (OperationCanceledException e)
         {
             failTest( e );
         }
@@ -205,10 +228,14 @@ public class BaseTests
         }
     }
 
-    protected void failTest( Exception e )
+    protected static IWorkspace workspace()
     {
-        StringWriter s = new StringWriter();
-        e.printStackTrace(new PrintWriter(s));
-        fail(s.toString());
-    } 
+        return ResourcesPlugin.getWorkspace();
+    }
+
+    protected static IWorkspaceRoot workspaceRoot()
+    {
+        return workspace().getRoot();
+    }
+
 }

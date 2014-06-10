@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jem.util,
  org.eclipse.m2e.tests.common;bundle-version="1.3.0",
  com.liferay.ide.project.core;bundle-version="2.0.0",
- com.liferay.ide.project.core.tests
+ com.liferay.ide.project.core.tests,
+ com.liferay.ide.server.core.tests;bundle-version="2.1.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.maven.core.tests
