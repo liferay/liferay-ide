@@ -38,6 +38,9 @@ import org.junit.Test;
 public class ServerManagerTests extends ServerCoreBase
 {
 
+    private static final String BUNDLE_SHUTDOWN_PORT = "8005";
+    private static final String BUNDLE_AJP_PORT = "8009";
+    private static final String BUNDLE_START_PORT = "8080";
     private final static String portalSetupWizardFileName = "portal-setup-wizard.properties";
     private final static String remoteIDEConnectorLPKGFileName = "Remote IDE Connector CE.lpkg";
     private static IServerManagerConnection service;
@@ -73,11 +76,11 @@ public class ServerManagerTests extends ServerCoreBase
             "Expected the port " + liferayServerAjpPort + " is available", true,
             SocketUtil.isPortAvailable( liferayServerAjpPort ) );
 
-        changeServerXmlPort( "8080", liferayServerStartPort );
+        changeServerXmlPort( BUNDLE_START_PORT, liferayServerStartPort );
 
-        changeServerXmlPort( "8009", liferayServerAjpPort );
+        changeServerXmlPort( BUNDLE_AJP_PORT, liferayServerAjpPort );
 
-        changeServerXmlPort( "8005", liferayServerShutdownPort );
+        changeServerXmlPort( BUNDLE_SHUTDOWN_PORT, liferayServerShutdownPort );
 
         copyFileToServer( server, "deploy", "files", remoteIDEConnectorLPKGFileName );
 
@@ -87,14 +90,15 @@ public class ServerManagerTests extends ServerCoreBase
         {
             final IStatus[] status = new IStatus[1];
 
-            server.start( ILaunchManager.DEBUG_MODE, new IServer.IOperationListener()
+            final IServer.IOperationListener listener = new IServer.IOperationListener()
             {
-
                 public void done( IStatus result )
                 {
                     status[0] = result;
                 }
-            } );
+            };
+
+            server.start( ILaunchManager.DEBUG_MODE, listener );
 
             int i = 0;
 
@@ -136,12 +140,11 @@ public class ServerManagerTests extends ServerCoreBase
 
         if( server.getServerState() != IServer.STATE_STOPPED )
         {
-
             server.stop( true );
 
-            changeServerXmlPort( liferayServerShutdownPort, "8005" );
-            changeServerXmlPort( liferayServerStartPort, "8080" );
-            changeServerXmlPort( liferayServerAjpPort, "8009" );
+            changeServerXmlPort( liferayServerShutdownPort, BUNDLE_SHUTDOWN_PORT );
+            changeServerXmlPort( liferayServerStartPort, BUNDLE_START_PORT );
+            changeServerXmlPort( liferayServerAjpPort, BUNDLE_AJP_PORT );
         }
     }
 

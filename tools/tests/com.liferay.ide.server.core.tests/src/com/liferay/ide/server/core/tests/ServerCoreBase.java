@@ -50,9 +50,9 @@ public abstract class ServerCoreBase extends BaseTests
 {
 
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
-    protected final static String liferayServerStartPort = System.getProperty( "liferay.server.start.port" );
     protected final static String liferayServerAjpPort = System.getProperty( "liferay.server.ajp.port" );
     protected final static String liferayServerShutdownPort = System.getProperty( "liferay.server.shutdown.port" );
+    protected final static String liferayServerStartPort = System.getProperty( "liferay.server.start.port" );
     private static IPath liferayBundlesPath;
     private static IRuntime runtime;
     private static IServer server;
