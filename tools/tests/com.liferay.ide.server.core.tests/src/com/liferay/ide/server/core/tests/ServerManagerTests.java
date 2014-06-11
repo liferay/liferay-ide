@@ -24,6 +24,7 @@ import com.liferay.ide.server.util.SocketUtil;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.wst.server.core.IServer;
@@ -62,15 +63,21 @@ public class ServerManagerTests extends ServerCoreBase
     @Before
     public void startServer() throws Exception
     {
-        final NullProgressMonitor npm = new NullProgressMonitor();
-
         final IServer server = getServer();
 
         assertEquals(
-            "Expected the port " + liferayServerPort + " is available", true,
-            SocketUtil.isPortAvailable( liferayServerPort ) );
+            "Expected the port " + liferayServerStartPort + " is available", true,
+            SocketUtil.isPortAvailable( liferayServerStartPort ) );
 
-        changeServerXmlPort( "8080", liferayServerPort );
+        assertEquals(
+            "Expected the port " + liferayServerAjpPort + " is available", true,
+            SocketUtil.isPortAvailable( liferayServerAjpPort ) );
+
+        changeServerXmlPort( "8080", liferayServerStartPort );
+
+        changeServerXmlPort( "8009", liferayServerAjpPort );
+
+        changeServerXmlPort( "8005", liferayServerShutdownPort );
 
         copyFileToServer( server, "deploy", "files", remoteIDEConnectorLPKGFileName );
 
@@ -78,7 +85,16 @@ public class ServerManagerTests extends ServerCoreBase
 
         if( server.getServerState() == IServer.STATE_STOPPED )
         {
-            server.start( ILaunchManager.DEBUG_MODE, npm );
+            final IStatus[] status = new IStatus[1];
+
+            server.start( ILaunchManager.DEBUG_MODE, new IServer.IOperationListener()
+            {
+
+                public void done( IStatus result )
+                {
+                    status[0] = result;
+                }
+            } );
 
             int i = 0;
 
@@ -88,8 +104,7 @@ public class ServerManagerTests extends ServerCoreBase
 
                 i++;
             }
-            while( ( server.getServerState() != IServer.STATE_STARTED ) &&
-                ( server.getServerState() == IServer.STATE_STARTING ) && ( i < 20 ) );
+            while( ( status[0] == null ) && ( i < 20 ) );
         }
 
         assertEquals( "Expected server has started", IServer.STATE_STARTED, server.getServerState() );
@@ -97,7 +112,7 @@ public class ServerManagerTests extends ServerCoreBase
         service = new ServerManagerConnection();
 
         service.setHost( "localhost" );
-        service.setHttpPort( liferayServerPort );
+        service.setHttpPort( liferayServerStartPort );
         service.setManagerContextPath( "/server-manager-web" );
         service.setUsername( "test@liferay.com" );
         service.setPassword( "test" );
@@ -121,9 +136,12 @@ public class ServerManagerTests extends ServerCoreBase
 
         if( server.getServerState() != IServer.STATE_STOPPED )
         {
+
             server.stop( true );
 
-            changeServerXmlPort( liferayServerPort, "8080" );
+            changeServerXmlPort( liferayServerShutdownPort, "8005" );
+            changeServerXmlPort( liferayServerStartPort, "8080" );
+            changeServerXmlPort( liferayServerAjpPort, "8009" );
         }
     }
 
@@ -141,7 +159,7 @@ public class ServerManagerTests extends ServerCoreBase
         assertEquals( "Expected the Test Application has been installed", null, result );
 
         assertEquals(
-            "Expected the Test Application Folder to exist:" + testApplicationFolder.toPath(), true,
+            "Expected the Test Application Folder to exist:" + testApplicationFolder.getAbsolutePath(), true,
             testApplicationFolder.exists() );
 
         result = service.isAppInstalled( "test-application" );
@@ -159,7 +177,7 @@ public class ServerManagerTests extends ServerCoreBase
 
         assertEquals( "Expected uploading the Modified Test Portlet is success", null, result );
 
-        assertEquals( "Expected the view jsp file to exist:" + testJspFile.toPath(), true, testJspFile.exists() );
+        assertEquals( "Expected the view jsp file to exist:" + testJspFile.getAbsolutePath(), true, testJspFile.exists() );
 
         result =
             service.updateApplication(

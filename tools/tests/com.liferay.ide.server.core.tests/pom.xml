@@ -31,7 +31,9 @@
     <name>Liferay IDE Server Core Tests</name>
 
     <properties>
-        <liferay.server.port>5678</liferay.server.port>
+        <liferay.server.ajp.port>5679</liferay.server.ajp.port>
+        <liferay.server.shutdown.port>5677</liferay.server.shutdown.port>
+        <liferay.server.start.port>5678</liferay.server.start.port>
     </properties>
     
 	<build>
@@ -48,7 +50,9 @@
                     <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
                     <systemProperties>
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
-                        <liferay.server.port>${liferay.server.port}</liferay.server.port>
+                        <liferay.server.start.port>${liferay.server.start.port}</liferay.server.start.port>
+                        <liferay.server.ajp.port>${liferay.server.ajp.port}</liferay.server.ajp.port>
+                        <liferay.server.shutdown.port>${liferay.server.shutdown.port}</liferay.server.shutdown.port>
                     </systemProperties>
                 </configuration>
             </plugin>
