@@ -302,31 +302,7 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                         }
                     }
 
-                    op().getLibraries().clear();
-
-                    for( MobileAPI rootAPI : rootAPIs )
-                    {
-                        if( rootAPI instanceof PortalAPI )
-                        {
-                            if( this.apisTreeViewer.getChecked( rootAPI ) )
-                            {
-                                final Library newLib = op().getLibraries().insert();
-                                newLib.setContext( rootAPI.context );
-                            }
-                        }
-                        else
-                        {
-                            for( EntityAPI api : rootAPI.entities )
-                            {
-                                if( this.apisTreeViewer.getChecked( api ) )
-                                {
-                                    final Library newLib = op().getLibraries().insert();
-                                    newLib.setContext( api.context );
-                                    newLib.setEntity( api.name );
-                                }
-                            }
-                        }
-                    }
+                    updateLibraries();
 
                     updateValidation();
                 }
@@ -381,8 +357,18 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                             {
                                 apisTreeViewer.setGrayed( rootAPI, false );
                                 apisTreeViewer.setSubtreeChecked( rootAPI, true );
-                                updateValidation();
                             }
+
+                            final Runnable runnable = new Runnable()
+                            {
+                                public void run()
+                                {
+                                    updateLibraries();
+                                    updateValidation();
+                                }
+                            };
+
+                            UIUtil.async( runnable, 500 );
                         }
                     }
                 );
@@ -402,6 +388,17 @@ public class ComponentAPIsCustomPart extends FormComponentPart
                                 apisTreeViewer.setSubtreeChecked( rootAPI, false );
                                 updateValidation();
                             }
+
+                            final Runnable runnable = new Runnable()
+                            {
+                                public void run()
+                                {
+                                    updateLibraries();
+                                    updateValidation();
+                                }
+                            };
+
+                            UIUtil.async( runnable, 1000 );
                         }
                     }
                 );
@@ -452,7 +449,38 @@ public class ComponentAPIsCustomPart extends FormComponentPart
 
                 refreshValidation();
             }
+
+            private void updateLibraries()
+            {
+                op().getLibraries().clear();
+
+                for( MobileAPI rootAPI : rootAPIs )
+                {
+                    if( rootAPI instanceof PortalAPI )
+                    {
+                        if( this.apisTreeViewer.getChecked( rootAPI ) )
+                        {
+                            final Library newLib = op().getLibraries().insert();
+                            newLib.setContext( rootAPI.context );
+                        }
+                    }
+                    else
+                    {
+                        for( EntityAPI api : rootAPI.entities )
+                        {
+                            if( this.apisTreeViewer.getChecked( api ) )
+                            {
+                                final Library newLib = op().getLibraries().insert();
+                                newLib.setContext( api.context );
+                                newLib.setEntity( api.name );
+                            }
+                        }
+                    }
+                }
+            }
         };
     }
+
+
 
 }

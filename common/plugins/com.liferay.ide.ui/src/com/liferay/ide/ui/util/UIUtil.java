@@ -72,6 +72,27 @@ public class UIUtil
         }
     }
 
+    public static void async( final Runnable runnable, final long delay )
+    {
+        final Runnable delayer = new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    Thread.sleep( delay );
+                }
+                catch( InterruptedException e )
+                {
+                }
+
+                async( runnable );
+            }
+        };
+
+        async( delayer );
+    }
+
     private static boolean confirmPerspectiveSwitch( IWorkbenchWindow window, IPerspectiveDescriptor finalPersp )
     {
         IPreferenceStore store = IDEWorkbenchPlugin.getDefault().getPreferenceStore();
