@@ -54,9 +54,6 @@
                         <liferay.server.shutdown.port>${liferay.server.shutdown.port}</liferay.server.shutdown.port>
                         <liferay.server.start.port>${liferay.server.start.port}</liferay.server.start.port>
                     </systemProperties>
-                    <excludes>
-                        <exclude>**/ServerManagerTests*</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
             <plugin>

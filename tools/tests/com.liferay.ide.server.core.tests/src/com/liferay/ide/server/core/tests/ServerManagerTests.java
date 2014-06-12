@@ -30,6 +30,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.wst.server.core.IServer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -149,6 +150,7 @@ public class ServerManagerTests extends ServerCoreBase
     }
 
     @Test
+    @Ignore
     public void testInstallUpdateUninstallApplication() throws Exception
     {
         final NullProgressMonitor npm = new NullProgressMonitor();
