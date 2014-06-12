@@ -48,6 +48,8 @@
                 <artifactId>tycho-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+                    <useUIHarness>false</useUIHarness>
+                    <useUIThread>false</useUIThread>
                     <systemProperties>
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <liferay.server.ajp.port>${liferay.server.ajp.port}</liferay.server.ajp.port>

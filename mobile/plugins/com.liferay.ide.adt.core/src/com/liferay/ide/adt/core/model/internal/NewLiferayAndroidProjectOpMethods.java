@@ -23,7 +23,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IProject;
@@ -110,25 +109,37 @@ public class NewLiferayAndroidProjectOpMethods
         newProject.open( monitor );
     }
 
-    private static void updateProjectContents( File projectDir, NewLiferayAndroidProjectOp op )
-        throws FileNotFoundException, IOException
+    private static void updateProjectContents( File projectDir, NewLiferayAndroidProjectOp op ) throws CoreException
     {
         // update project name
         final File dotProject = new File( projectDir, ".project" );
 
-        FileUtil.searchAndReplace( dotProject, "<name>liferay-mobile-sdk-sample-android</name>", "<name>" +
-            op.getProjectName().content() + "</name>" );
+        try
+        {
+            boolean updated =
+                FileUtil.searchAndReplace( dotProject, "<name>liferay-mobile-sdk-sample-android</name>", "<name>" +
+                    op.getProjectName().content() + "</name>" );
 
-        // update target sdk
-        final int sdkLevel = ADTUtil.extractSdkLevel( op.getTargetSDK().content( true ) );
-        final File androidManfest = new File( projectDir, "AndroidManifest.xml" );
+            if( ! updated )
+            {
+                throw new IOException();
+            }
 
-        FileUtil.searchAndReplace(
-            androidManfest, "android:targetSdkVersion=\"17\"", "android:targetSdkVersion=\"" + sdkLevel + "\"" );
+            // update target sdk
+            final int sdkLevel = ADTUtil.extractSdkLevel( op.getTargetSDK().content( true ) );
+            final File androidManfest = new File( projectDir, "AndroidManifest.xml" );
 
-        final File projectProperties = new File( projectDir, "project.properties" );
+            FileUtil.searchAndReplace(
+                androidManfest, "android:targetSdkVersion=\"\\d+\"", "android:targetSdkVersion=\"" + sdkLevel + "\"" );
 
-        FileUtil.searchAndReplace( projectProperties, "target=android-17", "target=android-" + sdkLevel );
+            final File projectProperties = new File( projectDir, "project.properties" );
+
+            FileUtil.searchAndReplace( projectProperties, "target=android-\\d+", "target=android-" + sdkLevel );
+        }
+        catch( IOException e )
+        {
+            throw new CoreException( ADTCore.createErrorStatus( "Unable to update project contents", e ) );
+        }
     }
 
     private static IWorkspace workspace()

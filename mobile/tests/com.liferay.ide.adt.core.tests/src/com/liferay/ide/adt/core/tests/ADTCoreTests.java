@@ -345,6 +345,7 @@ public class ADTCoreTests extends BaseTests
         createLiferayAndroidProjectSDK( "API 16: Android 4.1 (Jelly Bean)" /*16*/ );
         createLiferayAndroidProjectSDK( "API 17: Android 4.2 (Jelly Bean)" /*17*/ );
         createLiferayAndroidProjectSDK( "API 18: Android 4.3 (Jelly Bean)" /*18*/ );
+        createLiferayAndroidProjectSDK( "API 19: Android 4.4 (KitKat)" /*19*/ );
     }
 
     @Test

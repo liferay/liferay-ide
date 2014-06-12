@@ -475,16 +475,22 @@ public class FileUtil
         }
     }
 
-    public static void searchAndReplace( File file, String search, String replace ) throws FileNotFoundException, IOException
+    public static boolean searchAndReplace( File file, String search, String replace ) throws FileNotFoundException, IOException
     {
+        boolean replaced = false;
+
         if( file.exists() )
         {
             final String searchContents = CoreUtil.readStreamToString( new FileInputStream( file ) );
 
-            final String replaceContents = searchContents.replace( search, replace );
+            final String replaceContents = searchContents.replaceAll( search, replace );
+
+            replaced = ! searchContents.equals( replaceContents );
 
             CoreUtil.writeStreamFromString( replaceContents, new FileOutputStream( file ) );
         }
+
+        return replaced;
     }
 
     public static void validateEdit( final IFile... files ) throws CoreException
