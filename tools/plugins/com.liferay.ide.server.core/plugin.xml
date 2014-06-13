@@ -998,6 +998,7 @@
                name="http://www.springframework.org/schema/aop/spring-util-3.0.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/spring-util-3.0.xsd">
          </uri>
+         <!--
          <uri
                name="http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-app_2_4.xsd">
@@ -1018,6 +1019,7 @@
                name="http://java.sun.com/xml/ns/javaee/web-common_3_0.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-common_3_0.xsd">
          </uri>
+         -->
          <uri
                name="http://xmlns.jcp.org/xml/ns/javaee/web-common_3_1.xsd"
                uri="platform:/plugin/com.liferay.ide.server.core/xsd/web-common_3_1.xsd">
