@@ -15,10 +15,7 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
-import com.liferay.ide.maven.core.aether.AetherUtil;
 
-import org.eclipse.aether.RepositorySystem;
-import org.eclipse.aether.RepositorySystemSession;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMarkerResolution;
@@ -37,16 +34,10 @@ public class ConfigProblemMarkerResolutionGenerator implements IMarkerResolution
 
         if( correctMarker( marker ) )
         {
-            final RepositorySystem system = AetherUtil.newRepositorySystem();
-            final RepositorySystemSession session = AetherUtil.newRepositorySystemSession( system );
-
-            final String pluginVersion =
-                AetherUtil.getLatestVersion( "com.liferay.maven.plugins:liferay-maven-plugin:6.2.1", system, session );
-
             retval = new IMarkerResolution[]
             {
                 new SelectActiveProfilesMarkerResolution(),
-                new NewLiferayProfileMarkerResolution( pluginVersion )
+                new NewLiferayProfileMarkerResolution()
             };
         }
 

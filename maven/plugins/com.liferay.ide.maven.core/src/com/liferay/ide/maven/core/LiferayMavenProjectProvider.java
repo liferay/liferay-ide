@@ -279,8 +279,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                         for( NewLiferayProfile newProfile : newUserSettingsProfiles )
                         {
-                            MavenUtil.createNewLiferayProfileNode(
-                                pomDocument, newProfile, newProfile.getLiferayVersion().content() );
+                            MavenUtil.createNewLiferayProfileNode( pomDocument, newProfile );
                         }
 
                         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -311,7 +310,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                     for( final NewLiferayProfile newProfile : newProjectPomProfiles )
                     {
-                        MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newProfile, archetypeVersion );
+                        MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newProfile );
                     }
 
                     domModel.save();

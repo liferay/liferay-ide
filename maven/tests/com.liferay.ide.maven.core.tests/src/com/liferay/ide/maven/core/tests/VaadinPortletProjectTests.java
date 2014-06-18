@@ -17,6 +17,9 @@ package com.liferay.ide.maven.core.tests;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.core.resources.IProject;
 import org.junit.Test;
 
@@ -46,5 +49,36 @@ public class VaadinPortletProjectTests extends LiferayMavenProjectTestCase
         assertTrue( pomContents.contains( "<artifactId>vaadin-server</artifactId>" ) );
         assertTrue( pomContents.contains( "<artifactId>vaadin-client</artifactId>" ) );
         assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
+    }
+
+    @Test
+    public void testProfileLiferayMavenPluginVersionCheck() throws Exception
+    {
+        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+        op.setProjectName( "profileCheck" );
+        op.setProjectProvider( "maven" );
+        op.setPortletFramework( "vaadin" );
+
+        createTestBundleProfile( op );
+
+        final IProject newProject = base.createProject( op );
+
+        assertNotNull( newProject );
+
+        String pomContents = CoreUtil.readStreamToString( newProject.getFile( "pom.xml" ).getContents() );
+
+        Matcher matcher =
+            Pattern.compile( ".*<liferay.version>(.*)</liferay.version>.*", Pattern.MULTILINE | Pattern.DOTALL ).matcher(
+                pomContents );
+        matcher.matches();
+        String extractedLiferayVersion = matcher.group( 1 );
+
+        Matcher matcher2 = Pattern.compile(
+            ".*<liferay.maven.plugin.version>(.*)</liferay.maven.plugin.version>.*",
+            Pattern.MULTILINE | Pattern.DOTALL ).matcher( pomContents );
+        matcher2.matches();
+        String extractedLiferayPluginVersion = matcher2.group( 1 );
+
+        assertEquals( extractedLiferayVersion, extractedLiferayPluginVersion );
     }
 }

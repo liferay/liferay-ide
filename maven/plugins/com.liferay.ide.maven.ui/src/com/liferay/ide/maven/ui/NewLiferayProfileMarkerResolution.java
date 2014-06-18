@@ -41,13 +41,9 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerResolution
 {
 
-    private String pluginVersion;
-
-    public NewLiferayProfileMarkerResolution( final String pluginVersion )
+    public NewLiferayProfileMarkerResolution()
     {
         super();
-
-        this.pluginVersion = pluginVersion;
     }
 
     public String getLabel()
@@ -76,7 +72,7 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
                 final IDOMModel domModel =
                     (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
 
-                MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newLiferayProfile, this.pluginVersion );
+                MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newLiferayProfile );
 
                 domModel.save();
 

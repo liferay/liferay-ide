@@ -68,8 +68,7 @@ import org.w3c.dom.Node;
 public class MavenUtil
 {
 
-    public static Node createNewLiferayProfileNode(
-        Document pomDocument, NewLiferayProfile newLiferayProfile, final String pluginVersion )
+    public static Node createNewLiferayProfileNode( Document pomDocument, NewLiferayProfile newLiferayProfile )
     {
         Node newNode = null;
 
@@ -119,7 +118,7 @@ public class MavenUtil
                 NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
                 NodeUtil.appendChildElement( propertiesElement, "liferay.version", liferayVersion );
                 NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
-                NodeUtil.appendChildElement( propertiesElement, "liferay.maven.plugin.version", pluginVersion );
+                NodeUtil.appendChildElement( propertiesElement, "liferay.maven.plugin.version", liferayVersion );
                 NodeUtil.appendTextNode( propertiesElement, "\n\t\t" );
                 NodeUtil.appendChildElement(
                     propertiesElement, "liferay.auto.deploy.dir", autoDeployDir.toOSString() );
