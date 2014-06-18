@@ -147,7 +147,7 @@ public final class ZipUtil {
 
                 final String taskMsg =
                     NLS.bind( Resources.progressUnzipped, new Object[] { file.getName(), c++, totalWork } );
-                monitor.setTaskName(taskMsg);
+                monitor.subTask( taskMsg );
 
                 if (entry.isDirectory())
                     continue;
