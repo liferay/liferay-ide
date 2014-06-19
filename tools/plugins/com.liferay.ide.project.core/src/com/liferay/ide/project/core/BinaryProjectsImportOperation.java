@@ -86,7 +86,7 @@ public class BinaryProjectsImportOperation extends AbstractDataModelOperation
 
                         try
                         {
-                            monitor.setTaskName( Msgs.creatingPlugin + pluginBinaryRecord.getLiferayPluginName() );
+                            monitor.subTask( Msgs.creatingPlugin + pluginBinaryRecord.getLiferayPluginName() );
                             projectRecords[i] =
                                 ProjectImportUtil.createSDKPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
                             monitor.worked( 1 );

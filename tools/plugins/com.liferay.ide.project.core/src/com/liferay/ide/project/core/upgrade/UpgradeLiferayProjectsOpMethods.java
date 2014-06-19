@@ -108,7 +108,7 @@ public class UpgradeLiferayProjectsOpMethods
             if( projectItem != null )
             {
                 final IProject project = ProjectUtil.getProject( projectItem );
-                monitor.setTaskName( "Upgrading project " + project.getName() );
+                monitor.subTask( "Upgrading project " + project.getName() );
 
                 for( String action : projectActions )
                 {
