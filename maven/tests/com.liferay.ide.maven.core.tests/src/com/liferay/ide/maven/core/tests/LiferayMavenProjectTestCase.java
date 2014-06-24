@@ -14,12 +14,17 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.ProfileLocation;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
 
+import java.util.Set;
+
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.osgi.framework.Version;
 
 
 
@@ -43,7 +48,35 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
     protected void createTestBundleProfile( NewLiferayPluginProjectOp op )
     {
         NewLiferayProfile profile = op.getNewLiferayProfiles().insert();
-        profile.setLiferayVersion( base.getRuntimeVersion() );
+
+        Set<String> vals = profile.getLiferayVersion().service( PossibleValuesService.class ).values();
+
+        Version greatest = new Version( "6.2.1" );
+
+        for( final String val : vals )
+        {
+            try
+            {
+                final Version v = new Version( val );
+
+                if( greatest == null )
+                {
+                    greatest = v;
+                }
+                else
+                {
+                    if( CoreUtil.compareVersions( greatest, v ) < 0 )
+                    {
+                        greatest = v;
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        profile.setLiferayVersion( greatest.getMajor() + "." + greatest.getMicro() + "." + greatest.getMinor() );
         profile.setId( "test-bundle" );
         profile.setRuntimeName( base.getRuntimeVersion() );
         profile.setProfileLocation( ProfileLocation.projectPom );
