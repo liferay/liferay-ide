@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -112,7 +112,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
         }
         else if( PORTLET_FRAMEWORK_ID.equals( propertyName ) )
         {
-            return LiferayProjectCore.getPortletFrameworks()[0].getId();
+            return ProjectCore.getPortletFrameworks()[0].getId();
         }
         else if( THEME_PARENT.equals( propertyName ) )
         {
@@ -287,7 +287,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
             }
         }
 
-        LiferayProjectCore.getPortletFrameworks();
+        ProjectCore.getPortletFrameworks();
     }
 
     @Override
@@ -295,7 +295,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
     {
         String portletFrameworkId = getStringProperty( PORTLET_FRAMEWORK_ID );
 
-        IPortletFramework portletFramework = LiferayProjectCore.getPortletFramework( portletFrameworkId );
+        IPortletFramework portletFramework = ProjectCore.getPortletFramework( portletFrameworkId );
 
         if( FACET_PROJECT_NAME.equals( propertyName ) || LIFERAY_SDK_NAME.equals( propertyName ) ||
             LIFERAY_USE_WORKSPACE_LOCATION.equals( propertyName ) || LIFERAY_USE_CUSTOM_LOCATION.equals( propertyName ) )
@@ -339,7 +339,7 @@ public class PluginFacetProjectCreationDataModelProvider extends WebFacetProject
 
     protected void setupPortletFramework( IPortletFramework portletFramework )
     {
-        IPortletFramework[] portletFrameworks = LiferayProjectCore.getPortletFrameworks();
+        IPortletFramework[] portletFrameworks = ProjectCore.getPortletFrameworks();
 
         for( IPortletFramework framework : portletFrameworks )
         {

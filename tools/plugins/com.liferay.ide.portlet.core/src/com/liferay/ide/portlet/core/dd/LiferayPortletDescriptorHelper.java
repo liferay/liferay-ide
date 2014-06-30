@@ -19,8 +19,10 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
-import com.liferay.ide.project.core.util.ISampleElementsOperation;
+import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.RemoveAllPortletsOperation;
+import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -40,11 +42,22 @@ import org.w3c.dom.NodeList;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper 
-                                            implements INewPortletClassDataModelProperties,
-                                                       IPortletElementOperation,
-                                                       ISampleElementsOperation
+public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper
+                                            implements INewPortletClassDataModelProperties
 {
+    public static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_PORTLET_XML_FILE;
+
+    private static final String DESCRIPTOR_TEMPLATE =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//" //$NON-NLS-1$
+        + "DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd" //$NON-NLS-1$
+        + "\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-" //$NON-NLS-1$
+        + "name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-" //$NON-NLS-1$
+        + "mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n" //$NON-NLS-1$
+        + "\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n" //$NON-NLS-1$
+        + "\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n" //$NON-NLS-1$
+        + "\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</" //$NON-NLS-1$
+        + "role-mapper>\n</liferay-portlet-app>"; //$NON-NLS-1$
+
     public LiferayPortletDescriptorHelper()
     {
         super();
@@ -55,49 +68,72 @@ public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper
         super( project );
     }
 
-    public IStatus addNewPortlet( final IDataModel model )
+    @Override
+    protected void addDescriptorOperations()
     {
-        IStatus status = Status.OK_STATUS;
-
-        if( canAddNewPortlet( model ) )
-        {
-            final IFile descriptorFile = getDescriptorFile();
-
-            if( descriptorFile != null )
+        addDescriptorOperation
+        (
+            new AddNewPortletOperation()
             {
-                final DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+                @Override
+                public IStatus addNewPortlet( final IDataModel model )
                 {
+                    IStatus status = Status.OK_STATUS;
 
-                    protected void createDefaultFile()
+                    if( canAddNewPortlet( model ) )
                     {
-                        String templateString =
-                            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE liferay-portlet-app PUBLIC \"-//Liferay//" //$NON-NLS-1$
-                                + "DTD Portlet Application {0}//EN\" \"http://www.liferay.com/dtd/liferay-portlet-app_{1}.dtd" //$NON-NLS-1$
-                                + "\">\n\n<liferay-portlet-app>\n\u0009<role-mapper>\n\u0009\u0009<role-name>administrator</role-" //$NON-NLS-1$
-                                + "name>\n\u0009\u0009<role-link>Administrator</role-link>\n\u0009</role-mapper>\n\u0009<role-" //$NON-NLS-1$
-                                + "mapper>\n\u0009\u0009<role-name>guest</role-name>\n\u0009\u0009<role-link>Guest</role-link>\n" //$NON-NLS-1$
-                                + "\u0009</role-mapper>\n\u0009<role-mapper>\n\u0009\u0009<role-name>power-user</role-name>\n" //$NON-NLS-1$
-                                + "\u0009\u0009<role-link>Power User</role-link>\n\u0009</role-mapper>\n\u0009<role-mapper>\n" //$NON-NLS-1$
-                                + "\u0009\u0009<role-name>user</role-name>\n\u0009\u0009<role-link>User</role-link>\n\u0009</" //$NON-NLS-1$
-                                + "role-mapper>\n</liferay-portlet-app>"; //$NON-NLS-1$
+                        final IFile descriptorFile = getDescriptorFile();
 
-                        createDefaultDescriptor( templateString, getDescriptorVersion() );
+                        if( descriptorFile != null )
+                        {
+                            final DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+                            {
+                                protected void createDefaultFile()
+                                {
+                                    createDefaultDescriptor( DESCRIPTOR_TEMPLATE , getDescriptorVersion() );
+                                }
+
+                                protected IStatus doExecute( IDOMDocument document )
+                                {
+                                    return doAddNewPortlet( document, model );
+                                }
+                            };
+
+                            status = domModelOperation.execute();
+                        }
                     }
 
-                    protected IStatus doExecute( IDOMDocument document )
-                    {
-                        return doAddNewPortlet( document, model );
-                    }
-                };
-
-                status = domModelOperation.execute();
+                    return status;
+                }
             }
-        }
+        );
 
-        return status;
+        addDescriptorOperation
+        (
+            new RemoveAllPortletsOperation()
+            {
+                @Override
+                public IStatus removeAllPortlets()
+                {
+                    return doRemoveAllPortlets();
+                }
+            }
+        );
+
+        addDescriptorOperation
+        (
+            new RemoveSampleElementsOperation()
+            {
+                @Override
+                public IStatus removeSampleElements()
+                {
+                    return doRemoveAllPortlets();
+                }
+            }
+        );
     }
 
-    public boolean canAddNewPortlet( IDataModel model )
+    protected boolean canAddNewPortlet( IDataModel model )
     {
         return model.getID().contains( "NewPortlet" );
     }
@@ -135,7 +171,7 @@ public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper
         return status;
     }
 
-    public IStatus doAddNewPortlet( IDOMDocument document, final IDataModel model )
+    protected IStatus doAddNewPortlet( IDOMDocument document, final IDataModel model )
     {
         // <liferay-portlet-app> element
         Element rootElement = document.getDocumentElement();
@@ -208,12 +244,7 @@ public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper
         return Status.OK_STATUS;
     }
 
-    public IFile getDescriptorFile()
-    {
-        return this.project == null ? null : getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-    }
-
-    public IStatus removeAllPortlets()
+    protected IStatus doRemoveAllPortlets()
     {
         final String portletTagName = "portlet";
 
@@ -230,8 +261,8 @@ public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper
         return status;
     }
 
-    public IStatus removeSampleElements()
+    public IFile getDescriptorFile()
     {
-        return removeAllPortlets();
+        return super.getDescriptorFile( DESCRIPTOR_FILE );
     }
 }

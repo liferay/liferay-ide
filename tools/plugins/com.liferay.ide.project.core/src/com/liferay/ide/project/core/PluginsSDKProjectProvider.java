@@ -179,7 +179,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         }
         catch( IOException e )
         {
-            throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
+            throw new CoreException( ProjectCore.createErrorStatus( e ) );
         }
 
         final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectLocation.toOSString() );
@@ -201,7 +201,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             }
             catch( BackingStoreException e )
             {
-                LiferayProjectCore.logError( "Unable to persist sdk name to project " + projectName, e );
+                ProjectCore.logError( "Unable to persist sdk name to project " + projectName, e );
             }
         }
 
@@ -305,7 +305,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
+            ProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
             descriptorVersion = "6.0.0"; //$NON-NLS-1$
         }
 
@@ -328,7 +328,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         if( path.append(".project").toFile().exists() ) //$NON-NLS-1$
         {
-            retval = LiferayProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
+            retval = ProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
                     "\" is not valid because a project already exists at that location." ); //$NON-NLS-1$
         }
         else
@@ -337,7 +337,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
             if( pathFile.exists() && pathFile.isDirectory() && pathFile.listFiles().length > 0 )
             {
-                retval = LiferayProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
+                retval = ProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
                         "\" is not valid because it already contains files." ); //$NON-NLS-1$
             }
         }

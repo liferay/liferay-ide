@@ -302,7 +302,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                                 }
                                 catch( FileNotFoundException e )
                                 {
-                                    throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
+                                    throw new CoreException( ProjectCore.createErrorStatus( e ) );
                                 }
                             }
 
@@ -457,7 +457,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
         finally
         {
@@ -496,7 +496,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         }
         catch( ExecutionException e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
     }
 

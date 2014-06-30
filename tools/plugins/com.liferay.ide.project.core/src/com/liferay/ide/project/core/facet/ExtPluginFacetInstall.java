@@ -18,7 +18,7 @@ package com.liferay.ide.project.core.facet;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 
@@ -107,7 +107,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             }
             catch( Exception e )
             {
-                LiferayProjectCore.logError( e );
+                ProjectCore.logError( e );
             }
 
             IFolder webappRoot = this.project.getFolder( ISDKConstants.DEFAULT_DOCROOT_FOLDER );
@@ -215,7 +215,7 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
             }
             catch( Exception e )
             {
-                LiferayProjectCore.logError( e );
+                ProjectCore.logError( e );
             }
         }
     }

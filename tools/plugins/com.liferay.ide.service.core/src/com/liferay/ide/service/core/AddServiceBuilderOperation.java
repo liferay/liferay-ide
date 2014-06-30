@@ -18,7 +18,7 @@ package com.liferay.ide.service.core;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
@@ -67,7 +67,7 @@ public class AddServiceBuilderOperation extends AbstractDataModelOperation
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
+            ProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
             descriptorVersion = "6.0.0"; //$NON-NLS-1$
         }
 

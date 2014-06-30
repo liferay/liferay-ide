@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator;
 
 import org.eclipse.core.resources.IMarker;
@@ -63,7 +63,7 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
     {
         try
         {
-            return marker.getType().equals( LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE );
+            return marker.getType().equals( ProjectCore.LIFERAY_PROJECT_MARKER_TYPE );
         }
         catch( CoreException e )
         {

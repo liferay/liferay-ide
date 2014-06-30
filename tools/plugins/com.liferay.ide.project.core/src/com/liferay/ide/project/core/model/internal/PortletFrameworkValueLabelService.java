@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.sapphire.ValueProperty;
@@ -33,7 +33,7 @@ public class PortletFrameworkValueLabelService extends ValueLabelService
     @Override
     public String provide( String value )
     {
-        IPortletFramework framework = LiferayProjectCore.getPortletFramework( value );
+        IPortletFramework framework = ProjectCore.getPortletFramework( value );
 
         return framework != null ? framework.getDisplayName() : value;
     }

@@ -22,7 +22,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.SDK;
@@ -743,7 +743,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         Set<String> acturalLables = new HashSet<String>();
 
-        for( IPortletFramework pf : LiferayProjectCore.getPortletFrameworks() )
+        for( IPortletFramework pf : ProjectCore.getPortletFrameworks() )
         {
             acturalLables.add( vls.provide( pf.getShortName() ) );
         }

@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.util;
 
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 
 import java.text.MessageFormat;
 import java.util.regex.Matcher;
@@ -126,7 +127,7 @@ public class VersionedDTDRootElementController extends StandardRootElementContro
         {
             final IProject project = this.resource().adapt( IProject.class );
 
-            final String defaultVersion = new LiferayDescriptorHelper( project ).getDescriptorVersion();
+            final String defaultVersion = LiferayDescriptorHelper.getDescriptorVersion( project );
 
             DocumentType existingDocType = getDocument().getDoctype();
 

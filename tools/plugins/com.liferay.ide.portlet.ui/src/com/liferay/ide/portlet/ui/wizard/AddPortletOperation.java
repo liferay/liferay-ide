@@ -17,13 +17,13 @@ package com.liferay.ide.portlet.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.core.dd.IPortletElementOperation;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.operation.NewEntryClassOperation;
 import com.liferay.ide.portlet.core.operation.NewPortletClassOperation;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelperManager;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
+import com.liferay.ide.project.core.descriptor.RemoveAllPortletsOperation;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
@@ -371,48 +371,12 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
     protected IStatus removeAllPortlets( IProject project )
     {
-        IStatus status = Status.OK_STATUS; 
-
-        final LiferayDescriptorHelper[] helpers = LiferayDescriptorHelperManager.getInstance().getDescriptorHelpers( project );
-
-        for( LiferayDescriptorHelper helper : helpers )
-        {
-            if( helper instanceof IPortletElementOperation )
-            {
-                status = ( (IPortletElementOperation) helper ).removeAllPortlets();
-
-                if( ! status.isOK() )
-                {
-                    PortletCore.getDefault().getLog().log( status );
-                    return status;
-                }
-            }
-        }
-
-        return status;
+        return ProjectCore.operate( project, RemoveAllPortletsOperation.class );
     }
 
     protected IStatus addNewPortlet( IProject project, IDataModel model )
     {
-        IStatus status = Status.OK_STATUS; 
-
-        final LiferayDescriptorHelper[] helpers = LiferayDescriptorHelperManager.getInstance().getDescriptorHelpers( project );
-
-        for( LiferayDescriptorHelper helper : helpers )
-        {
-            if( helper instanceof IPortletElementOperation )
-            {
-                status = ( (IPortletElementOperation) helper ).addNewPortlet( model );
-
-                if( ! status.isOK() )
-                {
-                    PortletCore.getDefault().getLog().log( status );
-                    return status;
-                }
-            }
-        }
-
-        return status;
+        return ProjectCore.operate( project, AddNewPortletOperation.class, model );
     }
 
 }

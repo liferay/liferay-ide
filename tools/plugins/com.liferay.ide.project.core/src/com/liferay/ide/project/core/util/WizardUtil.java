@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.templates.core.ITemplateContext;
 import com.liferay.ide.templates.core.ITemplateOperation;
 import com.liferay.ide.templates.core.TemplatesCore;
@@ -77,7 +77,7 @@ public class WizardUtil
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
 
     }

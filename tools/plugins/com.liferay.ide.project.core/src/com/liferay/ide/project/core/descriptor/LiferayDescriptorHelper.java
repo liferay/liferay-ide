@@ -13,12 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.project.core.descriptor;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.ByteArrayInputStream;
 import java.text.MessageFormat;
@@ -47,9 +47,8 @@ import org.w3c.dom.NodeList;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayDescriptorHelper
+public abstract class LiferayDescriptorHelper
 {
-
     public abstract class DOMModelEditOperation extends DOMModelOperation
     {
         public DOMModelEditOperation( IFile descriptorFile )
@@ -172,6 +171,45 @@ public class LiferayDescriptorHelper
         }
     }
 
+    public static String getDescriptorVersion( IProject project )
+    {
+        return getDescriptorVersion( project, "6.0.0" );
+    }
+
+    public static String getDescriptorVersion( IProject project, final String defaultValue )
+    {
+        String retval = defaultValue;
+
+        try
+        {
+            final ILiferayProject lProject = LiferayCore.create( project );
+
+            if( lProject != null )
+            {
+                final String versionStr = lProject.getPortalVersion();
+                retval = getDescriptorVersionFromPortalVersion( versionStr );
+            }
+        }
+        catch( Exception e )
+        {
+            LiferayCore.logError( "Could not get liferay runtime.", e ); //$NON-NLS-1$
+        }
+
+        return retval;
+    }
+
+    protected static String getDescriptorVersionFromPortalVersion( String versionStr )
+    {
+        final Version version = new Version( versionStr );
+
+        final int major = version.getMajor();
+        final int minor = version.getMinor();
+
+        return Integer.toString( major ) + "." + Integer.toString( minor ) + ".0"; //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    protected ArrayList<IDescriptorOperation> descriptorOperations = new ArrayList<IDescriptorOperation>();
+
     protected IContentType contentType;
 
     protected String descriptorPath;
@@ -180,12 +218,21 @@ public class LiferayDescriptorHelper
 
     public LiferayDescriptorHelper()
     {
+        addDescriptorOperations();
     }
 
     public LiferayDescriptorHelper( IProject project )
     {
         this.project = project;
+        addDescriptorOperations();
     }
+
+    protected void addDescriptorOperation( IDescriptorOperation operation )
+    {
+        descriptorOperations.add( operation );
+    }
+
+    protected abstract void addDescriptorOperations();
 
     protected List<Element> getChildElements( Element parent )
     {
@@ -214,9 +261,24 @@ public class LiferayDescriptorHelper
         return this.contentType;
     }
 
+    public abstract IFile getDescriptorFile();
+
     protected IFile getDescriptorFile( String fileName )
     {
         return project == null ? null : CoreUtil.getDescriptorFile( project, fileName );
+    }
+
+    public IDescriptorOperation getDescriptorOperation( Class<? extends IDescriptorOperation> type )
+    {
+        for( IDescriptorOperation operation : descriptorOperations )
+        {
+            if( type.isAssignableFrom( operation.getClass() ) )
+            {
+                return operation;
+            }
+        }
+
+        return null;
     }
 
     public String getDescriptorPath()
@@ -224,41 +286,9 @@ public class LiferayDescriptorHelper
         return this.descriptorPath;
     }
 
-    public String getDescriptorVersion()
+    protected String getDescriptorVersion()
     {
-        return getDescriptorVersion( "6.0.0" );
-    }
-
-    public String getDescriptorVersion( final String defaultValue )
-    {
-        String retval = defaultValue;
-
-        try
-        {
-            final ILiferayProject lProject = LiferayCore.create( project );
-
-            if( lProject != null )
-            {
-                final String versionStr = lProject.getPortalVersion();
-                retval = getDescriptorVersionFromPortalVersion( versionStr );
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayCore.logError( "Could not get liferay runtime.", e ); //$NON-NLS-1$
-        }
-
-        return retval;
-    }
-
-    protected String getDescriptorVersionFromPortalVersion( String versionStr )
-    {
-        final Version version = new Version( versionStr );
-
-        final int major = version.getMajor();
-        final int minor = version.getMinor();
-
-        return Integer.toString( major ) + "." + Integer.toString( minor ) + ".0"; //$NON-NLS-1$ //$NON-NLS-2$
+        return getDescriptorVersion( project );
     }
 
     protected IProject getProject()
@@ -270,7 +300,7 @@ public class LiferayDescriptorHelper
     {
         if( document == null )
         {
-            return LiferayProjectCore.createErrorStatus( MessageFormat.format(
+            return ProjectCore.createErrorStatus( MessageFormat.format(
                 "Could not remove {0} elements: null document", tagName ) );
         }
 
@@ -289,7 +319,7 @@ public class LiferayDescriptorHelper
         }
         catch( Exception ex )
         {
-            return LiferayProjectCore.
+            return ProjectCore.
                 createErrorStatus(MessageFormat.format( "Could not remove {0} elements", tagName ), ex ); //$NON-NLS-1$
         }
 

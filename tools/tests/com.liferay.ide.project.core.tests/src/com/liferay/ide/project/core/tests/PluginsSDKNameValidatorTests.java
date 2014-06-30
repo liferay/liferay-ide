@@ -19,7 +19,7 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
@@ -57,7 +57,7 @@ public class PluginsSDKNameValidatorTests extends ProjectCoreBase
 
         final IMarker sdkMarker =
             getProjectMarkers(
-                portletProject, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE,
+                portletProject, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE,
                 PluginsSDKProjectRuntimeValidator.ID_PLUGINS_SDK_NOT_SET );
 
         assertNull( sdkMarker );
@@ -67,7 +67,7 @@ public class PluginsSDKNameValidatorTests extends ProjectCoreBase
         final ProjectDescription newDescripton = new ProjectDescription();
 
         newDescripton.setName( oldDescription.getName() );
-        newDescripton.setLocation( LiferayProjectCore.getDefault().getStateLocation().append( projectName ) );
+        newDescripton.setLocation( ProjectCore.getDefault().getStateLocation().append( projectName ) );
         newDescripton.setBuildSpec( oldDescription.getBuildSpec() );
         newDescripton.setNatureIds( oldDescription.getNatureIds() );
 
@@ -78,7 +78,7 @@ public class PluginsSDKNameValidatorTests extends ProjectCoreBase
 
         final IMarker newSdkMarker =
             getProjectMarkers(
-                portletProject, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE,
+                portletProject, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE,
                 PluginsSDKProjectRuntimeValidator.ID_PLUGINS_SDK_NOT_SET );
 
         assertNotNull( newSdkMarker );
@@ -89,7 +89,7 @@ public class PluginsSDKNameValidatorTests extends ProjectCoreBase
 
         final IMarker resolutionSdkMarker =
             getProjectMarkers(
-                portletProject, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE,
+                portletProject, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE,
                 PluginsSDKProjectRuntimeValidator.ID_PLUGINS_SDK_NOT_SET );
 
         assertNull( resolutionSdkMarker );

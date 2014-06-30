@@ -19,7 +19,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.List;
@@ -40,10 +40,12 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Cindy Li
  * @author Terry Jia
+ * @author Kuo Zhang
  */
 @SuppressWarnings( { "restriction" } )
 public class HookDescriptorHelper extends LiferayDescriptorHelper implements INewHookDataModelProperties
 {
+    public static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_HOOK_XML_FILE;
 
     private static final String HOOK_DESCRIPTOR_TEMPLATE =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //$NON-NLS-1$
@@ -56,7 +58,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 
     public IStatus addActionItems( final List<String[]> actionItems )
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
@@ -81,9 +83,15 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         return status;
     }
 
+    @Override
+    protected void addDescriptorOperations()
+    {
+        // currently, no descriptor operations for this descriptor
+    }
+
     public IStatus addLanguageProperties( final List<String> languageProperties )
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
@@ -110,7 +118,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 
     public void createDefaultDescriptor()
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         final DOMModelEditOperation operation = new DOMModelEditOperation( descriptorFile )
         {
@@ -307,7 +315,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
     {
         final String[] retval = new String[1];
 
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         DOMModelOperation operation = new DOMModelReadOperation( descriptorFile )
         {
@@ -326,6 +334,12 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         }
 
         return retval[0];
+    }
+
+    @Override
+    public IFile getDescriptorFile()
+    {
+        return super.getDescriptorFile( DESCRIPTOR_FILE );
     }
 
     public String readCustomJSPFolder( IDOMDocument document, IDataModel model )
@@ -350,7 +364,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 
     public IStatus setCustomJSPDir( final IDataModel model )
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
@@ -377,7 +391,7 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 
     public IStatus setPortalProperties( final IDataModel model, final String propertiesFile )
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {

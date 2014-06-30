@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.sdk.core.SDK;
@@ -64,7 +64,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
     }
 
     @Override
@@ -82,7 +82,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
     }
 
     @Override
@@ -198,7 +198,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         final SDK newSDK = createNewSDK();
         newSDK.setVersion( "6.0.0" );
 
-        final IPortletFramework jsf = LiferayProjectCore.getPortletFramework( "jsf" );
+        final IPortletFramework jsf = ProjectCore.getPortletFramework( "jsf" );
 
         op.setProjectProvider( "ant" );
         op.setPortletFramework( "jsf" );

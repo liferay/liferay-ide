@@ -17,7 +17,7 @@ package com.liferay.ide.service.core.descriptor;
 
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.project.core.BaseValidator;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.service.core.ServiceCore;
@@ -70,7 +70,7 @@ public class ServiceBuilderDescriptorValidator extends BaseValidator
 
     public static final String PACKAGE_PATH_ATTRIBUTE = "package-path"; //$NON-NLS-1$
 
-    public static final String PREFERENCE_NODE_QUALIFIER = LiferayProjectCore.getDefault().getBundle().getSymbolicName();
+    public static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
 
     public ServiceBuilderDescriptorValidator()
     {
@@ -237,7 +237,7 @@ public class ServiceBuilderDescriptorValidator extends BaseValidator
 
                 boolean useProjectSettings =
                     projectScope.getNode( PREFERENCE_NODE_QUALIFIER ).getBoolean(
-                        LiferayProjectCore.USE_PROJECT_SETTINGS, false );
+                        ProjectCore.USE_PROJECT_SETTINGS, false );
 
                 if( useProjectSettings )
                 {

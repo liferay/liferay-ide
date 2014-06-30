@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.upgrade.NamedItem;
@@ -58,7 +58,7 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.1" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.1" );
     }
 
 
@@ -77,7 +77,7 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27" );
     }
 
     @Override

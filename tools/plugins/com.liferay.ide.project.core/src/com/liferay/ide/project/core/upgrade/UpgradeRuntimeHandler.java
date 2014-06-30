@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -82,8 +82,8 @@ public class UpgradeRuntimeHandler extends AbstractUpgradeProjectHandler
         catch( Exception e )
         {
             final IStatus error =
-                LiferayProjectCore.createErrorStatus( "Unable to upgrade target runtime for " + project.getName(), e );
-            LiferayProjectCore.logError( error );
+                ProjectCore.createErrorStatus( "Unable to upgrade target runtime for " + project.getName(), e );
+            ProjectCore.logError( error );
 
             retval = StatusBridge.create( error );
         }

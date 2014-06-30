@@ -17,7 +17,7 @@ package com.liferay.ide.layouttpl.core.descriptor;
 
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.project.core.BaseValidator;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -66,7 +66,7 @@ public class LayoutTplDescriptorValidator extends BaseValidator
 
     public static final String MESSAGE_WAP_TEMPLATE_PATH_NOT_FOUND = Msgs.wapTemplatePathNotFound;
 
-    public static final String PREFERENCE_NODE_QUALIFIER = LiferayProjectCore.getDefault().getBundle().getSymbolicName();
+    public static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
 
     public LayoutTplDescriptorValidator()
     {
@@ -94,7 +94,7 @@ public class LayoutTplDescriptorValidator extends BaseValidator
 
             boolean useProjectSettings =
                 projectScope.getNode( PREFERENCE_NODE_QUALIFIER ).getBoolean(
-                    LiferayProjectCore.USE_PROJECT_SETTINGS, false );
+                    ProjectCore.USE_PROJECT_SETTINGS, false );
 
             if( useProjectSettings )
             {

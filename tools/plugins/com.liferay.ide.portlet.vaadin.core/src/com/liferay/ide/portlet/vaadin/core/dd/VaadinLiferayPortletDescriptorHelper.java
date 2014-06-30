@@ -53,16 +53,24 @@ public class VaadinLiferayPortletDescriptorHelper extends LiferayPortletDescript
         super( project );
     }
 
-    public IStatus addNewPortlet( IDataModel model )
+    @Override
+    protected void addDescriptorOperations()
+    {
+        super.addDescriptorOperations();
+    }
+
+    @Override
+    public boolean canAddNewPortlet( IDataModel model )
+    {
+        return model.getID().contains( "NewVaadinPortlet" );
+    }
+
+    @Override
+    protected IStatus doAddNewPortlet( IDOMDocument document, IDataModel model )
     {
         IStatus status = Status.OK_STATUS;
 
-        if( ! canAddNewPortlet( model ) )
-        {
-            return status;
-        }
-
-        status = super.addNewPortlet( model );
+        status = super.doAddNewPortlet( document, model );
 
         if( ! status.isOK() )
         {
@@ -99,12 +107,6 @@ public class VaadinLiferayPortletDescriptorHelper extends LiferayPortletDescript
         }
 
         return status;
-    }
-
-    @Override
-    public boolean canAddNewPortlet( IDataModel model )
-    {
-        return model.getID().contains( "NewVaadinPortlet" );
     }
 
     private IStatus updateVaadinLiferayPortletXMLTo62( IDOMDocument document )

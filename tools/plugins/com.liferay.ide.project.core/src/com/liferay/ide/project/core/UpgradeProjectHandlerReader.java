@@ -33,7 +33,7 @@ public class UpgradeProjectHandlerReader extends ExtensionReader<AbstractUpgrade
 
     public UpgradeProjectHandlerReader()
     {
-        super( LiferayProjectCore.PLUGIN_ID, EXTENSION, UPGRADEACTION_ELEMENT );
+        super( ProjectCore.PLUGIN_ID, EXTENSION, UPGRADEACTION_ELEMENT );
     }
 
     @Override

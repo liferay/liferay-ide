@@ -13,12 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.project.core.descriptor;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -42,12 +42,19 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class WebXMLDescriptorHelper extends LiferayDescriptorHelper
 {
+    private static String DESCRIPTOR_FILE = ILiferayConstants.WEB_XML_FILE;
 
     public WebXMLDescriptorHelper( IProject project )
     {
         super( project );
 
         setDescriptorPath( ILiferayConstants.WEB_XML_FILE );
+    }
+
+    @Override
+    protected void addDescriptorOperations()
+    {
+        // currently, no descriptor operations for this descriptor
     }
 
     public IStatus addTagLib( final TagLibRefType tagLibRefType )
@@ -150,7 +157,7 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper
                     }
                     catch( Exception e )
                     {
-                        return LiferayProjectCore.createErrorStatus( e );
+                        return ProjectCore.createErrorStatus( e );
                     }
 
                     return Status.OK_STATUS;
@@ -250,6 +257,12 @@ public class WebXMLDescriptorHelper extends LiferayDescriptorHelper
         }
 
         return Status.OK_STATUS;
+    }
+
+    @Override
+    public IFile getDescriptorFile()
+    {
+        return super.getDescriptorFile( DESCRIPTOR_FILE );
     }
 
     protected boolean tagLibReferenceExists( IDOMDocument document, TagLibRefType tagLibRefType )

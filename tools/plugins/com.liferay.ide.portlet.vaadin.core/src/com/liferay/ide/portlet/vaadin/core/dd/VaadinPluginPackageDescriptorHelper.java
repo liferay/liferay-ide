@@ -34,6 +34,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
+/**
+ * @author Kuo Zhang
+ */
 public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescriptorHelper
 {
 
@@ -52,14 +55,13 @@ public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescripto
     @Override
     public IStatus addNewPortlet( IDataModel dataModel )
     {
-        IStatus status = Status.OK_STATUS;
-
         if( canAddNewPortlet( dataModel ) )
         {
-            addPortalDependency( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar" );
+            return addPortalDependency( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar" );
         }
 
-        return status;
+        return Status.OK_STATUS;
+
     }
 
     public IStatus addPortalDependency( String propertyName, String value )

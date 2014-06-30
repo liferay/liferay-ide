@@ -13,16 +13,27 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.project.core.descriptor;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Version;
 
 /**
  * @author Kuo Zhang
  */
-public interface IDescriptorVersionUpdateOperation
+public abstract class UpdateDescriptorVersionOperation implements IDescriptorOperation
 {
+    @Override
+    public IStatus execute( Object... params )
+    {
+        if( params != null && params.length == 2 && params[0] instanceof Version && params[1] instanceof Version )
+        {
+            return update( (Version) params[0], (Version) params[1] );
+        }
 
-    IStatus update( Version preVersion, Version postVersion );
+        return Status.OK_STATUS;
+    }
+
+    public abstract IStatus update( Version preVersion, Version postVersion );
 }

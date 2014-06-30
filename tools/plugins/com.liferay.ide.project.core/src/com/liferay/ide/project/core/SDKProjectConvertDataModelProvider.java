@@ -193,7 +193,7 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.projectNotLocated );
+                return ProjectCore.createErrorStatus( Msgs.projectNotLocated );
             }
         }
         else if( SDK_VERSION.equals( name ) )
@@ -206,7 +206,7 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
+                return ProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
                     SDKManager.getLeastValidVersion() );
             }
         }
@@ -224,7 +224,7 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
                 }
             }
 
-            return LiferayProjectCore.createErrorStatus( Msgs.selectOneLiferayProject );
+            return ProjectCore.createErrorStatus( Msgs.selectOneLiferayProject );
         }
         else if( FACET_RUNTIME.equals( name ) )
         {
@@ -232,7 +232,7 @@ public class SDKProjectConvertDataModelProvider extends FacetProjectCreationData
 
             if( !( runtime instanceof BridgedRuntime ) )
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.validLiferayRuntimeSelected );
+                return ProjectCore.createErrorStatus( Msgs.validLiferayRuntimeSelected );
             }
             else
             {

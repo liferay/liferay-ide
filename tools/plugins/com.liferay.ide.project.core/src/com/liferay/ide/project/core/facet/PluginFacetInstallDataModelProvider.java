@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
@@ -120,14 +120,14 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 
             if( CoreUtil.isNullOrEmpty( sdkName ) )
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.noPluginSDKConfigured );
+                return ProjectCore.createErrorStatus( Msgs.noPluginSDKConfigured );
             }
 
             SDK sdk = SDKManager.getInstance().getSDK( sdkName );
 
             if( sdk == null )
             {
-                return LiferayProjectCore.createErrorStatus( NLS.bind( Msgs.pluginSDKNotDefined, sdkName ) );
+                return ProjectCore.createErrorStatus( NLS.bind( Msgs.pluginSDKNotDefined, sdkName ) );
             }
 
             return Status.OK_STATUS;

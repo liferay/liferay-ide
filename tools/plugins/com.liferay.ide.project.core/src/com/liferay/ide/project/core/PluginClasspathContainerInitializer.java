@@ -58,7 +58,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         if( count != 2 )
         {
             final String msg = "Invalid plugin classpath container should expecting 2 segments."; //$NON-NLS-1$
-            throw new CoreException( LiferayProjectCore.createErrorStatus( msg ) );
+            throw new CoreException( ProjectCore.createErrorStatus( msg ) );
         }
 
         String root = containerPath.segment( 0 );
@@ -66,7 +66,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         if( !ID.equals( root ) )
         {
             final String msg = "Invalid plugin classpath container, expecting container root "; //$NON-NLS-1$
-            throw new CoreException( LiferayProjectCore.createErrorStatus( msg + ID ) );
+            throw new CoreException( ProjectCore.createErrorStatus( msg + ID ) );
         }
 
         String finalSegment = containerPath.segment( 1 );
@@ -94,7 +94,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
 
         classpathContainer =
@@ -166,7 +166,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
             }
             catch( Exception e )
             {
-                LiferayProjectCore.logError( e );
+                ProjectCore.logError( e );
             }
         }
 

@@ -21,7 +21,7 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.project.core.BaseValidator;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -91,7 +91,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
     public static final String PORTAL_PROPERTIES_ELEMENT = "portal-properties"; //$NON-NLS-1$
 
     public static final String PREFERENCE_NODE_QUALIFIER =
-        LiferayProjectCore.getDefault().getBundle().getSymbolicName();
+        ProjectCore.getDefault().getBundle().getSymbolicName();
 
     private static final String SERVICE_ELEMENT = "service"; //$NON-NLS-1$
 
@@ -418,7 +418,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
 
             boolean useProjectSettings =
                 projectScope.getNode( PREFERENCE_NODE_QUALIFIER ).getBoolean(
-                    LiferayProjectCore.USE_PROJECT_SETTINGS, false );
+                    ProjectCore.USE_PROJECT_SETTINGS, false );
 
             if( useProjectSettings )
             {

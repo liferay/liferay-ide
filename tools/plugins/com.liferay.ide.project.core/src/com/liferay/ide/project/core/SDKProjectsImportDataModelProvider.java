@@ -200,7 +200,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
             }
             else
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.invalidPluginSDKLocation );
+                return ProjectCore.createErrorStatus( Msgs.invalidPluginSDKLocation );
             }
         }
         else if( SDK_VERSION.equals( name ) )
@@ -217,12 +217,12 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
                 }
                 else
                 {
-                    return LiferayProjectCore.createWarningStatus( Msgs.versionUnequal );
+                    return ProjectCore.createWarningStatus( Msgs.versionUnequal );
                 }
             }
             else
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
+                return ProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
                     SDKManager.getLeastValidVersion() );
             }
         }
@@ -246,7 +246,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
                             if( binaryProject.isWeb() &&
                                 CoreUtil.compareVersions( sdkVersion, ILiferayConstants.V700 ) < 0 )
                             {
-                                return LiferayProjectCore.createErrorStatus( Msgs.unableSupportWebPluginType );
+                                return ProjectCore.createErrorStatus( Msgs.unableSupportWebPluginType );
                             }
                         }
                     }
@@ -263,7 +263,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
 
             if( !( runtime instanceof BridgedRuntime ) )
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.selectValidLiferayRuntime );
+                return ProjectCore.createErrorStatus( Msgs.selectValidLiferayRuntime );
             }
             else
             {
@@ -275,7 +275,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
                 }
                 else
                 {
-                    return LiferayProjectCore.createWarningStatus( Msgs.versionUnequal );
+                    return ProjectCore.createWarningStatus( Msgs.versionUnequal );
                 }
             }
         }
@@ -323,7 +323,7 @@ public class SDKProjectsImportDataModelProvider extends FacetProjectCreationData
      */
     public IStatus createSelectedProjectsErrorStatus()
     {
-        return LiferayProjectCore.createErrorStatus( Msgs.selectOneLiferayProject );
+        return ProjectCore.createErrorStatus( Msgs.selectOneLiferayProject );
     }
 
     protected IFacetedProjectWorkingCopy getFacetedProjectWorkingCopy()

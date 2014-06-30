@@ -13,17 +13,28 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.dd;
+package com.liferay.ide.project.core.descriptor;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+
 
 /**
  * @author Kuo Zhang
  */
-public interface IPortletElementOperation
+public abstract class AddNewPortletOperation implements IDescriptorOperation
 {
-    IStatus addNewPortlet( IDataModel dataModel );
+    @Override
+    public IStatus execute( Object... params )
+    {
+		if( params != null && params.length ==1 && params[0] instanceof IDataModel )
+		{
+		    return addNewPortlet( (IDataModel) params[0] );
+		}
 
-    IStatus removeAllPortlets();
+    	return Status.OK_STATUS;
+    }
+
+    public abstract IStatus addNewPortlet( IDataModel model );
 }

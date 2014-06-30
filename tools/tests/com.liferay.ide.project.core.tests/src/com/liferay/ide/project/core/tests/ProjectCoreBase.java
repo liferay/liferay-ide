@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -195,7 +195,7 @@ public class ProjectCoreBase extends ServerCoreBase
 
     protected IPath getLiferayPluginsSdkDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
     }
 
     protected IPath getLiferayPluginsSDKZip()

@@ -20,7 +20,7 @@ package com.liferay.ide.layouttpl.core.operation;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -40,6 +40,8 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implements INewLayoutTplDataModelProperties
 {
+    public static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE;
+
     private static final String LAYOUT_DESCRIPTOR_TEMPLATE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" //$NON-NLS-1$
             + "<!DOCTYPE layout-templates PUBLIC \"-//Liferay//DTD Layout Templates {0}//EN\" \"http://www.liferay.com/dtd/liferay-layout-templates_{1}.dtd\">\n\n<layout-templates>\n</layout-templates>\n"; //$NON-NLS-1$
 
@@ -48,9 +50,15 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
         super( project );
     }
 
+    @Override
+    protected void addDescriptorOperations()
+    {
+        // currently, no descriptor operations for this descriptor
+    }
+
     public IStatus addNewLayoutTemplate( final IDataModel dm )
     {
-        final IFile descriptorFile = getDescriptorFile( ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE );
+        final IFile descriptorFile = getDescriptorFile();
 
         final DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
         {
@@ -116,6 +124,12 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
         return Status.OK_STATUS;
     }
 
+    @Override
+    public IFile getDescriptorFile()
+    {
+        return super.getDescriptorFile( DESCRIPTOR_FILE );
+    }
+
     public boolean hasTemplateId( final String templateId )
     {
         if( CoreUtil.isNullOrEmpty( templateId ) )
@@ -126,7 +140,7 @@ public class LayoutTplDescriptorHelper extends LiferayDescriptorHelper implement
         final boolean[] retval = new boolean[1];
 
         DOMModelOperation operation =
-            new DOMModelReadOperation( getDescriptorFile( ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE ) )
+            new DOMModelReadOperation( getDescriptorFile() )
             {
                 @Override
                 protected IStatus doExecute( IDOMDocument document )

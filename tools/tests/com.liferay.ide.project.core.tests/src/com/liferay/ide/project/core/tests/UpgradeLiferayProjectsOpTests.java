@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.upgrade.NamedItem;
@@ -114,7 +114,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Unable to upgrade deployment meta file.", e ); //$NON-NLS-1$
+            ProjectCore.logError( "Unable to upgrade deployment meta file.", e ); //$NON-NLS-1$
         }
     }
 
@@ -131,7 +131,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
     }
 
@@ -197,13 +197,13 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
 
     protected IPath getLiferayPluginsSdkDi620()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
     }
 
     @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.1" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.1" );
     }
 
 
@@ -232,12 +232,12 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.1-ce-ga2/tomcat-7.0.27" );
     }
 
     protected IPath getLiferayRuntimeDir620()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
     }
 
     @Override
@@ -317,7 +317,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
                 "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
                 liferayRuntimeZipFile.exists() );
 
-            ZipUtil.unzip( liferayRuntimeZipFile, LiferayProjectCore.getDefault().getStateLocation().toFile() );
+            ZipUtil.unzip( liferayRuntimeZipFile, ProjectCore.getDefault().getStateLocation().toFile() );
         }
 
         assertEquals( true, liferayRuntimeDirFile.exists() );

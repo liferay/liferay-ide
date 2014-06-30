@@ -18,8 +18,10 @@ package com.liferay.ide.portlet.core.dd;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
-import com.liferay.ide.project.core.util.ISampleElementsOperation;
+import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.RemoveAllPortletsOperation;
+import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +45,14 @@ import org.w3c.dom.NodeList;
  */
 @SuppressWarnings( "restriction" )
 public class LiferayDisplayDescriptorHelper extends LiferayDescriptorHelper
-    implements INewPortletClassDataModelProperties, IPortletElementOperation, ISampleElementsOperation
+                                            implements INewPortletClassDataModelProperties
 {
+    public static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_DISPLAY_XML_FILE;
+
+    private static final String DESCRIPTOR_TEMPLATE =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE display PUBLIC \"-//Liferay//DTD Display " //$NON-NLS-1$
+        + "{0}//EN\" \"http://www.liferay.com/dtd/liferay-display_{1}.dtd\">\n\n<display>\n</display>"; //$NON-NLS-1$
+
     public LiferayDisplayDescriptorHelper()
     {
         super();
@@ -55,38 +63,93 @@ public class LiferayDisplayDescriptorHelper extends LiferayDescriptorHelper
         super( project );
     }
 
-    public IStatus addNewPortlet( final IDataModel model )
+    @Override
+    protected void addDescriptorOperations()
     {
-        IStatus status = Status.OK_STATUS;
-
-        final IFile descriptorFile = getDescriptorFile();
-
-        if( descriptorFile != null )
-        {
-            DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+        addDescriptorOperation
+        (
+            new AddNewPortletOperation()
             {
-                protected void createDefaultFile()
+                @Override
+                public IStatus addNewPortlet( final IDataModel model )
                 {
-                    String templateString =
-                        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE display PUBLIC \"-//Liferay//DTD Display " //$NON-NLS-1$
-                            + "{0}//EN\" \"http://www.liferay.com/dtd/liferay-display_{1}.dtd\">\n\n<display>\n</display>"; //$NON-NLS-1$
+                    IStatus status = Status.OK_STATUS;
 
-                    createDefaultDescriptor( templateString, getDescriptorVersion() );
+                    final IFile descriptorFile = getDescriptorFile();
+
+                    if( descriptorFile != null )
+                    {
+                        DOMModelEditOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+                        {
+                            protected void createDefaultFile()
+                            {
+                                createDefaultDescriptor( DESCRIPTOR_TEMPLATE, getDescriptorVersion() );
+                            }
+
+                            protected IStatus doExecute( IDOMDocument document )
+                            {
+                                return doAddNewPortlet( document, model );
+                            }
+                        };
+
+                        status = domModelOperation.execute();
+                    }
+
+                    return status;
+                }
+            }
+        );
+
+        addDescriptorOperation
+        (
+            new RemoveAllPortletsOperation()
+            {
+                @Override
+                public IStatus removeAllPortlets()
+                {
+                    return removeAllPortlets();
+                }
+            }
+        );
+
+        addDescriptorOperation
+        (
+            new RemoveSampleElementsOperation()
+            {
+                @Override
+                public IStatus removeSampleElements()
+                {
+                    return removeAllPortlets();
+                }
+            }
+        );
+    }
+
+    public IStatus configureLiferayDisplayXml( final String newPortletName )
+    {
+        final IStatus status = new DOMModelEditOperation( getDescriptorFile() )
+        {
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                final Element rootElement = document.getDocumentElement();
+
+                final NodeList portletNodes = rootElement.getElementsByTagName( "category" );
+
+                if( portletNodes.getLength() > 0 )
+                {
+                    final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
+                    final Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet" );
+                    portletName.setAttribute( "id", newPortletName );
                 }
 
-                protected IStatus doExecute( IDOMDocument document )
-                {
-                    return doAddNewPortlet( document, model );
-                }
-            };
-
-            status = domModelOperation.execute();
-        }
+                return Status.OK_STATUS;
+            }
+        }.execute();
 
         return status;
     }
 
-    public IStatus doAddNewPortlet( IDOMDocument document, final IDataModel model )
+    protected IStatus doAddNewPortlet( IDOMDocument document, final IDataModel model )
     {
         // <display> element
         Element rootElement = document.getDocumentElement();
@@ -188,7 +251,12 @@ public class LiferayDisplayDescriptorHelper extends LiferayDescriptorHelper
         return allPortletCategories.toArray( new String[0] );
     }
 
-    public IStatus removeAllPortlets()
+    public IFile getDescriptorFile()
+    {
+        return super.getDescriptorFile( DESCRIPTOR_FILE );
+    }
+
+    protected IStatus removeAllPortlets()
     {
         final String categoryTagName = "category";
 
@@ -203,40 +271,6 @@ public class LiferayDisplayDescriptorHelper extends LiferayDescriptorHelper
         IStatus status = domModelOperation.execute();
 
         return status;
-    }
-
-    public IStatus removeSampleElements()
-    {
-        return removeAllPortlets();
-    }
-
-    public IStatus configureLiferayDisplayXml( final String newPortletName )
-    {
-        final IStatus status = new DOMModelEditOperation( getDescriptorFile() )
-        {
-            protected IStatus doExecute( IDOMDocument document )
-            {
-                final Element rootElement = document.getDocumentElement();
-
-                final NodeList portletNodes = rootElement.getElementsByTagName( "category" );
-
-                if( portletNodes.getLength() > 0 )
-                {
-                    final Element lastPortletElement = (Element) portletNodes.item( portletNodes.getLength() - 1 );
-                    final Element portletName = NodeUtil.findChildElement( lastPortletElement, "portlet" );
-                    portletName.setAttribute( "id", newPortletName );
-                }
-
-                return Status.OK_STATUS;
-            }
-        }.execute();
-
-        return status;
-    }
-
-    public IFile getDescriptorFile()
-    {
-        return getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
     }
 
 }

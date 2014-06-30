@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.sapphire.ImageData;
 import org.eclipse.sapphire.Result;
@@ -33,7 +33,7 @@ public class PortletFrameworkValueImageService extends ValueImageService
     {
         ImageData data = null;
 
-        final IPortletFramework framework = LiferayProjectCore.getPortletFramework( value );
+        final IPortletFramework framework = ProjectCore.getPortletFramework( value );
 
         if( framework != null )
         {

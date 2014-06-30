@@ -164,7 +164,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 
                 if( existingProject != null && existingProject.exists() )
                 {
-                    return LiferayProjectCore.createErrorStatus( Msgs.projectNameExists );
+                    return ProjectCore.createErrorStatus( Msgs.projectNameExists );
                 }
 
                 File projectDir = record.getProjectLocation().toFile();
@@ -178,11 +178,11 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
                 }
                 else
                 {
-                    return LiferayProjectCore.createErrorStatus( Msgs.projectNotLocated );
+                    return ProjectCore.createErrorStatus( Msgs.projectNotLocated );
                 }
             }
 
-            return LiferayProjectCore.createErrorStatus( Msgs.invalidProjectLocation );
+            return ProjectCore.createErrorStatus( Msgs.invalidProjectLocation );
         }
         else if( SDK_VERSION.equals( name ) )
         {
@@ -198,7 +198,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
                 }
                 else
                 {
-                    return LiferayProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
+                    return ProjectCore.createErrorStatus( Msgs.invalidPluginSDKVersion +
                         SDKManager.getLeastValidVersion() );
                 }
             }
@@ -215,7 +215,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
             }
             else
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.invalidLiferayPluginType );
+                return ProjectCore.createErrorStatus( Msgs.invalidLiferayPluginType );
             }
         }
         else if( FACET_RUNTIME.equals( name ) )
@@ -224,7 +224,7 @@ public class LiferayProjectImportDataModelProvider extends FacetProjectCreationD
 
             if( !( runtime instanceof BridgedRuntime ) )
             {
-                return LiferayProjectCore.createErrorStatus( Msgs.validLiferayRuntimeSelected );
+                return ProjectCore.createErrorStatus( Msgs.validLiferayRuntimeSelected );
             }
             else
             {

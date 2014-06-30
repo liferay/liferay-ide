@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.pref;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -107,7 +107,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
 
         useSnapshotVersion =
             new BooleanFieldEditor(
-                LiferayProjectCore.PREF_USE_SNAPSHOT_VERSION, "Allow snapshot versions for new maven projects",
+                ProjectCore.PREF_USE_SNAPSHOT_VERSION, "Allow snapshot versions for new maven projects",
                 getFieldEditorParent() );
 
         useSnapshotVersion.fillIntoGrid( getFieldEditorParent(), 1 );
@@ -120,7 +120,7 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
     {
         if( prefStore == null )
         {
-            prefStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, LiferayProjectCore.PLUGIN_ID );
+            prefStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, ProjectCore.PLUGIN_ID );
         }
 
         return prefStore;

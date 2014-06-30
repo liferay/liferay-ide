@@ -15,6 +15,8 @@
 package com.liferay.ide.project.core.util;
 
 
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
+
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -105,7 +107,7 @@ public class VersionedSchemaRootElementController extends StandardRootElementCon
 
                     if( project != null )
                     {
-                        version = new LiferayDescriptorHelper( project ).getDescriptorVersion( defaultVersion );
+                        version = LiferayDescriptorHelper.getDescriptorVersion( project, defaultVersion );
                     }
 
                     namespace = MessageFormat.format( this.namespaceTemplate, version );

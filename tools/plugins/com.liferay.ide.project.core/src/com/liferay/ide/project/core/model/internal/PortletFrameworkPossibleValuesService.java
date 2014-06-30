@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class PortletFrameworkPossibleValuesService extends PossibleValuesService
 
         possibleValues = new ArrayList<String>();
 
-        for( final IPortletFramework portletFramework : LiferayProjectCore.getPortletFrameworks() )
+        for( final IPortletFramework portletFramework : ProjectCore.getPortletFrameworks() )
         {
             if( shouldAdd( portletFramework ) )
             {

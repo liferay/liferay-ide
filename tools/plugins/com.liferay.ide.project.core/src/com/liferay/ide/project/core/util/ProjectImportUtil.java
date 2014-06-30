@@ -21,7 +21,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -142,7 +142,7 @@ public class ProjectImportUtil
             }
             else if( pluginBinaryRecord.isPortlet() )
             {
-                final IPortletFramework[] portletFrameworks = LiferayProjectCore.getPortletFrameworks();
+                final IPortletFramework[] portletFrameworks = ProjectCore.getPortletFrameworks();
                 String portletFrameworkName = null;
 
                 for( int i = 0; i < portletFrameworks.length; i++ )

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.tests;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IPath;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.2" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.2" );
     }
 
     @Override
@@ -48,7 +48,7 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.2-ce-ga3/tomcat-7.0.40" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.1.2-ce-ga3/tomcat-7.0.40" );
     }
 
     @Override

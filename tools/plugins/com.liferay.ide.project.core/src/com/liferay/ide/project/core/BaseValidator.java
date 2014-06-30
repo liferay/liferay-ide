@@ -102,7 +102,7 @@ public abstract class BaseValidator extends AbstractValidator
         }
         catch( IOException e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
         finally
         {
@@ -165,7 +165,7 @@ public abstract class BaseValidator extends AbstractValidator
                         }
                         catch( JavaModelException e )
                         {
-                            LiferayProjectCore.logError( e );
+                            ProjectCore.logError( e );
                         }
                     }
 
@@ -310,7 +310,7 @@ public abstract class BaseValidator extends AbstractValidator
         }
         catch( IOException e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
         finally
         {
@@ -347,7 +347,7 @@ public abstract class BaseValidator extends AbstractValidator
         }
         catch( JavaModelException e )
         {
-            LiferayProjectCore.logError( "Error resolving classpath.", e );
+            ProjectCore.logError( "Error resolving classpath.", e );
         }
 
         return paths.toArray( new IPath[0] );

@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.sapphire.ConversionException;
 import org.eclipse.sapphire.ConversionService;
@@ -35,6 +35,6 @@ public class StringToIPortletFrameworkConversionService extends ConversionServic
     @Override
     public IPortletFramework convert( String object ) throws ConversionException
     {
-        return LiferayProjectCore.getPortletFramework( object );
+        return ProjectCore.getPortletFramework( object );
     }
 }

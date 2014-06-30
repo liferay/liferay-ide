@@ -18,11 +18,9 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 import com.liferay.ide.project.core.model.internal.LocationListener;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelperManager;
-import com.liferay.ide.project.core.util.ISampleElementsOperation;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
@@ -122,7 +120,7 @@ public class NewLiferayPluginProjectOpMethods
         catch( Exception e )
         {
             final String msg = "Error creating Liferay plugin project."; //$NON-NLS-1$
-            LiferayProjectCore.logError( msg, e );
+            ProjectCore.logError( msg, e );
 
             return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );
         }
@@ -285,22 +283,7 @@ public class NewLiferayPluginProjectOpMethods
 
             if( project != null && project.exists() )
             {
-                final LiferayDescriptorHelper[] helpers =
-                    LiferayDescriptorHelperManager.getInstance().getDescriptorHelpers( project );
-
-                for( LiferayDescriptorHelper helper : helpers )
-                {
-                    if( helper instanceof ISampleElementsOperation )
-                    {
-                        status = ( (ISampleElementsOperation) helper ).removeSampleElements();
-
-                        if( !status.isOK() )
-                        {
-                            LiferayProjectCore.getDefault().getLog().log( status );
-                            return status;
-                        }
-                    }
-                }
+                ProjectCore.operate( project, RemoveSampleElementsOperation.class );
 
                 // delete sample files: view.jsp, main.css, main.js
                 try
@@ -321,7 +304,7 @@ public class NewLiferayPluginProjectOpMethods
                 }
                 catch( CoreException e )
                 {
-                    LiferayProjectCore.logError( "Error deleting sample files.", e );
+                    ProjectCore.logError( "Error deleting sample files.", e );
                 }
            }
         }
@@ -381,18 +364,18 @@ public class NewLiferayPluginProjectOpMethods
     {
         try
         {
-            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayProjectCore.PLUGIN_ID );
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
-            prefs.put( LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
-            prefs.putBoolean( LiferayProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
-            prefs.putBoolean( LiferayProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
+            prefs.put( ProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+            prefs.putBoolean( ProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
+            prefs.putBoolean( ProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
 
             prefs.flush();
         }
         catch( Exception e )
         {
             final String msg = "Error updating default project build type."; //$NON-NLS-1$
-            LiferayProjectCore.logError( msg, e );
+            ProjectCore.logError( msg, e );
         }
     }
 

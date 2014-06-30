@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 
 import org.eclipse.core.resources.IProject;
@@ -60,7 +60,7 @@ public class WebPluginFacetInstall extends PluginFacetInstall
             }
             catch( Exception e )
             {
-                LiferayProjectCore.logError( e );
+                ProjectCore.logError( e );
             }
         }
         else if( shouldSetupDefaultOutputLocation() )

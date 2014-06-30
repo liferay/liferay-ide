@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -40,7 +40,7 @@ public class IncludeSampleCodeDefaultValueService extends DefaultValueService
 
         includeSampleCode =
             Platform.getPreferencesService().getBoolean(
-                LiferayProjectCore.PLUGIN_ID, LiferayProjectCore.PREF_INCLUDE_SAMPLE_CODE, true, prefContexts );
+                ProjectCore.PLUGIN_ID, ProjectCore.PREF_INCLUDE_SAMPLE_CODE, true, prefContexts );
     }
 
     @Override

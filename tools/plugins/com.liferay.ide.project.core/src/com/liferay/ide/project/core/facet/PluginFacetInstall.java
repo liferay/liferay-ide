@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.facet;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -98,7 +98,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
         catch( CoreException e )
         {
-            LiferayProjectCore.logError( "Unable to create link", e ); //$NON-NLS-1$
+            ProjectCore.logError( "Unable to create link", e ); //$NON-NLS-1$
         }
 
         try
@@ -108,7 +108,7 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
         }
         catch( JavaModelException e )
         {
-            LiferayProjectCore.logError( "Unable to set java-ouput-path", e ); //$NON-NLS-1$
+            ProjectCore.logError( "Unable to set java-ouput-path", e ); //$NON-NLS-1$
         }
     }
 
@@ -371,13 +371,13 @@ public abstract class PluginFacetInstall implements IDelegate, IPluginProjectDat
                 }
                 catch( Exception e )
                 {
-                    LiferayProjectCore.logError( e );
+                    ProjectCore.logError( e );
                 }
             }
         }
         catch( FileNotFoundException e1 )
         {
-            throw new CoreException( LiferayProjectCore.createErrorStatus( e1 ) );
+            throw new CoreException( ProjectCore.createErrorStatus( e1 ) );
         }
     }
 

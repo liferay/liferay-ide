@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.model.LiferayPluginSDKOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -201,7 +201,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
                 }
                 catch( BackingStoreException be )
                 {
-                    LiferayProjectCore.logError( "Unable to persist sdk name to project " + getProject(), be );
+                    ProjectCore.logError( "Unable to persist sdk name to project " + getProject(), be );
                 }
             }
         }

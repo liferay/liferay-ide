@@ -15,7 +15,7 @@
 package com.liferay.ide.alloy.core;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 
 import org.eclipse.core.resources.IProject;
@@ -45,7 +45,7 @@ public class UpgradeLAUTHandler extends AbstractUpgradeProjectHandler
 
             if( lautRunner == null )
             {
-                LiferayProjectCore.logError( "Alloy Core Not set LautRunner", null ); //$NON-NLS-1$
+                ProjectCore.logError( "Alloy Core Not set LautRunner", null ); //$NON-NLS-1$
             }
             else
             {

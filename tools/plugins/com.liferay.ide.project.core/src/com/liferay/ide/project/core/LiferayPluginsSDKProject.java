@@ -141,7 +141,7 @@ public class LiferayPluginsSDKProject extends BaseLiferayProject
             }
             catch( CoreException e )
             {
-                LiferayProjectCore.logError( "Unable to get property " + key, e );
+                ProjectCore.logError( "Unable to get property " + key, e );
             }
         }
 

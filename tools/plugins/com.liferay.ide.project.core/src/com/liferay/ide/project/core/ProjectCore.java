@@ -16,6 +16,8 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.descriptor.IDescriptorOperation;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -39,14 +43,14 @@ import org.osgi.framework.BundleContext;
  * @author Simon Jiang
  * @author Kuo Zhang
  */
-public class LiferayProjectCore extends Plugin
+public class ProjectCore extends Plugin
 {
 
     // The liferay project marker type
     public static final String LIFERAY_PROJECT_MARKER_TYPE = "com.liferay.ide.project.core.LiferayProjectMarker";
 
     // The shared instance
-    private static LiferayProjectCore plugin;
+    private static ProjectCore plugin;
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.project.core"; //$NON-NLS-1$
@@ -72,6 +76,14 @@ public class LiferayProjectCore extends Plugin
 
     // The value of maven build type
     public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
+
+    /**
+     * The constructor
+     */
+    public ProjectCore()
+    {
+        pluginPackageResourceListener = new PluginPackageResourceListener();
+    }
 
     public static IStatus createErrorStatus( Exception e )
     {
@@ -118,9 +130,40 @@ public class LiferayProjectCore extends Plugin
      *
      * @return the shared instance
      */
-    public static LiferayProjectCore getDefault()
+    public static ProjectCore getDefault()
     {
         return plugin;
+    }
+
+    private static LiferayDescriptorHelper[] getDescriptorHelpers( IProject project, Class<? extends IDescriptorOperation> type )
+    {
+        List<LiferayDescriptorHelper> retval = new ArrayList<LiferayDescriptorHelper>();
+
+        project = CoreUtil.getLiferayProject( project );
+
+        if( project == null || ! project.exists() )
+        {
+            return null;
+        }
+
+        final LiferayDescriptorHelper[] allHelpers = LiferayDescriptorHelperReader.getInstance().getAllHelpers();
+
+        for( LiferayDescriptorHelper helper : allHelpers )
+        {
+            helper.setProject( project );
+
+            final IFile descriptorFile = helper.getDescriptorFile();
+
+            if( descriptorFile != null && descriptorFile.exists() )
+            {
+                if( helper.getDescriptorOperation( type ) != null )
+                {
+                    retval.add( helper );
+                }
+            }
+        }
+
+        return retval.toArray( new LiferayDescriptorHelper[0] );
     }
 
     public static IPortletFramework getPortletFramework( String name )
@@ -251,12 +294,23 @@ public class LiferayProjectCore extends Plugin
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
     }
 
-    /**
-     * The constructor
-     */
-    public LiferayProjectCore()
+    public static IStatus operate( IProject project, Class<? extends IDescriptorOperation> type, Object... params )
     {
-        pluginPackageResourceListener = new PluginPackageResourceListener();
+        IStatus status = Status.OK_STATUS;
+
+        LiferayDescriptorHelper[] helpers = getDescriptorHelpers( project, type );
+
+        for( LiferayDescriptorHelper helper : helpers )
+        {
+            status = helper.getDescriptorOperation( type ).execute( params );
+
+            if( ! status.isOK() )
+            {
+                return status;
+            }
+        }
+
+        return status;
     }
 
     /*

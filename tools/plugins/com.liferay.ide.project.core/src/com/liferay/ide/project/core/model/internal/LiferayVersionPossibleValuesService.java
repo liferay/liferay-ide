@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import java.util.List;
@@ -75,7 +75,7 @@ public class LiferayVersionPossibleValuesService extends PossibleValuesService
                         }
                         catch( Exception e )
                         {
-                            LiferayProjectCore.logError( "Could not determine possible versions.", e );
+                            ProjectCore.logError( "Could not determine possible versions.", e );
                         }
 
                         refresh();

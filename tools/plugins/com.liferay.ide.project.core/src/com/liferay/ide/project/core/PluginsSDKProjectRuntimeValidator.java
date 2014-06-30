@@ -60,7 +60,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                 if( fproj.getPrimaryRuntime() == null )
                 {
                     setMarker(
-                        proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
+                        proj, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
                         MSG_PRIMARY_RUNTIME_NOT_SET, LOCATION_TARGETED_RUNTIMES, ID_PRIMARY_RUNTIME_NOT_SET );
                 }
                 else
@@ -68,7 +68,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                     if( ! ServerUtil.isLiferayRuntime( (BridgedRuntime) fproj.getPrimaryRuntime() ) )
                     {
                         setMarker(
-                            proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
+                            proj, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR,
                             MSG_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME, LOCATION_TARGETED_RUNTIMES,
                             ID_PRIMARY_RUNTIME_NOT_LIFERAY_RUNTIME );
                     }
@@ -78,7 +78,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
             {
 
                 setMarker(
-                    proj, LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
+                    proj, ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, IMarker.SEVERITY_ERROR, Msgs.pluginSDKNotSet,
                     LOCATION_TARGETED_SDK, ID_PLUGINS_SDK_NOT_SET );
             }
         }
@@ -91,7 +91,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
             if( proj.isOpen() )
             {
                 IMarker[] markers =
-                    proj.findMarkers( LiferayProjectCore.LIFERAY_PROJECT_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+                    proj.findMarkers( ProjectCore.LIFERAY_PROJECT_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
 
                 for( IMarker marker : markers )
                 {
@@ -108,7 +108,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
         }
         catch( CoreException e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
     }
 

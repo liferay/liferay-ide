@@ -12,15 +12,15 @@
  * details.
  *
  *******************************************************************************/
-
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.project.core.descriptor;
 
 import org.eclipse.core.runtime.IStatus;
+
 
 /**
  * @author Kuo Zhang
  */
-public interface ISampleElementsOperation
+public interface IDescriptorOperation
 {
-    IStatus removeSampleElements();
+    IStatus execute( Object... params );
 }

@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
@@ -101,7 +101,7 @@ public class SDKPluginFacetUtil
                     }
                     catch( Exception e )
                     {
-                        LiferayProjectCore.logError( e );
+                        ProjectCore.logError( e );
                     }
                 }
             }
@@ -243,7 +243,7 @@ public class SDKPluginFacetUtil
 
         if( preset == null )
         {
-            throw new CoreException( LiferayProjectCore.createErrorStatus( NLS.bind( Msgs.noFacetPreset, fpjwc.getProjectName() ) ) );
+            throw new CoreException( ProjectCore.createErrorStatus( NLS.bind( Msgs.noFacetPreset, fpjwc.getProjectName() ) ) );
         }
 
         Set<IProjectFacetVersion> currentProjectFacetVersions = fpjwc.getProjectFacets();

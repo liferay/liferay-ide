@@ -13,7 +13,7 @@ package com.liferay.ide.maven.core.aether;
 
 import com.liferay.ide.maven.core.LiferayMavenCore;
 import com.liferay.ide.maven.core.MavenUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import java.util.List;
 
@@ -175,7 +175,7 @@ public class AetherUtil
         final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
 
         return  Platform.getPreferencesService().getBoolean(
-                LiferayProjectCore.PLUGIN_ID, LiferayProjectCore.PREF_USE_SNAPSHOT_VERSION, false, prefContexts );
+                ProjectCore.PLUGIN_ID, ProjectCore.PREF_USE_SNAPSHOT_VERSION, false, prefContexts );
     }
 
 }

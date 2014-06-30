@@ -19,7 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -128,7 +128,7 @@ public class ProjectUtil
             }
             catch( IOException exception )
             {
-                LiferayProjectCore.logError( exception.getLocalizedMessage(), exception );
+                ProjectCore.logError( exception.getLocalizedMessage(), exception );
             }
         }
 
@@ -188,7 +188,7 @@ public class ProjectUtil
                     }
                     catch( IOException exception )
                     {
-                        LiferayProjectCore.logError( exception.getLocalizedMessage(), exception );
+                        ProjectCore.logError( exception.getLocalizedMessage(), exception );
                     }
 
                     // dont recurse directories that we have already determined
@@ -232,7 +232,7 @@ public class ProjectUtil
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Unable to create default web xml", e ); //$NON-NLS-1$
+            ProjectCore.logError( "Unable to create default web xml", e ); //$NON-NLS-1$
         }
     }
 
@@ -583,7 +583,7 @@ public class ProjectUtil
                 }
                 catch( Exception e )
                 {
-                    LiferayProjectCore.logError( e );
+                    ProjectCore.logError( e );
                 }
             }
 
@@ -591,7 +591,7 @@ public class ProjectUtil
         }
         catch( Exception ex )
         {
-            LiferayProjectCore.logError( "Exception trying to fix Ext project classpath entries.", ex ); //$NON-NLS-1$
+            ProjectCore.logError( "Exception trying to fix Ext project classpath entries.", ex ); //$NON-NLS-1$
         }
     }
 
@@ -637,7 +637,7 @@ public class ProjectUtil
                                     }
                                     catch( Exception e )
                                     {
-                                        LiferayProjectCore.logError( e );
+                                        ProjectCore.logError( e );
                                     }
                                 }
                             }
@@ -883,7 +883,7 @@ public class ProjectUtil
         }
         catch( JavaModelException e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
 
         return list.toArray( new IPackageFragmentRoot[list.size()] );
@@ -1060,7 +1060,7 @@ public class ProjectUtil
             }
             catch( CoreException e )
             {
-                throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
             }
         }
         else if( projectRecord.liferayProjectDir != null )
@@ -1071,7 +1071,7 @@ public class ProjectUtil
             }
             catch( CoreException e )
             {
-                throw new CoreException( LiferayProjectCore.createErrorStatus( e ) );
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
             }
         }
 

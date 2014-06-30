@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
@@ -116,9 +116,9 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler
         catch( Exception e )
         {
             final IStatus error =
-                LiferayProjectCore.createErrorStatus(
+                ProjectCore.createErrorStatus(
                     "Unable to upgrade deployment meta file for " + project.getName(), e );
-            LiferayProjectCore.logError( error );
+            ProjectCore.logError( error );
 
             retval = StatusBridge.create( error );
         }

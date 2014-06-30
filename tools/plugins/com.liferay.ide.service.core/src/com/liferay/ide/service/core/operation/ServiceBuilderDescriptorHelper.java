@@ -18,8 +18,8 @@ package com.liferay.ide.service.core.operation;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
-import com.liferay.ide.project.core.util.ISampleElementsOperation;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +41,10 @@ import org.w3c.dom.NodeList;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper implements ISampleElementsOperation
+public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
 {
+    private static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE; 
+
     private final String NEW_LINE = System.getProperty( "line.separator" );
 
     public ServiceBuilderDescriptorHelper()
@@ -92,6 +94,22 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper impl
         }
 
         return status;
+    }
+
+    @Override
+    protected void addDescriptorOperations()
+    {
+        addDescriptorOperation
+        (
+            new RemoveSampleElementsOperation()
+            {
+                @Override
+                public IStatus removeSampleElements()
+                {
+                    return removeAllEntities();
+                }
+            }
+        );
     }
 
     public IStatus addEntity( final String entityName )
@@ -393,7 +411,7 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper impl
 
     public IFile getDescriptorFile()
     {
-        return this.project == null ? null : getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        return super.getDescriptorFile( DESCRIPTOR_FILE );
     }
 
     private String nextSuffix( String val )
@@ -431,10 +449,5 @@ public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper impl
         };
 
         return editOperation.execute();
-    }
-
-    public IStatus removeSampleElements()
-    {
-        return removeAllEntities();
     }
 }

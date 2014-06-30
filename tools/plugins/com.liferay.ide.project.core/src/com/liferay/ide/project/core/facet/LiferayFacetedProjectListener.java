@@ -17,7 +17,7 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -81,7 +81,7 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener
                         }
                         catch( Exception e )
                         {
-                            LiferayProjectCore.logError( "Unable to removed fixed jsdt facet", e ); //$NON-NLS-1$
+                            ProjectCore.logError( "Unable to removed fixed jsdt facet", e ); //$NON-NLS-1$
                         }
 
                         // next uninstall the jsdt facet
@@ -124,7 +124,7 @@ public class LiferayFacetedProjectListener implements IFacetedProjectListener
                         }
                         catch( CoreException e )
                         {
-                            LiferayProjectCore.logError( "Unable to uninstall jsdt facet", e ); //$NON-NLS-1$
+                            ProjectCore.logError( "Unable to uninstall jsdt facet", e ); //$NON-NLS-1$
                         }
 
                         return Status.OK_STATUS;

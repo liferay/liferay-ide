@@ -17,7 +17,7 @@ package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
@@ -39,7 +39,7 @@ public class ProjectProviderDefaultValueService extends DefaultValueService
         final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
         final String defaultProjectBuildType =
             Platform.getPreferencesService().getString(
-                LiferayProjectCore.PLUGIN_ID, LiferayProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, null,
+                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, null,
                     prefContexts );
 
         if( defaultProjectBuildType != null )

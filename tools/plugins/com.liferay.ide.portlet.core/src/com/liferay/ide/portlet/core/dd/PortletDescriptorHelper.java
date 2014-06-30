@@ -19,8 +19,10 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
-import com.liferay.ide.project.core.util.ISampleElementsOperation;
+import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.RemoveAllPortletsOperation;
+import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +46,16 @@ import org.w3c.dom.NodeList;
  * @author Kuo Zhang
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
-public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties,
-                                                                                IPortletElementOperation,
-                                                                                ISampleElementsOperation
+public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties
 {
+
+    public static final String DESCRIPTOR_FILE = ILiferayConstants.PORTLET_XML_FILE;
+
+    private static final String DESCRIPTOR_TEMPLATE =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<portlet-app xmlns=\"http://java.sun.com/xml/ns/" //$NON-NLS-1$
+        + "portlet/portlet-app_2_0.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:" //$NON-NLS-1$
+        + "schemaLocation=\"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/" //$NON-NLS-1$
+        + "xml/ns/portlet/portlet-app_2_0.xsd\" version=\"2.0\">\n</portlet-app>"; //$NON-NLS-1$
 
     public PortletDescriptorHelper()
     {
@@ -59,40 +67,68 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         super( project );
     }
 
-    public IStatus addNewPortlet( final IDataModel model )
+    protected void addDescriptorOperations()
     {
-        IStatus status = Status.OK_STATUS;
-
-        if( canAddNewPortlet( model ) )
-        {
-            final IFile descriptorFile = getDescriptorFile();
-
-            if( descriptorFile != null )
+        addDescriptorOperation
+        ( 
+            new RemoveSampleElementsOperation()
             {
-                DOMModelOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+                @Override
+                public IStatus removeSampleElements()
                 {
-                    protected void createDefaultFile()
-                    {
-                        String templateString =
-                            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<portlet-app xmlns=\"http://java.sun.com/xml/ns/" //$NON-NLS-1$
-                                + "portlet/portlet-app_2_0.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:" //$NON-NLS-1$
-                                + "schemaLocation=\"http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/" //$NON-NLS-1$
-                                + "xml/ns/portlet/portlet-app_2_0.xsd\" version=\"2.0\">\n</portlet-app>"; //$NON-NLS-1$
-
-                        createDefaultDescriptor( templateString, "" ); //$NON-NLS-1$
-                    }
-
-                    protected IStatus doExecute( IDOMDocument document )
-                    {
-                        return doAddNewPortlet( document, model );
-                    }
+                    return doRemoveAllPortlets();
                 };
-
-                status = domModelOperation.execute();
             }
-        }
+        );
 
-        return status;
+        addDescriptorOperation
+        (
+            new AddNewPortletOperation()
+            {
+                @Override
+                public IStatus addNewPortlet( final IDataModel model )
+                {
+                    IStatus status = Status.OK_STATUS;
+
+                    if( canAddNewPortlet( model ) )
+                    {
+                        final IFile descriptorFile = getDescriptorFile();
+
+                        if( descriptorFile != null )
+                        {
+                            DOMModelOperation domModelOperation = new DOMModelEditOperation( descriptorFile )
+                            {
+                                protected void createDefaultFile()
+                                {
+                                    createDefaultDescriptor( DESCRIPTOR_TEMPLATE, "" ); //$NON-NLS-1$
+                                }
+
+                                protected IStatus doExecute( IDOMDocument document )
+                                {
+                                    return doAddNewPortlet( document, model );
+                                }
+                            };
+
+                            status = domModelOperation.execute();
+                        }
+                    }
+
+                    return status;
+                }
+            }
+        );
+
+        addDescriptorOperation
+        (
+            new RemoveAllPortletsOperation()
+            {
+                @Override
+                public IStatus removeAllPortlets()
+                {
+                    return doRemoveAllPortlets();
+                }
+            }
+        );
     }
 
     public boolean canAddNewPortlet( IDataModel model )
@@ -124,63 +160,6 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         }.execute();
 
         return status;
-    }
-
-    public String[] getAllPortletNames()
-    {
-        final List<String> allPortletNames = new ArrayList<String>();
-
-        final IFile descriptorFile = getDescriptorFile();
-
-        if( descriptorFile != null )
-        {
-            DOMModelOperation op = new DOMModelReadOperation( descriptorFile )
-            {
-                protected IStatus doExecute( IDOMDocument document )
-                {
-                    NodeList nodeList = document.getElementsByTagName( "portlet-name" ); //$NON-NLS-1$
-
-                    for( int i = 0; i < nodeList.getLength(); i++ )
-                    {
-                        Element portletName = (Element) nodeList.item( i );
-                        allPortletNames.add( NodeUtil.getTextContent( portletName ) );
-                    }
-
-                    return Status.OK_STATUS;
-                }
-            };
-
-            op.execute();
-        }
-
-        return allPortletNames.toArray( new String[0] );
-    }
-
-    protected String getPortletClassText( IDataModel model )
-    {
-        return model.getStringProperty( QUALIFIED_CLASS_NAME );
-    }
-
-    public IStatus removeAllPortlets()
-    {
-        final String portletTagName = "portlet";
-
-        DOMModelEditOperation domModelOperation = new DOMModelEditOperation( getDescriptorFile() )
-        {
-            protected IStatus doExecute( IDOMDocument document )
-            {
-                return removeAllElements( document, portletTagName );
-            }
-        };
-
-        IStatus status = domModelOperation.execute();
-
-        return status;
-    }
-
-    public IStatus removeSampleElements()
-    {
-        return removeAllPortlets();
     }
 
     public IStatus doAddNewPortlet( IDOMDocument document, IDataModel model )
@@ -285,9 +264,61 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return Status.OK_STATUS;
     }
 
+    public IStatus doRemoveAllPortlets()
+    {
+        final String portletTagName = "portlet";
+
+        DOMModelEditOperation domModelOperation = new DOMModelEditOperation( getDescriptorFile() )
+        {
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return removeAllElements( document, portletTagName );
+            }
+        };
+
+        IStatus status = domModelOperation.execute();
+
+        return status;
+    }
+
+    public String[] getAllPortletNames()
+    {
+        final List<String> allPortletNames = new ArrayList<String>();
+
+        final IFile descriptorFile = getDescriptorFile();
+
+        if( descriptorFile != null )
+        {
+            DOMModelOperation op = new DOMModelReadOperation( descriptorFile )
+            {
+                protected IStatus doExecute( IDOMDocument document )
+                {
+                    NodeList nodeList = document.getElementsByTagName( "portlet-name" ); //$NON-NLS-1$
+
+                    for( int i = 0; i < nodeList.getLength(); i++ )
+                    {
+                        Element portletName = (Element) nodeList.item( i );
+                        allPortletNames.add( NodeUtil.getTextContent( portletName ) );
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            };
+
+            op.execute();
+        }
+
+        return allPortletNames.toArray( new String[0] );
+    }
+
     public IFile getDescriptorFile()
     {
-        return this.project == null ? null : getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        return super.getDescriptorFile( DESCRIPTOR_FILE );
+    }
+
+    protected String getPortletClassText( IDataModel model )
+    {
+        return model.getStringProperty( QUALIFIED_CLASS_NAME );
     }
 
 }

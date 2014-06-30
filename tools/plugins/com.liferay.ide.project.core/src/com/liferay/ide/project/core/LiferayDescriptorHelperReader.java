@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ExtensionReader;
-import com.liferay.ide.project.core.util.LiferayDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class LiferayDescriptorHelperReader extends ExtensionReader<LiferayDescri
 
     private LiferayDescriptorHelperReader()
     {
-        super( LiferayProjectCore.PLUGIN_ID, EXTENSION, HELPER_ELEMENT );
+        super( ProjectCore.PLUGIN_ID, EXTENSION, HELPER_ELEMENT );
     }
 
     @Override

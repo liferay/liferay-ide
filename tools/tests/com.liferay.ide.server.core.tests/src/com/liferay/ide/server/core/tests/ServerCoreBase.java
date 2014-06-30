@@ -22,7 +22,7 @@ import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -123,7 +123,7 @@ public abstract class ServerCoreBase extends BaseTests
 
     protected IPath getLiferayRuntimeDir()
     {
-        return LiferayProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
     }
 
     protected IPath getLiferayRuntimeZip()
@@ -173,7 +173,7 @@ public abstract class ServerCoreBase extends BaseTests
                 "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
                 liferayRuntimeZipFile.exists() );
 
-            ZipUtil.unzip( liferayRuntimeZipFile, LiferayProjectCore.getDefault().getStateLocation().toFile() );
+            ZipUtil.unzip( liferayRuntimeZipFile, ProjectCore.getDefault().getStateLocation().toFile() );
         }
 
         assertEquals( true, liferayRuntimeDirFile.exists() );

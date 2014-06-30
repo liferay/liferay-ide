@@ -15,7 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.ui.IvyUtil;
@@ -179,8 +179,8 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                     }
                     catch( CoreException e )
                     {
-                        return LiferayProjectCore.createErrorStatus(
-                            LiferayProjectCore.PLUGIN_ID, "Failed to configured ivy project.", e ); //$NON-NLS-1$
+                        return ProjectCore.createErrorStatus(
+                            ProjectCore.PLUGIN_ID, "Failed to configured ivy project.", e ); //$NON-NLS-1$
                     }
 
                     return Status.OK_STATUS;
@@ -233,7 +233,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                             }
                             catch( CoreException ex )
                             {
-                                LiferayProjectCore.createErrorStatus( ex );
+                                ProjectCore.createErrorStatus( ex );
                             }
                         }
                     }

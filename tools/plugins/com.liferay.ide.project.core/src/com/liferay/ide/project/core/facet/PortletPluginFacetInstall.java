@@ -18,7 +18,7 @@ package com.liferay.ide.project.core.facet;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 
 import org.eclipse.core.resources.IContainer;
@@ -149,7 +149,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
             }
             catch( Exception e )
             {
-                LiferayProjectCore.logError( e );
+                ProjectCore.logError( e );
             }
 
             if( masterModel.getBooleanProperty( PLUGIN_FRAGMENT_ENABLED ) )
@@ -183,7 +183,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                     }
                     catch( Exception ex )
                     {
-                        LiferayProjectCore.logError( "Error deleting view.jsp", ex ); //$NON-NLS-1$
+                        ProjectCore.logError( "Error deleting view.jsp", ex ); //$NON-NLS-1$
                     }
                 }
             }
@@ -237,7 +237,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         }
         catch( Exception e1 )
         {
-            LiferayProjectCore.logError( e1 );
+            ProjectCore.logError( e1 );
         }
 
         // IDE-417 set a project preference for disabling JSP fragment validation
@@ -251,7 +251,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( "Could not store jsp fragment validation preference", e ); //$NON-NLS-1$
+            ProjectCore.logError( "Could not store jsp fragment validation preference", e ); //$NON-NLS-1$
         }
 
         if( shouldConfigureDeploymentAssembly() )

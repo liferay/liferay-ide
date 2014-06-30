@@ -17,7 +17,7 @@ package com.liferay.ide.portlet.ui.pref;
 
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.project.core.LiferayProjectCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.ui.pref.AbstractValidationSettingsPage;
 
@@ -244,7 +244,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getPreferenceNodeQualifier()
     {
-        return LiferayProjectCore.PLUGIN_ID;
+        return ProjectCore.PLUGIN_ID;
     }
 
     @Override
@@ -256,7 +256,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getProjectSettingsKey()
     {
-        return LiferayProjectCore.USE_PROJECT_SETTINGS;
+        return ProjectCore.USE_PROJECT_SETTINGS;
     }
 
     @Override

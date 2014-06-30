@@ -69,7 +69,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         }
         catch( Exception e )
         {
-            retval = LiferayProjectCore.createErrorStatus( e );
+            retval = ProjectCore.createErrorStatus( e );
         }
 
         ResourcesPlugin.getWorkspace().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
@@ -92,7 +92,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         }
         catch( Exception e )
         {
-            retval = LiferayProjectCore.createErrorStatus( e );
+            retval = ProjectCore.createErrorStatus( e );
         }
 
         getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
@@ -103,7 +103,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         }
         catch( Exception e )
         {
-            LiferayProjectCore.logError( e );
+            ProjectCore.logError( e );
         }
 
         return retval;

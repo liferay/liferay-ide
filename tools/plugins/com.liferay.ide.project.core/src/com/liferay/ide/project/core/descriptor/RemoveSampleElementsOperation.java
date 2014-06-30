@@ -12,31 +12,23 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.project.core.IPortletFramework;
-import com.liferay.ide.project.core.ProjectCore;
+package com.liferay.ide.project.core.descriptor;
 
-import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.PropertyDef;
+import org.eclipse.core.runtime.IStatus;
 
 
 /**
- * @author Gregory Amerson
+ * @author Kuo Zhang
  */
-public class PortletFrameworkPropertyAuxTextProvider extends PossibleValuesAuxTextProvider
+public abstract class RemoveSampleElementsOperation implements IDescriptorOperation
 {
-
     @Override
-    public String getAuxText( Element modelElement, PropertyDef property, String possibleValue )
+    public IStatus execute( Object... params )
     {
-        final IPortletFramework framework = ProjectCore.getPortletFramework( possibleValue );
-        return framework != null ? getAuxText( framework ) : null;
+        return removeSampleElements();
     }
 
-    private String getAuxText( IPortletFramework framework )
-    {
-        return framework.getDescription();
-    }
+    public abstract IStatus removeSampleElements();
 
 }
