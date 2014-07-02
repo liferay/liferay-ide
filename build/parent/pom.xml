@@ -21,15 +21,15 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <tycho-packaging-format>yyyyMMddHHmm'-ga2'</tycho-packaging-format>
-        <tycho-version>0.19.0</tycho-version>
-        <tycho-extras-version>0.19.0</tycho-extras-version>
+        <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
+        <tycho-version>0.20.0</tycho-version>
+        <tycho-extras-version>0.20.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</orbit-site>
         <osgi-bundles-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/osgi-bundles-repository/</osgi-bundles-site>
         <sapphire-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/sapphire-8.0.1-custom/</sapphire-site>
@@ -278,16 +278,16 @@
 
     <profiles>
         <profile>
-            <id>indigo</id>
+            <id>juno</id>
             <activation>
                 <property>
-                    <name>!skipIndigo</name>
+                    <name>!skipJuno</name>
                 </property>
             </activation>
             <properties>
-                <eclipse-site>http://download.eclipse.org/releases/indigo/</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/3.7</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/repository/indigo</wtp-site>
+                <eclipse-site>http://download.eclipse.org/releases/juno/201303010900/</eclipse-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.2</eclipse-project-update-site>
+                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.4.1/R-3.4.1-20120917174803/repository</wtp-site>
             </properties>
             <repositories>
                 <repository>
