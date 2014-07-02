@@ -14,6 +14,16 @@ new File("../..").eachDirRecurse
 		return
 	}
 
+    it.eachFile { itFile ->
+        if( itFile.isFile() && itFile.absolutePath.endsWith(".xml")
+            && itFile.text.contains( "Copyright (c) 2000-2012 Liferay, Inc. All rights reserved." ) )
+        {
+            println "Replacing copyright ${itFile.name}"
+            itFile.text = itFile.text.replaceAll( "Copyright \\(c\\) 2000-2012 Liferay, Inc. All rights reserved.", "Copyright \\(c\\) 2000-present Liferay, Inc. All rights reserved." );
+        }
+    }
+
+
 	// check for manifest
 	File manifest = new File( it, "META-INF/MANIFEST.MF" )
 

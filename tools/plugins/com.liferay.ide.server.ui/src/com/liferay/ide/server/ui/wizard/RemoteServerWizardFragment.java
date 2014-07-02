@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * The contents of this file are subject to the terms of the Liferay Enterprise
  * Subscription License ("License"). You may not use this file except in
