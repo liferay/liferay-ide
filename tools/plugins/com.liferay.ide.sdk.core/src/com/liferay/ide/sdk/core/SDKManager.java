@@ -69,7 +69,7 @@ public final class SDKManager
         instance = this;
     }
 
-    public void addSDK( SDK sdk )
+    public synchronized void addSDK( SDK sdk )
     {
         if( sdk == null )
         {
@@ -101,7 +101,7 @@ public final class SDKManager
         }
     }
 
-    public void clearSDKs()
+    public synchronized void clearSDKs()
     {
         this.sdkList.clear();
 
@@ -208,7 +208,7 @@ public final class SDKManager
         return null;
     }
 
-    public SDK[] getSDKs()
+    public synchronized SDK[] getSDKs()
     {
         if( !initialized )
         {
@@ -309,7 +309,7 @@ public final class SDKManager
         }
     }
 
-    public void setSDKs( SDK[] sdks )
+    public synchronized void setSDKs( SDK[] sdks )
     {
         if( CoreUtil.isNullOrEmpty( sdks ) )
         {
