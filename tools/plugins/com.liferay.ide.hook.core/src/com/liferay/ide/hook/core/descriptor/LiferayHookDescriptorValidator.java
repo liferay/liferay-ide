@@ -119,8 +119,19 @@ public class LiferayHookDescriptorValidator extends BaseValidator
 
         if( ! classResource.endsWith( ".properties" ) )
         {
+            final String elementName = classResourceSpecifier.getLocalName();
+            String preferenceKey = null; 
+
+            if( elementName.equals( PORTAL_PROPERTIES_ELEMENT ) )
+            {
+                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_SYNTAX_INVALID;
+            }
+            else if( elementName.equals( LANGUAGE_PROPERTIES_ELEMENT ) )
+            {
+                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_SYNTAX_INVALID;
+            }
+
             final String msg = MessageFormat.format( MESSAGE_PRORETIES_VALUE_END_WITH_PROPERTIES, new Object[] { classResource } );
-            final String preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_INVALID_PROPERTIES_SYNTAX;
 
             return createMarkerValues( 
                 preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
@@ -169,11 +180,11 @@ public class LiferayHookDescriptorValidator extends BaseValidator
 
             if( elementName.equals( PORTAL_PROPERTIES_ELEMENT ) )
             {
-                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND;
+                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_RESOURCE_NOT_FOUND;
             }
             else if( elementName.equals( LANGUAGE_PROPERTIES_ELEMENT ) )
             {
-                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND;
+                preferenceKey = ValidationPreferences.LIFERAY_HOOK_XML_RESOURCE_NOT_FOUND;
             }
 
             return createMarkerValues(
@@ -219,7 +230,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
     {
         checkDocrootElement(
             document, CUSTOM_JSP_DIR_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND, MESSAGE_CUSTOM_JSP_DIR_NOT_FOUND, problems );
+            ValidationPreferences.LIFERAY_HOOK_XML_RESOURCE_NOT_FOUND, MESSAGE_CUSTOM_JSP_DIR_NOT_FOUND, problems );
     }
 
     protected void checkServiceElements(
@@ -249,8 +260,8 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                 problem =
                     checkClass(
                         javaProject, itemServiceType, preferenceNodeQualifier, preferenceScopes,
-                        ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
-                        ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, null );
+                        ValidationPreferences.LIFERAY_HOOK_XML_TYPE_NOT_FOUND,
+                        ValidationPreferences.LIFERAY_HOOK_XML_TYPE_HIERARCHY_INCORRECT, null );
 
                 if( problem != null )
                 {
@@ -273,7 +284,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                                 problem =
                                     createMarkerValues(
                                         preferenceNodeQualifier, preferenceScopes,
-                                        ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY,
+                                        ValidationPreferences.LIFERAY_HOOK_XML_TYPE_HIERARCHY_INCORRECT,
                                         (IDOMNode) itemServiceType, msg );
 
                                 if( problem != null )
@@ -286,7 +297,7 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                                 problem =
                                     createMarkerValues(
                                         preferenceNodeQualifier, preferenceScopes,
-                                        ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY,
+                                        ValidationPreferences.LIFERAY_HOOK_XML_TYPE_HIERARCHY_INCORRECT,
                                         (IDOMNode) itemServiceType, MESSAGE_SERVICE_TYPE_INVALID );
 
                                 if( problem != null )
@@ -318,8 +329,8 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                     problem =
                         checkClass(
                             javaProject, itemServiceImpl, preferenceNodeQualifier, preferenceScopes,
-                            ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
-                            ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, serviceTypeContent +
+                            ValidationPreferences.LIFERAY_HOOK_XML_TYPE_NOT_FOUND,
+                            ValidationPreferences.LIFERAY_HOOK_XML_TYPE_HIERARCHY_INCORRECT, serviceTypeContent +
                                 "Wrapper" ); //$NON-NLS-1$
 
                 }
@@ -328,8 +339,8 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                     problem =
                         checkClass(
                             javaProject, itemServiceImpl, preferenceNodeQualifier, preferenceScopes,
-                            ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
-                            ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, null );
+                            ValidationPreferences.LIFERAY_HOOK_XML_TYPE_NOT_FOUND,
+                            ValidationPreferences.LIFERAY_HOOK_XML_TYPE_HIERARCHY_INCORRECT, null );
 
                 }
                 if( problem != null )
@@ -371,8 +382,8 @@ public class LiferayHookDescriptorValidator extends BaseValidator
                 Map<String, String> map = getAllClasseElements( "LiferayHookClassElements.properties" ); //$NON-NLS-1$
 
                 checkAllClassElements(
-                    map, javaProject, liferayHookXml, ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND,
-                    ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
+                    map, javaProject, liferayHookXml, ValidationPreferences.LIFERAY_HOOK_XML_TYPE_NOT_FOUND,
+                    ValidationPreferences.LIFERAY_HOOK_XML_TYPE_HIERARCHY_INCORRECT, preferenceScopes,
                     PREFERENCE_NODE_QUALIFIER, problems );
             }
 

@@ -43,6 +43,7 @@ import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class PortletValidationSettingsPage extends AbstractValidationSettingsPage
@@ -147,87 +148,56 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
         twistie = createTwistie( body, Msgs.portletXMLDescriptor, columns );
         Composite inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, Msgs.classNotFound, ValidationPreferences.PORTLET_XML_CLASS_NOT_FOUND );
-
-        createCombo( inner, Msgs.incorrectClassHierarchy, ValidationPreferences.PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
-
-        createCombo( inner, Msgs.resourceBundleNotFound, ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND );
-
-        createCombo( inner, Msgs.invalidResourceBundleSyntax, ValidationPreferences.PORTLET_XML_INVALID_RESOURCE_BUNDLE_SYNTAX );
-
-        twistie = createTwistie( body, Msgs.liferayPortletXMLDescriptor, columns );
-        inner = createInnerComposite( parent, twistie, columns );
-
-        createCombo( inner, Msgs.classNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_CLASS_NOT_FOUND );
-        createCombo( inner, Msgs.incorrectClassHierarchy, ValidationPreferences.LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY );
-        createCombo( inner, Msgs.iconNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND );
-        createCombo( inner, Msgs.entryWeightNotValid, ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID );
-        createCombo(
-            inner, Msgs.headerPortalCssNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND );
-        createCombo(
-            inner, Msgs.headerPortletCssNotFound,
-            ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_CSS_NOT_FOUND );
-        createCombo(
-            inner, Msgs.headerPortalJavascriptNotFound,
-            ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND );
-        createCombo(
-            inner, Msgs.headerPortletJavascriptNotFound,
-            ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND );
-        createCombo(
-            inner, Msgs.footerPortalCssNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND );
-        createCombo(
-            inner, Msgs.footerPortletCssNotFound,
-            ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_CSS_NOT_FOUND );
-        createCombo(
-            inner, Msgs.footerPortalJavascriptNotFound,
-            ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND );
-        createCombo(
-            inner, Msgs.footerPortletJavascriptNotFound,
-            ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND );
-        createCombo( inner, Msgs.portletNameNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND );
-
-        twistie = createTwistie( body, Msgs.liferayDisplayXMLDescriptor, columns );
-        inner = createInnerComposite( parent, twistie, columns );
-
-        createCombo( inner, Msgs.portletIdNotFound, ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND );
-
-        createCombo( inner, Msgs.categoryNameInvalid, ValidationPreferences.LIFERAY_DISPLAY_XML_CATEGORY_NAME_INVALID );
-
-        twistie = createTwistie( body, Msgs.liferayHookXMLDescriptor, columns );
-        inner = createInnerComposite( parent, twistie, columns );
-
-        createCombo( inner, Msgs.classNotFound, ValidationPreferences.LIFERAY_HOOK_XML_CLASS_NOT_FOUND );
-        createCombo( inner, Msgs.incorrectClassHierarchy, ValidationPreferences.LIFERAY_HOOK_XML_INCORRECT_CLASS_HIERARCHY );
-        createCombo(
-            inner, Msgs.portalPropertiesResourceNotFound,
-            ValidationPreferences.LIFERAY_HOOK_XML_PORTAL_PROPERTIES_NOT_FOUND );
-        createCombo(
-            inner, Msgs.languagePropertiesResourceNotFound,
-            ValidationPreferences.LIFERAY_HOOK_XML_LANGUAGE_PROPERTIES_NOT_FOUND );
-        createCombo(
-            inner, Msgs.invalidPropertiesSyntax,
-            ValidationPreferences.LIFERAY_HOOK_XML_INVALID_PROPERTIES_SYNTAX);
-        createCombo(
-            inner, Msgs.customJspDirectoryNotFound, ValidationPreferences.LIFERAY_HOOK_XML_CUSTOM_JSP_DIR_NOT_FOUND );
-
-        twistie = createTwistie( body, Msgs.liferayLayoutTemplatesDescriptor, columns );
-        inner = createInnerComposite( parent, twistie, columns );
-
-        createCombo(
-            inner, Msgs.templatePathResourceNotFound,
-            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_TEMPLATE_PATH_NOT_FOUND );
-        createCombo(
-            inner, Msgs.wapTemplatePathResourceNotFound,
-            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_WAP_TEMPLATE_PATH_NOT_FOUND );
-        createCombo(
-            inner, Msgs.thumbnailPathResourceNotFound,
-            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_THUMBNAIL_PATH_NOT_FOUND );
+        createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.PORTLET_XML_SYNTAX_INVALID );
+        createCombo( inner, Msgs.typeNotFound, ValidationPreferences.PORTLET_XML_TYPE_NOT_FOUND );
+        createCombo( inner, Msgs.typeHierarchyIncorrect, ValidationPreferences.PORTLET_XML_TYPE_HIERARCHY_INCORRECT );
+        createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.PORTLET_XML_RESOURCE_NOT_FOUND );
+        createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.PORTLET_XML_REFERENCE_NOT_FOUND );
 
         twistie = createTwistie( body, Msgs.serviceXMLDescriptor, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, Msgs.namespaceNotValid, ValidationPreferences.SERVICE_XML_NAMESPACE_INVALID );
-        createCombo( inner, Msgs.packagePathNotValid, ValidationPreferences.SERVICE_XML_PACKAGE_PATH_INVALID );
+        createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.SERVICE_XML_SYNTAX_INVALID );
+        createCombo( inner, Msgs.typeNotFound, ValidationPreferences.SERVICE_XML_TYPE_NOT_FOUND );
+        createCombo( inner, Msgs.typeHierarchyIncorrect, ValidationPreferences.SERVICE_XML_TYPE_HIERARCHY_INCORRECT );
+        createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.SERVICE_XML_RESOURCE_NOT_FOUND );
+        createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.SERVICE_XML_REFERENCE_NOT_FOUND );
+
+        twistie = createTwistie( body, Msgs.liferayPortletXMLDescriptor, columns );
+        inner = createInnerComposite( parent, twistie, columns );
+
+        createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_PORTLET_XML_SYNTAX_INVALID );
+        createCombo( inner, Msgs.typeNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_TYPE_NOT_FOUND );
+        createCombo( inner, Msgs.typeHierarchyIncorrect, ValidationPreferences.LIFERAY_PORTLET_XML_TYPE_HIERARCHY_INCORRECT );
+        createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND );
+        createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_PORTLET_XML_REFERENCE_NOT_FOUND );
+
+        twistie = createTwistie( body, Msgs.liferayHookXMLDescriptor, columns );
+        inner = createInnerComposite( parent, twistie, columns );
+
+        createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_HOOK_XML_SYNTAX_INVALID );
+        createCombo( inner, Msgs.typeNotFound, ValidationPreferences.LIFERAY_HOOK_XML_TYPE_NOT_FOUND );
+        createCombo( inner, Msgs.typeHierarchyIncorrect, ValidationPreferences.LIFERAY_HOOK_XML_TYPE_HIERARCHY_INCORRECT );
+        createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.LIFERAY_HOOK_XML_RESOURCE_NOT_FOUND );
+        createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_HOOK_XML_REFERENCE_NOT_FOUND );
+
+        twistie = createTwistie( body, Msgs.liferayDisplayXMLDescriptor, columns );
+        inner = createInnerComposite( parent, twistie, columns );
+
+        createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_DISPLAY_XML_SYNTAX_INVALID );
+        createCombo( inner, Msgs.typeNotFound, ValidationPreferences.LIFERAY_DISPLAY_XML_TYPE_NOT_FOUND );
+        createCombo( inner, Msgs.typeHierarchyIncorrect, ValidationPreferences.LIFERAY_DISPLAY_XML_TYPE_HIERARCHY_INCORRECT );
+        createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.LIFERAY_DISPLAY_XML_RESOURCE_NOT_FOUND );
+        createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_DISPLAY_XML_REFERENCE_NOT_FOUND );
+
+        twistie = createTwistie( body, Msgs.liferayLayoutTemplatesDescriptor, columns );
+        inner = createInnerComposite( parent, twistie, columns );
+
+        createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_SYNTAX_INVALID );
+        createCombo( inner, Msgs.typeNotFound, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_TYPE_NOT_FOUND );
+        createCombo( inner, Msgs.typeHierarchyIncorrect, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_TYPE_HIERARCHY_INCORRECT );
+        createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_RESOURCE_NOT_FOUND );
+        createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_REFERENCE_NOT_FOUND );
 
         return parent;
     }
@@ -309,42 +279,24 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
     private static class Msgs extends NLS
     {
-        public static String categoryNameInvalid;
-        public static String classNotFound;
-        public static String customJspDirectoryNotFound;
-        public static String entryWeightNotValid;
+        public static String typeNotFound;
+        public static String typeHierarchyIncorrect;
+        public static String referenceNotFound;
+        public static String resourceNotFound;
+        public static String syntaxInvalid;
+
         public static String error;
-        public static String footerPortalCssNotFound;
-        public static String footerPortalJavascriptNotFound;
-        public static String footerPortletCssNotFound;
-        public static String footerPortletJavascriptNotFound;
-        public static String headerPortalCssNotFound;
-        public static String headerPortalJavascriptNotFound;
-        public static String headerPortletCssNotFound;
-        public static String headerPortletJavascriptNotFound;
-        public static String iconNotFound;
         public static String ignore;
-        public static String incorrectClassHierarchy;
-        public static String invalidPropertiesSyntax;
-        public static String invalidResourceBundleSyntax;
-        public static String languagePropertiesResourceNotFound;
+        public static String warning;
+
         public static String liferayDisplayXMLDescriptor;
         public static String liferayHookXMLDescriptor;
         public static String liferayLayoutTemplatesDescriptor;
         public static String liferayPortletXMLDescriptor;
-        public static String namespaceNotValid;
-        public static String packagePathNotValid;
-        public static String portalPropertiesResourceNotFound;
-        public static String portletIdNotFound;
-        public static String portletNameNotFound;
         public static String portletXMLDescriptor;
-        public static String resourceBundleNotFound;
-        public static String selectSeverityLevel;
         public static String serviceXMLDescriptor;
-        public static String templatePathResourceNotFound;
-        public static String thumbnailPathResourceNotFound;
-        public static String wapTemplatePathResourceNotFound;
-        public static String warning;
+
+        public static String selectSeverityLevel;
 
         static
         {

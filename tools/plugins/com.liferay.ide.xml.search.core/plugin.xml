@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
+	
+	<!--==================== Query specification of all descriptors ====================-->
     <extension point="org.eclipse.wst.xml.search.core.querySpecifications">
         <querySpecification id="liferay.liferayportletxml.querySpecification"
-                            class="com.liferay.ide.xml.search.core.LiferayPortletQuerySpecification" />
-    </extension>
-
-    <extension point="org.eclipse.wst.xml.search.core.querySpecifications">
+                            class="com.liferay.ide.xml.search.core.descriptors.LiferayPortletQuerySpecification" />
         <querySpecification id="liferay.portletxml.querySpecification"
-                            class="com.liferay.ide.xml.search.core.PortletQuerySpecification" />
-    </extension>
-
-    <extension point="org.eclipse.wst.xml.search.core.querySpecifications">
+                            class="com.liferay.ide.xml.search.core.descriptors.PortletQuerySpecification" />
         <querySpecification id="liferay.liferaydisplayxml.querySpecification"
-                            class="com.liferay.ide.xml.search.core.LiferayDisplayQuerySpecification" />
+                            class="com.liferay.ide.xml.search.core.descriptors.LiferayDisplayQuerySpecification" />
+        <querySpecification id="liferay.servicexml.querySpecification"
+                            class="com.liferay.ide.xml.search.core.descriptors.ServiceBuilderQuerySpecification" />
+		<querySpecification id="liferay.liferayhookxml.querySpecification"
+                            class="com.liferay.ide.xml.search.core.descriptors.LiferayHookQuerySpecification" />
+    	<querySpecification id="liferay.liferaylayouttplxml.querySpecification"
+                            class="com.liferay.ide.xml.search.core.descriptors.LiferayLayoutTplQuerySpecification" />
     </extension>
 
     <!--==================== Resource Query specification ====================-->
 
     <extension point="org.eclipse.wst.xml.search.core.resourceQuerySpecifications">
         <querySpecification id="liferay.webresources.css.querySpecification"
-                            class="com.liferay.ide.xml.search.core.CSSResourcesQuerySpecification" />
+                            class="com.liferay.ide.xml.search.core.resources.CSSResourcesQuerySpecification" />
         <querySpecification id="liferay.webresources.js.querySpecification"
-                            class="com.liferay.ide.xml.search.core.JSResourcesQuerySpecification" />
+                            class="com.liferay.ide.xml.search.core.resources.JSResourcesQuerySpecification" />
         <querySpecification id="liferay.webresources.image.querySpecification"
-                            class="com.liferay.ide.xml.search.core.ImageResourcesQuerySpecification" />
-    </extension>	
+                            class="com.liferay.ide.xml.search.core.resources.ImageResourcesQuerySpecification" />
+        <querySpecification id="liferay.webresources.jsp.querySpecification"
+                            class="com.liferay.ide.xml.search.core.resources.JSPResourcesQuerySpecification" />
+        <querySpecification id="liferay.webresources.tpl.querySpecification"
+                            class="com.liferay.ide.xml.search.core.resources.TplResourcesQuerySpecification" />
+        <!-- Query specification of element <resource-bundle> in portlet.xml -->
+        <querySpecification id="liferay.webresources.resourcebundle.querySpecification"
+                            class="com.liferay.ide.xml.search.core.resources.ResourceBundleQuerySpecification" />
+        <!-- Query specification of element <portal-properties> in liferay-portlet.xml -->
+        <querySpecification id="liferay.webresources.portalproperties.querySpecification"
+                            class="com.liferay.ide.xml.search.core.resources.PortalPropertiesQuerySpecification" />
+        <!-- Query specification of element <language-properties> in liferay-portlet.xml -->
+        <querySpecification id="liferay.webresources.languageproperties.querySpecification"
+                            class="com.liferay.ide.xml.search.core.resources.LanguagePropertiesQuerySpecification" />
+        <!-- Query specification of element <custom-jsp-directory> in liferay-hook.xml -->
+        <querySpecification id="liferay.webresources.jspdir.querySpecification"
+        					class="com.liferay.ide.xml.search.core.resources.JSPDirectoryQuerySpecification" />
+
+    </extension>
 
 </plugin>

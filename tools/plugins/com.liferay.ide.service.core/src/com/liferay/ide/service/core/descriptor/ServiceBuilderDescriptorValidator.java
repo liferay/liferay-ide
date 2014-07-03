@@ -188,10 +188,10 @@ public class ServiceBuilderDescriptorValidator extends BaseValidator
                 IDOMDocument document = ( (IDOMModel) model ).getDocument();
 
                 checkNamespaceElements(
-                    document, preferenceScopes, ValidationPreferences.SERVICE_XML_NAMESPACE_INVALID, problems );
+                    document, preferenceScopes, ValidationPreferences.SERVICE_XML_SYNTAX_INVALID, problems );
 
                 checkPackagePaths(
-                    document, preferenceScopes, ValidationPreferences.SERVICE_XML_PACKAGE_PATH_INVALID, problems );
+                    document, preferenceScopes, ValidationPreferences.SERVICE_XML_SYNTAX_INVALID, problems );
             }
 
         }

@@ -9,7 +9,7 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.resources;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;

@@ -9,7 +9,9 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.descriptors;
+
+import com.liferay.ide.xml.search.core.LiferayXMLConstants;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -18,15 +20,15 @@ import org.eclipse.wst.xml.search.core.queryspecifications.requestor.ContentType
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
 
 /**
- * XML Search requestor for portlet.xml descriptors.
+ * XML Search requestor for liferay-display.xml descriptors.
  */
-public class PortletSearchRequestor extends ContentTypeXMLSearchRequestor
+public class LiferayDisplaySearchRequestor extends ContentTypeXMLSearchRequestor
 {
 
-    public static IXMLSearchRequestor INSTANCE = new PortletSearchRequestor();
+    public static IXMLSearchRequestor INSTANCE = new LiferayDisplaySearchRequestor();
 
     private static final Collection<String> contentTypeIds =
-        Collections.singleton( LiferayXMLConstants.PORTLET_XML_CONTENT_TYPE );
+        Collections.singleton( LiferayXMLConstants.LIFERAY_DISPLAY_XML_CONTENT_TYPE );
 
     @Override
     protected Collection<String> getSupportedContentTypeIds()

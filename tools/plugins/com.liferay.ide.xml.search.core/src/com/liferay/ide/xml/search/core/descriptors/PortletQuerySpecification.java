@@ -9,14 +9,14 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.descriptors;
 
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
 
 /**
- * Query specification to search liferay-portlet.xml descriptors.
+ * Query specification to search portlet.xml descriptors.
  */
-public class LiferayPortletQuerySpecification extends AbstractWebInfQuerySpecification
+public class PortletQuerySpecification extends AbstractWebInfQuerySpecification
 {
 
     /*
@@ -25,7 +25,7 @@ public class LiferayPortletQuerySpecification extends AbstractWebInfQuerySpecifi
      */
     public IXMLSearchRequestor getRequestor()
     {
-        return LiferayPortletSearchRequestor.INSTANCE;
+        return PortletSearchRequestor.INSTANCE;
     }
 
 }

@@ -128,17 +128,17 @@ public class LayoutTplDescriptorValidator extends BaseValidator
     {
         checkDocrootElement(
             document, TEMPLATE_PATH_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_TEMPLATE_PATH_NOT_FOUND, MESSAGE_TEMPLATE_PATH_NOT_FOUND,
+            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_RESOURCE_NOT_FOUND, MESSAGE_TEMPLATE_PATH_NOT_FOUND,
             problems );
 
         checkDocrootElement(
             document, WAP_TEMPLATE_PATH_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_WAP_TEMPLATE_PATH_NOT_FOUND,
+            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_RESOURCE_NOT_FOUND,
             MESSAGE_WAP_TEMPLATE_PATH_NOT_FOUND, problems );
 
         checkDocrootElement(
             document, THUMBNAIL_PATH_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_THUMBNAIL_PATH_NOT_FOUND, MESSAGE_THUMBNAIL_PATH_NOT_FOUND,
+            ValidationPreferences.LIFERAY_LAYOUTTPL_XML_RESOURCE_NOT_FOUND, MESSAGE_THUMBNAIL_PATH_NOT_FOUND,
             problems );
     }
 

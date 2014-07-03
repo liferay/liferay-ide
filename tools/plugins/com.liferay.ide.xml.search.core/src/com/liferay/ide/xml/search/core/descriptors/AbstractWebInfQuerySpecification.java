@@ -9,12 +9,13 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.descriptors;
+
+import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.xml.search.core.queryspecifications.container.IResourceProvider;
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestorProvider;
 
@@ -26,7 +27,6 @@ public abstract class AbstractWebInfQuerySpecification implements IResourceProvi
      * @see org.eclipse.wst.xml.search.core.queryspecifications.container.
      * IResourceProvider#getResource(java.lang.Object, org.eclipse.core.resources.IResource)
      */
-    //TODO make this work for maven projects (should not hard code the docroot path)
     public IResource getResource( Object selectedNode, IResource resource )
     {
         // Search WEB-INF folder.
@@ -37,7 +37,7 @@ public abstract class AbstractWebInfQuerySpecification implements IResourceProvi
             return folder;
         }
 
-        final IFolder webInf = resource.getProject().getFolder( new Path( "docroot/WEB-INF" ) );
+        final IFolder webInf = CoreUtil.getDefaultDocrootFolder( resource.getProject() ).getFolder( "WEB-INF" );
 
         if( webInf.exists() )
         {

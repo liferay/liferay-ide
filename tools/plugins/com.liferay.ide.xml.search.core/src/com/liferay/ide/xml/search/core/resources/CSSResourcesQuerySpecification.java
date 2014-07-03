@@ -9,12 +9,12 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.resources;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.wst.xml.search.core.resource.IURIResolver;
 
-public class JSResourcesQuerySpecification extends AbstractWebResourcesQuerySpecification
+public class CSSResourcesQuerySpecification extends AbstractWebResourcesQuerySpecification
 {
 
     /*
@@ -24,6 +24,6 @@ public class JSResourcesQuerySpecification extends AbstractWebResourcesQuerySpec
      */
     public IURIResolver getURIResolver( IFile file, Object selectedNode )
     {
-        return JSResourceURIResolver.INSTANCE;
+        return CSSResourceURIResolver.INSTANCE;
     }
 }

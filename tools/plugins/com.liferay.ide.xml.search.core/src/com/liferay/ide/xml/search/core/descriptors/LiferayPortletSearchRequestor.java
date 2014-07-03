@@ -9,7 +9,9 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.descriptors;
+
+import com.liferay.ide.xml.search.core.LiferayXMLConstants;
 
 import java.util.Collection;
 import java.util.Collections;

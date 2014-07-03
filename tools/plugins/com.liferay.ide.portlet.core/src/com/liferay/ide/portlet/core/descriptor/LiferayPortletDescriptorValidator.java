@@ -148,46 +148,46 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
     {
         checkDocrootElement(
             document, ICON_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_ICON_NOT_FOUND, MESSAGE_ICON_NOT_FOUND, problems );
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND, MESSAGE_ICON_NOT_FOUND, problems );
 
         checkDocrootElement(
             document, HEADER_PORTAL_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_CSS_NOT_FOUND, MESSAGE_HEADER_PORTAL_CSS_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND, MESSAGE_HEADER_PORTAL_CSS_NOT_FOUND,
             problems );
 
         checkDocrootElement(
             document, HEADER_PORTLET_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_CSS_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND,
             MESSAGE_HEADER_PORTLET_CSS_NOT_FOUND, problems );
 
         checkDocrootElement(
             document, HEADER_PORTAL_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND,
             MESSAGE_HEADER_PORTAL_JAVASCRIPT_NOT_FOUND, problems );
 
         checkDocrootElement(
             document, HEADER_PORTLET_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND,
             MESSAGE_HEADER_PORTLET_JAVASCRIPT_NOT_FOUND, problems );
 
         checkDocrootElement(
             document, FOOTER_PORTAL_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_CSS_NOT_FOUND, MESSAGE_FOOTER_PORTAL_CSS_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND, MESSAGE_FOOTER_PORTAL_CSS_NOT_FOUND,
             problems );
 
         checkDocrootElement(
             document, FOOTER_PORTLET_CSS_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_CSS_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND,
             MESSAGE_FOOTER_PORTLET_CSS_NOT_FOUND, problems );
 
         checkDocrootElement(
             document, FOOTER_PORTAL_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND,
             MESSAGE_FOOTER_PORTAL_JAVASCRIPT_NOT_FOUND, problems );
 
         checkDocrootElement(
             document, FOOTER_PORTLET_JAVASCRIPT_ELEMENT, project, PREFERENCE_NODE_QUALIFIER, preferenceScopes,
-            ValidationPreferences.LIFERAY_PORTLET_XML_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND,
+            ValidationPreferences.LIFERAY_PORTLET_XML_RESOURCE_NOT_FOUND,
             MESSAGE_FOOTER_PORTLET_JAVASCRIPT_NOT_FOUND, problems );
     }
 
@@ -241,7 +241,7 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
 
             checkPortletName(
                 portletXmlDocument, liferayPortletNameElement, preferenceScopes,
-                ValidationPreferences.LIFERAY_PORTLET_XML_PORTLET_NAME_NOT_FOUND, MESSAGE_PORTLET_NAME_NOT_FOUND,
+                ValidationPreferences.LIFERAY_PORTLET_XML_REFERENCE_NOT_FOUND, MESSAGE_PORTLET_NAME_NOT_FOUND,
                 problems );
         }
     }
@@ -270,13 +270,13 @@ public class LiferayPortletDescriptorValidator extends BaseValidator
 
                 checkAllClassElements(
                     getAllClasseElements( "LiferayPortletClassElements.properties" ), javaProject, liferayPortletXml, //$NON-NLS-1$
-                    ValidationPreferences.LIFERAY_PORTLET_XML_CLASS_NOT_FOUND,
-                    ValidationPreferences.LIFERAY_PORTLET_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
+                    ValidationPreferences.LIFERAY_PORTLET_XML_TYPE_NOT_FOUND,
+                    ValidationPreferences.LIFERAY_PORTLET_XML_TYPE_HIERARCHY_INCORRECT, preferenceScopes,
                     PREFERENCE_NODE_QUALIFIER, problems );
 
                 checkControlPanelEntryWeightElements(
                     liferayPortletXmlDocument, preferenceScopes,
-                    ValidationPreferences.LIFERAY_PORTLET_XML_ENTRY_WEIGHT_NOT_VALID, MESSAGE_ENTRY_WEIGHT_NOT_VALID,
+                    ValidationPreferences.LIFERAY_PORTLET_XML_SYNTAX_INVALID, MESSAGE_ENTRY_WEIGHT_NOT_VALID,
                     problems );
             }
 

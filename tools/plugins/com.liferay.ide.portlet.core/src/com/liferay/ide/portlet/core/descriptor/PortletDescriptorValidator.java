@@ -130,8 +130,8 @@ public class PortletDescriptorValidator extends BaseValidator
 
                 checkAllClassElements(
                     getAllClasseElements( "PortletClassElements.properties" ), javaProject, portletXml, //$NON-NLS-1$
-                    ValidationPreferences.PORTLET_XML_CLASS_NOT_FOUND,
-                    ValidationPreferences.PORTLET_XML_INCORRECT_CLASS_HIERARCHY, preferenceScopes,
+                    ValidationPreferences.PORTLET_XML_TYPE_NOT_FOUND,
+                    ValidationPreferences.PORTLET_XML_TYPE_HIERARCHY_INCORRECT, preferenceScopes,
                     PREFERENCE_NODE_QUALIFIER, problems );
 
                 checkResourceBundleElements( document, javaProject, preferenceScopes, problems );
@@ -226,7 +226,7 @@ public class PortletDescriptorValidator extends BaseValidator
         if( classResource.endsWith( ".properties" ) )
         {
             final String msg = MessageFormat.format( MESSAGE_RESOURCE_BUNDLE_NOT_END_PROPERTIES, new Object[] { classResource } );
-            final String preferenceKey = ValidationPreferences.PORTLET_XML_INVALID_RESOURCE_BUNDLE_SYNTAX;
+            final String preferenceKey = ValidationPreferences.PORTLET_XML_SYNTAX_INVALID;
 
             return createMarkerValues( 
                 preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
@@ -235,7 +235,7 @@ public class PortletDescriptorValidator extends BaseValidator
         if( classResource.contains( IPath.SEPARATOR + "" ) || ( CoreUtil.isWindows() && classResource.contains( "\\" ) ) )
         {
             final String msg = MessageFormat.format( MESSAGE_RESOURCE_BUNDLE_PATH_NOT_CONTAIN_SEPARATOR, new Object[] { classResource } );
-            final String preferenceKey = ValidationPreferences.PORTLET_XML_INVALID_RESOURCE_BUNDLE_SYNTAX;
+            final String preferenceKey = ValidationPreferences.PORTLET_XML_SYNTAX_INVALID;
 
             return createMarkerValues( 
                 preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );
@@ -278,7 +278,7 @@ public class PortletDescriptorValidator extends BaseValidator
         if( classResourceValue == null )
         {
             final String msg = MessageFormat.format( MESSAGE_RESOURCE_BUNDLE_NOT_FOUND, new Object[] { classResource } );
-            final String preferenceKey = ValidationPreferences.PORTLET_XML_RESOURCE_BUNDLE_NOT_FOUND;
+            final String preferenceKey = ValidationPreferences.PORTLET_XML_RESOURCE_NOT_FOUND;
 
             return createMarkerValues(
                 preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) classResourceSpecifier, msg );

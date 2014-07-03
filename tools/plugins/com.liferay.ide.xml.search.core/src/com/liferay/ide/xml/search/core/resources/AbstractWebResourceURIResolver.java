@@ -9,7 +9,7 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.resources;
 
 import java.util.Set;
 
@@ -18,7 +18,7 @@ import org.eclipse.wst.xml.search.core.resource.ResourceBaseURIResolver;
 
 /**
  * Extension of WTP/XML Search resources uri resolver for Liferay to manage css, js, icons used in the descriptor of
- * lifreay which starts with "/". Ex : <pre>
+ * liferay which starts with "/". Ex : <pre>
  * <header-portlet-css>/html/portlet/directory/css/main.css</header-portlet-css> </pre>
  */
 public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIResolver

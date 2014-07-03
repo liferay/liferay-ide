@@ -9,7 +9,7 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.resources;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,20 +19,24 @@ import java.util.Set;
  * lifreay which starts with "/". Ex : <pre>
  * <header-portlet-css>/html/portlet/directory/css/main.css</header-portlet-css> </pre>
  */
-public class JSResourceURIResolver extends AbstractWebResourceURIResolver
+public class ImageResourcesURIResolver extends AbstractWebResourceURIResolver
 {
 
-    public static final JSResourceURIResolver INSTANCE = new JSResourceURIResolver();
+    public static final ImageResourcesURIResolver INSTANCE = new ImageResourcesURIResolver();
 
     private static final Set<String> EXTENSIONS;
 
     static
     {
         EXTENSIONS = new HashSet<String>();
-        EXTENSIONS.add( "js" );
+        EXTENSIONS.add( "png" );
+        EXTENSIONS.add( "jpg" );
+        EXTENSIONS.add( "jpeg" );
+        EXTENSIONS.add( "bmp" );
+        EXTENSIONS.add( "gif" );
     }
 
-    public JSResourceURIResolver()
+    public ImageResourcesURIResolver()
     {
         super( true );
     }

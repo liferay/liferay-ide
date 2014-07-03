@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013-2014 Angelo ZERR.
+ * Copyright (c) 2011 Angelo ZERR.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,23 +9,21 @@
  *     Angelo Zerr <angelo.zerr@gmail.com> - initial API and implementation
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.core;
+package com.liferay.ide.xml.search.core.resources;
 
-import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.wst.xml.search.core.resource.IURIResolver;
 
-/**
- * Query specification to search liferay-display.xml descriptors.
- */
-public class LiferayDisplayQuerySpecification extends AbstractWebInfQuerySpecification
+public class ImageResourcesQuerySpecification extends AbstractWebResourcesQuerySpecification
 {
 
     /*
      * (non-Javadoc)
-     * @see org.eclipse.wst.xml.search.core.resource.IResourceRequestorProvider# getRequestor()
+     * @see org.eclipse.wst.xml.search.core.resource.IURIResolverProvider#getURIResolver
+     * (org.eclipse.core.resources.IFile, java.lang.Object)
      */
-    public IXMLSearchRequestor getRequestor()
+    public IURIResolver getURIResolver( IFile file, Object selectedNode )
     {
-        return LiferayDisplaySearchRequestor.INSTANCE;
+        return ImageResourcesURIResolver.INSTANCE;
     }
-
 }

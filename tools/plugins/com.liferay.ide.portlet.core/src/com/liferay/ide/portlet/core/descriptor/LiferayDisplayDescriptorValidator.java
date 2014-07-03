@@ -179,7 +179,7 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator
 
             checkCategoryName(
                 liferayDisplayDocument, categoryElement, preferenceScopes,
-                ValidationPreferences.LIFERAY_DISPLAY_XML_CATEGORY_NAME_INVALID, MESSAGE_CATEGORY_NAME_IS_EMPTY,
+                ValidationPreferences.LIFERAY_DISPLAY_XML_SYNTAX_INVALID, MESSAGE_CATEGORY_NAME_IS_EMPTY,
                 problems );
         }
     }
@@ -242,7 +242,7 @@ public class LiferayDisplayDescriptorValidator extends BaseValidator
 
             checkPortletId(
                 portletXmlDocument, portletElement, preferenceScopes,
-                ValidationPreferences.LIFERAY_DISPLAY_XML_PORTLET_ID_NOT_FOUND, MESSAGE_PORTLET_NAME_NOT_FOUND,
+                ValidationPreferences.LIFERAY_DISPLAY_XML_REFERENCE_NOT_FOUND, MESSAGE_PORTLET_NAME_NOT_FOUND,
                 problems );
         }
     }
