@@ -51,7 +51,7 @@
         <module>com.liferay.ide.maven-repository</module>
         <module>com.liferay.ide.tools-repository</module>
         <module>com.liferay.mobile.sdk-repository</module>
-        <module>com.liferay.ide.velocity-repository</module>
+        <!--<module>com.liferay.ide.velocity-repository</module>-->
         <module>com.liferay.ide-repository</module>
     </modules>
 
