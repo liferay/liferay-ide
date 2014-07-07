@@ -46,6 +46,16 @@
             <layout>p2</layout>
             <url>${tern-site}</url>
         </repository>
+        <repository>
+            <id>ivyde</id>
+            <layout>p2</layout>
+            <url>${ivyde-site}</url>
+        </repository>
+        <repository>
+            <id>ivy</id>
+            <layout>p2</layout>
+            <url>${ivy-site}</url>
+        </repository>
     </repositories>
 
 </project>
