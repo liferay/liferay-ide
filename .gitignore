@@ -6,7 +6,7 @@
 hs_err_pid*.log
 bin/
 rebel.xml
-target/
+target
 /.settings/
 /.project
-laut
+laut-1.*

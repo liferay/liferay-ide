@@ -29,8 +29,9 @@
                 <module>../common</module>
                 <module>../tools</module>
                 <module>../maven</module>
-                <module>../velocity</module>
+                <!--<module>../velocity</module>-->
                 <module>../mobile</module>
+                <module>../jsdt</module>
                 <module>releng</module>
             </modules>
         </profile>
