@@ -31,7 +31,7 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  * @author Kamesh Sampath [IDE-405] updated the ImageRegistry
  */
@@ -58,7 +58,7 @@ public class PortletUIPlugin extends AbstractUIPlugin
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static PortletUIPlugin getDefault()
@@ -68,7 +68,12 @@ public class PortletUIPlugin extends AbstractUIPlugin
 
     public static void logError( Exception e )
     {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
+        logError( e.getMessage(), e );
+    }
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
     }
 
     private ContributionContextTypeRegistry fContextTypeRegistry;

@@ -305,6 +305,16 @@
       </viewerContentBinding>
    </extension>
    <extension point="org.eclipse.ui.editors.templates">
-    <include file="templates/portlet-java-templates.xml" /> 
+    <include file="templates/portlet-java-templates.xml" />
   </extension>
+   <extension
+         point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+      <hyperlinkDetector
+            class="com.liferay.ide.portlet.ui.editor.PortletURLHyperlinkDetector"
+            description="Portlet URL Methods"
+            id="com.liferay.ide.portlet.ui.portletUrl"
+            name="Portlet URL"
+            targetId="org.eclipse.jst.jsp.core.jspsource">
+      </hyperlinkDetector>
+   </extension>
 </plugin>
