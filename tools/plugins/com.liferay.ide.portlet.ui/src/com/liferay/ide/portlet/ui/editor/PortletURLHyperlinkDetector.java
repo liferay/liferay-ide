@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.portlet.ui.editor;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +125,7 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector
                         final String nameValue = name.getNodeValue();
 
                         // search for this method in any portlet classes
-                        actionUrlMethods = findPortletMethod( document, nameValue );
+                        actionUrlMethods = findPortletMethods( document, nameValue );
 
                         this.lastModStamp = modStamp;
                         this.lastFile = file;
@@ -131,7 +133,7 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector
                         this.lastActionUrlMethods = actionUrlMethods;
                     }
 
-                    if( actionUrlMethods.length > 0 )
+                    if( ! CoreUtil.isNullOrEmpty( actionUrlMethods ) )
                     {
                         final List<IHyperlink> links = new ArrayList<IHyperlink>();
 
@@ -143,7 +145,17 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector
                             }
                         }
 
-                        retval = links.toArray( new IHyperlink[0] );
+                        if( links.size() != 0 )
+                        {
+                            if( canShowMultipleHyperlinks )
+                            {
+                                retval = links.toArray( new IHyperlink[0] );
+                            }
+                            else
+                            {
+                                retval = new IHyperlink[] { links.get( 0 ) };
+                            }
+                        }
                     }
                 }
             }
@@ -152,7 +164,7 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector
         return retval;
     }
 
-    private IMethod[] findPortletMethod( IDocument document, String nameValue )
+    private IMethod[] findPortletMethods( IDocument document, String nameValue )
     {
         IMethod[] retval = null;
 
@@ -170,13 +182,13 @@ public class PortletURLHyperlinkDetector extends AbstractHyperlinkDetector
 
                     if( portlet != null )
                     {
-                        final IJavaSearchScope scope =
-                            SearchEngine.createStrictHierarchyScope( project, portlet, true, false, null );
-
                         final List<IMethod> methods = new ArrayList<IMethod>();
                         final SearchRequestor requestor = new ActionMethodCollector( methods );
 
-                        SearchPattern search =
+                        final IJavaSearchScope scope =
+                            SearchEngine.createStrictHierarchyScope( project, portlet, true, false, null );
+
+                        final SearchPattern search =
                             SearchPattern.createPattern(
                                 nameValue, IJavaSearchConstants.METHOD, IJavaSearchConstants.DECLARATIONS,
                                 SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE );

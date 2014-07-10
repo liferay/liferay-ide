@@ -149,6 +149,11 @@ public class UIUtil
         return result == IDialogConstants.YES_ID;
     }
 
+    public static IWorkbenchPage getActivePage()
+    {
+        return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+    }
+
     public static Shell getActiveShell()
     {
         final Shell[] retval = new Shell[1];

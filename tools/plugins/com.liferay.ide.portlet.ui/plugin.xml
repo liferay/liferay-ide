@@ -312,8 +312,14 @@
       <hyperlinkDetector
             class="com.liferay.ide.portlet.ui.editor.PortletURLHyperlinkDetector"
             description="Portlet URL Methods"
-            id="com.liferay.ide.portlet.ui.portletUrl"
+            id="com.liferay.ide.portlet.ui.portletUrlHyperlinkDetector"
             name="Portlet URL"
+            targetId="org.eclipse.jst.jsp.core.jspsource">
+      </hyperlinkDetector>
+      <hyperlinkDetector
+            class="com.liferay.ide.portlet.ui.editor.MessageKeyHyperlinkDetector"
+            id="com.liferay.ide.portlet.ui.messageKeyHyperlinkDetector"
+            name="Message Key Hyperlink Detector"
             targetId="org.eclipse.jst.jsp.core.jspsource">
       </hyperlinkDetector>
    </extension>
