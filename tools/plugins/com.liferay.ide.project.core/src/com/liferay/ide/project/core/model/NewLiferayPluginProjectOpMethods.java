@@ -31,10 +31,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.ElementList;
@@ -110,7 +114,7 @@ public class NewLiferayPluginProjectOpMethods
             {
                 updateProjectPrefs( op );
 
-                removeSampleCode( op );
+                removeSampleCodeAndFiles( op );
             }
 
             retval = StatusBridge.create( status );
@@ -269,7 +273,7 @@ public class NewLiferayPluginProjectOpMethods
         return ServerCore.findRuntime( runtimeName );
     }
 
-    public static IStatus removeSampleCode( NewLiferayPluginProjectOp op )
+    private static IStatus removeSampleCodeAndFiles( NewLiferayPluginProjectOp op )
     {
         IStatus status = org.eclipse.core.runtime.Status.OK_STATUS;
 
@@ -296,6 +300,28 @@ public class NewLiferayPluginProjectOpMethods
                             return status;
                         }
                     }
+                }
+
+                // delete sample files: view.jsp, main.css, main.js
+                try
+                {
+                    final IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
+
+                    IFile[] sampleFiles = { docroot.getFile( "view.jsp" ),
+                                            docroot.getFile( "css/main.css" ),
+                                            docroot.getFile( "js/main.js" ) };
+
+                    for( IFile file : sampleFiles )
+                    {
+                        if( file != null && file.exists() )
+                        {
+                            file.delete( true, new NullProgressMonitor() );
+                        }
+                    }
+                }
+                catch( CoreException e )
+                {
+                    LiferayProjectCore.logError( "Error deleting sample files.", e );
                 }
            }
         }
