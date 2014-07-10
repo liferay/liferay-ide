@@ -15,16 +15,19 @@
 
 package com.liferay.ide.service.ui.editor;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.service.core.util.ServiceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICodeAssist;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.corext.util.JdtFlags;
@@ -121,15 +124,22 @@ public class ServiceMethodImplementationHyperlinkDetector extends AbstractHyperl
                     {
                         if( element instanceof IMethod )
                         {
-                        addHyperlinks(
-                            links, wordRegion, (SelectionDispatchAction) openAction, (IMethod) element,
-                            elements.length > 1, (JavaEditor) textEditor );
+                            addHyperlinks(
+                                links, wordRegion, (SelectionDispatchAction) openAction, (IMethod) element,
+                                elements.length > 1, (JavaEditor) textEditor );
                         }
                     }
 
                     if( links.size() != 0 )
                     {
-                        retval = links.toArray( new IHyperlink[0] );
+                        if( canShowMultipleHyperlinks )
+                        {
+                            retval = links.toArray( new IHyperlink[0] );
+                        }
+                        else
+                        {
+                            retval = new IHyperlink[] { links.get( 0 ) };
+                        }
                     }
                 }
             }
@@ -196,7 +206,31 @@ public class ServiceMethodImplementationHyperlinkDetector extends AbstractHyperl
 
                 if( implType != null )
                 {
-                    retval = implType.findMethods( method )[0]; // match name and arguments
+                    IMethod[] methods = implType.findMethods( method );
+
+                    if( CoreUtil.isNullOrEmpty( methods ) )
+                    {
+                        final ITypeHierarchy hierarchy = implType.newSupertypeHierarchy( new NullProgressMonitor() );
+                        IType currentType = implType;
+
+                        while( retval == null && currentType != null )
+                        {
+                            methods = currentType.findMethods( method );// match name and arguments
+
+                            if( ! CoreUtil.isNullOrEmpty( methods ) )
+                            {
+                                retval = methods[0];
+                            }
+                            else
+                            {
+                                currentType = hierarchy.getSuperclass( currentType );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        retval = methods[0];
+                    }
                 }
             }
         }
