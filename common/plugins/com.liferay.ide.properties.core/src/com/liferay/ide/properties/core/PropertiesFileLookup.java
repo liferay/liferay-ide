@@ -33,6 +33,7 @@ public class PropertiesFileLookup
     {
         public final int offset;
         public final int length;
+        public String value;
 
         public KeyInfo( int offset, int length )
         {
@@ -162,37 +163,61 @@ public class PropertiesFileLookup
     {
         try
         {
-            parse( input, null );
+            parse( input, null, false );
         }
         catch( IOException e )
         {
         }
+        finally
+        {
+            try
+            {
+                input.close();
+            }
+            catch( IOException e )
+            {
+            }
+        }
     }
 
-    public PropertiesFileLookup( InputStream input, String initialLookup )
+    public PropertiesFileLookup( InputStream input, String initialLookup, boolean loadValues )
     {
         try
         {
-            parse( input, initialLookup );
+            parse( input, initialLookup, loadValues );
         }
         catch( IOException e )
         {
         }
+        finally
+        {
+            try
+            {
+                input.close();
+            }
+            catch( IOException e )
+            {
+            }
+        }
     }
 
-    private void parse( InputStream input, String initialLookup ) throws IOException
+    private void parse( InputStream input, String initialLookup, boolean loadValues ) throws IOException
     {
         final LineReader lr = new LineReader( new InputStreamReader( input ) );
 
         char[] convtBuf = new char[1024];
         int[] limit;
         int keyLen;
+        int valueStart;
         char c;
+        boolean hasSep;
         boolean precedingBackslash;
 
         while ((limit = lr.readLine())[0] >= 0) {
             c = 0;
             keyLen = 0;
+            valueStart = limit[0];
+            hasSep = false;
 
             //System.out.println("line=<" + new String(lineBuf, 0, limit) + ">");
             precedingBackslash = false;
@@ -200,8 +225,11 @@ public class PropertiesFileLookup
                 c = lr.lineBuf[keyLen];
                 //need check if escaped.
                 if ((c == '=' ||  c == ':') && !precedingBackslash) {
+                    valueStart = keyLen + 1;
+                    hasSep = true;
                     break;
                 } else if ((c == ' ' || c == '\t' ||  c == '\f') && !precedingBackslash) {
+                    valueStart = keyLen + 1;
                     break;
                 }
                 if (c == '\\') {
@@ -211,9 +239,30 @@ public class PropertiesFileLookup
                 }
                 keyLen++;
             }
+            if( loadValues )
+            {
+                while (valueStart < limit[0]) {
+                    c = lr.lineBuf[valueStart];
+                    if (c != ' ' && c != '\t' &&  c != '\f') {
+                        if (!hasSep && (c == '=' ||  c == ':')) {
+                            hasSep = true;
+                        } else {
+                            break;
+                        }
+                    }
+                    valueStart++;
+                }
+            }
 
             String key = loadConvert(lr.lineBuf, 0, keyLen, convtBuf);
-            lookup.put( key, new KeyInfo( limit[1] - limit[0] - 1, keyLen ) );
+            KeyInfo info = new KeyInfo( limit[1] - limit[0] - 1, keyLen );
+
+            if( loadValues )
+            {
+                info.value = loadConvert(lr.lineBuf, valueStart, limit[0] - valueStart, convtBuf);
+            }
+
+            lookup.put( key, info );
             if( key.equals( initialLookup ) ) {
                 return;
             }
