@@ -39,29 +39,6 @@ import org.w3c.dom.Node;
 @SuppressWarnings( "restriction" )
 public class NodeUtils
 {
-    public static Node getMessageKey( IDOMNode currentNode )
-    {
-        Node retval = null;
-
-        final boolean messageNode = currentNode != null &&
-                        currentNode.getNodeName() != null &&
-                        currentNode.getNodeType() == Node.ELEMENT_NODE &&
-                        ( currentNode.getNodeName().endsWith( "message" ) ||
-                          currentNode.getNodeName().endsWith( "error" ) );
-
-        if( messageNode )
-        {
-            final Node key = currentNode.getAttributes().getNamedItem( "key" );
-
-            if( key != null && ( ! CoreUtil.isNullOrEmpty( key.getNodeValue() ) ) )
-            {
-                retval = key;
-            }
-        }
-
-        return retval;
-    }
-
     public static MessageKey[] findMessageKeys( IDocument document, String key, boolean loadValues  )
     {
         MessageKey[] retval = null;
@@ -84,7 +61,8 @@ public class NodeUtils
                     {
                         try
                         {
-                            final KeyInfo info = new PropertiesFileLookup( prop.getContents(), key, loadValues ).getKeyInfo( key );
+                            final KeyInfo info =
+                                new PropertiesFileLookup( prop.getContents(), key, loadValues ).getKeyInfo( key );
 
                             if( info != null && info.offset >= 0 )
                             {
@@ -102,5 +80,44 @@ public class NodeUtils
         }
 
         return retval;
+    }
+
+    public static Node getMessageKey( IDOMNode currentNode )
+    {
+        Node retval = null;
+
+        final boolean messageNode = currentNode != null &&
+                        currentNode.getNodeName() != null &&
+                        currentNode.getNodeType() == Node.ELEMENT_NODE &&
+                        ( currentNode.getNodeName().endsWith( "message" ) ||
+                          currentNode.getNodeName().endsWith( "error" ) ||
+                          isAuiLabel( currentNode ));
+
+        if( messageNode )
+        {
+            final Node key = currentNode.getAttributes().getNamedItem( "key" );
+
+            if( key != null && ( ! CoreUtil.isNullOrEmpty( key.getNodeValue() ) ) )
+            {
+                retval = key;
+            }
+            else
+            {
+                final Node label = currentNode.getAttributes().getNamedItem( "label" );
+
+                if( label != null && ( ! CoreUtil.isNullOrEmpty( label.getNodeValue() ) ) )
+                {
+                    retval = label;
+                }
+            }
+        }
+
+        return retval;
+    }
+
+    private static boolean isAuiLabel( IDOMNode currentNode )
+    {
+        return currentNode.getNodeName().startsWith( "aui:" ) &&
+            currentNode.getAttributes().getNamedItem( "label" ) != null;
     }
 }
