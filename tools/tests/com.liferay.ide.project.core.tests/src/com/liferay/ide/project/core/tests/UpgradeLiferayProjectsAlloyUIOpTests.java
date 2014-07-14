@@ -109,9 +109,13 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
     @Test
     public void testExecAlloyUpgradeTool() throws Exception
     {
-        UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
+        final NewLiferayPluginProjectOp projectOp = newProjectOp( "exec-alloy-upgrade-tool" );
+        projectOp.setPluginType( PluginType.portlet );
+        projectOp.setIncludeSampleCode( true );
 
-        IProject project = createServicePluginTypeAntProject( "service");
+        final IProject project = createAntProject( projectOp );
+
+        final UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
         final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
@@ -121,7 +125,8 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
 
         assertEquals( true, mainCss.exists() );
 
-        CoreUtil.writeStreamFromString( ".aui-field-select{}", new FileOutputStream( mainCss.getUnderlyingFile().getLocation().toFile() ) );
+        CoreUtil.writeStreamFromString( ".aui-field-select{}", new FileOutputStream(
+            mainCss.getUnderlyingFile().getLocation().toFile() ) );
 
         List<String> actionString = new ArrayList<String>();
         List<String> projectString = new ArrayList<String>();

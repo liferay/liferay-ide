@@ -299,6 +299,11 @@ public class NewLiferayPluginProjectOpMethods
                         if( file != null && file.exists() )
                         {
                             file.delete( true, new NullProgressMonitor() );
+
+                            if( file.getParent().members().length == 0 )
+                            {
+                                CoreUtil.deleteResource( file.getParent() );
+                            }
                         }
                     }
                 }
