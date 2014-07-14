@@ -44,7 +44,7 @@
 
     <target name="bundle">
         <if>
-            <isset property="create.bundles" />
+            <isset property="createBundles" />
             <then>
                 <property name="output.win32.zip.name" value="liferay-ide-eclipse-windows-x32-QUALIFIED_VERSION.zip" />
                 <property name="output.linux.tar.name" value="liferay-ide-eclipse-linux-x32-QUALIFIED_VERSION.tar" />
@@ -72,7 +72,7 @@
 
         <condition property="checkParameters" value="true">
             <or>
-                <isset property="create.bundles" />
+                <isset property="createBundles" />
                 <isset property="create.adt.bundles" />
             </or>
         </condition>
@@ -107,7 +107,7 @@
         <mkdir dir="${work.dir}" />
 
         <if>
-            <isset property="create.bundles" />
+            <isset property="createBundles" />
             <then>
                 <antcall target="clean-eclipse" />
                 <antcall target="setup-eclipse" />
@@ -318,7 +318,7 @@
     </target>
 
     <target name="install-feature">
-        <exec executable="${builder.exe}" outputproperty="output" failonerror="true">
+        <exec executable="${builder.exe}" outputproperty="output" failonerror="true" dir="${target.dir}">
             <arg value="-nosplash" />
             <arg value="-application" />
             <arg value="org.eclipse.equinox.p2.director" />

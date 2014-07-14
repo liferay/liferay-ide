@@ -43,6 +43,7 @@
       <feature id="org.eclipse.sapphire.ui.swt.xml.editor" />
       <feature id="org.apache.ivyde.feature" />
       <feature id="org.apache.ivy.feature" />
+      <feature id="org.eclipse.wst.xml.search.core-feature" />
    </features>
 
    <configurations>
