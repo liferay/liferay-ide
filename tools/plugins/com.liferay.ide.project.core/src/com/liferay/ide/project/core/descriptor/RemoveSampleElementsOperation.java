@@ -24,7 +24,7 @@ import org.eclipse.core.runtime.IStatus;
 public abstract class RemoveSampleElementsOperation implements IDescriptorOperation
 {
     @Override
-    public IStatus execute( Object... params )
+    public final IStatus execute( Object... params )
     {
         return removeSampleElements();
     }

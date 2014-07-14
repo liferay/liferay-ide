@@ -713,9 +713,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 }
             }
 
-            ProjectCore.operate( project, UpdateDescriptorVersionOperation.class,
-                new org.osgi.framework.Version( archetypeVesion ), new org.osgi.framework.Version( dtdVersion ) );
-
+            ProjectCore.operate( project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion );
         }
         catch( Exception e )
         {

@@ -26,14 +26,14 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 public abstract class AddNewPortletOperation implements IDescriptorOperation
 {
     @Override
-    public IStatus execute( Object... params )
+    public final IStatus execute( Object... params )
     {
-		if( params != null && params.length ==1 && params[0] instanceof IDataModel )
-		{
-		    return addNewPortlet( (IDataModel) params[0] );
-		}
+        if( params != null && params.length ==1 && params[0] instanceof IDataModel )
+        {
+            return addNewPortlet( (IDataModel) params[0] );
+        }
 
-    	return Status.OK_STATUS;
+        return Status.OK_STATUS;
     }
 
     public abstract IStatus addNewPortlet( IDataModel model );
