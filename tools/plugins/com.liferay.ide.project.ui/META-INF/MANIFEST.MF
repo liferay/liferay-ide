@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.project.ui;singleton:=true
 Bundle-Version: 2.2.0.qualifier
-Bundle-Activator: com.liferay.ide.project.ui.ProjectUIPlugin
+Bundle-Activator: com.liferay.ide.project.ui.ProjectUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.common.project.facet.ui;bundle-version="[1.4.1,1.5.0)";visibility:=reexport,

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.tomcat.ui;
 
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.job.CleanAppServerJob;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
@@ -124,7 +124,7 @@ public class CleanAppServerAction extends AbstractObjectAction
         }
         catch( Exception ex )
         {
-            ProjectUIPlugin.logError( ex );
+            ProjectUI.logError( ex );
         }
     }
 

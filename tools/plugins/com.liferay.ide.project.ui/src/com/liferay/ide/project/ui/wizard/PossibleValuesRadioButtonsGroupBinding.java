@@ -9,7 +9,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public final class PossibleValuesRadioButtonsGroupBinding<T> extends AbstractBin
             try
             {
                 Class<PossibleValuesAuxTextProvider> providerClass =
-                    (Class<PossibleValuesAuxTextProvider>) ProjectUIPlugin.getDefault().getBundle().loadClass(
+                    (Class<PossibleValuesAuxTextProvider>) ProjectUI.getDefault().getBundle().loadClass(
                         auxTextProviderName );
                 auxTextProvider = providerClass.newInstance();
             }

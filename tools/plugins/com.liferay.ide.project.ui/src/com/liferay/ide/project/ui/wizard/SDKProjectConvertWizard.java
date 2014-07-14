@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.project.core.SDKProjectConvertDataModelProvider;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -48,8 +48,8 @@ public class SDKProjectConvertWizard extends DataModelWizard implements IWorkben
 
         setWindowTitle( Msgs.convertProject );
 
-        setDefaultPageImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
-            ProjectUIPlugin.PLUGIN_ID, "/icons/wizban/convert_wiz.png" ) ); //$NON-NLS-1$
+        setDefaultPageImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
+            ProjectUI.PLUGIN_ID, "/icons/wizban/convert_wiz.png" ) ); //$NON-NLS-1$
     }
 
     @Override

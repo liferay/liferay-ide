@@ -20,7 +20,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -665,7 +665,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
         }
         catch( InvocationTargetException e )
         {
-            ProjectUIPlugin.logError( e );
+            ProjectUI.logError( e );
         }
         catch( InterruptedException e )
         {

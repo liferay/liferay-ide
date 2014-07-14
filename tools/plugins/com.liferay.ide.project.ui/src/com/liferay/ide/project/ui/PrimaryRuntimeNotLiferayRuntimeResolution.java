@@ -39,7 +39,7 @@ public final class PrimaryRuntimeNotLiferayRuntimeResolution extends PrimaryRunt
         }
         catch( CoreException e )
         {
-            ProjectUIPlugin.logError( e );
+            ProjectUI.logError( e );
         }
 
         super.run( marker );

@@ -53,7 +53,7 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
         }
         catch( CoreException e )
         {
-            ProjectUIPlugin.logError( "Marker cannot be found.", e ); //$NON-NLS-1$
+            ProjectUI.logError( "Marker cannot be found.", e ); //$NON-NLS-1$
         }
 
         return new IMarkerResolution[] { resolution };
@@ -67,7 +67,7 @@ public class LiferayProjectMarkerResolutionGenerator implements IMarkerResolutio
         }
         catch( CoreException e )
         {
-            ProjectUIPlugin.logError( "The marker doesn't exist.", e ); //$NON-NLS-1$
+            ProjectUI.logError( "The marker doesn't exist.", e ); //$NON-NLS-1$
         }
 
         return false;

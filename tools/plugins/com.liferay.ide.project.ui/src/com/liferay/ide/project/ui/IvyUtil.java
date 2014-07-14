@@ -125,7 +125,7 @@ public class IvyUtil
         }
         catch( JavaModelException e )
         {
-            ProjectUIPlugin.logError( "Unable to add Ivy library container", e ); //$NON-NLS-1$
+            ProjectUI.logError( "Unable to add Ivy library container", e ); //$NON-NLS-1$
         }
 
         return null;

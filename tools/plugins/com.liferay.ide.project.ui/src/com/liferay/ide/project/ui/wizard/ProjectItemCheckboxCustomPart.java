@@ -22,7 +22,7 @@ import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.upgrade.NamedItem;
 import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.navigator.AbstractLabelProvider;
@@ -127,19 +127,19 @@ public class ProjectItemCheckboxCustomPart extends AbstractCheckboxCustomPart
         protected void initalizeImageRegistry( ImageRegistry imageRegistry )
         {
             imageRegistry.put( PluginType.portlet.name(),
-                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/portlet.png" ) );
+                ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/portlet.png" ) );
             imageRegistry.put( PluginType.hook.name(),
-                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/hook.png" ) );
+                ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/hook.png" ) );
             imageRegistry.put( PluginType.layouttpl.name(),
-                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/layout.png" ) );
+                ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/layout.png" ) );
             imageRegistry.put( PluginType.servicebuilder.name(),
-                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/portlet.png" ) );
+                ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/portlet.png" ) );
             imageRegistry.put( PluginType.ext.name(),
-                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/ext.png" ) );
+                ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/ext.png" ) );
             imageRegistry.put( PluginType.theme.name(),
-                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/theme.png" ) );
+                ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/theme.png" ) );
             imageRegistry.put( PluginType.web.name(),
-                ProjectUIPlugin.imageDescriptorFromPlugin( ProjectUIPlugin.PLUGIN_ID, "/icons/e16/web.png" ) );
+                ProjectUI.imageDescriptorFromPlugin( ProjectUI.PLUGIN_ID, "/icons/e16/web.png" ) );
         }
     }
 

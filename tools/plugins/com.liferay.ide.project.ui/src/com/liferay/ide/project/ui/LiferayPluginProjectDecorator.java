@@ -95,7 +95,7 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 
             IPath path = new Path( ICON_DIR ).append( gif );
 
-            URL gifImageURL = FileLocator.find( Platform.getBundle( ProjectUIPlugin.PLUGIN_ID ), path, null );
+            URL gifImageURL = FileLocator.find( Platform.getBundle( ProjectUI.PLUGIN_ID ), path, null );
 
             if( gifImageURL != null )
             {
@@ -198,7 +198,7 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
         }
         catch( CoreException e )
         {
-            ProjectUIPlugin.logError( e );
+            ProjectUI.logError( e );
 
             return false;
         }

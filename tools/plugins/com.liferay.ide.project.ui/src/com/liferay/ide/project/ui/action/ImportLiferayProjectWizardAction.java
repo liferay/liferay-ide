@@ -18,7 +18,7 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard;
 
 import org.eclipse.osgi.util.NLS;
@@ -33,7 +33,7 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction
     {
         protected String getContributorID()
         {
-            return ProjectUIPlugin.PLUGIN_ID;
+            return ProjectUI.PLUGIN_ID;
         }
 
         @Override

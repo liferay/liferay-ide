@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.pref;
 
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.pref.AbstractValidationSettingsPage;
 
 import java.util.HashMap;
@@ -153,7 +153,7 @@ public class ProjectValidationSettingsPage extends AbstractValidationSettingsPag
 
     protected IDialogSettings getDialogSettings()
     {
-        return ProjectUIPlugin.getDefault().getDialogSettings();
+        return ProjectUI.getDefault().getDialogSettings();
     }
 
     @Override

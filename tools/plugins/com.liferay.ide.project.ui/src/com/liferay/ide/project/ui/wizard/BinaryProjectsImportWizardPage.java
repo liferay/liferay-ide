@@ -20,7 +20,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.ISDKProjectsImportDataModelProperties;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.io.File;
@@ -76,7 +76,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
 
         public Image getImage()
         {
-            Image image = ProjectUIPlugin.getDefault().getImageRegistry().get( ProjectUIPlugin.IMAGE_ID );
+            Image image = ProjectUI.getDefault().getImageRegistry().get( ProjectUI.IMAGE_ID );
 
             return image;
         }
@@ -414,7 +414,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         }
         catch( InvocationTargetException e )
         {
-            ProjectUIPlugin.logError( e );
+            ProjectUI.logError( e );
         }
         catch( InterruptedException e )
         {

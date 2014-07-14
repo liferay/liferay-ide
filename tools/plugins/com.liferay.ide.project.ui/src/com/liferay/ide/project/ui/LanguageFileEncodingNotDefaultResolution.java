@@ -58,7 +58,7 @@ public class LanguageFileEncodingNotDefaultResolution implements IMarkerResoluti
             }
             catch( Exception e )
             {
-                ProjectUIPlugin.logError( e );
+                ProjectUI.logError( e );
             }
         }
     }

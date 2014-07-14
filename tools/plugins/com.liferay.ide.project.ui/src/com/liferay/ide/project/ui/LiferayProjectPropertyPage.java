@@ -88,8 +88,8 @@ public class LiferayProjectPropertyPage extends PropertyPage
     {
         super();
 
-        setImageDescriptor( ProjectUIPlugin.imageDescriptorFromPlugin(
-            ProjectUIPlugin.PLUGIN_ID, "/icons/e16/liferay.png" ) ); //$NON-NLS-1$
+        setImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
+            ProjectUI.PLUGIN_ID, "/icons/e16/liferay.png" ) ); //$NON-NLS-1$
 
         noDefaultAndApplyButton();
     }
@@ -172,7 +172,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
                                     }
                                     catch( Exception e )
                                     {
-                                        retval = ProjectUIPlugin.createErrorStatus( "Could not set targeted runtime", e ); //$NON-NLS-1$
+                                        retval = ProjectUI.createErrorStatus( "Could not set targeted runtime", e ); //$NON-NLS-1$
                                     }
 
                                     return retval;
@@ -297,7 +297,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
                     }
                     catch( Exception e )
                     {
-                        ProjectUIPlugin.logError( "Could not determine liferay runtime", e ); //$NON-NLS-1$
+                        ProjectUI.logError( "Could not determine liferay runtime", e ); //$NON-NLS-1$
                     }
 
                     final List<String> runtimeNames = new ArrayList<String>();
@@ -331,7 +331,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
             }
             catch(Exception e)
             {
-                ProjectUIPlugin.logError( "Could not determine whether its a maven project ", e ); //$NON-NLS-1$
+                ProjectUI.logError( "Could not determine whether its a maven project ", e ); //$NON-NLS-1$
             }
         }
 

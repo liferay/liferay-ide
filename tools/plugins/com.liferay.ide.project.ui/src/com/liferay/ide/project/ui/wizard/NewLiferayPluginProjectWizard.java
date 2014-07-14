@@ -19,7 +19,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.ui.IvyUtil;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
@@ -160,7 +160,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
         }
         catch( Exception ex )
         {
-            ProjectUIPlugin.logError( "Unable to add project to working set", ex );
+            ProjectUI.logError( "Unable to add project to working set", ex );
         }
 
         openLiferayPerspective( project );

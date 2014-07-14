@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.action;
 
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 
 import java.net.URL;
 
@@ -54,7 +54,7 @@ public class LinkToPluginDocAction extends SapphireActionHandler
         }
         catch( Exception ex )
         {
-            ProjectUIPlugin.logError( "Could not open external browser.", ex );
+            ProjectUI.logError( "Could not open external browser.", ex );
         }
 
         return null;

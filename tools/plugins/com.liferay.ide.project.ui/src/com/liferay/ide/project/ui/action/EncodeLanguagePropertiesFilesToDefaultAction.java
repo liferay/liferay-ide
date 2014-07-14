@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -70,7 +70,7 @@ public class EncodeLanguagePropertiesFilesToDefaultAction implements IObjectActi
             }
             catch( Exception e )
             {
-                ProjectUIPlugin.logError( e );
+                ProjectUI.logError( e );
             }
         }
     }

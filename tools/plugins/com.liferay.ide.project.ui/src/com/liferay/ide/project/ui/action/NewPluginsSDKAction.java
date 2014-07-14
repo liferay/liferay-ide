@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.action;
 
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.ui.SDKsPreferencePage;
 
 import org.eclipse.jface.action.Action;
@@ -34,7 +34,7 @@ public class NewPluginsSDKAction extends Action
 
     public NewPluginsSDKAction( Shell shell )
     {
-        super( Msgs.newLiferaySDK, ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
+        super( Msgs.newLiferaySDK, ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry(
             "/icons/n16/sdk_new.png" ) ) ); //$NON-NLS-1$
         this.shell = shell;
     }

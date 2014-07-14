@@ -18,7 +18,7 @@ package com.liferay.ide.project.ui.wizard;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PortletPluginFacetInstallDataModelProvider;
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -48,7 +48,7 @@ public class PortletPluginFacetInstallPage extends DataModelWizardPage
     {
         super( DataModelFactory.createDataModel( new PortletPluginFacetInstallDataModelProvider() ), "portlet.plugin.facet.install.page" ); //$NON-NLS-1$
 
-        setImageDescriptor( ImageDescriptor.createFromURL( ProjectUIPlugin.getDefault().getBundle().getEntry(
+        setImageDescriptor( ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry(
             "/icons/wizban/plugin_project.png" ) ) ); //$NON-NLS-1$
 
         setTitle( Msgs.modifyLiferayPluginProject );

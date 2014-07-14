@@ -34,7 +34,7 @@ import org.osgi.framework.BundleContext;
  *
  * @author Greg Amerson
  */
-public class ProjectUIPlugin extends AbstractUIPlugin
+public class ProjectUI extends AbstractUIPlugin
 {
 
     // Shared images
@@ -43,7 +43,7 @@ public class ProjectUIPlugin extends AbstractUIPlugin
     public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location"; //$NON-NLS-1$
 
     // The shared instance
-    private static ProjectUIPlugin plugin;
+    private static ProjectUI plugin;
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.project.ui"; //$NON-NLS-1$
@@ -68,7 +68,7 @@ public class ProjectUIPlugin extends AbstractUIPlugin
      *
      * @return the shared instance
      */
-    public static ProjectUIPlugin getDefault()
+    public static ProjectUI getDefault()
     {
         return plugin;
     }
@@ -129,7 +129,7 @@ public class ProjectUIPlugin extends AbstractUIPlugin
     /**
      * The constructor
      */
-    public ProjectUIPlugin()
+    public ProjectUI()
     {
     }
 

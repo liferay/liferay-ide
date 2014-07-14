@@ -97,7 +97,7 @@ public class PrimaryRuntimeNotSetResolution implements IMarkerResolution
                     }
                     catch( CoreException e )
                     {
-                        ProjectUIPlugin.logError( e );
+                        ProjectUI.logError( e );
                     }
                 }
             }

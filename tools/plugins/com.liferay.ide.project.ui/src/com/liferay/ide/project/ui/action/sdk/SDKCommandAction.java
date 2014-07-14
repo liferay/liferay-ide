@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui.action.sdk;
 
-import com.liferay.ide.project.ui.ProjectUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -90,7 +90,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction
                         }
                         catch( Exception e )
                         {
-                            return ProjectUIPlugin.createErrorStatus( "Error running SDK command " + getSDKCommand(), e ); //$NON-NLS-1$
+                            return ProjectUI.createErrorStatus( "Error running SDK command " + getSDKCommand(), e ); //$NON-NLS-1$
                         }
 
                         return Status.OK_STATUS;
