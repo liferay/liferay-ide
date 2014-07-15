@@ -21,6 +21,7 @@ import com.liferay.ide.service.core.util.ServiceUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ICodeAssist;
 import org.eclipse.jdt.core.IJavaElement;
@@ -30,6 +31,13 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.search.IJavaSearchConstants;
+import org.eclipse.jdt.core.search.IJavaSearchScope;
+import org.eclipse.jdt.core.search.SearchEngine;
+import org.eclipse.jdt.core.search.SearchMatch;
+import org.eclipse.jdt.core.search.SearchParticipant;
+import org.eclipse.jdt.core.search.SearchPattern;
+import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.jdt.internal.corext.util.JdtFlags;
 import org.eclipse.jdt.internal.ui.actions.SelectionConverter;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
@@ -52,8 +60,29 @@ import org.eclipse.ui.texteditor.ITextEditor;
  *
  */
 @SuppressWarnings( "restriction" )
-public class ServiceMethodImplementationHyperlinkDetector extends AbstractHyperlinkDetector
+public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
 {
+    private static class WrapperMethodCollector extends SearchRequestor
+    {
+        private final List<IMethod> results;
+
+        public WrapperMethodCollector( List<IMethod> results )
+        {
+            super();
+            this.results = results;
+        }
+
+        @Override
+        public void acceptSearchMatch( SearchMatch match ) throws CoreException
+        {
+            final Object element = match.getElement();
+
+            if( element instanceof IMethod )
+            {
+                this.results.add( (IMethod) element );
+            }
+        }
+    }
     private IJavaElement[] lastElements;
     private ITypeRoot lastInput;
     private long lastModStamp;
@@ -70,6 +99,13 @@ public class ServiceMethodImplementationHyperlinkDetector extends AbstractHyperl
             if( implMethod != null )
             {
                 links.add( new ServiceMethodImplementationHyperlink( wordRegion, openAction, implMethod, qualify ) );
+            }
+
+            final IMethod wrapperMethod = getServiceWrapperMethod( method );
+
+            if( wrapperMethod != null )
+            {
+                links.add( new ServiceMethodWrapperHyperlink( wordRegion, openAction, wrapperMethod, qualify ) );
             }
         }
     }
@@ -157,7 +193,7 @@ public class ServiceMethodImplementationHyperlinkDetector extends AbstractHyperl
         this.lastWordRegion = null;
     }
 
-    private IType findImplType( IJavaElement parent, String fullyQualifiedName ) throws JavaModelException
+    private IType findType( IJavaElement parent, String fullyQualifiedName ) throws JavaModelException
     {
         IType retval = parent.getJavaProject().findType( fullyQualifiedName );
 
@@ -202,7 +238,7 @@ public class ServiceMethodImplementationHyperlinkDetector extends AbstractHyperl
                 // as per liferay standard real implementation will be in impl package and Impl suffix
                 // e.g. com.example.service.FooUtil.getBar() --> com.example.service.impl.FooImpl.getBar()
                 final String fullyQualifiedName = packageName + ".impl." + baseServiceName + "Impl";
-                final IType implType = findImplType( methodClass, fullyQualifiedName );
+                final IType implType = findType( methodClass, fullyQualifiedName );
 
                 if( implType != null )
                 {
@@ -230,6 +266,57 @@ public class ServiceMethodImplementationHyperlinkDetector extends AbstractHyperl
                     else
                     {
                         retval = methods[0];
+                    }
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return retval;
+    }
+
+    private IMethod getServiceWrapperMethod( final IMethod method )
+    {
+        IMethod retval = null;
+
+        try
+        {
+            final IJavaElement methodClass = method.getParent();
+            final IType methodClassType = method.getDeclaringType();
+            final String methodClassName = methodClass.getElementName();
+
+            if( methodClassName.endsWith( "Util" ) && JdtFlags.isPublic( method ) && JdtFlags.isStatic( method ) )
+            {
+                final String packageName = methodClassType.getPackageFragment().getElementName();
+                final String baseServiceName = methodClassName.substring( 0, methodClassName.length() - 4 );
+                // as per liferay standard wrapper type will be in service package with Wrapper suffix
+                // e.g. com.example.service.FooUtil.getBar() --> com.example.service.FooWrapper.getBar()
+                final String fullyQualifiedName = packageName + "." + baseServiceName + "Wrapper";
+                final IType wrapperType = findType( methodClass, fullyQualifiedName );
+
+                if( wrapperType != null )
+                {
+                    // look for classes that implement this wrapper
+                    final List<IMethod> wrapperMethods = new ArrayList<IMethod>();
+                    final SearchRequestor requestor = new WrapperMethodCollector( wrapperMethods );
+
+                    final IJavaSearchScope scope =
+                        SearchEngine.createStrictHierarchyScope( null, wrapperType, true, false, null );
+
+                    final SearchPattern search =
+                        SearchPattern.createPattern(
+                            method.getElementName(), IJavaSearchConstants.METHOD, IJavaSearchConstants.DECLARATIONS,
+                            SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE );
+
+                    new SearchEngine().search(
+                        search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
+                        requestor, new NullProgressMonitor() );
+
+                    if( ! CoreUtil.isNullOrEmpty( wrapperMethods ) )
+                    {
+                        retval = wrapperMethods.get( 0 );
                     }
                 }
             }

@@ -22,19 +22,18 @@ import org.eclipse.jface.text.IRegion;
 /**
  * @author Gregory Amerson
  */
-public class ServiceMethodImplementationHyperlink extends ServiceMethodHyperlink
+public class ServiceMethodWrapperHyperlink extends ServiceMethodHyperlink
 {
-
-    public ServiceMethodImplementationHyperlink(
-        final IRegion word, final SelectionDispatchAction action, final IMethod implMethod, final boolean qualify )
+    public ServiceMethodWrapperHyperlink(
+        final IRegion word, final SelectionDispatchAction action, final IMethod wrapperMethod, final boolean qualify )
     {
-        super( word, action, implMethod, qualify );
+        super( word, action, wrapperMethod, qualify );
     }
 
     @Override
     protected String getStaticText()
     {
-        return "Open Service Implementation";
+        return "Open Service Wrapper";
     }
 
 }

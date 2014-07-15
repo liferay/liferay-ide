@@ -105,10 +105,10 @@
     <extension
          point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
          <hyperlinkDetector
-               class="com.liferay.ide.service.ui.editor.ServiceMethodImplementationHyperlinkDetector"
-               description="Locates real implementation methods for service util class methods"
-               id="com.liferay.ide.service.ui.ServiceMethodImplementationHyperlinkDetector"
-               name="Open Service Implementation"
+               class="com.liferay.ide.service.ui.editor.ServiceMethodHyperlinkDetector"
+               description="Locates real implementation and wrapper methods for service util class methods"
+               id="com.liferay.ide.service.ui.ServiceMethodHyperlinkDetector"
+               name="Open Service"
                targetId="org.eclipse.jdt.ui.javaCode">
       </hyperlinkDetector>
    </extension>
