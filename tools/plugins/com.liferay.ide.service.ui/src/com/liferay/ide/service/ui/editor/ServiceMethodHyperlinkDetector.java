@@ -78,11 +78,13 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
     private static class WrapperMethodCollector extends SearchRequestor
     {
         private final List<IMethod> results;
+        private final IMethod method;
 
-        public WrapperMethodCollector( List<IMethod> results )
+        public WrapperMethodCollector( List<IMethod> results, IMethod method  )
         {
             super();
             this.results = results;
+            this.method = method;
         }
 
         @Override
@@ -90,10 +92,31 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
         {
             final Object element = match.getElement();
 
-            if( element instanceof IMethod )
+            if( element instanceof IMethod && matches( (IMethod) element ) )
             {
                 this.results.add( (IMethod) element );
             }
+        }
+
+        private boolean matches( IMethod element ) throws JavaModelException
+        {
+            boolean matches = false;
+
+            if( this.method.getNumberOfParameters() == element.getNumberOfParameters() )
+            {
+                matches = true;
+
+                for( int i = 0; i < this.method.getTypeParameters().length; i++ )
+                {
+                    if( ! this.method.getParameterTypes()[i].equals( element.getParameterTypes()[i] ) )
+                    {
+                        matches = false;
+                        break;
+                    }
+                }
+            }
+
+            return matches;
         }
     }
 
@@ -326,7 +349,7 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
                     {
                      // look for classes that implement this wrapper
                         final List<IMethod> overrides = new ArrayList<IMethod>();
-                        final SearchRequestor requestor = new WrapperMethodCollector( overrides );
+                        final SearchRequestor requestor = new WrapperMethodCollector( overrides, method );
 
                         final IJavaSearchScope scope =
                             SearchEngine.createStrictHierarchyScope( null, wrapperType, true, false, null );
