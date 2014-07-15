@@ -22,6 +22,8 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
+ *
+ * @author Gregory Amerson
  */
 public class ServiceUI extends AbstractUIPlugin
 {
@@ -44,7 +46,12 @@ public class ServiceUI extends AbstractUIPlugin
 
     public static void logError( Exception e )
     {
-        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
+        logError( e.getMessage(), e );
+    }
+
+    public static void logError( String msg, Exception e )
+    {
+        getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
     }
 
     /**

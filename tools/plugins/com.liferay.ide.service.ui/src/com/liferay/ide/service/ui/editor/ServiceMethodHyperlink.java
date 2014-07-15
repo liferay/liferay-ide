@@ -66,6 +66,11 @@ public class ServiceMethodHyperlink implements IHyperlink
         return null;
     }
 
+    public IMethod method()
+    {
+        return this.serviceMethod;
+    }
+
     public void open()
     {
         Runnable runnable = new Runnable()
@@ -79,4 +84,8 @@ public class ServiceMethodHyperlink implements IHyperlink
         BusyIndicator.showWhile( Display.getDefault(), runnable );
     }
 
+    public IRegion wordRegion()
+    {
+        return this.word;
+    }
 }

@@ -62,6 +62,19 @@ import org.eclipse.ui.texteditor.ITextEditor;
 @SuppressWarnings( "restriction" )
 public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
 {
+
+    private static class IMethodWrapper
+    {
+        private final boolean base;
+        private final IMethod method;
+
+        public IMethodWrapper( IMethod method, boolean base )
+        {
+            this.method = method;
+            this.base = base;
+        }
+    }
+
     private static class WrapperMethodCollector extends SearchRequestor
     {
         private final List<IMethod> results;
@@ -83,13 +96,14 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
             }
         }
     }
+
     private IJavaElement[] lastElements;
     private ITypeRoot lastInput;
     private long lastModStamp;
     private IRegion lastWordRegion;
 
     private void addHyperlinks(
-        final List<IHyperlink> links, final IRegion wordRegion, final SelectionDispatchAction openAction,
+        final List<IHyperlink> links, final IRegion word, final SelectionDispatchAction openAction,
         final IMethod method, final boolean qualify, final JavaEditor editor )
     {
         if( shouldAddServiceHyperlink( editor ) )
@@ -98,14 +112,22 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
 
             if( implMethod != null )
             {
-                links.add( new ServiceMethodImplementationHyperlink( wordRegion, openAction, implMethod, qualify ) );
+                links.add( new ServiceMethodImplementationHyperlink( word, openAction, implMethod, qualify ) );
             }
 
-            final IMethod wrapperMethod = getServiceWrapperMethod( method );
+            final IMethodWrapper wrapperMethod = getServiceWrapperMethod( method );
 
             if( wrapperMethod != null )
             {
-                links.add( new ServiceMethodWrapperHyperlink( wordRegion, openAction, wrapperMethod, qualify ) );
+                if( wrapperMethod.base )
+                {
+                    links.add( new ServiceMethodWrapperLookupHyperlink(
+                        editor, word, openAction, wrapperMethod.method, qualify ) );
+                }
+                else
+                {
+                    links.add( new ServiceMethodWrapperHyperlink( word, openAction, wrapperMethod.method, qualify ) );
+                }
             }
         }
     }
@@ -277,9 +299,9 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
         return retval;
     }
 
-    private IMethod getServiceWrapperMethod( final IMethod method )
+    private IMethodWrapper getServiceWrapperMethod( final IMethod method )
     {
-        IMethod retval = null;
+        IMethodWrapper retval = null;
 
         try
         {
@@ -298,25 +320,34 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
 
                 if( wrapperType != null )
                 {
-                    // look for classes that implement this wrapper
-                    final List<IMethod> wrapperMethods = new ArrayList<IMethod>();
-                    final SearchRequestor requestor = new WrapperMethodCollector( wrapperMethods );
+                    IMethod[] wrapperBaseMethods = wrapperType.findMethods( method );
 
-                    final IJavaSearchScope scope =
-                        SearchEngine.createStrictHierarchyScope( null, wrapperType, true, false, null );
-
-                    final SearchPattern search =
-                        SearchPattern.createPattern(
-                            method.getElementName(), IJavaSearchConstants.METHOD, IJavaSearchConstants.DECLARATIONS,
-                            SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE );
-
-                    new SearchEngine().search(
-                        search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
-                        requestor, new NullProgressMonitor() );
-
-                    if( ! CoreUtil.isNullOrEmpty( wrapperMethods ) )
+                    if( ! CoreUtil.isNullOrEmpty( wrapperBaseMethods ) )
                     {
-                        retval = wrapperMethods.get( 0 );
+                     // look for classes that implement this wrapper
+                        final List<IMethod> overrides = new ArrayList<IMethod>();
+                        final SearchRequestor requestor = new WrapperMethodCollector( overrides );
+
+                        final IJavaSearchScope scope =
+                            SearchEngine.createStrictHierarchyScope( null, wrapperType, true, false, null );
+
+                        final SearchPattern search =
+                            SearchPattern.createPattern(
+                                method.getElementName(), IJavaSearchConstants.METHOD, IJavaSearchConstants.DECLARATIONS,
+                                SearchPattern.R_EXACT_MATCH | SearchPattern.R_CASE_SENSITIVE );
+
+                        new SearchEngine().search(
+                            search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
+                            requestor, new NullProgressMonitor() );
+
+                        if( overrides.size() > 1 )
+                        {
+                            retval = new IMethodWrapper( wrapperBaseMethods[0], true );
+                        }
+                        else if( overrides.size() == 1 )
+                        {
+                            retval = new IMethodWrapper( overrides.get( 0 ), false );
+                        }
                     }
                 }
             }
