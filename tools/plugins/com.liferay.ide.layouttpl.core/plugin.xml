@@ -115,39 +115,6 @@
             priority="high">
       </content-type>
    </extension>
-   <extension
-         id="liferaylayouttpldescriptorvalidator"
-         name="%layout.templates.descriptor.validator.name"
-         point="org.eclipse.wst.validation.validatorV2">
-      <validator
-            build="true"
-            class="com.liferay.ide.layouttpl.core.descriptor.LayoutTplDescriptorValidator"
-            manual="true"
-            markerId="com.liferay.ide.layouttpl.core.liferayLayoutTplDescriptorMarker"
-            version="1">
-         <include>
-            <rules>
-               <contentType
-                     id="com.liferay.ide.layouttpl.core.liferaylayouttplxml">
-               </contentType>
-            </rules>
-         </include>
-         <group
-               id="org.eclipse.wst.sse.core.structuredModelGroup">
-         </group>
-      </validator>
-   </extension>
-   <extension
-         id="liferayLayoutTplDescriptorMarker"
-         name="%layout.templates.descriptor.problem.name"
-         point="org.eclipse.core.resources.markers">
-      <persistent
-            value="true">
-      </persistent>
-      <super
-            type="org.eclipse.wst.validation.problemmarker">
-      </super>
-   </extension>
  <extension
        point="com.liferay.ide.templates.core.templateDefinition">
     <template

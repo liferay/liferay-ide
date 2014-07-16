@@ -12,38 +12,30 @@
  * details.
  *
  *******************************************************************************/
+package com.liferay.ide.xml.search.core.validators;
 
-package com.liferay.ide.xml.search.ui.util;
+import com.liferay.ide.core.ILiferayConstants;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.wst.validation.internal.provisional.core.IValidator;
+import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 
 
 /**
  * @author Kuo Zhang
  */
-public class ValidatorUtil
+public class LiferayLayoutTplDescriptorValidator extends LiferayDescriptorBaseValidator
 {
+    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.core.liferayLayoutTplDescriptorMarker";
 
-    public static boolean isChar( char c )
+    @Override
+    protected void setMarker( IValidator validator, IFile file )
     {
-        int x = c;
-
-        if( ( x >= 97 && x <= 122 ) || ( x >= 65 && x <= 90 ) )
+        if( validator instanceof XMLReferencesBatchValidator &&
+            ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE.equals( file.getName() ) )
         {
-            return true;
+            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
         }
-
-        return false;
     }
 
-    public static boolean isValidNamespace( String namespace )
-    {
-        for( char c : namespace.toCharArray() )
-        {
-            if( ( c != '_' ) && ( ! isChar( c ) ) )
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }

@@ -14,37 +14,4 @@
             priority="high">
       </content-type>
    </extension>
-   <extension
-         id="liferayhookdescriptorvalidator"
-         name="%hook.descriptor.validator.name"
-         point="org.eclipse.wst.validation.validatorV2">
-      <validator
-            build="true"
-            class="com.liferay.ide.hook.core.descriptor.LiferayHookDescriptorValidator"
-            manual="true"
-            markerId="com.liferay.ide.hook.core.liferayHookDescriptorMarker"
-            version="1">
-         <include>
-            <rules>
-               <contentType
-                     id="com.liferay.ide.hook.core.liferayhookxml">
-               </contentType>
-            </rules>
-         </include>
-         <group
-               id="org.eclipse.wst.sse.core.structuredModelGroup">
-         </group>
-      </validator>
-   </extension>
-   <extension
-         id="liferayHookDescriptorMarker"
-         name="%hook.descriptor.problem.name"
-         point="org.eclipse.core.resources.markers">
-      <persistent
-            value="true">
-      </persistent>
-      <super
-            type="org.eclipse.wst.validation.problemmarker">
-      </super>
-   </extension>
 </plugin>

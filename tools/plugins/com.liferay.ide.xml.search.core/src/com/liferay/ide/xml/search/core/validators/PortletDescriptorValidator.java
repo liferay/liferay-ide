@@ -12,13 +12,15 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.xml.search.ui.validators;
+package com.liferay.ide.xml.search.core.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
@@ -31,25 +33,21 @@ import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayPortletDescriptorValidator extends LiferayDescriptorBaseValidator
+public class PortletDescriptorValidator extends LiferayDescriptorBaseValidator
 {
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayPortletDescriptorMarker";
 
-    @Override
-    public void doValidate( IXMLReference reference, IDOMNode node, IFile file,
-                          IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        super.doValidate( reference, node, file, validator, reporter, batchMode );
-    }
+    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.core.portletDescriptorMarker";
+    public static final String MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES = Msgs.resourceBundleEndProperties;
+    public static final String MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR = Msgs.resourceBundleContainPathSeparator ;
 
     @Override
     protected void setMarker( IValidator validator, IFile file )
     {
         if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.LIFERAY_PORTLET_XML_FILE.equals( file.getName() ) )
+            ILiferayConstants.PORTLET_XML_FILE.equals( file.getName() ) )
         {
             ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        }
+        } 
     }
 
     @Override
@@ -60,22 +58,21 @@ public class LiferayPortletDescriptorValidator extends LiferayDescriptorBaseVali
 
         if( severity != ValidationMessage.IGNORE )
         {
-            if( node.getParentNode().getNodeName().equals( "control-panel-entry-weight" ) )
+            if( "resource-bundle".equals( node.getParentNode().getNodeName() ) )
             {
                 String validationMsg = null;
 
-                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );;
+                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
 
-                if( nodeValue != null )
+                if( nodeValue.endsWith( ".properties" ) )
                 {
-                    try
-                    {
-                        Double.parseDouble( nodeValue );
-                    }
-                    catch( NumberFormatException nfe )
-                    {
-                        validationMsg = NLS.bind( Msgs.entryWeightSyntaxInvalid, nodeValue );;
-                    }
+                    validationMsg = NLS.bind( MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES, nodeValue );
+                }
+
+                if( validationMsg == null &&
+                  ( nodeValue.contains( IPath.SEPARATOR + "" ) || ( CoreUtil.isWindows() && nodeValue.contains( "\\" ) ) ) )
+                {
+                    validationMsg = NLS.bind( MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR, nodeValue );
                 }
 
                 if( validationMsg != null )
@@ -91,11 +88,12 @@ public class LiferayPortletDescriptorValidator extends LiferayDescriptorBaseVali
 
     private static class Msgs extends NLS
     {
-        public static String entryWeightSyntaxInvalid;
+        public static String resourceBundleEndProperties;
+        public static String resourceBundleContainPathSeparator;
 
         static
         {
-            initializeMessages( LiferayPortletDescriptorValidator.class.getName(), Msgs.class );
+            initializeMessages( PortletDescriptorValidator.class.getName(), Msgs.class );
         }
     }
 }

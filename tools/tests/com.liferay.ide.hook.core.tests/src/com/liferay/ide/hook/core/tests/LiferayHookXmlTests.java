@@ -18,8 +18,8 @@ import static org.junit.Assert.assertEquals;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.hook.core.descriptor.LiferayHookDescriptorValidator;
 import com.liferay.ide.project.core.tests.XmlTestsBase;
+import com.liferay.ide.xml.search.core.validators.LiferayHookDescriptorValidator;
 
 import java.text.MessageFormat;
 
@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -78,7 +79,11 @@ public class LiferayHookXmlTests extends XmlTestsBase
         descriptorFile.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }
 
+    /**
+     * Only test in Eclipse workbench, cannot be tested on headless thread
+     */
     @Test
+    @Ignore
     public void testLanguagePropertiesELementValidation() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
@@ -96,7 +101,7 @@ public class LiferayHookXmlTests extends XmlTestsBase
         elementValue = "LanguagePropertiesNotEndProperties";
         setPropertiesValue( descriptorFile, elementName, elementValue );
         markerMessage = MessageFormat.format(
-            LiferayHookDescriptorValidator.MESSAGE_PRORETIES_VALUE_END_WITH_PROPERTIES, new Object[] { elementValue } );
+            LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
         assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage ) );
@@ -157,7 +162,11 @@ public class LiferayHookXmlTests extends XmlTestsBase
         assertEquals( false, checkMarker( descriptorFile, markerType, null ) );
     }
 
+    /**
+     * Only test in Eclipse workbench, cannot be tested on headless thread
+     */
     @Test
+    @Ignore
     public void testPortalPropertiesELementValidation() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
@@ -175,7 +184,7 @@ public class LiferayHookXmlTests extends XmlTestsBase
         elementValue = "PortalPropertiesNotEndProperties";
         setPropertiesValue( descriptorFile, elementName, elementValue );
         markerMessage = MessageFormat.format(
-            LiferayHookDescriptorValidator.MESSAGE_PRORETIES_VALUE_END_WITH_PROPERTIES, new Object[] { elementValue } );
+            LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
         assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage ) );

@@ -50,7 +50,6 @@ public class ResourceBundleURIResolver extends ResourceBaseURIResolver
     @Override
     public boolean accept( Object selectedNode, IResource rootContainer, IResource file, String matching, boolean fullMatch )
     {
-        // fullMatch is always true
         final String extension = file.getFileExtension();
 
         if( ! getExtensions().contains( extension.toLowerCase() ) )
@@ -62,7 +61,16 @@ public class ResourceBundleURIResolver extends ResourceBaseURIResolver
         {
             final String uri = resolve( selectedNode, rootContainer, file );
 
-            return uri.equals( matching );
+            matching = matching.toLowerCase();
+
+            if( fullMatch )
+            {
+                return uri.equals( matching );
+            }
+            else
+            {
+                return uri.startsWith( matching );
+            }
         }
 
         return false;

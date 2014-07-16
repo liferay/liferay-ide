@@ -12,12 +12,13 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.xml.search.ui.validators;
+
+package com.liferay.ide.xml.search.core.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
-import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
+import com.liferay.ide.xml.search.core.LiferayXMLSearchCore;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jdt.core.IType;
@@ -40,7 +41,12 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class LiferayHookDescriptorValidator extends LiferayDescriptorBaseValidator
 {
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayHookDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.core.liferayHookDescriptorMarker";
+    public static final String MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES = Msgs.propertiesNotEndWithProperties;
+    public static final String MESSAGE_SERVICE_IMPL_TYPE_INCORRECT = Msgs.serviceImplTypeIncorrect;
+    public static final String MESSAGE_SERVICE_TYPE_INVALID = Msgs.serviceTypeInvalid;
+    public static final String MESSAGE_SERVICE_TYPE_NOT_INTERFACE = Msgs.serviceTypeNotInterface;
+
 
     @Override
     protected void setMarker( IValidator validator, IFile file )
@@ -74,13 +80,14 @@ public class LiferayHookDescriptorValidator extends LiferayDescriptorBaseValidat
                     {
                         if( ! nodeValue.endsWith( ".properties" ) )
                         {
-                            validationMsg = NLS.bind( Msgs.propertiesValueShouldEndWithProperties, nodeValue );
+                            validationMsg = NLS.bind( MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES, nodeValue );
                         }
                     }
 
                     if( validationMsg != null )
                     {
                         addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );
+                        return false;
                     }
                 }
             }
@@ -171,14 +178,14 @@ public class LiferayHookDescriptorValidator extends LiferayDescriptorBaseValidat
 
                 if( !typeCorrect )
                 {
-                    msg = NLS.bind( Msgs.serviceImplTypeIncorrect, serviceImplContent, superTypeName );
+                    msg = NLS.bind( MESSAGE_SERVICE_IMPL_TYPE_INCORRECT, serviceImplContent, superTypeName );
                     return new ValidationInfo( msg, ValidationType.TYPE_HIERARCHY_INCORRECT );
                 }
             }
         }
         catch( Exception e )
         {
-            LiferayXMLSearchUI.logError( e );
+            LiferayXMLSearchCore.logError( e );
         }
 
         return null;
@@ -204,20 +211,20 @@ public class LiferayHookDescriptorValidator extends LiferayDescriptorBaseValidat
             // validate if it is an interface
             if( ! type.isInterface() )
             {
-                msg = NLS.bind( Msgs.serviceTypeNotInterface, serviceTypeContent );
+                msg = NLS.bind( MESSAGE_SERVICE_TYPE_NOT_INTERFACE, serviceTypeContent );
                 return new ValidationInfo( msg, ValidationType.TYPE_HIERARCHY_INCORRECT );
             }
 
             // validate type hierarchy
             if( ! serviceTypeContent.matches( "com.liferay.*Service" ) )
             {
-                msg = Msgs.serviceTypeInvalid;
+                msg = MESSAGE_SERVICE_TYPE_INVALID;
                 return new ValidationInfo( msg, ValidationType.TYPE_HIERARCHY_INCORRECT );
             }
         }
         catch( Exception e )
         {
-            LiferayXMLSearchUI.logError( e );
+            LiferayXMLSearchCore.logError( e );
         }
 
         return null;
@@ -225,7 +232,7 @@ public class LiferayHookDescriptorValidator extends LiferayDescriptorBaseValidat
 
     private static class Msgs extends NLS
     {
-        public static String propertiesValueShouldEndWithProperties;
+        public static String propertiesNotEndWithProperties;
 
         public static String serviceTypeInvalid;
         public static String serviceTypeNotInterface;

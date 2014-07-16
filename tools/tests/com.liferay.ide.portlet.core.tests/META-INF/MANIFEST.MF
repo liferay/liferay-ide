@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.sapphire.modeling.xml,
  org.eclipse.sapphire.modeling,
  org.eclipse.sapphire.java,
- com.liferay.ide.server.core.tests;bundle-version="2.1.1"
+ com.liferay.ide.server.core.tests;bundle-version="2.1.1",
+ com.liferay.ide.xml.search.core
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.core.tests

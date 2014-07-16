@@ -12,12 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.xml.search.ui.validators;
+package com.liferay.ide.xml.search.core.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
-import com.liferay.ide.xml.search.ui.util.ValidatorUtil;
+import com.liferay.ide.xml.search.core.util.ValidatorUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
 @SuppressWarnings( "restriction" )
 public class ServiceBuilderDescriptorValidator extends LiferayDescriptorBaseValidator
 {
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.serviceBuilderDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.core.serviceBuilderDescriptorMarker";
 
     @Override
     protected void setMarker( IValidator validator, IFile file )

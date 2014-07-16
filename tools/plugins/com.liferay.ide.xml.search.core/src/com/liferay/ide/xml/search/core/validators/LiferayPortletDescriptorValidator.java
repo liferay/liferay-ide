@@ -12,9 +12,10 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.xml.search.ui.validators;
+package com.liferay.ide.xml.search.core.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 
 import org.eclipse.core.resources.IFile;
@@ -25,24 +26,28 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Node;
-
 
 /**
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayDisplayDescriptorValidator extends LiferayDescriptorBaseValidator
+public class LiferayPortletDescriptorValidator extends LiferayDescriptorBaseValidator
 {
+    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.core.liferayPortletDescriptorMarker";
+    public static final String MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID = Msgs.entryWeightSyntaxInvalid;
 
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayDisplayDescriptorMarker";
+    @Override
+    public void doValidate( IXMLReference reference, IDOMNode node, IFile file,
+                          IValidator validator, IReporter reporter, boolean batchMode )
+    {
+        super.doValidate( reference, node, file, validator, reporter, batchMode );
+    }
 
     @Override
     protected void setMarker( IValidator validator, IFile file )
     {
         if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.LIFERAY_DISPLAY_XML_FILE.equals( file.getName() ) )
+            ILiferayConstants.LIFERAY_PORTLET_XML_FILE.equals( file.getName() ) )
         {
             ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
         }
@@ -56,13 +61,27 @@ public class LiferayDisplayDescriptorValidator extends LiferayDescriptorBaseVali
 
         if( severity != ValidationMessage.IGNORE )
         {
-            if( node.getNodeType() == Node.ATTRIBUTE_NODE && "name".equals( node.getNodeName() )
-                && "category".equals( ( (Attr) node ).getOwnerElement().getNodeName() ) )
+            if( node.getParentNode().getNodeName().equals( "control-panel-entry-weight" ) )
             {
-                if( node.getNodeValue().matches( "\\s*" ) )
+                String validationMsg = null;
+
+                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );;
+
+                if( nodeValue != null )
                 {
-                    String validationMsg = Msgs.categoryNameCannotBeEmpty;
-                    addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );;
+                    try
+                    {
+                        Double.parseDouble( nodeValue );
+                    }
+                    catch( NumberFormatException nfe )
+                    {
+                        validationMsg = NLS.bind( MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID, nodeValue );;
+                    }
+                }
+
+                if( validationMsg != null )
+                {
+                    addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );
                     return false;
                 }
             }
@@ -73,11 +92,11 @@ public class LiferayDisplayDescriptorValidator extends LiferayDescriptorBaseVali
 
     private static class Msgs extends NLS
     {
-        public static String categoryNameCannotBeEmpty;
+        public static String entryWeightSyntaxInvalid;
 
         static
         {
-            initializeMessages( LiferayDisplayDescriptorValidator.class.getName(), Msgs.class );
+            initializeMessages( LiferayPortletDescriptorValidator.class.getName(), Msgs.class );
         }
     }
 }

@@ -12,15 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.xml.search.ui.validators;
+package com.liferay.ide.xml.search.core.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
@@ -28,24 +25,28 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Node;
+
 
 /**
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class PortletDescriptorValidator extends LiferayDescriptorBaseValidator
+public class LiferayDisplayDescriptorValidator extends LiferayDescriptorBaseValidator
 {
 
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.portletDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.core.liferayDisplayDescriptorMarker";
+    public static final String MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY = Msgs.categoryNameCannotBeEmpty;
 
     @Override
     protected void setMarker( IValidator validator, IFile file )
     {
         if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.PORTLET_XML_FILE.equals( file.getName() ) )
+            ILiferayConstants.LIFERAY_DISPLAY_XML_FILE.equals( file.getName() ) )
         {
             ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        } 
+        }
     }
 
     @Override
@@ -56,26 +57,13 @@ public class PortletDescriptorValidator extends LiferayDescriptorBaseValidator
 
         if( severity != ValidationMessage.IGNORE )
         {
-            if( "resource-bundle".equals( node.getParentNode().getNodeName() ) )
+            if( node.getNodeType() == Node.ATTRIBUTE_NODE && "name".equals( node.getNodeName() )
+                && "category".equals( ( (Attr) node ).getOwnerElement().getNodeName() ) )
             {
-                String validationMsg = null;
-
-                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
-
-                if( nodeValue.endsWith( ".properties" ) )
+                if( node.getNodeValue().matches( "\\s*" ) )
                 {
-                    validationMsg = NLS.bind( Msgs.resourceBundleEndProperties, nodeValue );
-                }
-
-                if( validationMsg == null &&
-                  ( nodeValue.contains( IPath.SEPARATOR + "" ) || ( CoreUtil.isWindows() && nodeValue.contains( "\\" ) ) ) )
-                {
-                    validationMsg = NLS.bind( Msgs.resourceBundlePathContainSeparator, nodeValue );
-                }
-
-                if( validationMsg != null )
-                {
-                    addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );
+                    String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
+                    addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );;
                     return false;
                 }
             }
@@ -86,12 +74,11 @@ public class PortletDescriptorValidator extends LiferayDescriptorBaseValidator
 
     private static class Msgs extends NLS
     {
-        public static String resourceBundleEndProperties;
-        public static String resourceBundlePathContainSeparator;
+        public static String categoryNameCannotBeEmpty;
 
         static
         {
-            initializeMessages( PortletDescriptorValidator.class.getName(), Msgs.class );
+            initializeMessages( LiferayDisplayDescriptorValidator.class.getName(), Msgs.class );
         }
     }
 }

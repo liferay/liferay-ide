@@ -42,11 +42,13 @@ public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIReso
             return false;
         }
 
+        matching = matching.toLowerCase();
+
         if( fullMatch )
         {
             if( canStartsWithoutSlash )
             {
-                final String uri = resolve( selectedNode, rootContainer, file );
+                final String uri = resolve( selectedNode, rootContainer, file ).toLowerCase();
 
                 return( uri.equals( matching ) || uri.equals( "/" + matching ) );
             }

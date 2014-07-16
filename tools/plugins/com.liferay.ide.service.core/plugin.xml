@@ -15,39 +15,6 @@
       </content-type>
    </extension>
    <extension
-         id="servicebuilderdescriptorvalidator"
-         name="%service.builder.descriptor.validator.name"
-         point="org.eclipse.wst.validation.validatorV2">
-      <validator
-            build="true"
-            class="com.liferay.ide.service.core.descriptor.ServiceBuilderDescriptorValidator"
-            manual="true"
-            markerId="com.liferay.ide.service.core.serviceBuilderDescriptorMarker"
-            version="1">
-         <include>
-            <rules>
-               <contentType
-                     id="com.liferay.ide.service.core.servicebuildercontent">
-               </contentType>
-            </rules>
-         </include>
-         <group
-               id="org.eclipse.wst.sse.core.structuredModelGroup">
-         </group>
-      </validator>
-   </extension>
-   <extension
-         id="serviceBuilderDescriptorMarker"
-         name="%service.builder.descriptor.problem.name"
-         point="org.eclipse.core.resources.markers">
-      <persistent
-            value="true">
-      </persistent>
-      <super
-            type="org.eclipse.wst.validation.problemmarker">
-      </super>
-   </extension>
-   <extension
          point="com.liferay.ide.templates.core.templateDefinition">
       <template
             id="com.liferay.ide.service.core.defaultServiceXmlFile"
@@ -117,7 +84,7 @@
             id="com.liferay.ide.service.core.serviceBuilderDescriptorHelper">
       </liferayDescriptorHelper>
    </extension>
-   
+
     <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
       <upgradeProjectHandler
             class="com.liferay.ide.service.core.UpgradeServiceBuilderHandler"

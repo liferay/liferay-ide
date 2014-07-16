@@ -13,12 +13,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.ui.validators;
+package com.liferay.ide.xml.search.core.validators;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
-import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
+import com.liferay.ide.xml.search.core.LiferayXMLSearchCore;
 
 import java.util.List;
 
@@ -39,8 +39,6 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
-import org.eclipse.wst.sse.ui.internal.reconcile.validator.AnnotationInfo;
-import org.eclipse.wst.sse.ui.internal.reconcile.validator.IncrementalReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
@@ -67,6 +65,11 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
 {
 
     private static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
+    public static final String MESSAGE_SYNTAX_INVALID = Msgs.syntaxInvalid;
+    public static final String MESSAGE_REFERENCE_NOT_FOUND = Msgs.referenceNotFound;
+    public static final String MESSAGE_RESOURCE_NOT_FOUND = Msgs.resourceNotFound;
+    public static final String MESSAGE_TYPE_HIERARCHY_INCORRECT = Msgs.typeHierarchyIncorrect;
+    public static final String MESSAGE_TYPE_NOT_FOUND = Msgs.typeNotFound;
 
     protected LocalizedMessage createMessage(
         int start, int length, String messageText, int severity, IStructuredDocument structuredDocument )
@@ -178,7 +181,7 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
             }
             catch( CoreException e )
             {
-                LiferayXMLSearchUI.logError( e );
+                LiferayXMLSearchCore.logError( e );
             }
 
             return retval;
@@ -264,13 +267,9 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         {
             if( batchMode )
             {
+                reporter.removeAllMessages( validator );
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );
-            }
-            else
-            {
-                AnnotationInfo info = new AnnotationInfo( message );
-                ( (IncrementalReporter) reporter ).addAnnotationInfo( validator, info );
             }
         }
     }
@@ -299,9 +298,9 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         switch( validationType )
         {
         case SYNTAX_INVALID:
-            return NLS.bind( Msgs.syntaxInvalid, node.getNodeName() );
+            return NLS.bind( MESSAGE_SYNTAX_INVALID, node.getNodeName() );
         case TYPE_NOT_FOUND:
-            return NLS.bind( Msgs.typeNotFound, textContent );
+            return NLS.bind( MESSAGE_TYPE_NOT_FOUND, textContent );
         case TYPE_HIERARCHY_INCORRECT:
         {
             if( referenceTo != null && referenceTo.getType() == IXMLReferenceTo.ToType.JAVA && file != null )
@@ -318,15 +317,15 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
                     }
 
                     final String superTypeNames = sb.toString().replaceAll( ", $", "" );
-                    return NLS.bind( Msgs.typeHierarchyIncorrect, textContent, superTypeNames );
+                    return NLS.bind( MESSAGE_TYPE_HIERARCHY_INCORRECT, textContent, superTypeNames );
                 }
             }
         }
         case RESOURCE_NOT_FOUND:
-            return NLS.bind( Msgs.resourceNotFound, textContent );
+            return NLS.bind( MESSAGE_RESOURCE_NOT_FOUND, textContent );
         case REFERENCE_NOT_FOUND:
             final IFile referencedFile = getReferencedFile( referenceTo, node, file );
-            return NLS.bind( Msgs.referenceNotFound, textContent, referencedFile != null ? referencedFile.getName() : "" );
+            return NLS.bind( MESSAGE_REFERENCE_NOT_FOUND, textContent, referencedFile != null ? referencedFile.getName() : "" );
         }
 
         return null;
