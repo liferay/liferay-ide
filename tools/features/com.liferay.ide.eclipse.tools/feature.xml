@@ -273,15 +273,6 @@
          version="0.0.0"/>
 
    <plugin
-         id="com.liferay.laut.macosx.cocoa.x86"
-         os="macosx"
-         ws="cocoa"
-         arch="x86"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="com.liferay.laut.macosx.cocoa.x86_64"
          os="macosx"
          ws="cocoa"

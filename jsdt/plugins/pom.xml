@@ -40,7 +40,6 @@
         <module>com.liferay.ide.jsdt.core</module>
         <module>com.liferay.laut.linux.gtk.x86</module>
         <module>com.liferay.laut.linux.gtk.x86_64</module>
-        <module>com.liferay.laut.macosx.cocoa.x86</module>
         <module>com.liferay.laut.macosx.cocoa.x86_64</module>
         <module>com.liferay.laut.win32.win32.x86</module>
         <module>com.liferay.laut.win32.win32.x86_64</module>
