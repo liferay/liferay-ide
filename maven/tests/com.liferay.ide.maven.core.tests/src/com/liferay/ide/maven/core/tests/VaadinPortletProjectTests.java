@@ -54,6 +54,8 @@ public class VaadinPortletProjectTests extends LiferayMavenProjectTestCase
     @Test
     public void testProfileLiferayMavenPluginVersionCheck() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
         op.setProjectName( "profileCheck" );
         op.setProjectProvider( "maven" );

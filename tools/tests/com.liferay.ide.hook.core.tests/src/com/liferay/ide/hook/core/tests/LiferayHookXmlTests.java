@@ -81,6 +81,8 @@ public class LiferayHookXmlTests extends XmlTestsBase
     @Test
     public void testLanguagePropertiesELementValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IProject project = getProject( "Hook-Properties-Validation-Test-hook" );
 
         final IFile descriptorFile = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_HOOK_XML_FILE );
@@ -158,6 +160,8 @@ public class LiferayHookXmlTests extends XmlTestsBase
     @Test
     public void testPortalPropertiesELementValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IProject project = getProject( "Hook-Properties-Validation-Test-hook" );
 
         final IFile descriptorFile = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_HOOK_XML_FILE );

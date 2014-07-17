@@ -148,6 +148,8 @@ public class PortletXmlTests extends XmlTestsBase
     @Test
     public void testResourceBundleElementValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IProject project =
             importProject( "portlets", "com.liferay.ide.portlet.core.tests", "Portlet-Properties-Validation-Test-portlet" );
         final IFile descriptorFile = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );

@@ -54,6 +54,21 @@ import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 public class BaseTests
 {
 
+    protected static IProject project( final String name )
+    {
+        return workspaceRoot().getProject( name );
+    }
+
+    protected static IWorkspace workspace()
+    {
+        return ResourcesPlugin.getWorkspace();
+    }
+
+    protected static IWorkspaceRoot workspaceRoot()
+    {
+        return workspace().getRoot();
+    }
+
     protected final IFile createFile( final IProject project, final String path ) throws Exception
     {
         return createFile( project, path, new byte[0] );
@@ -117,6 +132,26 @@ public class BaseTests
         return p;
     }
 
+    protected final File createTempFile( final String fileDir, final String fileName )
+    {
+        try
+        {
+            File tempFile = LiferayCore.getDefault().getStateLocation().append( fileName ).toFile();
+
+            FileUtil.writeFileFromStream( tempFile, getClass().getResourceAsStream( fileDir + "/" + fileName ) );
+
+            if( tempFile.exists() )
+            {
+                return tempFile;
+            }
+        }
+        catch( IOException e )
+        {
+        }
+
+        return null;
+    }
+
     protected final void deleteProject( final String name ) throws Exception
     {
         String n = getClass().getName();
@@ -156,42 +191,9 @@ public class BaseTests
         return element;
     }
 
-    protected final File createTempFile( final String fileDir, final String fileName )
-    {
-        try
-        {
-            File tempFile = LiferayCore.getDefault().getStateLocation().append( fileName ).toFile();
-
-            FileUtil.writeFileFromStream( tempFile, getClass().getResourceAsStream( fileDir + "/" + fileName ) );
-
-            if( tempFile.exists() )
-            {
-                return tempFile;
-            }
-        }
-        catch( IOException e )
-        {
-        }
-
-        return null;
-    }
-
-    protected static IProject project( final String name )
-    {
-        return workspaceRoot().getProject( name );
-    }
-
     protected String stripCarriageReturns( String value )
     {
         return value.replaceAll( "\r", "" );
-    }
-
-    protected void waitForBuildAndValidation(IProject project) throws Exception
-    {
-        project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
-        waitForBuildAndValidation();
-        project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
-        waitForBuildAndValidation();
     }
 
     protected void waitForBuildAndValidation() throws Exception
@@ -228,14 +230,12 @@ public class BaseTests
         }
     }
 
-    protected static IWorkspace workspace()
+    protected void waitForBuildAndValidation(IProject project) throws Exception
     {
-        return ResourcesPlugin.getWorkspace();
-    }
-
-    protected static IWorkspaceRoot workspaceRoot()
-    {
-        return workspace().getRoot();
+        project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
+        waitForBuildAndValidation();
+        project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+        waitForBuildAndValidation();
     }
 
 }

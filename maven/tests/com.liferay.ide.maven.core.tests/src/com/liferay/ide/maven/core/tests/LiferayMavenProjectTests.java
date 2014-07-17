@@ -19,33 +19,6 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
 {
 
     @Test
-    public void testNewLiferayPortletProject() throws Exception
-    {
-        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
-        op.setProjectName( "mvc" );
-        op.setProjectProvider( "maven" );
-        op.setPortletFramework( "mvc" );
-
-        createTestBundleProfile( op );
-
-        final IProject project = base.createProject( op );
-
-        assertNotNull( project );
-
-        String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
-
-        assertTrue( pomContents.contains( "<liferay.version>" ) );
-        assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
-        assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
-
-        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-        waitForJobsToComplete();
-
-        IVirtualComponent projectComponent = ComponentCore.createComponent( project );
-        assertEquals( "mvc-portlet", projectComponent.getDeployedName() );
-    }
-
-    @Test
     public void testNewLiferayHookProject() throws Exception
     {
         NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
@@ -96,6 +69,35 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
 
         IVirtualComponent projectComponent = ComponentCore.createComponent( project );
         assertEquals( "template-layouttpl", projectComponent.getDeployedName() );
+    }
+
+    @Test
+    public void testNewLiferayPortletProject() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
+
+        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+        op.setProjectName( "mvc" );
+        op.setProjectProvider( "maven" );
+        op.setPortletFramework( "mvc" );
+
+        createTestBundleProfile( op );
+
+        final IProject project = base.createProject( op );
+
+        assertNotNull( project );
+
+        String pomContents = CoreUtil.readStreamToString( project.getFile( "pom.xml" ).getContents() );
+
+        assertTrue( pomContents.contains( "<liferay.version>" ) );
+        assertTrue( pomContents.contains( "<artifactId>liferay-maven-plugin</artifactId>" ) );
+        assertTrue( pomContents.contains( "<artifactId>portal-service</artifactId>" ) );
+
+        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+        waitForJobsToComplete();
+
+        IVirtualComponent projectComponent = ComponentCore.createComponent( project );
+        assertEquals( "mvc-portlet", projectComponent.getDeployedName() );
     }
 
     @Test

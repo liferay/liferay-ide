@@ -78,72 +78,96 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     @Test
     public void testLocationListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testLocationListener();
     }
 
     @Test
     public void testNewJsfRichfacesProjects() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewJsfRichfacesProjects();
     }
 
     @Test
     public void testNewLayoutAntProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewLayoutAntProject();
     }
 
     @Test
     public void testNewProjectCustomLocationPortlet() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewProjectCustomLocationPortlet();
     }
 
     @Test
     public void testNewProjectCustomLocationWrongSuffix() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewProjectCustomLocationWrongSuffix();
     }
 
     @Test
     public void testNewSDKProjectCustomLocation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewSDKProjectCustomLocation();
     }
 
     @Test
     public void testNewSDKProjectEclipseWorkspace() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewSDKProjectEclipseWorkspace();
     }
 
     @Test
     public void testNewSDKProjectInSDK() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewSDKProjectInSDK();
     }
 
     @Test
     public void testNewThemeProjects() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewThemeProjects();
     }
 
     @Test
     public void testPluginTypeListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testPluginTypeListener( true );
     }
 
     @Test
     public void testProjectNameValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testProjectNameValidation( "project-name-validation-620" );
     }
 
     @Test
     public void testUseSdkLocationListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testUseSdkLocationListener();
     }
 }

@@ -45,17 +45,19 @@ import org.junit.Before;
 
 /**
  * @author Terry Jia
+ * @author Gregory Amerson
  */
 public abstract class ServerCoreBase extends BaseTests
 {
 
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
+    private static IPath liferayBundlesPath;
     protected final static String liferayServerAjpPort = System.getProperty( "liferay.server.ajp.port" );
     protected final static String liferayServerShutdownPort = System.getProperty( "liferay.server.shutdown.port" );
     protected final static String liferayServerStartPort = System.getProperty( "liferay.server.start.port" );
-    private static IPath liferayBundlesPath;
     private static IRuntime runtime;
     private static IServer server;
+    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
 
     protected void changeServerXmlPort( String currentPort, String targetPort )
     {
@@ -153,6 +155,8 @@ public abstract class ServerCoreBase extends BaseTests
     @Before
     public void setupRuntime() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         assertNotNull(
             "Expected System.getProperty(\"liferay.bundles.dir\") to not be null",
             System.getProperty( "liferay.bundles.dir" ) );
@@ -231,5 +235,7 @@ public abstract class ServerCoreBase extends BaseTests
 
         assertNotNull( server );
     }
+
+    protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }
 
 }

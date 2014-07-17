@@ -350,6 +350,8 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
     @Test
     public void testExecServiceBuilder() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
         IProject project = createServicePluginTypeAntProject( "service-builder");
@@ -399,6 +401,8 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
     @Test
     public void testExecUpgradeRuntime() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         IProject[] projects = createAllPluginTypeAntProject("runtime");
 
         IRuntime runtime611 = ServerCore.findRuntime( getRuntimeVersion() );
@@ -441,6 +445,8 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
     @Test
     public void testMetadataUpgrade() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
         IProject[] projects = createAllPluginTypeAntProject("dtd");
@@ -475,6 +481,8 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
     @Test
     public void testPossibleTargetRuntime() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
         final String originalRuntimeName = getRuntimeVersion();

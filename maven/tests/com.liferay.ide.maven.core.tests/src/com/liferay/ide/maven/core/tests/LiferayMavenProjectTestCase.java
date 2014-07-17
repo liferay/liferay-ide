@@ -35,15 +35,9 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTestCase
 {
+    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
+
     protected final ProjectCoreBase base = new ProjectCoreBase();
-
-    @Override
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-
-        base.setupPluginsSDKAndRuntime();
-    }
 
     protected void createTestBundleProfile( NewLiferayPluginProjectOp op )
     {
@@ -83,5 +77,15 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
 
         op.setActiveProfilesValue( "test-bundle" );
     }
+
+    @Override
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+
+        base.setupPluginsSDKAndRuntime();
+    }
+
+    protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }
 
 }

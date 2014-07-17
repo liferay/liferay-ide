@@ -50,6 +50,8 @@ public class LiferayHookModelTests extends ProjectCoreBase
     @Test
     public void strutsActionPathPossibleValuesCacheService() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "testPossibleValuesCache" );
         op.setPluginType( PluginType.hook );
 
@@ -93,6 +95,8 @@ public class LiferayHookModelTests extends ProjectCoreBase
     @Test
     public void strutsActionPathPossibleValuesService() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "testPossibleValues" );
         op.setPluginType( PluginType.hook );
 

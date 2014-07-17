@@ -40,6 +40,8 @@ public class LiferayPluginSDKOpTests extends ProjectCoreBase
     @Test
     public void pluginsSDKNameDefaultValueService() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         LiferayPluginSDKOp op1 = LiferayPluginSDKOp.TYPE.instantiate();
 
         final SDK originalSDK = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
@@ -70,6 +72,8 @@ public class LiferayPluginSDKOpTests extends ProjectCoreBase
     @Test
     public void pluginsSDKNamePossibleValueService() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         LiferayPluginSDKOp op = LiferayPluginSDKOp.TYPE.instantiate();
 
         final SDK originSDK = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );

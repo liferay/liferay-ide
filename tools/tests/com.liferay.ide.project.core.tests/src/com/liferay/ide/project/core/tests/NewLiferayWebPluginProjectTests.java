@@ -59,6 +59,8 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
     @Test
     public void testNewWebAntProjectValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         IPath liferayPluginsSdkDir = super.getLiferayPluginsSdkDir();
 
         final File liferayPluginsSdkDirFile = liferayPluginsSdkDir.toFile();
@@ -117,6 +119,8 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
     @Test
     public void testNewWebAntProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final String projectName = "test-web-project-sdk";
         final NewLiferayPluginProjectOp op = newProjectOp( projectName );
 

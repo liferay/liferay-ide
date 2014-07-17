@@ -72,6 +72,8 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     @Test
     public void testPluginTypeListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testPluginTypeListener();
     }
 
@@ -84,6 +86,8 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
     @Test
     public void testNewJsfRichfacesProjects() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testNewJsfRichfacesProjects();
     }
 }

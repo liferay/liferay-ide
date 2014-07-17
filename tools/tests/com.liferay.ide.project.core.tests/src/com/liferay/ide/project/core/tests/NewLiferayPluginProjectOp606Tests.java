@@ -146,6 +146,8 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
     @Test
     public void testPluginTypeListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         super.testPluginTypeListener();
     }
 

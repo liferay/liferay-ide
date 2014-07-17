@@ -145,6 +145,8 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
     @Test
     public void testHookProjectEncoding() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IProject hookProject = importProject( "hooks", "Hook-Encoding-Test-hook" );
         assertEquals( true, ProjectUtil.isHookProject( hookProject ) );
 
@@ -242,6 +244,8 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
     @Test
     public void testPortletProjectEncoding() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IProject portletProject = importProject( "portlets", "Portlet-Encoding-Test-portlet" );
 
         assertEquals( true, ProjectUtil.isPortletProject( portletProject ) );

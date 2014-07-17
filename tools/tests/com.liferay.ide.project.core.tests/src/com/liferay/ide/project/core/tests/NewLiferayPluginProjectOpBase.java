@@ -174,6 +174,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testDisplayNameDefaultValue() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "display-name-default-value" );
 
         final DefaultValueService dvs = op.getDisplayName().service( DefaultValueService.class );
@@ -240,6 +242,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewExtAntProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "ext" );
         op.setPluginType( PluginType.ext );
 
@@ -257,6 +261,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewHookAntProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-hook-project-sdk" );
         op.setPluginType( PluginType.hook );
 
@@ -274,6 +280,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewJsfAntProjects() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         createNewJsfAntProject( "jsf", "" );
         createNewJsfAntProject( "liferay_faces_alloy", "" );
         createNewJsfAntProject( "icefaces", "" );
@@ -318,6 +326,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewPortletAntProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "portlet-without-servicexml" );
         op.setPluginType( PluginType.portlet );
 
@@ -437,6 +447,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewSDKProjects() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         createAntProject( newProjectOp( "test-name-1" ) );
         createAntProject( newProjectOp( "Test With Spaces" ) );
         createAntProject( newProjectOp( "test_name_1" ) );
@@ -451,6 +463,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewServiceBuilderPortletAntProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "portlet-with-servicexml" );
         op.setPluginType( PluginType.servicebuilder );
 
@@ -480,6 +494,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testNewVaadinAntProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-vaadin-project-sdk" );
         op.setPluginType( PluginType.portlet );
         op.setPortletFramework( "vaadin" );
@@ -500,6 +516,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testPluginsSDKNameDefaultValue() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final SDK originalSDK = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
         originalSDK.setDefault( true );
 
@@ -529,6 +547,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testPluginsSDKNameListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-plugin-sdk-name-listener" );
         final String projectName = op.getProjectName().content();
         op.setProjectProvider( "ant" );
@@ -555,6 +575,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testPluginsSDKNamePossibleValues() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-plugins-sdk-name-possbile-values" );
         op.setProjectProvider( "ant" );
 
@@ -575,6 +597,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testPluginsSDKNameValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-plugins-sdk-name-validation" );
         op.setProjectProvider( "ant" );
 
@@ -691,6 +715,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testPortletFrameworkAdvancedPossibleValues() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-portlet-framework-advanced-possible-values" );
 
         final Set<String> acturalFrameworks =
@@ -715,6 +741,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testPortletFrameworkPossibleValues() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-portlet-framework-possible-values" );
         op.setProjectProvider( "ant" );
         op.setPluginType( "portlet" );
@@ -737,6 +765,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testPortletFrameworkValueLabel() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-portlet-framework-value-label" );
 
         final ValueLabelService vls = op.getPortletFramework().service( ValueLabelService.class );
@@ -836,6 +866,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testProjectProviderValueLabel() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-project-provider-value-label" );
 
         final ValueLabelService vls = op.getProjectProvider().service( ValueLabelService.class );
@@ -862,6 +894,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testRuntimeNameDefaultValue() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         removeAllRuntimes();
 
         setupPluginsSDKAndRuntime();
@@ -892,6 +926,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testRuntimeNamePossibleValues() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-runtime-possbile-values" );
 
         final String originalRuntimeName = getRuntimeVersion();
@@ -920,6 +956,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testRuntimeNameValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-runtime-name-validation" );
         op.setProjectProvider( "ant" );
 
@@ -958,6 +996,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testIncludeSampleCode() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         // test portlet project
         NewLiferayPluginProjectOp op = newProjectOp("test-include-sample-code-portlet");
 
@@ -996,6 +1036,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testDontIncludeSampleCode() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         // test portlet project
         NewLiferayPluginProjectOp op = newProjectOp("test-dont-include-sample-code-portlet");
 

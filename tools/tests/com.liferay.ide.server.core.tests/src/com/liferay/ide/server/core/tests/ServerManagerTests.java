@@ -67,6 +67,8 @@ public class ServerManagerTests extends ServerCoreBase
     @Before
     public void startServer() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IServer server = getServer();
 
         assertEquals(
@@ -137,6 +139,8 @@ public class ServerManagerTests extends ServerCoreBase
     @After
     public void stopServer() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         IServer server = getServer();
 
         if( server.getServerState() != IServer.STATE_STOPPED )

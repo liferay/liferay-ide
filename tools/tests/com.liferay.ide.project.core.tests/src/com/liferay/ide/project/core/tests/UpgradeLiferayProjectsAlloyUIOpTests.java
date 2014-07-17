@@ -109,6 +109,8 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
     @Test
     public void testExecAlloyUpgradeTool() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp projectOp = newProjectOp( "exec-alloy-upgrade-tool" );
         projectOp.setPluginType( PluginType.portlet );
         projectOp.setIncludeSampleCode( true );

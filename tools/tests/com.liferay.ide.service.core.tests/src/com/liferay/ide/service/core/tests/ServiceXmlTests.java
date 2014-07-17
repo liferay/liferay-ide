@@ -45,6 +45,8 @@ public class ServiceXmlTests extends XmlTestsBase
     @Test
     public void testAddDefaultColumns() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IProject project =
             importProject( "portlets", "com.liferay.ide.service.core.tests", "Add-Default-Columns-Test-portlet" );
 
@@ -69,6 +71,8 @@ public class ServiceXmlTests extends XmlTestsBase
     @Test
     public void testAddSampleEntity() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IProject project =
             importProject( "portlets","com.liferay.ide.service.core.tests", "Add-Sample-Entity-Test-portlet" );
 

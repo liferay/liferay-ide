@@ -47,6 +47,8 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
     @Test
     public void loadHookPropertiesFromClass() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         setupPluginsSDKAndRuntime();
 
         final IPath runtimeLocation = ServerCore.getRuntimes()[0].getLocation();
@@ -61,6 +63,8 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
     @Test
     public void loadServerInfoFromClass() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         setupPluginsSDKAndRuntime();
 
         final IPath runtimeLocation = ServerCore.getRuntimes()[0].getLocation();
@@ -75,6 +79,8 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
     @Test
     public void loadVersionFromClass() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         setupPluginsSDKAndRuntime();
 
         final IPath runtimeLocation = ServerCore.getRuntimes()[0].getLocation();

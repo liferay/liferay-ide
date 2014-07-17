@@ -73,6 +73,8 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     @Test
     public void testNewJSFPortletProjectPortletName() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final String jsfSuite = "jsf-2.x";
         final String suffix = "";
         final String customPortletName = "test111";
@@ -107,6 +109,8 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     @Test
     public void testNewMVCPortletProjectCustomPortletName() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final String customPortletName = "test111";
 
         IProject jsfProject = createNewMVCPortletProjectCustomPortletName(customPortletName);

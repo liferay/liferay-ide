@@ -189,6 +189,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Test
     public void testPortletFrameworkValidation() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         NewLiferayPluginProjectOp op = newProjectOp( "test-portlet-framework-validation" );
         op.setPluginType( "portlet" );
         final ValidationService vs = op.getPortletFramework().service( ValidationService.class );
@@ -217,6 +219,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Test
     public void testProjectNameListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return ;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "" );
         final SDK sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
 
@@ -251,6 +255,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Test
     public void testProjectProviderListener() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-project-provider-listener" );
         final String projectName = op.getProjectName().content();
         op.setPluginType( "portlet" );
@@ -272,6 +278,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     @Test
     public void testProjectProviderPossibleValues() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-project-provider-possbile-values" );
 
         final Set<String> acturalValues = op.getProjectProvider().service( PossibleValuesService.class ).values();

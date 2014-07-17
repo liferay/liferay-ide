@@ -19,8 +19,8 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.PluginsSDKProjectRuntimeValidator;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -46,6 +46,8 @@ public class PluginsSDKNameValidatorTests extends ProjectCoreBase
     @Test
     public void testSDKProjectsValidator() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final String projectName = "Test2";
         final NewLiferayPluginProjectOp op = newProjectOp( projectName );
         op.setPluginType( PluginType.portlet );

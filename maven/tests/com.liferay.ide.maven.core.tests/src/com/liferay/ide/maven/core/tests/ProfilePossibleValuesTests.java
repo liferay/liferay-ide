@@ -20,10 +20,6 @@ import static org.junit.Assert.assertEquals;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.Profile;
 
-import java.util.Iterator;
-import java.util.Set;
-
-import org.eclipse.sapphire.PossibleValuesService;
 import org.junit.Test;
 
 /**
@@ -33,21 +29,13 @@ public class ProfilePossibleValuesTests
 {
 
     @Test
-    public void testProfilesPossibleValues() throws Exception
+    public void testActiveProfilesValue() throws Exception
     {
         final NewLiferayPluginProjectOp op = newMavenProjectOp();
 
-        final PossibleValuesService possibleValues = op.getSelectedProfiles().service( PossibleValuesService.class );
-
-        final Set<String> profileValues = possibleValues.values();
-
-        assertEquals( true, profileValues.size() > 0 );
-
-        final Iterator<String> itr = profileValues.iterator();
-
         final Profile firstProfile = op.getSelectedProfiles().insert();
 
-        final String firstProfileId = itr.next();
+        final String firstProfileId = "__first_profile__";
 
         firstProfile.setId( firstProfileId );
 
@@ -55,7 +43,7 @@ public class ProfilePossibleValuesTests
 
         final Profile secondProfile = op.getSelectedProfiles().insert();
 
-        final String secondProfileId = itr.next();
+        final String secondProfileId = "__second_profile__";
 
         secondProfile.setId( secondProfileId );
 

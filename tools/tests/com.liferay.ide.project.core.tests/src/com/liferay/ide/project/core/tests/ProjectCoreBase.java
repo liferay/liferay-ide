@@ -230,6 +230,8 @@ public class ProjectCoreBase extends ServerCoreBase
     @Before
     public void setupPluginsSDK() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
 
         if( ! liferayPluginsSdkDirFile.exists() )
@@ -314,6 +316,8 @@ public class ProjectCoreBase extends ServerCoreBase
 
     public void setupPluginsSDKAndRuntime() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         setupPluginsSDK();
         setupRuntime();
     }
