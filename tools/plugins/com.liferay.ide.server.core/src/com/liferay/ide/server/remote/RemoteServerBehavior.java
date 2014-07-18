@@ -625,7 +625,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
     protected int publishModuleFull( IModule[] module, int deltaKind, IProgressMonitor monitor ) throws CoreException
     {
-        if( module == null || module.length != 1 )
+        if( module == null )
         {
             throw new CoreException( LiferayServerCore.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
                 ( module != null ? module.length : 0 ) ) );
@@ -738,7 +738,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
     protected int removeModule( IModule[] module, IProgressMonitor monitor ) throws CoreException
     {
-        if( module == null || module.length != 1 )
+        if( module == null )
         {
             throw new CoreException( LiferayServerCore.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
                 ( module != null ? module.length : 0 ) ) );
