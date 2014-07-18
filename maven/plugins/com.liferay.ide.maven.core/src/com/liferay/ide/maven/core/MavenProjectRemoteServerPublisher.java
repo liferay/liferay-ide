@@ -16,15 +16,19 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.remote.AbstractRemoteServerPublisher;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -149,10 +153,9 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
     {
         IPath retval = null;
 
-        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
-
-        if( runMavenGoal( projectFacade, getMavenDeployGoals(), monitor ) )
+        if( runMavenGoal( getProject(), monitor ) )
         {
+            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
             final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
             final String targetFolder = mavenProject.getBuild().getDirectory();
             final String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
@@ -164,15 +167,34 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
     }
 
     private boolean runMavenGoal(
-        final IMavenProjectFacade projectFacade, final String goal, final IProgressMonitor monitor )
+        final IProject project, final IProgressMonitor monitor )
         throws CoreException
     {
+        IProject execProject = project;
+
+        IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( project, monitor );
+
+        String pluginType = MavenUtil.getLiferayMavenPluginType( projectFacade.getMavenProject( monitor ) );
+        
+        List<IFile> serviceXmls = ( new SearchFilesVisitor() ).searchFiles( project, "service.xml" );
+
+        final MavenProject parentProject = projectFacade.getMavenProject( monitor ).getParent();
+        String goal = getMavenDeployGoals();
+
+        if( serviceXmls != null && serviceXmls.size() > 0 &&
+            pluginType.equalsIgnoreCase( ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE ) && parentProject != null )
+        {
+            execProject = ProjectUtil.getProject( parentProject.getName() );
+            projectFacade = MavenUtil.getProjectFacade( execProject, monitor );
+            goal = " package -am -pl " + project.getName();
+        }
+
         ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
 
         ILaunchConfigurationType launchConfigurationType =
             launchManager.getLaunchConfigurationType( LAUNCH_CONFIGURATION_TYPE_ID );
 
-        IPath basedirLocation = getProject().getLocation();
+        IPath basedirLocation = execProject.getLocation();
 
         String newName = launchManager.generateLaunchConfigurationName( basedirLocation.lastSegment() );
 
