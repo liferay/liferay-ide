@@ -49,6 +49,7 @@ import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
  * @author Simon Jiang
+ * @author Gregory Amerson
  */
 public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPublisher
 {
@@ -65,9 +66,55 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
         super( project );
     }
 
+    private boolean execMavenLaunch(
+        final IProject project, final String goal, final IMavenProjectFacade facade, IProgressMonitor monitor )
+        throws CoreException
+    {
+        final ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+        final ILaunchConfigurationType launchConfigurationType =
+            launchManager.getLaunchConfigurationType( LAUNCH_CONFIGURATION_TYPE_ID );
+        final IPath basedirLocation = project.getLocation();
+        final String newName = launchManager.generateLaunchConfigurationName( basedirLocation.lastSegment() );
+
+        final ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance( null, newName );
+        workingCopy.setAttribute( ATTR_POM_DIR, basedirLocation.toString() );
+        workingCopy.setAttribute( ATTR_GOALS, goal );
+        workingCopy.setAttribute( ATTR_UPDATE_SNAPSHOTS, true );
+        workingCopy.setAttribute( ATTR_WORKSPACE_RESOLUTION, true );
+        workingCopy.setAttribute( ATTR_SKIP_TESTS, true );
+
+        if( facade != null )
+        {
+            final ResolverConfiguration configuration = facade.getResolverConfiguration();
+
+            final String selectedProfiles = configuration.getSelectedProfiles();
+
+            if( selectedProfiles != null && selectedProfiles.length() > 0 )
+            {
+                workingCopy.setAttribute( ATTR_PROFILES, selectedProfiles );
+            }
+
+            new LaunchHelper().launch( workingCopy, "run", monitor );
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private String getMavenDeployGoals()
     {
         return "package war:war";
+    }
+
+    private boolean isServiceBuilderProject( IProject project, String pluginType, MavenProject parentProject  )
+    {
+        final List<IFile> serviceXmls = ( new SearchFilesVisitor() ).searchFiles( project, "service.xml" );
+
+        return serviceXmls != null && serviceXmls.size() > 0 &&
+            pluginType.equalsIgnoreCase( ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE ) && parentProject != null;
     }
 
     @Override
@@ -170,60 +217,25 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
         final IProject project, final IProgressMonitor monitor )
         throws CoreException
     {
-        IProject execProject = project;
+        boolean retval = false;
 
-        IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( project, monitor );
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
+        final String pluginType = MavenUtil.getLiferayMavenPluginType( facade.getMavenProject( monitor ) );
+        final MavenProject parentProject = facade.getMavenProject( monitor ).getParent();
+        final String goal = getMavenDeployGoals();
 
-        String pluginType = MavenUtil.getLiferayMavenPluginType( projectFacade.getMavenProject( monitor ) );
-        
-        List<IFile> serviceXmls = ( new SearchFilesVisitor() ).searchFiles( project, "service.xml" );
-
-        final MavenProject parentProject = projectFacade.getMavenProject( monitor ).getParent();
-        String goal = getMavenDeployGoals();
-
-        if( serviceXmls != null && serviceXmls.size() > 0 &&
-            pluginType.equalsIgnoreCase( ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE ) && parentProject != null )
+        if( isServiceBuilderProject( project, pluginType, parentProject ) )
         {
-            execProject = ProjectUtil.getProject( parentProject.getName() );
-            projectFacade = MavenUtil.getProjectFacade( execProject, monitor );
-            goal = " package -am -pl " + project.getName();
-        }
-
-        ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
-
-        ILaunchConfigurationType launchConfigurationType =
-            launchManager.getLaunchConfigurationType( LAUNCH_CONFIGURATION_TYPE_ID );
-
-        IPath basedirLocation = execProject.getLocation();
-
-        String newName = launchManager.generateLaunchConfigurationName( basedirLocation.lastSegment() );
-
-        final ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance( null, newName );
-
-        workingCopy.setAttribute( ATTR_POM_DIR, basedirLocation.toString() );
-        workingCopy.setAttribute( ATTR_GOALS, goal );
-        workingCopy.setAttribute( ATTR_UPDATE_SNAPSHOTS, true );
-        workingCopy.setAttribute( ATTR_WORKSPACE_RESOLUTION, true );
-        workingCopy.setAttribute( ATTR_SKIP_TESTS, true );
-
-        if( projectFacade != null )
-        {
-            final ResolverConfiguration configuration = projectFacade.getResolverConfiguration();
-
-            final String selectedProfiles = configuration.getSelectedProfiles();
-
-            if( selectedProfiles != null && selectedProfiles.length() > 0 )
-            {
-                workingCopy.setAttribute( ATTR_PROFILES, selectedProfiles );
-            }
-
-            new LaunchHelper().launch( workingCopy, "run", monitor );
-
-            return true;
+            retval = execMavenLaunch(
+                ProjectUtil.getProject( parentProject.getName() ),
+                " package -am -pl " + project.getName(),
+                MavenUtil.getProjectFacade( project, monitor ), monitor );
         }
         else
         {
-            return false;
+            retval = execMavenLaunch( project, goal, facade, monitor );
         }
+
+        return retval;
     }
 }
