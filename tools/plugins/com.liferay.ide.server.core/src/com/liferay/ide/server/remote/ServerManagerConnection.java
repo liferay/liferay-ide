@@ -290,16 +290,9 @@ public class ServerManagerConnection extends RemoteConnection implements IServer
             throw new APIException( getIsAliveAPI(), "Unable to connect to server manager." ); //$NON-NLS-1$
         }
 
-        try
+        if( isSuccess( status ) )
         {
-            if( isSuccess( status ) )
-            {
-                return true;
-            }
-        }
-        catch( JSONException e )
-        {
-            throw new APIException( getIsAliveAPI(), e );
+            return true;
         }
 
         return false;

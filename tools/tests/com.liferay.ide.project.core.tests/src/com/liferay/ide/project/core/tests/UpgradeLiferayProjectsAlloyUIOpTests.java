@@ -30,30 +30,20 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Simon Jiang
  */
-
 public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
 {
-
-    private IProject createServicePluginTypeAntProject(String prefixProjectName) throws Exception
-    {
-        final NewLiferayPluginProjectOp op = newProjectOp( PluginType.servicebuilder.name() + "-" + prefixProjectName );
-        op.setPluginType( PluginType.servicebuilder.name() );
-        IProject project = createAntProject( op );
-
-        return project;
-    }
 
     @Override
     protected IPath getLiferayPluginsSdkDir()
@@ -119,16 +109,15 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
 
         final UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        final IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( project );
 
         assertNotNull( webappRoot );
 
-        final IVirtualFile mainCss = webappRoot.getFile( "css/main.css" );
+        final IFile mainCss = webappRoot.getFile( "css/main.css" );
 
         assertEquals( true, mainCss.exists() );
 
-        CoreUtil.writeStreamFromString( ".aui-field-select{}", new FileOutputStream(
-            mainCss.getUnderlyingFile().getLocation().toFile() ) );
+        CoreUtil.writeStreamFromString( ".aui-field-select{}", new FileOutputStream( mainCss.getLocation().toFile() ) );
 
         List<String> actionString = new ArrayList<String>();
         List<String> projectString = new ArrayList<String>();
@@ -143,13 +132,13 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
 
         UpgradeLiferayProjectsOpMethods.performUpgrade( projectString, actionString, op.getRuntimeName().content(), new NullProgressMonitor() );
 
-        mainCss.getUnderlyingFile().refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
+        mainCss.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
 
-        final IVirtualFile serviceJarXml = webappRoot.getFile( "css/main.css" );
+        final IFile serviceJarXml = webappRoot.getFile( "css/main.css" );
 
         assertEquals( true, serviceJarXml.exists() );
 
-        String cssContent = CoreUtil.readStreamToString( mainCss.getUnderlyingFile().getContents() );
+        String cssContent = CoreUtil.readStreamToString( mainCss.getContents() );
 
         assertEquals( false, cssContent.contains( "aui" ) );
     }
