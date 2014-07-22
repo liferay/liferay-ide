@@ -154,7 +154,7 @@ public class ProjectCoreBase extends ServerCoreBase
         assertEquals(
             status.toString(), Status.createOkStatus().message().toLowerCase(), status.message().toLowerCase() );
 
-        if( projectName == null )
+        if( projectName == null || op.getProjectProvider().content().getShortName().equalsIgnoreCase( "ant" ) )
         {
             projectName = op.getFinalProjectName().content();
         }
