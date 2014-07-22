@@ -142,7 +142,7 @@ public class ProjectCoreBase extends ServerCoreBase
 
     public IProject createProject( NewLiferayPluginProjectOp op )
     {
-        return createProject( op, op.getFinalProjectName().content() );
+        return createProject( op, null );
     }
 
     public IProject createProject( NewLiferayPluginProjectOp op, String projectName )
@@ -153,6 +153,11 @@ public class ProjectCoreBase extends ServerCoreBase
 
         assertEquals(
             status.toString(), Status.createOkStatus().message().toLowerCase(), status.message().toLowerCase() );
+
+        if( projectName == null )
+        {
+            projectName = op.getFinalProjectName().content();
+        }
 
         final IProject newLiferayPluginProject = project( projectName );
 
