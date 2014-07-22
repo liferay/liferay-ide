@@ -15,15 +15,12 @@
 
 package com.liferay.ide.layouttpl.ui.util;
 
-import com.liferay.ide.layouttpl.core.model.ModelElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 import com.liferay.ide.layouttpl.ui.parts.PortletLayoutEditPart;
 import com.liferay.ide.layouttpl.ui.parts.PortletRowLayoutEditPart;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.util.ProjectUtil;
-
-import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.gef.Request;
@@ -43,17 +40,8 @@ public class LayoutTplUIUtil
             return -1;
         }
 
-        List<ModelElement> cols = currentParent.getColumns();
 
-        for( int i = 0; i < cols.size(); i++ )
-        {
-            if( column.equals( cols.get( i ) ) )
-            {
-                return i;
-            }
-        }
-
-        return -1;
+        return currentParent.getPortletColumns().indexOf( column );
     }
 
     public static int getRowIndex( PortletLayoutEditPart layoutEditPart )
@@ -84,7 +72,7 @@ public class LayoutTplUIUtil
             return false;
         }
 
-        if( !( ( (CreateRequest) request ).getNewObject().getClass() == class1 ) )
+        if( !( ( (CreateRequest) request ).getNewObjectType() == class1 ) )
         {
             return false;
         }

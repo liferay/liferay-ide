@@ -15,23 +15,18 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
-import com.liferay.ide.layouttpl.core.model.ModelElement;
+import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
+import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 import com.liferay.ide.layouttpl.ui.draw2d.PortletLayoutPanel;
-import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
-import com.liferay.ide.layouttpl.ui.model.PortletColumn;
-import com.liferay.ide.layouttpl.ui.model.PortletLayout;
-import com.liferay.ide.layouttpl.ui.policies.PortletLayoutLayoutEditPolicy;
 
-import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.MarginBorder;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 
@@ -42,37 +37,6 @@ import org.eclipse.swt.graphics.Color;
 public class PortletLayoutEditPart extends BaseGraphicalEditPart
 {
 
-    protected class PortletLayoutLayoutListener implements LayoutListener
-    {
-
-        public void invalidate( IFigure container )
-        {
-        }
-
-        public boolean layout( IFigure container )
-        {
-            return false;
-        }
-
-        public void postLayout( IFigure container )
-        {
-            if( needsRefreshPostLayout )
-            {
-                needsRefreshPostLayout = false;
-                refreshVisuals();
-            }
-
-        }
-
-        public void remove( IFigure child )
-        {
-        }
-
-        public void setConstraint( IFigure child, Object constraint )
-        {
-        }
-
-    }
     public static final int COLUMN_SPACING = 10;
 
     public static final int LAYOUT_MARGIN = 10;
@@ -82,11 +46,7 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
         return new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 );
     }
 
-    protected LayoutListener layoutListener = new PortletLayoutLayoutListener();
-
     protected PortletLayoutPanel layoutPanel;
-
-    protected boolean needsRefreshPostLayout;
 
     public int getDefaultColumnHeight()
     {
@@ -103,18 +63,6 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
         return null;
     }
 
-    public void propertyChange( PropertyChangeEvent evt )
-    {
-        String prop = evt.getPropertyName();
-
-        if( PortletLayout.COLUMN_ADDED_PROP.equals( prop ) || PortletLayout.COLUMN_REMOVED_PROP.equals( prop ) ||
-            PortletLayout.CHILD_COLUMN_WEIGHT_CHANGED_PROP.equals( prop ) )
-        {
-            refreshChildren();
-            refreshVisuals();
-        }
-    }
-
     private PortletRowLayoutEditPart getCastedParent()
     {
         return (PortletRowLayoutEditPart) getParent();
@@ -123,7 +71,6 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
     @Override
     protected void createEditPolicies()
     {
-        installEditPolicy( EditPolicy.LAYOUT_ROLE, new PortletLayoutLayoutEditPolicy() );
     }
 
     @Override
@@ -140,8 +87,6 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
         layoutPanel.setBackgroundColor( new Color( null, 171, 171, 171 ) );
         layoutPanel.setLayoutManager( gridLayout );
 
-        layoutPanel.addLayoutListener( layoutListener );
-
         return layoutPanel;
     }
 
@@ -150,19 +95,14 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
         return (PortletLayoutPanel) getFigure();
     }
 
-    protected PortletLayout getCastedModel()
+    protected PortletLayoutElement getCastedModel()
     {
-        return (PortletLayout) getModel();
+        return (PortletLayoutElement) getModel();
     }
 
-    protected List<ModelElement> getModelChildren()
+    protected ElementList<PortletColumnElement> getModelChildren()
     {
-        return getCastedModel().getColumns(); // return a list of columns
-    }
-
-    protected LayoutTplDiagram getParentModel()
-    {
-        return (LayoutTplDiagram) getParent().getModel();
+        return getCastedModel().getPortletColumns();
     }
 
     @SuppressWarnings( "rawtypes" )
@@ -204,7 +144,7 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
         int numColumns = columns.size();
 
         // need to rebuild column widths based on weight
-        if( numColumns > 1 )
+        if( numColumns > 0 )
         {
             // get width of our own part to calculate new width
             int rowWidth = this.getFigure().getSize().width - ( PortletLayoutEditPart.LAYOUT_MARGIN * 2 );
@@ -214,25 +154,19 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
                 for( Object col : columns )
                 {
                     PortletColumnEditPart portletColumnPart = (PortletColumnEditPart) col;
-                    PortletColumn column = (PortletColumn) portletColumnPart.getModel();
-                    // if (column.getWeight() == PortletColumn.DEFAULT_WEIGHT) {
-                    // column.setWeight(100);
-                    // }
+                    PortletColumnElement column = (PortletColumnElement) portletColumnPart.getModel();
                     GridData rowData = portletColumnPart.createGridData();
 
-                    double percent = column.getWeight() / 100d;
+                    double percent = column.getWeight().content().doubleValue() /
+                                     column.getFullWeight().content().doubleValue();
                     rowData.widthHint = (int) ( percent * rowWidth ) - ( COLUMN_SPACING * 2 );
                     this.setLayoutConstraint( portletColumnPart, portletColumnPart.getFigure(), rowData );
+                    portletColumnPart.refresh();
                 }
-            }
-            else
-            {
-                this.needsRefreshPostLayout = true;
             }
         }
 
         gridLayout.numColumns = numColumns;
-        gridLayout.invalidate();
 
         this.getFigure().repaint();
     }

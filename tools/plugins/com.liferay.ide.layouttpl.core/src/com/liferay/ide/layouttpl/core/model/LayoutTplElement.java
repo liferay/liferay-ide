@@ -15,49 +15,55 @@
 
 package com.liferay.ide.layouttpl.core.model;
 
-import com.liferay.ide.layouttpl.core.model.internal.PortletColumnsListener;
-import com.liferay.ide.layouttpl.core.model.internal.PortletColumnsValidtionSerivce;
-import com.liferay.ide.layouttpl.core.model.internal.PortletLayoutClassNameDefaultValueService;
-
-import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Listeners;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
-
 
 /**
  * @author Kuo Zhang
- * 
- * shows as a row
  */
-@Label( standard = "Row" )
-public interface PortletLayoutElement extends Element
+public interface LayoutTplElement extends CanAddPortletLayouts
 {
-    ElementType TYPE = new ElementType( PortletLayoutElement.class );
 
-    // *** Portlet Columns ***
+    ElementType TYPE = new ElementType( LayoutTplElement.class );
 
-    @Type( base = PortletColumnElement.class )
-    @Listeners( PortletColumnsListener.class )
-    @Service( impl = PortletColumnsValidtionSerivce.class )
-    ListProperty PROP_PORTLET_COLUMNS = new ListProperty( TYPE, "PortletColumns" );
+    // *** Role ***
 
-    ElementList<PortletColumnElement> getPortletColumns();
+    @DefaultValue( text = "main" )
+    ValueProperty PROP_ROLE = new ValueProperty( TYPE, "Role" );
+
+    Value<String> getRole();
+    void setRole( String role );
+
+    // *** Id ***
+
+    @DefaultValue( text = "main-content" )
+    ValueProperty PROP_ID = new ValueProperty( TYPE, "Id" );
+
+    Value<String> getId();
+    void setId( String id );
 
     // *** Class Name ***
 
     @Required
-    @Service( impl = PortletLayoutClassNameDefaultValueService.class )
     ValueProperty PROP_ClASS_NAME = new ValueProperty( TYPE, "ClassName" );
 
     Value<String> getClassName();
-    void setClassName( String className);
+    void setClassName( String className );
+
+    // *** Style ***
+
+    // only two styles, use Boolean, if there are more styles in the future, use subclasses 
+    @Required
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
+    ValueProperty PROP_BOOTSTRAP_STYLE = new ValueProperty( TYPE, "BootstrapStyle" );
+
+    Value<Boolean> getBootstrapStyle();
+    void setBootstrapStyle( String value );
+    void setBootstrapStyle( Boolean value );
 
 }

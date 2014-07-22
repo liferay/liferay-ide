@@ -15,172 +15,119 @@
 
 package com.liferay.ide.layouttpl.core.model;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
+import com.liferay.ide.layouttpl.core.model.internal.PortletColumnFullWeightDefaultValueService;
+import com.liferay.ide.layouttpl.core.model.internal.PortletColumnWeightDefaultValueService;
+import com.liferay.ide.layouttpl.core.model.internal.PortletColumnWeightValidationService;
 
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
+import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
+import org.eclipse.sapphire.modeling.annotations.Type;
+
 
 /**
- * @author Gregory Amerson
- * @author Cindy Li
+ * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
-public class PortletColumnElement extends PortletRowLayoutElement
+@Label( standard = "Column" )
+public interface PortletColumnElement extends CanAddPortletLayouts
 {
-    public static final int DEFAULT_WEIGHT = -1;
-    public static final String WEIGHT_PROP = "PortletColumn.weight"; //$NON-NLS-1$
+    ElementType TYPE = new ElementType( PortletColumnElement.class );
 
-    // public static final String SIZE_PROP = "PortletColumn.size";
-    // public static final String LOCATION_PROP = "PortletColumn.location";
+    // *** NumId ***
 
-    public static PortletColumnElement createFromElement( IDOMElement portletColumnElement, ILayoutTplDiagramFactory factory )
-    {
-        if( portletColumnElement == null )
-        {
-            return null;
+    ValueProperty PROP_NUM_ID = new ValueProperty( TYPE, "NumId" );
+
+    Value<String> getNumId();
+    void setNumId( String value );
+
+    // *** Class Name ***
+
+    @DefaultValue( text = "portlet-column" )
+    ValueProperty PROP_ClASS_NAME = new ValueProperty( TYPE, "ClassName" );
+
+    Value<String> getClassName();
+    void setClassName( String value );
+
+    // *** Weight ***
+
+    @Type( base = Integer.class )
+    @Services
+    ( 
+        value = 
+        { 
+            @Service( impl = PortletColumnWeightDefaultValueService.class ) ,
+            @Service( impl = PortletColumnWeightValidationService.class )
         }
+    )
+    @Required
+    ValueProperty PROP_WEIGHT = new ValueProperty( TYPE, "Weight" );
 
-        PortletColumnElement newPortletColumn = factory.newPortletColumn();
+    Value<Integer> getWeight();
+    void setWeight( String value );
+    void setWeight( Integer value );
 
-        String existingClassName = portletColumnElement.getAttribute( "class" ); //$NON-NLS-1$
 
-        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) && existingClassName.contains( "portlet-column" ) ) //$NON-NLS-1$
-        {
-            newPortletColumn.setClassName( existingClassName );
-        }
-        else
-        {
-            newPortletColumn.setClassName( "portlet-column" ); //$NON-NLS-1$
-        }
+    // *** Full Weight ***
 
-        newPortletColumn.setWeight( LayoutTplUtil.getWeightValue( portletColumnElement, -1 ) );
+    @Type( base = Integer.class )
+    @Service( impl = PortletColumnFullWeightDefaultValueService.class )
+    ValueProperty PROP_FULL_WEIGHT = new ValueProperty( TYPE, "FullWeight" );
 
-        IDOMElement[] portletLayoutElements =
-            LayoutTplUtil.findChildElementsByClassName( portletColumnElement, "div", "portlet-layout" ); //$NON-NLS-1$ //$NON-NLS-2$
+    Value<Integer> getFullWeight();
+    void setFullWeight( String value );
+    void setFullWeight( Integer value );
 
-        if( !CoreUtil.isNullOrEmpty( portletLayoutElements ) )
-        {
-            for( IDOMElement portletLayoutElement : portletLayoutElements )
-            {
-                PortletLayoutElement newPortletLayout = factory.newPortletLayoutFromElement( portletLayoutElement );
-                newPortletColumn.addRow( newPortletLayout );
-            }
-        }
+    // *** Is First ***
 
-        return newPortletColumn;
-    }
+    @Required
+    @Type( base = Boolean.class )
+    ValueProperty PROP_FIRST = new ValueProperty( TYPE, "First" );
 
-    protected String className;
-    protected boolean first = false;
-    protected boolean last = false;
-    protected int numId = 0;
-    protected int weight;
+    Value<Boolean> getFirst();
+    void setFirst( Boolean value );
+    void setFirst( String value );
 
-    public PortletColumnElement()
-    {
-        this( DEFAULT_WEIGHT, "portlet-column" ); //$NON-NLS-1$
-    }
+    // *** Is Last ***
 
-    public PortletColumnElement( int weight )
-    {
-        this( weight, "portlet-column" ); //$NON-NLS-1$
-    }
+    @Required
+    @DefaultValue( text = "false" )
+    @Type( base = Boolean.class )
+    ValueProperty PROP_LAST = new ValueProperty( TYPE, "Last" );
 
-    public PortletColumnElement( int weight, String className )
-    {
-        super();
+    Value<Boolean> getLast();
+    void setLast( Boolean value );
+    void setLast( String value );
 
-        this.weight = weight;
-        this.className = className;
-    }
+    // *** Is Only ***
 
-    public String getClassName()
-    {
-        return className;
-    }
+    @Required
+    @DefaultValue( text = "false" )
+    @Type( base = Boolean.class )
+    ValueProperty PROP_ONLY = new ValueProperty( TYPE, "Only" );
 
-    public int getNumId()
-    {
-        return numId;
-    }
+    Value<Boolean> getOnly();
+    void setOnly( Boolean value );
+    void setOnly( String value );
 
-    public Object getPropertyValue( Object propertyId )
-    {
-        if( WEIGHT_PROP.equals( propertyId ) )
-        {
-            if( getWeight() == DEFAULT_WEIGHT )
-            {
-                return "100%"; //$NON-NLS-1$
-            }
-            else
-            {
-                return Integer.toString( getWeight() ) + "%"; //$NON-NLS-1$
-            }
-        }
+    // *** Column Descriptor ***
 
-        return super.getPropertyValue( propertyId );
-    }
+    @DefaultValue( text = "" )
+    ValueProperty PROP_COLUMN_DESCRIPTOR = new ValueProperty( TYPE, "ColumnDescriptor" );
 
-    public int getWeight()
-    {
-        return weight;
-    }
+    Value<String> getColumnDescriptor();
+    void setColumnDescriptor( String value );
 
-    public boolean isFirst()
-    {
-        return first;
-    }
+    // *** Column Content Descriptor ***
 
-    public boolean isLast()
-    {
-        return last;
-    }
+    @DefaultValue( text = "" )
+    ValueProperty PROP_COLUMN_CONTENT_DESCRIPTOR = new ValueProperty( TYPE, "ColumnContentDescriptor" );
 
-    @Override
-    public void removeChild( ModelElement child )
-    {
-    }
-
-    public void setClassName( String className )
-    {
-        this.className = className;
-    }
-
-    public void setFirst( boolean first )
-    {
-        this.first = first;
-    }
-
-    public void setLast( boolean last )
-    {
-        this.last = last;
-    }
-
-    public void setNumId( int numId )
-    {
-        this.numId = numId;
-    }
-
-    public void setPropertyValue( Object propertyId, Object value )
-    {
-        if( WEIGHT_PROP.equals( propertyId ) )
-        {
-            String val = value.toString().replaceAll( "%", StringPool.EMPTY ); //$NON-NLS-1$
-            int weight = Integer.parseInt( val );
-            setWeight( weight );
-        }
-        else
-        {
-            super.setPropertyValue( propertyId, value );
-        }
-    }
-
-    public void setWeight( int weight )
-    {
-        int oldValue = this.weight;
-        this.weight = weight;
-        firePropertyChange( WEIGHT_PROP, oldValue, this.weight );
-    }
+    Value<String> getColumnContentDescriptor();
+    void setColumnContentDescriptor( String value );
 
 }

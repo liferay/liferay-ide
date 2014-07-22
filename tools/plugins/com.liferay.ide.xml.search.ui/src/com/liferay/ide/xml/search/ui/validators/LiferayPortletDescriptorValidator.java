@@ -65,7 +65,7 @@ public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
             {
                 String validationMsg = null;
 
-                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );;
+                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
 
                 if( nodeValue != null )
                 {

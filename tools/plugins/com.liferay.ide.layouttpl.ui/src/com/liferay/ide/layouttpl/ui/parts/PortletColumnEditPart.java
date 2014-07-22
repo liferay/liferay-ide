@@ -15,12 +15,8 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
+import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.ui.draw2d.ColumnFigure;
-import com.liferay.ide.layouttpl.ui.model.PortletColumn;
-import com.liferay.ide.layouttpl.ui.policies.PortletColumnComponentEditPolicy;
-import com.liferay.ide.layouttpl.ui.policies.PortletColumnLayoutEditPolicy;
-
-import java.beans.PropertyChangeEvent;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Graphics;
@@ -30,7 +26,6 @@ import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -46,13 +41,6 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
     public PortletColumnEditPart()
     {
         super();
-    }
-
-    protected void createEditPolicies()
-    {
-        // allow removal of the associated model element
-        installEditPolicy( EditPolicy.COMPONENT_ROLE, new PortletColumnComponentEditPolicy() );
-        installEditPolicy( EditPolicy.LAYOUT_ROLE, new PortletColumnLayoutEditPolicy() );
     }
 
     protected IFigure createFigure()
@@ -76,7 +64,7 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
 
     protected Figure createFigureForModel()
     {
-        if( getModel() instanceof PortletColumn )
+        if( getModel() instanceof PortletColumnElement )
         {
             RoundedRectangle rect = new ColumnFigure();
             rect.setCornerDimensions( new Dimension( 20, 20 ) );
@@ -122,9 +110,9 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
     }
 
     @Override
-    public PortletColumn getCastedModel()
+    public PortletColumnElement getCastedModel()
     {
-        return (PortletColumn) getModel();
+        return (PortletColumnElement) getModel();
     }
 
     public PortletLayoutEditPart getCastedParent()
@@ -136,20 +124,6 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
     public int getMargin()
     {
         return COLUMN_MARGIN;
-    }
-
-    public void propertyChange( PropertyChangeEvent evt )
-    {
-        String prop = evt.getPropertyName();
-
-        if( PortletColumn.WEIGHT_PROP.equals( prop ) )
-        {
-            refreshVisuals();
-        }
-        else
-        {
-            super.propertyChange( evt );
-        }
     }
 
     protected void refreshVisuals()
@@ -177,16 +151,14 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
 
         ( (GraphicalEditPart) getParent() ).setLayoutConstraint( this, getFigure(), gd );
 
-        int columnWeight = getCastedModel().getWeight();
-
-        if( columnWeight == PortletColumn.DEFAULT_WEIGHT )
-        {
-            columnWeight = 100;
-        }
-
         if( getFigure() instanceof ColumnFigure )
         {
-            ( (ColumnFigure) getFigure() ).setText( columnWeight + "%" ); //$NON-NLS-1$
+            ( (ColumnFigure) getFigure() ).setText( getCastedModel().getWeight().content().toString() ); //$NON-NLS-1$
         }
+    }
+
+    @Override
+    protected void createEditPolicies()
+    {
     }
 }

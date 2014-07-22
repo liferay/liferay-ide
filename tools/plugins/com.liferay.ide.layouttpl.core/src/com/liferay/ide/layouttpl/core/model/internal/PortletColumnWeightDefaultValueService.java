@@ -13,38 +13,41 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.layouttpl.ui.parts;
+package com.liferay.ide.layouttpl.core.model.internal;
 
-import org.eclipse.draw2d.Panel;
-import org.eclipse.swt.graphics.Color;
+import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
+
+import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.sapphire.Element;
+
 
 /**
- * @author Gregory Amerson
- * @author Cindy Li
+ * @author Kuo Zhang
+ *
  */
-public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart
+public class PortletColumnWeightDefaultValueService extends DefaultValueService
 {
-    public static final int DIAGRAM_MARGIN = 10;
-
-    public LayoutTplDiagramEditPart()
-    {
-    }
 
     @Override
-    protected void configurePanel( Panel panel )
+    protected String compute()
     {
-        super.configurePanel( panel );
-        panel.setBackgroundColor( new Color( null, 10, 10, 10 ) );
+        int retval = 0;
+
+        LayoutTplElement layoutTpl = context( Element.class ).nearest( LayoutTplElement.class );
+
+        if( layoutTpl != null )
+        {
+            if( layoutTpl.getBootstrapStyle().content() )
+            {
+                retval =  3;
+            }
+            else
+            {
+                retval = 25;
+            }
+        }
+
+        return String.valueOf( retval );
     }
 
-    @Override
-    protected void createEditPolicies()
-    {
-    }
-
-    @Override
-    public int getMargin()
-    {
-        return DIAGRAM_MARGIN;
-    }
 }

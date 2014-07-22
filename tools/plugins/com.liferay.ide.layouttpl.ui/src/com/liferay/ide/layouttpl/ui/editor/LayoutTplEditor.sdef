@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <editor-page>
+        <element-type>com.liferay.ide.layouttpl.core.model.LayoutTplElement</element-type>
+        <page-name>Design</page-name>
+        <page-header-text>Layout Template</page-header-text>
+        <root-node>
+             <node>
+                <section>
+                    <content>
+                        <property-editor>ClassName</property-editor>
+                        <property-editor>Role</property-editor>
+                        <property-editor>Id</property-editor>
+                    </content>
+                    <label>Basic Info</label>
+                    <collapsible>false</collapsible>
+                </section>
+                <section>
+                    <label>Add Row Templates</label>
+                    <content>
+                        <actuator>
+                            <action-id>Sapphire.Add</action-id>
+                            <label>Add Row</label>
+                            <show-image>true</show-image>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.2_I_Columns.ActionHandler</action-handler-id>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(6, 6)&quot;: &quot;(50, 50)&quot;}</label>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.2_II_Columns.ActionHandler</action-handler-id>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(4, 8)&quot;: &quot;(30, 70)&quot;}</label>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.2_III_Columns.ActionHandler</action-handler-id>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(8, 4)&quot;: &quot;(70, 30)&quot;}</label>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.3_Columns.ActionHandler</action-handler-id>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <label>Add Row with 3 Columns ${Root().BootstrapStyle ? &quot;(4, 4, 4)&quot;: &quot;(33, 33, 33)&quot;}</label>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                        </actuator>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <margin-vertical>10</margin-vertical>
+                </section>
+                <section>
+                    <label>Add Layout Templates</label>
+                    <collapsible>true</collapsible>
+                    <content>
+                        <actuator>
+                            <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
+                            <action-handler-id>Add.1_2_I_Rows.ActionHandler</action-handler-id>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Layout with 2 Rows ${Root().BootstrapStyle ? &quot;(12, (4, 8)) &quot;: &quot;(100, (30, 70))&quot;}</label>
+                        </actuator>
+                        <actuator>
+                            <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
+                            <action-handler-id>Add.1_2_II_Rows.ActionHandler</action-handler-id>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Layout with 2 Rows ${Root().BootstrapStyle ? &quot;(12, (8, 4)) &quot;: &quot;(100, (70, 30))&quot;}</label>
+                        </actuator>
+                        <actuator>
+                            <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
+                            <action-handler-id>Add.2_2_Rows.ActionHandler</action-handler-id>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Layout with 2 Rows ${Root().BootstrapStyle ? &quot;((4, 8), (8, 4)) &quot;: &quot;((30, 70), (70, 30))&quot;}</label>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.1_2_1_Rows.ActionHandler</action-handler-id>
+                            <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Layout with 3 Rows ${Root().BootstrapStyle ? &quot;(12, (6,  6), 12) &quot;: &quot;(100, (50, 50), 100)&quot;}</label>
+                            <show-image>true</show-image>
+                        </actuator>
+                    </content>
+                    <margin-vertical>10</margin-vertical>
+                </section>
+                <node-include>PortletLayoutsList</node-include>
+                <label>Layout ${Size(PortletLayouts)&gt;0 ? Concat(&quot;(&quot;,Size(PortletLayouts),(Size(PortletLayouts)&gt;1?&quot; Rows&quot;:&quot; Row&quot;),&quot;)&quot;) : &quot;&quot;}</label>
+                    <action>
+                        <id>LayoutTpl.Add.RowTemplate</id>
+                        <label>Add Row Template</label>
+                        <group>Sapphire.AddDeleteGroup</group>
+                        <location>after:Sapphire.Add</location>
+                    <image>icons/e16/add_action.png</image>
+                    </action>
+                    <action-handler-factory>
+                        <action>LayoutTpl.Add.RowTemplate</action>
+                        <impl>com.liferay.ide.layouttpl.ui.actions.AddRowTemplateActionHandlerFactory</impl>
+                    </action-handler-factory>
+                    <action>
+                        <id>LayoutTpl.Add.LayoutTemplate</id>
+                        <label>Add Layout Template</label>
+                        <group>Sapphire.AddDeleteGroup</group>
+                        <location>after:LayoutTpl.Add.RowTemplate</location>
+                    <image>icons/e16/add_action.png</image>
+                    </action>
+                    <action-handler-factory>
+                        <action>LayoutTpl.Add.LayoutTemplate</action>
+                        <impl>com.liferay.ide.layouttpl.ui.actions.AddLayoutTemplateActionHandlerFactory</impl>
+                    </action-handler-factory>
+            </node>
+        </root-node>
+        <id>designPage</id>
+    </editor-page>
+    <node-factory>
+        <id>PortletLayoutsList</id>
+        <property>PortletLayouts</property>
+        <case>
+            <section>
+                <content>
+                    <property-editor>
+                        <property>PortletColumns</property>
+                        <child-property>
+                            <label>Id</label>
+                            <property>NumId</property>
+                            <hint>
+                                <name>read.only</name>
+                                <value>true</value>
+                            </hint>
+                        </child-property>
+                        <child-property>
+                            <label>${Root().BootstrapStyle ? &quot;Spans&quot;: &quot;Weight&quot;}</label>
+                            <property>Weight</property>
+                        </child-property>
+                        <scale-vertically>true</scale-vertically>
+                        <show-label>false</show-label>
+                    </property-editor>
+                </content>
+                <label>Columns</label>
+            </section>
+            <node-include>PortletColumnsList</node-include>
+            <element-type>com.liferay.ide.layouttpl.core.model.PortletLayoutElement</element-type>
+            <label>Row ${Size(PortletColumns)&gt;0 ? Concat(&quot;(&quot;,Size(PortletColumns),(Size(PortletColumns)&gt;1?&quot; Columns&quot;:&quot; Column&quot;),&quot;)&quot;) : &quot;&quot;}</label>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>PortletColumnsList</id>
+        <property>PortletColumns</property>
+        <case>
+            <label>Column (${Root().BootstrapStyle ? Concat(Weight, Weight&gt;1 ? &quot; Spans&quot; : &quot; Span&quot;) : Concat(&quot;Weight &quot;, Weight)})</label>
+            <section>
+                <content>
+                    <label>
+                        <visible-when>${Root().BootstrapStyle}</visible-when>
+                        <text>From Liferay 6.2, layout templates use Bootstrap’s 12 column grid system. For each column, the span value is the numerator of a fraction over 12 representing the width of the column.</text>
+                    </label>
+                    <label>
+                        <visible-when>${! Root().BootstrapStyle}</visible-when>
+                        <text>The weight is the numerator of a fraction over 100 representing the width of the column.</text>
+                    </label>
+                    <property-editor>
+                        <label>${Root().BootstrapStyle ? &quot;Span(s)&quot;: &quot;Weight&quot;}</label>
+                        <property>Weight</property>
+                        <documentation>
+                        </documentation>
+                    </property-editor>
+                </content>
+                <label>Weight</label>
+            </section>
+            <node-include>PortletLayoutsList</node-include>
+            <element-type>com.liferay.ide.layouttpl.core.model.PortletColumnElement</element-type>
+            <documentation>
+            </documentation>
+            <section>
+                <label>Add Row Templates</label>
+                <content>
+                        <actuator>
+                            <action-id>Sapphire.Add</action-id>
+                            <label>Add Row</label>
+                            <show-image>true</show-image>
+                            <image>icons/e16/add_action.png</image>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.2_I_Columns.ActionHandler</action-handler-id>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(6, 6)&quot;: &quot;(50, 50)&quot;}</label>
+                            <show-image>true</show-image>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                        </actuator>
+                        <actuator>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <action-handler-id>Add.2_II_Columns.ActionHandler</action-handler-id>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(4, 8)&quot;: &quot;(30, 70)&quot;}</label>
+                            <show-image>true</show-image>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.2_III_Columns.ActionHandler</action-handler-id>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(8, 4)&quot;: &quot;(70, 30)&quot;}</label>
+                            <show-image>true</show-image>
+                        </actuator>
+                        <actuator>
+                            <action-handler-id>Add.3_Columns.ActionHandler</action-handler-id>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <action-id>LayoutTpl.Add.Rows</action-id>
+                            <image>icons/e16/add_action.png</image>
+                            <label>Add Row with 3 Columns ${Root().BootstrapStyle ? &quot;(4, 4, 4)&quot;: &quot;(33, 33, 33)&quot;}</label>
+                            <show-image>true</show-image>
+                        </actuator>
+                    </content>
+                <margin-vertical>10</margin-vertical>
+            </section>
+            <action>
+                <id>LayoutTpl.Add.RowTemplate</id>
+                <label>Add Row Template</label>
+                <group>Sapphire.AddDeleteGroup</group>
+                <location>after:Sapphire.Add</location>
+                <image>icons/e16/add_action.png</image>
+            </action>
+            <action-handler-factory>
+                <action>LayoutTpl.Add.RowTemplate</action>
+                <impl>com.liferay.ide.layouttpl.ui.actions.AddRowTemplateActionHandlerFactory</impl>
+            </action-handler-factory>
+        </case>
+    </node-factory>
+</definition>

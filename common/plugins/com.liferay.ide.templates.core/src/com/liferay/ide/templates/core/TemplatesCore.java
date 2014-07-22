@@ -86,7 +86,6 @@ public class TemplatesCore extends Plugin
         try
         {
             String id = element.getAttribute( "id" ); //$NON-NLS-1$
-            String name = element.getAttribute( "name" ); //$NON-NLS-1$
             String resource = element.getAttribute( "resource" ); //$NON-NLS-1$
             String templateFolder = null;
             List<TemplateVariable> paramList = new ArrayList<TemplateVariable>();
@@ -114,7 +113,6 @@ public class TemplatesCore extends Plugin
             templateModel = new TemplateModel( pluginName,
                                                config,
                                                id,
-                                               name,
                                                resource,
                                                templateFolder,
                                                vars );

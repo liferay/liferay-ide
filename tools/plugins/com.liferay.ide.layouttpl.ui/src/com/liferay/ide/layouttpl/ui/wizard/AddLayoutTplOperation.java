@@ -15,16 +15,17 @@
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.layouttpl.core.model.LayoutTplDiagramElement;
+import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
+import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
+import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
-import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
-import com.liferay.ide.layouttpl.ui.model.PortletColumn;
-import com.liferay.ide.layouttpl.ui.model.PortletLayout;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.LiferayDataModelOperation;
 
@@ -44,10 +45,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class AddLayoutTplOperation extends LiferayDataModelOperation implements INewLayoutTplDataModelProperties
@@ -65,32 +68,36 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
         IDataModel dm = getDataModel();
 
-        LayoutTplDiagram diagramModel = createLayoutTplDigram( dm );
+        String diagramClassName = dm.getStringProperty( LAYOUT_TEMPLATE_ID );
+        LayoutTplElement diagramModel = createLayoutTplDigram( dm, isBootstrapStyle(), diagramClassName );
 
         try
         {
-            String templateFile = getDataModel().getStringProperty( LAYOUT_TEMPLATE_FILE );
+            IFile templateFile = null;
 
-            IFile templateFileValue = null;
-            if( !CoreUtil.isNullOrEmpty( templateFile ) )
+            String templateFileName = getDataModel().getStringProperty( LAYOUT_TEMPLATE_FILE );
+
+            if( !CoreUtil.isNullOrEmpty( templateFileName ) )
             {
-                templateFileValue = createTemplateFile( templateFile, diagramModel );
+                templateFile = createTemplateFile( templateFileName, diagramModel );
             }
 
-            getDataModel().setProperty( LAYOUT_TPL_FILE_CREATED, templateFileValue );
+            getDataModel().setProperty( LAYOUT_TPL_FILE_CREATED, templateFile );
 
-            String wapTemplateFile = getDataModel().getStringProperty( LAYOUT_WAP_TEMPLATE_FILE );
+            String wapTemplateFileName = getDataModel().getStringProperty( LAYOUT_WAP_TEMPLATE_FILE );
 
-            if( !CoreUtil.isNullOrEmpty( wapTemplateFile ) )
+            diagramModel.setClassName( diagramClassName + ".wap" );
+
+            if( !CoreUtil.isNullOrEmpty( wapTemplateFileName ) )
             {
-                createTemplateFile( wapTemplateFile, diagramModel );
+                createTemplateFile( wapTemplateFileName, diagramModel );
             }
 
-            String thumbnailFile = getDataModel().getStringProperty( LAYOUT_THUMBNAIL_FILE );
+            String thumbnailFileName = getDataModel().getStringProperty( LAYOUT_THUMBNAIL_FILE );
 
-            if( !CoreUtil.isNullOrEmpty( thumbnailFile ) )
+            if( !CoreUtil.isNullOrEmpty( thumbnailFileName ) )
             {
-                createThumbnailFile( thumbnailFile, diagramModel );
+                createThumbnailFile( thumbnailFileName );
             }
         }
         catch( CoreException ex )
@@ -110,154 +117,219 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
         return retval;
     }
 
-    protected void createThumbnailFile( String thumbnailFile, LayoutTplDiagram diagramModel ) throws CoreException,
-        IOException
+    protected void createThumbnailFile( String thumbnailFileName ) 
+        throws CoreException, IOException
     {
         IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
-        IFile thumbnailFileValue = defaultDocroot.getFile( thumbnailFile );
+        IFile thumbnailFile = defaultDocroot.getFile( thumbnailFileName );
         URL iconFileURL = LayoutTplUI.getDefault().getBundle().getEntry( "/icons/blank_columns.png" ); //$NON-NLS-1$
 
-        CoreUtil.prepareFolder( (IFolder) thumbnailFileValue.getParent() );
+        CoreUtil.prepareFolder( (IFolder) thumbnailFile.getParent() );
 
-        if( thumbnailFileValue.exists() )
+        if( thumbnailFile.exists() )
         {
-            thumbnailFileValue.setContents( iconFileURL.openStream(), IResource.FORCE, null );
+            thumbnailFile.setContents( iconFileURL.openStream(), IResource.FORCE, null );
         }
         else
         {
-            thumbnailFileValue.create( iconFileURL.openStream(), true, null );
+            thumbnailFile.create( iconFileURL.openStream(), true, null );
         }
     }
 
-    protected IFile createTemplateFile( String templateFile, LayoutTplDiagram diagramModel ) throws CoreException
+    protected IFile createTemplateFile( String templateFileName, LayoutTplElement element ) throws CoreException
     {
         IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
-        IFile templateFileValue = defaultDocroot.getFile( templateFile );
-        CoreUtil.prepareFolder( (IFolder) templateFileValue.getParent() );
+        IFile templateFile = defaultDocroot.getFile( templateFileName );
 
-        if( diagramModel != null )
+        if( element != null )
         {
-            LayoutTplUtil.saveToFile( (LayoutTplDiagramElement)diagramModel, templateFileValue, null );
+            LayoutTplUtil.saveToFile( element, templateFile, null );
         }
         else
         {
             ByteArrayInputStream input = new ByteArrayInputStream( StringPool.EMPTY.getBytes() );
 
-            if( templateFileValue.exists() )
+            if( templateFile.exists() )
             {
-                templateFileValue.setContents( input, IResource.FORCE, null );
+                templateFile.setContents( input, IResource.FORCE, null );
             }
             else
             {
-                templateFileValue.create( input, true, null );
+                templateFile.create( input, true, null );
             }
         }
 
-        return templateFileValue;
+        return templateFile;
     }
 
-    protected LayoutTplDiagram createLayoutTplDigram( IDataModel dm )
+    protected LayoutTplElement createLayoutTplDigram( IDataModel dm, boolean isBootstrapStyle, String className )
     {
-        LayoutTplDiagram diagram = new LayoutTplDiagram();
+        LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
+        layoutTpl.setBootstrapStyle( isBootstrapStyle );
+        layoutTpl.setClassName( className );
 
-        if( dm.getBooleanProperty( LAYOUT_IMAGE_BLANK_COLUMN ) )
+        if( dm.getBooleanProperty( LAYOUT_IMAGE_1_COLUMN ) )
         {
-            diagram = null;
-        }
-        else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_COLUMN ) )
-        {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 100 ), 0 );
-            diagram.addRow( row );
+            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column = row.getPortletColumns().insert();
+
+            column.setWeight( column.getFullWeight().content() );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_I_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 100 ), 0 );
+            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert(); 
 
-            PortletLayout row2 = new PortletLayout();
-            row2.addColumn( new PortletColumn( 70 ), 0 );
-            row2.addColumn( new PortletColumn( 30 ), 0 );
+            PortletColumnElement column11 = row1.getPortletColumns().insert();
+            column11.setWeight( column11.getFullWeight().content() );
 
-            diagram.addRow( row );
-            diagram.addRow( row2 );
+            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column21 = row2.getPortletColumns().insert();
+            PortletColumnElement column22 = row2.getPortletColumns().insert();
+
+            if( isBootstrapStyle )
+            {
+                column21.setWeight( 8 );
+                column22.setWeight( 4 );
+            }
+            else
+            {
+                column21.setWeight( 70 );
+                column22.setWeight( 30 );
+            }
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_II_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 100 ), 0 );
+            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
 
-            PortletLayout row2 = new PortletLayout();
-            row2.addColumn( new PortletColumn( 30 ), 0 );
-            row2.addColumn( new PortletColumn( 70 ), 0 );
+            PortletColumnElement column11 = row1.getPortletColumns().insert();
+            column11.setWeight( column11.getFullWeight().content() );
 
-            diagram.addRow( row );
-            diagram.addRow( row2 );
+            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert(); 
+            PortletColumnElement column21 = row2.getPortletColumns().insert();
+            PortletColumnElement column22 = row2.getPortletColumns().insert();
+
+            if( isBootstrapStyle )
+            {
+                column21.setWeight( 4 );
+                column22.setWeight( 8 );
+            }
+            else
+            {
+                column21.setWeight( 30 );
+                column22.setWeight( 70 );
+            }
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_1_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 100 ), 0 );
+            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column11 = row1.getPortletColumns().insert();
+            column11.setWeight( column11.getFullWeight().content() );
 
-            PortletLayout row2 = new PortletLayout();
-            row2.addColumn( new PortletColumn( 50 ), 0 );
-            row2.addColumn( new PortletColumn( 50 ), 0 );
+            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column21 = row2.getPortletColumns().insert();
+            column21.setWeight( column21.getFullWeight().content() / 2 );
+            PortletColumnElement column22 = row2.getPortletColumns().insert();
+            column22.setWeight( column22.getFullWeight().content() / 2 );
 
-            PortletLayout row3 = new PortletLayout();
-            row3.addColumn( new PortletColumn( 100 ), 0 );
-
-            diagram.addRow( row );
-            diagram.addRow( row2 );
-            diagram.addRow( row3 );
+            PortletLayoutElement row3 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column31 = row3.getPortletColumns().insert();
+            column11.setWeight( column31.getFullWeight().content() );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_I_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 50 ), 0 );
-            row.addColumn( new PortletColumn( 50 ), 0 );
+            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column11 = row1.getPortletColumns().insert();
+            column11.setWeight( column11.getFullWeight().content() / 2 );
+            PortletColumnElement column12 = row1.getPortletColumns().insert();
+            column12.setWeight( column12.getFullWeight().content() / 2 );
 
-            diagram.addRow( row );
+            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column21 = row2.getPortletColumns().insert();
+            column21.setWeight( column21.getFullWeight().content() / 2 );
+            PortletColumnElement column22 = row2.getPortletColumns().insert();
+            column22.setWeight( column22.getFullWeight().content() / 2 );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_II_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 70 ), 0 );
-            row.addColumn( new PortletColumn( 30 ), 0 );
+            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column1 = row.getPortletColumns().insert();
+            PortletColumnElement column2 = row.getPortletColumns().insert();
 
-            diagram.addRow( row );
+            if( isBootstrapStyle )
+            {
+                column1.setWeight( 8 );
+                column2.setWeight( 4 );
+            }
+            else
+            {
+                column1.setWeight( 70 );
+                column2.setWeight( 30 );
+            }
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_III_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 30 ), 0 );
-            row.addColumn( new PortletColumn( 70 ), 0 );
+            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column1 = row.getPortletColumns().insert();
+            PortletColumnElement column2 = row.getPortletColumns().insert();
 
-            diagram.addRow( row );
+            if( isBootstrapStyle )
+            {
+                column1.setWeight( 4 );
+                column2.setWeight( 8 );
+            }
+            else
+            {
+                column1.setWeight( 30 );
+                column2.setWeight( 70 );
+            }
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_2_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 30 ), 0 );
-            row.addColumn( new PortletColumn( 70 ), 0 );
+            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column11 = row1.getPortletColumns().insert();
+            PortletColumnElement column12 = row1.getPortletColumns().insert();
 
-            PortletLayout row2 = new PortletLayout();
-            row2.addColumn( new PortletColumn( 70 ), 0 );
-            row2.addColumn( new PortletColumn( 30 ), 0 );
+            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column21 = row2.getPortletColumns().insert();
+            PortletColumnElement column22 = row2.getPortletColumns().insert();
 
-            diagram.addRow( row );
-            diagram.addRow( row2 );
+            if( isBootstrapStyle )
+            {
+                column11.setWeight( 4 );
+                column12.setWeight( 8 );
+                column21.setWeight( 8 );
+                column22.setWeight( 4 );
+            }
+            else
+            {
+                column11.setWeight( 30 );
+                column12.setWeight( 70 );
+                column21.setWeight( 70 );
+                column22.setWeight( 30 );
+            }
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_3_COLUMN ) )
         {
-            PortletLayout row = new PortletLayout();
-            row.addColumn( new PortletColumn( 33 ), 0 );
-            row.addColumn( new PortletColumn( 33 ), 0 );
-            row.addColumn( new PortletColumn( 33 ), 0 );
+            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column1 = row.getPortletColumns().insert();
+            PortletColumnElement column2 = row.getPortletColumns().insert();
+            PortletColumnElement column3 = row.getPortletColumns().insert();
 
-            diagram.addRow( row );
+            if( isBootstrapStyle )
+            {
+                column1.setWeight( 4 );
+                column2.setWeight( 4 );
+                column3.setWeight( 4 );
+            }
+            else
+            {
+                column1.setWeight( 33 );
+                column2.setWeight( 33 );
+                column3.setWeight( 33 );
+            }
         }
 
-        return diagram;
+        return layoutTpl;
     }
 
     public IProject getTargetProject()
@@ -265,6 +337,13 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
         String projectName = model.getStringProperty( PROJECT_NAME );
 
         return ProjectUtil.getProject( projectName );
+    }
+
+    private boolean isBootstrapStyle()
+    {
+        final Version version = new Version( LiferayCore.create( getTargetProject() ).getPortalVersion() );
+
+        return CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 ;
     }
 
 }

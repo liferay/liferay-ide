@@ -15,9 +15,9 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
-import com.liferay.ide.layouttpl.ui.model.LayoutTplDiagram;
-import com.liferay.ide.layouttpl.ui.model.PortletColumn;
-import com.liferay.ide.layouttpl.ui.model.PortletLayout;
+import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
+import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
+import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -27,11 +27,9 @@ import org.eclipse.gef.EditPartFactory;
  */
 public class LayoutTplEditPartFactory implements EditPartFactory
 {
-    private final boolean visualEditorSupported;
 
-    public LayoutTplEditPartFactory( boolean visualEditorSupported )
+    public LayoutTplEditPartFactory()
     {
-        this.visualEditorSupported = visualEditorSupported;
     }
 
     public EditPart createEditPart( EditPart context, Object modelElement )
@@ -47,17 +45,17 @@ public class LayoutTplEditPartFactory implements EditPartFactory
 
     protected EditPart getPartForElement( Object modelElement )
     {
-        if( modelElement instanceof LayoutTplDiagram )
+        if( modelElement instanceof LayoutTplElement )
         {
-            return new LayoutTplDiagramEditPart( this.visualEditorSupported );
+            return new LayoutTplDiagramEditPart();
         }
 
-        if( modelElement instanceof PortletLayout )
+        if( modelElement instanceof PortletLayoutElement )
         {
             return new PortletLayoutEditPart();
         }
 
-        if( modelElement instanceof PortletColumn )
+        if( modelElement instanceof PortletColumnElement )
         {
             return new PortletColumnEditPart();
         }

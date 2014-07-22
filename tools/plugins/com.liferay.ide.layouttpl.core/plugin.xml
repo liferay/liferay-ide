@@ -115,24 +115,36 @@
             priority="high">
       </content-type>
    </extension>
- <extension
-       point="com.liferay.ide.templates.core.templateDefinition">
-    <template
-          id="com.liferay.ide.layouttpl.core.defaultLayoutTemplate"
-          name="Default Layout Template"
-          resource="layouttpl.ftl">
-    </template>
-    <templatesFolder
-          path="templates/">
-    </templatesFolder>
-    <templateVariable
-          name="root"
-          required="true">
-    </templateVariable>
-    <templateVariable
-          name="templateName"
-          required="true">
-    </templateVariable>
- </extension>
+
+    <extension
+    	point="com.liferay.ide.templates.core.templateDefinition">
+    	<template
+              id="com.liferay.ide.layouttpl.core.layoutTemplate.legacy"
+              name="Legacy Layout Template"
+              resource="layouttpl_legacy.ftl">
+        </template>
+        <templatesFolder
+              path="templates/">
+        </templatesFolder>
+        <templateVariable
+              name="root"
+              required="true">
+        </templateVariable>
+    </extension>
+    <extension
+        point="com.liferay.ide.templates.core.templateDefinition">
+        <template
+              id="com.liferay.ide.layouttpl.core.layoutTemplate.bootstrap"
+              name="Bootstrap Layout Template"
+              resource="layouttpl_bootstrap.ftl">
+        </template>
+        <templatesFolder
+              path="templates/">
+        </templatesFolder>
+        <templateVariable
+              name="root"
+              required="true">
+        </templateVariable>
+    </extension>
 
 </plugin>

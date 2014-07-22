@@ -15,36 +15,14 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
-import com.liferay.ide.layouttpl.core.model.ModelElement;
-
-import java.beans.PropertyChangeListener;
-
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Gregory Amerson
  */
-public abstract class BaseGraphicalEditPart extends AbstractGraphicalEditPart implements PropertyChangeListener
+public abstract class BaseGraphicalEditPart extends AbstractGraphicalEditPart
 {
-
-    public void activate()
-    {
-        if( !isActive() )
-        {
-            super.activate();
-            ( (ModelElement) getModel() ).addPropertyChangeListener( this );
-        }
-    }
-
-    public void deactivate()
-    {
-        if( isActive() )
-        {
-            super.deactivate();
-            ( (ModelElement) getModel() ).removePropertyChangeListener( this );
-        }
-    }
 
     protected Display getDisplay()
     {

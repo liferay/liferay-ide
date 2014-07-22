@@ -42,11 +42,6 @@ public class LayoutTplRootEditPart extends SimpleRootEditPart implements LayerCo
             setEnabled( false );
         }
 
-        // @Override
-        // public Dimension getMinimumSize(int wHint, int hHint) {
-        // return super.getMinimumSize(-1, -1);
-        // }
-
         /**
          * @see org.eclipse.draw2d.Figure#getPreferredSize(int, int)
          */

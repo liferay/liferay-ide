@@ -15,33 +15,28 @@
 
 package com.liferay.ide.layouttpl.ui.parts;
 
-import com.liferay.ide.layouttpl.core.model.ModelElement;
-import com.liferay.ide.layouttpl.core.model.PortletRowLayoutElement;
+import com.liferay.ide.layouttpl.core.model.CanAddPortletLayouts;
+import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 
-import java.beans.PropertyChangeEvent;
 import java.util.List;
 
-import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.LayoutListener;
 import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.Panel;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.editparts.AbstractEditPart;
-import org.eclipse.swt.SWT;
+import org.eclipse.sapphire.ElementList;
 
 /**
  * @author Cindy Li
+ *
  */
 public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart
 {
     public static final int DEFAULT_COLUMN_HEIGHT = -1;
 
     protected Panel panel;
-
-    protected boolean shouldUpdateConstraints = false;
 
     protected void configurePanel( Panel panel )
     {
@@ -52,36 +47,6 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart
 
         panel.setLayoutManager( gridLayout );
         panel.setBorder( new MarginBorder( getMargin() ) );
-
-        panel.addLayoutListener( new LayoutListener()
-        {
-
-            public void invalidate( IFigure container )
-            {
-                shouldUpdateConstraints = true;
-            }
-
-            public boolean layout( IFigure container )
-            {
-                return false;
-            }
-
-            public void postLayout( IFigure container )
-            {
-                if( shouldUpdateConstraints )
-                {
-                    updateColumnConstraints();
-                }
-            }
-
-            public void remove( IFigure child )
-            {
-            }
-
-            public void setConstraint( IFigure child, Object constraint )
-            {
-            }
-        } );
     }
 
     @Override
@@ -98,9 +63,9 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart
         return new Panel();
     }
 
-    protected PortletRowLayoutElement getCastedModel()
+    protected CanAddPortletLayouts getCastedModel()
     {
-        return (PortletRowLayoutElement) getModel();
+        return (CanAddPortletLayouts) getModel();
     }
 
     public int getContainerWidth()
@@ -115,9 +80,9 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart
 
     public abstract int getMargin();
 
-    protected List<ModelElement> getModelChildren()
+    protected ElementList<PortletLayoutElement> getModelChildren()
     {
-        return getCastedModel().getRows(); // return a list of rows
+        return getCastedModel().getPortletLayouts(); // return a list of rows
     }
 
     public int getPreferredColumnHeight()
@@ -149,37 +114,6 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart
         return getChildren().size();
     }
 
-    public void propertyChange( PropertyChangeEvent evt )
-    {
-        String prop = evt.getPropertyName();
-
-        if( PortletRowLayoutElement.ROW_ADDED_PROP.equals( prop ) || PortletRowLayoutElement.ROW_REMOVED_PROP.equals( prop ) )
-        {
-            refreshChildren();
-            List rows = getChildren();
-
-            if( rows.size() > 0 )
-            {
-                for( Object row : rows )
-                {
-                    AbstractEditPart rowPart = (AbstractEditPart) row;
-                    List cols = rowPart.getChildren();
-
-                    if( cols.size() > 0 )
-                    {
-                        for( Object col : cols )
-                        {
-                            ( (AbstractEditPart) col ).refresh();
-                        }
-                    }
-
-                    ( (AbstractEditPart) row ).refresh();
-                }
-            }
-            refreshVisuals();
-        }
-    }
-
     @Override
     public void refresh()
     {
@@ -203,49 +137,6 @@ public abstract class PortletRowLayoutEditPart extends BaseGraphicalEditPart
             {
                 ( (AbstractEditPart) child ).refresh();
             }
-        }
-    }
-
-    protected void updateColumnConstraints()
-    {
-        try
-        {
-            for( Object row : getChildren() )
-            {
-                PortletLayoutEditPart rowPart = (PortletLayoutEditPart) row;
-
-                for( Object col : ( (EditPart) row ).getChildren() )
-                {
-                    PortletColumnEditPart columnPart = (PortletColumnEditPart) col;
-                    Object constraint = rowPart.getLayoutConstraint( columnPart, columnPart.getFigure() );
-
-                    if( constraint instanceof GridData )
-                    {
-                        GridData gd = (GridData) constraint;
-                        int columnHeight = getPreferredColumnHeight();
-
-                        if( columnHeight > 0 )
-                        {
-                            gd.heightHint = columnHeight;
-                        }
-                        else
-                        {
-                            gd.heightHint = SWT.DEFAULT;
-                            gd.grabExcessVerticalSpace = true;
-                        }
-
-                        rowPart.setLayoutConstraint( columnPart, columnPart.getFigure(), gd );
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            // best effort don't log errors
-        }
-        finally
-        {
-            shouldUpdateConstraints = false;
         }
     }
 

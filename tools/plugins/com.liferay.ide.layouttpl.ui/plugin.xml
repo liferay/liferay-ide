@@ -12,11 +12,10 @@
       </image>
 
    </extension>
- <extension
+   <extension
        point="org.eclipse.ui.editors">
     <editor
-          class="com.liferay.ide.layouttpl.ui.editor.LayoutTplMultiPageEditor"
-          contributorClass="com.liferay.ide.layouttpl.ui.editor.LayoutTplMultiPageEditorActionBarContributor"
+          class="com.liferay.ide.layouttpl.ui.editor.LayoutTplEditor"
           default="true"
           extensions="tpl"
           icon="icons/e16/layout.png"
