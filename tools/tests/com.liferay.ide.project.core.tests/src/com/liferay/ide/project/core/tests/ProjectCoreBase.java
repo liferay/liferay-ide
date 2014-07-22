@@ -154,6 +154,11 @@ public class ProjectCoreBase extends ServerCoreBase
         assertEquals(
             status.toString(), Status.createOkStatus().message().toLowerCase(), status.message().toLowerCase() );
 
+        if( op.getProjectProvider().content().getShortName().equalsIgnoreCase( "ant" ) )
+        {
+            projectName = op.getFinalProjectName().content();
+        }
+
         final IProject newLiferayPluginProject = project( projectName );
 
         assertNotNull( newLiferayPluginProject );
