@@ -36,6 +36,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -130,9 +131,11 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
         upgradeProjectItem.setName( project.getName() );
         projectString.add( upgradeProjectItem.getName().content() );
 
-        UpgradeLiferayProjectsOpMethods.performUpgrade( projectString, actionString, op.getRuntimeName().content(), new NullProgressMonitor() );
+        final NullProgressMonitor npm = new NullProgressMonitor();
 
-        mainCss.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
+        UpgradeLiferayProjectsOpMethods.execute( op, ProgressMonitorBridge.create( npm ) );
+
+        mainCss.refreshLocal( IResource.DEPTH_ZERO, npm );
 
         final IFile serviceJarXml = webappRoot.getFile( "css/main.css" );
 

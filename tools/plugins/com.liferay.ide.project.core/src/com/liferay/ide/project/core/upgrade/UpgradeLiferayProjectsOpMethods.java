@@ -67,14 +67,16 @@ public class UpgradeLiferayProjectsOpMethods
         {
             if( !s.ok() )
             {
-                retval = Status.createErrorStatus( "Some upgrade actions failed, please see Eclipse error log for more details" );
+                retval =
+                    Status.createErrorStatus( "Some upgrade actions failed, please see Eclipse error log for more details" );
             }
         }
 
         return retval;
     }
 
-    private static HashMap<String, AbstractUpgradeProjectHandler> getActionMap( List<AbstractUpgradeProjectHandler> upgradeActions )
+    private static HashMap<String, AbstractUpgradeProjectHandler> getActionMap(
+        List<AbstractUpgradeProjectHandler> upgradeActions )
     {
         HashMap<String, AbstractUpgradeProjectHandler> actionMaps = new HashMap<String,AbstractUpgradeProjectHandler>();
 
@@ -86,7 +88,7 @@ public class UpgradeLiferayProjectsOpMethods
         return actionMaps;
     }
 
-    public static final Status[] performUpgrade(
+    private static final Status[] performUpgrade(
         final List<String> projectItems, final List<String> projectActions, final String runtimeName,
         final IProgressMonitor monitor )
     {

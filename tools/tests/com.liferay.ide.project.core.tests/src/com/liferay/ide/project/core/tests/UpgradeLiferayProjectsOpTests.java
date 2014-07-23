@@ -50,6 +50,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IRuntime;
@@ -387,7 +388,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
         upgradeProjectItem.setName( project.getName() );
         projectString.add( upgradeProjectItem.getName().content() );
 
-        UpgradeLiferayProjectsOpMethods.performUpgrade( projectString, actionString, op.getRuntimeName().content(), new NullProgressMonitor() );
+        UpgradeLiferayProjectsOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         IProject upgradeProject = ProjectUtil.getProject( project.getName() );
         assertEquals(runtime620.getName() , ServerUtil.getRuntime( upgradeProject ).getName());
@@ -417,26 +418,28 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
         IRuntime runtime620 = ServerCore.findRuntime( getRuntimeVersion620() );
         op.setRuntimeName( runtime620.getName() );
 
-        List<String> actionString = new ArrayList<String>();
-        List<String> projectString = new ArrayList<String>();
+        List<String> actions = new ArrayList<String>();
+        List<String> projectsToUpgrade = new ArrayList<String>();
 
         NamedItem upgradeRuntimAction = op.getSelectedActions().insert();
         upgradeRuntimAction.setName( "RuntimeUpgrade" );
-        actionString.add( upgradeRuntimAction.getName().content() );
+        actions.add( upgradeRuntimAction.getName().content() );
 
         for( IProject project : projects)
         {
             NamedItem upgradeProjectItem = op.getSelectedProjects().insert();
             upgradeProjectItem.setName( project.getName() );
-            projectString.add( upgradeProjectItem.getName().content() );
+            projectsToUpgrade.add( upgradeProjectItem.getName().content() );
         }
 
-        UpgradeLiferayProjectsOpMethods.performUpgrade( projectString, actionString, op.getRuntimeName().content(), new NullProgressMonitor() );
+        UpgradeLiferayProjectsOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        for( String projectName : projectString)
+        for( String projectName : projectsToUpgrade )
         {
             IProject project = ProjectUtil.getProject( projectName );
-            assertEquals(runtime620.getName() , ServerUtil.getRuntime( project ).getName());
+            assertEquals(
+                "Project \"" + project.getName() + "\" failed upgrade.", runtime620.getName(),
+                ServerUtil.getRuntime( project ).getName() );
         }
 
     }
@@ -470,7 +473,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
             projectString.add( upgradeProjectItem.getName().content() );
         }
 
-        UpgradeLiferayProjectsOpMethods.performUpgrade( projectString, actionString, op.getRuntimeName().content(), new NullProgressMonitor() );
+        UpgradeLiferayProjectsOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         for( IProject project : projects)
         {
