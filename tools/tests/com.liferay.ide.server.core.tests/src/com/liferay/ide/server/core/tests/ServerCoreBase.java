@@ -26,13 +26,13 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -61,23 +61,25 @@ public abstract class ServerCoreBase extends BaseTests
 
     protected void changeServerXmlPort( String currentPort, String targetPort )
     {
-        final IFile serverXml = server.getServerConfiguration().getFile( "server.xml" );
+        final File serverXml = server.getRuntime().getLocation().append( "conf" ).append( "server.xml" ).toFile();
 
         assertEquals(
-            "Expected the server.xml file to exist:" + serverXml.getLocation().toOSString(), true, serverXml.exists() );
+            "Expected the server.xml file to exist:" + serverXml.getAbsolutePath(), true, serverXml.exists() );
 
         try
         {
-            String contents = CoreUtil.readStreamToString( serverXml.getContents(), true );
+            String contents = CoreUtil.readStreamToString( new FileInputStream( serverXml ), true );
 
             contents = contents.replaceAll( currentPort, targetPort );
 
-            serverXml.setContents( new ByteArrayInputStream( contents.getBytes() ), IFile.FORCE, null );
+            FileWriter fw = new FileWriter(serverXml.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.write(contents);
+
+            bw.close();
         }
         catch( IOException e )
-        {
-        }
-        catch( CoreException e )
         {
         }
 

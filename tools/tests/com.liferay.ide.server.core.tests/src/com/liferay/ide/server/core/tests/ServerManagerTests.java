@@ -18,19 +18,27 @@ package com.liferay.ide.server.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
 import com.liferay.ide.server.util.SocketUtil;
 
 import java.io.File;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.wst.server.core.IServer;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -64,6 +72,29 @@ public class ServerManagerTests extends ServerCoreBase
         return createTempFile( "files", testApplicationPartialDeletionWarFileName );
     }
 
+    private ILaunchConfigurationWorkingCopy getLaunchConfig( IPath workingDir, String execFileName, String command )
+        throws CoreException
+    {
+        ILaunchManager launchManager = DebugPlugin.getDefault().getLaunchManager();
+
+        ILaunchConfigurationType configType =
+            launchManager.getLaunchConfigurationType( "org.eclipse.ui.externaltools.ProgramLaunchConfigurationType" );
+        ILaunchConfigurationWorkingCopy config =
+            configType.newInstance( null, launchManager.generateLaunchConfigurationName( "tomcat-server" ) );
+
+        config.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
+        config.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", true );
+        config.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", true );
+
+        String execPath = workingDir.append( execFileName ).toOSString();
+
+        config.setAttribute( "org.eclipse.ui.externaltools.ATTR_LOCATION", execPath );
+        config.setAttribute( "org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY", workingDir.toOSString() );
+        config.setAttribute( "org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS", command );
+
+        return config;
+    }
+
     @Before
     public void startServer() throws Exception
     {
@@ -89,32 +120,60 @@ public class ServerManagerTests extends ServerCoreBase
 
         copyFileToServer( server, "", "files", portalSetupWizardFileName );
 
-        if( server.getServerState() == IServer.STATE_STOPPED )
+        final String exceFileName = Platform.getOS().contains( "win" ) ? "catalina.bat" : "catalina.sh";
+
+        final LaunchHelper launchHelper = new LaunchHelper();
+
+        final IPath serverLocation = server.getRuntime().getLocation().append( "bin" );
+
+        Thread thread = new Thread()
         {
-            final IStatus[] status = new IStatus[1];
 
-            final IServer.IOperationListener listener = new IServer.IOperationListener()
+            public void run()
             {
-                public void done( IStatus result )
+                try
                 {
-                    status[0] = result;
+                    launchHelper.launch(
+                        getLaunchConfig( serverLocation, exceFileName, "run" ), ILaunchManager.RUN_MODE, null );
                 }
-            };
-
-            server.start( ILaunchManager.DEBUG_MODE, listener );
-
-            int i = 0;
-
-            do
-            {
-                Thread.sleep( 30000 );
-
-                i++;
+                catch( CoreException e )
+                {
+                }
             }
-            while( ( status[0] == null ) && ( i < 20 ) );
-        }
+        };
 
-        assertEquals( "Expected server has started", IServer.STATE_STARTED, server.getServerState() );
+        thread.start();
+
+        boolean stop = false;
+
+        int i = 0;
+
+        while( !stop || i > 1500)
+        {
+            try
+            {
+                URL pingUrl = new URL( "http://localhost:" + liferayServerStartPort );
+                URLConnection conn = pingUrl.openConnection();
+                ( (HttpURLConnection) conn ).setInstanceFollowRedirects( false );
+                ( (HttpURLConnection) conn ).getResponseCode();
+
+                if( !stop )
+                {
+                    Thread.sleep( 200 );
+                }
+
+                stop = true;
+            }
+            catch( Exception e )
+            {
+                if (!stop) {
+                    i++;
+
+                    Thread.sleep( 200 );
+                }
+            }
+
+        }
 
         service = new ServerManagerConnection();
 
@@ -143,18 +202,63 @@ public class ServerManagerTests extends ServerCoreBase
 
         IServer server = getServer();
 
-        if( server.getServerState() != IServer.STATE_STOPPED )
-        {
-            server.stop( true );
+        final String exceFileName = Platform.getOS().contains( "win" ) ? "shutdown.bat" : "shutdown.sh";
 
-            changeServerXmlPort( liferayServerShutdownPort, BUNDLE_SHUTDOWN_PORT );
-            changeServerXmlPort( liferayServerStartPort, BUNDLE_START_PORT );
-            changeServerXmlPort( liferayServerAjpPort, BUNDLE_AJP_PORT );
+        final LaunchHelper launchHelper = new LaunchHelper();
+
+        final IPath serverLocation = server.getRuntime().getLocation().append( "bin" );
+
+        Thread thread = new Thread()
+        {
+
+            public void run()
+            {
+                try
+                {
+                    launchHelper.launch(
+                        getLaunchConfig( serverLocation, exceFileName, "run" ), ILaunchManager.RUN_MODE, null );
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+        };
+
+        thread.start();
+
+        boolean stop = false;
+
+        int i = 0;
+
+        while( !stop || i > 15)
+        {
+            try
+            {
+                URL pingUrl = new URL( "http://localhost:" + liferayServerStartPort );
+                URLConnection conn = pingUrl.openConnection();
+                ( (HttpURLConnection) conn ).setInstanceFollowRedirects( false );
+                ( (HttpURLConnection) conn ).getResponseCode();
+
+                if( !stop )
+                {
+                    Thread.sleep( 200 );
+                }
+
+                i++;
+            }
+            catch( Exception e )
+            {
+                stop = true;
+            }
+
         }
+
+        changeServerXmlPort( liferayServerShutdownPort, BUNDLE_SHUTDOWN_PORT );
+        changeServerXmlPort( liferayServerStartPort, BUNDLE_START_PORT );
+        changeServerXmlPort( liferayServerAjpPort, BUNDLE_AJP_PORT );
     }
 
     @Test
-    @Ignore
     public void testInstallUpdateUninstallApplication() throws Exception
     {
         final NullProgressMonitor npm = new NullProgressMonitor();
