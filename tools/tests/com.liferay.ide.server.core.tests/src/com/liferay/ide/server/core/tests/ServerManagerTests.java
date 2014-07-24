@@ -73,6 +73,8 @@ public class ServerManagerTests extends ServerCoreBase
 
         String execPath = workingDir.append( execFileName ).toOSString();
 
+        new File( execPath ).setExecutable( true );
+
         config.setAttribute( "org.eclipse.ui.externaltools.ATTR_LOCATION", execPath );
         config.setAttribute( "org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY", workingDir.toOSString() );
         config.setAttribute( "org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS", command );
@@ -241,6 +243,8 @@ public class ServerManagerTests extends ServerCoreBase
     @Test
     public void testInstallUpdateUninstallApplication() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NullProgressMonitor npm = new NullProgressMonitor();
 
         assertEquals( "Expected the server state is started", "STARTED", service.getServerState() );
