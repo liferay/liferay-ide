@@ -82,6 +82,11 @@ public class LiferayRuntimeStubDelegate extends RuntimeDelegate implements ILife
         return getLiferayRuntime().getJavadocURL();
     }
 
+    public IPath getLiferayHome()
+    {
+        return getLiferayRuntime().getLiferayHome();
+    }
+
     public ILiferayRuntime getLiferayRuntime()
     {
         return (ILiferayRuntime) getTempRuntime().loadAdapter( ILiferayRuntime.class, new NullProgressMonitor() );

@@ -204,6 +204,11 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return getAppServerDir().append( "/lib/ext" ); //$NON-NLS-1$
     }
 
+    public IPath getLiferayHome()
+    {
+        return getAppServerDir().removeLastSegments( 1 );
+    }
+
     public String getPortalVersion()
     {
         // check for existing release info

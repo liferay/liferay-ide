@@ -332,7 +332,7 @@ public class LiferayTomcatUtil
     public static IPath[] getAllUserClasspathLibraries( IPath runtimeLocation, IPath portalDir )
     {
         List<IPath> libs = new ArrayList<IPath>();
-        IPath libFolder = runtimeLocation.append( "lib" ); //$NON-NLS-1$
+        IPath libFolder = runtimeLocation.append( "lib/ext" ); //$NON-NLS-1$
         IPath webinfLibFolder = portalDir.append( "WEB-INF/lib" ); //$NON-NLS-1$
 
         try

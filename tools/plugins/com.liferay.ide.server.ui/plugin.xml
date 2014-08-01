@@ -95,6 +95,26 @@
       </objectContribution>
       <objectContribution
             adaptable="true"
+            id="com.liferay.ide.server.ui.popup.dbconnection"
+            objectClass="org.eclipse.wst.server.core.IServer">
+         <visibility>
+            <and>
+                <objectState
+                      name="serverType"
+                      value="com.liferay.*">
+                </objectState>
+            </and>
+         </visibility>
+         <action
+               class="com.liferay.ide.server.ui.action.CreateDBConnectAction"
+               enablesFor="1"
+               icon="icons/e16/jdbc_16.gif"
+               id="com.liferay.ide.server.ui.action.createDBConnectAction"
+               label="%create.database.connection.action.label">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
             id="com.liferay.ide.server.ui.popup.module"
             objectClass="org.eclipse.wst.server.ui.IServerModule">
          

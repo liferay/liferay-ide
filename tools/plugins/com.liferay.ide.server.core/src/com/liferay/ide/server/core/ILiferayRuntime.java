@@ -41,6 +41,8 @@ public interface ILiferayRuntime extends IJavaRuntime
 
     String getJavadocURL();
 
+    IPath getLiferayHome();
+
     String getPortalVersion();
 
     Properties getPortletCategories();
