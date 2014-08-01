@@ -107,6 +107,8 @@ public class LiferayMavenProjectTests extends LiferayMavenProjectTestCase
     @Test
     public void testNewLiferayRemoteServiceBuilderProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
         op.setProjectName( "servicebuilder" );
         op.setProjectProvider( "maven" );
