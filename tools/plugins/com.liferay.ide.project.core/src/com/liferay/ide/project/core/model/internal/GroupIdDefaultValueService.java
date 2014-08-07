@@ -39,11 +39,6 @@ public class GroupIdDefaultValueService extends DefaultValueService
     @Override
     protected String compute()
     {
-        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
-        final String defaultMavenGroupId =
-            Platform.getPreferencesService().getString(
-                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PROJECT_MAVEN_GROUPID, null, prefContexts );
-
         String groupId = null;
 
         final Path location = op().getLocation().content();
@@ -63,16 +58,24 @@ public class GroupIdDefaultValueService extends DefaultValueService
         {
             if( CoreUtil.isNullOrEmpty( groupId ) )
             {
-                groupId = defaultMavenGroupId;
+                groupId = getDefaultMavenGroupId();
             }
             else
             {
                 groupId = "com.example.plugins";
             }
-
         }
 
         return groupId;
+    }
+
+    private String getDefaultMavenGroupId()
+    {
+        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+        final String defaultMavenGroupId =
+            Platform.getPreferencesService().getString(
+                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PROJECT_MAVEN_GROUPID, null, prefContexts );
+        return defaultMavenGroupId;
     }
 
     protected void initDefaultValueService()

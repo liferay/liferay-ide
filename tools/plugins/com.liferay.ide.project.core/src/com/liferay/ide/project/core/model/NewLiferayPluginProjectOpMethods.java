@@ -375,10 +375,11 @@ public class NewLiferayPluginProjectOpMethods
             prefs.putBoolean( ProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
             prefs.putBoolean( ProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
 
-            if( op.getProjectProvider().text().equalsIgnoreCase( "maven" ) )
+            if( "maven".equalsIgnoreCase( op.getProjectProvider().text() ) )
             {
                 prefs.put( ProjectCore.PREF_DEFAULT_PROJECT_MAVEN_GROUPID, op.getGroupId().content() );
             }
+
             prefs.flush();
         }
         catch( Exception e )

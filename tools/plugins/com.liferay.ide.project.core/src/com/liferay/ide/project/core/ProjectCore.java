@@ -64,6 +64,8 @@ public class ProjectCore extends Plugin
     // The key of default project build type for creating a new liferay plug in project
     public static final String PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION = "project-default-build-type-option";
 
+    public static final String PREF_DEFAULT_PROJECT_MAVEN_GROUPID = "default-project-maven-groupid";
+
     public static final String PREF_INCLUDE_SAMPLE_CODE = "include-sample-code";
 
     // The key of using snapshot vresion stored in prefernce store
@@ -76,16 +78,6 @@ public class ProjectCore extends Plugin
 
     // The value of maven build type
     public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
-
-    public static final String PREF_DEFAULT_PROJECT_MAVEN_GROUPID = "default-project-maven-groupid";
-
-    /**
-     * The constructor
-     */
-    public ProjectCore()
-    {
-        pluginPackageResourceListener = new PluginPackageResourceListener();
-    }
 
     public static IStatus createErrorStatus( Exception e )
     {
@@ -313,6 +305,14 @@ public class ProjectCore extends Plugin
         }
 
         return status;
+    }
+
+    /**
+     * The constructor
+     */
+    public ProjectCore()
+    {
+        pluginPackageResourceListener = new PluginPackageResourceListener();
     }
 
     /*
