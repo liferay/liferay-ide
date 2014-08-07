@@ -14,10 +14,16 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
@@ -33,6 +39,11 @@ public class GroupIdDefaultValueService extends DefaultValueService
     @Override
     protected String compute()
     {
+        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+        final String defaultMavenGroupId =
+            Platform.getPreferencesService().getString(
+                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PROJECT_MAVEN_GROUPID, null, prefContexts );
+
         String groupId = null;
 
         final Path location = op().getLocation().content();
@@ -45,11 +56,20 @@ public class GroupIdDefaultValueService extends DefaultValueService
             final String projectName = op().getProjectName().content();
 
             groupId = NewLiferayPluginProjectOpMethods.getMavenParentPomGroupId( op, projectName, parentProjectOsPath );
+
         }
 
         if( groupId == null )
         {
-            groupId = "com.example.plugins";
+            if( CoreUtil.isNullOrEmpty( groupId ) )
+            {
+                groupId = defaultMavenGroupId;
+            }
+            else
+            {
+                groupId = "com.example.plugins";
+            }
+
         }
 
         return groupId;

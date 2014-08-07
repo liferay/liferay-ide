@@ -77,6 +77,8 @@ public class ProjectCore extends Plugin
     // The value of maven build type
     public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
 
+    public static final String PREF_DEFAULT_PROJECT_MAVEN_GROUPID = "default-project-maven-groupid";
+
     /**
      * The constructor
      */
