@@ -889,6 +889,11 @@
             id="com.liferay.ide.project.ui.handlers.projectUpgrade"
             name="Upgrade Liferay Projects">
       </command>
+      <category
+            description="Project Upgrade Commands"
+            id="com.liferay.ide.project.ui.handlers"
+            name="Project Upgrade Commands">
+      </category>      
    </extension>
 
    <extension
