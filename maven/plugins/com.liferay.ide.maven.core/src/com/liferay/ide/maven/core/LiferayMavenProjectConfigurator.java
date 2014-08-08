@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.util.HookUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 
 import java.io.File;
@@ -37,6 +38,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.internal.MavenPluginActivator;
 import org.eclipse.m2e.core.internal.markers.IMavenMarkerManager;
@@ -264,7 +267,17 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
                     if( oldContextRoot == null || ( oldContextRoot != null && ! oldContextRoot.endsWith( pluginTypeSuffix ) ) )
                     {
-                        ComponentUtilities.setServerContextRoot( project, deployedFileName );
+
+                        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+                        boolean setMavenPluginSuffix =
+                            prefs.getBoolean( ProjectCore.PREF_SET_MAVEN_PLUGIN_SUFFIX, false );
+
+                        if( setMavenPluginSuffix )
+                        {
+                            ComponentUtilities.setServerContextRoot( project, deployedFileName );
+                        }
+
                     }
                 }
             }

@@ -68,6 +68,9 @@ public class ProjectCore extends Plugin
 
     public static final String PREF_INCLUDE_SAMPLE_CODE = "include-sample-code";
 
+    // set maven project context root with suffix
+    public static final String PREF_SET_MAVEN_PLUGIN_SUFFIX = "set-maven-plugin-suffix";
+
     // The key of using snapshot vresion stored in prefernce store
     public static final String PREF_USE_SNAPSHOT_VERSION = "use-snapshot-version";
 

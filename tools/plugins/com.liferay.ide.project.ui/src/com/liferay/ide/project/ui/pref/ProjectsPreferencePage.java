@@ -37,6 +37,8 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
     //private RadioGroupFieldEditor radioGroupEditor;
     private BooleanFieldEditor useSnapshotVersion;
 
+    private BooleanFieldEditor setMavenPluginSuffix;
+
     public ProjectsPreferencePage()
     {
         super( GRID );
@@ -113,6 +115,16 @@ public class ProjectsPreferencePage extends FieldEditorPreferencePage implements
         useSnapshotVersion.fillIntoGrid( getFieldEditorParent(), 1 );
 
         addField( useSnapshotVersion );
+
+        setMavenPluginSuffix =
+            new BooleanFieldEditor(
+                ProjectCore.PREF_SET_MAVEN_PLUGIN_SUFFIX, "Add plugin type suffix for maven project context root",
+                getFieldEditorParent() );
+
+        setMavenPluginSuffix.fillIntoGrid( getFieldEditorParent(), 1 );
+
+        addField( setMavenPluginSuffix );
+
     }
 
     @Override
