@@ -33,8 +33,7 @@
     <name>Liferay IDE JavaScript Features</name>
 
     <modules>
-        <module>com.liferay.ide.jsdt</module>
-        <!--<module>com.liferay.ide.jsdt.hidden</module>-->
+        <module>com.liferay.ide.alloy</module>
     </modules>
 </project>
 

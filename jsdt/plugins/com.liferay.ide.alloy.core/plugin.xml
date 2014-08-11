@@ -5,8 +5,30 @@
       <upgradeProjectHandler
             class="com.liferay.ide.alloy.core.UpgradeLAUTHandler"
             name="AlloyUIExecute"
-            description="Run Liferay Alloy UI Upgrade tool"
+            description="Run Liferay AlloyUI Upgrade tool"
             id="com.liferay.ide.alloy.core.upgradeLAUTHandler">
       </upgradeProjectHandler>
+   </extension>
+   <extension
+         point="tern.eclipse.ide.core.ternNatureAdapters">
+      <ternAdaptToNature
+            class="com.liferay.ide.alloy.core.LiferayProjectTernAdapter"
+            id="com.liferay.ide.alloy.core.ternAdapter"
+            name="Liferay Project Tern Adapter">
+         <defaultModules>
+            <module
+                  name="aui"
+                  withDependencies="true">
+            </module>
+            <module
+                  name="liferay"
+                  withDependencies="true">
+            </module>
+            <module
+                  name="yui"
+                  withDependencies="true">
+            </module>
+         </defaultModules>
+      </ternAdaptToNature>
    </extension>
 </plugin>

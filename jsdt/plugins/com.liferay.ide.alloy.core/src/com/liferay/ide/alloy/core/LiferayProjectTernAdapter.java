@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -14,20 +12,27 @@
  * details.
  *
  *******************************************************************************/
- -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+package com.liferay.ide.alloy.core;
 
-    <parent>
-        <groupId>com.liferay.ide.jsdt.plugins</groupId>
-        <artifactId>jsdt-plugins</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
-    </parent>
+import com.liferay.ide.project.core.util.ProjectUtil;
 
-    <artifactId>com.liferay.ide.jsdt.core</artifactId>
-    <packaging>eclipse-plugin</packaging>
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
-    <name>Liferay IDE JavaScript Core</name>
+import tern.eclipse.ide.core.ITernNatureCapability;
 
-</project>
+
+/**
+ * @author Gregory Amerson
+ *
+ */
+public class LiferayProjectTernAdapter implements ITernNatureCapability
+{
+
+    @Override
+    public boolean hasTernNature( IProject project ) throws CoreException
+    {
+        return ProjectUtil.isPortletProject( project );
+    }
+
+}

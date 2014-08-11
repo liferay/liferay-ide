@@ -64,6 +64,11 @@
             <layout>p2</layout>
             <url>${eclipse-xml-search-site}</url>
         </repository>
+        <repository>
+            <id>tern</id>
+            <layout>p2</layout>
+            <url>${tern-site}</url>
+        </repository>
     </repositories>
 
     <build>

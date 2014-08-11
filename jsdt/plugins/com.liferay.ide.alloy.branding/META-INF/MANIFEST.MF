@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
-Bundle-SymbolicName: com.liferay.ide.jsdt.branding
+Bundle-SymbolicName: com.liferay.ide.alloy.branding
 Bundle-Version: 2.2.0.qualifier
 Bundle-Vendor: %bundle.vendor

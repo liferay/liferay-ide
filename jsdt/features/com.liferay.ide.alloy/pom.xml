@@ -26,9 +26,9 @@
     </parent>
 
 
-    <artifactId>com.liferay.ide.jsdt</artifactId>
+    <artifactId>com.liferay.ide.alloy</artifactId>
     <packaging>eclipse-feature</packaging>
 
-    <name>Liferay IDE JavaScript Feature</name>
+    <name>Liferay IDE AlloyUI Feature</name>
 
 </project>

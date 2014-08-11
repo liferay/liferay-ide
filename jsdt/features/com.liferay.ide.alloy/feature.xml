@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.liferay.ide.jsdt"
-      label="Liferay IDE JavaScript"
+      id="com.liferay.ide.alloy"
+      label="Liferay IDE AlloyUI"
       version="2.2.0.qualifier"
       provider-name="Liferay, Inc."
-      plugin="com.liferay.ide.jsdt.branding">
+      plugin="com.liferay.ide.alloy.branding">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
       Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
@@ -34,12 +34,14 @@
    <requires>
       <import feature="com.liferay.ide.common" version="2.2.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.eclipse.tools" version="2.2.0" match="greaterOrEqual"/>
-      <!--<import feature="tern-feature" version="0.4.0" match="greaterOrEqual"/>
-      <import feature="tern-jsdt-feature" version="0.4.0" match="greaterOrEqual"/>-->
+      <import feature="tern-feature" version="0.4.0" match="greaterOrEqual"/>
+      <import feature="tern-jsdt-feature" version="0.4.0" match="greaterOrEqual"/>
+      <import feature="tern-server-nodejs-feature" version="0.4.0" match="greaterOrEqual"/>
+      <import feature="tern.eclipse.ide.server.nodejs.embed" version="0.4.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
-         id="com.liferay.ide.jsdt.branding"
+         id="com.liferay.ide.alloy.branding"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -103,12 +105,5 @@
          download-size="0"
          install-size="0"
          version="0.0.0"/>
-
-   <plugin
-         id="com.liferay.ide.jsdt.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
 </feature>

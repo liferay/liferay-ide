@@ -3,6 +3,9 @@
     <feature id="com.liferay.ide.eclipse.tools" version="0.0.0">
         <category name="liferay" />
     </feature>
+    <feature id="com.liferay.ide.alloy" version="0.0.0">
+        <category name="liferay" />
+    </feature>
 
     <category-def name="liferay" label="Liferay">
         <description>

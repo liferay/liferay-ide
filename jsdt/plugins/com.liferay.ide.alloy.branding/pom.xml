@@ -25,10 +25,10 @@
         <version>2.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>com.liferay.ide.jsdt.branding</artifactId>
+    <artifactId>com.liferay.ide.alloy.branding</artifactId>
     <packaging>eclipse-plugin</packaging>
 
-    <name>Liferay IDE JavaScript Branding</name>
+    <name>Liferay IDE AlloyUI Branding</name>
 
     <build>
         <plugins>
