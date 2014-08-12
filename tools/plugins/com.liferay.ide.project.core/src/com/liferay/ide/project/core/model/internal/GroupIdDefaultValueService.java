@@ -56,11 +56,9 @@ public class GroupIdDefaultValueService extends DefaultValueService
 
         if( groupId == null )
         {
+            groupId = getDefaultMavenGroupId();
+
             if( CoreUtil.isNullOrEmpty( groupId ) )
-            {
-                groupId = getDefaultMavenGroupId();
-            }
-            else
             {
                 groupId = "com.example.plugins";
             }
