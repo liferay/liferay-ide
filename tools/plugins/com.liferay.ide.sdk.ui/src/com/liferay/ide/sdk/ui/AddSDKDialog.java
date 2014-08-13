@@ -53,6 +53,7 @@ import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Greg Amerson
+ * @author kameshs
  */
 public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 {
@@ -165,6 +166,29 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 
         location = SWTUtil.createSingleText( container, 1 );
 
+        // Fix IDE-901
+        location.addModifyListener( new ModifyListener()
+        {
+
+            public void modifyText( ModifyEvent e )
+            {
+                if( e.widget instanceof Text )
+                {
+                    Text txtLocation = (Text) e.widget;
+                    if( txtLocation.getText() != null )
+                    {
+                        IPath sdkLocationPath = new Path( txtLocation.getText() );
+                        String strSdkLocDir = sdkLocationPath.toOSString();
+                        if( sdkLocationPath.isValidPath( strSdkLocDir ) && SDKUtil.isValidSDKLocation( strSdkLocDir ) )
+                        {
+                            name.setText( sdkLocationPath.lastSegment() );
+                        }
+                    }
+                }
+
+            }
+        } );
+        
         Button browse = SWTUtil.createButton( container, Msgs.browse );
         browse.addSelectionListener
         (
