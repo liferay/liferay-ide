@@ -171,21 +171,21 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
         // Fix IDE-901
         location.addModifyListener( new ModifyListener()
         {
-
             public void modifyText( ModifyEvent e )
             {
                 if( e.widget instanceof Text )
                 {
-                    Text txtLocation = (Text) e.widget;
+                    final Text txtLocation = (Text) e.widget;
+
                     if( txtLocation.getText() != null )
                     {
                         setSDKName( txtLocation );
                     }
                 }
 
-            }           
-        } );
-         
+            }
+        });
+
         Button browse = SWTUtil.createButton( container, Msgs.browse );
         browse.addSelectionListener
         (
@@ -209,16 +209,15 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
         SWTUtil.createLabel( container, Msgs.nameLabel, 1 );
 
         name = SWTUtil.createSingleText( container, 1 );
-        
+
         /*
-         * FIX IDE-901 - 
+         * FIX IDE-901 -
          * case 1 :  After SDK addition user clears the SDK name and pastes new path
-         * case 2 :  User thinks edit new name clears and goes to SDK Location and adds 
+         * case 2 :  User thinks edit new name clears and goes to SDK Location and adds
          * new SDK location
          */
         name.addFocusListener( new FocusListener()
         {
-
             public void focusLost( FocusEvent e )
             {
                 /*
@@ -233,9 +232,8 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
                 {
                     setSDKName( location );
                 }
-
             }
-        } );
+        });
 
         if( sdkToEdit != null )
         {
@@ -359,14 +357,16 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
             serverTargetCombo.select( 0 );
         }
     }
-    
+
     protected void setSDKName( Text txtSDKLocation )
     {
-        IPath sdkLocationPath = new Path( txtSDKLocation.getText() );
-        String strSdkLocDir = sdkLocationPath.toOSString();
+        final IPath sdkLocationPath = new Path( txtSDKLocation.getText() );
+        final String strSdkLocDir = sdkLocationPath.toOSString();
+
         if( name !=null && sdkLocationPath.isValidPath( strSdkLocDir ) && SDKUtil.isValidSDKLocation( strSdkLocDir ) )
         {
-            String existingSDKName = name.getText();
+            final String existingSDKName = name.getText();
+
             if( CoreUtil.isNullOrEmpty( existingSDKName ) )
             {
                 name.setText( sdkLocationPath.lastSegment() );
