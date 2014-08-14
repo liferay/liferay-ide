@@ -36,6 +36,8 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -53,7 +55,7 @@ import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Greg Amerson
- * @author kameshs
+ * @author Kamesh Sampath
  */
 public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
 {
@@ -177,18 +179,13 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
                     Text txtLocation = (Text) e.widget;
                     if( txtLocation.getText() != null )
                     {
-                        IPath sdkLocationPath = new Path( txtLocation.getText() );
-                        String strSdkLocDir = sdkLocationPath.toOSString();
-                        if( sdkLocationPath.isValidPath( strSdkLocDir ) && SDKUtil.isValidSDKLocation( strSdkLocDir ) )
-                        {
-                            name.setText( sdkLocationPath.lastSegment() );
-                        }
+                        setSDKName( txtLocation );
                     }
                 }
 
-            }
+            }           
         } );
-        
+         
         Button browse = SWTUtil.createButton( container, Msgs.browse );
         browse.addSelectionListener
         (
@@ -212,6 +209,33 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
         SWTUtil.createLabel( container, Msgs.nameLabel, 1 );
 
         name = SWTUtil.createSingleText( container, 1 );
+        
+        /*
+         * FIX IDE-901 - 
+         * case 1 :  After SDK addition user clears the SDK name and pastes new path
+         * case 2 :  User thinks edit new name clears and goes to SDK Location and adds 
+         * new SDK location
+         */
+        name.addFocusListener( new FocusListener()
+        {
+
+            public void focusLost( FocusEvent e )
+            {
+                /*
+                 * nothing to do as user might purposefully clear it add new location, the name will then be derived
+                 * automatically when
+                 */
+            }
+
+            public void focusGained( FocusEvent e )
+            {
+                if( location != null && location.getText() != null )
+                {
+                    setSDKName( location );
+                }
+
+            }
+        } );
 
         if( sdkToEdit != null )
         {
@@ -333,6 +357,20 @@ public class AddSDKDialog extends TitleAreaDialog implements ModifyListener
         if( serverTargetCombo.getSelectionIndex() < 0 && runtimes.length > 0 )
         {
             serverTargetCombo.select( 0 );
+        }
+    }
+    
+    protected void setSDKName( Text txtSDKLocation )
+    {
+        IPath sdkLocationPath = new Path( txtSDKLocation.getText() );
+        String strSdkLocDir = sdkLocationPath.toOSString();
+        if( name !=null && sdkLocationPath.isValidPath( strSdkLocDir ) && SDKUtil.isValidSDKLocation( strSdkLocDir ) )
+        {
+            String existingSDKName = name.getText();
+            if( CoreUtil.isNullOrEmpty( existingSDKName ) )
+            {
+                name.setText( sdkLocationPath.lastSegment() );
+            }
         }
     }
 
