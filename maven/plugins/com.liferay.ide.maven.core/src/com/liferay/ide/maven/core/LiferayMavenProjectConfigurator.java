@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.util.DirectoryScanner;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -73,6 +74,7 @@ import org.osgi.framework.Version;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Kuo Zhang
+ * @author Kamesh Sampath
  */
 @SuppressWarnings( "restriction" )
 public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator
@@ -191,7 +193,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
 
-        if( ! shouldConfigure( liferayMavenPlugin ) )
+        if( ! shouldConfigure( liferayMavenPlugin,request ) )
         {
             monitor.done();
             return;
@@ -533,9 +535,28 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                                                ILiferayMavenConstants.LIFERAY_MAVEN_MARKER_CONFIGURATION_WARNING_ID );
     }
 
-    private boolean shouldConfigure( Plugin liferayMavenPlugin )
+    /*
+     * IDE-1489 Fixes, if the liferay maven plugin not found the project will be scanned for liferay specific files
+     */
+    private boolean shouldConfigure( Plugin liferayMavenPlugin, ProjectConfigurationRequest request )
     {
-        return liferayMavenPlugin != null;
+        boolean configureAsLiferayPlugin = ( liferayMavenPlugin != null );
+        final MavenProject mavenProject = request.getMavenProject();
+        final File baseDir = mavenProject.getBasedir();
+        final String[] includes = { "**/liferay*.xml", "**/liferay*.properties" };
+
+        if( liferayMavenPlugin == null )
+        {
+            DirectoryScanner dirScanner = new DirectoryScanner();
+            dirScanner.setBasedir( baseDir );
+            dirScanner.setIncludes( includes );
+            dirScanner.scan();
+            String[] liferayProjectFiles = dirScanner.getIncludedFiles();
+            configureAsLiferayPlugin =
+                configureAsLiferayPlugin || ( liferayProjectFiles != null && liferayProjectFiles.length > 0 );
+        }
+
+        return configureAsLiferayPlugin;
     }
 
     private boolean shouldInstallNewLiferayFacet( IFacetedProject facetedProject )
