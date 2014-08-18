@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.eclipse.properties.ui;
+package com.liferay.ide.properties.ui;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

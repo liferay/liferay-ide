@@ -15,17 +15,25 @@
 
 package com.liferay.ide.core.describer;
 
-import com.liferay.ide.core.util.PropertiesUtil;
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 
 /**
  * @author Gregory Amerson
  */
-public class LiferayLanguagePropertiesFileDescriber extends LiferayPropertiesFileDescriber
+public class LiferayPortalPropertiesFileDescriber extends LiferayPropertiesFileDescriber
 {
+    private final Set<String> fileNames = new HashSet<String>();
+    {
+        fileNames.add( "portal-ext.properties" );
+        fileNames.add( "portal-ide.properties" );
+        fileNames.add( "portal-setup-wizard.properties" );
+    }
 
-    public LiferayLanguagePropertiesFileDescriber()
+    public LiferayPortalPropertiesFileDescriber()
     {
         super();
     }
@@ -33,6 +41,21 @@ public class LiferayLanguagePropertiesFileDescriber extends LiferayPropertiesFil
     @Override
     protected boolean isPropertiesFile( Object file )
     {
-        return file instanceof IFile && PropertiesUtil.isLanguagePropertiesFile( (IFile) file );
+        String fileName = null;
+
+        if( file instanceof File )
+        {
+            fileName = ( (File) file).getName();
+        }
+        else if( file instanceof IFile )
+        {
+            fileName = ( (IFile) file).getName();
+        }
+        else if( file instanceof String )
+        {
+            fileName = new File( (String) file ).getName();
+        }
+
+        return fileNames.contains( fileName );
     }
 }

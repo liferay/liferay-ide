@@ -28,6 +28,21 @@
       </content-type>
    </extension>
    <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.jdt.core.javaProperties"
+            default-charset="UTF-8"
+            file-extensions="properties"
+            file-names="portal-ext.properties,portal-setup-wizard.properties,portal-ide.properties"
+            id="liferayportalpropertiesfile"
+            name="Liferay Portal Properties File"
+            priority="high">
+         <describer
+               class="com.liferay.ide.core.describer.LiferayPortalPropertiesFileDescriber">
+         </describer>
+      </content-type>
+   </extension>
+   <extension
          id="LiferayLanguagePropertiesMarker"
          name="%liferay.language.properties.problem.name"
          point="org.eclipse.core.resources.markers">

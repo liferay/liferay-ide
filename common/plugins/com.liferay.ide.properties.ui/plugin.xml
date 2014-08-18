@@ -18,14 +18,14 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.liferay.ide.eclipse.properties.ui.editor.PluginPackagePropertiesEditor"
+            class="com.liferay.ide.properties.ui.editor.LiferayPortalPropertiesEditor"
             default="true"
-            icon="icons/e16/hook.png"
-            id="com.liferay.ide.eclipse.properties.ui.editor.PluginPackagePropertiesEditor"
-            name="Liferay Plugin Package Properties Editor"
+            icon="icons/e16/server.png"
+            id="com.liferay.ide.properties.ui.editor.LiferayPortalPropertiesEditor"
+            name="Liferay Portal Properties Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
         <contentTypeBinding
-               contentTypeId="com.liferay.ide.eclipse.portlet.core.liferayhookxml">
+               contentTypeId="com.liferay.ide.core.liferayportalpropertiesfile">
          </contentTypeBinding>
       </editor>
       

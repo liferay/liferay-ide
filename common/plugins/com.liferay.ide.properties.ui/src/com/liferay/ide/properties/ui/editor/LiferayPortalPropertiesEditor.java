@@ -12,27 +12,37 @@
  * details.
  *
  *******************************************************************************/
+package com.liferay.ide.properties.ui.editor;
 
-package com.liferay.ide.core.describer;
+import java.io.File;
 
-import com.liferay.ide.core.util.PropertiesUtil;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.internal.ui.propertiesfileeditor.PropertiesFileEditor;
+import org.eclipse.ui.IEditorInput;
 
-import org.eclipse.core.resources.IFile;
 
 /**
  * @author Gregory Amerson
  */
-public class LiferayLanguagePropertiesFileDescriber extends LiferayPropertiesFileDescriber
+@SuppressWarnings( "restriction" )
+public class LiferayPortalPropertiesEditor extends PropertiesFileEditor
 {
 
-    public LiferayLanguagePropertiesFileDescriber()
+    @Override
+    protected void doSetInput( IEditorInput input ) throws CoreException
     {
-        super();
+        super.doSetInput( input );
+
+        File file = (File) input.getAdapter( File.class );
+
+        ((LiferayPortalPropertiesSourceViewerConfiguration) getSourceViewerConfiguration()).setPropertilesFile( file );
     }
 
     @Override
-    protected boolean isPropertiesFile( Object file )
+    protected void initializeEditor()
     {
-        return file instanceof IFile && PropertiesUtil.isLanguagePropertiesFile( (IFile) file );
+        super.initializeEditor();
+
+        setSourceViewerConfiguration( new LiferayPortalPropertiesSourceViewerConfiguration( this ) );
     }
 }
