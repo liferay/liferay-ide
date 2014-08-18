@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Liferay Properties UI
 Bundle-SymbolicName: com.liferay.ide.properties.ui;singleton:=true
-Bundle-Version: 1.4.0.qualifier
+Bundle-Version: 2.2.0.qualifier
 Bundle-Activator: com.liferay.ide.properties.ui.PropertiesUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.ui,
