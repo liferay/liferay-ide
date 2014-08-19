@@ -597,7 +597,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         return null;
     }
 
-
     private static class Msgs extends NLS
     {
         public static String configuringLiferayProject;
