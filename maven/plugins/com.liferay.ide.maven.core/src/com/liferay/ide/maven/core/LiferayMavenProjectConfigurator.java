@@ -83,7 +83,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     private static final IPath ROOT_PATH = new Path("/");  //$NON-NLS-1$
     private static final String MAVEN_WAR_PLUGIN_KEY = "org.apache.maven.plugins:maven-war-plugin";
     private static final String WAR_SOURCE_FOLDER = "/src/main/webapp"; //$NON-NLS-1$
-    private static final String WAR_PACKAGING = "war"; //$NON-NLS-1$
+
     private IMavenMarkerManager mavenMarkerManager;
 
     public LiferayMavenProjectConfigurator()
@@ -538,32 +538,27 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     }
 
     /*
-     * IDE-1489 Fixes, if the liferay maven plugin not found the project will be scanned for liferay specific files
+     * IDE-1489 when no liferay maven plugin is found the project will be scanned for liferay specific files
      */
     private boolean shouldConfigure( Plugin liferayMavenPlugin, ProjectConfigurationRequest request )
     {
         final IProject project = request.getProject();
         final MavenProject mavenProject = request.getMavenProject();
 
-        boolean configureAsLiferayPlugin = ( liferayMavenPlugin != null );
+        boolean configureAsLiferayPlugin = liferayMavenPlugin != null;
 
-        if( WAR_PACKAGING.equals( mavenProject.getPackaging() ) )
+        if( ! configureAsLiferayPlugin )
         {
-            if( liferayMavenPlugin == null )
-            {
+            final IPath baseDir = warSourceDirectory( project, mavenProject ).getRawLocation();
+            final String[] includes = { "**/liferay*.xml", "**/liferay*.properties" };
 
-                final IPath baseDir = warSourceDirectory( project, mavenProject ).getRawLocation();
-                final String[] includes = { "**/liferay*.xml", "**/liferay*.properties" };
+            final DirectoryScanner dirScanner = new DirectoryScanner();
+            dirScanner.setBasedir( baseDir.toFile() );
+            dirScanner.setIncludes( includes );
+            dirScanner.scan();
 
-                final DirectoryScanner dirScanner = new DirectoryScanner();
-                dirScanner.setBasedir( baseDir.toFile() );
-                dirScanner.setIncludes( includes );
-                dirScanner.scan();
-
-                final String[] liferayProjectFiles = dirScanner.getIncludedFiles();
-                configureAsLiferayPlugin =
-                    configureAsLiferayPlugin || ( liferayProjectFiles != null && liferayProjectFiles.length > 0 );
-            }
+            final String[] liferayProjectFiles = dirScanner.getIncludedFiles();
+            configureAsLiferayPlugin = liferayProjectFiles != null && liferayProjectFiles.length > 0;
         }
 
         return configureAsLiferayPlugin;
