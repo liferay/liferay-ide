@@ -22,57 +22,44 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 {
 
     @Test
-    public void testLiferayFactedConfigured()
+    public void testLiferayFactedConfigured() throws Exception
     {
-        try
-        {
-            IProject project = importProject( "projects/configurators/webapp-1/pom.xml" );
-            assertNotNull( project );
-            IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
-            assertNotNull( facade );
-            assertFalse( CoreUtil.isLiferayProject( project ) );
-        }
-        catch( Exception e )
-        {
-            e.getMessage();
-            fail( e.getMessage() );
-        }
+        IProject project = importProject( "projects/configurators/webapp-1/pom.xml" );
+
+        assertNotNull( project );
+
+        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
+
+        assertNotNull( facade );
+
+        assertFalse( CoreUtil.isLiferayProject( project ) );
     }
 
     @Test
-    public void testLiferayFacetNoLiferayPluginConfigured()
+    public void testLiferayFacetNoLiferayPluginConfigured() throws Exception
     {
-        try
-        {
-            IProject project = importProject( "projects/configurators/default-webapp-no-liferay-plugin/pom.xml" );
-            assertNotNull( project );
-            IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
-            assertNotNull( facade );
-            assertTrue( CoreUtil.isLiferayProject( project ) );
-        }
-        catch( Exception e )
-        {
-            e.getMessage();
-            fail( e.getMessage() );
-        }
+        IProject project = importProject( "projects/configurators/default-webapp-no-liferay-plugin/pom.xml" );
+
+        assertNotNull( project );
+
+        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
+
+        assertNotNull( facade );
+
+        assertTrue( CoreUtil.isLiferayProject( project ) );
     }
 
     @Test
-    public void testLiferayFacetNoLiferayPluginWarPluginConfigured()
+    public void testLiferayFacetNoLiferayPluginWarPluginConfigured() throws Exception
     {
-        try
-        {
-            IProject project = importProject( "projects/configurators/webapp-alternate-webapp-folder/pom.xml" );
-            assertNotNull( project );
-            IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
-            assertNotNull( facade );
-            assertTrue( CoreUtil.isLiferayProject( project ) );
-        }
-        catch( Exception e )
-        {
-            e.getMessage();
-            fail( e.getMessage() );
+        IProject project = importProject( "projects/configurators/webapp-alternate-webapp-folder/pom.xml" );
 
-        }
+        assertNotNull( project );
+
+        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
+
+        assertNotNull( facade );
+
+        assertTrue( CoreUtil.isLiferayProject( project ) );
     }
 }
