@@ -581,7 +581,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         if( warPluginConfiguration != null )
         {
-
             final Xpp3Dom[] warSourceDirs = warPluginConfiguration.getChildren( "warSourceDirectory" );
 
             if( warSourceDirs != null && warSourceDirs.length > 0 )
@@ -589,7 +588,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                 final String resourceLocation = warSourceDirs[0].getValue();
                 return project.getFolder( resourceLocation );
             }
-
         }
         else
         {
