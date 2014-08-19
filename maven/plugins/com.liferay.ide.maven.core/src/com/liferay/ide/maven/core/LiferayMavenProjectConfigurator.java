@@ -195,7 +195,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
 
-        if( ! shouldConfigure( liferayMavenPlugin,request ) )
+        if( ! shouldConfigure( liferayMavenPlugin, request ) )
         {
             monitor.done();
             return;
@@ -568,12 +568,12 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         return configureAsLiferayPlugin;
     }
-  
+
     private boolean shouldInstallNewLiferayFacet( IFacetedProject facetedProject )
     {
         return getLiferayProjectFacet( facetedProject ) == null;
     }
-    
+
     private IFolder warSourceDirectory( final IProject project, final MavenProject mavenProject )
     {
         final Xpp3Dom warPluginConfiguration =
