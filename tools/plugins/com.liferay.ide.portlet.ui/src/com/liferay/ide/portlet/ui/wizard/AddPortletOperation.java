@@ -50,8 +50,6 @@ import org.eclipse.jface.text.templates.persistence.TemplateStore;
 import org.eclipse.jst.j2ee.common.ParamValue;
 import org.eclipse.jst.j2ee.internal.common.operations.AddJavaEEArtifactOperation;
 import org.eclipse.jst.j2ee.internal.common.operations.NewJavaEEArtifactClassOperation;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
@@ -62,7 +60,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 public class AddPortletOperation extends AddJavaEEArtifactOperation
     implements INewPortletClassDataModelProperties, IPluginWizardFragmentProperties
 {
-    protected IVirtualFolder webappRoot;
+    protected IFolder webappRoot;
     protected TemplateContextType portletContextType;
     protected TemplateStore templateStore;
 
@@ -70,7 +68,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
     {
         super( dataModel );
 
-        this.webappRoot = CoreUtil.getDocroot( getTargetProject() );
+        this.webappRoot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
         this.templateStore = store;
         this.portletContextType = type;
     }
@@ -357,8 +355,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
         if( this.webappRoot != null )
         {
-            IVirtualFile projectFile = this.webappRoot.getFile( new Path( filePath ) );
-            retval = projectFile.getUnderlyingFile();
+            retval = this.webappRoot.getFile( new Path( filePath ) );
         }
 
         return retval;
