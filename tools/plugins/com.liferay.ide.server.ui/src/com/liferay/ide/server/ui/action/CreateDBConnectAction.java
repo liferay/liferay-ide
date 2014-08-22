@@ -52,7 +52,7 @@ import org.eclipse.wst.server.core.IServer;
 public class CreateDBConnectAction extends AbstractServerRunningAction
 {
 
-    private final static String PORTAL_EXT_PROPERTIES1 = "portal-setup-wizard.properties"; //$NON-NLS-1$
+    private final static String PORTAL_EXT_PROPERTIES = "portal-ext.properties"; //$NON-NLS-1$
     private final static String PORTAL_SETUP_PROPERTIES = "portal-setup-wizard.properties"; //$NON-NLS-1$
     private final static String JDBC_DRIVER_CLASS_NAME = "jdbc.default.driverClassName"; //$NON-NLS-1$
 
@@ -69,7 +69,7 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
 
     private Properties getDatabaseProperties( IPath bundlePath )
     {
-        final IPath bundleExtPath = bundlePath.append( PORTAL_EXT_PROPERTIES1 );
+        final IPath bundleExtPath = bundlePath.append( PORTAL_EXT_PROPERTIES );
         final Properties pluginPackageProperties = new Properties();
 
         try
