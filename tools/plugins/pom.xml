@@ -59,7 +59,6 @@
         <module>com.liferay.ide.theme.ui</module>
         <module>com.liferay.ide.tools.branding</module>
         <module>com.liferay.ide.ui.snippets</module>
-        <module>com.liferay.ide.xml.search.core</module>
         <module>com.liferay.ide.xml.search.ui</module>
     </modules>
 </project>

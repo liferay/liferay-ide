@@ -15,7 +15,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.xml.ui,
  org.eclipse.ui,
  org.eclipse.wst.validation,
- com.liferay.ide.xml.search.core,
  org.eclipse.jdt.core,
  com.liferay.ide.core,
  org.eclipse.wst.jsdt.core,
@@ -24,4 +23,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jface.text
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.liferay.ide.xml.search.ui
+Export-Package: com.liferay.ide.xml.search.ui,
+ com.liferay.ide.xml.search.ui.validators
