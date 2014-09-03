@@ -112,4 +112,33 @@
                targetId="org.eclipse.jdt.ui.javaCode">
       </hyperlinkDetector>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.commands">
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Run the build-service command"
+            id="com.liferay.ide.service.ui.buildService"
+            name="Build Service">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Run the build-wsdd command"
+            id="com.liferay.ide.service.ui.buildWSDD"
+            name="Build WSDD">
+        </command>
+   </extension>
+    
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.liferay.ide.service.ui.handlers.BuildServiceHandler"
+            commandId="com.liferay.ide.service.ui.buildService">
+      </handler>
+      <handler
+            class="com.liferay.ide.service.ui.handlers.BuildWSDDHandler"
+            commandId="com.liferay.ide.service.ui.buildWSDD">
+      </handler>      
+   </extension>   
+   
 </plugin>
