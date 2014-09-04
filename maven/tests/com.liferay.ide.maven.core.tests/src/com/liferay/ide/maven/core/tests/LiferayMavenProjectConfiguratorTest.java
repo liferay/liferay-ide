@@ -22,20 +22,6 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 {
 
     @Test
-    public void testLiferayFactedConfigured() throws Exception
-    {
-        IProject project = importProject( "projects/configurators/webapp-1/pom.xml" );
-
-        assertNotNull( project );
-
-        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
-
-        assertNotNull( facade );
-
-        assertFalse( CoreUtil.isLiferayProject( project ) );
-    }
-
-    @Test
     public void testLiferayFacetNoLiferayPluginConfigured() throws Exception
     {
         IProject project = importProject( "projects/configurators/default-webapp-no-liferay-plugin/pom.xml" );
@@ -64,6 +50,20 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
     }
 
     @Test
+    public void testLiferayFactedConfigured() throws Exception
+    {
+        IProject project = importProject( "projects/configurators/webapp-1/pom.xml" );
+
+        assertNotNull( project );
+
+        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
+
+        assertNotNull( facade );
+
+        assertFalse( CoreUtil.isLiferayProject( project ) );
+    }
+
+    @Test
     public void testWarPluginNoWarSourceDirConfigured() throws Exception
     {
         IProject project = importProject( "projects/configurators/bad-war-config/pom.xml" );
@@ -75,6 +75,5 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
         assertNotNull( facade );
 
         assertTrue( CoreUtil.isLiferayProject( project ) );
-
     }
 }
