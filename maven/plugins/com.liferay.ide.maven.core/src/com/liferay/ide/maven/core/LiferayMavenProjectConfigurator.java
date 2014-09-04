@@ -547,9 +547,12 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         boolean configureAsLiferayPlugin = liferayMavenPlugin != null;
 
-        if( ! configureAsLiferayPlugin )
+        IFolder warSourceDir = warSourceDirectory( project, mavenProject );
+
+        if( !configureAsLiferayPlugin && warSourceDir != null )
         {
-            final IPath baseDir = warSourceDirectory( project, mavenProject ).getRawLocation();
+
+            final IPath baseDir = warSourceDir.getRawLocation();
             final String[] includes = { "**/liferay*.xml", "**/liferay*.properties" };
 
             final DirectoryScanner dirScanner = new DirectoryScanner();
@@ -583,13 +586,20 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                 final String resourceLocation = warSourceDirs[0].getValue();
                 return project.getFolder( resourceLocation );
             }
+            else
+            {
+                /*
+                 * if no explicit warSourceDirectory set we assume the default warSource directory
+                 * ${basedir}/src/main/webapp refer to http://maven.apache.org/plugins/maven-war-plugin/war-mojo.html
+                 * for more information
+                 */
+                return project.getFolder( WAR_SOURCE_FOLDER );
+            }
         }
         else
         {
             return project.getFolder( WAR_SOURCE_FOLDER );
         }
-
-        return null;
     }
 
     private static class Msgs extends NLS

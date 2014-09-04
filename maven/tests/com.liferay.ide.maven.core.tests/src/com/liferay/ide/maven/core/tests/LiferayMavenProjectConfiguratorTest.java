@@ -62,4 +62,19 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
         assertTrue( CoreUtil.isLiferayProject( project ) );
     }
+
+    @Test
+    public void testWarPluginNoWarSourceDirConfigured() throws Exception
+    {
+        IProject project = importProject( "projects/configurators/bad-war-config/pom.xml" );
+
+        assertNotNull( project );
+
+        IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
+
+        assertNotNull( facade );
+
+        assertTrue( CoreUtil.isLiferayProject( project ) );
+
+    }
 }
