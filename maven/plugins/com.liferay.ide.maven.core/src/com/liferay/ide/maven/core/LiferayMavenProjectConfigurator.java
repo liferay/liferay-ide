@@ -547,7 +547,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         boolean configureAsLiferayPlugin = liferayMavenPlugin != null;
 
-        IFolder warSourceDir = warSourceDirectory( project, mavenProject );
+        final IFolder warSourceDir = warSourceDirectory( project, mavenProject );
 
         if( !configureAsLiferayPlugin && warSourceDir != null )
         {
