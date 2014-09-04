@@ -574,6 +574,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private IFolder warSourceDirectory( final IProject project, final MavenProject mavenProject )
     {
+        IFolder retval = null;
+
         final Xpp3Dom warPluginConfiguration =
             (Xpp3Dom) mavenProject.getPlugin( MAVEN_WAR_PLUGIN_KEY ).getConfiguration();
 
@@ -584,22 +586,21 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             if( warSourceDirs != null && warSourceDirs.length > 0 )
             {
                 final String resourceLocation = warSourceDirs[0].getValue();
-                return project.getFolder( resourceLocation );
-            }
-            else
-            {
-                /*
-                 * if no explicit warSourceDirectory set we assume the default warSource directory
-                 * ${basedir}/src/main/webapp refer to http://maven.apache.org/plugins/maven-war-plugin/war-mojo.html
-                 * for more information
-                 */
-                return project.getFolder( WAR_SOURCE_FOLDER );
+                retval = project.getFolder( resourceLocation );
             }
         }
-        else
+
+        if( retval == null )
         {
-            return project.getFolder( WAR_SOURCE_FOLDER );
+            /*
+             * if no explicit warSourceDirectory set we assume the default warSource directory
+             * ${basedir}/src/main/webapp refer to http://maven.apache.org/plugins/maven-war-plugin/war-mojo.html
+             * for more information
+             */
+            retval = project.getFolder( WAR_SOURCE_FOLDER );
         }
+
+        return retval;
     }
 
     private static class Msgs extends NLS
