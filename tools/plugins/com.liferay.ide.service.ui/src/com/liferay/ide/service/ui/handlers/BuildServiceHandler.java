@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -70,17 +71,17 @@ public class BuildServiceHandler extends AbstractHandler
             {
                 final BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
                 job.schedule();
-                retval = job.getResult();
+                retval = Status.OK_STATUS;
             }
         }
         catch( Exception e )
         {
-            ServiceCore.logError( e );
+            retval = ServiceCore.createErrorStatus( "Unable to execute build-service command", e );
         }
 
         return retval;
     }
-    
+
     protected IFile getServiceFile( IProject project )
     {
         IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
