@@ -38,20 +38,21 @@ public class BuildServiceHandler extends AbstractHandler
 
             final Object selected = structuredSelection.getFirstElement();
 
+            IProject project = null;
+
             if( selected instanceof IResource )
             {
-                IResource resource = (IResource) selected;
-                boolean isLiferayProject = CoreUtil.isLiferayProject( resource.getProject() );
-
-                if( isLiferayProject )
-                {
-                    IProject project = resource.getProject();
-                    retval = executeServiceBuild( project );
-                }
+                project = ( (IResource) selected ).getProject();
             }
             else if( selected instanceof IJavaProject )
             {
-                final IProject project = ( (IJavaProject) selected ).getProject();
+                project = ( (IJavaProject) selected ).getProject();
+            }
+
+            final boolean isLiferay = CoreUtil.isLiferayProject( project );
+
+            if( isLiferay )
+            {
                 retval = executeServiceBuild( project );
             }
         }
