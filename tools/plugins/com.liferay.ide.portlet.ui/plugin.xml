@@ -13,7 +13,7 @@
             category="com.liferay.ide.newWizards"
             icon="icons/n16/portlet_new.png"
             id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet"
-            name="%lifeay.portlet.wizard.name">
+            name="%liferay.portlet.wizard.name">
          <class class="com.liferay.ide.portlet.ui.wizard.NewPortletWizard">
             <parameter name="liferay_artifact" value="true"/>
             <parameter name="menuIndex" value="10" />
@@ -72,7 +72,18 @@
                contentTypeId="com.liferay.ide.portlet.core.liferaydisplayxml">
          </contentTypeBinding>
       </editor>
-
+      <editor
+            class = "com.liferay.ide.portlet.ui.editor.LiferayPortletXmlEditor"
+            default="true"
+            id="com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor"
+            filenames="liferay-portlet.xml"
+            icon="icons/e16/liferay_portlet.png"
+            name="%liferay.portlet.application.configuration.editor.name"
+            symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+         <contentTypeBinding
+               contentTypeId="com.liferay.ide.portlet.core.liferayportletxml">
+         </contentTypeBinding>
+      </editor>         
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

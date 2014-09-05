@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <import>
+        <package>com.liferay.ide.portlet.ui</package>
+        <package>com.liferay.ide.portlet.ui.action</package>
+        <package>com.liferay.ide.portlet.core.lfportlet.model</package>
+        <package>com.liferay.ide.portlet.core.lfportlet.model.internal</package>
+        <package>com.liferay.ide.portlet.ui.parts</package>
+        <package>com.liferay.ide.portlet.ui.action.filters</package>
+        <package>com.liferay.ide.portlet.ui.editor.internal</package>
+    </import>
+    <editor-page>
+        <id>liferay-portlet-app.editor</id>
+        <element-type>LiferayPortletApp</element-type>
+        <page-name>Overriew</page-name>
+        <page-header-text>Liferay Portlet Application</page-header-text>
+        <initial-selection>LiferayPortlets</initial-selection>
+        <page-header-image>images/liferay_portlet.png</page-header-image>
+        <root-node>
+            <node>
+                <label>Liferay Portlets</label>
+                <node-include>PortletsNodeList</node-include>
+                <section>
+                    <content>
+                        <property-editor>
+                            <span>true</span>
+                            <property>Portlets</property>
+                            <child-property>PortletName</child-property>
+                            <child-property>Icon</child-property>
+                            <show-label>false</show-label>
+                        </property-editor>
+                    </content>
+                    <label>Liferay Portlets Quick Edit</label>
+                </section>
+                <image>icons/e16/portlets_16x16.png</image>
+            </node>
+            <node>
+                <label>Role Mappper</label>
+                <section>
+                    <content>
+                        <property-editor>
+                            <span>true</span>
+                            <property>RoleMappers</property>
+                            <child-property>RoleName</child-property>
+                            <child-property>RoleLink</child-property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                        </property-editor>
+                    </content>
+                    <label>Liferay Portlets Quick Edit</label>
+                </section>
+                <image>icons/e16/role.png</image>
+            </node>
+            <node>
+                <label>Custom User Attribute</label>
+                <section>
+                    <label>Custom User Attribute Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>CustomUserAttributes</property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                            <child-property>CustomClass</child-property>
+                        </property-editor>
+                    </content>
+                </section>
+                <node-include>CustomUserAttributesNodeList</node-include>
+                <image>icons/e16/custom_folder.png</image>
+            </node>
+        </root-node>
+        <action>
+            <id>Sapphire.ShowInSource</id>
+            <label>Show in Source</label>
+            <hint>
+                <name>style</name>
+                <value>image+text</value>
+            </hint>
+            <context>Sapphire.EditorPage.Outline.Node</context>
+        </action>
+    </editor-page>
+    <node-factory>
+        <id>PortletsNodeList</id>
+        <property>Portlets</property>
+        <case>
+            <label>${PortletName}</label>
+            <image>${ Image() }</image>
+            <section>
+                <content>
+                    <include>portlet.basic.composite</include>
+                </content>
+                <label>${ PortletName != null ? concat( PortletName, ' Details' ) : '&lt;portlet-name&gt;' }</label>
+                <collapsible>false</collapsible>
+                <action>
+                    <id>LiferayIDE.PortletNode.Expand</id>
+                    <context>Sapphire.Section</context>
+                    <type>TOGGLE</type>
+                    <label>More Details</label>
+                    <image>icons/elcl16/toggle_info_16x16.png</image>
+                    <location>before:Sapphire.Restore.Defaults</location>
+                </action>
+                <action-handler>
+                    <action>LiferayIDE.PortletNode.Expand</action>
+                    <id>LiferayIDE.PortletNode.Expand</id>
+                    <impl>ExpandSectionOutlineNodeHandler</impl>
+                </action-handler>
+            </section>
+            <section>
+                <label>Contron Panel Setting</label>
+                <content>
+                    <property-editor>
+                        <property>ControlPanelEntryCategory</property>
+                        <hint>
+                            <name>browse.only</name>
+                            <value>true</value>
+                        </hint>
+                    </property-editor>
+                    <property-editor>ControlPanelEntryWeight</property-editor>
+                    <property-editor>ControlPanelEntryClass</property-editor>
+                </content>
+                <collapsible>true</collapsible>
+                <collapsed-initially>false</collapsed-initially>
+            </section>
+            <section>
+                <label>Common Style Configuration</label>
+                <indent>true</indent>
+                <content>
+                    <property-editor>
+                        <property>CssClassWrapper</property>
+                        <show-label>true</show-label>
+                    </property-editor>
+                    <property-editor>
+                        <property>HeaderPortletCsses</property>
+                        <show-label>true</show-label>
+                    </property-editor>
+                    <property-editor>
+                        <property>HeaderPortletJavascripts</property>
+                        <show-label>true</show-label>
+                    </property-editor>
+                    <property-editor>
+                        <property>FooterPortletCsses</property>
+                        <show-label>true</show-label>
+                    </property-editor>
+                    <property-editor>
+                        <property>FooterPortletJavascripts</property>
+                        <show-label>true</show-label>
+                    </property-editor>
+                 </content>
+                <collapsible>true</collapsible>
+                <collapsed-initially>false</collapsed-initially>
+            </section>
+            <node>
+                <label>Additional Style Setting</label>
+                <section>
+                    <label>Style Detail Setting</label>
+                    <content>
+                        <property-editor>HeaderPortalCsses</property-editor>
+                        <property-editor>HeaderPortalJavascripts</property-editor>
+                        <property-editor>FooterPortalCsses</property-editor>
+                        <property-editor>FooterPortalJavascripts</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <image>icons/e16/style.gif</image>
+            </node>
+            <node>
+                <label>Scheduler Entry Setting</label>
+                <node-include>SchedulerEntryList</node-include>
+                <image>images/options_16x16.gif</image>
+                <section>
+                    <label>Scheduler Entry Quick Edit</label>
+                    <content>
+                        <property-editor>
+                            <property>SchedulerEntries</property>
+                            <show-label>false</show-label>
+                            <span>true</span>
+                            <child-property>SchedulerDescription</child-property>
+                        </property-editor>
+                    </content>
+                </section>
+            </node>
+            <node>
+                <label>Mapping and Search Setting</label>
+                <section>
+                    <label>Struts Mapping Detail Setting</label>
+                    <content>
+                        <property-editor>VirtualPath</property-editor>
+                        <property-editor>StrutsPath</property-editor>
+                        <property-editor>ParentStrutsPath</property-editor>
+                        <property-editor>ConfigurationActionClass</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+	            <section>
+	                <label>Search Detail Setting</label>
+	                <content>
+	                    <property-editor>
+	                        <property>IndexerClasses</property>
+	                        <hint>
+	                            <name>browse.only</name>
+	                            <value>true</value>
+	                        </hint>
+	                    </property-editor>
+	                    <property-editor>OpenSearchClass</property-editor>
+	                </content>
+	                <collapsible>true</collapsible>
+	                <collapsed-initially>false</collapsed-initially>
+	            </section>
+	            <section>
+	                <label>URL Mapping Detail Setting</label>
+	                <content>
+	                    <property-editor>PortletUrlClass</property-editor>
+	                    <property-editor>FriendlyURLMapperClass</property-editor>
+	                    <property-editor>FriendlyURLMapping</property-editor>
+	                    <property-editor>FriendlyURLRoutes</property-editor>
+	                    <property-editor>URLEncoderClass</property-editor>
+	                </content>
+	                <collapsible>true</collapsible>
+	                <collapsed-initially>false</collapsed-initially>
+	            </section>
+	            <image>icons/e16/mapping.png</image>
+            </node>
+            <node>
+                <label>Data Handler Setting</label>
+                <section>
+                    <label>Portlet Data Handler Detail Setting</label>
+                    <content>
+                        <property-editor>PortletDataHandlerClass</property-editor>
+                        <property-editor>StagedModelDataHandlerClasses</property-editor>
+                        <property-editor>PortletLayoutListenerClass</property-editor>
+                        <property-editor>PollerProcessorClass</property-editor>
+                        <property-editor>PopMessageListenerClass</property-editor>
+                        <property-editor>WebDAVStorageToken</property-editor>
+                        <property-editor>WebDAVStorageClass</property-editor>
+                        <property-editor>XmlRPCMethodClass</property-editor>
+                        <property-editor>TrashHandlers</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <image>icons/e16/data_handler.gif</image>
+            </node>
+            <node>
+                <label>Social and Security Setting</label>
+                <section>
+                    <label>Social Details Setting</label>
+                    <content>
+                        <property-editor>SocialActivityInterpreterClasses</property-editor>
+                        <property-editor>SocialRequestInterpreterClass</property-editor>
+                        <property-editor>UserNotificationDefinitions</property-editor>
+                        <property-editor>UserNotificationHandlerClasses</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                    <image>icons/e16/social.png</image>
+                </section>
+                <section>
+                    <label>Security Details Setting</label>
+                    <content>
+                        <property-editor>PermissionPropagator</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <image>icons/e16/social.png</image>
+            </node>
+            <node>
+                <label>Custom Display and Layout Setting</label>
+                <section>
+                    <label>Custom Display and Layout Details Setting</label>
+                    <content>
+                        <property-editor>CustomAttributesDisplays</property-editor>
+                        <property-editor>DDMDisplay</property-editor>
+                        <property-editor>TemplateHandler</property-editor>
+                        
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <section>
+                    <label>Workflow Details Setting</label>
+                    <content>
+                        <property-editor>AssetRendererFactories</property-editor>
+                        <property-editor>AtomCollectionAdapters</property-editor>
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <image>icons/e16/display.gif</image>
+            </node>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>CustomUserAttributesNodeList</id>
+        <property>CustomUserAttributes</property>
+        <case>
+            <label>${CustomClass ==null ? '&lt;custom-user-attribute&gt;' : CustomClass }</label>
+            <image>${ Image() }</image>
+            <section>
+                <label>Custom User Attribute Details</label>
+                <content>
+                    <property-editor>CustomClass</property-editor>
+                    <property-editor>CustomUserAttributeNames</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>SchedulerEntryList</id>
+        <property>SchedulerEntries</property>
+        <case>
+            <label>${SchedulerDescription ==null ? '&lt;container-runtime-option&gt;' : SchedulerDescription }</label>
+            <image>${ Image() }</image>
+            <section>
+                <label>Scheduler Entry Details Setting</label>
+                <content>
+                    <property-editor>SchedulerDescription</property-editor>
+                    <property-editor>SchedulerEventListenerClass</property-editor>
+                    <spacer></spacer>
+                    <label>Scheduler Entry Trigger Detail Setting</label>
+                    <with>
+                        <path>PortletTrigger</path>
+                        <show-label>false</show-label>
+                        <case>
+                            <element-type>CronTrigger</element-type>
+                            <content>
+                                <with>
+	                                <label>Select Cron trigger type</label>
+	                                <path>CronTrigger</path>
+	                                <show-label>false</show-label>
+	                                <case>
+	                                    <element-type>PropertyCronTrigger</element-type>
+	                                    <content>
+	                                        <property-editor>PropertyKey</property-editor>
+	                                    </content>
+	                                </case>
+                                    <case>
+                                        <element-type>CronTriggeValueTrigger</element-type>
+                                        <content>
+                                            <property-editor>CronTriggerValue</property-editor>
+                                        </content>
+                                    </case>
+                                </with>
+                            </content>
+                        </case>
+                        <case>
+                            <element-type>SimpleTrigger</element-type>
+                            <content>
+                                <with>
+                                    <label>Select Simple trigger type</label>
+                                    <path>SimpleTrigger</path>
+                                    <show-label>false</show-label>
+                                    <case>
+                                        <element-type>PropertySimpleTrigger</element-type>
+                                        <content>
+                                            <property-editor>PropertyKey</property-editor>
+                                        </content>
+                                    </case>
+                                    <case>
+                                        <element-type>SimpleTriggeValueTrigger</element-type>
+                                        <content>
+                                            <property-editor>SimpleTriggerValue</property-editor>
+                                        </content>
+                                    </case>
+                                </with>
+                                <property-editor>TimeUnit</property-editor>
+                            </content>
+                        </case>
+                    </with>
+                </content>
+            </section>
+        </case>
+    </node-factory>   
+    <composite>
+        <id>portlet.basic.composite</id>
+        <content>
+            <property-editor>PortletName</property-editor>
+            <property-editor>Icon</property-editor>
+        </content>
+    </composite>
+</definition>

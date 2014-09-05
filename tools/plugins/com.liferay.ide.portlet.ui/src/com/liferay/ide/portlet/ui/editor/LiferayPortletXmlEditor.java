@@ -1,0 +1,40 @@
+/*******************************************************************************
+ * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *******************************************************************************/
+
+package com.liferay.ide.portlet.ui.editor;
+
+
+
+import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortletXml;
+
+import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+
+/**
+ * @author Simon Jiang
+ */
+public class LiferayPortletXmlEditor extends SapphireEditorForXml
+{
+
+    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor"; //$NON-NLS-1$
+
+    public LiferayPortletXmlEditor()
+    {
+        super( 
+            LiferayPortletXml.TYPE, 
+            DefinitionLoader
+                .sdef( LiferayPortletXmlEditor.class )
+                .page( "liferay-portlet-app.editor" ) );
+    }
+}
