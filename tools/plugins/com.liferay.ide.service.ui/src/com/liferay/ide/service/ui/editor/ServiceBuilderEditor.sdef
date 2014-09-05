@@ -905,6 +905,7 @@ development of services.</content>
             <impl>BuildWSDDActionHandler</impl>
         </action-handler>
         <element-type>ServiceBuilder6xx</element-type>
+        <initial-selection>Service Builder/Entities</initial-selection>
     </editor-page>
     <diagram-page>
         <id>diagramPage</id>
