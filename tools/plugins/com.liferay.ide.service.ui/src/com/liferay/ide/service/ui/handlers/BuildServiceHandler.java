@@ -35,7 +35,7 @@ public class BuildServiceHandler extends AbstractHandler
         {
             final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 
-            Object selected = structuredSelection.getFirstElement();
+            final Object selected = structuredSelection.getFirstElement();
 
             if( selected instanceof IResource )
             {
