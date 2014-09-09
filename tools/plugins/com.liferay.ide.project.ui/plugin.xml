@@ -398,6 +398,7 @@
       <actionSet
             id="com.liferay.ide.eclipse.ui.shortcuts.actionSet"
             label="%ide.actions.label">
+            <!--
          <action
                class="com.liferay.ide.project.ui.action.NewServerDropDownAction"
                icon="icons/n16/server_new.png"
@@ -415,10 +416,10 @@
                style="pulldown"
                toolbarPath="Normal/Liferay"
                tooltip="%new.portlet.action.tooltip">
-         </action>
+         </action> -->
          <action
                class="com.liferay.ide.project.ui.action.NewPluginProjectDropDownAction"
-               icon="icons/n16/plugin_new.png"
+               icon="icons/n16/server_new.png"
                id="com.liferay.ide.ui.action.newPluginProject"
                label="%new.project.action.label"
                style="pulldown"
