@@ -15,9 +15,24 @@
 
 package com.liferay.ide.project.core.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
+
+import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.services.ValidationService;
 import org.junit.Test;
 
 /**
@@ -55,6 +70,21 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     protected IPath getLiferayRuntimeZip()
     {
         return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
+    }
+
+    private IPath getLiferayPlugins612SdkDir()
+    {
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.2" );
+    }
+
+    private IPath getLiferayPlugins612SDKZip()
+    {
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.1.1-20130816114619181.zip" );
+    }
+
+    private String getLiferayPlugins612SdkZipFolder()
+    {
+        return "liferay-plugins-sdk-6.1.1/";
     }
 
     @Override
@@ -160,7 +190,39 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     {
         if( shouldSkipBundleTests() ) return;
 
-        super.testProjectNameValidation( "project-name-validation-620" );
+        setupPluginsSDK();
+        setupPlugins612SDK();
+
+        final NewLiferayPluginProjectOp op1 = newProjectOp( "" );
+
+        op1.setUseDefaultLocation( true );
+
+        PossibleValuesService ps = op1.getPluginsSDKName().service( PossibleValuesService.class );
+
+        String[] sdkNames = (String[]) ps.data().toArray( new String[ps.data().size()] );
+        
+        op1.setPluginsSDKName( sdkNames[0] );
+        ValidationService vs = op1.getProjectName().service( ValidationService.class );
+
+        String validProjectName = "test1";
+
+        op1.setProjectName( validProjectName );
+        assertEquals( "ok", vs.validation().message() );
+        assertEquals( "ok", op1.getProjectName().validation().message() );
+
+        op1.setProjectName( validProjectName + "-portlet" );
+        assertEquals( "ok", vs.validation().message() );
+        assertEquals( "ok", op1.getProjectName().validation().message() );
+
+        createProject( op1 );
+
+        op1.setPluginsSDKName( sdkNames[1] );
+
+        op1.setProjectName( validProjectName );
+        assertEquals( true, !"ok".equals( vs.validation().message() ) );
+        assertEquals( true, !"ok".equals( op1.getProjectName().validation().message() ) );
+
+        op1.dispose();
     }
 
     @Test
@@ -170,4 +232,100 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
 
         super.testUseSdkLocationListener();
     }
+    
+
+
+
+    /**
+     * @throws Exception
+     */
+    private void setupPlugins612SDK() throws Exception
+    {
+        if( shouldSkipBundleTests() )
+            return;
+
+        final File liferayPluginsSdkDirFile = getLiferayPlugins612SdkDir().toFile();
+
+        if( !liferayPluginsSdkDirFile.exists() )
+        {
+            final File liferayPluginsSdkZipFile = getLiferayPlugins612SDKZip().toFile();
+
+            assertEquals(
+                "Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
+                liferayPluginsSdkZipFile.exists() );
+
+            liferayPluginsSdkDirFile.mkdirs();
+
+            final String liferayPluginsSdkZipFolder = getLiferayPlugins612SdkZipFolder();
+
+            if( CoreUtil.isNullOrEmpty( liferayPluginsSdkZipFolder ) )
+            {
+                ZipUtil.unzip( liferayPluginsSdkZipFile, liferayPluginsSdkDirFile );
+            }
+            else
+            {
+                ZipUtil.unzip(
+                    liferayPluginsSdkZipFile, liferayPluginsSdkZipFolder, liferayPluginsSdkDirFile,
+                    new NullProgressMonitor() );
+            }
+        }
+
+        assertEquals( true, liferayPluginsSdkDirFile.exists() );
+
+        final File ivyCacheDir = new File( liferayPluginsSdkDirFile, ".ivy" );
+
+        if( !ivyCacheDir.exists() )
+        {
+            // setup ivy cache
+
+            final File ivyCacheZipFile = getIvyCacheZip().toFile();
+
+            assertEquals(
+                "Expected ivy-cache.zip to be here: " + ivyCacheZipFile.getAbsolutePath(), true,
+                ivyCacheZipFile.exists() );
+
+            ZipUtil.unzip( ivyCacheZipFile, liferayPluginsSdkDirFile );
+        }
+
+        assertEquals( "Expected .ivy folder to be here: " + ivyCacheDir.getAbsolutePath(), true, ivyCacheDir.exists() );
+
+        SDK sdk = null;
+
+        final SDK existingSdk = SDKManager.getInstance().getSDK( getLiferayPlugins612SdkDir() );
+
+        if( existingSdk == null )
+        {
+            sdk = SDKUtil.createSDKFromLocation( getLiferayPlugins612SdkDir() );
+        }
+        else
+        {
+            sdk = existingSdk;
+        }
+
+        assertNotNull( sdk );
+
+        sdk.setDefault( true );
+
+        SDKManager.getInstance().addSDK( sdk );
+
+        final IPath customLocationBase = getCustomLocationBase();
+
+        final File customBaseDir = customLocationBase.toFile();
+
+        if( customBaseDir.exists() )
+        {
+            FileUtil.deleteDir( customBaseDir, true );
+
+            if( customBaseDir.exists() )
+            {
+                for( File f : customBaseDir.listFiles() )
+                {
+                    System.out.println( f.getAbsolutePath() );
+                }
+            }
+
+            assertEquals( "Unable to delete pre-existing customBaseDir", false, customBaseDir.exists() );
+        }
+    }
+
 }
