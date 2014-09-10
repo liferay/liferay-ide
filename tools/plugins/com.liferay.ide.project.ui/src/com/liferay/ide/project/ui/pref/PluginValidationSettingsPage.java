@@ -13,10 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.portlet.ui.pref;
+package com.liferay.ide.project.ui.pref;
 
-import com.liferay.ide.portlet.core.PortletCore;
-import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.ui.pref.AbstractValidationSettingsPage;
@@ -46,13 +45,12 @@ import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class PortletValidationSettingsPage extends AbstractValidationSettingsPage
+public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
 {
 
-    public static final String PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID =
-        "com.liferay.ide.portlet.ui.propertyPage.project.validation"; //$NON-NLS-1$
+    public static final String PROJECT_UI_PROPERTIES_PAGE_ID = "com.liferay.ide.project.ui.properties";
 
-    public static final String VALIDATION_ID = "com.liferay.ide.portlet.ui.validation"; //$NON-NLS-1$
+    public static final String VALIDATION_ID = "com.liferay.ide.project.ui.pluginValidationSettingsPage"; //$NON-NLS-1$
 
     protected static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
 
@@ -208,7 +206,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
     protected IDialogSettings getDialogSettings()
     {
-        return PortletUIPlugin.getDefault().getDialogSettings();
+        return ProjectUI.getDefault().getDialogSettings();
     }
 
     @Override
@@ -232,12 +230,12 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
     @Override
     protected String getPropertyPageID()
     {
-        return PORTLET_UI_PROPERTY_PAGE_PROJECT_VALIDATION_ID;
+        return PROJECT_UI_PROPERTIES_PAGE_ID;
     }
 
     protected String getQualifier()
     {
-        return PortletCore.getDefault().getBundle().getSymbolicName();
+        return ProjectCore.getDefault().getBundle().getSymbolicName();
     }
 
     protected void initializeValues()
@@ -300,7 +298,7 @@ public class PortletValidationSettingsPage extends AbstractValidationSettingsPag
 
         static
         {
-            initializeMessages( PortletValidationSettingsPage.class.getName(), Msgs.class );
+            initializeMessages( PluginValidationSettingsPage.class.getName(), Msgs.class );
         }
     }
 }

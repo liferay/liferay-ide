@@ -464,6 +464,38 @@
                 <toJava />
             </reference>
 
+            <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
+                <from
+                    path="//indexer-class-name"
+                    targetNodes="text()"
+                    querySpecificationId="liferay.liferayhookxml.querySpecification" />
+                <toJava extends="com.liferay.portal.model.BaseModel" />
+            </reference>
+
+            <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
+                <from
+                    path="//indexer-post-processor-impl"
+                    targetNodes="text()"
+                    querySpecificationId="liferay.liferayhookxml.querySpecification" />
+                <toJava extends="com.liferay.portal.kernel.search.IndexerPostProcessor" />
+            </reference>
+
+            <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
+                <from
+                    path="//servlet-filter-impl"
+                    targetNodes="text()"
+                    querySpecificationId="liferay.liferayhookxml.querySpecification" />
+                <toJava extends="javax.servlet.Filter" />
+            </reference>
+
+            <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
+                <from
+                    path="//struts-action-impl"
+                    targetNodes="text()"
+                    querySpecificationId="liferay.liferayhookxml.querySpecification" />
+                <toJava extends="com.liferay.portal.kernel.struts.StrutsAction,com.liferay.portal.kernel.struts.StrutsPortletAction" />
+            </reference>
+
         </references>
     </extension>
 

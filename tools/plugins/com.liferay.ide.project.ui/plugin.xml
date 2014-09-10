@@ -880,6 +880,12 @@
             id="com.liferay.ide.project.ui.ProjectsPreferencePage"
             name="Projects">
       </page>
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.project.ui.pref.PluginValidationSettingsPage"
+            id="com.liferay.ide.project.ui.pluginValidationSettingsPage"
+            name="%plugin.validation.page.name">
+      </page>
    </extension>
 
    <extension

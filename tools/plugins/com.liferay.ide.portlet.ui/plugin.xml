@@ -169,32 +169,6 @@
       </propertyTester>
    </extension>
    <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            category="com.liferay.ide.ui.preferences.liferay"
-            class="com.liferay.ide.portlet.ui.pref.PortletValidationSettingsPage"
-            id="com.liferay.ide.portlet.ui.validation"
-            name="%portlet.plugin.validation.page.name">
-      </page>
-   </extension>
-   <extension
-         point="org.eclipse.ui.propertyPages">
-      <page
-            category="com.liferay.ide.project.ui.properties"
-            class="com.liferay.ide.portlet.ui.pref.PortletValidationSettingsPage"
-            id="com.liferay.ide.portlet.ui.propertyPage.project.validation"
-            name="%portlet.plugin.validation.page.name">
-         <enabledWhen>
-            <adapt
-                  type="org.eclipse.core.resources.IProject">
-               <test
-                     property="com.liferay.ide.project.ui.isLiferayProject">
-               </test>
-            </adapt>
-         </enabledWhen>
-      </page>
-   </extension>
-   <extension
          point="org.eclipse.wst.xml.core.catalogContributions">
       <catalogContribution></catalogContribution>
    </extension>
