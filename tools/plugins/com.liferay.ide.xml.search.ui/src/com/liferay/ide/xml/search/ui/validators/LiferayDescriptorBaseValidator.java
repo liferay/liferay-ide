@@ -44,6 +44,7 @@ import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.search.core.properties.IPropertiesRequestor;
 import org.eclipse.wst.xml.search.core.queryspecifications.IXMLQuerySpecification;
 import org.eclipse.wst.xml.search.core.queryspecifications.XMLQuerySpecificationManager;
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
@@ -59,6 +60,7 @@ import org.w3c.dom.Node;
 
 /**
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
@@ -70,6 +72,7 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
     public static final String MESSAGE_RESOURCE_NOT_FOUND = Msgs.resourceNotFound;
     public static final String MESSAGE_TYPE_HIERARCHY_INCORRECT = Msgs.typeHierarchyIncorrect;
     public static final String MESSAGE_TYPE_NOT_FOUND = Msgs.typeNotFound;
+    public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
 
     protected LocalizedMessage createMessage(
         int start, int length, String messageText, int severity, IStructuredDocument structuredDocument )
@@ -111,6 +114,9 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
                 break;
             case RESOURCE:
                 validateReferenceToResource( referenceTo, node, file, validator, reporter, batchMode );
+                break;
+            case PROPERTY:
+                validateReferenceToProperty( referenceTo, node, file, validator, reporter, batchMode );
                 break;
             default:
                 return;
@@ -188,6 +194,54 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         }
     }
 
+    class ReferencedPropertiesVisitor implements IResourceProxyVisitor
+    {
+
+        IFile retval = null;
+        IPropertiesRequestor propertiesRequestor;
+        IResource rootResource;
+
+        public boolean visit( IResourceProxy proxy )
+        {
+            try
+            {
+                if( proxy.getType() == IResource.FILE )
+                {
+                    final IFile file = (IFile) proxy.requestResource();
+
+                    if( propertiesRequestor.accept( file, rootResource ) )
+                    {
+                        retval = file;
+                        return false;
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+                return true;
+            }
+
+            return true;
+        }
+
+        public IFile getReferencedFile( IPropertiesRequestor requestor, IResource rootResource )
+        {
+            this.propertiesRequestor = requestor;
+            this.rootResource = rootResource;
+
+            try
+            {
+                rootResource.accept( this, IContainer.EXCLUDE_DERIVED );
+            }
+            catch( CoreException e )
+            {
+                LiferayXMLSearchUI.logError( e );
+            }
+
+            return retval;
+        }
+    }
+
     /**
      * default implementation of all kinds of validation
      */
@@ -243,6 +297,13 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
 
     protected void validateReferenceToJava( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
                                             IValidator validator, IReporter reporter, boolean batchMode )
+    {
+        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
+    }
+
+    protected void validateReferenceToProperty(
+        IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+        boolean batchMode )
     {
         validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
     }
@@ -326,6 +387,10 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         case REFERENCE_NOT_FOUND:
             final IFile referencedFile = getReferencedFile( referenceTo, node, file );
             return NLS.bind( MESSAGE_REFERENCE_NOT_FOUND, textContent, referencedFile != null ? referencedFile.getName() : "" );
+        case PROPERTY_NOT_FOUND:
+            final IFile languagePropertiesFile = getReferencedFile( referenceTo, node, file );
+            return NLS.bind( MESSAGE_PROPERTY_NOT_FOUND, textContent, languagePropertiesFile != null
+                ? languagePropertiesFile.getName() : "" );
         }
 
         return null;
@@ -375,6 +440,8 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
             return ValidationType.TYPE_NOT_FOUND;
         case RESOURCE:
             return ValidationType.RESOURCE_NOT_FOUND;
+        case PROPERTY:
+            return ValidationType.PROPERTY_NOT_FOUND;
         default:
             return null;
         }
@@ -399,15 +466,17 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
     protected static class Msgs extends NLS
     {
 
-        public static String syntaxInvalid;
-        public static String typeNotFound;
-        public static String typeHierarchyIncorrect;
-        public static String resourceNotFound;
+        public static String propertyNotFound;
         public static String referenceNotFound;
+        public static String resourceNotFound;
+        public static String syntaxInvalid;
+        public static String typeHierarchyIncorrect;
+        public static String typeNotFound;
 
         static
         {
             initializeMessages( LiferayDescriptorBaseValidator.class.getName(), Msgs.class );
         }
     }
+
 }

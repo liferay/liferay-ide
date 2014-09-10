@@ -22,12 +22,15 @@ import java.util.Set;
 
 /**
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 public class ValidationPreferences
 {
+
     public enum ValidationType
     {
-        SYNTAX_INVALID, TYPE_NOT_FOUND, TYPE_HIERARCHY_INCORRECT, REFERENCE_NOT_FOUND, RESOURCE_NOT_FOUND
+        SYNTAX_INVALID, TYPE_NOT_FOUND, TYPE_HIERARCHY_INCORRECT, REFERENCE_NOT_FOUND, RESOURCE_NOT_FOUND,
+            PROPERTY_NOT_FOUND
     }
 
     // *** validation preferences of liferay-display.xml ***
@@ -83,9 +86,9 @@ public class ValidationPreferences
     public static final String SERVICE_XML_RESOURCE_NOT_FOUND = "service-xml-resource-not-found";
     public static final String SERVICE_XML_SYNTAX_INVALID = "service-xml-syntax-invalid";
 
-    private static Set<String> preferenceKeys; 
+    private static Set<String> preferenceKeys;
 
-    static 
+    static
     {
         preferenceKeys = new HashSet<String>();
 

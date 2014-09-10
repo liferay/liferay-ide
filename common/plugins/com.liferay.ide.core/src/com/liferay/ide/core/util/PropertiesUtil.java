@@ -46,6 +46,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * @author Kuo Zhang
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class PropertiesUtil
 {
@@ -124,6 +125,40 @@ public class PropertiesUtil
         }
 
         return retval.toArray( new IFile[0] );
+    }
+
+    public static IFile getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
+    {
+        IFile retval = null;
+
+        final IProject proj = CoreUtil.getLiferayProject( portletXml );
+
+        if( proj == null )
+        {
+            return retval;
+        }
+
+        final IFolder srcFolder = CoreUtil.getFirstSrcFolder( proj );
+
+        if( srcFolder.exists() && ( portletXml != null ) && ( portletXml.exists() ) )
+        {
+            final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
+
+            String resourceBundleValue = resourceNodeInfo.getResourceBundle();
+
+            retval =
+                CoreUtil.getWorkspaceRoot().getFile(
+                    srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
+
+        }
+
+        return retval;
+    }
+
+    public static IFile getDefaultLanguagePropertiesFromProject( IProject project )
+    {
+        return getDefaultLanguagePropertiesFromPortletXml( CoreUtil.getDescriptorFile(
+            project, ILiferayConstants.PORTLET_XML_FILE ) );
     }
 
     private static synchronized LanguageFileInfo getLanguageFileInfo( IFile liferayHookXml )
@@ -375,6 +410,19 @@ public class PropertiesUtil
                                             supportedLocaleValue );
                                     }
                                 }
+
+                                String resourceBundle =
+                                    resourceBundleValue.replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+
+                                if( !resourceBundle.endsWith( PROPERTIES_FILE_SUFFIX ) &&
+                                    !resourceBundle.contains( IPath.SEPARATOR + "" ) &&
+                                    !( CoreUtil.isWindows() && resourceBundle.contains( "\\" ) ) )
+                                {
+                                    resourceBundle =
+                                        new Path( resourceBundle.replace( ".", IPath.SEPARATOR + "" ) ).toString();
+                                }
+
+                                retval.setResourceBundle( resourceBundle );
                             }
 
                             resourceBundleValue = null;
@@ -694,7 +742,7 @@ public class PropertiesUtil
                     }
                     catch( Exception e )
                     {
-                        // in case something is wrong when doing match regular expression 
+                        // in case something is wrong when doing match regular expression
                         return true;
                     }
                 }
@@ -742,6 +790,7 @@ public class PropertiesUtil
             return modificationStamp;
         }
 
+        private String resourceBundle = "";
         private final List<String> resourceBundlesPatterns = new ArrayList<String>();
         private final List<String> supportedLocalePatterns = new ArrayList<String>();
 
@@ -753,6 +802,16 @@ public class PropertiesUtil
         public void addSupportedLocalePattern( String supportedLocalePattern )
         {
             this.supportedLocalePatterns.add( supportedLocalePattern );
+        }
+
+        public void setResourceBundle( String resourceBundle )
+        {
+            this.resourceBundle = resourceBundle;
+        }
+
+        public String getResourceBundle()
+        {
+            return this.resourceBundle;
         }
 
         public String[] getResourceBundlePatterns()

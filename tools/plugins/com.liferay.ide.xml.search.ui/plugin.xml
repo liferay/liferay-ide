@@ -16,6 +16,8 @@
                             class="com.liferay.ide.xml.search.ui.descriptors.LiferayHookQuerySpecification" />
         <querySpecification id="liferay.liferaylayouttplxml.querySpecification"
                             class="com.liferay.ide.xml.search.ui.descriptors.LiferayLayoutTplQuerySpecification" />
+        <querySpecification id="liferay.jsp.querySpecification" 
+                            class="com.liferay.ide.xml.search.ui.descriptors.LiferayJspQuerySpecification" />
     </extension>
 
     <!--==================== Resource Query specification ====================-->
@@ -43,7 +45,14 @@
         <!-- Query specification of element <custom-jsp-directory> in liferay-hook.xml -->
         <querySpecification id="liferay.webresources.jspdir.querySpecification"
                             class="com.liferay.ide.xml.search.ui.resources.JSPDirectoryQuerySpecification" />
+    </extension>
 
+    <extension
+          point="org.eclipse.wst.xml.search.core.propertiesQuerySpecifications">
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.resources.PortletLanguagePropertiesQuerySpecification"
+             id="portlet.language.properties.querySpecification">
+       </querySpecification>
     </extension>
 
     <!--==================== portlet.xml ====================-->
@@ -556,6 +565,217 @@
         </references>
     </extension>
 
+    <extension point="org.eclipse.wst.xml.search.editor.xmlReferences">
+       <references contentTypeIds="org.eclipse.jst.jsp.core.jspsource">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="//message"
+                   targetNodes="@key"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="*"
+                   targetNodes="@message"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="*"
+                   targetNodes="@label"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="*"
+                   targetNodes="@helpMessage"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="*"
+                   targetNodes="@prefix"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="*"
+                   targetNodes="@suffix"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="a"
+                   targetNodes="@title"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="a"
+                   targetNodes="@label"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="button"
+                   targetNodes="@value"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="*"
+                   targetNodes="@placeholder"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="validator"
+                   targetNodes="@errorMessage"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="workflow-status"
+                   targetNodes="@statusMessage"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="icon-delete"
+                   targetNodes="@confirmation"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="input-move-boxes"
+                   targetNodes="@rightTitle"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="input-move-boxes"
+                   targetNodes="@leftTitle"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+          
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+             <from
+                   path="social-activities"
+                   targetNodes="@feedLinkMessage"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+       </references>
+    </extension>
 
     <!--========== Liferay validators and markers ==========-->
 
@@ -655,12 +875,31 @@
        <persistent value="true"/>
     </extension>
 
+    <!-- Liferay Jsp Descriptor -->
+    <extension point="org.eclipse.wst.xml.search.editor.referenceValidators">
+       <validator
+            id="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator"
+            class="com.liferay.ide.xml.search.ui.validators.LiferayJspDescriptorValidator">
+       </validator>
+    </extension>
+
+    <extension
+        id="liferayJspDescriptorMarker"
+        name="%liferay.jsp.descriptor.marker.name"
+        point="org.eclipse.core.resources.markers">
+       <super type="org.eclipse.wst.validation.problemmarker"/>
+       <persistent value="true"/>
+    </extension>
+
     <!--========== Content Assist Info Provider ==========-->
 
 	 <extension point="org.eclipse.wst.xml.search.editor.contentAssists" >
         <additionalProposalInfoProvider 
             id="contentAssist.portlet.info" 
             class="com.liferay.ide.xml.search.ui.PortletContentAssistInfoProvider" />
+        <additionalProposalInfoProvider 
+            id="contentAssist.language.property.info" 
+            class="com.liferay.ide.xml.search.ui.LanguagePropertyContentAssistInfoProvider" />
     </extension>
 
     <!--========== Edit Configurations ==========-->
@@ -699,6 +938,14 @@
         <sourceViewerConfiguration
             class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
             target="com.liferay.ide.service.core.servicebuildercontent" />
+    </extension>
+
+    <extension
+          point="org.eclipse.wst.xml.search.editor.referenceFilters">
+       <filter
+             class="com.liferay.ide.xml.search.ui.descriptors.LiferayJspTaglibReferenceFilter"
+             id="liferay.jsp.taglib.filter">
+       </filter>
     </extension>
 
 </plugin>

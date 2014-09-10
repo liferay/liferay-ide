@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.jsdt.core,
  com.liferay.ide.project.core,
  org.eclipse.wst.sse.ui,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.eclipse.jst.jsp.search.editor
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.liferay.ide.xml.search.ui,
