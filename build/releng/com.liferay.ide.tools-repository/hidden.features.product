@@ -44,6 +44,7 @@
       <feature id="org.apache.ivyde.feature" />
       <feature id="org.apache.ivy.feature" />
       <feature id="org.eclipse.wst.xml.search.core-feature" />
+      <feature id="org.eclipse.wst.xml.search.web-feature" />
       <feature id="tern-feature" />
       <feature id="tern-jsdt-feature" />
       <feature id="tern-server-nodejs-feature" />
