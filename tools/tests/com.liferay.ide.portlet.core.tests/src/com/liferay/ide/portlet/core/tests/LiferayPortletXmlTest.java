@@ -26,7 +26,7 @@ import com.liferay.ide.portlet.core.lfportlet.model.ISimpleTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.ITrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.IndexerClass;
 import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortlet;
-import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortletApp;
+import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortletXml;
 import com.liferay.ide.portlet.core.lfportlet.model.PropertyCronTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.PropertySimpleTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.SchedulerEntry;
@@ -78,14 +78,14 @@ public class LiferayPortletXmlTest extends XmlTestsBase
 
     }
 
-    protected LiferayPortletApp newLiferayPortletAppOp( InputStream source ) throws Exception
+    protected LiferayPortletXml newLiferayPortletAppOp( InputStream source ) throws Exception
     {
-        final LiferayPortletApp op =
-            LiferayPortletApp.TYPE.instantiate( new RootXmlResource( new XmlResourceStore( source ) ) );
+        final LiferayPortletXml op =
+            LiferayPortletXml.TYPE.instantiate( new RootXmlResource( new XmlResourceStore( source ) ) );
         return op;
     }
 
-    private LiferayPortletApp op( final IProject project ) throws Exception
+    private LiferayPortletXml op( final IProject project ) throws Exception
     {
         final XmlResourceStore store = new XmlResourceStore( getLiferayPortletXml( project ).getContents( true ) )
         {
@@ -101,12 +101,12 @@ public class LiferayPortletXmlTest extends XmlTestsBase
             }
         };
 
-        return LiferayPortletApp.TYPE.instantiate( new RootXmlResource( store ) );
+        return LiferayPortletXml.TYPE.instantiate( new RootXmlResource( store ) );
     }
 
-    private LiferayPortletApp op( String source ) throws ResourceStoreException
+    private LiferayPortletXml op( String source ) throws ResourceStoreException
     {
-        return LiferayPortletApp.TYPE.instantiate( new RootXmlResource( new XmlResourceStore(
+        return LiferayPortletXml.TYPE.instantiate( new RootXmlResource( new XmlResourceStore(
             getClass().getResourceAsStream( source ) ) ) );
     }
 
@@ -125,7 +125,7 @@ public class LiferayPortletXmlTest extends XmlTestsBase
         newProjectOp.setPortletName( "testPortlet" );
         final IProject testProject = createAntProject( newProjectOp );
 
-        LiferayPortletApp liferayPortletApp = op( testProject );
+        LiferayPortletXml liferayPortletApp = op( testProject );
 
         for( LiferayPortlet liferayPortlet : liferayPortletApp.getPortlets() )
         {
@@ -150,7 +150,7 @@ public class LiferayPortletXmlTest extends XmlTestsBase
         newProjectOp.setPortletName( "testPortlet" );
         final IProject testProject = createAntProject( newProjectOp );
 
-        LiferayPortletApp liferayPortletApp = op( testProject );
+        LiferayPortletXml liferayPortletApp = op( testProject );
 
         for( LiferayPortlet liferayPortlet : liferayPortletApp.getPortlets() )
         {
@@ -182,7 +182,7 @@ public class LiferayPortletXmlTest extends XmlTestsBase
         if( shouldSkipBundleTests() )
             return;
 
-        LiferayPortletApp liferayPortletApp = LiferayPortletApp.TYPE.instantiate();
+        LiferayPortletXml liferayPortletApp = LiferayPortletXml.TYPE.instantiate();
         LiferayPortlet liferayPortlet = liferayPortletApp.getPortlets().insert();
         SchedulerEntry schedulerEntry = liferayPortlet.getSchedulerEntries().insert();
 
@@ -218,7 +218,7 @@ public class LiferayPortletXmlTest extends XmlTestsBase
         newProjectOp.setPortletName( "testPortlet" );
         final IProject testProject = createAntProject( newProjectOp );
 
-        LiferayPortletApp liferayPortletApp = op( testProject );
+        LiferayPortletXml liferayPortletApp = op( testProject );
 
         for( LiferayPortlet liferayPortlet : liferayPortletApp.getPortlets() )
         {
@@ -240,7 +240,7 @@ public class LiferayPortletXmlTest extends XmlTestsBase
     @Test
     public void testPortletXmlRead() throws Exception
     {
-        final LiferayPortletApp portletApp = op( PORTLET_XML );
+        final LiferayPortletXml portletApp = op( PORTLET_XML );
 
         assertNotNull( portletApp );
 
