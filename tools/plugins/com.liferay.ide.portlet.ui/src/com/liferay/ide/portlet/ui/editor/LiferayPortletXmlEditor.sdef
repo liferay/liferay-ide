@@ -11,7 +11,7 @@
     </import>
     <editor-page>
         <id>liferay-portlet-app.editor</id>
-        <element-type>LiferayPortletApp</element-type>
+        <element-type>LiferayPortletXml</element-type>
         <page-name>Overriew</page-name>
         <page-header-text>Liferay Portlet Application</page-header-text>
         <initial-selection>LiferayPortlets</initial-selection>
@@ -136,10 +136,10 @@
                         <property>HeaderPortletJavascripts</property>
                         <show-label>true</show-label>
                     </property-editor>
-                    <property-editor>
+                    <!-- <property-editor>
                         <property>FooterPortletCsses</property>
                         <show-label>true</show-label>
-                    </property-editor>
+                    </property-editor>-->
                     <property-editor>
                         <property>FooterPortletJavascripts</property>
                         <show-label>true</show-label>
@@ -148,6 +148,7 @@
                 <collapsible>true</collapsible>
                 <collapsed-initially>false</collapsed-initially>
             </section>
+            <!--  
             <node>
                 <label>Additional Style Setting</label>
                 <section>
@@ -163,6 +164,7 @@
                 </section>
                 <image>icons/e16/style.gif</image>
             </node>
+            -->
             <node>
                 <label>Scheduler Entry Setting</label>
                 <node-include>SchedulerEntryList</node-include>
@@ -184,9 +186,9 @@
                 <section>
                     <label>Struts Mapping Detail Setting</label>
                     <content>
-                        <property-editor>VirtualPath</property-editor>
+                        <!--  <property-editor>VirtualPath</property-editor> -->
                         <property-editor>StrutsPath</property-editor>
-                        <property-editor>ParentStrutsPath</property-editor>
+                        <!-- <property-editor>ParentStrutsPath</property-editor> -->
                         <property-editor>ConfigurationActionClass</property-editor>
                     </content>
                     <collapsible>true</collapsible>
@@ -202,7 +204,7 @@
 	                            <value>true</value>
 	                        </hint>
 	                    </property-editor>
-	                    <property-editor>OpenSearchClass</property-editor>
+	                    <!-- <property-editor>OpenSearchClass</property-editor> -->
 	                </content>
 	                <collapsible>true</collapsible>
 	                <collapsed-initially>false</collapsed-initially>
@@ -214,7 +216,7 @@
 	                    <property-editor>FriendlyURLMapperClass</property-editor>
 	                    <property-editor>FriendlyURLMapping</property-editor>
 	                    <property-editor>FriendlyURLRoutes</property-editor>
-	                    <property-editor>URLEncoderClass</property-editor>
+	                    <!-- <property-editor>URLEncoderClass</property-editor> -->
 	                </content>
 	                <collapsible>true</collapsible>
 	                <collapsed-initially>false</collapsed-initially>
@@ -228,13 +230,14 @@
                     <content>
                         <property-editor>PortletDataHandlerClass</property-editor>
                         <property-editor>StagedModelDataHandlerClasses</property-editor>
-                        <property-editor>PortletLayoutListenerClass</property-editor>
+                        <!-- <property-editor>PortletLayoutListenerClass</property-editor>
                         <property-editor>PollerProcessorClass</property-editor>
                         <property-editor>PopMessageListenerClass</property-editor>
                         <property-editor>WebDAVStorageToken</property-editor>
                         <property-editor>WebDAVStorageClass</property-editor>
-                        <property-editor>XmlRPCMethodClass</property-editor>
-                        <property-editor>TrashHandlers</property-editor>
+                        <property-editor>XmlRPCMethodClass</property-editor> -->
+                        <property-editor>TrashHandlers</property-editor> 
+                        <property-editor>WorkflowHandler</property-editor>
                     </content>
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>
@@ -247,14 +250,16 @@
                     <label>Social Details Setting</label>
                     <content>
                         <property-editor>SocialActivityInterpreterClasses</property-editor>
-                        <property-editor>SocialRequestInterpreterClass</property-editor>
+                        <!-- <property-editor>SocialRequestInterpreterClass</property-editor>
                         <property-editor>UserNotificationDefinitions</property-editor>
-                        <property-editor>UserNotificationHandlerClasses</property-editor>
+                        <property-editor>UserNotificationHandlerClasses</property-editor> -->
+                        <property-editor>System</property-editor>
                     </content>
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>
                     <image>icons/e16/social.png</image>
                 </section>
+                <!--
                 <section>
                     <label>Security Details Setting</label>
                     <content>
@@ -262,18 +267,20 @@
                     </content>
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>
-                </section>
+                </section> -->
                 <image>icons/e16/social.png</image>
             </node>
             <node>
                 <label>Custom Display and Layout Setting</label>
+                
                 <section>
                     <label>Custom Display and Layout Details Setting</label>
                     <content>
-                        <property-editor>CustomAttributesDisplays</property-editor>
+                        <!--  <property-editor>CustomAttributesDisplays</property-editor>
                         <property-editor>DDMDisplay</property-editor>
-                        <property-editor>TemplateHandler</property-editor>
-                        
+                        <property-editor>TemplateHandler</property-editor>-->
+                        <property-editor>Scopeable</property-editor>
+                        <property-editor>Instanceable</property-editor>
                     </content>
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>
@@ -282,7 +289,7 @@
                     <label>Workflow Details Setting</label>
                     <content>
                         <property-editor>AssetRendererFactories</property-editor>
-                        <property-editor>AtomCollectionAdapters</property-editor>
+                        <!-- <property-editor>AtomCollectionAdapters</property-editor> -->
                     </content>
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>

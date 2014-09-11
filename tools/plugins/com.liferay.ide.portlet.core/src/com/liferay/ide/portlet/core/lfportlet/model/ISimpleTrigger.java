@@ -20,6 +20,7 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -32,10 +33,11 @@ public interface ISimpleTrigger extends ITrigger
 
     // *** Time Unit ***
 
-    @Label( standard = "Time Unit" )
-    @XmlBinding( path = "time-unit" )
-    @PossibleValues( values = { "day", "hour", "minute", "second", "week" } )
     @DefaultValue( text = "second" )
+    @Label( standard = "Time Unit" )
+    @Required
+    @PossibleValues( values = { "day", "hour", "minute", "second", "week" } )
+    @XmlBinding( path = "time-unit" )
     ValueProperty PROP_TIME_UNIT = new ValueProperty( TYPE, "TimeUnit" ); //$NON-NLS-1$
 
     Value<String> getTimeUnit();

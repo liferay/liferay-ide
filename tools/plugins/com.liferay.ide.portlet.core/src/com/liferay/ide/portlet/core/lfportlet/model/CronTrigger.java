@@ -24,7 +24,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 /**
  * @author Simon Jiang
  */
-public interface CronTrigger extends ITrigger
+public interface CronTrigger extends ICronTrigger
 {
 
     ElementType TYPE = new ElementType( CronTrigger.class );

@@ -17,6 +17,7 @@ package com.liferay.ide.portlet.core.lfportlet.model.internal;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
@@ -42,31 +44,36 @@ public class LiferayScriptPossibleValuesService extends PossibleValuesService
     protected void initPossibleValuesService()
     {
         super.initPossibleValuesService();
-
-        this.type = this.param( "type" );
     }
 
     @Override
     protected void compute( Set<String> values )
     {
-        final IProject project = context( Element.class ).adapt( IProject.class );
+        Element modeElement = context( Element.class );
+        List<FileExtensions> exts = modeElement.parent().definition().getAnnotations( FileExtensions.class );
 
-        if( project != null )
+        if( exts != null && exts.size() > 0 )
         {
-            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+            this.type = exts.get( 0 ).expr();
+            final IProject project = modeElement.adapt( IProject.class );
 
-            if( webappRoot != null )
+            if( project != null )
             {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    final IPath location = container.getLocation();
+                final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
 
-                    if( location != null )
+                if( webappRoot != null )
+                {
+                    for( IContainer container : webappRoot.getUnderlyingFolders() )
                     {
-                        if( location.toFile().exists())
+                        final IPath location = container.getLocation();
+
+                        if( location != null )
                         {
-                            values.addAll( new PropertiesVisitor().visitScriptFiles( container, type, values ) );
-                        }     
+                            if( location.toFile().exists() )
+                            {
+                                values.addAll( new PropertiesVisitor().visitScriptFiles( container, type, values ) );
+                            }
+                        }
                     }
                 }
             }

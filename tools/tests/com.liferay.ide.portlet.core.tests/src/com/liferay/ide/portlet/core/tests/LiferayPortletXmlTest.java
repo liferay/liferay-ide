@@ -7,26 +7,17 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.lfportlet.model.AssetRendererFactory;
-import com.liferay.ide.portlet.core.lfportlet.model.AtomCollectionAdapter;
 import com.liferay.ide.portlet.core.lfportlet.model.CronTriggeValueTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.CronTrigger;
-import com.liferay.ide.portlet.core.lfportlet.model.CustomAttributesDisplay;
 import com.liferay.ide.portlet.core.lfportlet.model.CustomUserAttribute;
 import com.liferay.ide.portlet.core.lfportlet.model.CutomUserAttributeName;
-import com.liferay.ide.portlet.core.lfportlet.model.FooterPortalCss;
-import com.liferay.ide.portlet.core.lfportlet.model.FooterPortalJavascript;
-import com.liferay.ide.portlet.core.lfportlet.model.FooterPortletCss;
-import com.liferay.ide.portlet.core.lfportlet.model.FooterPortletJavascript;
-import com.liferay.ide.portlet.core.lfportlet.model.HeaderPortalCss;
-import com.liferay.ide.portlet.core.lfportlet.model.HeaderPortalJavascript;
-import com.liferay.ide.portlet.core.lfportlet.model.HeaderPortletCss;
-import com.liferay.ide.portlet.core.lfportlet.model.HeaderPortletJavascript;
 import com.liferay.ide.portlet.core.lfportlet.model.ICronTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.ISimpleTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.ITrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.IndexerClass;
 import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortlet;
 import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortletXml;
+import com.liferay.ide.portlet.core.lfportlet.model.PortletStyleElement;
 import com.liferay.ide.portlet.core.lfportlet.model.PropertyCronTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.PropertySimpleTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.SchedulerEntry;
@@ -35,7 +26,6 @@ import com.liferay.ide.portlet.core.lfportlet.model.SimpleTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.SocialActivityInterpreterClass;
 import com.liferay.ide.portlet.core.lfportlet.model.StagedModelDataHandlerClass;
 import com.liferay.ide.portlet.core.lfportlet.model.TrashHandler;
-import com.liferay.ide.portlet.core.lfportlet.model.UserNotificationHandlerClass;
 import com.liferay.ide.portlet.core.lfportlet.model.internal.NumberValueValidationService;
 import com.liferay.ide.portlet.core.model.SecurityRoleRef;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -154,23 +144,13 @@ public class LiferayPortletXmlTest extends XmlTestsBase
 
         for( LiferayPortlet liferayPortlet : liferayPortletApp.getPortlets() )
         {
-            ElementList<HeaderPortletCss> portletCsses = liferayPortlet.getHeaderPortletCsses();
+            ElementList<PortletStyleElement> portletCsses = liferayPortlet.getHeaderPortletCsses();
             {
-                for( HeaderPortletCss portletCss : portletCsses )
+                for( PortletStyleElement portletCss : portletCsses )
                 {
                     final PossibleValuesService scriptService =
                         portletCss.getValue().service( PossibleValuesService.class );
                     assertEquals( true, scriptService.values().contains( "/css/main.css" ) );
-                }
-            }
-
-            ElementList<HeaderPortalJavascript> portletJses = liferayPortlet.getHeaderPortalJavascripts();
-            {
-                for( HeaderPortalJavascript portletJs : portletJses )
-                {
-                    final PossibleValuesService scriptService =
-                        portletJs.getValue().service( PossibleValuesService.class );
-                    assertEquals( true, scriptService.values().contains( "/js/main.js" ) );
                 }
             }
         }
@@ -258,11 +238,7 @@ public class LiferayPortletXmlTest extends XmlTestsBase
 
         assertEquals( "/icon.png", portlet.getIcon().content().toPortableString() );
 
-        assertEquals( "/testVirtualPath", portlet.getVirtualPath().content() );
-
         assertEquals( "/testStrutsPath", portlet.getStrutsPath().content() );
-
-        assertEquals( "/test", portlet.getParentStrutsPath().content() );
 
         assertEquals( "com.test.configuration.Test", portlet.getConfigurationActionClass().content().toString() );
 
@@ -276,8 +252,6 @@ public class LiferayPortletXmlTest extends XmlTestsBase
         {
             assertEquals( true, Arrays.asList( indexerClassNames ).contains( indexer.getValue().toString() ) );
         }
-
-        assertEquals( "com.test.Opensearch", portlet.getOpenSearchClass().content().toString() );
 
         String[] schedulerEntryDescriptions = { "scheduler cron entry test", "scheduler simple entry test" };
 
@@ -349,8 +323,6 @@ public class LiferayPortletXmlTest extends XmlTestsBase
 
         assertEquals( "test", portlet.getFriendlyURLRoutes().toString() );
 
-        assertEquals( "com.test.urlEncoder.Test", portlet.getURLEncoderClass().content().toString() );
-
         assertEquals( "com.test.portletDataHandler.Test", portlet.getPortletDataHandlerClass().content().toString() );
 
         final ElementList<StagedModelDataHandlerClass> stageHandlers = portlet.getStagedModelDataHandlerClasses();
@@ -367,15 +339,6 @@ public class LiferayPortletXmlTest extends XmlTestsBase
                 true, Arrays.asList( stageHandlersValue ).contains( stageHandler.getValue().content().toString() ) );
         }
 
-        assertEquals( "com.test.templateHandler.Test1", portlet.getTemplateHandler().content().toString() );
-
-        assertEquals(
-            "com.test.portletLayoutListener.Test1", portlet.getPortletLayoutListenerClass().content().toString() );
-
-        assertEquals( "com.test.pollerProcesser.Test1", portlet.getPollerProcessorClass().content().toString() );
-
-        assertEquals( "com.test.popMessageListern.Test1", portlet.getPopMessageListenerClass().content().toString() );
-
         final ElementList<SocialActivityInterpreterClass> socialActivities =
             portlet.getSocialActivityInterpreterClasses();
 
@@ -390,33 +353,6 @@ public class LiferayPortletXmlTest extends XmlTestsBase
             assertEquals(
                 true, Arrays.asList( socialActivityValues ).contains( socialActivity.getValue().content().toString() ) );
         }
-
-        assertEquals(
-            "com.test.socialRequestInterperter.Test1", portlet.getSocialRequestInterpreterClass().content().toString() );
-
-        assertEquals( "/userNotification.xml", portlet.getUserNotificationDefinitions().toString() );
-
-        final ElementList<UserNotificationHandlerClass> notficationHandlers =
-            portlet.getUserNotificationHandlerClasses();
-
-        assertNotNull( notficationHandlers );
-
-        String[] notficationHandlerValues =
-            { "com.test.userNotificationHandler.Test1", "com.test.userNotificationHandler.Test2",
-                "com.test.userNotificationHandler.Test3" };
-
-        for( UserNotificationHandlerClass notficationHandler : notficationHandlers )
-        {
-            assertEquals(
-                true,
-                Arrays.asList( notficationHandlerValues ).contains( notficationHandler.getValue().content().toString() ) );
-        }
-
-        assertEquals( "webdav", portlet.getWebDAVStorageToken().content().toPortableString() );
-
-        assertEquals( "com.test.webdavStorage.Test1", portlet.getWebDAVStorageClass().content().toString() );
-
-        assertEquals( "com.test.xmlRpcMethod.Test1", portlet.getXmlRPCMethodClass().content().toString() );
 
         assertEquals( "my", portlet.getControlPanelEntryCategory().content() );
 
@@ -438,37 +374,6 @@ public class LiferayPortletXmlTest extends XmlTestsBase
                 true, Arrays.asList( assetHandlersValues ).contains( assetHandler.getValue().content().toString() ) );
         }
 
-        final ElementList<AtomCollectionAdapter> atomAdapters = portlet.getAtomCollectionAdapters();
-
-        assertNotNull( atomAdapters );
-
-        String[] atomAdaptersValues =
-            { "com.test.atomCollectionAdapter.Test1", "com.test.atomCollectionAdapter.Test2",
-                "com.test.atomCollectionAdapter.Test3" };
-
-        for( AtomCollectionAdapter atomAdapter : atomAdapters )
-        {
-            assertEquals(
-                true, Arrays.asList( atomAdaptersValues ).contains( atomAdapter.getValue().content().toString() ) );
-        }
-
-        final ElementList<CustomAttributesDisplay> customDisplays = portlet.getCustomAttributesDisplays();
-
-        assertNotNull( customDisplays );
-
-        String[] customDisplaysValues =
-            { "com.test.customAttribute.Test1", "com.test.customAttribute.Test2", "com.test.customAttribute.Test3" };
-
-        for( CustomAttributesDisplay customDisplay : customDisplays )
-        {
-            assertEquals(
-                true, Arrays.asList( customDisplaysValues ).contains( customDisplay.getValue().content().toString() ) );
-        }
-
-        assertEquals( "com.test.ddmDisplay.Test1", portlet.getDDMDisplay().content().toString() );
-
-        assertEquals( "com.test.permissionPropagator.Test1", portlet.getPermissionPropagator().content().toString() );
-
         final ElementList<TrashHandler> trashHanlders = portlet.getTrashHandlers();
 
         assertNotNull( trashHanlders );
@@ -484,33 +389,13 @@ public class LiferayPortletXmlTest extends XmlTestsBase
 
         // workflow test
 
-        assertEquals( "userId", portlet.getUserPrincipalStrategy().toString() );
-
-        assertEquals( new Double( 15 ), portlet.getActionTimeout().content() );
-
-        assertEquals( new Double( 15 ), portlet.getRenderTimeout().content() );
-
-        final ElementList<HeaderPortalCss> headerPortalCsses = portlet.getHeaderPortalCsses();
-
-        String[] headerPortalCssesValues = { "/css/portal1.css", "/css/portal2.css", "/css/portal3.css" };
-
-        assertNotNull( headerPortalCsses );
-
-        for( HeaderPortalCss headerPortalCss : headerPortalCsses )
-        {
-            assertEquals(
-                true,
-                Arrays.asList( headerPortalCssesValues ).contains(
-                    headerPortalCss.getValue().content().toPortableString() ) );
-        }
-
-        final ElementList<HeaderPortletCss> headerPortletCsses = portlet.getHeaderPortletCsses();
+        final ElementList<PortletStyleElement> headerPortletCsses = portlet.getHeaderPortletCsses();
 
         assertNotNull( headerPortletCsses );
 
         String[] headerPortletCssesValues = { "/css/portlet1.css", "/css/portlet2.css", "/css/portlet3.css" };
 
-        for( HeaderPortletCss headerPortalCss : headerPortletCsses )
+        for( PortletStyleElement headerPortalCss : headerPortletCsses )
         {
             assertEquals(
                 true,
@@ -518,27 +403,14 @@ public class LiferayPortletXmlTest extends XmlTestsBase
                     headerPortalCss.getValue().content().toPortableString() ) );
         }
 
-        final ElementList<HeaderPortalJavascript> headerPortalJses = portlet.getHeaderPortalJavascripts();
 
-        assertNotNull( headerPortalJses );
-
-        String[] headerPortalJsesValues = { "/js/portal.js", "/js/porta2.js", "/js/porta3.js" };
-
-        for( HeaderPortalJavascript headerPortalJs : headerPortalJses )
-        {
-            assertEquals(
-                true,
-                Arrays.asList( headerPortalJsesValues ).contains(
-                    headerPortalJs.getValue().content().toPortableString() ) );
-        }
-
-        final ElementList<HeaderPortletJavascript> headerPortletJses = portlet.getHeaderPortletJavascripts();
+        final ElementList<PortletStyleElement> headerPortletJses = portlet.getHeaderPortletJavascripts();
 
         assertNotNull( headerPortletJses );
 
         String[] headerPortletJsesValues = { "/js/portlet1.js", "/js/portlet2.js", "/js/portlet3.js" };
 
-        for( HeaderPortletJavascript headerPortletJs : headerPortletJses )
+        for( PortletStyleElement headerPortletJs : headerPortletJses )
         {
             assertEquals(
                 true,
@@ -546,55 +418,13 @@ public class LiferayPortletXmlTest extends XmlTestsBase
                     headerPortletJs.getValue().content().toPortableString() ) );
         }
 
-        final ElementList<FooterPortalCss> footerPortalCsses = portlet.getFooterPortalCsses();
-
-        assertNotNull( footerPortalCsses );
-
-        String[] footerPortalCssesValues = { "/css/portal1.css", "/css/portal2.css", "/css/portal3.css" };
-
-        for( FooterPortalCss footerPortalCss : footerPortalCsses )
-        {
-            assertEquals(
-                true,
-                Arrays.asList( footerPortalCssesValues ).contains(
-                    footerPortalCss.getValue().content().toPortableString() ) );
-        }
-
-        final ElementList<FooterPortletCss> footerPortletCsses = portlet.getFooterPortletCsses();
-
-        assertNotNull( footerPortletCsses );
-
-        String[] footerPortletCssesValues = { "/css/portlet1.css", "/css/portlet2.css", "/css/portlet3.css" };
-
-        for( FooterPortletCss footerPortalCss : footerPortletCsses )
-        {
-            assertEquals(
-                true,
-                Arrays.asList( footerPortletCssesValues ).contains(
-                    footerPortalCss.getValue().content().toPortableString() ) );
-        }
-
-        final ElementList<FooterPortalJavascript> footerPortalJses = portlet.getFooterPortalJavascripts();
-
-        assertNotNull( footerPortalJses );
-
-        String[] footerPortalJsesValues = { "/js/portal1.js", "/js/portal2.js", "/js/portal3.js" };
-
-        for( FooterPortalJavascript footerPortaljs : footerPortalJses )
-        {
-            assertEquals(
-                true,
-                Arrays.asList( footerPortalJsesValues ).contains(
-                    footerPortaljs.getValue().content().toPortableString() ) );
-        }
-
-        final ElementList<FooterPortletJavascript> footerPortletJses = portlet.getFooterPortletJavascripts();
+        final ElementList<PortletStyleElement> footerPortletJses = portlet.getFooterPortletJavascripts();
 
         assertNotNull( footerPortletJses );
 
         String[] footerPortletJsesValues = { "/js/portlet1.js", "/js/portlet2.js", "/js/portlet3.js" };
 
-        for( FooterPortletJavascript footerPortletJs : footerPortletJses )
+        for( PortletStyleElement footerPortletJs : footerPortletJses )
         {
             assertEquals(
                 true,

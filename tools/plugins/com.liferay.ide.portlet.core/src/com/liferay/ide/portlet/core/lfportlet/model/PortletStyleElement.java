@@ -14,8 +14,20 @@
 
 package com.liferay.ide.portlet.core.lfportlet.model;
 
+import com.liferay.ide.portlet.core.lfportlet.model.internal.LiferayScriptPossibleValuesService;
+import com.liferay.ide.portlet.core.lfportlet.model.internal.PortletStyleValidationService;
+
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
+import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
+import org.eclipse.sapphire.modeling.annotations.Type;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 
 /**
@@ -24,5 +36,20 @@ import org.eclipse.sapphire.ElementType;
 public interface PortletStyleElement extends Element
 {
     ElementType TYPE = new ElementType( PortletStyleElement.class );
+    @Services
+    (
+        value =
+        {
+            @Service (impl = LiferayScriptPossibleValuesService.class),
+            @Service( impl = PortletStyleValidationService.class )
+        }
+    )
+    @Type( base = Path.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
+    @XmlBinding( path = "" )
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
+    Value<Path> getValue();
+    void setValue( Path value );
+    void setValue( String value );
 }

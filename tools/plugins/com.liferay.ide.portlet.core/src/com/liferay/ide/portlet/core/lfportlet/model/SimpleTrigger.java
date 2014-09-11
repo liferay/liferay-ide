@@ -30,7 +30,7 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 /**
  * @author Simon Jiang
  */
-public interface SimpleTrigger extends ITrigger
+public interface SimpleTrigger extends ISimpleTrigger
 {
 
     ElementType TYPE = new ElementType( SimpleTrigger.class );
