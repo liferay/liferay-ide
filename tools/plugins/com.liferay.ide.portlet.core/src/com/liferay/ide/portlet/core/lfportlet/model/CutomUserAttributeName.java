@@ -33,10 +33,9 @@ public interface CutomUserAttributeName extends Element
 
     @Label( standard = "Custom Attribute Name" )
     @XmlBinding( path = "" )
-    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" ); //$NON-NLS-1$
+    ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     Value<String> getValue();
-
     void setValue( String value );
 
 }

@@ -36,19 +36,19 @@ public interface TrashHandler extends Element
 {
     ElementType TYPE = new ElementType( TrashHandler.class );
 
+
     // Transh Handler
 
-    @Label( standard = "Trash Handler" )
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @MustExist
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.lifaray.portal.kernel.trash.TrashHandler" )
+    @Label( standard = "Trash Handler" )
+    @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
     @XmlBinding( path= "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     ReferenceValue<JavaTypeName, JavaType> getValue();
-
+    void setValue( JavaTypeName value );
     void setValue( String value );
 
-    void setValue( JavaTypeName value );
 }

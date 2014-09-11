@@ -37,12 +37,9 @@ public interface FooterPortalCss extends PortletStyleElement
 {
     ElementType TYPE = new ElementType( FooterPortalCss.class );
 
-    // Footer Portal Css
+    // Footer Portal CSS
 
-    @Type( base = Path.class )
     @Label( standard = "Footer Portal Css" )
-    @XmlBinding( path = "" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @Services
     (
         value =
@@ -58,12 +55,13 @@ public interface FooterPortalCss extends PortletStyleElement
             @Service( impl = PortletStyleValidationService.class )
         }
     )
+    @Type( base = Path.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     Value<Path> getValue();
-
-    void setValue( String value );
-
     void setValue( Path value );
+    void setValue( String value );
 
 }

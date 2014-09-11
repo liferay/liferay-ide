@@ -34,18 +34,11 @@ public interface ISimpleTrigger extends ITrigger
 
     @Label( standard = "Time Unit" )
     @XmlBinding( path = "time-unit" )
-    @PossibleValues
-    ( 
-        values = 
-            {  
-                "day", "hour", "minute", "second", "week"
-            } 
-    )
+    @PossibleValues( values = { "day", "hour", "minute", "second", "week" } )
     @DefaultValue( text = "second" )
     ValueProperty PROP_TIME_UNIT = new ValueProperty( TYPE, "TimeUnit" ); //$NON-NLS-1$
 
     Value<String> getTimeUnit();
-
     void setTimeUnit( String value );
 
 }

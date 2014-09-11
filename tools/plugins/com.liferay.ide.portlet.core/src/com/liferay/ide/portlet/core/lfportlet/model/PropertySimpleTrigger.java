@@ -33,12 +33,11 @@ public interface PropertySimpleTrigger extends ISimpleTrigger
     // *** Property Key ***
 
     @Label( standard = "Property Key" )
-    @XmlBinding( path = "" )
     @Required
+    @XmlBinding( path = "" )
     ValueProperty PROP_PROPERTY_KEY = new ValueProperty( TYPE, "PropertyKey" ); //$NON-NLS-1$
 
     Value<String> getPropertyKey();
-
     void setPropertyKey( String value );
 
 }

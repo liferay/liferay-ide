@@ -12,7 +12,7 @@
  * details.
  *******************************************************************************/
 
-package com.liferay.ide.portlet.core.lfportlet.model; 
+package com.liferay.ide.portlet.core.lfportlet.model;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
@@ -36,17 +36,15 @@ public interface IndexerClass extends Element
 {
     ElementType TYPE = new ElementType( IndexerClass.class );
 
-    @Label( standard = "Indexer Class" )
-    @XmlBinding( path = "" )
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @MustExist
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.search.Indexer" )
+    @Label( standard = "Indexer Class" )
+    @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     ReferenceValue<JavaTypeName, JavaType> getValue();
-
-    void setValue( String value );
-
     void setValue( JavaTypeName value );
+    void setValue( String value );
 }

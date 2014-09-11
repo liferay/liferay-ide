@@ -42,6 +42,7 @@ public interface SchedulerEntry extends Element
 
     ElementType TYPE = new ElementType( SchedulerEntry.class );
 
+
     // *** SchedulerDescription ***
 
     @Label( standard = "SchedulerDescription" )
@@ -50,35 +51,36 @@ public interface SchedulerEntry extends Element
     ValueProperty PROP_SCHEDULER_DESCRIPTION = new ValueProperty( TYPE, "SchedulerDescription" );
 
     Value<String> getSchedulerDescription();
-
     void SetSchedulerDescription( String value );
 
+
     // *** Scheduler Event Listener Class ***
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @Required
+
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "com.liferay.portal.kernel.messaging.MessageListener" } )
     @Label( standard = "SchedulerEventListenerClass" )
+    @Reference( target = JavaType.class )
+    @Required
+    @Type( base = JavaTypeName.class )
     @XmlBinding( path = "scheduler-event-listener-class" )
     ValueProperty PROP_SCHEDULER_EVENT_LISTENER_CLASS = new ValueProperty( TYPE, "SchedulerEventListenerClass" );
 
     ReferenceValue<JavaTypeName, JavaType> getSchedulerEventListenerClass();
-
     void setSchedulerEventListenerClass( JavaTypeName value );
-
     void setSchedulerEventListenerClass( String value );
 
+
     // *** Trigger ***
+
     @Required
     @Type( base = ITrigger.class, possible = { CronTrigger.class, SimpleTrigger.class } )
     @XmlElementBinding
     (
-        path = "trigger", 
-        mappings = 
+        mappings =
         {
             @XmlElementBinding.Mapping( element = "cron", type = CronTrigger.class ),
             @XmlElementBinding.Mapping( element = "simple", type = SimpleTrigger.class )
-        }
+        },
+        path = "trigger"
     )
     ElementProperty PROP_PORTLET_TRIGGER = new ElementProperty( TYPE, "PortletTrigger" );
 

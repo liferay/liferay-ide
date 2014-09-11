@@ -38,18 +38,16 @@ public interface AssetRendererFactory extends Element
 
     // Value
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.asset.model.AssetRendererFactory" )
-    @XmlBinding( path = "" )
-    @MustExist
     @Label( standard = "Asset Renderer Factory" )
+    @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     ReferenceValue<JavaTypeName, JavaType> getValue();
-
     void setValue( JavaTypeName value );
-
     void setValue( String value );
 
 }

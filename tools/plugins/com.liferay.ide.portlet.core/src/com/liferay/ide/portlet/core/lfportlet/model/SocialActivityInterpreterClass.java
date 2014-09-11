@@ -35,16 +35,15 @@ public interface SocialActivityInterpreterClass extends Element
 {
     ElementType TYPE = new ElementType( SocialActivityInterpreterClass.class );
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @MustExist
+
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.social.model.SocialActivityInterpreter" )
+    @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
     @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
-    
+
     ReferenceValue<JavaTypeName, JavaType> getValue();
-
     void setValue( JavaTypeName value );
-
     void setValue( String value );
 }

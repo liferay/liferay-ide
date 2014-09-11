@@ -34,11 +34,6 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 public class IconRelativePathService extends RelativePathService
 {
 
-    protected IProject project()
-    {
-        return context( Element.class ).adapt( IProject.class );
-    }
-
     final List<Path> computeRoots( IProject project )
     {
         List<Path> roots = new ArrayList<Path>();
@@ -64,11 +59,15 @@ public class IconRelativePathService extends RelativePathService
         return roots;
     }
 
+    protected IProject project()
+    {
+        return context( Element.class ).adapt( IProject.class );
+    }
+
     @Override
     public final List<Path> roots()
     {
         return computeRoots( project() );
     }
-
 
 }

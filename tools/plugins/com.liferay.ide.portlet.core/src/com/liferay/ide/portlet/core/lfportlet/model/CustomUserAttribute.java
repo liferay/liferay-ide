@@ -44,8 +44,8 @@ public interface CustomUserAttribute extends Element
 
     // *** Custom Name ***
 
-    @Type( base = CutomUserAttributeName.class )
     @Label( standard = "Custom Name" )
+    @Type( base = CutomUserAttributeName.class )
     @XmlListBinding
     (
         mappings = @XmlListBinding.Mapping
@@ -53,25 +53,23 @@ public interface CustomUserAttribute extends Element
             element = "name",
             type = CutomUserAttributeName.class
         )
-    )    
+    )
     ListProperty PROP_CUSTOM_USER_ATTRIBUTE_NAMES = new ListProperty( TYPE, "CustomUserAttributeNames" );
 
     ElementList<CutomUserAttributeName> getCustomUserAttributeNames();
 
     // *** Custom Class ***
 
+    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.CustomUserAttributes" )
     @Label( standard = "Custom Class" )
-    @XmlBinding( path = "custom-class" )
-    @Type( base = JavaTypeName.class )
     @MustExist
     @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.CustomUserAttributes" )
+    @Type( base = JavaTypeName.class )
+    @XmlBinding( path = "custom-class" )
     ValueProperty PROP_CUSTOM_CLASS = new ValueProperty( TYPE, "CustomClass" );
 
     ReferenceValue<JavaTypeName, JavaType> getCustomClass();
-
     void setCustomClass( JavaTypeName value );
-
     void setCustomClass( String value );
 
 }

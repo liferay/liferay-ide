@@ -38,9 +38,6 @@ public interface FooterPortletJavascript extends PortletStyleElement
     ElementType TYPE = new ElementType( FooterPortletJavascript.class );
 
     @Label( standard = "Footer Portlet Javascript" )
-    @Type( base = Path.class )
-    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
-    @XmlBinding( path = "" )
     @Services
     (
         value =
@@ -56,12 +53,13 @@ public interface FooterPortletJavascript extends PortletStyleElement
             @Service( impl = PortletStyleValidationService.class )
         }
     )
+    @Type( base = Path.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     Value<Path> getValue();
-
-    void setValue( String value );
-
     void setValue( Path value );
+    void setValue( String value );
 
 }

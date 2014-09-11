@@ -65,9 +65,9 @@ public class PortletStyleValidationService extends ValidationService
 
     private static class FileCheckVisitor implements IResourceProxyVisitor
     {
-
         String searchFileName = null;
         boolean fileExisted = false;
+
         public boolean visit( IResourceProxy resourceProxy )
         {
             if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().equals( searchFileName ) )
@@ -86,6 +86,7 @@ public class PortletStyleValidationService extends ValidationService
         public boolean checkFiles( IResource container, String searchFileName )
         {
             this.searchFileName = searchFileName;
+
             try
             {
                 container.accept( this, IContainer.EXCLUDE_DERIVED );

@@ -37,10 +37,7 @@ public interface HeaderPortletJavascript extends PortletStyleElement
 {
     ElementType TYPE = new ElementType( HeaderPortletJavascript.class );
 
-    @Type( base = Path.class )
     @Label( standard = "Header Portlet Javascript" )
-    @XmlBinding( path = "" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @Services
     (
         value =
@@ -56,12 +53,13 @@ public interface HeaderPortletJavascript extends PortletStyleElement
             @Service( impl = PortletStyleValidationService.class )
         }
     )
+    @Type( base = Path.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     Value<Path> getValue();
-
-    void setValue( String value );
-
     void setValue( Path value );
+    void setValue( String value );
 
 }

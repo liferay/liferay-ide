@@ -40,10 +40,7 @@ public interface HeaderPortalJavascript extends PortletStyleElement
 
     // Header Portal Javascript
 
-    @Type( base = Path.class )
     @Label( standard = "Header Portal Javascript" )
-    @XmlBinding( path = "" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @Services
     (
         value =
@@ -59,12 +56,13 @@ public interface HeaderPortalJavascript extends PortletStyleElement
             @Service( impl = PortletStyleValidationService.class )
         }
     )
+    @Type( base = Path.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     Value<Path> getValue();
-
-    void setValue( String value );
-
     void setValue( Path value );
+    void setValue( String value );
 
 }

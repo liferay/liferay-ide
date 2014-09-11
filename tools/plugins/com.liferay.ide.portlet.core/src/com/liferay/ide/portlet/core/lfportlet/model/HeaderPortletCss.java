@@ -37,10 +37,7 @@ public interface HeaderPortletCss extends PortletStyleElement
 {
     ElementType TYPE = new ElementType( HeaderPortletCss.class );
 
-    @Type( base = Path.class )
-    @XmlBinding( path = "" )
     @Label( standard = "Header Portlet Css" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
     @Services
     (
         value =
@@ -55,12 +52,14 @@ public interface HeaderPortletCss extends PortletStyleElement
             ),
             @Service( impl = PortletStyleValidationService.class )
         }
-    )    
+    )
+    @Type( base = Path.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FILE )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     Value<Path> getValue();
-
+    void setValue( Path value );
     void setValue( String value );
 
-    void setValue( Path value );
 }

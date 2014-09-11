@@ -49,7 +49,7 @@ public class NumberValueValidationService extends ValidationService
         if( !modelElement.disposed() )
         {
             final String triggerValue = (String) modelElement.property( context( ValueProperty.class ) ).content();
-            
+
             if( !CoreUtil.isNullOrEmpty( triggerValue ) )
             {
                 value = Integer.valueOf( triggerValue );

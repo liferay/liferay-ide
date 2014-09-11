@@ -33,43 +33,36 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlElementBinding;
 public interface SimpleTrigger extends ITrigger
 {
 
-
     ElementType TYPE = new ElementType( SimpleTrigger.class );
+
 
     // *** Simple Trigger ***
 
-    @Type( base = ISimpleTrigger.class, possible = { PropertySimpleTrigger.class, SimpleTriggeValueTrigger.class } )
     @Required
+    @Type( base = ISimpleTrigger.class, possible = { PropertySimpleTrigger.class, SimpleTriggeValueTrigger.class } )
     @XmlElementBinding
-    ( 
+    (
         path = "",
-        mappings = 
+        mappings =
         {
             @XmlElementBinding.Mapping( element = "property-key", type = PropertySimpleTrigger.class ),
             @XmlElementBinding.Mapping( element = "simple-trigger-value", type = SimpleTriggeValueTrigger.class )
-        } 
+        }
     )
     ElementProperty PROP_SIMPLE_TRIGGER = new ElementProperty( TYPE, "SimpleTrigger" );
 
     ElementHandle<ISimpleTrigger> getSimpleTrigger();
- 
-    
+
+
     // *** Time Unit ***
 
-    @Required
-    @Label( standard = "Time Unit" )
-    @XmlBinding( path = "time-unit" )
-    @PossibleValues
-    ( 
-        values = 
-            {  
-                "day", "hour", "minute", "second", "week"
-            } 
-    )
     @DefaultValue( text = "second" )
+    @Label( standard = "Time Unit" )
+    @Required
+    @PossibleValues( values = { "day", "hour", "minute", "second", "week" } )
+    @XmlBinding( path = "time-unit" )
     ValueProperty PROP_TIME_UNIT = new ValueProperty( TYPE, "TimeUnit" ); //$NON-NLS-1$
 
     Value<String> getTimeUnit();
-
     void setTimeUnit( String value );
 }

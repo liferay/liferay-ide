@@ -30,6 +30,7 @@ public class LiferayPortletNameValidationService extends ValidationService
 {
 
     private String liferayPortletName;
+
     @Override
     protected Status compute()
     {
@@ -59,10 +60,9 @@ public class LiferayPortletNameValidationService extends ValidationService
         return Status.createErrorStatus( Resources.bind(
             StringEscapeUtils.unescapeJava( Resources.portletNameInvalid ), new Object[] { liferayPortletName } ) );
     }
-    
+
     private static final class Resources extends NLS
     {
-
         public static String portletNameInvalid;
 
         static

@@ -35,19 +35,18 @@ public interface UserNotificationHandlerClass extends Element
 {
     ElementType TYPE = new ElementType( UserNotificationHandlerClass.class );
 
+
     // Value
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
     @JavaTypeConstraint ( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.notigications.UserNotificationHandler")
-    @XmlBinding( path = "" )
     @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     ReferenceValue<JavaTypeName, JavaType> getValue();
-
-    void setValue( String value );
-
     void setValue( JavaTypeName value );
+    void setValue( String value );
 
 }

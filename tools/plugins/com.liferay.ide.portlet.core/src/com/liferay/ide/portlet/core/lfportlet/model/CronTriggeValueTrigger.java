@@ -22,7 +22,6 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -36,29 +35,20 @@ public interface CronTriggeValueTrigger extends ICronTrigger
     // *** Cron Trigger Value ***
 
     @Label( standard = "Cron Trigger Value" )
-    @XmlBinding( path = "" )
     @Required
-    @Services
+    @Service
     (
-        value =
+        impl = NumberValueValidationService.class,
+        params =
         {
-            @Service
-            (
-                impl = NumberValueValidationService.class,
-                params =
-                {
-                    @Service.Param( name = "min", value = "1" ),
-                    @Service.Param( name = "max", value = "" ),
-                }
-            )
+            @Service.Param( name = "min", value = "1" ),
+            @Service.Param( name = "max", value = "" ),
         }
-    )   
-    ValueProperty PROP_CRON_TRIGGER_VALUE = new ValueProperty( TYPE, "CronTriggerValue" ); //$NON-NLS-1$
+    )
+    @XmlBinding( path = "" )
+    ValueProperty PROP_CRON_TRIGGER_VALUE = new ValueProperty( TYPE, "CronTriggerValue" );
 
     Value<String> getCronTriggerValue();
-
     void setCronTriggerValue( String value );
-
-
 
 }

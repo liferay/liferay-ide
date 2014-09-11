@@ -28,7 +28,6 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 
-
 /**
  * @author Simon Jiang
  */
@@ -38,18 +37,15 @@ public interface StagedModelDataHandlerClass extends Element
 
     // Value
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint
-    (
-        kind = JavaTypeKind.CLASS,
-        type = "com.liferay.portal.kernel.lar.StagedModelDataHandlder"
-    )
+    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.lar.StagedModelDataHandlder")
     @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
     @XmlBinding( path = "" )
     ValueProperty PROP_VALUE= new ValueProperty( TYPE, "Value" );
 
     ReferenceValue<JavaTypeName, JavaType> getValue();
     void setValue( JavaTypeName value );
     void setValue( String value );
+
 }

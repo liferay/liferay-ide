@@ -25,5 +25,4 @@ public interface PortletStyleElement extends Element
 {
     ElementType TYPE = new ElementType( PortletStyleElement.class );
 
-
 }

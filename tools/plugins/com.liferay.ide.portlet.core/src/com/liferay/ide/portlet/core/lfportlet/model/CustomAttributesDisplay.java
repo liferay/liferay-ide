@@ -38,18 +38,16 @@ public interface CustomAttributesDisplay extends Element
 
     // Custom Attribute Display
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @MustExist
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type ="com.liferay.portlet.expando.model.CustomAttributesDisplay" )
-    @XmlBinding( path = "" )
     @Label( standard = "Custom Attribute Display" )
+    @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
+    @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     ReferenceValue<JavaTypeName, JavaType> getValue();
-
-    void setValue( String value );
-
     void setValue( JavaTypeName value );
+    void setValue( String value );
 
 }

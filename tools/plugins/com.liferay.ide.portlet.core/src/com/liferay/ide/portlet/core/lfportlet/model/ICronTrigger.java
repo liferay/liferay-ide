@@ -24,6 +24,4 @@ public interface ICronTrigger extends ITrigger
 
     ElementType TYPE = new ElementType( ICronTrigger.class );
 
-
-
 }

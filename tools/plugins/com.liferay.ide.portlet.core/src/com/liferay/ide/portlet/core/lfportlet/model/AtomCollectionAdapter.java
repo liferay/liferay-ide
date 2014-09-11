@@ -38,17 +38,15 @@ public interface AtomCollectionAdapter extends Element
 
     // Atom Collection Adapter
 
-    @Type( base = JavaTypeName.class )
-    @Reference( target = JavaType.class )
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.atom.AtomCollectionAdapter")
+    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.atom.AtomCollectionAdapter" )
     @Label( standard = "Atom Collection Adatper" )
     @MustExist
+    @Reference( target = JavaType.class )
+    @Type( base = JavaTypeName.class )
     @XmlBinding( path = "" )
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     ReferenceValue<JavaTypeName, JavaType> getValue();
-
     void seValue( JavaTypeName value );
-
     void setValue( String value );
 }

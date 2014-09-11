@@ -22,7 +22,6 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -33,32 +32,24 @@ public interface SimpleTriggeValueTrigger extends ISimpleTrigger
 
     ElementType TYPE = new ElementType( SimpleTriggeValueTrigger.class );
 
+
     // *** Simple Trigger Value ***
 
     @Label( standard = "Simple Trigger Value" )
-    @XmlBinding( path = "" )
     @Required
-    @Services
+    @Service
     (
-        value =
+        impl = NumberValueValidationService.class,
+        params =
         {
-            @Service
-            (
-                impl = NumberValueValidationService.class,
-                params =
-                {
-                    @Service.Param( name = "min", value = "1" ),
-                    @Service.Param( name = "max", value = "" )
-                }
-            )
+            @Service.Param( name = "min", value = "1" ),
+            @Service.Param( name = "max", value = "" )
         }
-    )   
+    )
+    @XmlBinding( path = "" )
     ValueProperty PROP_SIMPLE_TRIGGER_VALUE = new ValueProperty( TYPE, "SimpleTriggerValue" ); //$NON-NLS-1$
 
     Value<String> getSimpleTriggerValue();
-
     void setSimpleTriggerValue( String value );
-
-
 
 }
