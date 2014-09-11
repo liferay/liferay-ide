@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.properties.core;
+package com.liferay.ide.core.properties;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;

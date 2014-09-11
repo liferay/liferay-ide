@@ -14,10 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.portlet.ui.util;
 
+import com.liferay.ide.core.properties.PropertiesFileLookup;
+import com.liferay.ide.core.properties.PropertiesFileLookup.KeyInfo;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
-import com.liferay.ide.properties.core.PropertiesFileLookup;
-import com.liferay.ide.properties.core.PropertiesFileLookup.KeyInfo;
 
 import java.util.ArrayList;
 import java.util.List;

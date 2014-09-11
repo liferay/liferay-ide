@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.properties.core;
+package com.liferay.ide.core.properties;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;

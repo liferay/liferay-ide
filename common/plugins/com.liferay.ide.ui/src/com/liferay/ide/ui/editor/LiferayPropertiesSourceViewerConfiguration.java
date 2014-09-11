@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.properties.ui.editor;
+package com.liferay.ide.ui.editor;
 
 import java.io.File;
 
@@ -30,11 +30,11 @@ import org.eclipse.ui.texteditor.ITextEditor;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferayPortalPropertiesSourceViewerConfiguration extends PropertiesFileSourceViewerConfiguration
+public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSourceViewerConfiguration
 {
     private File propertiesFile;
 
-    public LiferayPortalPropertiesSourceViewerConfiguration( ITextEditor editor )
+    public LiferayPropertiesSourceViewerConfiguration( ITextEditor editor )
     {
         super( JavaPlugin.getDefault().getJavaTextTools().getColorManager(),
             JavaPlugin.getDefault().getCombinedPreferenceStore(), editor,
@@ -49,7 +49,7 @@ public class LiferayPortalPropertiesSourceViewerConfiguration extends Properties
             @Override
             public IContentAssistProcessor getContentAssistProcessor( final String contentType )
             {
-                return new LiferayPortalPropertiesContentAssistProcessor( propertiesFile, contentType );
+                return new LiferayPropertiesContentAssistProcessor( propertiesFile, contentType );
             }
         };
     }

@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.properties.core;
+package com.liferay.ide.core.properties;
 
 import java.io.IOException;
 import java.io.InputStream;

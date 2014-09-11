@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.properties.ui.editor;
+package com.liferay.ide.ui.editor;
 
 import java.io.File;
 
@@ -25,7 +25,7 @@ import org.eclipse.ui.IEditorInput;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferayPortalPropertiesEditor extends PropertiesFileEditor
+public class LiferayPropertiesEditor extends PropertiesFileEditor
 {
 
     @Override
@@ -35,7 +35,7 @@ public class LiferayPortalPropertiesEditor extends PropertiesFileEditor
 
         File file = (File) input.getAdapter( File.class );
 
-        ((LiferayPortalPropertiesSourceViewerConfiguration) getSourceViewerConfiguration()).setPropertilesFile( file );
+        ((LiferayPropertiesSourceViewerConfiguration) getSourceViewerConfiguration()).setPropertilesFile( file );
     }
 
     @Override
@@ -43,6 +43,6 @@ public class LiferayPortalPropertiesEditor extends PropertiesFileEditor
     {
         super.initializeEditor();
 
-        setSourceViewerConfiguration( new LiferayPortalPropertiesSourceViewerConfiguration( this ) );
+        setSourceViewerConfiguration( new LiferayPropertiesSourceViewerConfiguration( this ) );
     }
 }

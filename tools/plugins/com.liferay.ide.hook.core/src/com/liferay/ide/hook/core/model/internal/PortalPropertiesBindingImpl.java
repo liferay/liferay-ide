@@ -17,10 +17,10 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.PortalProperty;
-import com.liferay.ide.properties.core.PortalPropertiesConfiguration;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

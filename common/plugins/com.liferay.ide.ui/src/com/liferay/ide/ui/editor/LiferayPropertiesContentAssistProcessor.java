@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.properties.ui.editor;
+package com.liferay.ide.ui.editor;
 
 import java.io.File;
 
@@ -26,13 +26,13 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 /**
  * @author Gregory Amerson
  */
-public class LiferayPortalPropertiesContentAssistProcessor implements IContentAssistProcessor
+public class LiferayPropertiesContentAssistProcessor implements IContentAssistProcessor
 {
     private final String contentType;
     private final File propertiesFile;
 
 
-    public LiferayPortalPropertiesContentAssistProcessor( File propertiesFile , String contentType )
+    public LiferayPropertiesContentAssistProcessor( File propertiesFile , String contentType )
     {
         this.contentType = contentType;
         this.propertiesFile = propertiesFile;

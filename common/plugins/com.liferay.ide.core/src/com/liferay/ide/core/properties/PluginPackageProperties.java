@@ -15,9 +15,7 @@
  *          Gregory Amerson -initial implementation
  *******************************************************************************/
 
-package com.liferay.ide.properties.model.pluginpackage;
-
-import com.liferay.ide.properties.model.annotations.PropertyBinding;
+package com.liferay.ide.core.properties;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;

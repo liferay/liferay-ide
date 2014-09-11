@@ -16,7 +16,7 @@
  * Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.properties.model.annotations;
+package com.liferay.ide.core.properties;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
