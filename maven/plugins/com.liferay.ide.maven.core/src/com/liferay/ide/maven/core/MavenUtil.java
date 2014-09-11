@@ -370,6 +370,26 @@ public class MavenUtil
         return new Path( relativeBuildOutputDir ).append( ILiferayMavenConstants.M2E_LIFERAY_FOLDER );
     }
 
+    public static String getMajorMinorVersionOnly( String version )
+    {
+        String retval = null;
+
+        final Matcher matcher = MAJOR_MINOR_VERSION.matcher( version );
+
+        if( matcher.find() )
+        {
+            try
+            {
+                retval = new Version( matcher.group( 1 ) ).toString();
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        return retval;
+    }
+
     public static IMavenProjectFacade getProjectFacade( final IProject project )
     {
         return getProjectFacade( project, new NullProgressMonitor() );
@@ -455,12 +475,12 @@ public class MavenUtil
             ( project.hasNature( IMavenConstants.NATURE_ID ) || project.getFile( IMavenConstants.POM_FILE_NAME ).exists() );
     }
 
+
     public static boolean isPomFile( IFile pomFile )
     {
         return pomFile != null && pomFile.exists() && IMavenConstants.POM_FILE_NAME.equals( pomFile.getName() ) &&
             pomFile.getParent() instanceof IProject;
     }
-
 
     public static boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
     {
@@ -513,26 +533,6 @@ public class MavenUtil
         }
 
         childNode.setValue( ( value == null ) ? null : value.toString() );
-    }
-
-    public static String getMajorMinorVersionOnly( String version )
-    {
-        String retval = null;
-
-        final Matcher matcher = MAJOR_MINOR_VERSION.matcher( version );
-
-        if( matcher.find() )
-        {
-            try
-            {
-                retval = new Version( matcher.group( 1 ) ).toString();
-            }
-            catch( Exception e )
-            {
-            }
-        }
-
-        return retval;
     }
 
 }
