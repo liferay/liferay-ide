@@ -22,6 +22,8 @@ import com.liferay.ide.server.util.ServerUtil;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.cli.MavenCli;
@@ -46,7 +48,6 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
-import org.eclipse.m2e.core.embedder.MavenRuntimeManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
@@ -67,6 +68,9 @@ import org.w3c.dom.Node;
 @SuppressWarnings( "restriction" )
 public class MavenUtil
 {
+
+    private static final Pattern MAJOR_MINOR_VERSION = Pattern.compile( "([0-9]\\.[0-9])\\..*" );
+
 
     public static Node createNewLiferayProfileNode( Document pomDocument, NewLiferayProfile newLiferayProfile )
     {
@@ -321,6 +325,7 @@ public class MavenUtil
         return pluginType;
     }
 
+    @SuppressWarnings( "deprecation" )
     public static String getLocalRepositoryDir()
     {
         String retval = null;
@@ -333,7 +338,7 @@ public class MavenUtil
             userSettings = MavenCli.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
         }
 
-        final MavenRuntimeManager runtimeManager = MavenPlugin.getMavenRuntimeManager();
+        final org.eclipse.m2e.core.embedder.MavenRuntimeManager runtimeManager = MavenPlugin.getMavenRuntimeManager();
 
         final String globalSettings = runtimeManager.getGlobalSettingsFile();
 
@@ -508,6 +513,26 @@ public class MavenUtil
         }
 
         childNode.setValue( ( value == null ) ? null : value.toString() );
+    }
+
+    public static String getMajorMinorVersionOnly( String version )
+    {
+        String retval = null;
+
+        final Matcher matcher = MAJOR_MINOR_VERSION.matcher( version );
+
+        if( matcher.find() )
+        {
+            try
+            {
+                retval = new Version( matcher.group( 1 ) ).toString();
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        return retval;
     }
 
 }

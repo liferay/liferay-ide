@@ -336,7 +336,8 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 final String pluginVersion =
                     getNewLiferayProfilesPluginVersion( activeProfiles, op.getNewLiferayProfiles(), archetypeVersion );
 
-                updateDtdVersion( firstProject, pluginVersion, archetypeVersion );
+                final String archVersion = MavenUtil.getMajorMinorVersionOnly( archetypeVersion );
+                updateDtdVersion( firstProject, pluginVersion, archVersion );
             }
 
             if( op.getPluginType().content().equals( PluginType.portlet ) )
