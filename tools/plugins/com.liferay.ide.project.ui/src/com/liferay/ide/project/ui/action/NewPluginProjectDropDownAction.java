@@ -212,6 +212,16 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
                 ActionContributionItem noProjectExtraitem = new ActionContributionItem( action );
                 noProjectExtraitem.fill( fMenu, -1 );
             }
+
+            new Separator().fill( fMenu, -1 );
+
+            Action[] sdkActions = getSdkActions( parent.getShell() );
+
+            for( Action action : sdkActions )
+            {
+                ActionContributionItem sdkItem = new ActionContributionItem( action );
+                sdkItem.fill( fMenu, -1 );
+            }
         }
 
         return fMenu;
@@ -221,6 +231,8 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
     {
         return null;
     }
+
+
 
     public static NewWizardAction[] getNewProjectActions()
     {
@@ -257,6 +269,11 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
     protected String getNonProjectTypeAttribute()
     {
         return "liferay_artifact"; //$NON-NLS-1$
+    }
+
+    protected Action[] getSdkActions( Shell shell )
+    {
+        return new Action[] { new NewPluginsSDKAction( shell ), new NewServerAction( shell ) };
     }
 
     protected static String getTypeAttribute()
