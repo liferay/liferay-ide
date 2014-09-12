@@ -19,10 +19,15 @@ import java.io.File;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.propertiesfileeditor.IPropertiesFilePartitions;
 import org.eclipse.jdt.internal.ui.propertiesfileeditor.PropertiesFileSourceViewerConfiguration;
+import org.eclipse.jface.internal.text.html.HTMLTextPresenter;
+import org.eclipse.jface.text.DefaultInformationControl;
+import org.eclipse.jface.text.IInformationControl;
+import org.eclipse.jface.text.IInformationControlCreator;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 
@@ -44,12 +49,27 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
     @Override
     public IContentAssistant getContentAssistant( final ISourceViewer sourceViewer )
     {
-        return new ContentAssistant()
+        final ContentAssistant assistant = new ContentAssistant()
         {
             @Override
             public IContentAssistProcessor getContentAssistProcessor( final String contentType )
             {
                 return new LiferayPropertiesContentAssistProcessor( propertiesFile, contentType );
+            }
+        };
+
+        assistant.setInformationControlCreator( getInformationControlCreator( sourceViewer ) );
+
+        return assistant;
+    }
+
+    public IInformationControlCreator getInformationControlCreator( ISourceViewer sourceViewer )
+    {
+        return new IInformationControlCreator()
+        {
+            public IInformationControl createInformationControl( Shell parent )
+            {
+                return new DefaultInformationControl( parent, new HTMLTextPresenter( true ) );
             }
         };
     }
