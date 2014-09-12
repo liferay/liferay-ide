@@ -27,6 +27,7 @@ import org.eclipse.ui.IEditorInput;
 @SuppressWarnings( "restriction" )
 public class LiferayPropertiesEditor extends PropertiesFileEditor
 {
+    public static final String ID = "com.liferay.ide.ui.editor.LiferayPortalPropertiesEditor";
 
     @Override
     protected void doSetInput( IEditorInput input ) throws CoreException

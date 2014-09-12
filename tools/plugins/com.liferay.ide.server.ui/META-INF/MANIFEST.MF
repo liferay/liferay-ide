@@ -30,10 +30,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.jsp.core,
  org.eclipse.jst.jsp.ui,
  org.eclipse.ui.ide,
- org.eclipse.datatools.connectivity
+ org.eclipse.datatools.connectivity,
+ org.eclipse.core.filesystem
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.ui,
  com.liferay.ide.server.ui.action,
  com.liferay.ide.server.ui.cmd,
+ com.liferay.ide.server.ui.navigator,
  com.liferay.ide.server.ui.wizard
