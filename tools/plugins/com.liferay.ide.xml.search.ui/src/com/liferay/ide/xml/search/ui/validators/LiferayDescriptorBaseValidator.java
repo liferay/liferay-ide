@@ -65,14 +65,133 @@ import org.w3c.dom.Node;
 @SuppressWarnings( "restriction" )
 public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
 {
-
-    private static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
-    public static final String MESSAGE_SYNTAX_INVALID = Msgs.syntaxInvalid;
+    public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
     public static final String MESSAGE_REFERENCE_NOT_FOUND = Msgs.referenceNotFound;
     public static final String MESSAGE_RESOURCE_NOT_FOUND = Msgs.resourceNotFound;
+    public static final String MESSAGE_SYNTAX_INVALID = Msgs.syntaxInvalid;
     public static final String MESSAGE_TYPE_HIERARCHY_INCORRECT = Msgs.typeHierarchyIncorrect;
     public static final String MESSAGE_TYPE_NOT_FOUND = Msgs.typeNotFound;
-    public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
+
+    private static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
+
+    private class ReferencedFileVisitor implements IResourceProxyVisitor
+    {
+        IFile retval = null;
+        IResource rootResource;
+        IXMLSearchRequestor searchRequestor;
+
+        public IFile getReferencedFile( IXMLSearchRequestor requestor, IResource rootResource )
+        {
+            this.searchRequestor = requestor;
+            this.rootResource = rootResource;
+
+            try
+            {
+                rootResource.accept( this, IContainer.EXCLUDE_DERIVED );
+            }
+            catch( CoreException e )
+            {
+                LiferayXMLSearchUI.logError( e );
+            }
+
+            return retval;
+        }
+
+        public boolean visit( IResourceProxy proxy )
+        {
+            try
+            {
+                if( proxy.getType() == IResource.FILE )
+                {
+                    final IFile file = (IFile) proxy.requestResource();
+
+                    if( searchRequestor.accept( file, rootResource ) )
+                    {
+                        if( searchRequestor.accept( StructuredModelManager.getModelManager().getModelForRead( file ) ) )
+                        {
+                            retval = file;
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+                return true;
+            }
+
+            return true;
+        }
+    }
+
+    class ReferencedPropertiesVisitor implements IResourceProxyVisitor
+    {
+
+        IPropertiesRequestor propertiesRequestor;
+        IFile retval = null;
+        IResource rootResource;
+
+        public IFile getReferencedFile( IPropertiesRequestor requestor, IResource rootResource )
+        {
+            this.propertiesRequestor = requestor;
+            this.rootResource = rootResource;
+
+            try
+            {
+                rootResource.accept( this, IContainer.EXCLUDE_DERIVED );
+            }
+            catch( CoreException e )
+            {
+                LiferayXMLSearchUI.logError( e );
+            }
+
+            return retval;
+        }
+
+        public boolean visit( IResourceProxy proxy )
+        {
+            try
+            {
+                if( proxy.getType() == IResource.FILE )
+                {
+                    final IFile file = (IFile) proxy.requestResource();
+
+                    if( propertiesRequestor.accept( file, rootResource ) )
+                    {
+                        retval = file;
+                        return false;
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+                return true;
+            }
+
+            return true;
+        }
+    }
+
+    protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+                               boolean batchMode, String messageText, int severity )
+    {
+        final String textContent = DOMUtils.getNodeValue( node );
+        int startOffset = getStartOffset( node );
+        int length = textContent.trim().length() + 2;
+
+        final LocalizedMessage message =
+            createMessage( startOffset, length, messageText, severity, node.getStructuredDocument() );
+
+        if( message != null )
+        {
+            if( batchMode )
+            {
+                reporter.removeAllMessages( validator );
+                message.setTargetObject( file );
+                reporter.addMessage( validator, message );
+            }
+        }
+    }
 
     protected LocalizedMessage createMessage(
         int start, int length, String messageText, int severity, IStructuredDocument structuredDocument )
@@ -124,229 +243,6 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
 
     }
 
-    /**
-     * get the exactly file which contains the element referenced by another xml element
-     */
-    protected IFile getReferencedFile( IXMLReferenceTo referenceTo, Node node, IFile file )
-    {
-        IXMLQuerySpecification querySpecification =
-            XMLQuerySpecificationManager.getDefault().getQuerySpecification( referenceTo.getQuerySpecificationId() );
-
-        if( !querySpecification.isMultiResource() )
-        {
-            IResource resource = querySpecification.getResource( node, file );
-
-            IXMLSearchRequestor requestor = querySpecification.getRequestor();
-
-            return new ReferencedFileVisitor().getReferencedFile( requestor, resource );
-        }
-
-        return null;
-    }
-
-    private class ReferencedFileVisitor implements IResourceProxyVisitor
-    {
-        IFile retval = null;
-        IXMLSearchRequestor searchRequestor;
-        IResource rootResource;
-
-        public boolean visit( IResourceProxy proxy )
-        {
-            try
-            {
-                if( proxy.getType() == IResource.FILE )
-                {
-                    final IFile file = (IFile) proxy.requestResource();
-
-                    if( searchRequestor.accept( file, rootResource ) )
-                    {
-                        if( searchRequestor.accept( StructuredModelManager.getModelManager().getModelForRead( file ) ) )
-                        {
-                            retval = file;
-                            return false;
-                        }
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                return true;
-            }
-
-            return true;
-        }
-
-        public IFile getReferencedFile( IXMLSearchRequestor requestor, IResource rootResource )
-        {
-            this.searchRequestor = requestor;
-            this.rootResource = rootResource;
-
-            try
-            {
-                rootResource.accept( this, IContainer.EXCLUDE_DERIVED );
-            }
-            catch( CoreException e )
-            {
-                LiferayXMLSearchUI.logError( e );
-            }
-
-            return retval;
-        }
-    }
-
-    class ReferencedPropertiesVisitor implements IResourceProxyVisitor
-    {
-
-        IFile retval = null;
-        IPropertiesRequestor propertiesRequestor;
-        IResource rootResource;
-
-        public boolean visit( IResourceProxy proxy )
-        {
-            try
-            {
-                if( proxy.getType() == IResource.FILE )
-                {
-                    final IFile file = (IFile) proxy.requestResource();
-
-                    if( propertiesRequestor.accept( file, rootResource ) )
-                    {
-                        retval = file;
-                        return false;
-                    }
-                }
-            }
-            catch( Exception e )
-            {
-                return true;
-            }
-
-            return true;
-        }
-
-        public IFile getReferencedFile( IPropertiesRequestor requestor, IResource rootResource )
-        {
-            this.propertiesRequestor = requestor;
-            this.rootResource = rootResource;
-
-            try
-            {
-                rootResource.accept( this, IContainer.EXCLUDE_DERIVED );
-            }
-            catch( CoreException e )
-            {
-                LiferayXMLSearchUI.logError( e );
-            }
-
-            return retval;
-        }
-    }
-
-    /**
-     * default implementation of all kinds of validation
-     */
-    protected void validateReferenceToAllType( IXMLReferenceTo referenceTo, IDOMNode node,IFile file,
-                                               IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        final IValidationResult result =
-            referenceTo.getSearcher().searchForValidation(
-                node, DOMUtils.getNodeValue( node ), -1, -1, file, referenceTo );
-
-        if( result != null )
-        {
-            boolean addMessage = false;
-
-            int nbElements = result.getNbElements();
-            if( nbElements > 0 )
-            {
-                if( nbElements > 1 && !isMultipleElementsAllowed( node, nbElements ) )
-                {
-                    addMessage = true;
-                }
-            }
-            else
-            {
-                addMessage = true;
-            }
-
-            if( addMessage )
-            {
-                ValidationType validationType = getValidationType( referenceTo, nbElements );
-                int severity = getServerity( validationType, file );
-
-                if( severity != ValidationMessage.IGNORE )
-                {
-                    final String messageText = getMessageText( validationType, referenceTo, node, file );
-                    addMessage( node, file, validator, reporter, batchMode, messageText, severity );
-                }
-            }
-        }
-    }
-
-    protected void validateReferenceToXML( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
-                                           IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
-    }
-
-    protected void validateReferenceToResource( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
-                                                IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
-    }
-
-    protected void validateReferenceToJava( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
-                                            IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
-    }
-
-    protected void validateReferenceToProperty(
-        IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
-        boolean batchMode )
-    {
-        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
-    }
-
-    protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,
-                                      IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        return true;
-    }
-
-    protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter,
-                               boolean batchMode, String messageText, int severity )
-    {
-        final String textContent = DOMUtils.getNodeValue( node );
-        int startOffset = getStartOffset( node );
-        int length = textContent.trim().length() + 2;
-
-        final LocalizedMessage message =
-            createMessage( startOffset, length, messageText, severity, node.getStructuredDocument() );
-
-        if( message != null )
-        {
-            if( batchMode )
-            {
-                reporter.removeAllMessages( validator );
-                message.setTargetObject( file );
-                reporter.addMessage( validator, message );
-            }
-        }
-    }
-
-    /**
-     * Subclasses override the method to set their own markers
-     */
-    protected void setMarker( IValidator validator, IFile file )
-    {
-    }
-
-    protected String getMessageText( ValidationType validationType, Node node )
-    {
-        return getMessageText( validationType, null, node, null );
-    }
-
     protected String getMessageText( ValidationType validationType, IXMLReferenceTo referenceTo, Node node, IFile file )
     {
         final String textContent = DOMUtils.getNodeValue( node );
@@ -396,6 +292,31 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         return null;
     }
 
+    protected String getMessageText( ValidationType validationType, Node node )
+    {
+        return getMessageText( validationType, null, node, null );
+    }
+
+    /**
+     * get the exactly file which contains the element referenced by another xml element
+     */
+    protected IFile getReferencedFile( IXMLReferenceTo referenceTo, Node node, IFile file )
+    {
+        IXMLQuerySpecification querySpecification =
+            XMLQuerySpecificationManager.getDefault().getQuerySpecification( referenceTo.getQuerySpecificationId() );
+
+        if( !querySpecification.isMultiResource() )
+        {
+            IResource resource = querySpecification.getResource( node, file );
+
+            IXMLSearchRequestor requestor = querySpecification.getRequestor();
+
+            return new ReferencedFileVisitor().getReferencedFile( requestor, resource );
+        }
+
+        return null;
+    }
+
     protected IScopeContext[] getScopeContexts( IProject project )
     {
         final ProjectScope projectScope = new ProjectScope( project );
@@ -418,11 +339,13 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
     protected int getStartOffset( IDOMNode node )
     {
         int nodeType = node.getNodeType();
+
         switch( nodeType )
         {
-        case Node.ATTRIBUTE_NODE:
-            return ( (IDOMAttr) node ).getValueRegionStartOffset();
+            case Node.ATTRIBUTE_NODE:
+                return ( (IDOMAttr) node ).getValueRegionStartOffset();
         }
+
         return node.getStartOffset();
     }
 
@@ -430,26 +353,33 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
     {
         switch( referenceTo.getType() )
         {
-        case XML:
-            return ValidationType.REFERENCE_NOT_FOUND;
-        case JAVA:
-            if( nbElements == -1 )
-            {
-                return ValidationType.TYPE_HIERARCHY_INCORRECT;
-            }
-            return ValidationType.TYPE_NOT_FOUND;
-        case RESOURCE:
-            return ValidationType.RESOURCE_NOT_FOUND;
-        case PROPERTY:
-            return ValidationType.PROPERTY_NOT_FOUND;
-        default:
-            return null;
+            case XML:
+                return ValidationType.REFERENCE_NOT_FOUND;
+            case JAVA:
+                if( nbElements == -1 )
+                {
+                    return ValidationType.TYPE_HIERARCHY_INCORRECT;
+                }
+                return ValidationType.TYPE_NOT_FOUND;
+            case RESOURCE:
+                return ValidationType.RESOURCE_NOT_FOUND;
+            case PROPERTY:
+                return ValidationType.PROPERTY_NOT_FOUND;
+            default:
+                return null;
         }
     }
 
     private boolean isMultipleElementsAllowed( IDOMNode node, int nbElements )
     {
         return true;
+    }
+
+    /**
+     * Subclasses override the method to set their own markers
+     */
+    protected void setMarker( IValidator validator, IFile file )
+    {
     }
 
     @Override
@@ -463,9 +393,81 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         }
     }
 
+    /**
+     * default implementation of all kinds of validation
+     */
+    protected void validateReferenceToAllType( IXMLReferenceTo referenceTo, IDOMNode node,IFile file,
+                                               IValidator validator, IReporter reporter, boolean batchMode )
+    {
+        final IValidationResult result =
+            referenceTo.getSearcher().searchForValidation(
+                node, DOMUtils.getNodeValue( node ), -1, -1, file, referenceTo );
+
+        if( result != null )
+        {
+            boolean addMessage = false;
+
+            int nbElements = result.getNbElements();
+
+            if( nbElements > 0 )
+            {
+                if( nbElements > 1 && !isMultipleElementsAllowed( node, nbElements ) )
+                {
+                    addMessage = true;
+                }
+            }
+            else
+            {
+                addMessage = true;
+            }
+
+            if( addMessage )
+            {
+                ValidationType validationType = getValidationType( referenceTo, nbElements );
+                int severity = getServerity( validationType, file );
+
+                if( severity != ValidationMessage.IGNORE )
+                {
+                    final String messageText = getMessageText( validationType, referenceTo, node, file );
+                    addMessage( node, file, validator, reporter, batchMode, messageText, severity );
+                }
+            }
+        }
+    }
+
+    protected void validateReferenceToJava( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
+                                            IValidator validator, IReporter reporter, boolean batchMode )
+    {
+        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
+    }
+
+    protected void validateReferenceToProperty(
+        IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+        boolean batchMode )
+    {
+        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
+    }
+
+    protected void validateReferenceToResource( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
+                                                IValidator validator, IReporter reporter, boolean batchMode )
+    {
+        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
+    }
+
+    protected void validateReferenceToXML( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
+                                           IValidator validator, IReporter reporter, boolean batchMode )
+    {
+        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
+    }
+
+    protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,
+                                      IValidator validator, IReporter reporter, boolean batchMode )
+    {
+        return true;
+    }
+
     protected static class Msgs extends NLS
     {
-
         public static String propertyNotFound;
         public static String referenceNotFound;
         public static String resourceNotFound;
@@ -478,5 +480,4 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
             initializeMessages( LiferayDescriptorBaseValidator.class.getName(), Msgs.class );
         }
     }
-
 }

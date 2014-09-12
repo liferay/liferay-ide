@@ -51,6 +51,149 @@ import org.xml.sax.helpers.DefaultHandler;
 public class PropertiesUtil
 {
 
+    private static class LanguageFileInfo
+    {
+        private IFile liferayHookXml;
+        private long modificationStamp;
+
+        private final List<String> vals = new ArrayList<String>();
+
+        public LanguageFileInfo( IFile file )
+        {
+            liferayHookXml = file;
+            modificationStamp = liferayHookXml.getModificationStamp();
+        }
+
+        public void addLanguagePropertiesPattern( String languagePropertiesVal )
+        {
+            vals.add(languagePropertiesVal);
+        }
+
+        public String[] getLanguagePropertyPatterns()
+        {
+            return vals.toArray( new String[0] );
+        }
+
+        public IFile getLiferayHookXml()
+        {
+            return liferayHookXml;
+        }
+
+        public long getModificationStamp()
+        {
+            return modificationStamp;
+        }
+    }
+
+    private static class PropertiesVisitor implements IResourceProxyVisitor
+    {
+        IResource entryResource = null;
+        String matchedRelativePath = null;
+        List<IFile> resources = new ArrayList<IFile>();
+
+        public boolean visit( IResourceProxy resourceProxy )
+        {
+            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith( PROPERTIES_FILE_SUFFIX ) )
+            {
+                IResource resource = resourceProxy.requestResource();
+
+                if( resource.exists() )
+                {
+                    String relativePath = resource.getLocation().
+                        makeRelativeTo( entryResource.getLocation() ).toString().replace( PROPERTIES_FILE_SUFFIX, "" );
+
+                    try
+                    {
+                        if( relativePath.matches( matchedRelativePath ) )
+                        {
+                            resources.add( (IFile) resource );
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        // in case something is wrong when doing match regular expression
+                        return true;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public IFile[] visitPropertiesFiles( IResource container, String matchedRelativePath )
+        {
+            this.entryResource = container;
+            this.matchedRelativePath = matchedRelativePath;
+
+            try
+            {
+                container.accept( this, IContainer.EXCLUDE_DERIVED );
+            }
+            catch( CoreException e )
+            {
+                LiferayCore.logError( e );
+            }
+
+            return resources.toArray( new IFile[resources.size()] );
+        }
+    }
+
+    private static class ResourceNodeInfo
+    {
+        private long modificationStamp;
+        private IFile portletXml;
+
+        private String resourceBundle = "";
+
+        private final List<String> resourceBundlesPatterns = new ArrayList<String>();
+
+        private final List<String> supportedLocalePatterns = new ArrayList<String>();
+
+        public ResourceNodeInfo( IFile file )
+        {
+            portletXml = file;
+            modificationStamp = portletXml.getModificationStamp();
+        }
+        public void addResourceBundlePattern( String resourceBundlePattern )
+        {
+            this.resourceBundlesPatterns.add( resourceBundlePattern );
+        }
+        public void addSupportedLocalePattern( String supportedLocalePattern )
+        {
+            this.supportedLocalePatterns.add( supportedLocalePattern );
+        }
+
+        public long getModificationStamp()
+        {
+            return modificationStamp;
+        }
+
+        public IFile getPortletXml()
+        {
+            return portletXml;
+        }
+
+        public String getResourceBundle()
+        {
+            return this.resourceBundle;
+        }
+
+        public String[] getResourceBundlePatterns()
+        {
+            return this.resourceBundlesPatterns.toArray( new String[0] );
+        }
+
+        public String[] getSupportedLocalePatterns()
+        {
+            return this.supportedLocalePatterns.toArray( new String[0] );
+        }
+
+        public void setResourceBundle( String resourceBundle )
+        {
+            this.resourceBundle = resourceBundle;
+        }
+    }
+
     public final static String ELEMENT_LANGUAGE_PROPERTIES = "language-properties";
 
     public final static String ELEMENT_PORTAL_PROPERTIES = "portal-properties";
@@ -102,6 +245,94 @@ public class PropertiesUtil
         }
     }
 
+    /*
+     *  Convert the element values of <resource-bundle> in portlet.xml and <language-properties> in liferay-hook.xml
+     *  to the corresponding regular expression to match the local files.
+     *  The return values is: String[0] is base value of normal format without suffix, String[1] is a regex.
+     *  Both may be null, check them before using them.
+     */
+    public static String[] generatePropertiesNamePatternsForEncoding( String baseValue, String elementName )
+    {
+        baseValue = baseValue.replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+        String regex = null;
+
+        if( elementName.equals( ELEMENT_RESOURCE_BUNDLE ) )
+        {
+            if( baseValue.endsWith( PROPERTIES_FILE_SUFFIX ) ||
+                baseValue.contains( IPath.SEPARATOR + "" ) ||
+                ( CoreUtil.isWindows() && baseValue.contains( "\\" ) ) )
+            {
+                return new String[0];
+            }
+
+            baseValue = new Path( baseValue.replace( "." , IPath.SEPARATOR + "" ) ).toString();
+
+            if( ! baseValue.contains( "_" ) )
+            {
+                regex = baseValue + "_.*";
+            }
+        }
+        else if( elementName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
+        {
+            if( ! baseValue.endsWith( PROPERTIES_FILE_SUFFIX ) )
+            {
+                return new String[0];
+            }
+
+            baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
+
+            if( baseValue.contains( "*" ) )
+            {
+                regex = baseValue.replace( "*", ".*" );
+
+                baseValue = null;
+            }
+            else
+            {
+                if( ! baseValue.contains( "_" ) )
+                {
+                    regex = baseValue + "_.*";
+                }
+            }
+        }
+
+        String[] retval = new String[]{ baseValue, regex };
+
+        return retval;
+    }
+
+    public static String[] generatePropertiesNamePatternsForValidation( String baseValue, String elementName )
+    {
+        // Cleaning the baseValue has been done in the validator, no need to do the same as method
+        // generatePropertiesNamePatternsForEncoding()
+
+        String regex = null;
+
+        if( elementName.equals( ELEMENT_RESOURCE_BUNDLE ) )
+        {
+            baseValue = new Path( baseValue.replace(".", IPath.SEPARATOR + "" ) ).toString();
+        }
+        else if( elementName.equals( ELEMENT_PORTAL_PROPERTIES ) )
+        {
+            baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
+        }
+        else if( elementName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
+        {
+            baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
+
+            if( baseValue.contains( "*" ) )
+            {
+                regex = baseValue.replace( "*", ".*" );
+
+                baseValue = null;
+            }
+        }
+
+        String[] retval = new String[]{ baseValue, regex };
+
+        return retval;
+    }
+
     // Get all the language properties files referenced from portlet.xml and liferay-hook.xml
     public static IFile[] getAllLanguagePropertiesFiles( IProject proj )
     {
@@ -149,7 +380,6 @@ public class PropertiesUtil
             retval =
                 CoreUtil.getWorkspaceRoot().getFile(
                     srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
-
         }
 
         return retval;
@@ -174,15 +404,6 @@ public class PropertiesUtil
                 {
                     boolean isLangPropElem = false;
 
-                    public void startElement( String uri, String localName, String qName, Attributes attributes )
-                        throws SAXException
-                    {
-                        if( qName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
-                        {
-                            isLangPropElem = true;
-                        }
-                    }
-
                     public void characters( char ch[], int start, int length ) throws SAXException
                     {
                         if( isLangPropElem )
@@ -203,7 +424,6 @@ public class PropertiesUtil
                                     }
                                 }
                             }
-
                         }
                     }
 
@@ -212,6 +432,15 @@ public class PropertiesUtil
                         if( qName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
                         {
                             isLangPropElem = false;
+                        }
+                    }
+
+                    public void startElement( String uri, String localName, String qName, Attributes attributes )
+                        throws SAXException
+                    {
+                        if( qName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
+                        {
+                            isLangPropElem = true;
                         }
                     }
                 };
@@ -346,20 +575,6 @@ public class PropertiesUtil
                     String resourceBundleValue = null;
                     final List<String> supportedLocaleValues = new ArrayList<String>();
 
-                    public void startElement( String uri, String localName, String qName, Attributes attributes )
-                        throws SAXException
-                    {
-                        if( qName.equals( ELEMENT_RESOURCE_BUNDLE ) )
-                        {
-                            isResourceBundleElem = true;
-                        }
-
-                        if( qName.equals( ELEMENT_SUPPORTED_LOCALE ) )
-                        {
-                            isSupportedLocaleElem = true;
-                        }
-                    }
-
                     public void characters( char ch[], int start, int length ) throws SAXException
                     {
                         if( isSupportedLocaleElem )
@@ -390,7 +605,8 @@ public class PropertiesUtil
                             if( !CoreUtil.isNullOrEmpty( resourceBundleValue ) )
                             {
                                 final String[] resourceBundlesPatterns =
-                                    generatePropertiesNamePatternsForEncoding( resourceBundleValue, ELEMENT_RESOURCE_BUNDLE );
+                                    generatePropertiesNamePatternsForEncoding(
+                                        resourceBundleValue, ELEMENT_RESOURCE_BUNDLE );
 
                                 for( String pattern : resourceBundlesPatterns )
                                 {
@@ -429,6 +645,20 @@ public class PropertiesUtil
                             supportedLocaleValues.clear();
                         }
                     }
+
+                    public void startElement( String uri, String localName, String qName, Attributes attributes )
+                        throws SAXException
+                    {
+                        if( qName.equals( ELEMENT_RESOURCE_BUNDLE ) )
+                        {
+                            isResourceBundleElem = true;
+                        }
+
+                        if( qName.equals( ELEMENT_SUPPORTED_LOCALE ) )
+                        {
+                            isSupportedLocaleElem = true;
+                        }
+                    }
                 };
 
                 final InputStream contents = portletXml.getContents();
@@ -452,94 +682,6 @@ public class PropertiesUtil
         }
 
         return tmpResourceNodeInfo;
-    }
-
-    /*
-     *  Convert the element values of <resource-bundle> in portlet.xml and <language-properties> in liferay-hook.xml
-     *  to the corresponding regular expression to match the local files.
-     *  The return values is: String[0] is base value of normal format without suffix, String[1] is a regex.
-     *  Both may be null, check them before using them.
-     */
-    public static String[] generatePropertiesNamePatternsForEncoding( String baseValue, String elementName )
-    {
-        baseValue = baseValue.replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
-        String regex = null;
-
-        if( elementName.equals( ELEMENT_RESOURCE_BUNDLE ) )
-        {
-            if( baseValue.endsWith( PROPERTIES_FILE_SUFFIX ) ||
-                baseValue.contains( IPath.SEPARATOR + "" ) ||
-                ( CoreUtil.isWindows() && baseValue.contains( "\\" ) ) )
-            {
-                return new String[0];
-            }
-
-            baseValue = new Path( baseValue.replace( "." , IPath.SEPARATOR + "" ) ).toString();
-
-            if( ! baseValue.contains( "_" ) )
-            {
-                regex = baseValue + "_.*";
-            }
-        }
-        else if( elementName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
-        {
-            if( ! baseValue.endsWith( PROPERTIES_FILE_SUFFIX ) )
-            {
-                return new String[0];
-            }
-
-            baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
-
-            if( baseValue.contains( "*" ) )
-            {
-                regex = baseValue.replace( "*", ".*" );
-
-                baseValue = null;
-            }
-            else
-            {
-                if( ! baseValue.contains( "_" ) )
-                {
-                    regex = baseValue + "_.*";
-                }
-            }
-        }
-
-        String[] retval = new String[]{ baseValue, regex };
-
-        return retval;
-    }
-
-    public static String[] generatePropertiesNamePatternsForValidation( String baseValue, String elementName )
-    {
-        // Cleaning the baseValue has been done in the validator, no need to do the same as method
-        // generatePropertiesNamePatternsForEncoding()
-
-        String regex = null;
-
-        if( elementName.equals( ELEMENT_RESOURCE_BUNDLE ) )
-        {
-            baseValue = new Path( baseValue.replace(".", IPath.SEPARATOR + "" ) ).toString();
-        }
-        else if( elementName.equals( ELEMENT_PORTAL_PROPERTIES ) )
-        {
-            baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
-        }
-        else if( elementName.equals( ELEMENT_LANGUAGE_PROPERTIES ) )
-        {
-            baseValue = new Path( baseValue.replace( PROPERTIES_FILE_SUFFIX, "" ) ).toString();
-
-            if( baseValue.contains( "*" ) )
-            {
-                regex = baseValue.replace( "*", ".*" );
-
-                baseValue = null;
-            }
-        }
-
-        String[] retval = new String[]{ baseValue, regex };
-
-        return retval;
     }
 
     public static boolean hasNonDefaultEncodingLanguagePropertiesFile( IProject proj )
@@ -666,8 +808,8 @@ public class PropertiesUtil
             }
             else
             {
-                final IFile file = CoreUtil.getWorkspaceRoot().
-                    getFile( container.getFullPath().append( relativePath + PROPERTIES_FILE_SUFFIX ) );
+                final IPath path = container.getFullPath().append( relativePath + PROPERTIES_FILE_SUFFIX );
+                final IFile file = CoreUtil.getWorkspaceRoot().getFile( path );
 
                 if( file != null && file.exists() )
                 {
@@ -680,148 +822,5 @@ public class PropertiesUtil
         }
 
         return new IFile[0];
-    }
-
-    private static class LanguageFileInfo
-    {
-        private IFile liferayHookXml;
-        private long modificationStamp;
-
-        public LanguageFileInfo( IFile file )
-        {
-            liferayHookXml = file;
-            modificationStamp = liferayHookXml.getModificationStamp();
-        }
-
-        public IFile getLiferayHookXml()
-        {
-            return liferayHookXml;
-        }
-
-        public long getModificationStamp()
-        {
-            return modificationStamp;
-        }
-
-        private final List<String> vals = new ArrayList<String>();
-
-        public void addLanguagePropertiesPattern( String languagePropertiesVal )
-        {
-            vals.add(languagePropertiesVal);
-        }
-
-        public String[] getLanguagePropertyPatterns()
-        {
-            return vals.toArray( new String[0] );
-        }
-    }
-
-    private static class PropertiesVisitor implements IResourceProxyVisitor
-    {
-        IResource entryResource = null;
-        String matchedRelativePath = null;
-        List<IFile> resources = new ArrayList<IFile>();
-
-        public boolean visit( IResourceProxy resourceProxy )
-        {
-            if( resourceProxy.getType() == IResource.FILE && resourceProxy.getName().endsWith( PROPERTIES_FILE_SUFFIX ) )
-            {
-                IResource resource = resourceProxy.requestResource();
-
-                if( resource.exists() )
-                {
-                    String relativePath = resource.getLocation().
-                        makeRelativeTo( entryResource.getLocation() ).toString().replace( PROPERTIES_FILE_SUFFIX, "" );
-
-                    try
-                    {
-                        if( relativePath.matches( matchedRelativePath ) )
-                        {
-                            resources.add( (IFile) resource );
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                        // in case something is wrong when doing match regular expression
-                        return true;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        public IFile[] visitPropertiesFiles( IResource container, String matchedRelativePath )
-        {
-            this.entryResource = container;
-            this.matchedRelativePath = matchedRelativePath;
-
-            try
-            {
-                container.accept( this, IContainer.EXCLUDE_DERIVED );
-            }
-            catch( CoreException e )
-            {
-                LiferayCore.logError( e );
-            }
-
-            return resources.toArray( new IFile[resources.size()] );
-        }
-    }
-
-    private static class ResourceNodeInfo
-    {
-        private IFile portletXml;
-        private long modificationStamp;
-
-        public ResourceNodeInfo( IFile file )
-        {
-            portletXml = file;
-            modificationStamp = portletXml.getModificationStamp();
-        }
-
-        public IFile getPortletXml()
-        {
-            return portletXml;
-        }
-
-        public long getModificationStamp()
-        {
-            return modificationStamp;
-        }
-
-        private String resourceBundle = "";
-        private final List<String> resourceBundlesPatterns = new ArrayList<String>();
-        private final List<String> supportedLocalePatterns = new ArrayList<String>();
-
-        public void addResourceBundlePattern( String resourceBundlePattern )
-        {
-            this.resourceBundlesPatterns.add( resourceBundlePattern );
-        }
-
-        public void addSupportedLocalePattern( String supportedLocalePattern )
-        {
-            this.supportedLocalePatterns.add( supportedLocalePattern );
-        }
-
-        public void setResourceBundle( String resourceBundle )
-        {
-            this.resourceBundle = resourceBundle;
-        }
-
-        public String getResourceBundle()
-        {
-            return this.resourceBundle;
-        }
-
-        public String[] getResourceBundlePatterns()
-        {
-            return this.resourceBundlesPatterns.toArray( new String[0] );
-        }
-
-        public String[] getSupportedLocalePatterns()
-        {
-            return this.supportedLocalePatterns.toArray( new String[0] );
-        }
     }
 }

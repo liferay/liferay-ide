@@ -35,15 +35,6 @@ public class LiferayJspDescriptorValidator extends LiferayDescriptorBaseValidato
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayJspDescriptorMarker";
 
     @Override
-    protected void setMarker( IValidator validator, IFile file )
-    {
-        if( ( validator instanceof XMLReferencesBatchValidator ) && file.getFileExtension().equals( "jsp" ) )
-        {
-            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        }
-    }
-
-    @Override
     protected IFile getReferencedFile( IXMLReferenceTo referenceTo, Node node, IFile file )
     {
         if( referenceTo instanceof IXMLReferenceToProperty )
@@ -70,6 +61,15 @@ public class LiferayJspDescriptorValidator extends LiferayDescriptorBaseValidato
         }
 
         return null;
+    }
+
+    @Override
+    protected void setMarker( IValidator validator, IFile file )
+    {
+        if( ( validator instanceof XMLReferencesBatchValidator ) && file.getFileExtension().equals( "jsp" ) )
+        {
+            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
+        }
     }
 
 }
