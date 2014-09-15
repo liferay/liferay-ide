@@ -65,22 +65,29 @@ public class NewLiferayProfileMarkerResolution extends AbstractProjectMarkerReso
 
         if( result == SapphireDialog.OK )
         {
+            IDOMModel domModel = null;
+
             try
             {
                 final IFile pomFile = project.getFile( IMavenConstants.POM_FILE_NAME );
 
-                final IDOMModel domModel =
-                    (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
+                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
 
                 MavenUtil.createNewLiferayProfileNode( domModel.getDocument(), newLiferayProfile );
 
                 domModel.save();
 
-                domModel.releaseFromEdit();
             }
             catch( Exception e )
             {
                 LiferayMavenCore.logError( "Unable to save new Liferay profiles to project pom.", e );
+            }
+            finally
+            {
+                if( domModel != null )
+                {
+                    domModel.releaseFromEdit();
+                }
             }
 
             NewLiferayProfileActionHandler.addToActiveProfiles( op, newLiferayProfile );

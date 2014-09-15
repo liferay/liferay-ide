@@ -59,9 +59,11 @@ public class PortletNamePossibleValueService extends PossibleValuesService
 
         final IFile portletXml = resourceFolder.getFile( "portlet.xml" );
 
+        IDOMModel portletModel = null;
+
         try
         {
-            IDOMModel portletModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( portletXml );
+            portletModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( portletXml );
 
             IDOMDocument portletDocument = portletModel.getDocument();
 
@@ -87,6 +89,13 @@ public class PortletNamePossibleValueService extends PossibleValuesService
         catch( Exception e )
         {
             LiferayCore.logError( e );
+        }
+        finally
+        {
+            if( portletModel != null )
+            {
+                portletModel.releaseFromRead();
+            }
         }
 
         if( this.localPortletNames != null )

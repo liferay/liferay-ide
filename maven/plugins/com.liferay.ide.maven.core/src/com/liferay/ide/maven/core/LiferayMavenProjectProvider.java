@@ -301,10 +301,11 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                 final IFile pomFile = newMavenProject.getPom();
 
+                IDOMModel domModel = null;
+
                 try
                 {
-                    final IDOMModel domModel =
-                        (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
+                    domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( pomFile );
 
                     for( final NewLiferayProfile newProfile : newProjectPomProfiles )
                     {
@@ -313,11 +314,17 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                     domModel.save();
 
-                    domModel.releaseFromEdit();
                 }
                 catch( IOException e )
                 {
                     LiferayMavenCore.logError( "Unable to save new Liferay profiles to project pom.", e );
+                }
+                finally
+                {
+                    if( domModel != null )
+                    {
+                        domModel.releaseFromEdit();
+                    }
                 }
 
                 for( final IProject project : newProjects )
