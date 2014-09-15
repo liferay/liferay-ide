@@ -105,7 +105,8 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
                 {
                     if( partialKey != null && key.getKey().startsWith( partialKey ) )
                     {
-                        proposals.add( new PropertyCompletionProposal( key.getKey(), key.getComment() ) );
+                        proposals.add( new PropertyCompletionProposal(
+                            key.getKey(), key.getComment(), offset, rewindOffset ) );
                     }
                 }
             }

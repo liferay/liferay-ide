@@ -65,15 +65,16 @@ public class LiferayPropertiesEditor extends PropertiesFileEditor
 
         PropKey[] propKeys = null;
 
-        // first fine runtime location to get portal.properties definition
+        // first fine runtime location to get properties definitions
         final IPath appServerPortalDir = getAppServerPortalDir( input );
+        final String propertiesEntry = getPropertiesEntry( input );
 
         if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
         {
             try
             {
                 final JarFile jar = new JarFile( appServerPortalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile() );
-                final ZipEntry lang = jar.getEntry( "portal.properties" );
+                final ZipEntry lang = jar.getEntry( propertiesEntry );
 
                 propKeys = parseKeys( jar.getInputStream( lang ) );
 
@@ -81,7 +82,7 @@ public class LiferayPropertiesEditor extends PropertiesFileEditor
             }
             catch( Exception e )
             {
-                LiferayUIPlugin.logError( "Unable to get portal language properties file", e );
+                LiferayUIPlugin.logError( "Unable to get portal properties file", e );
             }
         }
 
@@ -152,6 +153,22 @@ public class LiferayPropertiesEditor extends PropertiesFileEditor
                     LiferayUIPlugin.logError( "Unable to get portal language properties file", e );
                 }
             }
+        }
+
+        return retval;
+    }
+
+    private String getPropertiesEntry( IEditorInput input )
+    {
+        String retval = null;
+
+        if( input.getName().equals( "system-ext.properties" ) )
+        {
+            retval = "system.properties";
+        }
+        else
+        {
+            retval = "portal.properties";
         }
 
         return retval;

@@ -16,6 +16,8 @@ package com.liferay.ide.server.ui.navigator;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.ILiferayServer;
+import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
 
@@ -56,7 +58,7 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
     @SuppressWarnings( { "rawtypes", "unchecked" } )
     public void getPipelinedChildren( Object parent, Set currentChildren )
     {
-        if( parent instanceof IServer )
+        if( shouldAddChildren( parent ) )
         {
             final IServer server = (IServer) parent;
 
@@ -74,8 +76,7 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
                     {
                         public boolean accept( File dir, String name )
                         {
-                            return dir.equals( liferayHome ) && ( !"portal-ide.properties".equals( name ) ) &&
-                                name.startsWith( "portal" ) && name.endsWith( ".properties" );
+                            return dir.equals( liferayHome ) && name.endsWith( "-ext.properties" );
                         }
                     });
 
@@ -123,6 +124,23 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
     public boolean hasPipelinedChildren( Object element, boolean currentHasChildren )
     {
         return hasChildren( element );
+    }
+
+    private boolean shouldAddChildren( Object parent )
+    {
+        if( parent instanceof IServer )
+        {
+            final IServer server = (IServer) parent;
+
+            final ILiferayServer liferayServer = (ILiferayServer) server.loadAdapter( ILiferayServer.class, null );
+
+            if( ! ( liferayServer instanceof IRemoteServer ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

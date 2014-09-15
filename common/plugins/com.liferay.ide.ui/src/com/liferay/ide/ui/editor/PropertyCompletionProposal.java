@@ -14,8 +14,11 @@
  *******************************************************************************/
 package com.liferay.ide.ui.editor;
 
+import com.liferay.ide.ui.LiferayUIPlugin;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.AbstractReusableInformationControlCreator;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IInformationControl;
@@ -36,18 +39,29 @@ import org.eclipse.ui.PlatformUI;
  */
 public class PropertyCompletionProposal implements ICompletionProposal, ICompletionProposalExtension3, ICompletionProposalExtension5
 {
-
     private final String info;
     private final String key;
+    private final int offset;
+    private final int rewindOffset;
 
-    public PropertyCompletionProposal( String key, String info )
+    public PropertyCompletionProposal( String key, String info, int offset, int rewindOffset )
     {
         this.key = key;
         this.info = info;
+        this.offset = offset;
+        this.rewindOffset = rewindOffset;
     }
 
     public void apply( IDocument document )
     {
+        try
+        {
+            document.replace( this.rewindOffset, this.offset - this.rewindOffset, this.key );
+        }
+        catch( BadLocationException e )
+        {
+            LiferayUIPlugin.logError( "Unable to apply proposal", e );
+        }
     }
 
     public String getAdditionalProposalInfo()
@@ -89,11 +103,19 @@ public class PropertyCompletionProposal implements ICompletionProposal, IComplet
 
     public int getPrefixCompletionStart( IDocument document, int completionOffset )
     {
-        return 0;
+        return this.rewindOffset;
     }
 
     public CharSequence getPrefixCompletionText( IDocument document, int completionOffset )
     {
+        try
+        {
+            return document.get( this.rewindOffset, completionOffset );
+        }
+        catch( BadLocationException e )
+        {
+        }
+
         return null;
     }
 

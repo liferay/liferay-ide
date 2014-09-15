@@ -30,7 +30,7 @@ public class LiferayPortalPropertiesFileDescriber extends LiferayPropertiesFileD
     {
         fileNames.add( "portal.properties" );
         fileNames.add( "portal-ext.properties" );
-        fileNames.add( "portal-setup-wizard.properties" );
+        fileNames.add( "system-ext.properties" );
     }
 
     public LiferayPortalPropertiesFileDescriber()
