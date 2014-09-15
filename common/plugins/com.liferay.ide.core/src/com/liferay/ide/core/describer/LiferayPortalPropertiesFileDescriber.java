@@ -28,8 +28,8 @@ public class LiferayPortalPropertiesFileDescriber extends LiferayPropertiesFileD
 {
     private final Set<String> fileNames = new HashSet<String>();
     {
+        fileNames.add( "portal.properties" );
         fileNames.add( "portal-ext.properties" );
-        fileNames.add( "portal-ide.properties" );
         fileNames.add( "portal-setup-wizard.properties" );
     }
 

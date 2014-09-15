@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.ui.editor;
 
-import java.io.File;
+import com.liferay.ide.ui.editor.LiferayPropertiesContentAssistProcessor.PropKey;
 
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.propertiesfileeditor.IPropertiesFilePartitions;
@@ -37,7 +37,8 @@ import org.eclipse.ui.texteditor.ITextEditor;
 @SuppressWarnings( "restriction" )
 public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSourceViewerConfiguration
 {
-    private File propertiesFile;
+    private IContentAssistant assitant;
+    private PropKey[] propKeys;
 
     public LiferayPropertiesSourceViewerConfiguration( ITextEditor editor )
     {
@@ -49,18 +50,23 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
     @Override
     public IContentAssistant getContentAssistant( final ISourceViewer sourceViewer )
     {
-        final ContentAssistant assistant = new ContentAssistant()
+        if( assitant == null )
         {
-            @Override
-            public IContentAssistProcessor getContentAssistProcessor( final String contentType )
+            final ContentAssistant ca = new ContentAssistant()
             {
-                return new LiferayPropertiesContentAssistProcessor( propertiesFile, contentType );
-            }
-        };
+                @Override
+                public IContentAssistProcessor getContentAssistProcessor( final String contentType )
+                {
+                    return new LiferayPropertiesContentAssistProcessor( propKeys, contentType );
+                }
+            };
 
-        assistant.setInformationControlCreator( getInformationControlCreator( sourceViewer ) );
+            ca.setInformationControlCreator( getInformationControlCreator( sourceViewer ) );
 
-        return assistant;
+            assitant = ca;
+        }
+
+        return assitant;
     }
 
     public IInformationControlCreator getInformationControlCreator( ISourceViewer sourceViewer )
@@ -74,8 +80,9 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
         };
     }
 
-    void setPropertilesFile( File file )
+    void setPropKeys( PropKey[] keys )
     {
-        this.propertiesFile = file;
+        this.propKeys = keys;
+        this.assitant = null;
     }
 }

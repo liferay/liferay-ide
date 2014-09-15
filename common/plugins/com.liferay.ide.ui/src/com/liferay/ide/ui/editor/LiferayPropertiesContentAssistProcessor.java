@@ -14,33 +14,20 @@
  *******************************************************************************/
 package com.liferay.ide.ui.editor;
 
-import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.util.ServerUtil;
-import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.core.util.CoreUtil;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentExtension3;
+import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContextInformation;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
-import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.ServerCore;
 
 
 /**
@@ -48,10 +35,10 @@ import org.eclipse.wst.server.core.ServerCore;
  */
 public class LiferayPropertiesContentAssistProcessor implements IContentAssistProcessor
 {
-    class PropKey
+    public static class PropKey
     {
-        private final String key;
         private final String comment;
+        private final String key;
 
         PropKey( String key, String comment )
         {
@@ -59,71 +46,74 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
             this.comment = comment;
         }
 
-        String getKey()
-        {
-            return this.key;
-        }
-
         String getComment()
         {
             return this.comment;
         }
+
+        String getKey()
+        {
+            return this.key;
+        }
     }
 
     private final char[] AUTO_CHARS = new char[] { '.' };
-    private final File propertiesFile;
-    private PropKey[] propkeys;
+    private final PropKey[] propKeys;
 
 
-    public LiferayPropertiesContentAssistProcessor( File propertiesFile , String contentType )
+    public LiferayPropertiesContentAssistProcessor( PropKey[] propKeys, String contentType )
     {
-        this.propertiesFile = propertiesFile;
+        this.propKeys = propKeys;
+
+        if( CoreUtil.isNullOrEmpty( propKeys ) )
+        {
+            throw new IllegalArgumentException( "propKeys can not be empty" );
+        }
     }
 
     public ICompletionProposal[] computeCompletionProposals( ITextViewer viewer, int offset )
     {
-        if( this.propkeys == null )
+        ICompletionProposal[] retval = null;
+
+        String currentPartitionType = null;
+
+        final IDocument document = viewer.getDocument();
+        final IDocumentPartitioner partitioner = getPartitioner( document );
+
+        if( partitioner != null )
         {
-            try
+            final ITypedRegion p = partitioner.getPartition( offset );
+
+            if( p != null )
             {
-                final IPath propsParentPath = new Path( this.propertiesFile.getParentFile().getCanonicalPath() );
+                currentPartitionType = p.getType();
+            }
+        }
 
-                for( IRuntime runtime : ServerCore.getRuntimes() )
+        if( currentPartitionType != null && currentPartitionType.equals( IDocument.DEFAULT_CONTENT_TYPE ) )
+        {
+            // now we need to check to see if we have a partial key
+            final int rewindOffset = rewindOffsetToNearestNonDefaultPartition( partitioner, offset );
+
+            final String partialKey = getPartialKey( document, rewindOffset, offset );
+
+            final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
+
+            if( this.propKeys != null )
+            {
+                for( PropKey key : this.propKeys )
                 {
-                    if( propsParentPath.equals( runtime.getLocation() ) ||
-                        propsParentPath.isPrefixOf( runtime.getLocation() ) )
+                    if( partialKey != null && key.getKey().startsWith( partialKey ) )
                     {
-                        final ILiferayRuntime lr = ServerUtil.getLiferayRuntime( runtime );
-
-                        final JarFile jar =
-                            new JarFile( lr.getAppServerPortalDir().append( "WEB-INF/lib/portal-impl.jar" ).toFile() );
-                        final ZipEntry lang = jar.getEntry( "portal.properties" );
-
-                        propkeys = parseKeys( jar.getInputStream( lang ) );
-
-                        jar.close();
-
-                        break;
+                        proposals.add( new PropertyCompletionProposal( key.getKey(), key.getComment() ) );
                     }
                 }
             }
-            catch( Exception e )
-            {
-                LiferayUIPlugin.logError( "Unable to get portal language properties file", e );
-            }
+
+            retval = proposals.toArray( new ICompletionProposal[0] );
         }
 
-        final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
-
-        if( this.propkeys != null )
-        {
-            for( PropKey key : this.propkeys )
-            {
-                proposals.add( new PropertyCompletionProposal( key.getKey(), key.getComment() ) );
-            }
-        }
-
-        return proposals.toArray( new ICompletionProposal[0] );
+        return retval;
     }
 
     public IContextInformation[] computeContextInformation( ITextViewer viewer, int offset )
@@ -151,36 +141,52 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
         return "Unable to get keys from portal.properties";
     }
 
-    private PropKey[] parseKeys( InputStream inputStream ) throws ConfigurationException, IOException
+    private String getPartialKey( IDocument document , int rewindOffset, int offset )
     {
-        List<PropKey> parsed = new ArrayList<PropKey>();
+        String retval = null;
 
-        final PortalPropertiesConfiguration config = new PortalPropertiesConfiguration();
-        config.load( inputStream );
-        inputStream.close();
-
-        final Iterator<?> keys = config.getKeys();
-        final PropertiesConfigurationLayout layout = config.getLayout();
-
-        while( keys.hasNext() )
+        if( rewindOffset < offset );
         {
-            final String key = keys.next().toString();
-            final String comment = layout.getComment( key );
-
-            parsed.add( new PropKey( key, comment == null ? null : comment.replaceAll( "\n", "\n<br/>" ) ) );
+            try
+            {
+                retval = document.get( rewindOffset, offset - rewindOffset ).trim();
+            }
+            catch( Exception e )
+            {
+            }
         }
 
-        final PropKey[] parsedKeys = parsed.toArray( new PropKey[0] );
+        return retval;
+    }
 
-        Arrays.sort( parsedKeys, new Comparator<PropKey>()
+    @SuppressWarnings( "restriction" )
+    private IDocumentPartitioner getPartitioner( IDocument document )
+    {
+        IDocumentPartitioner retval = null;
+
+        if( document instanceof IDocumentExtension3 )
         {
-            public int compare( PropKey o1, PropKey o2 )
-            {
-                return o1.getKey().compareTo( o2.getKey() );
-            }
-        });
+            final IDocumentExtension3 doc3 = (IDocumentExtension3) document;
+            retval = doc3.getDocumentPartitioner(
+                org.eclipse.jdt.internal.ui.propertiesfileeditor.IPropertiesFilePartitions.PROPERTIES_FILE_PARTITIONING );
+        }
 
-        return parsedKeys;
+        return retval;
+    }
+
+    private int rewindOffsetToNearestNonDefaultPartition( IDocumentPartitioner partitioner, final int initialOffset )
+    {
+        int offset = initialOffset;
+
+        ITypedRegion partition = partitioner.getPartition( offset );
+
+        while( offset > 0 && partition != null && IDocument.DEFAULT_CONTENT_TYPE.equals( partition.getType() ) )
+        {
+            offset--;
+            partition = partitioner.getPartition( offset );
+        }
+
+        return offset;
     }
 
 }
