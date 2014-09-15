@@ -83,8 +83,6 @@ public class PortletNamePossibleValueService extends PossibleValuesService
             }
 
             this.localPortletNames = portletNameList.toArray( new String[0] );
-
-            portletModel.releaseFromRead();
         }
         catch( Exception e )
         {
@@ -102,7 +100,6 @@ public class PortletNamePossibleValueService extends PossibleValuesService
         {
             Collections.addAll( values, this.localPortletNames );
         }
-
     }
 
 }

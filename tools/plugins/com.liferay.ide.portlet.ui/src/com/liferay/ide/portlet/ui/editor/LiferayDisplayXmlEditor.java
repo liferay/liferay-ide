@@ -21,7 +21,12 @@ package com.liferay.ide.portlet.ui.editor;
 import com.liferay.ide.portlet.core.display.model.Display6xx;
 
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.editor.IFormPage;
 
 /**
  * @author Kamesh Sampath
@@ -34,13 +39,23 @@ public class LiferayDisplayXmlEditor extends SapphireEditorForXml
 
     public LiferayDisplayXmlEditor()
     {
-        super
-        (
-            Display6xx.TYPE,
-            DefinitionLoader
-                .sdef( LiferayDisplayXmlEditor.class )
-                .page( "DetailsPage" )
-        );
+        super( Display6xx.TYPE, DefinitionLoader.sdef( LiferayDisplayXmlEditor.class ).page( "DetailsPage" ) );
     }
 
+    public int addPage( final IEditorPart page, final IEditorInput input ) throws PartInitException
+    {
+        int index = super.addPage( page, input );
+        setPageText( index, page.getTitle() );
+
+        return index;
+    }
+
+    public void addPage( int index, IFormPage page ) throws PartInitException
+    {
+        if( page instanceof MasterDetailsEditorPage )
+        {
+            super.addPage( 1, page.getPartControl() );
+            configurePage( 1, page );
+        }
+    }
 }

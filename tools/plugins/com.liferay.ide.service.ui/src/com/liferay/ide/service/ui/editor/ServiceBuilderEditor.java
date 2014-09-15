@@ -26,11 +26,14 @@ import java.net.MalformedURLException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
 import org.eclipse.sapphire.ui.swt.gef.SapphireDiagramEditor;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -43,13 +46,24 @@ public class ServiceBuilderEditor extends SapphireEditorForXml
 
     public ServiceBuilderEditor()
     {
-        super
-        (
-            ServiceBuilder6xx.TYPE,
-            DefinitionLoader
-                .sdef( ServiceBuilderEditor.class )
-                .page( "serviceBuilderPage" )//$NON-NLS-1$
-        );
+        super( ServiceBuilder6xx.TYPE, DefinitionLoader.sdef( ServiceBuilderEditor.class ).page( "serviceBuilderPage" ) );
+    }
+
+    public int addPage( final IEditorPart page, final IEditorInput input ) throws PartInitException
+    {
+        int index = super.addPage( page, input );
+        setPageText( index, page.getTitle() );
+
+        return index;
+    }
+
+    public void addPage( int index, IFormPage page ) throws PartInitException
+    {
+        if( page instanceof MasterDetailsEditorPage )
+        {
+            super.addPage( 1, page.getPartControl() );
+            configurePage( 1, page );
+        }
     }
 
     @Override
@@ -63,7 +77,7 @@ public class ServiceBuilderEditor extends SapphireEditorForXml
                 .page( "diagramPage" ) //$NON-NLS-1$
         );
 
-        addEditorPage( 0, this.pageDiagram );
+        addEditorPage( 1, this.pageDiagram );
     }
 
     @Override

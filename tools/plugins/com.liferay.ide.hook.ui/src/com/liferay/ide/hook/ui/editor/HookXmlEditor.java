@@ -43,10 +43,13 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -56,25 +59,15 @@ import org.eclipse.ui.part.FileEditorInput;
  */
 public class HookXmlEditor extends SapphireEditorForXml
 {
-
     public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor";//$NON-NLS-1$
 
     protected boolean customModelDirty = false;
 
     private boolean ignoreCustomModelChanges;
 
-    /**
-	 *
-	 */
     public HookXmlEditor()
     {
-        super
-        (
-            Hook6xx.TYPE,
-            DefinitionLoader
-                .sdef( HookXmlEditor.class )
-                .page( "HookConfigurationPage" )
-        );
+        super( Hook6xx.TYPE, DefinitionLoader.sdef( HookXmlEditor.class ).page( "HookConfigurationPage" ) );
     }
 
     @Override
@@ -94,6 +87,23 @@ public class HookXmlEditor extends SapphireEditorForXml
         this.ignoreCustomModelChanges = true;
         model.attach( listener, Hook.PROP_CUSTOM_JSPS.name() + "/*" ); //$NON-NLS-1$
         this.ignoreCustomModelChanges = false;
+    }
+
+    public int addPage( final IEditorPart page, final IEditorInput input ) throws PartInitException
+    {
+        int index = super.addPage( page, input );
+        setPageText( index, page.getTitle() );
+
+        return index;
+    }
+
+    public void addPage( int index, IFormPage page ) throws PartInitException
+    {
+        if( page instanceof MasterDetailsEditorPage )
+        {
+            super.addPage( 1, page.getPartControl() );
+            configurePage( 1, page );
+        }
     }
 
     private void copyCustomJspsToProject( IPath portalDir, ElementList<CustomJsp> customJsps )
