@@ -24,7 +24,6 @@ import com.liferay.ide.hook.core.model.CustomJsp;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.Hook6xx;
-import com.liferay.ide.hook.core.model.internal.PortalPropertiesBindingImpl;
 import com.liferay.ide.hook.ui.HookUI;
 
 import java.io.FileInputStream;
@@ -41,10 +40,8 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.PropertyBinding;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.modeling.xml.XmlResource;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
@@ -96,7 +93,6 @@ public class HookXmlEditor extends SapphireEditorForXml
 
         this.ignoreCustomModelChanges = true;
         model.attach( listener, Hook.PROP_CUSTOM_JSPS.name() + "/*" ); //$NON-NLS-1$
-        model.attach( listener, Hook.PROP_PORTAL_PROPERTIES_OVERRIDES.name()  + "/*" ); //$NON-NLS-1$
         this.ignoreCustomModelChanges = false;
     }
 
@@ -158,17 +154,6 @@ public class HookXmlEditor extends SapphireEditorForXml
             if( portalDir != null )
             {
                 copyCustomJspsToProject( portalDir, customJsps );
-            }
-
-            final PropertyBinding binding =
-                hook.resource().adapt( XmlResource.class ).binding( hook.getPortalPropertiesOverrides() );
-
-            if( binding instanceof PortalPropertiesBindingImpl )
-            {
-                final PortalPropertiesBindingImpl portalPropertiesBindingImpl =
-                    PortalPropertiesBindingImpl.class.cast( binding );
-
-                portalPropertiesBindingImpl.flush();
             }
 
             this.customModelDirty = false;

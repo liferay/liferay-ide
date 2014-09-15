@@ -21,9 +21,7 @@ package com.liferay.ide.hook.core.model;
 import com.liferay.ide.hook.core.model.internal.CustomJspDirListener;
 import com.liferay.ide.hook.core.model.internal.CustomJspsBindingImpl;
 import com.liferay.ide.hook.core.model.internal.CustomJspsEnablementService;
-import com.liferay.ide.hook.core.model.internal.PortalPropertiesBindingImpl;
 import com.liferay.ide.hook.core.model.internal.PortalPropertiesFileListener;
-import com.liferay.ide.hook.core.model.internal.PortalPropertiesOverridesEnablementService;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementHandle;
@@ -49,7 +47,6 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
  */
 public interface Hook extends Element
 {
-
     ElementType TYPE = new ElementType( Hook.class );
 
     // *** PortalPropertiesFile ***
@@ -60,17 +57,6 @@ public interface Hook extends Element
     ElementProperty PROP_PORTAL_PROPERTIES_FILE = new ElementProperty( TYPE, "PortalPropertiesFile" ); //$NON-NLS-1$
 
     ElementHandle<PortalPropertiesFile> getPortalPropertiesFile();
-
-    // *** PortalProperties ***
-
-    @Type( base = PortalProperty.class )
-    @Label( standard = "Portal Properties Overrides" )
-    @FixedOrderList
-    @Service( impl = PortalPropertiesOverridesEnablementService.class )
-    @CustomXmlListBinding( impl = PortalPropertiesBindingImpl.class )
-    ListProperty PROP_PORTAL_PROPERTIES_OVERRIDES = new ListProperty( TYPE, "PortalPropertiesOverrides" ); //$NON-NLS-1$
-
-    ElementList<PortalProperty> getPortalPropertiesOverrides();
 
     // *** LanguageProperties ***
 

@@ -139,6 +139,13 @@
                id="com.liferay.ide.server.ui.action.openPortalHomeAction"
                label="%open.portal.home.action.label">
          </action>
+         <action
+               class="com.liferay.ide.server.ui.action.CreatePortalSettingsFileAction"
+               enablesFor="1"
+               icon="icons/e16/properties.png"
+               id="com.liferay.ide.server.ui.action.createPortalSettingsFile"
+               label="Create Portal Settings File">
+         </action>
       </objectContribution>
       <objectContribution
             adaptable="true"

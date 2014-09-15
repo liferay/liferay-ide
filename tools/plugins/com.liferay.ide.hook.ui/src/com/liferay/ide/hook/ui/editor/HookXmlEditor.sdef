@@ -65,36 +65,6 @@
                                     <id>Sapphire.Create.Properties.File</id>
                                 </action-handler>
                             </property-editor>
-                            <separator></separator>
-                            <property-editor>
-                                <property>../PortalPropertiesOverrides</property>
-                                <hint>
-                                    <value>DefaultListPropertyEditorRenderer$Factory</value>
-                                    <name>factory</name>
-                                </hint>
-                            </property-editor>
-                            <detail-section>
-                                <property>../PortalPropertiesOverrides</property>
-                                <case>
-                                    <element-type>PortalProperty</element-type>
-                                    <content>
-                                        <property-editor>
-                                            <property>Name</property>
-                                            <label>Override Name</label>
-                                        </property-editor>
-                                        <property-editor>
-                                            <property>Value</property>
-                                            <label>Override Value</label>
-                                        </property-editor>
-                                    </content>
-                                </case>
-                                <case>
-                                    <content>
-                                        <label>Select a portal property item above to view or edit additional
-                                            parameters.</label>
-                                    </content>
-                                </case>
-                            </detail-section>
                         </content>
                     </case>
                     <label>Customize Liferay Portal Properties</label>
