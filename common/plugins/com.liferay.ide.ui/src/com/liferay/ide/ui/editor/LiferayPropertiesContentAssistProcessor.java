@@ -150,6 +150,11 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
         {
             try
             {
+                if( rewindOffset > 0 )
+                {
+                    rewindOffset--;// move rewind back to beginning of partition type
+                }
+
                 retval = document.get( rewindOffset, offset - rewindOffset ).trim();
             }
             catch( Exception e )
@@ -185,6 +190,11 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
         {
             offset--;
             partition = partitioner.getPartition( offset );
+        }
+
+        if( offset < initialOffset )
+        {
+            offset++; // move back up to next partition
         }
 
         return offset;

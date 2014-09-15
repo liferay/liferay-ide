@@ -37,7 +37,8 @@ import org.eclipse.ui.PlatformUI;
 /**
  * @author Gregory Amerson
  */
-public class PropertyCompletionProposal implements ICompletionProposal, ICompletionProposalExtension3, ICompletionProposalExtension5
+public class PropertyCompletionProposal
+    implements ICompletionProposal, ICompletionProposalExtension3, ICompletionProposalExtension5
 {
     private final String info;
     private final String key;
@@ -121,7 +122,9 @@ public class PropertyCompletionProposal implements ICompletionProposal, IComplet
 
     public Point getSelection( IDocument document )
     {
-        return null;
+        final int point = this.rewindOffset + this.key.length();
+
+        return new Point( point, 0 );
     }
 
 }
