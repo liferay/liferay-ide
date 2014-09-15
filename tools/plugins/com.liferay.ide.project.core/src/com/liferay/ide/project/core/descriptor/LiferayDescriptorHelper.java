@@ -195,6 +195,11 @@ public abstract class LiferayDescriptorHelper
             LiferayCore.logError( "Could not get liferay runtime.", e ); //$NON-NLS-1$
         }
 
+        if( "0.0.0".equals( retval ) )
+        {
+            retval = defaultValue;
+        }
+
         return retval;
     }
 
