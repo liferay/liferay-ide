@@ -15,22 +15,16 @@
 package com.liferay.ide.portlet.ui.editor;
 
 
-
 import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortletXml;
+import com.liferay.ide.ui.editor.LazyLoadingEditorForXml;
 
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
-import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.editor.IFormPage;
 
 /**
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-public class LiferayPortletXmlEditor extends SapphireEditorForXml
+public class LiferayPortletXmlEditor extends LazyLoadingEditorForXml
 {
     public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor";
 
@@ -43,20 +37,9 @@ public class LiferayPortletXmlEditor extends SapphireEditorForXml
         );
     }
 
-    public int addPage( final IEditorPart page, final IEditorInput input ) throws PartInitException
+    @Override
+    protected boolean shouldCreateFormPages()
     {
-        int index = super.addPage( page, input );
-        setPageText( index, page.getTitle() );
-
-        return index;
-    }
-
-    public void addPage( int index, IFormPage page ) throws PartInitException
-    {
-        if( page instanceof MasterDetailsEditorPage )
-        {
-            super.addPage( 1, page.getPartControl() );
-            configurePage( 1, page );
-        }
+        return true;
     }
 }

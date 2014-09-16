@@ -25,6 +25,7 @@ import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.Hook6xx;
 import com.liferay.ide.hook.ui.HookUI;
+import com.liferay.ide.ui.editor.LazyLoadingEditorForXml;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -43,13 +44,9 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
-import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStorageEditorInput;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -57,7 +54,7 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class HookXmlEditor extends SapphireEditorForXml
+public class HookXmlEditor extends LazyLoadingEditorForXml
 {
     public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor";//$NON-NLS-1$
 
@@ -87,23 +84,6 @@ public class HookXmlEditor extends SapphireEditorForXml
         this.ignoreCustomModelChanges = true;
         model.attach( listener, Hook.PROP_CUSTOM_JSPS.name() + "/*" ); //$NON-NLS-1$
         this.ignoreCustomModelChanges = false;
-    }
-
-    public int addPage( final IEditorPart page, final IEditorInput input ) throws PartInitException
-    {
-        int index = super.addPage( page, input );
-        setPageText( index, page.getTitle() );
-
-        return index;
-    }
-
-    public void addPage( int index, IFormPage page ) throws PartInitException
-    {
-        if( page instanceof MasterDetailsEditorPage )
-        {
-            super.addPage( 1, page.getPartControl() );
-            configurePage( 1, page );
-        }
     }
 
     private void copyCustomJspsToProject( IPath portalDir, ElementList<CustomJsp> customJsps )
@@ -149,6 +129,8 @@ public class HookXmlEditor extends SapphireEditorForXml
             HookUI.logError( e );
         }
     }
+
+
 
     @Override
     public void doSave( IProgressMonitor monitor )
@@ -228,6 +210,12 @@ public class HookXmlEditor extends SapphireEditorForXml
         this.ignoreCustomModelChanges = true;
         super.pageChange( pageIndex );
         this.ignoreCustomModelChanges = false;
+    }
+
+    @Override
+    protected boolean shouldCreateFormPages()
+    {
+        return true;
     }
 
 }

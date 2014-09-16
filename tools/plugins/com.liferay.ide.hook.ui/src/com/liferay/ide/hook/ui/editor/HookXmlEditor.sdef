@@ -44,6 +44,7 @@
         </root-node>
         <page-header-image>images/hook.png</page-header-image>
         <element-type>Hook6xx</element-type>
+        <initial-selection>Portal Properties</initial-selection>
     </editor-page>
     <node>
         <id>PortalPropertiesNode</id>
