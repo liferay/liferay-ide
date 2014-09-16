@@ -64,7 +64,6 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_PORTLET_NAME = new ValueProperty( TYPE, "PortletName" );
 
     Value<String> getPortletName();
-
     void setPortletName( String portletName );
 
     // *** icon? ***
@@ -77,9 +76,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_ICON = new ValueProperty( TYPE, "Icon" );
 
     Value<Path> getIcon();
-
     void setIcon( Path icon );
-
     void setIcon( String icon );
 
     // css-class-wrapper?
@@ -88,7 +85,6 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_CSS_CLASS_WRAPPER = new ValueProperty( TYPE, "CssClassWrapper" );
 
     Value<String> getCssClassWrapper();
-
     void setCssClassWrappper( String value );
 
     //    header-portlet-css*
@@ -108,9 +104,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_REQUEST_SESSION_ATTRIBUTES = new ValueProperty( TYPE, "PrivateRequestAttributes" );
 
     Value<Boolean> getPrivateRequestAttributes();
-
     void setPrivateRequestAttributes( Boolean value );
-
     void setPrivateRequestAttributes( String value );
 
     // private-session-attributes?
@@ -121,9 +115,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_PRIVATE_SESSION_ATTRIBUTES = new ValueProperty( TYPE, "PrivateSessionAttributes" );
 
     Value<Boolean> getPrivateSessionAttributes();
-
     void setPrivateSessionAttributes( Boolean value );
-
     void setPrivateSessionAttributes( String value );
 
     // use-default-template?
@@ -134,9 +126,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_USE_DEFAULT_TEMPLATE = new ValueProperty( TYPE, "UseDefaultTemplate" );
 
     Value<Boolean> getUseDefaultTemplate();
-
     void setUseDefaultTemplate( Boolean value );
-
     void setUseDefaultTemplate( String value );
 
     // render-weight?
@@ -147,9 +137,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_RENDER_WEIGHT = new ValueProperty( TYPE, "RenderWeight" );
 
     Value<Double> getRenderWeight();
-
     void setRenderWeight( Double value );
-
     void setRenderWeight( String value );
 
     // *** struts-path? ***
@@ -158,7 +146,6 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_STRUTS_PATH = new ValueProperty( TYPE, "StrutsPath" );
 
     Value<String> getStrutsPath();
-
     void setStrutsPath( String value );
 
     // preferences-owned-by-group?
@@ -169,9 +156,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_PREFERENCES_OWNED_BY_GROUP = new ValueProperty( TYPE, "PreferencesOwnedByGroup" );
 
     Value<Boolean> getPreferencesOwnedByGroup();
-
     void setPreferencesOwnedByGroup( Boolean value );
-
     void setPreferencesOwnedByGroup( String value );
 
     // *** configuration-action-class? ***
@@ -183,9 +168,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_CONFIGURATION_ACTION_CLASS = new ValueProperty( TYPE, "ConfigurationActionClass" );
 
     ReferenceValue<JavaTypeName, JavaType> getConfigurationActionClass();
-
     void setConfiguration( JavaTypeName value );
-
     void setConfiguration( String value );
 
     // add-default-resource?
@@ -196,11 +179,8 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_ADD_DEFAULT_RESOURDE = new ValueProperty( TYPE, "AddDefaultResource" );
 
     Value<Boolean> getAddDefaultResource();
-
     void setAddDefaultSystem( Boolean value );
-
     void setAddDefaultSystem( String value );
-    
 
     //    footer-portlet-javascript*
     @Label( standard = "Footer Portlet Javascript" )
@@ -221,7 +201,7 @@ public interface LiferayPortlet extends Element
     ListProperty PROP_STAGED_MODEL_DATA_HANDLER_CLASSES = new ListProperty( TYPE, "StagedModelDataHandlerClasses" );
 
     ElementList<StagedModelDataHandlerClass> getStagedModelDataHandlerClasses();
-    
+
     //    control-panel-entry-category?
     @Label( standard = "Control Panel Entry Category" )
     @PossibleValues
@@ -248,9 +228,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_PORTLET_URL_CLASS = new ValueProperty( TYPE, "PortletUrlClass" );
 
     ReferenceValue<JavaTypeName, JavaType> getPortletUrlClass();
-
     void setPortletUrlClass( JavaTypeName value );
-
     void setPortletUrlClass( String value );
 
     // control-panel-weight?
@@ -261,9 +239,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_CONTROL_PANEL_ENTRY_WEIGHT = new ValueProperty( TYPE, "ControlPanelEntryWeight" );
 
     Value<Double> getControlPanelEntryWeight();
-
     void setControlPanelEntryWeight( Double value );
-
     void setControlPanelEntryWeight( String value );
 
     // friendly-url-mapper-class?
@@ -276,9 +252,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_FRIENDLY_URL_MAPPER_CLASS = new ValueProperty( TYPE, "FriendlyURLMapperClass" );
 
     ReferenceValue<JavaTypeName, JavaType> getFriendlyURLMapperClass();
-
     void setFriendlyURLMapperClass( JavaTypeName value );
-
     void setFriendlyURLMapperClass( String value );
 
     // friendly-url-mapping?
@@ -287,7 +261,6 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_FRIENDLY_URL_MAPPING = new ValueProperty( TYPE, "FriendlyURLMapping" );
 
     Value<String> getFriendlyURLMapping();
-
     void setFriendlyURLMapping( String value );
 
     // friendly-url-routes?
@@ -296,7 +269,6 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_FRIENDLY_URL_Routes = new ValueProperty( TYPE, "FriendlyURLRoutes" );
 
     Value<String> getFriendlyURLRoutes();
-
     void setFriendlyURLRoutes( String value );
 
     // portlet-data-handler-class?
@@ -309,9 +281,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_PORTLET_DATA_HANDLER_CLASS = new ValueProperty( TYPE, "PortletDataHandlerClass" );
 
     ReferenceValue<JavaTypeName, JavaType> getPortletDataHandlerClass();
-
     void setPortletDataHandlerClass( JavaTypeName value );
-
     void setPortletDataHandlerClass( String value );
 
     // system?
@@ -322,9 +292,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_SYSTEM = new ValueProperty( TYPE, "System" );
 
     Value<Boolean> getSystem();
-
     void setSystem( Boolean value );
-
     void setSystem( String value );
 
     // instanceable?
@@ -335,9 +303,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_INSTANCEABLE = new ValueProperty( TYPE, "Instanceable" );
 
     Value<Boolean> getInstanceable();
-
     void setInstanceable( Boolean value );
-
     void setInstanceable( String value );
 
     // scopeable?
@@ -348,9 +314,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_SCOPEABLE = new ValueProperty( TYPE, "Scopeable" );
 
     Value<Boolean> getScopeable();
-
     void setScopeable( Boolean value );
-
     void setScopeable( String value );
 
     // *** indexer-class* ***
@@ -360,10 +324,8 @@ public interface LiferayPortlet extends Element
     ListProperty PROP_INDEXER_CLASSES = new ListProperty( TYPE, "IndexerClasses" );
 
     ElementList<IndexerClass> getIndexerClasses();
-    
-    
-    //    social-activity-interpreter-class*
 
+    //    social-activity-interpreter-class*
     @Type( base = SocialActivityInterpreterClass.class )
     @XmlListBinding( mappings = @XmlListBinding.Mapping(
                     element = "social-activity-interpreter-class",
@@ -400,9 +362,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_CONTROL_PANEL_ENTRY_CLASS = new ValueProperty( TYPE, "ControlPanelEntryClass" );
 
     ReferenceValue<JavaTypeName, JavaType> getControlPanelEntryClass();
-
     void setControlPanelEntryClass( JavaTypeName value );
-
     void setControlPanleEntryClass( String value );
 
     // asset-renderer-factory*
@@ -434,9 +394,7 @@ public interface LiferayPortlet extends Element
     ValueProperty PROP_WORKFLOW_HANDLER = new ValueProperty( TYPE, "WorkflowHandler" );
 
     ReferenceValue<JavaTypeName, JavaType> getWorkflowHandler();
-
     void setWorkflowHandler( JavaTypeName value );
-
     void setWorkflowHandler( String value );
 
 }
