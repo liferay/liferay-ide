@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -144,7 +145,7 @@ public class PropertiesUtil
         private long modificationStamp;
         private IFile portletXml;
 
-        private HashSet<String> resourceBundles = new HashSet<String>();
+        private Set<String> resourceBundles = new HashSet<String>();
 
         private final List<String> resourceBundlesPatterns = new ArrayList<String>();
 
@@ -174,7 +175,7 @@ public class PropertiesUtil
             return portletXml;
         }
 
-        public HashSet<String> getResourceBundles()
+        public Set<String> getResourceBundles()
         {
             return this.resourceBundles;
         }
@@ -376,7 +377,7 @@ public class PropertiesUtil
         {
             final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
 
-            HashSet<String> resourceBundles = resourceNodeInfo.getResourceBundles();
+            Set<String> resourceBundles = resourceNodeInfo.getResourceBundles();
 
             if( ( resourceBundles != null ) && ( resourceBundles.size() > 0 ) )
             {
