@@ -926,6 +926,175 @@
       </handler>
    </extension>
 
+
+   <extension
+         point="org.eclipse.ui.commands">
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Build All SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.buildAll"
+            name="Build All SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Build Client SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.buildClient"
+            name="Build Client SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Build CSS SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.buildCSS"
+            name="Build CSS SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Build DB SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.buildDB"
+            name="Build DB SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Build Lang SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.buildLang"
+            name="Build Lang SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Build Service SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.buildService"
+            name="Build Service SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Build WSDD SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.buildWSDD"
+            name="Build WSDD SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Clean SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.clean"
+            name="Clean SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Compile SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.compile"
+            name="Compile SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Compile Test SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.compileTest"
+            name="Compile Test SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Deploy SDK command"
+            id="com.liferay.ide.project.ui.command.deploy"
+            name="Deploy SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Direct Deploy SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.directDeploy"
+            name="Direct Deploy SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Format Source SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.formateSource"
+            name="Format Source SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Merge SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.merge"
+            name="Merge SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Test SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.test"
+            name="Test SDK Command">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="War SDK command"
+            id="com.liferay.ide.project.ui.command.buildWar"
+            name="War SDK Command">
+        </command>
+        
+   </extension>
+    
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.liferay.ide.project.ui.handlers.AllSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.buildAll">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.BuildClientSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.buildClient">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.BuildCssSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.buildCSS">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.BuildDBSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.buildDB">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.BuildLangSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.buildLang">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.BuildServiceSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.buildService">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.BuildWSDDSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.buildWSDD">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.CleanSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.clean">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.CompileSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.compile">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.CompilleTestSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.compileTest">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.DeploySDKHandler"
+            commandId="com.liferay.ide.project.ui.command.deploy">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.DirectDeploySDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.directDeploy">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.FormatSourceSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.formateSource">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.MergeSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.merge">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.TestSDKHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.test">
+      </handler>
+      <handler
+            class="com.liferay.ide.project.ui.handlers.WarSDKHandler"
+            commandId="com.liferay.ide.project.ui.command.buildWar">
+      </handler>      
+   </extension>   
 <!--  
 
    <extension
