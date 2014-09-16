@@ -622,19 +622,6 @@
           <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
              <from
                    path="*"
-                   targetNodes="@prefix"
-                   querySpecificationId="liferay.jsp.querySpecification"
-                   filterId="liferay.jsp.taglib.filter"  >
-             </from>
-             <toProperty
-                   querySpecificationId="portlet.language.properties.querySpecification"
-                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
-             </toProperty>
-          </reference>
-
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
-             <from
-                   path="*"
                    targetNodes="@suffix"
                    querySpecificationId="liferay.jsp.querySpecification"
                    filterId="liferay.jsp.taglib.filter"  >
