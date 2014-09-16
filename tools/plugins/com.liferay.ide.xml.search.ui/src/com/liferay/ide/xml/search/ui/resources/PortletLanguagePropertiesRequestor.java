@@ -35,9 +35,18 @@ public class PortletLanguagePropertiesRequestor extends DefaultPropertiesRequest
     {
         IProject project = rootResource.getProject();
 
-        IFile defaultPortletLanguageProperties = PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
+        IFile[] defaultPortletLanguagePropertiesFiles =
+            PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
 
-        return defaultPortletLanguageProperties.equals( file );
+        for( IFile defaultPortletLanguagePropertiesFile : defaultPortletLanguagePropertiesFiles )
+        {
+            if( defaultPortletLanguagePropertiesFile.equals( file ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

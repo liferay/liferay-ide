@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
@@ -143,7 +144,7 @@ public class PropertiesUtil
         private long modificationStamp;
         private IFile portletXml;
 
-        private String resourceBundle = "";
+        private HashSet<String> resourceBundles = new HashSet<String>();
 
         private final List<String> resourceBundlesPatterns = new ArrayList<String>();
 
@@ -173,9 +174,9 @@ public class PropertiesUtil
             return portletXml;
         }
 
-        public String getResourceBundle()
+        public HashSet<String> getResourceBundles()
         {
-            return this.resourceBundle;
+            return this.resourceBundles;
         }
 
         public String[] getResourceBundlePatterns()
@@ -188,9 +189,9 @@ public class PropertiesUtil
             return this.supportedLocalePatterns.toArray( new String[0] );
         }
 
-        public void setResourceBundle( String resourceBundle )
+        public void putResourceBundle( String resourceBundle )
         {
-            this.resourceBundle = resourceBundle;
+            this.resourceBundles.add( resourceBundle );
         }
     }
 
@@ -358,15 +359,15 @@ public class PropertiesUtil
         return retval.toArray( new IFile[0] );
     }
 
-    public static IFile getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
+    public static IFile[] getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
     {
-        IFile retval = null;
+        IFile[] retvals = null;
 
         final IProject proj = CoreUtil.getLiferayProject( portletXml );
 
         if( proj == null )
         {
-            return retval;
+            return retvals;
         }
 
         final IFolder srcFolder = CoreUtil.getFirstSrcFolder( proj );
@@ -375,17 +376,28 @@ public class PropertiesUtil
         {
             final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
 
-            String resourceBundleValue = resourceNodeInfo.getResourceBundle();
+            HashSet<String> resourceBundles = resourceNodeInfo.getResourceBundles();
 
-            retval =
-                CoreUtil.getWorkspaceRoot().getFile(
-                    srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
+            if( ( resourceBundles != null ) && ( resourceBundles.size() > 0 ) )
+            {
+                retvals = new IFile[resourceBundles.size()];
+
+                for( int i = 0; i < resourceBundles.size(); i++ )
+                {
+                    String resourceBundleValue = (String) resourceBundles.toArray()[i];
+
+                    retvals[i] =
+                        CoreUtil.getWorkspaceRoot().getFile(
+                            srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
+                }
+            }
+
         }
 
-        return retval;
+        return retvals;
     }
 
-    public static IFile getDefaultLanguagePropertiesFromProject( IProject project )
+    public static IFile[] getDefaultLanguagePropertiesFromProject( IProject project )
     {
         return getDefaultLanguagePropertiesFromPortletXml( CoreUtil.getDescriptorFile(
             project, ILiferayConstants.PORTLET_XML_FILE ) );
@@ -638,7 +650,7 @@ public class PropertiesUtil
                                         new Path( resourceBundle.replace( ".", IPath.SEPARATOR + "" ) ).toString();
                                 }
 
-                                retval.setResourceBundle( resourceBundle );
+                                retval.putResourceBundle( resourceBundle );
                             }
 
                             resourceBundleValue = null;
