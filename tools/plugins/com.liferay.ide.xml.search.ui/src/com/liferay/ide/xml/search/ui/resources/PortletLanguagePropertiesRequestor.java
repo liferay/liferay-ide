@@ -33,9 +33,9 @@ public class PortletLanguagePropertiesRequestor extends DefaultPropertiesRequest
 
     protected boolean accept( IFile file, IResource rootResource )
     {
-        IProject project = rootResource.getProject();
+        final IProject project = rootResource.getProject();
 
-        IFile[] defaultPortletLanguagePropertiesFiles =
+        final IFile[] defaultPortletLanguagePropertiesFiles =
             PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
 
         for( IFile defaultPortletLanguagePropertiesFile : defaultPortletLanguagePropertiesFiles )

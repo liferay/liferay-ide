@@ -55,9 +55,8 @@ public class PropertiesUtil
 
     private static class LanguageFileInfo
     {
-        private IFile liferayHookXml;
-        private long modificationStamp;
-
+        private final IFile liferayHookXml;
+        private final long modificationStamp;
         private final List<String> vals = new ArrayList<String>();
 
         public LanguageFileInfo( IFile file )
@@ -91,7 +90,7 @@ public class PropertiesUtil
     {
         IResource entryResource = null;
         String matchedRelativePath = null;
-        List<IFile> resources = new ArrayList<IFile>();
+        final List<IFile> resources = new ArrayList<IFile>();
 
         public boolean visit( IResourceProxy resourceProxy )
         {
@@ -142,13 +141,10 @@ public class PropertiesUtil
 
     private static class ResourceNodeInfo
     {
-        private long modificationStamp;
-        private IFile portletXml;
-
-        private Set<String> resourceBundles = new HashSet<String>();
-
+        private final long modificationStamp;
+        private final IFile portletXml;
+        private final Set<String> resourceBundles = new HashSet<String>();
         private final List<String> resourceBundlesPatterns = new ArrayList<String>();
-
         private final List<String> supportedLocalePatterns = new ArrayList<String>();
 
         public ResourceNodeInfo( IFile file )
@@ -377,7 +373,7 @@ public class PropertiesUtil
         {
             final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
 
-            Set<String> resourceBundles = resourceNodeInfo.getResourceBundles();
+            final Set<String> resourceBundles = resourceNodeInfo.getResourceBundles();
 
             if( ( resourceBundles != null ) && ( resourceBundles.size() > 0 ) )
             {
@@ -392,7 +388,6 @@ public class PropertiesUtil
                             srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
                 }
             }
-
         }
 
         return retvals;
