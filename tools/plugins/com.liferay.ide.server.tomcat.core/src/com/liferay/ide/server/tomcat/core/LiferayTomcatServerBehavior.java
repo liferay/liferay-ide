@@ -62,6 +62,11 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         super();
     }
 
+    public IPath getDeployedPath( IModule[] module )
+    {
+        return getModuleDeployDirectory( module[0] );
+    }
+
     @Override
     public IPath getModuleDeployDirectory( IModule module )
     {

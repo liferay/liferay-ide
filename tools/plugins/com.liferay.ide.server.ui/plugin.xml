@@ -193,6 +193,13 @@
                id="com.liferay.ide.server.ui.action.redeploy"
                label="%redeploy.action.label">
          </action>
+         <action
+               class="com.liferay.ide.server.ui.action.OpenDeployedFolderAction"
+               enablesFor="1"
+               icon="icons/e16/open_deployed_folder.gif"
+               id="com.liferay.ide.server.ui.action.opendeployed"
+               label="Open Deployed Folder">
+         </action>
       </objectContribution>
    </extension>
    <extension

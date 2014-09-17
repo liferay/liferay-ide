@@ -31,6 +31,12 @@ public class RedeployAction extends AbstractServerRunningAction
         super();
     }
 
+    @Override
+    protected int getRequiredServerState()
+    {
+        return IServer.STATE_STARTED | IServer.STATE_STOPPED;
+    }
+
     public void run( IAction action )
     {
         if( selectedModule == null )
@@ -50,11 +56,5 @@ public class RedeployAction extends AbstractServerRunningAction
             }
         }
 
-    }
-
-    @Override
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED | IServer.STATE_STOPPED;
     }
 }

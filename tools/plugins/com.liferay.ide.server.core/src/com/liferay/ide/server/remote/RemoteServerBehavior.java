@@ -141,6 +141,11 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         remoteServerUpdateJob = null;
     }
 
+    public IPath getDeployedPath( IModule[] module )
+    {
+        return null;
+    }
+
     public int getRemoteServerState( int currentServerState, IProgressMonitor monitor )
     {
         try

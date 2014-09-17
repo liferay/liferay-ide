@@ -15,13 +15,16 @@
 
 package com.liferay.ide.server.core;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IModule;
 
 /**
- * @author Greg Amerson
+ * @author Gregory Amerson
  */
 public interface ILiferayServerBehavior
 {
+
+    IPath getDeployedPath( IModule[] module );
 
     void redeployModule( IModule[] module );
 
