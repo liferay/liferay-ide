@@ -96,10 +96,8 @@ public class PluginsCustomLabelProvider extends LabelProvider
         {
             return Msgs.liferayPlugins;
         }
-        else
-        {
-            return null;
-        }
+
+        return null;
     }
 
     private static class Msgs extends NLS

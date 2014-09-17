@@ -3,7 +3,6 @@
 <plugin>
    <extension
          point="org.eclipse.ui.navigator.viewer">
-      <!--
       <viewerContentBinding
             viewerId="org.eclipse.wst.server.ui.ServersView">
          <includes>
@@ -13,7 +12,6 @@
             </contentExtension>
          </includes>
       </viewerContentBinding>
-      -->
       <viewerContentBinding
             viewerId="org.eclipse.wst.server.ui.ServersView">
          <includes>
@@ -26,7 +24,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
-      <!--
       <navigatorContent
             activeByDefault="true"
             contentProvider="org.eclipse.wst.server.ui.internal.cnf.ServerContentProvider"
@@ -66,7 +63,6 @@
                suppressedExtensionId="org.eclipse.wst.server.ui.ServersView.content.root">
          </override>
       </navigatorContent>
-      -->
       <navigatorContent
             activeByDefault="true"
             contentProvider="com.liferay.ide.server.ui.navigator.PropertiesContentProvider"

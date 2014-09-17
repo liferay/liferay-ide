@@ -45,7 +45,7 @@ public class PropertiesLabelProvider extends LabelProvider implements ILightweig
             return PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FILE );
         }
 
-        return super.getImage( element );
+        return null;
     }
 
     @Override
@@ -58,6 +58,6 @@ public class PropertiesLabelProvider extends LabelProvider implements ILightweig
             return file.getName();
         }
 
-        return super.getText( element );
+        return null;
     }
 }
