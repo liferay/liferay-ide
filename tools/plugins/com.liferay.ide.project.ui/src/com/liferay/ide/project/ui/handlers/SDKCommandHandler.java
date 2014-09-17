@@ -30,8 +30,6 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public abstract class SDKCommandHandler extends AbstractHandler
 {
 
-    protected abstract String getSDKCommand();
-
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
         IStatus retval = null;
@@ -116,5 +114,7 @@ public abstract class SDKCommandHandler extends AbstractHandler
 
         return retval;
     }
+
+    protected abstract String getSDKCommand();
 
 }
