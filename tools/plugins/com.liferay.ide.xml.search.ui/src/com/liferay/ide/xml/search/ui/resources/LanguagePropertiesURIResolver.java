@@ -58,9 +58,7 @@ public class LanguagePropertiesURIResolver extends ResourceBaseURIResolver
 
         if( matching != null )
         {
-            final String uri = resolve( selectedNode, rootContainer, file ).toLowerCase();
-
-            matching = matching.toLowerCase();
+            final String uri = resolve( selectedNode, rootContainer, file );
 
             if( matching.contains( "*" ) )
             {

@@ -61,8 +61,6 @@ public class ResourceBundleURIResolver extends ResourceBaseURIResolver
         {
             final String uri = resolve( selectedNode, rootContainer, file );
 
-            matching = matching.toLowerCase();
-
             if( fullMatch )
             {
                 return uri.equals( matching );
