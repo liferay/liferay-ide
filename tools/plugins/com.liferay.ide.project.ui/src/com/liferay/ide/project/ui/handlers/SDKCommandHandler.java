@@ -72,24 +72,23 @@ public abstract class SDKCommandHandler extends AbstractHandler
 
         try
         {
-            final IFile buildXmlFile = project.getFile( "build.xml" ); //$NON-NLS-1$
+            final IFile buildXmlFile = project.getFile( "build.xml" );
 
             if( buildXmlFile.exists() )
             {
                 final IProject p = project;
                 final IFile buildFile = buildXmlFile;
 
-                new Job( p.getName() + " : " + getSDKCommand() ) //$NON-NLS-1$
+                new Job( p.getName() + " : " + getSDKCommand() )
                 {
-
                     @Override
                     protected IStatus run( IProgressMonitor monitor )
                     {
                         try
                         {
-                            SDK sdk = SDKUtil.getSDK( p );
+                            final SDK sdk = SDKUtil.getSDK( p );
 
-                            Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( p );
+                            final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( p );
 
                             sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties, monitor );
 
@@ -97,15 +96,13 @@ public abstract class SDKCommandHandler extends AbstractHandler
                         }
                         catch( Exception e )
                         {
-                            return ProjectUI.createErrorStatus( "Error running SDK command " + getSDKCommand(), e ); //$NON-NLS-1$
+                            return ProjectUI.createErrorStatus( "Error running SDK command " + getSDKCommand(), e );
                         }
 
                         return Status.OK_STATUS;
                     }
                 }.schedule();
-
             }
-
         }
         catch( Exception e )
         {
