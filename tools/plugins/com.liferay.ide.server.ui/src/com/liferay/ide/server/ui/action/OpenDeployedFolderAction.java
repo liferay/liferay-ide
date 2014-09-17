@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.ui.action;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 
@@ -25,7 +26,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.server.core.IServer;
 
@@ -46,21 +46,25 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction
 
     private String formShowInSytemExplorerCommand( File path ) throws IOException
     {
+        String retval = null;
+
         String command =
-            IDEWorkbenchPlugin.getDefault().getPreferenceStore().getString(
-                IDEInternalPreferences.WORKBENCH_SYSTEM_EXPLORER );
+            IDEWorkbenchPlugin.getDefault().getPreferenceStore().getString("SYSTEM_EXPLORER");
 
-        command = Util.replaceAll( command, VARIABLE_RESOURCE, quotePath( path.getCanonicalPath() ) );
-        command = Util.replaceAll( command, VARIABLE_RESOURCE_URI, path.getCanonicalFile().toURI().toString() );
-
-        final File parent = path.getParentFile();
-
-        if( parent != null )
+        if( ! CoreUtil.isNullOrEmpty( command ) )
         {
-            command = Util.replaceAll( command, VARIABLE_FOLDER, quotePath( parent.getCanonicalPath() ) );
+            command = Util.replaceAll( command, VARIABLE_RESOURCE, quotePath( path.getCanonicalPath() ) );
+            command = Util.replaceAll( command, VARIABLE_RESOURCE_URI, path.getCanonicalFile().toURI().toString() );
+
+            final File parent = path.getParentFile();
+
+            if( parent != null )
+            {
+                retval = Util.replaceAll( command, VARIABLE_FOLDER, quotePath( parent.getCanonicalPath() ) );
+            }
         }
 
-        return command;
+        return retval;
     }
 
     private IPath getDeployFolderPath()
@@ -138,7 +142,15 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction
         {
             final IPath deployedPath = getDeployFolderPath();
 
-            if( deployedPath == null || ( ! deployedPath.toFile().exists() ) )
+            try
+            {
+                if( deployedPath == null || ( !deployedPath.toFile().exists() ) ||
+                    CoreUtil.isNullOrEmpty( formShowInSytemExplorerCommand( deployedPath.toFile() ) ) )
+                {
+                    action.setEnabled( false );
+                }
+            }
+            catch( IOException e )
             {
                 action.setEnabled( false );
             }
