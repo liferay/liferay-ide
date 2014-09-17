@@ -931,9 +931,9 @@
          point="org.eclipse.ui.commands">
         <command
             categoryId="com.liferay.ide.project.ui.handlers"
-            description="Build All SDK command"
-            id="com.liferay.ide.project.ui.sdk.command.buildAll"
-            name="Build All SDK Command">
+            description="All SDK command"
+            id="com.liferay.ide.project.ui.sdk.command.all"
+            name="All SDK Command">
         </command>
         <command
             categoryId="com.liferay.ide.project.ui.handlers"
@@ -1022,17 +1022,16 @@
         <command
             categoryId="com.liferay.ide.project.ui.handlers"
             description="War SDK command"
-            id="com.liferay.ide.project.ui.command.buildWar"
+            id="com.liferay.ide.project.ui.command.war"
             name="War SDK Command">
         </command>
-        
    </extension>
-    
+
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             class="com.liferay.ide.project.ui.handlers.AllSDKHandler"
-            commandId="com.liferay.ide.project.ui.sdk.command.buildAll">
+            commandId="com.liferay.ide.project.ui.sdk.command.all">
       </handler>
       <handler
             class="com.liferay.ide.project.ui.handlers.BuildClientSDKHandler"
@@ -1092,10 +1091,10 @@
       </handler>
       <handler
             class="com.liferay.ide.project.ui.handlers.WarSDKHandler"
-            commandId="com.liferay.ide.project.ui.command.buildWar">
-      </handler>      
-   </extension>   
-<!--  
+            commandId="com.liferay.ide.project.ui.command.war">
+      </handler>
+   </extension>
+<!--
 
    <extension
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
