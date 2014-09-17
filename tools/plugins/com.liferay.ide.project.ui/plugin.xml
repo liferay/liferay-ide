@@ -1066,7 +1066,7 @@
             commandId="com.liferay.ide.project.ui.sdk.command.compile">
       </handler>
       <handler
-            class="com.liferay.ide.project.ui.handlers.CompilleTestSDKHandler"
+            class="com.liferay.ide.project.ui.handlers.CompileTestSDKHandler"
             commandId="com.liferay.ide.project.ui.sdk.command.compileTest">
       </handler>
       <handler

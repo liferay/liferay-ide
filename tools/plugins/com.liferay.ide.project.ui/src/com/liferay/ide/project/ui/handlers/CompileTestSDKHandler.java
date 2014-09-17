@@ -20,7 +20,7 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 /**
  * @author Simon Jiang
  */
-public class CompilleTestSDKHandler extends SDKCommandHandler
+public class CompileTestSDKHandler extends SDKCommandHandler
 {
 
     @Override
