@@ -825,12 +825,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals( "A project with that name already exists.", op2.getProjectName().validation().message() );
 
         op2.setProjectName( validProjectName );
-        assertEquals( "\"" + op2.getLocation().content().toOSString().replace( '\\', '/' ) +
-            "\" is not valid because a project already exists at that location.", vs.validation().message() );
-        assertEquals(
-            "\"" + op2.getLocation().content().toOSString().replace( '\\', '/' ) +
-                "\" is not valid because a project already exists at that location.",
-            op2.getProjectName().validation().message() );
+        assertEquals( "A project with that name already exists.", vs.validation().message() );
+        assertEquals( "A project with that name already exists.", op2.getProjectName().validation().message() );
 
         final IPath dotProjectLocation = proj.getLocation().append( ".project" );
 
@@ -845,10 +841,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         vs = op3.getProjectName().service( ValidationService.class );
 
         op3.setProjectName( validProjectName );
-        assertEquals( "\"" + op3.getLocation().content().toOSString().replace( '\\', '/' ) +
-            "\" is not valid because it already contains files.", vs.validation().message() );
-        assertEquals( "\"" + op3.getLocation().content().toOSString().replace( '\\', '/' ) +
-            "\" is not valid because it already contains files.", op3.getProjectName().validation().message() );
+        assertEquals( "A project with that name already exists.", vs.validation().message() );
+        assertEquals( "A project with that name already exists.", op3.getProjectName().validation().message() );
 
         String invalidProjectName = validProjectName + "/";
         op3.setProjectName( invalidProjectName );
