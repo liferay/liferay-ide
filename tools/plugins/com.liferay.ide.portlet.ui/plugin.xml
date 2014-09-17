@@ -83,7 +83,7 @@
          <contentTypeBinding
                contentTypeId="com.liferay.ide.portlet.core.liferayportletxml">
          </contentTypeBinding>
-      </editor>         
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -294,6 +294,7 @@
   </extension>
    <extension
          point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">
+      <!-- no longer needed now supported by xml-search query spec
       <hyperlinkDetector
             class="com.liferay.ide.portlet.ui.editor.PortletURLHyperlinkDetector"
             description="Portlet URL Methods"
@@ -301,6 +302,7 @@
             name="Portlet URL"
             targetId="org.eclipse.jst.jsp.core.jspsource">
       </hyperlinkDetector>
+      -->
       <hyperlinkDetector
             class="com.liferay.ide.portlet.ui.editor.MessageKeyHyperlinkDetector"
             id="com.liferay.ide.portlet.ui.messageKeyHyperlinkDetector"

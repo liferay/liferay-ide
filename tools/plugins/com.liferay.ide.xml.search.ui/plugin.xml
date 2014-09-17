@@ -16,7 +16,7 @@
                             class="com.liferay.ide.xml.search.ui.descriptors.LiferayHookQuerySpecification" />
         <querySpecification id="liferay.liferaylayouttplxml.querySpecification"
                             class="com.liferay.ide.xml.search.ui.descriptors.LiferayLayoutTplQuerySpecification" />
-        <querySpecification id="liferay.jsp.querySpecification" 
+        <querySpecification id="liferay.jsp.querySpecification"
                             class="com.liferay.ide.xml.search.ui.descriptors.LiferayJspQuerySpecification" />
     </extension>
 
@@ -63,7 +63,7 @@
 
             <!-- References of Java class -->
             <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
-                <from 
+                <from
                     path="//ns:portlet-class"
                     targetNodes="text()"
                     querySpecificationId="liferay.portletxml.querySpecification" />
@@ -71,7 +71,7 @@
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
-                <from 
+                <from
                     path="/ns:portlet-app/ns:listener/ns:listener-class"
                     targetNodes="text()"
                     querySpecificationId="liferay.portletxml.querySpecification" />
@@ -93,7 +93,7 @@
                     targetNodes="text()"
                     querySpecificationId="liferay.portletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.resourcebundle.querySpecification" />
-            </reference> 
+            </reference>
 
             <!-- no "to" element means it's only used for syntax validation -->
             <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
@@ -140,13 +140,13 @@
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
                     path="//configuration-action-class"
-                    targetNodes="text()" 
+                    targetNodes="text()"
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.portlet.ConfigurationAction"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
-                <from 
+                <from
                     path="//control-panel-entry-class"
                     targetNodes="text()"
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
@@ -524,7 +524,7 @@
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorValidator">
-                <from 
+                <from
                     path="//wap-template-path"
                     targetNodes="text()"
                     querySpecificationId="liferay.liferaylayouttplxml.querySpecification"/>
@@ -532,7 +532,7 @@
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorValidator">
-                <from 
+                <from
                     path="//thumbnail-path"
                     targetNodes="text()"
                     querySpecificationId="liferay.liferaylayouttplxml.querySpecification"/>
@@ -748,7 +748,7 @@
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
           </reference>
-          
+
           <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
              <from
                    path="social-activities"
@@ -760,6 +760,16 @@
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
+          </reference>
+
+          <reference>
+             <from
+                   path="//actionURL"
+                   targetNodes="@name">
+             </from>
+             <toJavaMethod
+                   querySpecificationId="com.liferay.ide.xml.search.ui.portletActionMethodQuery" >
+             </toJavaMethod>
           </reference>
        </references>
     </extension>
@@ -881,11 +891,11 @@
     <!--========== Content Assist Info Provider ==========-->
 
 	 <extension point="org.eclipse.wst.xml.search.editor.contentAssists" >
-        <additionalProposalInfoProvider 
-            id="contentAssist.portlet.info" 
+        <additionalProposalInfoProvider
+            id="contentAssist.portlet.info"
             class="com.liferay.ide.xml.search.ui.PortletContentAssistInfoProvider" />
-        <additionalProposalInfoProvider 
-            id="contentAssist.language.property.info" 
+        <additionalProposalInfoProvider
+            id="contentAssist.language.property.info"
             class="com.liferay.ide.xml.search.ui.LanguagePropertyContentAssistInfoProvider" />
     </extension>
 
@@ -934,5 +944,11 @@
              id="liferay.jsp.taglib.filter">
        </filter>
     </extension>
-
+    <extension
+          point="org.eclipse.wst.xml.search.editor.javaMethodQuerySpecifications">
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.java.PortletActionMethodQuery"
+             id="com.liferay.ide.xml.search.ui.portletActionMethodQuery">
+       </querySpecification>
+    </extension>
 </plugin>
