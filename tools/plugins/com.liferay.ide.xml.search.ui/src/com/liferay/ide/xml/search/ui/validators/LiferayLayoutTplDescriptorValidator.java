@@ -24,7 +24,7 @@ import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 /**
  * @author Kuo Zhang
  */
-public class LiferayLayoutTplDescriptorValidator extends LiferayDescriptorBaseValidator
+public class LiferayLayoutTplDescriptorValidator extends LiferayBaseValidator
 {
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorMarker";
 

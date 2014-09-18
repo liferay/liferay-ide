@@ -37,7 +37,7 @@ import org.w3c.dom.Node;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class ServiceBuilderDescriptorValidator extends LiferayDescriptorBaseValidator
+public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator
 {
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.serviceBuilderDescriptorMarker";
 

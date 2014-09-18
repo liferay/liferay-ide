@@ -567,7 +567,7 @@
 
     <extension point="org.eclipse.wst.xml.search.editor.xmlReferences">
        <references contentTypeIds="org.eclipse.jst.jsp.core.jspsource">
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="//message"
                    targetNodes="@key"
@@ -580,7 +580,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="*"
                    targetNodes="@message"
@@ -593,7 +593,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="*"
                    targetNodes="@label"
@@ -606,7 +606,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="*"
                    targetNodes="@helpMessage"
@@ -619,7 +619,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="*"
                    targetNodes="@suffix"
@@ -632,7 +632,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="a"
                    targetNodes="@title"
@@ -645,7 +645,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="a"
                    targetNodes="@label"
@@ -658,7 +658,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="button"
                    targetNodes="@value"
@@ -671,7 +671,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="*"
                    targetNodes="@placeholder"
@@ -684,7 +684,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="validator"
                    targetNodes="@errorMessage"
@@ -697,7 +697,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="workflow-status"
                    targetNodes="@statusMessage"
@@ -710,7 +710,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="icon-delete"
                    targetNodes="@confirmation"
@@ -723,7 +723,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="input-move-boxes"
                    targetNodes="@rightTitle"
@@ -736,7 +736,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="input-move-boxes"
                    targetNodes="@leftTitle"
@@ -749,7 +749,7 @@
              </toProperty>
           </reference>
 
-          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="social-activities"
                    targetNodes="@feedLinkMessage"
@@ -763,7 +763,7 @@
           </reference>
 
           <reference
-                validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
+                validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
                    path="//actionURL"
                    targetNodes="@name">
@@ -876,13 +876,13 @@
     <!-- Liferay Jsp Descriptor -->
     <extension point="org.eclipse.wst.xml.search.editor.referenceValidators">
        <validator
-            id="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator"
-            class="com.liferay.ide.xml.search.ui.validators.LiferayJspDescriptorValidator">
+            id="com.liferay.ide.xml.search.ui.liferayJspValidator"
+            class="com.liferay.ide.xml.search.ui.validators.LiferayJspValidator">
        </validator>
     </extension>
 
     <extension
-        id="liferayJspDescriptorMarker"
+        id="liferayJspMarker"
         name="%liferay.jsp.descriptor.marker.name"
         point="org.eclipse.core.resources.markers">
        <super type="org.eclipse.wst.validation.problemmarker"/>

@@ -33,7 +33,7 @@ import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class PortletDescriptorValidator extends LiferayDescriptorBaseValidator
+public class PortletDescriptorValidator extends LiferayBaseValidator
 {
 
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.portletDescriptorMarker";

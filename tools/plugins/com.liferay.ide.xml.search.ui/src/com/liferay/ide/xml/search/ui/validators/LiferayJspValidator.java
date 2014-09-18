@@ -34,10 +34,10 @@ import org.w3c.dom.Node;
  * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public class LiferayJspDescriptorValidator extends LiferayDescriptorBaseValidator
+public class LiferayJspValidator extends LiferayBaseValidator
 {
 
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayJspDescriptorMarker";
+    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayJspMarker";
 
     protected void addMessage(
         IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,

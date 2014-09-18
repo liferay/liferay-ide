@@ -37,6 +37,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IMessage;
@@ -63,7 +64,7 @@ import org.w3c.dom.Node;
  * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
+public class LiferayBaseValidator implements IXMLReferenceValidator
 {
     public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
     public static final String MESSAGE_REFERENCE_NOT_FOUND = Msgs.referenceNotFound;
@@ -108,11 +109,26 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
 
                     if( searchRequestor.accept( file, rootResource ) )
                     {
-                        if( searchRequestor.accept( StructuredModelManager.getModelManager().getModelForRead( file ) ) )
+                        IStructuredModel model = null;
+
+                        try
                         {
-                            retval = file;
-                            return false;
+                            model = StructuredModelManager.getModelManager().getModelForRead( file );
+
+                            if( searchRequestor.accept( model ) )
+                            {
+                                retval = file;
+                                return false;
+                            }
                         }
+                        finally
+                        {
+                            if( model != null )
+                            {
+                                model.releaseFromRead();
+                            }
+                        }
+
                     }
                 }
             }
@@ -493,7 +509,7 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
 
         static
         {
-            initializeMessages( LiferayDescriptorBaseValidator.class.getName(), Msgs.class );
+            initializeMessages( LiferayBaseValidator.class.getName(), Msgs.class );
         }
     }
 }

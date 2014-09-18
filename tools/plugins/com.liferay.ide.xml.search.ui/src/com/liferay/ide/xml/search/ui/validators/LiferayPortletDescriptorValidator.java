@@ -31,7 +31,7 @@ import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayPortletDescriptorValidator extends LiferayDescriptorBaseValidator
+public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
 {
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayPortletDescriptorMarker";
     public static final String MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID = Msgs.entryWeightSyntaxInvalid;

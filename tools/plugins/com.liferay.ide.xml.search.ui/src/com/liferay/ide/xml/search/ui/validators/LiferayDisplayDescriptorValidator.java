@@ -33,7 +33,7 @@ import org.w3c.dom.Node;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayDisplayDescriptorValidator extends LiferayDescriptorBaseValidator
+public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator
 {
 
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayDisplayDescriptorMarker";

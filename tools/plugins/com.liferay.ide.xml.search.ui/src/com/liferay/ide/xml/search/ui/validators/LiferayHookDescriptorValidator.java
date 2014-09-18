@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayHookDescriptorValidator extends LiferayDescriptorBaseValidator
+public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 {
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayHookDescriptorMarker";
     public static final String MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES = Msgs.propertiesNotEndWithProperties;
