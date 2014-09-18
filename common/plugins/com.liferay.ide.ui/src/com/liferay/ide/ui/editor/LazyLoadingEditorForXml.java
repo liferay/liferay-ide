@@ -2,6 +2,7 @@ package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.ui.LiferayUIPlugin;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.LoggingService;
 import org.eclipse.sapphire.Sapphire;
@@ -43,6 +44,32 @@ public class LazyLoadingEditorForXml extends SapphireEditorForXml
 
         super.addPage( index, page.getPartControl() );
         configurePage( index, page );
+    }
+
+    @Override
+    public void doSave( IProgressMonitor monitor )
+    {
+        if( loaded )
+        {
+            super.doSave( monitor );
+        }
+        else
+        {
+            getEditor( 0 ).doSave( monitor );
+        }
+    }
+
+    @Override
+    public void doSaveAs()
+    {
+        if( loaded )
+        {
+            super.doSaveAs();
+        }
+        else
+        {
+            getEditor( 0 ).doSaveAs();
+        }
     }
 
     public int getOffset()
