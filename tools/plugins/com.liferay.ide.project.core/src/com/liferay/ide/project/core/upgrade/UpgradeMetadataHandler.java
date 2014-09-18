@@ -15,8 +15,8 @@
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.File;
@@ -74,42 +74,48 @@ public class UpgradeMetadataHandler extends AbstractUpgradeProjectHandler
             {
                 final IStructuredModel editModel = StructuredModelManager.getModelManager().getModelForEdit( file );
 
-                if( editModel != null && editModel instanceof IDOMModel )
+                try
                 {
-                    worked = worked + perUnit;
-                    submon.worked( worked );
-
-                    final IDOMDocument xmlDocument = ( (IDOMModel) editModel ).getDocument();
-                    final DocumentTypeImpl docType = (DocumentTypeImpl) xmlDocument.getDoctype();
-
-                    final String publicId = docType.getPublicId();
-                    final String newPublicId = getNewDoctTypeSetting( publicId, "6.2.0", publicid_regrex );
-
-                    if( newPublicId != null )
+                    if( editModel != null && editModel instanceof IDOMModel )
                     {
-                        docType.setPublicId( newPublicId );
+                        worked = worked + perUnit;
+                        submon.worked( worked );
+
+                        final IDOMDocument xmlDocument = ( (IDOMModel) editModel ).getDocument();
+                        final DocumentTypeImpl docType = (DocumentTypeImpl) xmlDocument.getDoctype();
+
+                        final String publicId = docType.getPublicId();
+                        final String newPublicId = getNewDoctTypeSetting( publicId, "6.2.0", publicid_regrex );
+
+                        if( newPublicId != null )
+                        {
+                            docType.setPublicId( newPublicId );
+                        }
+
+                        worked = worked + perUnit;
+                        submon.worked( worked );
+
+                        final String systemId = docType.getSystemId();
+                        final String newSystemId = getNewDoctTypeSetting( systemId, "6_2_0", systemid_regrex );
+
+                        if( newSystemId != null )
+                        {
+                            docType.setSystemId( newSystemId );
+                        }
+
+                        editModel.save();
+
+                        worked = worked + perUnit;
+                        submon.worked( worked );
                     }
-
-                    worked = worked + perUnit;
-                    submon.worked( worked );
-
-                    final String systemId = docType.getSystemId();
-                    final String newSystemId = getNewDoctTypeSetting( systemId, "6_2_0", systemid_regrex );
-
-                    if( newSystemId != null )
+                    else
                     {
-                        docType.setSystemId( newSystemId );
+                        updateProperties( file, "liferay-versions", "6.2.0+" );
                     }
-
-                    editModel.save();
-                    editModel.releaseFromEdit();
-
-                    worked = worked + perUnit;
-                    submon.worked( worked );
                 }
-                else
+                finally
                 {
-                    updateProperties( file, "liferay-versions", "6.2.0+" );
+                    editModel.releaseFromEdit();
                 }
             }
         }
