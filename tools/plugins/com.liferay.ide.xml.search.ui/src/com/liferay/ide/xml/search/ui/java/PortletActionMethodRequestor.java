@@ -35,8 +35,8 @@ public class PortletActionMethodRequestor extends AbstractJavaMethodRequestor
 
         boolean valid =
             parameterTypes != null && parameterTypes.length == 2 &&
-            parameterTypes[0].equals( "QActionRequest;" ) &&
-            parameterTypes[1].equals( "QActionResponse;" );
+            ( parameterTypes[0].equals( "QActionRequest;" ) || parameterTypes[0].equals( "Qjavax.portlet.ActionRequest;" ) ) &&
+            ( parameterTypes[1].equals( "QActionResponse;" ) || parameterTypes[1].equals( "Qjavax.portlet.ActionResponse;" ) );
 
         return valid ? Status.OK_STATUS : null;
     }
