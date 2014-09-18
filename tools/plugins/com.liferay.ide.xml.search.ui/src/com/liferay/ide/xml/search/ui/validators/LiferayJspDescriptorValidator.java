@@ -17,22 +17,45 @@ package com.liferay.ide.xml.search.ui.validators;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.properties.IPropertiesQuerySpecification;
 import org.eclipse.wst.xml.search.core.properties.IPropertiesRequestor;
+import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceToProperty;
 import org.eclipse.wst.xml.search.editor.util.PropertiesQuerySpecificationUtil;
+import org.eclipse.wst.xml.search.editor.validation.LocalizedMessage;
 import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 import org.w3c.dom.Node;
 
 /**
  * @author Terry Jia
  */
+@SuppressWarnings( "restriction" )
 public class LiferayJspDescriptorValidator extends LiferayDescriptorBaseValidator
 {
 
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayJspDescriptorMarker";
+
+    protected void addMessage(
+        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
+        int severity )
+    {
+        final String textContent = DOMUtils.getNodeValue( node );
+        int startOffset = getStartOffset( node );
+        int length = textContent.trim().length() + 2;
+
+        final LocalizedMessage message =
+            createMessage( startOffset, length, messageText, severity, node.getStructuredDocument() );
+
+        if( message != null )
+        {
+            message.setTargetObject( file );
+            reporter.addMessage( validator, message );
+        }
+    }
 
     @Override
     protected IFile getReferencedFile( IXMLReferenceTo referenceTo, Node node, IFile file )

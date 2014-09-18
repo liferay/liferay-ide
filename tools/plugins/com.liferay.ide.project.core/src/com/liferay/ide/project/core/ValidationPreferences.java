@@ -29,8 +29,13 @@ public class ValidationPreferences
 
     public enum ValidationType
     {
-        SYNTAX_INVALID, TYPE_NOT_FOUND, TYPE_HIERARCHY_INCORRECT, REFERENCE_NOT_FOUND, RESOURCE_NOT_FOUND,
-            PROPERTY_NOT_FOUND
+        METHOD_NOT_FOUND,
+        PROPERTY_NOT_FOUND,
+        REFERENCE_NOT_FOUND,
+        RESOURCE_NOT_FOUND,
+        SYNTAX_INVALID,
+        TYPE_NOT_FOUND,
+        TYPE_HIERARCHY_INCORRECT,
     }
 
     // *** validation preferences of liferay-display.xml ***

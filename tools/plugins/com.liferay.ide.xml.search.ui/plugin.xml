@@ -762,7 +762,8 @@
              </toProperty>
           </reference>
 
-          <reference>
+          <reference
+                validatorId="com.liferay.ide.xml.search.ui.liferayJspDescriptorValidator">
              <from
                    path="//actionURL"
                    targetNodes="@name">

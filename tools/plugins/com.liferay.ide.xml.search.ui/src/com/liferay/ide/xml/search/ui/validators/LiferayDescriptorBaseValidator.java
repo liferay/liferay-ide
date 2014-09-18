@@ -71,6 +71,7 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
     public static final String MESSAGE_SYNTAX_INVALID = Msgs.syntaxInvalid;
     public static final String MESSAGE_TYPE_HIERARCHY_INCORRECT = Msgs.typeHierarchyIncorrect;
     public static final String MESSAGE_TYPE_NOT_FOUND = Msgs.typeNotFound;
+    public static final String MESSAGE_METHOD_NOT_FOUND = Msgs.methodNotFound;
 
     private static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
 
@@ -231,6 +232,9 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
             case JAVA:
                 validateReferenceToJava( referenceTo, node, file, validator, reporter, batchMode );
                 break;
+            case JAVA_METHOD:
+                validateReferenceToJavaMethod( referenceTo, node, file, validator, reporter, batchMode );
+                break;
             case RESOURCE:
                 validateReferenceToResource( referenceTo, node, file, validator, reporter, batchMode );
                 break;
@@ -258,6 +262,8 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
             return NLS.bind( MESSAGE_SYNTAX_INVALID, node.getNodeName() );
         case TYPE_NOT_FOUND:
             return NLS.bind( MESSAGE_TYPE_NOT_FOUND, textContent );
+        case METHOD_NOT_FOUND:
+            return NLS.bind( MESSAGE_METHOD_NOT_FOUND, textContent );
         case TYPE_HIERARCHY_INCORRECT:
         {
             if( referenceTo != null && referenceTo.getType() == IXMLReferenceTo.ToType.JAVA && file != null )
@@ -361,6 +367,8 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
                     return ValidationType.TYPE_HIERARCHY_INCORRECT;
                 }
                 return ValidationType.TYPE_NOT_FOUND;
+            case JAVA_METHOD:
+                return ValidationType.METHOD_NOT_FOUND;
             case RESOURCE:
                 return ValidationType.RESOURCE_NOT_FOUND;
             case PROPERTY:
@@ -441,6 +449,13 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
     }
 
+    protected void validateReferenceToJavaMethod(
+        IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+        boolean batchMode )
+    {
+        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
+    }
+
     protected void validateReferenceToProperty(
         IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
         boolean batchMode )
@@ -474,6 +489,7 @@ public class LiferayDescriptorBaseValidator implements IXMLReferenceValidator
         public static String syntaxInvalid;
         public static String typeHierarchyIncorrect;
         public static String typeNotFound;
+        public static String methodNotFound;
 
         static
         {
