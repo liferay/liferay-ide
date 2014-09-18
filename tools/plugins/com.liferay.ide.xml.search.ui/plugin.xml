@@ -647,6 +647,32 @@
 
           <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
+                   path="header"
+                   targetNodes="@title"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="panel"
+                   targetNodes="@title"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter"  >
+             </from>
+             <toProperty
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
                    path="a"
                    targetNodes="@label"
                    querySpecificationId="liferay.jsp.querySpecification"

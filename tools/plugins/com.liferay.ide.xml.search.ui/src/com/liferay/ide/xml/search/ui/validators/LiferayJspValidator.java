@@ -45,15 +45,19 @@ public class LiferayJspValidator extends LiferayBaseValidator
     {
         final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
-        int length = textContent.trim().length() + 2;
 
-        final LocalizedMessage message =
-            createMessage( startOffset, length, messageText, severity, node.getStructuredDocument() );
-
-        if( message != null )
+        if( textContent != null )
         {
-            message.setTargetObject( file );
-            reporter.addMessage( validator, message );
+            int length = textContent.trim().length() + 2;
+
+            final LocalizedMessage message =
+                createMessage( startOffset, length, messageText, severity, node.getStructuredDocument() );
+
+            if( message != null )
+            {
+                message.setTargetObject( file );
+                reporter.addMessage( validator, message );
+            }
         }
     }
 
