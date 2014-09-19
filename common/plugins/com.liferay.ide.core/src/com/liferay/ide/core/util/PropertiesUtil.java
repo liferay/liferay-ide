@@ -356,20 +356,20 @@ public class PropertiesUtil
         return retval.toArray( new IFile[0] );
     }
 
-    public static IFile[] getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
+    public static ArrayList<IFile> getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
     {
-        IFile[] retvals = null;
-
         final IProject proj = CoreUtil.getLiferayProject( portletXml );
 
         if( proj == null )
         {
-            return retvals;
+            return null;
         }
 
-        final IFolder srcFolder = CoreUtil.getFirstSrcFolder( proj );
+        ArrayList<IFile> retvals = new ArrayList<IFile>();
 
-        if( srcFolder.exists() && ( portletXml != null ) && ( portletXml.exists() ) )
+        final IFolder[] srcFolders = CoreUtil.getSrcFolders( proj );
+
+        if( ( portletXml != null ) && ( portletXml.exists() ) )
         {
             final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
 
@@ -377,15 +377,21 @@ public class PropertiesUtil
 
             if( ( resourceBundles != null ) && ( resourceBundles.size() > 0 ) )
             {
-                retvals = new IFile[resourceBundles.size()];
-
                 for( int i = 0; i < resourceBundles.size(); i++ )
                 {
                     String resourceBundleValue = (String) resourceBundles.toArray()[i];
 
-                    retvals[i] =
-                        CoreUtil.getWorkspaceRoot().getFile(
-                            srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
+                    for( IFolder srcFolder : srcFolders )
+                    {
+                        IFile languageFile =
+                            CoreUtil.getWorkspaceRoot().getFile(
+                                srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
+
+                        if( ( languageFile != null ) && languageFile.exists() )
+                        {
+                            retvals.add( languageFile );
+                        }
+                    }
                 }
             }
         }
@@ -393,7 +399,7 @@ public class PropertiesUtil
         return retvals;
     }
 
-    public static IFile[] getDefaultLanguagePropertiesFromProject( IProject project )
+    public static ArrayList<IFile> getDefaultLanguagePropertiesFromProject( IProject project )
     {
         return getDefaultLanguagePropertiesFromPortletXml( CoreUtil.getDescriptorFile(
             project, ILiferayConstants.PORTLET_XML_FILE ) );

@@ -15,8 +15,6 @@
 
 package com.liferay.ide.xml.search.ui.resources;
 
-import com.liferay.ide.core.util.CoreUtil;
-
 import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.search.core.properties.IPropertiesRequestor;
 import org.eclipse.wst.xml.search.core.properties.IPropertiesRequestorProvider;
@@ -36,7 +34,7 @@ public class PortletLanguagePropertiesQuerySpecification implements IPropertiesR
 
     public IResource getResource( Object selectedNode, IResource resource )
     {
-        return CoreUtil.getFirstSrcFolder( resource.getProject() );
+        return resource.getProject();
     }
 
 }
