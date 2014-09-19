@@ -160,6 +160,12 @@ public class ServiceMethodHyperlinkDetector extends AbstractHyperlinkDetector
         IHyperlink[] retval = null;
 
         final ITextEditor textEditor = (ITextEditor) getAdapter( ITextEditor.class );
+
+        if( textEditor == null )
+        {
+            return retval;
+        }
+
         final ITypeRoot input = EditorUtility.getEditorInputJavaElement( textEditor, false );
         final IAction openAction = textEditor.getAction( "OpenEditor" );
 

@@ -37,7 +37,7 @@ public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIReso
     {
         final String extension = file.getFileExtension();
 
-        if( !getExtensions().contains( extension.toLowerCase() ) )
+        if( extension == null || ( ! getExtensions().contains( extension.toLowerCase() ) ) )
         {
             return false;
         }
