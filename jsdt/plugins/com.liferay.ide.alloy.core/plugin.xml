@@ -31,4 +31,36 @@
          </defaultModules>
       </ternAdaptToNature>
    </extension>
+   <extension
+         point="org.eclipse.wst.sse.core.modelHandler">
+      <modelHandler
+            associatedContentTypeId="com.liferay.ide.jsdt.core.liferayjspsource"
+            class="com.liferay.ide.alloy.core.jsp.LiferayModelHandlerForJSP"
+            id="com.liferay.ide.jsdt.core.liferayJsp">
+      </modelHandler>
+   </extension>
+
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.jst.jsp.core.jspsource"
+            default-charset="ISO-8859-1"
+            file-extensions="jsp,jsv,jtpl,jspx,ljsp"
+            id="com.liferay.ide.jsdt.core.liferayjspsource"
+            name="Liferay JSP Source"
+            priority="high">
+         <describer
+               class="com.liferay.ide.alloy.core.jsp.LiferayContentDescriberForJSP">
+         </describer>
+
+      </content-type>
+   </extension>
+   <extension
+        point="org.eclipse.core.filebuffers.documentCreation"
+        id="com.liferay.ide.jsdt.core.documentfactories"
+        name="aaa">
+        <factory
+            contentTypeId="com.liferay.ide.jsdt.core.liferayjspsource"
+            class="com.liferay.ide.alloy.core.jsp.LiferayBasicStructuredDocumentFactory" />
+    </extension>
 </plugin>
