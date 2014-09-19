@@ -57,6 +57,7 @@ import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
@@ -96,6 +97,13 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
         else
         {
             File file = (File) input.getAdapter( File.class );
+
+            if( file == null && input instanceof FileStoreEditorInput )
+            {
+                FileStoreEditorInput fInput = (FileStoreEditorInput) input;
+
+                file = new File( fInput.getURI().getPath() );
+            }
 
             if( file != null && file.exists() )
             {
@@ -180,7 +188,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
             propKeys = keys;
         }
 
-        if( assitant == null )
+        if( propKeys != null && assitant == null )
         {
             final ContentAssistant ca = new ContentAssistant()
             {

@@ -192,7 +192,7 @@ public class LiferayPropertiesContentAssistProcessor implements IContentAssistPr
             partition = partitioner.getPartition( offset );
         }
 
-        if( offset < initialOffset )
+        if( offset > 0 && offset < initialOffset )
         {
             offset++; // move back up to next partition
         }
