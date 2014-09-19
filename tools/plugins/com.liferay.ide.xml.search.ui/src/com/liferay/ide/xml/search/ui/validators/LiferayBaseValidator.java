@@ -371,7 +371,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         return node.getStartOffset();
     }
 
-    private ValidationType getValidationType( IXMLReferenceTo referenceTo, int nbElements )
+    protected ValidationType getValidationType( IXMLReferenceTo referenceTo, int nbElements )
     {
         switch( referenceTo.getType() )
         {
@@ -394,7 +394,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         }
     }
 
-    private boolean isMultipleElementsAllowed( IDOMNode node, int nbElements )
+    protected boolean isMultipleElementsAllowed( IDOMNode node, int nbElements )
     {
         return true;
     }

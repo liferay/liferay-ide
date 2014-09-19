@@ -15,8 +15,15 @@
 
 package com.liferay.ide.xml.search.ui.validators;
 
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
+import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
+
+import java.util.Properties;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -26,6 +33,7 @@ import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceToProperty;
 import org.eclipse.wst.xml.search.editor.util.PropertiesQuerySpecificationUtil;
+import org.eclipse.wst.xml.search.editor.validation.IValidationResult;
 import org.eclipse.wst.xml.search.editor.validation.LocalizedMessage;
 import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 import org.w3c.dom.Node;
@@ -96,6 +104,71 @@ public class LiferayJspValidator extends LiferayBaseValidator
         if( ( validator instanceof XMLReferencesBatchValidator ) && file.getFileExtension().equals( "jsp" ) )
         {
             ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
+        }
+    }
+
+    @Override
+    protected void validateReferenceToProperty(
+        IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+        boolean batchMode )
+    {
+        final String languageKey = DOMUtils.getNodeValue( node );
+
+        final IValidationResult result =
+            referenceTo.getSearcher().searchForValidation( node, languageKey, -1, -1, file, referenceTo );
+
+        if( result != null )
+        {
+            boolean addMessage = false;
+
+            int nbElements = result.getNbElements();
+
+            if( nbElements > 0 )
+            {
+                if( nbElements > 1 && !isMultipleElementsAllowed( node, nbElements ) )
+                {
+                    addMessage = true;
+                }
+            }
+            else
+            {
+                addMessage = true;
+            }
+
+            if( addMessage )
+            {
+                Properties properties =
+                    PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( file.getProject() ) );
+
+                if( properties != null )
+                {
+                    try
+                    {
+                        String languageValue = (String) properties.get( languageKey );
+
+                        if( !languageValue.equals( "" ) )
+                        {
+                            addMessage = false;
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        addMessage = true;
+                    }
+
+                    if( addMessage )
+                    {
+                        ValidationType validationType = getValidationType( referenceTo, nbElements );
+                        int severity = getServerity( validationType, file );
+
+                        if( severity != ValidationMessage.IGNORE )
+                        {
+                            final String messageText = getMessageText( validationType, referenceTo, node, file );
+                            addMessage( node, file, validator, reporter, batchMode, messageText, severity );
+                        }
+                    }
+                }
+            }
         }
     }
 
