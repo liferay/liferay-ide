@@ -137,7 +137,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
             if( addMessage )
             {
-                Properties properties =
+                final Properties properties =
                     PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( file.getProject() ) );
 
                 if( properties != null )
@@ -153,13 +153,12 @@ public class LiferayJspValidator extends LiferayBaseValidator
                     }
                     catch( Exception e )
                     {
-                        addMessage = true;
                     }
 
                     if( addMessage )
                     {
-                        ValidationType validationType = getValidationType( referenceTo, nbElements );
-                        int severity = getServerity( validationType, file );
+                        final ValidationType validationType = getValidationType( referenceTo, nbElements );
+                        final int severity = getServerity( validationType, file );
 
                         if( severity != ValidationMessage.IGNORE )
                         {

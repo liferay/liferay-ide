@@ -16,7 +16,6 @@
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,11 +32,11 @@ import org.eclipse.core.runtime.IPath;
 public class PortalLanguagePropertiesCacheUtil
 {
 
-    private static WeakHashMap<IPath, Properties> languagePortalMap = new WeakHashMap<IPath, Properties>();
+    private static final WeakHashMap<IPath, Properties> languagePortalMap = new WeakHashMap<IPath, Properties>();
 
     public static Properties getPortalLanguageProperties( ILiferayProject project )
     {
-        Properties portalLanguageProperties = null;
+        Properties retval = null;
 
         JarFile jar = null;
 
@@ -45,30 +44,30 @@ public class PortalLanguagePropertiesCacheUtil
 
         try
         {
-            IPath appServerPortalDir = project.getAppServerPortalDir();
+            final IPath appServerPortalDir = project.getAppServerPortalDir();
 
-            portalLanguageProperties = languagePortalMap.get( appServerPortalDir );
+            retval = languagePortalMap.get( appServerPortalDir );
 
-            if( portalLanguageProperties == null )
+            if( retval == null )
             {
                 if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
                 {
                     jar = new JarFile( appServerPortalDir.append( "WEB-INF/lib/portal-impl.jar" ).toFile() );
                     final ZipEntry lang = jar.getEntry( "content/Language.properties" );
 
-                    portalLanguageProperties = new Properties();
+                    retval = new Properties();
 
                     in = jar.getInputStream( lang );
 
-                    portalLanguageProperties.load( in );
+                    retval.load( in );
                 }
 
-                languagePortalMap.put( appServerPortalDir, portalLanguageProperties );
+                languagePortalMap.put( appServerPortalDir, retval );
             }
         }
         catch( Exception e )
         {
-            LiferayCore.logError( e );
+            LiferayXMLSearchUI.logError( "Unable to find portal language properties", e );
         }
         finally
         {
@@ -86,11 +85,11 @@ public class PortalLanguagePropertiesCacheUtil
             }
             catch( IOException e )
             {
-                LiferayCore.logError( e );
+                // no errors this is best effort
             }
         }
 
-        return portalLanguageProperties;
+        return retval;
     }
 
 }
