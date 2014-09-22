@@ -356,7 +356,7 @@ public class PropertiesUtil
         return retval.toArray( new IFile[0] );
     }
 
-    public static ArrayList<IFile> getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
+    public static List<IFile> getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
     {
         final IProject proj = CoreUtil.getLiferayProject( portletXml );
 
@@ -365,7 +365,7 @@ public class PropertiesUtil
             return null;
         }
 
-        ArrayList<IFile> retvals = new ArrayList<IFile>();
+        List<IFile> retvals = new ArrayList<IFile>();
 
         final IFolder[] srcFolders = CoreUtil.getSrcFolders( proj );
 
@@ -399,7 +399,7 @@ public class PropertiesUtil
         return retvals;
     }
 
-    public static ArrayList<IFile> getDefaultLanguagePropertiesFromProject( IProject project )
+    public static List<IFile> getDefaultLanguagePropertiesFromProject( IProject project )
     {
         return getDefaultLanguagePropertiesFromPortletXml( CoreUtil.getDescriptorFile(
             project, ILiferayConstants.PORTLET_XML_FILE ) );
