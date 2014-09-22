@@ -65,7 +65,10 @@ public class ServiceBuilderEditor extends LazyLoadingEditorForXml
     {
         super.doSave( monitor );
 
-        this.pageDiagram.doSave( monitor );
+        if( this.pageDiagram != null )
+        {
+            this.pageDiagram.doSave( monitor );
+        }
     }
 
     public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
