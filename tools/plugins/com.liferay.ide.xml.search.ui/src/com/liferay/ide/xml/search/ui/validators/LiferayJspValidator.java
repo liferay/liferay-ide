@@ -47,6 +47,9 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayJspMarker";
 
+    private final String JSP_TAG_START = "<%=";
+    private final String JSP_TAG_END = "%>";
+
     protected void addMessage(
         IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
         int severity )
@@ -114,56 +117,59 @@ public class LiferayJspValidator extends LiferayBaseValidator
     {
         final String languageKey = DOMUtils.getNodeValue( node );
 
-        final IValidationResult result =
-            referenceTo.getSearcher().searchForValidation( node, languageKey, -1, -1, file, referenceTo );
-
-        if( result != null )
+        if( !languageKey.contains( JSP_TAG_START ) && !languageKey.contains( JSP_TAG_END ) )
         {
-            boolean addMessage = false;
+            final IValidationResult result =
+                referenceTo.getSearcher().searchForValidation( node, languageKey, -1, -1, file, referenceTo );
 
-            int nbElements = result.getNbElements();
-
-            if( nbElements > 0 )
+            if( result != null )
             {
-                if( nbElements > 1 && !isMultipleElementsAllowed( node, nbElements ) )
+                boolean addMessage = false;
+
+                int nbElements = result.getNbElements();
+
+                if( nbElements > 0 )
+                {
+                    if( nbElements > 1 && !isMultipleElementsAllowed( node, nbElements ) )
+                    {
+                        addMessage = true;
+                    }
+                }
+                else
                 {
                     addMessage = true;
                 }
-            }
-            else
-            {
-                addMessage = true;
-            }
 
-            if( addMessage )
-            {
-                final Properties properties =
-                    PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( file.getProject() ) );
-
-                if( properties != null )
+                if( addMessage )
                 {
-                    try
-                    {
-                        String languageValue = (String) properties.get( languageKey );
+                    final Properties properties =
+                        PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( file.getProject() ) );
 
-                        if( !languageValue.equals( "" ) )
+                    if( properties != null )
+                    {
+                        try
                         {
-                            addMessage = false;
+                            String languageValue = (String) properties.get( languageKey );
+
+                            if( !languageValue.equals( "" ) )
+                            {
+                                addMessage = false;
+                            }
                         }
-                    }
-                    catch( Exception e )
-                    {
-                    }
-
-                    if( addMessage )
-                    {
-                        final ValidationType validationType = getValidationType( referenceTo, nbElements );
-                        final int severity = getServerity( validationType, file );
-
-                        if( severity != ValidationMessage.IGNORE )
+                        catch( Exception e )
                         {
-                            final String messageText = getMessageText( validationType, referenceTo, node, file );
-                            addMessage( node, file, validator, reporter, batchMode, messageText, severity );
+                        }
+
+                        if( addMessage )
+                        {
+                            final ValidationType validationType = getValidationType( referenceTo, nbElements );
+                            final int severity = getServerity( validationType, file );
+
+                            if( severity != ValidationMessage.IGNORE )
+                            {
+                                final String messageText = getMessageText( validationType, referenceTo, node, file );
+                                addMessage( node, file, validator, reporter, batchMode, messageText, severity );
+                            }
                         }
                     }
                 }
