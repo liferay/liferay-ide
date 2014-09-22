@@ -365,7 +365,7 @@ public class PropertiesUtil
             return null;
         }
 
-        List<IFile> retvals = new ArrayList<IFile>();
+        final List<IFile> retvals = new ArrayList<IFile>();
 
         final IFolder[] srcFolders = CoreUtil.getSrcFolders( proj );
 
@@ -379,11 +379,11 @@ public class PropertiesUtil
             {
                 for( int i = 0; i < resourceBundles.size(); i++ )
                 {
-                    String resourceBundleValue = (String) resourceBundles.toArray()[i];
+                    final String resourceBundleValue = (String) resourceBundles.toArray()[i];
 
                     for( IFolder srcFolder : srcFolders )
                     {
-                        IFile languageFile =
+                        final IFile languageFile =
                             CoreUtil.getWorkspaceRoot().getFile(
                                 srcFolder.getFullPath().append( resourceBundleValue + PROPERTIES_FILE_SUFFIX ) );
 
