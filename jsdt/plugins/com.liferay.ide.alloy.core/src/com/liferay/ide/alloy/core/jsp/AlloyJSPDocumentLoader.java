@@ -49,8 +49,8 @@ public class AlloyJSPDocumentLoader extends JSPDocumentLoader
             if( parser instanceof BlockTagParser )
             {
                 final BlockTagParser blockParser = (BlockTagParser) parser;
-                final BlockMarker bm = new BlockMarker("aui:script", null, DOMRegionContext.BLOCK_TEXT, false);
-                blockParser.addBlockMarker(bm);
+                final BlockMarker bm = new BlockMarker( "aui:script", null, DOMRegionContext.BLOCK_TEXT, false );
+                blockParser.addBlockMarker( bm );
             }
         }
 

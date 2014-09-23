@@ -63,4 +63,9 @@
             contentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
             class="com.liferay.ide.alloy.core.jsp.LiferayBasicStructuredDocumentFactory" />
     </extension>
+    <extension point="org.eclipse.wst.jsdt.web.core.javascriptPreProcessor">
+        <javascriptPreProcessor
+            class="com.liferay.ide.alloy.core.jsp.AlloyJsTranslation"
+            priority="10" />
+    </extension>
 </plugin>

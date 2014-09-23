@@ -40,7 +40,17 @@ import org.eclipse.wst.sse.core.internal.encoding.IContentDescriptionExtended;
 @SuppressWarnings( "restriction" )
 public class AlloyContentDescriberForJSP implements ITextContentDescriber
 {
-	private final static QualifiedName[] SUPPORTED_OPTIONS = {IContentDescription.CHARSET, IContentDescription.BYTE_ORDER_MARK, IContentDescriptionExtended.DETECTED_CHARSET, IContentDescriptionExtended.UNSUPPORTED_CHARSET, IContentDescriptionExtended.APPROPRIATE_DEFAULT, IContentDescriptionForJSP.CONTENT_TYPE_ATTRIBUTE, IContentDescriptionForJSP.LANGUAGE_ATTRIBUTE, IContentDescriptionForJSP.CONTENT_FAMILY_ATTRIBUTE};
+    private final static QualifiedName[] SUPPORTED_OPTIONS =
+    {
+        IContentDescription.CHARSET,
+        IContentDescription.BYTE_ORDER_MARK,
+        IContentDescriptionExtended.DETECTED_CHARSET,
+        IContentDescriptionExtended.UNSUPPORTED_CHARSET,
+        IContentDescriptionExtended.APPROPRIATE_DEFAULT,
+        IContentDescriptionForJSP.CONTENT_TYPE_ATTRIBUTE,
+        IContentDescriptionForJSP.LANGUAGE_ATTRIBUTE,
+        IContentDescriptionForJSP.CONTENT_FAMILY_ATTRIBUTE
+    };
 
     @Override
     public int describe( InputStream contents, IContentDescription description ) throws IOException
@@ -50,13 +60,10 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber
         try
         {
             final Field inputStreamField = contents.getClass().getDeclaredField( "in" );
-
             inputStreamField.setAccessible( true );
 
             final InputStream inputStream = (InputStream) inputStreamField.get( contents );
-
             final Field fileStoreField = inputStream.getClass().getDeclaredField( "target" );
-
             fileStoreField.setAccessible( true );
 
             final IFileStore fileStore = (IFileStore) fileStoreField.get( inputStream );
@@ -81,12 +88,6 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber
     }
 
     @Override
-    public QualifiedName[] getSupportedOptions()
-    {
-        return SUPPORTED_OPTIONS;
-    }
-
-    @Override
     public int describe( Reader contents, IContentDescription description ) throws IOException
     {
         int retval = new ContentDescriberForJSP().describe( contents, description );
@@ -94,41 +95,33 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber
         try
         {
             final Field documentReaderField = contents.getClass().getDeclaredField( "in" );
-
             documentReaderField.setAccessible( true );
 
             final Object documentReader = documentReaderField.get( contents );
-
             final Field fDocumentField = documentReader.getClass().getDeclaredField( "fDocument" );
-
             fDocumentField.setAccessible( true );
 
             final Object fDocument = fDocumentField.get( documentReader );
-
-            final Field fDocumentListenersField = fDocument.getClass().getSuperclass().getSuperclass().getDeclaredField( "fDocumentListeners" );
-
+            final Field fDocumentListenersField =
+                fDocument.getClass().getSuperclass().getSuperclass().getDeclaredField( "fDocumentListeners" );
             fDocumentListenersField.setAccessible( true );
 
             final ListenerList fDocumentListeners = (ListenerList) fDocumentListenersField.get( fDocument );
-
             final Object[] listeners = fDocumentListeners.getListeners();
 
             for( Object listener : listeners )
             {
                 try
                 {
-                    final Field fFileField = listener.getClass().getEnclosingClass().getSuperclass().getDeclaredField( "fFile" );
-
+                    final Field fFileField =
+                        listener.getClass().getEnclosingClass().getSuperclass().getDeclaredField( "fFile" );
                     fFileField.setAccessible( true );
 
                     // get enclosing instance of listener
-
                     final Field thisField = listener.getClass().getDeclaredField( "this$0" );
-
                     thisField.setAccessible( true );
 
                     Object enclosingObject = thisField.get( listener );
-
                     Object fFile = fFileField.get( enclosingObject );
 
                     if( fFile instanceof IFile )
@@ -152,6 +145,12 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber
         }
 
         return retval;
+    }
+
+    @Override
+    public QualifiedName[] getSupportedOptions()
+    {
+        return SUPPORTED_OPTIONS;
     }
 
 }
