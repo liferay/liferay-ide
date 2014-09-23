@@ -47,7 +47,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
     public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayJspMarker";
 
-    private final String JSP_TAG_START = "<%=";
+    private final String JSP_TAG_START = "<%";
     private final String JSP_TAG_END = "%>";
 
     protected void addMessage(
