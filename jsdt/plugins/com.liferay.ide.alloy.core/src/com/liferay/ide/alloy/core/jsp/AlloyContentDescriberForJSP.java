@@ -34,8 +34,11 @@ import org.eclipse.jst.jsp.core.internal.provisional.contenttype.IContentDescrip
 import org.eclipse.wst.sse.core.internal.encoding.IContentDescriptionExtended;
 
 
+/**
+ * @author Gregory Amerson
+ */
 @SuppressWarnings( "restriction" )
-public class LiferayContentDescriberForJSP implements ITextContentDescriber
+public class AlloyContentDescriberForJSP implements ITextContentDescriber
 {
 	private final static QualifiedName[] SUPPORTED_OPTIONS = {IContentDescription.CHARSET, IContentDescription.BYTE_ORDER_MARK, IContentDescriptionExtended.DETECTED_CHARSET, IContentDescriptionExtended.UNSUPPORTED_CHARSET, IContentDescriptionExtended.APPROPRIATE_DEFAULT, IContentDescriptionForJSP.CONTENT_TYPE_ATTRIBUTE, IContentDescriptionForJSP.LANGUAGE_ATTRIBUTE, IContentDescriptionForJSP.CONTENT_FAMILY_ATTRIBUTE};
 

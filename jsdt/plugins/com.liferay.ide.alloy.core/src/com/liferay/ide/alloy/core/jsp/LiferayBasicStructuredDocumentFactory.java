@@ -24,6 +24,9 @@ import org.eclipse.wst.sse.core.internal.ltk.modelhandler.IModelHandler;
 import org.eclipse.wst.sse.core.internal.modelhandler.ModelHandlerRegistry;
 import org.eclipse.wst.sse.core.internal.text.JobSafeStructuredDocument;
 
+/**
+ * @author Gregory Amerson
+ */
 @SuppressWarnings( "restriction" )
 public class LiferayBasicStructuredDocumentFactory extends BasicStructuredDocumentFactory
 {
@@ -33,7 +36,7 @@ public class LiferayBasicStructuredDocumentFactory extends BasicStructuredDocume
     {
         IDocument document = null;
         IContentType contentType =
-            Platform.getContentTypeManager().getContentType( "com.liferay.ide.jsdt.core.liferayjspsource" );
+            Platform.getContentTypeManager().getContentType( "com.liferay.ide.alloy.core.alloyjspsource" );
         IModelHandler handler = null;
 
         while( handler == null && !IContentTypeManager.CT_TEXT.equals( contentType.getId() ) )

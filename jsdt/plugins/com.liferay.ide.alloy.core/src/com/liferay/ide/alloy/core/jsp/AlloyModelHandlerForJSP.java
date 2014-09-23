@@ -14,19 +14,19 @@
  *******************************************************************************/
 package com.liferay.ide.alloy.core.jsp;
 
-import org.eclipse.jface.text.IDocumentPartitioner;
-import org.eclipse.jst.jsp.core.internal.encoding.JSPDocumentLoader;
+import org.eclipse.jst.jsp.core.internal.modelhandler.ModelHandlerForJSP;
+import org.eclipse.wst.sse.core.internal.document.IDocumentLoader;
 
 
 /**
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferayJSPDocumentLoader extends JSPDocumentLoader
+public class AlloyModelHandlerForJSP extends ModelHandlerForJSP
 {
     @Override
-    public IDocumentPartitioner getDefaultDocumentPartitioner()
+    public IDocumentLoader getDocumentLoader()
     {
-        return new LiferayStructuredTextPartitionerForJSP();
+        return new AlloyJSPDocumentLoader();
     }
 }

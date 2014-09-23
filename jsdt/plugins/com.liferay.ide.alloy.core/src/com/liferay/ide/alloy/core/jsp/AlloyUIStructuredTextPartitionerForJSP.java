@@ -15,7 +15,6 @@
 
 package com.liferay.ide.alloy.core.jsp;
 
-import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.jst.jsp.core.internal.text.StructuredTextPartitionerForJSP;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
@@ -24,7 +23,7 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferayStructuredTextPartitionerForJSP extends StructuredTextPartitionerForJSP
+public class AlloyUIStructuredTextPartitionerForJSP extends StructuredTextPartitionerForJSP
 {
 
     @Override
@@ -34,8 +33,7 @@ public class LiferayStructuredTextPartitionerForJSP extends StructuredTextPartit
 
         final IStructuredDocumentRegion sdRegion = this.fStructuredDocument.getRegionAtCharacterOffset( offset );
 
-        if( sdRegion != null && sdRegion.getPrevious() != null &&
-            sdRegion.getPrevious().toString().contains( "aui:script" ) )
+        if( isAlloyUIScriptRegion( sdRegion ) )
         {
             retval = "org.eclipse.wst.html.SCRIPT";
         }
@@ -48,7 +46,7 @@ public class LiferayStructuredTextPartitionerForJSP extends StructuredTextPartit
     {
         String retval = super.getPartitionTypeBetween( previousNode, nextNode );
 
-        if( previousNode.toString().contains( "aui:script" ) )
+        if( isAlloyUIScriptBetween(previousNode, nextNode ) )
         {
             retval = "org.eclipse.wst.html.SCRIPT";
         }
@@ -56,10 +54,17 @@ public class LiferayStructuredTextPartitionerForJSP extends StructuredTextPartit
         return retval;
     }
 
-    @Override
-    public ITypedRegion getPartition( int offset )
+    private boolean isAlloyUIScriptBetween( IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
     {
-        // TODO Auto-generated method stub
-        return super.getPartition( offset );
+        return previousNode.toString().contains( "aui:script" );
     }
+
+    private boolean isAlloyUIScriptRegion( IStructuredDocumentRegion sdRegion )
+    {
+        // TODO can this handle content with other regions like <aui:script> function foo() {}; <portletTag/> function
+        // bar(){}</aui:script>
+        return sdRegion != null && sdRegion.getPrevious() != null &&
+            sdRegion.getPrevious().toString().contains( "aui:script" );
+    }
+
 }

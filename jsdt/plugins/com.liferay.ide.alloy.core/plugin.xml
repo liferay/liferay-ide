@@ -34,9 +34,9 @@
    <extension
          point="org.eclipse.wst.sse.core.modelHandler">
       <modelHandler
-            associatedContentTypeId="com.liferay.ide.jsdt.core.liferayjspsource"
-            class="com.liferay.ide.alloy.core.jsp.LiferayModelHandlerForJSP"
-            id="com.liferay.ide.jsdt.core.liferayJsp">
+            associatedContentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
+            class="com.liferay.ide.alloy.core.jsp.AlloyModelHandlerForJSP"
+            id="com.liferay.ide.alloy.core.alloyJsp">
       </modelHandler>
    </extension>
 
@@ -46,11 +46,11 @@
             base-type="org.eclipse.jst.jsp.core.jspsource"
             default-charset="ISO-8859-1"
             file-extensions="jsp,jsv,jtpl,jspx,ljsp"
-            id="com.liferay.ide.jsdt.core.liferayjspsource"
-            name="Liferay JSP Source"
+            id="com.liferay.ide.alloy.core.alloyjspsource"
+            name="Alloy JSP Source"
             priority="high">
          <describer
-               class="com.liferay.ide.alloy.core.jsp.LiferayContentDescriberForJSP">
+               class="com.liferay.ide.alloy.core.jsp.AlloyContentDescriberForJSP">
          </describer>
 
       </content-type>
@@ -60,7 +60,7 @@
         id="com.liferay.ide.jsdt.core.documentfactories"
         name="aaa">
         <factory
-            contentTypeId="com.liferay.ide.jsdt.core.liferayjspsource"
+            contentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
             class="com.liferay.ide.alloy.core.jsp.LiferayBasicStructuredDocumentFactory" />
     </extension>
 </plugin>
