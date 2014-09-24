@@ -71,6 +71,11 @@
             <layout>p2</layout>
             <url>${tern-site}</url>
         </repository>
+        <repository>
+            <id>webresources</id>
+            <layout>p2</layout>
+            <url>${webresources-site}</url>
+        </repository>
     </repositories>
 
     <build>
