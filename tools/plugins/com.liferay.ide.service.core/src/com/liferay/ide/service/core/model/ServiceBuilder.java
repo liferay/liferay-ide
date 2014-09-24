@@ -59,8 +59,9 @@ public interface ServiceBuilder extends Element
 
     // *** Auto-Namespace-Tables ***
 
-    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
     @Label( standard = "&Auto namespace tables" )
+    @Type( base = Boolean.class )
     @XmlBinding( path = "@auto-namespace-tables" )
     ValueProperty PROP_AUTO_NAMESPACE_TABLES = new ValueProperty( TYPE, "AutoNamespaceTables" ); //$NON-NLS-1$
 
