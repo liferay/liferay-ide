@@ -149,12 +149,7 @@ public class ADTCoreTests extends BaseTests
 
         final String androidManifestContent = CoreUtil.readStreamToString( androidManifest.getContents() );
 
-        final String expectedAndroidManifestContent =
-            CoreUtil.readStreamToString( this.getClass().getResourceAsStream(
-                "files/AndroidManifest-targetSDK-" + sdkLevel + ".xml" ) );
-
-        assertEquals(
-            stripCarriageReturns( expectedAndroidManifestContent ), stripCarriageReturns( androidManifestContent ) );
+        assertTrue( androidManifestContent.contains( "android:targetSdkVersion=\"" + sdkLevel + "\"" ) );
 
         final IFile projectProperties = newProject.getFile( "project.properties" );
 
