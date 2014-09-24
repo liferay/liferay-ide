@@ -41,5 +41,8 @@
             type="org.eclipse.m2e.core.maven2Problem.wtp.configuration">
       </super>
    </extension>
+   <extension point="org.eclipse.core.runtime.preferences">
+      <initializer class="com.liferay.ide.maven.core.pref.ProjectMavenPreferenceInitializer" />
+   </extension>
 
 </plugin>

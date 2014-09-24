@@ -196,4 +196,13 @@
             markerType="org.eclipse.m2e.core.maven2Problem.mavenarchiver.error">
       </markerResolutionGenerator>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.maven.ui.pref.ProjectMavenPreferencePage"
+            id="com.liferay.ide.maven.ui.projectMavenPreferencePage"
+            name="Maven">
+      </page>
+   </extension>   
 </plugin>

@@ -234,7 +234,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         if( this.model.getBooleanProperty( DISABLE_CUSTOM_JSP_FOLDER_VALIDATION ) )
         {
-            HookUtil.configureJSPSyntaxValidationExclude( getTargetProject(), customFolder, true );
+            HookUtil.configureJSPSyntaxValidationExclude( getTargetProject(), customFolder );
         }
 
         return status;

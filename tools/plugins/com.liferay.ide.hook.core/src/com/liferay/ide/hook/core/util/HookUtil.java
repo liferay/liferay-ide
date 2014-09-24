@@ -47,7 +47,7 @@ import org.w3c.dom.DocumentType;
 public class HookUtil
 {
 
-    public static void configureJSPSyntaxValidationExclude( IProject project, IFolder customFolder, boolean isNewRule  )
+    public static void configureJSPSyntaxValidationExclude( IProject project, IFolder customFolder )
     {
         try
         {
@@ -82,11 +82,8 @@ public class HookUtil
 
                     if( excludeGroup == null )
                     {
-                        if( isNewRule )
-                        {
-                            excludeGroup = FilterGroup.create( true, new FilterRule[] { folderRule } );
-                            validators[i].add( excludeGroup );
-                        }
+                        excludeGroup = FilterGroup.create( true, new FilterRule[] { folderRule } );
+                        validators[i].add( excludeGroup );
                     }
                     else
                     {
@@ -96,11 +93,9 @@ public class HookUtil
                         {
                             if( customJSPFolderPattern.equals( rule.getPattern() ) )
                             {
-                                if( ! isNewRule )
-                                {
-                                    FilterGroup newExcludeGroup = FilterGroup.removeRule( excludeGroup, rule );
-                                    validators[i].replaceFilterGroup( excludeGroup, newExcludeGroup );
-                                }
+                                FilterGroup newExcludeGroup = FilterGroup.removeRule( excludeGroup, rule );
+                                validators[i].replaceFilterGroup(
+                                    excludeGroup, FilterGroup.addRule( newExcludeGroup, folderRule ) );
 
                                 hasCustomJSPFolderRule = true;
                                 break;
