@@ -58,11 +58,11 @@ public class ValidationPreferences
 
     // *** validation preferences of liferay-layouttpl.xml
 
-    public static final String LIFERAY_LAYOUTTPL_XML_TYPE_HIERARCHY_INCORRECT = "liferay-layouttpl-xml-type-hierarchy-incorrect";
-    public static final String LIFERAY_LAYOUTTPL_XML_TYPE_NOT_FOUND = "liferay-layouttpl-xml-type-not-found";
-    public static final String LIFERAY_LAYOUTTPL_XML_REFERENCE_NOT_FOUND = "liferay-layouttpl-xml-reference-not-found";
-    public static final String LIFERAY_LAYOUTTPL_XML_RESOURCE_NOT_FOUND = "liferay-layouttpl-xml-resource-not-found";
-    public static final String LIFERAY_LAYOUTTPL_XML_SYNTAX_INVALID = "liferay-layouttpl-xml-syntax-invalid";
+    public static final String LIFERAY_LAYOUTTPL_XML_TYPE_HIERARCHY_INCORRECT = "liferay-layout-templates-xml-type-hierarchy-incorrect";
+    public static final String LIFERAY_LAYOUTTPL_XML_TYPE_NOT_FOUND = "liferay-layout-templates-xml-type-not-found";
+    public static final String LIFERAY_LAYOUTTPL_XML_REFERENCE_NOT_FOUND = "liferay-layout-templates-xml-reference-not-found";
+    public static final String LIFERAY_LAYOUTTPL_XML_RESOURCE_NOT_FOUND = "liferay-layout-templates-xml-resource-not-found";
+    public static final String LIFERAY_LAYOUTTPL_XML_SYNTAX_INVALID = "liferay-layout-templates-xml-syntax-invalid";
 
 
     // *** validation preferences of liferay-portlet.xml ***
