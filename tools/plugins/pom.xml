@@ -54,7 +54,6 @@
         <module>com.liferay.ide.server.ui</module>
         <module>com.liferay.ide.service.core</module>
         <module>com.liferay.ide.service.ui</module>
-        <module>com.liferay.ide.taglib.ui</module>
         <module>com.liferay.ide.theme.core</module>
         <module>com.liferay.ide.theme.ui</module>
         <module>com.liferay.ide.tools.branding</module>
