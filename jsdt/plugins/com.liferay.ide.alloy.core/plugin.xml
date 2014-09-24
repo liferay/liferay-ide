@@ -82,4 +82,10 @@
              file-extensions="scss">
        </file-association>
     </extension>
+    <extension
+          point="tern.eclipse.ide.core.ternFileConfigurations">
+       <configuration
+             class="com.liferay.ide.alloy.core.jsp.AlloyJSPFileConfiguration">
+       </configuration>
+    </extension>
 </plugin>
