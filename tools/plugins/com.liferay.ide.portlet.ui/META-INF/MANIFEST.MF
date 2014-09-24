@@ -50,13 +50,14 @@ Require-Bundle: com.liferay.ide.portlet.core;visibility:=reexport,
  org.eclipse.ui.navigator,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.wst.xml.search.core;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.ui,
  com.liferay.ide.portlet.ui.action,
  com.liferay.ide.portlet.ui.action.filters,
  com.liferay.ide.portlet.ui.editor,
  com.liferay.ide.portlet.ui.editor.internal,
+ com.liferay.ide.portlet.ui.jsf,
  com.liferay.ide.portlet.ui.navigator,
  com.liferay.ide.portlet.ui.navigator.actions,
  com.liferay.ide.portlet.ui.template,

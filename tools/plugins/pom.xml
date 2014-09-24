@@ -39,8 +39,6 @@
         <module>com.liferay.ide.layouttpl.core</module>
         <module>com.liferay.ide.layouttpl.ui</module>
         <module>com.liferay.ide.portlet.core</module>
-        <module>com.liferay.ide.portlet.jsf.core</module>
-        <module>com.liferay.ide.portlet.jsf.ui</module>
         <module>com.liferay.ide.portlet.ui</module>
         <module>com.liferay.ide.portlet.vaadin.core</module>
         <module>com.liferay.ide.portlet.vaadin.ui</module>

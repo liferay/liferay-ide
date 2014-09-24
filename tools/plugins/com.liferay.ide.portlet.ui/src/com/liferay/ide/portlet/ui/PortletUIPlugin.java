@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.ui;
 
+import com.liferay.ide.portlet.ui.jsf.JSFPortletTemplateContextTypeIds;
 import com.liferay.ide.portlet.ui.template.PortletTemplateContextTypeIds;
 
 import java.io.IOException;
@@ -94,6 +95,7 @@ public class PortletUIPlugin extends AbstractUIPlugin
             ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
 
             registry.addContextType( PortletTemplateContextTypeIds.NEW );
+            registry.addContextType( JSFPortletTemplateContextTypeIds.NEW );
 
             fContextTypeRegistry = registry;
         }
@@ -107,7 +109,7 @@ public class PortletUIPlugin extends AbstractUIPlugin
         {
             fTemplateStore =
                 new ContributionTemplateStore(
-                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates" ); //$NON-NLS-1$
+                    getTemplateContextRegistry(), getPreferenceStore(), "com.liferay.ide.portlet.ui.custom_templates" );
 
             try
             {

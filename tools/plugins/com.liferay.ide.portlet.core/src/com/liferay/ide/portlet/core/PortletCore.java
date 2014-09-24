@@ -23,6 +23,9 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jst.jsf.core.IJSFCoreConstants;
+import org.eclipse.wst.common.project.facet.core.IProjectFacet;
+import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.prefs.Preferences;
 
@@ -34,6 +37,9 @@ import org.osgi.service.prefs.Preferences;
  */
 public class PortletCore extends Plugin
 {
+
+    public static final IProjectFacet JSF_FACET =
+                    ProjectFacetsManager.getProjectFacet( IJSFCoreConstants.JSF_CORE_FACET_ID );
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.portlet.core"; //$NON-NLS-1$
