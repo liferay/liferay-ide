@@ -68,4 +68,18 @@
             class="com.liferay.ide.alloy.core.jsp.AlloyJsTranslation"
             priority="10" />
     </extension>
+    <extension
+          point="org.eclipse.a.wst.html.webresources.core.webResourcesProviders">
+       <provider
+             class="com.liferay.ide.alloy.core.webresources.PortalResourcesProvider"
+             types="css,scss">
+       </provider>
+    </extension>
+    <extension
+          point="org.eclipse.core.contenttype.contentTypes">
+       <file-association
+             content-type="org.eclipse.wst.css.core.csssource"
+             file-extensions="scss">
+       </file-association>
+    </extension>
 </plugin>
