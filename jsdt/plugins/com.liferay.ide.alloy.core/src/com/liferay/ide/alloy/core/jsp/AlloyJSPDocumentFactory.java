@@ -28,16 +28,16 @@ import org.eclipse.wst.sse.core.internal.text.JobSafeStructuredDocument;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class LiferayBasicStructuredDocumentFactory extends BasicStructuredDocumentFactory
+public class AlloyJSPDocumentFactory extends BasicStructuredDocumentFactory
 {
 
     @Override
     public IDocument createDocument()
     {
         IDocument document = null;
+        IModelHandler handler = null;
         IContentType contentType =
             Platform.getContentTypeManager().getContentType( "com.liferay.ide.alloy.core.alloyjspsource" );
-        IModelHandler handler = null;
 
         while( handler == null && !IContentTypeManager.CT_TEXT.equals( contentType.getId() ) )
         {

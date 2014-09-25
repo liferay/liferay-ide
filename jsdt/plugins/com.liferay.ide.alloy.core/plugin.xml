@@ -57,11 +57,10 @@
    </extension>
    <extension
         point="org.eclipse.core.filebuffers.documentCreation"
-        id="com.liferay.ide.jsdt.core.documentfactories"
-        name="aaa">
+        id="com.liferay.ide.alloy.core.documentfactories">
         <factory
             contentTypeId="com.liferay.ide.alloy.core.alloyjspsource"
-            class="com.liferay.ide.alloy.core.jsp.LiferayBasicStructuredDocumentFactory" />
+            class="com.liferay.ide.alloy.core.jsp.AlloyJSPDocumentFactory" />
     </extension>
     <extension point="org.eclipse.wst.jsdt.web.core.javascriptPreProcessor">
         <javascriptPreProcessor
@@ -87,5 +86,11 @@
        <configuration
              class="com.liferay.ide.alloy.core.jsp.AlloyJSPFileConfiguration">
        </configuration>
+    </extension>
+    <extension
+          point="org.eclipse.a.wst.html.webresources.core.webResourcesFinderTypeProviders">
+       <provider
+             class="com.liferay.ide.alloy.core.jsp.AlloyFinderTypeProvider">
+       </provider>
     </extension>
 </plugin>
