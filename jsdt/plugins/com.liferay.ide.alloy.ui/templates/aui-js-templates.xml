@@ -28,6 +28,11 @@
   }
 );
   </template>
+  <template name="aui-base" description="Creates a aui-base sandbox" id="com.liferay.ide.alloy.ui.templates.base" context="javaScript" enabled="true" autoinsert="true">
+  YUI().use('aui-base', function(Y) {
+    ${cursor}
+});
+  </template>
   <template name="aui-button" description="Enables the creation of rich buttons different from traditional HTML form buttons." id="com.liferay.ide.alloy.ui.templates.button" context="javaScript" enabled="true" autoinsert="true">
     YUI().use(
   'aui-button',

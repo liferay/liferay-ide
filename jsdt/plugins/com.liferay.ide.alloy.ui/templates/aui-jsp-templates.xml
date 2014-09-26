@@ -1,0 +1,18 @@
+<templates>
+
+<template name="aui-button" description="An aui:button tag with all of the most commonly used attributes"
+    id="com.liferay.ide.alloy.ui.templates.aui-button" context="jsp_all" enabled="true" autoinsert="true"
+>&lt;aui:button name="${name}" value="${value}" /&gt;</template>
+
+<template name="aui-form" description="An aui:form tag with all of the most commonly used attributes"
+    id="com.liferay.ide.alloy.ui.templates.aui-form" context="jsp_all" enabled="true" autoinsert="true"
+>&lt;aui:form action="${action}" method="post" name="${name}"&gt;
+${cursor}
+&lt;/aui:form&gt;
+</template>
+
+<template name="aui-input" description="An aui:input tag with all of the most commonly used attributes"
+    id="com.liferay.ide.alloy.ui.templates.aui-input" context="jsp_all" enabled="true" autoinsert="true"
+>&lt;aui:input name="${name}" type="${type}" value="${value}" /&gt;</template>
+
+</templates>
