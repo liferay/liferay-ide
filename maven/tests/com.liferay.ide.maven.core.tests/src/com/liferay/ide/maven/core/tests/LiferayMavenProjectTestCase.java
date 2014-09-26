@@ -40,7 +40,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
- *
+ * @author Simon Jiang *
  */
 @SuppressWarnings( "restriction" )
 public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTestCase
@@ -88,19 +88,19 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
         op.setActiveProfilesValue( "test-bundle" );
     }
 
+    public void failTest( Exception e )
+    {
+        StringWriter s = new StringWriter();
+        e.printStackTrace( new PrintWriter( s ) );
+        fail( s.toString() );
+    }
+
     @Override
     protected void setUp() throws Exception
     {
         super.setUp();
 
         base.setupPluginsSDKAndRuntime();
-    }
-
-    public void failTest( Exception e )
-    {
-        StringWriter s = new StringWriter();
-        e.printStackTrace( new PrintWriter( s ) );
-        fail( s.toString() );
     }
 
     protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }
