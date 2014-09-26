@@ -105,7 +105,7 @@
                 </action-handler>
             </section>
             <section>
-                <label>Contron Panel Setting</label>
+                <label>Control Panel</label>
                 <content>
                     <property-editor>
                         <property>ControlPanelEntryCategory</property>
@@ -121,7 +121,7 @@
                 <collapsed-initially>false</collapsed-initially>
             </section>
             <section>
-                <label>Common Style Configuration</label>
+                <label>Common Style</label>
                 <indent>true</indent>
                 <content>
                     <property-editor>
@@ -166,7 +166,7 @@
             </node>
             -->
             <node>
-                <label>Scheduler Entry Setting</label>
+                <label>Scheduler Entry</label>
                 <node-include>SchedulerEntryList</node-include>
                 <image>images/options_16x16.gif</image>
                 <section>
@@ -182,9 +182,9 @@
                 </section>
             </node>
             <node>
-                <label>Mapping and Search Setting</label>
+                <label>Mapping and Search</label>
                 <section>
-                    <label>Struts Mapping Detail Setting</label>
+                    <label>Struts Mappings</label>
                     <content>
                         <!--  <property-editor>VirtualPath</property-editor> -->
                         <property-editor>StrutsPath</property-editor>
@@ -195,7 +195,7 @@
                     <collapsed-initially>false</collapsed-initially>
                 </section>
 	            <section>
-	                <label>Search Detail Setting</label>
+	                <label>Search</label>
 	                <content>
 	                    <property-editor>
 	                        <property>IndexerClasses</property>
@@ -210,7 +210,7 @@
 	                <collapsed-initially>false</collapsed-initially>
 	            </section>
 	            <section>
-	                <label>URL Mapping Detail Setting</label>
+	                <label>URL Mappings</label>
 	                <content>
 	                    <property-editor>PortletUrlClass</property-editor>
 	                    <property-editor>FriendlyURLMapperClass</property-editor>
@@ -224,9 +224,9 @@
 	            <image>icons/e16/mapping.png</image>
             </node>
             <node>
-                <label>Data Handler Setting</label>
+                <label>Data Handler</label>
                 <section>
-                    <label>Portlet Data Handler Detail Setting</label>
+                    <label>Portlet Data Handler</label>
                     <content>
                         <property-editor>PortletDataHandlerClass</property-editor>
                         <property-editor>StagedModelDataHandlerClasses</property-editor>
@@ -245,9 +245,9 @@
                 <image>icons/e16/data_handler.gif</image>
             </node>
             <node>
-                <label>Social and Security Setting</label>
+                <label>Social and Security</label>
                 <section>
-                    <label>Social Details Setting</label>
+                    <label>Social</label>
                     <content>
                         <property-editor>SocialActivityInterpreterClasses</property-editor>
                         <!-- <property-editor>SocialRequestInterpreterClass</property-editor>
@@ -271,10 +271,10 @@
                 <image>icons/e16/social.png</image>
             </node>
             <node>
-                <label>Custom Display and Layout Setting</label>
+                <label>Custom Display and Layout</label>
                 
                 <section>
-                    <label>Custom Display and Layout Details Setting</label>
+                    <label>Custom Display and Layout</label>
                     <content>
                         <!--  <property-editor>CustomAttributesDisplays</property-editor>
                         <property-editor>DDMDisplay</property-editor>
@@ -286,7 +286,7 @@
                     <collapsed-initially>false</collapsed-initially>
                 </section>
                 <section>
-                    <label>Workflow Details Setting</label>
+                    <label>Workflow</label>
                     <content>
                         <property-editor>AssetRendererFactories</property-editor>
                         <!-- <property-editor>AtomCollectionAdapters</property-editor> -->
@@ -305,7 +305,7 @@
             <label>${CustomClass ==null ? '&lt;custom-user-attribute&gt;' : CustomClass }</label>
             <image>${ Image() }</image>
             <section>
-                <label>Custom User Attribute Details</label>
+                <label>Custom User Attributes</label>
                 <content>
                     <property-editor>CustomClass</property-editor>
                     <property-editor>CustomUserAttributeNames</property-editor>
@@ -320,7 +320,7 @@
             <label>${SchedulerDescription ==null ? '&lt;container-runtime-option&gt;' : SchedulerDescription }</label>
             <image>${ Image() }</image>
             <section>
-                <label>Scheduler Entry Details Setting</label>
+                <label>Scheduler Entry</label>
                 <content>
                     <property-editor>SchedulerDescription</property-editor>
                     <property-editor>SchedulerEventListenerClass</property-editor>
