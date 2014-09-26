@@ -39,10 +39,9 @@ public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProj
     @Test
     public void testNoCustomJspValidationConfigured() throws Exception
     {
+        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
 
-        final IEclipsePreferences defaultPrefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
-
-        defaultPrefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false );
+        prefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false );
 
         IProject project = importProject( "projects/configurators/customJspValidation/pom.xml" );
 
@@ -64,23 +63,20 @@ public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProj
         final IMarker[] markers =
             project.findMarkers( "org.eclipse.jst.jsp.core.validationMarker", true, IResource.DEPTH_INFINITE );
 
-
         for( IMarker marker : markers )
         {
             assertEquals( true, marker.getAttribute( IMarker.SEVERITY ).equals( IMarker.SEVERITY_ERROR ) );
         }
 
         project.delete( true, monitor );
-
     }
 
     @Test
     public void testCustomJspValidationConfigured() throws Exception
     {
+        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
 
-        final IEclipsePreferences defaultPrefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
-
-        defaultPrefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true );
+        prefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true );
 
         IProject project = importProject( "projects/configurators/customJspValidation/pom.xml" );
 
@@ -108,7 +104,6 @@ public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProj
         }
 
         project.delete( true, monitor );
-
     }
 
 
