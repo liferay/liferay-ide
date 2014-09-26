@@ -21,6 +21,7 @@ import com.liferay.ide.maven.core.LiferayMavenCore;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -106,5 +107,12 @@ public class LiferayMavenProjectCustomJSPValidationTest extends LiferayMavenProj
         project.delete( true, monitor );
     }
 
+    @Test
+    public void testCustomJspValidationDefaults() throws Exception
+    {
+        final IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );;
+
+        assertTrue( prefs.getBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, false ) );
+    }
 
 }
