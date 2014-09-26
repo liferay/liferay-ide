@@ -18,12 +18,15 @@ package com.liferay.ide.hook.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.HookCore;
+import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.validation.Validator;
 import org.eclipse.wst.validation.internal.ConfigurationManager;
@@ -47,8 +50,9 @@ import org.w3c.dom.DocumentType;
 public class HookUtil
 {
 
-    public static void configureJSPSyntaxValidationExclude( IProject project, IFolder customFolder )
+    public static boolean configureJSPSyntaxValidationExclude( IProject project, IFolder customFolder )
     {
+        boolean returnCode = false;
         try
         {
             final Validator[] vals =
@@ -119,11 +123,15 @@ public class HookUtil
 
             final ValPrefManagerProject vpm = new ValPrefManagerProject( project );
             vpm.savePreferences( pp, validators );
+
+            returnCode = true;
         }
         catch( Exception e )
         {
             HookCore.logError( "Unable to configure jsp syntax validation folder exclude rule.", e ); //$NON-NLS-1$
         }
+        
+        return returnCode;
     }
 
     public static IFolder getCustomJspFolder(Hook hook, IProject project)
@@ -148,6 +156,27 @@ public class HookUtil
                         return (IFolder) folder;
                     }
                 }
+            }
+        }
+
+        return null;
+    }
+
+    public static IPath getCustomJspPath( IProject project )
+    {
+        final HookDescriptorHelper hookDescriptor = new HookDescriptorHelper( project );
+        final String customJSPFolder = hookDescriptor.getCustomJSPFolder( null );
+
+        if( customJSPFolder != null )
+        {
+            final IFolder docFolder = CoreUtil.getDefaultDocrootFolder( project );
+
+            if( docFolder != null )
+            {
+                final IPath newPath = Path.fromOSString( customJSPFolder.substring( 1 ) );
+                final IPath pathValue = docFolder.getFullPath().append( newPath );
+
+                return pathValue;
             }
         }
 
