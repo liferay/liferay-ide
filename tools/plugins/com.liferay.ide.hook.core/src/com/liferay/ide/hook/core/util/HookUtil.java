@@ -14,6 +14,7 @@
  * Contributors:
  *      Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
+
 package com.liferay.ide.hook.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -32,7 +33,6 @@ import org.eclipse.wst.validation.Validator;
 import org.eclipse.wst.validation.internal.ConfigurationManager;
 import org.eclipse.wst.validation.internal.ProjectConfiguration;
 import org.eclipse.wst.validation.internal.ValManager;
-import org.eclipse.wst.validation.internal.ValManager.UseProjectPreferences;
 import org.eclipse.wst.validation.internal.ValPrefManagerProject;
 import org.eclipse.wst.validation.internal.ValidatorMutable;
 import org.eclipse.wst.validation.internal.model.FilterGroup;
@@ -40,7 +40,6 @@ import org.eclipse.wst.validation.internal.model.FilterRule;
 import org.eclipse.wst.validation.internal.model.ProjectPreferences;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
-
 
 /**
  * @author Gregory Amerson
@@ -50,82 +49,91 @@ import org.w3c.dom.DocumentType;
 public class HookUtil
 {
 
-    public static boolean configureJSPSyntaxValidationExclude( IProject project, IFolder customFolder )
+    private final static String VALIDATOR_ID = "org.eclipse.jst.jsp.core.JSPBatchValidator";
+
+    public static boolean configureJSPSyntaxValidationExclude(
+        IProject project, IFolder customFolder, boolean configureRule )
     {
         boolean retval = false;
 
         try
         {
-            final Validator[] vals =
-                ValManager.getDefault().getValidatorsConfiguredForProject( project, UseProjectPreferences.MustUse );
 
-            final ValidatorMutable[] validators = new ValidatorMutable[vals.length];
+            final Validator validator = ValManager.getDefault().getValidator( VALIDATOR_ID, project );
 
-            for( int i = 0; i < vals.length; i++ )
+            final ValidatorMutable validatorTable = new ValidatorMutable( validator );
+
+            // check for exclude group
+            FilterGroup excludeGroup = null;
+
+            for( FilterGroup group : validatorTable.getGroups() )
             {
-                validators[i] = new ValidatorMutable( vals[i] );
-
-                if( "org.eclipse.jst.jsp.core.JSPBatchValidator".equals( validators[i].getId() ) ) //$NON-NLS-1$
+                if( group.isExclude() )
                 {
-                    // check for exclude group
-                    FilterGroup excludeGroup = null;
-
-                    for( FilterGroup group : validators[i].getGroups() )
-                    {
-                        if( group.isExclude() )
-                        {
-                            excludeGroup = group;
-                            break;
-                        }
-                    }
-
-                    final String customJSPFolderPattern =
-                        customFolder.getFullPath().makeRelativeTo( customFolder.getProject().getFullPath() ).toPortableString();
-
-                    final FilterRule folderRule =
-                        FilterRule.createFile( customJSPFolderPattern, true, FilterRule.File.FileTypeFolder );
-
-                    if( excludeGroup == null )
-                    {
-                        excludeGroup = FilterGroup.create( true, new FilterRule[] { folderRule } );
-                        validators[i].add( excludeGroup );
-                    }
-                    else
-                    {
-                        boolean hasCustomJSPFolderRule = false;
-
-                        for( FilterRule rule : excludeGroup.getRules() )
-                        {
-                            if( customJSPFolderPattern.equals( rule.getPattern() ) )
-                            {
-                                FilterGroup newExcludeGroup = FilterGroup.removeRule( excludeGroup, rule );
-                                validators[i].replaceFilterGroup(
-                                    excludeGroup, FilterGroup.addRule( newExcludeGroup, folderRule ) );
-
-                                hasCustomJSPFolderRule = true;
-                                break;
-                            }
-
-                        }
-
-                        if( !hasCustomJSPFolderRule )
-                        {
-                            validators[i].replaceFilterGroup(
-                                excludeGroup, FilterGroup.addRule( excludeGroup, folderRule ) );
-                        }
-                    }
+                    excludeGroup = group;
+                    break;
                 }
             }
 
-            final ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration( project );
-            pc.setDoesProjectOverride( true );
+            final String customJSPFolderPattern =
+                customFolder.getFullPath().makeRelativeTo( customFolder.getProject().getFullPath() ).toPortableString();
 
-            final ProjectPreferences pp = new ProjectPreferences( project, true, false, null );
+            final FilterRule folderRule =
+                FilterRule.createFile( customJSPFolderPattern, true, FilterRule.File.FileTypeFolder );
 
-            final ValPrefManagerProject vpm = new ValPrefManagerProject( project );
-            vpm.savePreferences( pp, validators );
+            if( excludeGroup == null )
+            {
+                if( configureRule )
+                {
+                    excludeGroup = FilterGroup.create( true, new FilterRule[] { folderRule } );
+                    validatorTable.add( excludeGroup );
+                    retval = true;
+                }
+            }
+            else
+            {
+                boolean hasCustomJSPFolderRule = false;
 
-            retval = true;
+                for( FilterRule rule : excludeGroup.getRules() )
+                {
+                    if( customJSPFolderPattern.equals( rule.getPattern() ) )
+                    {
+                        if( configureRule )
+                        {
+                            FilterGroup newExcludeGroup = FilterGroup.removeRule( excludeGroup, rule );
+                            validatorTable.replaceFilterGroup(
+                                excludeGroup, FilterGroup.addRule( newExcludeGroup, folderRule ) );
+                        }
+                        hasCustomJSPFolderRule = true;
+                        break;
+                    }
+                }
+
+                if( !hasCustomJSPFolderRule )
+                {
+                    if( configureRule )
+                    {
+                        validatorTable.replaceFilterGroup( excludeGroup, FilterGroup.addRule( excludeGroup, folderRule ) );
+
+                        hasCustomJSPFolderRule = true;
+                    }
+                }
+                retval = hasCustomJSPFolderRule;
+            }
+
+            if( configureRule )
+            {
+                final ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration( project );
+                pc.setDoesProjectOverride( true );
+
+                final ProjectPreferences pp = new ProjectPreferences( project, true, false, null );
+
+                final ValPrefManagerProject vpm = new ValPrefManagerProject( project );
+
+                final ValidatorMutable[] validatorTables = new ValidatorMutable[] { validatorTable };
+                
+                vpm.savePreferences( pp, validatorTables );
+            }
         }
         catch( Exception e )
         {
@@ -133,13 +141,14 @@ public class HookUtil
         }
 
         return retval;
+
     }
 
     public static IFolder getCustomJspFolder( Hook hook, IProject project )
     {
         CustomJspDir element = hook.getCustomJspDir().content();
 
-        if( element != null && ( ! element.getValue().empty() ) )
+        if( element != null && ( !element.getValue().empty() ) )
         {
             // IDE-110 IDE-648
             IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
@@ -152,7 +161,7 @@ public class HookUtil
 
                 for( IContainer folder : customJspFolder.getUnderlyingFolders() )
                 {
-                    if( folder != null && ! folder.isDerived() )
+                    if( folder != null && !folder.isDerived() )
                     {
                         return (IFolder) folder;
                     }
@@ -174,7 +183,7 @@ public class HookUtil
 
             if( docFolder != null )
             {
-                final IPath newPath = Path.fromOSString( customJSPFolder.substring( 1 ) );
+                final IPath newPath = Path.fromOSString( customJSPFolder );
                 final IPath pathValue = docFolder.getFullPath().append( newPath );
 
                 return pathValue;
@@ -186,7 +195,7 @@ public class HookUtil
 
     /**
      * A small utility method used to compute the DTD version
-     *
+     * 
      * @param document
      *            - the document that is loaded by the editor
      */

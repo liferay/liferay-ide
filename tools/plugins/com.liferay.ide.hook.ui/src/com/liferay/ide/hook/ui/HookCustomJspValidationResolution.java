@@ -51,11 +51,11 @@ public class HookCustomJspValidationResolution implements IMarkerResolution
 
         if( customJspPath != null )
         {
-            final boolean returnCode =
+            final boolean retval =
                 HookUtil.configureJSPSyntaxValidationExclude(
-                project, project.getFolder( customJspPath.makeRelativeTo( project.getFullPath() ) ) );
+                    project, project.getFolder( customJspPath.makeRelativeTo( project.getFullPath() ) ), true );
 
-            if( returnCode )
+            if( retval )
             {
                 UIUtil.async( new Runnable()
                 {

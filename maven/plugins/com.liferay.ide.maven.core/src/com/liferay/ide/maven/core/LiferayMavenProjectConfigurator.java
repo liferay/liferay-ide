@@ -321,7 +321,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
                 if ( docFolder != null )
                 {
-                    final IPath newPath = Path.fromOSString( customJSPFolder.substring( 1 ) );
+                    final IPath newPath = Path.fromOSString( customJSPFolder );
                     final IPath pathValue = docFolder.getFullPath().append( newPath );
 
                     final boolean disableCustomJspValidation =
@@ -330,7 +330,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                     if( disableCustomJspValidation )
                     {
                         HookUtil.configureJSPSyntaxValidationExclude(
-                            project, project.getFolder( pathValue.makeRelativeTo( project.getFullPath() ) ) );
+                            project, project.getFolder( pathValue.makeRelativeTo( project.getFullPath() ) ), true );
                     }
                 }
             }
