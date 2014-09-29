@@ -49,10 +49,9 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
         if( referenceTo instanceof IXMLReferenceToProperty )
         {
             final IProject project = file.getProject();
-            final List<IFile> languagePropertiesFiles =
-                PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
+            final List<IFile> languageFiles = PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
 
-            for( IFile languagePropertiesFile : languagePropertiesFiles )
+            for( IFile languageFile : languageFiles )
             {
                 final Properties properties = new Properties();
 
@@ -60,7 +59,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 
                 try
                 {
-                    contents = languagePropertiesFile.getContents();
+                    contents = languageFile.getContents();
 
                     properties.load( contents );
 
@@ -68,9 +67,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 
                     if( key != null )
                     {
-                        sb.append( NLS.bind( HOVER, key, languagePropertiesFile.getFullPath().toString() ) );
-
-                        sb.append( "<br/>" );
+                        sb.append( NLS.bind( HOVER, key, languageFile.getFullPath().toString() ) ).append( "<br/>" );
                     }
                     else
                     {
