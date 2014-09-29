@@ -44,7 +44,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
         Object selectedNode, int offset, String mathingString, int startIndex, int endIndex, IFile file,
         IXMLReferenceTo referenceTo )
     {
-        String retval = null;
+        StringBuffer sb = new StringBuffer();
 
         if( referenceTo instanceof IXMLReferenceToProperty )
         {
@@ -68,7 +68,9 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 
                     if( key != null )
                     {
-                        retval = NLS.bind( HOVER, key, languagePropertiesFile.getFullPath().toString() );
+                        sb.append( NLS.bind( HOVER, key, languagePropertiesFile.getFullPath().toString() ) );
+
+                        sb.append( "<br/>" );
                     }
                     else
                     {
@@ -93,7 +95,7 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
                 }
             }
 
-            if( CoreUtil.isNullOrEmpty( retval ) )
+            if( CoreUtil.isNullOrEmpty( sb.toString() ) )
             {
                 final Properties portalProperties =
                     PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( project ) );
@@ -102,12 +104,12 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 
                 if( key != null )
                 {
-                    retval = NLS.bind( HOVER, key, "Liferay Portal Language.properties" );
+                    sb.append( NLS.bind( HOVER, key, "Liferay Portal Language.properties" ) );
                 }
             }
         }
 
-        return retval;
+        return sb.toString();
     }
 
 }
