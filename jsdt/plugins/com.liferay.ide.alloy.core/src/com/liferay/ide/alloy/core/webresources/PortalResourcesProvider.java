@@ -27,6 +27,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.WebResourceType;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemProvider;
+import org.eclipse.wst.html.webresources.core.providers.WebResourcesProviderContext;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 
 
@@ -39,7 +40,8 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider
 {
 
     @Override
-    public File[] getResources( IDOMNode htmlNode, IFile htmlFile, WebResourceType resourceType )
+    public File[] getResources(
+        IDOMNode htmlNode, IFile htmlFile, WebResourceType resourceType, WebResourcesProviderContext context )
     {
         File[] retval = null;
 
