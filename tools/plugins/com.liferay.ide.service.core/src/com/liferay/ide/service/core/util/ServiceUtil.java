@@ -41,15 +41,18 @@ public class ServiceUtil
 
         for( final IProject project : CoreUtil.getAllProjects() )
         {
-            final IJavaProject jp = JavaCore.create( project );
-
-            if( jp != null )
+            if( project.isAccessible() )
             {
-                final List<IFile> serviceXmls = new SearchFilesVisitor().searchFiles( project, "service.xml" );
+                final IJavaProject jp = JavaCore.create( project );
 
-                if( serviceXmls.size() > 0 )
+                if( jp != null )
                 {
-                    serviceProjects.add( jp );
+                    final List<IFile> serviceXmls = new SearchFilesVisitor().searchFiles( project, "service.xml" );
+
+                    if( serviceXmls.size() > 0 )
+                    {
+                        serviceProjects.add( jp );
+                    }
                 }
             }
         }
