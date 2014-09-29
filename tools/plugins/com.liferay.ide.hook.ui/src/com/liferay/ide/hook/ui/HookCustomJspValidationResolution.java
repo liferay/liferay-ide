@@ -61,13 +61,13 @@ public class HookCustomJspValidationResolution implements IMarkerResolution
                 {
                     public void run()
                     {
-                        final boolean result =
-                            MessageDialog.openConfirm(
+                        final boolean revalidate =
+                            MessageDialog.openQuestion(
                                 UIUtil.getActiveShell(), Msgs.revalidateTitle, Msgs.revalidateMsg );
 
-                        if( result )
+                        if( revalidate )
                         {
-                            new WorkspaceJob( "revalidation custom jsp folder." )
+                            new WorkspaceJob( "revalidating " + project.getName() )
                             {
                                 @Override
                                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
