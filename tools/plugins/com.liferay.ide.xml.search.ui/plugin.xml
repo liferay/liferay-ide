@@ -575,6 +575,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -588,6 +589,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -601,6 +603,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -614,6 +617,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -627,6 +631,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -640,6 +645,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -653,6 +659,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -666,6 +673,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -679,6 +687,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -692,6 +701,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -705,6 +715,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -718,6 +729,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -731,6 +743,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -744,6 +757,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -757,6 +771,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -770,6 +785,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -783,6 +799,7 @@
                    filterId="liferay.jsp.taglib.filter"  >
              </from>
              <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
                    querySpecificationId="portlet.language.properties.querySpecification"
                    additionalProposalInfoProviderId="contentAssist.language.property.info" >
              </toProperty>
@@ -964,6 +981,13 @@
             target="com.liferay.ide.service.core.servicebuildercontent" />
     </extension>
 
+    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+        <documentationTextHover
+            class="org.eclipse.wst.xml.search.editor.hover.XMLReferencesInfoHoverProcessor"
+            target="org.eclipse.jst.jsp.DEFAULT_JSP,org.eclipse.jst.jsp.JSP_DIRECTIVE">
+        </documentationTextHover>
+    </extension>
+
     <extension
           point="org.eclipse.wst.xml.search.editor.referenceFilters">
        <filter
@@ -977,5 +1001,13 @@
              class="com.liferay.ide.xml.search.ui.java.PortletActionMethodQuery"
              id="com.liferay.ide.xml.search.ui.portletActionMethodQuery">
        </querySpecification>
+    </extension>
+
+    <extension
+          point="org.eclipse.wst.xml.search.editor.searchers">
+       <searcher
+             class="com.liferay.ide.xml.search.ui.searcher.LiferayJspLanguagePropertiesSearcher"
+             id="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher">
+       </searcher>
     </extension>
 </plugin>
