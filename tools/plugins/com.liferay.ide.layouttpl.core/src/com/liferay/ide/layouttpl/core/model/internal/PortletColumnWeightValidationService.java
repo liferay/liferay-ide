@@ -43,14 +43,14 @@ public class PortletColumnWeightValidationService extends ValidationService
         {
             if( layoutTpl.getBootstrapStyle().content() )
             {
-                if( weight <=0 || weight > 12 )
+                if( weight <= 0 || weight > 12 )
                 {
                     retval = Status.createErrorStatus( "The weight value is invalid, should be in (0, 12]" );
                 }
             }
             else
             {
-                if( weight <=0 || weight > 100 )
+                if( weight <= 0 || weight > 100 )
                 {
                     retval = Status.createErrorStatus( "The weight value is invalid, should be in (0, 100]" );
                 }

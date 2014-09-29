@@ -38,6 +38,62 @@ public class LayoutTplElementsFactory
 
     public static LayoutTplElementsFactory INSTANCE = new LayoutTplElementsFactory();
 
+    public void initPortletColumnFromElement( PortletColumnElement portletColumn, IDOMElement domElement )
+    {
+        if( domElement == null )
+        {
+            return;
+        }
+
+        String existingClassName = domElement.getAttribute( "class" );
+
+        if( !CoreUtil.isNullOrEmpty( existingClassName ) &&
+            !existingClassName.equals( portletColumn.getClassName().content() ) &&
+             existingClassName.contains( "portlet-column" ) )
+        {
+            portletColumn.setClassName( existingClassName );
+        }
+
+        portletColumn.setWeight( LayoutTplUtil.getWeightValue( domElement, -1 ) );
+
+        IDOMElement[] portletLayoutDOMElements =
+            LayoutTplUtil.findChildElementsByClassName( domElement, "div", "portlet-layout" );
+
+        if( !CoreUtil.isNullOrEmpty( portletLayoutDOMElements ) )
+        {
+            for( IDOMElement portletLayoutDOMElement : portletLayoutDOMElements )
+            {
+                PortletLayoutElement portletLayout = portletColumn.getPortletLayouts().insert();
+                this.initPortletLayoutFromElement( portletLayout, portletLayoutDOMElement );
+            }
+        }
+    }
+
+    public void initPortletLayoutFromElement( PortletLayoutElement portletLayout, IDOMElement domElement )
+    {
+        if( domElement == null )
+        {
+            return;
+        }
+
+        String existingClassName = domElement.getAttribute( "class" );
+
+        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) &&
+               existingClassName.contains( portletLayout.getClassName().content() ) )
+        {
+            portletLayout.setClassName( existingClassName );
+        }
+
+        IDOMElement[] portletColumnDOMElements =
+            LayoutTplUtil.findChildElementsByClassName( domElement, "div", "portlet-column" );
+
+        for( IDOMElement portletColumnElement : portletColumnDOMElements )
+        {
+            PortletColumnElement portletColumn = portletLayout.getPortletColumns().insert();
+            this.initPortletColumnFromElement( portletColumn, portletColumnElement );
+        }
+    }
+
     public LayoutTplElement newLayoutTplFromFile( IFile file, Boolean isBootstrapStyle )
     {
         if( file == null || !( file.exists() ) )
@@ -100,62 +156,6 @@ public class LayoutTplElementsFactory
         }
 
         return layoutTpl;
-    }
-
-    public void initPortletColumnFromElement( PortletColumnElement portletColumn, IDOMElement domElement )
-    {
-        if( domElement == null )
-        {
-            return;
-        }
-
-        String existingClassName = domElement.getAttribute( "class" ); //$NON-NLS-1$
-
-        if( !CoreUtil.isNullOrEmpty( existingClassName ) &&
-            !existingClassName.equals( portletColumn.getClassName().content() ) &&
-             existingClassName.contains( "portlet-column" ) )
-        {
-            portletColumn.setClassName( existingClassName );
-        }
-
-        portletColumn.setWeight( LayoutTplUtil.getWeightValue( domElement, -1 ) );
-
-        IDOMElement[] portletLayoutDOMElements =
-            LayoutTplUtil.findChildElementsByClassName( domElement, "div", "portlet-layout" );
-
-        if( !CoreUtil.isNullOrEmpty( portletLayoutDOMElements ) )
-        {
-            for( IDOMElement portletLayoutDOMElement : portletLayoutDOMElements )
-            {
-                PortletLayoutElement portletLayout = portletColumn.getPortletLayouts().insert();
-                this.initPortletLayoutFromElement( portletLayout, portletLayoutDOMElement );
-            }
-        }
-    }
-
-    public void initPortletLayoutFromElement( PortletLayoutElement portletLayout, IDOMElement domElement )
-    {
-        if( domElement == null )
-        {
-            return;
-        }
-
-        String existingClassName = domElement.getAttribute( "class" ); //$NON-NLS-1$
-
-        if( ( !CoreUtil.isNullOrEmpty( existingClassName ) ) &&
-               existingClassName.contains( portletLayout.getClassName().content() ) )
-        {
-            portletLayout.setClassName( existingClassName );
-        }
-
-        IDOMElement[] portletColumnDOMElements =
-            LayoutTplUtil.findChildElementsByClassName( domElement, "div", "portlet-column" ); //$NON-NLS-1$ //$NON-NLS-2$
-
-        for( IDOMElement portletColumnElement : portletColumnDOMElements )
-        {
-            PortletColumnElement portletColumn = portletLayout.getPortletColumns().insert();
-            this.initPortletColumnFromElement( portletColumn, portletColumnElement );
-        }
     }
 
 }

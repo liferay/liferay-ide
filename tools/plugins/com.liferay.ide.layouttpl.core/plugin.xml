@@ -117,8 +117,8 @@
    </extension>
 
     <extension
-    	point="com.liferay.ide.templates.core.templateDefinition">
-    	<template
+        point="com.liferay.ide.templates.core.templateDefinition">
+        <template
               id="com.liferay.ide.layouttpl.core.layoutTemplate.legacy"
               name="Legacy Layout Template"
               resource="layouttpl_legacy.ftl">
