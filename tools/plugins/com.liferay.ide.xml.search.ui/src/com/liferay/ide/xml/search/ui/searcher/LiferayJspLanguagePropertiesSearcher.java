@@ -16,6 +16,7 @@
 package com.liferay.ide.xml.search.ui.searcher;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
 
@@ -25,6 +26,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceToProperty;
 import org.eclipse.wst.xml.search.editor.searchers.properties.XMLSearcherForProperties;
@@ -35,16 +38,19 @@ import org.eclipse.wst.xml.search.editor.searchers.properties.XMLSearcherForProp
 public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperties
 {
 
+    private static final String HOVER = "\"{0}\" in {1}";
+
     public String searchForTextHover(
         Object selectedNode, int offset, String mathingString, int startIndex, int endIndex, IFile file,
         IXMLReferenceTo referenceTo )
     {
-        final StringBuffer message = new StringBuffer();
+        String retval = null;
 
         if( referenceTo instanceof IXMLReferenceToProperty )
         {
+            final IProject project = file.getProject();
             final List<IFile> languagePropertiesFiles =
-                PropertiesUtil.getDefaultLanguagePropertiesFromProject( file.getProject() );
+                PropertiesUtil.getDefaultLanguagePropertiesFromProject( project );
 
             for( IFile languagePropertiesFile : languagePropertiesFiles )
             {
@@ -58,11 +64,11 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
 
                     properties.load( contents );
 
-                    Object languageValue = properties.get( mathingString );
+                    Object key = properties.get( mathingString );
 
-                    if( languageValue != null )
+                    if( key != null )
                     {
-                        getTextHoverMessage( message, languageValue, languagePropertiesFile.getFullPath().toString() );
+                        retval = NLS.bind( HOVER, key, languagePropertiesFile.getFullPath().toString() );
                     }
                     else
                     {
@@ -87,35 +93,21 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
                 }
             }
 
-            if( message.toString().equals( "" ) )
+            if( CoreUtil.isNullOrEmpty( retval ) )
             {
                 final Properties portalProperties =
-                    PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( file.getProject() ) );
+                    PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( project ) );
 
-                Object languageValue = portalProperties.get( mathingString );
+                Object key = portalProperties.get( mathingString );
 
-                if( languageValue != null )
+                if( key != null )
                 {
-                    getTextHoverMessage( message, languageValue, "Portal Language file" );
+                    retval = NLS.bind( HOVER, key, "Liferay Portal Language.properties" );
                 }
             }
         }
 
-        return message.toString();
-    }
-
-    private void getTextHoverMessage( StringBuffer message, Object messageValue, String fileLocation )
-    {
-        message.append( "\"" );
-        message.append( messageValue );
-        message.append( "\"" );
-
-        message.append( " " );
-        message.append( "in" );
-        message.append( " " );
-        message.append( fileLocation );
-
-        message.append( "<br/>" );
+        return retval;
     }
 
 }
