@@ -15,7 +15,6 @@
 
 package com.liferay.ide.hook.ui;
 
-import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -31,7 +30,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IMarkerResolution;
 
 /**
@@ -59,45 +57,37 @@ public class HookCustomJspValidationResolution implements IMarkerResolution
 
             if( returnCode )
             {
-                UIUtil.async
-                (
-                    new Runnable()
+                UIUtil.async( new Runnable()
+                {
+                    public void run()
                     {
-                        public void run()
-                        {
-                            final boolean result = 
-                              MessageDialog.openConfirm( new Shell(), "Validation Confirm", "Do you want to run validate" );
+                        final boolean result =
+                            MessageDialog.openConfirm(
+                                UIUtil.getActiveShell(), Msgs.revalidateTitle, Msgs.revalidateMsg );
 
-                            if( result )
+                        if( result )
+                        {
+                            new WorkspaceJob( "revalidation custom jsp folder." )
                             {
-                                try
+                                @Override
+                                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                                 {
-                                    new WorkspaceJob( "Project Validation Job" )
-                                    {
-                                        @Override
-                                        public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                                        {
-                                            project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
-                                            return Status.OK_STATUS;
-                                        }
-                                    }.schedule();
+                                    project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
+                                    return Status.OK_STATUS;
                                 }
-                                catch( Exception e )
-                                {
-                                    HookCore.logError( "execute project build failed", e );
-                                }
-                            }
+                            }.schedule();
                         }
                     }
-                );
+                });
             }
         }
     }
 
     private static class Msgs extends NLS
     {
-
         public static String disableCustomJspValidation;
+        public static String revalidateMsg;
+        public static String revalidateTitle;
 
         static
         {

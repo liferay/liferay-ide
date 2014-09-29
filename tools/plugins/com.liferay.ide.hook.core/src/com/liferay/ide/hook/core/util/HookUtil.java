@@ -135,7 +135,7 @@ public class HookUtil
         return retval;
     }
 
-    public static IFolder getCustomJspFolder(Hook hook, IProject project)
+    public static IFolder getCustomJspFolder( Hook hook, IProject project )
     {
         CustomJspDir element = hook.getCustomJspDir().content();
 

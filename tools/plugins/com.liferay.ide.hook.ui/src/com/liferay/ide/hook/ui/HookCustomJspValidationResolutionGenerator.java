@@ -60,7 +60,7 @@ public class HookCustomJspValidationResolutionGenerator implements IMarkerResolu
         }
         catch( Exception e )
         {
-            HookCore.logError( "Get Marker attribute error. ", e );
+            HookCore.logError( "Get marker attribute error. ", e );
         }
 
         return hasResolution;
