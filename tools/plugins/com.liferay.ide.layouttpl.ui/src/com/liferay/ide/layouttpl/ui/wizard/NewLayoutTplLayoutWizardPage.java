@@ -47,8 +47,7 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
     protected static final ImageDescriptor[] layoutOptionsImages =
         new ImageDescriptor[] {
             ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
-                "/icons/layouts/blank_column.png" ) ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry( "/icons/layouts/1_column.png" ) ), //$NON-NLS-1$
+                "/icons/layouts/1_column.png" ) ), //$NON-NLS-1$
             ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
                 "/icons/layouts/1_2_columns_i.png" ) ), //$NON-NLS-1$
             ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
@@ -66,7 +65,7 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
             ImageDescriptor.createFromURL( LayoutTplUI.getDefault().getBundle().getEntry(
                 "/icons/layouts/3_columns.png" ) ), }; //$NON-NLS-1$
 
-    protected static final String[] layoutOptionsText = new String[] { Msgs.blank, Msgs.oneColumn, Msgs.oneTwoColumns3070,
+    protected static final String[] layoutOptionsText = new String[] { Msgs.oneColumn, Msgs.oneTwoColumns3070,
         Msgs.oneTwoColumns7030, Msgs.oneTwoOneColumns, Msgs.twoColumns5050, Msgs.twoColumns3070, Msgs.twoColumns7030,
         Msgs.twoTwoColumns, Msgs.threeColumns };
 
@@ -170,7 +169,6 @@ public class NewLayoutTplLayoutWizardPage extends DataModelWizardPage implements
 
     private static class Msgs extends NLS
     {
-        public static String blank;
         public static String createLayoutTemplate;
         public static String oneColumn;
         public static String oneTwoColumns3070;

@@ -43,9 +43,7 @@ public interface INewLayoutTplDataModelProperties extends IArtifactEditOperation
 
     public static final String LAYOUT_IMAGE_3_COLUMN = "INewLayoutTplModelProperties.LAYOUT_IMAGE_3_COLUMN"; //$NON-NLS-1$
 
-    public static final String LAYOUT_IMAGE_BLANK_COLUMN = "INewLayoutTplModelProperties.LAYOUT_IMAGE_BLANK_COLUMN"; //$NON-NLS-1$
-
-    public static final String[] LAYOUT_PROPERTIES = new String[] { LAYOUT_IMAGE_BLANK_COLUMN, LAYOUT_IMAGE_1_COLUMN,
+    public static final String[] LAYOUT_PROPERTIES = new String[] { LAYOUT_IMAGE_1_COLUMN,
         LAYOUT_IMAGE_1_2_I_COLUMN, LAYOUT_IMAGE_1_2_II_COLUMN, LAYOUT_IMAGE_1_2_1_COLUMN, LAYOUT_IMAGE_2_I_COLUMN,
         LAYOUT_IMAGE_2_II_COLUMN, LAYOUT_IMAGE_2_III_COLUMN, LAYOUT_IMAGE_2_2_COLUMN, LAYOUT_IMAGE_3_COLUMN };
 

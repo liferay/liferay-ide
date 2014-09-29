@@ -102,15 +102,14 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         {
             return "/" + getStringProperty( LAYOUT_TEMPLATE_ID ) + ".png";  //$NON-NLS-1$//$NON-NLS-2$
         }
-        else if( LAYOUT_IMAGE_BLANK_COLUMN.equals( propertyName ) )
+        else if( LAYOUT_IMAGE_1_COLUMN.equals( propertyName ) )
         {
             return true;
         }
-        else if( LAYOUT_IMAGE_1_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_1_2_1_COLUMN.equals( propertyName ) ||
-            LAYOUT_IMAGE_1_2_I_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_1_2_II_COLUMN.equals( propertyName ) ||
-            LAYOUT_IMAGE_2_2_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_2_I_COLUMN.equals( propertyName ) ||
-            LAYOUT_IMAGE_2_II_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_2_III_COLUMN.equals( propertyName ) ||
-            LAYOUT_IMAGE_3_COLUMN.equals( propertyName ) )
+        else if( LAYOUT_IMAGE_1_2_1_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_1_2_I_COLUMN.equals( propertyName ) ||
+            LAYOUT_IMAGE_1_2_II_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_2_2_COLUMN.equals( propertyName ) ||
+            LAYOUT_IMAGE_2_I_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_2_II_COLUMN.equals( propertyName ) ||
+            LAYOUT_IMAGE_2_III_COLUMN.equals( propertyName ) || LAYOUT_IMAGE_3_COLUMN.equals( propertyName ) )
         {
 
             return false;
@@ -139,7 +138,6 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         propertyNames.add( LAYOUT_IMAGE_2_II_COLUMN );
         propertyNames.add( LAYOUT_IMAGE_2_III_COLUMN );
         propertyNames.add( LAYOUT_IMAGE_3_COLUMN );
-        propertyNames.add( LAYOUT_IMAGE_BLANK_COLUMN );
 
         propertyNames.add( LAYOUT_TPL_FILE_CREATED );
 

@@ -33,7 +33,6 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
-//import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.osgi.BundleBasedContext;
 import org.eclipse.sapphire.ui.SapphireEditor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
@@ -155,8 +154,6 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
         if( layoutTpl == null )
         {
             layoutTpl = createEmptyDiagramModel();
-            refreshSourceModel( layoutTpl );
-            this.sourcePage.doSave( null );
         }
 
         layoutTpl.attach( new Listener()
@@ -208,17 +205,26 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
         if( activePage == PREVIEW_PAGE_INDEX )
         {
-            this.sourcePage.doSave( monitor );
+            if( this.sourcePage.isDirty() )
+            {
+                this.sourcePage.doSave( monitor );
+            }
         }
         else if( activePage == SOURCE_PAGE_INDEX )
         {
-            this.sourcePage.doSave( monitor );
-            refreshDiagramModel();
+            if( this.sourcePage.isDirty() )
+            {
+                this.sourcePage.doSave( monitor );
+                refreshDiagramModel();
+            }
         }
         else if( activePage == DESIGN_PAGE_INDEX ) 
         {
-            refreshSourceModel();
-            this.sourcePage.doSave( monitor );
+            if( isDesignPageChanged )
+            {
+                refreshSourceModel();
+                this.sourcePage.doSave( monitor );
+            }
         }
 
         setSourceModelChanged( false );
@@ -351,10 +357,8 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
         if( newElement == null )
         {
+            // create an empty model for diagram in memory, but not write to source
             newElement = createEmptyDiagramModel();
-
-            refreshSourceModel( newElement );
-            this.sourcePage.doSave( null );
         }
 
         Element model = getModelElement();
@@ -386,6 +390,12 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
         setSourceModelChanged( false );
     }
 
+    @Override
+    protected void setActivePage( int pageIndex )
+    {
+        super.setActivePage( SOURCE_PAGE_INDEX );
+    }
+
     protected void setDesignPageChanged( boolean changed )
     {
         isDesignPageChanged = changed;
@@ -413,5 +423,4 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
     {
         this.isSourceModelChanged = changed; 
     }
-
 }

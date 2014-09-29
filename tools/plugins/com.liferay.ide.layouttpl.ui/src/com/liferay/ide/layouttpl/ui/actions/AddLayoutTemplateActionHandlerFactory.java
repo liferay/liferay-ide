@@ -2,6 +2,7 @@
 package com.liferay.ide.layouttpl.ui.actions;
 
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,7 +186,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 
         protected void setLabel()
         {
-            final String prefix = "Layout with 3 Rows "; 
+            final String prefix = "Layout with 3 Rows ";
 
             if( isBootstrapStyle )
             {
@@ -214,7 +215,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 
     private boolean canOverride()
     {
-        return MessageDialog.openQuestion( null, "Warning", Msgs.addLayoutTplWarningMsg );
+        return MessageDialog.openQuestion( UIUtil.getActiveShell(), "Warning", Msgs.addLayoutTplWarningMsg );
     }
 
     private static class Msgs extends NLS

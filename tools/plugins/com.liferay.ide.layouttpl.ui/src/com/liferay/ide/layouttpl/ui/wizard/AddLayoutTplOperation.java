@@ -188,13 +188,13 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
             if( isBootstrapStyle )
             {
-                column21.setWeight( 8 );
-                column22.setWeight( 4 );
+                column21.setWeight( 4 );
+                column22.setWeight( 8 );
             }
             else
             {
-                column21.setWeight( 70 );
-                column22.setWeight( 30 );
+                column21.setWeight( 30 );
+                column22.setWeight( 70 );
             }
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_II_COLUMN ) )
@@ -210,13 +210,13 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
             if( isBootstrapStyle )
             {
-                column21.setWeight( 4 );
-                column22.setWeight( 8 );
+                column21.setWeight( 8 );
+                column22.setWeight( 4 );
             }
             else
             {
-                column21.setWeight( 30 );
-                column22.setWeight( 70 );
+                column21.setWeight( 70 );
+                column22.setWeight( 30 );
             }
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_1_COLUMN ) )
@@ -237,17 +237,11 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_I_COLUMN ) )
         {
-            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column11 = row1.getPortletColumns().insert();
-            column11.setWeight( column11.getFullWeight().content() / 2 );
-            PortletColumnElement column12 = row1.getPortletColumns().insert();
-            column12.setWeight( column12.getFullWeight().content() / 2 );
-
-            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column21 = row2.getPortletColumns().insert();
-            column21.setWeight( column21.getFullWeight().content() / 2 );
-            PortletColumnElement column22 = row2.getPortletColumns().insert();
-            column22.setWeight( column22.getFullWeight().content() / 2 );
+            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
+            PortletColumnElement column1 = row.getPortletColumns().insert();
+            column1.setWeight( column1.getFullWeight().content() / 2 );
+            PortletColumnElement column2 = row.getPortletColumns().insert();
+            column2.setWeight( column2.getFullWeight().content() / 2 );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_II_COLUMN ) )
         {

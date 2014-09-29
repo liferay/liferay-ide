@@ -114,6 +114,7 @@
                         <action>LayoutTpl.Add.LayoutTemplate</action>
                         <impl>com.liferay.ide.layouttpl.ui.actions.AddLayoutTemplateActionHandlerFactory</impl>
                     </action-handler-factory>
+                <image>icons/e16/layout.gif</image>
             </node>
         </root-node>
         <id>designPage</id>
@@ -147,6 +148,7 @@
             <node-include>PortletColumnsList</node-include>
             <element-type>com.liferay.ide.layouttpl.core.model.PortletLayoutElement</element-type>
             <label>Row ${Size(PortletColumns)&gt;0 ? Concat(&quot;(&quot;,Size(PortletColumns),(Size(PortletColumns)&gt;1?&quot; Columns&quot;:&quot; Column&quot;),&quot;)&quot;) : &quot;&quot;}</label>
+            <image>icons/e16/row_16.gif</image>
         </case>
     </node-factory>
     <node-factory>
