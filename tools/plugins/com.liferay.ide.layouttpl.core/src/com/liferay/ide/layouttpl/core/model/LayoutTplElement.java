@@ -56,10 +56,10 @@ public interface LayoutTplElement extends CanAddPortletLayouts
 
     // *** Style ***
 
-    // only two styles, use Boolean, if there are more styles in the future, use subclasses 
+    // only two styles, use Boolean, if there are more styles in the future, use subclasses
+    @DefaultValue( text = "true" )
     @Required
     @Type( base = Boolean.class )
-    @DefaultValue( text = "true" )
     ValueProperty PROP_BOOTSTRAP_STYLE = new ValueProperty( TYPE, "BootstrapStyle" );
 
     Value<Boolean> getBootstrapStyle();

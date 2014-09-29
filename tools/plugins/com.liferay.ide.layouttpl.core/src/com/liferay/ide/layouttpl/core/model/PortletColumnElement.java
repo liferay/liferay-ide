@@ -15,8 +15,6 @@
 
 package com.liferay.ide.layouttpl.core.model;
 
-import com.liferay.ide.layouttpl.core.model.internal.PortletColumnFullWeightDefaultValueService;
-import com.liferay.ide.layouttpl.core.model.internal.PortletColumnWeightDefaultValueService;
 import com.liferay.ide.layouttpl.core.model.internal.PortletColumnWeightValidationService;
 
 import org.eclipse.sapphire.ElementType;
@@ -26,7 +24,6 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 
 
@@ -55,15 +52,9 @@ public interface PortletColumnElement extends CanAddPortletLayouts
 
     // *** Weight ***
 
+    @DefaultValue( text = "${Root.BootstrapStyle ? \"3\" : \"25\"}" )
     @Type( base = Integer.class )
-    @Services
-    ( 
-        value = 
-        { 
-            @Service( impl = PortletColumnWeightDefaultValueService.class ) ,
-            @Service( impl = PortletColumnWeightValidationService.class )
-        }
-    )
+    @Service( impl = PortletColumnWeightValidationService.class )
     @Required
     ValueProperty PROP_WEIGHT = new ValueProperty( TYPE, "Weight" );
 
@@ -74,8 +65,8 @@ public interface PortletColumnElement extends CanAddPortletLayouts
 
     // *** Full Weight ***
 
+    @DefaultValue( text = "${Root.BootstrapStyle ? \"12\" : \"100\"}" )
     @Type( base = Integer.class )
-    @Service( impl = PortletColumnFullWeightDefaultValueService.class )
     ValueProperty PROP_FULL_WEIGHT = new ValueProperty( TYPE, "FullWeight" );
 
     Value<Integer> getFullWeight();
@@ -94,8 +85,8 @@ public interface PortletColumnElement extends CanAddPortletLayouts
 
     // *** Is Last ***
 
-    @Required
     @DefaultValue( text = "false" )
+    @Required
     @Type( base = Boolean.class )
     ValueProperty PROP_LAST = new ValueProperty( TYPE, "Last" );
 
@@ -105,8 +96,8 @@ public interface PortletColumnElement extends CanAddPortletLayouts
 
     // *** Is Only ***
 
-    @Required
     @DefaultValue( text = "false" )
+    @Required
     @Type( base = Boolean.class )
     ValueProperty PROP_ONLY = new ValueProperty( TYPE, "Only" );
 

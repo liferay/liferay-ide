@@ -1,5 +1,7 @@
 package com.liferay.ide.layouttpl.core.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
 import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
@@ -25,6 +27,54 @@ public class LayoutTplTestsBootstrap extends LayoutTplCoreTests
     protected String getFilesPrefix()
     {
         return "bootstrap/files/";
+    }
+
+    @Test
+    public void testPortletColumnWeightDefaultValueService() throws Exception
+    {
+        final LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
+
+        layoutTpl.setBootstrapStyle( true );
+
+        final PortletColumnElement column = layoutTpl.getPortletLayouts().insert().getPortletColumns().insert();
+
+        assertEquals( 3, column.getWeight().content( true ).intValue() );
+
+        layoutTpl.setBootstrapStyle( false );
+
+        assertEquals( 25, column.getWeight().content( true ).intValue() );
+    }
+
+    @Test
+    public void testPortletColumnFullWeightDefaultValueService() throws Exception
+    {
+        final LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
+
+        layoutTpl.setBootstrapStyle( true );
+
+        final PortletColumnElement column = layoutTpl.getPortletLayouts().insert().getPortletColumns().insert();
+
+        assertEquals( 12, column.getFullWeight().content( true ).intValue() );
+
+        layoutTpl.setBootstrapStyle( false );
+
+        assertEquals( 100, column.getFullWeight().content( true ).intValue() );
+    }
+
+    @Test
+    public void testPortletLayoutClassNameDefaultValueService() throws Exception
+    {
+        final LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
+
+        layoutTpl.setBootstrapStyle( true );
+
+        final PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
+
+        assertEquals( "portlet-layout row-fluid", row.getClassName().content( true ) );
+
+        layoutTpl.setBootstrapStyle( false );
+
+        assertEquals( "portlet-layout", row.getClassName().content( true ) );
     }
 
     @Test
