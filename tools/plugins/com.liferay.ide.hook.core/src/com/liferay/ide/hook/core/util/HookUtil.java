@@ -52,7 +52,8 @@ public class HookUtil
 
     public static boolean configureJSPSyntaxValidationExclude( IProject project, IFolder customFolder )
     {
-        boolean returnCode = false;
+        boolean retval = false;
+
         try
         {
             final Validator[] vals =
@@ -124,14 +125,14 @@ public class HookUtil
             final ValPrefManagerProject vpm = new ValPrefManagerProject( project );
             vpm.savePreferences( pp, validators );
 
-            returnCode = true;
+            retval = true;
         }
         catch( Exception e )
         {
             HookCore.logError( "Unable to configure jsp syntax validation folder exclude rule.", e ); //$NON-NLS-1$
         }
-        
-        return returnCode;
+
+        return retval;
     }
 
     public static IFolder getCustomJspFolder(Hook hook, IProject project)
