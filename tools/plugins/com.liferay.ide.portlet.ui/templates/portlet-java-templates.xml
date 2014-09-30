@@ -2,14 +2,14 @@
 
 <templates>
 
-<template name="lr-session" description="Grabs the current session from portletRequest" id="portlet.Session" context="java-statements" enabled="true">
+<template name="http-session" description="Grabs the current session from portletRequest" id="portlet.Session" context="java-statements" enabled="true">
 HttpServletRequest httpRequest = PortalUtil.getHttpServletRequest(${request:var('javax.portlet.PortletRequest')});
 HttpSession session = httpRequest.getSession();
 ${:import(com.liferay.portal.util.PortalUtil,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpSession)}
 ${cursor}
 </template>
 
-<template name="lr-eventhandler-jsr" autoinsert="true" context="java-members" id="portlet.eventhandler" deleted="false" description="Portlet IPC Event Handler built with JSR-286 annotation" enabled="true" >
+<template name="eventhandler-jsr" autoinsert="true" context="java-members" id="portlet.eventhandler" deleted="false" description="Portlet IPC Event Handler built with JSR-286 annotation" enabled="true" >
 @ProcessEvent(qname = "{http://${eventNamespace}}${eventName}")
 public void ${handleEvent}(EventRequest ${eventRequest}, EventResponse ${eventResponse}) {
     Event event = ${eventRequest}.getEvent();
@@ -19,8 +19,8 @@ public void ${handleEvent}(EventRequest ${eventRequest}, EventResponse ${eventRe
 ${:import(javax.portlet.Event,javax.portlet.EventRequest,javax.portlet.EventResponse,javax.portlet.ProcessEvent)}
 </template>
 
-<template name="lr-permissioncheck" autoinsert="true" context="java-statements" id="portlet.permissioncheck" deleted="false" description="utilizes the permission checker from themeDisplay for checking permissions" enabled="true">
-// e.g. get the group id you're interested in like this: 
+<template name="permissioncheck" autoinsert="true" context="java-statements" id="portlet.permissioncheck" deleted="false" description="utilizes the permission checker from themeDisplay for checking permissions" enabled="true">
+// e.g. get the group id you're interested in like this:
 // long groupId = ${themeDisplay:var(com.liferay.portal.theme.ThemeDisplay)}.getScopeGroupId();
 
 if (${themeDisplay}.getPermissionChecker()
@@ -30,19 +30,19 @@ if (${themeDisplay}.getPermissionChecker()
 }
 </template>
 
-<template name="lr-processaction" autoinsert="true" context="java-members" id="portlet.processaction" deleted="false" description="renamable action handler for portlets" enabled="true" >
+<template name="processaction" autoinsert="true" context="java-members" id="portlet.processaction" deleted="false" description="renamable action handler for portlets" enabled="true" >
 public void ${doSomething}(ActionRequest ${actionRequest}, ActionResponse ${actionResponse}) {
     ${cursor}
 }
 ${:import(javax.portlet.ActionRequest,javax.portlet.ActionResponse)}
 </template>
 
-<template name="lr-themedisplay" autoinsert="true" context="java-statements" id="portlet.themeDisplay" deleted="false" description="access ThemeDisplay object from a scope that has a PortletRequest available" enabled="true">
+<template name="themedisplay" autoinsert="true" context="java-statements" id="portlet.themeDisplay" deleted="false" description="access ThemeDisplay object from a scope that has a PortletRequest available" enabled="true">
 ThemeDisplay ${themeDisplay} = (ThemeDisplay) ${request:var(javax.portlet.PortletRequest)}.getAttribute(WebKeys.THEME_DISPLAY);
 
 long groupId = ${themeDisplay}.getScopeGroupId();
 
-// now read your parameters, e.g. like this: 
+// now read your parameters, e.g. like this:
 // long someParameter = ParamUtil.getLong(request, "someParameter");
 ${cursor}
 
