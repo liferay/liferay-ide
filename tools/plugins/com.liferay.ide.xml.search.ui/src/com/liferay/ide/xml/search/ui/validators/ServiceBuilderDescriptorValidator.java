@@ -80,7 +80,7 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator
                 {
                     final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
 
-                    if( nodeValue != null && nodeValue.trim().length() > 0 )
+                    if( nodeValue != null )
                     {
                         // Use standard java conventions to validate the package name
                         IStatus javaStatus = JavaConventions.

@@ -34,12 +34,7 @@ public class NamespaceValidationService extends ValidationService
         final Value<String> namespace = context().find( ServiceBuilder.class ).getNamespace();
         String content = namespace.content();
 
-        if( content == null )
-        {
-            return Status.createErrorStatus( Msgs.namespaceNotEmpty );
-        }
-
-        if( ! ServiceUtil.isValidNamespace( content.toString() ) )
+        if( content != null && ! ServiceUtil.isValidNamespace( content.toString() ) )
         {
             return Status.createErrorStatus( Msgs.namespaceElementValidKeyword );
         }
@@ -50,7 +45,6 @@ public class NamespaceValidationService extends ValidationService
     private static class Msgs extends NLS
     {
         public static String namespaceElementValidKeyword;
-        public static String namespaceNotEmpty;
 
         static
         {
