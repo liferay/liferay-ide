@@ -21,6 +21,8 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
@@ -35,6 +37,8 @@ import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemP
  */
 public class PortalResourcesProvider implements IWebResourcesFileSystemProvider
 {
+
+    private static final Map<IPath, Collection<File>> fileCache = new WeakHashMap<IPath, Collection<File>>();
 
     @Override
     public File[] getResources( IWebResourcesContext context )
@@ -54,31 +58,45 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider
 
                 if( cssPath.toFile().exists() )
                 {
-                    final Collection<File> files =
-                        FileUtils.listFiles( cssPath.toFile(), new String[] { "css", "scss" }, true );
-
-                    final Collection<File> cached = new HashSet<File>();
-
-                    for( File file : files )
+                    synchronized( fileCache )
                     {
-                        if( file.getName().endsWith( "scss" ) )
+                        final Collection<File> cachedFiles = fileCache.get( cssPath );
+
+                        if( cachedFiles != null )
                         {
-                            final File cachedFile =
-                                new File( file.getParent(), ".sass-cache/" +
-                                    file.getName().replaceAll( "scss$", "css" ) );
-
-                            if( cachedFile.exists() )
-                            {
-                                cached.add( file );
-                            }
+                            retval = cachedFiles.toArray( new File[0] );
                         }
-                    }
+                        else
+                        {
+                            final Collection<File> files =
+                                FileUtils.listFiles( cssPath.toFile(), new String[] { "css", "scss" }, true );
 
-                    files.removeAll( cached );
+                            final Collection<File> cached = new HashSet<File>();
 
-                    if( files != null )
-                    {
-                        retval = files.toArray( new File[0] );
+                            for( File file : files )
+                            {
+                                if( file.getName().endsWith( "scss" ) )
+                                {
+                                    final File cachedFile =
+                                        new File( file.getParent(), ".sass-cache/" +
+                                            file.getName().replaceAll( "scss$", "css" ) );
+
+                                    if( cachedFile.exists() )
+                                    {
+                                        cached.add( file );
+                                    }
+                                }
+                            }
+
+                            files.removeAll( cached );
+
+                            if( files != null )
+                            {
+                                retval = files.toArray( new File[0] );
+                            }
+
+                            fileCache.put( cssPath, files );
+                        }
                     }
                 }
             }
