@@ -28,18 +28,39 @@ public class AlloyFinderTypeProvider implements IWebResourcesFinderTypeProvider
 
     @Override
     public WebResourcesFinderType getWebResourcesFinderType(
-        String elementName, String attrName, IStructuredDocumentRegion documentRegion, int documentPosition )
+        String elementName, String attrName, IStructuredDocumentRegion region, int position )
     {
-        // <aui:button cssClass="btn-primary" ... />
-        // we want to match all aui:* tags that have cssClass
-
-        if( elementName != null && elementName.startsWith( "aui:" ) && "cssClass".equals( attrName ) )
+        if( isCssClassName( elementName, attrName, region, position ) )
         {
             // find CSS class name.
             return WebResourcesFinderType.CSS_CLASS_NAME;
         }
 
         return null;
+    }
+
+    private boolean isCssClassName( String elementName, String attrName, IStructuredDocumentRegion region, int position )
+    {
+        // <aui:button cssClass="btn-primary" ... />
+        // we want to match all aui:* tags that have cssClass
+        return elementName != null && isCssElement( elementName ) && attrName != null && isCssAttribute( attrName );
+    }
+
+    private boolean isCssElement( String elementName )
+    {
+        return elementName.startsWith( "ace:" ) ||
+               elementName.startsWith( "aui:" ) ||
+               elementName.startsWith( "h:" ) ||
+               elementName.startsWith( "p:" ) ||
+               elementName.startsWith( "rich:" );
+    }
+
+    private boolean isCssAttribute( String attrName )
+    {
+        return attrName.equals( "cssClass" ) ||
+               attrName.equals( "bodyClass" ) ||
+               attrName.equals( "headherClass" ) ||
+               attrName.equals( "styleClass" );
     }
 
 }
