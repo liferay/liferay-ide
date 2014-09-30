@@ -40,32 +40,35 @@ public class ColumnFigure extends RoundedRectangle
         // setText("50%");
     }
 
-    @Override
-    public void paintFigure( Graphics graphics )
+    private boolean compareFonts( Font font1, Font font2 )
     {
-        super.paintFigure( graphics );
-
-        if( getText() == null )
+        if( font1 == null || font2 == null )
         {
-            return;
+            return false;
         }
 
-        if( !shouldDrawText() )
+        if( ! font1.getDevice().equals( font2.getDevice() ) )
         {
-            return;
+            return false;
         }
 
-        correctFont();
+        FontData[] data1 = font1.getFontData();
+        FontData[] data2 = font2.getFontData();
 
-        if( graphics.getFont() != null )
+        if( !( data1.length == data2.length ) )
         {
-            graphics.setTextAntialias( SWT.ON );
-            graphics.setFont( getFont() );
-            Dimension extent = FigureUtilities.getTextExtents( getText(), graphics.getFont() );
-
-            graphics.drawString( getText(), bounds.x + ( bounds.width / 2 ) - ( extent.width / 2 ), bounds.y +
-                ( bounds.height / 2 ) - ( extent.height / 2 ) );
+            return false;
         }
+
+        for( int i = 0; i < data1.length; i++ )
+        {
+            if( ! data1[i].equals( data2[i] ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     protected void correctFont()
@@ -119,6 +122,39 @@ public class ColumnFigure extends RoundedRectangle
         return text;
     }
 
+    @Override
+    public void paintFigure( Graphics graphics )
+    {
+        super.paintFigure( graphics );
+
+        if( getText() == null )
+        {
+            return;
+        }
+
+        if( !shouldDrawText() )
+        {
+            return;
+        }
+
+        correctFont();
+
+        if( graphics.getFont() != null )
+        {
+            graphics.setTextAntialias( SWT.ON );
+            graphics.setFont( getFont() );
+            Dimension extent = FigureUtilities.getTextExtents( getText(), graphics.getFont() );
+
+            graphics.drawString( getText(), bounds.x + ( bounds.width / 2 ) - ( extent.width / 2 ), bounds.y +
+                ( bounds.height / 2 ) - ( extent.height / 2 ) );
+        }
+    }
+
+    public void setDrawText( boolean drawText )
+    {
+        this.drawText = drawText;
+    }
+
     public void setText( String text )
     {
         this.text = text;
@@ -127,41 +163,5 @@ public class ColumnFigure extends RoundedRectangle
     public boolean shouldDrawText()
     {
         return drawText;
-    }
-
-    public void setDrawText( boolean drawText )
-    {
-        this.drawText = drawText;
-    }
-
-    private boolean compareFonts( Font font1, Font font2 )
-    {
-        if( font1 == null || font2 == null )
-        {
-            return false;
-        }
-
-        if( ! font1.getDevice().equals( font2.getDevice() ) )
-        {
-            return false;
-        }
-
-        FontData[] data1 = font1.getFontData();
-        FontData[] data2 = font2.getFontData();
-
-        if( !( data1.length == data2.length ) )
-        {
-            return false;
-        }
-
-        for( int i = 0; i < data1.length; i++ )
-        {
-            if( ! data1[i].equals( data2[i] ) )
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
