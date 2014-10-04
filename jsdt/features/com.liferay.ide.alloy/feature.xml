@@ -7,7 +7,7 @@
       plugin="com.liferay.ide.alloy.branding">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
+      Liferay IDE AlloyUI includes javascript development tooling for AlloyUI framework including Tern integration, and css webresources feature.
    </description>
 
    <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
