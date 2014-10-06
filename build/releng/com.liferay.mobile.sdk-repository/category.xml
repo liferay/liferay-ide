@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
     <feature id="com.liferay.mobile.sdk" version="0.0.0">
-        <category name="liferay" />
+        <category name="liferay-mobile-sdk" />
     </feature>
 
-    <category-def name="liferay" label="Liferay">
+    <category-def name="liferay-mobile-sdk" label="Liferay Mobile SDK">
         <description>
-            Liferay Portal is an complete enterprise web platform for building intuitive, engaging web experiences
+            The Liferay Mobile SDK is a framework for building native mobile apps that integrate with your different Liferay Portal instances and their portlets.
         </description>
     </category-def>
 </site>
