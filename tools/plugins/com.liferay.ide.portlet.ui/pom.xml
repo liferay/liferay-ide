@@ -28,6 +28,6 @@
     <artifactId>com.liferay.ide.portlet.ui</artifactId>
     <packaging>eclipse-plugin</packaging>
 
-    <name>Liferay IDE JSF UI</name>
+    <name>Liferay IDE Portlet UI</name>
 
 </project>
