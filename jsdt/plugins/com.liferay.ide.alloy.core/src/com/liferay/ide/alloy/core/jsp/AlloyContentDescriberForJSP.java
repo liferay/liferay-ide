@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.alloy.core.jsp;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.IOException;
@@ -22,9 +23,7 @@ import java.io.Reader;
 import java.lang.reflect.Field;
 
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.internal.utils.FileUtil;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
@@ -70,12 +69,14 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber
 
             if( fileStore != null )
             {
-                final IFile file =
-                    ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( FileUtil.toPath( fileStore.toURI() ) );
+                final IFile[] files = CoreUtil.getWorkspaceRoot().findFilesForLocationURI( fileStore.toURI() );
 
-                if( ProjectUtil.isPortletProject( file.getProject() ) )
+                for( IFile file : files )
                 {
-                    return VALID;
+                    if( ProjectUtil.isPortletProject( file.getProject() ) )
+                    {
+                        return VALID;
+                    }
                 }
             }
         }
