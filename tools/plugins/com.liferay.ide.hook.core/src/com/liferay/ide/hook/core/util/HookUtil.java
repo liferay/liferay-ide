@@ -23,12 +23,10 @@ import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.validation.Validator;
 import org.eclipse.wst.validation.internal.ConfigurationManager;
 import org.eclipse.wst.validation.internal.ProjectConfiguration;
@@ -151,20 +149,17 @@ public class HookUtil
         if( element != null && ( !element.getValue().empty() ) )
         {
             // IDE-110 IDE-648
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+            IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( project );
 
             if( element != null && webappRoot != null )
             {
                 org.eclipse.sapphire.modeling.Path customJspDir = element.getValue().content();
 
-                IVirtualFolder customJspFolder = webappRoot.getFolder( customJspDir.toPortableString() );
+                IFolder customJspFolder = webappRoot.getFolder( customJspDir.toPortableString() );
 
-                for( IContainer folder : customJspFolder.getUnderlyingFolders() )
+                if( customJspFolder != null && !customJspFolder.isDerived() )
                 {
-                    if( folder != null && !folder.isDerived() )
-                    {
-                        return (IFolder) folder;
-                    }
+                    return customJspFolder;
                 }
             }
         }
