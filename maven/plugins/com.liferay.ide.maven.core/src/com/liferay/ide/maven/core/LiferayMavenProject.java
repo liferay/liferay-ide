@@ -72,9 +72,11 @@ public class LiferayMavenProject extends BaseLiferayProject
             return adapterType.cast( projectBuilder );
         }
 
-        if( IRemoteServerPublisher.class.equals( adapterType ) && MavenUtil.getProjectFacade( getProject() ) != null )
+        if( IRemoteServerPublisher.class.equals( adapterType ) &&
+            MavenUtil.getProjectFacade( getProject() ) != null )
         {
-            final IRemoteServerPublisher remoteServerPublisher = new MavenProjectRemoteServerPublisher( getProject() );
+            final IRemoteServerPublisher remoteServerPublisher =
+                new MavenProjectRemoteServerPublisher( getProject() );
 
             return adapterType.cast( remoteServerPublisher );
         }
@@ -167,7 +169,8 @@ public class LiferayMavenProject extends BaseLiferayProject
     {
         String retval = defaultValue;
 
-        if( ( "theme.type".equals( key ) || "theme.parent".equals( key ) ) && ProjectUtil.isThemeProject( getProject() ) )
+        if( ( "theme.type".equals( key ) || "theme.parent".equals( key ) ) &&
+            ProjectUtil.isThemeProject( getProject() ) )
         {
             final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
 
@@ -177,11 +180,15 @@ public class LiferayMavenProject extends BaseLiferayProject
 
                 if( "theme.type".equals( key ) )
                 {
-                    retval = MavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE );
+                    retval =
+                        MavenUtil.getLiferayMavenPluginConfig(
+                            mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE );
                 }
                 else
                 {
-                    retval = MavenUtil.getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PARENT_THEME );
+                    retval =
+                        MavenUtil.getLiferayMavenPluginConfig(
+                            mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PARENT_THEME );
                 }
             }
         }
