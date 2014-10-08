@@ -54,48 +54,51 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider
             {
                 final IPath portalDir = project.getAppServerPortalDir();
 
-                final IPath cssPath = portalDir.append( "html/themes/_unstyled/css" );
-
-                if( cssPath.toFile().exists() )
+                if( portalDir != null )
                 {
-                    synchronized( fileCache )
+                    final IPath cssPath = portalDir.append( "html/themes/_unstyled/css" );
+
+                    if( cssPath.toFile().exists() )
                     {
-                        final Collection<File> cachedFiles = fileCache.get( cssPath );
-
-                        if( cachedFiles != null )
+                        synchronized( fileCache )
                         {
-                            retval = cachedFiles.toArray( new File[0] );
-                        }
-                        else
-                        {
-                            final Collection<File> files =
-                                FileUtils.listFiles( cssPath.toFile(), new String[] { "css", "scss" }, true );
+                            final Collection<File> cachedFiles = fileCache.get( cssPath );
 
-                            final Collection<File> cached = new HashSet<File>();
-
-                            for( File file : files )
+                            if( cachedFiles != null )
                             {
-                                if( file.getName().endsWith( "scss" ) )
-                                {
-                                    final File cachedFile =
-                                        new File( file.getParent(), ".sass-cache/" +
-                                            file.getName().replaceAll( "scss$", "css" ) );
+                                retval = cachedFiles.toArray( new File[0] );
+                            }
+                            else
+                            {
+                                final Collection<File> files =
+                                    FileUtils.listFiles( cssPath.toFile(), new String[] { "css", "scss" }, true );
 
-                                    if( cachedFile.exists() )
+                                final Collection<File> cached = new HashSet<File>();
+
+                                for( File file : files )
+                                {
+                                    if( file.getName().endsWith( "scss" ) )
                                     {
-                                        cached.add( file );
+                                        final File cachedFile =
+                                            new File( file.getParent(), ".sass-cache/" +
+                                                file.getName().replaceAll( "scss$", "css" ) );
+
+                                        if( cachedFile.exists() )
+                                        {
+                                            cached.add( file );
+                                        }
                                     }
                                 }
+
+                                files.removeAll( cached );
+
+                                if( files != null )
+                                {
+                                    retval = files.toArray( new File[0] );
+                                }
+
+                                fileCache.put( cssPath, files );
                             }
-
-                            files.removeAll( cached );
-
-                            if( files != null )
-                            {
-                                retval = files.toArray( new File[0] );
-                            }
-
-                            fileCache.put( cssPath, files );
                         }
                     }
                 }

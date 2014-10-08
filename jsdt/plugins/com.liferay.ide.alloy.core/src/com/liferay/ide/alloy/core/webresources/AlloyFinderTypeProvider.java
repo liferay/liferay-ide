@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.alloy.core.jsp;
+package com.liferay.ide.alloy.core.webresources;
 
 import org.eclipse.wst.html.webresources.core.IWebResourcesFinderTypeProvider;
 import org.eclipse.wst.html.webresources.core.WebResourcesFinderType;

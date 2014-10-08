@@ -96,7 +96,7 @@
     <extension
           point="org.eclipse.a.wst.html.webresources.core.webResourcesFinderTypeProviders">
        <provider
-             class="com.liferay.ide.alloy.core.jsp.AlloyFinderTypeProvider">
+             class="com.liferay.ide.alloy.core.webresources.AlloyFinderTypeProvider">
        </provider>
     </extension>
 </plugin>
