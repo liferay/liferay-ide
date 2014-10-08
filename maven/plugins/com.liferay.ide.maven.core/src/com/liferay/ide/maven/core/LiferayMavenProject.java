@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
@@ -197,15 +198,42 @@ public class LiferayMavenProject extends BaseLiferayProject
         {
             try
             {
-                MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
+                final MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
 
                 String liferayVersion =
                     MavenUtil.getLiferayMavenPluginConfig(
                         mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
 
-                retval = MavenUtil.getVersion( liferayVersion );
+                if( liferayVersion == null )
+                {
+                    liferayVersion = mavenProject.getProperties().getProperty( "liferay.version" );
+
+                    if( liferayVersion == null )
+                    {
+                        // look through dependencies for portal-service
+                        final List<Dependency> deps = mavenProject.getDependencies();
+
+                        if( deps != null )
+                        {
+                            for( Dependency dep : deps )
+                            {
+                                if( dep.getArtifactId().startsWith( "portal-" ) &&
+                                    dep.getGroupId().startsWith( "com.liferay" ) )
+                                {
+                                    liferayVersion = dep.getVersion();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if( liferayVersion != null )
+                {
+                    retval = MavenUtil.getVersion( liferayVersion );
+                }
             }
-            catch( CoreException ce )
+            catch( CoreException e )
             {
             }
         }
