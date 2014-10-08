@@ -56,7 +56,6 @@ public class HookUtil
 
         try
         {
-
             final Validator validator = ValManager.getDefault().getValidator( VALIDATOR_ID, project );
 
             final ValidatorMutable validatorTable = new ValidatorMutable( validator );
@@ -111,17 +110,20 @@ public class HookUtil
                 {
                     if( configureRule )
                     {
-                        validatorTable.replaceFilterGroup( excludeGroup, FilterGroup.addRule( excludeGroup, folderRule ) );
+                        validatorTable.replaceFilterGroup(
+                            excludeGroup, FilterGroup.addRule( excludeGroup, folderRule ) );
 
                         hasCustomJSPFolderRule = true;
                     }
                 }
+
                 retval = hasCustomJSPFolderRule;
             }
 
             if( configureRule )
             {
-                final ProjectConfiguration pc = ConfigurationManager.getManager().getProjectConfiguration( project );
+                final ProjectConfiguration pc =
+                    ConfigurationManager.getManager().getProjectConfiguration( project );
                 pc.setDoesProjectOverride( true );
 
                 final ProjectPreferences pp = new ProjectPreferences( project, true, false, null );
@@ -129,7 +131,7 @@ public class HookUtil
                 final ValPrefManagerProject vpm = new ValPrefManagerProject( project );
 
                 final ValidatorMutable[] validatorTables = new ValidatorMutable[] { validatorTable };
-                
+
                 vpm.savePreferences( pp, validatorTables );
             }
         }
@@ -139,7 +141,6 @@ public class HookUtil
         }
 
         return retval;
-
     }
 
     public static IFolder getCustomJspFolder( Hook hook, IProject project )
@@ -190,7 +191,7 @@ public class HookUtil
 
     /**
      * A small utility method used to compute the DTD version
-     * 
+     *
      * @param document
      *            - the document that is loaded by the editor
      */
