@@ -16,6 +16,7 @@
 package com.liferay.ide.portlet.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
@@ -189,11 +190,17 @@ public class LiferayPortletDescriptorHelper extends LiferayDescriptorHelper
             NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-category", entryCategory ); //$NON-NLS-1$
             NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-weight", model.getStringProperty( ENTRY_WEIGHT ) ); //$NON-NLS-1$
 
+            String javaPackage = model.getStringProperty( JAVA_PACKAGE );
+
+            if( ! CoreUtil.isNullOrEmpty( javaPackage ) )
+            {
+                javaPackage = javaPackage + StringPool.PERIOD;
+            }
+
             if( model.getBooleanProperty( CREATE_ENTRY_CLASS ) )
             {
-                NodeUtil.appendChildElement(
-                    newPortletElement, "control-panel-entry-class", model.getStringProperty( JAVA_PACKAGE ) + "." + //$NON-NLS-1$ //$NON-NLS-2$
-                        model.getStringProperty( ENTRY_CLASS_NAME ) );
+                NodeUtil.appendChildElement( newPortletElement, "control-panel-entry-class", javaPackage + //$NON-NLS-1$ //$NON-NLS-2$
+                    model.getStringProperty( ENTRY_CLASS_NAME ) );
             }
         }
 

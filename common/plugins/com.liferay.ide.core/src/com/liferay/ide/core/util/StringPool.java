@@ -29,6 +29,7 @@ public class StringPool
     public static final String EMPTY = BLANK;
     public static final String EQUALS = "="; //$NON-NLS-1$
     public static final String FORWARD_SLASH = "/"; //$NON-NLS-1$
+    public static final String PERIOD = "."; //$NON-NLS-1$
     public static final String SPACE = " "; //$NON-NLS-1$
     public static final String UNDERSCORE = "_"; //$NON-NLS-1$
 }
