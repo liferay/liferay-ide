@@ -27,6 +27,7 @@ import org.eclipse.wst.server.core.model.PublishOperation;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayPublishTask extends PublishTask
@@ -48,8 +49,22 @@ public class LiferayPublishTask extends PublishTask
         for( int i = 0; i < size; i++ )
         {
             IModule[] module = (IModule[]) modules.get( i );
-            Integer in = (Integer) kindList.get( i );
-            tasks.add( new LiferayPublishOperation( tomcatServer, kind, module, in.intValue() ) );
+            if( tomcatServer.getSelectedModules() != null )
+            {
+                for( IModule[] moduleItem : tomcatServer.getSelectedModules() )
+                {
+                    if( moduleItem[0].getId().equals( module[0].getId() ) )
+                    {
+                        Integer in = (Integer) kindList.get( i );
+                        tasks.add( new LiferayPublishOperation( tomcatServer, kind, module, in.intValue() ) );
+                    }
+                }
+            }
+            else
+            {
+                Integer in = (Integer) kindList.get( i );
+                tasks.add( new LiferayPublishOperation( tomcatServer, kind, module, in.intValue() ) );
+            }
         }
 
         return (PublishOperation[]) tasks.toArray( new PublishOperation[tasks.size()] );
