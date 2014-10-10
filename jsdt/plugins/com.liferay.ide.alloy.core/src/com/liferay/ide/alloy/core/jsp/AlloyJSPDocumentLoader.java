@@ -33,7 +33,7 @@ public class AlloyJSPDocumentLoader extends JSPDocumentLoader
     @Override
     public IDocumentPartitioner getDefaultDocumentPartitioner()
     {
-        return new AlloyUIStructuredTextPartitionerForJSP();
+        return new AlloyStructuredTextPartitionerForJSP();
     }
 
     @Override

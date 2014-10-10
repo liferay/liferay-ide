@@ -14,19 +14,79 @@
  *******************************************************************************/
 package com.liferay.ide.alloy.core.jsp;
 
+import java.util.Iterator;
+
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Position;
+import org.eclipse.wst.jsdt.web.core.internal.Logger;
 import org.eclipse.wst.jsdt.web.core.javascript.JsDataTypes;
 import org.eclipse.wst.jsdt.web.core.javascript.JsTranslator;
 import org.eclipse.wst.jsdt.web.core.javascript.NodeHelper;
+import org.eclipse.wst.jsdt.web.core.javascript.Util;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocument;
+import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
+import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegionList;
 import org.eclipse.wst.xml.core.internal.regions.DOMRegionContext;
 
 
 /**
  * @author Gregory Amerson
+ *
+ * Most of this class is copied from JsTranslator
  */
 @SuppressWarnings( "restriction" )
 public class AlloyJsTranslator extends JsTranslator
 {
+    private static final String EVENT_HANDLER_PRE  = "(function(){";
+    private static final int EVENT_HANDLER_PRE_LENGTH = EVENT_HANDLER_PRE.length();
+    private static final String EVENT_HANDLER_POST = "})();";
+    private static final int EVENT_HANDLER_POST_LENGTH = EVENT_HANDLER_POST.length();
+
+    public static final String[] ALLOYATTREVENTS =
+    {
+        "onActiveStateChange",
+        "onBoundingBoxChange",
+        "onChange",
+        "onClassNamesChange",
+        "onClick",
+        "onContentBoxChange",
+        "onContentUpdate",
+        "onCssClassChange",
+        "onDefaultStateChange",
+        "onDepthChange",
+        "onDestroy",
+        "onDestroyedChange",
+        "onDisabledChange",
+        "onFocusedChange",
+        "onHandlerChange",
+        "onHeightChange",
+        "onHideClassChange",
+        "onHoverStateChange",
+        "onIconChange",
+        "onIconNodeChange",
+        "onIdChange",
+        "onIndexChange",
+        "onInit",
+        "onInitializedChange",
+        "onLabelChange",
+        "onLabelNodeChange",
+        "onParentChange",
+        "onRender",
+        "onRenderChange",
+        "onRenderedChange",
+        "onRootChange",
+        "onSelectedChange",
+        "onSrcNodeChange",
+        "onStringsChange",
+        "onSubmit",
+        "onTabIndexChange",
+        "onTitleChange",
+        "onTypeChange",
+        "onUseARIAChange",
+        "onVisibleChange",
+        "onWidthChange",
+    };
 
     public AlloyJsTranslator( IStructuredDocument doc, String baseLocation, boolean listen )
     {
@@ -71,7 +131,7 @@ public class AlloyJsTranslator extends JsTranslator
                                 translateJSNode(getCurrentNode().getNext());
                             }
                         } // End search for <script> sections
-                    } else if (nh.containsAttribute(JsDataTypes.HTMLATREVENTS)) {
+                    } else if (nh.containsAttribute(JsDataTypes.HTMLATREVENTS) || nh.containsAttribute(ALLOYATTREVENTS)) {
                         /* Check for embedded JS events in any tags */
                         translateInlineJSNode(getCurrentNode());
                     } else if (nh.nameEquals("META") && nh.attrEquals("http-equiv", "Content-Script-Type") && nh.containsAttribute(new String[] { "content" })) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -88,4 +148,91 @@ public class AlloyJsTranslator extends JsTranslator
         finishedTranslation();
         }
     }
+
+    /*
+     * copied from org.eclipse.wst.jsdt.web.core.javascript.JsTranslator.translateInLineJSNode()
+     * modified hardcoded checks for htmlish scriptish attributes
+     */
+    public void translateInlineJSNode(IStructuredDocumentRegion container) {
+        // System.out
+        // .println("JSPTranslator.translateInlineJSNode Entered
+        // w/ScriptOffset:"
+        // + scriptOffset);
+
+            //NodeHelper nh = new NodeHelper(container);
+            // System.out.println("inline js node looking at:\n" + nh);
+            /* start a function header.. will amend later */
+            ITextRegionList t = container.getRegions();
+            ITextRegion r;
+            Iterator regionIterator = t.iterator();
+            while (regionIterator.hasNext() && !isCanceled() ) {
+                r = (ITextRegion) regionIterator.next();
+                if (r.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_NAME) {
+                    int start = r.getStart();
+                    int offset = r.getTextEnd();
+                    String tagAttrname = container.getText(r);
+                    /*
+                     * Attribute values aren't case sensative, also make sure next
+                     * region is attrib value
+                     */
+                    if (NodeHelper.isInArray(JsDataTypes.HTMLATREVENTS, tagAttrname) || NodeHelper.isInArray( ALLOYATTREVENTS, tagAttrname )) {
+                        if (regionIterator.hasNext()) {
+                            regionIterator.next();
+                        }
+                        if (regionIterator.hasNext()) {
+                            r = ((ITextRegion) regionIterator.next());
+                        }
+                        if (r.getType() == DOMRegionContext.XML_TAG_ATTRIBUTE_VALUE) {
+                            int valStartOffset = container.getStartOffset(r);
+                            // int valEndOffset = r.getTextEnd();
+                            String rawText = container.getText(r);
+                            if (rawText == null || rawText.length() == 0) {
+                                continue;
+                            }
+                            /* Strip quotes */
+                            switch (rawText.charAt(0)) {
+                                case '\'':
+                                case '"':
+                                    rawText = rawText.substring(1);
+                                    valStartOffset++;
+                            }
+                            if (rawText == null || rawText.length() == 0) {
+                                continue;
+                            }
+                            switch (rawText.charAt(rawText.length() - 1)) {
+                                case '\'':
+                                case '"':
+                                    rawText = rawText.substring(0, rawText.length() - 1);
+                            }
+                            // Position inScript = new Position(scriptOffset,
+                            // rawText.length());
+                            /* Quoted text starts +1 and ends -1 char */
+                            Position inHtml = new Position(valStartOffset, rawText.length());
+                            /* need to pad the script text with spaces */
+                            char[] spaces = Util.getPad(Math.max(0, valStartOffset - scriptOffset - EVENT_HANDLER_PRE_LENGTH));
+                            for (int i = 0; i < spaces.length; i++) {
+                                try {
+                                    char c = fStructuredDocument.getChar(scriptOffset + i);
+                                    if (c == '\n' || c == '\r' || c == '\t')
+                                        spaces[i] = c;
+                                }
+                                catch (BadLocationException e) {
+                                    Logger.logException(e);
+                                }
+                            }
+                            fScriptText.append(spaces);
+                            fScriptText.append(EVENT_HANDLER_PRE);
+                            appendAndTrack(rawText, valStartOffset);
+                            if(ADD_SEMICOLON_AT_INLINE) fScriptText.append(";"); //$NON-NLS-1$
+                            if(r.getLength() > rawText.length()) {
+                                fScriptText.append(EVENT_HANDLER_POST);
+                                spaces = Util.getPad(Math.max(0, r.getLength() - rawText.length() - EVENT_HANDLER_POST_LENGTH));
+                                fScriptText.append(spaces);
+                            }
+                            scriptOffset = container.getEndOffset(r);
+                        }
+                    }
+                }
+            }
+        }
 }
