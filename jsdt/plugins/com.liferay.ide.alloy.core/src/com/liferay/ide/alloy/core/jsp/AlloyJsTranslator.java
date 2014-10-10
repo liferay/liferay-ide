@@ -46,8 +46,10 @@ public class AlloyJsTranslator extends JsTranslator
     public static final String[] ALLOYATTREVENTS =
     {
         "onActiveStateChange",
+        "onBlurMethod",
         "onBoundingBoxChange",
         "onChange",
+        "onChangeMethod",
         "onClassNamesChange",
         "onClick",
         "onContentBoxChange",
@@ -59,6 +61,7 @@ public class AlloyJsTranslator extends JsTranslator
         "onDestroyedChange",
         "onDisabledChange",
         "onFocusedChange",
+        "onFocusMethod",
         "onHandlerChange",
         "onHeightChange",
         "onHideClassChange",
@@ -71,6 +74,7 @@ public class AlloyJsTranslator extends JsTranslator
         "onInitializedChange",
         "onLabelChange",
         "onLabelNodeChange",
+        "onlyActions",
         "onParentChange",
         "onRender",
         "onRenderChange",
