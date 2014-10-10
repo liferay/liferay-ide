@@ -31,8 +31,8 @@
         <tycho-version>0.20.0</tycho-version>
         <tycho-extras-version>0.20.0</tycho-extras-version>
         <eclipse-site>http://download.eclipse.org/releases/luna/</eclipse-site>
-<!--         <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-project-update-site> -->
-<!--         <wtp-site>http://download.eclipse.org/webtools/repository/luna/</wtp-site> -->
+        <!-- <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-project-update-site> -->
+        <!-- <wtp-site>http://download.eclipse.org/webtools/repository/luna/</wtp-site> -->
         <liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/releng/com.liferay.ide-repository/target/updatesite/</liferay-ide-site>
     </properties>
 
@@ -42,16 +42,6 @@
             <layout>p2</layout>
             <url>${eclipse-site}</url>
         </repository>
-<!--         <repository> -->
-<!--             <id>eclipse-project</id> -->
-<!--             <layout>p2</layout> -->
-<!--             <url>${eclipse-project-update-site}</url> -->
-<!--         </repository> -->
-<!--         <repository> -->
-<!--             <id>wtp</id> -->
-<!--             <layout>p2</layout> -->
-<!--             <url>${wtp-site}</url> -->
-<!--         </repository> -->
         <repository>
             <id>liferay-ide</id>
             <layout>p2</layout>
@@ -107,16 +97,16 @@
                     <configuration>
                         <dependency-resolution>
                             <extraRequirements>
-	                            <requirement>
-	                                <type>eclipse-feature</type>
-	                                <id>com.liferay.ide.eclipse.tools</id>
-	                                <versionRange>0.0.0</versionRange>
-	                            </requirement>
-	                            <requirement>
-	                                <type>p2-installable-unit</type>
-	                                <id>org.eclipse.jdt.feature.group</id>
-	                                <versionRange>0.0.0</versionRange>
-	                            </requirement>
+                                <requirement>
+                                    <type>eclipse-feature</type>
+                                    <id>com.liferay.ide.eclipse.tools</id>
+                                    <versionRange>0.0.0</versionRange>
+                                </requirement>
+                                <requirement>
+                                    <type>p2-installable-unit</type>
+                                    <id>org.eclipse.jdt.feature.group</id>
+                                    <versionRange>0.0.0</versionRange>
+                                </requirement>
                             </extraRequirements>
                         </dependency-resolution>
                         <resolver>p2</resolver>
@@ -198,11 +188,11 @@
                         <includes>
                             <include>**/*Test*.class</include>
                         </includes>
-	                    <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
-	                    <systemProperties>
-	                        <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
+                        <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+                        <systemProperties>
+                            <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                             <skipBundleTests>${skipBundleTests}</skipBundleTests>
-	                    </systemProperties>
+                        </systemProperties>
                     </configuration>
                 </plugin>
             </plugins>

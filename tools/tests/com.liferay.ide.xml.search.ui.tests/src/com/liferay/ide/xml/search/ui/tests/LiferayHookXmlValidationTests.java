@@ -163,7 +163,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
      * Only test in Eclipse workbench, cannot be tested on headless thread
      */
     @Test
-    public void testPortalPropertiesELementValidation() throws Exception
+    public void testPortalPropertiesElementValidation() throws Exception
     {
         final IProject project = getProject( "Hook-Properties-Validation-Test-hook" );
 
@@ -197,7 +197,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
             LiferayHookDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         // portal properties file exists
         elementValue = "PortalPropertiesExist.properties";

@@ -105,7 +105,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         // resource-bundle doesn't end with ".properties"
         elementValue = "ResourceBundleNotEndWithProperties";
@@ -121,7 +121,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         // resource-bundle values doesn't contain "/"
         elementValue = "ResourceBundleWithoutSlash";
@@ -137,7 +137,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             PortletDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         // resource bundle file exists
         elementValue = "ResourceBundleExist";
@@ -153,7 +153,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             PortletDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         // resource bundle file exists
         elementValue = "ResourceBundleExist";
@@ -180,20 +180,20 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         setPropertiesValue( descriptorFile, portletClass, elementValue );
         String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Empty";
         setPropertiesValue( descriptorFile, portletClass, elementValue );
         markerMessage = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } );
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, false ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, false ) );
 
         elementValue = "com.liferay.ide.tests.GenericPortletImpl";
         setPropertiesValue( descriptorFile, portletClass, elementValue );
         waitForBuildAndValidation( project );
-        assertEquals( true, checkNoMarker( descriptorFile, markerType ) ); 
+        assertEquals( true, checkNoMarker( descriptorFile, markerType ) );
 
-        // *** Element <listener-class> *** 
+        // *** Element <listener-class> ***
 
         final String listenerClass = "listener-class";
 
@@ -201,18 +201,18 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         setPropertiesValue( descriptorFile, listenerClass, elementValue );
         markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Empty";
         setPropertiesValue( descriptorFile, listenerClass, elementValue );
         markerMessage = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } );
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, false ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, false ) );
 
         elementValue = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
         setPropertiesValue( descriptorFile, listenerClass, elementValue );
         waitForBuildAndValidation( project );
-        assertEquals( true, checkNoMarker( descriptorFile, markerType ) ); 
+        assertEquals( true, checkNoMarker( descriptorFile, markerType ) );
 
         // *** Element <filter-class> ***
 
@@ -222,20 +222,20 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         setPropertiesValue( descriptorFile, filterClass, elementValue );
         markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Empty";
         setPropertiesValue( descriptorFile, filterClass, elementValue );
         markerMessage = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } );
 
         waitForBuildAndValidation( project );
-        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, false ) ); 
+        assertEquals( true, checkMarker( descriptorFile, markerType, markerMessage, false ) );
 
         elementValue = "com.liferay.ide.tests.ResourceFilterImpl";
         setPropertiesValue( descriptorFile, filterClass, elementValue );
 
         waitForBuildAndValidation( project );
-        assertEquals( true, checkNoMarker( descriptorFile, markerType ) ); 
+        assertEquals( true, checkNoMarker( descriptorFile, markerType ) );
     }
 
 }

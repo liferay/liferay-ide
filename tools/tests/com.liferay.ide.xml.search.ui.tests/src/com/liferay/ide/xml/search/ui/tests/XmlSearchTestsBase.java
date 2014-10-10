@@ -59,12 +59,12 @@ import org.junit.Before;
 
 
 /**
- * The minimal collection generated from: 
+ * The minimal collection generated from:
  * {@link XmlBaseTestsBase}, {@link ProjectCoreBase}, {@link ServerCoreBase}, and {@link BaseTests}
  * to remove dependencies on other test plugins.
- * 
+ *
  * @author Kuo Zhang
- * 
+ *
  */
 @SuppressWarnings( "restriction" )
 public class XmlSearchTestsBase
