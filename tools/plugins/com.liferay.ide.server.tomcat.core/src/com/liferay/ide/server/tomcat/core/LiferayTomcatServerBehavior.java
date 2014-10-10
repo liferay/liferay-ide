@@ -234,7 +234,9 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
             if( getServer().getServerState() != IServer.STATE_STOPPED )
             {
                 if( deltaKind == ServerBehaviourDelegate.ADDED || deltaKind == ServerBehaviourDelegate.REMOVED )
+                {
                     setServerRestartState( true );
+                }
             }
 
             setModulePublishState( moduleTree, IServer.PUBLISH_STATE_NONE );

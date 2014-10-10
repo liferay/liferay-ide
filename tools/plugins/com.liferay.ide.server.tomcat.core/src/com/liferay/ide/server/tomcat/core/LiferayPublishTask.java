@@ -29,11 +29,10 @@ import org.eclipse.wst.server.core.model.PublishOperation;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
+@SuppressWarnings( { "rawtypes", "restriction", "unchecked" } )
 public class LiferayPublishTask extends PublishTask
 {
 
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
     public PublishOperation[] getTasks( IServer server, int kind, List modules, List kindList )
     {
         if( modules == null )
@@ -41,32 +40,34 @@ public class LiferayPublishTask extends PublishTask
             return null;
         }
 
-        LiferayTomcatServerBehavior tomcatServer =
+        LiferayTomcatServerBehavior liferayServer =
             (LiferayTomcatServerBehavior) server.loadAdapter( LiferayTomcatServerBehavior.class, null );
 
-        List tasks = new ArrayList();
-        int size = modules.size();
+        final List tasks = new ArrayList();
+        final int size = modules.size();
+
         for( int i = 0; i < size; i++ )
         {
-            IModule[] module = (IModule[]) modules.get( i );
-            if( tomcatServer.getSelectedModules() != null )
+            final IModule[] module = (IModule[]) modules.get( i );
+
+            if( liferayServer.getSelectedModules() != null )
             {
-                for( IModule[] moduleItem : tomcatServer.getSelectedModules() )
+                for( IModule[] moduleItem : liferayServer.getSelectedModules() )
                 {
                     if( moduleItem[0].getId().equals( module[0].getId() ) )
                     {
-                        Integer in = (Integer) kindList.get( i );
-                        tasks.add( new LiferayPublishOperation( tomcatServer, kind, module, in.intValue() ) );
+                        int in = (Integer) kindList.get( i );
+                        tasks.add( new LiferayPublishOperation( liferayServer, kind, module, in ) );
                     }
                 }
             }
             else
             {
-                Integer in = (Integer) kindList.get( i );
-                tasks.add( new LiferayPublishOperation( tomcatServer, kind, module, in.intValue() ) );
+                int in = (Integer) kindList.get( i );
+                tasks.add( new LiferayPublishOperation( liferayServer, kind, module, in ) );
             }
         }
 
-        return (PublishOperation[]) tasks.toArray( new PublishOperation[tasks.size()] );
+        return (PublishOperation[]) tasks.toArray( new PublishOperation[0] );
     }
 }
