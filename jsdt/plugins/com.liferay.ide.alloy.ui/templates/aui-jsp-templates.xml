@@ -65,7 +65,10 @@ ${cursor}
 
 <template name="aui-script" description="An aui:script tag with all of the most commonly used attributes"
     id="com.liferay.ide.alloy.ui.templates.aui-script" context="jsp_all" enabled="true" autoinsert="true"
->&lt;aui:script use="${use}" /&gt;</template>
+>&lt;aui:script use="${use}" &gt;
+${cursor}
+&lt;/aui:script&gt;
+</template>
 
 <template name="aui-select" description="An aui:select tag with all of the most commonly used attributes"
     id="com.liferay.ide.alloy.ui.templates.aui-select" context="jsp_all" enabled="true" autoinsert="true"
