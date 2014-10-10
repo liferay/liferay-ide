@@ -221,6 +221,12 @@ public class CoreUtil
         return false;
     }
 
+    public static void createEmptyFile( IFile newFile ) throws CoreException
+    {
+        ByteArrayInputStream fis = new ByteArrayInputStream( new byte[0] );
+        newFile.create( fis, true, null );
+    }
+    
     public static IStatus createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, LiferayCore.PLUGIN_ID, msg );

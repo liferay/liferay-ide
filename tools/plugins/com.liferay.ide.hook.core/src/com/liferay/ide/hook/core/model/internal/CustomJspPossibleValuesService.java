@@ -18,8 +18,6 @@ package com.liferay.ide.hook.core.model.internal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.hook.core.model.Hook;
-import com.liferay.ide.hook.core.util.HookUtil;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -28,7 +26,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.PossibleValuesService;
@@ -38,6 +35,7 @@ import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class CustomJspPossibleValuesService extends PossibleValuesService
 {
@@ -121,24 +119,7 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
     @Override
     public Status problem( Value<?> value )
     {
-        final IFolder customJspFolder = HookUtil.getCustomJspFolder( hook(), project() );
-
-        if( customJspFolder != null )
-        {
-            final IFile invalidFile = customJspFolder.getFile( value.text() );
-
-            if( invalidFile.exists() )
-            {
-                return Status.createOkStatus();
-            }
-        }
-
-        return Status.createErrorStatus( "invalid value" );
-    }
-
-    private Hook hook()
-    {
-        return this.context().find( Hook.class );
+        return Status.createOkStatus();
     }
 
     protected IProject project()

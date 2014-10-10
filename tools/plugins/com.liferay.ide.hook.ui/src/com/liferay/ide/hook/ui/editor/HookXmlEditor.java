@@ -175,7 +175,15 @@ public class HookXmlEditor extends LazyLoadingEditorForXml
                             try
                             {
                                 CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
-                                customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
+
+                                if( portalJsp.toFile().exists() )
+                                {
+                                    customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
+                                }
+                                else
+                                {
+                                    CoreUtil.createEmptyFile( customJspFile );
+                                }
                             }
                             catch( Exception e )
                             {
