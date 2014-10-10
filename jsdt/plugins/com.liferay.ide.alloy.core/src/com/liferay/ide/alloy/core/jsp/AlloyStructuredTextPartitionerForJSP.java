@@ -47,7 +47,8 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
     }
 
     @Override
-    public String getPartitionTypeBetween( IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
+    public String getPartitionTypeBetween(
+        IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
     {
         String retval = super.getPartitionTypeBetween( previousNode, nextNode );
 
@@ -59,10 +60,13 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
         return retval;
     }
 
-    private boolean isAUIEventHandlerAttrValue( IStructuredDocumentRegion region, ITextRegion childRegion, int offset )
+    private boolean isAUIEventHandlerAttrValue(
+        IStructuredDocumentRegion region, ITextRegion childRegion, int offset )
     {
-        if( "XML_TAG_NAME".equals( region.getType() ) && "XML_TAG_ATTRIBUTE_VALUE".equals( childRegion.getType() )
-                        && region.getText().toLowerCase().startsWith( "<aui:" ) )
+        if( region != null && childRegion != null &&
+            "XML_TAG_NAME".equals( region.getType() ) &&
+            "XML_TAG_ATTRIBUTE_VALUE".equals( childRegion.getType() ) &&
+            region.getText().toLowerCase().startsWith( "<aui:" ) )
         {
             // we have found an attribute value in a AUI tag but now we need to check if the attribteName is a
             // javascript type attribute
@@ -92,15 +96,16 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
         return false;
     }
 
-    private boolean isAUIScriptBetween( IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
+    private boolean isAUIScriptBetween(
+        IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
     {
         return previousNode.toString().contains( "aui:script" );
     }
 
     private boolean isAUIScriptRegion( IStructuredDocumentRegion sdRegion )
     {
-        // TODO can this handle content with other regions like <aui:script> function foo() {}; <portletTag/> function
-        // bar(){}</aui:script>
+        // TODO can this handle content with other regions like
+        // <aui:script> function foo() {}; <portletTag/> function bar(){}</aui:script>
         return sdRegion != null && sdRegion.getPrevious() != null &&
             sdRegion.getPrevious().toString().contains( "aui:script" );
     }
