@@ -25,63 +25,16 @@ import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.Test;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 
 /**
  * This test cannot run in headless mode, run it as a product "org.eclipse.platform.ide"
- * 
+ *
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
 public class PortletXmlValidationTests extends XmlSearchTestsBase
 {
-    private final String bundleId = "com.liferay.ide.xml.search.ui.tests";
-
-    private IProject getProject( String projectName ) throws Exception
-    {
-        IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
-
-        if( project != null && project.exists() )
-        {
-            return project;
-        }
-
-        return importProject( "portlets", bundleId, projectName );
-    }
-
-    private void setPropertiesValue( IFile descriptorFile, String elementName, String value ) throws Exception
-    {
-        final IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( descriptorFile );
-        final IDOMDocument document = domModel.getDocument();
-        final NodeList elements = document.getElementsByTagName( elementName );
-
-        assertEquals( true, elements.getLength() > 0 );
-
-        final Element element = (Element) elements.item( 0 );
-
-        final NodeList childNodes = element.getChildNodes();
-
-        for( int i = 0; i < childNodes.getLength(); i++ )
-        {
-            element.removeChild( childNodes.item( i ) );
-        }
-
-        element.appendChild( document.createTextNode( value ) );
-
-        domModel.save();
-        domModel.releaseFromEdit();
-
-        descriptorFile.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
-    }
-
     /**
      * Only test in Eclipse workbench, cannot be tested on headless thread
      */
@@ -90,7 +43,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
     {
         if( shouldSkipBundleTests() ) return;
 
-        final IProject project = getProject( "Portlet-Xml-Validation-Test-portlet" );
+        final IProject project = getProject( "portlets", "Portlet-Xml-Validation-Test-portlet" );
         final IFile descriptorFile = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
         final String markerType = PortletDescriptorValidator.MARKER_TYPE;
 
@@ -168,7 +121,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
     {
         if( shouldSkipBundleTests() ) return;
 
-        final IProject project = getProject( "Portlet-Xml-Validation-Test-portlet" );
+        final IProject project = getProject( "portlets", "Portlet-Xml-Validation-Test-portlet" );
         final IFile descriptorFile = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
         final String markerType = PortletDescriptorValidator.MARKER_TYPE;
 

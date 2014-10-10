@@ -54,8 +54,13 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.Before;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 
 /**
@@ -76,6 +81,7 @@ public class XmlSearchTestsBase
     private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
 
     protected static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of type \"{0}\" incorrect";
+    private final String bundleId = "com.liferay.ide.xml.search.ui.tests";
 
     protected boolean checkNoMarker( IFile descriptorFile, String markerType ) throws Exception
     {
@@ -416,6 +422,43 @@ public class XmlSearchTestsBase
         waitForBuildAndValidation();
         project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
         waitForBuildAndValidation();
+    }
+
+    protected IProject getProject( String path, String projectName ) throws Exception
+    {
+        IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
+
+        if( project != null && project.exists() )
+        {
+            return project;
+        }
+
+        return importProject( path, bundleId, projectName );
+    }
+
+    protected void setPropertiesValue( IFile descriptorFile, String elementName, String value ) throws Exception
+    {
+        final IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( descriptorFile );
+        final IDOMDocument document = domModel.getDocument();
+        final NodeList elements = document.getElementsByTagName( elementName );
+
+        assertEquals( true, elements.getLength() > 0 );
+
+        final Element element = (Element) elements.item( 0 );
+
+        final NodeList childNodes = element.getChildNodes();
+
+        for( int i = 0; i < childNodes.getLength(); i++ )
+        {
+            element.removeChild( childNodes.item( i ) );
+        }
+
+        element.appendChild( document.createTextNode( value ) );
+
+        domModel.save();
+        domModel.releaseFromEdit();
+
+        descriptorFile.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }
 
 }
