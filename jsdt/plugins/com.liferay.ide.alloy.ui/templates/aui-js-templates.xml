@@ -83,6 +83,25 @@
   }
 );
   </template>
+  <template name="aui-component" description="Provides a mechanism for creating new AUI components" id="com.liferay.ide.alloy.ui.templates.component" context="javaScript" enabled="true" autoinsert="true">
+  AUI().add('${componentName}', function(A){
+    var ${componentVar} = A.Component.create({
+        AUGMENTS: [Liferay.PortletBase],
+        ATTRS: {},
+        EXTENDS: A.Base,
+        NAME: '${componentVar}',
+        prototype: {
+            initializer: function(config) {
+                var instance = this;
+            }
+        }
+    });
+
+    Liferay.Portlet.${componentVar} = ${componentVar};
+},
+'',
+{ requires: ['liferay-portlet-base'] });
+  </template>
   <template name="aui-datatable" description="Provides the user with a method of organizing, arranging, and editing tables of information." id="com.liferay.ide.alloy.ui.templates.datatable" context="javaScript" enabled="true" autoinsert="true">
     AUI().use(
   'aui-datatable',
