@@ -26,6 +26,8 @@ import org.osgi.framework.BundleContext;
 public class HookCore extends Plugin
 {
 
+    public final static String VALIDATOR_ID = "org.eclipse.jst.jsp.core.JSPBatchValidator";
+
     // The shared instance
     private static HookCore plugin;
 

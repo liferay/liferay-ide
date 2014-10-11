@@ -47,8 +47,6 @@ import org.w3c.dom.DocumentType;
 public class HookUtil
 {
 
-    private final static String VALIDATOR_ID = "org.eclipse.jst.jsp.core.JSPBatchValidator";
-
     public static boolean configureJSPSyntaxValidationExclude(
         IProject project, IFolder customFolder, boolean configureRule )
     {
@@ -56,7 +54,7 @@ public class HookUtil
 
         try
         {
-            final Validator validator = ValManager.getDefault().getValidator( VALIDATOR_ID, project );
+            final Validator validator = ValManager.getDefault().getValidator( HookCore.VALIDATOR_ID, project );
 
             final ValidatorMutable validatorTable = new ValidatorMutable( validator );
 

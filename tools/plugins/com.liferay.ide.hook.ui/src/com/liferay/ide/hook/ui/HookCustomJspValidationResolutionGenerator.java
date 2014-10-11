@@ -42,18 +42,23 @@ public class HookCustomJspValidationResolutionGenerator implements IMarkerResolu
         {
             if( marker.getAttribute( IMarker.SEVERITY ).equals( IMarker.SEVERITY_ERROR ) )
             {
-                final IProject project = marker.getResource().getProject();
+                final String validationId = (String) marker.getAttribute( "ValidationId" );
 
-                final IPath customJspPath = HookUtil.getCustomJspPath( project );
-
-                if( customJspPath != null )
+                if( validationId.equalsIgnoreCase( HookCore.VALIDATOR_ID ) )
                 {
-                    final IPath jspPath = marker.getResource().getProjectRelativePath();
-                    final IPath relativeCustomJspPath = customJspPath.makeRelativeTo( project.getFullPath() );
+                    final IProject project = marker.getResource().getProject();
 
-                    if( relativeCustomJspPath.isPrefixOf( jspPath ) )
+                    final IPath customJspPath = HookUtil.getCustomJspPath( project );
+
+                    if( customJspPath != null )
                     {
-                        hasResolution = true;
+                        final IPath jspPath = marker.getResource().getProjectRelativePath();
+                        final IPath relativeCustomJspPath = customJspPath.makeRelativeTo( project.getFullPath() );
+
+                        if( relativeCustomJspPath.isPrefixOf( jspPath ) )
+                        {
+                            hasResolution = true;
+                        }
                     }
                 }
             }
