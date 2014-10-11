@@ -62,7 +62,7 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
 
     protected int lastPageIndex = -1;
 
-    protected PluginPackageModel model;;
+    protected PluginPackageModel model;
 
     public void contextRemoved( InputContext context )
     {
@@ -259,7 +259,9 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
             {
                 ignoreModelChanges = true;
 
-                ( (PluginPackageModel) getModel() ).load( new ByteArrayInputStream( props.getBytes() ), false );
+                if (getLastDirtyState()) {
+                    ( (PluginPackageModel) getModel() ).load( new ByteArrayInputStream( props.getBytes() ), false );
+                }
 
                 ignoreModelChanges = false;
             }

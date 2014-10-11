@@ -61,6 +61,16 @@ public interface PluginPackageProperties extends Element
 
     void setShortDescription( String value );
 
+    // *** ChangeLog ***
+
+    @Label( standard = "Long &Description" )
+    @PropertyBinding( key = "long-description" )
+    ValueProperty PROP_LONG_DESCRIPTION = new ValueProperty( TYPE, "LongDescription" ); //$NON-NLS-1$
+
+    Value<String> getLongDescription();
+
+    void setLongDescription( String value );
+
     @Type( base = Boolean.class )
     @Label( standard = "Speed &Filters" )
     @PropertyBinding( key = "speed-filters-enabled" )

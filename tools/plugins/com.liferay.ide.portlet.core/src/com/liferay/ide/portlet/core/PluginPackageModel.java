@@ -152,6 +152,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
         return getStringProperty( PROPERTY_LICENSES );
     }
 
+    public String getLongDescription()
+    {
+        return getStringProperty( PROPERTY_LONG_DESCRIPTION );
+    }
+
     public String getModuleGroupId()
     {
         return getStringProperty( PROPERTY_MODULE_GROUP_ID );
@@ -340,6 +345,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
     public void setLicenses( String licenses )
     {
         setProperty( PROPERTY_LICENSES, licenses );
+    }
+
+    public void setLongDescription( String desc )
+    {
+        setProperty( PROPERTY_LONG_DESCRIPTION, desc );
     }
 
     public void setModuleGroupId( String moduleGroupId )

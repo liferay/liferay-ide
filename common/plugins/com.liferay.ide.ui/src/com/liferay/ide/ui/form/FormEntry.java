@@ -67,16 +67,16 @@ public class FormEntry {
 	 * @param browseText
 	 * @param linkLabel
 	 */
-	public FormEntry(Composite parent, FormToolkit toolkit, String labelText, String browseText, boolean linkLabel) {
-		this(parent, toolkit, labelText, browseText, linkLabel, 0);
+	public FormEntry(Composite parent, FormToolkit toolkit, String labelText, String browseText, int style, boolean linkLabel) {
+		this(parent, toolkit, labelText, browseText, style, linkLabel, 0);
 	}
 
-	public FormEntry(Composite parent, FormToolkit toolkit, String labelText, String browseText, boolean linkLabel, int indent) {
-		createControl(parent, toolkit, labelText, SWT.SINGLE, browseText, linkLabel, indent, 0);
+	public FormEntry(Composite parent, FormToolkit toolkit, String labelText, String browseText, int style, boolean linkLabel, int indent) {
+		createControl(parent, toolkit, labelText, style, browseText, linkLabel, indent, 0);
 	}
 
-	public FormEntry(Composite parent, FormToolkit toolkit, String labelText, int indent, int tcolspan) {
-		createControl(parent, toolkit, labelText, SWT.SINGLE, null, false, indent, tcolspan);
+	public FormEntry(Composite parent, FormToolkit toolkit, String labelText, int style, int indent, int tcolspan) {
+		createControl(parent, toolkit, labelText, style, null, false, indent, tcolspan);
 	}
 
 	/**
@@ -199,7 +199,9 @@ public class FormEntry {
 	private void addListeners() {
 		fText.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				keyReleaseOccured(e);
+				if (e.keyCode != SWT.CR) {
+					keyReleaseOccured(e);
+				}
 			}
 		});
 		fText.addModifyListener(new ModifyListener() {
