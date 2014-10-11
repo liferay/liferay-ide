@@ -26,6 +26,7 @@ import com.liferay.ide.server.util.LiferayPublishHelper;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.server.util.SocketUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
@@ -64,6 +66,9 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
 {
     protected ILaunch currentLaunch;
+
+    private List<IModule[]> selectedModules;
+
     protected IServerManagerConnection remoteConnection;
     protected Job remoteServerUpdateJob;
 
@@ -133,6 +138,15 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     }
 
     @Override
+    protected MultiStatus executePublishers(
+        int kind, List<IModule[]> modules, List<Integer> deltaKinds, IProgressMonitor monitor, IAdaptable info )
+        throws CoreException
+    {
+        return super.executePublishers(
+            kind, ( selectedModules == null ) ? modules : selectedModules, deltaKinds, monitor, info );
+    }
+
+    @Override
     public void dispose()
     {
         super.dispose();
@@ -193,14 +207,18 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         return IServer.STATE_UNKNOWN;
     }
 
+    public List<IModule[]> getSelectedModules()
+    {
+        return selectedModules;
+    }
+
+    @SuppressWarnings( "rawtypes" )
     public void redeployModule( IModule[] module )
     {
         setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
 
         IAdaptable info = new IAdaptable()
         {
-
-            @SuppressWarnings( "rawtypes" )
             public Object getAdapter( Class adapter )
             {
                 if( String.class.equals( adapter ) )
@@ -209,7 +227,22 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
             }
         };
 
-        getServer().publish( IServer.PUBLISH_FULL, null, info, null );
+        final List<IModule[]> modules = new ArrayList<IModule[]>();
+        modules.add( module );
+
+        try
+        {
+            selectedModules = modules;
+            publish( IServer.PUBLISH_FULL, modules, null, info );
+        }
+        catch( CoreException e )
+        {
+            LiferayServerCore.logError( "redploying module " + module[0].getName() + " failed.", e );
+        }
+        finally
+        {
+            selectedModules = null;
+        }
     }
 
     public void serverAdded( IServer server )
@@ -728,6 +761,16 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         return IServer.PUBLISH_STATE_NONE;
     }
+    
+    
+    @SuppressWarnings( "rawtypes" )
+    @Override
+    protected void publishModules( int kind, List modules, List deltaKind2, MultiStatus multi, IProgressMonitor monitor )
+    {
+        super.publishModules( kind, ( selectedModules == null ) ? modules : selectedModules, deltaKind2, multi, monitor );
+    }
+
+
 
     @Override
     protected void publishStart( IProgressMonitor monitor ) throws CoreException
