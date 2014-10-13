@@ -16,6 +16,7 @@
 package com.liferay.ide.portlet.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
@@ -44,6 +45,7 @@ import org.w3c.dom.NodeList;
  * @author Cindy Li
  * @author Simon Jiang
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class PortletDescriptorHelper extends LiferayDescriptorHelper implements INewPortletClassDataModelProperties
@@ -70,7 +72,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
     protected void addDescriptorOperations()
     {
         addDescriptorOperation
-        ( 
+        (
             new RemoveSampleElementsOperation()
             {
                 @Override
@@ -129,6 +131,23 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
                 }
             }
         );
+    }
+
+    public IStatus addResourceBundle( final String resourceBundle )
+    {
+        final IFile descriptorFile = getDescriptorFile();
+
+        DOMModelOperation operation = new DOMModelEditOperation( descriptorFile )
+        {
+
+            @Override
+            protected IStatus doExecute( IDOMDocument document )
+            {
+                return doAddResourceBundle( document, resourceBundle );
+            }
+        };
+
+        return operation.execute();
     }
 
     public boolean canAddNewPortlet( IDataModel model )
@@ -264,6 +283,41 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return Status.OK_STATUS;
     }
 
+    protected IStatus doAddResourceBundle( IDOMDocument document, String resourceBundle )
+    {
+        final FormatProcessorXML processor = new FormatProcessorXML();
+
+        final NodeList supportsList = document.getElementsByTagName( "supports" );
+        final NodeList portletList = document.getElementsByTagName( "portlet" );
+
+        if( ( supportsList != null ) && ( supportsList.getLength() > 0 ) && ( portletList != null ) &&
+            ( portletList.getLength() > 0 ) && !CoreUtil.isNullOrEmpty( resourceBundle ) )
+        {
+            Element newResourceBundleElement = null;
+
+            Node portlet = null;
+
+            final Node supports = supportsList.item( 0 );
+
+            for( int i = 0; i < portletList.getLength(); i++ )
+            {
+                portlet = portletList.item( i );
+
+                if( supports.getParentNode().equals( portlet ) )
+                {
+                    break;
+                }
+            }
+
+            newResourceBundleElement =
+                NodeUtil.insertChildElementAfter( (Element) portlet, supports, "resource-bundle", resourceBundle );
+
+            processor.formatNode( newResourceBundleElement );
+        }
+
+        return Status.OK_STATUS;
+    }
+
     public IStatus doRemoveAllPortlets()
     {
         final String portletTagName = "portlet";
@@ -309,6 +363,37 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         }
 
         return allPortletNames.toArray( new String[0] );
+    }
+
+    public String[] getAllResourceBundles()
+    {
+        final List<String> allResourceBundles = new ArrayList<String>();
+
+        final IFile descriptorFile = getDescriptorFile();
+
+        if( descriptorFile != null )
+        {
+            DOMModelOperation op = new DOMModelReadOperation( descriptorFile )
+            {
+                protected IStatus doExecute( IDOMDocument document )
+                {
+                    NodeList nodeList = document.getElementsByTagName( "resource-bundle" ); //$NON-NLS-1$
+
+                    for( int i = 0; i < nodeList.getLength(); i++ )
+                    {
+                        Element resourceBundle = (Element) nodeList.item( i );
+
+                        allResourceBundles.add( NodeUtil.getTextContent( resourceBundle ) );
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            };
+
+            op.execute();
+        }
+
+        return allResourceBundles.toArray( new String[0] );
     }
 
     public IFile getDescriptorFile()

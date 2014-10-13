@@ -17,6 +17,7 @@ package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
+import com.liferay.ide.xml.search.ui.LiferayXMLConstants;
 import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
 
 import java.util.Properties;
@@ -45,14 +46,14 @@ import org.w3c.dom.Node;
 public class LiferayJspValidator extends LiferayBaseValidator
 {
 
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayJspMarker";
+    public static final String MARKER_TYPE = "org.eclipse.jst.jsp.core.validationMarker";
 
     private final String JSP_TAG_START = "<%";
     private final String JSP_TAG_END = "%>";
 
     protected void addMessage(
         IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
-        int severity )
+        int severity, String querySpecificationId )
     {
         final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
@@ -66,6 +67,15 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
             if( message != null )
             {
+                String category = LiferayXMLConstants.MARKER_CATEGORY_JAVA_METHOD;
+
+                if( querySpecificationId.equals( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID ) )
+                {
+                    category = LiferayXMLConstants.MARKER_CATEGORY_RESOURCE_BUNDLE;
+                }
+
+                message.setAttribute( LiferayXMLConstants.MARKER_CATEGORY, category );
+
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );
             }
@@ -167,8 +177,13 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
                             if( severity != ValidationMessage.IGNORE )
                             {
+                                final String querySpecificationId = referenceTo.getQuerySpecificationId();
+
                                 final String messageText = getMessageText( validationType, referenceTo, node, file );
-                                addMessage( node, file, validator, reporter, batchMode, messageText, severity );
+
+                                addMessage(
+                                    node, file, validator, reporter, batchMode, messageText, severity,
+                                    querySpecificationId );
                             }
                         }
                     }

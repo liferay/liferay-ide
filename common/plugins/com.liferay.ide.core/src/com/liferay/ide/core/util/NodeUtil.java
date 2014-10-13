@@ -25,6 +25,7 @@ import org.w3c.dom.Text;
 
 /**
  * @author Greg Amerson
+ * @author Terry Jia
  */
 public class NodeUtil
 {
@@ -200,6 +201,35 @@ public class NodeUtil
             }
 
             parentElement.insertBefore( newChildElement, refNode );
+        }
+
+        return newChildElement;
+    }
+
+    public static Element insertChildElementAfter(
+        Element parentElement, Node refNode, String newElementName, String initialTextContent )
+    {
+        Element newChildElement = null;
+
+        if( parentElement != null && newElementName != null )
+        {
+            Document ownerDocument = parentElement.getOwnerDocument();
+
+            newChildElement = ownerDocument.createElement( newElementName );
+
+            if( initialTextContent != null )
+            {
+                newChildElement.appendChild( ownerDocument.createTextNode( initialTextContent ) );
+            }
+
+            if( parentElement.getLastChild().equals( refNode ) )
+            {
+                parentElement.appendChild( newChildElement );
+            }
+            else
+            {
+                parentElement.insertBefore( newChildElement, refNode.getNextSibling() );
+            }
         }
 
         return newChildElement;

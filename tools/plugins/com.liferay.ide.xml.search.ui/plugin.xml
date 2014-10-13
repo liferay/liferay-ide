@@ -1010,4 +1010,12 @@
              id="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher">
        </searcher>
     </extension>
+
+    <extension
+         point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+            class="com.liferay.ide.xml.search.ui.LanguagePropertiesMarkerResolutionGenerator"
+            markerType="org.eclipse.jst.jsp.core.validationMarker">
+      </markerResolutionGenerator>
+   </extension>
 </plugin>

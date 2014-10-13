@@ -85,6 +85,7 @@ import org.w3c.dom.Node;
  * @author Gregory Amerson
  * @author Kuo Zhang
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class CoreUtil
@@ -891,6 +892,18 @@ public class CoreUtil
             {
                 node.removeChild( node.getFirstChild() );
             }
+        }
+    }
+
+    public static void validateFile( IFile file, IProgressMonitor monitor )
+    {
+        try
+        {
+            ValidationRunner.validate( file, ValType.Manual, monitor, false );
+        }
+        catch( CoreException e )
+        {
+            LiferayCore.logError( "Error while validating file: " + file.getFullPath(), e ); //$NON-NLS-1$
         }
     }
 

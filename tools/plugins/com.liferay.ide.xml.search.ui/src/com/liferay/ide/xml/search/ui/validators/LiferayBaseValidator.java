@@ -189,8 +189,16 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         }
     }
 
-    protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter,
-                               boolean batchMode, String messageText, int severity )
+    protected void addMessage(
+        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
+        int severity )
+    {
+        addMessage( node, file, validator, reporter, batchMode, messageText, severity, "" );
+    }
+
+    protected void addMessage(
+        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
+        int severity, String querySpecificationId )
     {
         final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
@@ -205,6 +213,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
             {
                 reporter.removeAllMessages( validator );
                 message.setTargetObject( file );
+
                 reporter.addMessage( validator, message );
             }
         }
