@@ -34,8 +34,7 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 @SuppressWarnings( { "restriction", "rawtypes" } )
 public class RedeployAction extends AbstractServerRunningAction
 {
-
-    protected List<ModuleServer> selectedModule;
+    private ModuleServer[] selectedModules;
 
     @Override
     public void selectionChanged( IAction action, ISelection selection )
@@ -44,7 +43,7 @@ public class RedeployAction extends AbstractServerRunningAction
 
         if( !selection.isEmpty() )
         {
-            selectedModule = new ArrayList<ModuleServer>();
+            final List<ModuleServer> newModules = new ArrayList<ModuleServer>();
             if( selection instanceof IStructuredSelection )
             {
                 final IStructuredSelection obj = (IStructuredSelection) selection;
@@ -53,11 +52,13 @@ public class RedeployAction extends AbstractServerRunningAction
                 while( selectionIterator.hasNext() )
                 {
                     ModuleServer moduleServer = (ModuleServer) selectionIterator.next();
-                    selectedModule.add( moduleServer );
+                    newModules.add( moduleServer );
                     validServerState =
                         validServerState &&
                             ( ( moduleServer.getServer().getServerState() & getRequiredServerState() ) > 0 );
                 }
+
+                this.selectedModules = newModules.toArray( new ModuleServer[0] );
 
                 action.setEnabled( validServerState );
             }
@@ -77,14 +78,14 @@ public class RedeployAction extends AbstractServerRunningAction
 
     public void run( IAction action )
     {
-        if( selectedModule == null )
+        if( selectedModules == null )
         {
             return; // can't do anything if server has not been selected
         }
 
-        if( selectedModule != null )
+        if( selectedModules != null )
         {
-            for( ModuleServer moduleServer : selectedModule )
+            for( ModuleServer moduleServer : selectedModules )
             {
                 ILiferayServerBehavior liferayServerBehavior =
                     (ILiferayServerBehavior) moduleServer.getServer().loadAdapter( ILiferayServerBehavior.class, null );
