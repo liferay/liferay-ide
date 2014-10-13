@@ -36,36 +36,6 @@ public class RedeployAction extends AbstractServerRunningAction
 {
     private ModuleServer[] selectedModules;
 
-    @Override
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        boolean validServerState = true;
-
-        if( !selection.isEmpty() )
-        {
-            final List<ModuleServer> newModules = new ArrayList<ModuleServer>();
-
-            if( selection instanceof IStructuredSelection )
-            {
-                final IStructuredSelection obj = (IStructuredSelection) selection;
-                final Iterator selectionIterator = obj.iterator();
-
-                while( selectionIterator.hasNext() )
-                {
-                    ModuleServer moduleServer = (ModuleServer) selectionIterator.next();
-                    newModules.add( moduleServer );
-                    validServerState =
-                        validServerState &&
-                            ( ( moduleServer.getServer().getServerState() & getRequiredServerState() ) > 0 );
-                }
-
-                this.selectedModules = newModules.toArray( new ModuleServer[0] );
-
-                action.setEnabled( validServerState );
-            }
-        }
-    }
-
     public RedeployAction()
     {
         super();
@@ -96,6 +66,36 @@ public class RedeployAction extends AbstractServerRunningAction
                 {
                     liferayServerBehavior.redeployModule( moduleServer.getModule() );
                 }
+            }
+        }
+    }
+
+    @Override
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        boolean validServerState = true;
+
+        if( !selection.isEmpty() )
+        {
+            final List<ModuleServer> newModules = new ArrayList<ModuleServer>();
+
+            if( selection instanceof IStructuredSelection )
+            {
+                final IStructuredSelection obj = (IStructuredSelection) selection;
+                final Iterator selectionIterator = obj.iterator();
+
+                while( selectionIterator.hasNext() )
+                {
+                    ModuleServer moduleServer = (ModuleServer) selectionIterator.next();
+                    newModules.add( moduleServer );
+                    validServerState =
+                        validServerState &&
+                            ( ( moduleServer.getServer().getServerState() & getRequiredServerState() ) > 0 );
+                }
+
+                this.selectedModules = newModules.toArray( new ModuleServer[0] );
+
+                action.setEnabled( validServerState );
             }
         }
     }
