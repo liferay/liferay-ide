@@ -223,6 +223,11 @@ public class CoreUtil
 
     public static void createEmptyFile( IFile newFile ) throws CoreException
     {
+        if( newFile.getParent() instanceof IFolder )
+        {
+            prepareFolder( (IFolder) newFile.getParent() );
+        }
+
         newFile.create( new ByteArrayInputStream( new byte[0] ), true, null );
     }
 

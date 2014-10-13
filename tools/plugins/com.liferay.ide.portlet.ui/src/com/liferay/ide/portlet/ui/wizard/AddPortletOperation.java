@@ -180,17 +180,12 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
     protected void createEmptyFileInDocroot( String filePath ) throws CoreException
     {
-        IFile projectFile = getProjectFile( filePath );
+        final IFile projectFile = getProjectFile( filePath );
 
-        if( !projectFile.exists() )
+        if( ! projectFile.exists() )
         {
-            IFolder parent = (IFolder) projectFile.getParent();
-
-            CoreUtil.prepareFolder( parent );
-
-            projectFile.create( new ByteArrayInputStream( new byte[0] ), IResource.FORCE, null );
+            CoreUtil.createEmptyFile( projectFile );
         }
-
     }
 
     @SuppressWarnings( "unchecked" )
