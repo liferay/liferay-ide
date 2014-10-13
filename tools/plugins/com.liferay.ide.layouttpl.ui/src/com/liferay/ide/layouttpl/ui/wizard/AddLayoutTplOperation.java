@@ -20,12 +20,11 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
-import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
-import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.core.operation.LayoutTplDescriptorHelper;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
+import com.liferay.ide.layouttpl.ui.util.LayoutTemplatesFactory;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.wizard.LiferayDataModelOperation;
 
@@ -170,157 +169,39 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
         if( dm.getBooleanProperty( LAYOUT_IMAGE_1_COLUMN ) )
         {
-            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column = row.getPortletColumns().insert();
-
-            column.setWeight( column.getFullWeight().content() );
+            LayoutTemplatesFactory.add_Layout_1( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_I_COLUMN ) )
         {
-            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert(); 
-
-            PortletColumnElement column11 = row1.getPortletColumns().insert();
-            column11.setWeight( column11.getFullWeight().content() );
-
-            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column21 = row2.getPortletColumns().insert();
-            PortletColumnElement column22 = row2.getPortletColumns().insert();
-
-            if( isBootstrapStyle )
-            {
-                column21.setWeight( 4 );
-                column22.setWeight( 8 );
-            }
-            else
-            {
-                column21.setWeight( 30 );
-                column22.setWeight( 70 );
-            }
+            LayoutTemplatesFactory.add_Layout_1_2_I( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_II_COLUMN ) )
         {
-            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
-
-            PortletColumnElement column11 = row1.getPortletColumns().insert();
-            column11.setWeight( column11.getFullWeight().content() );
-
-            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert(); 
-            PortletColumnElement column21 = row2.getPortletColumns().insert();
-            PortletColumnElement column22 = row2.getPortletColumns().insert();
-
-            if( isBootstrapStyle )
-            {
-                column21.setWeight( 8 );
-                column22.setWeight( 4 );
-            }
-            else
-            {
-                column21.setWeight( 70 );
-                column22.setWeight( 30 );
-            }
+            LayoutTemplatesFactory.add_Layout_1_2_II( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_1_2_1_COLUMN ) )
         {
-            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column11 = row1.getPortletColumns().insert();
-            column11.setWeight( column11.getFullWeight().content() );
-
-            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column21 = row2.getPortletColumns().insert();
-            column21.setWeight( column21.getFullWeight().content() / 2 );
-            PortletColumnElement column22 = row2.getPortletColumns().insert();
-            column22.setWeight( column22.getFullWeight().content() / 2 );
-
-            PortletLayoutElement row3 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column31 = row3.getPortletColumns().insert();
-            column31.setWeight( column31.getFullWeight().content() );
+            LayoutTemplatesFactory.add_Layout_1_2_1( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_I_COLUMN ) )
         {
-            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column1 = row.getPortletColumns().insert();
-            column1.setWeight( column1.getFullWeight().content() / 2 );
-            PortletColumnElement column2 = row.getPortletColumns().insert();
-            column2.setWeight( column2.getFullWeight().content() / 2 );
+            LayoutTemplatesFactory.add_Layout_2_I( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_II_COLUMN ) )
         {
-            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column1 = row.getPortletColumns().insert();
-            PortletColumnElement column2 = row.getPortletColumns().insert();
-
-            if( isBootstrapStyle )
-            {
-                column1.setWeight( 8 );
-                column2.setWeight( 4 );
-            }
-            else
-            {
-                column1.setWeight( 70 );
-                column2.setWeight( 30 );
-            }
+            LayoutTemplatesFactory.add_Layout_2_II( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_III_COLUMN ) )
         {
-            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column1 = row.getPortletColumns().insert();
-            PortletColumnElement column2 = row.getPortletColumns().insert();
-
-            if( isBootstrapStyle )
-            {
-                column1.setWeight( 4 );
-                column2.setWeight( 8 );
-            }
-            else
-            {
-                column1.setWeight( 30 );
-                column2.setWeight( 70 );
-            }
+            LayoutTemplatesFactory.add_Layout_2_III( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_2_COLUMN ) )
         {
-            PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column11 = row1.getPortletColumns().insert();
-            PortletColumnElement column12 = row1.getPortletColumns().insert();
-
-            PortletLayoutElement row2 = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column21 = row2.getPortletColumns().insert();
-            PortletColumnElement column22 = row2.getPortletColumns().insert();
-
-            if( isBootstrapStyle )
-            {
-                column11.setWeight( 4 );
-                column12.setWeight( 8 );
-                column21.setWeight( 8 );
-                column22.setWeight( 4 );
-            }
-            else
-            {
-                column11.setWeight( 30 );
-                column12.setWeight( 70 );
-                column21.setWeight( 70 );
-                column22.setWeight( 30 );
-            }
+            LayoutTemplatesFactory.add_Layout_2_2( layoutTpl );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_3_COLUMN ) )
         {
-            PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
-            PortletColumnElement column1 = row.getPortletColumns().insert();
-            PortletColumnElement column2 = row.getPortletColumns().insert();
-            PortletColumnElement column3 = row.getPortletColumns().insert();
-
-            if( isBootstrapStyle )
-            {
-                column1.setWeight( 4 );
-                column2.setWeight( 4 );
-                column3.setWeight( 4 );
-            }
-            else
-            {
-                column1.setWeight( 33 );
-                column2.setWeight( 33 );
-                column3.setWeight( 33 );
-            }
+            LayoutTemplatesFactory.add_Layout_3( layoutTpl );
         }
 
         return layoutTpl;

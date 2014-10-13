@@ -24,28 +24,28 @@
                             <show-image>true</show-image>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.2_I_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.2_I.ActionHandler</action-handler-id>
                             <action-id>LayoutTpl.Add.RowTemplate</action-id>
                             <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(6, 6)&quot;: &quot;(50, 50)&quot;}</label>
                             <show-image>true</show-image>
                             <image>icons/e16/add_action.png</image>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.2_II_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.2_II.ActionHandler</action-handler-id>
                             <action-id>LayoutTpl.Add.RowTemplate</action-id>
                             <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(4, 8)&quot;: &quot;(30, 70)&quot;}</label>
                             <show-image>true</show-image>
                             <image>icons/e16/add_action.png</image>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.2_III_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.2_III.ActionHandler</action-handler-id>
                             <action-id>LayoutTpl.Add.RowTemplate</action-id>
                             <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(8, 4)&quot;: &quot;(70, 30)&quot;}</label>
                             <show-image>true</show-image>
                             <image>icons/e16/add_action.png</image>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.3_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.3.ActionHandler</action-handler-id>
                             <action-id>LayoutTpl.Add.RowTemplate</action-id>
                             <label>Add Row with 3 Columns ${Root().BootstrapStyle ? &quot;(4, 4, 4)&quot;: &quot;(33, 33, 33)&quot;}</label>
                             <show-image>true</show-image>
@@ -61,27 +61,27 @@
                     <content>
                         <actuator>
                             <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
-                            <action-handler-id>Add.1_2_I_Rows.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Layout.1_2_I.ActionHandler</action-handler-id>
                             <show-image>true</show-image>
                             <image>icons/e16/add_action.png</image>
                             <label>Add Layout with 2 Rows ${Root().BootstrapStyle ? &quot;(12, (4, 8)) &quot;: &quot;(100, (30, 70))&quot;}</label>
                         </actuator>
                         <actuator>
                             <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
-                            <action-handler-id>Add.1_2_II_Rows.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Layout.1_2_II.ActionHandler</action-handler-id>
                             <show-image>true</show-image>
                             <image>icons/e16/add_action.png</image>
                             <label>Add Layout with 2 Rows ${Root().BootstrapStyle ? &quot;(12, (8, 4)) &quot;: &quot;(100, (70, 30))&quot;}</label>
                         </actuator>
                         <actuator>
                             <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
-                            <action-handler-id>Add.2_2_Rows.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Layout.2_2.ActionHandler</action-handler-id>
                             <show-image>true</show-image>
                             <image>icons/e16/add_action.png</image>
-                            <label>Add Layout with 2 Rows ${Root().BootstrapStyle ? &quot;((4, 8), (8, 4)) &quot;: &quot;((30, 70), (70, 30))&quot;}</label>
+                            <label>Add Layout with 2 Rows ${Root().BootstrapStyle ? &quot;((8, 4), (4, 8)) &quot;: &quot;((70, 30), (30, 70))&quot;}</label>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.1_2_1_Rows.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Layout.1_2_1.ActionHandler</action-handler-id>
                             <action-id>LayoutTpl.Add.LayoutTemplate</action-id>
                             <image>icons/e16/add_action.png</image>
                             <label>Add Layout with 3 Rows ${Root().BootstrapStyle ? &quot;(12, (6,  6), 12) &quot;: &quot;(100, (50, 50), 100)&quot;}</label>
@@ -189,7 +189,7 @@
                             <image>icons/e16/add_action.png</image>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.2_I_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.2_I.ActionHandler</action-handler-id>
                             <image>icons/e16/add_action.png</image>
                             <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(6, 6)&quot;: &quot;(50, 50)&quot;}</label>
                             <show-image>true</show-image>
@@ -197,20 +197,20 @@
                         </actuator>
                         <actuator>
                             <action-id>LayoutTpl.Add.RowTemplate</action-id>
-                            <action-handler-id>Add.2_II_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.2_II.ActionHandler</action-handler-id>
                             <image>icons/e16/add_action.png</image>
                             <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(4, 8)&quot;: &quot;(30, 70)&quot;}</label>
                             <show-image>true</show-image>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.2_III_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.2_III.ActionHandler</action-handler-id>
                             <action-id>LayoutTpl.Add.RowTemplate</action-id>
                             <image>icons/e16/add_action.png</image>
                             <label>Add Row with 2 Columns ${Root().BootstrapStyle ? &quot;(8, 4)&quot;: &quot;(70, 30)&quot;}</label>
                             <show-image>true</show-image>
                         </actuator>
                         <actuator>
-                            <action-handler-id>Add.3_Columns.ActionHandler</action-handler-id>
+                            <action-handler-id>Add.Row.3.ActionHandler</action-handler-id>
                             <action-id>LayoutTpl.Add.RowTemplate</action-id>
                             <action-id>LayoutTpl.Add.Rows</action-id>
                             <image>icons/e16/add_action.png</image>

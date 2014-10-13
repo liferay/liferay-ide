@@ -1,7 +1,20 @@
-
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *******************************************************************************/
 package com.liferay.ide.layouttpl.ui.actions;
 
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
+import com.liferay.ide.layouttpl.ui.util.LayoutTemplatesFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
@@ -16,13 +29,17 @@ import org.eclipse.sapphire.ui.SapphireActionHandlerFactory;
 import org.eclipse.sapphire.ui.def.ActionHandlerDef;
 import org.eclipse.sapphire.ui.def.ActionHandlerFactoryDef;
 
+
+/**
+ * @author Kuo Zhang
+ */
 public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandlerFactory
 {
     private final static String ADD_LAYOUT_TEMPLATE_ACTION_ID = "LayoutTpl.Add.LayoutTemplate";
-    private final static String ADD_1_2_I_ROWS_ACTION_HANDLDER_ID = "Add.1_2_I_Rows.ActionHandler";
-    private final static String ADD_1_2_II_ROWS_ACTION_HANDLER_ID = "Add.1_2_II_Rows.ActionHandler";
-    private final static String ADD_2_2_ROWS_ACTION_HANDLER_ID = "Add.2_2_Rows.ActionHandler";
-    private final static String ADD_1_2_1_ROWS_ACTION_HANDLER_ID = "Add.1_2_1_Rows.ActionHandler";
+    private final static String ADD_LAYOUT_1_2_I_ACTION_HANDLDER_ID = "Add.Layout.1_2_I.ActionHandler";
+    private final static String ADD_LAYOUT_1_2_II_ACTION_HANDLER_ID = "Add.Layout.1_2_II.ActionHandler";
+    private final static String ADD_LAYOUT_2_2_ACTION_HANDLER_ID = "Add.Layout.2_2.ActionHandler";
+    private final static String ADD_LAYOUT_1_2_1_ACTION_HANDLER_ID = "Add.Layout.1_2_1.ActionHandler";
     private boolean isBootstrapStyle;
 
     public AddLayoutTemplateActionHandlerFactory()
@@ -43,23 +60,23 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
         if( ADD_LAYOUT_TEMPLATE_ACTION_ID.equals( getAction().getId() ) )
         {
             ArrayList<SapphireActionHandler> actionHandlers = new ArrayList<SapphireActionHandler>();
-            actionHandlers.add( new Add_1_2_I_Rows_ActionHandler() );
-            actionHandlers.add( new Add_1_2_II_Rows_ActionHandler() );
-            actionHandlers.add( new Add_2_2_Rows_ActionHandler() );
-            actionHandlers.add( new Add_1_2_1_Rows_ActionHandler() );
+            actionHandlers.add( new Add_Layout_1_2_I_ActionHandler() );
+            actionHandlers.add( new Add_Layout_1_2_II_ActionHandler() );
+            actionHandlers.add( new Add_Layout_2_2_ActionHandler() );
+            actionHandlers.add( new Add_Layout_1_2_1_ActionHandler() );
             return actionHandlers;
         }
 
         return null;
     }
 
-    private class Add_1_2_I_Rows_ActionHandler extends SapphireActionHandler
+    private class Add_Layout_1_2_I_ActionHandler extends SapphireActionHandler
     {
         @Override
         public void init( SapphireAction action, ActionHandlerDef def )
         {
             super.init( action, def );
-            setId( ADD_1_2_I_ROWS_ACTION_HANDLDER_ID );
+            setId( ADD_LAYOUT_1_2_I_ACTION_HANDLDER_ID );
             setLabel();
         }
  
@@ -85,14 +102,14 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
             if( element.getPortletLayouts().size() == 0 || canOverride() )
             {
                 element.getPortletLayouts().clear();
-                LayoutTplTemplatesFacotry.add_1_2_I_Rows( element );
+                LayoutTemplatesFactory.add_Layout_1_2_I( element );
             }
 
-            return null; 
+            return null;
         }
     }
 
-    private class Add_1_2_II_Rows_ActionHandler extends SapphireActionHandler
+    private class Add_Layout_1_2_II_ActionHandler extends SapphireActionHandler
     {
 
         @Override
@@ -100,7 +117,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
         {
             super.init( action, def );
 
-            setId( ADD_1_2_II_ROWS_ACTION_HANDLER_ID );
+            setId( ADD_LAYOUT_1_2_II_ACTION_HANDLER_ID );
             setLabel();
         }
 
@@ -126,21 +143,21 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
             if( element.getPortletLayouts().size() == 0 || canOverride() )
             {
                 element.getPortletLayouts().clear();
-                LayoutTplTemplatesFacotry.add_1_2_II_Rows( element );
+                LayoutTemplatesFactory.add_Layout_1_2_II( element );
             }
 
             return null;
         }
     }
 
-    private class Add_2_2_Rows_ActionHandler extends SapphireActionHandler
+    private class Add_Layout_2_2_ActionHandler extends SapphireActionHandler
     {
 
         @Override
         public void init( SapphireAction action, ActionHandlerDef def )
         {
             super.init( action, def );
-            setId( ADD_2_2_ROWS_ACTION_HANDLER_ID ); 
+            setId( ADD_LAYOUT_2_2_ACTION_HANDLER_ID );
             setLabel();
         }
 
@@ -150,11 +167,11 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
 
             if( isBootstrapStyle )
             {
-                super.setLabel( prefix + "((4, 8), (8, 4))" );
+                super.setLabel( prefix + "((8, 4), (4, 8))" );
             }
             else
             {
-                super.setLabel( prefix + "((30, 70), (70, 30))");
+                super.setLabel( prefix + "((70, 30), (30, 70))");
             }
         }
 
@@ -166,21 +183,21 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
             if( element.getPortletLayouts().size() == 0 || canOverride()  )
             {
                 element.getPortletLayouts().clear();
-                LayoutTplTemplatesFacotry.add_2_2_Rows( element );
+                LayoutTemplatesFactory.add_Layout_2_2( element );
             }
 
             return null;
         }
     }
 
-    private class Add_1_2_1_Rows_ActionHandler extends SapphireActionHandler
+    private class Add_Layout_1_2_1_ActionHandler extends SapphireActionHandler
     {
 
         @Override
         public void init( SapphireAction action, ActionHandlerDef def )
         {
             super.init( action, def );
-            setId( ADD_1_2_1_ROWS_ACTION_HANDLER_ID );
+            setId( ADD_LAYOUT_1_2_1_ACTION_HANDLER_ID );
             setLabel();
         }
 
@@ -206,7 +223,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
             if( element.getPortletLayouts().size() == 0 || canOverride() )
             {
                 element.getPortletLayouts().clear();
-                LayoutTplTemplatesFacotry.add_1_2_1_Rows( element );
+                LayoutTemplatesFactory.add_Layout_1_2_1( element );
             }
 
             return null;
