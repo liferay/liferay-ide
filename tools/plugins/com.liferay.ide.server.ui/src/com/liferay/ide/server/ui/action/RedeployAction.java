@@ -44,6 +44,7 @@ public class RedeployAction extends AbstractServerRunningAction
         if( !selection.isEmpty() )
         {
             final List<ModuleServer> newModules = new ArrayList<ModuleServer>();
+
             if( selection instanceof IStructuredSelection )
             {
                 final IStructuredSelection obj = (IStructuredSelection) selection;
@@ -87,8 +88,9 @@ public class RedeployAction extends AbstractServerRunningAction
         {
             for( ModuleServer moduleServer : selectedModules )
             {
-                ILiferayServerBehavior liferayServerBehavior =
-                    (ILiferayServerBehavior) moduleServer.getServer().loadAdapter( ILiferayServerBehavior.class, null );
+                final ILiferayServerBehavior liferayServerBehavior =
+                    (ILiferayServerBehavior) moduleServer.getServer().loadAdapter(
+                        ILiferayServerBehavior.class, null );
 
                 if( liferayServerBehavior != null )
                 {
