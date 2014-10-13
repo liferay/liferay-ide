@@ -150,11 +150,12 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
         return Status.OK_STATUS;
     }
 
-    protected IFile copyPortalJSPToProject( IPath portalDir, String portalJsp, IFolder customFolder ) throws Exception
+    protected IFile copyPortalJSPToProject( IPath portalDir, String portalJsp, IFolder customFolder )
+        throws Exception
     {
-        IPath portalJspPath = new Path( portalJsp );
+        final IPath portalJspPath = new Path( portalJsp );
 
-        IPath originalPortalJspPath = portalDir.append( portalJsp );
+        final IPath originalPortalJspPath = portalDir.append( portalJsp );
 
         final IFile newJspFile = customFolder.getFile( portalJspPath );
 
@@ -162,8 +163,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         if( originalPortalJspPath.toFile().exists() )
         {
-
-            FileInputStream fis = new FileInputStream( originalPortalJspPath.toFile() );
+            final FileInputStream fis = new FileInputStream( originalPortalJspPath.toFile() );
 
             if( newJspFile.exists() )
             {
@@ -173,15 +173,13 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
             {
                 newJspFile.create( fis, true, null );
             }
-
-            return newJspFile;
         }
         else
         {
             CoreUtil.createEmptyFile( newJspFile );
-
-            return newJspFile;
         }
+
+        return newJspFile;
     }
 
     protected IStatus createCustomJSPs( IDataModel dm )
