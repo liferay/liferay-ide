@@ -65,11 +65,13 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
 {
+
+
     protected ILaunch currentLaunch;
 
     private List<IModule[]> selectedModules;
-
     protected IServerManagerConnection remoteConnection;
+
     protected Job remoteServerUpdateJob;
 
     public RemoteServerBehavior()
@@ -135,147 +137,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     public IStatus canStop()
     {
         return LiferayServerCore.createWarningStatus( Msgs.stoppingRemoteLiferayServerNotSupported );
-    }
-
-    @Override
-    protected MultiStatus executePublishers(
-        int kind, List<IModule[]> modules, List<Integer> deltaKinds, IProgressMonitor monitor, IAdaptable info )
-        throws CoreException
-    {
-        return super.executePublishers(
-            kind, ( selectedModules == null ) ? modules : selectedModules, deltaKinds, monitor, info );
-    }
-
-    @Override
-    public void dispose()
-    {
-        super.dispose();
-
-        remoteServerUpdateJob.cancel();
-        remoteServerUpdateJob = null;
-    }
-
-    public IPath getDeployedPath( IModule[] module )
-    {
-        return null;
-    }
-
-    public int getRemoteServerState( int currentServerState, IProgressMonitor monitor )
-    {
-        try
-        {
-            if( currentServerState == IServer.STATE_STOPPED )
-            {
-                monitor.beginTask( NLS.bind( Msgs.updatingServerState, getServer().getName() ), 100 );
-            }
-
-            Object retval = null;
-
-            IServerManagerConnection remoteConnection = getServerManagerConnection();
-
-            try
-            {
-                retval = remoteConnection.getServerState();
-            }
-            catch( Exception e )
-            {
-                e.printStackTrace();
-            }
-
-            if( retval == null )
-            {
-                return IServer.STATE_UNKNOWN;
-            }
-
-            String serverState = retval.toString();
-
-            if( "STARTED".equals( serverState ) ) //$NON-NLS-1$
-            {
-                return IServer.STATE_STARTED;
-            }
-            else if( "STOPPED".equals( serverState ) ) //$NON-NLS-1$
-            {
-                return IServer.STATE_STOPPED;
-            }
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( "Could not get server state.", e ); //$NON-NLS-1$
-            return IServer.STATE_UNKNOWN;
-        }
-
-        return IServer.STATE_UNKNOWN;
-    }
-
-    public List<IModule[]> getSelectedModules()
-    {
-        return selectedModules;
-    }
-
-    @SuppressWarnings( "rawtypes" )
-    public void redeployModule( IModule[] module )
-    {
-        setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
-
-        IAdaptable info = new IAdaptable()
-        {
-            public Object getAdapter( Class adapter )
-            {
-                if( String.class.equals( adapter ) )
-                    return "user"; //$NON-NLS-1$
-                return null;
-            }
-        };
-
-        final List<IModule[]> modules = new ArrayList<IModule[]>();
-        modules.add( module );
-
-        try
-        {
-            selectedModules = modules;
-            publish( IServer.PUBLISH_FULL, modules, null, info );
-        }
-        catch( CoreException e )
-        {
-            LiferayServerCore.logError( "redploying module " + module[0].getName() + " failed.", e );
-        }
-        finally
-        {
-            selectedModules = null;
-        }
-    }
-
-    public void serverAdded( IServer server )
-    {
-    }
-
-    public void serverChanged( IServer server )
-    {
-    }
-
-    public void serverRemoved( IServer server )
-    {
-        if( server.equals( getServer() ) )
-        {
-            if( currentLaunch != null && !currentLaunch.isTerminated() )
-            {
-                try
-                {
-                    currentLaunch.terminate();
-                }
-                catch( DebugException e )
-                {
-                }
-            }
-        }
-
-        ServerCore.removeServerLifecycleListener( this );
-    }
-
-    @Override
-    public void stop( boolean force )
-    {
-        setServerState( IServer.STATE_STOPPED );
     }
 
     protected Job checkRemoteServerState( IProgressMonitor monitor )
@@ -425,6 +286,91 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         };
     }
 
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+
+        remoteServerUpdateJob.cancel();
+        remoteServerUpdateJob = null;
+    }
+
+    @Override
+    protected MultiStatus executePublishers(
+        int kind, List<IModule[]> modules, List<Integer> deltaKinds, IProgressMonitor monitor, IAdaptable info )
+        throws CoreException
+    {
+        return super.executePublishers(
+            kind, ( selectedModules == null ) ? modules : selectedModules, deltaKinds, monitor, info );
+    }
+
+    public IPath getDeployedPath( IModule[] module )
+    {
+        return null;
+    }
+
+    protected IRemoteServer getRemoteServer()
+    {
+        return RemoteUtil.getRemoteServer( getServer() );
+    }
+
+    public int getRemoteServerState( int currentServerState, IProgressMonitor monitor )
+    {
+        try
+        {
+            if( currentServerState == IServer.STATE_STOPPED )
+            {
+                monitor.beginTask( NLS.bind( Msgs.updatingServerState, getServer().getName() ), 100 );
+            }
+
+            Object retval = null;
+
+            IServerManagerConnection remoteConnection = getServerManagerConnection();
+
+            try
+            {
+                retval = remoteConnection.getServerState();
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+
+            if( retval == null )
+            {
+                return IServer.STATE_UNKNOWN;
+            }
+
+            String serverState = retval.toString();
+
+            if( "STARTED".equals( serverState ) ) //$NON-NLS-1$
+            {
+                return IServer.STATE_STARTED;
+            }
+            else if( "STOPPED".equals( serverState ) ) //$NON-NLS-1$
+            {
+                return IServer.STATE_STOPPED;
+            }
+        }
+        catch( Exception e )
+        {
+            LiferayServerCore.logError( "Could not get server state.", e ); //$NON-NLS-1$
+            return IServer.STATE_UNKNOWN;
+        }
+
+        return IServer.STATE_UNKNOWN;
+    }
+
+    protected long getRemoteServerUpdateDelay()
+    {
+        return 5000;
+    }
+
+    public List<IModule[]> getSelectedModules()
+    {
+        return selectedModules;
+    }
+
     protected IServerManagerConnection getServerManagerConnection()
     {
         if( remoteConnection == null )
@@ -433,16 +379,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
 
         return remoteConnection;
-    }
-
-    protected IRemoteServer getRemoteServer()
-    {
-        return RemoteUtil.getRemoteServer( getServer() );
-    }
-
-    protected long getRemoteServerUpdateDelay()
-    {
-        return 5000;
     }
 
     @Override
@@ -761,16 +697,13 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         return IServer.PUBLISH_STATE_NONE;
     }
-    
-    
+
     @SuppressWarnings( "rawtypes" )
     @Override
     protected void publishModules( int kind, List modules, List deltaKind2, MultiStatus multi, IProgressMonitor monitor )
     {
         super.publishModules( kind, ( selectedModules == null ) ? modules : selectedModules, deltaKind2, multi, monitor );
     }
-
-
 
     @Override
     protected void publishStart( IProgressMonitor monitor ) throws CoreException
@@ -781,6 +714,39 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         {
             throw new CoreException(
                 LiferayServerCore.createErrorStatus( Msgs.notPublishRemoteServer ) );
+        }
+    }
+
+    @SuppressWarnings( "rawtypes" )
+    public void redeployModule( IModule[] module )
+    {
+        setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
+
+        IAdaptable info = new IAdaptable()
+        {
+            public Object getAdapter( Class adapter )
+            {
+                if( String.class.equals( adapter ) )
+                    return "user"; //$NON-NLS-1$
+                return null;
+            }
+        };
+
+        final List<IModule[]> modules = new ArrayList<IModule[]>();
+        modules.add( module );
+
+        try
+        {
+            selectedModules = modules;
+            publish( IServer.PUBLISH_FULL, modules, null, info );
+        }
+        catch( CoreException e )
+        {
+            LiferayServerCore.logError( "redploying module " + module[0].getName() + " failed.", e );
+        }
+        finally
+        {
+            selectedModules = null;
         }
     }
 
@@ -851,6 +817,36 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         return IServer.PUBLISH_STATE_NONE;
     }
+    
+    
+    public void serverAdded( IServer server )
+    {
+    }
+
+
+
+    public void serverChanged( IServer server )
+    {
+    }
+
+    public void serverRemoved( IServer server )
+    {
+        if( server.equals( getServer() ) )
+        {
+            if( currentLaunch != null && !currentLaunch.isTerminated() )
+            {
+                try
+                {
+                    currentLaunch.terminate();
+                }
+                catch( DebugException e )
+                {
+                }
+            }
+        }
+
+        ServerCore.removeServerLifecycleListener( this );
+    }
 
     protected boolean shouldPublishModuleFull( IModuleResourceDelta[] deltas )
     {
@@ -895,6 +891,12 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
 
         return retval;
+    }
+
+    @Override
+    public void stop( boolean force )
+    {
+        setServerState( IServer.STATE_STOPPED );
     }
 
     protected void terminateLaunch()
@@ -989,6 +991,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
     private static class Msgs extends NLS
     {
+
         public static String gettingLiferayConnection;
         public static String gettingRemoteConnection;
         public static String installing;
