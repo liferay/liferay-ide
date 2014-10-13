@@ -17,14 +17,52 @@ package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
+@SuppressWarnings( { "restriction", "rawtypes" } )
 public class RedeployAction extends AbstractServerRunningAction
 {
+
+    protected List<ModuleServer> selectedModule;
+
+    @Override
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        boolean validServerState = true;
+
+        if( !selection.isEmpty() )
+        {
+            selectedModule = new ArrayList<ModuleServer>();
+            if( selection instanceof IStructuredSelection )
+            {
+                final IStructuredSelection obj = (IStructuredSelection) selection;
+                final Iterator selectionIterator = obj.iterator();
+
+                while( selectionIterator.hasNext() )
+                {
+                    ModuleServer moduleServer = (ModuleServer) selectionIterator.next();
+                    selectedModule.add( moduleServer );
+                    validServerState =
+                        validServerState &&
+                            ( ( moduleServer.getServer().getServerState() & getRequiredServerState() ) > 0 );
+                }
+
+                action.setEnabled( validServerState );
+            }
+        }
+    }
 
     public RedeployAction()
     {
@@ -46,15 +84,16 @@ public class RedeployAction extends AbstractServerRunningAction
 
         if( selectedModule != null )
         {
-            selectedModule.getModule()[0].getProject();
-            ILiferayServerBehavior liferayServerBehavior =
-                (ILiferayServerBehavior) selectedModule.getServer().loadAdapter( ILiferayServerBehavior.class, null );
-
-            if( liferayServerBehavior != null )
+            for( ModuleServer moduleServer : selectedModule )
             {
-                liferayServerBehavior.redeployModule( selectedModule.getModule() );
+                ILiferayServerBehavior liferayServerBehavior =
+                    (ILiferayServerBehavior) moduleServer.getServer().loadAdapter( ILiferayServerBehavior.class, null );
+
+                if( liferayServerBehavior != null )
+                {
+                    liferayServerBehavior.redeployModule( moduleServer.getModule() );
+                }
             }
         }
-
     }
 }
