@@ -25,14 +25,13 @@ import org.osgi.framework.BundleContext;
  */
 public class HookCore extends Plugin
 {
-
-    public final static String VALIDATOR_ID = "org.eclipse.jst.jsp.core.JSPBatchValidator";
-
     // The shared instance
     private static HookCore plugin;
 
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.hook.core"; //$NON-NLS-1$
+
+    public final static String VALIDATOR_ID = "org.eclipse.jst.jsp.core.JSPBatchValidator";
 
     public static IStatus createErrorStatus( Exception e )
     {
