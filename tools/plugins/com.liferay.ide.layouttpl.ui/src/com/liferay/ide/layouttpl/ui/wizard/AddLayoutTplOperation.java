@@ -233,7 +233,7 @@ public class AddLayoutTplOperation extends LiferayDataModelOperation implements 
 
             PortletLayoutElement row3 = layoutTpl.getPortletLayouts().insert();
             PortletColumnElement column31 = row3.getPortletColumns().insert();
-            column11.setWeight( column31.getFullWeight().content() );
+            column31.setWeight( column31.getFullWeight().content() );
         }
         else if( dm.getBooleanProperty( LAYOUT_IMAGE_2_I_COLUMN ) )
         {
