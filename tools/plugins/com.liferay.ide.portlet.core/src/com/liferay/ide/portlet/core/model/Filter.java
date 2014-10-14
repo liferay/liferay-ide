@@ -25,6 +25,7 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
 import org.eclipse.sapphire.java.JavaTypeConstraint;
+import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.annotations.CountConstraint;
@@ -65,8 +66,13 @@ public interface Filter extends Describeable, Displayable
     @Label( standard = "implementation class", full = "Filter implementation class" )
     @Required
     @MustExist
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = { "javax.portlet.filter.ResourceFilter",
-        "javax.portlet.filter.RenderFilter", "javax.portlet.filter.ActionFilter", "javax.portlet.filter.EventFilter" } )
+    @JavaTypeConstraint
+    (
+        kind = JavaTypeKind.CLASS,
+        type = { "javax.portlet.filter.ResourceFilter", "javax.portlet.filter.RenderFilter",
+                 "javax.portlet.filter.ActionFilter", "javax.portlet.filter.EventFilter" },
+        behavior = JavaTypeConstraintBehavior.AT_LEAST_ONE
+    )
     @XmlBinding( path = "filter-class" )
     ValueProperty PROP_IMPLEMENTATION = new ValueProperty( TYPE, "Implementation" ); //$NON-NLS-1$
 
