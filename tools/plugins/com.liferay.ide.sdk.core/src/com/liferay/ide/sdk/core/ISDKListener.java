@@ -20,9 +20,9 @@ package com.liferay.ide.sdk.core;
  */
 public interface ISDKListener
 {
-    void sdksAdded( SDK[] sdk );
+    void sdksAdded( SDK[] sdks );
 
-    void sdksChanged( SDK[] sdk );
+    void sdksChanged( SDK[] sdks );
 
-    void sdksRemoved( SDK[] sdk );
+    void sdksRemoved( SDK[] sdks );
 }

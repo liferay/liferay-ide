@@ -34,10 +34,11 @@ import org.osgi.framework.BundleContext;
 public class LiferayServerUIPlugin extends AbstractUIPlugin
 {
 
-    public static final String IMG_WIZ_RUNTIME = "imgWizRuntime"; //$NON-NLS-1$
+    public static final String IMG_NOTIFICATION = "imgNotification";
+    public static final String IMG_WIZ_RUNTIME = "imgWizRuntime";
 
     // The plugin ID
-    public static final String PLUGIN_ID = "com.liferay.ide.server.ui"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "com.liferay.ide.server.ui";
 
     // base url for icons
     private static URL ICON_BASE_URL;
@@ -167,15 +168,16 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
 
         final String[] pluginTypes = new String[]
         {
-            "portlet", "hook", "ext", "layouttpl", "theme", "web" //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$//$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+            "portlet", "hook", "ext", "layouttpl", "theme", "web"
         };
 
         for (String type : pluginTypes)
         {
-            registerImage( registry, type, "/icons/e16/" + type + ".png" ); //$NON-NLS-1$ //$NON-NLS-2$
+            registerImage( registry, type, "/icons/e16/" + type + ".png" );
         }
 
-        registerImage( registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png" ); //$NON-NLS-1$
+        registerImage( registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png" );
+        registerImage( registry, IMG_NOTIFICATION, "e16/server.png" );
 
         return registry;
     }

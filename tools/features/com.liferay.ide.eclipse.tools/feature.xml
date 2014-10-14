@@ -48,6 +48,7 @@
       <import feature="org.eclipse.jst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.mylyn.commons.notifications" version="1.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.common.fproj" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.common_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>

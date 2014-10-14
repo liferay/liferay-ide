@@ -31,7 +31,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.jsp.ui,
  org.eclipse.ui.ide,
  org.eclipse.datatools.connectivity,
- org.eclipse.core.filesystem
+ org.eclipse.core.filesystem,
+ org.eclipse.mylyn.commons.notifications.ui,
+ org.eclipse.mylyn.commons.notifications.core,
+ org.eclipse.mylyn.commons.workbench,
+ org.eclipse.mylyn.commons.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.ui,
