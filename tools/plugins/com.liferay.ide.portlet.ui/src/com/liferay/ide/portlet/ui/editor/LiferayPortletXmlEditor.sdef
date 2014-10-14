@@ -148,7 +148,7 @@
                 <collapsible>true</collapsible>
                 <collapsed-initially>false</collapsed-initially>
             </section>
-            <!--  
+            <!--
             <node>
                 <label>Additional Style Setting</label>
                 <section>
@@ -236,7 +236,7 @@
                         <property-editor>WebDAVStorageToken</property-editor>
                         <property-editor>WebDAVStorageClass</property-editor>
                         <property-editor>XmlRPCMethodClass</property-editor> -->
-                        <property-editor>TrashHandlers</property-editor> 
+                        <property-editor>TrashHandlers</property-editor>
                         <property-editor>WorkflowHandler</property-editor>
                     </content>
                     <collapsible>true</collapsible>
@@ -272,7 +272,7 @@
             </node>
             <node>
                 <label>Custom Display and Layout</label>
-                
+
                 <section>
                     <label>Custom Display and Layout</label>
                     <content>
@@ -378,7 +378,7 @@
                 </content>
             </section>
         </case>
-    </node-factory>   
+    </node-factory>
     <composite>
         <id>portlet.basic.composite</id>
         <content>
