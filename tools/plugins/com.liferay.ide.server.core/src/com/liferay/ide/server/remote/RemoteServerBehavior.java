@@ -66,11 +66,9 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
 {
 
-
     protected ILaunch currentLaunch;
-
-    private List<IModule[]> selectedModules;
     protected IServerManagerConnection remoteConnection;
+    protected List<IModule[]> selectedModules;
 
     protected Job remoteServerUpdateJob;
 
@@ -817,8 +815,8 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         return IServer.PUBLISH_STATE_NONE;
     }
-    
-    
+
+
     public void serverAdded( IServer server )
     {
     }
