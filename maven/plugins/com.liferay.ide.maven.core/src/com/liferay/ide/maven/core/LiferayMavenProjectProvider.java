@@ -108,8 +108,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         "liferay-portlet-ext.xml"
     };
 
-    private static final String LIFERAY_ARCHETYPES_GROUP_ID = "com.liferay.maven.archetypes";
-
     private static final Pattern publicid_pattern = Pattern.compile(
         "-\\//(?:[a-z][a-z]+)\\//(?:[a-z][a-z]+)[\\s+(?:[a-z][a-z0-9_]*)]*\\s+(\\d\\.\\d\\.\\d)\\//(?:[a-z][a-z]+)",
         Pattern.CASE_INSENSITIVE | Pattern.DOTALL );
@@ -136,7 +134,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         final String version = op.getArtifactVersion().content();
         final String javaPackage = op.getGroupId().content();
         final String activeProfilesValue = op.getActiveProfilesValue().content();
-        final PluginType pluginType = op.getPluginType().content( true );
         final IPortletFramework portletFramework = op.getPortletFramework().content( true );
         final String frameworkName = getFrameworkName( op );
 
@@ -149,42 +146,17 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             location = location.removeLastSegments( 1 );
         }
 
-        String archetypeArtifactId = null;
-        String archetypeType = null;
-
-        if( pluginType.equals( PluginType.portlet ) )
-        {
-            archetypeArtifactId = portletFramework.getArchetypeGAV();
-
-            if( archetypeArtifactId == null )
-            {
-                if( portletFramework.isRequiresAdvanced() )
-                {
-                    archetypeType = "portlet-" + frameworkName.replace( "_", "-" );
-                }
-                else
-                {
-                    archetypeType = pluginType.name();
-                }
-            }
-        }
-        else
-        {
-            archetypeType = pluginType.name();
-        }
-
-        if( archetypeArtifactId == null )
-        {
-            archetypeArtifactId = LIFERAY_ARCHETYPES_GROUP_ID + ":liferay-" + archetypeType + "-archetype:6.2.1";
-        }
-
+        final String archetypeArtifactId = op.getArchetype().content( true );
+        
         // get latest liferay archetype
         monitor.beginTask( "Determining latest Liferay maven plugin archetype version.", IProgressMonitor.UNKNOWN );
-        final String archetypeVersion = AetherUtil.getLatestAvailableArtifact( archetypeArtifactId ).getVersion();
+        // final String archetypeVersion = AetherUtil.getLatestAvailableArtifact( archetypeArtifactId ).getVersion();
 
         final Archetype archetype = new Archetype();
 
         final String[] gav = archetypeArtifactId.split( ":" );
+
+        final String archetypeVersion = gav[gav.length - 1];
 
         archetype.setGroupId( gav[0] );
         archetype.setArtifactId( gav[1] );
@@ -538,6 +510,20 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     LiferayMavenCore.logError( "unable to get parent groupId", e );
                 }
             }
+        }
+        else if( "archetypeGav".equals( key ) )
+        {
+            final List<T> preferenceValues = new ArrayList<T>();
+
+            final String archetypeKey = (String) params[0];
+
+            final String defaultValue = (String) params[1];
+
+            final String value = LiferayMavenCore.getPreferenceString( archetypeKey, defaultValue );
+
+            preferenceValues.add( type.cast( value ) );
+
+            retval = preferenceValues;
         }
 
         return retval;

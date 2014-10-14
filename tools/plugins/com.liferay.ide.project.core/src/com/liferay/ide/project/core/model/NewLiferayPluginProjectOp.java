@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.model;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.internal.ActiveProfilesValidationService;
+import com.liferay.ide.project.core.model.internal.ArchetypeDefaultValueService;
 import com.liferay.ide.project.core.model.internal.ArtifactVersionDefaultValueService;
 import com.liferay.ide.project.core.model.internal.CreateNewPortletDefaultValueService;
 import com.liferay.ide.project.core.model.internal.DisplayNameDefaultValueService;
@@ -82,6 +83,16 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferayRuntime
 {
     ElementType TYPE = new ElementType( NewLiferayPluginProjectOp.class );
+
+    // *** ArchTypeVersion ***
+
+    @Label( standard = "archetypeGAV" )
+    @Service( impl = ArchetypeDefaultValueService.class )
+    ValueProperty PROP_ARCHETYPE = new ValueProperty( TYPE, "Archetype" ); //$NON-NLS-1$
+
+    Value<String> getArchetype();
+
+    void setArchetype( String value );
 
     // *** ProjectName ***
 

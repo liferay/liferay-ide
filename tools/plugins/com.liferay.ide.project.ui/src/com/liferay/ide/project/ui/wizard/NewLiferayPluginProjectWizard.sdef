@@ -196,6 +196,13 @@
                     </content>
                     <visible-when>${ PluginType == 'portlet' &amp;&amp; IncludeSampleCode == 'true'  }</visible-when>
                 </group>
+                <group>
+                    <label>Maven options</label>
+                    <content>
+                        <property-editor>Archetype</property-editor>
+                    </content>
+                    <visible-when>${ PluginType == 'portlet'  &amp;&amp; ProjectProvider == 'maven' }</visible-when>
+                </group>
             </content>
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
@@ -218,6 +225,13 @@
                         </property-editor>
                     </content>
                     <label>JSF Component Suite</label>
+                </group>
+                <group>
+                    <label>Maven options</label>
+                    <content>
+                        <property-editor>Archetype</property-editor>
+                    </content>
+                    <visible-when>${ PluginType == 'portlet'  &amp;&amp; ProjectProvider == 'maven' }</visible-when>
                 </group>
             </content>
             <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>

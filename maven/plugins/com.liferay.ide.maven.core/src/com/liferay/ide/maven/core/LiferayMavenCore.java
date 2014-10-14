@@ -43,6 +43,37 @@ public class LiferayMavenCore extends Plugin
     // The key of disable customJspValidation checking
     public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
 
+    public static final String PREF_MAVEN_MVC_ARCHETYPE = "com.liferay.maven.archetypes:liferay-portlet-archetype";
+
+    public static final String PREF_MAVEN_JSF_ARCHETYPE = "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype";
+
+    public static final String PREF_MAVEN_VAADIN_ARCHETYPE = "com.vaadin:vaadin-archetype-liferay-portlet";
+
+    public static final String PREF_MAVEN_ICEFACES_ARCHETYPE =
+        "com.liferay.maven.archetypes:liferay-portlet-icefaces-archetype";
+
+    public static final String PREF_MAVEN_FACES_ALLOY_ARCHETYPE =
+        "com.liferay.maven.archetypes:liferay-portlet-liferay-faces-alloy-archetype";
+
+    public static final String PREF_MAVEN_PRIMEFACES_ARCHETYPE =
+        "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype";
+
+    public static final String PREF_MAVEN_RICHFACES_ARCHETYPE =
+        "com.liferay.maven.archetypes:liferay-portlet-richfaces-archetype";
+
+    public static final String PREF_MAVEN_HOOK_ARCHETYPE = "com.liferay.maven.archetypes:liferay-hook-archetype";
+    
+    public static final String PREF_MAVEN_SERVICE_ARCHETYPE = "com.liferay.maven.archetypes:liferay-servicebuilder-archetype";
+    
+    public static final String PREF_MAVEN_LAYOUTTPL_ARCHETYPE = "com.liferay.maven.archetypes:liferay-layouttpl-archetype";
+
+    public static final String PREF_MAVEN_THEME_ARCHETYPE = "com.liferay.maven.archetypes:liferay-theme-archetype";
+    
+    public static final String PREF_MAVEN_EXT_ARCHETYPE = "com.liferay.maven.archetypes:liferay-ext-archetype";
+    
+    public static final String PREF_MAVEN_WEB_ARCHETYPE = "com.liferay.maven.archetypes:liferay-web-archetype";
+
+
     public static Status createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, null );
@@ -85,6 +116,14 @@ public class LiferayMavenCore extends Plugin
         IPreferencesService preferencesService = Platform.getPreferencesService();
 
         return preferencesService.getBoolean( PLUGIN_ID, key, false, scopes );
+    }
+
+    public static String getPreferenceString( final String key, final String defaultValue )
+    {
+        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
+        IPreferencesService preferencesService = Platform.getPreferencesService();
+
+        return preferencesService.getString( PLUGIN_ID, key, defaultValue, scopes );
     }
 
     public static void log( IStatus status )

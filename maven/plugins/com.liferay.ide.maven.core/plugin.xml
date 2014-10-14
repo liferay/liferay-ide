@@ -43,6 +43,7 @@
    </extension>
    <extension point="org.eclipse.core.runtime.preferences">
       <initializer class="com.liferay.ide.maven.core.pref.ProjectMavenPreferenceInitializer" />
+      <initializer class="com.liferay.ide.maven.core.pref.MavenArchetypePreferenceInitializer" />
    </extension>
 
 </plugin>
