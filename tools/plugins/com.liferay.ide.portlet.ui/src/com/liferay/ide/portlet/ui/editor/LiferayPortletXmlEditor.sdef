@@ -12,7 +12,7 @@
     <editor-page>
         <id>liferay-portlet-app.editor</id>
         <element-type>LiferayPortletXml</element-type>
-        <page-name>Overriew</page-name>
+        <page-name>Overview</page-name>
         <page-header-text>Liferay Portlet Application</page-header-text>
         <initial-selection>LiferayPortlets</initial-selection>
         <page-header-image>images/liferay_portlet.png</page-header-image>
