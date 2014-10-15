@@ -112,7 +112,7 @@
                targetId="org.eclipse.jdt.ui.javaCode">
       </hyperlinkDetector>
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.commands">
         <command
@@ -138,7 +138,22 @@
       <handler
             class="com.liferay.ide.service.ui.handlers.BuildWSDDHandler"
             commandId="com.liferay.ide.service.ui.buildWSDD">
-      </handler>      
-   </extension>   
-   
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.liferay.ide.service.ui.buildService"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+V">
+      </key>
+      <key
+            commandId="com.liferay.ide.service.ui.buildWSDD"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+W">
+      </key>
+   </extension>
+
 </plugin>

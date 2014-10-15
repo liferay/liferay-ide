@@ -24,7 +24,7 @@ public class BuildWSDDHandler extends BuildServiceHandler
         {
             final IFile servicesFile = getServiceFile( project );
 
-            if( servicesFile != null )
+            if( servicesFile != null && servicesFile.exists() )
             {
                 final BuildServiceJob job = ServiceCore.createBuildWSDDJob( servicesFile );
                 job.schedule();

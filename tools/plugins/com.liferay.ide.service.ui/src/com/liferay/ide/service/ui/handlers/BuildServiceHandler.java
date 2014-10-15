@@ -8,28 +8,31 @@ import com.liferay.ide.service.core.job.BuildServiceJob;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
+@SuppressWarnings( "restriction" )
 public class BuildServiceHandler extends AbstractHandler
 {
 
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
         IStatus retval = null;
+        IProject project = null;
+
         final ISelection selection = HandlerUtil.getCurrentSelection( event );
 
         if( selection instanceof IStructuredSelection )
@@ -38,23 +41,37 @@ public class BuildServiceHandler extends AbstractHandler
 
             final Object selected = structuredSelection.getFirstElement();
 
-            IProject project = null;
-
             if( selected instanceof IResource )
             {
                 project = ( (IResource) selected ).getProject();
             }
-            else if( selected instanceof IJavaProject )
+            else if( selected instanceof IJavaElement )
             {
-                project = ( (IJavaProject) selected ).getProject();
+                project = ( (IJavaElement) selected ).getJavaProject().getProject();
             }
-
-            final boolean isLiferay = CoreUtil.isLiferayProject( project );
-
-            if( isLiferay )
+            else if( selected instanceof PackageFragmentRootContainer )
             {
-                retval = executeServiceBuild( project );
+                project = ( (PackageFragmentRootContainer) selected ).getJavaProject().getProject();
             }
+        }
+
+        if( project == null )
+        {
+            final IEditorInput editorInput = HandlerUtil.getActiveEditorInput( event );
+
+            if( editorInput != null && editorInput.getAdapter( IResource.class ) != null )
+            {
+                project = ( (IResource) editorInput.getAdapter( IResource.class ) ).getProject();
+            }
+        }
+
+        // use CoreUtil.isLiferayProject(IProject) won't work for maven project
+        // CoreUtil.getLiferayProejct(IResource) will get the nested liferay maven project
+        project =  CoreUtil.getLiferayProject( project );
+
+        if( project != null )
+        {
+            retval = executeServiceBuild( project );
         }
 
         return retval;
@@ -68,7 +85,7 @@ public class BuildServiceHandler extends AbstractHandler
         {
             final IFile servicesFile = getServiceFile( project );
 
-            if( servicesFile != null )
+            if( servicesFile != null && servicesFile.exists() )
             {
                 final BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
                 job.schedule();
@@ -85,25 +102,6 @@ public class BuildServiceHandler extends AbstractHandler
 
     protected IFile getServiceFile( IProject project )
     {
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-        if( webappRoot != null )
-        {
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
-            {
-                if( container != null && container.exists() )
-                {
-                    Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ); //$NON-NLS-1$
-                    IFile serviceFile = container.getFile( path );
-
-                    if( serviceFile.exists() )
-                    {
-                        return serviceFile;
-                    }
-                }
-            }
-        }
-
-        return null;
+        return CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
     }
 }

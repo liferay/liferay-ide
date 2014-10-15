@@ -19,20 +19,26 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 /**
  * @author Simon Jiang
+ * @author Kuo Zhang
  */
+@SuppressWarnings( "restriction" )
 public abstract class SDKCommandHandler extends AbstractHandler
 {
 
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
         IStatus retval = null;
+        IProject project = null;
+
         final ISelection selection = HandlerUtil.getCurrentSelection( event );
 
         if( selection instanceof IStructuredSelection )
@@ -41,25 +47,37 @@ public abstract class SDKCommandHandler extends AbstractHandler
 
             final Object selected = structuredSelection.getFirstElement();
 
-            IProject project = null;
-
             if( selected instanceof IResource )
             {
                 project = ( (IResource) selected ).getProject();
             }
-            else if( selected instanceof IJavaProject )
+            else if( selected instanceof IJavaElement )
             {
-                project = ( (IJavaProject) selected ).getProject();
+                project = ( (IJavaElement) selected ).getJavaProject().getProject();
             }
-
-            final boolean isLiferay = CoreUtil.isLiferayProject( project );
-
-            if( isLiferay )
+            else if( selected instanceof PackageFragmentRootContainer )
             {
-                if( SDKUtil.isSDKProject( project ) )
-                {
-                    retval = executeSdkCommand( project );
-                }
+                project = ( (PackageFragmentRootContainer) selected ).getJavaProject().getProject();
+            }
+        }
+
+        if( project == null )
+        {
+            final IEditorInput editorInput = HandlerUtil.getActiveEditorInput( event );
+
+            if( editorInput != null && editorInput.getAdapter( IResource.class ) != null )
+            {
+                project = ( (IResource) editorInput.getAdapter( IResource.class ) ).getProject();
+            }
+        }
+
+        final boolean isLiferay = CoreUtil.isLiferayProject( project );
+
+        if( isLiferay )
+        {
+            if( SDKUtil.isSDKProject( project ) )
+            {
+                retval = executeSdkCommand( project );
             }
         }
 

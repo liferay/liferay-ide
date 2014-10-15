@@ -514,7 +514,7 @@ public class CoreUtil
             }
         }
 
-        return project;
+        return null;
 
         /*IProject retval = null;
 
