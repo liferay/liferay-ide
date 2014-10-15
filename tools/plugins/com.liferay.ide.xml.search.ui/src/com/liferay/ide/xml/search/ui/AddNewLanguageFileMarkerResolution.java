@@ -20,15 +20,12 @@ import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
 import java.io.ByteArrayInputStream;
 import java.net.URL;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -64,6 +61,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
             {
                 if( !CoreUtil.isNullOrEmpty( resouceBundle ) )
                 {
+                    // TODO does this handle bundles like foo.bar.myresources.content.Language?
                     String[] paths = resouceBundle.split( "\\." );
 
                     if( paths.length == 2 )
@@ -86,7 +84,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
     @Override
     public String getLabel()
     {
-        return "Create a new language properties file for this project.";
+        return "Create a new default resource bundle add it to portlet.xml.";
     }
 
     public Image getImage()
@@ -112,6 +110,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
         {
             checkResourceBundleElement( project );
 
+            // TODO on maven projects this should be resources folder
             final IFolder folder = CoreUtil.getFirstSrcFolder( project ).getFolder( languageFilePackage );
 
             if( !folder.exists() )
@@ -122,7 +121,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
             final IFile languageFile = folder.getFile( languageFileName + ".properties" );
 
             String languageKey = getLanguageKey( message );
-            String languageMessage = getLanguageMessage( languageKey );
+            String languageMessage = getDefaultLanguageMessage( languageKey );
             String languagePropertyLine = languageKey + "=" + languageMessage + "\n";
 
             if( !languageFile.exists() )
@@ -153,15 +152,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
 
             openEditor( languageFile );
         }
-        catch( CoreException e )
-        {
-            LiferayXMLSearchUI.logError( e );
-        }
-        catch( UnsupportedEncodingException e )
-        {
-            LiferayXMLSearchUI.logError( e );
-        }
-        catch( IOException e )
+        catch( Exception e )
         {
             LiferayXMLSearchUI.logError( e );
         }

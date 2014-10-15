@@ -55,8 +55,7 @@ public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResol
             {
                 for( IFile file : files )
                 {
-                    resolutions.add( new AddLanguagePropertyMarkerResolution( marker, file, false ) );
-                    resolutions.add( new AddLanguagePropertyMarkerResolution( marker, file, true ) );
+                    resolutions.add( new AddLanguagePropertyMarkerResolution( marker, file ) );
                 }
             }
 

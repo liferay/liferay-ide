@@ -26,7 +26,6 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -38,27 +37,20 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
 {
 
     private IFile languageFile = null;
-    private boolean openEditor = false;
 
-    public AddLanguagePropertyMarkerResolution( IMarker marker, IFile languageFile, boolean openEditor )
+    public AddLanguagePropertyMarkerResolution( IMarker marker, IFile languageFile )
     {
         super( marker );
 
         this.languageFile = languageFile;
-        this.openEditor = openEditor;
     }
 
     public String getLabel()
     {
         final StringBuffer sb = new StringBuffer();
 
-        sb.append( "Add the language key to " );
-        sb.append( languageFile.getName() );
-
-        if( openEditor )
-        {
-            sb.append( " and open the properties editor" );
-        }
+        sb.append( "Add missing key to " );
+        sb.append( languageFile.getProjectRelativePath().toString() );
 
         return sb.toString();
     }
@@ -98,12 +90,10 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
 
             if( properties.get( languageKey ) != null )
             {
-                is.close();
-
                 return;
             }
 
-            final String languageMessage = getLanguageMessage( languageKey );
+            final String languageMessage = getDefaultLanguageMessage( languageKey );
 
             final String languagePropertyLine = languageKey + "=" + languageMessage;
 
@@ -124,20 +114,24 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
                 new ByteArrayInputStream( contentSb.toString().trim().getBytes( "UTF-8" ) ), IResource.FORCE,
                 new NullProgressMonitor() );
 
-            if( openEditor )
+            openEditor( languageFile );
+        }
+        catch( Exception e )
+        {
+            LiferayXMLSearchUI.logError( e );
+        }
+        finally
+        {
+            if( is != null )
             {
-                openEditor( languageFile );
+                try
+                {
+                    is.close();
+                }
+                catch( IOException e )
+                {
+                }
             }
-
-            is.close();
-        }
-        catch( IOException e )
-        {
-            LiferayXMLSearchUI.logError( e );
-        }
-        catch( CoreException e )
-        {
-            LiferayXMLSearchUI.logError( e );
         }
     }
 
