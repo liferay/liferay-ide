@@ -19,6 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
 import java.io.ByteArrayInputStream;
+import java.net.URL;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -29,6 +30,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 
 /**
  * @author Terry Jia
@@ -84,6 +87,13 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
     public String getLabel()
     {
         return "Create a new language properties file for this project.";
+    }
+
+    public Image getImage()
+    {
+        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/resource-bundle-new.png" );
+
+        return ImageDescriptor.createFromURL( url ).createImage();
     }
 
     @Override

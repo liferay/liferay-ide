@@ -18,7 +18,6 @@ package com.liferay.ide.xml.search.ui;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +25,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -121,13 +118,6 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
         }
 
         return sb.toString().trim();
-    }
-
-    public Image getImage()
-    {
-        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/portlet.png" );
-
-        return ImageDescriptor.createFromURL( url ).createImage();
     }
 
     protected void openEditor( IFile file ) throws PartInitException

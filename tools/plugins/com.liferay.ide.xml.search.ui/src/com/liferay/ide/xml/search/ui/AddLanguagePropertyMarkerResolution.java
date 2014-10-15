@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -27,6 +28,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 
 /**
  * @author Terry Jia
@@ -60,6 +63,12 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
         return sb.toString();
     }
 
+    public Image getImage()
+    {
+        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/resource-bundle.png" );
+
+        return ImageDescriptor.createFromURL( url ).createImage();
+    }
     protected void promptUser( final IMarker marker )
     {
         final String message = marker.getAttribute( IMarker.MESSAGE, "" );
