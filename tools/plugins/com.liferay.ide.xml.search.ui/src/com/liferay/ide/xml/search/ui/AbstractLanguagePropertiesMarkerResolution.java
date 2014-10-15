@@ -19,10 +19,13 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.IWorkbenchPage;
@@ -40,8 +43,6 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
 {
 
     private IMarker currentMarker = null;
-
-    private int count = 0;
 
     public AbstractLanguagePropertiesMarkerResolution( IMarker marker )
     {
@@ -71,6 +72,7 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
         return getLabel();
     }
 
+    // TODO don't parse this from message but use a marker attribute instead
     protected String getLanguageKey( String markerMessage )
     {
         if( CoreUtil.isNullOrEmpty( markerMessage ) )
@@ -92,7 +94,7 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
         return languageKey;
     }
 
-    protected String getLanguageMessage( String languageKey )
+    protected String getDefaultLanguageMessage( String languageKey )
     {
         if( CoreUtil.isNullOrEmpty( languageKey ) )
         {
@@ -129,28 +131,35 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
 
     public void run( IMarker marker )
     {
-        promptUser( marker );
+        resolve( marker );
 
-        count--;
-
-        if( count == 0 )
-        {
-            CoreUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
-        }
+        CoreUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
     }
 
     public void run( IMarker[] markers, IProgressMonitor monitor )
     {
-        count = markers.length;
+        final Set<IFile> files = new HashSet<IFile>();
 
         for( int i = 0; i < markers.length; i++ )
         {
             monitor.subTask( Util.getProperty( IMarker.MESSAGE, markers[i] ) );
 
-            run( markers[i] );
+            resolve( markers[i] );
+
+            final IResource resource = markers[i].getResource();
+
+            if( resource instanceof IFile && ( ! files.contains( resource ) ) )
+            {
+                files.add( (IFile) resource );
+            }
+        }
+
+        for( IFile file : files )
+        {
+            CoreUtil.validateFile( file, new NullProgressMonitor() );
         }
     }
 
-    protected abstract void promptUser( IMarker marker );
+    protected abstract void resolve( IMarker marker );
 
 }

@@ -69,7 +69,8 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
 
         return ImageDescriptor.createFromURL( url ).createImage();
     }
-    protected void promptUser( final IMarker marker )
+
+    protected void resolve( final IMarker marker )
     {
         final String message = marker.getAttribute( IMarker.MESSAGE, "" );
 

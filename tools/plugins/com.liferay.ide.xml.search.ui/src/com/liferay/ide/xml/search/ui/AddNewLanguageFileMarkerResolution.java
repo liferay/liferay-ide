@@ -97,7 +97,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
     }
 
     @Override
-    protected void promptUser( IMarker marker )
+    protected void resolve( IMarker marker )
     {
         final IProject project = marker.getResource().getProject();
 
