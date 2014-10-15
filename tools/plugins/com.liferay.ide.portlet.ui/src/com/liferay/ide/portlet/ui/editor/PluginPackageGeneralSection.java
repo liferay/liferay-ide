@@ -32,11 +32,9 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -247,12 +245,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         authorEntry = new FormEntry( client, toolkit, Msgs.authorLabel, null, SWT.SINGLE, false );
         authorEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setAuthor( entry.getValue().trim() );
             }
-        } );
+        });
 
         configureEntry( authorEntry );
     }
@@ -262,12 +259,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         changeLogEntry = new FormEntry( client, toolkit, Msgs.changeLogLabel, null, SWT.SINGLE, false );
         changeLogEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setChangeLog( entry.getValue().trim() );
             }
-        } );
+        });
 
         configureEntry( changeLogEntry );
     }
@@ -312,13 +308,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         licensesEntry = new FormEntry( client, toolkit, Msgs.licensesLabel, null, SWT.SINGLE, false );
         licensesEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setLicenses( entry.getValue().trim() );
             }
-
-        } );
+        });
 
         configureEntry( licensesEntry );
     }
@@ -328,13 +322,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         moduleGroupIdEntry = new FormEntry( client, toolkit, Msgs.moduleGroupIdLabel, null, SWT.SINGLE, false );
         moduleGroupIdEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setModuleGroupId( entry.getValue().trim() );
             }
-
-        } );
+        });
 
         configureEntry( moduleGroupIdEntry );
     }
@@ -344,13 +336,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         moduleIncrementalVersionEntry = new FormEntry( client, toolkit, Msgs.moduleVersionLabel, null, SWT.SINGLE, false );
         moduleIncrementalVersionEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setModuleIncrementalVersion( entry.getValue().trim() );
             }
-
-        } );
+        });
 
         configureEntry( moduleIncrementalVersionEntry );
     }
@@ -360,13 +350,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         nameEntry = new FormEntry( client, toolkit, Msgs.nameLabel, null, SWT.SINGLE, false );
         nameEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setName( entry.getValue().trim() );
             }
-
-        } );
+        });
 
         configureEntry( nameEntry );
     }
@@ -376,13 +364,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         pageUrlEntry = new FormEntry( client, toolkit, Msgs.pageURLLabel, null, SWT.SINGLE, false );
         pageUrlEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setPageUrl( entry.getValue().trim() );
             }
-
-        } );
+        });
 
         configureEntry( pageUrlEntry );
     }
@@ -398,13 +384,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         shortDescriptionEntry = new FormEntry( client, toolkit, Msgs.shortDescriptionLabel, null, SWT.SINGLE, false );
         shortDescriptionEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setShortDescription( entry.getValue().trim() );
             }
-
-        } );
+        });
         shortDescriptionEntry.getText().setLayoutData( gd );
         shortDescriptionEntry.setEditable( isEditable() );
     }
@@ -422,13 +406,12 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         longDescriptionEntry = new FormEntry( client, toolkit, Msgs.longDescriptionLabel, null, style, false );
         longDescriptionEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setLongDescription( entry.getValue().trim() );
             }
 
-        } );
+        });
         longDescriptionEntry.getText().setLayoutData( gd );
         longDescriptionEntry.setEditable( isEditable() );
     }
@@ -446,7 +429,6 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         speedFilters.setEnabled( isEditable() );
         speedFilters.addSelectionListener( new SelectionAdapter()
         {
-
             public void widgetSelected( SelectionEvent e )
             {
                 if( !speedFilterEnabledModifying )
@@ -455,7 +437,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
                 }
             }
 
-        } );
+        });
     }
 
     protected void createTagsEntry( Composite client, FormToolkit toolkit, IActionBars actionBars )
@@ -463,13 +445,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         tagsEntry = new FormEntry( client, toolkit, Msgs.tagsLabel, null, SWT.SINGLE, false );
         tagsEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
         {
-
             public void textValueChanged( FormEntry entry )
             {
                 getModel().setTags( entry.getValue().trim() );
             }
-
-        } );
+        });
 
         configureEntry( tagsEntry );
     }
