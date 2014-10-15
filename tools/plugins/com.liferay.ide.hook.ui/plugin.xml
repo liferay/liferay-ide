@@ -29,7 +29,7 @@
                contentTypeId="com.liferay.ide.hook.core.liferayhookxml">
          </contentTypeBinding>
       </editor>
-      
+
    </extension>
      <extension
          point="org.eclipse.ui.newWizards">
@@ -52,12 +52,12 @@
          </description>
       </wizard>
    </extension>
-   
+
    <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
             class="com.liferay.ide.hook.ui.HookCustomJspValidationResolutionGenerator"
             markerType="org.eclipse.jst.jsp.core.validationMarker">
       </markerResolutionGenerator>
-   </extension>   
+   </extension>
 </plugin>

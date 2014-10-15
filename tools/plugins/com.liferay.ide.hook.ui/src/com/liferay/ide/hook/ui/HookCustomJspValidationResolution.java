@@ -18,6 +18,8 @@ package com.liferay.ide.hook.ui;
 import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.net.URL;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -29,14 +31,27 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.ui.IMarkerResolution;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IMarkerResolution2;
 
 /**
  * @author Simon Jiang
  */
-public class HookCustomJspValidationResolution implements IMarkerResolution
+public class HookCustomJspValidationResolution implements IMarkerResolution2
 {
+
+    public String getDescription()
+    {
+        return getLabel();
+    }
+
+    public Image getImage()
+    {
+        final URL url = HookUI.getDefault().getBundle().getEntry( "/icons/e16/disabled.png" );
+        return ImageDescriptor.createFromURL( url ).createImage();
+    }
 
     public String getLabel()
     {
@@ -94,4 +109,6 @@ public class HookCustomJspValidationResolution implements IMarkerResolution
             initializeMessages( HookCustomJspValidationResolution.class.getName(), Msgs.class );
         }
     }
+
+
 }
