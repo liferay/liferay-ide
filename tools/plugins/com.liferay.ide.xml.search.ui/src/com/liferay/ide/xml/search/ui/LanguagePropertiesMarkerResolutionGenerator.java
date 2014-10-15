@@ -38,7 +38,7 @@ public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResol
     {
         IMarkerResolution[] retval = null;
 
-        if( correctMarker( marker ) )
+        if( hasResolutions( marker ) )
         {
             final IProject project = marker.getResource().getProject();
 
@@ -68,11 +68,6 @@ public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResol
     }
 
     public boolean hasResolutions( IMarker marker )
-    {
-        return correctMarker( marker );
-    }
-
-    protected boolean correctMarker( IMarker marker )
     {
         try
         {
