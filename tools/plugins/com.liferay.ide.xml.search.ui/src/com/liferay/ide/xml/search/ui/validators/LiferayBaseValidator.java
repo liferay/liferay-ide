@@ -66,6 +66,7 @@ import org.w3c.dom.Node;
 @SuppressWarnings( "restriction" )
 public class LiferayBaseValidator implements IXMLReferenceValidator
 {
+    public static final String MARKER_QUERY_ID = "querySpecificationId";
     public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
     public static final String MESSAGE_REFERENCE_NOT_FOUND = Msgs.referenceNotFound;
     public static final String MESSAGE_RESOURCE_NOT_FOUND = Msgs.resourceNotFound;
@@ -191,9 +192,9 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
 
     protected void addMessage(
         IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
-        int severity )
+        int severity)
     {
-        addMessage( node, file, validator, reporter, batchMode, messageText, severity, "" );
+        addMessage( node, file, validator, reporter, batchMode, messageText, severity, null );
     }
 
     protected void addMessage(
@@ -213,7 +214,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
             {
                 reporter.removeAllMessages( validator );
                 message.setTargetObject( file );
-
+                message.setAttribute( MARKER_QUERY_ID, querySpecificationId );
                 reporter.addMessage( validator, message );
             }
         }
@@ -462,7 +463,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
                 if( severity != ValidationMessage.IGNORE )
                 {
                     final String messageText = getMessageText( validationType, referenceTo, node, file );
-                    addMessage( node, file, validator, reporter, batchMode, messageText, severity );
+                    addMessage( node, file, validator, reporter, batchMode, messageText, severity, referenceTo.getQuerySpecificationId() );
                 }
             }
         }

@@ -17,6 +17,7 @@ package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,9 +72,9 @@ public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResol
     {
         try
         {
-            return LiferayXMLConstants.LIFERAY_JSP_MARKER_WARNING_ID.equals( marker.getType() ) &&
-                LiferayXMLConstants.MARKER_CATEGORY_RESOURCE_BUNDLE.equals( marker.getAttribute(
-                    LiferayXMLConstants.MARKER_CATEGORY, "" ) );
+            return LiferayXMLConstants.LIFERAY_JSP_MARKER_ID.equals( marker.getType() ) &&
+                LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( marker.getAttribute(
+                    LiferayBaseValidator.MARKER_QUERY_ID, "" ) );
         }
         catch( CoreException e )
         {

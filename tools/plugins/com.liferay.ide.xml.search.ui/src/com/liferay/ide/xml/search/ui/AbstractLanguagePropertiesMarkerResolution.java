@@ -16,6 +16,7 @@
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,10 +57,10 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
 
         for( IMarker marker : markers )
         {
-            if( ( marker != null ) &&
-                !marker.equals( currentMarker ) &&
-                marker.getAttribute( LiferayXMLConstants.MARKER_CATEGORY, "" ).equals(
-                    LiferayXMLConstants.MARKER_CATEGORY_RESOURCE_BUNDLE ) )
+            if( marker != null &&
+                ( !marker.equals( currentMarker ) ) &&
+                LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( marker.getAttribute(
+                    LiferayBaseValidator.MARKER_QUERY_ID, "" ) ) )
             {
                 otherMarkers.add( marker );
             }
