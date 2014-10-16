@@ -27,6 +27,21 @@ import org.eclipse.wst.sse.core.internal.provisional.text.ITextRegion;
 public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitionerForJSP
 {
 
+    private final String[] RESOURCE_BUNDLE_ATTRS = new String[]
+    {
+        "key",
+        "message",
+        "label",
+        "helpMessage",
+        "suffix",
+        "title",
+        "value",
+        "placeholder",
+        "errorMessage",
+        "statusMessage",
+        "confirmation"
+    };
+
     @Override
     public String getPartitionType( ITextRegion region, int offset )
     {
@@ -96,6 +111,44 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
         return false;
     }
 
+    protected boolean isResourceBundleAttrValue(
+        IStructuredDocumentRegion region, ITextRegion childRegion, int offset )
+    {
+        if( region != null &&
+            childRegion != null &&
+            "XML_TAG_NAME".equals( region.getType() ) &&
+            "XML_TAG_ATTRIBUTE_VALUE".equals( childRegion.getType() ) &&
+            ( region.getText().toLowerCase().startsWith( "<aui:" ) ||
+              region.getText().toLowerCase().startsWith( "<liferay-ui:" ) ) )
+        {
+            // we have found an attribute value in a liferay tag but now we need to check if the attribteName is a
+            // resource bundle attribute
+            final ITextRegion[] regions = region.getRegions().toArray();
+
+            for( int i = 0; i < regions.length; i++ )
+            {
+                if( regions[i].equals( childRegion ) )
+                {
+                    if( i >=2 && regions[i-2].getType().equals( "XML_TAG_ATTRIBUTE_NAME" ) )
+                    {
+                        final ITextRegion attrNameRegion = regions[i-2];
+                        final String attrName = region.getFullText( attrNameRegion );
+
+                        for( String attr : RESOURCE_BUNDLE_ATTRS )
+                        {
+                            if( attrName.equals( attr ) )
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     private boolean isAUIScriptBetween(
         IStructuredDocumentRegion previousNode, IStructuredDocumentRegion nextNode )
     {
@@ -118,6 +171,12 @@ public class AlloyStructuredTextPartitionerForJSP extends StructuredTextPartitio
         {
             return false;
         }
+
+// only used if we need partitioner to not skip over liferay taglib message keys
+//        if( isResourceBundleAttrValue( sdRegion, containedChildRegion, offset ) )
+//        {
+//            return true;
+//        }
 
         return super.isDocumentRegionBasedPartition( sdRegion, containedChildRegion, offset );
     }
