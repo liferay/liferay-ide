@@ -36,7 +36,7 @@ import org.eclipse.sapphire.ui.def.ActionHandlerFactoryDef;
 public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandlerFactory
 {
     private final static String ADD_LAYOUT_TEMPLATE_ACTION_ID = "LayoutTpl.Add.LayoutTemplate";
-    private final static String ADD_LAYOUT_1_2_I_ACTION_HANDLDER_ID = "Add.Layout.1_2_I.ActionHandler";
+    private final static String ADD_LAYOUT_1_2_I_ACTION_HANDLER_ID = "Add.Layout.1_2_I.ActionHandler";
     private final static String ADD_LAYOUT_1_2_II_ACTION_HANDLER_ID = "Add.Layout.1_2_II.ActionHandler";
     private final static String ADD_LAYOUT_2_2_ACTION_HANDLER_ID = "Add.Layout.2_2.ActionHandler";
     private final static String ADD_LAYOUT_1_2_1_ACTION_HANDLER_ID = "Add.Layout.1_2_1.ActionHandler";
@@ -76,7 +76,7 @@ public class AddLayoutTemplateActionHandlerFactory extends SapphireActionHandler
         public void init( SapphireAction action, ActionHandlerDef def )
         {
             super.init( action, def );
-            setId( ADD_LAYOUT_1_2_I_ACTION_HANDLDER_ID );
+            setId( ADD_LAYOUT_1_2_I_ACTION_HANDLER_ID );
             setLabel();
         }
  

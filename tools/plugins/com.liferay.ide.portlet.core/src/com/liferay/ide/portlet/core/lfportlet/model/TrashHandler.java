@@ -39,7 +39,7 @@ public interface TrashHandler extends Element
 
     // Transh Handler
 
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.lifaray.portal.kernel.trash.TrashHandler" )
+    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.trash.TrashHandler" )
     @Label( standard = "Trash Handler" )
     @MustExist
     @Reference( target = JavaType.class )

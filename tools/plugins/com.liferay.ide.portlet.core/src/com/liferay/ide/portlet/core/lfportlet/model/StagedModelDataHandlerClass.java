@@ -37,7 +37,7 @@ public interface StagedModelDataHandlerClass extends Element
 
     // Value
 
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.lar.StagedModelDataHandlder")
+    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.lar.StagedModelDataHandler")
     @MustExist
     @Reference( target = JavaType.class )
     @Type( base = JavaTypeName.class )
