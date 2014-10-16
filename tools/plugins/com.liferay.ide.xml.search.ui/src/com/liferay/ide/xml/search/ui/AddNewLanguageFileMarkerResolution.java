@@ -42,9 +42,13 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
 
     private String languageFileName = "Language";
 
-    public AddNewLanguageFileMarkerResolution( IMarker marker )
+    private String portletName = "";
+
+    public AddNewLanguageFileMarkerResolution( IMarker marker, String portletName )
     {
         super( marker );
+
+        this.portletName = portletName;
     }
 
     private void checkResourceBundleElement( IProject project )
@@ -55,7 +59,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
 
         if( resouceBundles.length == 0 )
         {
-            portletDescriptorHelper.addResourceBundle( languageFilePackage + "." + languageFileName );
+            portletDescriptorHelper.addResourceBundle( languageFilePackage + "." + languageFileName, portletName );
         }
         else
         {
@@ -98,7 +102,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
     @Override
     public String getLabel()
     {
-        return "Create a new default resource bundle add it to portlet.xml.";
+        return "Create a new default resource bundle add it to portlet.xml for " + portletName + " portlet";
     }
 
     public Image getImage()

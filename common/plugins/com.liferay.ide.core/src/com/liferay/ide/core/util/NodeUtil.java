@@ -120,6 +120,29 @@ public class NodeUtil
         return null;
     }
 
+    public static Node findLastChild( Element element, String elementName )
+    {
+        if( element != null && !( CoreUtil.isNullOrEmpty( elementName ) ) )
+        {
+            NodeList children = element.getChildNodes();
+
+            if( children != null && children.getLength() > 0 )
+            {
+                for( int i = children.getLength() - 1; i >= 0; i-- )
+                {
+                    Node child = children.item( i );
+
+                    if( elementName.equals( child.getNodeName() ) )
+                    {
+                        return child;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static String getChildElementContent( Node parent, String childElement )
     {
         String retval = null;

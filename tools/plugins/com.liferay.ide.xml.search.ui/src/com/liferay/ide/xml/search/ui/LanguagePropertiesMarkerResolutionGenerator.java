@@ -17,6 +17,7 @@ package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
@@ -49,7 +50,15 @@ public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResol
 
             if( CoreUtil.isNullOrEmpty( files ) )
             {
-                resolutions.add( new AddNewLanguageFileMarkerResolution( marker ) );
+                String[] portletNames = new PortletDescriptorHelper( project ).getAllPortletNames();
+
+                if( !CoreUtil.isNullOrEmpty( portletNames ) )
+                {
+                    for( String portletName : portletNames )
+                    {
+                        resolutions.add( new AddNewLanguageFileMarkerResolution( marker, portletName ) );
+                    }
+                }
             }
             else
             {

@@ -133,7 +133,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         );
     }
 
-    public IStatus addResourceBundle( final String resourceBundle )
+    public IStatus addResourceBundle( final String resourceBundle, final String portletName )
     {
         final IFile descriptorFile = getDescriptorFile();
 
@@ -143,7 +143,7 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
             @Override
             protected IStatus doExecute( IDOMDocument document )
             {
-                return doAddResourceBundle( document, resourceBundle );
+                return doAddResourceBundle( document, resourceBundle, portletName );
             }
         };
 
@@ -283,34 +283,58 @@ public class PortletDescriptorHelper extends LiferayDescriptorHelper implements 
         return Status.OK_STATUS;
     }
 
-    protected IStatus doAddResourceBundle( IDOMDocument document, String resourceBundle )
+    protected IStatus doAddResourceBundle( IDOMDocument document, String resourceBundle, String portletName )
     {
         final FormatProcessorXML processor = new FormatProcessorXML();
 
-        final NodeList supportsList = document.getElementsByTagName( "supports" );
-        final NodeList portletList = document.getElementsByTagName( "portlet" );
+        final NodeList portletNameList = document.getElementsByTagName( "portlet-name" );
 
-        if( ( supportsList != null ) && ( supportsList.getLength() > 0 ) && ( portletList != null ) &&
-            ( portletList.getLength() > 0 ) && !CoreUtil.isNullOrEmpty( resourceBundle ) )
+        if( ( portletNameList != null ) && ( portletNameList.getLength() > 0 ) &&
+            !CoreUtil.isNullOrEmpty( resourceBundle ) )
         {
-            Element newResourceBundleElement = null;
+            Node portletNameNode = null;
 
-            Node portlet = null;
-
-            final Node supports = supportsList.item( 0 );
-
-            for( int i = 0; i < portletList.getLength(); i++ )
+            for( int i = 0; i < portletNameList.getLength(); i++ )
             {
-                portlet = portletList.item( i );
-
-                if( supports.getParentNode().equals( portlet ) )
+                if( NodeUtil.getTextContent( portletNameList.item( i ) ).equals( portletName ) )
                 {
-                    break;
+                    portletNameNode = portletNameList.item( i );
                 }
             }
 
+            if( portletNameNode == null )
+            {
+                return Status.CANCEL_STATUS;
+            }
+
+            Element newResourceBundleElement = null;
+
+            Node portlet = portletNameNode.getParentNode();
+
+            Node refNode = null;
+
+            Node supports = NodeUtil.findLastChild( (Element) portlet, "supports" );
+
+            if( supports != null )
+            {
+                Node supportedLocale = NodeUtil.findLastChild( (Element) portlet, "supported-locale" );
+
+                if( supportedLocale != null )
+                {
+                    refNode = supportedLocale;
+                }
+                else
+                {
+                    refNode = supports;
+                }
+            }
+            else
+            {
+                return Status.CANCEL_STATUS;
+            }
+
             newResourceBundleElement =
-                NodeUtil.insertChildElementAfter( (Element) portlet, supports, "resource-bundle", resourceBundle );
+                NodeUtil.insertChildElementAfter( (Element) portlet, refNode, "resource-bundle", resourceBundle );
 
             processor.formatNode( newResourceBundleElement );
         }
