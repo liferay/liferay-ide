@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.BundleContext;
@@ -73,6 +72,8 @@ public class LiferayMavenCore extends Plugin
     // The key of disable customJspValidation checking
     public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
 
+    private static final IScopeContext[] scopes =
+                    new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
 
     public static Status createErrorStatus( String msg )
     {
@@ -110,20 +111,14 @@ public class LiferayMavenCore extends Plugin
         return DefaultScope.INSTANCE.getNode( PLUGIN_ID );
     }
 
-    public static boolean getPreference( String key )
+    public static boolean getPreferenceBoolean( String key )
     {
-        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
-        IPreferencesService preferencesService = Platform.getPreferencesService();
-
-        return preferencesService.getBoolean( PLUGIN_ID, key, false, scopes );
+        return Platform.getPreferencesService().getBoolean( PLUGIN_ID, key, false, scopes );
     }
 
     public static String getPreferenceString( final String key, final String defaultValue )
     {
-        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
-        IPreferencesService preferencesService = Platform.getPreferencesService();
-
-        return preferencesService.getString( PLUGIN_ID, key, defaultValue, scopes );
+        return Platform.getPreferencesService().getString( PLUGIN_ID, key, defaultValue, scopes );
     }
 
     public static void log( IStatus status )

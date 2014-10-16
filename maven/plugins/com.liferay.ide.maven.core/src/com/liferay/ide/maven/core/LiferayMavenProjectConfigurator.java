@@ -325,7 +325,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                     final IPath pathValue = docFolder.getFullPath().append( newPath );
 
                     final boolean disableCustomJspValidation =
-                        LiferayMavenCore.getPreference( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION );
+                        LiferayMavenCore.getPreferenceBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION );
 
                     if( disableCustomJspValidation )
                     {
