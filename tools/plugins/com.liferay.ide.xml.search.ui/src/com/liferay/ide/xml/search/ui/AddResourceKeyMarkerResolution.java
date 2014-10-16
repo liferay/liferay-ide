@@ -33,16 +33,16 @@ import org.eclipse.swt.graphics.Image;
 /**
  * @author Terry Jia
  */
-public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropertiesMarkerResolution
+public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarkerResolution
 {
 
-    private IFile languageFile = null;
+    private IFile resourceBundle = null;
 
-    public AddLanguagePropertyMarkerResolution( IMarker marker, IFile languageFile )
+    public AddResourceKeyMarkerResolution( IMarker marker, IFile languageFile )
     {
         super( marker );
 
-        this.languageFile = languageFile;
+        this.resourceBundle = languageFile;
     }
 
     public String getLabel()
@@ -50,7 +50,7 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
         final StringBuffer sb = new StringBuffer();
 
         sb.append( "Add missing key to " );
-        sb.append( languageFile.getProjectRelativePath().toString() );
+        sb.append( resourceBundle.getProjectRelativePath().toString() );
 
         return sb.toString();
     }
@@ -66,7 +66,7 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
     {
         final String message = marker.getAttribute( IMarker.MESSAGE, "" );
 
-        if( ( message == null ) || ( languageFile == null ) )
+        if( ( message == null ) || ( resourceBundle == null ) )
         {
             return;
         }
@@ -75,9 +75,9 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
 
         try
         {
-            is = languageFile.getContents();
+            is = resourceBundle.getContents();
 
-            final String languageKey = getLanguageKey( marker );
+            final String languageKey = getResourceKey( marker );
 
             if( CoreUtil.isNullOrEmpty( languageKey ) )
             {
@@ -93,11 +93,11 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
                 return;
             }
 
-            final String languageMessage = getDefaultLanguageMessage( languageKey );
+            final String resourceValue = getDefaultResourceValue( languageKey );
 
-            final String languagePropertyLine = languageKey + "=" + languageMessage;
+            final String resourcePropertyLine = languageKey + "=" + resourceValue;
 
-            final String contents = CoreUtil.readStreamToString( languageFile.getContents() );
+            final String contents = CoreUtil.readStreamToString( resourceBundle.getContents() );
 
             final StringBuffer contentSb = new StringBuffer();
 
@@ -108,13 +108,13 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
                 contentSb.append( "\n" );
             }
 
-            contentSb.append( languagePropertyLine );
+            contentSb.append( resourcePropertyLine );
 
-            languageFile.setContents(
+            resourceBundle.setContents(
                 new ByteArrayInputStream( contentSb.toString().trim().getBytes( "UTF-8" ) ), IResource.FORCE,
                 new NullProgressMonitor() );
 
-            openEditor( languageFile );
+            openEditor( resourceBundle );
         }
         catch( Exception e )
         {

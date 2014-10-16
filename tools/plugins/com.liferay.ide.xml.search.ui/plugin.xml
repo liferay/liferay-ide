@@ -940,7 +940,7 @@
             class="com.liferay.ide.xml.search.ui.PortletContentAssistInfoProvider" />
         <additionalProposalInfoProvider
             id="contentAssist.language.property.info"
-            class="com.liferay.ide.xml.search.ui.LanguagePropertyContentAssistInfoProvider" />
+            class="com.liferay.ide.xml.search.ui.ResourceBundleContentAssistInfoProvider" />
     </extension>
 
     <!--========== Edit Configurations ==========-->
@@ -1021,7 +1021,7 @@
     <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
-            class="com.liferay.ide.xml.search.ui.LanguagePropertiesMarkerResolutionGenerator"
+            class="com.liferay.ide.xml.search.ui.ResourceBundleMarkerResolutionGenerator"
             markerType="org.eclipse.jst.jsp.core.validationMarker">
       </markerResolutionGenerator>
    </extension>

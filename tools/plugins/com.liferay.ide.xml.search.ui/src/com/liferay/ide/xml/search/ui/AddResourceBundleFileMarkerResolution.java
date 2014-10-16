@@ -35,16 +35,16 @@ import org.eclipse.swt.graphics.Image;
 /**
  * @author Terry Jia
  */
-public class AddNewLanguageFileMarkerResolution extends AbstractLanguagePropertiesMarkerResolution
+public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundleMarkerResolution
 {
 
-    private String languageFilePackage = "content";
+    private String resourceBundlePackage = "content";
 
-    private String languageFileName = "Language";
+    private String resourceBundleName = "Language";
 
     private String portletName = "";
 
-    public AddNewLanguageFileMarkerResolution( IMarker marker, String portletName )
+    public AddResourceBundleFileMarkerResolution( IMarker marker, String portletName )
     {
         super( marker );
 
@@ -59,7 +59,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
 
         if( resouceBundles.length == 0 )
         {
-            portletDescriptorHelper.addResourceBundle( languageFilePackage + "." + languageFileName, portletName );
+            portletDescriptorHelper.addResourceBundle( resourceBundlePackage + "." + resourceBundleName, portletName );
         }
         else
         {
@@ -79,18 +79,18 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
                             sb.append( "/" );
                         }
 
-                        languageFilePackage = sb.toString();
-                        languageFileName = paths[paths.length - 1];
+                        resourceBundlePackage = sb.toString();
+                        resourceBundleName = paths[paths.length - 1];
                     }
                     else if( paths.length == 2 )
                     {
-                        languageFilePackage = paths[0];
-                        languageFileName = paths[1];
+                        resourceBundlePackage = paths[0];
+                        resourceBundleName = paths[1];
                     }
                     else if( paths.length == 1 )
                     {
-                        languageFilePackage = "";
-                        languageFileName = paths[0];
+                        resourceBundlePackage = "";
+                        resourceBundleName = paths[0];
                     }
 
                     break;
@@ -102,7 +102,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
     @Override
     public String getLabel()
     {
-        return "Create a new default resource bundle add it to portlet.xml for " + portletName + " portlet";
+        return "Create a new default resource bundle add it to " + portletName + " portlet";
     }
 
     public Image getImage()
@@ -135,52 +135,52 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
                 return;
             }
 
-            final IFolder folder = liferayProject.getSourceFolder( "resources" ).getFolder( languageFilePackage );
+            final IFolder folder = liferayProject.getSourceFolder( "resources" ).getFolder( resourceBundlePackage );
 
             if( !folder.exists() )
             {
                 CoreUtil.makeFolders( folder );
             }
 
-            final IFile languageFile = folder.getFile( languageFileName + ".properties" );
+            final IFile resourceBundle = folder.getFile( resourceBundleName + ".properties" );
 
-            String languageKey = getLanguageKey( marker );
+            String resourceKey = getResourceKey( marker );
 
-            if( CoreUtil.isNullOrEmpty( languageKey ) )
+            if( CoreUtil.isNullOrEmpty( resourceKey ) )
             {
                 return;
             }
 
-            String languageMessage = getDefaultLanguageMessage( languageKey );
-            String languagePropertyLine = languageKey + "=" + languageMessage + "\n";
+            String resourceValue = getDefaultResourceValue( resourceKey );
+            String resourcePropertyLine = resourceKey + "=" + resourceValue + "\n";
 
-            if( !languageFile.exists() )
+            if( !resourceBundle.exists() )
             {
-                IFolder parent = (IFolder) languageFile.getParent();
+                IFolder parent = (IFolder) resourceBundle.getParent();
 
                 CoreUtil.prepareFolder( parent );
 
-                languageFile.create(
-                    new ByteArrayInputStream( languagePropertyLine.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+                resourceBundle.create(
+                    new ByteArrayInputStream( resourcePropertyLine.getBytes( "UTF-8" ) ), IResource.FORCE, null );
             }
             else
             {
-                String contents = CoreUtil.readStreamToString( languageFile.getContents() );
+                String contents = CoreUtil.readStreamToString( resourceBundle.getContents() );
 
                 StringBuffer sb = new StringBuffer();
 
                 sb.append( contents );
-                sb.append( languageKey );
+                sb.append( resourceKey );
                 sb.append( "=" );
-                sb.append( languageMessage );
+                sb.append( resourceValue );
                 sb.append( "\n" );
 
-                languageFile.setContents(
+                resourceBundle.setContents(
                     new ByteArrayInputStream( sb.toString().getBytes( "UTF-8" ) ), IResource.FORCE,
                     new NullProgressMonitor() );
             }
 
-            openEditor( languageFile );
+            openEditor( resourceBundle );
         }
         catch( Exception e )
         {

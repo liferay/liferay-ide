@@ -33,7 +33,7 @@ import org.eclipse.ui.IMarkerResolutionGenerator2;
 /**
  * @author Terry Jia
  */
-public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResolutionGenerator2
+public class ResourceBundleMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 {
 
     public IMarkerResolution[] getResolutions( IMarker marker )
@@ -56,7 +56,7 @@ public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResol
                 {
                     for( String portletName : portletNames )
                     {
-                        resolutions.add( new AddNewLanguageFileMarkerResolution( marker, portletName ) );
+                        resolutions.add( new AddResourceBundleFileMarkerResolution( marker, portletName ) );
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class LanguagePropertiesMarkerResolutionGenerator implements IMarkerResol
             {
                 for( IFile file : files )
                 {
-                    resolutions.add( new AddLanguagePropertyMarkerResolution( marker, file ) );
+                    resolutions.add( new AddResourceKeyMarkerResolution( marker, file ) );
                 }
             }
 

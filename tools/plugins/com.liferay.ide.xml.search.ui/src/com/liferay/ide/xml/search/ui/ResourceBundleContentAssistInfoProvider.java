@@ -20,6 +20,6 @@ import org.eclipse.wst.xml.search.editor.contentassist.PropertyContentAssistAddi
 /**
  * @author Terry Jia
  */
-public class LanguagePropertyContentAssistInfoProvider extends PropertyContentAssistAdditionalProposalInfoProvider
+public class ResourceBundleContentAssistInfoProvider extends PropertyContentAssistAdditionalProposalInfoProvider
 {
 }

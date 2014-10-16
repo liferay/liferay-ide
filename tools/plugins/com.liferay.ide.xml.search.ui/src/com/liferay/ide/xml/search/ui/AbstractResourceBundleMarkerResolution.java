@@ -39,12 +39,12 @@ import org.eclipse.ui.views.markers.internal.Util;
  * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public abstract class AbstractLanguagePropertiesMarkerResolution extends WorkbenchMarkerResolution
+public abstract class AbstractResourceBundleMarkerResolution extends WorkbenchMarkerResolution
 {
 
     private IMarker currentMarker = null;
 
-    public AbstractLanguagePropertiesMarkerResolution( IMarker marker )
+    public AbstractResourceBundleMarkerResolution( IMarker marker )
     {
         this.currentMarker = marker;
     }
@@ -72,7 +72,7 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
         return getLabel();
     }
 
-    protected String getLanguageKey( IMarker marker )
+    protected String getResourceKey( IMarker marker )
     {
         if( marker == null )
         {
@@ -82,14 +82,14 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
         return marker.getAttribute( LiferayXMLConstants.LANGUAGE_KEY, "" );
     }
 
-    protected String getDefaultLanguageMessage( String languageKey )
+    protected String getDefaultResourceValue( String resourceKey )
     {
-        if( CoreUtil.isNullOrEmpty( languageKey ) )
+        if( CoreUtil.isNullOrEmpty( resourceKey ) )
         {
             return "";
         }
 
-        final String[] words = languageKey.split( "-" );
+        final String[] words = resourceKey.split( "-" );
 
         final StringBuffer sb = new StringBuffer();
 

@@ -123,7 +123,7 @@ public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
 
             for( IMarkerResolution resolution : resolutions )
             {
-                if( resolution instanceof AbstractLanguagePropertiesMarkerResolution )
+                if( resolution instanceof AbstractResourceBundleMarkerResolution )
                 {
                     retval.add( new MarkerResolutionProposal( resolution, marker ) );
                 }
