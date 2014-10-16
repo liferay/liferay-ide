@@ -21,11 +21,7 @@ import com.liferay.ide.project.core.model.ProfileLocation;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.Test;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -150,11 +146,5 @@ public class JSFPortletProjectTests extends LiferayMavenProjectTestCase
 
         assertTrue( contents.contains( "PUBLIC \"-//Liferay//DTD Portlet Application 6.1.0//EN\"" ) );
         assertTrue( contents.contains( "http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd" ) );
-
-        final IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( descriptorFile );
-        final IDOMDocument document = domModel.getDocument();
-        NodeList elements = document.getElementsByTagName( "requires-namespaced-parameters" );
-
-        assertEquals( 0, elements.getLength() );
     }
 }

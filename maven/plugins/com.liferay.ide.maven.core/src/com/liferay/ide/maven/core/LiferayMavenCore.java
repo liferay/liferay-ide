@@ -39,35 +39,31 @@ public class LiferayMavenCore extends Plugin
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.maven.core"; //$NON-NLS-1$
 
-    public static final String PREF_ARCHETYPE_GAV_EXT = "com.liferay.maven.archetypes:liferay-ext-archetype";
+    public static final String PREF_ARCHETYPE_GAV_EXT = "archetype-gav-ext";
 
-    public static final String PREF_ARCHETYPE_GAV_FACES_ALLOY =
-        "com.liferay.maven.archetypes:liferay-portlet-liferay-faces-alloy-archetype";
+    public static final String PREF_ARCHETYPE_GAV_LIFERAY_FACES_ALLOY = "archetype-gav-liferay-faces-alloy";
 
-    public static final String PREF_ARCHETYPE_GAV_HOOK = "com.liferay.maven.archetypes:liferay-hook-archetype";
+    public static final String PREF_ARCHETYPE_GAV_HOOK = "archetype-gav-hook";
 
-    public static final String PREF_ARCHETYPE_GAV_ICEFACES =
-        "com.liferay.maven.archetypes:liferay-portlet-icefaces-archetype";
+    public static final String PREF_ARCHETYPE_GAV_ICEFACES = "archetype-gav-icefaces";
 
-    public static final String PREF_ARCHETYPE_GAV_JSF = "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype";
+    public static final String PREF_ARCHETYPE_GAV_JSF = "archetype-gav-jsf";
 
-    public static final String PREF_ARCHETYPE_GAV_LAYOUTTPL = "com.liferay.maven.archetypes:liferay-layouttpl-archetype";
+    public static final String PREF_ARCHETYPE_GAV_LAYOUTTPL = "archetype-gav-layouttpl";
 
-    public static final String PREF_ARCHETYPE_GAV_MVC_PORTLET = "com.liferay.maven.archetypes:liferay-portlet-archetype";
+    public static final String PREF_ARCHETYPE_GAV_MVC = "archetype-gav-mvc";
 
-    public static final String PREF_ARCHETYPE_GAV_PRIMEFACES =
-        "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype";
+    public static final String PREF_ARCHETYPE_GAV_PRIMEFACES = "archetype-gav-primefaces";
 
-    public static final String PREF_ARCHETYPE_GAV_RICHFACES =
-        "com.liferay.maven.archetypes:liferay-portlet-richfaces-archetype";
+    public static final String PREF_ARCHETYPE_GAV_RICHFACES = "archetype-gav-richfaces";
 
-    public static final String PREF_ARCHETYPE_GAV_SERVICEBUILDER = "com.liferay.maven.archetypes:liferay-servicebuilder-archetype";
+    public static final String PREF_ARCHETYPE_GAV_SERVICEBUILDER = "archetype-gav-servicebuilder";
 
-    public static final String PREF_ARCHETYPE_GAV_THEME = "com.liferay.maven.archetypes:liferay-theme-archetype";
+    public static final String PREF_ARCHETYPE_GAV_THEME = "archetype-gav-theme";
 
-    public static final String PREF_ARCHETYPE_GAV_VAADIN = "com.vaadin:vaadin-archetype-liferay-portlet";
+    public static final String PREF_ARCHETYPE_GAV_VAADIN = "archetype-gav-vaadin";
 
-    public static final String PREF_ARCHETYPE_GAV_WEB = "com.liferay.maven.archetypes:liferay-web-archetype";
+    public static final String PREF_ARCHETYPE_GAV_WEB = "archetype-gav-web";
 
     // The key of disable customJspValidation checking
     public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";

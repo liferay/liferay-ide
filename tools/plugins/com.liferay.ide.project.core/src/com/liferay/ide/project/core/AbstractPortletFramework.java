@@ -41,11 +41,6 @@ public abstract class AbstractPortletFramework implements IPortletFramework
     private boolean requiresAdvanced;
     private String shortName;
 
-    public String getArchetypeGAV()
-    {
-        return null;
-    }
-
     public String getBundleId()
     {
         return bundleId;

@@ -84,14 +84,12 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
 {
     ElementType TYPE = new ElementType( NewLiferayPluginProjectOp.class );
 
-    // *** ArchTypeVersion ***
+    // *** Archetype ***
 
-    @Label( standard = "archetypeGAV" )
     @Service( impl = ArchetypeDefaultValueService.class )
     ValueProperty PROP_ARCHETYPE = new ValueProperty( TYPE, "Archetype" ); //$NON-NLS-1$
 
     Value<String> getArchetype();
-
     void setArchetype( String value );
 
     // *** ProjectName ***

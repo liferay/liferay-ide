@@ -201,7 +201,7 @@
                     <content>
                         <property-editor>Archetype</property-editor>
                     </content>
-                    <visible-when>${ PluginType == 'portlet'  &amp;&amp; ProjectProvider == 'maven' }</visible-when>
+                    <visible-when>${PluginType == 'portlet' &amp;&amp; ProjectProvider == 'maven'}</visible-when>
                 </group>
             </content>
             <margin-right>10</margin-right>
@@ -231,7 +231,7 @@
                     <content>
                         <property-editor>Archetype</property-editor>
                     </content>
-                    <visible-when>${ PluginType == 'portlet'  &amp;&amp; ProjectProvider == 'maven' }</visible-when>
+                    <visible-when>${PluginType == 'portlet' &amp;&amp; ProjectProvider == 'maven'}</visible-when>
                 </group>
             </content>
             <visible-when>${ PluginType == 'portlet' &amp;&amp; PortletFramework == 'jsf-2.x' }</visible-when>

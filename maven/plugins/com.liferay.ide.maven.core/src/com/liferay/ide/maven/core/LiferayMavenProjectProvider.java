@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -147,10 +148,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         }
 
         final String archetypeArtifactId = op.getArchetype().content( true );
-        
-        // get latest liferay archetype
-        monitor.beginTask( "Determining latest Liferay maven plugin archetype version.", IProgressMonitor.UNKNOWN );
-        // final String archetypeVersion = AetherUtil.getLatestAvailableArtifact( archetypeArtifactId ).getVersion();
 
         final Archetype archetype = new Archetype();
 
@@ -511,19 +508,13 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 }
             }
         }
-        else if( "archetypeGav".equals( key ) )
+        else if( "archetypeGAV".equals( key ) )
         {
-            final List<T> preferenceValues = new ArrayList<T>();
+            final String frameworkType = (String) params[0];
 
-            final String archetypeKey = (String) params[0];
+            final String value = LiferayMavenCore.getPreferenceString( "archetype-gav-" + frameworkType, "" );
 
-            final String defaultValue = (String) params[1];
-
-            final String value = LiferayMavenCore.getPreferenceString( archetypeKey, defaultValue );
-
-            preferenceValues.add( type.cast( value ) );
-
-            retval = preferenceValues;
+            retval = Collections.singletonList( type.cast( value ) );
         }
 
         return retval;

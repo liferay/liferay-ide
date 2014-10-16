@@ -54,8 +54,6 @@ public interface IPortletFramework
 
     IStatus configureNewProject( IDataModel dataModel, IFacetedProjectWorkingCopy facetedProject );
 
-    String getArchetypeGAV();
-
     String getBundleId();
 
     String getDescription();

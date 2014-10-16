@@ -18,8 +18,6 @@ import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 
-import java.util.List;
-
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -30,11 +28,10 @@ import org.eclipse.sapphire.PropertyContentEvent;
  */
 public class ArchetypeDefaultValueService extends DefaultValueService
 {
-    private static final String LIFERAY_ARCHETYPES_GROUP_ID = "com.liferay.maven.archetypes";
 
     private FilteredListener<PropertyContentEvent> listener;
 
-    
+
     @Override
     protected void initDefaultValueService()
     {
@@ -46,7 +43,7 @@ public class ArchetypeDefaultValueService extends DefaultValueService
                 refresh();
             }
         };
-        
+
         op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).attach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK_ADVANCED ).attach( this.listener );
     }
@@ -54,56 +51,31 @@ public class ArchetypeDefaultValueService extends DefaultValueService
     @Override
     protected String compute()
     {
-        final IPortletFramework portletFramework = op().getPortletFramework().content( true );
         final PluginType pluginType = op().getPluginType().content();
-        String archetypeArtifactId = null;
-        String archetypeType = null;
+
+        String frameworkType = null;
 
         if( pluginType.equals( PluginType.portlet ) )
         {
-            archetypeArtifactId = portletFramework.getArchetypeGAV();
+            final IPortletFramework portletFramework = op().getPortletFramework().content();
 
-            if( archetypeArtifactId == null )
+            if( portletFramework.isRequiresAdvanced() )
             {
-                if( portletFramework.isRequiresAdvanced() )
-                {
-
-                    String frameworkName = portletFramework.getShortName();
-
-                    if( portletFramework.isRequiresAdvanced() )
-                    {
-                        frameworkName = op().getPortletFrameworkAdvanced().content().getShortName();
-                    }
-
-                    archetypeType = "portlet-" + frameworkName.replace( "_", "-" );
-                }
-                else
-                {
-                    archetypeType = pluginType.name();
-                }
+                frameworkType = op().getPortletFrameworkAdvanced().content().getShortName();
+            }
+            else
+            {
+                frameworkType = portletFramework.getShortName();
             }
         }
         else
         {
-            archetypeType = pluginType.name();
+            frameworkType = pluginType.name();
         }
 
-        if( archetypeArtifactId == null )
-        {
-            final String archetypeArtifactIdkey =
-                LIFERAY_ARCHETYPES_GROUP_ID + ":liferay-" + archetypeType + "-archetype";
-            
-            List<String> archetypeValues =
-                op().getProjectProvider().content().getData(
-                    "archetypeGav", String.class, archetypeArtifactIdkey, "6.2.1" );
+        frameworkType = frameworkType.replaceAll( "_", "-" );
 
-            if( !archetypeValues.isEmpty() )
-            {
-                archetypeArtifactId = archetypeArtifactIdkey + ":" + archetypeValues.get( 0 );
-            }
-        }
-
-        return archetypeArtifactId;
+        return op().getProjectProvider().content().getData( "archetypeGAV", String.class, frameworkType ).get( 0 );
     }
 
 
