@@ -85,28 +85,27 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
             {
                 String[] values = value.toString().split( "," ); //$NON-NLS-1$
 
-                if( values.length == 1 )
-                {
-                    v = escapeValue( values[0] );
-                }
-                else
-                {
-                    StringBuffer buf = new StringBuffer();
+                StringBuffer buf = new StringBuffer();
 
-                    for( String val : values )
+                for( String val : values )
+                {
+                    if( key.equals( IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE ) &&
+                        !val.startsWith( "**/WEB-INF/lib/" ) )
                     {
-                        if( CoreUtil.isNullOrEmpty( buf.toString() ) )
-                        {
-                            buf.append( "\\\n" ); //$NON-NLS-1$
-                            buf.append( "    " + escapeValue( val ) ); //$NON-NLS-1$
-                        }
-                        else
-                        {
-                            buf.append( ",\\\n    " + escapeValue( val ) ); //$NON-NLS-1$
-                        }
+                        val = "**/WEB-INF/lib/" + val;
                     }
-                    v = buf.toString();
+
+                    if( CoreUtil.isNullOrEmpty( buf.toString() ) )
+                    {
+                        buf.append( "\\\n" ); //$NON-NLS-1$
+                        buf.append( "    " + escapeValue( val ) ); //$NON-NLS-1$
+                    }
+                    else
+                    {
+                        buf.append( ",\\\n    " + escapeValue( val ) ); //$NON-NLS-1$
+                    }
                 }
+                v = buf.toString();
             }
             else
             {
@@ -193,18 +192,22 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
     }
 
     public static final String[] sortedKeys = new String[] 
-    { 
+    {
         "name",  //$NON-NLS-1$
         "module-group-id",  //$NON-NLS-1$
         "module-incremental-version", //$NON-NLS-1$
         "tags",  //$NON-NLS-1$
         "short-description",  //$NON-NLS-1$
+        "long-description",  //$NON-NLS-1$
         "change-log",  //$NON-NLS-1$
         "page-url",  //$NON-NLS-1$
         "author",  //$NON-NLS-1$
         "licenses",  //$NON-NLS-1$
+        "liferay-versions",  //$NON-NLS-1$
         "portal-dependency-jars", //$NON-NLS-1$
-        "portal-dependency-tlds" //$NON-NLS-1$
+        "deploy-excludes", //$NON-NLS-1$
+        "portal-dependency-tlds",  //$NON-NLS-1$
+        "speed-filters-enabled"  //$NON-NLS-1$
     };
 
     public PluginPropertiesConfigurationLayout( PropertiesConfiguration config )
@@ -214,6 +217,7 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
         this.setForceSingleLine( true );
         this.setSingleLine( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, false );
         this.setSingleLine( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS, false );
+        this.setSingleLine( IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE, false );
         this.setSingleLine( IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, false );
     }
 
@@ -221,6 +225,7 @@ public class PluginPropertiesConfigurationLayout extends PropertiesConfiguration
     {
         return key.equals( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS ) ||
             key.equals( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS ) ||
+            key.equals( IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE ) ||
             key.equals( IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS );
     }
 

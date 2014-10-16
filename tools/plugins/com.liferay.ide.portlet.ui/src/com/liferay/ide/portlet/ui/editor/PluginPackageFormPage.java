@@ -81,6 +81,9 @@ public class PluginPackageFormPage extends IDEFormPage
         PortalJarsSection jarsSection = new PortalJarsSection( this, right, getPortalSectionLabels() );
         managedForm.addPart( jarsSection );
 
+        PortalDeployExcludesSection excludesSection = new PortalDeployExcludesSection( this, right, getPortalSectionLabels() );
+        managedForm.addPart( excludesSection );
+
         PortalTldsSection tldsSection = new PortalTldsSection( this, right, getPortalSectionLabels() );
         managedForm.addPart( tldsSection );
 

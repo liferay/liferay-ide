@@ -28,6 +28,8 @@ public interface IPluginPackageModel extends IModel, IModelChangeProvider
 
     String PROPERTY_CHANGE_LOG = "change-log"; //$NON-NLS-1$
 
+    String PROPERTY_DEPLOY_EXCLUDE = "deploy-excludes"; //$NON-NLS-1$
+
     String PROPERTY_LICENSES = "licenses"; //$NON-NLS-1$
 
     String PROPERTY_LIFERAY_VERSIONS = "liferay-versions"; //$NON-NLS-1$

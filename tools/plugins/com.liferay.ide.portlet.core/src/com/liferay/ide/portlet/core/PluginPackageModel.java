@@ -110,6 +110,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
         addDependency( PROPERTY_PORTAL_DEPENDENCY_TLDS, tldFile );
     }
 
+    public void addPortalDeployExcludeJar( String jar )
+    {
+        addDependency( PROPERTY_DEPLOY_EXCLUDE, jar );
+    }
+
     public void addRequiredDeploymentContext( String context )
     {
         addDependency( PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, context );
@@ -210,6 +215,20 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
         }
     }
 
+    public String[] getPortalDeloyExcludesJars()
+    {
+        String exludeJars = pluginPackageProperties.getString( PROPERTY_DEPLOY_EXCLUDE, null );
+
+        if( exludeJars != null )
+        {
+            return exludeJars.split( "," ); //$NON-NLS-1$
+        }
+        else
+        {
+            return new String[0];
+        }
+    }
+
     public String[] getRequiredDeploymentContexts()
     {
         String contexts = pluginPackageProperties.getString( PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS, null );
@@ -286,6 +305,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
 
         for( String dep : deps )
         {
+            if (dep.startsWith( "**/WEB-INF/lib/" ))
+            {
+                dep = dep.substring( dep.lastIndexOf( "/" ) + 1 );
+            }
+
             boolean shouldKeep = true;
 
             for( String removedValue : removedValues )
@@ -330,6 +354,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
     public void removePortalDependencyTlds( String[] removedTlds )
     {
         removeDependency( PROPERTY_PORTAL_DEPENDENCY_TLDS, removedTlds );
+    }
+
+    public void removePortalDeployExcludeJar( String[] removedJars )
+    {
+        removeDependency( PROPERTY_DEPLOY_EXCLUDE, removedJars );
     }
 
     public void removeRequiredDeploymentContexts( String[] contexts )

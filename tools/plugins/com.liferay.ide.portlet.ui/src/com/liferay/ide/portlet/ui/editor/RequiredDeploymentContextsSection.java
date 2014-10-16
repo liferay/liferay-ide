@@ -178,8 +178,9 @@ public class RequiredDeploymentContextsSection extends TableSection implements I
 			markStale();
 			return;
 		}
-		
+
 		if (event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS ||
+			event.getChangedProperty() == IPluginPackageModel.PROPERTY_DEPLOY_EXCLUDE ||
 			event.getChangedProperty() == IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_TLDS ||
 			event.getChangedProperty() == IPluginPackageModel.PROPERTY_REQUIRED_DEPLOYMENT_CONTEXTS) {
 
