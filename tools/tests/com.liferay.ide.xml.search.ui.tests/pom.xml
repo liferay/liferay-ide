@@ -183,7 +183,7 @@
                     <version>${tycho-version}</version>
                     <configuration>
                         <useUIHarness>true</useUIHarness>
-                        <useUIThread>true</useUIThread>
+                        <useUIThread>false</useUIThread>
                         <product>org.eclipse.platform.ide</product>
                         <includes>
                             <include>**/*Test*.class</include>

@@ -128,7 +128,6 @@ public class XmlSearchTestsBase
 
     protected void failTest( Exception e )
     {
-        System.out.println("FooBar");
         StringWriter s = new StringWriter();
         e.printStackTrace(new PrintWriter(s));
         fail(s.toString());
