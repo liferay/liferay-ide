@@ -35,19 +35,19 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
     public void initializeDefaultPreferences()
     {
         final IEclipsePreferences defaultPrefs = LiferayMavenCore.getDefaultPrefs();
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_MVC_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_JSF_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_VAADIN_ARCHETYPE, "7.4.0.alpha2" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_FACES_ALLOY_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_ICEFACES_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_PRIMEFACES_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_RICHFACES_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_HOOK_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_SERVICE_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_THEME_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_LAYOUTTPL_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_EXT_ARCHETYPE, "6.2.1" );
-        defaultPrefs.put( LiferayMavenCore.PREF_MAVEN_WEB_ARCHETYPE, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_MVC_PORTLET, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_JSF, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_VAADIN, "7.4.0.alpha2" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_FACES_ALLOY, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_ICEFACES, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_PRIMEFACES, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_RICHFACES, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_HOOK, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_SERVICEBUILDER, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_THEME, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_LAYOUTTPL, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_EXT, "6.2.1" );
+        defaultPrefs.put( LiferayMavenCore.PREF_ARCHETYPE_GAV_WEB, "6.2.1" );
     }
 
 }

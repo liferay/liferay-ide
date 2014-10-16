@@ -40,38 +40,38 @@ public class LiferayMavenCore extends Plugin
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.maven.core"; //$NON-NLS-1$
 
-    // The key of disable customJspValidation checking
-    public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
+    public static final String PREF_ARCHETYPE_GAV_EXT = "com.liferay.maven.archetypes:liferay-ext-archetype";
 
-    public static final String PREF_MAVEN_MVC_ARCHETYPE = "com.liferay.maven.archetypes:liferay-portlet-archetype";
-
-    public static final String PREF_MAVEN_JSF_ARCHETYPE = "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype";
-
-    public static final String PREF_MAVEN_VAADIN_ARCHETYPE = "com.vaadin:vaadin-archetype-liferay-portlet";
-
-    public static final String PREF_MAVEN_ICEFACES_ARCHETYPE =
-        "com.liferay.maven.archetypes:liferay-portlet-icefaces-archetype";
-
-    public static final String PREF_MAVEN_FACES_ALLOY_ARCHETYPE =
+    public static final String PREF_ARCHETYPE_GAV_FACES_ALLOY =
         "com.liferay.maven.archetypes:liferay-portlet-liferay-faces-alloy-archetype";
 
-    public static final String PREF_MAVEN_PRIMEFACES_ARCHETYPE =
+    public static final String PREF_ARCHETYPE_GAV_HOOK = "com.liferay.maven.archetypes:liferay-hook-archetype";
+
+    public static final String PREF_ARCHETYPE_GAV_ICEFACES =
+        "com.liferay.maven.archetypes:liferay-portlet-icefaces-archetype";
+
+    public static final String PREF_ARCHETYPE_GAV_JSF = "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype";
+
+    public static final String PREF_ARCHETYPE_GAV_LAYOUTTPL = "com.liferay.maven.archetypes:liferay-layouttpl-archetype";
+
+    public static final String PREF_ARCHETYPE_GAV_MVC_PORTLET = "com.liferay.maven.archetypes:liferay-portlet-archetype";
+
+    public static final String PREF_ARCHETYPE_GAV_PRIMEFACES =
         "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype";
 
-    public static final String PREF_MAVEN_RICHFACES_ARCHETYPE =
+    public static final String PREF_ARCHETYPE_GAV_RICHFACES =
         "com.liferay.maven.archetypes:liferay-portlet-richfaces-archetype";
 
-    public static final String PREF_MAVEN_HOOK_ARCHETYPE = "com.liferay.maven.archetypes:liferay-hook-archetype";
-    
-    public static final String PREF_MAVEN_SERVICE_ARCHETYPE = "com.liferay.maven.archetypes:liferay-servicebuilder-archetype";
-    
-    public static final String PREF_MAVEN_LAYOUTTPL_ARCHETYPE = "com.liferay.maven.archetypes:liferay-layouttpl-archetype";
+    public static final String PREF_ARCHETYPE_GAV_SERVICEBUILDER = "com.liferay.maven.archetypes:liferay-servicebuilder-archetype";
 
-    public static final String PREF_MAVEN_THEME_ARCHETYPE = "com.liferay.maven.archetypes:liferay-theme-archetype";
-    
-    public static final String PREF_MAVEN_EXT_ARCHETYPE = "com.liferay.maven.archetypes:liferay-ext-archetype";
-    
-    public static final String PREF_MAVEN_WEB_ARCHETYPE = "com.liferay.maven.archetypes:liferay-web-archetype";
+    public static final String PREF_ARCHETYPE_GAV_THEME = "com.liferay.maven.archetypes:liferay-theme-archetype";
+
+    public static final String PREF_ARCHETYPE_GAV_VAADIN = "com.vaadin:vaadin-archetype-liferay-portlet";
+
+    public static final String PREF_ARCHETYPE_GAV_WEB = "com.liferay.maven.archetypes:liferay-web-archetype";
+
+    // The key of disable customJspValidation checking
+    public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
 
 
     public static Status createErrorStatus( String msg )
