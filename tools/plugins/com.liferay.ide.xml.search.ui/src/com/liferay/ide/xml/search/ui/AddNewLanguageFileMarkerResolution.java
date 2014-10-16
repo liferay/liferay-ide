@@ -15,6 +15,8 @@
 
 package com.liferay.ide.xml.search.ui;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 
@@ -61,10 +63,22 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
             {
                 if( !CoreUtil.isNullOrEmpty( resouceBundle ) )
                 {
-                    // TODO does this handle bundles like foo.bar.myresources.content.Language?
                     String[] paths = resouceBundle.split( "\\." );
 
-                    if( paths.length == 2 )
+                    if( paths.length > 2 )
+                    {
+                        StringBuffer sb = new StringBuffer();
+
+                        for( int i = 0; i < ( paths.length - 1 ); i++ )
+                        {
+                            sb.append( paths[i] );
+                            sb.append( "/" );
+                        }
+
+                        languageFilePackage = sb.toString();
+                        languageFileName = paths[paths.length - 1];
+                    }
+                    else if( paths.length == 2 )
                     {
                         languageFilePackage = paths[0];
                         languageFileName = paths[1];
@@ -110,8 +124,14 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
         {
             checkResourceBundleElement( project );
 
-            // TODO on maven projects this should be resources folder
-            final IFolder folder = CoreUtil.getFirstSrcFolder( project ).getFolder( languageFilePackage );
+            final ILiferayProject liferayProject = LiferayCore.create( project );
+
+            if( liferayProject == null )
+            {
+                return;
+            }
+
+            final IFolder folder = liferayProject.getSourceFolder( "resources" ).getFolder( languageFilePackage );
 
             if( !folder.exists() )
             {
@@ -120,7 +140,13 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
 
             final IFile languageFile = folder.getFile( languageFileName + ".properties" );
 
-            String languageKey = getLanguageKey( message );
+            String languageKey = getLanguageKey( marker );
+
+            if( CoreUtil.isNullOrEmpty( languageKey ) )
+            {
+                return;
+            }
+
             String languageMessage = getDefaultLanguageMessage( languageKey );
             String languagePropertyLine = languageKey + "=" + languageMessage + "\n";
 
@@ -140,7 +166,7 @@ public class AddNewLanguageFileMarkerResolution extends AbstractLanguageProperti
                 StringBuffer sb = new StringBuffer();
 
                 sb.append( contents );
-                sb.append( getLanguageKey( message ) );
+                sb.append( languageKey );
                 sb.append( "=" );
                 sb.append( languageMessage );
                 sb.append( "\n" );

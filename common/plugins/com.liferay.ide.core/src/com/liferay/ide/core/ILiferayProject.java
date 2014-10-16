@@ -16,6 +16,7 @@ package com.liferay.ide.core;
 
 import java.util.Properties;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
 
 
@@ -40,6 +41,8 @@ public interface ILiferayProject
     Properties getPortletEntryCategories();
 
     String getProperty( String key, String defaultValue );
+
+    IFolder getSourceFolder( String classification );
 
     IPath[] getUserLibs();
 

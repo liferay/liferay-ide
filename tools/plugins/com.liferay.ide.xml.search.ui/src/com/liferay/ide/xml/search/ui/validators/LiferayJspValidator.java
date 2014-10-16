@@ -17,6 +17,7 @@ package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
+import com.liferay.ide.xml.search.ui.LiferayXMLConstants;
 import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
 
 import java.util.Properties;
@@ -66,6 +67,11 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
             if( message != null )
             {
+                if( querySpecificationId.equals( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID ) )
+                {
+                    message.setAttribute( LiferayXMLConstants.LANGUAGE_KEY, textContent );
+                }
+
                 message.setAttribute( MARKER_QUERY_ID, querySpecificationId );
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );

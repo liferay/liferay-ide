@@ -72,26 +72,14 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
         return getLabel();
     }
 
-    // TODO don't parse this from message but use a marker attribute instead
-    protected String getLanguageKey( String markerMessage )
+    protected String getLanguageKey( IMarker marker )
     {
-        if( CoreUtil.isNullOrEmpty( markerMessage ) )
+        if( marker == null )
         {
             return "";
         }
 
-        String languageKey = "";
-
-        int firstCharAt = markerMessage.indexOf( "\"" );
-
-        int secondCharAt = markerMessage.lastIndexOf( "\"" );
-
-        if( firstCharAt > 0 && secondCharAt > 0 )
-        {
-            languageKey = markerMessage.substring( firstCharAt + 1, secondCharAt );
-        }
-
-        return languageKey;
+        return marker.getAttribute( LiferayXMLConstants.LANGUAGE_KEY, "" );
     }
 
     protected String getDefaultLanguageMessage( String languageKey )
@@ -148,7 +136,7 @@ public abstract class AbstractLanguagePropertiesMarkerResolution extends Workben
 
             final IResource resource = markers[i].getResource();
 
-            if( resource instanceof IFile && ( ! files.contains( resource ) ) )
+            if( resource instanceof IFile && ( !files.contains( resource ) ) )
             {
                 files.add( (IFile) resource );
             }

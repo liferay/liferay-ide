@@ -20,6 +20,7 @@ import com.liferay.ide.core.ILiferayProjectAdapter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -58,6 +59,11 @@ public abstract class BaseLiferayProject implements ILiferayProject
     public IProject getProject()
     {
         return this.project;
+    }
+
+    public IFolder getSourceFolder( String classification )
+    {
+        return CoreUtil.getFirstSrcFolder( project );
     }
 
 }

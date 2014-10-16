@@ -77,7 +77,7 @@ public class AddLanguagePropertyMarkerResolution extends AbstractLanguagePropert
         {
             is = languageFile.getContents();
 
-            final String languageKey = getLanguageKey( message );
+            final String languageKey = getLanguageKey( marker );
 
             if( CoreUtil.isNullOrEmpty( languageKey ) )
             {

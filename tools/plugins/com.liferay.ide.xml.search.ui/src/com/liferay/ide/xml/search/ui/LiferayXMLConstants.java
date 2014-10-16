@@ -18,6 +18,7 @@ public interface LiferayXMLConstants
 {
 
     String PORTLET_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.portletxml";
+    String LANGUAGE_KEY = "language-key";
     String LIFERAY_JSP_MARKER_ID = "org.eclipse.jst.jsp.core.validationMarker";
     String LIFERAY_PORTLET_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.liferayportletxml";
     String LIFERAY_DISPLAY_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.liferaydisplayxml";
