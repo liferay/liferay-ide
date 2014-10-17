@@ -18,14 +18,8 @@ package com.liferay.ide.maven.ui.pref;
 import com.liferay.ide.maven.core.LiferayMavenCore;
 import com.liferay.ide.ui.util.SWTUtil;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.BooleanFieldEditor;
-import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -42,17 +36,14 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
  */
 public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
-
-    protected Map<String, FieldEditor> elements;
-
     public static final String ID = "com.liferay.ide.maven.ui.projectMavenPreferencePage";
 
-    private ScopedPreferenceStore prefStore;
+    private final ScopedPreferenceStore prefStore;
 
     public ProjectMavenPreferencePage()
     {
         super( GRID );
-        elements = new HashMap<String, FieldEditor>();
+        prefStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, LiferayMavenCore.PLUGIN_ID );
     }
 
     private void createBooleanEditior( Composite parent, final String label, final String key )
@@ -60,8 +51,6 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
         final BooleanFieldEditor booleanEditor = new BooleanFieldEditor( key, label, parent );
         booleanEditor.setPreferenceStore( getPreferenceStore() );
         addField( booleanEditor );
-
-        elements.put( key, booleanEditor );
     }
 
     @Override
@@ -69,15 +58,18 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
     {
         Composite archetypeComposite = createGroupCompostie( Msgs.mavenDefaultArchetyepGroup );
 
-        createStringEditior( archetypeComposite, Msgs.portletMVCArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_MVC );
-        createStringEditior( archetypeComposite, Msgs.portletJSFArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_JSF );
+        createStringEditior(
+            archetypeComposite, Msgs.portletMVCArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_MVC );
+        createStringEditior(
+            archetypeComposite, Msgs.portletJSFArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_JSF );
         createStringEditior(
             archetypeComposite, Msgs.portletJSFICEfacesArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_ICEFACES );
         createStringEditior(
             archetypeComposite, Msgs.portletJSFFacesAlloyArchetype,
             LiferayMavenCore.PREF_ARCHETYPE_GAV_LIFERAY_FACES_ALLOY );
         createStringEditior(
-            archetypeComposite, Msgs.portletJSFPrimeFacesArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_PRIMEFACES );
+            archetypeComposite, Msgs.portletJSFPrimeFacesArchetype,
+            LiferayMavenCore.PREF_ARCHETYPE_GAV_PRIMEFACES );
         createStringEditior(
             archetypeComposite, Msgs.portletJSFRichFacesArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_RICHFACES );
         createStringEditior(
@@ -88,10 +80,10 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
             archetypeComposite, Msgs.layoutTemplateArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_LAYOUTTPL );
         createStringEditior(
             archetypeComposite, Msgs.serviceBuilderArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_SERVICEBUILDER );
-        createStringEditior( archetypeComposite, Msgs.ExtArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_EXT );
-        createStringEditior( archetypeComposite, Msgs.WebArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_WEB );
+        createStringEditior( archetypeComposite, Msgs.extArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_EXT );
+        createStringEditior( archetypeComposite, Msgs.webArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_WEB );
 
-        Composite customJspComposite = createGroupCompostie( Msgs.mavenHookCustomJspGroup );
+        Composite customJspComposite = createGroupCompostie( Msgs.mavenProjectConfiguratorOptions );
 
         createBooleanEditior(
             customJspComposite, Msgs.disableCustomJSPValidation, LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION );
@@ -113,60 +105,16 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
         final StringFieldEditor stringEditor = new StringFieldEditor( key, label, parent );
         stringEditor.setPreferenceStore( getPreferenceStore() );
         addField( stringEditor );
-
-        elements.put( key, stringEditor );
     }
+
     @Override
     public IPreferenceStore getPreferenceStore()
     {
-        if( prefStore == null )
-        {
-            prefStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, LiferayMavenCore.PLUGIN_ID );
-        }
-
-        return prefStore;
+        return this.prefStore;
     }
 
     public void init( IWorkbench workbench )
     {
-    }
-
-    @Override
-    protected void performDefaults()
-    {
-        resetValues();
-        super.performDefaults();
-    }
-
-    @Override
-    protected void performApply()
-    {
-        storeValues();
-        super.performApply();
-    }
-
-    private void resetValues()
-    {
-        Set<String> keys = elements.keySet();
-        for( String key : keys )
-        {
-            FieldEditor editor = elements.get( key );
-
-            editor.loadDefault();
-        }
-    }
-
-    private void storeValues()
-    {
-        Iterator<String> it = elements.keySet().iterator();
-
-        while( it.hasNext() )
-        {
-            final String key = it.next();
-
-            FieldEditor editor = elements.get( key );
-            editor.store();
-        }
     }
 
     private static class Msgs extends NLS
@@ -183,10 +131,10 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
         public static String serviceBuilderArchetype;
         public static String layoutTemplateArchetype;
         public static String themeArchetype;
-        public static String ExtArchetype;
-        public static String WebArchetype;
+        public static String extArchetype;
+        public static String webArchetype;
         public static String mavenDefaultArchetyepGroup;
-        public static String mavenHookCustomJspGroup;
+        public static String mavenProjectConfiguratorOptions;
         public static String disableCustomJSPValidation;
 
         static
