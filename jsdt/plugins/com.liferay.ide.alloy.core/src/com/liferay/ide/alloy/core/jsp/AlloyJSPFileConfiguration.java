@@ -18,6 +18,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
 
+import tern.ITernFile;
 import tern.eclipse.ide.core.ITernFileConfiguration;
 import tern.server.protocol.html.ScriptTagRegion;
 
@@ -30,11 +31,16 @@ public class AlloyJSPFileConfiguration implements ITernFileConfiguration
     private static final ScriptTagRegion[] tags = new ScriptTagRegion[] { new ScriptTagRegion( "aui:script" ) };
 
     @Override
-    public ScriptTagRegion[] getScriptTags( IFile file )
+    public ScriptTagRegion[] getScriptTags( ITernFile ternFile )
     {
-        if( file != null && ProjectUtil.isPortletProject( file.getProject() ) )
+        if( ternFile != null )
         {
-            return tags;
+            Object file = ternFile.getAdapter( IFile.class );
+
+            if( file instanceof IFile && ProjectUtil.isPortletProject( ( (IFile) file ).getProject() ) )
+            {
+                return tags;
+            }
         }
 
         return null;
