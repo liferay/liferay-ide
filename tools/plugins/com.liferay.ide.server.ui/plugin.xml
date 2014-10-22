@@ -315,13 +315,8 @@
    </extension>
    <extension
          point="org.eclipse.mylyn.commons.notifications.ui.notifications">
-      <category
-            icon="icons/e16/server.png"
-            id="com.liferay.ide.server.ui.settings"
-            label="Liferay IDE">
-      </category>
       <event
-            categoryId="com.liferay.ide.server.ui.settings"
+            categoryId="com.liferay.ide.ui.settings"
             icon="icons/e16/properties.png"
             id="com.liferay.ide.server.ui.importglobalsettings"
             label="Import Global Settings">

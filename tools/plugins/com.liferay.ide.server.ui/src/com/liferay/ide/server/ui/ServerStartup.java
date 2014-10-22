@@ -105,7 +105,6 @@ public class ServerStartup implements IStartup
             @Override
             public void open()
             {
-
                 boolean importSettings = MessageDialog.openQuestion(
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
                     "Previous Liferay IDE Settings Detected",
@@ -114,18 +113,6 @@ public class ServerStartup implements IStartup
                 if( importSettings )
                 {
                     importGlobalSettings();
-                }
-
-                try
-                {
-                    IEclipsePreferences prefs =
-                        InstanceScope.INSTANCE.getNode( LiferayServerUIPlugin.PLUGIN_ID );
-                    prefs.putBoolean( GLOBAL_SETTINGS_CHECKED, true );
-                    prefs.flush();
-                }
-                catch( BackingStoreException e )
-                {
-                    LiferayServerUIPlugin.logError( "Unable to persist global-setting-checked pref", e );
                 }
             }
         };
@@ -351,6 +338,18 @@ public class ServerStartup implements IStartup
         {
             NotificationsUi.getService().notify(
                 Collections.singletonList( createImportGlobalSettingsNotification() ) );
+
+            try
+            {
+                IEclipsePreferences prefs =
+                    InstanceScope.INSTANCE.getNode( LiferayServerUIPlugin.PLUGIN_ID );
+                prefs.putBoolean( GLOBAL_SETTINGS_CHECKED, true );
+                prefs.flush();
+            }
+            catch( BackingStoreException e )
+            {
+                LiferayServerUIPlugin.logError( "Unable to persist global-setting-checked pref", e );
+            }
         }
     }
 
