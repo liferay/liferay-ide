@@ -330,8 +330,8 @@
   <template name="aui-io" description="Allows you to make asynchronous HTTP (Ajax) requests." id="com.liferay.ide.alloy.ui.templates.io" context="javaScript" enabled="true" autoinsert="true">
     AUI().use(
   'aui-io-request',
-  function (Y) {
-    Y.io.request(
+  function (A) {
+    A.io.request(
       'http://alloyui.com/io/data/content.html',
       {
         on: {
@@ -363,12 +363,11 @@
 );
   </template>
   <template name="aui-node" description="Allows for interaction with the DOM through a set of utility methods." id="com.liferay.ide.alloy.ui.templates.node" context="javaScript" enabled="true" autoinsert="true">
-    // Create an AUI instance and load the 'aui-node' module
-AUI().use(
+    AUI().use(
   'aui-node',
   function(A) {
     // Select the node(s) using a css selector string
-    var node = Y.one('#toggleColor');
+    var node = A.one('#toggleColor');
 
     // Change the background color on a `click` event
     node.on(
@@ -426,13 +425,13 @@ AUI().use(
     AUI().use(
   'aui-popover',
   function(A) {
-    var trigger = Y.one('#myPopover');
+    var trigger = A.one('#myPopover');
 
     var popover = new A.Popover(
       {
         align: {
           node: trigger,
-          points:[Y.WidgetPositionAlign.BC, Y.WidgetPositionAlign.TC]
+          points:[A.WidgetPositionAlign.BC, A.WidgetPositionAlign.TC]
         },
         bodyContent: 'Body Content',
         headerContent: 'Header content',
@@ -474,6 +473,12 @@ AUI().use(
     ).render();
   }
 );
+  </template>
+  <template name="aui-sandbox" description="Create an AUI sandbox" id="com.liferay.ide.alloy.ui.templates.sandbox" context="javaScript" enabled="true" autoinsert="true">
+  AUI().use('${sandbox}', function(A) {
+    var node = A.one("${selector}");
+    ${cursor}
+});
   </template>
   <template name="aui-scheduler" description="Allows user to access scheduler widget with built-in calendar." id="com.liferay.ide.alloy.ui.templates.scheduler" context="javaScript" enabled="true" autoinsert="true">
     AUI().use(
@@ -520,7 +525,7 @@ AUI().use(
     AUI().use(
   'aui-sortable-list',
   function(A) {
-    var placeholder = Y.Node.create('&lt;li class="placeholder"&gt;&lt;/li&gt;');
+    var placeholder = A.Node.create('&lt;li class="placeholder"&gt;&lt;/li&gt;');
 
     new A.SortableList(
       {
@@ -619,7 +624,7 @@ AUI().use(
             label: 'File X'
           },
           {
-            label: 'File Y'
+            label: 'File A'
           },
           {
             label: 'File Z'
@@ -640,7 +645,7 @@ AUI().use(
   }
 );
   </template>
-  <template name="aui-video" description="Creates an interactive HTML5 video player with fallback Flash video player." id="com.liferay.ide.alloy.ui.templates.video" context="javaScript" enabled="true" autoinsert="true">
+ <template name="aui-video" description="Creates an interactive HTML5 video player with fallback Flash video player." id="com.liferay.ide.alloy.ui.templates.video" context="javaScript" enabled="true" autoinsert="true">
     AUI().use(
   'aui-video',
   function(A) {
@@ -659,5 +664,10 @@ AUI().use(
   'aui-viewport'
 );
 
+  </template>
+  <template name="self-invoke-fn" description="A self invoking function." id="com.liferay.ide.alloy.ui.template.selffn" context="javaScript" enabled="true" autoinsert="true">
+  (function (${args}) {
+    ${cursor}
+})(${args});
   </template>
 </templates>
