@@ -33,7 +33,7 @@
             base-type="org.eclipse.jdt.core.javaProperties"
             default-charset="UTF-8"
             file-extensions="properties"
-            file-names="portal.properties,portal-ext.properties,system-ext.properties"
+            file-names="portal.properties,portal-ext.properties,portal-setup-wizard.properties,system-ext.properties"
             id="liferayportalpropertiesfile"
             name="Liferay Portal Properties File"
             priority="high">
