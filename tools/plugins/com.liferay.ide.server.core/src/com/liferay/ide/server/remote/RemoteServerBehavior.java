@@ -65,12 +65,10 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
 {
-
-    protected ILaunch currentLaunch;
-    protected IServerManagerConnection remoteConnection;
-    protected List<IModule[]> selectedModules;
-
-    protected Job remoteServerUpdateJob;
+    private ILaunch currentLaunch;
+    private IServerManagerConnection remoteConnection;
+    private List<IModule[]> redeployModules;
+    private Job remoteServerUpdateJob;
 
     public RemoteServerBehavior()
     {
@@ -299,7 +297,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         throws CoreException
     {
         return super.executePublishers(
-            kind, ( selectedModules == null ) ? modules : selectedModules, deltaKinds, monitor, info );
+            kind, ( redeployModules == null ) ? modules : redeployModules, deltaKinds, monitor, info );
     }
 
     public IPath getDeployedPath( IModule[] module )
@@ -362,11 +360,6 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     protected long getRemoteServerUpdateDelay()
     {
         return 5000;
-    }
-
-    public List<IModule[]> getSelectedModules()
-    {
-        return selectedModules;
     }
 
     protected IServerManagerConnection getServerManagerConnection()
@@ -482,6 +475,8 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         super.publishFinish( monitor );
 
         setServerPublishState( IServer.PUBLISH_STATE_NONE );
+
+        this.redeployModules = null;
     }
 
     @Override
@@ -700,7 +695,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     @Override
     protected void publishModules( int kind, List modules, List deltaKind2, MultiStatus multi, IProgressMonitor monitor )
     {
-        super.publishModules( kind, ( selectedModules == null ) ? modules : selectedModules, deltaKind2, multi, monitor );
+        super.publishModules( kind, ( redeployModules == null ) ? modules : redeployModules, deltaKind2, multi, monitor );
     }
 
     @Override
@@ -735,7 +730,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         try
         {
-            selectedModules = modules;
+            redeployModules = modules;
             publish( IServer.PUBLISH_FULL, modules, null, info );
         }
         catch( CoreException e )
@@ -744,7 +739,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
         finally
         {
-            selectedModules = null;
+            redeployModules = null;
         }
     }
 

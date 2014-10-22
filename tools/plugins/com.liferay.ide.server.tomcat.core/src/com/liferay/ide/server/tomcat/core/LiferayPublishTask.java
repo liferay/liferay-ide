@@ -50,9 +50,9 @@ public class LiferayPublishTask extends PublishTask
         {
             final IModule[] module = (IModule[]) modules.get( i );
 
-            if( liferayServer.getSelectedModules() != null )
+            if( liferayServer.getRedeployModules() != null )
             {
-                for( IModule[] moduleItem : liferayServer.getSelectedModules() )
+                for( IModule[] moduleItem : liferayServer.getRedeployModules() )
                 {
                     if( moduleItem[0].getId().equals( module[0].getId() ) )
                     {

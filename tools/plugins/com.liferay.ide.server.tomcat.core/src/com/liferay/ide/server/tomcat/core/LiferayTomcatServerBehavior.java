@@ -60,7 +60,7 @@ import org.w3c.dom.Document;
 public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implements ILiferayServerBehavior
 {
 
-    private List<IModule[]> selectedModules;
+    private List<IModule[]> redeployModules;
 
     public LiferayTomcatServerBehavior()
     {
@@ -73,7 +73,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         throws CoreException
     {
         return super.executePublishers(
-            kind, ( selectedModules == null ) ? modules : selectedModules, deltaKinds, monitor, info );
+            kind, ( redeployModules == null ) ? modules : redeployModules, deltaKinds, monitor, info );
     }
 
     public IPath getDeployedPath( IModule[] module )
@@ -118,9 +118,9 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         return super.getResources( module );
     }
 
-    public List<IModule[]> getSelectedModules()
+    public List<IModule[]> getRedeployModules()
     {
-        return selectedModules;
+        return redeployModules;
     }
 
     public IStatus moveContextToAutoDeployDir(
@@ -222,6 +222,14 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
     }
 
     @Override
+    protected void publishFinish( IProgressMonitor monitor ) throws CoreException
+    {
+        super.publishFinish( monitor );
+
+        this.redeployModules = null;
+    }
+
+    @Override
     protected void publishModule( int kind, int deltaKind, IModule[] moduleTree, IProgressMonitor monitor )
         throws CoreException
     {
@@ -251,7 +259,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
     @Override
     protected void publishModules( int kind, List modules, List deltaKind2, MultiStatus multi, IProgressMonitor monitor )
     {
-        super.publishModules( kind, ( selectedModules == null ) ? modules : selectedModules, deltaKind2, multi, monitor );
+        super.publishModules( kind, ( redeployModules == null ) ? modules : redeployModules, deltaKind2, multi, monitor );
     }
 
     public void redeployModule( IModule[] module )
@@ -278,7 +286,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 
         try
         {
-            selectedModules = modules;
+            redeployModules = modules;
             publish( IServer.PUBLISH_FULL, modules, null, info );
         }
         catch( CoreException e )
@@ -287,7 +295,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         }
         finally
         {
-            selectedModules = null;
+            redeployModules = null;
         }
     }
 
