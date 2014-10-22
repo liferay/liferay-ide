@@ -117,9 +117,7 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
     {
         final IProject project = marker.getResource().getProject();
 
-        final String message = marker.getAttribute( IMarker.MESSAGE, "" );
-
-        if( message.equals( "" ) || project == null )
+        if( getResourceKey(marker) == null || project == null )
         {
             return;
         }

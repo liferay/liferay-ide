@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.xml.search.ui;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
@@ -27,16 +28,19 @@ import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.quickassist.IQuickAssistInvocationContext;
 import org.eclipse.jface.text.quickassist.IQuickAssistProcessor;
+import org.eclipse.jface.text.quickassist.IQuickFixableAnnotation;
 import org.eclipse.jface.text.source.Annotation;
+import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.texteditor.MarkerAnnotation;
+import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
 
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
 {
 
@@ -49,15 +53,18 @@ public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
     @Override
     public boolean canFix( Annotation annotation )
     {
-        if( annotation instanceof MarkerAnnotation )
+        if( annotation instanceof TemporaryAnnotation )
         {
-            MarkerAnnotation mark = (MarkerAnnotation) annotation;
+            TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
 
-            String hint = mark.getMarker().getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, null );
-
-            if( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( hint ) )
+            if( temp.getAttributes() != null )
             {
-                return true;
+                Object hint = temp.getAttributes().get( LiferayBaseValidator.MARKER_QUERY_ID );
+
+                if( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( hint ) )
+                {
+                    return true;
+                }
             }
         }
 
@@ -72,36 +79,45 @@ public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
 
         final List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
         final ISourceViewer sourceViewer = context.getSourceViewer();
-        final Iterator<Annotation> annotations = sourceViewer.getAnnotationModel().getAnnotationIterator();
+        final IAnnotationModel annotationModel = sourceViewer.getAnnotationModel();
+        final Iterator<Annotation> annotations = annotationModel.getAnnotationIterator();
 
         while( annotations.hasNext() )
         {
             final Annotation annotation = annotations.next();
 
-            if( annotation instanceof MarkerAnnotation )
+            final Position position =  annotationModel.getPosition( annotation );
+
+            try
             {
-                final MarkerAnnotation marker = (MarkerAnnotation) annotation;
-                final Position position =  sourceViewer.getAnnotationModel().getPosition( annotation );
-                try
+                final IMarker marker = createTempMarker( annotation );
+                final int lineNum = sourceViewer.getDocument().getLineOfOffset( position.getOffset() ) + 1;
+                final int currentLineNum = sourceViewer.getDocument().getLineOfOffset( context.getOffset() ) + 1;
+
+                if( marker != null && currentLineNum == lineNum )
                 {
-                    int lineNum = sourceViewer.getDocument().getLineOfOffset( position.getOffset() ) + 1;
-                    int currentLineNum = sourceViewer.getDocument().getLineOfOffset( context.getOffset() ) + 1;
+                    final String hint = marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, null );
 
-                    if( currentLineNum == lineNum )
+                    if( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( hint ) )
                     {
-                        final String hint =
-                            marker.getMarker().getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, null );
+                        final ICompletionProposal[] resolutions = createFromMarkerResolutions( marker );
 
-                        if( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( hint ) )
+                        if( ! CoreUtil.isNullOrEmpty( resolutions ) )
                         {
-                            Collections.addAll( proposals, createFromMarkerResolutions( marker.getMarker() ) );
+                            Collections.addAll( proposals, resolutions );
+
+                            if( annotation instanceof IQuickFixableAnnotation )
+                            {
+                                final IQuickFixableAnnotation quick = (IQuickFixableAnnotation) annotation;
+                                quick.setQuickFixable( true );
+                            }
                         }
                     }
                 }
-                catch( BadLocationException e )
-                {
-                    LiferayXMLSearchUI.logError( "Error finding quick assists", e );
-                }
+            }
+            catch( BadLocationException e )
+            {
+                LiferayXMLSearchUI.logError( "Error finding quick assists", e );
             }
         }
 
@@ -131,6 +147,21 @@ public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
         }
 
         return retval.toArray( new ICompletionProposal[0] );
+    }
+
+    private IMarker createTempMarker( Annotation annotation )
+    {
+        if( annotation instanceof TemporaryAnnotation )
+        {
+            TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
+
+            if( temp.getAttributes() != null )
+            {
+                return new TempMarker( (TemporaryAnnotation) annotation );
+            }
+        }
+
+        return null;
     }
 
     @Override

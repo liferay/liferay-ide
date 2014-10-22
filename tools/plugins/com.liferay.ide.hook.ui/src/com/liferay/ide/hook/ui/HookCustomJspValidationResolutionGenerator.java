@@ -45,9 +45,11 @@ public class HookCustomJspValidationResolutionGenerator implements IMarkerResolu
     public boolean hasResolutions( IMarker marker )
     {
         boolean hasResolution = false;
+
         try
         {
-            if( marker.getAttribute( IMarker.SEVERITY ).equals( IMarker.SEVERITY_ERROR ) )
+            if( marker.getAttribute( IMarker.SEVERITY ) != null &&
+                marker.getAttribute( IMarker.SEVERITY ).equals( IMarker.SEVERITY_ERROR ) )
             {
                 final String validationId = (String) marker.getAttribute( "ValidationId" );
 

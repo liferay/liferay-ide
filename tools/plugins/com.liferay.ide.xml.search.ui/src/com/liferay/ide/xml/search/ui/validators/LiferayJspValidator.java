@@ -45,9 +45,6 @@ import org.w3c.dom.Node;
 @SuppressWarnings( "restriction" )
 public class LiferayJspValidator extends LiferayBaseValidator
 {
-
-    public static final String MARKER_TYPE = "org.eclipse.jst.jsp.core.validationMarker";
-
     private final String JSP_TAG_START = "<%";
     private final String JSP_TAG_END = "%>";
 
@@ -73,6 +70,8 @@ public class LiferayJspValidator extends LiferayBaseValidator
                 }
 
                 message.setAttribute( MARKER_QUERY_ID, querySpecificationId );
+                message.setAttribute( "fullPath", file.getFullPath().toPortableString() );
+                message.setAttribute( "markerType", LiferayXMLConstants.LIFERAY_JSP_MARKER_ID  );
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );
             }
@@ -113,7 +112,8 @@ public class LiferayJspValidator extends LiferayBaseValidator
     {
         if( ( validator instanceof XMLReferencesBatchValidator ) && file.getFileExtension().equals( "jsp" ) )
         {
-            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
+            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId(
+                LiferayXMLConstants.LIFERAY_JSP_MARKER_ID );
         }
     }
 
