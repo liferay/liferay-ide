@@ -175,7 +175,7 @@ public class AetherUtil
         final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
 
         return  Platform.getPreferencesService().getBoolean(
-                ProjectCore.PLUGIN_ID, ProjectCore.PREF_USE_SNAPSHOT_VERSION, false, prefContexts );
+            LiferayMavenCore.PLUGIN_ID, LiferayMavenCore.PREF_ALLOW_SNAPSHOT_VERSION, false, prefContexts );
     }
 
 }

@@ -87,6 +87,8 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
 
         createBooleanEditior(
             customJspComposite, Msgs.disableCustomJSPValidation, LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION );
+        createBooleanEditior(
+            customJspComposite, Msgs.addPluginTypeSuffix, LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX );
     }
 
     private Composite createGroupCompostie( final String groupName )
@@ -136,6 +138,8 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
         public static String mavenDefaultArchetyepGroup;
         public static String mavenProjectConfiguratorOptions;
         public static String disableCustomJSPValidation;
+        public static String allowSnapshotVersions;
+        public static String addPluginTypeSuffix;
 
         static
         {

@@ -68,19 +68,7 @@ public class ProjectCore extends Plugin
 
     public static final String PREF_INCLUDE_SAMPLE_CODE = "include-sample-code";
 
-    // set maven project context root with suffix
-    public static final String PREF_SET_MAVEN_PLUGIN_SUFFIX = "set-maven-plugin-suffix";
-
-    // The key of using snapshot vresion stored in prefernce store
-    public static final String PREF_USE_SNAPSHOT_VERSION = "use-snapshot-version";
-
     public static final String USE_PROJECT_SETTINGS = "use-project-settings"; //$NON-NLS-1$
-
-    // The value of ant build type
-    public static final String VALUE_PROJECT_ANT_BUILD_TYPE = "ant";
-
-    // The value of maven build type
-    public static final String VALUE_PROJECT_MAVEN_BUILD_TYPE = "maven";
 
     public static IStatus createErrorStatus( Exception e )
     {

@@ -272,10 +272,10 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                     if( oldContextRoot == null || ( oldContextRoot != null && ! oldContextRoot.endsWith( pluginTypeSuffix ) ) )
                     {
 
-                        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+                        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );
 
                         boolean setMavenPluginSuffix =
-                            prefs.getBoolean( ProjectCore.PREF_SET_MAVEN_PLUGIN_SUFFIX, false );
+                            prefs.getBoolean( LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX, false );
 
                         if( setMavenPluginSuffix )
                         {

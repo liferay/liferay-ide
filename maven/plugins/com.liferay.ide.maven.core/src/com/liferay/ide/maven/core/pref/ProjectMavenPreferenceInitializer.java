@@ -35,8 +35,8 @@ public class ProjectMavenPreferenceInitializer extends AbstractPreferenceInitial
     public void initializeDefaultPreferences()
     {
         final IEclipsePreferences defaultPrefs = LiferayMavenCore.getDefaultPrefs();
-        defaultPrefs.putBoolean(
-            LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true );
+        defaultPrefs.putBoolean( LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION, true );
+        defaultPrefs.putBoolean( LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX, false );
     }
 
 }
