@@ -15,86 +15,18 @@
 
 package com.liferay.ide.service.ui.actions;
 
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.service.core.ServiceCore;
-import com.liferay.ide.service.core.job.BuildServiceJob;
-import com.liferay.ide.service.ui.ServiceUIUtil;
-import com.liferay.ide.ui.action.AbstractObjectAction;
-
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
+import com.liferay.ide.ui.action.AbstractCommandAction;
 
 /**
  * @author Greg Amerson
  */
-public class BuildServicesAction extends AbstractObjectAction
+public class BuildServicesAction extends AbstractCommandAction
 {
 
-    public BuildServicesAction()
+    @Override
+    protected String getCommandId()
     {
-        super();
-    }
-
-    public void run( IAction action )
-    {
-        if( fSelection instanceof IStructuredSelection )
-        {
-            Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
-
-            Object elem = elems[0];
-
-            IProject project = null;
-
-            if( elem instanceof IFile )
-            {
-                IFile projectFile = (IFile) elem;
-
-                project = projectFile.getProject();
-            }
-            else if( elem instanceof IProject )
-            {
-                project = (IProject) elem;
-
-            }
-
-            IFile servicesFile = null;
-            // IDE-110 IDE-648
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-            if( webappRoot != null )
-            {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists() )
-                    {
-                        final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ); //$NON-NLS-1$
-                        servicesFile = container.getFile( path );
-
-                        if( servicesFile.exists() )
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if( servicesFile != null && servicesFile.exists() )
-            {
-                if( ServiceUIUtil.shouldCreateServiceBuilderJob( servicesFile ) )
-                {
-                    BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
-
-                    job.schedule();
-                }
-            }
-        }
-
+        return "com.liferay.ide.service.ui.buildService";
     }
 
 }
