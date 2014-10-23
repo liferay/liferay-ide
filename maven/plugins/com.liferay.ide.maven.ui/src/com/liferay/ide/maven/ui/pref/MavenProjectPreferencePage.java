@@ -33,14 +33,15 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 /**
  * @author Simon Jiang
+ * @author Eric Min
  */
-public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
+public class MavenProjectPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
-    public static final String ID = "com.liferay.ide.maven.ui.projectMavenPreferencePage";
+    public static final String ID = "com.liferay.ide.maven.ui.mavenProjectPreferencePage";
 
     private final ScopedPreferenceStore prefStore;
 
-    public ProjectMavenPreferencePage()
+    public MavenProjectPreferencePage()
     {
         super( GRID );
         prefStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, LiferayMavenCore.PLUGIN_ID );
@@ -86,9 +87,9 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
         Composite customJspComposite = createGroupCompostie( Msgs.mavenProjectConfiguratorOptions );
 
         createBooleanEditior(
-            customJspComposite, Msgs.disableCustomJSPValidation, LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION );
-        createBooleanEditior(
             customJspComposite, Msgs.addPluginTypeSuffix, LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX );
+        createBooleanEditior(
+            customJspComposite, Msgs.disableCustomJSPValidation, LiferayMavenCore.PREF_DISABLE_CUSTOM_JSP_VALIDATION );
     }
 
     private Composite createGroupCompostie( final String groupName )
@@ -121,28 +122,27 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
 
     private static class Msgs extends NLS
     {
-
-        public static String portletMVCArchetype;
-        public static String portletJSFArchetype;
-        public static String portletVaadinArchetype;
-        public static String portletJSFICEfacesArchetype;
-        public static String portletJSFFacesAlloyArchetype;
-        public static String portletJSFPrimeFacesArchetype;
-        public static String portletJSFRichFacesArchetype;
-        public static String hookArchetype;
-        public static String serviceBuilderArchetype;
-        public static String layoutTemplateArchetype;
-        public static String themeArchetype;
+        public static String addPluginTypeSuffix;
+        public static String disableCustomJSPValidation;
         public static String extArchetype;
-        public static String webArchetype;
+        public static String hookArchetype;
+        public static String layoutTemplateArchetype;
         public static String mavenDefaultArchetyepGroup;
         public static String mavenProjectConfiguratorOptions;
-        public static String disableCustomJSPValidation;
-        public static String addPluginTypeSuffix;
+        public static String portletJSFArchetype;
+        public static String portletJSFFacesAlloyArchetype;
+        public static String portletJSFICEfacesArchetype;
+        public static String portletJSFPrimeFacesArchetype;
+        public static String portletJSFRichFacesArchetype;
+        public static String portletMVCArchetype;
+        public static String portletVaadinArchetype;
+        public static String serviceBuilderArchetype;
+        public static String themeArchetype;
+        public static String webArchetype;
 
         static
         {
-            initializeMessages( ProjectMavenPreferencePage.class.getName(), Msgs.class );
+            initializeMessages( MavenProjectPreferencePage.class.getName(), Msgs.class );
         }
     }
 }
