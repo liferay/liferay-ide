@@ -94,9 +94,7 @@ public class ValidationPreferences
     // *** validation preferences of liferay jsp files ***
 
     public static final String LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND = "liferay-jsp-files-java-method-not-found";
-
-    public static final String LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND =
-        "liferay-jsp-files-resource-property-not-found";
+    public static final String LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND = "liferay-jsp-files-resource-property-not-found";
 
     private static Set<String> preferenceKeys;
 

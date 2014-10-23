@@ -113,9 +113,13 @@ public class LiferayJspValidator extends LiferayBaseValidator
     @Override
     protected int getServerity( ValidationType validationType, IFile file )
     {
-        String validationKey = ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND;
+        String validationKey = null;
 
-        if( ValidationType.METHOD_NOT_FOUND.equals( validationType ) )
+        if( ValidationType.PROPERTY_NOT_FOUND.equals( validationType ) )
+        {
+            validationKey = ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND;
+        }
+        else if( ValidationType.METHOD_NOT_FOUND.equals( validationType ) )
         {
             validationKey = ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND;
         }
