@@ -106,6 +106,7 @@
             objectClass="org.eclipse.core.resources.IResource">
          <action
                class="com.liferay.ide.portlet.ui.action.BuildLanguagesAction"
+               definitionId="com.liferay.ide.portlet.ui.buildLang"
                enablesFor="1"
                icon="icons/e16/liferay.png"
                id="com.liferay.ide.portlet.ui.lang.popup.action"
@@ -345,5 +346,30 @@
             file="templates/portlet-jsf-templates.xml"
             translations="templates/portlet-jsf-templates.properties">
       </include>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="com.liferay.ide.project.ui.handlers"
+            description="Run the build-lang command"
+            id="com.liferay.ide.portlet.ui.buildLang"
+            name="Build Languages">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.liferay.ide.portlet.ui.handlers.BuildLangHandler"
+            commandId="com.liferay.ide.portlet.ui.buildLang">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.liferay.ide.portlet.ui.buildLang"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M3+N">
+      </key>
    </extension>
 </plugin>
