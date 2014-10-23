@@ -14,11 +14,14 @@
  *******************************************************************************/
 package com.liferay.ide.alloy.core.webresources;
 
+import com.liferay.ide.alloy.core.AlloyCore;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,6 +29,7 @@ import java.util.WeakHashMap;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemProvider;
@@ -104,7 +108,41 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider
                 }
             }
         }
+        else if( htmlFile != null && ProjectUtil.isLayoutTplProject( htmlFile.getProject() ) )
+        {
+            // return the static css resource for layout template names based on the version
+
+            final ILiferayProject liferayProject = LiferayCore.create( htmlFile.getProject() );
+
+            if( liferayProject != null )
+            {
+                final String version = liferayProject.getPortalVersion();
+
+                try
+                {
+                    if( version != null && ( version.startsWith( "6.0" ) || version.startsWith( "6.1" ) ) )
+                    {
+                        retval = createLayoutHelperFiles( "resources/layouttpl-6.1.css" );
+                    }
+                    else if( version != null )
+                    {
+                        retval = createLayoutHelperFiles( "resources/layouttpl-6.2.css" );
+                    }
+                }
+                catch( IOException e )
+                {
+                    AlloyCore.logError( "Unable to load layout template helper css files", e );
+                }
+            }
+        }
 
         return retval;
+    }
+
+    private File[] createLayoutHelperFiles( String path ) throws IOException
+    {
+        final URL url = FileLocator.toFileURL( AlloyCore.getDefault().getBundle().getEntry( path ) );
+
+        return new File[] { new File( url.getFile() ) };
     }
 }
