@@ -1109,15 +1109,6 @@
          </enabledWhen>
       </page>
    </extension>
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="com.liferay.ide.project.ui.sdk.command.buildLang"
-            contextId="org.eclipse.ui.contexts.window"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M3+N">
-      </key>
-   </extension>
 <!--
 
    <extension
