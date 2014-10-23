@@ -31,6 +31,7 @@ import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
@@ -206,10 +207,17 @@ public interface LiferayPortlet extends Element
     @Label( standard = "Control Panel Entry Category" )
     @PossibleValues
     (
+        invalidValueSeverity = Severity.OK,
         values =
         {
-            "apps", "configurations", "sites", "users", "site_administration.configuration",
-            "site_administration.content" ,"site_administration.pages","site_administration.users"
+            "apps",
+            "configurations",
+            "sites",
+            "users",
+            "site_administration.configuration",
+            "site_administration.content",
+            "site_administration.pages",
+            "site_administration.users"
         }
     )
     @XmlBinding( path = "control-panel-entry-category" )
