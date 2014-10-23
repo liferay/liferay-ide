@@ -37,7 +37,7 @@ public interface TrashHandler extends Element
     ElementType TYPE = new ElementType( TrashHandler.class );
 
 
-    // Transh Handler
+    // Trash Handler
 
     @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portal.kernel.trash.TrashHandler" )
     @Label( standard = "Trash Handler" )

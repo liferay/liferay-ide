@@ -384,7 +384,7 @@ public interface LiferayPortlet extends Element
     ElementList<AssetRendererFactory> getAssetRendererFactories();
 
     // trash-handler*
-    @Label( standard = "Transh Handlers" )
+    @Label( standard = "Trash Handlers" )
     @Type( base = TrashHandler.class )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "trash-handler", type = TrashHandler.class ) )
     ListProperty PROP_TRASH_HANDLERS = new ListProperty( TYPE, "TrashHandlers" );
