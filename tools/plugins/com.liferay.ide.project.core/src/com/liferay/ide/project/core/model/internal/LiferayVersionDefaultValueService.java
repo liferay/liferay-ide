@@ -98,15 +98,19 @@ public class LiferayVersionDefaultValueService extends DefaultValueService
                     @Override
                     protected IStatus run( IProgressMonitor monitor )
                     {
-                        final String runtimeName = context( NewLiferayProfile.class ).getRuntimeName().content();
-                        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtimeName );
+                        final NewLiferayProfile newLiferayProfile = context( NewLiferayProfile.class );
 
-                        if( liferayRuntime != null )
+                        if( !newLiferayProfile.disposed() )
                         {
-                            runtimeVersion = liferayRuntime.getPortalVersion();
-                            refresh();
-                        }
+                            final String runtimeName = newLiferayProfile.getRuntimeName().content();
+                            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtimeName );
 
+                            if( liferayRuntime != null )
+                            {
+                                runtimeVersion = liferayRuntime.getPortalVersion();
+                                refresh();
+                            }
+                        }
                         return Status.OK_STATUS;
                     }
                 }.schedule();
