@@ -433,9 +433,10 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
     protected void validateReferenceToAllType( IXMLReferenceTo referenceTo, IDOMNode node,IFile file,
                                                IValidator validator, IReporter reporter, boolean batchMode )
     {
+        final String nodeValue = DOMUtils.getNodeValue( node );
+
         final IValidationResult result =
-            referenceTo.getSearcher().searchForValidation(
-                node, DOMUtils.getNodeValue( node ), -1, -1, file, referenceTo );
+            referenceTo.getSearcher().searchForValidation( node, nodeValue, -1, -1, file, referenceTo );
 
         if( result != null )
         {

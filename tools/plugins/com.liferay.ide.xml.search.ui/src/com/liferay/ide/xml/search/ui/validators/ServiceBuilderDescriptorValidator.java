@@ -15,7 +15,6 @@
 package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 import com.liferay.ide.xml.search.ui.util.ValidatorUtil;
 
@@ -28,6 +27,7 @@ import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 import org.w3c.dom.Attr;
@@ -65,7 +65,7 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator
             {
                 if( node.getParentNode().getNodeName().equals( "namespace" ) )
                 {
-                    final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+                    final String nodeValue = DOMUtils.getNodeValue( node );
 
                     if( ! ValidatorUtil.isValidNamespace( nodeValue ) )
                     {
@@ -78,7 +78,7 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator
                 if( "package-path".equals( node.getNodeName() ) &&
                     "service-builder".equals( ( (Attr) node ).getOwnerElement().getNodeName() ) )
                 {
-                    final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+                    final String nodeValue = DOMUtils.getNodeValue( node );
 
                     if( nodeValue != null )
                     {

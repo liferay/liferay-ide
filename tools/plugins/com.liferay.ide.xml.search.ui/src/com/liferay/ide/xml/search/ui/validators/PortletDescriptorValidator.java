@@ -16,7 +16,6 @@ package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 
 import org.eclipse.core.resources.IFile;
@@ -26,6 +25,7 @@ import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 
@@ -62,7 +62,7 @@ public class PortletDescriptorValidator extends LiferayBaseValidator
             {
                 String validationMsg = null;
 
-                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+                final String nodeValue = DOMUtils.getNodeValue( node );
 
                 if( nodeValue.endsWith( ".properties" ) )
                 {

@@ -16,7 +16,6 @@
 package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
 
@@ -27,6 +26,7 @@ import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
+import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.util.JdtUtils;
@@ -71,7 +71,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
             {
                 String validationMsg = null;
 
-                final String nodeValue = node.getNodeValue().replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+                final String nodeValue = DOMUtils.getNodeValue( node );
 
                 if( nodeValue != null && nodeValue.length() > 0 )
                 {
@@ -134,7 +134,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
     private ValidationInfo validateServiceImpl( IDOMNode node, IFile file )
     {
-        String serviceImplContent = node.getNodeValue();
+        final String serviceImplContent= DOMUtils.getNodeValue( node );
 
         IType type = JdtUtils.getJavaType(file.getProject(), serviceImplContent );
 
@@ -195,7 +195,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
     {
         try
         {
-            final String serviceTypeContent = node.getNodeValue();
+            final String serviceTypeContent= DOMUtils.getNodeValue( node );
 
             final IType type = JdtUtils.getJavaType(file.getProject(), serviceTypeContent );
 
