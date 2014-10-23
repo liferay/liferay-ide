@@ -105,6 +105,7 @@
             id="com.liferay.ide.portlet.ui.lang.popup"
             objectClass="org.eclipse.core.resources.IResource">
          <action
+               definitionId="com.liferay.ide.project.ui.sdk.command.buildLang"
                class="com.liferay.ide.portlet.ui.action.BuildLanguagesAction"
                enablesFor="1"
                icon="icons/e16/liferay.png"

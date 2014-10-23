@@ -42,6 +42,7 @@
             id="com.liferay.ide.service.ui.service.popup"
             objectClass="org.eclipse.core.resources.IResource">
          <action
+               definitionId="com.liferay.ide.service.ui.buildWSDD"
                class="com.liferay.ide.service.ui.actions.BuildWSDDAction"
                enablesFor="1"
                icon="icons/e16/service.png"
@@ -51,6 +52,7 @@
                tooltip="%build.web.services.descriptor.action.tooltip">
          </action>
          <action
+               definitionId="com.liferay.ide.service.ui.buildService"
                class="com.liferay.ide.service.ui.actions.BuildServicesAction"
                enablesFor="1"
                icon="icons/e16/service.png"
