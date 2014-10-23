@@ -29,6 +29,7 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Eric Min
  */
 public class LiferayMavenCore extends Plugin
 {
@@ -39,39 +40,28 @@ public class LiferayMavenCore extends Plugin
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.maven.core"; //$NON-NLS-1$
 
+    // set maven project context root with suffix
+    public static final String PREF_ADD_MAVEN_PLUGIN_SUFFIX = "add-maven-plugin-suffix";
+
     public static final String PREF_ARCHETYPE_GAV_EXT = "archetype-gav-ext";
-
     public static final String PREF_ARCHETYPE_GAV_LIFERAY_FACES_ALLOY = "archetype-gav-liferay-faces-alloy";
-
     public static final String PREF_ARCHETYPE_GAV_HOOK = "archetype-gav-hook";
-
     public static final String PREF_ARCHETYPE_GAV_ICEFACES = "archetype-gav-icefaces";
-
     public static final String PREF_ARCHETYPE_GAV_JSF = "archetype-gav-jsf";
-
     public static final String PREF_ARCHETYPE_GAV_LAYOUTTPL = "archetype-gav-layouttpl";
-
     public static final String PREF_ARCHETYPE_GAV_MVC = "archetype-gav-mvc";
-
     public static final String PREF_ARCHETYPE_GAV_PRIMEFACES = "archetype-gav-primefaces";
-
     public static final String PREF_ARCHETYPE_GAV_RICHFACES = "archetype-gav-richfaces";
-
     public static final String PREF_ARCHETYPE_GAV_SERVICEBUILDER = "archetype-gav-servicebuilder";
-
     public static final String PREF_ARCHETYPE_GAV_THEME = "archetype-gav-theme";
-
     public static final String PREF_ARCHETYPE_GAV_VAADIN = "archetype-gav-vaadin";
-
     public static final String PREF_ARCHETYPE_GAV_WEB = "archetype-gav-web";
 
     // The key of disable customJspValidation checking
     public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
 
-    // set maven project context root with suffix
-    public static final String PREF_ADD_MAVEN_PLUGIN_SUFFIX = "add-maven-plugin-suffix";
-
-    private static final IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
+    private static final IScopeContext[] scopes =
+                    new IScopeContext[] { InstanceScope.INSTANCE, DefaultScope.INSTANCE };
 
     public static Status createErrorStatus( String msg )
     {
