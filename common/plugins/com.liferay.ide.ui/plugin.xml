@@ -111,12 +111,4 @@
          </contentTypeBinding>
       </editor>
    </extension>
-   <extension
-         point="org.eclipse.mylyn.commons.notifications.ui.notifications">
-      <category
-            icon="icons/e16/server.png"
-            id="com.liferay.ide.ui.settings"
-            label="Liferay IDE">
-      </category>
-   </extension>
 </plugin>
