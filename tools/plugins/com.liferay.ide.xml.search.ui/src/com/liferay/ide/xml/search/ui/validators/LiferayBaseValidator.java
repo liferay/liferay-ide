@@ -318,7 +318,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         case PROPERTY_NOT_FOUND:
             final IFile languagePropertiesFile = getReferencedFile( referenceTo, node, file );
             return NLS.bind( MESSAGE_PROPERTY_NOT_FOUND, textContent, languagePropertiesFile != null
-                ? languagePropertiesFile.getName() : "" );
+                ? languagePropertiesFile.getName() : "any resource files" );
         }
 
         return null;
