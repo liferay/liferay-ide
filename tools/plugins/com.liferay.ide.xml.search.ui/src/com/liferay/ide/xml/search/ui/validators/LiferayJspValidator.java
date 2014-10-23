@@ -16,6 +16,7 @@
 package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 import com.liferay.ide.xml.search.ui.LiferayXMLConstants;
 import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
@@ -24,7 +25,9 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
+import org.eclipse.wst.validation.internal.provisional.core.IMessage;
 import org.eclipse.wst.validation.internal.provisional.core.IReporter;
 import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
@@ -105,6 +108,20 @@ public class LiferayJspValidator extends LiferayBaseValidator
         }
 
         return null;
+    }
+
+    @Override
+    protected int getServerity( ValidationType validationType, IFile file )
+    {
+        String validationKey = ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND;
+
+        if( ValidationType.METHOD_NOT_FOUND.equals( validationType ) )
+        {
+            validationKey = ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND;
+        }
+
+        return Platform.getPreferencesService().getInt(
+            PREFERENCE_NODE_QUALIFIER, validationKey, IMessage.NORMAL_SEVERITY, getScopeContexts( file.getProject() ) );
     }
 
     @Override

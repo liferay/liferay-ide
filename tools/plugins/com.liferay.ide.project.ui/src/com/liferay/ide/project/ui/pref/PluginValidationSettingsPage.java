@@ -43,6 +43,7 @@ import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
  * @author Gregory Amerson
  * @author Cindy Li
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
@@ -197,6 +198,12 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_RESOURCE_NOT_FOUND );
         createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_LAYOUTTPL_XML_REFERENCE_NOT_FOUND );
 
+        twistie = createTwistie( body, Msgs.liferayJspFiles, columns );
+        inner = createInnerComposite( parent, twistie, columns );
+
+        createCombo( inner, Msgs.propertyNotFound, ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND );
+        createCombo( inner, Msgs.methodNotFound, ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND );
+
         return parent;
     }
 
@@ -282,6 +289,8 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         public static String referenceNotFound;
         public static String resourceNotFound;
         public static String syntaxInvalid;
+        public static String propertyNotFound;
+        public static String methodNotFound;
 
         public static String error;
         public static String ignore;
@@ -293,6 +302,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         public static String liferayPortletXMLDescriptor;
         public static String portletXMLDescriptor;
         public static String serviceXMLDescriptor;
+        public static String liferayJspFiles;
 
         public static String selectSeverityLevel;
 

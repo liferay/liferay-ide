@@ -75,7 +75,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
     public static final String MESSAGE_TYPE_NOT_FOUND = Msgs.typeNotFound;
     public static final String MESSAGE_METHOD_NOT_FOUND = Msgs.methodNotFound;
 
-    private static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
+    protected static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
 
     private class ReferencedFileVisitor implements IResourceProxyVisitor
     {

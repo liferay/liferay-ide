@@ -91,6 +91,13 @@ public class ValidationPreferences
     public static final String SERVICE_XML_RESOURCE_NOT_FOUND = "service-xml-resource-not-found";
     public static final String SERVICE_XML_SYNTAX_INVALID = "service-xml-syntax-invalid";
 
+    // *** validation preferences of liferay jsp files ***
+
+    public static final String LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND = "liferay-jsp-files-java-method-not-found";
+
+    public static final String LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND =
+        "liferay-jsp-files-resource-property-not-found";
+
     private static Set<String> preferenceKeys;
 
     static
@@ -132,6 +139,9 @@ public class ValidationPreferences
         preferenceKeys.add( SERVICE_XML_REFERENCE_NOT_FOUND );
         preferenceKeys.add( SERVICE_XML_RESOURCE_NOT_FOUND );
         preferenceKeys.add( SERVICE_XML_SYNTAX_INVALID );
+
+        preferenceKeys.add( LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND );
+        preferenceKeys.add( LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND );
     }
 
     public static String getValidationPreferenceKey( String descriptorFileName, ValidationType type )
