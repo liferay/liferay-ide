@@ -94,14 +94,6 @@
                     querySpecificationId="liferay.portletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.resourcebundle.querySpecification" />
             </reference>
-
-            <!-- no "to" element means it's only used for syntax validation -->
-            <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
-                <from
-                    path="/ns:portlet-app/ns:portlet/ns:display-name"
-                    targetNodes="text()"
-                    querySpecificationId="liferay.portletxml.querySpecification" />
-            </reference>
         </references>
     </extension>
 
@@ -113,14 +105,6 @@
         <references contentTypeIds="com.liferay.ide.portlet.core.liferayportletxml">
 
             <!-- References of Java class -->
-            <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
-                <from
-                    path="/liferay-portlet-app/portlet/portlet-url-class"
-                    targetNodes="text()"
-                    querySpecificationId="liferay.liferayportletxml.querySpecification" />
-                <toJava extends="javax.portlet.GenericPortlet"/>
-            </reference>
-
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
                     path="/liferay-portlet-app/portlet/asset-renderer-factory"
