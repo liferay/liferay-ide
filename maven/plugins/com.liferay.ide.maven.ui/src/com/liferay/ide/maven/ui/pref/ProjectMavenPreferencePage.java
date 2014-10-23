@@ -138,7 +138,6 @@ public class ProjectMavenPreferencePage extends FieldEditorPreferencePage implem
         public static String mavenDefaultArchetyepGroup;
         public static String mavenProjectConfiguratorOptions;
         public static String disableCustomJSPValidation;
-        public static String allowSnapshotVersions;
         public static String addPluginTypeSuffix;
 
         static
