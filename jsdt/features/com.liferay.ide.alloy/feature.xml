@@ -34,11 +34,11 @@
    <requires>
       <import feature="com.liferay.ide.common" version="2.2.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.eclipse.tools" version="2.2.0" match="greaterOrEqual"/>
-      <import feature="tern-feature" version="0.6.0" match="greaterOrEqual"/>
-      <import feature="tern-jsdt-feature" version="0.6.0" match="greaterOrEqual"/>
-      <import feature="tern-server-nodejs-feature" version="0.6.0" match="greaterOrEqual"/>
-      <import feature="tern.eclipse.ide.server.nodejs.embed" version="0.6.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.html.webresources.feature" version="0.6.0" match="greaterOrEqual"/>
+      <import feature="tern-feature" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="tern-jsdt-feature" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="tern-server-nodejs-feature" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="tern.eclipse.ide.server.nodejs.embed" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.wst.html.webresources.feature" version="0.7.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
