@@ -801,6 +801,18 @@
                    querySpecificationId="com.liferay.ide.xml.search.ui.portletActionMethodQuery" >
              </toJavaMethod>
           </reference>
+
+          <reference
+                validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="//param"
+                   targetNodes="@value">
+             </from>
+             <toJava
+                   extends="com.liferay.util.bridges.mvc.ActionCommand"
+                   searcherId="com.liferay.ide.xml.search.ui.portletActionCommandSearcher">
+             </toJava>
+          </reference>
        </references>
     </extension>
 
@@ -920,7 +932,7 @@
 
     <!--========== Content Assist Info Provider ==========-->
 
-	 <extension point="org.eclipse.wst.xml.search.editor.contentAssists" >
+    <extension point="org.eclipse.wst.xml.search.editor.contentAssists" >
         <additionalProposalInfoProvider
             id="contentAssist.portlet.info"
             class="com.liferay.ide.xml.search.ui.PortletContentAssistInfoProvider" />
@@ -931,7 +943,7 @@
 
     <!--========== Edit Configurations ==========-->
 
-	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
         <sourceViewerConfiguration
             class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
             target="com.liferay.ide.portlet.core.portletxml" />
@@ -949,13 +961,13 @@
             target="com.liferay.ide.portlet.core.liferaydisplayxml" />
     </extension>
 
-	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
         <sourceViewerConfiguration
             class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
             target="com.liferay.ide.hook.core.liferayhookxml" />
     </extension>
 
-	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
         <sourceViewerConfiguration
             class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
             target="com.liferay.ide.layouttpl.core.liferaylayouttplxml" />
@@ -988,6 +1000,7 @@
              id="liferay.jsp.taglib.filter">
        </filter>
     </extension>
+
     <extension
           point="org.eclipse.wst.xml.search.editor.javaMethodQuerySpecifications">
        <querySpecification
@@ -1002,6 +1015,10 @@
              class="com.liferay.ide.xml.search.ui.searcher.LiferayJspLanguagePropertiesSearcher"
              id="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher">
        </searcher>
+       <searcher
+             class="com.liferay.ide.xml.search.ui.java.PortletActionCommandSearcher"
+             id="com.liferay.ide.xml.search.ui.portletActionCommandSearcher">
+       </searcher>
     </extension>
 
     <extension
@@ -1010,5 +1027,5 @@
             class="com.liferay.ide.xml.search.ui.ResourceBundleMarkerResolutionGenerator"
             markerType="org.eclipse.jst.jsp.core.validationMarker">
       </markerResolutionGenerator>
-   </extension>
+    </extension>
 </plugin>

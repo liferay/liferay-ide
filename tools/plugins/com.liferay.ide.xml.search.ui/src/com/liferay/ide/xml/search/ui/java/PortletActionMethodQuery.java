@@ -26,6 +26,8 @@ import org.eclipse.wst.xml.search.editor.searchers.javamethod.requestor.IJavaMet
  */
 public class PortletActionMethodQuery implements IJavaMethodRequestorProvider, IClassNameExtractorProvider
 {
+    private static final IClassNameExtractor EXTRACTOR_INSTANCE =
+                    new HierarchyTypeClassNameExtractor( "javax.portlet.Portlet" );
 
     public PortletActionMethodQuery()
     {
@@ -35,7 +37,7 @@ public class PortletActionMethodQuery implements IJavaMethodRequestorProvider, I
     @Override
     public IClassNameExtractor getClassNameExtractor( Object selectedNode, IFile file )
     {
-        return PortletActionMethodClassNameExtractor.INSTANCE;
+        return EXTRACTOR_INSTANCE;
     }
 
     @Override

@@ -34,22 +34,19 @@ import org.eclipse.jdt.core.search.SearchPattern;
 import org.eclipse.jdt.core.search.SearchRequestor;
 import org.eclipse.wst.xml.search.core.xpath.NamespaceInfos;
 import org.eclipse.wst.xml.search.editor.searchers.javamethod.classnameprovider.AbstractClassNameExtractor;
-import org.eclipse.wst.xml.search.editor.searchers.javamethod.classnameprovider.IClassNameExtractor;
 import org.w3c.dom.Node;
 
 
 /**
  * @author Gregory Amerson
  */
-public class PortletActionMethodClassNameExtractor extends AbstractClassNameExtractor
+public class HierarchyTypeClassNameExtractor extends AbstractClassNameExtractor
 {
-    public static final IClassNameExtractor INSTANCE = new PortletActionMethodClassNameExtractor();
-
-    private static class PortletClassCollector extends SearchRequestor
+    private static class TypeClassCollector extends SearchRequestor
     {
         private final List<String> results = new ArrayList<String>();
 
-        public PortletClassCollector()
+        public TypeClassCollector()
         {
             super();
         }
@@ -73,6 +70,15 @@ public class PortletActionMethodClassNameExtractor extends AbstractClassNameExtr
         }
     }
 
+    private final String typeName;
+
+    public HierarchyTypeClassNameExtractor( String typeName )
+    {
+        super();
+
+        this.typeName = typeName;
+    }
+
     @Override
     protected String[] doExtractClassNames(
         Node node, IFile file, String pathForClass, String findByAttrName, boolean findByParentNode,
@@ -84,25 +90,28 @@ public class PortletActionMethodClassNameExtractor extends AbstractClassNameExtr
 
         try
         {
-            // look for all subclasses of liferayPortlet in this project
-            final IType portletType = project.findType( "javax.portlet.Portlet" );
+            final IType type = project.findType( this.typeName );
 
-            final IJavaSearchScope scope =
-                SearchEngine.createStrictHierarchyScope( project, portletType, true, false, null );
+            if( type != null )
+            {
+                final TypeClassCollector requestor = new TypeClassCollector();
 
-            final PortletClassCollector requestor = new PortletClassCollector();
-            final SearchPattern search =
-                SearchPattern.createPattern( "*", IJavaSearchConstants.CLASS, IJavaSearchConstants.DECLARATIONS, 0 );
+                final IJavaSearchScope scope =
+                    SearchEngine.createStrictHierarchyScope( project, type, true, false, null );
 
-            new SearchEngine().search(
-                search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope, requestor,
-                new NullProgressMonitor() );
+                final SearchPattern search =
+                    SearchPattern.createPattern(
+                        "*", IJavaSearchConstants.CLASS, IJavaSearchConstants.DECLARATIONS, 0 );
 
-            retval = requestor.getResults().toArray( new String[0] );
+                new SearchEngine().search(
+                    search, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
+                    requestor, new NullProgressMonitor() );
+
+                retval = requestor.getResults().toArray( new String[0] );
+            }
         }
         catch( Exception e )
         {
-            e.printStackTrace();
         }
 
         return retval;
