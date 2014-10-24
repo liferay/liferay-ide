@@ -30,6 +30,8 @@ public interface IPluginPackageModel extends IModel, IModelChangeProvider
 
     String PROPERTY_LICENSES = "licenses"; //$NON-NLS-1$
 
+    String PROPERTY_LIFERAY_VERSIONS = "liferay-versions"; //$NON-NLS-1$
+
     String PROPERTY_LONG_DESCRIPTION = "long-description"; //$NON-NLS-1$
 
     String PROPERTY_MODULE_GROUP_ID = "module-group-id"; //$NON-NLS-1$

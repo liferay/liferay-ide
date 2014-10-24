@@ -49,6 +49,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
     protected FormEntry authorEntry;
     protected FormEntry changeLogEntry;
     protected FormEntry licensesEntry;
+    protected FormEntry liferayVersionsEntry;
     protected FormEntry longDescriptionEntry;
     protected FormEntry moduleGroupIdEntry;
     protected FormEntry moduleIncrementalVersionEntry;
@@ -149,6 +150,10 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
                     {
                         licensesEntry.setValue( newValue.toString() );
                     }
+                    else if( IPluginPackageModel.PROPERTY_LIFERAY_VERSIONS.equals( changedProperty ) )
+                    {
+                        liferayVersionsEntry.setValue( newValue.toString() );
+                    }
                     else if( IPluginPackageModel.PROPERTY_SHORT_DESCRIPTION.equals( changedProperty ) )
                     {
                         shortDescriptionEntry.setValue( newValue.toString() );
@@ -210,6 +215,11 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         if( getModel().getPageUrl() != null )
         {
             pageUrlEntry.setValue( getModel().getPageUrl(), true );
+        }
+
+        if( getModel().getLiferayVersions() != null )
+        {
+            liferayVersionsEntry.setValue( getModel().getLiferayVersions(), true );
         }
 
         if( getModel().getShortDescription() != null )
@@ -286,13 +296,14 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         IActionBars actionBars = page.getEditor().getEditorSite().getActionBars();
 
         createNameEntry( client, toolkit, actionBars );
-        createChangeLogEntry( client, toolkit, actionBars );
         createModuleGroupIdEntry( client, toolkit, actionBars );
-        createPageUrlEntry( client, toolkit, actionBars );
         createModuleIncrementalVersionEntry( client, toolkit, actionBars );
-        createAuthorEntry( client, toolkit, actionBars );
         createTagsEntry( client, toolkit, actionBars );
+        createChangeLogEntry( client, toolkit, actionBars );
+        createPageUrlEntry( client, toolkit, actionBars );
+        createAuthorEntry( client, toolkit, actionBars );
         createLicensesEntry( client, toolkit, actionBars );
+        createLiferayVersionsEntry( client, toolkit, actionBars );
         createShortDescriptionEntry( client, toolkit, actionBars );
         createLongDescriptionEntry( client, toolkit, actionBars );
         createSpeedFiltersEntry( client, toolkit, actionBars );
@@ -315,6 +326,20 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         });
 
         configureEntry( licensesEntry );
+    }
+
+    protected void createLiferayVersionsEntry( Composite client, FormToolkit toolkit, IActionBars actionBars )
+    {
+        liferayVersionsEntry = new FormEntry( client, toolkit, Msgs.liferayVersionsLabel, null, SWT.SINGLE, false );
+        liferayVersionsEntry.setFormEntryListener( new FormEntryAdapter( this, actionBars )
+        {
+            public void textValueChanged( FormEntry entry )
+            {
+                getModel().setLiferayVersions( entry.getValue().trim() );
+            }
+        });
+
+        configureEntry( liferayVersionsEntry );
     }
 
     protected void createModuleGroupIdEntry( Composite client, FormToolkit toolkit, IActionBars actionBars )
@@ -465,6 +490,7 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
         public static String changeLogLabel;
         public static String general;
         public static String licensesLabel;
+        public static String liferayVersionsLabel;
         public static String longDescriptionLabel;
         public static String moduleGroupIdLabel;
         public static String moduleVersionLabel;

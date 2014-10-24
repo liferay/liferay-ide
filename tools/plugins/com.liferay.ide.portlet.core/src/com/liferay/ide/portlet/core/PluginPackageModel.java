@@ -152,6 +152,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
         return getStringProperty( PROPERTY_LICENSES );
     }
 
+    public String getLiferayVersions()
+    {
+        return getStringProperty( PROPERTY_LIFERAY_VERSIONS );
+    }
+
     public String getLongDescription()
     {
         return getStringProperty( PROPERTY_LONG_DESCRIPTION );
@@ -345,6 +350,11 @@ public class PluginPackageModel extends AbstractEditingModel implements IPluginP
     public void setLicenses( String licenses )
     {
         setProperty( PROPERTY_LICENSES, licenses );
+    }
+
+    public void setLiferayVersions( String liferayVersions )
+    {
+        setProperty( PROPERTY_LIFERAY_VERSIONS, liferayVersions );
     }
 
     public void setLongDescription( String desc )
