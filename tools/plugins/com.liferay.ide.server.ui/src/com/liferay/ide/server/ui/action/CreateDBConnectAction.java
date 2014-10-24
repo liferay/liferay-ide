@@ -54,19 +54,31 @@ import org.eclipse.wst.server.core.IServer;
 public class CreateDBConnectAction extends AbstractServerRunningAction
 {
 
-    private final static String PORTAL_EXT_PROPERTIES = "portal-ext.properties"; //$NON-NLS-1$
-    private final static String PORTAL_SETUP_PROPERTIES = "portal-setup-wizard.properties"; //$NON-NLS-1$
+
+
     private final static String JDBC_DRIVER_CLASS_NAME = "jdbc.default.driverClassName"; //$NON-NLS-1$
+
+    private final static String PORTAL_EXT_PROPERTIES = "portal-ext.properties"; //$NON-NLS-1$
+
+    private final static String PORTAL_SETUP_PROPERTIES = "portal-setup-wizard.properties"; //$NON-NLS-1$
 
     public CreateDBConnectAction()
     {
         super();
     }
 
-    @Override
-    protected int getRequiredServerState()
+    private String generateUniqueConnectionProfileName( final String connectionProfileName )
     {
-        return IServer.STATE_STARTED | IServer.STATE_STARTING | IServer.STATE_STOPPING | IServer.STATE_STOPPED;
+        int index = 1;
+        String testName = connectionProfileName;
+
+        while( ProfileManager.getInstance().getProfileByName( testName ) != null )
+        {
+            index++;
+            testName = connectionProfileName + String.valueOf( index );
+        }
+
+        return testName;
     }
 
     private Properties getDatabaseProperties( IPath bundlePath )
@@ -116,23 +128,65 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
         return pluginPackageProperties;
     }
 
-    @Override
-    public void selectionChanged( IAction action, ISelection selection )
+
+    private LiferayDatabaseConnection getLiferayDBConnection(
+        final String driverClass, final String userName, final String password, final String connectionUrl )
     {
-        super.selectionChanged( action, selection );
-
-        if( !selection.isEmpty() )
+        if( driverClass.equals( "com.mysql.jdbc.Driver" ) ) //$NON-NLS-1$
         {
-            if( selection instanceof IStructuredSelection )
-            {
-                final IStructuredSelection sel = (IStructuredSelection) selection;
+            final String defaultDriverClass = "com.mysql.jdbc.Driver"; //$NON-NLS-1$
+            final String providerId = "org.eclipse.datatools.enablement.mysql.connectionProfile"; //$NON-NLS-1$
+            final String connectionDesc = "Mysql Connection Profile"; //$NON-NLS-1$
+            final String driverTemplate = "org.eclipse.datatools.enablement.mysql.5_1.driverTemplate"; //$NON-NLS-1$
 
-                if( sel.toList().size() > 1 )
-                {
-                    action.setEnabled( sel.toList().size() == 1 );
-                }
+            return new MysqlLiferayDatabaseConnection(
+                defaultDriverClass, providerId, connectionDesc, driverTemplate, userName, password, connectionUrl );
+        }
+        else if( driverClass.equals( "org.postgresql.Driver" ) ) //$NON-NLS-1$
+        {
+            final String defaultDriverClass = "org.postgresql.Driver"; //$NON-NLS-1$
+            final String providerId = "org.eclipse.datatools.enablement.postgresql.connectionProfile"; //$NON-NLS-1$
+            final String connectionDesc = "Posgresql Connection Profile"; //$NON-NLS-1$
+            final String driverTemplate = "org.eclipse.datatools.enablement.postgresql.postgresqlDriverTemplate"; //$NON-NLS-1$
+
+            return new PostgresqlLiferayDatabaseConnection(
+                defaultDriverClass, providerId, connectionDesc, driverTemplate, userName, password, connectionUrl );
+        }
+        else if( driverClass == null || driverClass.equals( "org.hsqldb.jdbcDriver" ) ) //$NON-NLS-1$
+        {
+            final String defaultDriverClass = "org.hsqldb.jdbcDriver"; //$NON-NLS-1$
+            final String providerId = "org.eclipse.datatools.enablement.hsqldb.connectionProfile"; //$NON-NLS-1$
+            final String connectionDesc = "Hsql Connection Profile"; //$NON-NLS-1$
+            final String driverTemplate = "org.eclipse.datatools.enablement.hsqldb.1_8.driver"; //$NON-NLS-1$
+
+            return new HsqlLiferayDatabaseConnection( defaultDriverClass, providerId, connectionDesc, driverTemplate );
+        }
+
+        return null;
+    }
+
+    private URL[] getLiferayRuntimeLibs( final ILiferayRuntime liferayRuntime ) throws Exception
+    {
+        final IPath[] extraLibs = liferayRuntime.getUserLibs();
+        final List<URL> libUrlList = new ArrayList<URL>();
+
+        if( !CoreUtil.isNullOrEmpty( extraLibs ) )
+        {
+            for( IPath url : extraLibs )
+            {
+                libUrlList.add( new File( url.toOSString() ).toURI().toURL() );
             }
         }
+
+        final URL[] urls = libUrlList.toArray( new URL[libUrlList.size()] );
+
+        return urls;
+    }
+
+    @Override
+    protected int getRequiredServerState()
+    {
+        return IServer.STATE_STARTED | IServer.STATE_STARTING | IServer.STATE_STOPPING | IServer.STATE_STOPPED;
     }
 
     @SuppressWarnings( "resource" )
@@ -206,47 +260,70 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
         }
     }
 
-    private String generateUniqueConnectionProfileName( final String connectionProfileName )
+    @Override
+    public void selectionChanged( IAction action, ISelection selection )
     {
-        int index = 1;
-        String testName = connectionProfileName;
+        super.selectionChanged( action, selection );
 
-        while( ProfileManager.getInstance().getProfileByName( testName ) != null )
+        if( !selection.isEmpty() )
         {
-            index++;
-            testName = connectionProfileName + String.valueOf( index );
-        }
-
-        return testName;
-    }
-
-    private URL[] getLiferayRuntimeLibs( final ILiferayRuntime liferayRuntime ) throws Exception
-    {
-        final IPath[] extraLibs = liferayRuntime.getUserLibs();
-        final List<URL> libUrlList = new ArrayList<URL>();
-
-        if( !CoreUtil.isNullOrEmpty( extraLibs ) )
-        {
-            for( IPath url : extraLibs )
+            if( selection instanceof IStructuredSelection )
             {
-                libUrlList.add( new File( url.toOSString() ).toURI().toURL() );
+                final IStructuredSelection sel = (IStructuredSelection) selection;
+
+                if( sel.toList().size() > 1 )
+                {
+                    action.setEnabled( sel.toList().size() == 1 );
+                }
             }
         }
+    }
 
-        final URL[] urls = libUrlList.toArray( new URL[libUrlList.size()] );
+    private class HsqlLiferayDatabaseConnection extends LiferayDatabaseConnection
+    {
+        private final static String defaultConnecionUrl = "jdbc:hsqldb:lportal"; //$NON-NLS-1$
 
-        return urls;
+        private final static String defaultPassword = ""; //$NON-NLS-1$
+        private final static String defaultUserName = "sa"; //$NON-NLS-1$
+        public HsqlLiferayDatabaseConnection(
+            final String driverClass, final String providerId, final String connectinDesc, final String driverTemplate)
+        {
+            super( driverClass, providerId, connectinDesc, driverTemplate, defaultUserName, defaultPassword, defaultConnecionUrl );
+        }
+
+        @Override
+        protected String getDatabaseName( String connectionUrl )
+        {
+            String retval = "lportal";
+
+            if( !CoreUtil.isNullOrEmpty( connectionUrl ) )
+            {
+                final int databaseNameBegin = connectionUrl.lastIndexOf( "/" ); //$NON-NLS-1$
+
+                if( databaseNameBegin > 0 )
+                {
+                    final String databaseName = connectionUrl.substring( databaseNameBegin + 1 );
+
+                    if( !CoreUtil.isNullOrEmpty( databaseName ) )
+                    {
+                        retval = databaseName;
+                    }
+                }
+            }
+
+            return retval;
+        }
     }
 
     private abstract class LiferayDatabaseConnection
     {
-        private String driverClass;
-        private String providerId;
         private String connectionDesc;
-        private String driverTemplate;
-        private String userName;
-        private String password;
         private String connectionUrl;
+        private String driverClass;
+        private String driverTemplate;
+        private String password;
+        private String providerId;
+        private String userName;
 
         public LiferayDatabaseConnection(
             final String driverClass, final String providerId, final String connectinDesc, final String driverTemplate,
@@ -260,20 +337,6 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
             this.userName = userName;
             this.password = password;
             this.connectionUrl = connectionUrl;
-        }
-
-        private String generateUniqueDriverDefinitionName( final String driverDefinitionNameBase )
-        {
-            int index = 1;
-            String testName = driverDefinitionNameBase;
-
-            while( DriverManager.getInstance().getDriverInstanceByName( testName ) != null )
-            {
-                index++;
-                testName = driverDefinitionNameBase + String.valueOf( index );
-            }
-
-            return testName;
         }
 
         public void addDatabaseConnectionProfile( String connectionName, String driverPath )
@@ -301,44 +364,21 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
                 uniqueConnectionProfileName, connectionDesc, providerId, connectionProfileProperties, "", false ); //$NON-NLS-1$
         }
 
+        private String generateUniqueDriverDefinitionName( final String driverDefinitionNameBase )
+        {
+            int index = 1;
+            String testName = driverDefinitionNameBase;
+
+            while( DriverManager.getInstance().getDriverInstanceByName( testName ) != null )
+            {
+                index++;
+                testName = driverDefinitionNameBase + String.valueOf( index );
+            }
+
+            return testName;
+        }
+
         protected abstract String getDatabaseName( final String connectionUrl );
-    }
-
-
-    private LiferayDatabaseConnection getLiferayDBConnection(
-        final String driverClass, final String userName, final String password, final String connectionUrl )
-    {
-        if( driverClass.equals( "com.mysql.jdbc.Driver" ) ) //$NON-NLS-1$
-        {
-            final String defaultDriverClass = "com.mysql.jdbc.Driver"; //$NON-NLS-1$
-            final String providerId = "org.eclipse.datatools.enablement.mysql.connectionProfile"; //$NON-NLS-1$
-            final String connectionDesc = "Mysql Connection Profile"; //$NON-NLS-1$
-            final String driverTemplate = "org.eclipse.datatools.enablement.mysql.5_1.driverTemplate"; //$NON-NLS-1$
-
-            return new MysqlLiferayDatabaseConnection(
-                defaultDriverClass, providerId, connectionDesc, driverTemplate, userName, password, connectionUrl );
-        }
-        else if( driverClass.equals( "org.postgresql.Driver" ) ) //$NON-NLS-1$
-        {
-            final String defaultDriverClass = "org.postgresql.Driver"; //$NON-NLS-1$
-            final String providerId = "org.eclipse.datatools.enablement.postgresql.connectionProfile"; //$NON-NLS-1$
-            final String connectionDesc = "Posgresql Connection Profile"; //$NON-NLS-1$
-            final String driverTemplate = "org.eclipse.datatools.enablement.postgresql.postgresqlDriverTemplate"; //$NON-NLS-1$
-
-            return new PostgresqlLiferayDatabaseConnection(
-                defaultDriverClass, providerId, connectionDesc, driverTemplate, userName, password, connectionUrl );
-        }
-        else if( driverClass == null || driverClass.equals( "org.hsqldb.jdbcDriver" ) ) //$NON-NLS-1$
-        {
-            final String defaultDriverClass = "org.hsqldb.jdbcDriver"; //$NON-NLS-1$
-            final String providerId = "org.eclipse.datatools.enablement.hsqldb.connectionProfile"; //$NON-NLS-1$
-            final String connectionDesc = "Hsql Connection Profile"; //$NON-NLS-1$
-            final String driverTemplate = "org.eclipse.datatools.enablement.hsqldb.1_8.driver"; //$NON-NLS-1$
-
-            return new HsqlLiferayDatabaseConnection( defaultDriverClass, providerId, connectionDesc, driverTemplate );
-        }
-
-        return null;
     }
 
     private class MysqlLiferayDatabaseConnection extends LiferayDatabaseConnection
@@ -419,48 +459,12 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
         }
     }
 
-    private class HsqlLiferayDatabaseConnection extends LiferayDatabaseConnection
-    {
-        public HsqlLiferayDatabaseConnection(
-            final String driverClass, final String providerId, final String connectinDesc, final String driverTemplate)
-        {
-            super( driverClass, providerId, connectinDesc, driverTemplate, defaultUserName, defaultPassword, defaultConnecionUrl );
-        }
-
-        private final static String defaultConnecionUrl = "jdbc:hsqldb:lportal"; //$NON-NLS-1$
-        private final static String defaultUserName = "sa"; //$NON-NLS-1$
-        private final static String defaultPassword = ""; //$NON-NLS-1$
-
-        @Override
-        protected String getDatabaseName( String connectionUrl )
-        {
-            String retval = "lportal";
-
-            if( !CoreUtil.isNullOrEmpty( connectionUrl ) )
-            {
-                final int databaseNameBegin = connectionUrl.lastIndexOf( "/" ); //$NON-NLS-1$
-
-                if( databaseNameBegin > 0 )
-                {
-                    final String databaseName = connectionUrl.substring( databaseNameBegin + 1 );
-
-                    if( !CoreUtil.isNullOrEmpty( databaseName ) )
-                    {
-                        retval = databaseName;
-                    }
-                }
-            }
-
-            return retval;
-        }
-    }
-
     private static class Msgs extends NLS
     {
-        public static String noDBConnectDriver;
         public static String addDBConnnection;
         public static String addProfileError;
         public static String noDatabasePropertyFile;
+        public static String noDBConnectDriver;
 
         static
         {
