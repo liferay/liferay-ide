@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
@@ -193,17 +194,34 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
         if( createNewPortlet && PluginType.portlet.equals( op.getPluginType().content() ) )
         {
-            openNewPortletWizard();
+            final IPortletFramework portletFramework = op.getPortletFramework().content();
+            String wizardId = null;
+
+            if( ("mvc").equals( portletFramework.getShortName() ) )
+            {
+                wizardId = "com.liferay.ide.portlet.ui.newPortletWizard";
+            }
+            else if( ("jsf-2.x").equals( portletFramework.getShortName() ) )
+            {
+                wizardId = "com.liferay.ide.portlet.ui.newJSFPortletWizard";
+            }
+            else if( ("vaadin").equals( portletFramework.getShortName() ) )
+            {
+                wizardId = "com.liferay.ide.portlet.vaadin.ui.newVaadinPortletWizard";
+            }
+
+            if( wizardId != null )
+            {
+                openNewPortletWizard( wizardId );
+            }
         }
     }
 
-    private void openNewPortletWizard()
+    private void openNewPortletWizard( String wizardId )
     {
         final IExtensionRegistry registry = Platform.getExtensionRegistry();
 
-        final String newPortletWizardExtensionId = "com.liferay.ide.portlet.ui.newPortletWizard";
-
-        final IExtension extension = registry.getExtension( newPortletWizardExtensionId );
+        final IExtension extension = registry.getExtension( wizardId );
 
         final IConfigurationElement[] elements = extension.getConfigurationElements();
 
