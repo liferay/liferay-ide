@@ -69,7 +69,7 @@ public class JSFLiferayPortletDescriptorHelper extends LiferayPortletDescriptorH
                 @Override
                 public IStatus update( Version preVersion, Version postVersion )
                 {
-                    if( ( CoreUtil.compareVersions( preVersion, ILiferayConstants.V620 ) > 0 ) &&
+                    if( ( CoreUtil.compareVersions( preVersion, ILiferayConstants.V620 ) >= 0 ) &&
                           CoreUtil.compareVersions( postVersion, ILiferayConstants.V620 ) < 0 )
                     {
                         final IFile descriptorFile = getDescriptorFile();
