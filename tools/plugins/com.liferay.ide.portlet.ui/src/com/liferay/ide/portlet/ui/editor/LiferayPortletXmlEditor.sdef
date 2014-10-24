@@ -109,7 +109,19 @@
                 <content>
                     <property-editor>ControlPanelEntryCategory</property-editor>
                     <property-editor>ControlPanelEntryWeight</property-editor>
-                    <property-editor>ControlPanelEntryClass</property-editor>
+                    <property-editor>
+                        <property>ControlPanelEntryClass</property>
+                        <action-handler-filter>
+                            <impl>NoBrowseActionHandlerFilter</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler-filter>
+                        <action-handler>
+                            <id>Hierarchy.Browse.Java.Type</id>
+                            <action>Sapphire.Browse</action>
+                            <impl>HierarchyBrowseActionHandler</impl>
+                            <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                        </action-handler>
+                    </property-editor>
                 </content>
                 <collapsible>true</collapsible>
                 <collapsed-initially>false</collapsed-initially>
@@ -183,45 +195,81 @@
                         <!--  <property-editor>VirtualPath</property-editor> -->
                         <property-editor>StrutsPath</property-editor>
                         <!-- <property-editor>ParentStrutsPath</property-editor> -->
-                        <property-editor>ConfigurationActionClass</property-editor>
+                        <property-editor>
+                            <property>ConfigurationActionClass</property>
+                            <action-handler-filter>
+                                <impl>NoBrowseActionHandlerFilter</impl>
+                                <context>Sapphire.ValuePropertyEditor</context>
+                            </action-handler-filter>
+                            <action-handler>
+                                <id>Hierarchy.Browse.Java.Type</id>
+                                <action>Sapphire.Browse</action>
+                                <impl>HierarchyBrowseActionHandler</impl>
+                                <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                            </action-handler>
+                        </property-editor>
                     </content>
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>
                 </section>
-	            <section>
-	                <label>Search</label>
-	                <content>
-	                    <property-editor>
-	                        <property>IndexerClasses</property>
-	                        <hint>
-	                            <name>browse.only</name>
-	                            <value>true</value>
-	                        </hint>
-	                    </property-editor>
-	                    <!-- <property-editor>OpenSearchClass</property-editor> -->
-	                </content>
-	                <collapsible>true</collapsible>
-	                <collapsed-initially>false</collapsed-initially>
-	            </section>
-	            <section>
-	                <label>URL Mappings</label>
-	                <content>
-	                    <property-editor>FriendlyURLMapperClass</property-editor>
-	                    <property-editor>FriendlyURLMapping</property-editor>
-	                    <property-editor>FriendlyURLRoutes</property-editor>
-	                    <!-- <property-editor>URLEncoderClass</property-editor> -->
-	                </content>
-	                <collapsible>true</collapsible>
-	                <collapsed-initially>false</collapsed-initially>
-	            </section>
-	            <image>icons/e16/mapping.png</image>
+                <section>
+                    <label>Search</label>
+                    <content>
+                        <property-editor>
+                            <property>IndexerClasses</property>
+                            <hint>
+                                <name>browse.only</name>
+                                <value>true</value>
+                            </hint>
+                        </property-editor>
+                        <!-- <property-editor>OpenSearchClass</property-editor> -->
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <section>
+                    <label>URL Mappings</label>
+                    <content>
+                        <property-editor>
+                            <property>FriendlyURLMapperClass</property>
+                            <action-handler-filter>
+                                <impl>NoBrowseActionHandlerFilter</impl>
+                                <context>Sapphire.ValuePropertyEditor</context>
+                            </action-handler-filter>
+                            <action-handler>
+                                <id>Hierarchy.Browse.Java.Type</id>
+                                <action>Sapphire.Browse</action>
+                                <impl>HierarchyBrowseActionHandler</impl>
+                                <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                            </action-handler>
+                        </property-editor>
+                        <property-editor>FriendlyURLMapping</property-editor>
+                        <property-editor>FriendlyURLRoutes</property-editor>
+                        <!-- <property-editor>URLEncoderClass</property-editor> -->
+                    </content>
+                    <collapsible>true</collapsible>
+                    <collapsed-initially>false</collapsed-initially>
+                </section>
+                <image>icons/e16/mapping.png</image>
             </node>
             <node>
                 <label>Data Handler</label>
                 <section>
                     <label>Portlet Data Handler</label>
                     <content>
-                        <property-editor>PortletDataHandlerClass</property-editor>
+                        <property-editor>
+                            <property>PortletDataHandlerClass</property>
+                            <action-handler-filter>
+                                <impl>NoBrowseActionHandlerFilter</impl>
+                                <context>Sapphire.ValuePropertyEditor</context>
+                            </action-handler-filter>
+                            <action-handler>
+                                <id>Hierarchy.Browse.Java.Type</id>
+                                <action>Sapphire.Browse</action>
+                                <impl>HierarchyBrowseActionHandler</impl>
+                                <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                            </action-handler>
+                        </property-editor>
                         <property-editor>StagedModelDataHandlerClasses</property-editor>
                         <!-- <property-editor>PortletLayoutListenerClass</property-editor>
                         <property-editor>PollerProcessorClass</property-editor>
@@ -230,7 +278,19 @@
                         <property-editor>WebDAVStorageClass</property-editor>
                         <property-editor>XmlRPCMethodClass</property-editor> -->
                         <property-editor>TrashHandlers</property-editor>
-                        <property-editor>WorkflowHandler</property-editor>
+                        <property-editor>
+                            <property>WorkflowHandler</property>
+                            <action-handler-filter>
+                                <impl>NoBrowseActionHandlerFilter</impl>
+                                <context>Sapphire.ValuePropertyEditor</context>
+                            </action-handler-filter>
+                            <action-handler>
+                                <id>Hierarchy.Browse.Java.Type</id>
+                                <action>Sapphire.Browse</action>
+                                <impl>HierarchyBrowseActionHandler</impl>
+                                <condition>JavaTypeBrowseActionHandlerCondition</condition>
+                            </action-handler>
+                        </property-editor>
                     </content>
                     <collapsible>true</collapsible>
                     <collapsed-initially>false</collapsed-initially>
@@ -326,15 +386,15 @@
                             <element-type>CronTrigger</element-type>
                             <content>
                                 <with>
-	                                <label>Select Cron trigger type</label>
-	                                <path>CronTrigger</path>
-	                                <show-label>false</show-label>
-	                                <case>
-	                                    <element-type>PropertyCronTrigger</element-type>
-	                                    <content>
-	                                        <property-editor>PropertyKey</property-editor>
-	                                    </content>
-	                                </case>
+                                    <label>Select Cron trigger type</label>
+                                    <path>CronTrigger</path>
+                                    <show-label>false</show-label>
+                                    <case>
+                                        <element-type>PropertyCronTrigger</element-type>
+                                        <content>
+                                            <property-editor>PropertyKey</property-editor>
+                                        </content>
+                                    </case>
                                     <case>
                                         <element-type>CronTriggeValueTrigger</element-type>
                                         <content>
