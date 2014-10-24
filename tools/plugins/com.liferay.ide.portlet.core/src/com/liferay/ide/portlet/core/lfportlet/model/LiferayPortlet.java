@@ -226,19 +226,6 @@ public interface LiferayPortlet extends Element
     Value<String> getControlPanelEntryCategory();
     void setControlPanelEntryCategory( String value );
 
-    // portlet-url-class?
-    @JavaTypeConstraint( kind = JavaTypeKind.CLASS, type = "com.liferay.portlet.PortletURLImplWrapper" )
-    @Label( standard = "Portlet Url Class" )
-    @MustExist
-    @Reference( target = JavaType.class )
-    @Type( base = JavaTypeName.class )
-    @XmlBinding( path = "portlet-url-class" )
-    ValueProperty PROP_PORTLET_URL_CLASS = new ValueProperty( TYPE, "PortletUrlClass" );
-
-    ReferenceValue<JavaTypeName, JavaType> getPortletUrlClass();
-    void setPortletUrlClass( JavaTypeName value );
-    void setPortletUrlClass( String value );
-
     // control-panel-weight?
     @Label( standard = "Control Panel Entry Weight" )
     @NumericRange( min = "0" )
