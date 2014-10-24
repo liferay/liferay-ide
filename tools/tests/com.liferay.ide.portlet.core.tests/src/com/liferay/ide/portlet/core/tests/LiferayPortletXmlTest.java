@@ -315,8 +315,6 @@ public class LiferayPortletXmlTest extends XmlTestsBase
             }
         }
 
-        assertEquals( "com.test.portletUrlClass.Test", portlet.getPortletUrlClass().content().toString() );
-
         assertEquals( "com.test.friendUrlMapper.Test", portlet.getFriendlyURLMapperClass().content().toString() );
 
         assertEquals( "test", portlet.getFriendlyURLMapping().toString() );

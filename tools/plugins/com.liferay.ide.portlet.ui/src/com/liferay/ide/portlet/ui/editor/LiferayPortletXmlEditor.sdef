@@ -206,7 +206,6 @@
 	            <section>
 	                <label>URL Mappings</label>
 	                <content>
-	                    <property-editor>PortletUrlClass</property-editor>
 	                    <property-editor>FriendlyURLMapperClass</property-editor>
 	                    <property-editor>FriendlyURLMapping</property-editor>
 	                    <property-editor>FriendlyURLRoutes</property-editor>
