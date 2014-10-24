@@ -29,14 +29,17 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
+import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.ServerEvent;
 import org.eclipse.wst.server.core.TaskModel;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 import org.eclipse.wst.server.ui.wizard.WizardFragment;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class RemoteServerWizardFragment extends WizardFragment
 {
@@ -135,6 +138,19 @@ public class RemoteServerWizardFragment extends WizardFragment
                     } );
 
                     ServerCore.removeServerLifecycleListener( this );
+
+                    server.addServerListener( new IServerListener()
+                    {
+                        public void serverChanged( ServerEvent event )
+                        {
+                            if( event.getServer().getServerState() == IServer.STATE_STARTED )
+                            {
+                                server.publish( IServer.PUBLISH_INCREMENTAL, null, null, null );
+
+                                server.removeServerListener( this );
+                            }
+                        }
+                    });
                 }
             }
 
