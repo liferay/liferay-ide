@@ -42,6 +42,8 @@ import org.eclipse.datatools.connectivity.drivers.DriverInstance;
 import org.eclipse.datatools.connectivity.drivers.DriverManager;
 import org.eclipse.datatools.connectivity.drivers.jdbc.IJDBCDriverDefinitionConstants;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.wst.server.core.IServer;
@@ -112,6 +114,25 @@ public class CreateDBConnectAction extends AbstractServerRunningAction
         }
 
         return pluginPackageProperties;
+    }
+
+    @Override
+    public void selectionChanged( IAction action, ISelection selection )
+    {
+        super.selectionChanged( action, selection );
+
+        if( !selection.isEmpty() )
+        {
+            if( selection instanceof IStructuredSelection )
+            {
+                final IStructuredSelection sel = (IStructuredSelection) selection;
+
+                if( sel.toList().size() > 1 )
+                {
+                    action.setEnabled( sel.toList().size() == 1 );
+                }
+            }
+        }
     }
 
     @SuppressWarnings( "resource" )
