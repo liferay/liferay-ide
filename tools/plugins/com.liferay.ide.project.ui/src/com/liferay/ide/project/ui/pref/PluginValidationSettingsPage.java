@@ -49,7 +49,7 @@ import org.eclipse.wst.sse.ui.internal.preferences.ui.ScrolledPageContent;
 public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
 {
 
-    public static final String PROJECT_UI_PROPERTIES_PAGE_ID = "com.liferay.ide.project.ui.properties";
+    public static final String PROJECT_UI_PROPERTIES_PAGE_ID = "com.liferay.ide.project.ui.propertyPage.validation";
 
     public static final String VALIDATION_ID = "com.liferay.ide.project.ui.pluginValidationSettingsPage"; //$NON-NLS-1$
 

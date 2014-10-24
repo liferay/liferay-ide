@@ -65,6 +65,21 @@
          </enabledWhen>
       </page>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            id="com.liferay.ide.project.ui.propertyPage.validation"
+            name="%plugin.validation.page.name"
+            category="com.liferay.ide.project.ui.properties"
+            class="com.liferay.ide.project.ui.pref.PluginValidationSettingsPage">
+         <enabledWhen>
+            <adapt type="org.eclipse.core.resources.IProject">
+                <test property="com.liferay.ide.project.ui.isLiferayProject">
+                </test>
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
 
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
@@ -1087,21 +1102,6 @@
             class="com.liferay.ide.project.ui.handlers.WarSDKHandler"
             commandId="com.liferay.ide.project.ui.command.war">
       </handler>
-   </extension>
-   <extension
-         point="org.eclipse.ui.propertyPages">
-      <page
-            category="com.liferay.ide.project.ui.properties"
-            class="com.liferay.ide.project.ui.pref.PluginValidationSettingsPage"
-            id="com.liferay.ide.project.ui.propertyPage.validation"
-            name="%plugin.validation.page.name">
-         <enabledWhen>
-            <adapt type="org.eclipse.core.resources.IProject">
-                <test property="com.liferay.ide.project.ui.isLiferayProject">
-                </test>
-            </adapt>
-         </enabledWhen>
-      </page>
    </extension>
 <!--
 
