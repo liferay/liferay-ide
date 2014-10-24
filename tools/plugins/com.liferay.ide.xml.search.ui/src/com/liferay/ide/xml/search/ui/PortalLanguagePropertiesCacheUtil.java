@@ -36,6 +36,11 @@ public class PortalLanguagePropertiesCacheUtil
 
     public static Properties getPortalLanguageProperties( ILiferayProject project )
     {
+        if( project == null )
+        {
+            return new Properties();
+        }
+
         Properties retval = null;
 
         JarFile jar = null;
