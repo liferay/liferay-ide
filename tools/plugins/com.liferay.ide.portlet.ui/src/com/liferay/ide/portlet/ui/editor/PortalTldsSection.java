@@ -217,7 +217,6 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		}
 	}
 
-
 	public void dispose() {
 
 		IBaseModel model =  getPage().getModel();
@@ -266,7 +265,6 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	 */
 	protected void doPaste(Object targetObject, Object[] sourceObjects) {
 		// Get the model
-
 	}
 
 	public boolean setFormInput(Object object) {
@@ -279,7 +277,6 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	}
 
 	protected void fillContextMenu(IMenuManager manager) {
-
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -296,38 +293,45 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 		updateButtons();
 	}
 
-	private void handleAdd() {
-		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
-		String[] existingTlds = model.getPortalDependencyTlds();
-		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
-		IPath portalDir = editor.getPortalDir();
+    private void handleAdd()
+    {
+        PluginPackageModel model = (PluginPackageModel) getPage().getModel();
+        String[] existingTlds = model.getPortalDependencyTlds();
+        PluginPackageEditor editor = (PluginPackageEditor) getPage().getEditor();
+        IPath portalDir = editor.getPortalDir();
 
-		if( portalDir != null )
-		{
-		    ExternalFileSelectionDialog dialog =
-                new ExternalFileSelectionDialog(getPage().getShell(), new PortalTldViewerFilter(
-                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds), true, false);  //$NON-NLS-1$//$NON-NLS-2$
-            dialog.setInput(portalDir.toFile());
+        if( portalDir != null )
+        {
+            ExternalFileSelectionDialog dialog =
+                new ExternalFileSelectionDialog( getPage().getShell(), new PortalTldViewerFilter(
+                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/tld" }, existingTlds ), true, false ); //$NON-NLS-1$//$NON-NLS-2$
+            dialog.setInput( portalDir.toFile() );
             dialog.create();
-            if (dialog.open() == Window.OK) {
+            if( dialog.open() == Window.OK )
+            {
                 Object[] selectedFiles = dialog.getResult();
-                try {
-                    for (int i = 0; i < selectedFiles.length; i++) {
+                try
+                {
+                    for( int i = 0; i < selectedFiles.length; i++ )
+                    {
                         File tld = (File) selectedFiles[i];
-                        if (tld.exists()) {
-                            model.addPortalDependencyTld(tld.getName());
+                        if( tld.exists() )
+                        {
+                            model.addPortalDependencyTld( tld.getName() );
                         }
                     }
-                } catch (Exception e) {
+                }
+                catch( Exception e )
+                {
                 }
             }
-		}
+        }
         else
         {
             MessageDialog.openInformation(
                 getPage().getShell(), Msgs.liferayPluginPackageEditor, Msgs.notDeterminePortalDirectory );
         }
-	}
+    }
 
 	private void handleUp() {
 		int index = getTablePart().getTableViewer().getTable().getSelectionIndex();
@@ -345,7 +349,6 @@ public class PortalTldsSection extends TableSection implements IModelChangedList
 	}
 
 	public void swap(int index1, int index2) {
-
 	}
 
 	public void initialize() {

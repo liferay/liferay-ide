@@ -80,26 +80,29 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 			return fJars.toArray();
 		}
 	}
-	
-	protected void createJarsArray() {
-		fJars = new Vector<File>();
-		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
-		String[] portalJars = model.getPortalDependencyJars();
-		IPath portalDir = ((PluginPackageEditor)getPage().getEditor()).getPortalDir();
+
+    protected void createJarsArray()
+    {
+        fJars = new Vector<File>();
+        PluginPackageModel model = (PluginPackageModel) getPage().getModel();
+        String[] portalJars = model.getPortalDependencyJars();
+        IPath portalDir = ( (PluginPackageEditor) getPage().getEditor() ).getPortalDir();
 
         if( portalDir != null )
         {
-            for (String portalJar : portalJars) {
-                File jarFile = new File(portalDir.append("WEB-INF/lib").toFile(), portalJar.trim()); //$NON-NLS-1$
+            for( String portalJar : portalJars )
+            {
+                File jarFile = new File( portalDir.append( "WEB-INF/lib" ).toFile(), portalJar.trim() ); //$NON-NLS-1$
 
-                if (jarFile.isFile() && jarFile.exists()) {
-                    fJars.add(jarFile);
+                if( jarFile.isFile() && jarFile.exists() )
+                {
+                    fJars.add( jarFile );
                 }
             }
         }
-		
-	}
-	
+
+    }
+
 	class PortalJarsLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 		public Image getColumnImage(Object element, int columnIndex) {
@@ -113,7 +116,6 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 			}
 			return StringPool.EMPTY;
 		}
-		
 	}
 
 	public PortalJarsSection(IDEFormPage page, Composite parent, String[] labels) {
@@ -219,7 +221,6 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		}
 	}
 
-
 	public void dispose() {
 		
 		IBaseModel model =  getPage().getModel();
@@ -298,39 +299,46 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 		updateButtons();
 	}
 
-	private void handleAdd() {
-		PluginPackageModel model = (PluginPackageModel) getPage().getModel();
-		String[] existingJars = model.getPortalDependencyJars();
-		PluginPackageEditor editor = (PluginPackageEditor)getPage().getEditor();
-		IPath portalDir = editor.getPortalDir();
-        
-		if( portalDir != null )
-		{
+    private void handleAdd()
+    {
+        PluginPackageModel model = (PluginPackageModel) getPage().getModel();
+        String[] existingJars = model.getPortalDependencyJars();
+        PluginPackageEditor editor = (PluginPackageEditor) getPage().getEditor();
+        IPath portalDir = editor.getPortalDir();
+
+        if( portalDir != null )
+        {
             ExternalFileSelectionDialog dialog =
                 new ExternalFileSelectionDialog( getPage().getShell(), new PortalJarViewerFilter(
-                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/lib" }, existingJars ), true, false );  //$NON-NLS-1$//$NON-NLS-2$
-            dialog.setInput(portalDir.toFile());
-	        dialog.create();
-	        if (dialog.open() == Window.OK) {
-	            Object[] selectedFiles = dialog.getResult();
-	            try {
-	                for (int i = 0; i < selectedFiles.length; i++) {
-	                    File jar = (File) selectedFiles[i];
-	                    if (jar.exists()) {
-	                        model.addPortalDependencyJar(jar.getName());
-	                    }
-	                }
-	            } catch (Exception e) {
-	            }
-	        }
-		}
+                    portalDir.toFile(), new String[] { "WEB-INF", "WEB-INF/lib" }, existingJars ), true, false ); //$NON-NLS-1$//$NON-NLS-2$
+            dialog.setInput( portalDir.toFile() );
+            dialog.create();
+            if( dialog.open() == Window.OK )
+            {
+                Object[] selectedFiles = dialog.getResult();
+                try
+                {
+                    for( int i = 0; i < selectedFiles.length; i++ )
+                    {
+                        File jar = (File) selectedFiles[i];
+                        if( jar.exists() )
+                        {
+                            model.addPortalDependencyJar( jar.getName() );
+                        }
+                    }
+                }
+                catch( Exception e )
+                {
+                }
+            }
+        }
         else
         {
             MessageDialog.openInformation(
                 getPage().getShell(), Msgs.liferayPluginPackageEditor, Msgs.notDeterminePortalDirectory );
         }
-	}
-	
+    }
+
 	private void handleUp() {
 		int index = getTablePart().getTableViewer().getTable().getSelectionIndex();
 		if (index < 1)
@@ -482,7 +490,6 @@ public class PortalJarsSection extends TableSection implements IModelChangedList
 //			});
 //		}
 //	}
-
 
 	public void setFocus() {
 		if (fViewer != null)
