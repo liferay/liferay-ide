@@ -41,7 +41,7 @@ import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
+public class JSPQuickAssistProcessor implements IQuickAssistProcessor
 {
 
     @Override
@@ -59,9 +59,7 @@ public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
 
             if( temp.getAttributes() != null )
             {
-                Object hint = temp.getAttributes().get( LiferayBaseValidator.MARKER_QUERY_ID );
-
-                if( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( hint ) )
+                if( temp.getAttributes().get( LiferayBaseValidator.MARKER_QUERY_ID ) != null )
                 {
                     return true;
                 }
@@ -96,9 +94,7 @@ public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
 
                 if( marker != null && currentLineNum == lineNum )
                 {
-                    final String hint = marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, null );
-
-                    if( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( hint ) )
+                    if( marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, null ) != null )
                     {
                         final ICompletionProposal[] resolutions = createFromMarkerResolutions( marker );
 
@@ -139,7 +135,7 @@ public class ResourceBundleQuickAssistProcessor implements IQuickAssistProcessor
 
             for( IMarkerResolution resolution : resolutions )
             {
-                if( resolution instanceof AbstractResourceBundleMarkerResolution )
+                if( resolution instanceof CommonWorkbenchMarkerResolution )
                 {
                     retval.add( new MarkerResolutionProposal( resolution, marker ) );
                 }

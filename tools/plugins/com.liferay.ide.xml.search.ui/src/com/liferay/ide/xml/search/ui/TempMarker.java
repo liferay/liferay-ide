@@ -54,9 +54,9 @@ public class TempMarker implements IMarker
 
         this.file =
             CoreUtil.getWorkspaceRoot().getFile(
-                Path.fromPortableString( (String) this.attributes.get( "fullPath" ) ) );
+                Path.fromPortableString( (String) this.attributes.get( XMLSearchConstants.FULL_PATH ) ) );
 
-        this.type = (String) this.attributes.get( "markerType" );
+        this.type = (String) this.attributes.get( XMLSearchConstants.MARKER_TYPE );
     }
 
     @Override

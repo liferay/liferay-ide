@@ -42,14 +42,9 @@ import org.w3c.dom.Node;
  */
 public class HierarchyTypeClassNameExtractor extends AbstractClassNameExtractor
 {
-    private static class TypeClassCollector extends SearchRequestor
+    private static class TypeNameRequestor extends SearchRequestor
     {
         private final List<String> results = new ArrayList<String>();
-
-        public TypeClassCollector()
-        {
-            super();
-        }
 
         @Override
         public void acceptSearchMatch( SearchMatch match ) throws CoreException
@@ -94,7 +89,7 @@ public class HierarchyTypeClassNameExtractor extends AbstractClassNameExtractor
 
             if( type != null )
             {
-                final TypeClassCollector requestor = new TypeClassCollector();
+                final TypeNameRequestor requestor = new TypeNameRequestor();
 
                 final IJavaSearchScope scope =
                     SearchEngine.createStrictHierarchyScope( project, type, true, false, null );

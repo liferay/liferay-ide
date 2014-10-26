@@ -15,7 +15,7 @@
 
 package com.liferay.ide.xml.search.ui.descriptors;
 
-import com.liferay.ide.xml.search.ui.LiferayXMLConstants;
+import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class ServiceBuilderSearchRequestor extends ContentTypeXMLSearchRequestor
     public static IXMLSearchRequestor INSTANCE = new ServiceBuilderSearchRequestor();
 
     private static final Collection<String> contentTypeIds =
-        Collections.singleton( LiferayXMLConstants.SERVICE_BUILDER_CONTETN_TYPE );
+        Collections.singleton( XMLSearchConstants.SERVICE_BUILDER_CONTETN_TYPE );
 
     @Override
     protected Collection<String> getSupportedContentTypeIds()

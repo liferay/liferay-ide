@@ -18,8 +18,8 @@ package com.liferay.ide.xml.search.ui.validators;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
-import com.liferay.ide.xml.search.ui.LiferayXMLConstants;
 import com.liferay.ide.xml.search.ui.PortalLanguagePropertiesCacheUtil;
+import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 
 import java.util.Properties;
 
@@ -67,14 +67,10 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
             if( message != null )
             {
-                if( querySpecificationId.equals( LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID ) )
-                {
-                    message.setAttribute( LiferayXMLConstants.LANGUAGE_KEY, textContent );
-                }
-
                 message.setAttribute( MARKER_QUERY_ID, querySpecificationId );
-                message.setAttribute( "fullPath", file.getFullPath().toPortableString() );
-                message.setAttribute( "markerType", LiferayXMLConstants.LIFERAY_JSP_MARKER_ID  );
+                message.setAttribute( XMLSearchConstants.TEXT_CONTENT, textContent );
+                message.setAttribute( XMLSearchConstants.FULL_PATH, file.getFullPath().toPortableString() );
+                message.setAttribute( XMLSearchConstants.MARKER_TYPE, XMLSearchConstants.LIFERAY_JSP_MARKER_ID  );
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );
             }
@@ -134,7 +130,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
         if( ( validator instanceof XMLReferencesBatchValidator ) && file.getFileExtension().equals( "jsp" ) )
         {
             ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId(
-                LiferayXMLConstants.LIFERAY_JSP_MARKER_ID );
+                XMLSearchConstants.LIFERAY_JSP_MARKER_ID );
         }
     }
 

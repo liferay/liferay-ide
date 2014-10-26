@@ -28,25 +28,18 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 import org.eclipse.ui.views.markers.internal.Util;
 
 /**
  * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public abstract class AbstractResourceBundleMarkerResolution extends WorkbenchMarkerResolution
+public abstract class AbstractResourceBundleMarkerResolution extends CommonWorkbenchMarkerResolution
 {
-
-    private IMarker currentMarker = null;
 
     public AbstractResourceBundleMarkerResolution( IMarker marker )
     {
-        this.currentMarker = marker;
+        super( marker );
     }
 
     public IMarker[] findOtherMarkers( IMarker[] markers )
@@ -56,8 +49,8 @@ public abstract class AbstractResourceBundleMarkerResolution extends WorkbenchMa
         for( IMarker marker : markers )
         {
             if( marker != null &&
-                ( !marker.equals( currentMarker ) ) &&
-                LiferayXMLConstants.RESOURCE_BUNDLE_QUERY_SPECIFICATION_ID.equals( marker.getAttribute(
+                ( !marker.equals( marker ) ) &&
+                XMLSearchConstants.RESOURCE_BUNDLE_QUERY_ID.equals( marker.getAttribute(
                     LiferayBaseValidator.MARKER_QUERY_ID, "" ) ) )
             {
                 otherMarkers.add( marker );
@@ -79,7 +72,7 @@ public abstract class AbstractResourceBundleMarkerResolution extends WorkbenchMa
             return "";
         }
 
-        return marker.getAttribute( LiferayXMLConstants.LANGUAGE_KEY, "" );
+        return marker.getAttribute( XMLSearchConstants.TEXT_CONTENT, "" );
     }
 
     protected String getDefaultResourceValue( String resourceKey )
@@ -110,20 +103,6 @@ public abstract class AbstractResourceBundleMarkerResolution extends WorkbenchMa
         return sb.toString().trim();
     }
 
-    protected void openEditor( IFile file ) throws PartInitException
-    {
-        final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
-        IDE.openEditor( page, file );
-    }
-
-    public void run( IMarker marker )
-    {
-        resolve( marker );
-
-        CoreUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
-    }
-
     public void run( IMarker[] markers, IProgressMonitor monitor )
     {
         final Set<IFile> files = new HashSet<IFile>();
@@ -147,7 +126,5 @@ public abstract class AbstractResourceBundleMarkerResolution extends WorkbenchMa
             CoreUtil.validateFile( file, new NullProgressMonitor() );
         }
     }
-
-    protected abstract void resolve( IMarker marker );
 
 }

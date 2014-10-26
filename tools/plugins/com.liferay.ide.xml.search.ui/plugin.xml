@@ -989,7 +989,7 @@
     <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
         <provisionalConfiguration
             type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
-            class="com.liferay.ide.xml.search.ui.ResourceBundleQuickAssistProcessor"
+            class="com.liferay.ide.xml.search.ui.JSPQuickAssistProcessor"
             target="org.eclipse.jst.jsp.DEFAULT_JSP,org.eclipse.jst.jsp.JSP_DIRECTIVE" />
     </extension>
 
@@ -1024,7 +1024,7 @@
     <extension
          point="org.eclipse.ui.ide.markerResolution">
       <markerResolutionGenerator
-            class="com.liferay.ide.xml.search.ui.ResourceBundleMarkerResolutionGenerator"
+            class="com.liferay.ide.xml.search.ui.JSPMarkerResolutionGenerator"
             markerType="org.eclipse.jst.jsp.core.validationMarker">
       </markerResolutionGenerator>
     </extension>
