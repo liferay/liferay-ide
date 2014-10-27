@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide,
  com.liferay.ide.ui,
- com.liferay.ide.portlet.core
+ com.liferay.ide.portlet.core,
+ org.eclipse.jdt.ui
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.liferay.ide.xml.search.ui,

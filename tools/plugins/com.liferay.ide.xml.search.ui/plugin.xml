@@ -798,7 +798,8 @@
                    targetNodes="@name">
              </from>
              <toJavaMethod
-                   querySpecificationId="com.liferay.ide.xml.search.ui.portletActionMethodQuery" >
+                   querySpecificationId="com.liferay.ide.xml.search.ui.portletActionMethodQuery"
+                   searcherId="com.liferay.ide.xml.search.ui.portletActionMethodSearcher">
              </toJavaMethod>
           </reference>
 
@@ -1018,6 +1019,10 @@
        <searcher
              class="com.liferay.ide.xml.search.ui.java.PortletActionCommandSearcher"
              id="com.liferay.ide.xml.search.ui.portletActionCommandSearcher">
+       </searcher>
+       <searcher
+             class="com.liferay.ide.xml.search.ui.java.PortletActionMethodSearcher"
+             id="com.liferay.ide.xml.search.ui.portletActionMethodSearcher">
        </searcher>
     </extension>
 
