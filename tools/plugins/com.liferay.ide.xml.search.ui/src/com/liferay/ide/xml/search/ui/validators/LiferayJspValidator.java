@@ -109,6 +109,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
     @Override
     protected int getServerity( ValidationType validationType, IFile file )
     {
+        int retval = -1;
         String validationKey = null;
 
         if( ValidationType.PROPERTY_NOT_FOUND.equals( validationType ) )
@@ -120,8 +121,19 @@ public class LiferayJspValidator extends LiferayBaseValidator
             validationKey = ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND;
         }
 
-        return Platform.getPreferencesService().getInt(
-            PREFERENCE_NODE_QUALIFIER, validationKey, IMessage.NORMAL_SEVERITY, getScopeContexts( file.getProject() ) );
+        if( validationKey != null )
+        {
+            retval =
+                Platform.getPreferencesService().getInt(
+                    PREFERENCE_NODE_QUALIFIER, validationKey, IMessage.NORMAL_SEVERITY,
+                    getScopeContexts( file.getProject() ) );
+        }
+        else
+        {
+            retval = super.getServerity( validationType, file );
+        }
+
+        return retval;
     }
 
     @Override

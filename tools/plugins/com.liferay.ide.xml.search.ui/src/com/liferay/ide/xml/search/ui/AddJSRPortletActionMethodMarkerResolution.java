@@ -22,9 +22,13 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.PartInitException;
 
 
 /**
@@ -95,7 +99,7 @@ public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMa
         {
             final IProgressMonitor npm = new NullProgressMonitor();
 
-            this.type.createMethod(
+            final IMethod newMethod = this.type.createMethod(
                 MessageFormat.format( getCode(), getTextContent( marker ) ), null, true, npm );
 
             for( String importName : getImports() )
@@ -104,6 +108,15 @@ public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMa
             }
 
             type.getCompilationUnit().save( npm, false );
+
+            try
+            {
+                JavaUI.revealInEditor( JavaUI.openInEditor( newMethod ), (IJavaElement) newMethod );
+            }
+            catch( PartInitException e )
+            {
+                LiferayXMLSearchUI.logError( "Unable to open java editor on action method", e );
+            }
 
             if( marker.getResource() instanceof IFile )
             {
