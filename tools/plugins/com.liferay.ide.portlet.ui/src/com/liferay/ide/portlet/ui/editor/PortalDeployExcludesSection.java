@@ -98,7 +98,7 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 
         IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
-        if ( !docroot.getFolder( "WEB-INF/lib" ).exists())
+        if ( ProjectUtil.isMavenProject( project ))
         {
             TablePart tablePart = getTablePart();
             tablePart.setButtonEnabled(ADD_INDEX, false);
@@ -110,8 +110,10 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 
         IPath sdkLocation = sdk.getLocation();
 
-        String type = ProjectUtil.isPortletProject( project ) ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
-            ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
+        String type =
+            ProjectUtil.isPortletProject( project )
+                ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
+                    ? "hooks" : ProjectUtil.isWebProject( project ) ? "webs" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
 
         IPath excludeJarPath = sdkLocation.append( type ).append( docroot.getFullPath() );
 
@@ -342,8 +344,10 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 
         IPath sdkLocation = sdk.getLocation();
 
-        String type = ProjectUtil.isPortletProject( project ) ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
-            ? "hooks" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
+        String type =
+            ProjectUtil.isPortletProject( project )
+                ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
+                    ? "hooks" : ProjectUtil.isWebProject( project ) ? "webs" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
 
         IPath serviceJarPath = sdkLocation.append( type ).append( docroot.getFullPath() );
 
