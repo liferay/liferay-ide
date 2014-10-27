@@ -3,15 +3,15 @@
 
 <template name="actionURL" description="A portlet:actionURL tag with its most commonly used attributes"
     id="com.liferay.ide.portlet.ui.templates.actionURL" context="jsp_all" enabled="true" autoinsert="true"
->&lt;portlet:actionURL name="${action}" var="${var}" /&gt;</template>
+>&lt;portlet:actionURL name="${action}" var="${action}URL" /&gt;</template>
 
 <template name="common-taglibs" description="The most commonly used liferay taglibs"
     id="com.liferay.ide.portlet.ui.templates.common-taglibs" context="jsp_all" enabled="true" autoinsert="true"
->&lt;%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %&gt;
-&lt;%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %&gt;
-&lt;%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" %&gt;
-&lt;%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %&gt;
-&lt;%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %&gt;
+>&lt;&#37;@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" &#37;&gt;
+&lt;&#37;@ taglib uri="http://liferay.com/tld/aui" prefix="aui" &#37;&gt;
+&lt;&#37;@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" &#37;&gt;
+&lt;&#37;@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" &#37;&gt;
+&lt;&#37;@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" &#37;&gt;
 
 &lt;liferay-theme:defineObjects /&gt;
 &lt;portlet:defineObjects /&gt;
@@ -19,10 +19,10 @@
 
 <template name="currentURL" description="Create a jsp variable for currentURL"
     id="com.liferay.ide.portlet.ui.templates.currentURL" context="jsp_all" enabled="true" autoinsert="true"
->&lt;%
+>&lt;&#37;
 PortletURL currentURLObj = PortletURLUtil.getCurrent(liferayPortletRequest, liferayPortletResponse);
 String currentURL = currentURLObj.toString();
-%&gt;
+&#37;&gt;
 </template>
 
 
