@@ -31,6 +31,7 @@
          </defaultModules>
       </ternAdaptToNature>
    </extension>
+
    <extension
          point="org.eclipse.wst.sse.core.modelHandler">
       <modelHandler
@@ -55,6 +56,20 @@
 
       </content-type>
    </extension>
+
+   <extension point="org.eclipse.wst.xml.core.modelQueryExtensions">
+        <modelQueryExtension
+            class="org.eclipse.jst.jsp.core.internal.modelquery.JSPModelQueryExtension"
+            contentType="com.liferay.ide.alloy.core.alloyjspsource">
+        </modelQueryExtension>
+    </extension>
+    <extension point="org.eclipse.wst.xml.core.modelQueryExtensions">
+        <modelQueryExtension
+            class="org.eclipse.jst.jsp.core.internal.modelquery.TaglibModelQueryExtension"
+            contentType="com.liferay.ide.alloy.core.alloyjspsource">
+        </modelQueryExtension>
+    </extension>
+
    <extension
         point="org.eclipse.core.filebuffers.documentCreation"
         id="com.liferay.ide.alloy.core.documentfactories">
