@@ -48,8 +48,7 @@ public abstract class AbstractResourceBundleMarkerResolution extends CommonWorkb
 
         for( IMarker marker : markers )
         {
-            if( marker != null &&
-                ( !marker.equals( marker ) ) &&
+            if( marker != null && ( !marker.equals( this.marker ) ) &&
                 XMLSearchConstants.RESOURCE_BUNDLE_QUERY_ID.equals( marker.getAttribute(
                     LiferayBaseValidator.MARKER_QUERY_ID, "" ) ) )
             {
