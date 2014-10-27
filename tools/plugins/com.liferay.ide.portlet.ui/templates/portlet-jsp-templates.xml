@@ -5,6 +5,14 @@
     id="com.liferay.ide.portlet.ui.templates.actionURL" context="jsp_all" enabled="true" autoinsert="true"
 >&lt;portlet:actionURL name="${action}" var="${action}URL" /&gt;</template>
 
+<template name="actionURLForm" description="A portlet:actionURL tag and a aui:form"
+    id="com.liferay.ide.portlet.ui.templates.actionURLForm" context="jsp_all" enabled="true" autoinsert="true"
+>&lt;portlet:actionURL name="${action}" var="${action}URL" /&gt;
+
+&lt;aui:form action="&lt;&#37;= ${action}URL &#37;&gt;" method="post" name="fm" &gt;
+${cursor}
+&lt;/aui:form&gt;</template>
+
 <template name="common-taglibs" description="The most commonly used liferay taglibs"
     id="com.liferay.ide.portlet.ui.templates.common-taglibs" context="jsp_all" enabled="true" autoinsert="true"
 >&lt;&#37;@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" &#37;&gt;
