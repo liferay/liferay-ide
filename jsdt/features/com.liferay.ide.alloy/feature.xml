@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.liferay.ide.alloy"
-      label="Liferay IDE AlloyUI"
+      label="Liferay IDE AlloyUI (contains experimental features)"
       version="2.2.0.qualifier"
       provider-name="Liferay, Inc."
       plugin="com.liferay.ide.alloy.branding">
