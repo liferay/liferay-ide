@@ -159,7 +159,7 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
 
     public IMarkerResolution[] getResolutions( IMarker marker )
     {
-        IMarkerResolution[] retval = null;
+        IMarkerResolution[] retval = new IMarkerResolution[0];
 
         if( hasResolutions( marker ) )
         {
