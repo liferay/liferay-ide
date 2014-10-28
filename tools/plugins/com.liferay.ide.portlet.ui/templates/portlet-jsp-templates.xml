@@ -7,31 +7,15 @@
 
 <template name="actionURLForm" description="A portlet:actionURL tag and a aui:form"
     id="com.liferay.ide.portlet.ui.templates.actionURLForm" context="jsp_all" enabled="true" autoinsert="true"
->&lt;portlet:actionURL name="${action}" var="${action}URL" /&gt;
-
-&lt;aui:form action="&lt;&#37;= ${action}URL &#37;&gt;" method="post" name="fm" &gt;
-${cursor}
-&lt;/aui:form&gt;</template>
+>%Templates.portlet.actionurlform.content</template>
 
 <template name="common-taglibs" description="The most commonly used liferay taglibs"
     id="com.liferay.ide.portlet.ui.templates.common-taglibs" context="jsp_all" enabled="true" autoinsert="true"
->&lt;&#37;@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" &#37;&gt;
-&lt;&#37;@ taglib uri="http://liferay.com/tld/aui" prefix="aui" &#37;&gt;
-&lt;&#37;@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet" &#37;&gt;
-&lt;&#37;@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" &#37;&gt;
-&lt;&#37;@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" &#37;&gt;
-
-&lt;liferay-theme:defineObjects /&gt;
-&lt;portlet:defineObjects /&gt;
-</template>
+>%Templates.portlet.commontaglibs.content</template>
 
 <template name="currentURL" description="Create a jsp variable for currentURL"
     id="com.liferay.ide.portlet.ui.templates.currentURL" context="jsp_all" enabled="true" autoinsert="true"
->&lt;&#37;
-PortletURL currentURLObj = PortletURLUtil.getCurrent(liferayPortletRequest, liferayPortletResponse);
-String currentURL = currentURLObj.toString();
-&#37;&gt;
-</template>
+>%Templates.portlet.currenturl.content</template>
 
 
 <template name="%Templates.portlet.aboutjsp.name" description="%Templates.portlet.aboutjsp.desc"
