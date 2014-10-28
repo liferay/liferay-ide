@@ -49,7 +49,6 @@
       <feature id="tern-jsdt-feature" />
       <feature id="tern-server-nodejs-feature" />
       <feature id="tern.eclipse.ide.server.nodejs.embed" />
-      <feature id="org.eclipse.wst.html.webresources.feature" />
    </features>
 
    <configurations>

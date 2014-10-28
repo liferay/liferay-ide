@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.liferay.ide.alloy"
-      label="Liferay IDE AlloyUI (contains experimental features)"
+      label="Liferay IDE AlloyUI"
       version="2.2.0.qualifier"
       provider-name="Liferay, Inc."
       plugin="com.liferay.ide.alloy.branding">
@@ -38,7 +38,6 @@
       <import feature="tern-jsdt-feature" version="0.7.0" match="greaterOrEqual"/>
       <import feature="tern-server-nodejs-feature" version="0.7.0" match="greaterOrEqual"/>
       <import feature="tern.eclipse.ide.server.nodejs.embed" version="0.7.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.wst.html.webresources.feature" version="0.7.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
