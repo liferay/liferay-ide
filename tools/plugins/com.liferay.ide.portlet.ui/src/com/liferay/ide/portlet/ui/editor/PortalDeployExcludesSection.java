@@ -98,7 +98,7 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 
         IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
-        if ( ProjectUtil.isMavenProject( project ))
+        if ( ProjectUtil.isMavenProject( project ) || ProjectUtil.isExtProject( project ))
         {
             TablePart tablePart = getTablePart();
             tablePart.setButtonEnabled(ADD_INDEX, false);
@@ -113,7 +113,7 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
         String type =
             ProjectUtil.isPortletProject( project )
                 ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
-                    ? "hooks" : ProjectUtil.isWebProject( project ) ? "webs" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
+                    ? "hooks" : ProjectUtil.isWebProject( project ) ? "webs" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
 
         IPath excludeJarPath = sdkLocation.append( type ).append( docroot.getFullPath() );
 
@@ -347,7 +347,7 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
         String type =
             ProjectUtil.isPortletProject( project )
                 ? "portlets" : ProjectUtil.isHookProject( project ) //$NON-NLS-1$
-                    ? "hooks" : ProjectUtil.isWebProject( project ) ? "webs" : ProjectUtil.isExtProject( project ) ? "ext" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
+                    ? "hooks" : ProjectUtil.isWebProject( project ) ? "webs" : StringPool.EMPTY; //$NON-NLS-1$ //$NON-NLS-2$
 
         IPath serviceJarPath = sdkLocation.append( type ).append( docroot.getFullPath() );
 
