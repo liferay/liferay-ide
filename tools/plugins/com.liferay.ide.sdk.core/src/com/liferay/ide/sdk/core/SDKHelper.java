@@ -209,7 +209,9 @@ public class SDKHelper extends LaunchHelper
         {
             if( antLib.toFile().exists() )
             {
-                model.addEntry( RuntimeClasspathModel.USER, JavaRuntime.newArchiveRuntimeClasspathEntry( antLib ) );
+                model.addEntry(
+                    RuntimeClasspathModel.USER,
+                    JavaRuntime.newArchiveRuntimeClasspathEntry( antLib.makeAbsolute() ) );
             }
         }
 

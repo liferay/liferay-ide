@@ -100,7 +100,7 @@ public class SDKCorePlugin extends Plugin
     private void addSDKToMemento( SDK sdk, IMemento memento )
     {
         memento.putString( "name", sdk.getName() );
-        memento.putString( "location", sdk.getLocation().toOSString() );
+        memento.putString( "location", sdk.getLocation().toPortableString() );
         memento.putBoolean( "default", sdk.isDefault() );
     }
 

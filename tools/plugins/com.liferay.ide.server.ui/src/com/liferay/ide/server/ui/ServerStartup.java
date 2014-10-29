@@ -42,6 +42,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.internal.Base;
 import org.eclipse.wst.server.core.internal.IMemento;
@@ -50,6 +51,7 @@ import org.eclipse.wst.server.core.internal.ResourceManager;
 import org.eclipse.wst.server.core.internal.Runtime;
 import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.internal.XMLMemento;
+import org.eclipse.wst.server.core.model.ServerDelegate;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -123,7 +125,7 @@ public class ServerStartup implements IStartup
         SDK sdk = new SDK();
 
         sdk.setName( memento.getString( "name" ) );
-        sdk.setLocation( Path.fromPortableString( memento.getString( "location" ) ) );
+        sdk.setLocation( Path.fromPortableString( memento.getString( "location" ) ).makeAbsolute() );
 
         return sdk;
     }
@@ -277,7 +279,14 @@ public class ServerStartup implements IStartup
                                         addServer.setAccessible( true );
                                         addServer.invoke( resourceManager, server );
 
-                                        server.createWorkingCopy().save( true, null );
+                                        final IServerWorkingCopy wc = server.createWorkingCopy();
+
+                                        ServerDelegate delegate =
+                                            (ServerDelegate) wc.loadAdapter( ServerDelegate.class, null );
+
+                                        delegate.importRuntimeConfiguration( wc.getRuntime(), null );
+
+                                        wc.save( true, null );
                                     }
                                 }
                             }
