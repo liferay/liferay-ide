@@ -31,8 +31,7 @@
         <tycho-version>0.20.0</tycho-version>
         <tycho-extras-version>0.20.0</tycho-extras-version>
         <eclipse-site>http://download.eclipse.org/releases/luna/</eclipse-site>
-        <!-- <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-project-update-site> -->
-        <!-- <wtp-site>http://download.eclipse.org/webtools/repository/luna/</wtp-site> -->
+        <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-project-update-site>
         <liferay-ide-site>http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/releng/com.liferay.ide-repository/target/updatesite/</liferay-ide-site>
     </properties>
 
@@ -46,6 +45,11 @@
             <id>liferay-ide</id>
             <layout>p2</layout>
             <url>${liferay-ide-site}</url>
+        </repository>
+        <repository>
+            <id>eclipse-project</id>
+            <layout>p2</layout>
+            <url>${eclipse-project-update-site}</url>
         </repository>
     </repositories>
 
@@ -183,8 +187,8 @@
                     <version>${tycho-version}</version>
                     <configuration>
                         <useUIHarness>true</useUIHarness>
-                        <useUIThread>false</useUIThread>
-                        <product>org.eclipse.platform.ide</product>
+                        <useUIThread>true</useUIThread>
+                        <application>org.eclipse.ui.ide.workbench</application>
                         <includes>
                             <include>**/*Test*.class</include>
                         </includes>
@@ -193,6 +197,13 @@
                             <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                             <skipBundleTests>${skipBundleTests}</skipBundleTests>
                         </systemProperties>
+                        <dependencies>
+	                        <dependency>
+	                            <type>eclipse-feature</type>
+	                            <artifactId>org.eclipse.platform</artifactId>
+	                            <version>0.0.0</version>
+	                        </dependency>
+                        </dependencies>
                     </configuration>
                 </plugin>
             </plugins>

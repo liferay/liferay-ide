@@ -47,7 +47,7 @@ public class PortletDescriptorValidator extends LiferayBaseValidator
             ILiferayConstants.PORTLET_XML_FILE.equals( file.getName() ) )
         {
             ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        } 
+        }
     }
 
     @Override

@@ -15,10 +15,8 @@
 
 package com.liferay.ide.xml.search.ui.tests;
 
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -33,43 +31,21 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.validation.internal.operations.ValidatorManager;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.Before;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 
 /**
- * The minimal collection generated from:
- * {@link XmlBaseTestsBase}, {@link ProjectCoreBase}, {@link ServerCoreBase}, and {@link BaseTests}
- * to remove dependencies on other test plugins.
- *
  * @author Kuo Zhang
- *
  */
 @SuppressWarnings( "restriction" )
 public class XmlSearchTestsBase
@@ -81,57 +57,7 @@ public class XmlSearchTestsBase
     private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
 
     protected static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of type \"{0}\" incorrect";
-    private final String bundleId = "com.liferay.ide.xml.search.ui.tests";
-
-    protected boolean checkNoMarker( IFile descriptorFile, String markerType ) throws Exception
-    {
-        final IMarker[] markers = descriptorFile.findMarkers( markerType, false, IResource.DEPTH_ZERO );
-
-        for( IMarker marker : markers )
-        {
-            if( markerType.equals( marker.getType() ) )
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    protected boolean checkMarker( IFile descriptorFile, String markerType, String markerMessage, boolean fullMatch ) throws Exception
-    {
-        final IMarker[] markers = descriptorFile.findMarkers( markerType, false, IResource.DEPTH_ZERO );
-
-        for( IMarker marker : markers )
-        {
-            if( markerType.equals( marker.getType() ) )
-            {
-                if( fullMatch )
-                {
-                    if( marker.getAttribute( IMarker.MESSAGE ).equals( markerMessage ) )
-                    {
-                        return true;
-                    }
-                }
-                else
-                {
-                    if( marker.getAttribute( IMarker.MESSAGE ).toString().startsWith( markerMessage ) )
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    protected void failTest( Exception e )
-    {
-        StringWriter s = new StringWriter();
-        e.printStackTrace(new PrintWriter(s));
-        fail(s.toString());
-    }
+    private static final String bundleId = "com.liferay.ide.xml.search.ui.tests";
 
     protected IPath getCustomLocationBase()
     {
@@ -171,6 +97,7 @@ public class XmlSearchTestsBase
     {
         return "liferay-plugins-sdk-6.2.0/";
     }
+
     protected IPath getLiferayRuntimeDir()
     {
         return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
@@ -180,6 +107,19 @@ public class XmlSearchTestsBase
     {
         return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
     }
+
+    protected IProject getProject( String path, String projectName ) throws Exception
+    {
+        IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
+
+        if( project != null && project.exists() )
+        {
+            return project;
+        }
+
+        return importProject( path, bundleId, projectName );
+    }
+
     protected String getRuntimeId()
     {
         return "com.liferay.ide.server.62.tomcat.runtime.70";
@@ -377,87 +317,5 @@ public class XmlSearchTestsBase
     }
 
     protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }
-
-    protected void waitForBuildAndValidation() throws Exception
-    {
-        IWorkspaceRoot root = null;
-
-        try
-        {
-            ResourcesPlugin.getWorkspace().checkpoint( true );
-
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Thread.sleep( 200 );
-            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
-        }
-        catch( InterruptedException e )
-        {
-            // failTest( e );
-            // ignore
-        }
-        catch( IllegalArgumentException e )
-        {
-            // failTest( e );
-        }
-        catch( OperationCanceledException e )
-        {
-            // failTest( e );
-        }
-        finally
-        {
-            if( root != null )
-            {
-                Job.getJobManager().endRule( root );
-            }
-        }
-    }
-
-    protected void waitForBuildAndValidation( IProject project ) throws Exception
-    {
-        project.build( IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor() );
-        waitForBuildAndValidation();
-        project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
-        waitForBuildAndValidation();
-    }
-
-    protected IProject getProject( String path, String projectName ) throws Exception
-    {
-        IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
-
-        if( project != null && project.exists() )
-        {
-            return project;
-        }
-
-        return importProject( path, bundleId, projectName );
-    }
-
-    protected void setPropertiesValue( IFile descriptorFile, String elementName, String value ) throws Exception
-    {
-        final IDOMModel domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( descriptorFile );
-        final IDOMDocument document = domModel.getDocument();
-        final NodeList elements = document.getElementsByTagName( elementName );
-
-        assertEquals( true, elements.getLength() > 0 );
-
-        final Element element = (Element) elements.item( 0 );
-
-        final NodeList childNodes = element.getChildNodes();
-
-        for( int i = 0; i < childNodes.getLength(); i++ )
-        {
-            element.removeChild( childNodes.item( i ) );
-        }
-
-        element.appendChild( document.createTextNode( value ) );
-
-        domModel.save();
-        domModel.releaseFromEdit();
-
-        descriptorFile.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
-    }
 
 }
