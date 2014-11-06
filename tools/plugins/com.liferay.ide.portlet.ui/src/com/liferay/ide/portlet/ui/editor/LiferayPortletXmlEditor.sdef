@@ -35,7 +35,7 @@
                 <image>icons/e16/portlets_16x16.png</image>
             </node>
             <node>
-                <label>Role Mappper</label>
+                <label>Role Mapper</label>
                 <section>
                     <content>
                         <property-editor>
