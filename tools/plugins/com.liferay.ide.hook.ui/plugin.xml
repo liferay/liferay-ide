@@ -18,13 +18,16 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.liferay.ide.hook.ui.editor.HookXmlEditor"
             default="true"
             filenames="liferay-hook.xml"
             icon="icons/e16/hook.png"
             id="com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor"
             name="%hook.editor.name"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+        <class class="com.liferay.ide.hook.ui.editor.HookXmlEditor">
+            <parameter name="sdef" value="com.liferay.ide.hook.ui.editor.HookXmlEditor"/>
+            <parameter name="pageName" value="Overview"/>
+        </class>
         <contentTypeBinding
                contentTypeId="com.liferay.ide.hook.core.liferayhookxml">
          </contentTypeBinding>

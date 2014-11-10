@@ -19,27 +19,26 @@
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.portlet.core.display.model.Display6xx;
-import com.liferay.ide.ui.editor.LazyLoadingEditorForXml;
 
-import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import org.eclipse.ui.PartInitException;
 
 /**
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class LiferayDisplayXmlEditor extends LazyLoadingEditorForXml
+public class LiferayDisplayXmlEditor extends SapphireEditorForXml
 {
-
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayDisplayXmlEditor"; //$NON-NLS-1$
 
     public LiferayDisplayXmlEditor()
     {
-        super( Display6xx.TYPE, DefinitionLoader.sdef( LiferayDisplayXmlEditor.class ).page( "DetailsPage" ) );
+        super( Display6xx.TYPE, null );
     }
 
     @Override
-    protected boolean shouldCreateFormPages()
+    protected void createFormPages() throws PartInitException
     {
-        return true;
+        addDeferredPage( 1, "Overview", "DetailsPage" );
     }
+
 }

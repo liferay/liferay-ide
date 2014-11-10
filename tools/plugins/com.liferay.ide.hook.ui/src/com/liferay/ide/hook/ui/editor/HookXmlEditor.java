@@ -26,7 +26,6 @@ import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.Hook6xx;
 import com.liferay.ide.hook.core.util.HookUtil;
 import com.liferay.ide.hook.ui.HookUI;
-import com.liferay.ide.ui.editor.LazyLoadingEditorForXml;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.FileInputStream;
@@ -55,10 +54,11 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
-import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IStorageEditorInput;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -67,17 +67,15 @@ import org.eclipse.ui.part.FileEditorInput;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class HookXmlEditor extends LazyLoadingEditorForXml
+public class HookXmlEditor extends SapphireEditorForXml
 {
-    public static final String ID = "com.liferay.ide.eclipse.hook.ui.editor.HookXmlEditor";//$NON-NLS-1$
-
     protected boolean customModelDirty = false;
 
     private boolean ignoreCustomModelChanges;
 
     public HookXmlEditor()
     {
-        super( Hook6xx.TYPE, DefinitionLoader.sdef( HookXmlEditor.class ).page( "HookConfigurationPage" ) );
+        super( Hook6xx.TYPE, null );
     }
 
     @Override
@@ -97,6 +95,12 @@ public class HookXmlEditor extends LazyLoadingEditorForXml
         this.ignoreCustomModelChanges = true;
         model.attach( listener, Hook.PROP_CUSTOM_JSPS.name() + "/*" ); //$NON-NLS-1$
         this.ignoreCustomModelChanges = false;
+    }
+
+    @Override
+    protected void createFormPages() throws PartInitException
+    {
+        addDeferredPage( 1, "Overview", "HookConfigurationPage" );
     }
 
     private void configureCustomJspValidation( final IProject project, final String customerJspPath )
@@ -289,15 +293,8 @@ public class HookXmlEditor extends LazyLoadingEditorForXml
         this.ignoreCustomModelChanges = false;
     }
 
-    @Override
-    protected boolean shouldCreateFormPages()
-    {
-        return true;
-    }
-
     private static class Msgs extends NLS
     {
-
         public static String disableCustomValidationMsg;
         public static String disableCustomValidationTitle;
 

@@ -21,27 +21,20 @@ import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElementsFactory;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
 
-import java.util.Map;
+import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.sapphire.Context;
 import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.osgi.BundleBasedContext;
 import org.eclipse.sapphire.ui.SapphireEditor;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.def.EditorPageDef;
-import org.eclipse.sapphire.ui.forms.FormEditorPageDef;
-import org.eclipse.sapphire.ui.forms.MasterDetailsEditorPageDef;
-import org.eclipse.sapphire.ui.forms.swt.FormEditorPage;
-import org.eclipse.sapphire.ui.forms.swt.MasterDetailsEditorPage;
-import org.eclipse.sapphire.ui.forms.swt.SapphireEditorFormPage;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -55,7 +48,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Kuo Zhang
- * 
+ *
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplEditor extends SapphireEditor implements IExecutableExtension
@@ -67,10 +60,9 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
     private static final String SOURCE_PAGE_TITLE = "Source";
     private static final String PREVIEW_PAGE_TITLE = "Preview";
-    private static final String DESING_PAGE_TITLE = "Design";
+    private static final String DESIGN_PAGE_TITLE = "Design";
 
     private StructuredTextEditor sourcePage;
-    private SapphireEditorFormPage designPage;
     private LayoutTplPreviewEditor previewPage;
 
     private DefinitionLoader.Reference<EditorPageDef> definition;
@@ -80,38 +72,63 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
     private boolean isSourceModelChanged;
     private boolean isBootstrapStyle;
 
-    public LayoutTplEditor()
+    @Override
+    protected void createEditorPages() throws PartInitException
     {
-        this( LayoutTplElement.TYPE, DefinitionLoader.sdef( LayoutTplEditor.class ).page( "designPage" ) );
-    }
+        this.sourcePage = new StructuredTextEditor();
+        this.sourcePage.setEditorPart( this );
 
-    public LayoutTplEditor( final ElementType type, final DefinitionLoader.Reference<EditorPageDef> definition )
-    {
-        if( type == null )
-        {
-            throw new IllegalArgumentException();
-        }
+        addPage( SOURCE_PAGE_INDEX, this.sourcePage, getEditorInput() );
+        setPageText( SOURCE_PAGE_INDEX, SOURCE_PAGE_TITLE );
 
-        if( definition == null )
-        {
-            throw new IllegalArgumentException();
-        }
+        initSourceModel();
 
-        this.definition = definition;
+        addDeferredPage( 1, PREVIEW_PAGE_TITLE, "preview" );
+        addDeferredPage( 2, DESIGN_PAGE_TITLE, "designPage" );
     }
 
     @Override
-    protected void createDiagramPages() throws PartInitException
+    protected IEditorPart createPage( String pageDefinitionId )
     {
-        Element element = getModelElement();
-
-        if( element instanceof LayoutTplElement )
+        if( "preview".equals( pageDefinitionId ) )
         {
-            this.previewPage = new LayoutTplPreviewEditor( (LayoutTplElement) element );
+            if( this.previewPage == null )
+            {
+                Element element = getModelElement();
+
+                if( element instanceof LayoutTplElement )
+                {
+                    this.previewPage = new LayoutTplPreviewEditor( (LayoutTplElement) element )
+                    {
+                        @Override
+                        public String getTitle()
+                        {
+                            return "Preview";
+                        }
+                    };
+                }
+            }
+
+            return this.previewPage;
         }
 
-        addPage( PREVIEW_PAGE_INDEX, this.previewPage, getEditorInput() );
-        setPageText( PREVIEW_PAGE_INDEX, PREVIEW_PAGE_TITLE );
+        return super.createPage( pageDefinitionId );
+    }
+
+    @Override
+    protected Reference<EditorPageDef> getDefinition( String pageDefinitionId )
+    {
+        if( "preview".equals( pageDefinitionId ) )
+        {
+            if( this.definition == null )
+            {
+                this.definition = DefinitionLoader.sdef( LayoutTplEditor.class ).page( "preview" );
+            }
+
+            return this.definition;
+        }
+
+        return super.getDefinition( pageDefinitionId );
     }
 
     protected LayoutTplElement createEmptyDiagramModel()
@@ -124,24 +141,6 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
     }
 
     @Override
-    protected void createFormPages() throws PartInitException
-    {
-        final EditorPageDef def = this.definition.resolve();
-
-        if( def instanceof MasterDetailsEditorPageDef )
-        {
-            this.designPage = new MasterDetailsEditorPage( this, getModelElement(), this.definition );
-        }
-        else if( def instanceof FormEditorPageDef )
-        {
-            this.designPage = new FormEditorPage( this, getModelElement(), this.definition );
-        }
-
-        addPage( DESIGN_PAGE_INDEX, this.designPage );
-        setPageText( DESIGN_PAGE_INDEX, DESING_PAGE_TITLE );
-    }
-
-    @Override
     protected Element createModel()
     {
         final IFile file = getFile();
@@ -149,7 +148,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
         isBootstrapStyle = isBootstrapStyle();
 
         LayoutTplElement layoutTpl =
-            LayoutTplElementsFactory.INSTANCE.newLayoutTplFromFile( file, isBootstrapStyle ); 
+            LayoutTplElementsFactory.INSTANCE.newLayoutTplFromFile( file, isBootstrapStyle );
 
         if( layoutTpl == null )
         {
@@ -167,19 +166,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
         }, "*" );
 
-        return layoutTpl; 
-    }
-
-    @Override
-    protected void createSourcePages() throws PartInitException
-    {
-        this.sourcePage = new StructuredTextEditor();
-        this.sourcePage.setEditorPart( this );
-
-        addPage( SOURCE_PAGE_INDEX, this.sourcePage, getEditorInput() );
-        setPageText( SOURCE_PAGE_INDEX, SOURCE_PAGE_TITLE );
-
-        initSourceModel();
+        return layoutTpl;
     }
 
     @Override
@@ -189,7 +176,6 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
         this.definition = null;
         this.sourcePage = null;
-        this.designPage = null;
         this.previewPage = null;
 
         if( this.sourceModel != null )
@@ -218,7 +204,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
                 refreshDiagramModel();
             }
         }
-        else if( activePage == DESIGN_PAGE_INDEX ) 
+        else if( activePage == DESIGN_PAGE_INDEX )
         {
             if( isDesignPageChanged )
             {
@@ -302,18 +288,28 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
     @Override
     public boolean isDirty()
     {
-        return isDesignPageChanged || this.sourcePage.isDirty(); 
+        return isDesignPageChanged || this.sourcePage.isDirty();
     }
 
     @Override
     protected void pageChange( int pageIndex )
     {
-        int lastActivePage = getLastActivePage();
+        final int[] lastActivePage = new int[1];
 
-        if( lastActivePage == SOURCE_PAGE_INDEX && pageIndex == PREVIEW_PAGE_INDEX )
+        try
+        {
+            final Method getLastActivePage = SapphireEditor.class.getDeclaredMethod( "getLastActivePage" );
+            getLastActivePage.setAccessible( true );
+            lastActivePage[0] = (Integer) getLastActivePage.invoke( this );
+        }
+        catch( Exception e )
+        {
+        }
+
+        if( lastActivePage[0] == SOURCE_PAGE_INDEX && pageIndex == PREVIEW_PAGE_INDEX )
         {
             // if the source page is dirty, but the model didn't get changed,
-            // then don't refresh the model element 
+            // then don't refresh the model element
             if( this.sourcePage.isDirty() && isSourceModelChanged )
             {
                 refreshDiagramModel();
@@ -322,7 +318,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
             refreshPreviewPage();
         }
 
-        if( lastActivePage == SOURCE_PAGE_INDEX && pageIndex == DESIGN_PAGE_INDEX )
+        if( lastActivePage[0] == SOURCE_PAGE_INDEX && pageIndex == DESIGN_PAGE_INDEX )
         {
             if( this.sourcePage.isDirty() && isSourceModelChanged )
             {
@@ -330,7 +326,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
             }
         }
 
-        if( lastActivePage == DESIGN_PAGE_INDEX && pageIndex == SOURCE_PAGE_INDEX )
+        if( lastActivePage[0] == DESIGN_PAGE_INDEX && pageIndex == SOURCE_PAGE_INDEX )
         {
             if( isDesignPageChanged )
             {
@@ -338,7 +334,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
             }
         }
 
-        if( lastActivePage == DESIGN_PAGE_INDEX && pageIndex == PREVIEW_PAGE_INDEX )
+        if( lastActivePage[0] == DESIGN_PAGE_INDEX && pageIndex == PREVIEW_PAGE_INDEX )
         {
             if( isDesignPageChanged )
             {
@@ -368,7 +364,10 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
     protected void refreshPreviewPage()
     {
-        this.previewPage.refreshVisualModel( (LayoutTplElement) getModelElement() );
+        if( this.previewPage != null )
+        {
+            this.previewPage.refreshVisualModel( (LayoutTplElement) getModelElement() );
+        }
     }
 
     protected void refreshSourceModel()
@@ -390,37 +389,19 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
         setSourceModelChanged( false );
     }
 
-    @Override
-    protected void setActivePage( int pageIndex )
-    {
-        super.setActivePage( SOURCE_PAGE_INDEX );
-    }
+//    @Override
+//    protected void setActivePage( int pageIndex )
+//    {
+//        super.setActivePage( pageIndex );
+//    }
 
     protected void setDesignPageChanged( boolean changed )
     {
         isDesignPageChanged = changed;
     }
 
-    @Override
-    public void setInitializationData( final IConfigurationElement config,
-                                       final String propertyName,
-                                       final Object data )
-    {
-        super.setInitializationData( config, propertyName, data );
-
-        if( this.definition == null )
-        {
-            final String bundleId = config.getContributor().getName();
-            final Context context = BundleBasedContext.adapt( bundleId );
-            final Map<?,?> properties = (Map<?,?>) data;
-
-            final String sdef = (String) properties.get( "sdef" );
-            this.definition = DefinitionLoader.context( context ).sdef( sdef ).page();
-        }
-    }
-
     protected void setSourceModelChanged( boolean changed )
     {
-        this.isSourceModelChanged = changed; 
+        this.isSourceModelChanged = changed;
     }
 }

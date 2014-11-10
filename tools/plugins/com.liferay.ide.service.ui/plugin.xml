@@ -74,7 +74,6 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.liferay.ide.service.ui.editor.ServiceBuilderEditor"
             contributorClass="com.liferay.ide.service.ui.editor.ServiceBuilderEditorActionBarContributor"
             default="true"
             filenames="service.xml"
@@ -82,6 +81,10 @@
             id="com.liferay.ide.eclipse.service.ui.editor.servicebuilder"
             name="%service.editor.name"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
+         <class class="com.liferay.ide.service.ui.editor.ServiceBuilderEditor">
+             <parameter name="sdef" value="com.liferay.ide.service.ui.editor.ServiceBuilderEditor"/>
+             <parameter name="pageName" value="Overview"/>
+         </class>
         <contentTypeBinding
                contentTypeId="com.liferay.ide.service.core.servicebuildercontent">
          </contentTypeBinding>
@@ -130,7 +133,7 @@
             name="Build WSDD">
         </command>
    </extension>
-    
+
    <extension
          point="org.eclipse.ui.handlers">
       <handler

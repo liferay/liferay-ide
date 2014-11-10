@@ -16,30 +16,24 @@ package com.liferay.ide.portlet.ui.editor;
 
 
 import com.liferay.ide.portlet.core.lfportlet.model.LiferayPortletXml;
-import com.liferay.ide.ui.editor.LazyLoadingEditorForXml;
 
-import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import org.eclipse.ui.PartInitException;
 
 /**
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-public class LiferayPortletXmlEditor extends LazyLoadingEditorForXml
+public class LiferayPortletXmlEditor extends SapphireEditorForXml
 {
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.LiferayPortletXmlEditor";
-
     public LiferayPortletXmlEditor()
     {
-        super
-        (
-            LiferayPortletXml.TYPE,
-            DefinitionLoader.sdef( LiferayPortletXmlEditor.class ).page( "liferay-portlet-app.editor" )
-        );
+        super( LiferayPortletXml.TYPE, null );
     }
 
     @Override
-    protected boolean shouldCreateFormPages()
+    protected void createFormPages() throws PartInitException
     {
-        return true;
+        addDeferredPage( 1, "Overview", "liferay-portlet-app.editor" );
     }
 }

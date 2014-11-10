@@ -19,27 +19,24 @@
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.portlet.core.model.PortletApp;
-import com.liferay.ide.ui.editor.LazyLoadingEditorForXml;
 
-import org.eclipse.sapphire.ui.def.DefinitionLoader;
+import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
+import org.eclipse.ui.PartInitException;
 
 /**
  * @author Kamesh Sampath
  * @author Gregory Amerson
  */
-public class PortletXmlEditor extends LazyLoadingEditorForXml
+public class PortletXmlEditor extends SapphireEditorForXml
 {
-    public static final String ID = "com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor"; //$NON-NLS-1$
-
     public PortletXmlEditor()
     {
-        super( PortletApp.TYPE, DefinitionLoader.sdef( PortletXmlEditor.class ).page( "portlet-app.editor" ) );
+        super( PortletApp.TYPE, null );
     }
 
     @Override
-    protected boolean shouldCreateFormPages()
+    protected void createFormPages() throws PartInitException
     {
-        return true;
+        addDeferredPage( 1, "Overview", "portlet-app.editor" );
     }
-
 }

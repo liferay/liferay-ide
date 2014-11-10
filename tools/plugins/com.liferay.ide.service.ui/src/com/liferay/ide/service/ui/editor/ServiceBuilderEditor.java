@@ -18,16 +18,13 @@
 package com.liferay.ide.service.ui.editor;
 
 import com.liferay.ide.service.core.model.ServiceBuilder6xx;
-import com.liferay.ide.ui.editor.LazyLoadingEditorForXml;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.swt.gef.SapphireDiagramEditor;
+import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -37,38 +34,23 @@ import org.eclipse.ui.part.FileEditorInput;
 /**
  * @author Gregory Amerson
  */
-public class ServiceBuilderEditor extends LazyLoadingEditorForXml
+public class ServiceBuilderEditor extends SapphireEditorForXml
 {
-    private SapphireDiagramEditor pageDiagram;
-
     public ServiceBuilderEditor()
     {
-        super( ServiceBuilder6xx.TYPE, DefinitionLoader.sdef( ServiceBuilderEditor.class ).page( "serviceBuilderPage" ) );
+        super( ServiceBuilder6xx.TYPE, null );
+    }
+
+    @Override
+    protected void createFormPages() throws PartInitException
+    {
+        addDeferredPage( 1, "Overview", "serviceBuilderPage" );
     }
 
     @Override
     protected void createDiagramPages() throws PartInitException
     {
-        this.pageDiagram = new SapphireDiagramEditor
-        (
-            this, this.getModelElement(),
-            DefinitionLoader
-                .sdef( ServiceBuilderEditor.class )
-                .page( "diagramPage" ) //$NON-NLS-1$
-        );
-
-        addEditorPage( 3, this.pageDiagram );
-    }
-
-    @Override
-    public void doSave( final IProgressMonitor monitor )
-    {
-        super.doSave( monitor );
-
-        if( this.pageDiagram != null )
-        {
-            this.pageDiagram.doSave( monitor );
-        }
+        addDeferredPage( 2, "Diagram", "diagramPage" );
     }
 
     public InputStream getFileContents() throws CoreException, MalformedURLException, IOException
@@ -91,17 +73,5 @@ public class ServiceBuilderEditor extends LazyLoadingEditorForXml
         {
             return null;
         }
-    }
-
-    @Override
-    protected boolean shouldCreateDiagramPages()
-    {
-        return true;
-    }
-
-    @Override
-    protected boolean shouldCreateFormPages()
-    {
-        return true;
     }
 }

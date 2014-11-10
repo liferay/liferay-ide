@@ -233,4 +233,8 @@
             </action-handler-factory>
         </case>
     </node-factory>
+    <diagram-page>
+        <id>preview</id>
+        <element-type>com.liferay.ide.layouttpl.core.model.LayoutTplElement</element-type>
+    </diagram-page>
 </definition>
