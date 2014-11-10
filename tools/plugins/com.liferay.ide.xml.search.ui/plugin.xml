@@ -61,6 +61,26 @@
              class="com.liferay.ide.xml.search.ui.jsp.AuiButtonTypeQuerySpecification"
              id="aui.button.type.querySpecification">
        </querySpecification>
+
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.jsp.AuiInputTypeQuerySpecification"
+             id="aui.input.type.querySpecification">
+       </querySpecification>
+
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.jsp.AuiInputInlineLabelQuerySpecification"
+             id="aui.input.inlinelabel.querySpecification">
+       </querySpecification>
+
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.jsp.AuiInputCheckedQuerySpecification"
+             id="aui.input.checked.querySpecification">
+       </querySpecification>
+
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.jsp.AuiInputDisabledQuerySpecification"
+             id="aui.input.disabled.querySpecification">
+       </querySpecification>
     </extension>
 
     <!--==================== portlet.xml ====================-->
@@ -835,6 +855,58 @@
                    querySpecificationId="aui.button.type.querySpecification" >
              </toStatic>
           </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="input"
+                   targetNodes="@type"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter" >
+             </from>
+             <toStatic
+                   searcherId="com.liferay.ide.xml.search.ui.auiInputTypeSearcher"
+                   querySpecificationId="aui.input.type.querySpecification" >
+             </toStatic>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="input"
+                   targetNodes="@inlineLabel"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter" >
+             </from>
+             <toStatic
+                   searcherId="com.liferay.ide.xml.search.ui.auiInputInlineLabelSearcher"
+                   querySpecificationId="aui.input.inlinelabel.querySpecification" >
+             </toStatic>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="input"
+                   targetNodes="@checked"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter" >
+             </from>
+             <toStatic
+                   searcherId="com.liferay.ide.xml.search.ui.auiInputCheckedSearcher"
+                   querySpecificationId="aui.input.checked.querySpecification" >
+             </toStatic>
+          </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="input"
+                   targetNodes="@disabled"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter" >
+             </from>
+             <toStatic
+                   searcherId="com.liferay.ide.xml.search.ui.auiInputDisabledSearcher"
+                   querySpecificationId="aui.input.disabled.querySpecification" >
+             </toStatic>
+          </reference>
        </references>
     </extension>
 
@@ -1048,6 +1120,22 @@
        <searcher
              class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
              id="com.liferay.ide.xml.search.ui.auiButtonTypeSearcher">
+       </searcher>
+       <searcher
+             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
+             id="com.liferay.ide.xml.search.ui.auiInputTypeSearcher">
+       </searcher>
+       <searcher
+             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
+             id="com.liferay.ide.xml.search.ui.auiInputInlineLabelSearcher">
+       </searcher>
+       <searcher
+             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
+             id="com.liferay.ide.xml.search.ui.auiInputCheckedSearcher">
+       </searcher>
+       <searcher
+             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
+             id="com.liferay.ide.xml.search.ui.auiInputDisabledSearcher">
        </searcher>
     </extension>
 
