@@ -55,6 +55,14 @@
        </querySpecification>
     </extension>
 
+    <extension
+          point="org.eclipse.wst.xml.search.core.staticValueQuerySpecifications">
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.jsp.AuiButtonTypeQuerySpecification"
+             id="aui.button.type.querySpecification">
+       </querySpecification>
+    </extension>
+
     <!--==================== portlet.xml ====================-->
 
     <!-- Declaration of references between XML nodes for portlet.xml -->
@@ -814,6 +822,19 @@
                    searcherId="com.liferay.ide.xml.search.ui.portletActionCommandSearcher">
              </toJava>
           </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="button"
+                   targetNodes="@type"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter" >
+             </from>
+             <toStatic
+                   searcherId="com.liferay.ide.xml.search.ui.auiButtonTypeSearcher"
+                   querySpecificationId="aui.button.type.querySpecification" >
+             </toStatic>
+          </reference>
        </references>
     </extension>
 
@@ -1023,6 +1044,10 @@
        <searcher
              class="com.liferay.ide.xml.search.ui.java.PortletActionMethodSearcher"
              id="com.liferay.ide.xml.search.ui.portletActionMethodSearcher">
+       </searcher>
+       <searcher
+             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
+             id="com.liferay.ide.xml.search.ui.auiButtonTypeSearcher">
        </searcher>
     </extension>
 
