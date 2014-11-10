@@ -164,7 +164,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
             if( serviceTypeNode != null && validateServiceType( (IDOMNode) serviceTypeNode.getFirstChild(), file ) == null )
             {
                 // validate type hierarchy
-                final String serviceTypeContent = serviceTypeNode.getFirstChild().getNodeValue();
+                final String serviceTypeContent = serviceTypeNode.getFirstChild().getNodeValue().trim();
 
                 final String superTypeName = serviceTypeContent + "Wrapper";
                 final IType superType = JdtUtils.getJavaType( file.getProject(), superTypeName );
