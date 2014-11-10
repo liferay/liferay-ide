@@ -47,4 +47,9 @@ public class PropertiesFile
         return this.file.getName();
     }
 
+    public String getPath()
+    {
+        return this.file.getPath();
+    }
+
 }

@@ -13,6 +13,7 @@ package com.liferay.ide.server.ui.navigator;
 
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.action.EditPropertiesFileAction;
+import com.liferay.ide.server.ui.action.OpenLiferayHomeFolderAction;
 
 import java.util.Iterator;
 
@@ -41,6 +42,7 @@ public class PropertiesActionProvider extends CommonActionProvider
 
     private ICommonActionExtensionSite actionSite;
     private EditPropertiesFileAction editAction;
+    private OpenLiferayHomeFolderAction openFolderAction;
 
     public PropertiesActionProvider()
     {
@@ -79,6 +81,7 @@ public class PropertiesActionProvider extends CommonActionProvider
         if( file != null )
         {
             menu.add( editAction );
+            menu.add( openFolderAction );
         }
     }
 
@@ -156,6 +159,7 @@ public class PropertiesActionProvider extends CommonActionProvider
 
         // create the open action
         editAction = new EditPropertiesFileAction( provider );
+        openFolderAction = new OpenLiferayHomeFolderAction( provider );
     }
 
 }
