@@ -65,10 +65,10 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 public class RemoteServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IServerLifecycleListener
 {
-    private ILaunch currentLaunch;
+    protected ILaunch currentLaunch;
     private IServerManagerConnection remoteConnection;
     private List<IModule[]> redeployModules;
-    private Job remoteServerUpdateJob;
+    protected Job remoteServerUpdateJob;
 
     public RemoteServerBehavior()
     {
