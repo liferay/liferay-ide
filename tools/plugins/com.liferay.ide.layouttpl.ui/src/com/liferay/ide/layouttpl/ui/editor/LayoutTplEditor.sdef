@@ -9,10 +9,8 @@
                 <section>
                     <content>
                         <property-editor>ClassName</property-editor>
-                        <property-editor>Role</property-editor>
-                        <property-editor>Id</property-editor>
                     </content>
-                    <label>Basic Info</label>
+                    <label>Class Name</label>
                     <collapsible>false</collapsible>
                 </section>
                 <section>

@@ -1,4 +1,9 @@
 <#assign appendIndent="" layoutTplElement="div" layoutElement="div" columnElement="div" newLine="\n">
+<#if (root.getClassName().content())?exists>
+<#assign className=root.getClassName().content()>
+<#else>
+<#assign className="">
+</#if>
 <#macro printLayout this>
 <#if (this.getPortletLayouts().size()>0)>
 <#assign appendIndent=stack.push(appendIndent)+"\t">
@@ -30,6 +35,6 @@ ${appendIndent}</${layoutElement}>
 <#assign appendIndent=stack.pop()>
 </#if>
 </#macro>
-<${layoutTplElement} class="${root.getClassName().content()}" id="${root.getId().content()}" role="${root.getRole().content()}">
+<${layoutTplElement} class="${className}" id="${root.getId().content()}" role="${root.getRole().content()}">
 <@printLayout this=root/>
 </${layoutTplElement}>

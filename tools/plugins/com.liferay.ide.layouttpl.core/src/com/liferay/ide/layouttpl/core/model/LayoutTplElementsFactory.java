@@ -140,7 +140,6 @@ public class LayoutTplElementsFactory
             layoutTpl = LayoutTplElement.TYPE.instantiate();
             layoutTpl.setBootstrapStyle( isBootstrapStyle );
             layoutTpl.setClassName( mainContentElement.getAttribute( "class" ) );
-            layoutTpl.setRole( LayoutTplUtil.getRoleValue( mainContentElement, layoutTpl.getRole().content() ) );
 
             IDOMElement[] portletLayoutElements =
                 LayoutTplUtil.findChildElementsByClassName( mainContentElement, "div", "portlet-layout" );

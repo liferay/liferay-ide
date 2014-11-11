@@ -1,4 +1,9 @@
 <#assign appendIndent="">
+<#if (root.getClassName().content())?exists>
+<#assign className=root.getClassName().content()>
+<#else>
+<#assign className="">
+</#if>
 <#macro printLayout this type="">
 <#if type == "ie">
 <#assign rowElement="table" trBegin="\n"+appendIndent+"\t\t<tr>" trEnd=appendIndent+"</tr>\n\t\t" columnElement="td" columnNewline="">
@@ -35,7 +40,7 @@ ${columnNewline}<#rt>
 </#if>
 </#macro>
 <#if (root.getPortletLayouts().size() >= 0)>
-<div class="${root.getClassName().content()}" id="${root.getId().content()}" role="${root.getRole().content()}">
+<div class="${className}" id="${root.getId().content()}" role="${root.getRole().content()}">
 	#if ($browserSniffer.isIe($request) && $browserSniffer.getMajorVersion($request) < 8)
 <@printLayout this=root type="ie"/>
 	#else
