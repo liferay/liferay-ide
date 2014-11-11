@@ -30,4 +30,10 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.liferay.ide.xml.search.ui,
+ com.liferay.ide.xml.search.ui.descriptors,
+ com.liferay.ide.xml.search.ui.java,
+ com.liferay.ide.xml.search.ui.jsp,
+ com.liferay.ide.xml.search.ui.resources,
+ com.liferay.ide.xml.search.ui.searcher,
+ com.liferay.ide.xml.search.ui.util,
  com.liferay.ide.xml.search.ui.validators
