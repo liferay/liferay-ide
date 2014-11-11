@@ -107,7 +107,7 @@ public class BuildLangHandler extends AbstractHandler
                 }
             }
 
-            if( langFile.exists() )
+            if( langFile != null && langFile.exists() )
             {
                 try
                 {
