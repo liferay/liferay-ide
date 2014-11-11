@@ -55,7 +55,7 @@
                         <liferay.server.ajp.port>${liferay.server.ajp.port}</liferay.server.ajp.port>
                         <liferay.server.shutdown.port>${liferay.server.shutdown.port}</liferay.server.shutdown.port>
                         <liferay.server.start.port>${liferay.server.start.port}</liferay.server.start.port>
-                        <skipBundleTests>${skipBundleTests}</skipBundleTests>
+                        <skipBundleTests>${skipServerTests}</skipBundleTests>
                     </systemProperties>
                 </configuration>
             </plugin>
