@@ -15,17 +15,12 @@
 
 package com.liferay.ide.ui.dialog;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 
 import org.eclipse.jdt.core.search.IJavaSearchScope;
 import org.eclipse.jdt.internal.ui.dialogs.FilteredTypesSelectionDialog;
 import org.eclipse.jface.operation.IRunnableContext;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 /**
  * @author Greg Amerson
@@ -42,40 +37,5 @@ public class FilteredTypesSelectionDialogEx extends FilteredTypesSelectionDialog
         super( shell, multi, context, scope, elementKinds );
 
         setInitialPattern( StringPool.DOUBLE_ASTERISK );
-    }
-
-    @Override
-    public Control getPatternControl()
-    {
-        Control control = super.getPatternControl();
-
-        if( control instanceof Text && !listenerInstalled )
-        {
-            final Text text = (Text) control;
-            text.addModifyListener( new ModifyListener()
-            {
-
-                public void modifyText( ModifyEvent e )
-                {
-                    if( ignoreEvent )
-                    {
-                        return;
-                    }
-
-                    if( CoreUtil.isNullOrEmpty( text.getText() ) )
-                    {
-                        ignoreEvent = true;
-
-                        text.setText( StringPool.DOUBLE_ASTERISK );
-
-                        ignoreEvent = false;
-                    }
-                }
-            } );
-
-            listenerInstalled = true;
-        }
-
-        return control;
     }
 }
