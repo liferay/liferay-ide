@@ -56,7 +56,7 @@ public abstract class ServerCoreBase extends BaseTests
     protected final static String liferayServerStartPort = System.getProperty( "liferay.server.start.port" );
     private static IRuntime runtime;
     private static IServer server;
-    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
+    private final static String skipServerTests = System.getProperty( "skipServerTests" );
 
     protected void changeServerXmlPort( String currentPort, String targetPort )
     {
@@ -151,7 +151,7 @@ public abstract class ServerCoreBase extends BaseTests
     @Before
     public void setupRuntime() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipServerTests() ) return;
 
         assertNotNull(
             "Expected System.getProperty(\"liferay.bundles.dir\") to not be null",
@@ -232,6 +232,9 @@ public abstract class ServerCoreBase extends BaseTests
         assertNotNull( server );
     }
 
-    protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }
+    protected boolean shouldSkipServerTests()
+    {
+        return "true".equals( skipServerTests );
+    }
 
 }

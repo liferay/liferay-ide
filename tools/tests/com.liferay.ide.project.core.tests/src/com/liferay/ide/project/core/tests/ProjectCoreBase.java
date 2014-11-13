@@ -53,6 +53,8 @@ import org.junit.Before;
 public class ProjectCoreBase extends ServerCoreBase
 {
 
+    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
+
     protected IProject createAntProject( NewLiferayPluginProjectOp op ) throws Exception
     {
         final IProject project = createProject( op );
@@ -331,4 +333,8 @@ public class ProjectCoreBase extends ServerCoreBase
         setupRuntime();
     }
 
+    protected boolean shouldSkipBundleTests()
+    {
+        return "true".equals( skipBundleTests );
+    }
 }

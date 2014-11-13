@@ -100,7 +100,7 @@ public class ServerManagerTests extends ServerCoreBase
     @Before
     public void startServer() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipServerTests() ) return;
 
         final IServer server = getServer();
 
@@ -189,7 +189,7 @@ public class ServerManagerTests extends ServerCoreBase
     @After
     public void stopServer() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipServerTests() ) return;
 
         IServer server = getServer();
 
@@ -243,7 +243,7 @@ public class ServerManagerTests extends ServerCoreBase
     @Test
     public void testInstallUpdateUninstallApplication() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipServerTests() ) return;
 
         final NullProgressMonitor npm = new NullProgressMonitor();
 
