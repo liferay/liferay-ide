@@ -15,8 +15,9 @@
 
 package com.liferay.ide.xml.search.ui.tests;
 
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.openEditor;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.verifyQuickFix;
 import static org.junit.Assert.assertNotNull;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.*;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
@@ -24,16 +25,27 @@ import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.ui.IMarkerResolution;
 import org.junit.Test;
 
 
 /**
  * @author Kuo Zhang
- * 
+ *
  */
 public class JSPFileTests extends XmlSearchTestsBase
 {
+
+    private IFile getViewJspFile( IProject project ) throws Exception
+    {
+        IFile file =  CoreUtil.getDefaultDocrootFolder( project ).getFile( "view.jsp" );
+
+        if( file != null && file.exists() )
+        {
+            return file;
+        }
+
+        return null;
+    }
 
     @Test
     public void testMessageKey() throws Exception
@@ -48,26 +60,14 @@ public class JSPFileTests extends XmlSearchTestsBase
 
         IProject project = getProject( "portlets", "Portlet-Xml-Test-portlet" );
         IFile viewJspFile = getViewJspFile( project );
+
         assertNotNull( viewJspFile );
 
         openEditor( viewJspFile );
 
-        final String markerType = XMLSearchConstants.LIFERAY_JSP_MARKER_ID;
-        final String exceptedMessageRegex = "Property.*not found in.*";
+        String markerType = XMLSearchConstants.LIFERAY_JSP_MARKER_ID;
+        String exceptedMessageRegex = "Property.*not found in.*";
 
-        Class< ? extends IMarkerResolution > resolutionClazz = AddResourceKeyMarkerResolution.class;
-        verifyQuickFix( viewJspFile, markerType, exceptedMessageRegex, resolutionClazz );
-    }
-
-    private IFile getViewJspFile( IProject project ) throws Exception
-    {
-        final IFile file =  CoreUtil.getDefaultDocrootFolder( project ).getFile( "view.jsp" );
-
-        if( file != null && file.exists() )
-        {
-            return file;
-        }
-
-        return null;
+        verifyQuickFix( viewJspFile, markerType, exceptedMessageRegex, AddResourceKeyMarkerResolution.class );
     }
 }

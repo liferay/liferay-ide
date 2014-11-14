@@ -55,8 +55,244 @@ import org.w3c.dom.Node;
 public class PortletXmlTests extends XmlSearchTestsBase
 {
     private final static String MARKER_TYPE = PortletDescriptorValidator.MARKER_TYPE;
-    private IProject project;
     private IFile descriptorFile;
+    private IProject project;
+
+    private IFile getDescriptorFile() throws Exception
+    {
+        if( descriptorFile == null )
+        {
+            descriptorFile = CoreUtil.getDescriptorFile( getProject(), ILiferayConstants.PORTLET_XML_FILE );
+        }
+
+        return descriptorFile;
+    }
+
+    private IProject getProject() throws Exception
+    {
+        if( project == null )
+        {
+            project = super.getProject( "portlets", "Portlet-Xml-Test-portlet" );
+        }
+
+        return project;
+    }
+
+    @Test
+    public void testFilterClass() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
+
+        final IFile descriptorFile = getDescriptorFile();
+        openEditor( descriptorFile );
+
+        testFilterClassValidation( descriptorFile );
+        testFilterClassContentAssist( descriptorFile );
+        testFilterClassHyperlink( descriptorFile );
+    }
+
+    protected void testFilterClassContentAssist( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "filter-class";
+        String elementContent = "";
+        setElementContent( descriptorFile, elementName, elementContent );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+
+        final String exceptedProposalString = "ResourceFilterImpl - com.liferay.ide.tests";
+        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
+
+        elementContent = "com.liferay.ide.tests.ResourceFilterImpl";
+        setElementContent( descriptorFile, elementName, elementContent );
+        buildAndValidate( descriptorFile );
+    }
+
+    protected void testFilterClassHyperlink( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "listener-class";
+        String elementContent = "com.liferay.ide.tests.ResourceFilterImpl";
+        setElementContent( descriptorFile, elementName, elementContent );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+
+        assertNotNull( hyperlinks );
+        assertEquals( true, hyperlinks.length > 0 );
+
+        final String exceptedHyperlink = "ResourceFilterImpl - com.liferay.ide.tests";
+        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
+    }
+
+    protected void testFilterClassValidation( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "filter-class";
+
+        String elementContent = "Foo";
+        setElementContent( descriptorFile, elementName, elementContent );
+        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementContent } );
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+        elementContent = "com.liferay.ide.tests.Orphan";
+        setElementContent( descriptorFile, elementName, elementContent );
+        final String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementContent } ) + ".*";
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
+
+        elementContent = "com.liferay.ide.tests.ResourceFilterImpl";
+        setElementContent( descriptorFile, elementName, elementContent );
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+    }
+
+    @Test
+    public void testListenerClass() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
+
+        final IFile descriptorFile = getDescriptorFile();
+        openEditor( descriptorFile );
+
+        testListenerClassValidation( descriptorFile );
+        testListenerClassContentAssist( descriptorFile );
+        testListenerClassHyperLink( descriptorFile );
+    }
+
+    protected void testListenerClassContentAssist( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "listener-class";
+        String elementContent = "";
+
+        setElementContent( descriptorFile, elementName, elementContent );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+
+        final String exceptedProposalString = "PortletURLGenerationListenerImpl - com.liferay.ide.tests";
+        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
+
+        elementContent = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
+        setElementContent( descriptorFile, elementName, elementContent );
+        buildAndValidate( descriptorFile );
+    }
+
+    protected void testListenerClassHyperLink( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "listener-class";
+        String elementContent = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
+        setElementContent( descriptorFile, elementName, elementContent );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+
+        assertNotNull( hyperlinks );
+        assertEquals( true, hyperlinks.length > 0 );
+
+        final String exceptedHyperlink = "PortletURLGenerationListenerImpl - com.liferay.ide.tests";
+        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
+    }
+
+    protected void testListenerClassValidation( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "listener-class";
+
+        String elementValue = "Foo";
+        setElementContent( descriptorFile, elementName, elementValue );
+        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+        elementValue = "com.liferay.ide.tests.Orphan";
+        setElementContent( descriptorFile, elementName, elementValue );
+        final String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
+
+        elementValue = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+    }
+
+    @Test
+    public void testPortletClass() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
+
+        final IFile descriptorFile = getDescriptorFile();
+        openEditor( descriptorFile );
+
+        testPortletClassValidation( descriptorFile );
+        testPortletClassContentAssist( descriptorFile );
+        testPortletClassHyperlink( descriptorFile );
+    }
+
+    protected void testPortletClassContentAssist( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "portlet-class";
+        String elementContent = "";
+        setElementContent( descriptorFile, elementName, elementContent );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+
+        final String exceptedProposalString = "GenericPortletImpl - com.liferay.ide.tests";
+        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
+
+        elementContent = "com.liferay.ide.tests.GenericPortletImpl";
+        setElementContent( descriptorFile, elementName, elementContent );
+        buildAndValidate( descriptorFile );
+    }
+
+    protected void testPortletClassHyperlink( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "portlet-class";
+        String elementContent = "com.liferay.ide.tests.GenericPortletImpl";
+        setElementContent( descriptorFile, elementName, elementContent );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+
+        assertNotNull( hyperlinks );
+        assertEquals( true, hyperlinks.length > 0 );
+
+        final String exceptedHyperlink = "GenericPortletImpl - com.liferay.ide.tests";
+        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
+    }
+
+    protected void testPortletClassValidation( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "portlet-class";
+
+        String elementValue = "Foo";
+        setElementContent( descriptorFile, elementName, elementValue );
+
+        buildAndValidate( descriptorFile );
+
+        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+        elementValue = "com.liferay.ide.tests.Orphan";
+        setElementContent( descriptorFile, elementName, elementValue );
+        String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
+
+        elementValue = "com.liferay.ide.tests.GenericPortletImpl";
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+    }
 
     @Test
     public void testResourceBundle() throws Exception
@@ -69,6 +305,44 @@ public class PortletXmlTests extends XmlSearchTestsBase
         testResourceBundleValidation( descriptorFile );
         testResourceBundleContentAssist( descriptorFile );
         testResourceBundleHyperlink( descriptorFile );
+    }
+
+    protected void testResourceBundleContentAssist( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "resource-bundle";
+        String elementContent = "";
+        setElementContent( descriptorFile, elementName, "" );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+
+        final String exceptedProposalString = "content.Language";
+        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
+
+        // set element conent back to a right content
+        elementContent = "content.Language";
+        setElementContent( descriptorFile, elementName, elementContent );
+        buildAndValidate( descriptorFile );
+
+    }
+
+    protected void testResourceBundleHyperlink( IFile descriptorFile ) throws Exception
+    {
+        final String elementName = "resource-bundle";
+        String elementContent = "content.Language";
+        setElementContent( descriptorFile, elementName, elementContent );
+
+        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
+        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+
+        assertNotNull( hyperlinks );
+        assertEquals( true, hyperlinks.length > 0 );
+
+        final String exceptedHyperlink = "content/Language.properties";
+        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
     }
 
     protected void testResourceBundleValidation( IFile descriptorFile ) throws Exception
@@ -139,81 +413,6 @@ public class PortletXmlTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
     }
 
-    protected void testResourceBundleContentAssist( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "resource-bundle";
-        String elementContent = "";
-        setElementContent( descriptorFile, elementName, "" );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
-
-        assertNotNull( proposals );
-        assertEquals( true, proposals.length > 0 );
-
-        final String exceptedProposalString = "content.Language";
-        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
-
-        // set element conent back to a right content
-        elementContent = "content.Language";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-
-    }
-
-    protected void testResourceBundleHyperlink( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "resource-bundle";
-        String elementContent = "content.Language";
-        setElementContent( descriptorFile, elementName, elementContent );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
-
-        assertNotNull( hyperlinks );
-        assertEquals( true, hyperlinks.length > 0 );
-
-        final String exceptedHyperlink = "content/Language.properties";
-        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
-    }
-
-    @Test
-    public void testPortletClass() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        final IFile descriptorFile = getDescriptorFile();
-        openEditor( descriptorFile );
-
-        testPortletClassValidation( descriptorFile );
-        testPortletClassContentAssist( descriptorFile );
-        testPortletClassHyperlink( descriptorFile );
-    }
-
-    protected void testPortletClassValidation( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "portlet-class";
-
-        String elementValue = "Foo";
-        setElementContent( descriptorFile, elementName, elementValue );
-
-        buildAndValidate( descriptorFile );
-
-        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
-
-        elementValue = "com.liferay.ide.tests.GenericPortletImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
-    }
-
     protected IReporter testTest( IFile file ) throws Exception
     {
         XMLReferencesBatchValidator batchValidator = new XMLReferencesBatchValidator();
@@ -223,204 +422,5 @@ public class PortletXmlTests extends XmlSearchTestsBase
         validateMethod.setAccessible( true );
         validateMethod.invoke( batchValidator, descriptorFile, reporter );
         return reporter;
-    }
-
-    protected void testPortletClassContentAssist( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "portlet-class";
-        String elementContent = "";
-        setElementContent( descriptorFile, elementName, elementContent );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
-
-        assertNotNull( proposals );
-        assertEquals( true, proposals.length > 0 );
-
-        final String exceptedProposalString = "GenericPortletImpl - com.liferay.ide.tests";
-        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
-
-        elementContent = "com.liferay.ide.tests.GenericPortletImpl";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-    }
-
-    protected void testPortletClassHyperlink( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "portlet-class";
-        String elementContent = "com.liferay.ide.tests.GenericPortletImpl";
-        setElementContent( descriptorFile, elementName, elementContent );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
-
-        assertNotNull( hyperlinks );
-        assertEquals( true, hyperlinks.length > 0 );
-
-        final String exceptedHyperlink = "GenericPortletImpl - com.liferay.ide.tests";
-        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
-    }
-
-    @Test
-    public void testListenerClass() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        final IFile descriptorFile = getDescriptorFile();
-        openEditor( descriptorFile );
-
-        testListenerClassValidation( descriptorFile );
-        testListenerClassContentAssist( descriptorFile );
-        testListenerClassHyperLink( descriptorFile );
-    }
-
-    protected void testListenerClassValidation( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "listener-class";
-
-        String elementValue = "Foo";
-        setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        final String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
-
-        elementValue = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
-    }
-
-    protected void testListenerClassContentAssist( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "listener-class";
-        String elementContent = "";
-
-        setElementContent( descriptorFile, elementName, elementContent );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
-
-        assertNotNull( proposals );
-        assertEquals( true, proposals.length > 0 );
-
-        final String exceptedProposalString = "PortletURLGenerationListenerImpl - com.liferay.ide.tests";
-        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
-
-        elementContent = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-    }
-
-    protected void testListenerClassHyperLink( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "listener-class";
-        String elementContent = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
-        setElementContent( descriptorFile, elementName, elementContent );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
-
-        assertNotNull( hyperlinks );
-        assertEquals( true, hyperlinks.length > 0 );
-
-        final String exceptedHyperlink = "PortletURLGenerationListenerImpl - com.liferay.ide.tests";
-        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
-    }
-
-    @Test
-    public void testFilterClass() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        final IFile descriptorFile = getDescriptorFile();
-        openEditor( descriptorFile );
-
-        testFilterClassValidation( descriptorFile );
-        testFilterClassContentAssist( descriptorFile );
-        testFilterClassHyperlink( descriptorFile );
-    }
-
-    protected void testFilterClassValidation( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "filter-class";
-
-        String elementContent = "Foo";
-        setElementContent( descriptorFile, elementName, elementContent );
-        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementContent } );
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementContent = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementContent );
-        final String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementContent } ) + ".*";
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
-
-        elementContent = "com.liferay.ide.tests.ResourceFilterImpl";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
-    }
-
-    protected void testFilterClassContentAssist( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "filter-class";
-        String elementContent = "";
-        setElementContent( descriptorFile, elementName, elementContent );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
-
-        assertNotNull( proposals );
-        assertEquals( true, proposals.length > 0 );
-
-        final String exceptedProposalString = "ResourceFilterImpl - com.liferay.ide.tests";
-        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
-
-        elementContent = "com.liferay.ide.tests.ResourceFilterImpl";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-    }
-
-    protected void testFilterClassHyperlink( IFile descriptorFile ) throws Exception
-    {
-        final String elementName = "listener-class";
-        String elementContent = "com.liferay.ide.tests.ResourceFilterImpl";
-        setElementContent( descriptorFile, elementName, elementContent );
-
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
-
-        assertNotNull( hyperlinks );
-        assertEquals( true, hyperlinks.length > 0 );
-
-        final String exceptedHyperlink = "ResourceFilterImpl - com.liferay.ide.tests";
-        assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
-    }
-
-    private IFile getDescriptorFile() throws Exception
-    {
-        if( descriptorFile == null )
-        {
-            descriptorFile = CoreUtil.getDescriptorFile( getProject(), ILiferayConstants.PORTLET_XML_FILE );
-        }
-
-        return descriptorFile;
-    }
-
-    private IProject getProject() throws Exception
-    {
-        if( project == null )
-        {
-            project = super.getProject( "portlets", "Portlet-Xml-Test-portlet" );
-        }
-
-        return project;
     }
 }

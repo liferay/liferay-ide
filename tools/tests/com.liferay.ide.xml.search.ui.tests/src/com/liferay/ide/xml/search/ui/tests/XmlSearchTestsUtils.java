@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -75,7 +74,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Some methods are modified from eclipse wst sse tests
- * 
+ *
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
@@ -83,7 +82,7 @@ public class XmlSearchTestsUtils
 {
 
     private static Map<IFile, IEditorPart> fileToEditorMap = new HashMap<IFile, IEditorPart>();
-    private static Map<IFile, IDOMModel> fileToModelMap = new WeakHashMap<IFile, IDOMModel>();
+    private static Map<IFile, IDOMModel> fileToModelMap = new HashMap<IFile, IDOMModel>();
 
     private static ValManager valManager = ValManager.getDefault();
 

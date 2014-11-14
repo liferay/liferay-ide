@@ -51,13 +51,12 @@ import org.junit.Before;
 public class XmlSearchTestsBase
 {
 
-    private static IPath liferayBundlesPath;
-    private static IRuntime runtime;
-    private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
-    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
-
-    protected static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of type \"{0}\" incorrect";
     private static final String bundleId = "com.liferay.ide.xml.search.ui.tests";
+    private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
+    private static IPath liferayBundlesPath;
+    protected static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of type \"{0}\" incorrect";
+    private static IRuntime runtime;
+    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
 
     protected IPath getCustomLocationBase()
     {
