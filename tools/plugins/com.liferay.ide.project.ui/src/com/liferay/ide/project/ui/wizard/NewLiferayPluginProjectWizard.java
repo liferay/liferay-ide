@@ -25,6 +25,10 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
 import org.eclipse.ant.internal.ui.views.AntView;
@@ -66,6 +70,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPluginProjectOp>
@@ -212,12 +217,12 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
             if( wizardId != null )
             {
-                openNewPortletWizard( wizardId );
+                openNewPortletWizard( wizardId, project );
             }
         }
     }
 
-    private void openNewPortletWizard( String wizardId )
+    private void openNewPortletWizard( String wizardId, final IProject project )
     {
         final IExtensionRegistry registry = Platform.getExtensionRegistry();
 
@@ -237,11 +242,54 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                         {
                             try
                             {
+                                final List<IProject> projects = new ArrayList<IProject>();
+
+                                projects.add( project );
+
                                 INewWizard wizard = (INewWizard) CoreUtility.createExtension( element, "class" );
 
                                 final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
-                                wizard.init( PlatformUI.getWorkbench(), null );
+                                wizard.init( PlatformUI.getWorkbench(), new IStructuredSelection()
+                                {
+    
+                                    @Override
+                                    public boolean isEmpty()
+                                    {
+                                        return false;
+                                    }
+    
+                                    @Override
+                                    public Object getFirstElement()
+                                    {
+                                        return projects.get( 0 );
+                                    }
+    
+                                    @Override
+                                    public Iterator<IProject> iterator()
+                                    {
+                                        return projects.iterator();
+                                    }
+    
+                                    @Override
+                                    public int size()
+                                    {
+                                        return projects.size();
+                                    }
+    
+                                    @Override
+                                    public Object[] toArray()
+                                    {
+                                        return projects.toArray();
+                                    }
+    
+                                    @Override
+                                    public List<IProject> toList()
+                                    {
+                                        return projects;
+                                    }
+
+                                } );
 
                                 WizardDialog dialog = new WizardDialog( shell, wizard );
 

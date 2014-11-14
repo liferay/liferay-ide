@@ -64,6 +64,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class NewPortletWizard extends NewWebArtifactWizard
@@ -155,6 +156,16 @@ public class NewPortletWizard extends NewWebArtifactWizard
     @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
+
+        final Object selected = selection.getFirstElement();
+
+        if( selected instanceof IProject )
+        {
+            getDataModel().setStringProperty(
+                IArtifactEditOperationDataModelProperties.COMPONENT_NAME,
+                ( (IProject) selected ).getProject().getName() );
+        }
+
         super.init( workbench, selection );
         ValidProjectChecker checker = new ValidProjectChecker( ID );
         checker.checkValidProjectTypes();
