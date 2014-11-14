@@ -36,7 +36,7 @@ public interface LifeCycle extends Element
     // *** LifeCycle ***
 
     @Type( base = LifeCycleType.class )
-    @Label( standard = "life cyle name" )
+    @Label( standard = "lifecycle name" )
     @XmlBinding( path = "" )
     ValueProperty PROP_LIFE_CYCLE = new ValueProperty( TYPE, "LifeCycle" ); //$NON-NLS-1$
 
