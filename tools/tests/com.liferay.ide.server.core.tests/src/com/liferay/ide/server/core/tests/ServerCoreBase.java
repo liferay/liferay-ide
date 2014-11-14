@@ -56,6 +56,7 @@ public abstract class ServerCoreBase extends BaseTests
     protected final static String liferayServerStartPort = System.getProperty( "liferay.server.start.port" );
     private static IRuntime runtime;
     private static IServer server;
+    private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
     private final static String skipServerTests = System.getProperty( "skipServerTests" );
 
     protected void changeServerXmlPort( String currentPort, String targetPort )
@@ -230,6 +231,11 @@ public abstract class ServerCoreBase extends BaseTests
         server = serverWC.save( true, npm );
 
         assertNotNull( server );
+    }
+
+    protected boolean shouldSkipBundleTests()
+    {
+        return "true".equals( skipBundleTests );
     }
 
     protected boolean shouldSkipServerTests()
