@@ -25,10 +25,6 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
 import org.eclipse.ant.internal.ui.views.AntView;
@@ -46,6 +42,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.internal.ui.util.CoreUtility;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
@@ -234,76 +231,30 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
         {
             if( "wizard".equals( element.getName() ) )
             {
-                UIUtil.async
-                (
-                    new Runnable()
+                UIUtil.async( new Runnable()
+                {
+                    public void run()
                     {
-                        public void run()
+                        try
                         {
-                            try
-                            {
-                                final List<IProject> projects = new ArrayList<IProject>();
+                            final INewWizard wizard = (INewWizard) CoreUtility.createExtension( element, "class" );
 
-                                projects.add( project );
+                            final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 
-                                INewWizard wizard = (INewWizard) CoreUtility.createExtension( element, "class" );
+                            wizard.init( PlatformUI.getWorkbench(), new StructuredSelection( project ) );
 
-                                final Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+                            WizardDialog dialog = new WizardDialog( shell, wizard );
 
-                                wizard.init( PlatformUI.getWorkbench(), new IStructuredSelection()
-                                {
-    
-                                    @Override
-                                    public boolean isEmpty()
-                                    {
-                                        return false;
-                                    }
-    
-                                    @Override
-                                    public Object getFirstElement()
-                                    {
-                                        return projects.get( 0 );
-                                    }
-    
-                                    @Override
-                                    public Iterator<IProject> iterator()
-                                    {
-                                        return projects.iterator();
-                                    }
-    
-                                    @Override
-                                    public int size()
-                                    {
-                                        return projects.size();
-                                    }
-    
-                                    @Override
-                                    public Object[] toArray()
-                                    {
-                                        return projects.toArray();
-                                    }
-    
-                                    @Override
-                                    public List<IProject> toList()
-                                    {
-                                        return projects;
-                                    }
+                            dialog.create();
 
-                                } );
-
-                                WizardDialog dialog = new WizardDialog( shell, wizard );
-
-                                dialog.create();
-
-                                dialog.open();
-                            }
-                            catch( CoreException ex )
-                            {
-                                ProjectCore.createErrorStatus( ex );
-                            }
+                            dialog.open();
+                        }
+                        catch( CoreException ex )
+                        {
+                            ProjectCore.createErrorStatus( ex );
                         }
                     }
-                );
+                });
             }
         }
     }

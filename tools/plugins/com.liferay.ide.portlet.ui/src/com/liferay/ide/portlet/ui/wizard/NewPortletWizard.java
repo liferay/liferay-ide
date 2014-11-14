@@ -156,7 +156,6 @@ public class NewPortletWizard extends NewWebArtifactWizard
     @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
-
         final Object selected = selection.getFirstElement();
 
         if( selected instanceof IProject )
