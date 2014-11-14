@@ -23,7 +23,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 	 <parent>
 		<groupId>com.liferay.ide.common</groupId>
 		<artifactId>common</artifactId>
-		<version>2.2.0-SNAPSHOT</version>
+		<version>2.2.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.liferay.ide.common-features</groupId>
