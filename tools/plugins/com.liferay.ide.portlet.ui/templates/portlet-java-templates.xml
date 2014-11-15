@@ -49,4 +49,29 @@ ${cursor}
 ${:import(com.liferay.portal.theme.ThemeDisplay,com.liferay.portal.kernel.util.WebKeys,com.liferay.portal.kernel.util.ParamUtil)}
 </template>
 
+<template name="getboolean" autoinsert="true" context="java-statements" id="param.getBoolean" deleted="false" description="ParamUtil get boolean" enabled="true">
+boolean ${param} = ParamUtil.getBoolean(${request:var('javax.portlet.PortletRequest')}, "${param}");
+${:import(com.liferay.portal.kernel.util.ParamUtil)}
+</template>
+
+<template name="getdate" autoinsert="true" context="java-statements" id="param.getDate" deleted="false" description="ParamUtil get date" enabled="true">
+Date ${param} = ParamUtil.getDate(${request:var('javax.portlet.PortletRequest')}, "${param}", new SimpleDateFormat());
+${:import(java.util.Date,com.liferay.portal.kernel.util.ParamUtil,java.text.SimpleDateFormat)}
+</template>
+
+<template name="getinteger" autoinsert="true" context="java-statements" id="param.getInteger" deleted="false" description="ParamUtil get integer" enabled="true">
+int ${param} = ParamUtil.getInteger(${request:var('javax.portlet.PortletRequest')}, "${param}");
+${:import(com.liferay.portal.kernel.util.ParamUtil)}
+</template>
+
+<template name="getlong" autoinsert="true" context="java-statements" id="param.getLong" deleted="false" description="ParamUtil get long" enabled="true">
+long ${param} = ParamUtil.getLong(${request:var('javax.portlet.PortletRequest')}, "${param}");
+${:import(com.liferay.portal.kernel.util.ParamUtil)}
+</template>
+
+<template name="getstring" autoinsert="true" context="java-statements" id="param.getString" deleted="false" description="ParamUtil get string" enabled="true">
+String ${param} = ParamUtil.getString(${request:var('javax.portlet.PortletRequest')}, "${param}");
+${:import(com.liferay.portal.kernel.util.ParamUtil)}
+</template>
+
 </templates>
