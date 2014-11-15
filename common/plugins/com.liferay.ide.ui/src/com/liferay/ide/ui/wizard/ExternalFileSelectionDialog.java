@@ -201,7 +201,7 @@ public class ExternalFileSelectionDialog extends FilteredElementTreeSelectionDia
     {
         TreeViewer viewer = super.doCreateTreeViewer( parent, style );
 
-        viewer.setAutoExpandLevel( 3 );
+        viewer.setAutoExpandLevel( 5 );
 
         return viewer;
     }
