@@ -17,17 +17,15 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import com.liferay.ide.portlet.core.model.internal.InvertingBooleanXmlValueBinding;
-
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Unique;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
@@ -57,13 +55,15 @@ public interface CustomPortletMode extends Element, Describeable, Identifiable
      */
 
     @Type( base = Boolean.class )
-    @Label( standard = "Portlet managed" )
-    @CustomXmlValueBinding( impl = InvertingBooleanXmlValueBinding.class, params = "portal-managed" )
-    ValueProperty PROP_PORTLET_MANAGED = new ValueProperty( TYPE, "PortletManaged" ); //$NON-NLS-1$
+    @Label( standard = "Portal managed" )
+    @DefaultValue( text = "true" )
+    @XmlBinding( path = "portal-managed" )
+    ValueProperty PROP_PORTAL_MANAGED = new ValueProperty( TYPE, "PortalManaged" ); //$NON-NLS-1$
 
-    Value<Boolean> getPortletManaged();
 
-    void setPortletManaged( String value );
+    Value<Boolean> getPortalManaged();
 
-    void setPortletManaged( Boolean value );
+    void setPortalManaged( String value );
+
+    void setPortalManaged( Boolean value );
 }

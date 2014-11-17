@@ -157,7 +157,7 @@
                                 </hint>
                             </child-property>
                             <child-property>
-                                <property>PortletManaged</property>
+                                <property>PortalManaged</property>
                                 <hint>
                                     <name>column.widths</name>
                                     <value>30</value>
