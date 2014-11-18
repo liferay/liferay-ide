@@ -19,6 +19,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesProvider;
 
@@ -30,7 +31,7 @@ public class ProjectResourcesProvider implements IWebResourcesProvider
 {
 
     @Override
-    public IResource[] getResources( IWebResourcesContext context )
+    public IResource[] getResources( IWebResourcesContext context, IProgressMonitor monitor )
     {
         IResource[] retval = null;
 
