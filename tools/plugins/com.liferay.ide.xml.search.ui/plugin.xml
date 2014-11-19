@@ -783,6 +783,20 @@
              </toProperty>
           </reference>
 
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="search-container"
+                   targetNodes="@emptyResultsMessage"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter" >
+             </from>
+             <toProperty
+                   searcherId="com.liferay.ide.xml.search.ui.liferayJspLanguagePropertiesSearcher"
+                   querySpecificationId="portlet.language.properties.querySpecification"
+                   additionalProposalInfoProviderId="contentAssist.language.property.info" >
+             </toProperty>
+          </reference>
+
           <reference
                 validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
              <from
