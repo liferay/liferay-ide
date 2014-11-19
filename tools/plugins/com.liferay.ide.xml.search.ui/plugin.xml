@@ -81,6 +81,11 @@
              class="com.liferay.ide.xml.search.ui.jsp.AuiInputDisabledQuerySpecification"
              id="aui.input.disabled.querySpecification">
        </querySpecification>
+
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.jsp.AuiValidatorNameQuerySpecification"
+             id="aui.validator.name.querySpecification">
+       </querySpecification>
     </extension>
 
     <!--==================== portlet.xml ====================-->
@@ -885,6 +890,19 @@
                    querySpecificationId="aui.input.disabled.querySpecification" >
              </toStatic>
           </reference>
+
+          <reference validatorId="com.liferay.ide.xml.search.ui.liferayJspValidator">
+             <from
+                   path="validator"
+                   targetNodes="@name"
+                   querySpecificationId="liferay.jsp.querySpecification"
+                   filterId="liferay.jsp.taglib.filter" >
+             </from>
+             <toStatic
+                   searcherId="com.liferay.ide.xml.search.ui.auiValidatorNameSearcher"
+                   querySpecificationId="aui.validator.name.querySpecification" >
+             </toStatic>
+          </reference>
        </references>
     </extension>
 
@@ -1114,6 +1132,10 @@
        <searcher
              class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
              id="com.liferay.ide.xml.search.ui.auiInputDisabledSearcher">
+       </searcher>
+       <searcher
+             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
+             id="com.liferay.ide.xml.search.ui.auiValidatorNameSearcher">
        </searcher>
     </extension>
 
