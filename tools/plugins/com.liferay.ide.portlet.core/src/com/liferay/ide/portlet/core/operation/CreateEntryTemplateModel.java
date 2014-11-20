@@ -15,13 +15,16 @@
 
 package com.liferay.ide.portlet.core.operation;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jst.j2ee.internal.web.operations.CreateWebClassTemplateModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Cindy Li
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class CreateEntryTemplateModel extends CreateWebClassTemplateModel
@@ -43,11 +46,23 @@ public class CreateEntryTemplateModel extends CreateWebClassTemplateModel
     @Override
     public Collection<String> getImports()
     {
-        Collection<String> collection = super.getImports();
-        collection.add( "com.liferay.portlet.BaseControlPanelEntry" ); //$NON-NLS-1$
-        collection.add( "com.liferay.portal.model.Portlet" ); //$NON-NLS-1$
-        collection.add( "com.liferay.portal.security.permission.PermissionChecker" ); //$NON-NLS-1$
 
-        return collection;
+        final List<String> collectionList = new ArrayList<String>();
+
+        for( String importItem : super.getImports() )
+        {
+            if( importItem.contains( "<" ) && importItem.contains( ">" ) )
+            {
+                continue;
+            }
+
+            collectionList.add( importItem );
+        }
+
+        collectionList.add( "com.liferay.portlet.BaseControlPanelEntry" ); //$NON-NLS-1$
+        collectionList.add( "com.liferay.portal.model.Portlet" ); //$NON-NLS-1$
+        collectionList.add( "com.liferay.portal.security.permission.PermissionChecker" ); //$NON-NLS-1$
+
+        return collectionList;
     }
 }
