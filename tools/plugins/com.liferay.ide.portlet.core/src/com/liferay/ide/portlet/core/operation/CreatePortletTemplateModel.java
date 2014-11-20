@@ -15,7 +15,9 @@
 
 package com.liferay.ide.portlet.core.operation;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jst.j2ee.internal.web.operations.CreateWebClassTemplateModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -23,6 +25,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class CreatePortletTemplateModel extends CreateWebClassTemplateModel
@@ -42,34 +45,44 @@ public class CreatePortletTemplateModel extends CreateWebClassTemplateModel
     @Override
     public Collection<String> getImports()
     {
-        Collection<String> collection = super.getImports();
+        final List<String> collectionList = new ArrayList<String>();
+
+        for( String importItem : super.getImports() )
+        {
+            if( importItem.contains( "<" ) && importItem.contains( ">" ) )
+            {
+                continue;
+            }
+
+            collectionList.add( importItem );
+        }
 
         if( !isMVCPortletSuperclass() )
         {
-            collection.add( "java.io.IOException" ); //$NON-NLS-1$
-            collection.add( "javax.portlet.PortletException" ); //$NON-NLS-1$
+            collectionList.add( "java.io.IOException" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.PortletException" ); //$NON-NLS-1$
             // collection.add("javax.portlet.PortletRequest");
-            collection.add( "javax.portlet.PortletRequestDispatcher" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.PortletRequestDispatcher" ); //$NON-NLS-1$
             // collection.add("javax.portlet.PortletResponse");
-            collection.add( "javax.portlet.RenderRequest" ); //$NON-NLS-1$
-            collection.add( "javax.portlet.RenderResponse" ); //$NON-NLS-1$
-            collection.add( "com.liferay.portal.kernel.log.Log" ); //$NON-NLS-1$
-            collection.add( "com.liferay.portal.kernel.log.LogFactoryUtil" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.RenderRequest" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.RenderResponse" ); //$NON-NLS-1$
+            collectionList.add( "com.liferay.portal.kernel.log.Log" ); //$NON-NLS-1$
+            collectionList.add( "com.liferay.portal.kernel.log.LogFactoryUtil" ); //$NON-NLS-1$
         }
 
         if( shouldGenerateOverride( INewPortletClassDataModelProperties.PROCESSACTION_OVERRIDE ) )
         {
-            collection.add( "javax.portlet.ActionRequest" ); //$NON-NLS-1$
-            collection.add( "javax.portlet.ActionResponse" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.ActionRequest" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.ActionResponse" ); //$NON-NLS-1$
         }
 
         if( shouldGenerateOverride( INewPortletClassDataModelProperties.SERVERESOURCE_OVERRIDE ) )
         {
-            collection.add( "javax.portlet.ResourceRequest" ); //$NON-NLS-1$
-            collection.add( "javax.portlet.ResourceResponse" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.ResourceRequest" ); //$NON-NLS-1$
+            collectionList.add( "javax.portlet.ResourceResponse" ); //$NON-NLS-1$
         }
 
-        return collection;
+        return collectionList;
     }
 
     public String getInitParameterName()
