@@ -15,20 +15,17 @@
 
 package com.liferay.ide.layouttpl.core.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import com.liferay.ide.core.tests.BaseTests;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElementsFactory;
-import com.liferay.ide.layouttpl.core.model.PortletColumnElement;
-import com.liferay.ide.layouttpl.core.model.PortletLayoutElement;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
-
-import junit.framework.Assert;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -36,7 +33,6 @@ import org.junit.Test;
  * @author Cindy Li
  * @author Kuo Zhang
  */
-@SuppressWarnings( "deprecation" )
 public abstract class LayoutTplCoreTests extends BaseTests
 {
     private IProject a;
@@ -109,18 +105,18 @@ public abstract class LayoutTplCoreTests extends BaseTests
 
     protected void evalModelWithFile( IFile refTplFile, LayoutTplElement layoutTpl )
     {
-        Assert.assertEquals( true, layoutTpl != null );
+        assertEquals( true, layoutTpl != null );
 
         String templateSource = LayoutTplUtil.getTemplateSource( layoutTpl );
 
-        Assert.assertEquals( false, templateSource.isEmpty() );
+        assertEquals( false, templateSource.isEmpty() );
 
         String inputString = FileUtil.readContents( refTplFile.getLocation().toFile(), true ).trim();
 
         inputString = inputString.replaceAll( "\r", "" ).replaceAll( "\\s", "");
         templateSource = templateSource.replaceAll( "\r", "" ).replaceAll( "\\s", "");
 
-        Assert.assertEquals( true, inputString.equals( templateSource ) );
+        assertEquals( true, inputString.equals( templateSource ) );
     }
 
     protected void evalTemplateFromFile( String tplName ) throws Exception
@@ -136,9 +132,9 @@ public abstract class LayoutTplCoreTests extends BaseTests
         final IFile templateFile =
             createFile( this.a, getFilesPrefix() + tplName, this.getClass().getResourceAsStream( getFilesPrefix() + tplName ) );
 
-        Assert.assertEquals( templateFile.getFullPath().lastSegment(), tplName );
+        assertEquals( templateFile.getFullPath().lastSegment(), tplName );
 
-        Assert.assertEquals( true, templateFile.exists() );
+        assertEquals( true, templateFile.exists() );
 
         return templateFile;
     }

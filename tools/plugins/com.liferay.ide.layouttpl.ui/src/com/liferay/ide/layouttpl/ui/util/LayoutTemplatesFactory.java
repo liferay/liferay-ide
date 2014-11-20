@@ -148,20 +148,28 @@ public class LayoutTemplatesFactory
 
     // *** Row Templates ***
 
+    public static void add_Row_1( CanAddPortletLayouts element )
+    {
+        final PortletLayoutElement row = element.getPortletLayouts().insert();
+        final PortletColumnElement column = row.getPortletColumns().insert();
+
+        column.setWeight( column.getFullWeight().content() );
+    }
+
     public static void add_Row_2_I( CanAddPortletLayouts element )
     {
-        PortletLayoutElement row = element.getPortletLayouts().insert();
-        PortletColumnElement column1 = row.getPortletColumns().insert();
-        PortletColumnElement column2 = row.getPortletColumns().insert();
+        final PortletLayoutElement row = element.getPortletLayouts().insert();
+        final PortletColumnElement column1 = row.getPortletColumns().insert();
+        final PortletColumnElement column2 = row.getPortletColumns().insert();
 
-        int fullWeight = column1.getFullWeight().content();
+        final int fullWeight = column1.getFullWeight().content();
         column1.setWeight( fullWeight / 2 );
         column2.setWeight( fullWeight / 2 );
     }
 
     public static void add_Row_2_II( CanAddPortletLayouts element )
     {
-        PortletLayoutElement row = element.getPortletLayouts().insert();
+        final PortletLayoutElement row = element.getPortletLayouts().insert();
         PortletColumnElement column1 = row.getPortletColumns().insert();
         PortletColumnElement column2 = row.getPortletColumns().insert();
 

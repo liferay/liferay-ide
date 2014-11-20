@@ -15,6 +15,7 @@
 
 package com.liferay.ide.layouttpl.core.model;
 
+import com.liferay.ide.layouttpl.core.model.internal.PortletColumnWeightInitialValueService;
 import com.liferay.ide.layouttpl.core.model.internal.PortletColumnWeightValidationService;
 
 import org.eclipse.sapphire.ElementType;
@@ -24,6 +25,7 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 
 
@@ -54,7 +56,13 @@ public interface PortletColumnElement extends CanAddPortletLayouts
 
     @DefaultValue( text = "${Root.BootstrapStyle ? \"3\" : \"25\"}" )
     @Type( base = Integer.class )
-    @Service( impl = PortletColumnWeightValidationService.class )
+    @Services
+    (
+        {
+            @Service( impl = PortletColumnWeightValidationService.class ),
+            @Service( impl = PortletColumnWeightInitialValueService.class )
+        }
+    )
     @Required
     ValueProperty PROP_WEIGHT = new ValueProperty( TYPE, "Weight" );
 

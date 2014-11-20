@@ -17,9 +17,10 @@
                     <label>Add Row Templates</label>
                     <content>
                         <actuator>
-                            <action-id>Sapphire.Add</action-id>
-                            <label>Add Row</label>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <label>Add Row with 1 Column ${Root().BootstrapStyle ? &quot;(12)&quot;: &quot;(100)&quot;}</label>
                             <show-image>true</show-image>
+                            <action-handler-id>Add.Row.1.ActionHandler</action-handler-id>
                         </actuator>
                         <actuator>
                             <action-handler-id>Add.Row.2_I.ActionHandler</action-handler-id>
@@ -94,7 +95,7 @@
                         <id>LayoutTpl.Add.RowTemplate</id>
                         <label>Add Row Template</label>
                         <group>Sapphire.AddDeleteGroup</group>
-                        <location>after:Sapphire.Add</location>
+                        <location>before:LayoutTpl.Add.LayoutTemplate</location>
                     <image>icons/e16/add_action.png</image>
                     </action>
                     <action-handler-factory>
@@ -105,7 +106,7 @@
                         <id>LayoutTpl.Add.LayoutTemplate</id>
                         <label>Add Layout Template</label>
                         <group>Sapphire.AddDeleteGroup</group>
-                        <location>after:LayoutTpl.Add.RowTemplate</location>
+                        <location>before:Sapphire.Add</location>
                     <image>icons/e16/add_action.png</image>
                     </action>
                     <action-handler-factory>
@@ -181,10 +182,10 @@
                 <label>Add Row Templates</label>
                 <content>
                         <actuator>
-                            <action-id>Sapphire.Add</action-id>
-                            <label>Add Row</label>
+                            <action-id>LayoutTpl.Add.RowTemplate</action-id>
+                            <label>Add Row with 1 Column ${Root().BootstrapStyle ? &quot;(12)&quot;: &quot;(100)&quot;}</label>
                             <show-image>true</show-image>
-                            <image>icons/e16/add_action.png</image>
+                            <action-handler-id>Add.Row.1.ActionHandler</action-handler-id>
                         </actuator>
                         <actuator>
                             <action-handler-id>Add.Row.2_I.ActionHandler</action-handler-id>
@@ -222,7 +223,7 @@
                 <id>LayoutTpl.Add.RowTemplate</id>
                 <label>Add Row Template</label>
                 <group>Sapphire.AddDeleteGroup</group>
-                <location>after:Sapphire.Add</location>
+                <location>before:Sapphire.Add</location>
                 <image>icons/e16/add_action.png</image>
             </action>
             <action-handler-factory>

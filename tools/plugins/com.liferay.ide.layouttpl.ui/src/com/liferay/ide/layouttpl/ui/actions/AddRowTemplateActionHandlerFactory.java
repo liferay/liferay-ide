@@ -34,6 +34,7 @@ import org.eclipse.sapphire.ui.def.ActionHandlerFactoryDef;
 public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFactory
 {
     private final static String ADD_ROW_TEMPLATE_ACTION_ID = "LayoutTpl.Add.RowTemplate";
+    private static final String ADD_ROW_1_ACTION_HANDLER_ID = "Add.Row.1.ActionHandler";
     private static final String ADD_ROW_2_I_ACTION_HANDLER_ID = "Add.Row.2_I.ActionHandler";
     private static final String ADD_ROW_2_II_ACTION_HANDLER_ID = "Add.Row.2_II.ActionHandler";
     private static final String ADD_ROW_2_III_ACTION_HANDLER_ID = "Add.Row.2_III.ActionHandler";
@@ -59,6 +60,7 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
         if( ADD_ROW_TEMPLATE_ACTION_ID.equals( getAction().getId() ) )
         {
             ArrayList<SapphireActionHandler> actionHandlers = new ArrayList<SapphireActionHandler>();
+            actionHandlers.add( new Add_Row_1_ActionHandler() );
             actionHandlers.add( new Add_Row_2_I_ActionHandler() );
             actionHandlers.add( new Add_Row_2_II_ActionHandler() );
             actionHandlers.add( new Add_Row_2_III_ActionHandler() );
@@ -67,6 +69,40 @@ public class AddRowTemplateActionHandlerFactory extends SapphireActionHandlerFac
         }
 
         return null;
+    }
+
+    private class Add_Row_1_ActionHandler extends SapphireActionHandler
+    {
+
+        @Override
+        public void init( SapphireAction action, ActionHandlerDef def )
+        {
+            super.init( action, def );
+            setId( ADD_ROW_1_ACTION_HANDLER_ID );
+            setLabel();
+        }
+ 
+        protected void setLabel()
+        {
+            final String prefix = "Row with 1 Column ";
+
+            if( isBootstrapStyle )
+            {
+                super.setLabel( prefix + "(12)" );
+            }
+            else
+            {
+                super.setLabel( prefix + "(100)");
+            }
+        }
+
+        @Override
+        protected Object run( Presentation context )
+        {
+            CanAddPortletLayouts element = getModelElement().nearest( CanAddPortletLayouts.class );
+            LayoutTemplatesFactory.add_Row_1( element );
+            return null;
+        }
     }
 
     private class Add_Row_2_I_ActionHandler extends SapphireActionHandler

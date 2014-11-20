@@ -82,7 +82,7 @@ public class PortletColumnsValidtionSerivce extends ValidationService
         // we need allow 99% ?
         if( !( actualWeightSum == exceptedweightSum || ( exceptedweightSum == 100 && actualWeightSum == 99 ) ) )
         {
-            retval = Status.createErrorStatus( " The sum of weight of columns should be: " + exceptedweightSum );
+            retval = Status.createErrorStatus( "The sum of weight of columns should be: " + exceptedweightSum );
         }
 
         return retval;
