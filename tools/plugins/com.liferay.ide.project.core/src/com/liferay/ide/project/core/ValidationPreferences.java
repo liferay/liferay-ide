@@ -33,6 +33,7 @@ public class ValidationPreferences
         PROPERTY_NOT_FOUND,
         REFERENCE_NOT_FOUND,
         RESOURCE_NOT_FOUND,
+        STATIC_NOT_FOUND,
         SYNTAX_INVALID,
         TYPE_NOT_FOUND,
         TYPE_HIERARCHY_INCORRECT,

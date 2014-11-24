@@ -67,13 +67,14 @@ import org.w3c.dom.Node;
 public class LiferayBaseValidator implements IXMLReferenceValidator
 {
     public static final String MARKER_QUERY_ID = "querySpecificationId";
+    public static final String MESSAGE_METHOD_NOT_FOUND = Msgs.methodNotFound;
     public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
     public static final String MESSAGE_REFERENCE_NOT_FOUND = Msgs.referenceNotFound;
     public static final String MESSAGE_RESOURCE_NOT_FOUND = Msgs.resourceNotFound;
+    public static final String MESSAGE_STATIC_VALUE_NOT_FOUND = Msgs.staticValueNotFound;
     public static final String MESSAGE_SYNTAX_INVALID = Msgs.syntaxInvalid;
     public static final String MESSAGE_TYPE_HIERARCHY_INCORRECT = Msgs.typeHierarchyIncorrect;
     public static final String MESSAGE_TYPE_NOT_FOUND = Msgs.typeNotFound;
-    public static final String MESSAGE_METHOD_NOT_FOUND = Msgs.methodNotFound;
 
     protected static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
 
@@ -267,6 +268,9 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
             case PROPERTY:
                 validateReferenceToProperty( referenceTo, node, file, validator, reporter, batchMode );
                 break;
+            case STATIC:
+                validateReferenceToStatic( referenceTo, node, file, validator, reporter, batchMode );
+                break;
             default:
                 return;
         }
@@ -319,6 +323,8 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
             final IFile languagePropertiesFile = getReferencedFile( referenceTo, node, file );
             return NLS.bind( MESSAGE_PROPERTY_NOT_FOUND, textContent, languagePropertiesFile != null
                 ? languagePropertiesFile.getName() : "any resource files" );
+        case STATIC_NOT_FOUND:
+            return NLS.bind( MESSAGE_STATIC_VALUE_NOT_FOUND, textContent );
         }
 
         return null;
@@ -399,6 +405,8 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
                 return ValidationType.RESOURCE_NOT_FOUND;
             case PROPERTY:
                 return ValidationType.PROPERTY_NOT_FOUND;
+            case STATIC:
+                return ValidationType.STATIC_NOT_FOUND;
             default:
                 return null;
         }
@@ -496,6 +504,13 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
     }
 
+    protected void validateReferenceToStatic(
+        IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
+        boolean batchMode )
+    {
+        validateReferenceToAllType( referenceTo, node, file, validator, reporter, batchMode );
+    }
+
     protected void validateReferenceToXML( IXMLReferenceTo referenceTo, IDOMNode node, IFile file,
                                            IValidator validator, IReporter reporter, boolean batchMode )
     {
@@ -513,6 +528,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         public static String propertyNotFound;
         public static String referenceNotFound;
         public static String resourceNotFound;
+        public static String staticValueNotFound;
         public static String syntaxInvalid;
         public static String typeHierarchyIncorrect;
         public static String typeNotFound;
