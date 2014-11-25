@@ -68,7 +68,14 @@ public class LanguagePropertiesURIResolver extends ResourceBaseURIResolver
             }
             else
             {
-                return uri.startsWith( matching );
+                if( fullMatch )
+                {
+                    return uri.equals( matching );
+                }
+                else
+                {
+                    return uri.startsWith( matching );
+                }
             }
         }
 
