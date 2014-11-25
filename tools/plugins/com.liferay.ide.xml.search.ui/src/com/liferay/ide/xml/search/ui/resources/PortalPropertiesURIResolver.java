@@ -17,6 +17,7 @@ package com.liferay.ide.xml.search.ui.resources;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.wst.xml.search.core.resource.ResourceBaseURIResolver;
 
 
@@ -43,6 +44,33 @@ public class PortalPropertiesURIResolver extends ResourceBaseURIResolver
     protected Set<String> getExtensions()
     {
         return EXTENSIONS;
+    }
+
+    @Override
+    public boolean accept( Object selectedNode, IResource rootContainer, IResource file, String matching, boolean fullMatch )
+    {
+        final String extension = file.getFileExtension();
+
+        if( ! getExtensions().contains( extension.toLowerCase() ) )
+        {
+            return false;
+        }
+
+        if( matching != null )
+        {
+            final String uri = resolve( selectedNode, rootContainer, file );
+
+            if( fullMatch )
+            {
+                return uri.equals( matching );
+            }
+            else
+            {
+                return uri.startsWith( matching );
+            }
+        }
+
+        return false;
     }
 
 }
