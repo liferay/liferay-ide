@@ -183,6 +183,7 @@
                label="%test.services.action.label">
          </action>
          <action
+               definitionId="com.liferay.ide.server.ui.handlers.redeploy"
                class="com.liferay.ide.server.ui.action.RedeployAction"
                enablesFor="1"
                icon="icons/e16/redeploy_16x16.gif"
@@ -336,6 +337,33 @@
       </sink>
    </extension>
 
+   <extension
+         point="org.eclipse.ui.commands">
+        <command
+            categoryId="org.eclipse.wst.server.ui"
+            description="Run the redeploy command"
+            id="com.liferay.ide.server.ui.handlers.redeploy"
+            name="Redeploy">
+        </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.liferay.ide.server.ui.handlers.RedeployHandler"
+            commandId="com.liferay.ide.server.ui.handlers.redeploy">
+      </handler>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.liferay.ide.server.ui.handlers.redeploy"
+            contextId="org.eclipse.ui.serverViewScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+L">
+      </key>
+   </extension>
    <!--
    <extension
          point="org.eclipse.jdt.ui.classpathContainerPage">
