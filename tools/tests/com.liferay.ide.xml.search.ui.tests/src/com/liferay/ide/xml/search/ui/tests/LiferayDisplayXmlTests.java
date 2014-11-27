@@ -129,14 +129,27 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
         final String attrName = "id";
 
         setAttrValue( descriptorFile, elementName, attrName, "Portlet-Xml-Test" );
+        buildAndValidate( descriptorFile );
 
-        final String displayText = getTextHoverForAttr( descriptorFile, elementName, attrName );
+        final String[] displayTexts = getTextHoverForAttr( descriptorFile, elementName, attrName );
+        assertNotNull( displayTexts );
+        assertEquals( true, displayTexts.length > 0 );
 
-        assertNotNull( displayText );
-        assertEquals( true, displayText.contains( "Portlet name" ) &&
-                            displayText.contains( "Display name" ) &&
-                            displayText.contains( "Portlet class" ) &&
-                            displayText.contains( "File" ) );
+        boolean flag = false;
+
+        for( String text : displayTexts )
+        {
+            if( text.contains( "Portlet name" ) &&
+                text.contains( "Display name" ) &&
+                text.contains( "Portlet class" ) &&
+                text.contains( "File" ) )
+            {
+                flag = true;
+                break;
+            }
+        }
+
+        assertEquals( true, flag );
     }
 
     protected void testPortletAtIdValidtion() throws Exception

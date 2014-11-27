@@ -839,7 +839,6 @@
                    filterId="liferay.jsp.taglib.filter" >
              </from>
              <toStatic
-                   searcherId="com.liferay.ide.xml.search.ui.auiButtonTypeSearcher"
                    querySpecificationId="aui.button.type.querySpecification" >
              </toStatic>
           </reference>
@@ -852,7 +851,6 @@
                    filterId="liferay.jsp.taglib.filter" >
              </from>
              <toStatic
-                   searcherId="com.liferay.ide.xml.search.ui.auiInputTypeSearcher"
                    querySpecificationId="aui.input.type.querySpecification" >
              </toStatic>
           </reference>
@@ -865,7 +863,6 @@
                    filterId="liferay.jsp.taglib.filter" >
              </from>
              <toStatic
-                   searcherId="com.liferay.ide.xml.search.ui.auiInputInlineLabelSearcher"
                    querySpecificationId="aui.input.inlinelabel.querySpecification" >
              </toStatic>
           </reference>
@@ -878,7 +875,6 @@
                    filterId="liferay.jsp.taglib.filter" >
              </from>
              <toStatic
-                   searcherId="com.liferay.ide.xml.search.ui.auiInputCheckedSearcher"
                    querySpecificationId="aui.input.checked.querySpecification" >
              </toStatic>
           </reference>
@@ -891,7 +887,6 @@
                    filterId="liferay.jsp.taglib.filter" >
              </from>
              <toStatic
-                   searcherId="com.liferay.ide.xml.search.ui.auiInputDisabledSearcher"
                    querySpecificationId="aui.input.disabled.querySpecification" >
              </toStatic>
           </reference>
@@ -904,7 +899,6 @@
                    filterId="liferay.jsp.taglib.filter" >
              </from>
              <toStatic
-                   searcherId="com.liferay.ide.xml.search.ui.auiValidatorNameSearcher"
                    querySpecificationId="aui.validator.name.querySpecification" >
              </toStatic>
           </reference>
@@ -917,7 +911,6 @@
                    filterId="liferay.jsp.taglib.filter" >
              </from>
              <toStatic
-                   searcherId="com.liferay.ide.xml.search.ui.auiClassSearcher"
                    querySpecificationId="aui.class.querySpecification" >
              </toStatic>
           </reference>
@@ -1053,48 +1046,20 @@
 
     <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
         <sourceViewerConfiguration
-            class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
-            target="com.liferay.ide.portlet.core.portletxml" />
-    </extension>
-
-    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
-        <sourceViewerConfiguration
-            class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
-            target="com.liferay.ide.portlet.core.liferayportletxml" />
-    </extension>
-
-    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
-        <sourceViewerConfiguration
-            class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
-            target="com.liferay.ide.portlet.core.liferaydisplayxml" />
-    </extension>
-
-    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
-        <sourceViewerConfiguration
-            class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
-            target="com.liferay.ide.hook.core.liferayhookxml" />
-    </extension>
-
-    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
-        <sourceViewerConfiguration
-            class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
-            target="com.liferay.ide.layouttpl.core.liferaylayouttplxml" />
-    </extension>
-
-    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
-        <sourceViewerConfiguration
-            class="org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration"
-            target="com.liferay.ide.service.core.servicebuildercontent" />
-    </extension>
-
-    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+            class="com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlViewerConfiguration"
+            target="com.liferay.ide.portlet.core.portletxml,
+                    com.liferay.ide.portlet.core.liferayportletxml,
+                    com.liferay.ide.portlet.core.liferaydisplayxml,
+                    com.liferay.ide.hook.core.liferayhookxml,
+                    com.liferay.ide.layouttpl.core.liferaylayouttplxml,
+                    com.liferay.ide.service.core.servicebuildercontent" />
+        <provisionalConfiguration
+            type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
+            class="com.liferay.ide.xml.search.ui.quickassist.XmlValidationQuickAssistProcessor"
+			target="org.eclipse.wst.xml.XML_DEFAULT" />
         <documentationTextHover
             class="org.eclipse.wst.xml.search.editor.hover.XMLReferencesInfoHoverProcessor"
-            target="org.eclipse.jst.jsp.DEFAULT_JSP,org.eclipse.jst.jsp.JSP_DIRECTIVE">
-        </documentationTextHover>
-    </extension>
-
-    <extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+            target="org.eclipse.jst.jsp.DEFAULT_JSP,org.eclipse.jst.jsp.JSP_DIRECTIVE" />
         <provisionalConfiguration
             type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
             class="com.liferay.ide.xml.search.ui.JSPQuickAssistProcessor"
@@ -1131,34 +1096,6 @@
              class="com.liferay.ide.xml.search.ui.java.PortletActionMethodSearcher"
              id="com.liferay.ide.xml.search.ui.portletActionMethodSearcher">
        </searcher>
-       <searcher
-             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
-             id="com.liferay.ide.xml.search.ui.auiButtonTypeSearcher">
-       </searcher>
-       <searcher
-             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
-             id="com.liferay.ide.xml.search.ui.auiInputTypeSearcher">
-       </searcher>
-       <searcher
-             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
-             id="com.liferay.ide.xml.search.ui.auiInputInlineLabelSearcher">
-       </searcher>
-       <searcher
-             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
-             id="com.liferay.ide.xml.search.ui.auiInputCheckedSearcher">
-       </searcher>
-       <searcher
-             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
-             id="com.liferay.ide.xml.search.ui.auiInputDisabledSearcher">
-       </searcher>
-       <searcher
-             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
-             id="com.liferay.ide.xml.search.ui.auiValidatorNameSearcher">
-       </searcher>
-       <searcher
-             class="org.eclipse.wst.xml.search.editor.searchers.statics.XMLSearcherForStatic"
-             id="com.liferay.ide.xml.search.ui.auiClassSearcher">
-       </searcher>
     </extension>
 
     <extension
@@ -1166,6 +1103,30 @@
       <markerResolutionGenerator
             class="com.liferay.ide.xml.search.ui.JSPMarkerResolutionGenerator"
             markerType="org.eclipse.jst.jsp.core.validationMarker">
+      </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
+            markerType="com.liferay.ide.xml.search.ui.portletDescriptorMarker">
+      </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
+            markerType="com.liferay.ide.xml.search.ui.liferayPortletDescriptorMarker">
+      </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
+            markerType="com.liferay.ide.xml.search.ui.liferayDisplayDescriptorMarker">
+      </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
+            markerType="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorMarker">
+      </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
+            markerType="com.liferay.ide.xml.search.ui.liferayHookDescriptorMarker">
+      </markerResolutionGenerator>
+      <markerResolutionGenerator
+            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
+            markerType="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorMarker">
       </markerResolutionGenerator>
     </extension>
 </plugin>

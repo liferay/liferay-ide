@@ -24,6 +24,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ReflectionUtil;
 import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
+import com.liferay.ide.xml.search.ui.editor.CompoundRegion;
+import com.liferay.ide.xml.search.ui.editor.InfoRegion;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -42,7 +44,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
-import org.eclipse.jface.text.ITextHoverExtension2;
 import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -425,8 +426,10 @@ public class XmlSearchTestsUtils
         return null;
     }
 
-    private static String getTextHover( IFile file, int nodeType, String... nodeNames ) throws Exception
+    private static String[] getTextHover( IFile file, int nodeType, String... nodeNames ) throws Exception
     {
+        List<String> retval = new ArrayList<String>();
+
         Node targetNode = null;
         if( nodeType == Node.ELEMENT_NODE )
         {
@@ -450,7 +453,6 @@ public class XmlSearchTestsUtils
             return null;
         }
 
-        String retval = null;
         final StructuredTextEditor editor = getEditor( file );
         final StructuredTextViewer viewer = editor.getTextViewer();
 
@@ -463,20 +465,28 @@ public class XmlSearchTestsUtils
         final ITextHover hover = (ITextHover)getTextHoverMethod.invoke( viewer, offset ,0 );
         final IRegion region = hover.getHoverRegion( viewer, offset );
 
-        if( hover instanceof ITextHoverExtension2 )
+        if( region instanceof CompoundRegion )
         {
-            retval = (String) ( (ITextHoverExtension2) hover ).getHoverInfo2( viewer, region );
+            List<IRegion> regions = ( (CompoundRegion) region ).getRegions();
+
+            for( IRegion reg : regions )
+            {
+                if( reg instanceof InfoRegion )
+                {
+                    retval.add( ( (InfoRegion) reg ).getInfo() );
+                }
+            }
         }
 
-        return retval;
+        return retval.toArray( new String[0] );
     }
 
-    public static String getTextHoverForAttr( IFile file, String elementName, String attrName ) throws Exception
+    public static String[] getTextHoverForAttr( IFile file, String elementName, String attrName ) throws Exception
     {
         return getTextHover( file, Node.ATTRIBUTE_NODE, elementName, attrName );
     }
 
-    public static String getTextHoverForElement( IFile file, String elementName ) throws Exception
+    public static String[] getTextHoverForElement( IFile file, String elementName ) throws Exception
     {
         return getTextHover( file, Node.ELEMENT_NODE, elementName );
     }

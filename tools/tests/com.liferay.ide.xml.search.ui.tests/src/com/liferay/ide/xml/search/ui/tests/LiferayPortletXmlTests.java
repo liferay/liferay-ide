@@ -179,13 +179,26 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
     {
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-name";
-        final String displayTexts = getTextHoverForElement( descriptorFile, elementName );
 
+        final String[] displayTexts = getTextHoverForElement( descriptorFile, elementName );
         assertNotNull( displayTexts );
-        assertEquals( true, displayTexts.contains( "Portlet name" ) &&
-                            displayTexts.contains( "Display name" ) &&
-                            displayTexts.contains( "Portlet class" ) &&
-                            displayTexts.contains( "File" ) );
+        assertEquals( true, displayTexts.length > 0 );
+
+        boolean flag = false;
+
+        for( String text : displayTexts )
+        {
+            if( text.contains( "Portlet name" ) &&
+                text.contains( "Display name" ) &&
+                text.contains( "Portlet class" ) &&
+                text.contains( "File" ) )
+            {
+                flag = true;
+                break;
+            }
+        }
+
+        assertEquals( true, flag );
     }
 
     // TODO

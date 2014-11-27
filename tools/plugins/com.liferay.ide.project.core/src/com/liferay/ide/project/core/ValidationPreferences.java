@@ -20,6 +20,12 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
+
 /**
  * @author Kuo Zhang
  * @author Terry Jia
@@ -161,4 +167,44 @@ public class ValidationPreferences
         return retval.toString();
     }
 
+    // Levels: IGNORE: -1, ERROR: 1, WARNNING: 2
+    public static void setInstanceScopeValLevel( int validationLevel )
+    {
+        final IEclipsePreferences node = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        for( String key : preferenceKeys )
+        {
+            node.putInt( key, validationLevel );
+        }
+
+        try
+        {
+            node.flush();
+        }
+        catch( BackingStoreException e )
+        {
+            ProjectCore.logError( "Error setting validation preferences", e );
+        }
+    }
+
+    public static void setProjectScopeValLevel( IProject project, int validationLevel )
+    {
+        final IEclipsePreferences node = new ProjectScope( project ).getNode( ProjectCore.PLUGIN_ID );
+
+        try
+        {
+            node.putBoolean( ProjectCore.USE_PROJECT_SETTINGS, true );
+
+            for( String key : preferenceKeys )
+            {
+                 node.putInt( key, validationLevel );
+            }
+
+            node.flush();
+        }
+        catch( BackingStoreException e )
+        {
+            ProjectCore.logError( "Error setting validation preferences", e );
+        }
+    }
 }

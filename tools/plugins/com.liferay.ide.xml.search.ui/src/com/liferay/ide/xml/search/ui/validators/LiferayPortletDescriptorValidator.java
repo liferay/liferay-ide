@@ -15,7 +15,6 @@
 package com.liferay.ide.xml.search.ui.validators;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 
 import org.eclipse.core.resources.IFile;
