@@ -289,7 +289,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         switch( validationType )
         {
         case SYNTAX_INVALID:
-            return NLS.bind( MESSAGE_SYNTAX_INVALID, node.getNodeName() );
+            return NLS.bind( MESSAGE_SYNTAX_INVALID, textContent );
         case TYPE_NOT_FOUND:
             return NLS.bind( MESSAGE_TYPE_NOT_FOUND, textContent );
         case METHOD_NOT_FOUND:
