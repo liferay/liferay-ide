@@ -52,6 +52,7 @@ import org.osgi.framework.Bundle;
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class UIUtil
@@ -275,6 +276,30 @@ public class UIUtil
         );
     }
 
+    public static void refreshCommonView( final String viewId )
+    {
+        try
+        {
+            UIUtil.async( new Runnable()
+            {
+                public void run()
+                {
+                    IViewPart viewPart = showView( viewId );
+
+                    if( viewPart != null )
+                    {
+                        CommonViewer viewer = (CommonViewer) viewPart.getAdapter( CommonViewer.class );
+                        viewer.refresh( true );
+                    }
+                }
+            } );
+        }
+        catch( Exception e )
+        {
+            LiferayUIPlugin.logError( e );
+        }
+    }
+    
     private static void replaceCurrentPerspective( IPerspectiveDescriptor persp )
     {
         // Get the active page.
