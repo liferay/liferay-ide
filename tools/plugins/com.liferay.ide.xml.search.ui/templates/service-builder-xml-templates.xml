@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+<template name="sb-column" autoinsert="true" context="servicexml_tag" id="servicebuilder.column" deleted="false" description="a column for an entity" enabled="true" >&lt;column name="${name}" type="${String}" /&gt;</template>
+
+<template name="sb-columnp-primary" autoinsert="true" context="servicexml_tag" id="servicebuilder.columnprimary" deleted="false" description="a primary column for an entity" enabled="true" >&lt;column name="${name}" type="Long" primary="true" /&gt;</template>
+
+<template name="sb-entity" autoinsert="true" context="servicexml_tag" id="servicebuilder.entity" deleted="false" description="an entity element" enabled="true" >
+&lt;entity name="${name}" local-service="${true}" remote-service="${false}"&gt;
+
+	${cursor}
+&lt;/entity&gt;
+</template>
+
+<template name="sb-entity-sample" autoinsert="true" context="servicexml_tag" id="servicebuilder.entitysample" deleted="false" description="a simple entity element" enabled="true" >
+&lt;entity name="${Foo}" local-service="true" remote-service="true"&gt;
+
+	&lt;!-- PK fields --&gt;
+
+	&lt;column name="${fooId}" type="long" primary="true" /&gt;
+
+	&lt;!-- Group instance --&gt;
+
+	&lt;colunm name="groupId" type="long" /&gt;
+
+	&lt;!-- Audit fields --&gt;
+
+	&lt;column name="companyId" type="long" /&gt;
+	&lt;column name="userId" type="long" /&gt;
+	&lt;column name="userName" type="String" /&gt;
+	&lt;column name="createDate" type="Date" /&gt;
+	&lt;column name="modifiedDate" type="Date" /&gt;
+
+	&lt;!-- Other fields --&gt;
+
+	&lt;column name="field1" type="String" /&gt;
+	&lt;column name="field2" type="boolean" /&gt;
+	&lt;column name="field3" type="int" /&gt;
+	&lt;column name="field4" type="Date" /&gt;
+
+	&lt;!-- Order --&gt;
+
+	&lt;order by="asc"&gt;
+		&lt;order-column name="field1" /&gt;
+	&lt;/order&gt;
+
+	&lt;!-- Finder methods --&gt;
+
+	&lt;finder name="Field2" return-type="Collection"&gt;
+		&lt;finder-column name="field2" /&gt;
+	&lt;/finder&gt;
+&lt;/entity&gt;
+</template>
+
+<template name="sb-exceptions" autoinsert="true" context="servicexml_tag" id="servicebuilder.exceptions" deleted="false" description="an exceptions element" enabled="true" >
+&lt;exceptions&gt;
+	&lt;exception&gt;${cursor}&lt;/exception&gt;
+&lt;/exceptions&gt;
+</template>
+
+<template name="sb-finder" autoinsert="true" context="servicexml_tag" id="servicebuilder.finder" deleted="false" description="a finder element" enabled="true" >
+&lt;finder name="${name}" return-type="${Collection}"&gt;
+	&lt;finder-column name="${name}" /&gt;
+&lt;/finder&gt;
+</template>
+
+<template name="sb-finder-column" autoinsert="true" context="servicexml_tag" id="servicebuilder.findercolumn" deleted="false" description="a finder column for a finder" enabled="true" >&lt;finder-column name="${name}" /&gt;</template>
+
+<template name="sb-order" autoinsert="true" context="servicexml_tag" id="servicebuilder.order" deleted="false" description="an order element" enabled="true" >
+&lt;order by="${asc}"&gt;
+	&lt;order-column name="${name}" /&gt;
+&lt;/order&gt;
+</template>
+
+<template name="sb-order-column" autoinsert="true" context="servicexml_tag" id="servicebuilder.ordercolumn" deleted="false" description="an order column for an order" enabled="true" >&lt;order-column name="${name}" /&gt;</template>
+
+</templates>

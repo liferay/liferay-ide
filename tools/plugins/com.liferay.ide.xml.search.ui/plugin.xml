@@ -1051,8 +1051,10 @@
                     com.liferay.ide.portlet.core.liferayportletxml,
                     com.liferay.ide.portlet.core.liferaydisplayxml,
                     com.liferay.ide.hook.core.liferayhookxml,
-                    com.liferay.ide.layouttpl.core.liferaylayouttplxml,
-                    com.liferay.ide.service.core.servicebuildercontent" />
+                    com.liferay.ide.layouttpl.core.liferaylayouttplxml" />
+        <sourceViewerConfiguration
+            class="com.liferay.ide.xml.search.ui.editor.ServiceXmlViewerConfiguration"
+            target="com.liferay.ide.service.core.servicebuildercontent" />
         <provisionalConfiguration
             type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
             class="com.liferay.ide.xml.search.ui.quickassist.XmlValidationQuickAssistProcessor"
@@ -1064,6 +1066,18 @@
             type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
             class="com.liferay.ide.xml.search.ui.JSPQuickAssistProcessor"
             target="org.eclipse.jst.jsp.DEFAULT_JSP,org.eclipse.jst.jsp.JSP_DIRECTIVE" />
+    </extension>
+
+    <extension
+            point="org.eclipse.ui.editors.templates">
+         <include
+               file="templates/service-builder-xml-templates.xml">
+         </include>
+         <contextType
+               class="com.liferay.ide.xml.search.ui.editor.ServiceXmlContextType"
+               id="servicexml_tag"
+               name="Service Builder Xml Context Type">
+         </contextType>
     </extension>
 
     <extension

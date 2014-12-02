@@ -100,12 +100,6 @@
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
    </extension>
-      <extension
-            point="org.eclipse.ui.editors.templates">
-         <include
-               file="templates/service-builder-xml-templates.xml">
-         </include>
-    </extension>
 
     <extension
          point="org.eclipse.ui.workbench.texteditor.hyperlinkDetectors">

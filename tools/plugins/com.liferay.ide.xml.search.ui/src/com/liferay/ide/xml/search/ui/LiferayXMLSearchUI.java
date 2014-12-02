@@ -15,11 +15,18 @@
 
 package com.liferay.ide.xml.search.ui;
 
+import com.liferay.ide.xml.search.ui.editor.ServiceXmlContextType;
+
+import java.io.IOException;
 import java.net.URL;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
+import org.eclipse.jface.text.templates.persistence.TemplateStore;
+import org.eclipse.ui.editors.text.templates.ContributionContextTypeRegistry;
+import org.eclipse.ui.editors.text.templates.ContributionTemplateStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -27,6 +34,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plug-in life cycle
  *
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class LiferayXMLSearchUI extends AbstractUIPlugin
 {
@@ -34,10 +42,15 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin
     // The shared instance
     private static LiferayXMLSearchUI plugin;
 
+    private ContextTypeRegistry contextTypeRegistry;
+    private TemplateStore templateStore;
+
     public static String PORTLET_IMG = "portlet";
 
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.xml.search.ui";
+
+    public static final String SERVICE_XML_TEMPLATES_KEY = PLUGIN_ID + ".service_xml_templates";
 
     public static IStatus createErrorStatus( Exception e )
     {
@@ -67,6 +80,41 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin
     public static LiferayXMLSearchUI getDefault()
     {
         return plugin;
+    }
+
+    // add context type for templates of service.xml
+    public ContextTypeRegistry getContextTypeRegistry()
+    {
+        if( contextTypeRegistry == null )
+        {
+            ContributionContextTypeRegistry registry = new ContributionContextTypeRegistry();
+            registry.addContextType( ServiceXmlContextType.ID_SERVICE_XML_TAG );
+
+            contextTypeRegistry = registry;
+        }
+
+        return contextTypeRegistry;
+    }
+
+    public TemplateStore getServiceXmlTemplateStore()
+    {
+        if( templateStore == null )
+        {
+            templateStore =
+                new ContributionTemplateStore(
+                    getContextTypeRegistry(), getPreferenceStore(), SERVICE_XML_TEMPLATES_KEY );
+
+            try
+            {
+                templateStore.load();
+            }
+            catch( IOException e )
+            {
+                logError( "Error loading template store.", e );
+            }
+        }
+
+        return templateStore;
     }
 
     public static void logError( String msg, Exception e )
