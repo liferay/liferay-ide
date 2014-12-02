@@ -21,7 +21,7 @@
  */
 package org.jboss.ide.eclipse.freemarker.editor;
 
-import com.liferay.ide.debug.ui.IDebugEditor;
+import com.liferay.ide.portal.ui.debug.IDebugEditor;
 
 import freemarker.core.ParseException;
 import freemarker.template.Configuration;
