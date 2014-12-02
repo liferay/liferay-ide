@@ -19,6 +19,7 @@ import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.ui.LiferayServerUIPlugin;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.editor.LiferayPropertiesEditor;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,9 +36,12 @@ import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class CreatePortalSettingsFileAction extends AbstractServerRunningAction
 {
+
+    public static int PROP_UPDATE_VERSION = 0x404;
 
     private final static String PORTAL_EXT_PROPERTIES = "portal-ext.properties"; //$NON-NLS-1$
 
@@ -65,7 +69,7 @@ public class CreatePortalSettingsFileAction extends AbstractServerRunningAction
             {
                 final IPath home = liferayRuntime.getLiferayHome();
 
-                if( home != null &&  home.toFile().exists() )
+                if( home != null && home.toFile().exists() )
                 {
                     retval = home.append( PORTAL_EXT_PROPERTIES );
                 }
@@ -87,10 +91,11 @@ public class CreatePortalSettingsFileAction extends AbstractServerRunningAction
             {
                 if( newFile.createNewFile() )
                 {
+                    UIUtil.refreshCommonView( "org.eclipse.wst.server.ui.ServersView" );
+
                     final FileStoreEditorInput editorInput =
                         new FileStoreEditorInput( EFS.getLocalFileSystem().fromLocalFile( newFile ) );
-                    final IWorkbenchPage page =
-                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                    final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
                     try
                     {
