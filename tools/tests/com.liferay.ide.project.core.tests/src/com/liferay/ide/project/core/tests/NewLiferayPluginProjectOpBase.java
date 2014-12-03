@@ -1063,6 +1063,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testDontIncludeSampleCodeServiceBuilder() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         // test service-builder project
         NewLiferayPluginProjectOp op = newProjectOp("test-dont-include-sample-code-service-builder");
 
