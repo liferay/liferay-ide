@@ -28,8 +28,9 @@ public interface IProjectBuilder
 
     IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException;
 
-    IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException;
+    IStatus buildService( IProgressMonitor monitor ) throws CoreException;
 
-    IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException;
+    IStatus buildWSDD( IProgressMonitor monitor ) throws CoreException;
+
 
 }

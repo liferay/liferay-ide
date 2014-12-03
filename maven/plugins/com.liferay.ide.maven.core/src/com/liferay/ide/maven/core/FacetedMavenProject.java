@@ -41,7 +41,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  * @author Cindy Li
  * @author Simon Jiang
  */
-public class FacetedMavenProject extends LiferayMavenProject implements IMavenProject
+public class FacetedMavenProject extends LiferayMavenProject
 {
 
     private final FlexibleProject flexibleProject;

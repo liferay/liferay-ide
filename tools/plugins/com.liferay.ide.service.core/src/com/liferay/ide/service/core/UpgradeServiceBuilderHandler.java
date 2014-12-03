@@ -14,16 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.service.core;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
-import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.service.core.job.BuildServiceJob;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -48,24 +42,18 @@ public class UpgradeServiceBuilderHandler extends AbstractUpgradeProjectHandler
             final IProgressMonitor submon = CoreUtil.newSubMonitor( monitor, 25 );
             submon.subTask( "Executing build-service for " + project.getName() );
 
-            final List<IFile> files = new ArrayList<IFile>();
-            files.addAll( new SearchFilesVisitor().searchFiles(
-                project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ) );
-
             worked = worked + perUnit;
             submon.worked( worked );
 
-            for( IFile servicesFile : files )
-            {
-                final BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
-                job.schedule();
-                job.join();
-                final IStatus result = job.getResult();
+            final BuildServiceJob job = ServiceCore.createBuildServiceJob( project );
+            job.schedule();
+            job.join();
 
-                if( !result.isOK() )
-                {
-                    throw new CoreException( result );
-                }
+            final IStatus result = job.getResult();
+
+            if( !result.isOK() )
+            {
+                throw new CoreException( result );
             }
 
             worked = worked + perUnit;

@@ -28,6 +28,7 @@ import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class BuildServicesActionHandler extends SapphireActionHandler
 {
@@ -41,7 +42,7 @@ public class BuildServicesActionHandler extends SapphireActionHandler
         {
             if( ServiceUIUtil.shouldCreateServiceBuilderJob( file ) )
             {
-                BuildServiceJob job = ServiceCore.createBuildServiceJob( file );
+                BuildServiceJob job = ServiceCore.createBuildServiceJob( file.getProject() );
 
                 job.schedule();
             }

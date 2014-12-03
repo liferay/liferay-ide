@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -35,9 +36,11 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.core.ClasspathEntry;
 import org.eclipse.jst.common.jdt.internal.classpath.FlexibleProjectContainer;
 import org.eclipse.jst.j2ee.internal.common.classpath.J2EEComponentClasspathContainerUtils;
+import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class SDKProjectBuilder extends AbstractProjectBuilder
@@ -57,7 +60,24 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
             getProject(), langFile, null, ServerUtil.configureAppServerProperties( getProject() ), monitor );
     }
 
-    public IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
+    @Override
+    public IStatus buildService( IProgressMonitor monitor ) throws CoreException
+    {
+        final IFile servicesFile = getServiceFile( getProject() );
+
+        if( servicesFile != null && servicesFile.exists() )
+        {
+            final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+            sub.beginTask( Msgs.buildingServices, 100 );
+
+            return buildService( servicesFile, sub );
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    private IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval =
             sdk.buildService(
@@ -81,7 +101,24 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         return retval;
     }
 
-    public IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
+    @Override
+    public IStatus buildWSDD( IProgressMonitor monitor ) throws CoreException
+    {
+        final IFile servicesFile = getServiceFile( getProject() );
+
+        if( servicesFile != null && servicesFile.exists() )
+        {
+            final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+
+            sub.beginTask( Msgs.buildingServices, 100 );
+
+            return buildWSDD( servicesFile, sub );
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    private IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval =
             sdk.buildWSDD( getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
@@ -146,4 +183,15 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
         return Status.OK_STATUS;
     }
 
+    protected static class Msgs extends NLS
+    {
+
+        public static String buildingServices;
+        public static String buildingWSDD;
+
+        static
+        {
+            initializeMessages( SDKProjectBuilder.class.getName(), Msgs.class );
+        }
+    }
 }

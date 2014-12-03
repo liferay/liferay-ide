@@ -16,7 +16,9 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +40,9 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public abstract class LiferayMavenProject extends BaseLiferayProject
+public abstract class LiferayMavenProject extends BaseLiferayProject  implements IMavenProject
 {
 
     public LiferayMavenProject( IProject project )
@@ -47,6 +50,38 @@ public abstract class LiferayMavenProject extends BaseLiferayProject
         super( project );
     }
 
+    public <T> T adapt( Class<T> adapterType )
+    {
+        T adapter = super.adapt( adapterType );
+
+        if( adapter != null )
+        {
+            return adapter;
+        }
+
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), new NullProgressMonitor() );
+
+        if( facade != null )
+        {
+            if( IProjectBuilder.class.equals( adapterType ) )
+            {
+                final IProjectBuilder projectBuilder = new MavenProjectBuilder( getProject() );
+
+                return adapterType.cast( projectBuilder );
+            }
+            else if( IRemoteServerPublisher.class.equals( adapterType ) )
+            {
+                final IRemoteServerPublisher remoteServerPublisher =
+                    new MavenProjectRemoteServerPublisher( getProject() );
+
+                return adapterType.cast( remoteServerPublisher );
+            }
+        }
+
+        return null;
+    }
+
+    
     public IPath getLibraryPath( String filename )
     {
         final IPath[] libs = getUserLibs();

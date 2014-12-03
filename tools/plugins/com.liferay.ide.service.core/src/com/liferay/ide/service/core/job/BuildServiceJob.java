@@ -18,12 +18,8 @@ package com.liferay.ide.service.core.job;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.IProjectBuilder;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.service.core.ServiceCore;
 
-import java.text.MessageFormat;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -36,23 +32,25 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class BuildServiceJob extends Job
 {
 
-    protected IFile serviceXmlFile;
+    protected IProject project;
 
-    public BuildServiceJob( IFile serviceXmlFile )
+    public BuildServiceJob( IProject project )
     {
         super( Msgs.buildServices );
 
-        this.serviceXmlFile = serviceXmlFile;
+        this.project = project;
+
         setUser( true );
     }
 
     protected IProject getProject()
     {
-        return this.serviceXmlFile != null ? this.serviceXmlFile.getProject() : null;
+        return this.project;
     }
 
     protected IProjectBuilder getProjectBuilder() throws CoreException
@@ -86,12 +84,6 @@ public class BuildServiceJob extends Job
             return ServiceCore.createErrorStatus( Msgs.useLiferayProjectImportWizard );
         }
 
-        if( !ProjectUtil.isLiferayFacetedProject( getProject() ) )
-        {
-            return ServiceCore.createErrorStatus( MessageFormat.format(
-                Msgs.useConvertLiferayProject, getProject().getName() ) );
-        }
-
         monitor.beginTask( Msgs.buildingLiferayServices, 100 );
 
         final IWorkspaceRunnable workspaceRunner = new IWorkspaceRunnable()
@@ -120,7 +112,7 @@ public class BuildServiceJob extends Job
 
         monitor.worked( 50 );
 
-        IStatus retval = builder.buildService( serviceXmlFile, monitor );
+        IStatus retval = builder.buildService( monitor );
 
         if( retval == null )
         {

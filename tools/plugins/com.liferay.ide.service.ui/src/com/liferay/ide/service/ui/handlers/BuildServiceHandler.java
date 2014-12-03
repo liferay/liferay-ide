@@ -68,10 +68,6 @@ public class BuildServiceHandler extends AbstractHandler
             }
         }
 
-        // use CoreUtil.isLiferayProject(IProject) won't work for maven project
-        // CoreUtil.getLiferayProejct(IResource) will get the nested liferay maven project
-        project =  CoreUtil.getLiferayProject( project );
-
         if( project != null )
         {
             retval = executeServiceBuild( project );
@@ -86,14 +82,9 @@ public class BuildServiceHandler extends AbstractHandler
 
         try
         {
-            final IFile servicesFile = getServiceFile( project );
-
-            if( servicesFile != null && servicesFile.exists() )
-            {
-                final BuildServiceJob job = ServiceCore.createBuildServiceJob( servicesFile );
-                job.schedule();
-                retval = Status.OK_STATUS;
-            }
+            final BuildServiceJob job = ServiceCore.createBuildServiceJob( project );
+            job.schedule();
+            retval = Status.OK_STATUS;
         }
         catch( Exception e )
         {

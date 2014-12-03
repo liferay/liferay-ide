@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 public interface ILiferayMavenConstants
 {
@@ -61,6 +62,10 @@ public interface ILiferayMavenConstants
 
     String PLUGIN_CONFIG_PARENT_THEME = "parentTheme";
 
+    String PLUGIN_CONFIG_PLUGIN_NAME = "pluginName"; //$NON-NLS-1$
+    
+    String PLUGIN_CONFIG_WEBAPPBASE_DIR = "webappBaseDir"; //$NON-NLS-1$
+    
     String PLUGIN_CONFIG_PLUGIN_TYPE = "pluginType"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_SASS_DIR_NAMES = "sassDirNames"; //$NON-NLS-1$

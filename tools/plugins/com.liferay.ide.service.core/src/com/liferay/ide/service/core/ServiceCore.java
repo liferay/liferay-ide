@@ -18,7 +18,7 @@ package com.liferay.ide.service.core;
 import com.liferay.ide.service.core.job.BuildServiceJob;
 import com.liferay.ide.service.core.job.BuildWSDDJob;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
@@ -26,8 +26,9 @@ import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
- *
+ * 
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class ServiceCore extends Plugin
 {
@@ -38,16 +39,16 @@ public class ServiceCore extends Plugin
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.service.core"; //$NON-NLS-1$
 
-    public static BuildServiceJob createBuildServiceJob( IFile file )
+    public static BuildServiceJob createBuildServiceJob( IProject project )
     {
-        BuildServiceJob job = new BuildServiceJob( file );
+        BuildServiceJob job = new BuildServiceJob( project );
 
         return job;
     }
 
-    public static BuildWSDDJob createBuildWSDDJob( IFile file )
+    public static BuildWSDDJob createBuildWSDDJob( IProject project )
     {
-        BuildWSDDJob job = new BuildWSDDJob( file );
+        BuildWSDDJob job = new BuildWSDDJob( project );
 
         return job;
     }

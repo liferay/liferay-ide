@@ -701,11 +701,12 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
         if( facade != null )
         {
-            final MavenProject mavenProject = facade.getMavenProject();
-
-            if( mavenProject != null && "bundle".equals( mavenProject.getPackaging() ) )
+            try
             {
-                try
+
+                final MavenProject mavenProject = facade.getMavenProject( new NullProgressMonitor() );
+
+                if( mavenProject != null && "bundle".equals( mavenProject.getPackaging() ) )
                 {
                     final Plugin mavenBundlePlugin =
                         MavenUtil.getPlugin( facade, ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY, monitor );
@@ -715,10 +716,11 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                         return true;
                     }
                 }
-                catch( CoreException e )
-                {
-                }
             }
+            catch( CoreException e )
+            {
+            }
+
         }
 
         return false;

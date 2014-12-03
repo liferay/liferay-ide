@@ -38,7 +38,7 @@ public class BuildWSDDActionHandler extends SapphireActionHandler
         {
             if( ServiceUIUtil.shouldCreateServiceBuilderJob( file ) )
             {
-                BuildWSDDJob job = ServiceCore.createBuildWSDDJob( file );
+                BuildWSDDJob job = ServiceCore.createBuildWSDDJob( file.getProject() );
 
                 job.schedule();
             }

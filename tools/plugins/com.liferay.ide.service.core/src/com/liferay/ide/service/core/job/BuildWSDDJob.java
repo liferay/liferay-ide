@@ -18,7 +18,7 @@ package com.liferay.ide.service.core.job;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.service.core.ServiceCore;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -26,13 +26,14 @@ import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class BuildWSDDJob extends BuildServiceJob
 {
 
-    public BuildWSDDJob( IFile serviceXmlFile )
+    public BuildWSDDJob( IProject project )
     {
-        super( serviceXmlFile );
+        super( project );
 
         setName( Msgs.buildWSDD );
         setUser( true );
@@ -45,7 +46,7 @@ public class BuildWSDDJob extends BuildServiceJob
 
         monitor.worked( 50 );
 
-        IStatus retval = builder.buildWSDD( serviceXmlFile, monitor );
+        IStatus retval = builder.buildWSDD( monitor );
 
         if( retval == null )
         {

@@ -46,6 +46,7 @@ import org.eclipse.ui.progress.UIJob;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  *
  * Maven project builder for maven projects less then 6.2.0 version, 6.2 or greater uses MavenProjectBuilder
  */
@@ -98,26 +99,6 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
         monitor.done();
 
         return status;
-    }
-
-    @Override
-    public IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
-    {
-        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
-
-        sub.beginTask( Msgs.buildingServices, 100 );
-
-        return buildSB( serviceXmlFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_SERVICE, sub );
-    }
-
-    @Override
-    public IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
-    {
-        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
-
-        sub.beginTask( Msgs.buildingWSDD, 100 );
-
-        return buildSB( serviceXmlFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD, sub );
     }
 
     public IStatus runMavenGoal( final IMavenProjectFacade projectFacade,
