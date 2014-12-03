@@ -10,5 +10,5 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help,
  org.eclipse.help.base,
  org.eclipse.help.ui
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

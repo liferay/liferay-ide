@@ -13,6 +13,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.project.core;bundle-version="2.0.0",
  com.liferay.ide.project.core.tests,
  com.liferay.ide.server.core.tests;bundle-version="2.1.1"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.maven.core.tests

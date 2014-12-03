@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.collections;bundle-version="3.2.0",
  org.eclipse.core.resources,
  org.eclipse.sapphire.modeling
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core,
  com.liferay.ide.layouttpl.core.descriptor,

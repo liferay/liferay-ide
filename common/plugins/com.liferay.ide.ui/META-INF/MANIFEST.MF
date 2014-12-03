@@ -30,7 +30,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.ui;bundle-version="8.0.1",
  org.eclipse.sapphire.ui.swt.xml.editor;bundle-version="8.0.1",
  org.eclipse.sapphire.modeling;bundle-version="8.0.1"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui,
  com.liferay.ide.ui.action,

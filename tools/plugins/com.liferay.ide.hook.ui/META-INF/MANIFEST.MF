@@ -28,7 +28,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jst.j2ee.ui,
  com.liferay.ide.hook.core,
  com.liferay.ide.ui
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.hook.ui,
  com.liferay.ide.hook.ui.action,
