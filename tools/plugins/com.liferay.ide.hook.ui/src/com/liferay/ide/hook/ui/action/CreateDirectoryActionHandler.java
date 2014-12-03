@@ -17,6 +17,7 @@
 
 package com.liferay.ide.hook.ui.action;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.ui.HookUI;
@@ -131,7 +132,7 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler
 
             if( !absolutePath.toFile().exists() )
             {
-                IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( project );
+                IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
                 IFolder customJspFolder =
                     defaultDocroot.getFolder( new org.eclipse.core.runtime.Path( customJspDirValue.toPortableString() ) );

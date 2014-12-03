@@ -4,6 +4,7 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 
@@ -37,7 +38,11 @@ public class VersionsTests extends AbstractMavenProjectTestCase
 
         assertNotNull( lrproject );
 
-        assertEquals( "6.2.1", lrproject.getPortalVersion() );
+        final ILiferayPortal portal = lrproject.adapt( ILiferayPortal.class );
+
+        assertNotNull( portal );
+
+        assertEquals( "6.2.1", portal.getVersion() );
     }
 
     @Test
@@ -55,7 +60,11 @@ public class VersionsTests extends AbstractMavenProjectTestCase
 
         assertNotNull( lrproject );
 
-        assertEquals( "6.2.1", lrproject.getPortalVersion() );
+        final ILiferayPortal portal = lrproject.adapt( ILiferayPortal.class );
+
+        assertNotNull( portal );
+
+        assertEquals( "6.2.1", portal.getVersion() );
     }
 
 

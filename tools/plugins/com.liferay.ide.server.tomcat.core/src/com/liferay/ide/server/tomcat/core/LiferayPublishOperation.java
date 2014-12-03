@@ -10,8 +10,10 @@
  *******************************************************************************/
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -20,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -37,7 +39,6 @@ import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatVersionHelper;
 import org.eclipse.jst.server.tomcat.core.internal.xml.server40.ServerInstance;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IModuleResource;
@@ -256,7 +257,7 @@ public class LiferayPublishOperation extends PublishOperation {
 
 		for ( IModuleResourceDelta del : delta )
 		{
-			if ( CoreUtil.containsMember( del, paths ) || isHookProjectDelta( del ) )
+			if ( ComponentUtil.containsMember( del, paths ) || isHookProjectDelta( del ) )
 			{
 				clearWebXmlDescriptors(module2.getProject(), path, monitor);
 
@@ -315,21 +316,16 @@ public class LiferayPublishOperation extends PublishOperation {
 	private IModuleResource getWebXmlFile( IProject project, IPath modelDeployDirectory )
 	{
 	    // IDE-110 IDE-648
-		IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+	    final ILiferayProject lrproject = LiferayCore.create( project );
+	    final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
-		if (webappRoot != null)
+		if( webappRoot != null && webappRoot.exists() )
 		{
-		    for( IContainer container : webappRoot.getUnderlyingFolders() )
-            {
-                if( container != null && container.exists() )
-                {
-                    IFile webXml = container.getFile( new Path( WEB_XML_PATH ) );
+            IFile webXml = webappRoot.getFile( new Path( WEB_XML_PATH ) );
 
-                    if ( webXml.exists() )
-                    {
-                        return new ModuleFile( webXml, webXml.getName(), modelDeployDirectory.append( WEB_XML_PATH ) );
-                    }
-                }
+            if ( webXml.exists() )
+            {
+                return new ModuleFile( webXml, webXml.getName(), modelDeployDirectory.append( WEB_XML_PATH ) );
             }
 		}
 

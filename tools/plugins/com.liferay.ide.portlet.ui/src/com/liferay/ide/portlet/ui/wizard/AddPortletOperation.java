@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.ui.wizard;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
@@ -68,7 +69,7 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
     {
         super( dataModel );
 
-        this.webappRoot = CoreUtil.getDefaultDocrootFolder( getTargetProject() );
+        this.webappRoot = LiferayCore.create( getTargetProject() ).getDefaultDocrootFolder();
         this.templateStore = store;
         this.portletContextType = type;
     }

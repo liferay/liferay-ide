@@ -15,6 +15,7 @@
 
 package com.liferay.ide.xml.search.ui;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 
 import java.io.IOException;
@@ -49,7 +50,8 @@ public class PortalLanguagePropertiesCacheUtil
 
         try
         {
-            final IPath appServerPortalDir = project.getAppServerPortalDir();
+            final ILiferayPortal portal = project.adapt( ILiferayPortal.class );
+            final IPath appServerPortalDir = portal.getAppServerPortalDir();
 
             retval = languagePortalMap.get( appServerPortalDir );
 

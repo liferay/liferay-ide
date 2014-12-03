@@ -15,6 +15,8 @@
 
 package com.liferay.ide.core;
 
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
@@ -65,7 +67,8 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
             if( filename.equals( ILiferayConstants.PORTLET_XML_FILE ) )
             {
                 final IFile portletXml =
-                    CoreUtil.getDescriptorFile( CoreUtil.getLiferayProject( file ), ILiferayConstants.PORTLET_XML_FILE );
+                    LiferayCore.create( CoreUtil.getLiferayProject( file ) ).getDescriptorFile(
+                        ILiferayConstants.PORTLET_XML_FILE );
 
                 if( file.equals( portletXml ) )
                 {
@@ -79,7 +82,8 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
             if( filename.equals( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) )
             {
                 final IFile liferayHookXml =
-                    CoreUtil.getDescriptorFile( CoreUtil.getLiferayProject( file ), ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+                    LiferayCore.create( CoreUtil.getLiferayProject( file ) ).getDescriptorFile(
+                        ILiferayConstants.LIFERAY_HOOK_XML_FILE );
 
                 if( file.equals( liferayHookXml ) )
                 {

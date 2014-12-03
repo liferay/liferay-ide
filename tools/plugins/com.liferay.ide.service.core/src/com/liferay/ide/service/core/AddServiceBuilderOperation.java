@@ -15,17 +15,17 @@
 
 package com.liferay.ide.service.core;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.AbstractDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.osgi.framework.Version;
@@ -59,9 +58,9 @@ public class AddServiceBuilderOperation extends AbstractDataModelOperation
 
         try
         {
-            ILiferayProject liferayProject = LiferayCore.create( serviceBuilderFile.getProject() );
-
-            Version portalVersion = new Version( liferayProject.getPortalVersion() );
+            final ILiferayProject liferayProject = LiferayCore.create( serviceBuilderFile.getProject() );
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+            final Version portalVersion = new Version( portal.getVersion() );
 
             descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";  //$NON-NLS-1$//$NON-NLS-2$
         }
@@ -82,32 +81,25 @@ public class AddServiceBuilderOperation extends AbstractDataModelOperation
     private IStatus createServiceBuilderFile( IProject project, IProgressMonitor monitor )
     {
         // IDE-110 IDE-648
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
-        if( webappRoot == null )
+        if( defaultDocroot == null )
         {
             return ServiceCore.createErrorStatus( "Could not find webapp root folder." ); //$NON-NLS-1$
         }
 
-        for( IContainer container : webappRoot.getUnderlyingFolders() )
-        {
-            if( container != null && container.exists() )
-            {
-                final Path path = new Path( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) ); //$NON-NLS-1$
-                IFile serviceBuilderFile = container.getFile( path );
+        final Path path = new Path( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) ); //$NON-NLS-1$
+        final IFile serviceBuilderFile = defaultDocroot.getFile( path );
 
-                if( !serviceBuilderFile.exists() )
-                {
-                    try
-                    {
-                        createDefaultServiceBuilderFile( serviceBuilderFile, monitor );
-                        break;
-                    }
-                    catch( Exception ex )
-                    {
-                        return ServiceCore.createErrorStatus( ex );
-                    }
-                }
+        if( !serviceBuilderFile.exists() )
+        {
+            try
+            {
+                createDefaultServiceBuilderFile( serviceBuilderFile, monitor );
+            }
+            catch( Exception ex )
+            {
+                return ServiceCore.createErrorStatus( ex );
             }
         }
 

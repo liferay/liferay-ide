@@ -15,6 +15,7 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.HookCore;
@@ -54,7 +55,12 @@ public class CustomJspValidationService extends ValidationService
 
                 if( liferayProject != null )
                 {
-                    this.portalDir = liferayProject.getAppServerPortalDir();
+                    final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+
+                    if( portal != null )
+                    {
+                        this.portalDir = portal.getAppServerPortalDir();
+                    }
                 }
             }
             catch( Exception e )

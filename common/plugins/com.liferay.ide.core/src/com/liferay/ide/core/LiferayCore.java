@@ -33,7 +33,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class LiferayCore extends Plugin
 {
-    private static LiferayProjectAdapterReader adapterReader;
+    private static final LiferayProjectAdapterReader adapterReader = new LiferayProjectAdapterReader();
 
     public static final IPath GLOBAL_SETTINGS_PATH =
         new Path( System.getProperty( "user.home", "" ) + "/.liferay-ide" );
@@ -72,11 +72,6 @@ public class LiferayCore extends Plugin
                     }
                 }
             }
-        }
-
-        if( project == null )
-        {
-            LiferayCore.logInfo( "No liferay project providers registered for type: " + adaptable.getClass() ); //$NON-NLS-1$
         }
 
         return project;
@@ -144,11 +139,6 @@ public class LiferayCore extends Plugin
 
     public static synchronized ILiferayProjectAdapter[] getProjectAdapters()
     {
-        if( adapterReader == null )
-        {
-            adapterReader = new LiferayProjectAdapterReader();
-        }
-
         return adapterReader.getExtensions().toArray( new ILiferayProjectAdapter[0] );
     }
 

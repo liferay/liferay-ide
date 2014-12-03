@@ -15,7 +15,7 @@
 
 package com.liferay.ide.portlet.ui.wizard;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.portlet.core.operation.INewPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.operation.NewPortletClassDataModelProvider;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -28,8 +28,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -56,7 +56,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetProjectCreationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
@@ -192,21 +191,18 @@ public class NewPortletWizard extends NewWebArtifactWizard
                 String jspsFolder = getDataModel().getStringProperty( CREATE_JSPS_FOLDER );
 
                 // IDE-110 IDE-648
-                IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+                IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
-                if( webappRoot != null )
+                if( defaultDocroot != null )
                 {
-                    for( IContainer container : webappRoot.getUnderlyingFolders() )
+                    IFile viewFile = defaultDocroot.getFile( new Path( jspsFolder + "/view.jsp" ) ); //$NON-NLS-1$
+
+                    if( viewFile.exists() )
                     {
-                        IFile viewFile = container.getFile( new Path( jspsFolder + "/view.jsp" ) ); //$NON-NLS-1$
+                        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                        IDE.openEditor( page, viewFile, true );
 
-                        if( viewFile.exists() )
-                        {
-                            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                            IDE.openEditor( page, viewFile, true );
-
-                            return;
-                        }
+                        return;
                     }
                 }
             }

@@ -16,15 +16,12 @@
 package com.liferay.ide.service.ui;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Gregory Amerson
@@ -38,30 +35,20 @@ public class HasServiceFilePropertyTester extends PropertyTester
         {
             IResource resource = (IResource) receiver;
 
-            boolean isLiferayProject = ProjectUtil.isLiferayFacetedProject( resource.getProject() );
+            boolean isLiferayProject = CoreUtil.isLiferayProject( resource.getProject() );
 
             if( isLiferayProject )
             {
                 try
                 {
                     // IDE-110 IDE-648
-                    IVirtualFolder webappRoot = CoreUtil.getDocroot( resource.getProject() );
+                    final IResource serviceResource =
+                        LiferayCore.create( resource.getProject() ).findDocrootResource(
+                            new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ) );
 
-                    if( webappRoot != null )
+                    if( serviceResource != null && serviceResource.exists() )
                     {
-                        for( IContainer container : webappRoot.getUnderlyingFolders() )
-                        {
-                            if( container != null && container.exists() )
-                            {
-                                Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE ); //$NON-NLS-1$
-                                IFile serviceFile = container.getFile( path );
-
-                                if( serviceFile.exists() )
-                                {
-                                    return true;
-                                }
-                            }
-                        }
+                        return true;
                     }
                 }
                 catch( Throwable t )

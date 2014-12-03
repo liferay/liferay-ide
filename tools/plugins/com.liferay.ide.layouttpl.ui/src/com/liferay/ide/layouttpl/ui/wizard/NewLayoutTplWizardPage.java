@@ -15,13 +15,12 @@
 
 package com.liferay.ide.layouttpl.ui.wizard;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.operation.INewLayoutTplDataModelProperties;
 import com.liferay.ide.layouttpl.ui.LayoutTplUI;
 import com.liferay.ide.layouttpl.ui.util.LayoutTplUIUtil;
+import com.liferay.ide.project.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.osgi.util.NLS;
@@ -34,7 +33,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelEvent;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelListener;
@@ -200,12 +198,6 @@ public class NewLayoutTplWizardPage extends LiferayDataModelWizardPage implement
         super.enter();
 
         validatePage( true );
-    }
-
-    @Override
-    protected IVirtualFolder getDocroot()
-    {
-        return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
     }
 
     @Override

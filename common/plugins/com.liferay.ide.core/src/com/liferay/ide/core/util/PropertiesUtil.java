@@ -16,6 +16,7 @@
 package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 
 import java.io.ByteArrayInputStream;
@@ -333,16 +334,22 @@ public class PropertiesUtil
     }
 
     // Get all the language properties files referenced from portlet.xml and liferay-hook.xml
-    public static IFile[] getAllLanguagePropertiesFiles( IProject proj )
+    public static IFile[] getAllLanguagePropertiesFiles( IProject project )
     {
         final List<IFile> retval = new ArrayList<IFile>();
 
+        if( ! CoreUtil.isLiferayProject( project ) )
+        {
+            project = CoreUtil.getLiferayProject( project );
+        }
+
         final IFile[] resourceFiles =
-            getLanguagePropertiesFromPortletXml( CoreUtil.getDescriptorFile( proj, ILiferayConstants.PORTLET_XML_FILE ) );
+            getLanguagePropertiesFromPortletXml( LiferayCore.create( project ).getDescriptorFile(
+                ILiferayConstants.PORTLET_XML_FILE ) );
 
         final IFile[] languageFiles =
-            getLanguagePropertiesFromLiferayHookXml( CoreUtil.getDescriptorFile(
-                proj, ILiferayConstants.LIFERAY_HOOK_XML_FILE ) );
+            getLanguagePropertiesFromLiferayHookXml( LiferayCore.create( project ).getDescriptorFile(
+                ILiferayConstants.LIFERAY_HOOK_XML_FILE ) );
 
         if( resourceFiles.length > 0 )
         {
@@ -368,10 +375,9 @@ public class PropertiesUtil
 
         final List<IFile> retvals = new ArrayList<IFile>();
 
-        final IFolder[] srcFolders = CoreUtil.getSrcFolders( proj );
-
         if( ( portletXml != null ) && ( portletXml.exists() ) )
         {
+            final IFolder[] srcFolders = LiferayCore.create( proj ).getSourceFolders();
             final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
 
             final Set<String> resourceBundles = resourceNodeInfo.getResourceBundles();
@@ -402,8 +408,16 @@ public class PropertiesUtil
 
     public static List<IFile> getDefaultLanguagePropertiesFromProject( IProject project )
     {
-        return getDefaultLanguagePropertiesFromPortletXml( CoreUtil.getDescriptorFile(
-            project, ILiferayConstants.PORTLET_XML_FILE ) );
+        final ILiferayProject lp = LiferayCore.create( project );
+
+        if( lp != null )
+        {
+            return getDefaultLanguagePropertiesFromPortletXml( lp.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
+        }
+        else
+        {
+            return Collections.emptyList();
+        }
     }
 
     private static synchronized LanguageFileInfo getLanguageFileInfo( IFile liferayHookXml )
@@ -495,7 +509,7 @@ public class PropertiesUtil
             return new IFile[0];
         }
 
-        final IFolder[] srcFolders = CoreUtil.getSrcFolders( proj );
+        final IFolder[] srcFolders = LiferayCore.create( proj ).getSourceFolders();
 
         if( srcFolders.length < 1 )
         {
@@ -535,7 +549,7 @@ public class PropertiesUtil
             return new IFile[0];
         }
 
-        final IFolder[] srcFolders = CoreUtil.getSrcFolders( proj );
+        final IFolder[] srcFolders = LiferayCore.create( proj ).getSourceFolders();
 
         if( srcFolders.length < 1 )
         {
@@ -699,12 +713,24 @@ public class PropertiesUtil
         return tmpResourceNodeInfo;
     }
 
-    public static boolean hasNonDefaultEncodingLanguagePropertiesFile( IProject proj )
+    public static boolean hasNonDefaultEncodingLanguagePropertiesFile( IProject project )
     {
+        if( ! CoreUtil.isLiferayProject( project ) )
+        {
+            project = CoreUtil.getLiferayProject( project );
+        }
+
+        if( project == null )
+        {
+            return false;
+        }
+
         try
         {
+            final ILiferayProject liferayProject = LiferayCore.create( project );
+
             final IFile[] resourceFiles = getLanguagePropertiesFromPortletXml(
-                CoreUtil.getDescriptorFile( proj, ILiferayConstants.PORTLET_XML_FILE ) );
+                liferayProject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
 
             for( IFile file : resourceFiles )
             {
@@ -715,7 +741,7 @@ public class PropertiesUtil
             }
 
             final IFile[] languageFiles = getLanguagePropertiesFromLiferayHookXml(
-                CoreUtil.getDescriptorFile( proj, ILiferayConstants.LIFERAY_HOOK_XML_FILE ) );
+                liferayProject.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) );
 
             for( IFile file : languageFiles )
             {
@@ -748,10 +774,10 @@ public class PropertiesUtil
             return false;
         }
 
-        final IFile portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
-        final IFile liferayHookXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_HOOK_XML_FILE );
-
-        final IFolder[] srcFolders = CoreUtil.getSrcFolders( project );
+        final ILiferayProject liferayProject = LiferayCore.create( project );
+        final IFile portletXml = liferayProject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        final IFile liferayHookXml = liferayProject.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFolder[] srcFolders = liferayProject.getSourceFolders();
         final IPath targetFileLocation = targetFile.getLocation();
 
         try

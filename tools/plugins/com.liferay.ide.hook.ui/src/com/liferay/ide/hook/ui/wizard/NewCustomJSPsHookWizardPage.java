@@ -15,13 +15,14 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
+import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSectionCallback;
 import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -102,11 +103,16 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
         if( liferayProject != null )
         {
-            IPath portalDir = liferayProject.getAppServerPortalDir();
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-            if( portalDir != null && portalDir.toFile().exists() )
+            if( portal != null )
             {
-                jspItemsSection.setPortalDir( portalDir.toFile() );
+                final IPath portalDir = portal.getAppServerPortalDir();
+
+                if( portalDir != null && portalDir.toFile().exists() )
+                {
+                    jspItemsSection.setPortalDir( portalDir.toFile() );
+                }
             }
         }
     }
@@ -226,7 +232,6 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
     {
         return new ViewerFilter()
         {
-
             public boolean select( Viewer viewer, Object parent, Object element )
             {
                 if( element instanceof IProject )
@@ -240,13 +245,12 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
                 {
                     IFolder folder = (IFolder) element;
 
-                    IFolder docrootFolder = CoreUtil.getDefaultDocrootFolder( folder.getProject() );
+                    IFolder docrootFolder = LiferayCore.create( folder.getProject() ).getDefaultDocrootFolder();
 
                     if( docrootFolder.contains( folder ) )
                     {
                         return true;
                     }
-
                 }
 
                 return false;
@@ -291,7 +295,7 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
                     IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
 
-                    IFolder defaultWebappRootFolder = CoreUtil.getDefaultDocrootFolder( project );
+                    IFolder defaultWebappRootFolder = LiferayCore.create( project ).getDefaultDocrootFolder();
 
                     if( folder.equals( defaultWebappRootFolder ) )
                     {

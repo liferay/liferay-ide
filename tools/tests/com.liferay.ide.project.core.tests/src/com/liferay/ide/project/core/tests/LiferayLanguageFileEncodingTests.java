@@ -19,8 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectRecord;
@@ -150,7 +150,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         final IProject hookProject = importProject( "hooks", "Hook-Encoding-Test-hook" );
         assertEquals( true, ProjectUtil.isHookProject( hookProject ) );
 
-        final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( hookProject );
+        final IFolder defaultDocrootFolder = LiferayCore.create( hookProject ).getDefaultDocrootFolder();
         assertNotNull( defaultDocrootFolder );
         assertEquals( true, defaultDocrootFolder.exists() );
 
@@ -214,7 +214,8 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         // remove the reference line, the marker will disappear.
         assertEquals( true, hasEncodingMarker( removeThisLineTest ) );
 
-        final IFile liferayHookXml = CoreUtil.getDescriptorFile( hookProject, ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        final IFile liferayHookXml =
+            LiferayCore.create( hookProject ).getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
         removeSpecifiedNode( liferayHookXml, "language-properties", "content/RemoveThisLineTest.properties" );
 
         waitForBuildAndValidation( hookProject );
@@ -250,7 +251,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 
         assertEquals( true, ProjectUtil.isPortletProject( portletProject ) );
 
-        final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( portletProject );
+        final IFolder defaultDocrootFolder = LiferayCore.create( portletProject ).getDefaultDocrootFolder();
         assertNotNull( defaultDocrootFolder );
         assertEquals( true, defaultDocrootFolder.exists() );
 

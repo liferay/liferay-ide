@@ -38,8 +38,6 @@ import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.preferences.IWorkbenchPreferenceContainer;
-import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
-import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -106,37 +104,37 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
             }
         );
 
-        Hyperlink link2 = new Hyperlink( group, SWT.NULL );
-        link2.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
-        link2.setUnderlined( true );
-        link2.setText( Msgs.createNewLiferayRuntime );
-        link2.addHyperlinkListener
-        (
-            new HyperlinkAdapter()
-            {
-                public void linkActivated( HyperlinkEvent e )
-                {
-                    ServerUIUtil.showNewRuntimeWizard(
-                        LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
-                }
-            }
-        );
-
-        Hyperlink link3 = new Hyperlink( group, SWT.NULL );
-        link3.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
-        link3.setUnderlined( true );
-        link3.setText( Msgs.createNewLiferayServer );
-        link3.addHyperlinkListener
-        (
-            new HyperlinkAdapter()
-            {
-                public void linkActivated( HyperlinkEvent e )
-                {
-                    ServerUIUtil.showNewServerWizard(
-                        LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
-                }
-            }
-        );
+//        Hyperlink link2 = new Hyperlink( group, SWT.NULL );
+//        link2.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
+//        link2.setUnderlined( true );
+//        link2.setText( Msgs.createNewLiferayRuntime );
+//        link2.addHyperlinkListener
+//        (
+//            new HyperlinkAdapter()
+//            {
+//                public void linkActivated( HyperlinkEvent e )
+//                {
+//                    ServerUIUtil.showNewRuntimeWizard(
+//                        LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
+//                }
+//            }
+//        );
+//
+//        Hyperlink link3 = new Hyperlink( group, SWT.NULL );
+//        link3.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
+//        link3.setUnderlined( true );
+//        link3.setText( Msgs.createNewLiferayServer );
+//        link3.addHyperlinkListener
+//        (
+//            new HyperlinkAdapter()
+//            {
+//                public void linkActivated( HyperlinkEvent e )
+//                {
+//                    ServerUIUtil.showNewServerWizard(
+//                        LiferayUIPreferencePage.this.getShell(), IModuleConstants.JST_WEB_MODULE, "2.5", "com.liferay." ); //$NON-NLS-1$ //$NON-NLS-2$
+//                }
+//            }
+//        );
 
         group = new Group( pageParent, SWT.NONE );
         group.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );

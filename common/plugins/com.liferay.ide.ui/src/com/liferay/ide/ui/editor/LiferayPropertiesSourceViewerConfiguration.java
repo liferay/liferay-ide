@@ -15,10 +15,10 @@
 package com.liferay.ide.ui.editor;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.properties.PortalPropertiesConfiguration;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
@@ -91,7 +91,12 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
 
             if( project != null )
             {
-                retval = project.getAppServerPortalDir();
+                final ILiferayPortal portal = project.adapt( ILiferayPortal.class );
+
+                if( portal != null )
+                {
+                    retval = portal.getAppServerPortalDir();
+                }
             }
         }
         else
@@ -169,20 +174,25 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
             if( adapter instanceof IFile && isHookProject( ( (IFile) adapter ).getProject() ) )
             {
                 final ILiferayProject liferayProject = LiferayCore.create( ( (IFile) adapter ).getProject() );
-                final Set<String> hookProps = new HashSet<String>();
-                Collections.addAll( hookProps, liferayProject.getHookSupportedProperties() );
+                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-                final List<PropKey> filtered = new ArrayList<PropKey>();
-
-                for( PropKey pk : keys )
+                if( portal != null )
                 {
-                    if( hookProps.contains( pk.getKey() ) )
-                    {
-                        filtered.add( pk );
-                    }
-                }
+                    final Set<String> hookProps = new HashSet<String>();
+                    Collections.addAll( hookProps, portal.getHookSupportedProperties() );
 
-                keys = filtered.toArray( new PropKey[0] );
+                    final List<PropKey> filtered = new ArrayList<PropKey>();
+
+                    for( PropKey pk : keys )
+                    {
+                        if( hookProps.contains( pk.getKey() ) )
+                        {
+                            filtered.add( pk );
+                        }
+                    }
+
+                    keys = filtered.toArray( new PropKey[0] );
+                }
             }
 
             propKeys = keys;
@@ -238,7 +248,7 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
     {
         final ILiferayProject lr = LiferayCore.create( project );
 
-        return lr != null && CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_HOOK_XML_FILE ) != null;
+        return lr != null && lr.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) != null;
     }
 
     private PropKey[] parseKeys( InputStream inputStream ) throws ConfigurationException, IOException

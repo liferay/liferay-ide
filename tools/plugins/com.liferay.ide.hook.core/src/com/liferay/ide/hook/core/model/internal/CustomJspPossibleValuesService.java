@@ -15,6 +15,7 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -65,26 +66,31 @@ public class CustomJspPossibleValuesService extends PossibleValuesService
 
             if( liferayProject != null )
             {
-                this.portalDir = new Path( liferayProject.getAppServerPortalDir().toPortableString() );
+                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-                if( this.portalDir != null )
+                if( portal != null )
                 {
-                    final File portalDirFile = portalDir.toFile();
-                    final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
+                    this.portalDir = new Path( portal.getAppServerPortalDir().toPortableString() );
 
-                    final List<File> fileValues = new LinkedList<File>();
-
-                    if( htmlDirFile.exists() )
+                    if( this.portalDir != null )
                     {
-                        findJSPFiles( new File[] { htmlDirFile }, fileValues );
-                    }
-                    else
-                    {
-                        final File[] files = portalDirFile.listFiles( jspfilter );
-                        findJSPFiles( files, fileValues );
-                    }
+                        final File portalDirFile = portalDir.toFile();
+                        final File htmlDirFile = new File( portalDirFile, "html" ); //$NON-NLS-1$
 
-                    this.possibleValues = fileValues.toArray( new File[0] );
+                        final List<File> fileValues = new LinkedList<File>();
+
+                        if( htmlDirFile.exists() )
+                        {
+                            findJSPFiles( new File[] { htmlDirFile }, fileValues );
+                        }
+                        else
+                        {
+                            final File[] files = portalDirFile.listFiles( jspfilter );
+                            findJSPFiles( files, fileValues );
+                        }
+
+                        this.possibleValues = fileValues.toArray( new File[0] );
+                    }
                 }
             }
         }

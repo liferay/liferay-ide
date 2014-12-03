@@ -14,10 +14,14 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-import java.util.Properties;
+import java.util.Collection;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 
 /**
@@ -28,22 +32,20 @@ public interface ILiferayProject
 
     <T> T adapt( Class<T> adapterType );
 
-    IPath getAppServerPortalDir();
+    IResource findDocrootResource( IPath path );
 
-    String[] getHookSupportedProperties();
+    IFolder getDefaultDocrootFolder();
+
+    IFile getDescriptorFile( String name );
 
     IPath getLibraryPath( String filename );
-
-    String getPortalVersion();
-
-    Properties getPortletCategories();
-
-    Properties getPortletEntryCategories();
 
     String getProperty( String key, String defaultValue );
 
     IFolder getSourceFolder( String classification );
 
-    IPath[] getUserLibs();
+    IFolder[] getSourceFolders();
+
+    Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException;
 
 }

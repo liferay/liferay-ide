@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -32,7 +33,6 @@ import java.io.File;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.junit.Test;
 
 /**
@@ -128,9 +128,7 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
 
         final IProject webProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( webProject );
-
-        assertNotNull( webappRoot );
+        assertNotNull( LiferayCore.create( webProject ).getDefaultDocrootFolder() );
     }
 
 }

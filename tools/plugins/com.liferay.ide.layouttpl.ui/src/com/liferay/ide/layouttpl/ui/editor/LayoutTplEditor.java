@@ -15,6 +15,8 @@
 package com.liferay.ide.layouttpl.ui.editor;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
@@ -271,7 +273,9 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
         try
         {
-            final Version version = new Version( LiferayCore.create( getFile().getProject() ).getPortalVersion() );
+            final ILiferayProject lrproject = LiferayCore.create( getFile().getProject() );
+            final ILiferayPortal portal = lrproject.adapt( ILiferayPortal.class );
+            final Version version = new Version( portal.getVersion() );
 
             if( CoreUtil.compareVersions( version,ILiferayConstants.V620 ) < 0 )
             {

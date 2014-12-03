@@ -15,9 +15,10 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
+import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.window.Window;
@@ -125,7 +126,12 @@ public class PropertyOverridesTableWizardSection extends StringArrayTableWizardS
 
             if( liferayProject != null )
             {
-               hookProperties = liferayProject.getHookSupportedProperties();
+                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+
+                if( portal != null )
+                {
+                    hookProperties = portal.getHookSupportedProperties();
+                }
             }
 
             PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell() );

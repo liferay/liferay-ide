@@ -15,7 +15,7 @@
 
 package com.liferay.ide.portlet.ui.jsf;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.portlet.core.jsf.INewJSFPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.jsf.NewJSFPortletClassDataModelProvider;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
@@ -23,8 +23,8 @@ import com.liferay.ide.portlet.ui.wizard.NewLiferayPortletWizardPage;
 import com.liferay.ide.portlet.ui.wizard.NewPortletWizard;
 import com.liferay.ide.project.ui.wizard.ValidProjectChecker;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
@@ -37,7 +37,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelProvider;
@@ -134,33 +133,27 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
                 final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 
                 // IDE-110 IDE-648
-                final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+                final IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
-                if( webappRoot != null )
+                if( defaultDocroot != null )
                 {
-                    for( IContainer container : webappRoot.getUnderlyingFolders() )
+                    final Path path = new Path( jspsFolder + "/view.xhtml" ); //$NON-NLS-1$
+                    IFile viewFile = defaultDocroot.getFile( path );
+
+                    if( viewFile.exists() )
                     {
-                        if( container != null && container.exists() )
-                        {
-                            final Path path = new Path( jspsFolder + "/view.xhtml" ); //$NON-NLS-1$
-                            IFile viewFile = container.getFile( path );
+                        IWorkbenchPage page =
+                            PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-                            if( viewFile.exists() )
-                            {
-                                IWorkbenchPage page =
-                                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                        IDE.openEditor( page, viewFile, true );
 
-                                IDE.openEditor( page, viewFile, true );
-
-                                return;
-                            }
-                        }
+                        return;
                     }
                 }
             }
             catch( Exception e )
             {
-                // eat this exception this is just best effort
+                // best effort
             }
         }
     }

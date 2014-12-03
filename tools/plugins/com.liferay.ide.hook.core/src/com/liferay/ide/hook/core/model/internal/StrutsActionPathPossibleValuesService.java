@@ -17,6 +17,7 @@ package com.liferay.ide.hook.core.model.internal;
 
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.model.Hook;
@@ -73,7 +74,12 @@ public class StrutsActionPathPossibleValuesService extends PossibleValuesService
 
         if( liferayProject != null )
         {
-            this.portalDir = liferayProject.getAppServerPortalDir();
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+
+            if( portal != null )
+            {
+                this.portalDir = portal.getAppServerPortalDir();
+            }
         }
     }
 

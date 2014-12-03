@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.ui.editor;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.model.IModelChangedEvent;
@@ -97,7 +98,8 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
         try
         {
             final ILiferayProject liferayProject = LiferayCore.create( getEditorInput().getFile().getProject() );
-            return liferayProject.getAppServerPortalDir();
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+            return portal.getAppServerPortalDir();
         }
         catch( Exception e )
         {

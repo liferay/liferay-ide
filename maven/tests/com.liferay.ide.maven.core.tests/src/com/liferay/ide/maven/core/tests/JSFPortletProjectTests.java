@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
@@ -137,7 +138,7 @@ public class JSFPortletProjectTests extends LiferayMavenProjectTestCase
 
         assertNotNull( newProject );
 
-        final IFile descriptorFile = CoreUtil.getDescriptorFile( newProject, "liferay-portlet.xml" );
+        final IFile descriptorFile = LiferayCore.create( newProject ).getDescriptorFile( "liferay-portlet.xml" );
 
         assertNotNull( descriptorFile );
         assertTrue( descriptorFile.exists() );

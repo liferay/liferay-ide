@@ -16,9 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.common.frameworks,
  com.liferay.ide.project.core,
  org.eclipse.jem.util,
- org.eclipse.jem.workbench,
- com.liferay.ide.templates.core
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ org.eclipse.jem.workbench
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.service.core,
  com.liferay.ide.service.core.job,

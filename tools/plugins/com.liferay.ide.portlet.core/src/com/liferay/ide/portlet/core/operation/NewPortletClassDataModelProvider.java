@@ -16,6 +16,7 @@
 package com.liferay.ide.portlet.core.operation;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -158,24 +159,30 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 }
             }
 
-            categories = liferayProject.getPortletCategories();
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-            IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-
-            for( IProject workspaceProject : workspaceProjects )
+            if( portal != null )
             {
-                if( ProjectUtil.isPortletProject( workspaceProject ) )
-                {
-                    LiferayDisplayDescriptorHelper liferayDisplayDH = new LiferayDisplayDescriptorHelper( workspaceProject );
-                    String[] portletCategories = liferayDisplayDH.getAllPortletCategories();
+                categories = portal.getPortletCategories();
 
-                    if( portletCategories.length > 0 )
+                final IProject[] workspaceProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+
+                for( IProject workspaceProject : workspaceProjects )
+                {
+                    if( ProjectUtil.isPortletProject( workspaceProject ) )
                     {
-                        for( String portletCategory : portletCategories )
+                        LiferayDisplayDescriptorHelper liferayDisplayDH =
+                            new LiferayDisplayDescriptorHelper( workspaceProject );
+                        String[] portletCategories = liferayDisplayDH.getAllPortletCategories();
+
+                        if( portletCategories.length > 0 )
                         {
-                            if( findExistingCategory( portletCategory ) == null )
+                            for( String portletCategory : portletCategories )
                             {
-                                categories.put( portletCategory, portletCategory );
+                                if( findExistingCategory( portletCategory ) == null )
+                                {
+                                    categories.put( portletCategory, portletCategory );
+                                }
                             }
                         }
                     }
@@ -327,19 +334,25 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         {
             String initParameterName = "template"; //$NON-NLS-1$
 
-            ILiferayProject liferayProject = LiferayCore.create( getProject() );
-            String version = liferayProject.getPortalVersion();
+            final ILiferayProject liferayProject = LiferayCore.create( getProject() );
 
-            if( version != null )
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+
+            if( portal != null )
             {
-                Version portalVersion = Version.parseVersion( version );
+                String version = portal.getVersion();
 
-                if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V610 ) < 0 )
+                if( version != null )
                 {
-                    initParameterName = "jsp"; //$NON-NLS-1$
-                }
+                    Version portalVersion = Version.parseVersion( version );
 
-                return initParameterName;
+                    if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V610 ) < 0 )
+                    {
+                        initParameterName = "jsp";
+                    }
+
+                    return initParameterName;
+                }
             }
         }
 
@@ -389,7 +402,16 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             }
         }
 
-        return liferayProject.getPortletEntryCategories();
+        final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+
+        if( portal != null )
+        {
+            return portal.getPortletEntryCategories();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     protected Object getInitParams()
@@ -406,9 +428,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             try
             {
-                ILiferayProject liferayProject = LiferayCore.create( getProject() );
-                String version = liferayProject.getPortalVersion();
-                Version portalVersion = Version.parseVersion( version );
+                final ILiferayProject liferayProject = LiferayCore.create( getProject() );
+                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+                final String version = portal.getVersion();
+                final Version portalVersion = Version.parseVersion( version );
 
                 if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V610 ) >= 0 )
                 {
@@ -535,14 +558,19 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 }
             }
 
-            final Version portalVersion = Version.parseVersion( liferayProject.getPortalVersion() );
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-            if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) >= 0 )
+            if( portal != null )
             {
-                return new DataModelPropertyDescriptor( "category.my", "My Account Administration" ); //$NON-NLS-1$ //$NON-NLS-2$
+                final Version portalVersion = Version.parseVersion( portal.getVersion() );
+
+                if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) < 0 )
+                {
+                    return new DataModelPropertyDescriptor( "category.my", "My Account Section" );
+                }
             }
 
-            return new DataModelPropertyDescriptor( "category.my", "My Account Section" ); //$NON-NLS-1$ //$NON-NLS-2$
+            return new DataModelPropertyDescriptor( "category.my", "My Account Administration" );
         }
 
         return super.getPropertyDescriptor( propertyName );
@@ -1000,7 +1028,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( ( !CoreUtil.isNullOrEmpty( folderValue ) ) && targetProject != null )
             {
-                IFolder defaultDocroot = CoreUtil.getDefaultDocrootFolder( targetProject );
+                IFolder defaultDocroot = LiferayCore.create( targetProject ).getDefaultDocrootFolder();
                 String errorMsg = FileUtil.validateNewFolder( defaultDocroot, folderValue );
 
                 if( errorMsg != null )

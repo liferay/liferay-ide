@@ -9,9 +9,12 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
@@ -102,6 +105,19 @@ public class BuildServiceHandler extends AbstractHandler
 
     protected IFile getServiceFile( IProject project )
     {
-        return CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        final IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
+
+        if( docroot != null && docroot.exists() )
+        {
+            final IPath path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+            final IFile serviceFile = docroot.getFile( path );
+
+            if( serviceFile.exists() )
+            {
+                return serviceFile;
+            }
+        }
+
+        return null;
     }
 }

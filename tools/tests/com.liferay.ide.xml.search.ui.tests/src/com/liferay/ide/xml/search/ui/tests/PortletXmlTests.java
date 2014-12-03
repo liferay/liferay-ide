@@ -28,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.xml.search.ui.validators.PortletDescriptorValidator;
 
 import java.lang.reflect.Method;
@@ -62,7 +62,7 @@ public class PortletXmlTests extends XmlSearchTestsBase
     {
         if( descriptorFile == null )
         {
-            descriptorFile = CoreUtil.getDescriptorFile( getProject(), ILiferayConstants.PORTLET_XML_FILE );
+            descriptorFile = LiferayCore.create( getProject() ).getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
         }
 
         return descriptorFile;

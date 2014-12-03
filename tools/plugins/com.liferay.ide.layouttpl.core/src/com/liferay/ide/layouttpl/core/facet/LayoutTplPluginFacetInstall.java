@@ -17,6 +17,8 @@
 
 package com.liferay.ide.layouttpl.core.facet;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
@@ -103,7 +105,8 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 
         removeUnneededClasspathEntries();
 
-        final IFolder folder = CoreUtil.getDefaultDocrootFolder( project );
+        final ILiferayProject lrproject = LiferayCore.create( project );
+        final IFolder folder = lrproject.getDefaultDocrootFolder();
 
         if( folder != null && folder.exists() )
         {

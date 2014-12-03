@@ -17,8 +17,6 @@ package com.liferay.ide.portlet.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.model.Param;
 import com.liferay.ide.portlet.core.model.Portlet;
 import com.liferay.ide.portlet.core.model.PortletApp;
@@ -27,30 +25,17 @@ import com.liferay.ide.portlet.core.model.SecurityRoleRef;
 import com.liferay.ide.portlet.core.model.Supports;
 import com.liferay.ide.project.core.tests.XmlTestsBase;
 
-import java.text.MessageFormat;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
 public class PortletXmlTests extends XmlTestsBase
 {
 

@@ -15,7 +15,7 @@
  *      Kamesh Sampath - initial implementation
  *******************************************************************************/
 
-package com.liferay.ide.core.model.xml.internal;
+package com.liferay.ide.portlet.core.model.internal;
 
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.modeling.xml.XmlElement;

@@ -15,9 +15,10 @@
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 import com.liferay.ide.project.core.model.internal.LocationListener;
@@ -101,7 +102,7 @@ public class NewLiferayPluginProjectOpMethods
 
         try
         {
-            final ILiferayProjectProvider projectProvider = op.getProjectProvider().content( true );
+            final NewLiferayProjectProvider projectProvider = op.getProjectProvider().content( true );
 
             //IDE-1306  If the user types too quickly all the model changes may not have propagated
             LocationListener.updateLocation( op );
@@ -288,7 +289,7 @@ public class NewLiferayPluginProjectOpMethods
                 // delete sample files: view.jsp, main.css, main.js
                 try
                 {
-                    final IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
+                    final IFolder docroot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
                     IFile[] sampleFiles = { docroot.getFile( "view.jsp" ),
                                             docroot.getFile( "css/main.css" ),

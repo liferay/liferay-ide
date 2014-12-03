@@ -15,6 +15,8 @@
 
 package com.liferay.ide.theme.core.facet;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -40,6 +42,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -118,7 +121,8 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             configureDeploymentAssembly( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
         }
 
-        IResource libRes = CoreUtil.getDefaultDocrootFolder( project ).findMember( "WEB-INF/lib" ); //$NON-NLS-1$
+        final ILiferayProject lrproject = LiferayCore.create( project );
+        IResource libRes = lrproject.findDocrootResource( new Path( "WEB-INF/lib" ) );
 
         if( libRes != null && libRes.exists() )
         {

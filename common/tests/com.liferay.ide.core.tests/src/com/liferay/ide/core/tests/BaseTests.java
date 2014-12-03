@@ -15,7 +15,6 @@
 
 package com.liferay.ide.core.tests;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import com.liferay.ide.core.LiferayCore;
@@ -34,23 +33,12 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.sapphire.Element;
-import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.modeling.xml.RootXmlResource;
-import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
-import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
 public class BaseTests
 {
 
@@ -176,66 +164,9 @@ public class BaseTests
         fail(s.toString());
     }
 
-    protected Element getElementFromFile( IProject project, IPath filePath, ElementType type ) throws Exception
-    {
-        final String filePathValue = filePath.toOSString();
-        final IFile file = createFile( project, filePathValue, this.getClass().getResourceAsStream( filePathValue ) );
-
-        assertEquals( file.getFullPath().lastSegment(), filePath.lastSegment() );
-
-        final InputStream contents = file.getContents();
-        final Element element = type.instantiate( new RootXmlResource( new XmlResourceStore( contents ) ) );
-
-        contents.close();
-
-        return element;
-    }
-
     protected String stripCarriageReturns( String value )
     {
         return value.replaceAll( "\r", "" );
-    }
-
-    protected void waitForBuildAndValidation() throws Exception
-    {
-        IWorkspaceRoot root = null;
-
-        try
-        {
-            ResourcesPlugin.getWorkspace().checkpoint(true);
-            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
-            Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
-            Job.getJobManager().join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
-            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
-            Thread.sleep(200);
-            Job.getJobManager().beginRule(root = ResourcesPlugin.getWorkspace().getRoot(), null);
-        }
-        catch (InterruptedException e)
-        {
-            failTest( e );
-        }
-        catch (IllegalArgumentException e)
-        {
-            failTest( e );
-        }
-        catch (OperationCanceledException e)
-        {
-            failTest( e );
-        }
-        finally
-        {
-            if (root != null) {
-                Job.getJobManager().endRule(root);
-            }
-        }
-    }
-
-    protected void waitForBuildAndValidation(IProject project) throws Exception
-    {
-        project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
-        waitForBuildAndValidation();
-        project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
-        waitForBuildAndValidation();
     }
 
 }

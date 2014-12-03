@@ -17,14 +17,14 @@
 
 package com.liferay.ide.layouttpl.core.operation;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -32,7 +32,6 @@ import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Greg Amerson
@@ -49,29 +48,11 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         super();
     }
 
-    private boolean checkDocrootFileExists(final IPath path)
+    private boolean checkDocrootFileExists( final IPath path )
     {
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( getTargetProject() );
+        IFolder defaultDocroot = LiferayCore.create( getTargetProject() ).getDefaultDocrootFolder();
 
-        if( webappRoot == null )
-        {
-            return false;
-        }
-
-        for( IContainer container : webappRoot.getUnderlyingFolders() )
-        {
-            if( container != null && container.exists() )
-            {
-                IFile file = container.getFile( path );
-
-                if( file.exists() )
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return defaultDocroot != null && defaultDocroot.exists();
     }
 
     @Override

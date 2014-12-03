@@ -16,18 +16,17 @@
 package com.liferay.ide.theme.core;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.AbstractPluginPublisher;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 
-import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
@@ -82,21 +81,15 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
 
         // check to make sure they have a look-and-feel.xml file
         // IDE-110 IDE-648
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        IFolder webappRoot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
-        if( webappRoot != null )
+        if( webappRoot != null && webappRoot.exists())
         {
-            for( IContainer container : webappRoot.getUnderlyingFolders() )
+            if( !( webappRoot.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
+                !( webappRoot.exists( new Path( "css" ) ) ) ) //$NON-NLS-1$
             {
-                if( container != null && container.exists() )
-                {
-                    if( !( container.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) || //$NON-NLS-1$
-                        !( container.exists( new Path( "css" ) ) ) ) //$NON-NLS-1$
-                    {
-                        ThemeCSSBuilder.compileTheme( project );
-                        ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
-                    }
-                }
+                ThemeCSSBuilder.compileTheme( project );
+                ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
             }
         }
         else

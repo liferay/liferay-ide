@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
@@ -30,7 +31,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.modeling.annotations.FileExtensions;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Simon Jiang
@@ -59,20 +59,17 @@ public class LiferayScriptPossibleValuesService extends PossibleValuesService
 
             if( project != null )
             {
-                final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+                final IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( project );
 
                 if( webappRoot != null )
                 {
-                    for( IContainer container : webappRoot.getUnderlyingFolders() )
-                    {
-                        final IPath location = container.getLocation();
+                    final IPath location = webappRoot.getLocation();
 
-                        if( location != null )
+                    if( location != null )
+                    {
+                        if( location.toFile().exists() )
                         {
-                            if( location.toFile().exists() )
-                            {
-                                values.addAll( new PropertiesVisitor().visitScriptFiles( container, type, values ) );
-                            }
+                            values.addAll( new PropertiesVisitor().visitScriptFiles( webappRoot, type, values ) );
                         }
                     }
                 }

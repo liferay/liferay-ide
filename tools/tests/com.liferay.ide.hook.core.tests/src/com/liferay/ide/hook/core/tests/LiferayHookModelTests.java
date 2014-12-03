@@ -18,9 +18,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.Hook6xx;
 import com.liferay.ide.hook.core.model.StrutsAction;
@@ -57,7 +57,7 @@ public class LiferayHookModelTests extends ProjectCoreBase
 
         final IProject hookProject = createAntProject( op );
 
-        final IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( hookProject );
+        final IFolder webappRoot = LiferayCore.create( hookProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
@@ -71,8 +71,9 @@ public class LiferayHookModelTests extends ProjectCoreBase
         assertNotNull( hook );
 
         final ILiferayProject liferayProject = LiferayCore.create( hookProject );
+        final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-        final IPath strutsConfigPath = liferayProject.getAppServerPortalDir().append( "WEB-INF/struts-config.xml" );
+        final IPath strutsConfigPath = portal.getAppServerPortalDir().append( "WEB-INF/struts-config.xml" );
 
         final StrutsAction strutsAction = hook.getStrutsActions().insert();
 
@@ -102,7 +103,7 @@ public class LiferayHookModelTests extends ProjectCoreBase
 
         final IProject hookProject = createAntProject( op );
 
-        final IFolder webappRoot = CoreUtil.getDefaultDocrootFolder( hookProject );
+        final IFolder webappRoot = LiferayCore.create( hookProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 

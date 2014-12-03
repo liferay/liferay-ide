@@ -16,8 +16,8 @@
 package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.wizard.ExternalFileSelectionDialog;
-import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 
 import java.io.File;
 import java.io.FileNotFoundException;

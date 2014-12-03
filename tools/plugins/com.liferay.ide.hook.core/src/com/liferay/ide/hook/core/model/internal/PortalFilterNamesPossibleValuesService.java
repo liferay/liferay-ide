@@ -15,6 +15,7 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.util.ServerUtil;
@@ -50,11 +51,16 @@ public class PortalFilterNamesPossibleValuesService extends PossibleValuesServic
 
                     if( liferayProject != null )
                     {
-                        final IPath appServerPortalDir = liferayProject.getAppServerPortalDir();
+                        final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-                        if( appServerPortalDir != null )
+                        if( portal != null )
                         {
-                            this.servletFilterNames = ServerUtil.getServletFilterNames( appServerPortalDir );
+                            final IPath appServerPortalDir = portal.getAppServerPortalDir();
+
+                            if( appServerPortalDir != null )
+                            {
+                                this.servletFilterNames = ServerUtil.getServletFilterNames( appServerPortalDir );
+                            }
                         }
                     }
                 }

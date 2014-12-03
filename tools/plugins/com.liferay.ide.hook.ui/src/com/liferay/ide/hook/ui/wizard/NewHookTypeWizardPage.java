@@ -19,8 +19,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,7 +41,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.common.componentcore.internal.operation.IArtifactEditOperationDataModelProperties;
 import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
@@ -126,12 +125,6 @@ public class NewHookTypeWizardPage extends LiferayDataModelWizardPage implements
         setShellImage();
 
         return topComposite;
-    }
-
-    @Override
-    protected IVirtualFolder getDocroot()
-    {
-        return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
     }
 
     @Override

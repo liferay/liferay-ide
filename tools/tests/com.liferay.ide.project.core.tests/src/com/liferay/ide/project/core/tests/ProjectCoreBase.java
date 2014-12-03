@@ -33,9 +33,14 @@ import java.io.File;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -43,6 +48,7 @@ import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 import org.junit.Before;
 
 /**
@@ -52,6 +58,48 @@ import org.junit.Before;
  */
 public class ProjectCoreBase extends ServerCoreBase
 {
+
+    protected void waitForBuildAndValidation() throws Exception
+    {
+        IWorkspaceRoot root = null;
+
+        try
+        {
+            ResourcesPlugin.getWorkspace().checkpoint(true);
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor());
+            Job.getJobManager().join(ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor());
+            Job.getJobManager().join(ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor());
+            Thread.sleep(200);
+            Job.getJobManager().beginRule(root = ResourcesPlugin.getWorkspace().getRoot(), null);
+        }
+        catch (InterruptedException e)
+        {
+            failTest( e );
+        }
+        catch (IllegalArgumentException e)
+        {
+            failTest( e );
+        }
+        catch (OperationCanceledException e)
+        {
+            failTest( e );
+        }
+        finally
+        {
+            if (root != null) {
+                Job.getJobManager().endRule(root);
+            }
+        }
+    }
+
+    protected void waitForBuildAndValidation(IProject project) throws Exception
+    {
+        project.build(IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor());
+        waitForBuildAndValidation();
+        project.build(IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor());
+        waitForBuildAndValidation();
+    }
 
     protected IProject createAntProject( NewLiferayPluginProjectOp op ) throws Exception
     {

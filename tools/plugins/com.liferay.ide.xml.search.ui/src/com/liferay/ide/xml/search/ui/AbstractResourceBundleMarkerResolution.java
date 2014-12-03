@@ -16,6 +16,7 @@
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.ui.views.markers.internal.Util;
 
 /**
@@ -122,7 +122,7 @@ public abstract class AbstractResourceBundleMarkerResolution extends CommonWorkb
 
         for( IFile file : files )
         {
-            CoreUtil.validateFile( file, new NullProgressMonitor() );
+            ComponentUtil.validateFile( file, monitor );
         }
     }
 

@@ -15,12 +15,13 @@
 
 package com.liferay.ide.hook.ui.wizard;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.ui.HookUI;
+import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
 import com.liferay.ide.ui.dialog.FilteredTypesSelectionDialogEx;
-import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
@@ -253,7 +254,12 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
 
             if( liferayProject != null )
             {
-                hookProperties = liferayProject.getHookSupportedProperties();
+                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
+
+                if( portal != null )
+                {
+                    hookProperties = portal.getHookSupportedProperties();
+                }
             }
 
             PropertiesFilteredDialog dialog = new PropertiesFilteredDialog( getParentShell(), ".*events.*" ); //$NON-NLS-1$

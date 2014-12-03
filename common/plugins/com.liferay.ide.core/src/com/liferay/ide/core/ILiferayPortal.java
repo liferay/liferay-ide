@@ -14,22 +14,25 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-import java.util.List;
+import java.util.Properties;
+
+import org.eclipse.core.runtime.IPath;
+
 
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProjectProvider
+public interface ILiferayPortal
 {
-    <T> List<T> getData( String key, Class<T> type, Object... params );
 
-    String getDisplayName();
+    IPath getAppServerPortalDir();
 
-    int getPriority();
+    String[] getHookSupportedProperties();
 
-    String getShortName();
+    Properties getPortletCategories();
 
-    ILiferayProject provide( Object type );
+    Properties getPortletEntryCategories();
 
-    boolean provides( Class<?> type );
+    String getVersion();
+
 }

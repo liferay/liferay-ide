@@ -15,6 +15,7 @@
 package com.liferay.ide.alloy.core.webresources;
 
 import com.liferay.ide.alloy.core.AlloyCore;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -34,8 +35,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesContext;
 import org.eclipse.wst.html.webresources.core.providers.IWebResourcesFileSystemProvider;
 
-
-
 /**
  * @author Gregory Amerson
  */
@@ -49,14 +48,15 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider
     {
         File[] retval = null;
         final IFile htmlFile = context.getHtmlFile();
+        final ILiferayProject project = LiferayCore.create( htmlFile.getProject() );
 
-        if( htmlFile != null && ProjectUtil.isPortletProject( htmlFile.getProject() ) )
+        if( htmlFile != null && project != null )
         {
-            final ILiferayProject project = LiferayCore.create( htmlFile.getProject() );
+            final ILiferayPortal portal = project.adapt( ILiferayPortal.class );
 
-            if( project != null )
+            if( portal != null && ProjectUtil.isPortletProject( htmlFile.getProject() ) )
             {
-                final IPath portalDir = project.getAppServerPortalDir();
+                final IPath portalDir = portal.getAppServerPortalDir();
 
                 if( portalDir != null )
                 {
@@ -107,16 +107,11 @@ public class PortalResourcesProvider implements IWebResourcesFileSystemProvider
                     }
                 }
             }
-        }
-        else if( htmlFile != null && ProjectUtil.isLayoutTplProject( htmlFile.getProject() ) )
-        {
+            else if( portal != null && ProjectUtil.isLayoutTplProject( htmlFile.getProject() ) )
+            {
             // return the static css resource for layout template names based on the version
 
-            final ILiferayProject liferayProject = LiferayCore.create( htmlFile.getProject() );
-
-            if( liferayProject != null )
-            {
-                final String version = liferayProject.getPortalVersion();
+                final String version = portal.getVersion();
 
                 try
                 {

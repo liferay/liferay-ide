@@ -14,7 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
@@ -27,7 +28,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.maven.project.MavenProject;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -44,7 +44,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
@@ -128,32 +127,27 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
             final int deltaKind = delta.getKind();
             final IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
             final IProject deltaProject = deltaResource.getProject();
-            final IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
+            final ILiferayProject lrproject = LiferayCore.create( deltaProject );
+            final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
             final IPath deltaFullPath = deltaResource.getFullPath();
 
             boolean deltaZip = false;
             IPath deltaPath = null;
 
-            if( webappRoot != null )
+            if( webappRoot != null && webappRoot.exists() )
             {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists()  )
-                    {
-                        final IPath containerFullPath = container.getFullPath();
+                final IPath containerFullPath = webappRoot.getFullPath();
 
-                        if ( containerFullPath.isPrefixOf( deltaFullPath ))
-                        {
-                            deltaZip = true;
-                            deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
-                        }
-                    }
+                if ( containerFullPath.isPrefixOf( deltaFullPath ))
+                {
+                    deltaZip = true;
+                    deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
                 }
             }
 
             if ( deltaZip ==false && new Path("WEB-INF").isPrefixOf( delta.getModuleRelativePath() ))
             {
-                final IFolder[] folders = CoreUtil.getSrcFolders( deltaProject );
+                final IFolder[] folders = ProjectUtil.getSourceFolders( deltaProject );
 
                 for( IFolder folder : folders )
                 {

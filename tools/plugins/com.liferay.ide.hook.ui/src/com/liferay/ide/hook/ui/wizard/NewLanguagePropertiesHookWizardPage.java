@@ -19,16 +19,20 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
 import com.liferay.ide.hook.ui.HookUI;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSection;
+import com.liferay.ide.project.ui.wizard.StringArrayTableWizardSectionCallback;
 import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.StringArrayTableWizardSection;
-import com.liferay.ide.ui.wizard.StringArrayTableWizardSectionCallback;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -234,7 +238,11 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
                 {
                     IFolder folder = (IFolder) element;
 
-                    if( folder.equals( CoreUtil.getFirstSrcFolder( getDataModel().getStringProperty( PROJECT_NAME ) ) ) )
+                    IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
+
+                    List<IContainer> sources = CoreUtil.getSourceContainers( JavaCore.create( project ) );
+
+                    if( sources.size() > 0 && folder.equals( sources.get( 0 ) ) )
                     {
                         folder = folder.getFolder( "content" ); //$NON-NLS-1$
                     }

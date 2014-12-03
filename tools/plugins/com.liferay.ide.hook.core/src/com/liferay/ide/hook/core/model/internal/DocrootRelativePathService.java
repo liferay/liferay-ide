@@ -18,18 +18,16 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.model.Hook;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Kamesh Sampath
@@ -49,19 +47,11 @@ public class DocrootRelativePathService extends RelativePathService
             final IProject project = hook.adapt( IProject.class );
 
             // IDE-110
-            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+            final IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
-            if( webappRoot != null )
+            if( defaultDocroot != null && defaultDocroot.exists() )
             {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    final IPath location = container.getLocation();
-
-                    if( location != null )
-                    {
-                        roots.add( new Path( location.toPortableString() ) );
-                    }
-                }
+                roots.add( new Path( defaultDocroot.getLocation().toPortableString() ) );
             }
         }
 

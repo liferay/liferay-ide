@@ -15,14 +15,13 @@
 
 package com.liferay.ide.service.ui.wizard;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.ui.wizard.LiferayDataModelWizardPage;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.service.core.operation.INewServiceBuilderDataModelProperties;
 import com.liferay.ide.service.ui.ServiceUI;
 import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.wizard.LiferayDataModelWizardPage;
 
 import java.net.URL;
 
@@ -52,7 +51,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 @SuppressWarnings( "restriction" )
@@ -189,12 +187,6 @@ public class NewServiceBuilderWizardPage extends LiferayDataModelWizardPage
         setShellImage();
 
         return topComposite;
-    }
-
-    @Override
-    protected IVirtualFolder getDocroot()
-    {
-        return CoreUtil.getDocroot( getDataModel().getStringProperty( PROJECT_NAME ) );
     }
 
     protected IPackageFragmentRoot getPackageFragmentRoot( IPackageFragment packageFragment )

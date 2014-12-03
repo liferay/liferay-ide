@@ -15,6 +15,7 @@
 
 package com.liferay.ide.core.util;
 
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 
 import java.io.ByteArrayInputStream;
@@ -32,12 +33,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -45,7 +42,6 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -53,29 +49,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jst.j2ee.componentcore.J2EEModuleVirtualComponent;
-import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
-import org.eclipse.wst.common.componentcore.ComponentCore;
-import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
-import org.eclipse.wst.common.project.facet.core.IFacetedProject;
-import org.eclipse.wst.common.project.facet.core.IProjectFacet;
-import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
-import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
-import org.eclipse.wst.server.core.model.IModuleResource;
-import org.eclipse.wst.server.core.model.IModuleResourceDelta;
-import org.eclipse.wst.validation.internal.ValType;
-import org.eclipse.wst.validation.internal.ValidationRunner;
 import org.osgi.framework.Version;
 import org.w3c.dom.Node;
 
@@ -87,7 +67,6 @@ import org.w3c.dom.Node;
  * @author Simon Jiang
  * @author Terry Jia
  */
-@SuppressWarnings( "restriction" )
 public class CoreUtil
 {
 
@@ -147,61 +126,6 @@ public class CoreUtil
         }
 
         return v1.getQualifier().compareTo( v2.getQualifier() );
-    }
-
-    public static boolean containsMember( IModuleResourceDelta delta, String[] paths )
-    {
-        if( delta == null )
-        {
-            return false;
-        }
-
-        // iterate over the path and find matching child delta
-        IModuleResourceDelta[] currentChildren = delta.getAffectedChildren();
-
-        if( currentChildren == null )
-        {
-            IFile file = (IFile) delta.getModuleResource().getAdapter( IFile.class );
-
-            if( file != null )
-            {
-                String filePath = file.getFullPath().toString();
-
-                for( String path : paths )
-                {
-                    if( filePath.contains( path ) )
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        for( int j = 0, jmax = currentChildren.length; j < jmax; j++ )
-        {
-            IPath moduleRelativePath = currentChildren[j].getModuleRelativePath();
-            String moduleRelativePathValue = moduleRelativePath.toString();
-            String moduleRelativeLastSegment = moduleRelativePath.lastSegment();
-
-            for( String path : paths )
-            {
-                if( moduleRelativePathValue.equals( path ) || moduleRelativeLastSegment.equals( path ) )
-                {
-                    return true;
-                }
-            }
-
-            boolean childContains = containsMember( currentChildren[j], paths );
-
-            if( childContains )
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static boolean containsNullElement( Object[] array )
@@ -287,37 +211,6 @@ public class CoreUtil
         return isNullOrEmpty( val );
     }
 
-    public static IProject findProjectByContextName( String contextName )
-    {
-        IProject retval = null;
-
-        if( ! isNullOrEmpty( contextName ) )
-        {
-            for( IProject project : getAllProjects() )
-            {
-                final IVirtualComponent c = ComponentCore.createComponent( project, true );
-
-                if( c != null )
-                {
-                    final Properties metaProperties = c.getMetaProperties();
-
-                    if( metaProperties != null )
-                    {
-                        String contextRoot = metaProperties.getProperty( "context-root" ); //$NON-NLS-1$
-
-                        if( contextName.equals( contextRoot ) )
-                        {
-                            retval = project;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return retval;
-    }
-
     public static IProject[] getAllProjects()
     {
         return ResourcesPlugin.getWorkspace().getRoot().getProjects();
@@ -346,142 +239,16 @@ public class CoreUtil
 
     public static IFolder getDefaultDocrootFolder( IProject project )
     {
-        if( project != null )
+        IFolder retval = null;
+
+        final ILiferayProject liferayProject = LiferayCore.create( project );
+
+        if( liferayProject != null )
         {
-            final IVirtualFolder webappRoot = getDocroot( project );
-
-            if( webappRoot != null )
-            {
-                final IPath defaultFolder = J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder( webappRoot );
-
-                if( defaultFolder != null )
-                {
-                    final IFolder folder = project.getFolder( defaultFolder );
-
-                    if( folder.exists() )
-                    {
-                        return folder;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public static IFile getDescriptorFile( IProject project, String descriptorFileName )
-    {
-        IFile retval = null;
-
-        if( ! CoreUtil.isLiferayProject( project ) )
-        {
-            project = CoreUtil.getLiferayProject( project );
-        }
-
-        if( project == null )
-        {
-            return retval;
-        }
-
-        final IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( project );
-
-        if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
-        {
-            retval = defaultDocrootFolder.getFile( new Path( "WEB-INF" ).append( descriptorFileName ) );
-        }
-
-        if( retval == null )
-        {
-            // fallback to looping through all virtual folders
-            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-            if( webappRoot != null )
-            {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists() )
-                    {
-                        final IFile descriptorFile = container.getFile( new Path( "WEB-INF" ).append( descriptorFileName ) );
-
-                        if( descriptorFile.exists() )
-                        {
-                            retval = descriptorFile;
-                            break;
-                        }
-                    }
-                }
-            }
+            retval = liferayProject.getDefaultDocrootFolder();
         }
 
         return retval;
-    }
-
-    public static IVirtualFolder getDocroot( IProject project )
-    {
-        IVirtualFolder retval = null;
-
-        if( project != null )
-        {
-            IVirtualComponent comp = ComponentCore.createComponent( project );
-
-            if( comp != null )
-            {
-                retval = comp.getRootFolder();
-            }
-        }
-
-        return retval;
-    }
-
-    public static IVirtualFolder getDocroot( String projectName )
-    {
-        IProject project = getProject( projectName );
-
-        return getDocroot( project );
-    }
-
-    public static IFile getDocrootFile( IProject project, String filePath )
-    {
-        IFile retval = null;
-
-        if( project != null && !CoreUtil.isNullOrEmpty( filePath ) )
-        {
-            IVirtualFolder webappRoot = getDocroot( project );
-
-            if( webappRoot != null )
-            {
-                IVirtualFile file = webappRoot.getFile( filePath );
-
-                if( file != null && file.exists() )
-                {
-                    retval = file.getUnderlyingFile();
-                }
-            }
-        }
-
-        return retval;
-    }
-
-    public static IFolder getFirstSrcFolder( IProject project )
-    {
-        @SuppressWarnings( "deprecation" )
-        IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
-
-        if( sourceFolders != null && sourceFolders.length > 0 )
-        {
-            IResource resource = sourceFolders[0].getResource();
-
-            return resource instanceof IFolder ? (IFolder) resource : null;
-        }
-
-        return null;
-    }
-
-    public static IFolder getFirstSrcFolder( String projectName )
-    {
-        IProject project = getProject( projectName );
-
-        return getFirstSrcFolder( project );
     }
 
     public static IProject getLiferayProject( IResource resource )
@@ -495,7 +262,7 @@ public class CoreUtil
 
         if( project != null && project.exists() )
         {
-            if( CoreUtil.isLiferayProject( project ) )
+            if( isLiferayProject( project ) )
             {
                 return project;
             }
@@ -562,7 +329,6 @@ public class CoreUtil
 
         return retval;*/
     }
-
     public static IProject getLiferayProject( String projectName )
     {
         return getLiferayProject( getProject( projectName ) );
@@ -623,26 +389,38 @@ public class CoreUtil
         return retval;
     }
 
-    public static IFolder[] getSrcFolders( IProject project )
+    public final static List<IContainer> getSourceContainers( final IJavaProject project )
     {
-        List<IFolder> retval = new ArrayList<IFolder>();
+        final List<IContainer> containers = new ArrayList<IContainer>();
 
-        @SuppressWarnings( "deprecation" )
-        IPackageFragmentRoot[] sourceFolders = J2EEProjectUtilities.getSourceContainers( project );
-
-        if( sourceFolders != null && sourceFolders.length > 0 )
+        if( project != null )
         {
-            for( IPackageFragmentRoot sourceFolder : sourceFolders )
+            final IClasspathEntry[] entries = project.readRawClasspath();
+
+            for( final IClasspathEntry entry : entries )
             {
-                if( sourceFolder.getResource() instanceof IFolder )
+                if( entry.getEntryKind() == IClasspathEntry.CPE_SOURCE && entry.getPath().segmentCount() > 0 )
                 {
-                    retval.add( (IFolder) sourceFolder.getResource() );
+                    IContainer container = null;
+
+                    if( entry.getPath().segmentCount() == 1 )
+                    {
+                        container = ResourcesPlugin.getWorkspace().getRoot().getProject( entry.getPath().segment( 0 ) );
+                    }
+                    else
+                    {
+                        container = ResourcesPlugin.getWorkspace().getRoot().getFolder( entry.getPath() );
+                    }
+
+                    if( !containers.contains( container ) )
+                    {
+                        containers.add( container );
+                    }
                 }
             }
-
         }
 
-        return retval.toArray( new IFolder[retval.size()] );
+        return containers;
     }
 
     public static IWorkspace getWorkspace()
@@ -654,6 +432,8 @@ public class CoreUtil
     {
         return ResourcesPlugin.getWorkspace().getRoot();
     }
+
+
 
     public static Object invoke( String methodName, Object object, Class<?>[] argTypes, Object[] args )
         throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
@@ -673,36 +453,7 @@ public class CoreUtil
 
     public static boolean isLiferayProject( IProject project )
     {
-        boolean retval = false;
-
-        if( project == null )
-        {
-            return retval;
-        }
-
-        try
-        {
-            IFacetedProject facetedProject = ProjectFacetsManager.create( project );
-
-            if( facetedProject != null )
-            {
-                for( IProjectFacetVersion facet : facetedProject.getProjectFacets() )
-                {
-                    IProjectFacet projectFacet = facet.getProjectFacet();
-
-                    if( projectFacet.getId().startsWith( "liferay" ) ) //$NON-NLS-1$
-                    {
-                        retval = true;
-                        break;
-                    }
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
-
-        return retval;
+        return project != null && LiferayCore.create( project ) != null;
     }
 
     public static boolean isLinux()
@@ -742,32 +493,6 @@ public class CoreUtil
         }
 
         return true;
-    }
-
-    public static boolean isResourceInDocroot( IModuleResource resource )
-    {
-        IFile file = (IFile) resource.getAdapter( IFile.class );
-
-        if( file != null )
-        {
-            IVirtualFolder webappRoot = getDocroot( file.getProject() );
-
-            if( webappRoot != null )
-            {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    boolean isDocrootResource = container != null && container.exists() &&
-                        container.getFullPath().isPrefixOf( file.getFullPath() );
-
-                    if ( isDocrootResource == true )
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
     }
 
     public static boolean isWindows()
@@ -892,50 +617,6 @@ public class CoreUtil
             {
                 node.removeChild( node.getFirstChild() );
             }
-        }
-    }
-
-    public static void validateFile( IFile file, IProgressMonitor monitor )
-    {
-        try
-        {
-            ValidationRunner.validate( file, ValType.Manual, monitor, false );
-        }
-        catch( CoreException e )
-        {
-            LiferayCore.logError( "Error while validating file: " + file.getFullPath(), e ); //$NON-NLS-1$
-        }
-    }
-
-    public static void validateFolder( IFolder folder, IProgressMonitor monitor )
-    {
-        try
-        {
-            Map<IProject, Set<IResource>> projects = new HashMap<IProject, Set<IResource>>();
-            final Set<IResource> resources = new HashSet<IResource>();
-
-            folder.accept
-            (
-                new IResourceVisitor()
-                {
-                    public boolean visit( IResource resource ) throws CoreException
-                    {
-                        if( resource instanceof IFile || resource instanceof IFile )
-                        {
-                            resources.add( resource );
-                        }
-
-                        return true;
-                    }
-                }
-            );
-
-            projects.put( folder.getProject(), resources );
-            ValidationRunner.validate( projects, ValType.Manual, monitor, false );
-        }
-        catch( CoreException e )
-        {
-            LiferayCore.logError( "Error while validating folder: " + folder.getFullPath(), e ); //$NON-NLS-1$
         }
     }
 

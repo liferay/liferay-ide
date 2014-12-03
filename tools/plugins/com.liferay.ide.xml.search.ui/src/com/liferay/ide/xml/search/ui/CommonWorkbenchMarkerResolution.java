@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.xml.search.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.util.ComponentUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -51,7 +51,7 @@ public abstract class CommonWorkbenchMarkerResolution extends WorkbenchMarkerRes
     {
         resolve( marker );
 
-        CoreUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
+        ComponentUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
     }
 
 }

@@ -14,12 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.layouttpl.core.util;
 
+import com.liferay.ide.core.templates.ITemplateContext;
+import com.liferay.ide.core.templates.ITemplateOperation;
+import com.liferay.ide.core.templates.TemplatesCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
-import com.liferay.ide.templates.core.ITemplateContext;
-import com.liferay.ide.templates.core.ITemplateOperation;
-import com.liferay.ide.templates.core.TemplatesCore;
 
 import java.util.ArrayList;
 import java.util.List;

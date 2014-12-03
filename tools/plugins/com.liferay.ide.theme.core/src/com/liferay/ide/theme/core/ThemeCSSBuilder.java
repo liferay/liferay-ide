@@ -16,6 +16,7 @@
 package com.liferay.ide.theme.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -29,6 +30,7 @@ import com.liferay.ide.theme.core.operation.ThemeDescriptorHelper;
 import com.liferay.ide.theme.core.util.BuildHelper;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -48,8 +51,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Gregory Amerson
@@ -97,38 +98,42 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
     public static void ensureLookAndFeelFileExists( IProject project ) throws CoreException
     {
         // IDE-110 IDE-648
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        final ILiferayProject lrProject = LiferayCore.create( project );
 
-        IVirtualFile lookAndFeelFile = null;
+        IFile lookAndFeelFile = null;
 
-        if( webappRoot != null )
+        final IResource res =
+            lrProject.findDocrootResource( new Path( "WEB-INF/" +
+                ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) );
+
+        if( res instanceof IFile && res.exists() )
         {
-            final IVirtualFile file =
-                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ); //$NON-NLS-1$
-
-            if( file != null && file.exists() )
-            {
-                lookAndFeelFile = file;
-            }
+            lookAndFeelFile = (IFile) res;
         }
 
         if( lookAndFeelFile == null )
         {
+            // need to generate a new lnf file in deafult docroot
             String id = project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY );
 
-            IVirtualFile propertiesFile =
-                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
+            final IResource propertiesFileRes =
+                lrProject.findDocrootResource( new Path( "WEB-INF/" +
+                    ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
             String name = id;
 
-            if( propertiesFile != null && propertiesFile.exists() )
+            if( propertiesFileRes instanceof IFile && propertiesFileRes.exists() )
             {
                 Properties props = new Properties();
 
                 try
                 {
-                    final IFile underlyingFile = propertiesFile.getUnderlyingFile();
-                    props.load( underlyingFile.getContents() );
-                    String nameValue = props.getProperty( "name" ); //$NON-NLS-1$
+                    final IFile propsFile = (IFile) propertiesFileRes;
+                    final InputStream contents = propsFile.getContents();
+
+                    props.load( contents );
+                    contents.close();
+
+                    final String nameValue = props.getProperty( "name" ); //$NON-NLS-1$
 
                     if( !CoreUtil.isNullOrEmpty( nameValue ) )
                     {
@@ -137,12 +142,19 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
                     final ThemeDescriptorHelper themeDescriptorHelper = new ThemeDescriptorHelper( project );
 
-                    final ILiferayProject lProject = LiferayCore.create( project );
+                    final ILiferayProject lProject = lrProject;
+                    final ILiferayPortal portal = lProject.adapt( ILiferayPortal.class );
+                    String version = "6.2.0";
+
+                    if( portal != null )
+                    {
+                        version = portal.getVersion();
+                    }
 
                     final String themeType = lProject.getProperty( "theme.type", "vm" );
 
                     themeDescriptorHelper.createDefaultFile(
-                        underlyingFile.getParent(), lProject.getPortalVersion(), id, name, themeType );
+                        lrProject.getDefaultDocrootFolder(), version, id, name, themeType );
                 }
                 catch( IOException e )
                 {
@@ -179,45 +191,48 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         final String themeParent = liferayProject.getProperty( "theme.parent", "_styled" );
 
-        IPath themesPath = liferayProject.getAppServerPortalDir().append( "html/themes" ); //$NON-NLS-1$
+        final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-        final List<IPath> restorePaths = new ArrayList<IPath>();
-
-        for( int i = 0; i < IPluginProjectDataModelProperties.THEME_PARENTS.length; i++ )
+        if( portal != null )
         {
-            if( IPluginProjectDataModelProperties.THEME_PARENTS[i].equals( themeParent ) )
+            final IPath themesPath = portal.getAppServerPortalDir().append( "html/themes" );
+            final List<IPath> restorePaths = new ArrayList<IPath>();
+
+            for( int i = 0; i < IPluginProjectDataModelProperties.THEME_PARENTS.length; i++ )
             {
-                restorePaths.add( themesPath.append( IPluginProjectDataModelProperties.THEME_PARENTS[i] ) );
-            }
-            else
-            {
-                if( restorePaths.size() > 0 )
+                if( IPluginProjectDataModelProperties.THEME_PARENTS[i].equals( themeParent ) )
                 {
                     restorePaths.add( themesPath.append( IPluginProjectDataModelProperties.THEME_PARENTS[i] ) );
                 }
+                else
+                {
+                    if( restorePaths.size() > 0 )
+                    {
+                        restorePaths.add( themesPath.append( IPluginProjectDataModelProperties.THEME_PARENTS[i] ) );
+                    }
+                }
             }
-        }
 
-        new Job( "publish theme delta" ) //$NON-NLS-1$
-        {
-            @Override
-            protected IStatus run( IProgressMonitor monitor )
+            new Job( "publish theme delta" ) //$NON-NLS-1$
             {
-                buildHelper.publishDelta( delta, path, restorePaths.toArray( new IPath[0] ), monitor );
-
-                try
+                @Override
+                protected IStatus run( IProgressMonitor monitor )
                 {
-                    docroot.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                }
-                catch( Exception e )
-                {
-                    ThemeCore.logError( e );
-                }
+                    buildHelper.publishDelta( delta, path, restorePaths.toArray( new IPath[0] ), monitor );
 
-                return Status.OK_STATUS;
-            }
-        }.schedule();
+                    try
+                    {
+                        docroot.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                    }
+                    catch( Exception e )
+                    {
+                        ThemeCore.logError( e );
+                    }
 
+                    return Status.OK_STATUS;
+                }
+            }.schedule();
+        }
     }
 
     @Override
@@ -289,16 +304,16 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                         if( "_diffs".equals( segment ) ) //$NON-NLS-1$
                         {
                             // IDE-110 IDE-648
-                            IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
+                            IFolder webappRoot = LiferayCore.create( getProject() ).getDefaultDocrootFolder();
 
                             if( webappRoot != null )
                             {
-                                IVirtualFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
+                                IFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
 
                                 if( diffs != null && diffs.exists() &&
-                                    diffs.getUnderlyingFolder().getFullPath().isPrefixOf( fullResourcePath ) )
+                                    diffs.getFullPath().isPrefixOf( fullResourcePath ) )
                                 {
-                                    applyDiffsDeltaToDocroot( delta, diffs.getUnderlyingFolder().getParent(), monitor );
+                                    applyDiffsDeltaToDocroot( delta, diffs.getParent(), monitor );
 
                                     return false;
                                 }
@@ -341,15 +356,15 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
         // check to see if there is any files in the _diffs folder
         // IDE-110 IDE-648
-        IVirtualFolder webappRoot = CoreUtil.getDocroot( getProject() );
+        IFolder webappRoot = LiferayCore.create( getProject() ).getDefaultDocrootFolder();
 
         if( webappRoot != null )
         {
-            IVirtualFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
+            IFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
 
             if( diffs != null && diffs.exists() )
             {
-                IResource[] diffMembers = diffs.getUnderlyingResources();
+                IResource[] diffMembers = diffs.members();
 
                 if( !CoreUtil.isNullOrEmpty( diffMembers ) )
                 {

@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.xml.search.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.util.ComponentUtil;
 
 import java.text.MessageFormat;
 
@@ -120,7 +120,7 @@ public class AddJSRPortletActionMethodMarkerResolution extends CommonWorkbenchMa
 
             if( marker.getResource() instanceof IFile )
             {
-                CoreUtil.validateFile( (IFile) marker.getResource(), npm );
+                ComponentUtil.validateFile( (IFile) marker.getResource(), npm );
             }
         }
         catch( JavaModelException e )

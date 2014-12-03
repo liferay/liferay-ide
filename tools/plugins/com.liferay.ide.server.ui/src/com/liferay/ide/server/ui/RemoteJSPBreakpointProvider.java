@@ -15,14 +15,15 @@
 
 package com.liferay.ide.server.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.StringPool;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -45,7 +46,6 @@ import org.eclipse.jst.jsp.ui.internal.JSPUIPlugin;
 import org.eclipse.jst.jsp.ui.internal.breakpointproviders.JavaStratumBreakpointProvider;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.ui.internal.StructuredResourceMarkerAnnotationModel;
 
 /**
@@ -69,21 +69,15 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 				String path = null;
                 // IDE-648 IDE-110
 				// get docroot relative path
-				IVirtualFolder webappRoot = CoreUtil.getDocroot(res.getProject());
+				final ILiferayProject lrproject = LiferayCore.create( res.getProject() );
+				final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
-				if (webappRoot != null) {
-				    for( IContainer container : webappRoot.getUnderlyingFolders() )
-	                {
-	                    if( container != null && container.exists() )
-	                    {
-	                        IPath relativePath = res.getFullPath().makeRelativeTo(container.getFullPath());
+				if (webappRoot != null && webappRoot.exists()) {
+                    IPath relativePath = res.getFullPath().makeRelativeTo(webappRoot.getFullPath());
 
-	                        if( relativePath != null && relativePath.segmentCount() > 0 )
-	                        {
-	                            path = "/" + relativePath.toPortableString(); //$NON-NLS-1$
-	                            break;
-	                        }
-	                    }
+                    if( relativePath != null && relativePath.segmentCount() > 0 )
+                    {
+                        path = "/" + relativePath.toPortableString(); //$NON-NLS-1$
 	                }
 				}
 

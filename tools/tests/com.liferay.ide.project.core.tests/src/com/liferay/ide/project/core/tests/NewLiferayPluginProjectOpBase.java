@@ -19,6 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -37,6 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
@@ -44,8 +47,6 @@ import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.ValidationService;
 import org.eclipse.sapphire.services.ValueLabelService;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -81,8 +82,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     {
         final String themeParent = op.getThemeParent().content();
         final String themeFramework = op.getThemeFramework().content();
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-        final IVirtualFile readme = webappRoot.getFile( "WEB-INF/src/resources-importer/readme.txt" );
+        final IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
+        final IFile readme = defaultDocroot.getFile( "WEB-INF/src/resources-importer/readme.txt" );
 
         assertEquals( true, readme.exists() );
 
@@ -113,11 +114,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject jsfProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( jsfProject );
+        final IFolder defaultDocroot = LiferayCore.create( jsfProject ).getDefaultDocrootFolder();
 
-        assertNotNull( webappRoot );
+        assertNotNull( defaultDocroot );
 
-        final IVirtualFile config = webappRoot.getFile( "WEB-INF/faces-config.xml" );
+        final IFile config = defaultDocroot.getFile( "WEB-INF/faces-config.xml" );
 
         assertEquals( true, config.exists() );
 
@@ -138,9 +139,9 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     {
         final IProject themeProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( themeProject );
+        final IFolder defaultDocroot = LiferayCore.create( themeProject ).getDefaultDocrootFolder();
 
-        assertNotNull( webappRoot );
+        assertNotNull( defaultDocroot );
 
         return themeProject;
     }
@@ -249,11 +250,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject extProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( extProject );
+        final IFolder defaultDocroot = LiferayCore.create( extProject ).getDefaultDocrootFolder();
 
-        assertNotNull( webappRoot );
+        assertNotNull( defaultDocroot );
 
-        final IVirtualFile extFile = webappRoot.getFile( "WEB-INF/liferay-portlet-ext.xml" );
+        final IFile extFile = defaultDocroot.getFile( "WEB-INF/liferay-portlet-ext.xml" );
 
         assertEquals( true, extFile.exists() );
     }
@@ -268,11 +269,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject hookProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( hookProject );
+        final IFolder webappRoot = LiferayCore.create( hookProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
-        final IVirtualFile hookXml = webappRoot.getFile( "WEB-INF/liferay-hook.xml" );
+        final IFile hookXml = webappRoot.getFile( "WEB-INF/liferay-hook.xml" );
 
         assertEquals( true, hookXml.exists() );
     }
@@ -314,11 +315,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject layouttplProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( layouttplProject );
+        final IFolder webappRoot = LiferayCore.create( layouttplProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
-        final IVirtualFile layoutXml = webappRoot.getFile( "WEB-INF/liferay-layout-templates.xml" );
+        final IFile layoutXml = webappRoot.getFile( "WEB-INF/liferay-layout-templates.xml" );
 
         assertEquals( true, layoutXml.exists() );
     }
@@ -333,11 +334,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject portletProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( portletProject );
+        final IFolder webappRoot = LiferayCore.create( portletProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
-        final IVirtualFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
+        final IFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
 
         assertEquals( false, serviceXml.exists() );
     }
@@ -385,7 +386,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject newProject = createNewSDKProjectCustomLocation( op, customLocation );
 
-        assertEquals( "Project not at expected custom location", true, newProject.getLocation().equals( customLocation ) );
+        assertEquals( "Project expected to be at custom location", true, newProject.getLocation().equals( customLocation ) );
 
         final IFile buildXml = newProject.getFile( "build.xml" );
 
@@ -470,15 +471,15 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject portletProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( portletProject );
+        final IFolder webappRoot = LiferayCore.create( portletProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
-        final IVirtualFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
+        final IFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
 
         assertEquals( true, serviceXml.exists() );
 
-        final String serviceXmlContent = CoreUtil.readStreamToString( serviceXml.getUnderlyingFile().getContents() );
+        final String serviceXmlContent = CoreUtil.readStreamToString( serviceXml.getContents() );
 
         assertEquals( true, serviceXmlContent.contains( getServiceXmlDoctype() ) );
     }
@@ -502,11 +503,11 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject vaadinProject = createAntProject( op );
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( vaadinProject );
+        final IFolder webappRoot = LiferayCore.create( vaadinProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
-        final IVirtualFile application =
+        final IFile application =
             webappRoot.getFile( "WEB-INF/src/testvaadinprojectsdk" + getRuntimeVersion() +
                 "/TestVaadinProjectSdk" + getRuntimeVersion() + "Application.java" );
 
@@ -1000,26 +1001,35 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject project = createAntProject( op );
 
-        IFile portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
-        IFile liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        IFile liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        ILiferayProject lr = LiferayCore.create( project );
+
+        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
 
         assertEquals( 1, countElements( portletXml, "portlet" ) );
         assertEquals( 1, countElements( liferayPortletXml, "portlet" ) );
         assertEquals( 1, countElements( liferayDisplayXml, "category" ) );
+    }
+
+    @Test
+    public void testIncludeSampleCodeServiceBuilder() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
 
         // test service-builder project
-        op = newProjectOp("test-include-sample-code-service-builder");
+        NewLiferayPluginProjectOp op = newProjectOp("test-include-sample-code-service-builder");
 
         op.setIncludeSampleCode( true );
         op.setPluginType( PluginType.servicebuilder );
 
-        project = createAntProject( op );
+        IProject project = createAntProject( op );
+        ILiferayProject lr = LiferayCore.create( project );
 
-        portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
-        liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
-        IFile serviceXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
 
         assertEquals( 1, countElements( portletXml, "portlet" ) );
         assertEquals( 1, countElements( liferayPortletXml, "portlet" ) );
@@ -1040,26 +1050,32 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject project = createAntProject( op );
 
-        IFile portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
-        IFile liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        IFile liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        ILiferayProject lr = LiferayCore.create( project );
+        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
 
         assertEquals( 0, countElements( portletXml, "portlet" ) );
         assertEquals( 0, countElements( liferayPortletXml, "portlet" ) );
         assertEquals( 0, countElements( liferayDisplayXml, "category" ) );
+    }
 
+    @Test
+    public void testDontIncludeSampleCodeServiceBuilder() throws Exception
+    {
         // test service-builder project
-        op = newProjectOp("test-dont-include-sample-code-service-builder");
+        NewLiferayPluginProjectOp op = newProjectOp("test-dont-include-sample-code-service-builder");
 
         op.setIncludeSampleCode( false );
         op.setPluginType( PluginType.servicebuilder );
 
-        project = createAntProject( op );
+        IProject project = createAntProject( op );
 
-        portletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.PORTLET_XML_FILE );
-        liferayPortletXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
-        liferayDisplayXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
-        IFile serviceXml = CoreUtil.getDescriptorFile( project, ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        ILiferayProject lr = LiferayCore.create( project );
+        IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
+        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
 
         assertEquals( 0, countElements( portletXml, "portlet" ) );
         assertEquals( 0, countElements( liferayPortletXml, "portlet" ) );

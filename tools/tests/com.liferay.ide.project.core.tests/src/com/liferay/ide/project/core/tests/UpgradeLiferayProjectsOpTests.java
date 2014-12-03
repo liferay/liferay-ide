@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -44,6 +44,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
@@ -51,8 +52,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
@@ -358,21 +357,20 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
 
         IProject project = createServicePluginTypeAntProject( "service-builder");
 
-        final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+        final IFolder webappRoot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
-        final IVirtualFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
+        final IFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
 
         assertEquals( true, serviceXml.exists() );
 
-        new ServiceBuilderDescriptorHelper( serviceXml.getUnderlyingFile().getProject() ).addDefaultEntity();
+        new ServiceBuilderDescriptorHelper( serviceXml.getProject() ).addDefaultEntity();
 
         setupRuntime620();
 
         IRuntime runtime620 = ServerCore.findRuntime( getRuntimeVersion() );
         op.setRuntimeName( runtime620.getName() );
-
 
         List<String> actionString = new ArrayList<String>();
         List<String> projectString = new ArrayList<String>();
@@ -394,7 +392,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
         IProject upgradeProject = ProjectUtil.getProject( project.getName() );
         assertEquals(runtime620.getName() , ServerUtil.getRuntime( upgradeProject ).getName());
 
-        final IVirtualFile serviceJarXml = webappRoot.getFile( "WEB-INF/lib/" + project.getName() + "-service.jar" );
+        final IFile serviceJarXml = webappRoot.getFile( "WEB-INF/lib/" + project.getName() + "-service.jar" );
 
         assertEquals( true, serviceJarXml.exists() );
     }
