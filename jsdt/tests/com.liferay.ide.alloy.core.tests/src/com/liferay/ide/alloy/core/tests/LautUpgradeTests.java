@@ -29,6 +29,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -48,6 +49,7 @@ public class LautUpgradeTests extends BaseTests
 
 
     @Test
+    @Ignore
     public void testUpgrade() throws Exception
     {
         final IFolder cssFolder = this.a.getFolder( new Path( "docroot/css/" ) );

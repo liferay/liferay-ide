@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -49,6 +50,7 @@ public class AlloyCoreTests extends BaseTests
 
 
     @Test
+    @Ignore
     public void fileExecutable() throws Exception
     {
         final LautRunner lautRunner = AlloyCore.getLautRunner();
@@ -72,6 +74,7 @@ public class AlloyCoreTests extends BaseTests
     }
 
     @Test
+    @Ignore
     public void testLautInstallation() throws Exception
     {
         final LautRunner lautRunner = AlloyCore.getLautRunner();

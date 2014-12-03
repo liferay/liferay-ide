@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <!--
    <extension point="com.liferay.ide.project.core.upgradeProjectHandlers">
       <upgradeProjectHandler
             class="com.liferay.ide.alloy.core.UpgradeLAUTHandler"
@@ -9,6 +10,7 @@
             id="com.liferay.ide.alloy.core.upgradeLAUTHandler">
       </upgradeProjectHandler>
    </extension>
+   -->
    <extension
          point="tern.eclipse.ide.core.ternNatureAdapters">
       <ternAdaptToNature
