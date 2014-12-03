@@ -17,7 +17,7 @@ package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 
 import java.io.File;
 import java.io.IOException;
@@ -129,7 +129,7 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction
         }
         catch( IOException e )
         {
-            LiferayServerUIPlugin.logError( "Unable to execute command", e );
+            LiferayServerUI.logError( "Unable to execute command", e );
         }
     }
 

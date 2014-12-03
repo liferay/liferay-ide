@@ -12,7 +12,7 @@
 package com.liferay.ide.server.ui.wizard;
 
 import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -42,7 +42,7 @@ public class LiferayRuntimeStubWizardFragment extends WizardFragment
     {
         wizard.setTitle( Msgs.liferayRuntimeStub );
         wizard.setDescription( Msgs.specifyDirectoryLocation );
-        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
+        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUI.getDefault().getBundle().getEntry(
             "/icons/wizban/server_wiz.png" ) ) ); //$NON-NLS-1$
 
         composite = new LiferayRuntimeStubComposite( parent, wizard );

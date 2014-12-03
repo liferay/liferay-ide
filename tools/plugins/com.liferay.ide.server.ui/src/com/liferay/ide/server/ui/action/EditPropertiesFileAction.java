@@ -11,7 +11,7 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.navigator.PropertiesFile;
 import com.liferay.ide.ui.editor.LiferayPropertiesEditor;
 
@@ -76,7 +76,7 @@ public class EditPropertiesFileAction extends SelectionProviderAction
             }
             catch( PartInitException e )
             {
-                LiferayServerUIPlugin.logError( "Error opening properties editor.", e );
+                LiferayServerUI.logError( "Error opening properties editor.", e );
             }
         }
     }

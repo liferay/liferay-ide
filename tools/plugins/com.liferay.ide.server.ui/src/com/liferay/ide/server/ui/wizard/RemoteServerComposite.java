@@ -18,7 +18,7 @@ import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
 import com.liferay.ide.server.remote.RemoteServer;
 import com.liferay.ide.server.remote.RemoteUtil;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.LiferayUIPlugin;
 import com.liferay.ide.ui.util.SWTUtil;
 
@@ -383,21 +383,21 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 
         if( CoreUtil.isNullOrEmpty( host ) )
         {
-            return LiferayServerUIPlugin.createErrorStatus( Msgs.specifyHostname );
+            return LiferayServerUI.createErrorStatus( Msgs.specifyHostname );
         }
 
         String username = remoteServerWC.getUsername();
 
         if( CoreUtil.isNullOrEmpty( username ) )
         {
-            return LiferayServerUIPlugin.createErrorStatus( Msgs.specifyUsernamePassword );
+            return LiferayServerUI.createErrorStatus( Msgs.specifyUsernamePassword );
         }
 
         String port = remoteServerWC.getHTTPPort();
 
         if( CoreUtil.isNullOrEmpty( port ) )
         {
-            return LiferayServerUIPlugin.createErrorStatus( Msgs.specifyHTTPPort );
+            return LiferayServerUI.createErrorStatus( Msgs.specifyHTTPPort );
         }
 
         IStatus status = remoteServerWC.validate( monitor );

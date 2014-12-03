@@ -12,7 +12,7 @@
 package com.liferay.ide.server.ui.wizard;
 
 import com.liferay.ide.server.remote.IRemoteServerWorkingCopy;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -61,7 +61,7 @@ public class RemoteServerWizardFragment extends WizardFragment
 
         wizard.setTitle( Msgs.remoteLiferayServer );
         wizard.setDescription( Msgs.configureRemoteLiferayServerInstance );
-        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUIPlugin.getDefault().getBundle().getEntry(
+        wizard.setImageDescriptor( ImageDescriptor.createFromURL( LiferayServerUI.getDefault().getBundle().getEntry(
             "/icons/wizban/server_wiz.png" ) ) ); //$NON-NLS-1$
 
         return composite;

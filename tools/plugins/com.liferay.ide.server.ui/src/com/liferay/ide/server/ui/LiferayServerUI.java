@@ -31,7 +31,7 @@ import org.osgi.framework.BundleContext;
  *
  * @auther Greg Amerson
  */
-public class LiferayServerUIPlugin extends AbstractUIPlugin
+public class LiferayServerUI extends AbstractUIPlugin
 {
 
     public static final String IMG_NOTIFICATION = "imgNotification";
@@ -44,14 +44,14 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
     private static URL ICON_BASE_URL;
 
     // The shared instance
-    private static LiferayServerUIPlugin plugin;
+    private static LiferayServerUI plugin;
 
     /**
      * Returns the shared instance
      *
      * @return the shared instance
      */
-    public static LiferayServerUIPlugin getDefault()
+    public static LiferayServerUI getDefault()
     {
         return plugin;
     }
@@ -101,12 +101,17 @@ public class LiferayServerUIPlugin extends AbstractUIPlugin
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, ex );
     }
 
+    public static IStatus logInfo( String msg, IStatus status )
+    {
+        return new Status( IStatus.INFO, PLUGIN_ID, msg, status.getException() );
+    }
+
     protected Map<String, ImageDescriptor> imageDescriptors = new HashMap<String, ImageDescriptor>();
 
     /**
      * The constructor
      */
-    public LiferayServerUIPlugin()
+    public LiferayServerUI()
     {
 
     }

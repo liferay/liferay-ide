@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %bundle.name
 Bundle-SymbolicName: com.liferay.ide.server.ui;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-Activator: com.liferay.ide.server.ui.LiferayServerUIPlugin
+Bundle-Activator: com.liferay.ide.server.ui.LiferayServerUI
 Bundle-Vendor: %bundle.vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.wst.server.ui;bundle-version="[1.1.103,2.0.0)";visibility:=reexport,
@@ -43,4 +43,5 @@ Export-Package: com.liferay.ide.server.ui,
  com.liferay.ide.server.ui.action,
  com.liferay.ide.server.ui.cmd,
  com.liferay.ide.server.ui.navigator,
+ com.liferay.ide.server.ui.portal,
  com.liferay.ide.server.ui.wizard

@@ -94,8 +94,8 @@ public class ServerStartup implements IStartup
             @Override
             public Image getNotificationImage()
             {
-                return LiferayServerUIPlugin.getDefault().getImageRegistry().get(
-                    LiferayServerUIPlugin.IMG_NOTIFICATION );
+                return LiferayServerUI.getDefault().getImageRegistry().get(
+                    LiferayServerUI.IMG_NOTIFICATION );
             }
 
             @Override
@@ -194,7 +194,7 @@ public class ServerStartup implements IStartup
                         }
                         catch( Exception e )
                         {
-                            LiferayServerUIPlugin.logError( "Unable to load runtime from memento", e );
+                            LiferayServerUI.logError( "Unable to load runtime from memento", e );
                         }
                     }
                 }
@@ -293,7 +293,7 @@ public class ServerStartup implements IStartup
                         }
                         catch( Exception e )
                         {
-                            LiferayServerUIPlugin.logError( "Unable to load server from memento", e );
+                            LiferayServerUI.logError( "Unable to load server from memento", e );
                         }
                     }
                 }
@@ -338,7 +338,7 @@ public class ServerStartup implements IStartup
         IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE };
 
         return !( Platform.getPreferencesService().getBoolean(
-            LiferayServerUIPlugin.PLUGIN_ID, GLOBAL_SETTINGS_CHECKED, false, scopes ) );
+            LiferayServerUI.PLUGIN_ID, GLOBAL_SETTINGS_CHECKED, false, scopes ) );
     }
 
     public void startup()
@@ -351,13 +351,13 @@ public class ServerStartup implements IStartup
             try
             {
                 IEclipsePreferences prefs =
-                    InstanceScope.INSTANCE.getNode( LiferayServerUIPlugin.PLUGIN_ID );
+                    InstanceScope.INSTANCE.getNode( LiferayServerUI.PLUGIN_ID );
                 prefs.putBoolean( GLOBAL_SETTINGS_CHECKED, true );
                 prefs.flush();
             }
             catch( BackingStoreException e )
             {
-                LiferayServerUIPlugin.logError( "Unable to persist global-setting-checked pref", e );
+                LiferayServerUI.logError( "Unable to persist global-setting-checked pref", e );
             }
         }
     }

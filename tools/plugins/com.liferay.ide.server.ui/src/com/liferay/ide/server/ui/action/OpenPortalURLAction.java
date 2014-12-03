@@ -16,7 +16,7 @@
 package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 
 import java.net.URL;
 
@@ -79,7 +79,7 @@ public abstract class OpenPortalURLAction extends AbstractServerRunningAction
                 }
                 catch( Exception e )
                 {
-                    LiferayServerUIPlugin.logError( e );
+                    LiferayServerUI.logError( e );
                 }
             }
         } );

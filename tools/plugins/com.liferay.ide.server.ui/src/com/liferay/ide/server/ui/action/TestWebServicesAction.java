@@ -17,7 +17,7 @@ package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.util.WebServicesHelper;
 import com.liferay.ide.ui.dialog.StringsFilteredDialog;
 
@@ -82,7 +82,7 @@ public class TestWebServicesAction extends AbstractServerRunningAction
             }
             catch( MalformedURLException e )
             {
-                LiferayServerUIPlugin.logError( e );
+                LiferayServerUI.logError( e );
                 return;
             }
 
@@ -98,7 +98,7 @@ public class TestWebServicesAction extends AbstractServerRunningAction
                 }
                 catch( MalformedURLException e )
                 {
-                    LiferayServerUIPlugin.logError( e );
+                    LiferayServerUI.logError( e );
                     return;
                 }
 

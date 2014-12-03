@@ -43,8 +43,8 @@ public class PluginsCustomLabelProvider extends LabelProvider
     {
         if( element instanceof PluginsContent )
         {
-            return LiferayServerUIPlugin.imageDescriptorFromPlugin(
-                LiferayServerUIPlugin.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage(); //$NON-NLS-1$
+            return LiferayServerUI.imageDescriptorFromPlugin(
+                LiferayServerUI.PLUGIN_ID, "/icons/e16/plugin.png" ).createImage(); //$NON-NLS-1$
         }
         else if( element instanceof ModuleServer )
         {
@@ -77,7 +77,7 @@ public class PluginsCustomLabelProvider extends LabelProvider
                         imageKey = ProjectUtil.getLiferayPluginType( project.getLocation().toOSString() );
                     }
 
-                    return LiferayServerUIPlugin.getDefault().getImageRegistry().get( imageKey );
+                    return LiferayServerUI.getDefault().getImageRegistry().get( imageKey );
                 }
             }
             catch( Exception ex )

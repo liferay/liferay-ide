@@ -16,7 +16,7 @@
 package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.editor.LiferayPropertiesEditor;
 
@@ -98,13 +98,13 @@ public class CreatePortalSettingsFileAction extends AbstractServerRunningAction
                     }
                     catch( PartInitException e )
                     {
-                        LiferayServerUIPlugin.logError( "Error opening properties editor.", e );
+                        LiferayServerUI.logError( "Error opening properties editor.", e );
                     }
                 }
             }
             catch( IOException e )
             {
-                LiferayServerUIPlugin.logError( "Unable to create new portal settings file", e );
+                LiferayServerUI.logError( "Unable to create new portal settings file", e );
             }
         }
     }

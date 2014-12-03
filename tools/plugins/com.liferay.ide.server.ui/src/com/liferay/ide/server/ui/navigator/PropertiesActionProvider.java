@@ -11,7 +11,7 @@
 
 package com.liferay.ide.server.ui.navigator;
 
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.action.EditPropertiesFileAction;
 
 import java.util.Iterator;
@@ -67,7 +67,7 @@ public class PropertiesActionProvider extends CommonActionProvider
                 }
                 catch( Exception e )
                 {
-                    LiferayServerUIPlugin.logError( "Error opening kaleo workflow.", e );
+                    LiferayServerUI.logError( "Error opening kaleo workflow.", e );
                 }
             }
         } );
