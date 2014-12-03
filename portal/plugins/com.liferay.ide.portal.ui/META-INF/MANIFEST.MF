@@ -18,9 +18,13 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.xml.core,
- org.eclipse.core.filesystem
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ org.eclipse.core.filesystem,
+ org.eclipse.debug.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.core.expressions
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portal.ui,
+ com.liferay.ide.portal.ui.debug,
  com.liferay.ide.portal.ui.navigator,
  com.liferay.ide.portal.ui.templates

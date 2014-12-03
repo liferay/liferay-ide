@@ -38,13 +38,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.liferay.ide.doc"
          download-size="0"
          install-size="0"
@@ -52,14 +45,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.debug.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.debug.ui"
+         id="com.liferay.ide.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

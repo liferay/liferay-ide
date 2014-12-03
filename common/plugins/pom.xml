@@ -35,8 +35,6 @@
 
     <modules>
         <module>com.liferay.ide.core</module>
-        <module>com.liferay.ide.debug.core</module>
-        <module>com.liferay.ide.debug.ui</module>
         <module>com.liferay.ide.doc</module>
         <module>com.liferay.ide.ui</module>
     </modules>
