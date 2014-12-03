@@ -15,7 +15,7 @@
       </content-type>
    </extension>
    <extension
-         point="com.liferay.ide.templates.core.templateDefinition">
+         point="com.liferay.ide.core.templateDefinitions">
       <template
             id="com.liferay.ide.service.core.defaultServiceXmlFile"
             name="Default service.xml file"
@@ -46,7 +46,7 @@
       </templateVariable>
    </extension>
    <extension
-         point="com.liferay.ide.templates.core.templateDefinition">
+         point="com.liferay.ide.core.templateDefinitions">
       <template
             id="com.liferay.ide.service.core.emptyServiceXmlFile"
             name="Empty service.xml file"
@@ -92,5 +92,5 @@
             description="Rebuild Services for service-builder projects"
             id="com.liferay.ide.service.core.upgradeServiceBuildHandler">
       </upgradeProjectHandler>
-   </extension>   
+   </extension>
 </plugin>

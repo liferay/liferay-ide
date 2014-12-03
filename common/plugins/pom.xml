@@ -38,8 +38,6 @@
         <module>com.liferay.ide.debug.core</module>
         <module>com.liferay.ide.debug.ui</module>
         <module>com.liferay.ide.doc</module>
-        <module>com.liferay.ide.freemarker</module>
-        <module>com.liferay.ide.templates.core</module>
         <module>com.liferay.ide.ui</module>
     </modules>
 </project>

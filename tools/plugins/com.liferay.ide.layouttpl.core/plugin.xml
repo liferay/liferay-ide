@@ -117,7 +117,7 @@
    </extension>
 
     <extension
-        point="com.liferay.ide.templates.core.templateDefinition">
+        point="com.liferay.ide.core.templateDefinitions">
         <template
               id="com.liferay.ide.layouttpl.core.layoutTemplate.legacy"
               name="Legacy Layout Template"
@@ -132,7 +132,7 @@
         </templateVariable>
     </extension>
     <extension
-        point="com.liferay.ide.templates.core.templateDefinition">
+        point="com.liferay.ide.core.templateDefinitions">
         <template
               id="com.liferay.ide.layouttpl.core.layoutTemplate.bootstrap"
               name="Bootstrap Layout Template"
