@@ -40,9 +40,6 @@ import org.eclipse.wst.server.core.IServer;
  */
 public class CreatePortalSettingsFileAction extends AbstractServerRunningAction
 {
-
-    public static int PROP_UPDATE_VERSION = 0x404;
-
     private final static String PORTAL_EXT_PROPERTIES = "portal-ext.properties"; //$NON-NLS-1$
 
     public CreatePortalSettingsFileAction()
