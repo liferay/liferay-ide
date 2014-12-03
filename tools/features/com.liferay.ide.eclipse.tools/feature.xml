@@ -2,9 +2,9 @@
 <feature
       id="com.liferay.ide.eclipse.tools"
       label="Liferay IDE"
-      version="2.2.1.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Liferay, Inc."
-      plugin="com.liferay.ide.tools.branding">
+      plugin="com.liferay.ide.ui">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
       Liferay IDE is the official set of Eclipse plugins for supporting Liferay Portal development platorm.
@@ -110,13 +110,6 @@
 
    <plugin
          id="com.liferay.ide.server.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.tools.branding"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -21,13 +21,13 @@
 
     <groupId>com.liferay.ide</groupId>
     <artifactId>parent</artifactId>
-    <version>2.2.1-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Liferay IDE Parent</name>
 
     <properties>
-        <tycho-packaging-format>yyyyMMddHHmm'-ga2'</tycho-packaging-format>
+        <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
         <tycho-version>0.20.0</tycho-version>
         <tycho-extras-version>0.20.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</orbit-site>
