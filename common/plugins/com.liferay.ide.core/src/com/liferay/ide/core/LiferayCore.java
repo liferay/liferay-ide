@@ -53,22 +53,25 @@ public class LiferayCore extends Plugin
     {
         ILiferayProject project = null;
 
-        final ILiferayProjectProvider[] providers = getProviders( adaptable.getClass() );
-
-        if( ! CoreUtil.isNullOrEmpty( providers ) )
+        if( adaptable != null )
         {
-            ILiferayProjectProvider currentProvider = null;
+            final ILiferayProjectProvider[] providers = getProviders( adaptable.getClass() );
 
-            for( ILiferayProjectProvider provider : providers )
+            if( ! CoreUtil.isNullOrEmpty( providers ) )
             {
-                if ( currentProvider == null || provider.getPriority() > currentProvider.getPriority() )
-                {
-                    final ILiferayProject lrp = provider.provide( adaptable );
+                ILiferayProjectProvider currentProvider = null;
 
-                    if( lrp != null )
+                for( ILiferayProjectProvider provider : providers )
+                {
+                    if ( currentProvider == null || provider.getPriority() > currentProvider.getPriority() )
                     {
-                        currentProvider = provider;
-                        project = lrp;
+                        final ILiferayProject lrp = provider.provide( adaptable );
+
+                        if( lrp != null )
+                        {
+                            currentProvider = provider;
+                            project = lrp;
+                        }
                     }
                 }
             }

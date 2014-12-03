@@ -160,18 +160,23 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         if( fullPath.lastSegment() != null &&
             fullPath.lastSegment().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
         {
-            final ILiferayProject lrproject = LiferayCore.create( delta.getResource().getProject() );
-            final IResource propertiesFile =
-                lrproject.findDocrootResource( new Path( "WEB-INF/" +
-                    ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
+            final IProject project = CoreUtil.getLiferayProject( delta.getResource() );
+            final ILiferayProject lrproject = LiferayCore.create( project );
 
-            if( propertiesFile != null && propertiesFile.exists() )
+            if( lrproject != null )
             {
-                final IPath filePath = propertiesFile.getFullPath();
+                final IResource propertiesFile =
+                    lrproject.findDocrootResource( new Path( "WEB-INF/" +
+                        ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
 
-                if( filePath.equals( fullPath ) )
+                if( propertiesFile != null && propertiesFile.exists() )
                 {
-                    return true;
+                    final IPath filePath = propertiesFile.getFullPath();
+
+                    if( filePath.equals( fullPath ) )
+                    {
+                        return true;
+                    }
                 }
             }
         }

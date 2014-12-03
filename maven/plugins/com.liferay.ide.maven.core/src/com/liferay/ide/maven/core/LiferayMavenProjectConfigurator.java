@@ -19,8 +19,8 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.util.HookUtil;
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -311,7 +311,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             }
         }
 
-        if ( project != null )
+        if ( project != null && ProjectUtil.isHookProject( project ) )
         {
             final HookDescriptorHelper hookDescriptor = new HookDescriptorHelper( project );
             final String customJSPFolder = hookDescriptor.getCustomJSPFolder( null );

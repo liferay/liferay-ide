@@ -16,9 +16,9 @@
 package com.liferay.ide.theme.core.facet;
 
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.PluginsSDKProject;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -121,8 +121,8 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
             configureDeploymentAssembly( IPluginFacetConstants.PORTLET_PLUGIN_SDK_SOURCE_FOLDER, DEFAULT_DEPLOY_PATH );
         }
 
-        final ILiferayProject lrproject = LiferayCore.create( project );
-        IResource libRes = lrproject.findDocrootResource( new Path( "WEB-INF/lib" ) );
+        final ILiferayProject lrproject = new PluginsSDKProject( project, null );
+        final IResource libRes = lrproject.findDocrootResource( new Path( "WEB-INF/lib" ) );
 
         if( libRes != null && libRes.exists() )
         {
