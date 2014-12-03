@@ -292,14 +292,14 @@ public class UIUtil
                         viewer.refresh( true );
                     }
                 }
-            } );
+            });
         }
         catch( Exception e )
         {
-            LiferayUIPlugin.logError( e );
+            LiferayUIPlugin.logError( "Unable to refresh view " + viewId, e );
         }
     }
-    
+
     private static void replaceCurrentPerspective( IPerspectiveDescriptor persp )
     {
         // Get the active page.
