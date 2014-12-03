@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.project.core.BundleProjectNature;
+
 import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
@@ -51,6 +53,8 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
     private static final String LAYOUTTPL_FACET = "liferay.layouttpl"; //$NON-NLS-1$
 
     private static ImageDescriptor PORTLET;
+
+    private static ImageDescriptor BUNDLE;
 
     /* The constants are duplicated here to avoid plugin loading. */
     private static final String PORTLET_FACET = "liferay.portlet"; //$NON-NLS-1$
@@ -126,6 +130,16 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
         return PORTLET;
     }
 
+    private static ImageDescriptor getBundle()
+    {
+        if( BUNDLE == null )
+        {
+            BUNDLE = getImageDescriptor( "liferay_bundle_ovr" ); //$NON-NLS-1$
+        }
+
+        return BUNDLE;
+    }
+
     private static ImageDescriptor getTheme()
     {
         if( THEME == null )
@@ -178,6 +192,10 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
             {
                 overlay = getWeb();
             }
+            else if ( hasNature( project, BundleProjectNature.ID ) )
+            {
+                overlay = getBundle();
+            }
 
             if( overlay != null )
             {
@@ -187,6 +205,18 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 
                 decoration.addOverlay( overlay );
             }
+        }
+    }
+
+    private boolean hasNature( IProject project, String id )
+    {
+        try
+        {
+            return project.hasNature( id );
+        }
+        catch( CoreException e )
+        {
+            return false;
         }
     }
 

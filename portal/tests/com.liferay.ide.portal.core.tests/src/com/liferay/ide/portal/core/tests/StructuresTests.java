@@ -10,10 +10,17 @@ import com.liferay.ide.portal.core.structures.model.Entry;
 import com.liferay.ide.portal.core.structures.model.Root;
 import com.liferay.ide.portal.core.structures.model.Structure;
 
+import java.io.InputStream;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.modeling.xml.RootXmlResource;
+import org.eclipse.sapphire.modeling.xml.XmlResourceStore;
 import org.junit.After;
 import org.junit.Test;
 
@@ -47,6 +54,21 @@ public class StructuresTests extends PortalCoreTests
     static final IPath TEST_JOURNAL_CONTENT_TEXT_FIELD = new Path( "structures/test-journal-content-text-field.xml" );
 
     private Element currentElement;
+
+    protected Element getElementFromFile( IProject project, IPath filePath, ElementType type ) throws Exception
+    {
+        final String filePathValue = filePath.toOSString();
+        final IFile file = createFile( project, filePathValue, this.getClass().getResourceAsStream( filePathValue ) );
+
+        assertEquals( file.getFullPath().lastSegment(), filePath.lastSegment() );
+
+        final InputStream contents = file.getContents();
+        final Element element = type.instantiate( new RootXmlResource( new XmlResourceStore( contents ) ) );
+
+        contents.close();
+
+        return element;
+    }
 
     @After
     public void cleanup() throws Exception

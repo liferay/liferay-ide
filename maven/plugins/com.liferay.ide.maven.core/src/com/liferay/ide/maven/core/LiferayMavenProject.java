@@ -14,27 +14,27 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.BaseLiferayProject;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.WTPProject;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
-import com.liferay.ide.server.util.LiferayPortalValueLoader;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -49,7 +49,7 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
  * @author Cindy Li
  * @author Simon Jiang
  */
-public class LiferayMavenProject extends BaseLiferayProject
+public class LiferayMavenProject extends WTPProject
 {
 
     public LiferayMavenProject( IProject project )
@@ -66,57 +66,32 @@ public class LiferayMavenProject extends BaseLiferayProject
             return adapter;
         }
 
-        if( IProjectBuilder.class.equals( adapterType ) && MavenUtil.getProjectFacade( getProject() ) != null )
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), new NullProgressMonitor() );
+
+        if( facade != null )
         {
-            final IProjectBuilder projectBuilder = new MavenProjectBuilder( getProject() );
+            if( IProjectBuilder.class.equals( adapterType ) )
+            {
+                final IProjectBuilder projectBuilder = new MavenProjectBuilder( getProject() );
 
-            return adapterType.cast( projectBuilder );
-        }
+                return adapterType.cast( projectBuilder );
+            }
+            else if( IRemoteServerPublisher.class.equals( adapterType ) )
+            {
+                final IRemoteServerPublisher remoteServerPublisher =
+                    new MavenProjectRemoteServerPublisher( getProject() );
 
-        if( IRemoteServerPublisher.class.equals( adapterType ) &&
-            MavenUtil.getProjectFacade( getProject() ) != null )
-        {
-            final IRemoteServerPublisher remoteServerPublisher =
-                new MavenProjectRemoteServerPublisher( getProject() );
+                return adapterType.cast( remoteServerPublisher );
+            }
+            else if( ILiferayPortal.class.equals( adapterType ) )
+            {
+                final ILiferayPortal portal = new LiferayMavenPortal( this );
 
-            return adapterType.cast( remoteServerPublisher );
+                return adapterType.cast( portal );
+            }
         }
 
         return null;
-    }
-
-    public IPath getAppServerPortalDir()
-    {
-        IPath retval = null;
-
-        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
-
-        if( projectFacade != null )
-        {
-            try
-            {
-                final MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
-
-                final String appServerPortalDir =
-                    MavenUtil.getLiferayMavenPluginConfig(
-                        mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR );
-
-                if( ! CoreUtil.isNullOrEmpty( appServerPortalDir ) )
-                {
-                    retval = new Path( appServerPortalDir );
-                }
-            }
-            catch( CoreException ce )
-            {
-            }
-        }
-
-        return retval;
-    }
-
-    public String[] getHookSupportedProperties()
-    {
-        return new LiferayPortalValueLoader( getAppServerPortalDir(), getUserLibs() ).loadHookPropertiesFromClass();
     }
 
     public IPath getLibraryPath( String filename )
@@ -197,111 +172,23 @@ public class LiferayMavenProject extends BaseLiferayProject
         return retval;
     }
 
-    public String getPortalVersion()
-    {
-        String retval = null;
-        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
-
-        if( projectFacade != null )
-        {
-            try
-            {
-                final MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
-
-                String liferayVersion =
-                    MavenUtil.getLiferayMavenPluginConfig(
-                        mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_LIFERAY_VERSION );
-
-                if( liferayVersion == null )
-                {
-                    liferayVersion = mavenProject.getProperties().getProperty( "liferay.version" );
-
-                    if( liferayVersion == null )
-                    {
-                        // look through dependencies for portal-service
-                        final List<Dependency> deps = mavenProject.getDependencies();
-
-                        if( deps != null )
-                        {
-                            for( Dependency dep : deps )
-                            {
-                                if( dep.getArtifactId().startsWith( "portal-" ) &&
-                                    dep.getGroupId().startsWith( "com.liferay" ) )
-                                {
-                                    liferayVersion = dep.getVersion();
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if( liferayVersion != null )
-                {
-                    retval = MavenUtil.getVersion( liferayVersion );
-                }
-            }
-            catch( CoreException e )
-            {
-            }
-        }
-
-        return retval;
-    }
-
-    public Properties getPortletCategories()
-    {
-        Properties retval = null;
-
-        final IPath appServerPortalDir = getAppServerPortalDir();
-
-        if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
-        {
-            retval = ServerUtil.getPortletCategories( appServerPortalDir );
-        }
-
-        return retval;
-    }
-
-    public Properties getPortletEntryCategories()
-    {
-        Properties retval = null;
-
-        final IPath appServerPortalDir = getAppServerPortalDir();
-
-        if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
-        {
-            String portalVersion = null;
-            ILiferayProject liferayProject = LiferayCore.create( getProject() );
-
-            if( liferayProject != null )
-            {
-                portalVersion  = liferayProject.getPortalVersion();
-            }
-
-            retval = ServerUtil.getEntryCategories( appServerPortalDir, portalVersion );
-        }
-
-        return retval;
-    }
-
     public IFolder getSourceFolder( String classification )
     {
-        IFolder sourceFolder = super.getSourceFolder( classification );
+        IFolder retval = super.getSourceFolder( classification );
 
-        IFolder[] sourceFolders = CoreUtil.getSrcFolders( getProject() );
+        final IFolder[] sourceFolders = ProjectUtil.getSourceFolders( getProject() );
 
         for( IFolder folder : sourceFolders )
         {
             if( folder.getName().equals( classification ) )
             {
-                sourceFolder = folder;
+                retval = folder;
 
                 break;
             }
         }
 
-        return sourceFolder;
+        return retval;
     }
 
     public IPath[] getUserLibs()
@@ -327,6 +214,32 @@ public class LiferayMavenProject extends BaseLiferayProject
         }
 
         return libs.toArray( new IPath[0] );
+    }
+
+    public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
+    {
+        final Collection<IFile> outputs = new HashSet<IFile>();
+
+        if( build )
+        {
+            this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+
+            new MavenProjectBuilder( this.getProject() ).runMavenGoal( getProject(), "package", monitor );
+
+            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+            final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+            final String targetFolder = mavenProject.getBuild().getDirectory();
+            final String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
+
+            final IFile output = getProject().getFile( new Path( targetFolder ).append( targetWar ) );
+
+            if( output.exists() )
+            {
+                outputs.add( output );
+            }
+        }
+
+        return outputs;
     }
 
 }

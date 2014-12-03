@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -126,7 +127,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     @Override
     public IStatus canStart( String launchMode )
     {
-        return LiferayServerCore.createErrorStatus( Msgs.liferayServerInstanceRemote );
+        return LiferayServerCore.error( Msgs.liferayServerInstanceRemote );
     }
 
     @Override
@@ -549,7 +550,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         if ( publisher == null )
         {
             setModuleStatus( module, null );
-            throw new CoreException( LiferayServerCore.createErrorStatus( Msgs.publishingModuleProject ) );
+            throw new CoreException( LiferayServerCore.error( Msgs.publishingModuleProject ) );
         }
 
         final IPath warPath = publisher.publishModuleDelta( appName + ".war", delta, "liferay", true );
@@ -582,7 +583,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         if( error != null )
         {
-            throw new CoreException( LiferayServerCore.createErrorStatus( error.toString() ) );
+            throw new CoreException( LiferayServerCore.error( error.toString() ) );
         }
 
         monitor.done();
@@ -594,7 +595,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         if( module == null )
         {
-            throw new CoreException( LiferayServerCore.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.error( "Cannot publish module with length " + //$NON-NLS-1$
                 ( module != null ? module.length : 0 ) ) );
         }
 
@@ -616,7 +617,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         if ( publisher == null )
         {
             setModuleStatus( module, null );
-            throw new CoreException( LiferayServerCore.createErrorStatus( Msgs.publishingModuleProject ) );
+            throw new CoreException( LiferayServerCore.error( Msgs.publishingModuleProject ) );
         }
 
         final IPath warPath = publisher.publishModuleFull( monitor );
@@ -632,7 +633,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         IServerManagerConnection remoteConnection = getServerManagerConnection();
 
-        setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.installing ) );
+        setModuleStatus( module, LiferayServerCore.info( Msgs.installing ) );
 
         submon.worked( 25 ); // 50% complete
 
@@ -667,12 +668,12 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         {
             setModuleStatus( module, null );
             setModuleState( module, IServer.STATE_UNKNOWN );
-            throw new CoreException( LiferayServerCore.createErrorStatus( error.toString() ) );
+            throw new CoreException( LiferayServerCore.error( error.toString() ) );
         }
 
         submon.worked( 40 ); // 90%
 
-        setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.starting ) );
+        setModuleStatus( module, LiferayServerCore.info( Msgs.starting ) );
 
         // scriptFile = getScriptFile("publish/startApplicationScript.groovy");
 
@@ -706,7 +707,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         if( state != IServer.STATE_STARTED )
         {
             throw new CoreException(
-                LiferayServerCore.createErrorStatus( Msgs.notPublishRemoteServer ) );
+                LiferayServerCore.error( Msgs.notPublishRemoteServer ) );
         }
     }
 
@@ -747,7 +748,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     {
         if( module == null )
         {
-            throw new CoreException( LiferayServerCore.createErrorStatus( "Cannot publish module with length " + //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.error( "Cannot publish module with length " + //$NON-NLS-1$
                 ( module != null ? module.length : 0 ) ) );
         }
 
@@ -776,7 +777,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         final String appName = ComponentUtilities.getServerContextRoot( moduleProject );
 
-        setModuleStatus( module, LiferayServerCore.createInfoStatus( Msgs.uninstalling ) );
+        setModuleStatus( module, LiferayServerCore.info( Msgs.uninstalling ) );
 
         monitor.subTask( Msgs.gettingRemoteConnection );
 
@@ -803,7 +804,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
         if( error != null )
         {
-            throw new CoreException( LiferayServerCore.createErrorStatus( error.toString() ) );
+            throw new CoreException( LiferayServerCore.error( error.toString() ) );
         }
 
         setModuleStatus( module, null );
@@ -856,27 +857,28 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
                 }
                 else
                 {
-                    IModuleResource resource = delta.getModuleResource();
+                    final IModuleResource resource = delta.getModuleResource();
+                    final IFile resourceFile = (IFile) resource.getAdapter( IFile.class );
 
-                    if( resource.getName().equals( "web.xml" ) || //$NON-NLS-1$
-                        resource.getName().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
+                    if( resourceFile != null )
                     {
+                        final ILiferayProject lrproject = LiferayCore.create( resourceFile.getProject() );
 
-                        retval = CoreUtil.isResourceInDocroot( resource );
+                        final IPath docrootPath = lrproject.getDefaultDocrootFolder().getFullPath();
 
-                        if( retval )
+                        if( lrproject.findDocrootResource(
+                                resourceFile.getFullPath().makeRelativeTo( docrootPath ) ) != null )
                         {
-                            break;
-                        }
-                    }
-                    else if( resource.getName().equals( "portlet.xml" ) ) //$NON-NLS-1$
-                    {
-                        // if portlet-custom.xml is used we need to redeploy on this change.
-                        retval = CoreUtil.isResourceInDocroot( resource );
-
-                        if( retval )
-                        {
-                            break;
+                            if( resource.getName().equals( "web.xml" ) ||
+                                resource.getName().equals(
+                                    ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
+                            {
+                                break;
+                            }
+                            else if( resource.getName().equals( "portlet.xml" ) )
+                            {
+                                break;
+                            }
                         }
                     }
                 }

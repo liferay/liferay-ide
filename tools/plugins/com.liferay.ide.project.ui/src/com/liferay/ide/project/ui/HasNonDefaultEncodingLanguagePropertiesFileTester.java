@@ -47,7 +47,7 @@ public class HasNonDefaultEncodingLanguagePropertiesFileTester extends PropertyT
         {
             try
             {
-                if( ! ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( ( (IFile) receiver ).getCharset() ) && 
+                if( ! ILiferayConstants.LANGUAGE_PROPERTIES_FILE_ENCODING_CHARSET.equals( ( (IFile) receiver ).getCharset() ) &&
                     PropertiesUtil.isLanguagePropertiesFile( (IFile) receiver ) )
                 {
                     retval = true;

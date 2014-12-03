@@ -20,6 +20,10 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.server.core.portal.OsgiConnection;
+import com.liferay.ide.server.core.portal.OsgiConnectionImpl;
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
@@ -82,12 +86,70 @@ public class LiferayServerCore extends Plugin
 
     private static ILiferayRuntimeStub[] runtimeStubs;
 
+    private static PortalBundle[] portalBundles;
+
+//    private static Map<String, OsgiConnection> osgiConnections;
+//
+//    private static OsgiConnection getOsgiConnection( final IServer server )
+//    {
+//        OsgiConnection retval = null;
+//
+//        if( osgiConnections == null )
+//        {
+//            osgiConnections = new HashMap<String, OsgiConnection>();
+//
+//            ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
+//            {
+//                public void serverAdded( IServer server )
+//                {
+//                }
+//
+//                public void serverChanged( IServer server )
+//                {
+//                }
+//
+//                public void serverRemoved( IServer s )
+//                {
+//                    if( server.equals( s ) )
+//                    {
+//                        OsgiConnection service = osgiConnections.get( server.getId() );
+//
+//                        if( service != null )
+//                        {
+//                            service = null;
+//                            osgiConnections.remove( server.getId() );
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//
+//        retval = osgiConnections.get( server.getId() );
+//
+//        if( retval == null )
+//        {
+//            retval = new OsgiConnectionImpl( 33133 );
+//
+//            osgiConnections.put( server.getId(), retval );
+//
+//            server.addServerListener( new IServerListener()
+//            {
+//                public void serverChanged( ServerEvent event )
+//                {
+//                    osgiConnections.remove( server.getId() );
+//                }
+//            });
+//        }
+//
+//        return retval;
+//    }
+
     public static IStatus createErrorStatus( Exception e )
     {
-        return createErrorStatus( PLUGIN_ID, e );
+        return error( e.getMessage(), e );
     }
 
-    public static IStatus createErrorStatus( String msg )
+    public static IStatus error( String msg )
     {
         return createErrorStatus( PLUGIN_ID, msg );
     }
@@ -102,12 +164,12 @@ public class LiferayServerCore extends Plugin
         return new Status( IStatus.ERROR, pluginId, msg, e );
     }
 
-    public static IStatus createErrorStatus( String pluginId, Throwable t )
+    public static IStatus error( String msg, Throwable t )
     {
-        return new Status( IStatus.ERROR, pluginId, t.getMessage(), t );
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, t );
     }
 
-    public static IStatus createInfoStatus( String msg )
+    public static IStatus info( String msg )
     {
         return new Status( IStatus.INFO, PLUGIN_ID, msg );
     }
@@ -203,11 +265,44 @@ public class LiferayServerCore extends Plugin
         return pluginPublishers;
     }
 
+    public static PortalLaunchParticipant[] getPortalLaunchParticipants()
+    {
+        PortalLaunchParticipant[] retval = null;
+
+        final IConfigurationElement[] elements =
+            Platform.getExtensionRegistry().getConfigurationElementsFor(
+                "com.liferay.ide.server.core.portalLaunchParticipants" );
+
+        try
+        {
+            final List<PortalLaunchParticipant> participants = new ArrayList<PortalLaunchParticipant>();
+
+            for( IConfigurationElement element : elements )
+            {
+                final Object o = element.createExecutableExtension( "class" ); //$NON-NLS-1$
+
+                if( o instanceof PortalLaunchParticipant )
+                {
+                    PortalLaunchParticipant participant = (PortalLaunchParticipant) o;
+                    participants.add( participant );
+                }
+            }
+
+            retval = participants.toArray( new PortalLaunchParticipant[0] );
+        }
+        catch( Exception e )
+        {
+            logError( "Unable to get portal launch participants", e ); //$NON-NLS-1$
+        }
+
+        return retval;
+    }
+
     public static URL getPortalSupportLibURL()
     {
         try
         {
-            return FileLocator.toFileURL( LiferayServerCore.getPluginEntry( "/portal-support/portal-support.jar" ) ); //$NON-NLS-1$
+            return FileLocator.toFileURL( LiferayServerCore.getPluginEntry( "/portal-support/portal-support.jar" ) );
         }
         catch( IOException e )
         {
@@ -218,27 +313,34 @@ public class LiferayServerCore extends Plugin
 
     public static IServerManagerConnection getRemoteConnection( final IRemoteServer server )
     {
+        IServerManagerConnection retval = null;
+
         if( connections == null )
         {
             connections = new HashMap<String, IServerManagerConnection>();
         }
 
-        IServerManagerConnection service = connections.get( server.getId() );
-
-        if( service == null )
+        if( server != null )
         {
-            service = new ServerManagerConnection();
+            IServerManagerConnection service = connections.get( server.getId() );
 
-            updateConnectionSettings( server, service );
+            if( service == null )
+            {
+                service = new ServerManagerConnection();
 
-            connections.put( server.getId(), service );
+                updateConnectionSettings( server, service );
+
+                connections.put( server.getId(), service );
+            }
+            else
+            {
+                updateConnectionSettings( server, service );
+            }
+
+            retval = service;
         }
-        else
-        {
-            updateConnectionSettings( server, service );
-        }
 
-        return service;
+        return retval;
     }
 
     public static IRuntimeDelegateValidator[] getRuntimeDelegateValidators()
@@ -295,6 +397,67 @@ public class LiferayServerCore extends Plugin
         }
 
         return retval;
+    }
+
+    public static PortalBundle getPortalBundle( PortalRuntime portalRuntime , String type )
+    {
+        PortalBundle retval = null;
+
+        if( type != null )
+        {
+            for( PortalBundle portalBundle : getPortalBundles() )
+            {
+                if( type.equals( portalBundle.getType() ) )
+                {
+                    try
+                    {
+                        retval =
+                            portalBundle.getClass().getConstructor( PortalRuntime.class ).newInstance( portalRuntime );
+                    }
+                    catch( Exception e )
+                    {
+                        logError( "Unable to get portal bundle class", e );
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return retval;
+    }
+
+    public static PortalBundle[] getPortalBundles()
+    {
+        if( portalBundles == null )
+        {
+            final IConfigurationElement[] elements =
+                Platform.getExtensionRegistry().getConfigurationElementsFor( PortalBundle.EXTENSION_ID );
+
+            try
+            {
+                List<PortalBundle> bundles = new ArrayList<PortalBundle>();
+
+                for( IConfigurationElement element : elements )
+                {
+                    final Object o = element.createExecutableExtension( "class" );
+
+                    if( o instanceof PortalBundle )
+                    {
+                        PortalBundle portalBundle = (PortalBundle) o;
+                        bundles.add( portalBundle );
+                    }
+                }
+
+                portalBundles = bundles.toArray( new PortalBundle[0] );
+            }
+            catch( Exception e )
+            {
+                logError( "Unable to get PortalBundle extensions", e ); //$NON-NLS-1$
+            }
+        }
+
+        return portalBundles;
     }
 
     public static ILiferayRuntimeStub[] getRuntimeStubs()
@@ -354,7 +517,17 @@ public class LiferayServerCore extends Plugin
 
     public static void logError( String msg )
     {
-        logError( createErrorStatus( msg ) );
+        logError( error( msg ) );
+    }
+
+    public static void logInfo( String msg )
+    {
+        logInfo( info( msg ) );
+    }
+
+    public static void logInfo( IStatus status )
+    {
+        getDefault().getLog().log( status );
     }
 
     public static void logError( String msg, Throwable e )
@@ -661,7 +834,6 @@ public class LiferayServerCore extends Plugin
     public void start( BundleContext context ) throws Exception
     {
         super.start( context );
-
         plugin = this;
 
         this.runtimeLifecycleListener = new IRuntimeLifecycleListener()
@@ -716,11 +888,16 @@ public class LiferayServerCore extends Plugin
     public void stop( BundleContext context ) throws Exception
     {
         plugin = null;
-
         super.stop( context );
 
         SDKManager.getInstance().removeSDKListener( this.sdkListener );
         ServerCore.removeRuntimeLifecycleListener( runtimeLifecycleListener );
         ServerCore.removeServerLifecycleListener( serverLifecycleListener );
     }
+
+    public static OsgiConnection newOsgiConnection( IServer server )
+    {
+        return new OsgiConnectionImpl( 33133 );
+    }
+
 }

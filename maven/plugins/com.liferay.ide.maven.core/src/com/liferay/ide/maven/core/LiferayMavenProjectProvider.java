@@ -26,6 +26,7 @@ import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProfileLocation;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.server.util.ComponentUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -642,7 +643,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
             try
             {
-                if( MavenUtil.isMavenProject( project ) )
+                if( MavenUtil.isMavenProject( project ) && ComponentUtil.hasLiferayFacet( project ) )
                 {
                     return new LiferayMavenProject( project );
                 }

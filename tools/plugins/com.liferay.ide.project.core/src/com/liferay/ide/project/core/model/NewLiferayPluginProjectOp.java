@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.IPortletFramework;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.internal.ActiveProfilesValidationService;
 import com.liferay.ide.project.core.model.internal.ArchetypeDefaultValueService;
 import com.liferay.ide.project.core.model.internal.ArtifactVersionDefaultValueService;
@@ -160,9 +161,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$
 
-    Value<ILiferayProjectProvider> getProjectProvider();
+    Value<NewLiferayProjectProvider> getProjectProvider();
     void setProjectProvider( String value );
-    void setProjectProvider( ILiferayProjectProvider value );
+    void setProjectProvider( NewLiferayProjectProvider value );
 
 
     // *** UseSDKLocation ***

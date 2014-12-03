@@ -110,9 +110,9 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
             {
                 IProject addModuleProject = addModule.getProject();
 
-                if( !CoreUtil.isLiferayProject( addModuleProject ) )
+                if( ! CoreUtil.isLiferayProject( addModuleProject ) )
                 {
-                    return LiferayServerCore.createErrorStatus( Msgs.notAddNonLiferayPluginProjectModule );
+                    return LiferayServerCore.error( Msgs.notAddNonLiferayPluginProjectModule );
                 }
 
                 IStatus facetStatus = FacetUtil.verifyFacets( addModuleProject, getServer() );
@@ -125,7 +125,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
                 // make sure that EXT is disabled for now for remote deployment
                 if( ServerUtil.isExtProject( addModuleProject ) )
                 {
-                    return LiferayServerCore.createErrorStatus( Msgs.extPluginDeployment );
+                    return LiferayServerCore.error( Msgs.extPluginDeployment );
                 }
             }
 
@@ -416,7 +416,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
 
             IServerManagerConnection connection = LiferayServerCore.getRemoteConnection( this );
 
-            final IStatus createErrorStatus = LiferayServerCore.createErrorStatus( CONNECT_ERROR_MSG );
+            final IStatus createErrorStatus = LiferayServerCore.error( CONNECT_ERROR_MSG );
 
             status = connection.isAlive() ? Status.OK_STATUS : createErrorStatus;
 

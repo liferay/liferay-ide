@@ -20,7 +20,7 @@ import com.liferay.ide.server.tomcat.ui.command.SetExternalPropertiesCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetMemoryArgsCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetServerModeCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetUserTimezoneCommand;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.cmd.SetPasswordCommand;
 import com.liferay.ide.server.ui.cmd.SetUsernameCommand;
 import com.liferay.ide.server.util.ServerUtil;
@@ -831,7 +831,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				// Must not be the same as the workspace location
 				if (dir.length() == 0 || workspacePath.equals(path)) {
 					return new IStatus [] {
-							new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.errorServerDirIsRoot)};
+							new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.errorServerDirIsRoot)};
 				}
 				// User specified value may not be under the ".metadata" folder of the workspace
 				else if (workspacePath.isPrefixOf(path)
@@ -839,12 +839,12 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 					int cnt = path.matchingFirstSegments(workspacePath);
 					if (METADATADIR.equals(path.segment(cnt))) {
 						return new IStatus [] {
-								new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, NLS.bind(Msgs.errorServerDirUnderRoot, METADATADIR))};
+								new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, NLS.bind(Msgs.errorServerDirUnderRoot, METADATADIR))};
 					}
 				}
 				else if (path.equals(installDirPath))
 					return new IStatus [] {
-						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID,
+						new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID,
 								NLS.bind(Msgs.errorServerDirCustomNotInstall,
 										NLS.bind(Msgs.serverEditorServerDirInstall, StringPool.EMPTY).trim()))};
 			}
@@ -853,7 +853,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 				// If non-custom instance dir is not the install and metadata isn't the selection, return error
 				if (!path.equals(installDirPath) /* && !serverDirMetadata.getSelection()*/) {
 					return new IStatus [] {
-							new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.changingRuntimeBaseDirectoriesNotSupported)};
+							new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.changingRuntimeBaseDirectoriesNotSupported)};
 				}
 			}
 
@@ -862,7 +862,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 			// Deploy directory must be set
 			if (dir == null || dir.length() == 0) {
 				return new IStatus [] {
-						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.errorDeployDirNotSpecified)};
+						new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.errorDeployDirNotSpecified)};
 			}
 
 			String externalPropetiesValue = tomcatServer.getExternalProperties();
@@ -872,7 +872,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 				if ((!externalPropertiesFile.exists()) || (!ServerUtil.isValidPropertiesFile(externalPropertiesFile))) {
 					return new IStatus[] {
-						new Status(IStatus.ERROR, LiferayServerUIPlugin.PLUGIN_ID, Msgs.invalidExternalProperitesFile)
+						new Status(IStatus.ERROR, LiferayServerUI.PLUGIN_ID, Msgs.invalidExternalProperitesFile)
 					};
 				}
 			}

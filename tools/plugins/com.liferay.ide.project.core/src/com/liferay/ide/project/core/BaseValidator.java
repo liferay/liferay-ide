@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
 
@@ -31,8 +31,10 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -42,8 +44,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.validate.ValidationMessage;
@@ -247,25 +247,15 @@ public abstract class BaseValidator extends AbstractValidator
         if( resourceValue != null && resourceValue.length() > 0 )
         {
             // IDE-110 IDE-648
-            final IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
+            final IResource resource =
+                LiferayCore.create( project ).findDocrootResource( new Path( resourceValue ) );
 
-            if( webappRoot != null )
+            if( resource == null || ! resource.exists() )
             {
-                // check for file first
-                IVirtualFile resourceFile = webappRoot.getFile( resourceValue );
+                String msg = MessageFormat.format( errorMessage, new Object[] { resourceValue } );
 
-                if( resourceFile == null || !resourceFile.exists() )
-                {
-                    IVirtualFolder resourceFolder = webappRoot.getFolder( resourceValue );
-
-                    if( resourceFolder == null || !resourceFolder.exists() )
-                    {
-                        String msg = MessageFormat.format( errorMessage, new Object[] { resourceValue } );
-
-                        return createMarkerValues(
-                            preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
-                    }
-                }
+                return createMarkerValues(
+                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
             }
         }
 

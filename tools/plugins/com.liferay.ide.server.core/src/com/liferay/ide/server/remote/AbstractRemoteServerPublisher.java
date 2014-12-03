@@ -14,7 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 
@@ -34,12 +35,12 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 
 /**
@@ -151,32 +152,27 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
     {
         for( IModuleResourceDelta delta : deltas )
         {
-            int deltaKind = delta.getKind();
+            final int deltaKind = delta.getKind();
 
-            IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
+            final IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
 
-            IProject deltaProject = deltaResource.getProject();
+            final IProject deltaProject = deltaResource.getProject();
 
             // IDE-110 IDE-648
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( deltaProject );
+            final ILiferayProject lrproject = LiferayCore.create( deltaProject );
+            final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
             IPath deltaPath = null;
 
-            if( webappRoot != null )
+            if( webappRoot != null && webappRoot.exists())
             {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists() )
-                    {
-                        final IPath deltaFullPath = deltaResource.getFullPath();
-                        final IPath containerFullPath = container.getFullPath();
-                        deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
+                final IPath deltaFullPath = deltaResource.getFullPath();
+                final IPath containerFullPath = webappRoot.getFullPath();
+                deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
 
-                        if( deltaPath != null && deltaPath.segmentCount() > 0 )
-                        {
-                            break;
-                        }
-                    }
+                if( deltaPath != null && deltaPath.segmentCount() > 0 )
+                {
+                    break;
                 }
             }
 

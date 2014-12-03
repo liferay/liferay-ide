@@ -15,11 +15,11 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.templates.ITemplateContext;
+import com.liferay.ide.core.templates.ITemplateOperation;
+import com.liferay.ide.core.templates.TemplatesCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.templates.core.ITemplateContext;
-import com.liferay.ide.templates.core.ITemplateOperation;
-import com.liferay.ide.templates.core.TemplatesCore;
 
 import java.io.ByteArrayInputStream;
 

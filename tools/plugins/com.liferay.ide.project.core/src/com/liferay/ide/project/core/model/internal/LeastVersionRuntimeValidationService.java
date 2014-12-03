@@ -37,12 +37,6 @@ public class LeastVersionRuntimeValidationService extends ValidationService
 {
 
     @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
-    }
-
-    @Override
     protected Status compute()
     {
         Status retval = Status.createOkStatus();

@@ -15,7 +15,6 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -32,6 +31,7 @@ import java.util.Map;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -90,20 +90,18 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
             String pluginVersion = "1";
 
             final IPath pluginPropertiesPath = new Path( "WEB-INF/liferay-plugin-package.properties" );
-            final IFile propertiesFile = CoreUtil.getDocrootFile( getProject(), pluginPropertiesPath.toOSString() );
+            final IResource propsRes =
+                LiferayCore.create( getProject() ).findDocrootResource( pluginPropertiesPath );
 
-            if( propertiesFile != null )
+            if( propsRes instanceof IFile && propsRes.exists() )
             {
                 try
                 {
-                    if( propertiesFile.exists() )
-                    {
-                        final PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
-                        final InputStream is = propertiesFile.getContents();
-                        pluginPackageProperties.load( is );
-                        pluginVersion = pluginPackageProperties.getString( "module-incremental-version" );
-                        is.close();
-                    }
+                    final PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
+                    final InputStream is = ( (IFile) propsRes).getContents();
+                    pluginPackageProperties.load( is );
+                    pluginVersion = pluginPackageProperties.getString( "module-incremental-version" );
+                    is.close();
                 }
                 catch( Exception e )
                 {

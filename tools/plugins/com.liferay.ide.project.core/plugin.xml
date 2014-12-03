@@ -529,7 +529,15 @@
             properties="isLiferayRuntime"
             type="org.eclipse.jst.common.project.facet.core.libprov.EnablementExpressionContext">
       </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.project.core.BundleProjectPropertyTester"
+            id="com.liferay.ide.project.core.isBundleProject"
+            namespace="com.liferay.ide.project.core"
+            properties="isBundleProject"
+            type="java.lang.Object" >
+      </propertyTester>
    </extension>
+
    <extension
          point="org.eclipse.wst.common.project.facet.core.listeners">
       <listener
@@ -589,6 +597,41 @@
             description="Update targeted runtime to selected version"
             id="com.liferay.ide.project.core.upgradeRuntimeHandler">
       </upgradeProjectHandler>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.moduleFactories">
+      <moduleFactory
+            class="com.liferay.ide.project.core.BundleFactoryDelegate"
+            id="com.liferay.ide.project.core.bundleFactory"
+            projects="true">
+         <moduleType
+           types="liferay.bundle"
+           versions="1.0">
+         </moduleType>
+         <enablement>
+            <or>
+                <test property="com.liferay.ide.project.core.isBundleProject" value="true"/>
+            </or>
+         </enablement>
+      </moduleFactory>
+   </extension>
+   <extension
+         id="bundleNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.liferay.ide.project.core.BundleProjectNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         id="bundleNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.liferay.ide.project.core.ProjectNature1">
+         </run>
+      </runtime>
    </extension>
 
    <!--

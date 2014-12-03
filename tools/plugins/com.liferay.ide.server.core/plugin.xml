@@ -2,8 +2,10 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="pluginPublishers" name="%plugin.publishers.extension.point.name" schema="schema/pluginPublishers.exsd"/>
+   <extension-point id="portalLaunchParticipants" name="Portal Launch Participants" schema="schema/portalLaunchParticipants.exsd"/>
    <extension-point id="runtimeDelegateValidators" name="%runtime.delegate.validators.extension.point.name" schema="schema/runtimeDelegateValidators.exsd"/>
    <extension-point id="runtimeStubs" name="%runtime.stubs.extension.point.name" schema="schema/runtimeStubs.exsd"/>
+   <extension-point id="portalBundles" name="Liferay Portal Bundles" schema="schema/portalBundles.exsd"/>
 
    <extension
          point="org.eclipse.wst.xml.core.catalogContributions">
@@ -1081,6 +1083,17 @@
                versions="1.0">
          </moduleType>
       </runtimeType>
+      <runtimeType
+            class="com.liferay.ide.server.core.portal.PortalRuntime"
+            description="Liferay 7.x"
+            id="com.liferay.ide.server.portal.runtime"
+            name="Liferay 7.x"
+            vendor="Liferay, Inc.">
+         <moduleType
+               types="liferay.bundle"
+               versions="*">
+         </moduleType>
+      </runtimeType>
    </extension>
    <extension
          point="org.eclipse.wst.server.core.serverTypes">
@@ -1096,6 +1109,18 @@
             runtimeTypeId="com.liferay.ide.eclipse.server.runtime.stub"
             supportsRemoteHosts="true">
       </serverType>
+      <serverType
+            behaviourClass="com.liferay.ide.server.core.portal.PortalServerBehavior"
+            class="com.liferay.ide.server.core.portal.PortalServerDelegate"
+            description="Liferay 7.x"
+            id="com.liferay.ide.server.portal"
+            initialState="stopped"
+            launchConfigId="com.liferay.ide.server.portal.launch"
+            name="Liferay 7.x"
+            runtime="true"
+            runtimeTypeId="com.liferay.ide.server.portal.runtime"
+            supportsRemoteHosts="true">
+      </serverType>
    </extension>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
@@ -1107,6 +1132,13 @@
             public="true"
             sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
             sourcePathComputerId="com.liferay.ide.server.remote.sourcePathComputer">
+      </launchConfigurationType>
+      <launchConfigurationType
+            delegate="com.liferay.ide.server.core.portal.PortalServerLaunchConfig"
+            id="com.liferay.ide.server.portal.launch"
+            modes="run,debug"
+            name="Liferay 7.x"
+            public="true">
       </launchConfigurationType>
    </extension>
    <extension
@@ -1190,6 +1222,20 @@
             class="com.liferay.ide.server.remote.RemoteSourcePathComputerDelegate"
             id="com.liferay.ide.server.remote.sourcePathComputer">
       </sourcePathComputer>
+   </extension>
+   <extension
+         point="org.eclipse.wst.server.core.moduleTypes">
+      <moduleType
+            id="liferay.bundle"
+            name="Liferay OSGi Bundle">
+      </moduleType>
+   </extension>
+   <extension
+         point="com.liferay.ide.server.core.portalBundles">
+      <portalBundle
+            class="com.liferay.ide.server.core.portal.PortalTomcatBundle"
+            type="tomcat">
+      </portalBundle>
    </extension>
 
 </plugin>

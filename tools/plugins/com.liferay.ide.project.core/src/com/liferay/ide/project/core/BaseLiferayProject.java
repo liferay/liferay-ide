@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectAdapter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -63,7 +64,14 @@ public abstract class BaseLiferayProject implements ILiferayProject
 
     public IFolder getSourceFolder( String classification )
     {
-        return CoreUtil.getFirstSrcFolder( project );
+        final IFolder[] folders = ProjectUtil.getSourceFolders( project );
+
+        if( !CoreUtil.isNullOrEmpty( folders ) )
+        {
+            return folders[0];
+        }
+
+        return null;
     }
 
 }

@@ -211,7 +211,7 @@ public class PluginClasspathContainerInitializer extends ClasspathContainerIniti
         }
         else
         {
-            throw new CoreException( LiferayServerCore.createErrorStatus( "Invalid final segment of type: " + //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.error( "Invalid final segment of type: " + //$NON-NLS-1$
                 finalSegment ) );
         }
 

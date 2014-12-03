@@ -15,14 +15,15 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
@@ -34,7 +35,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jst.jsp.core.internal.JSPCorePlugin;
 import org.eclipse.jst.jsp.core.internal.preferences.JSPCorePreferenceNames;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.project.facet.core.IProjectFacetVersion;
 
@@ -164,19 +164,16 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                         if( fragmentModel.getBooleanProperty( IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS ) )
                         {
                             // IDE-110 IDE-648
-                            IVirtualFolder webappRoot = CoreUtil.getDocroot( this.project );
+                            final ILiferayProject lrproject = LiferayCore.create( project );
+                            final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
-                            for( IContainer container : webappRoot.getUnderlyingFolders() )
+                            if( webappRoot != null && webappRoot.exists() )
                             {
-                                if( container != null && container.exists() )
-                                {
-                                    IFile viewJsp = container.getFile( new Path( "view.jsp" ) ); //$NON-NLS-1$
+                                IFile viewJsp = webappRoot.getFile( new Path( "view.jsp" ) ); //$NON-NLS-1$
 
-                                    if( viewJsp.exists() )
-                                    {
-                                        viewJsp.delete( true, monitor );
-                                        break;
-                                    }
+                                if( viewJsp.exists() )
+                                {
+                                    viewJsp.delete( true, monitor );
                                 }
                             }
                         }

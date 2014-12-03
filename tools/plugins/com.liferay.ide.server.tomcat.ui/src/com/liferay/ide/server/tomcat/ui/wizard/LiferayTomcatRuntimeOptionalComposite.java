@@ -20,7 +20,7 @@ import static com.liferay.ide.core.util.CoreUtil.empty;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.io.File;
@@ -82,7 +82,7 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
         wizard.setTitle( Msgs.liferayRuntimeTomcatBundle );
         wizard.setDescription( Msgs.specifyExtraSettings );
-        wizard.setImageDescriptor( LiferayServerUIPlugin.getImageDescriptor( LiferayServerUIPlugin.IMG_WIZ_RUNTIME ) );
+        wizard.setImageDescriptor( LiferayServerUI.getImageDescriptor( LiferayServerUI.IMG_WIZ_RUNTIME ) );
     }
 
     protected Button createButton( String text, int style )

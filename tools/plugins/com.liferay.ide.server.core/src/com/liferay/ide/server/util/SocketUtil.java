@@ -61,7 +61,7 @@ public class SocketUtil
         }
         catch( Exception e )
         {
-            status = LiferayServerCore.createErrorStatus( Msgs.notConnect );
+            status = LiferayServerCore.error( Msgs.notConnect );
             // e.printStackTrace();
         }
         finally

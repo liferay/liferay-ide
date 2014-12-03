@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.descriptor;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -186,7 +187,8 @@ public abstract class LiferayDescriptorHelper
 
             if( lProject != null )
             {
-                final String versionStr = lProject.getPortalVersion();
+                final ILiferayPortal portal = lProject.adapt( ILiferayPortal.class );
+                final String versionStr = portal.getVersion();
                 retval = getDescriptorVersionFromPortalVersion( versionStr );
             }
         }
@@ -270,7 +272,12 @@ public abstract class LiferayDescriptorHelper
 
     protected IFile getDescriptorFile( String fileName )
     {
-        return project == null ? null : CoreUtil.getDescriptorFile( project, fileName );
+        if( ! CoreUtil.isLiferayProject( project ) )
+        {
+            project = CoreUtil.getLiferayProject( project );
+        }
+
+        return project == null ? null : LiferayCore.create( project ).getDescriptorFile( fileName );
     }
 
     public IDescriptorOperation getDescriptorOperation( Class<? extends IDescriptorOperation> type )

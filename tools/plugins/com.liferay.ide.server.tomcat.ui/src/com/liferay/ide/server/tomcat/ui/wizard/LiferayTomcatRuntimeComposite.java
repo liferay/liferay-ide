@@ -18,7 +18,7 @@ package com.liferay.ide.server.tomcat.ui.wizard;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
-import com.liferay.ide.server.ui.LiferayServerUIPlugin;
+import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
         wizard.setTitle( Msgs.liferayTomcatRuntime );
         wizard.setDescription( Msgs.specifyInstallationDirectory );
-        wizard.setImageDescriptor( LiferayServerUIPlugin.getImageDescriptor( LiferayServerUIPlugin.IMG_WIZ_RUNTIME ) );
+        wizard.setImageDescriptor( LiferayServerUI.getImageDescriptor( LiferayServerUI.IMG_WIZ_RUNTIME ) );
     }
 
     public void modifyText( ModifyEvent e )

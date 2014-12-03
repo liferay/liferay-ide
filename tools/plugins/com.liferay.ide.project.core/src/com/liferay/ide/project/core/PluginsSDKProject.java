@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -22,12 +23,19 @@ import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
+import com.liferay.ide.server.util.ServerUtil;
 
-import java.util.Properties;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,12 +45,12 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class LiferayPluginsSDKProject extends BaseLiferayProject
+public class PluginsSDKProject extends WTPProject
 {
 
     private ILiferayRuntime liferayRuntime;
 
-    public LiferayPluginsSDKProject( IProject project, ILiferayRuntime liferayRuntime )
+    public PluginsSDKProject( IProject project, ILiferayRuntime liferayRuntime )
     {
         super( project );
 
@@ -69,8 +77,7 @@ public class LiferayPluginsSDKProject extends BaseLiferayProject
                 return adapterType.cast( projectBuilder );
             }
         }
-
-        if( IRemoteServerPublisher.class.equals( adapterType ) )
+        else if( IRemoteServerPublisher.class.equals( adapterType ) )
         {
             final SDK sdk = getSDK();
 
@@ -81,18 +88,14 @@ public class LiferayPluginsSDKProject extends BaseLiferayProject
                 return adapterType.cast( remotePublisher );
             }
         }
+        else if( ILiferayPortal.class.equals( adapterType ) )
+        {
+            final ILiferayPortal portal = new PluginsSDKPortal( this.liferayRuntime );
+
+            return adapterType.cast( portal );
+        }
 
         return null;
-    }
-
-    public IPath getAppServerPortalDir()
-    {
-        return this.liferayRuntime.getAppServerPortalDir();
-    }
-
-    public String[] getHookSupportedProperties()
-    {
-        return liferayRuntime.getHookSupportedProperties();
     }
 
     public IPath getLibraryPath( String filename )
@@ -148,21 +151,6 @@ public class LiferayPluginsSDKProject extends BaseLiferayProject
         return retval;
     }
 
-    public String getPortalVersion()
-    {
-        return liferayRuntime.getPortalVersion();
-    }
-
-    public Properties getPortletCategories()
-    {
-        return this.liferayRuntime.getPortletCategories();
-    }
-
-    public Properties getPortletEntryCategories()
-    {
-        return this.liferayRuntime.getPortletEntryCategories();
-    }
-
     protected SDK getSDK()
     {
         SDK retval = null;
@@ -184,6 +172,30 @@ public class LiferayPluginsSDKProject extends BaseLiferayProject
     public IPath[] getUserLibs()
     {
         return this.liferayRuntime.getUserLibs();
+    }
+
+    @Override
+    public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
+    {
+        final Collection<IFile> outputs = new HashSet<IFile>();
+
+        if( build )
+        {
+            this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+
+            final SDK sdk = SDKUtil.getSDK( this.getProject() );
+
+            final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( getProject() );
+
+            final IStatus warStatus = sdk.war( this.getProject(), null, true, appServerProperties, monitor );
+
+            if( warStatus.isOK() )
+            {
+
+            }
+        }
+
+        return outputs;
     }
 
 }

@@ -252,7 +252,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
     public ILiferayProject provide( Object type )
     {
-        LiferayPluginsSDKProject retval = null;
+        PluginsSDKProject retval = null;
         IProject project = null;
         ILiferayRuntime liferayRuntime = null;
 
@@ -283,7 +283,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         if( liferayRuntime != null )
         {
-            retval = new LiferayPluginsSDKProject( project, liferayRuntime );
+            retval = new PluginsSDKProject( project, liferayRuntime );
         }
 
         return retval;

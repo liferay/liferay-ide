@@ -18,6 +18,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
@@ -47,6 +48,8 @@ public abstract class NewLiferayProjectProvider extends AbstractLiferayProjectPr
 
     public abstract IStatus doCreateNewProject( final NewLiferayPluginProjectOp op, IProgressMonitor monitor )
         throws CoreException;
+
+    public abstract IStatus validateProjectLocation( String projectName, IPath path );
 
     protected String getFrameworkName( NewLiferayPluginProjectOp op )
     {

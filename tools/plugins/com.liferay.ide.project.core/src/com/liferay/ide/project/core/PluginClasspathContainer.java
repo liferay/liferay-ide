@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -23,6 +24,7 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.ComponentUtil;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -48,7 +50,6 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorations;
 import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 
 /**
  * @author Greg Amerson
@@ -226,27 +227,20 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
     {
         IClasspathEntry entry = null;
 
-        IFile serviceJar = ProjectUtil.findServiceJarForContext( context );
+        IFile serviceJar = ComponentUtil.findServiceJarForContext( context );
 
         if( serviceJar.exists() )
         {
-            IVirtualFolder webappRoot = CoreUtil.getDocroot( serviceJar.getProject() );
+            IFolder defaultDocroot = LiferayCore.create( serviceJar.getProject() ).getDefaultDocrootFolder();
 
             // IDE-110 IDE-648
-            if( webappRoot != null )
+            if( defaultDocroot != null && defaultDocroot.exists() )
             {
-                for( IContainer container : webappRoot.getUnderlyingFolders() )
-                {
-                    if( container != null && container.exists() )
-                    {
-                        IFolder serviceFolder = container.getFolder( new Path( "WEB-INF/service") ); //$NON-NLS-1$
+                IFolder serviceFolder = defaultDocroot.getFolder( new Path( "WEB-INF/service") ); //$NON-NLS-1$
 
-                        if( serviceFolder.exists() )
-                        {
-                            entry = createClasspathEntry( serviceJar.getLocation(), serviceFolder.getLocation() );
-                            break;
-                        }
-                    }
+                if( serviceFolder.exists() )
+                {
+                    entry = createClasspathEntry( serviceJar.getLocation(), serviceFolder.getLocation() );
                 }
             }
 

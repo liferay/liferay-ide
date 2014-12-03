@@ -21,7 +21,6 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
 import org.eclipse.debug.core.sourcelookup.ISourcePathComputer;
 import org.eclipse.jdt.internal.launching.JavaSourceLookupDirector;
 import org.eclipse.wst.server.core.IModule;
@@ -137,7 +136,10 @@ public class PortalSourceLookupDirector extends JavaSourceLookupDirector
     {
         super.initializeParticipants();
 
-        addParticipants( new ISourceLookupParticipant[] { new PortalSourceLookupParticipant() } );
+        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
+        {
+            addParticipants( participant.getPortalSourceLookupParticipants() );
+        }
     }
 
     @Override

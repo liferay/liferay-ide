@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.util.HookUtil;
@@ -317,7 +318,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             if ( customJSPFolder != null )
             {
-                final IFolder docFolder = CoreUtil.getDefaultDocrootFolder( project );
+                final IFolder docFolder = LiferayCore.create( project ).getDefaultDocrootFolder();
 
                 if ( docFolder != null )
                 {

@@ -16,10 +16,13 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.FileInputStream;
@@ -67,8 +70,6 @@ import org.eclipse.wst.common.componentcore.internal.operation.AddReferenceDataM
 import org.eclipse.wst.common.componentcore.internal.operation.RemoveReferenceDataModelProvider;
 import org.eclipse.wst.common.componentcore.internal.resources.VirtualArchiveComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFile;
-import org.eclipse.wst.common.componentcore.resources.IVirtualFolder;
 import org.eclipse.wst.common.componentcore.resources.IVirtualReference;
 import org.eclipse.wst.common.frameworks.datamodel.DataModelFactory;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -159,20 +160,14 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         if( fullPath.lastSegment() != null &&
             fullPath.lastSegment().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
         {
-            final IVirtualFolder webappRoot = CoreUtil.getDocroot( delta.getResource().getProject() );
-
-            if( webappRoot == null )
-            {
-                return false;
-            }
-
-            // IDE-110 648
-            final IVirtualFile propertiesFile =
-                webappRoot.getFile( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) ); //$NON-NLS-1$
+            final ILiferayProject lrproject = LiferayCore.create( delta.getResource().getProject() );
+            final IResource propertiesFile =
+                lrproject.findDocrootResource( new Path( "WEB-INF/" +
+                    ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
 
             if( propertiesFile != null && propertiesFile.exists() )
             {
-                final IPath filePath = propertiesFile.getUnderlyingFile().getFullPath();
+                final IPath filePath = propertiesFile.getFullPath();
 
                 if( filePath.equals( fullPath ) )
                 {
@@ -218,7 +213,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
     protected IVirtualReference processContext( IVirtualComponent rootComponent, String context )
     {
         // first check for jar file
-        IFile serviceJar = ProjectUtil.findServiceJarForContext( context );
+        IFile serviceJar = ComponentUtil.findServiceJarForContext( context );
 
         if( serviceJar == null )
         {

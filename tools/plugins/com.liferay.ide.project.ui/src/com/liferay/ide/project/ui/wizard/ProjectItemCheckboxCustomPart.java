@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -218,17 +219,22 @@ public class ProjectItemCheckboxCustomPart extends AbstractCheckboxCustomPart
 
                     if( lProject != null )
                     {
-                        final String portalVersion = lProject.getPortalVersion();
+                        final ILiferayPortal portal = lProject.adapt( ILiferayPortal.class );
 
-                        if( portalVersion != null )
+                        if( portal != null )
                         {
-                            final Version version = new Version( portalVersion );
+                            final String portalVersion = portal.getVersion();
 
-                            if( CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
+                            if( portalVersion != null )
                             {
-                                retval =
-                                    Status.createErrorStatus( "Portal version of " + project.getName() +
-                                        " is greater than " + ILiferayConstants.V620 );
+                                final Version version = new Version( portalVersion );
+
+                                if( CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
+                                {
+                                    retval =
+                                        Status.createErrorStatus( "Portal version of " + project.getName() +
+                                            " is greater than " + ILiferayConstants.V620 );
+                                }
                             }
                         }
                     }

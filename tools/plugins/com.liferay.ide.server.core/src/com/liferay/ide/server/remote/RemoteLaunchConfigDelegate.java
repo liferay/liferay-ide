@@ -15,12 +15,11 @@
 
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.debug.core.LiferayDebugCore;
-import com.liferay.ide.debug.core.fm.FMDebugTarget;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.PortalLaunchParticipant;
 import com.liferay.ide.server.core.PortalSourceLookupDirector;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Map;
 
@@ -52,7 +51,6 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         IServer server, ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
-
         if( monitor == null )
         {
             monitor = new NullProgressMonitor();
@@ -107,9 +105,11 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         if( monitor.isCanceled() || launch.isTerminated() )
         {
             IDebugTarget[] debugTargets = launch.getDebugTargets();
+
             for( int i = 0; i < debugTargets.length; i++ )
             {
                 IDebugTarget target = debugTargets[i];
+
                 if( target.canDisconnect() )
                 {
                     target.disconnect();
@@ -118,46 +118,12 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
             return;
         }
 
-        final IServerManagerConnection connection = getServerManagerConnection( server, monitor );
-
-        if( connection != null )
-        {
-            try
-            {
-                final String fmDebugPassword = connection.getFMDebugPassword();
-                final int fmDebugPort = connection.getFMDebugPort();
-
-                if( fmDebugPassword != null && fmDebugPort != -1 )
-                {
-                    launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD, fmDebugPassword );
-                    launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PORT, Integer.toString( fmDebugPort ) );
-
-                    final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
-
-                    launch.addDebugTarget( target );
-                }
-            }
-            catch( APIException e )
-            {
-                LiferayServerCore.logError( "Unable to determine remote freemarker debugger connection info.", e ); //$NON-NLS-1$
-            }
-        }
-
         monitor.done();
-    }
-
-    public IServerManagerConnection getServerManagerConnection( IServer server, IProgressMonitor monitor )
-    {
-        IServerManagerConnection connection =
-            LiferayServerCore.getRemoteConnection( (IRemoteServer) server.loadAdapter( IRemoteServer.class, monitor ) );
-
-        return connection;
     }
 
     public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
-
         String serverId = configuration.getAttribute( SERVER_ID, StringPool.EMPTY );
         IServer server = ServerCore.findServer( serverId );
 
@@ -173,7 +139,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         if( state != IServer.STATE_STARTED )
         {
             throw new CoreException(
-                LiferayServerCore.createErrorStatus( Msgs.serverNotRunning ) );
+                LiferayServerCore.error( Msgs.serverNotRunning ) );
         }
 
         if( ILaunchManager.RUN_MODE.equals( mode ) )
@@ -186,7 +152,12 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         }
         else
         {
-            throw new CoreException( LiferayServerCore.createErrorStatus( "Profile mode is not supported." ) ); //$NON-NLS-1$
+            throw new CoreException( LiferayServerCore.error( "Profile mode is not supported." ) ); //$NON-NLS-1$
+        }
+
+        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
+        {
+            participant.portalPostLaunch( configuration, mode, launch, monitor );
         }
     }
 
@@ -194,8 +165,7 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
         IServer server, ILaunchConfiguration configuration, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
-
-        IServerManagerConnection connection = getServerManagerConnection( server, monitor );
+        IServerManagerConnection connection = ServerUtil.getServerManagerConnection( server, monitor );
 
         RemoteMonitorProcess process = new RemoteMonitorProcess( server, connection, launch );
 

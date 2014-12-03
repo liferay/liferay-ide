@@ -15,28 +15,17 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.debug.core.LiferayDebugCore;
-import com.liferay.ide.debug.core.fm.FMDebugTarget;
-import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.PortalLaunchParticipant;
 import com.liferay.ide.server.core.PortalSourceLookupDirector;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerUtil;
-import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -46,48 +35,18 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfigurationDelegate
 {
-    private static final String STOP_SERVER = "stop-server"; //$NON-NLS-1$
-    private static final String FALSE = "false"; //$NON-NLS-1$
-    private static final String FM_PARAMS = " -Dfreemarker.debug.password={0} -Dfreemarker.debug.port={1}"; //$NON-NLS-1$
-
-    private String saveLaunchMode;
-    private String fmDebugPort;
-
     @Override
     public String getVMArguments( ILaunchConfiguration configuration ) throws CoreException
     {
         String retval = super.getVMArguments( configuration );
 
-        String stopServer = configuration.getAttribute( STOP_SERVER, FALSE );
-
-        if( ILaunchManager.DEBUG_MODE.equals( saveLaunchMode ) && FALSE.equals( stopServer ) )
+        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
         {
-            try
+            String vmArgs = participant.provideVMArgs( configuration );
+
+            if( ! CoreUtil.isNullOrEmpty( vmArgs ) )
             {
-                final IServer server = ServerUtil.getServer( configuration );
-
-                final ILiferayRuntime liferayRuntime =
-                    (ILiferayRuntime) server.getRuntime().loadAdapter( ILiferayRuntime.class, null );
-
-                final Version version = new Version( liferayRuntime.getPortalVersion() );
-
-                if( CoreUtil.compareVersions( version, ILiferayConstants.V620 ) >= 0 )
-                {
-                    if( this.fmDebugPort != null )
-                    {
-                        retval +=
-                            NLS.bind(
-                                FM_PARAMS, LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PASSWORD ),
-                                this.fmDebugPort );
-                    }
-                    else
-                    {
-                        LiferayDebugCore.logError( "The freemarker debug port is invalid." ); //$NON-NLS-1$
-                    }
-                }
-            }
-            catch( CoreException e )
-            {
+                retval += vmArgs;
             }
         }
 
@@ -106,70 +65,18 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
             sourceLocator.configureLaunch( launch );
         }
 
-        this.fmDebugPort = getValidatedDebugPort();
-        this.saveLaunchMode = mode;
+        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
+        {
+            participant.portalPreLaunch( configuration, mode, launch, monitor );
+        }
+
+
         super.launch( configuration, mode, launch, monitor );
-        this.saveLaunchMode = null;
 
-        final String stopServer = configuration.getAttribute( STOP_SERVER, FALSE );
-
-        if( ILaunchManager.DEBUG_MODE.equals( mode ) && FALSE.equals( stopServer ) )
+        for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
         {
-
-
-            if( this.fmDebugPort != null )
-            {
-                launch.setAttribute( LiferayDebugCore.PREF_FM_DEBUG_PORT, this.fmDebugPort );
-                this.fmDebugPort = null;
-
-                final IServer server = ServerUtil.getServer( configuration );
-
-                final IDebugTarget target = new FMDebugTarget( server.getHost(), launch, launch.getProcesses()[0] );
-                launch.addDebugTarget( target );
-            }
-            else
-            {
-                LiferayDebugCore.logError( "Launch freemarker port is invalid." ); //$NON-NLS-1$
-            }
+            participant.portalPostLaunch( configuration, mode, launch, monitor );
         }
     }
 
-    private String getValidatedDebugPort()
-    {
-        // This method will firstly do the validation on the customized port,
-        // if the port is not valid, it will search the whole extension ports from port 1025 to 65535
-        // to find another valid port, if no port is found, it returns null.
-        int port = Integer.parseInt( LiferayDebugCore.getPreference( LiferayDebugCore.PREF_FM_DEBUG_PORT ) );
-
-        final int lowerBound = 1025;
-        final int upperBound = 65535;
-
-        if( port < lowerBound || port > upperBound )
-        {
-            port = lowerBound;
-        }
-
-        while( port <= upperBound )
-        {
-            try
-            {
-                ServerSocket server = new ServerSocket();
-                server.bind( new InetSocketAddress( port ) );
-                server.close();
-
-                break;
-            }
-            catch( IOException e )
-            {
-                port++;
-            }
-        }
-
-        if( port <= upperBound )
-        {
-            return String.valueOf( port );
-        }
-
-        return null;
-    }
 }

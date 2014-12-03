@@ -46,6 +46,8 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
         assertNotNull( facade );
 
+        waitForJobsToComplete();
+
         assertTrue( CoreUtil.isLiferayProject( project ) );
     }
 
@@ -73,6 +75,8 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
         IMavenProjectFacade facade = MavenPlugin.getMavenProjectRegistry().create( project, monitor );
 
         assertNotNull( facade );
+
+        waitForJobsToComplete();
 
         assertTrue( CoreUtil.isLiferayProject( project ) );
     }

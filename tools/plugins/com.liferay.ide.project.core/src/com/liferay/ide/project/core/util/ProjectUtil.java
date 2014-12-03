@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -41,7 +42,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -481,39 +481,6 @@ public class ProjectUtil
 
     }
 
-    public static IFile findServiceJarForContext( String context )
-    {
-        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-
-        for( IProject project : projects )
-        {
-            if( project.getName().equals( context ) )
-            {
-                // IDE-110 IDE-648
-                IVirtualFolder webappRoot = CoreUtil.getDocroot( project );
-
-                if( webappRoot != null )
-                {
-                    for( IContainer container : webappRoot.getUnderlyingFolders() )
-                    {
-                        if( container != null && container.exists() )
-                        {
-                            final Path path = new Path( "WEB-INF/lib/" + project.getName() + "-service.jar" ); //$NON-NLS-1$ //$NON-NLS-2$
-                            IFile serviceJar = container.getFile( path );
-
-                            if( serviceJar.exists() )
-                            {
-                                return serviceJar;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
     private static void fixExtProjectClasspathEntries( IProject project )
     {
         try
@@ -720,7 +687,7 @@ public class ProjectUtil
     {
         if( project != null && ProjectUtil.isLiferayFacetedProject( project ) )
         {
-            IFolder defaultDocrootFolder = CoreUtil.getDefaultDocrootFolder( project );
+            IFolder defaultDocrootFolder = LiferayCore.create( project ).getDefaultDocrootFolder();
 
             if( defaultDocrootFolder != null )
             {
@@ -782,7 +749,7 @@ public class ProjectUtil
 
     public static String getRelativePathFromDocroot( IProject project, String path )
     {
-        IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
+        IFolder docroot = LiferayCore.create( project ).getDefaultDocrootFolder();
 
         IPath pathValue = new Path( path );
 
