@@ -15,7 +15,9 @@
 
 package com.liferay.ide.xml.search.ui.tests;
 
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.openEditor;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.deleteOtherProjects;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setAttrValue;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.verifyQuickFix;
 import static org.junit.Assert.assertNotNull;
 
@@ -30,14 +32,26 @@ import org.junit.Test;
 
 /**
  * @author Kuo Zhang
- *
  */
 public class JSPFileTests extends XmlSearchTestsBase
 {
 
-    private IFile getViewJspFile( IProject project ) throws Exception
+    private IProject project;
+
+    private IProject getProject() throws Exception
     {
-        IFile file =  CoreUtil.getDefaultDocrootFolder( project ).getFile( "view.jsp" );
+        if( project == null )
+        {
+            project = super.getProject( "portlets", "Portlet-Xml-Test-portlet" );
+            deleteOtherProjects( project );
+        }
+
+        return project;
+    }
+
+    private IFile getViewJspFile() throws Exception
+    {
+        final IFile file =  CoreUtil.getDefaultDocrootFolder( getProject() ).getFile( "view.jsp" );
 
         if( file != null && file.exists() )
         {
@@ -50,23 +64,40 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testMessageKey() throws Exception
     {
+        if( shouldSkipBundleTests() )
+        {
+            return;
+        }
+
+        testMessageKeyValidation();
+        testMessageKeyContentAssist();
         testMessageKeyQuickFix();
+    }
+
+    // TODO
+    public void testMessageKeyValidation()
+    {
+    }
+
+    // TODO
+    public void testMessageKeyContentAssist()
+    {
     }
 
     // an example of testing quick fix
     protected void testMessageKeyQuickFix() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
-
-        IProject project = getProject( "portlets", "Portlet-Xml-Test-portlet" );
-        IFile viewJspFile = getViewJspFile( project );
-
+        final IFile viewJspFile = getViewJspFile();
         assertNotNull( viewJspFile );
 
-        openEditor( viewJspFile );
+        final String elementName = "liferay-ui:message";
+        final String attrName = "key";
 
-        String markerType = XMLSearchConstants.LIFERAY_JSP_MARKER_ID;
-        String exceptedMessageRegex = "Property.*not found in.*";
+        setAttrValue( viewJspFile, elementName, attrName, "Foo" );
+        buildAndValidate( viewJspFile );
+
+        final String markerType = XMLSearchConstants.LIFERAY_JSP_MARKER_ID;
+        final String exceptedMessageRegex = "Property.*not found in.*";
 
         verifyQuickFix( viewJspFile, markerType, exceptedMessageRegex, AddResourceKeyMarkerResolution.class );
     }

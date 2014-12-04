@@ -30,6 +30,6 @@ public interface XMLSearchConstants
     String PORTLET_ACTION_METHOD_QUERY_ID = "com.liferay.ide.xml.search.ui.portletActionMethodQuery";
     String PORTLET_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.portletxml";
     String RESOURCE_BUNDLE_QUERY_ID = "portlet.language.properties.querySpecification";
-    String SERVICE_BUILDER_CONTETN_TYPE = "com.liferay.ide.service.core.servicebuildercontent";
+    String SERVICE_BUILDER_CONTENT_TYPE = "com.liferay.ide.service.core.servicebuildercontent";
     String TEXT_CONTENT = "textContent";
 }

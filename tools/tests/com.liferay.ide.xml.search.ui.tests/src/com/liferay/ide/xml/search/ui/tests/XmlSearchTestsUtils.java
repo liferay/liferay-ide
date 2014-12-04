@@ -20,30 +20,30 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ReflectionUtil;
+import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.text.FindReplaceDocumentAdapter;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
-import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.ITextHover;
+import org.eclipse.jface.text.ITextHoverExtension2;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
@@ -59,15 +59,18 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.ValOperation;
 import org.eclipse.wst.validation.internal.ValType;
-import org.eclipse.wst.validation.internal.operations.ValidatorManager;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.search.editor.hyperlink.HyperlinkUtils;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
 import org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -96,12 +99,13 @@ public class XmlSearchTestsUtils
     {
         return findMarkerByMessage( resource, markerType, markerMessage, fullMatch ) != null;
     }
+
     public static boolean checkNoMarker( IResource resource, String markerType ) throws Exception
     {
         return resource.findMarkers( markerType, false, IResource.DEPTH_ZERO ).length == 0;
     }
 
-    // check if the excepted proposal is in the given proposals
+    // check if the excepted hyperlink is in the given proposals
     public static boolean containHyperlink( IHyperlink[] hyperlinks, String exceptedHyperlinkText, boolean fullMatch )
     {
         for( IHyperlink hyperlink : hyperlinks )
@@ -129,7 +133,7 @@ public class XmlSearchTestsUtils
             {
                 return true;
             }
-            else if( ! fullMatch && proposal.getDisplayString().contains( exceptedProposalString ) )
+            else if( ! fullMatch && proposal.getDisplayString().matches( exceptedProposalString ) )
             {
                 return true;
             }
@@ -173,19 +177,17 @@ public class XmlSearchTestsUtils
         return null;
     }
 
-
-    // same as getElementContentOffset, only available for the attributes format: <element attribute=""/>, with quotes
-    public static int getAttrValueOffset( ITextViewer textViewer, String findString ) throws Exception
+    public static int getAttrValueOffset( IFile file, String elementName, String attrName ) throws Exception
     {
-        FindReplaceDocumentAdapter documentAdapter = new FindReplaceDocumentAdapter( textViewer.getDocument() );
-        IRegion region = documentAdapter.find( 0, findString, true, true, true, false );
+        final IDOMModel domModel = getDOMModel( file );
+        final Node attrNode = domModel.getDocument().getElementsByTagName( elementName ).
+                              item( 0 ).getAttributes().getNamedItem( attrName );
 
-        assertNotNull( region );
+        return getRegion( attrNode ).getOffset();
 
-        return region.getOffset() + findString.length() + 2;
     }
 
-    protected static IDOMModel getDOMModel( IFile file ) throws Exception
+    private static IDOMModel getDOMModel( IFile file ) throws Exception
     {
         IDOMModel domModel = fileToModelMap.get( file );
 
@@ -208,12 +210,11 @@ public class XmlSearchTestsUtils
                 final IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
                 final IWorkbenchPage page = workbenchWindow.getActivePage();
 
-                // let eclipse detect the editor id automatically
                 final IEditorPart editorPart = IDE.openEditor( page, file, true, true );
 
                 // specify the editor id
                 // final EditorPart editorPart = page.openEditor(
-                //    new FileEditorInput( file ), "com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor", true );
+                // new FileEditorInput( file ), "com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor", true );
 
                 assertNotNull( editorPart );
 
@@ -244,99 +245,240 @@ public class XmlSearchTestsUtils
         return editor;
     }
 
-    // This is only available for getting the offset of element content, element without attribute
-    // don't use it other places except for the tests.
-    // element format: <element></element>
-    public static int getElementContentOffset( ITextViewer textViewer, String findString ) throws Exception
+    public static int getElementContentOffset( IFile file, String elementName ) throws Exception
     {
-        FindReplaceDocumentAdapter documentAdapter = new FindReplaceDocumentAdapter( textViewer.getDocument() );
-        IRegion region = documentAdapter.find( 0, findString, true, true, true, false );
+        IDOMModel model = getDOMModel( file );
 
-        assertNotNull( region );
+        final Node element = model.getDocument().getElementsByTagName( elementName ).item( 0 );
 
-        return region.getOffset() + findString.length() + 1;
+        return getRegion( element.getFirstChild() ).getOffset();
     }
 
-    // TODO add method getHyperLinksForAttrValue
-    public static IHyperlink[] getHyperLinksForAttrValue( IFile file, SourceViewerConfiguration sourceViewConf,
-                                                          String nodeName, String id ) throws Exception
+    private static IHyperlink[] getHyperLinks( IFile file, int nodeType, String... nodeNames ) throws Exception
     {
-        return new IHyperlink[0];
-    }
-
-    public static IHyperlink[] getHyperLinksForElementContent( IFile file, SourceViewerConfiguration sourceViewConf,
-                                                               String elementName ) throws Exception
-    {
-        StructuredTextEditor editor = getEditor( file );
-        StructuredTextViewer viewer = editor.getTextViewer();
-
-        IDOMModel domModel = getDOMModel( file );
-        assertNotNull( domModel );
-
-        final Node node = domModel.getDocument().getElementsByTagName( elementName ).item( 0 );
-        assertNotNull( node );
-
-        viewer.configure( sourceViewConf );
-
-        IHyperlinkDetector[] hyperlinkDetectors = sourceViewConf.getHyperlinkDetectors( viewer );
-
-        Set<IHyperlink> hyperlinks = new HashSet<IHyperlink>();
-
-        IRegion region = HyperlinkUtils.getHyperlinkRegion( node.getFirstChild() );
-
-        for( IHyperlinkDetector detector : hyperlinkDetectors )
-        {
-            IHyperlink[] temp = detector.detectHyperlinks( viewer, region, true );
-
-            if( temp != null && temp.length > 0 )
-            {
-                hyperlinks.addAll( Arrays.asList( temp ) );
-            }
-        }
-
-        return hyperlinks.toArray( new IHyperlink[0] );
-    }
-
-    public static ICompletionProposal[] getProposals( IFile file, SourceViewerConfiguration sourceViewConf,
-                                                      String findString, int nodeType ) throws Exception
-    {
-        StructuredTextEditor editor = getEditor( file );
-        StructuredTextViewer viewer = editor.getTextViewer();
-
-        int offset = 0;
+        List<IHyperlink> retval = new ArrayList<IHyperlink>();
+        Node targetNode = null;
 
         if( nodeType == Node.ELEMENT_NODE )
         {
-            offset = getElementContentOffset( viewer, findString );
+            String elementName = nodeNames[0];
+            IDOMModel domModel = getDOMModel( file );
+
+            // the actual node is text node of this.element
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
         }
         else if( nodeType == Node.ATTRIBUTE_NODE )
         {
-            offset = getAttrValueOffset( viewer, findString );
+            String elementName = nodeNames[0];
+            String attrName = nodeNames[1];
+
+            IDOMModel domModel = getDOMModel( file );
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ). item( 0 ).
+                         getAttributes().getNamedItem( attrName );
+        }
+        else
+        {
+            return new IHyperlink[0];
         }
 
-        ContentAssistant contentAssistant = (ContentAssistant) sourceViewConf.getContentAssistant( viewer );
-        viewer.configure( sourceViewConf );
-        viewer.setSelectedRange( offset, 0 );
+        assertNotNull( targetNode );
+
+        final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
+        final SourceViewerConfiguration conf = getSourceViewerConfiguraion( file );
+
+        final IHyperlinkDetector[] hyperlinkDetectors = conf.getHyperlinkDetectors( viewer );
+        final IRegion region = getRegion( targetNode );
+
+        for( IHyperlinkDetector detector : hyperlinkDetectors )
+        {
+            IHyperlink[] tempHyperlinks = detector.detectHyperlinks( viewer, region, true );
+
+            if( tempHyperlinks != null && tempHyperlinks.length > 0 )
+            {
+                retval.addAll( Arrays.asList( tempHyperlinks ) );
+            }
+        }
+
+        return retval.toArray( new IHyperlink[0] );
+    }
+
+    public static IHyperlink[] getHyperLinksForAttr( IFile file, String elementName, String attrName ) throws Exception
+    {
+        return getHyperLinks( file, Node.ATTRIBUTE_NODE, elementName, attrName );
+    }
+
+    public static IHyperlink[] getHyperLinksForElement( IFile file, String elementName ) throws Exception
+    {
+        return getHyperLinks( file, Node.ELEMENT_NODE, elementName );
+    }
+
+    private static ICompletionProposal[] getProposals( IFile file, int nodeType, String... nodeNames ) throws Exception
+    {
+        Node targetNode = null;
+
+        if( nodeType == Node.ELEMENT_NODE )
+        {
+            String elementName = nodeNames[0];
+
+            IDOMModel domModel = getDOMModel( file );
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
+        }
+        else if( nodeType == Node.ATTRIBUTE_NODE )
+        {
+            String elementName = nodeNames[0];
+            String attrName = nodeNames[1];
+
+            IDOMModel domModel = getDOMModel( file );
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).
+                         getAttributes().getNamedItem( attrName );
+        }
+
+        int offset = getRegion( targetNode ).getOffset();
+
+        final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
+        final SourceViewerConfiguration srcViewConf = getSourceViewerConfiguraion( file );
+
+        final ContentAssistant contentAssistant = (ContentAssistant) srcViewConf.getContentAssistant( viewer );
+        // viewer.configure( srcViewConf );
+        // viewer.setSelectedRange( offset, 0 );
 
         // get the processor
-        String partitionTypeID = viewer.getDocument().getPartition( offset ).getType();
-        IContentAssistProcessor processor = contentAssistant.getContentAssistProcessor( partitionTypeID );
-
-        // fire content assist session about to start
-        Method privateFireSessionBeginEventMethod =
-            ContentAssistant.class.getDeclaredMethod( "fireSessionBeginEvent", new Class[] { boolean.class } );
-        privateFireSessionBeginEventMethod.setAccessible( true );
-        privateFireSessionBeginEventMethod.invoke( contentAssistant, new Object[] { Boolean.TRUE } );
+        final String partitionTypeID = viewer.getDocument().getPartition( offset ).getType();
+        final IContentAssistProcessor processor = contentAssistant.getContentAssistProcessor( partitionTypeID );
 
         // get content assist suggestions
-        ICompletionProposal[] proposals = processor.computeCompletionProposals( viewer, offset );
-
-        // fire content assist session ending
-        Method privateFireSessionEndEventMethod = ContentAssistant.class.getDeclaredMethod( "fireSessionEndEvent" );
-        privateFireSessionEndEventMethod.setAccessible( true );
-        privateFireSessionEndEventMethod.invoke( contentAssistant );
+        final ICompletionProposal[] proposals = processor.computeCompletionProposals( viewer, offset );
 
         return proposals;
+    }
+
+    public static ICompletionProposal[] getProposalsForAttr( IFile file, String elementName ,String attrName ) throws Exception
+    {
+        return getProposals( file, Node.ATTRIBUTE_NODE, elementName, attrName );
+    }
+
+    public static ICompletionProposal[] getProposalsForElement( IFile file, String elementName ) throws Exception
+    {
+        return getProposals( file, Node.ELEMENT_NODE, elementName );
+    }
+
+    private static IRegion getRegion( Node node )
+    {
+        if( node != null )
+        {
+            switch( node.getNodeType() )
+            {
+                case Node.ELEMENT_NODE:
+
+                    IDOMElement element = (IDOMElement) node;
+                    int endOffset;
+
+                    if( element.hasEndTag() && element.isClosed() )
+                    {
+                        endOffset = element.getStartEndOffset();
+                    }
+                    else
+                    {
+                        endOffset = element.getEndOffset();
+                    }
+
+                    return new Region( element.getStartOffset(), endOffset - element.getStartOffset() );
+
+                case Node.ATTRIBUTE_NODE:
+
+                    IDOMAttr att = (IDOMAttr) node;
+                    int regOffset = att.getValueRegionStartOffset();
+                    int regLength = att.getValueRegionText().length();
+                    String attValue = att.getValueRegionText();
+                    if( StringUtil.isQuoted( attValue ) )
+                    {
+                        regOffset++;
+                        regLength -= 2;
+                    }
+
+                    return new Region( regOffset, regLength );
+
+                case Node.TEXT_NODE:
+
+                    IDOMText text = (IDOMText) node;
+                    int startOffset = text.getStartOffset();
+                    int length = text.getLength();
+
+                    return new Region( startOffset, length );
+            }
+        }
+
+        return null;
+    }
+
+    public static SourceViewerConfiguration getSourceViewerConfiguraion( IFile file ) throws Exception
+    {
+        Object obj = ExtendedConfigurationBuilder.getInstance().
+                        getConfiguration( ExtendedConfigurationBuilder.SOURCEVIEWERCONFIGURATION,
+                            file.getContentDescription().getContentType().getId() );
+
+        if( obj instanceof SourceViewerConfiguration )
+        {
+            return (SourceViewerConfiguration) obj;
+        }
+
+        return null;
+    }
+
+    private static String getTextHover( IFile file, int nodeType, String... nodeNames ) throws Exception
+    {
+        Node targetNode = null;
+        if( nodeType == Node.ELEMENT_NODE )
+        {
+            String elementName = nodeNames[0];
+            IDOMModel domModel = getDOMModel( file );
+
+            // the actual node is text node of this.element
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
+        }
+        else if( nodeType == Node.ATTRIBUTE_NODE )
+        {
+            String elementName = nodeNames[0];
+            String attrName = nodeNames[1];
+
+            IDOMModel domModel = getDOMModel( file );
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ). item( 0 ).
+                         getAttributes().getNamedItem( attrName );
+        }
+        else
+        {
+            return null;
+        }
+
+        String retval = null;
+        final StructuredTextEditor editor = getEditor( file );
+        final StructuredTextViewer viewer = editor.getTextViewer();
+
+        int offset = getRegion( targetNode ).getOffset();
+
+        final Method getTextHoverMethod =
+            ReflectionUtil.getDeclaredMethodIncludingSuperClasses( viewer.getClass(), "getTextHover", int.class, int.class );
+        getTextHoverMethod.setAccessible( true );
+
+        final ITextHover hover = (ITextHover)getTextHoverMethod.invoke( viewer, offset ,0 );
+        final IRegion region = hover.getHoverRegion( viewer, offset );
+
+        if( hover instanceof ITextHoverExtension2 )
+        {
+            retval = (String) ( (ITextHoverExtension2) hover ).getHoverInfo2( viewer, region );
+        }
+
+        return retval;
+    }
+
+    public static String getTextHoverForAttr( IFile file, String elementName, String attrName ) throws Exception
+    {
+        return getTextHover( file, Node.ATTRIBUTE_NODE, elementName, attrName );
+    }
+
+    public static String getTextHoverForElement( IFile file, String elementName ) throws Exception
+    {
+        return getTextHover( file, Node.ELEMENT_NODE, elementName );
     }
 
     // open the editor during test, useless for test, but testers can see what's going on.
@@ -345,31 +487,30 @@ public class XmlSearchTestsUtils
         getEditor( file );
     }
 
-    public static String replace( String aString, String source, String target )
+    // set the attribute value for the 1st element with the "elementName"
+    public static void setAttrValue( IFile file, String elementName, String attrName, String attrValue ) throws Exception
     {
-        if( aString == null )
-            return null;
-        String normalString = ""; //$NON-NLS-1$
-        int length = aString.length();
-        int position = 0;
-        int previous = 0;
-        int spacer = source.length();
-        StringBuffer sb = new StringBuffer( normalString );
-        while( position + spacer - 1 < length && aString.indexOf( source, position ) > -1 )
-        {
-            position = aString.indexOf( source, previous );
-            sb.append( normalString );
-            sb.append( aString.substring( previous, position ) );
-            sb.append( target );
-            position += spacer;
-            previous = position;
-        }
-        sb.append( aString.substring( position, aString.length() ) );
-        normalString = sb.toString();
+        final IDOMModel domModel = getDOMModel( file );
 
-        return normalString;
+        assertNotNull( domModel );
+
+        final IDOMDocument document = domModel.getDocument();
+        final NodeList elements = document.getElementsByTagName( elementName );
+
+        assertEquals( true, elements.getLength() > 0 );
+
+        final Element element = (Element) elements.item( 0 );
+
+        Attr attrNode = element.getAttributeNode( attrName );
+
+        attrNode.setValue( attrValue );
+
+        domModel.save();
+
+        file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }
 
+    // set the content for the 1st element with name of "elementName"
     public static void setElementContent( IFile file, String elementName, String content ) throws Exception
     {
         final IDOMModel domModel = getDOMModel( file );
@@ -393,7 +534,6 @@ public class XmlSearchTestsUtils
         element.appendChild( document.createTextNode( content ) );
 
         domModel.save();
-        //domModel.releaseFromEdit();
 
         file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }
@@ -402,8 +542,8 @@ public class XmlSearchTestsUtils
     {
         final IDocument doc = editor.getTextViewer().getDocument();
         String contents = doc.get();
-        contents = XmlSearchTestsUtils.replace( contents, "\r\n", "\n" );
-        contents = XmlSearchTestsUtils.replace( contents, "\r", "\n" );
+        contents = StringUtil.replace( contents, "\r\n", "\n" );
+        contents = StringUtil.replace( contents, "\r", "\n" );
         doc.set( contents );
     }
 
@@ -423,50 +563,18 @@ public class XmlSearchTestsUtils
 
         exceptedMarker = findMarkerByMessage( file, markerType, markerMessageRegex, false );
         assertNull( exceptedMarker );
-
     }
 
-    public static void waitForBuildAndValidation() throws Exception
+    public static void deleteOtherProjects( IProject project ) throws Exception
     {
-        IWorkspaceRoot root = null;
+        final IProject[] projects = CoreUtil.getWorkspaceRoot().getProjects();
 
-        try
+        for( IProject proj : projects )
         {
-            ResourcesPlugin.getWorkspace().checkpoint( true );
-
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ValidatorManager.VALIDATOR_JOB_FAMILY, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Thread.sleep( 200 );
-            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
-        }
-        catch( InterruptedException e )
-        {
-        }
-        catch( IllegalArgumentException e )
-        {
-        }
-        catch( OperationCanceledException e )
-        {
-        }
-        finally
-        {
-            if( root != null )
+            if( ! proj.getName().equals( project.getName() ) )
             {
-                Job.getJobManager().endRule( root );
+                proj.delete( true, true, new NullProgressMonitor() );
             }
         }
     }
-
-    // remove it when we can make sure the buildAndValidate can work really well,
-    // this method is really unstable
-    public static void waitForBuildAndValidation( IProject project ) throws Exception
-    {
-        project.build( IncrementalProjectBuilder.CLEAN_BUILD, new NullProgressMonitor() );
-        waitForBuildAndValidation();
-        project.build( IncrementalProjectBuilder.FULL_BUILD, new NullProgressMonitor() );
-        waitForBuildAndValidation();
-    }
-
 }

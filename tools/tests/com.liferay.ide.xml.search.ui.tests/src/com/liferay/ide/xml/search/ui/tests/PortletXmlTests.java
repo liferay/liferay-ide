@@ -20,9 +20,9 @@ import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkMarke
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkNoMarker;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.containHyperlink;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.containProposal;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getHyperLinksForElementContent;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getProposals;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.openEditor;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.deleteOtherProjects;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getHyperLinksForElement;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getProposalsForElement;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setElementContent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,21 +31,13 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.xml.search.ui.validators.PortletDescriptorValidator;
 
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
-import org.eclipse.jface.text.source.SourceViewerConfiguration;
-import org.eclipse.wst.validation.ReporterHelper;
-import org.eclipse.wst.validation.internal.provisional.core.IReporter;
-import org.eclipse.wst.xml.search.editor.XMLReferencesStructuredTextViewerConfiguration;
-import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 import org.junit.Test;
-import org.w3c.dom.Node;
 
 /**
  * This test can only run in ui thread, and run as "org.eclipse.ui.ide.workbench" application.
@@ -60,12 +52,7 @@ public class PortletXmlTests extends XmlSearchTestsBase
 
     private IFile getDescriptorFile() throws Exception
     {
-        if( descriptorFile == null )
-        {
-            descriptorFile = LiferayCore.create( getProject() ).getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
-        }
-
-        return descriptorFile;
+        return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
     }
 
     private IProject getProject() throws Exception
@@ -73,6 +60,7 @@ public class PortletXmlTests extends XmlSearchTestsBase
         if( project == null )
         {
             project = super.getProject( "portlets", "Portlet-Xml-Test-portlet" );
+            deleteOtherProjects( project );
         }
 
         return project;
@@ -81,24 +69,24 @@ public class PortletXmlTests extends XmlSearchTestsBase
     @Test
     public void testFilterClass() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+        {
+            return;
+        }
 
-        final IFile descriptorFile = getDescriptorFile();
-        openEditor( descriptorFile );
-
-        testFilterClassValidation( descriptorFile );
-        testFilterClassContentAssist( descriptorFile );
-        testFilterClassHyperlink( descriptorFile );
+        testFilterClassValidation();
+        testFilterClassContentAssist();
+        testFilterClassHyperlink();
     }
 
-    protected void testFilterClassContentAssist( IFile descriptorFile ) throws Exception
+    protected void testFilterClassContentAssist() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "filter-class";
         String elementContent = "";
         setElementContent( descriptorFile, elementName, elementContent );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+        final ICompletionProposal[] proposals = getProposalsForElement( descriptorFile, elementName );
 
         assertNotNull( proposals );
         assertEquals( true, proposals.length > 0 );
@@ -111,14 +99,14 @@ public class PortletXmlTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
     }
 
-    protected void testFilterClassHyperlink( IFile descriptorFile ) throws Exception
+    protected void testFilterClassHyperlink() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "listener-class";
         String elementContent = "com.liferay.ide.tests.ResourceFilterImpl";
         setElementContent( descriptorFile, elementName, elementContent );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+        IHyperlink[] hyperlinks = getHyperLinksForElement( descriptorFile, elementName );
 
         assertNotNull( hyperlinks );
         assertEquals( true, hyperlinks.length > 0 );
@@ -127,8 +115,9 @@ public class PortletXmlTests extends XmlSearchTestsBase
         assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
     }
 
-    protected void testFilterClassValidation( IFile descriptorFile ) throws Exception
+    protected void testFilterClassValidation() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "filter-class";
 
         String elementContent = "Foo";
@@ -152,25 +141,25 @@ public class PortletXmlTests extends XmlSearchTestsBase
     @Test
     public void testListenerClass() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+        {
+            return;
+        }
 
-        final IFile descriptorFile = getDescriptorFile();
-        openEditor( descriptorFile );
-
-        testListenerClassValidation( descriptorFile );
-        testListenerClassContentAssist( descriptorFile );
-        testListenerClassHyperLink( descriptorFile );
+        testListenerClassValidation();
+        testListenerClassContentAssist();
+        testListenerClassHyperLink();
     }
 
-    protected void testListenerClassContentAssist( IFile descriptorFile ) throws Exception
+    protected void testListenerClassContentAssist() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "listener-class";
         String elementContent = "";
 
         setElementContent( descriptorFile, elementName, elementContent );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+        final ICompletionProposal[] proposals = getProposalsForElement( descriptorFile, elementName );
 
         assertNotNull( proposals );
         assertEquals( true, proposals.length > 0 );
@@ -183,14 +172,14 @@ public class PortletXmlTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
     }
 
-    protected void testListenerClassHyperLink( IFile descriptorFile ) throws Exception
+    protected void testListenerClassHyperLink() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "listener-class";
         String elementContent = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
         setElementContent( descriptorFile, elementName, elementContent );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+        IHyperlink[] hyperlinks = getHyperLinksForElement( descriptorFile, elementName );
 
         assertNotNull( hyperlinks );
         assertEquals( true, hyperlinks.length > 0 );
@@ -199,8 +188,9 @@ public class PortletXmlTests extends XmlSearchTestsBase
         assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
     }
 
-    protected void testListenerClassValidation( IFile descriptorFile ) throws Exception
+    protected void testListenerClassValidation() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "listener-class";
 
         String elementValue = "Foo";
@@ -224,24 +214,24 @@ public class PortletXmlTests extends XmlSearchTestsBase
     @Test
     public void testPortletClass() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+        {
+            return;
+        }
 
-        final IFile descriptorFile = getDescriptorFile();
-        openEditor( descriptorFile );
-
-        testPortletClassValidation( descriptorFile );
-        testPortletClassContentAssist( descriptorFile );
-        testPortletClassHyperlink( descriptorFile );
+        testPortletClassValidation();
+        testPortletClassContentAssist();
+        testPortletClassHyperlink();
     }
 
-    protected void testPortletClassContentAssist( IFile descriptorFile ) throws Exception
+    protected void testPortletClassContentAssist() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-class";
         String elementContent = "";
         setElementContent( descriptorFile, elementName, elementContent );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+        final ICompletionProposal[] proposals = getProposalsForElement( descriptorFile, elementName );
 
         assertNotNull( proposals );
         assertEquals( true, proposals.length > 0 );
@@ -254,14 +244,14 @@ public class PortletXmlTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
     }
 
-    protected void testPortletClassHyperlink( IFile descriptorFile ) throws Exception
+    protected void testPortletClassHyperlink() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-class";
         String elementContent = "com.liferay.ide.tests.GenericPortletImpl";
         setElementContent( descriptorFile, elementName, elementContent );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+        IHyperlink[] hyperlinks = getHyperLinksForElement( descriptorFile, elementName );
 
         assertNotNull( hyperlinks );
         assertEquals( true, hyperlinks.length > 0 );
@@ -270,8 +260,9 @@ public class PortletXmlTests extends XmlSearchTestsBase
         assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
     }
 
-    protected void testPortletClassValidation( IFile descriptorFile ) throws Exception
+    protected void testPortletClassValidation() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-class";
 
         String elementValue = "Foo";
@@ -297,24 +288,24 @@ public class PortletXmlTests extends XmlSearchTestsBase
     @Test
     public void testResourceBundle() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )
+        {
+            return;
+        }
 
-        final IFile descriptorFile = getDescriptorFile();
-        openEditor( descriptorFile );
-
-        testResourceBundleValidation( descriptorFile );
-        testResourceBundleContentAssist( descriptorFile );
-        testResourceBundleHyperlink( descriptorFile );
+        testResourceBundleValidation();
+        testResourceBundleContentAssist();
+        testResourceBundleHyperlink();
     }
 
-    protected void testResourceBundleContentAssist( IFile descriptorFile ) throws Exception
+    protected void testResourceBundleContentAssist() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "resource-bundle";
         String elementContent = "";
         setElementContent( descriptorFile, elementName, "" );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        final ICompletionProposal[] proposals = getProposals( descriptorFile, conf, elementName, Node.ELEMENT_NODE );
+        final ICompletionProposal[] proposals = getProposalsForElement( descriptorFile, elementName );
 
         assertNotNull( proposals );
         assertEquals( true, proposals.length > 0 );
@@ -322,21 +313,19 @@ public class PortletXmlTests extends XmlSearchTestsBase
         final String exceptedProposalString = "content.Language";
         assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
 
-        // set element conent back to a right content
         elementContent = "content.Language";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
-
     }
 
-    protected void testResourceBundleHyperlink( IFile descriptorFile ) throws Exception
+    protected void testResourceBundleHyperlink() throws Exception
     {
+        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "resource-bundle";
         String elementContent = "content.Language";
         setElementContent( descriptorFile, elementName, elementContent );
 
-        final SourceViewerConfiguration conf = new XMLReferencesStructuredTextViewerConfiguration();
-        IHyperlink[] hyperlinks = getHyperLinksForElementContent( descriptorFile, conf, elementName );
+        IHyperlink[] hyperlinks = getHyperLinksForElement( descriptorFile, elementName );
 
         assertNotNull( hyperlinks );
         assertEquals( true, hyperlinks.length > 0 );
@@ -345,8 +334,9 @@ public class PortletXmlTests extends XmlSearchTestsBase
         assertEquals( true, containHyperlink( hyperlinks, exceptedHyperlink, false ) );
     }
 
-    protected void testResourceBundleValidation( IFile descriptorFile ) throws Exception
+    protected void testResourceBundleValidation() throws Exception
     {
+        IFile descriptorFile = getDescriptorFile();
         final String elementName = "resource-bundle";
         String elementContent = null;
         String markerMessage = null;
@@ -411,16 +401,5 @@ public class PortletXmlTests extends XmlSearchTestsBase
         elementContent = "content.Language";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
-    }
-
-    protected IReporter testTest( IFile file ) throws Exception
-    {
-        XMLReferencesBatchValidator batchValidator = new XMLReferencesBatchValidator();
-        IReporter reporter = new ReporterHelper( new NullProgressMonitor() );
-
-        Method validateMethod = batchValidator.getClass().getDeclaredMethod( "validateFile", IFile.class, IReporter.class );
-        validateMethod.setAccessible( true );
-        validateMethod.invoke( batchValidator, descriptorFile, reporter );
-        return reporter;
     }
 }
