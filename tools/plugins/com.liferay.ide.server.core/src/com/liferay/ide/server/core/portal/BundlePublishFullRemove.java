@@ -29,12 +29,12 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Gregory Amerson
  */
-public class PublishFullRemove implements PublishOp
+public class BundlePublishFullRemove implements PublishOp
 {
     private final IServer server;
     private final PortalRuntime portalRuntime;
 
-    public PublishFullRemove( IServer s )
+    public BundlePublishFullRemove( IServer s )
     {
         this.server = s;
         this.portalRuntime = (PortalRuntime) this.server.getRuntime().loadAdapter( PortalRuntime.class, null );

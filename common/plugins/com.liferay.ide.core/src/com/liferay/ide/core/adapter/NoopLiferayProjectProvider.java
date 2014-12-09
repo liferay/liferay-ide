@@ -12,48 +12,36 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.maven.core;
+package com.liferay.ide.core.adapter;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ILiferayProjectProvider;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 
 
 /**
  * @author Gregory Amerson
  */
-public class BundleProjectProvider extends AbstractLiferayProjectProvider implements ILiferayProjectProvider
+public class NoopLiferayProjectProvider extends AbstractLiferayProjectProvider
 {
 
-    public BundleProjectProvider()
+    public NoopLiferayProjectProvider()
     {
         super( new Class<?>[] { IProject.class } );
     }
 
-    public ILiferayProject provide( Object type )
+    @Override
+    public ILiferayProject provide( Object adaptable )
     {
-        if( type instanceof IProject )
+        if( adaptable instanceof IProject )
         {
-            final IProject project = (IProject) type;
-
-            try
-            {
-                if( MavenUtil.isMavenProject( project ) && project.getName().startsWith( "sample.bundle" ) )
-                {
-                    return new BundleProject( project );
-                }
-            }
-            catch( CoreException e )
-            {
-                LiferayMavenCore.logError(
-                    "Unable to create ILiferayProject from maven bundle project " + project.getName(), e ); //$NON-NLS-1$
-            }
+            return new NoopLiferayProject( (IProject) adaptable );
         }
-
-        return null;
+        else
+        {
+            return null;
+        }
     }
 
 }

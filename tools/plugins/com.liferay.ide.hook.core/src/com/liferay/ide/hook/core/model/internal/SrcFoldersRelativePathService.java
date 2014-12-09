@@ -15,14 +15,15 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.Hook;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.services.RelativePathService;
 
@@ -41,7 +42,7 @@ public class SrcFoldersRelativePathService extends RelativePathService
         if( hook != null )
         {
             final IProject project = hook.adapt( IProject.class );
-            final IFolder[] folders = ProjectUtil.getSourceFolders( project );
+            final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
 
             for( final IFolder folder : folders )
             {

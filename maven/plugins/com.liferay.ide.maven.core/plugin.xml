@@ -35,13 +35,6 @@
             priority="high"
             shortName="maven">
       </liferayProjectProvider>
-      <liferayProjectProvider
-            class="com.liferay.ide.maven.core.BundleProjectProvider"
-            displayName="Maven (maven-bundle-plugin)"
-            id="com.liferay.ide.maven.core.bundleProjectProvider"
-            priority="high"
-            shortName="maven-bundle">
-      </liferayProjectProvider>
    </extension>
    <extension
          id="com.liferay.ide.maven.core.configurationProblem"

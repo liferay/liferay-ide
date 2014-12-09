@@ -343,13 +343,15 @@ public class PropertiesUtil
             project = CoreUtil.getLiferayProject( project );
         }
 
+        final ILiferayProject lrproject = LiferayCore.create( project );
+
         final IFile[] resourceFiles =
-            getLanguagePropertiesFromPortletXml( LiferayCore.create( project ).getDescriptorFile(
-                ILiferayConstants.PORTLET_XML_FILE ) );
+            getLanguagePropertiesFromPortletXml(
+                lrproject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
 
         final IFile[] languageFiles =
-            getLanguagePropertiesFromLiferayHookXml( LiferayCore.create( project ).getDescriptorFile(
-                ILiferayConstants.LIFERAY_HOOK_XML_FILE ) );
+            getLanguagePropertiesFromLiferayHookXml(
+                lrproject.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) );
 
         if( resourceFiles.length > 0 )
         {
@@ -377,7 +379,8 @@ public class PropertiesUtil
 
         if( ( portletXml != null ) && ( portletXml.exists() ) )
         {
-            final IFolder[] srcFolders = LiferayCore.create( proj ).getSourceFolders();
+            final ILiferayProject lrproject = LiferayCore.create( proj );
+            final IFolder[] srcFolders = lrproject.getSourceFolders();
             final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
 
             final Set<String> resourceBundles = resourceNodeInfo.getResourceBundles();
@@ -509,7 +512,8 @@ public class PropertiesUtil
             return new IFile[0];
         }
 
-        final IFolder[] srcFolders = LiferayCore.create( proj ).getSourceFolders();
+        final ILiferayProject lrproject = LiferayCore.create( proj );
+        final IFolder[] srcFolders = lrproject.getSourceFolders();
 
         if( srcFolders.length < 1 )
         {
@@ -549,7 +553,8 @@ public class PropertiesUtil
             return new IFile[0];
         }
 
-        final IFolder[] srcFolders = LiferayCore.create( proj ).getSourceFolders();
+        final ILiferayProject lrproject = LiferayCore.create( proj );
+        final IFolder[] srcFolders = lrproject.getSourceFolders();
 
         if( srcFolders.length < 1 )
         {

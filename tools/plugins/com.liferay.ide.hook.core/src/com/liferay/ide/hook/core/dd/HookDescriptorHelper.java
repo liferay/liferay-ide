@@ -16,6 +16,7 @@
 package com.liferay.ide.hook.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
@@ -225,7 +226,8 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
         // <hook> element
         Element rootElement = document.getDocumentElement();
 
-        IPath defaultWebappRootFolderFullPath = LiferayCore.create( project ).getDefaultDocrootFolder().getFullPath();
+        final ILiferayProject lrproject = LiferayCore.create( project );
+        final IPath defaultWebappRootFolderFullPath = lrproject.getDefaultDocrootFolder().getFullPath();
 
         String customJSPsFolder = model.getStringProperty( CUSTOM_JSPS_FOLDER );
 

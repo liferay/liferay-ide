@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
@@ -147,7 +148,7 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
 
             if ( deltaZip ==false && new Path("WEB-INF").isPrefixOf( delta.getModuleRelativePath() ))
             {
-                final IFolder[] folders = ProjectUtil.getSourceFolders( deltaProject );
+                final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( deltaProject ) );
 
                 for( IFolder folder : folders )
                 {

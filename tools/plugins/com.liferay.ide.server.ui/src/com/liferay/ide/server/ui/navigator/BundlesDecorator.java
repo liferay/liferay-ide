@@ -39,6 +39,7 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 
     private static BundlesDecorator instance;
 
+    private static final String WORKSPACE_BUNDLES_FOLDER_NAME = "Workspace Bundles";
     private static final String BUNDLES_FOLDER_NAME = "OSGi Bundles";
 
     public static BundlesDecorator getDefault()
@@ -147,6 +148,10 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 
     public StyledString getStyledText( Object element )
     {
+        if( element instanceof WorkspaceBundlesFolder )
+        {
+            return new StyledString( WORKSPACE_BUNDLES_FOLDER_NAME );
+        }
         if( element instanceof BundlesFolder )
         {
             return new StyledString( BUNDLES_FOLDER_NAME );
@@ -169,7 +174,11 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
     @Override
     public String getText( Object element )
     {
-        if( element instanceof BundlesFolder )
+        if( element instanceof WorkspaceBundlesFolder )
+        {
+            return WORKSPACE_BUNDLES_FOLDER_NAME;
+        }
+        else if( element instanceof BundlesFolder )
         {
             return BUNDLES_FOLDER_NAME;
         }

@@ -55,4 +55,14 @@
             value="true">
       </persistent>
    </extension>
+   <extension
+         point="com.liferay.ide.core.liferayProjectProviders">
+      <liferayProjectProvider
+            class="com.liferay.ide.core.adapter.NoopLiferayProjectProvider"
+            displayName="Noop Provider"
+            id="com.liferay.ide.core.noopProjectProvider"
+            priority="lowest"
+            shortName="noop">
+      </liferayProjectProvider>
+   </extension>
 </plugin>

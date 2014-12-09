@@ -16,7 +16,7 @@ package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.core.adapter.LaunchAdapter;
 import com.liferay.ide.maven.core.ILiferayMavenConstants;
-import com.liferay.ide.maven.core.LiferayMavenProject;
+import com.liferay.ide.maven.core.IMavenProject;
 import com.liferay.ide.maven.core.MavenProjectBuilder;
 
 import org.eclipse.core.resources.IFile;
@@ -58,7 +58,7 @@ public class MavenUIProjectBuilder extends MavenProjectBuilder
         super( project );
     }
 
-    public MavenUIProjectBuilder( LiferayMavenProject liferayMavenProject )
+    public MavenUIProjectBuilder( IMavenProject liferayMavenProject )
     {
         super( liferayMavenProject.getProject() );
     }

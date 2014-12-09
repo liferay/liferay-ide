@@ -90,11 +90,11 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements IJa
                 {
                     case ServerBehaviourDelegate.ADDED:
                     case ServerBehaviourDelegate.CHANGED:
-                        op = new PublishFullAdd( getServer() );
+                        op = new BundlePublishFullAdd( getServer() );
                         break;
 
                     case ServerBehaviourDelegate.REMOVED:
-                        op = new PublishFullRemove( getServer() );
+                        op = new BundlePublishFullRemove( getServer() );
                         break;
 
                     default:

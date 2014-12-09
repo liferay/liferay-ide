@@ -14,10 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
-import com.liferay.ide.project.core.WTPProject;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
@@ -31,6 +30,7 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.jdt.IClasspathManager;
@@ -46,13 +47,11 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
 
 /**
  * @author Gregory Amerson
- * @author Cindy Li
- * @author Simon Jiang
  */
-public class LiferayMavenProject extends WTPProject
+public class MavenBundlePluginProject extends BaseLiferayProject
 {
 
-    public LiferayMavenProject( IProject project )
+    public MavenBundlePluginProject( IProject project )
     {
         super( project );
     }
@@ -83,14 +82,29 @@ public class LiferayMavenProject extends WTPProject
 
                 return adapterType.cast( remoteServerPublisher );
             }
-            else if( ILiferayPortal.class.equals( adapterType ) )
-            {
-                final ILiferayPortal portal = new LiferayMavenPortal( this );
-
-                return adapterType.cast( portal );
-            }
         }
 
+        return null;
+    }
+
+    @Override
+    public IResource findDocrootResource( IPath path )
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IFolder getDefaultDocrootFolder()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IFile getDescriptorFile( String name )
+    {
+        // TODO Auto-generated method stub
         return null;
     }
 
@@ -141,6 +155,32 @@ public class LiferayMavenProject extends WTPProject
         return retval;
     }
 
+    public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
+    {
+        final Collection<IFile> outputs = new HashSet<IFile>();
+
+        if( build )
+        {
+            this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+
+            new MavenProjectBuilder( this.getProject() ).runMavenGoal( getProject(), "package", monitor );
+
+            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+            final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+            final String targetFolder = mavenProject.getBuild().getDirectory();
+            final String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
+
+            final IFile output = getProject().getFile( new Path( targetFolder ).append( targetWar ) );
+
+            if( output.exists() )
+            {
+                outputs.add( output );
+            }
+        }
+
+        return outputs;
+    }
+
     public String getProperty( String key, String defaultValue )
     {
         String retval = defaultValue;
@@ -176,7 +216,7 @@ public class LiferayMavenProject extends WTPProject
     {
         IFolder retval = super.getSourceFolder( classification );
 
-        final IFolder[] sourceFolders = ProjectUtil.getSourceFolders( getProject() );
+        final List<IFolder> sourceFolders = CoreUtil.getSourceFolders( JavaCore.create( getProject() ) );
 
         for( IFolder folder : sourceFolders )
         {
@@ -189,6 +229,14 @@ public class LiferayMavenProject extends WTPProject
         }
 
         return retval;
+    }
+
+    @Override
+    public IFolder[] getSourceFolders()
+    {
+        final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( getProject() ) );
+
+        return folders.toArray( new IFolder[0] );
     }
 
     public IPath[] getUserLibs()
@@ -214,32 +262,6 @@ public class LiferayMavenProject extends WTPProject
         }
 
         return libs.toArray( new IPath[0] );
-    }
-
-    public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
-    {
-        final Collection<IFile> outputs = new HashSet<IFile>();
-
-        if( build )
-        {
-            this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-
-            new MavenProjectBuilder( this.getProject() ).runMavenGoal( getProject(), "package", monitor );
-
-            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
-            final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
-            final String targetFolder = mavenProject.getBuild().getDirectory();
-            final String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
-
-            final IFile output = getProject().getFile( new Path( targetFolder ).append( targetWar ) );
-
-            if( output.exists() )
-            {
-                outputs.add( output );
-            }
-        }
-
-        return outputs;
     }
 
 }

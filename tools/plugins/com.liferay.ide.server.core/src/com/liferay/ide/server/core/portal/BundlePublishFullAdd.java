@@ -14,13 +14,13 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -34,12 +34,12 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Gregory Amerson
  */
-public class PublishFullAdd implements PublishOp
+public class BundlePublishFullAdd implements PublishOp
 {
-    private final IServer server;
     private final PortalRuntime portalRuntime;
+    private final IServer server;
 
-    public PublishFullAdd( IServer s )
+    public BundlePublishFullAdd( IServer s )
     {
         this.server = s;
         this.portalRuntime = (PortalRuntime) this.server.getRuntime().loadAdapter( PortalRuntime.class, null );
@@ -48,60 +48,6 @@ public class PublishFullAdd implements PublishOp
         {
             throw new IllegalArgumentException( "Could not get portal runtime from server " + s.getName() );
         }
-    }
-
-    public IStatus publish( IModule module, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = Status.OK_STATUS;
-
-        final ILiferayProject project = LiferayCore.create( module.getProject() );
-
-        if( project != null )
-        {
-            final Collection<IFile> outputs = project.getOutputs( true, monitor );
-
-            for( IFile output : outputs )
-            {
-                if( output.exists() )
-                {
-                    if( this.server.getServerState() == IServer.STATE_STARTED )
-                    {
-                        retval = remoteDeploy( output );
-                    }
-                    else
-                    {
-                        retval = autoDeploy( output );
-                    }
-                }
-            }
-        }
-        else
-        {
-            retval = LiferayServerCore.error( "Unable to get liferay project for " + module.getProject().getName() );
-        }
-
-        return retval;
-    }
-
-    private IStatus remoteDeploy( IFile output )
-    {
-        IStatus retval = null;
-
-        final OsgiConnection osgi = LiferayServerCore.newOsgiConnection( this.server );
-
-        final IPath rawLocation = output.getRawLocation();
-
-        if( rawLocation != null )
-        {
-            retval = osgi.instalBundle( rawLocation.toPortableString(), rawLocation.toFile() );
-        }
-        else
-        {
-            retval =
-                LiferayServerCore.error( "Uninstall to deploy file remotely " + output.getLocation().toPortableString() );
-        }
-
-        return retval;
     }
 
     private IStatus autoDeploy( IFile output ) throws CoreException
@@ -123,6 +69,58 @@ public class PublishFullAdd implements PublishOp
             {
                 retval = LiferayServerCore.error( "Unable to copy file to auto deploy folder", e );
             }
+        }
+
+        return retval;
+    }
+
+    public IStatus publish( IModule module, IProgressMonitor monitor ) throws CoreException
+    {
+        IStatus retval = Status.OK_STATUS;
+
+        final ILiferayProject project = LiferayCore.create( module.getProject() );
+        final IBundleProject bundleProject = project.adapt( IBundleProject.class );
+
+        if( bundleProject != null )
+        {
+            final IFile outputJar = bundleProject.getOutputJar( true, monitor );
+
+            if( outputJar.exists() )
+            {
+                if( this.server.getServerState() == IServer.STATE_STARTED )
+                {
+                    retval = remoteDeploy( outputJar );
+                }
+                else
+                {
+                    retval = autoDeploy( outputJar );
+                }
+            }
+        }
+        else
+        {
+            retval = LiferayServerCore.error( "Unable to get bundle project for " + module.getProject().getName() );
+        }
+
+        return retval;
+    }
+
+    private IStatus remoteDeploy( IFile output )
+    {
+        IStatus retval = null;
+
+        final OsgiConnection osgi = LiferayServerCore.newOsgiConnection( this.server );
+
+        final IPath rawLocation = output.getRawLocation();
+
+        if( rawLocation != null )
+        {
+            retval = osgi.instalBundle( rawLocation.toPortableString(), rawLocation.toFile() );
+        }
+        else
+        {
+            retval =
+                LiferayServerCore.error( "Uninstall to deploy file remotely " + output.getLocation().toPortableString() );
         }
 
         return retval;

@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.project.core.BaseLiferayProject;
+import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.server.core.portal.ModulePublisher;
 
 import java.util.Collection;

@@ -12,24 +12,20 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
+package com.liferay.ide.maven.core;
 
-import java.util.List;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+
 
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProjectProvider
+public interface IMavenProject
 {
-    <T> List<T> getData( String key, Class<T> type, Object... params );
 
-    String getDisplayName();
+    IProject getProject();
 
-    int getPriority();
+    IPath[] getUserLibs();
 
-    String getShortName();
-
-    ILiferayProject provide( Object adaptable );
-
-    boolean provides( Class<?> type );
 }

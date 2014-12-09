@@ -14,6 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.server.ui.navigator;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.OsgiBundle;
 import com.liferay.ide.server.core.portal.OsgiConnection;
@@ -23,6 +27,7 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -38,17 +43,22 @@ import org.eclipse.wst.server.core.IServer;
 public class BundlesFolder
 {
 
-    private final ICommonContentExtensionSite config;
-    private final IServer server;
-    private IStatus currentStatus;
-    private OsgiBundle[] cachedBundles;
-    private OsgiBundle[] loading = new OsgiBundle[] { new OsgiBundleLoading() };
     private Job cacheBundlesJob;
+    private OsgiBundle[] cachedBundles;
+    private final ICommonContentExtensionSite config;
+    private IStatus currentStatus;
+    private OsgiBundle[] loading = new OsgiBundle[] { new OsgiBundleLoading() };
+    private final IServer server;
 
     public BundlesFolder( ICommonContentExtensionSite config, IServer server )
     {
         this.config = config;
         this.server = server;
+    }
+
+    protected boolean filter( final OsgiBundle bundle )
+    {
+        return bundle != null && !isWorkspaceBundle( bundle );
     }
 
     public synchronized OsgiBundle[] getBundles()
@@ -78,6 +88,28 @@ public class BundlesFolder
         return this.currentStatus;
     }
 
+    protected boolean isWorkspaceBundle( final OsgiBundle bundle )
+    {
+        final String bundleName = bundle.getSymbolicName();
+
+        if( bundleName != null )
+        {
+            for( final IProject project : CoreUtil.getAllProjects() )
+            {
+                final ILiferayProject lrproject = LiferayCore.create( project );
+
+                final IBundleProject bundleProject = lrproject.adapt( IBundleProject.class );
+
+                if( bundleProject != null && bundleName.equals( bundleProject.getSymbolicName() ) )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private void scheduleCacheBundlesJob()
     {
         if( cacheBundlesJob == null )
@@ -101,7 +133,10 @@ public class BundlesFolder
 
                         for( OsgiBundle bundle : bundles )
                         {
-                            bundlesToShow.add( bundle );
+                            if( filter( bundle ) )
+                            {
+                                bundlesToShow.add( bundle );
+                            }
                         }
 
                         cachedBundles = bundlesToShow.toArray( new OsgiBundle[0] );

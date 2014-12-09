@@ -12,24 +12,29 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
+package com.liferay.ide.server.ui.navigator;
 
-import java.util.List;
+import com.liferay.ide.server.core.portal.OsgiBundle;
+
+import org.eclipse.ui.navigator.ICommonContentExtensionSite;
+import org.eclipse.wst.server.core.IServer;
+
 
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProjectProvider
+public class WorkspaceBundlesFolder extends BundlesFolder
 {
-    <T> List<T> getData( String key, Class<T> type, Object... params );
 
-    String getDisplayName();
+    public WorkspaceBundlesFolder( ICommonContentExtensionSite config, IServer server )
+    {
+        super( config, server );
+    }
 
-    int getPriority();
+    @Override
+    protected boolean filter( OsgiBundle bundle )
+    {
+        return bundle != null && isWorkspaceBundle( bundle );
+    }
 
-    String getShortName();
-
-    ILiferayProject provide( Object adaptable );
-
-    boolean provides( Class<?> type );
 }

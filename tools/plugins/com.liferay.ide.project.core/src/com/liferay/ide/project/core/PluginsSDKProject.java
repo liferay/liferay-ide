@@ -174,7 +174,6 @@ public class PluginsSDKProject extends WTPProject
         return this.liferayRuntime.getUserLibs();
     }
 
-    @Override
     public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
     {
         final Collection<IFile> outputs = new HashSet<IFile>();

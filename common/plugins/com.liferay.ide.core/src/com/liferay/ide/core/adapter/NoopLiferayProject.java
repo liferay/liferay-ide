@@ -12,10 +12,13 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
+package com.liferay.ide.core.adapter;
+
+import com.liferay.ide.core.BaseLiferayProject;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
@@ -23,23 +26,42 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProject
+public class NoopLiferayProject extends BaseLiferayProject
 {
 
-    <T> T adapt( Class<T> adapterType );
+    public NoopLiferayProject( IProject project )
+    {
+        super( project );
+    }
 
-    IResource findDocrootResource( IPath path );
+    @Override
+    public IResource findDocrootResource( IPath path )
+    {
+        return null;
+    }
 
-    IFolder getDefaultDocrootFolder();
+    @Override
+    public IFolder getDefaultDocrootFolder()
+    {
+        return null;
+    }
 
-    IFile getDescriptorFile( String name );
+    @Override
+    public IFile getDescriptorFile( String name )
+    {
+        return null;
+    }
 
-    IPath getLibraryPath( String filename );
+    @Override
+    public IPath getLibraryPath( String filename )
+    {
+        return null;
+    }
 
-    String getProperty( String key, String defaultValue );
-
-    IFolder getSourceFolder( String classification );
-
-    IFolder[] getSourceFolders();
+    @Override
+    public String getProperty( String key, String defaultValue )
+    {
+        return null;
+    }
 
 }

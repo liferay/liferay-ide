@@ -14,22 +14,18 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-import java.util.List;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IProgressMonitor;
+
 
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProjectProvider
+public interface IBundleProject
 {
-    <T> List<T> getData( String key, Class<T> type, Object... params );
 
-    String getDisplayName();
+    IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor );
 
-    int getPriority();
+    String getSymbolicName();
 
-    String getShortName();
-
-    ILiferayProject provide( Object adaptable );
-
-    boolean provides( Class<?> type );
 }

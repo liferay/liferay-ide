@@ -97,6 +97,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
                     {
                         if( apiCheck.isOK() )
                         {
+                            insertWorkspaceBundlesFolder( server, currentChildren );
                             insertBundlesFolder( server, currentChildren );
                             this.apiChecks.remove( server.getId() );
                         }
@@ -153,8 +154,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
             {
                 retval = true;
             }
-
-            if( ServerUtil.isLiferayRuntime( server ) && server.getServerState() == IServer.STATE_STARTED )
+            else if( ServerUtil.isLiferayRuntime( server ) && server.getServerState() == IServer.STATE_STARTED )
             {
                 retval = true;
             }
@@ -165,6 +165,22 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
         }
 
         return retval;
+    }
+
+    @Override
+    public boolean hasPipelinedChildren( Object element, boolean currentHasChildren )
+    {
+        return hasChildren( element );
+    }
+
+    @SuppressWarnings( { "rawtypes", "unchecked" } )
+    private void insertWorkspaceBundlesFolder( final IServer server, final Set currentChildren )
+    {
+        final BundlesFolder folder = new WorkspaceBundlesFolder( this.getConfig(), server );
+
+        this.bundlesFolders.put( server.getId(), folder );
+
+        currentChildren.add( folder );
     }
 
     @SuppressWarnings( { "rawtypes", "unchecked" } )

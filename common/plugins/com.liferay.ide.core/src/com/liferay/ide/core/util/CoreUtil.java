@@ -389,9 +389,9 @@ public class CoreUtil
         return retval;
     }
 
-    public final static List<IContainer> getSourceContainers( final IJavaProject project )
+    public final static List<IFolder> getSourceFolders( final IJavaProject project )
     {
-        final List<IContainer> containers = new ArrayList<IContainer>();
+        final List<IFolder> folders = new ArrayList<IFolder>();
 
         if( project != null )
         {
@@ -412,15 +412,15 @@ public class CoreUtil
                         container = ResourcesPlugin.getWorkspace().getRoot().getFolder( entry.getPath() );
                     }
 
-                    if( !containers.contains( container ) )
+                    if( !folders.contains( container ) && container instanceof IFolder )
                     {
-                        containers.add( container );
+                        folders.add( (IFolder) container );
                     }
                 }
             }
         }
 
-        return containers;
+        return folders;
     }
 
     public static IWorkspace getWorkspace()

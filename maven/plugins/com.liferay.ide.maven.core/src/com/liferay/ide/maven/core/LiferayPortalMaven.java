@@ -34,13 +34,13 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 /**
  * @author Gregory Amerson
  */
-public class LiferayMavenPortal implements ILiferayPortal
+public class LiferayPortalMaven implements ILiferayPortal
 {
-    private final LiferayMavenProject lrproject;
+    private final IMavenProject lrMvnProject;
 
-    public LiferayMavenPortal( LiferayMavenProject lrproject )
+    public LiferayPortalMaven( IMavenProject project )
     {
-        this.lrproject = lrproject;
+        this.lrMvnProject = project;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class LiferayMavenPortal implements ILiferayPortal
     {
         IPath retval = null;
 
-        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( this.lrproject.getProject() );
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( this.lrMvnProject.getProject() );
 
         if( projectFacade != null )
         {
@@ -77,7 +77,7 @@ public class LiferayMavenPortal implements ILiferayPortal
     public String[] getHookSupportedProperties()
     {
         return new LiferayPortalValueLoader(
-            getAppServerPortalDir(), this.lrproject.getUserLibs() ).loadHookPropertiesFromClass();
+            getAppServerPortalDir(), this.lrMvnProject.getUserLibs() ).loadHookPropertiesFromClass();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class LiferayMavenPortal implements ILiferayPortal
     public String getVersion()
     {
         String retval = null;
-        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( this.lrproject.getProject() );
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( this.lrMvnProject.getProject() );
 
         if( projectFacade != null )
         {

@@ -54,11 +54,11 @@ public class PortalRuntimeWizard extends WizardFragment
     @Override
     public void enter()
     {
-        super.enter();
-
         final IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
         runtime.setLocation( new Path( "/lrdev/repos/liferay/bundles/" ) );
         ( ( PortalRuntime) runtime.loadAdapter( PortalRuntime.class, null ) ).setPortalBundleType( "tomcat" );
+
+        this.composite.setRuntime(runtime);
     }
 
     @Override

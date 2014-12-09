@@ -17,13 +17,14 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.Hook;
 import com.liferay.ide.hook.core.model.PortalPropertiesFile;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.modeling.Path;
 
 /**
@@ -51,7 +52,7 @@ public class HookMethods
 
                 if( filePath != null )
                 {
-                    for( IFolder folder : ProjectUtil.getSourceFolders( hook.adapt( IProject.class ) ) )
+                    for( IFolder folder : CoreUtil.getSourceFolders( JavaCore.create( hook.adapt( IProject.class ) ) ) )
                     {
                         IFile file = folder.getFile( filePath.toPortableString() );
 

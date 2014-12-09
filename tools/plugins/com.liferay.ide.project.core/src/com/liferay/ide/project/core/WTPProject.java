@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.LiferayCore;
 
 import java.util.ArrayList;

@@ -15,10 +15,12 @@
 package com.liferay.ide.maven.ui;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectAdapter;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.maven.core.LiferayMavenProject;
+import com.liferay.ide.maven.core.FacetedMavenProject;
+import com.liferay.ide.maven.core.IMavenProject;
 import com.liferay.ide.project.core.IProjectBuilder;
 
 import java.util.regex.Matcher;
@@ -39,31 +41,37 @@ public class MavenProjectAdapter implements ILiferayProjectAdapter
 
     public <T> T adapt( ILiferayProject liferayProject, Class<T> adapterType )
     {
-        if( liferayProject instanceof LiferayMavenProject && IProjectBuilder.class.equals( adapterType ) )
+        if( liferayProject instanceof IMavenProject && IProjectBuilder.class.equals( adapterType ) )
         {
             // only use this builder for versions of Liferay less than 6.2
-            final LiferayMavenProject liferayMavenProject = LiferayMavenProject.class.cast( liferayProject );
-            final String version = liferayMavenProject.getLiferayMavenPluginVersion();
+            final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
 
-            if( ! CoreUtil.isNullOrEmpty( version ) )
+            if( portal != null )
             {
-                // we only need to match the first 2 characters
-                final Matcher matcher = majorMinor.matcher( version );
+                final String version = portal.getVersion();
 
-                String matchedVersion = null;
-
-                if( matcher.find() && matcher.groupCount() == 2 )
+                if( !CoreUtil.isNullOrEmpty( version ) )
                 {
-                    matchedVersion = matcher.group( 1 ) + "." + matcher.group( 2 ) + ".0";
-                }
+                    // we only need to match the first 2 characters
+                    final Matcher matcher = majorMinor.matcher( version );
 
-                final Version portalVersion = new Version( matchedVersion != null ? matchedVersion : version );
+                    String matchedVersion = null;
 
-                if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) < 0 )
-                {
-                    MavenUIProjectBuilder builder = new MavenUIProjectBuilder( (LiferayMavenProject) liferayProject );
+                    if( matcher.find() && matcher.groupCount() == 2 )
+                    {
+                        matchedVersion = matcher.group( 1 ) + "." + matcher.group( 2 ) + ".0";
+                    }
 
-                    return adapterType.cast( builder );
+                    final Version portalVersion =
+                        new Version( matchedVersion != null ? matchedVersion : version );
+
+                    if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) < 0 )
+                    {
+                        MavenUIProjectBuilder builder =
+                            new MavenUIProjectBuilder( (FacetedMavenProject) liferayProject );
+
+                        return adapterType.cast( builder );
+                    }
                 }
             }
         }

@@ -13,16 +13,15 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core;
+package com.liferay.ide.core;
 
-import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.ILiferayProjectAdapter;
-import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
+
+import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Gregory Amerson
@@ -64,14 +63,20 @@ public abstract class BaseLiferayProject implements ILiferayProject
 
     public IFolder getSourceFolder( String classification )
     {
-        final IFolder[] folders = ProjectUtil.getSourceFolders( project );
+        final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
 
         if( !CoreUtil.isNullOrEmpty( folders ) )
         {
-            return folders[0];
+            return folders.get( 0 );
         }
 
         return null;
+    }
+
+    @Override
+    public IFolder[] getSourceFolders()
+    {
+        return CoreUtil.getSourceFolders( JavaCore.create( getProject() ) ).toArray( new IFolder[0] );
     }
 
 }

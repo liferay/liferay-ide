@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.templates.DocumentTemplateContext;
 import org.eclipse.jface.text.templates.Template;
@@ -162,11 +163,11 @@ public class AddPortletOperation extends AddJavaEEArtifactOperation
 
     protected void createEmptyFileInDefaultSourceFolder( String filePath ) throws CoreException
     {
-        IFolder[] sourceFolders = ProjectUtil.getSourceFolders( getTargetProject() );
+        List<IFolder> sourceFolders = CoreUtil.getSourceFolders( JavaCore.create( getTargetProject() ) );
 
-        if( sourceFolders != null && sourceFolders.length > 0 )
+        if( sourceFolders != null && sourceFolders.size() > 0 )
         {
-            IFile projectFile = sourceFolders[0].getFile( filePath );
+            IFile projectFile = sourceFolders.get(0).getFile( filePath );
 
             if( !projectFile.exists() )
             {

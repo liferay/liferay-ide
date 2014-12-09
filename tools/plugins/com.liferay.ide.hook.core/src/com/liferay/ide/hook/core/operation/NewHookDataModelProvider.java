@@ -29,7 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -116,7 +115,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
         {
             IProject targetProject = getTargetProject();
 
-            List<IContainer> sources = CoreUtil.getSourceContainers( JavaCore.create( targetProject ) );
+            List<IFolder> sources = CoreUtil.getSourceFolders( JavaCore.create( targetProject ) );
 
             if( targetProject != null && sources.size() > 0 )
             {
@@ -127,7 +126,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
         {
             IProject targetProject = getTargetProject();
 
-            List<IContainer> sources = CoreUtil.getSourceContainers( JavaCore.create( targetProject ) );
+            List<IFolder> sources = CoreUtil.getSourceFolders( JavaCore.create( targetProject ) );
 
             if( targetProject != null && sources.size() > 0 )
             {

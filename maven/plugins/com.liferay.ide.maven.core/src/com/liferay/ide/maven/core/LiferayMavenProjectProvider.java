@@ -635,28 +635,40 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         return profilesToSave;
     }
 
-    public ILiferayProject provide( Object type )
+    public ILiferayProject provide( Object adaptable )
     {
-        if( type instanceof IProject )
+        if( adaptable instanceof IProject )
         {
-            final IProject project = (IProject) type;
+            final IProject project = (IProject) adaptable;
 
             try
             {
-                if( MavenUtil.isMavenProject( project ) && ComponentUtil.hasLiferayFacet( project ) )
+                if( MavenUtil.isMavenProject( project ) )
                 {
-                    return new LiferayMavenProject( project );
+                    if( ComponentUtil.hasLiferayFacet( project ) )
+                    {
+                        return new FacetedMavenProject( project );
+                    }
+                    else if( hasMavenBundlePlugin( project ) )
+                    {
+                        return new MavenBundlePluginProject( project );
+                    }
                 }
-
             }
             catch( CoreException e )
             {
                 LiferayMavenCore.logError(
-                    "Unable to create ILiferayProject from maven project " + project.getName(), e ); //$NON-NLS-1$
+                    "Unable to create ILiferayProject from maven project " + project.getName(), e );
             }
         }
 
         return null;
+    }
+
+    private boolean hasMavenBundlePlugin( IProject project )
+    {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     private void updateDtdVersion( IProject project, String dtdVersion, String archetypeVesion )

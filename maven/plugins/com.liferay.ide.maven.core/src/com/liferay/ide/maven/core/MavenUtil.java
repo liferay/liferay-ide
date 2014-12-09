@@ -471,7 +471,7 @@ public class MavenUtil
 
     public static boolean isMavenProject( IProject project ) throws CoreException
     {
-        return project != null && project.exists() &&
+        return project != null && project.exists() && project.isAccessible() &&
             ( project.hasNature( IMavenConstants.NATURE_ID ) || project.getFile( IMavenConstants.POM_FILE_NAME ).exists() );
     }
 

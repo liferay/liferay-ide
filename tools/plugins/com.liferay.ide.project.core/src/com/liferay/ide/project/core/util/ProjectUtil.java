@@ -60,7 +60,6 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.common.project.facet.core.JavaFacet;
@@ -786,91 +785,6 @@ public class ProjectUtil
         }
 
         return requiredSuffix;
-    }
-
-    public static IPackageFragmentRoot[] getSourceContainers( IProject project )
-    {
-        IJavaProject jProject = JavaCore.create( project );
-
-        if( jProject == null )
-        {
-            return new IPackageFragmentRoot[0];
-        }
-
-        List<IPackageFragmentRoot> list = new ArrayList<IPackageFragmentRoot>();
-        IVirtualComponent vc = ComponentCore.createComponent( project );
-        IPackageFragmentRoot[] roots;
-
-        try
-        {
-            roots = jProject.getPackageFragmentRoots();
-
-            for( int i = 0; i < roots.length; i++ )
-            {
-                if( roots[i].getKind() != IPackageFragmentRoot.K_SOURCE )
-                {
-                    continue;
-                }
-
-                IResource resource = roots[i].getResource();
-
-                if( null != resource )
-                {
-                    IVirtualResource[] vResources = ComponentCore.createResources( resource );
-                    boolean found = false;
-
-                    for( int j = 0; ! found && j < vResources.length; j++ )
-                    {
-                        if( vResources[j].getComponent().equals( vc ) )
-                        {
-                            if( ! list.contains( roots[i] ) )
-                            {
-                                list.add( roots[i] );
-                            }
-
-                            found = true;
-                        }
-                    }
-                }
-            }
-
-            if( list.size() == 0 )
-            {
-                for( IPackageFragmentRoot root : roots )
-                {
-                    if( root.getKind() == IPackageFragmentRoot.K_SOURCE )
-                    {
-                        if( ! list.contains( root ) )
-                        {
-                            list.add( root );
-                        }
-                    }
-                }
-            }
-        }
-        catch( JavaModelException e )
-        {
-            ProjectCore.logError( e );
-        }
-
-        return list.toArray( new IPackageFragmentRoot[list.size()] );
-    }
-
-    public static IFolder[] getSourceFolders( IProject project )
-    {
-        List<IFolder> sourceFolders = new ArrayList<IFolder>();
-
-        IPackageFragmentRoot[] sources = getSourceContainers( project );
-
-        for( IPackageFragmentRoot source : sources )
-        {
-            if( source.getResource() instanceof IFolder )
-            {
-                sourceFolders.add( ( (IFolder) source.getResource() ) );
-            }
-        }
-
-        return sourceFolders.toArray( new IFolder[sourceFolders.size()] );
     }
 
     public static String guessPluginType( IFacetedProjectWorkingCopy fpwc )

@@ -25,7 +25,6 @@ import com.liferay.ide.ui.util.SWTUtil;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -240,7 +239,7 @@ public class NewLanguagePropertiesHookWizardPage extends DataModelWizardPage imp
 
                     IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
 
-                    List<IContainer> sources = CoreUtil.getSourceContainers( JavaCore.create( project ) );
+                    List<IFolder> sources = CoreUtil.getSourceFolders( JavaCore.create( project ) );
 
                     if( sources.size() > 0 && folder.equals( sources.get( 0 ) ) )
                     {

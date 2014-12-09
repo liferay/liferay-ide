@@ -14,11 +14,13 @@
  *******************************************************************************/
 package com.liferay.ide.portlet.ui.handlers;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.job.BuildLanguageJob;
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.ui.util.UIUtil;
+
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -33,6 +35,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.packageview.PackageFragmentRootContainer;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -94,7 +97,7 @@ public class BuildLangHandler extends AbstractHandler
 
         if( project != null )
         {
-            IFolder[] srcFolders = ProjectUtil.getSourceFolders( project );
+            final List<IFolder> srcFolders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
 
             for( IFolder src : srcFolders )
             {

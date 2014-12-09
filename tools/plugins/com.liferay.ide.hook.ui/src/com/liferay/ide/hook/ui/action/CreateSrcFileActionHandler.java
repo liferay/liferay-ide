@@ -21,10 +21,10 @@ package com.liferay.ide.hook.ui.action;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.hook.ui.HookUI;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -32,6 +32,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.Value;
@@ -75,11 +76,11 @@ public class CreateSrcFileActionHandler extends PropertyEditorActionHandler
     {
         final IProject project = this.getModelElement().adapt( IProject.class );
 
-        final IFolder[] folders = ProjectUtil.getSourceFolders( project );
+        final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( project ) );
 
         if( !CoreUtil.isNullOrEmpty( folders ) )
         {
-            return folders[0].getFullPath();
+            return folders.get( 0 ).getFullPath();
         }
 
         return null;
