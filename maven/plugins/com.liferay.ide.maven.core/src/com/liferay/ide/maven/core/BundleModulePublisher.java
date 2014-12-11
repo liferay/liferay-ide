@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.ModulePublisher;
 import com.liferay.ide.server.core.portal.PortalRuntime;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -35,9 +37,9 @@ import org.eclipse.wst.server.core.IServer;
 public class BundleModulePublisher implements ModulePublisher
 {
 
-    private final BundleProject bundleProject;
+    private final IBundleProject bundleProject;
 
-    public BundleModulePublisher( BundleProject project )
+    public BundleModulePublisher( IBundleProject project )
     {
         if( project == null )
         {
@@ -47,12 +49,11 @@ public class BundleModulePublisher implements ModulePublisher
         this.bundleProject = project;
     }
 
-    public IStatus remove( IServer server, IModule module )
+    public IStatus remove( IServer server, IModule module ) throws CoreException
     {
         IStatus retval = null;
 
-        // TODO we can't just rely on projectName
-        final String projectName = this.bundleProject.getProject().getName();
+        final String symbolicName = this.bundleProject.getSymbolicName();
 
         final PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
 
@@ -60,7 +61,11 @@ public class BundleModulePublisher implements ModulePublisher
 
         final List<File> moduleFiles = new ArrayList<File>();
 
-        findFilesInPath( modulesPath.toFile(), projectName, moduleFiles );
+        // TODO this may not always match
+        findFilesInPath( modulesPath.toFile(), symbolicName, moduleFiles );
+
+        final IPath deployPath = runtime.getPortalBundle().getAutoDeployPath();
+        findFilesInPath( deployPath.toFile(), symbolicName, moduleFiles );
 
         if( moduleFiles.size() > 0 )
         {

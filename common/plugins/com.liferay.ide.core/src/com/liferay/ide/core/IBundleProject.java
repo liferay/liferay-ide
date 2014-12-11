@@ -15,6 +15,7 @@
 package com.liferay.ide.core;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 
@@ -24,8 +25,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IBundleProject
 {
 
-    IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor );
+    IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException;
 
-    String getSymbolicName();
+    String getSymbolicName() throws CoreException;
 
 }

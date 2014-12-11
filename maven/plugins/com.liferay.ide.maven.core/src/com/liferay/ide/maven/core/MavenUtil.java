@@ -152,8 +152,29 @@ public class MavenUtil
         return newNode;
     }
 
+    public static IStatus executeGoal( final IMavenProjectFacade facade,
+                                       final IMavenExecutionContext context,
+                                       final String goal,
+                                       final IProgressMonitor monitor ) throws CoreException
+    {
+        final IMaven maven = MavenPlugin.getMaven();
+        final List<String> goals = Collections.singletonList( goal );
+        final MavenProject mavenProject = facade.getMavenProject( monitor );
+        final MavenExecutionPlan plan = maven.calculateExecutionPlan( mavenProject, goals, true, monitor );
+        final List<MojoExecution> mojos = plan.getMojoExecutions();
 
-    public static IStatus executeMojoGoal( final IMavenProjectFacade projectFacade,
+        final ResolverConfiguration configuration = facade.getResolverConfiguration();
+        configuration.setResolveWorkspaceProjects( true );
+
+        for( MojoExecution mojo : mojos )
+        {
+            maven.execute( mavenProject, mojo, monitor );
+        }
+
+        return Status.OK_STATUS;
+    }
+
+    public static IStatus executeMojoGoal( final IMavenProjectFacade facade,
                                            final IMavenExecutionContext context,
                                            final String goal,
                                            final IProgressMonitor monitor ) throws CoreException
@@ -162,7 +183,7 @@ public class MavenUtil
         final IMaven maven = MavenPlugin.getMaven();
 
         final List<String> goals = Collections.singletonList( goal );
-        final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+        final MavenProject mavenProject = facade.getMavenProject( monitor );
         final MavenExecutionPlan plan = maven.calculateExecutionPlan( mavenProject, goals, true, monitor );
 
 //        context.getExecutionRequest().setOffline( true );
@@ -173,7 +194,7 @@ public class MavenUtil
 
         if( liferayMojoExecution != null )
         {
-            ResolverConfiguration configuration = projectFacade.getResolverConfiguration();
+            ResolverConfiguration configuration = facade.getResolverConfiguration();
             configuration.setResolveWorkspaceProjects( true );
 
             maven.execute( mavenProject, liferayMojoExecution, monitor );
@@ -227,7 +248,7 @@ public class MavenUtil
         return project.getFolder( m2eLiferayFolder ).getFolder( ILiferayMavenConstants.THEME_RESOURCES_FOLDER );
     }
 
-    public static Plugin getLiferayMavenPlugin( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
+    public static Plugin getPlugin( IMavenProjectFacade facade, final String pluginKey, IProgressMonitor monitor ) throws CoreException
     {
         Plugin retval = null;
         boolean loadedParent = false;
@@ -235,7 +256,7 @@ public class MavenUtil
 
         if( mavenProject != null )
         {
-            retval = mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+            retval = mavenProject.getPlugin( pluginKey );
         }
 
         if( retval == null )
@@ -261,7 +282,7 @@ public class MavenUtil
 
             while( parent != null && retval == null )
             {
-                retval = parent.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+                retval = parent.getPlugin( pluginKey );
 
                 parent = parent.getParent();
             }

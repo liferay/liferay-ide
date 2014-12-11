@@ -83,6 +83,7 @@ public class BundlePublishFullAdd implements PublishOp
 
         if( bundleProject != null )
         {
+            //TODO catch error in getOUtputJar and show a popup notification instead
             final IFile outputJar = bundleProject.getOutputJar( true, monitor );
 
             if( outputJar.exists() )

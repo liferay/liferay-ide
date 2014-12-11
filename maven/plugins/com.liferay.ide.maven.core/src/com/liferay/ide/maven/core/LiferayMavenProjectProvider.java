@@ -53,6 +53,8 @@ import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.cli.MavenCli;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Profile;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -68,6 +70,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
@@ -667,7 +670,31 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
     private boolean hasMavenBundlePlugin( IProject project )
     {
-        // TODO Auto-generated method stub
+        final NullProgressMonitor monitor = new NullProgressMonitor();
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
+
+        if( facade != null )
+        {
+            final MavenProject mavenProject = facade.getMavenProject();
+
+            if( mavenProject != null && "bundle".equals( mavenProject.getPackaging() ) )
+            {
+                try
+                {
+                    final Plugin mavenBundlePlugin =
+                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY, monitor );
+
+                    if( mavenBundlePlugin != null )
+                    {
+                        return true;
+                    }
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+        }
+
         return false;
     }
 

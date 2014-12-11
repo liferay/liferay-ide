@@ -110,6 +110,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements IJa
         {
             for( IModule module : modules )
             {
+                // TODO add a popup notification for CoreEx instead of letting bubble up to user
                 IStatus status = op.publish( module, monitor );
 
                 if( status.isOK() )

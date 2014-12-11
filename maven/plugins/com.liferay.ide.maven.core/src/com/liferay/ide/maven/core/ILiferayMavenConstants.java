@@ -51,6 +51,8 @@ public interface ILiferayMavenConstants
 
     String M2E_LIFERAY_FOLDER = "m2e-liferay";  //$NON-NLS-1$
 
+    String MAVEN_BUNDLE_PLUGIN_KEY = "org.apache.felix:maven-bundle-plugin";
+
     String PLUGIN_CONFIG_API_BASE_DIR = "apiBaseDir"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_APP_SERVER_PORTAL_DIR = "appServerPortalDir"; //$NON-NLS-1$

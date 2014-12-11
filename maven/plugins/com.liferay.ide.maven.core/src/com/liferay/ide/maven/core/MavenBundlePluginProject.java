@@ -15,14 +15,14 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.portal.ModulePublisher;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.maven.model.Plugin;
@@ -35,8 +35,8 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.m2e.core.MavenPlugin;
@@ -48,7 +48,7 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
 /**
  * @author Gregory Amerson
  */
-public class MavenBundlePluginProject extends BaseLiferayProject
+public class MavenBundlePluginProject extends BaseLiferayProject implements IBundleProject
 {
 
     public MavenBundlePluginProject( IProject project )
@@ -81,6 +81,14 @@ public class MavenBundlePluginProject extends BaseLiferayProject
                     new MavenProjectRemoteServerPublisher( getProject() );
 
                 return adapterType.cast( remoteServerPublisher );
+            }
+            else if( IBundleProject.class.equals( adapterType ) )
+            {
+                return adapterType.cast( this );
+            }
+            else if( ModulePublisher.class.equals( adapterType ) )
+            {
+                return adapterType.cast( new BundleModulePublisher( this ) );
             }
         }
 
@@ -142,7 +150,8 @@ public class MavenBundlePluginProject extends BaseLiferayProject
 
                 if( mavenProject != null )
                 {
-                    final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade, npm );
+                    final Plugin liferayMavenPlugin =
+                        MavenUtil.getPlugin( projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, npm );
 
                     retval = liferayMavenPlugin.getVersion();
                 }
@@ -155,30 +164,49 @@ public class MavenBundlePluginProject extends BaseLiferayProject
         return retval;
     }
 
-    public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
+    @Override
+    public IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
-        final Collection<IFile> outputs = new HashSet<IFile>();
+        IFile outputJar = null;
 
-        if( build )
+        if( buildIfNeeded )
         {
-            this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-
-            new MavenProjectBuilder( this.getProject() ).runMavenGoal( getProject(), "package", monitor );
-
-            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
-            final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
-            final String targetFolder = mavenProject.getBuild().getDirectory();
-            final String targetWar = mavenProject.getBuild().getFinalName() + "." + mavenProject.getPackaging();
-
-            final IFile output = getProject().getFile( new Path( targetFolder ).append( targetWar ) );
-
-            if( output.exists() )
+            try
             {
-                outputs.add( output );
+                this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+            }
+            catch( CoreException e )
+            {
+            }
+
+            final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
+
+            final IStatus status = mavenProjectBuilder.execGoal( "package", monitor );
+
+            if( status != null && status.isOK() )
+            {
+                final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+                final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+
+                final String targetName = mavenProject.getBuild().getFinalName() + ".jar";
+
+                // TODO find a better way to get the target folder
+                final IFolder targetFolder = getProject().getFolder( "target" );
+
+                if( targetFolder.exists() )
+                {
+                    targetFolder.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                    final IFile targetFile = targetFolder.getFile( targetName );
+
+                    if( targetFile.exists() )
+                    {
+                        outputJar = targetFile;
+                    }
+                }
             }
         }
 
-        return outputs;
+        return outputJar;
     }
 
     public String getProperty( String key, String defaultValue )
@@ -237,6 +265,18 @@ public class MavenBundlePluginProject extends BaseLiferayProject
         final List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( getProject() ) );
 
         return folders.toArray( new IFolder[0] );
+    }
+
+    @Override
+    public String getSymbolicName() throws CoreException
+    {
+        final IProgressMonitor monitor = new NullProgressMonitor();
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+        final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+
+        // TODO this may not necessarily be the project name
+
+        return mavenProject.getArtifactId();
     }
 
     public IPath[] getUserLibs()

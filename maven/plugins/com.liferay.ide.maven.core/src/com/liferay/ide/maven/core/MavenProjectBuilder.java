@@ -146,6 +146,25 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         return buildSB( serviceXmlFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD, sub );
     }
 
+    public IStatus execGoal( final String goal, final IProgressMonitor monitor ) throws CoreException
+    {
+        IStatus retval = null;
+
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( getProject(), monitor );
+
+        final ICallable<IStatus> callable = new ICallable<IStatus>()
+        {
+            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
+            {
+                return MavenUtil.executeGoal( facade, context, goal, monitor );
+            }
+        };
+
+        retval = executeMaven( facade, callable, monitor );
+
+        return retval;
+    }
+
     protected IStatus executeMaven( final IMavenProjectFacade projectFacade,
                                     final ICallable<IStatus> callable,
                                     IProgressMonitor monitor ) throws CoreException
@@ -169,7 +188,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         try
         {
             // not doing any null checks since this is in large try/catch
-            final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade, monitor );
+            final Plugin liferayMavenPlugin = MavenUtil.getPlugin( projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
             final Xpp3Dom config = (Xpp3Dom) liferayMavenPlugin.getConfiguration();
             final Xpp3Dom apiBaseDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_API_BASE_DIR );
             // this should be the name path of a project that should be in user's workspace that we can refresh

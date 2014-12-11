@@ -129,7 +129,8 @@ public class FacetedMavenProject extends WTPProject implements IMavenProject
 
                 if( mavenProject != null )
                 {
-                    final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade, npm );
+                    final Plugin liferayMavenPlugin =
+                        MavenUtil.getPlugin( projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, npm );
 
                     retval = liferayMavenPlugin.getVersion();
                 }
@@ -217,11 +218,11 @@ public class FacetedMavenProject extends WTPProject implements IMavenProject
         return libs.toArray( new IPath[0] );
     }
 
-    public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
+    public Collection<IFile> getOutputs( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
         final Collection<IFile> outputs = new HashSet<IFile>();
 
-        if( build )
+        if( buildIfNeeded )
         {
             this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
 

@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -25,6 +26,6 @@ import org.eclipse.wst.server.core.IServer;
 public interface ModulePublisher
 {
 
-    IStatus remove( IServer server , IModule module );
+    IStatus remove( IServer server , IModule module ) throws CoreException;
 
 }

@@ -194,7 +194,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         monitor.beginTask( NLS.bind( Msgs.configuringLiferayProject, request.getProject() ), 100 );
 
-        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
+        final Plugin liferayMavenPlugin =
+            MavenUtil.getPlugin(
+                request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
 
         if( ! shouldConfigure( liferayMavenPlugin, request ) )
         {
@@ -391,7 +393,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         final List<MavenProblemInfo> warnings = new ArrayList<MavenProblemInfo>();
 
         // first check to make sure that the AppServer* properties are available and pointed to valid location
-        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
+        final Plugin liferayMavenPlugin =
+            MavenUtil.getPlugin(
+                request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
 
         if( liferayMavenPlugin != null )
         {
@@ -510,7 +514,9 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         MavenProblemInfo retval = null;
 
         final String pluginType = MavenUtil.getLiferayMavenPluginType( request.getMavenProject() );
-        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( request.getMavenProjectFacade(), monitor );
+        final Plugin liferayMavenPlugin =
+            MavenUtil.getPlugin(
+                request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
         final Action action = getNewLiferayFacetInstallAction( pluginType );
 
         if( action != null )

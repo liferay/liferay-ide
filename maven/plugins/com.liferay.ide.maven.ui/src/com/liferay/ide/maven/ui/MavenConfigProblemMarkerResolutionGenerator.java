@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.ui;
 
+import com.liferay.ide.maven.core.ILiferayMavenConstants;
 import com.liferay.ide.maven.core.MavenUtil;
 
 import org.apache.maven.model.Plugin;
@@ -61,7 +62,9 @@ public class MavenConfigProblemMarkerResolutionGenerator extends ConfigProblemMa
                 {
                     try
                     {
-                        final Plugin liferayMavenPlugin = MavenUtil.getLiferayMavenPlugin( projectFacade, npm );
+                        final Plugin liferayMavenPlugin =
+                            MavenUtil.getPlugin(
+                                projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, npm );
 
                         if( liferayMavenPlugin != null )
                         {

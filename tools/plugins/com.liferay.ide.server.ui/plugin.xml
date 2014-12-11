@@ -118,6 +118,9 @@
                <instanceof
                      value="org.eclipse.wst.server.core.IServer">
                </instanceof>
+               <instanceof
+                     value="com.liferay.ide.server.ui.navigator.BundlesFolder">
+               </instanceof>
             </or>
          </triggerPoints>
          <possibleChildren>
@@ -127,6 +130,9 @@
                </instanceof>
                <instanceof
                      value="com.liferay.ide.server.ui.navigator.BundlesFolder">
+               </instanceof>
+               <instanceof
+                     value="com.liferay.ide.server.ui.navigator.WorkspaceBundlesFolder">
                </instanceof>
                <instanceof
                      value="com.liferay.ide.server.core.portal.OsgiBundle">
