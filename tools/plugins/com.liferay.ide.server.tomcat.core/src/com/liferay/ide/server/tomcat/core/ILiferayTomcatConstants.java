@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 /**
  * @author Greg Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public interface ILiferayTomcatConstants
 {
@@ -46,5 +47,7 @@ public interface ILiferayTomcatConstants
     boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean( "prevent.multi.ext.plugins.deploy", false ); //$NON-NLS-1$
 
     int STANDARD_SERVER_MODE = 1;
+    
+    boolean USE_DEFAULT_PORTAL_SERVER_SETTING = false;
 
 }

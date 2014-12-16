@@ -22,6 +22,7 @@ import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
 /**
  * @author Greg Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public interface ILiferayTomcatServer extends ILiferayServerWorkingCopy, ITomcatServer
@@ -37,6 +38,8 @@ public interface ILiferayTomcatServer extends ILiferayServerWorkingCopy, ITomcat
     String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties"; //$NON-NLS-1$
 
     String PROPERTY_MEMORY_ARGS = "memoryArgs"; //$NON-NLS-1$
+    
+    String PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS = "userDefaultPortalServerSettings"; //$NON-NLS-1$
 
     String PROPERTY_SERVER_MODE = "serverMode"; //$NON-NLS-1$
 

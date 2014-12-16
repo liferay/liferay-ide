@@ -27,6 +27,7 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
@@ -91,8 +92,6 @@ public class LiferayTomcatUtil
         List<String> runtimeVMArgs, IPath installPath, IPath configPath, IPath deployPath, boolean isTestEnv,
         IServer currentServer, ILiferayTomcatServer liferayTomcatServer )
     {
-        addUserVMArgs( runtimeVMArgs, currentServer, liferayTomcatServer );
-
         runtimeVMArgs.add( "-Dfile.encoding=UTF8" ); //$NON-NLS-1$
         runtimeVMArgs.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" ); //$NON-NLS-1$
         runtimeVMArgs.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" ); //$NON-NLS-1$
@@ -112,12 +111,38 @@ public class LiferayTomcatUtil
             "/conf/logging.properties\"" ); //$NON-NLS-1$
         runtimeVMArgs.add( "-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-        File externalPropertiesFile =
-            getExternalPropertiesFile( installPath, configPath, currentServer, liferayTomcatServer );
+        
+        
+        final boolean defaultPortalServerSetting = ( (LiferayTomcatServer) liferayTomcatServer ).getUseDefaultPortalServerSettings();
 
-        runtimeVMArgs.add( "-Dexternal-properties=\"" + externalPropertiesFile.getAbsolutePath() + "\"" ); //$NON-NLS-1$ //$NON-NLS-2$
+        if ( defaultPortalServerSetting == false )
+        {
+            addUserVMArgs( runtimeVMArgs, currentServer, liferayTomcatServer );
+
+            File externalPropertiesFile = 
+                            getExternalPropertiesFile( installPath, configPath, currentServer, liferayTomcatServer );
+
+            runtimeVMArgs.add( "-Dexternal-properties=\"" + externalPropertiesFile.getAbsolutePath() + "\"" ); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        else
+        {
+            addUserDefaultVMArgs( runtimeVMArgs );
+        }
     }
 
+    private static void addUserDefaultVMArgs( List<String> runtimeVMArgs )
+    {
+        String[] memoryArgs = ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS.split( StringPool.SPACE );
+
+        if( memoryArgs != null )
+        {
+            for( String arg : memoryArgs )
+            {
+                runtimeVMArgs.add( arg );
+            }
+        }
+    }
+    
     private static void addUserVMArgs(
         List<String> runtimeVMArgs, IServer currentServer, ILiferayTomcatServer portalTomcatServer )
     {

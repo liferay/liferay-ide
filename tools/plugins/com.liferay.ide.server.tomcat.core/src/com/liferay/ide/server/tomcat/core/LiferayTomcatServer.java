@@ -42,6 +42,7 @@ import org.osgi.framework.Version;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatServer extends TomcatServer
@@ -95,6 +96,11 @@ public class LiferayTomcatServer extends TomcatServer
         }
 
         return defaultServerMode;
+    }
+
+    public boolean getDefaultPortalServerSettings()
+    {
+        return ILiferayTomcatConstants.USE_DEFAULT_PORTAL_SERVER_SETTING;
     }
 
     public String getExternalProperties()
@@ -160,6 +166,11 @@ public class LiferayTomcatServer extends TomcatServer
     public ILiferayTomcatConfiguration getLiferayTomcatConfiguration() throws CoreException
     {
         return (ILiferayTomcatConfiguration) getTomcatConfiguration();
+    }
+
+    public boolean getUseDefaultPortalServerSettings()
+    {
+        return getAttribute( PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS, getDefaultPortalServerSettings() );
     }
 
     public int getServerMode()
@@ -403,6 +414,11 @@ public class LiferayTomcatServer extends TomcatServer
     public void setPassword( String password )
     {
         setAttribute( ATTR_PASSWORD, password );
+    }
+
+    public void setUseDefaultPortalServerSettings( final boolean useDefaultPortalServerSettings )
+    {
+        setAttribute( PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS, useDefaultPortalServerSettings );
     }
 
     public void setServerMode( int serverMode )

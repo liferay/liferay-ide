@@ -45,6 +45,7 @@ import org.junit.Before;
 /**
  * @author Terry Jia
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public abstract class ServerCoreBase extends BaseTests
 {
@@ -54,8 +55,8 @@ public abstract class ServerCoreBase extends BaseTests
     protected final static String liferayServerAjpPort = System.getProperty( "liferay.server.ajp.port" );
     protected final static String liferayServerShutdownPort = System.getProperty( "liferay.server.shutdown.port" );
     protected final static String liferayServerStartPort = System.getProperty( "liferay.server.start.port" );
-    private static IRuntime runtime;
-    private static IServer server;
+    protected static IRuntime runtime;
+    protected static IServer server;
     private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
     private final static String skipServerTests = System.getProperty( "skipServerTests" );
 
