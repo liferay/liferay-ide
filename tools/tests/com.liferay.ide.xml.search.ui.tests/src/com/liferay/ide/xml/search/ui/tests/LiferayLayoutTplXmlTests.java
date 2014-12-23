@@ -16,6 +16,9 @@
 package com.liferay.ide.xml.search.ui.tests;
 
 
+/**
+ * @author Kuo Zhang
+ */
 public class LiferayLayoutTplXmlTests extends XmlSearchTestsBase
 {
 

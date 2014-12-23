@@ -16,6 +16,7 @@ package com.liferay.ide.core.util;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public class StringPool
 {
