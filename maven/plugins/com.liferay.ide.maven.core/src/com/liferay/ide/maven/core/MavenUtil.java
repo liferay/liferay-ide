@@ -421,28 +421,12 @@ public class MavenUtil
         final IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
         final IFile pomResource = project.getFile( IMavenConstants.POM_FILE_NAME );
 
-        IMavenProjectFacade projectFacade = projectManager.create( project, monitor );
-
-        if( projectFacade == null || projectFacade.isStale() )
+        if( pomResource.exists() )
         {
-            try
-            {
-                projectManager.refresh( Collections.singleton( pomResource ), monitor );
-            }
-            catch( CoreException e )
-            {
-                LiferayMavenCore.logError( e );
-            }
-
-            projectFacade = projectManager.create( project, monitor );
-
-            if( projectFacade == null )
-            {
-                // error marker should have been created
-            }
+            return projectManager.create( pomResource, true, monitor );
         }
 
-        return projectFacade;
+        return null;
     }
 
     public static String getVersion( String version )

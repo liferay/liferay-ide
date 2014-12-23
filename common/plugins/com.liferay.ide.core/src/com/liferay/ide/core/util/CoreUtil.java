@@ -17,6 +17,7 @@ package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.adapter.NoopLiferayProject;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -453,7 +454,14 @@ public class CoreUtil
 
     public static boolean isLiferayProject( IProject project )
     {
-        return project != null && LiferayCore.create( project ) != null;
+        if( project != null )
+        {
+            ILiferayProject lrproject = LiferayCore.create( project );
+
+            return lrproject != null && !( lrproject instanceof NoopLiferayProject );
+        }
+
+        return false;
     }
 
     public static boolean isLinux()
