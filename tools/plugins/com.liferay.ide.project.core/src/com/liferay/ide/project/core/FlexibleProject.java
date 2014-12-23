@@ -39,10 +39,51 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 /**
  * @author Gregory Amerson
  */
-public abstract class WTPProject extends BaseLiferayProject
+public abstract class FlexibleProject extends BaseLiferayProject
 {
 
-    public WTPProject( IProject project )
+    private static IFolder getDefaultDocroot( IProject project )
+    {
+        IFolder folder = null;
+
+        final IVirtualFolder webappRoot = getVirtualDocroot( project );
+
+        if( webappRoot != null )
+        {
+            final IPath defaultFolder = J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder( webappRoot );
+
+            if( defaultFolder != null )
+            {
+                IFolder f = project.getFolder( defaultFolder );
+
+                if( f.exists() )
+                {
+                    folder = f;
+                }
+            }
+        }
+
+        return folder;
+    }
+
+    private static IVirtualFolder getVirtualDocroot( IProject project )
+    {
+        IVirtualFolder retval = null;
+
+        if( project != null )
+        {
+            IVirtualComponent comp = ComponentCore.createComponent( project );
+
+            if( comp != null )
+            {
+                retval = comp.getRootFolder();
+            }
+        }
+
+        return retval;
+    }
+
+    public FlexibleProject( IProject project )
     {
         super( project );
     }
@@ -73,47 +114,6 @@ public abstract class WTPProject extends BaseLiferayProject
     public IFolder getDefaultDocrootFolder()
     {
         return getDefaultDocroot( getProject() );
-    }
-
-    private static IVirtualFolder getVirtualDocroot( IProject project )
-    {
-        IVirtualFolder retval = null;
-
-        if( project != null )
-        {
-            IVirtualComponent comp = ComponentCore.createComponent( project );
-
-            if( comp != null )
-            {
-                retval = comp.getRootFolder();
-            }
-        }
-
-        return retval;
-    }
-
-    private static IFolder getDefaultDocroot( IProject project )
-    {
-        IFolder folder = null;
-
-        final IVirtualFolder webappRoot = getVirtualDocroot( project );
-
-        if( webappRoot != null )
-        {
-            final IPath defaultFolder = J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder( webappRoot );
-
-            if( defaultFolder != null )
-            {
-                IFolder f = project.getFolder( defaultFolder );
-
-                if( f.exists() )
-                {
-                    folder = f;
-                }
-            }
-        }
-
-        return folder;
     }
 
     @Override

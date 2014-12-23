@@ -45,7 +45,7 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PluginsSDKProject extends WTPProject
+public class PluginsSDKProject extends FlexibleProject
 {
 
     private ILiferayRuntime liferayRuntime;

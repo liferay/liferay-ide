@@ -65,7 +65,9 @@ import org.eclipse.aether.resolution.VersionRangeResolutionException;
 import org.eclipse.aether.resolution.VersionRangeResult;
 import org.eclipse.aether.version.Version;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -648,13 +650,37 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             {
                 if( MavenUtil.isMavenProject( project ) )
                 {
-                    if( ComponentUtil.hasLiferayFacet( project ) )
+                    if( hasMavenBundlePlugin( project ) )
+                    {
+                        return new MavenBundlePluginProject( project );
+                    }
+                    else if( ComponentUtil.hasLiferayFacet( project ) )
                     {
                         return new FacetedMavenProject( project );
                     }
-                    else if( hasMavenBundlePlugin( project ) )
+                    else
                     {
-                        return new MavenBundlePluginProject( project );
+                        // return dummy maven project that can't lookup docroot resources
+                        return new LiferayMavenProject( project )
+                        {
+                            @Override
+                            public IResource findDocrootResource( IPath path )
+                            {
+                                return null;
+                            }
+
+                            @Override
+                            public IFolder getDefaultDocrootFolder()
+                            {
+                                return null;
+                            }
+
+                            @Override
+                            public IFile getDescriptorFile( String name )
+                            {
+                                return null;
+                            }
+                        };
                     }
                 }
             }

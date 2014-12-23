@@ -15,34 +15,25 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayPortal;
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.FlexibleProject;
 import com.liferay.ide.project.core.IProjectBuilder;
-import com.liferay.ide.project.core.WTPProject;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
-import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.jdt.IClasspathManager;
-import org.eclipse.m2e.jdt.MavenJdtPlugin;
 
 
 /**
@@ -50,12 +41,29 @@ import org.eclipse.m2e.jdt.MavenJdtPlugin;
  * @author Cindy Li
  * @author Simon Jiang
  */
-public class FacetedMavenProject extends WTPProject implements IMavenProject
+public class FacetedMavenProject extends LiferayMavenProject implements IMavenProject
 {
+
+    private final FlexibleProject flexibleProject;
 
     public FacetedMavenProject( IProject project )
     {
         super( project );
+
+        this.flexibleProject = new FlexibleProject( project )
+        {
+            @Override
+            public IPath getLibraryPath( String filename )
+            {
+                return null;
+            }
+
+            @Override
+            public String getProperty( String key, String defaultValue )
+            {
+                return null;
+            }
+        };
     }
 
     public <T> T adapt( Class<T> adapterType )
@@ -95,127 +103,22 @@ public class FacetedMavenProject extends WTPProject implements IMavenProject
         return null;
     }
 
-    public IPath getLibraryPath( String filename )
+    @Override
+    public IResource findDocrootResource( IPath path )
     {
-        final IPath[] libs = getUserLibs();
-
-        if( ! CoreUtil.isNullOrEmpty( libs ) )
-        {
-            for( IPath lib : libs )
-            {
-                if( lib.removeFileExtension().lastSegment().startsWith( filename ) )
-                {
-                    return lib;
-                }
-            }
-        }
-
-        return null;
+        return this.flexibleProject.findDocrootResource( path );
     }
 
-    public String getLiferayMavenPluginVersion()
+    @Override
+    public IFolder getDefaultDocrootFolder()
     {
-        String retval = null;
-
-        final IMavenProjectFacade projectFacade = MavenPlugin.getMavenProjectRegistry().getProject( getProject() );
-
-        if( projectFacade != null )
-        {
-            try
-            {
-                final NullProgressMonitor npm = new NullProgressMonitor();
-
-                final MavenProject mavenProject = projectFacade.getMavenProject( npm );
-
-                if( mavenProject != null )
-                {
-                    final Plugin liferayMavenPlugin =
-                        MavenUtil.getPlugin( projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, npm );
-
-                    retval = liferayMavenPlugin.getVersion();
-                }
-            }
-            catch( CoreException e )
-            {
-            }
-        }
-
-        return retval;
+        return this.flexibleProject.getDefaultDocrootFolder();
     }
 
-    public String getProperty( String key, String defaultValue )
+    @Override
+    public IFile getDescriptorFile( String name )
     {
-        String retval = defaultValue;
-
-        if( ( "theme.type".equals( key ) || "theme.parent".equals( key ) ) &&
-            ProjectUtil.isThemeProject( getProject() ) )
-        {
-            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject() );
-
-            if( projectFacade != null )
-            {
-                final MavenProject mavenProject = projectFacade.getMavenProject();
-
-                if( "theme.type".equals( key ) )
-                {
-                    retval =
-                        MavenUtil.getLiferayMavenPluginConfig(
-                            mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_THEME_TYPE );
-                }
-                else
-                {
-                    retval =
-                        MavenUtil.getLiferayMavenPluginConfig(
-                            mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PARENT_THEME );
-                }
-            }
-        }
-
-        return retval;
-    }
-
-    public IFolder getSourceFolder( String classification )
-    {
-        IFolder retval = super.getSourceFolder( classification );
-
-        final List<IFolder> sourceFolders = CoreUtil.getSourceFolders( JavaCore.create( getProject() ) );
-
-        for( IFolder folder : sourceFolders )
-        {
-            if( folder.getName().equals( classification ) )
-            {
-                retval = folder;
-
-                break;
-            }
-        }
-
-        return retval;
-    }
-
-    public IPath[] getUserLibs()
-    {
-        final List<IPath> libs = new ArrayList<IPath>();
-
-        final IClasspathManager buildPathManager = MavenJdtPlugin.getDefault().getBuildpathManager();
-
-        try
-        {
-            final IClasspathEntry[] classpath =
-                buildPathManager.getClasspath(
-                    getProject(), IClasspathManager.CLASSPATH_RUNTIME, true, new NullProgressMonitor() );
-
-            for( IClasspathEntry entry : classpath )
-            {
-                libs.add( entry.getPath() );
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayMavenCore.logError( "Unable to get maven classpath.", e ); //$NON-NLS-1$
-        }
-
-        return libs.toArray( new IPath[0] );
+        return this.flexibleProject.getDescriptorFile( name );
     }
 
     public Collection<IFile> getOutputs( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException

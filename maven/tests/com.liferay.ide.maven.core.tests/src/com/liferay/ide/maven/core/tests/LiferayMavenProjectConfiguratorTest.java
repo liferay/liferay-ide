@@ -4,20 +4,20 @@
 
 package com.liferay.ide.maven.core.tests;
 
-import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.maven.core.FacetedMavenProject;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
-import org.eclipse.m2e.tests.common.RequireMavenExecutionContext;
 import org.junit.Test;
 
 /**
  * @author Kamesh Sampath
+ * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-@RequireMavenExecutionContext
 public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTestCase
 {
 
@@ -32,7 +32,7 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
         assertNotNull( facade );
 
-        assertTrue( CoreUtil.isLiferayProject( project ) );
+        assertTrue( LiferayCore.create( project ) instanceof FacetedMavenProject  );
     }
 
     @Test
@@ -48,11 +48,11 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
         waitForJobsToComplete();
 
-        assertTrue( CoreUtil.isLiferayProject( project ) );
+        assertTrue( LiferayCore.create( project ) instanceof FacetedMavenProject  );
     }
 
     @Test
-    public void testLiferayFactedConfigured() throws Exception
+    public void testLiferayFacetNotConfigured() throws Exception
     {
         IProject project = importProject( "projects/configurators/webapp-1/pom.xml" );
 
@@ -62,7 +62,7 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
         assertNotNull( facade );
 
-        assertFalse( CoreUtil.isLiferayProject( project ) );
+        assertFalse( LiferayCore.create( project ) instanceof FacetedMavenProject );
     }
 
     @Test
@@ -78,6 +78,6 @@ public class LiferayMavenProjectConfiguratorTest extends AbstractMavenProjectTes
 
         waitForJobsToComplete();
 
-        assertTrue( CoreUtil.isLiferayProject( project ) );
+        assertTrue( LiferayCore.create( project ) instanceof FacetedMavenProject );
     }
 }
