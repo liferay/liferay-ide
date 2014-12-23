@@ -457,7 +457,7 @@ public class XmlSearchTestsUtils
         int offset = getRegion( targetNode ).getOffset();
 
         final Method getTextHoverMethod =
-            ReflectionUtil.getDeclaredMethodIncludingSuperClasses( viewer.getClass(), "getTextHover", int.class, int.class );
+            ReflectionUtil.getDeclaredMethod( viewer.getClass(), "getTextHover", true, int.class, int.class );
         getTextHoverMethod.setAccessible( true );
 
         final ITextHover hover = (ITextHover)getTextHoverMethod.invoke( viewer, offset ,0 );

@@ -24,53 +24,48 @@ import java.lang.reflect.Method;
 public class ReflectionUtil
 {
 
-    public static Field getDeclaredFieldIncludingSuperClasses( Class<?> clazz, String fieldlName )
+    public static Field getDeclaredField( Class<?> clazz, String fieldName, boolean includeSuper )
     {
+        Field retval = null;
+
         try
         {
-            Field field = clazz.getDeclaredField( fieldlName );
-
-            return field;
+            retval = clazz.getDeclaredField( fieldName );
         }
         catch( NoSuchFieldException e )
         {
-            if( clazz.getSuperclass() != null )
+            if( includeSuper && clazz.getSuperclass() != null )
             {
-                return getDeclaredFieldIncludingSuperClasses( clazz.getSuperclass(), fieldlName );
-            }
-            else
-            {
-                return null;
+                retval = getDeclaredField( clazz.getSuperclass(), fieldName, true );
             }
         }
         catch( Exception e )
         {
-            return null;
         }
+
+        return retval;
     }
 
-    public static Method getDeclaredMethodIncludingSuperClasses( Class<?> clazz, String methodName, Class<?>... parameterTypes )
+    public static Method getDeclaredMethod(
+        Class<?> clazz, String methodName, boolean includeSuper, Class<?>... parameterTypes )
     {
+        Method retval = null;
+
         try
         {
-            Method method = clazz.getDeclaredMethod( methodName, parameterTypes );
-
-            return method;
+            retval = clazz.getDeclaredMethod( methodName, parameterTypes );
         }
         catch( NoSuchMethodException e )
         {
-            if( clazz.getSuperclass() != null )
+            if( includeSuper && clazz.getSuperclass() != null )
             {
-                return getDeclaredMethodIncludingSuperClasses( clazz.getSuperclass(), methodName, parameterTypes );
-            }
-            else
-            {
-                return null;
+                retval = getDeclaredMethod( clazz.getSuperclass(), methodName, true, parameterTypes );
             }
         }
         catch( Exception e )
         {
-            return null;
         }
+
+        return retval;
     }
 }
