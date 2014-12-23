@@ -52,7 +52,8 @@ public class PortletXmlTests extends XmlSearchTestsBase
 
     private IFile getDescriptorFile() throws Exception
     {
-        return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile(
+            ILiferayConstants.PORTLET_XML_FILE );
     }
 
     private IProject getProject() throws Exception
@@ -122,13 +123,16 @@ public class PortletXmlTests extends XmlSearchTestsBase
 
         String elementContent = "Foo";
         setElementContent( descriptorFile, elementName, elementContent );
-        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementContent } );
+        String markerMessage =
+            MessageFormat.format(
+                PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementContent } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementContent = "com.liferay.ide.tests.Orphan";
         setElementContent( descriptorFile, elementName, elementContent );
-        final String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementContent } ) + ".*";
+        final String markerMessageRegex =
+            MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementContent } ) + ".*";
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
 
@@ -195,13 +199,16 @@ public class PortletXmlTests extends XmlSearchTestsBase
 
         String elementValue = "Foo";
         setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        String markerMessage =
+            MessageFormat.format(
+                PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
         setElementContent( descriptorFile, elementName, elementValue );
-        final String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
+        final String markerMessageRegex =
+            MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
 
@@ -270,12 +277,15 @@ public class PortletXmlTests extends XmlSearchTestsBase
 
         buildAndValidate( descriptorFile );
 
-        String markerMessage = MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        String markerMessage =
+            MessageFormat.format(
+                PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
         setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessageRegex = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
+        String markerMessageRegex =
+            MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
 
@@ -358,8 +368,10 @@ public class PortletXmlTests extends XmlSearchTestsBase
         // resource-bundle values contains "/"
         elementContent = "ResourceBundle/WithSlash";
         setElementContent( descriptorFile, elementName, elementContent );
-        markerMessage = MessageFormat.format(
-            PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR, new Object[] { elementContent } );
+        markerMessage =
+            MessageFormat.format(
+                PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR,
+                new Object[] { elementContent } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 

@@ -42,7 +42,8 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
     private IFile getDescriptorFile() throws Exception
     {
-        return descriptor != null ? descriptor : LiferayCore.create( getProject() ).getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
+        return descriptor != null ? descriptor : LiferayCore.create( getProject() ).getDescriptorFile(
+            ILiferayConstants.LIFERAY_HOOK_XML_FILE );
     }
 
     private IProject getProject() throws Exception
@@ -88,7 +89,9 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
         String elementValue = "Foo";
         setElementContent( descriptorFile, elementName, elementValue );
 
-        String markerMessage = MessageFormat.format( LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        String markerMessage =
+            MessageFormat.format(
+                LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
@@ -136,13 +139,16 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
         String elementValue = "Foo";
         setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessage = MessageFormat.format( LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        String markerMessage =
+            MessageFormat.format(
+                LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
         setElementContent( descriptorFile, elementName, elementValue );
-        markerMessage = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
+        markerMessage =
+            MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, false ) );
 
@@ -185,8 +191,10 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
         // language-properties value doesn't end with ".properties"
         elementValue = "LanguagePropertiesNotEndProperties";
         setElementContent( descriptorFile, elementName, elementValue );
-        markerMessage = MessageFormat.format(
-            LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES, new Object[] { elementValue } );
+        markerMessage =
+            MessageFormat.format(
+                LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES,
+                new Object[] { elementValue } );
 
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
@@ -285,8 +293,10 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
         // portal-properties value donesn't end with ".properties"
         elementValue = "PortalPropertiesNotEndProperties";
         setElementContent( descriptorFile, elementName, elementValue );
-        markerMessage = MessageFormat.format(
-            LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES, new Object[] { elementValue } );
+        markerMessage =
+            MessageFormat.format(
+                LiferayHookDescriptorValidator.MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES,
+                new Object[] { elementValue } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
@@ -360,13 +370,16 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
         String elementValue = "Foo";
         setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessage = MessageFormat.format( LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        String markerMessage =
+            MessageFormat.format(
+                LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
         setElementContent( descriptorFile, elementName, elementValue );
-        markerMessage = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*" ;
+        markerMessage =
+            MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, false ) );
 
@@ -438,13 +451,16 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
         String elementValue = "Foo";
         setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessage = MessageFormat.format( LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+        String markerMessage =
+            MessageFormat.format(
+                LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
         setElementContent( descriptorFile, elementName, elementValue );
-        markerMessage = MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
+        markerMessage =
+            MessageFormat.format( MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue } ) + ".*";
         buildAndValidate( descriptorFile );
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, false ) );
 
