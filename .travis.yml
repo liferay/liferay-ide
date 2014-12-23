@@ -1,2 +1,0 @@
-language: java
-script: mvn clean verify -DskipBundleTests=true -DskipServerTests=true
