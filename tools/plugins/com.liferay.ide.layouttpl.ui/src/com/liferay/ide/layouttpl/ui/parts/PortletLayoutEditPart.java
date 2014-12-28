@@ -33,13 +33,14 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 public class PortletLayoutEditPart extends BaseGraphicalEditPart
 {
 
-    public static final int COLUMN_SPACING = 10;
+    public static final int COLUMN_SPACING = 5;
 
-    public static final int LAYOUT_MARGIN = 10;
+    public static final int LAYOUT_MARGIN = 5;
 
     public static GridData createGridData()
     {
@@ -147,7 +148,9 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
         if( numColumns > 0 )
         {
             // get width of our own part to calculate new width
-            int rowWidth = this.getFigure().getSize().width - ( PortletLayoutEditPart.LAYOUT_MARGIN * 2 );
+            // this method is invoked recursively, so it's complicated to compute the very exact width,
+            // sometimes minus 2 times of margin causes sidelines cannot be shown, minus 3 times of margin looks better
+            int rowWidth = this.getFigure().getParent().getSize().width - ( PortletLayoutEditPart.LAYOUT_MARGIN * 3 );
 
             if( rowWidth > 0 )
             {
@@ -159,16 +162,19 @@ public class PortletLayoutEditPart extends BaseGraphicalEditPart
 
                     double percent = column.getWeight().content().doubleValue() /
                                      column.getFullWeight().content().doubleValue();
-                    rowData.widthHint = (int) ( percent * rowWidth ) - ( COLUMN_SPACING * 2 );
-                    this.setLayoutConstraint( portletColumnPart, portletColumnPart.getFigure(), rowData );
+                    rowData.widthHint = (int) ( percent * rowWidth ) - COLUMN_SPACING * 2;
+
+                    IFigure columnFigure = portletColumnPart.getFigure();
+                    columnFigure.setSize( rowData.widthHint, columnFigure.getSize().height );
+
+                    // this.setLayoutConstraint( portletColumnPart, columnFigure, rowData );
                     portletColumnPart.refresh();
                 }
             }
+
+            gridLayout.numColumns = numColumns;
+            this.getFigure().repaint();
         }
-
-        gridLayout.numColumns = numColumns;
-
-        this.getFigure().repaint();
     }
 
 }

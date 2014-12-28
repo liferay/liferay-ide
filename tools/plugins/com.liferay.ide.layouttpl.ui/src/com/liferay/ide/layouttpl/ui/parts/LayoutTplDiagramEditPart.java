@@ -21,10 +21,11 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Gregory Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 public class LayoutTplDiagramEditPart extends PortletRowLayoutEditPart
 {
-    public static final int DIAGRAM_MARGIN = 10;
+    public static final int DIAGRAM_MARGIN = 5;
 
     public LayoutTplDiagramEditPart()
     {

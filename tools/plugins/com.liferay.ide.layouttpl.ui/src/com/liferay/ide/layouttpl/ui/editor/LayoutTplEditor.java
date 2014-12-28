@@ -348,7 +348,14 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
             refreshPreviewPage();
         }
 
-        super.pageChange( pageIndex );
+        try
+        {
+            super.pageChange( pageIndex );
+        }
+        catch( Exception e )
+        {
+            // catch the NPE caused by null content outline
+        }
     }
 
     protected void refreshDiagramModel()
@@ -392,12 +399,6 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
 
         setSourceModelChanged( false );
     }
-
-//    @Override
-//    protected void setActivePage( int pageIndex )
-//    {
-//        super.setActivePage( pageIndex );
-//    }
 
     protected void setDesignPageChanged( boolean changed )
     {

@@ -33,10 +33,11 @@ import org.eclipse.swt.graphics.Color;
 /**
  * @author Greg Amerson
  * @author Cindy Li
+ * @author Kuo Zhang
  */
 public class PortletColumnEditPart extends PortletRowLayoutEditPart
 {
-    public static final int COLUMN_MARGIN = 10;
+    public static final int COLUMN_MARGIN = 5;
 
     public PortletColumnEditPart()
     {
@@ -67,7 +68,7 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
         if( getModel() instanceof PortletColumnElement )
         {
             RoundedRectangle rect = new ColumnFigure();
-            rect.setCornerDimensions( new Dimension( 20, 20 ) );
+            rect.setCornerDimensions( new Dimension( 10, 10 ) );
 
             return rect;
         }
@@ -79,7 +80,7 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
 
     public GridData createGridData()
     {
-        GridData gd = new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 );
+        GridData gd = new GridData( SWT.LEFT, SWT.FILL, false, true, 1, 1 );
         gd.heightHint = getCastedParent().getDefaultColumnHeight();
 
         return gd;
@@ -97,14 +98,14 @@ public class PortletColumnEditPart extends PortletRowLayoutEditPart
                 r.width -= 1;
                 r.height -= 1;
 
-                graphics.drawRoundRectangle( r, 20, 20 ); //draw the outline
+                graphics.drawRoundRectangle( r, 10, 10 ); //draw the outline
 
                 r.width -= 1;
                 r.height -= 1;
                 r.x += 1;
                 r.y += 1;
 
-                graphics.fillRoundRectangle( r, 20, 20 ); //fill the color
+                graphics.fillRoundRectangle( r, 10, 10 ); //fill the color
             }
         };
     }
