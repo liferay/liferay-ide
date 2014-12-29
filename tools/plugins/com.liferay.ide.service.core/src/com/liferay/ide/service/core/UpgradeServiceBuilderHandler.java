@@ -45,7 +45,7 @@ public class UpgradeServiceBuilderHandler extends AbstractUpgradeProjectHandler
             worked = worked + perUnit;
             submon.worked( worked );
 
-            final BuildServiceJob job = ServiceCore.createBuildServiceJob( project );
+            final BuildServiceJob job = new BuildServiceJob( project );
             job.schedule();
             job.join();
 

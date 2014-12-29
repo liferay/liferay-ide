@@ -1,7 +1,7 @@
 package com.liferay.ide.service.ui.handlers;
 
 import com.liferay.ide.service.core.ServiceCore;
-import com.liferay.ide.service.core.job.BuildServiceJob;
+import com.liferay.ide.service.core.job.BuildWSDDJob;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
@@ -21,8 +21,7 @@ public class BuildWSDDHandler extends BuildServiceHandler
 
         try
         {
-            final BuildServiceJob job = ServiceCore.createBuildWSDDJob( project );
-            job.schedule();
+            new BuildWSDDJob( project ).schedule();
             retval = Status.OK_STATUS;
         }
         catch( Exception e )

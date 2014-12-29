@@ -15,7 +15,6 @@
 
 package com.liferay.ide.service.ui.actions;
 
-import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.job.BuildWSDDJob;
 import com.liferay.ide.service.ui.ServiceUIUtil;
 
@@ -38,9 +37,7 @@ public class BuildWSDDActionHandler extends SapphireActionHandler
         {
             if( ServiceUIUtil.shouldCreateServiceBuilderJob( file ) )
             {
-                BuildWSDDJob job = ServiceCore.createBuildWSDDJob( file.getProject() );
-
-                job.schedule();
+                new BuildWSDDJob( file.getProject() ).schedule();
             }
         }
 

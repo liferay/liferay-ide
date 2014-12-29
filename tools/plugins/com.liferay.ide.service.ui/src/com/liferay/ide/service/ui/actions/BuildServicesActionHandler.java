@@ -15,7 +15,6 @@
 
 package com.liferay.ide.service.ui.actions;
 
-import com.liferay.ide.service.core.ServiceCore;
 import com.liferay.ide.service.core.job.BuildServiceJob;
 import com.liferay.ide.service.ui.ServiceUIUtil;
 
@@ -42,9 +41,7 @@ public class BuildServicesActionHandler extends SapphireActionHandler
         {
             if( ServiceUIUtil.shouldCreateServiceBuilderJob( file ) )
             {
-                BuildServiceJob job = ServiceCore.createBuildServiceJob( file.getProject() );
-
-                job.schedule();
+                new BuildServiceJob( file.getProject() ).schedule();
             }
         }
         else

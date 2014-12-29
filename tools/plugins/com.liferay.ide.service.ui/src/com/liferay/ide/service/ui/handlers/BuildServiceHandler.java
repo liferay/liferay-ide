@@ -82,8 +82,7 @@ public class BuildServiceHandler extends AbstractHandler
 
         try
         {
-            final BuildServiceJob job = ServiceCore.createBuildServiceJob( project );
-            job.schedule();
+            new BuildServiceJob( project ).schedule();
             retval = Status.OK_STATUS;
         }
         catch( Exception e )
