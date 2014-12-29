@@ -81,7 +81,6 @@ public abstract class LiferayMavenProject extends BaseLiferayProject  implements
         return null;
     }
 
-    
     public IPath getLibraryPath( String filename )
     {
         final IPath[] libs = getUserLibs();

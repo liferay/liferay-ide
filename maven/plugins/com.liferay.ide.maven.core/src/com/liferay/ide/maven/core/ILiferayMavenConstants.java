@@ -63,9 +63,7 @@ public interface ILiferayMavenConstants
     String PLUGIN_CONFIG_PARENT_THEME = "parentTheme";
 
     String PLUGIN_CONFIG_PLUGIN_NAME = "pluginName"; //$NON-NLS-1$
-    
-    String PLUGIN_CONFIG_WEBAPPBASE_DIR = "webappBaseDir"; //$NON-NLS-1$
-    
+
     String PLUGIN_CONFIG_PLUGIN_TYPE = "pluginType"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_SASS_DIR_NAMES = "sassDirNames"; //$NON-NLS-1$
@@ -73,6 +71,8 @@ public interface ILiferayMavenConstants
     String PLUGIN_CONFIG_THEME_TYPE = "themeType"; //$NON-NLS-1$
 
     String PLUGIN_CONFIG_WEBAPP_DIR = "webappDir"; //$NON-NLS-1$
+
+    String PLUGIN_CONFIG_WEBAPPBASE_DIR = "webappBaseDir"; //$NON-NLS-1$
 
     String PLUGIN_GOAL_BUILD_CSS = _LIFERAY_MOJO_PREFIX + "build-css";  //$NON-NLS-1$
 

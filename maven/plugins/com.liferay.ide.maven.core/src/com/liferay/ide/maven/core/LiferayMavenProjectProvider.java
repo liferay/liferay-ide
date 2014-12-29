@@ -703,7 +703,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         {
             try
             {
-
                 final MavenProject mavenProject = facade.getMavenProject( new NullProgressMonitor() );
 
                 if( mavenProject != null && "bundle".equals( mavenProject.getPackaging() ) )
@@ -720,7 +719,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             catch( CoreException e )
             {
             }
-
         }
 
         return false;
