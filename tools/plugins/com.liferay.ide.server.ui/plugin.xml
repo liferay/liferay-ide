@@ -175,6 +175,7 @@
                label="%open.liferay.home.folder.action.label">
          </action>
          <action
+               definitionId="com.liferay.ide.server.ui.handlers.openjsonwsapi"
                class="com.liferay.ide.server.ui.action.OpenJSONWSAPIAction"
                enablesFor="1"
                icon="icons/e16/test_web_services_16x16.png"
@@ -182,6 +183,7 @@
                label="%test.json.services.action.label">
          </action>
          <action
+               definitionId="com.liferay.ide.server.ui.handlers.openportalhome"
                class="com.liferay.ide.server.ui.action.OpenPortalHomeAction"
                enablesFor="1"
                icon="icons/e16/open_portal_16x16.png"
@@ -251,6 +253,7 @@
                label="%redeploy.action.label">
          </action>
          <action
+               definitionId="com.liferay.ide.server.ui.handlers.opendeployedfolder"
                class="com.liferay.ide.server.ui.action.OpenDeployedFolderAction"
                enablesFor="1"
                icon="icons/e16/open_deployed_folder.gif"
@@ -458,6 +461,24 @@
             id="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder"
             name="Open Liferay Home Folder">
         </command>
+        <command
+            categoryId="org.eclipse.wst.server.ui"
+            description="Run Open Deployed Folder command"
+            id="com.liferay.ide.server.ui.handlers.opendeployedfolder"
+            name="Open Deployed Folder">
+        </command>
+        <command
+            categoryId="org.eclipse.wst.server.ui"
+            description="Run Open JSONWS API command"
+            id="com.liferay.ide.server.ui.handlers.openjsonwsapi"
+            name="Open JSONWS API">
+        </command>
+        <command
+            categoryId="org.eclipse.wst.server.ui"
+            description="Run Open Portal Home command"
+            id="com.liferay.ide.server.ui.handlers.openportalhome"
+            name="Open JSONWS API">
+        </command>
    </extension>
 
    <extension
@@ -470,6 +491,18 @@
             class="com.liferay.ide.server.ui.handlers.OpenLiferayHomeFolderHandler"
             commandId="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder">
       </handler>
+      <handler
+            class="com.liferay.ide.server.ui.handlers.OpenDeployedFolderHandler"
+            commandId="com.liferay.ide.server.ui.handlers.opendeployedfolder">
+      </handler>
+      <handler
+            class="com.liferay.ide.server.ui.handlers.OpenJSONWSAPIHandler"
+            commandId="com.liferay.ide.server.ui.handlers.openjsonwsapi">
+      </handler>
+      <handler
+            class="com.liferay.ide.server.ui.handlers.OpenPortalHomeHandler"
+            commandId="com.liferay.ide.server.ui.handlers.openportalhome">
+      </handler>
    </extension>
 
    <extension
@@ -478,7 +511,7 @@
             commandId="com.liferay.ide.server.ui.handlers.redeploy"
             contextId="org.eclipse.ui.serverViewScope"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+M2+L">
+            sequence="M1+M2+R">
       </key>
       <key
             commandId="com.liferay.ide.server.ui.handlers.openLiferayHomeFolder"
@@ -486,6 +519,24 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M3+O">
       </key>
+      <key
+            commandId="com.liferay.ide.server.ui.handlers.opendeployedfolder"
+            contextId="org.eclipse.ui.serverViewScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+D">
+      </key>
+      <key
+            commandId="com.liferay.ide.server.ui.handlers.openjsonwsapi"
+            contextId="org.eclipse.ui.serverViewScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+J">
+      </key>
+      <key
+            commandId="com.liferay.ide.server.ui.handlers.openportalhome"
+            contextId="org.eclipse.ui.serverViewScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+P">
+       </key>
    </extension>
    <!--
    <extension

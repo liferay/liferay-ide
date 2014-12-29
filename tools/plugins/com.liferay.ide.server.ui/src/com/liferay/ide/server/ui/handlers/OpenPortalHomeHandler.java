@@ -13,16 +13,37 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.server.ui.action;
+package com.liferay.ide.server.ui.handlers;
+
+import java.net.URL;
+
+import org.eclipse.osgi.util.NLS;
 
 /**
- * @author Greg Amerson
+ * @author Eric Min
  */
-public class OpenJSONWSAPIAction extends OpenPortalURLAction
+public class OpenPortalHomeHandler extends OpenPortalURLHandler
 {
 
-    protected String getCommandId()
+    protected URL getPortalURL( Object selected )
     {
-        return "com.liferay.ide.server.ui.handlers.openjsonwsapi";
+        return getLiferayServer( selected ).getPortalHomeUrl(); //$NON-NLS-1$
+    }
+
+    @Override
+    protected String getPortalURLTitle()
+    {
+        return Msgs.liferayPortal;
+    }
+
+    private static class Msgs extends NLS
+    {
+
+        public static String liferayPortal;
+
+        static
+        {
+            initializeMessages( OpenPortalHomeHandler.class.getName(), Msgs.class );
+        }
     }
 }

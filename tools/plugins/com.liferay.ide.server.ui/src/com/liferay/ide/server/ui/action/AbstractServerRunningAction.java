@@ -66,8 +66,6 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
         }
     }
 
-    protected abstract int getRequiredServerState();
-
     public void setActivePart( IAction action, IWorkbenchPart targetPart )
     {
         this.activePart = targetPart;
@@ -89,5 +87,7 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
             return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
         }
     }
+
+    protected abstract int getRequiredServerState();
 
 }
