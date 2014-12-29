@@ -40,21 +40,18 @@ public class RedeployHandler extends AbstractHandler
         final List<ModuleServer> modules = new ArrayList<ModuleServer>();
         final ISelection selection = HandlerUtil.getCurrentSelection( event );
 
-        if( selection instanceof IStructuredSelection )
+        if( !selection.isEmpty() )
         {
-            if( !selection.isEmpty() )
+            if( selection instanceof IStructuredSelection )
             {
-                if( selection instanceof IStructuredSelection )
-                {
-                    List selectedObj = ( (IStructuredSelection) selection ).toList();
+                List selectedObj = ( (IStructuredSelection) selection ).toList();
 
-                    for( Object object : selectedObj )
+                for( Object object : selectedObj )
+                {
+                    if( object instanceof ModuleServer )
                     {
-                        if( object instanceof ModuleServer )
-                        {
-                            ModuleServer moduleServer = (ModuleServer) object;
-                            modules.add( moduleServer );
-                        }
+                        ModuleServer moduleServer = (ModuleServer) object;
+                        modules.add( moduleServer );
                     }
                 }
             }
