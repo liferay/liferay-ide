@@ -480,7 +480,12 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
     protected IProject getProject()
     {
-        return (IProject) getProperty( PROJECT );
+    	IProject project=(IProject) getProperty( PROJECT );
+    	if( CoreUtil.isLiferayProject( project ))
+    	{
+    		return project;
+    	}
+        return null;
     }
 
     @Override
@@ -660,7 +665,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         }
         else
         {
-            runtime = ServerUtil.getRuntime( (IProject) getProperty( PROJECT ) );
+            runtime = ServerUtil.getRuntime( getProject() );
         }
 
         return runtime;
@@ -806,6 +811,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             if( this.fragment )
             {
                 return true;
+            }
+            if( getProject() == null )
+            {
+            	return false;
             }
 
             return PortletSupertypesValidator.isLiferayPortletSuperclass( getDataModel(), true );
