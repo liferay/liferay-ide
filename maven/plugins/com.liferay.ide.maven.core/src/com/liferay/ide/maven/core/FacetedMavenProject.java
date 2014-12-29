@@ -16,8 +16,6 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.project.core.FlexibleProject;
-import com.liferay.ide.project.core.IProjectBuilder;
-import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -79,20 +77,7 @@ public class FacetedMavenProject extends LiferayMavenProject
 
         if( facade != null )
         {
-            if( IProjectBuilder.class.equals( adapterType ) )
-            {
-                final IProjectBuilder projectBuilder = new MavenProjectBuilder( getProject() );
-
-                return adapterType.cast( projectBuilder );
-            }
-            else if( IRemoteServerPublisher.class.equals( adapterType ) )
-            {
-                final IRemoteServerPublisher remoteServerPublisher =
-                    new MavenProjectRemoteServerPublisher( getProject() );
-
-                return adapterType.cast( remoteServerPublisher );
-            }
-            else if( ILiferayPortal.class.equals( adapterType ) )
+            if( ILiferayPortal.class.equals( adapterType ) )
             {
                 final ILiferayPortal portal = new LiferayPortalMaven( this );
 
