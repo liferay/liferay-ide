@@ -14,13 +14,11 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 /**
@@ -40,19 +38,18 @@ public abstract class AbstractProjectBuilder implements IProjectBuilder
     {
         return this.project;
     }
-    
-    protected IFile getServiceFile( IProject project )
+
+    protected IFile getDocrootFile( String path )
     {
         final IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
         if( docroot != null && docroot.exists() )
         {
-            final IPath path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
-            final IFile serviceFile = docroot.getFile( path );
+            final IFile file = docroot.getFile( new Path( path ) );
 
-            if( serviceFile.exists() )
+            if( file.exists() )
             {
-                return serviceFile;
+                return file;
             }
         }
 

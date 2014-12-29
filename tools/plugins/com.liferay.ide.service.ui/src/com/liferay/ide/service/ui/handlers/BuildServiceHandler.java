@@ -100,7 +100,7 @@ public class BuildServiceHandler extends AbstractHandler
 
         if( docroot != null && docroot.exists() )
         {
-            final IPath path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+            final IPath path = new Path( "WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE );
             final IFile serviceFile = docroot.getFile( path );
 
             if( serviceFile.exists() )

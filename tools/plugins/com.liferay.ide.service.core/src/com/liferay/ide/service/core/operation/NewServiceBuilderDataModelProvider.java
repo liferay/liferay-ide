@@ -74,7 +74,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
     {
         if( SERVICE_FILE.equals( propertyName ) )
         {
-            return ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE;
+            return ILiferayConstants.SERVICE_XML_FILE;
         }
         else if( AUTHOR.equals( propertyName ) )
         {

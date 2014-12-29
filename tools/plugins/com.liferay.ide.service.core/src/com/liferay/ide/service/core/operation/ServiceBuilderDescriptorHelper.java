@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class ServiceBuilderDescriptorHelper extends LiferayDescriptorHelper
 {
-    private static final String DESCRIPTOR_FILE = ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE; 
+    private static final String DESCRIPTOR_FILE = ILiferayConstants.SERVICE_XML_FILE; 
 
     private final String NEW_LINE = System.getProperty( "line.separator" );
 

@@ -35,8 +35,8 @@ public interface ILiferayConstants
     String LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE = "liferay-plugin-package.properties"; //$NON-NLS-1$
     String LIFERAY_PLUGIN_PACKAGE_PROPERTIES_XML_FILE = "liferay-plugin-package.xml"; //$NON-NLS-1$
     String LIFERAY_PORTLET_XML_FILE = "liferay-portlet.xml"; //$NON-NLS-1$
-    String LIFERAY_SERVICE_BUILDER_XML_FILE = "service.xml"; //$NON-NLS-1$
     String PORTLET_XML_FILE = "portlet.xml"; //$NON-NLS-1$
+    String SERVICE_XML_FILE = "service.xml"; //$NON-NLS-1$
     Version V601 = new Version( 6, 0, 1 );
     Version V610 = new Version( 6, 1, 0 );
     Version V611 = new Version( 6, 1, 1 );

@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.server.util.ServerUtil;
@@ -63,7 +64,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
     @Override
     public IStatus buildService( IProgressMonitor monitor ) throws CoreException
     {
-        final IFile servicesFile = getServiceFile( getProject() );
+        final IFile servicesFile = getDocrootFile( "WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE );
 
         if( servicesFile != null && servicesFile.exists() )
         {
@@ -104,7 +105,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
     @Override
     public IStatus buildWSDD( IProgressMonitor monitor ) throws CoreException
     {
-        final IFile servicesFile = getServiceFile( getProject() );
+        final IFile servicesFile = getDocrootFile( "WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE );
 
         if( servicesFile != null && servicesFile.exists() )
         {

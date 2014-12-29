@@ -45,7 +45,7 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator
     protected void setMarker( IValidator validator, IFile file )
     {
         if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE.equals( file.getName() ) )
+            ILiferayConstants.SERVICE_XML_FILE.equals( file.getName() ) )
         {
             ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
         }

@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
@@ -101,15 +102,14 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 
     public IStatus buildSB( final IFile serviceXmlFile, final String goal, final IProgressMonitor monitor ) throws CoreException
     {
-        IProject serviceProject = serviceXmlFile.getProject();
-        
+        final IProject serviceProject = serviceXmlFile.getProject();
+
         final IMavenProjectFacade facade = MavenUtil.getProjectFacade( serviceProject , monitor );
 
         monitor.worked( 10 );
 
         final ICallable<IStatus> callable = new ICallable<IStatus>()
         {
-
             public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
             {
                 return MavenUtil.executeMojoGoal( facade, context, goal, monitor );
@@ -130,13 +130,12 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         monitor.done();
 
         return retval;
-
     }
 
     @Override
     public IStatus buildService( IProgressMonitor monitor ) throws CoreException
     {
-        IFile serviceFile = preBuildService( monitor );
+        final IFile serviceFile = preBuildService( monitor );
 
         final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
 
@@ -148,7 +147,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
     @Override
     public IStatus buildWSDD( IProgressMonitor monitor ) throws CoreException
     {
-        IFile serviceFile = preBuildService( monitor );
+        final IFile serviceFile = preBuildService( monitor );
 
         final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
 
@@ -237,7 +236,6 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         IProject retVal = null;
         try
         {
-            // not doing any null checks since this is in large try/catch
             final Xpp3Dom config = (Xpp3Dom) MavenUtil.getLiferayMavenPluginConfig( projectFacade.getMavenProject() );
             final Xpp3Dom webAppDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_WEBAPPBASE_DIR );
             final Xpp3Dom pluginName = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_NAME );
@@ -267,9 +265,9 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
     {
         IProject project = getProject();
 
-        IFile retVal = getServiceFile( project );
+        IFile retval = getDocrootFile( "WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE );
 
-        if( retVal == null )
+        if( retval == null )
         {
             final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( project );
 
@@ -279,14 +277,16 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 
                 if( portletProject != null )
                 {
-                    retVal = getServiceFile( portletProject );
+                    retval =
+                        new MavenProjectBuilder( portletProject ).getDocrootFile( "WEB-INF/" +
+                            ILiferayConstants.SERVICE_XML_FILE );
                 }
             }
         }
 
-        return retVal;
+        return retval;
     }
-    
+
     public void refreshSiblingProject( IMavenProjectFacade projectFacade, IProgressMonitor monitor ) throws CoreException
     {
         // need to look up project configuration and refresh the *-service project associated with this project

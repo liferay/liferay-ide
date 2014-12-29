@@ -1029,7 +1029,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
         IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
         IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
-        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.SERVICE_XML_FILE );
 
         assertEquals( 1, countElements( portletXml, "portlet" ) );
         assertEquals( 1, countElements( liferayPortletXml, "portlet" ) );
@@ -1077,7 +1077,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         IFile portletXml = lr.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
         IFile liferayPortletXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
         IFile liferayDisplayXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_DISPLAY_XML_FILE );
-        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.LIFERAY_SERVICE_BUILDER_XML_FILE );
+        IFile serviceXml = lr.getDescriptorFile( ILiferayConstants.SERVICE_XML_FILE );
 
         assertEquals( 0, countElements( portletXml, "portlet" ) );
         assertEquals( 0, countElements( liferayPortletXml, "portlet" ) );
