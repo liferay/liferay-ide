@@ -37,7 +37,20 @@ import org.eclipse.ui.IMarkerResolution2;
 public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolution2
 {
 
-    private final static String MESSAGE = "Decrease validation level of this worksapce to Ignore";
+    private final static String MESSAGE = "Decrease validation level of this marker for all projects to Ignore";
+
+    @Override
+    public String getDescription()
+    {
+        return MESSAGE;
+    }
+
+    @Override
+    public Image getImage()
+    {
+        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/arrow_down.png" );
+        return ImageDescriptor.createFromURL( url ).createImage();
+    }
 
     @Override
     public String getLabel()
@@ -59,19 +72,6 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
 
         ValidationPreferences.setInstanceScopeValLevel( -1 );
         ComponentUtil.validateFile( (IFile)marker.getResource(), new NullProgressMonitor() );
-    }
-
-    @Override
-    public String getDescription()
-    {
-        return MESSAGE;
-    }
-
-    @Override
-    public Image getImage()
-    {
-        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/arrow_down.png" );
-        return ImageDescriptor.createFromURL( url ).createImage();
     }
 
 }

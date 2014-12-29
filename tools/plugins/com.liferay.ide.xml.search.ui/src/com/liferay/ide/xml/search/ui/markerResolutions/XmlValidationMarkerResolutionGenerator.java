@@ -37,9 +37,8 @@ public class XmlValidationMarkerResolutionGenerator implements IMarkerResolution
     @Override
     public IMarkerResolution[] getResolutions( IMarker marker )
     {
-
         // for future usage, add resolution of creating properties file( portal.properties, Langauge.properties )
-        List<IMarkerResolution> retval = new ArrayList<IMarkerResolution>();
+        final List<IMarkerResolution> retval = new ArrayList<IMarkerResolution>();
 
         try
         {

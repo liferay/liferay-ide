@@ -35,14 +35,14 @@ public class InfoRegion extends Region
         this.info = info;
     }
 
-    public void setInfo( String info )
-    {
-        this.info = info;
-    }
-
     public String getInfo()
     {
         return info;
+    }
+
+    public void setInfo( String info )
+    {
+        this.info = info;
     }
 
 }

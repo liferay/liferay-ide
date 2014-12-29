@@ -46,6 +46,24 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
     }
 
     @Override
+    public IInformationControlCreator getHoverControlCreator()
+    {
+        return new IInformationControlCreator()
+        {
+            public IInformationControl createInformationControl( Shell parent )
+            {
+                return new LiferayCustomXmlHoverControl( parent );
+            }
+        };
+    }
+
+    @Override
+    public Object getHoverInfo2( ITextViewer textViewer, IRegion hoverRegion )
+    {
+        return hoverRegion;
+    }
+
+    @Override
     public IRegion getHoverRegion( final ITextViewer textViewer, final int offset )
     {
         IDocument document = textViewer.getDocument();
@@ -75,8 +93,8 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
 
                         if( pos.includes( offset ) )
                         {
-                            compoundRegion.addRegion(
-                                new MarkerRegion( pos.getOffset(), pos.getLength(), (MarkerAnnotation) annotation ) );
+                            compoundRegion.addRegion( new MarkerRegion(
+                                pos.getOffset(), pos.getLength(), (MarkerAnnotation) annotation ) );
                         }
                     }
                 }
@@ -91,29 +109,12 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
                 if( content != null )
                 {
                     compoundRegion.addRegion( new InfoRegion(
-                        normalRegion.getOffset(), normalRegion.getLength(), getHoverInfo( textViewer, normalRegion ) ) );
+                        normalRegion.getOffset(), normalRegion.getLength(), getHoverInfo(
+                            textViewer, normalRegion ) ) );
                 }
             }
         }
 
         return compoundRegion.getRegions().size() > 0 ? compoundRegion : null;
-    }
-
-    @Override
-    public IInformationControlCreator getHoverControlCreator()
-    {
-        return new IInformationControlCreator()
-        {
-            public IInformationControl createInformationControl( Shell parent )
-            {
-                return new LiferayCustomXmlHoverControl( parent );
-            }
-        };
-    }
-
-    @Override
-    public Object getHoverInfo2( ITextViewer textViewer, IRegion hoverRegion )
-    {
-        return hoverRegion;
     }
 }

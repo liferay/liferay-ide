@@ -27,29 +27,16 @@ public class CompoundRegion implements IRegion
 {
 
     private int length = Integer.MIN_VALUE;
-
     private int offset = Integer.MAX_VALUE;
-
     private List<IRegion> regions = new ArrayList<IRegion>();
 
-    public final ITextViewer textViewer;
-
     public final int textOffset;
+    public final ITextViewer textViewer;
 
     public CompoundRegion( ITextViewer textViewer, int textOffset )
     {
         this.textViewer = textViewer;
         this.textOffset = textOffset;
-    }
-
-    public int getLength()
-    {
-        return length;
-    }
-
-    public int getOffset()
-    {
-        return offset;
     }
 
     public void addRegion( IRegion region )
@@ -64,6 +51,16 @@ public class CompoundRegion implements IRegion
         int end = Math.max( region.getOffset() + region.getLength(), offset + length );
         offset = start;
         length = end - start;
+    }
+
+    public int getLength()
+    {
+        return length;
+    }
+
+    public int getOffset()
+    {
+        return offset;
     }
 
     public List<IRegion> getRegions()

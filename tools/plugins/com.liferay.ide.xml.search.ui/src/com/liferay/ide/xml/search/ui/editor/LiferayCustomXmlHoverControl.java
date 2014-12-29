@@ -43,8 +43,8 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -83,11 +83,8 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
     private static final String MULTIPLE_QUICK_FIXES = "{0} quick fixes available:";
 
     private CompoundRegion region;
-
     private Control focusControl;
-
     private Composite parent;
-
     private final DefaultMarkerAnnotationAccess markerAccess;
 
     public LiferayCustomXmlHoverControl( Shell shell )
@@ -257,13 +254,8 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
         {
             proposalImage.setImage( image );
 
-            proposalImage.addMouseListener( new MouseListener()
+            proposalImage.addMouseListener( new MouseAdapter()
             {
-
-                public void mouseDoubleClick( MouseEvent e ) {}
-
-                public void mouseDown( MouseEvent e ) {}
-
                 public void mouseUp( MouseEvent e )
                 {
                     if( e.button == 1 )
@@ -271,7 +263,7 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
                         apply( proposal, mark, region.textViewer, region.textOffset );
                     }
                 }
-            } );
+            });
         }
 
         Link proposalLink = new Link( parent, SWT.WRAP );
@@ -345,7 +337,6 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
         {
             // Original link for single fix, hence pass 1 for count
             list.add( createCompletionProposalLink( composite2, marker, resolution, 1 ) );
-
         }
 
         final Link[] links = list.toArray( new Link[0] );
@@ -391,14 +382,6 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
             } );
 
         }
-    }
-
-    private void createSeparator( Composite parent )
-    {
-        Label separator = new Label( parent, SWT.SEPARATOR | SWT.HORIZONTAL );
-        GridData gridData = new GridData( SWT.FILL, SWT.TOP, true, false );
-        gridData.verticalIndent = 2;
-        separator.setLayoutData( gridData );
     }
 
     protected void deferredCreateContent()

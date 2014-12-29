@@ -24,31 +24,14 @@ public class MarkerRegion implements IRegion
 {
 
     private final MarkerAnnotation annotation;
-
-    private final int offset;
-
     private final int length;
+    private final int offset;
 
     public MarkerRegion( int offset, int length, MarkerAnnotation applicable )
     {
         this.offset = offset;
         this.length = length;
         this.annotation = applicable;
-    }
-
-    public int getLength()
-    {
-        return length;
-    }
-
-    public int getOffset()
-    {
-        return offset;
-    }
-
-    public MarkerAnnotation getAnnotation()
-    {
-        return annotation;
     }
 
     @Override
@@ -71,5 +54,20 @@ public class MarkerRegion implements IRegion
         }
 
         return super.equals( obj );
+    }
+
+    public MarkerAnnotation getAnnotation()
+    {
+        return annotation;
+    }
+
+    public int getLength()
+    {
+        return length;
+    }
+
+    public int getOffset()
+    {
+        return offset;
     }
 }
