@@ -15,11 +15,6 @@
 
 package com.liferay.ide.server.ui.handlers;
 
-import com.liferay.ide.server.core.ILiferayServerBehavior;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -27,6 +22,11 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.liferay.ide.server.core.ILiferayServerBehavior;
 
 /**
  * @author Eric Min

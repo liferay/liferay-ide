@@ -15,11 +15,6 @@
 
 package com.liferay.ide.server.ui.handlers;
 
-import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.ui.LiferayServerUI;
-
-import java.net.URL;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -40,6 +35,11 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
+
+import java.net.URL;
+
+import com.liferay.ide.server.core.ILiferayServer;
+import com.liferay.ide.server.ui.LiferayServerUI;
 
 /**
  * @author Eric Min

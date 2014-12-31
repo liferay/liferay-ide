@@ -15,14 +15,14 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.ui.LiferayUIPlugin;
-
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.wst.server.core.IServer;
+
+import com.liferay.ide.ui.LiferayUIPlugin;
 
 /**
  * @author Greg Amerson

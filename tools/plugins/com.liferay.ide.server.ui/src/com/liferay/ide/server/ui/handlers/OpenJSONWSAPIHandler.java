@@ -15,10 +15,10 @@
 
 package com.liferay.ide.server.ui.handlers;
 
+import org.eclipse.osgi.util.NLS;
+
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Eric Min

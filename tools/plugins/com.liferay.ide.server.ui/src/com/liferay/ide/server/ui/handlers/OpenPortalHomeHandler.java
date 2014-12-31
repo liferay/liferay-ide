@@ -15,9 +15,9 @@
 
 package com.liferay.ide.server.ui.handlers;
 
-import java.net.URL;
-
 import org.eclipse.osgi.util.NLS;
+
+import java.net.URL;
 
 /**
  * @author Eric Min
