@@ -15,17 +15,17 @@
 
 package com.liferay.ide.server.ui.action;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.ui.LiferayServerUI;
+import com.liferay.ide.server.ui.util.ServerUIUtil;
+
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.wst.server.core.IServer;
-
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.ILiferayServerBehavior;
-import com.liferay.ide.server.ui.LiferayServerUI;
-import com.liferay.ide.server.ui.util.ServerUIUtil;
 
 /**
  * @author Gregory Amerson
