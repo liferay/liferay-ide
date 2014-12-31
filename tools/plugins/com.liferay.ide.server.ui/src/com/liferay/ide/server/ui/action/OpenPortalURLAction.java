@@ -54,6 +54,6 @@ public abstract class OpenPortalURLAction extends AbstractServerRunningAction
 
     protected int getRequiredServerState()
     {
-        return IServer.STATE_STARTED | IServer.STATE_STOPPED;
+        return IServer.STATE_STARTED;
     }
 }
