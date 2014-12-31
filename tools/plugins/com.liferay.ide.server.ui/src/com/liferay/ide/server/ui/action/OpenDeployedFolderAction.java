@@ -15,56 +15,26 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.ILiferayServerBehavior;
-import com.liferay.ide.server.ui.LiferayServerUI;
-
-import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.wst.server.core.IServer;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.ui.LiferayServerUI;
+import com.liferay.ide.server.ui.util.ServerUIUtil;
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
 public class OpenDeployedFolderAction extends AbstractServerRunningAction
 {
-    private static final String VARIABLE_FOLDER = "${selected_resource_parent_loc}";
-    private static final String VARIABLE_RESOURCE = "${selected_resource_loc}";
-    private static final String VARIABLE_RESOURCE_URI = "${selected_resource_uri}";
-
     public OpenDeployedFolderAction()
     {
         super();
-    }
-
-    private String formShowInSytemExplorerCommand( File path ) throws IOException
-    {
-        String retval = null;
-
-        String command =
-            IDEWorkbenchPlugin.getDefault().getPreferenceStore().getString("SYSTEM_EXPLORER");
-
-        if( ! CoreUtil.isNullOrEmpty( command ) )
-        {
-            command = Util.replaceAll( command, VARIABLE_RESOURCE, quotePath( path.getCanonicalPath() ) );
-            command = Util.replaceAll( command, VARIABLE_RESOURCE_URI, path.getCanonicalFile().toURI().toString() );
-
-            final File parent = path.getParentFile();
-
-            if( parent != null )
-            {
-                retval = Util.replaceAll( command, VARIABLE_FOLDER, quotePath( parent.getCanonicalPath() ) );
-            }
-        }
-
-        return retval;
     }
 
     private IPath getDeployFolderPath()
@@ -94,17 +64,6 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction
             IServer.STATE_UNKNOWN;
     }
 
-    private String quotePath( String path )
-    {
-        if( Util.isLinux() || Util.isMac() )
-        {
-            // Quote for usage inside "", man sh, topic QUOTING:
-            path = path.replaceAll( "[\"$`]", "\\\\$0" ); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-        // Windows: Can't quote, since explorer.exe has a very special command line parsing strategy.
-        return path;
-    }
-
     public void run( IAction action )
     {
         if( selectedModule == null )
@@ -116,16 +75,9 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction
 
         try
         {
-            String launchCmd = formShowInSytemExplorerCommand( folder.toFile() );
+            String launchCmd = ServerUIUtil.getSystemExplorerCommand( folder.toFile() );
 
-            if( Util.isLinux() || Util.isMac() )
-            {
-                Runtime.getRuntime().exec( new String[] { "/bin/sh", "-c", launchCmd }, null, folder.toFile() );
-            }
-            else
-            {
-                Runtime.getRuntime().exec( launchCmd, null, folder.toFile() );
-            }
+            ServerUIUtil.openInSystemExplorer( launchCmd, folder.toFile() );
         }
         catch( IOException e )
         {
@@ -145,7 +97,7 @@ public class OpenDeployedFolderAction extends AbstractServerRunningAction
             try
             {
                 if( deployedPath == null || ( !deployedPath.toFile().exists() ) ||
-                    CoreUtil.isNullOrEmpty( formShowInSytemExplorerCommand( deployedPath.toFile() ) ) )
+                    CoreUtil.isNullOrEmpty( ServerUIUtil.getSystemExplorerCommand( deployedPath.toFile() ) ) )
                 {
                     action.setEnabled( false );
                 }

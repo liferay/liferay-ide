@@ -15,117 +15,45 @@
 
 package com.liferay.ide.server.ui.action;
 
-import com.liferay.ide.server.core.ILiferayServer;
-import com.liferay.ide.server.ui.LiferayServerUI;
-
-import java.net.URL;
-
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.osgi.util.NLS;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
+
+import com.liferay.ide.ui.LiferayUIPlugin;
 
 /**
  * @author Greg Amerson
  */
-@SuppressWarnings( "restriction" )
 public abstract class OpenPortalURLAction extends AbstractServerRunningAction
 {
-
-    public OpenPortalURLAction()
-    {
-        super();
-    }
-
-    protected ILiferayServer getLiferayServer()
-    {
-        return (ILiferayServer) selectedServer.loadAdapter( ILiferayServer.class, null );
-    }
-
-    protected abstract URL getPortalURL();
-
-    protected abstract String getPortalURLTitle();
-
-    @Override
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED;
-    }
-
-    protected void openBrowser( final URL url, final String browserTitle )
-    {
-        Display.getDefault().asyncExec( new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    IWorkbenchBrowserSupport browserSupport =
-                        ServerUIPlugin.getInstance().getWorkbench().getBrowserSupport();
-
-                    IWebBrowser browser =
-                        browserSupport.createBrowser( IWorkbenchBrowserSupport.LOCATION_BAR |
-                            IWorkbenchBrowserSupport.NAVIGATION_BAR, null, browserTitle, null );
-
-                    browser.openURL( url );
-                }
-                catch( Exception e )
-                {
-                    LiferayServerUI.logError( e );
-                }
-            }
-        } );
-    }
-
-    protected void openPortalURL( ILiferayServer portalServer )
-    {
-        URL portalUrl = getPortalURL();
-
-        if( portalUrl == null )
-        {
-            MessageDialog.openError( getActiveShell(), Msgs.openPortalURL, Msgs.notDeterminePortalURL );
-            return;
-        }
-
-        openBrowser( portalUrl, getPortalURLTitle() );
-    }
 
     public void run( IAction action )
     {
         if( selectedServer != null )
         {
-            final ILiferayServer portalServer = getLiferayServer();
+            final ICommandService actionService =
+                (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
 
-            new Job( Msgs.openPortalUrl )
+            final Command actionCmd = actionService.getCommand( getCommandId() );
+
+            try
             {
-                @Override
-                protected IStatus run( IProgressMonitor monitor )
-                {
-                    openPortalURL( portalServer );
-                    return Status.OK_STATUS;
-                }
-
-            }.schedule();
+                actionCmd.executeWithChecks( new ExecutionEvent() );
+            }
+            catch( Exception e )
+            {
+                LiferayUIPlugin.logError( "Error running command " + getCommandId(), e );
+            }
         }
     }
 
-    private static class Msgs extends NLS
-    {
-        public static String notDeterminePortalURL;
-        public static String openPortalURL;
-        public static String openPortalUrl;
+    protected abstract String getCommandId();
 
-        static
-        {
-            initializeMessages( OpenPortalURLAction.class.getName(), Msgs.class );
-        }
+    protected int getRequiredServerState()
+    {
+        return IServer.STATE_STARTED | IServer.STATE_STOPPED;
     }
 }

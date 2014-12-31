@@ -15,39 +15,14 @@
 
 package com.liferay.ide.server.ui.action;
 
-import java.net.URL;
-
-import org.eclipse.osgi.util.NLS;
-
 /**
  * @author Greg Amerson
  */
 public class OpenPortalHomeAction extends OpenPortalURLAction
 {
 
-    public OpenPortalHomeAction()
+    protected String getCommandId()
     {
-        super();
-    }
-
-    protected URL getPortalURL()
-    {
-        return getLiferayServer().getPortalHomeUrl();
-    }
-
-    @Override
-    protected String getPortalURLTitle()
-    {
-        return Msgs.liferayPortal;
-    }
-
-    private static class Msgs extends NLS
-    {
-        public static String liferayPortal;
-
-        static
-        {
-            initializeMessages( OpenPortalHomeAction.class.getName(), Msgs.class );
-        }
+        return "com.liferay.ide.server.ui.handlers.openportalhome";
     }
 }

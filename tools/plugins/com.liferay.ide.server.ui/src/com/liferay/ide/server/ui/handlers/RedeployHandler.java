@@ -15,11 +15,6 @@
 
 package com.liferay.ide.server.ui.handlers;
 
-import com.liferay.ide.server.core.ILiferayServerBehavior;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -27,6 +22,11 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.liferay.ide.server.core.ILiferayServerBehavior;
 
 /**
  * @author Eric Min
@@ -40,21 +40,18 @@ public class RedeployHandler extends AbstractHandler
         final List<ModuleServer> modules = new ArrayList<ModuleServer>();
         final ISelection selection = HandlerUtil.getCurrentSelection( event );
 
-        if( selection instanceof IStructuredSelection )
+        if( !selection.isEmpty() )
         {
-            if( !selection.isEmpty() )
+            if( selection instanceof IStructuredSelection )
             {
-                if( selection instanceof IStructuredSelection )
-                {
-                    List selectedObj = ( (IStructuredSelection) selection ).toList();
+                List selectedObj = ( (IStructuredSelection) selection ).toList();
 
-                    for( Object object : selectedObj )
+                for( Object object : selectedObj )
+                {
+                    if( object instanceof ModuleServer )
                     {
-                        if( object instanceof ModuleServer )
-                        {
-                            ModuleServer moduleServer = (ModuleServer) object;
-                            modules.add( moduleServer );
-                        }
+                        ModuleServer moduleServer = (ModuleServer) object;
+                        modules.add( moduleServer );
                     }
                 }
             }
