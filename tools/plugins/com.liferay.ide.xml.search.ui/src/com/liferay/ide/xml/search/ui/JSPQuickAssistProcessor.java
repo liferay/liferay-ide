@@ -15,6 +15,7 @@
 package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseXMLValidationLevel;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
@@ -39,6 +41,7 @@ import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class JSPQuickAssistProcessor implements IQuickAssistProcessor
@@ -96,6 +99,15 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor
                 {
                     if( marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID, null ) != null )
                     {
+                        try
+                        {
+                            marker.setAttribute( XMLSearchConstants.FOR_JSP_QUICK_ASSIST, true );
+                        }
+                        catch( CoreException e )
+                        {
+                            LiferayXMLSearchUI.logError( "Error setting marker attribute", e );
+                        }
+
                         final ICompletionProposal[] resolutions = createFromMarkerResolutions( marker );
 
                         if( ! CoreUtil.isNullOrEmpty( resolutions ) )
@@ -135,7 +147,8 @@ public class JSPQuickAssistProcessor implements IQuickAssistProcessor
 
             for( IMarkerResolution resolution : resolutions )
             {
-                if( resolution instanceof CommonWorkbenchMarkerResolution )
+                if( resolution instanceof CommonWorkbenchMarkerResolution ||
+                    resolution instanceof DecreaseXMLValidationLevel )
                 {
                     retval.add( new MarkerResolutionProposal( resolution, marker ) );
                 }

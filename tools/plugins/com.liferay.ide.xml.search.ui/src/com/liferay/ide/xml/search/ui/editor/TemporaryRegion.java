@@ -1,0 +1,62 @@
+package com.liferay.ide.xml.search.ui.editor;
+
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
+
+/**
+ * @author Kuo Zhang
+ *
+ * the region used to locate TemporaryAnnotation
+ */
+@SuppressWarnings( "restriction" )
+public class TemporaryRegion implements IRegion
+{
+
+    private final TemporaryAnnotation annotation;
+    private final int length;
+    private final int offset;
+
+    public TemporaryRegion( int offset, int length, TemporaryAnnotation applicable )
+    {
+        this.offset = offset;
+        this.length = length;
+        this.annotation = applicable;
+    }
+
+    @Override
+    public boolean equals( Object obj )
+    {
+        if( !( obj instanceof TemporaryRegion ) )
+        {
+            return false;
+        }
+
+        TemporaryRegion compared = (TemporaryRegion) obj;
+
+        if( this.length == compared.length &&
+            this.offset == compared.offset &&
+            this.annotation.getText() != null &&
+            compared.annotation.getText() != null &&
+            this.annotation.getText().equals( compared.annotation.getText() ) )
+        {
+            return true;
+        }
+
+        return super.equals( obj );
+    }
+
+    public TemporaryAnnotation getAnnotation()
+    {
+        return annotation;
+    }
+
+    public int getLength()
+    {
+        return length;
+    }
+
+    public int getOffset()
+    {
+        return offset;
+    }
+}

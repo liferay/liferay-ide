@@ -97,11 +97,14 @@ public class LiferayJspLanguagePropertiesSearcher extends XMLSearcherForProperti
                 final Properties portalProperties =
                     PortalLanguagePropertiesCacheUtil.getPortalLanguageProperties( LiferayCore.create( project ) );
 
-                Object key = portalProperties.get( mathingString );
-
-                if( key != null )
+                if( portalProperties != null )
                 {
-                    sb.append( NLS.bind( HOVER, key, "Liferay Portal Language.properties" ) );
+                    Object key = portalProperties.get( mathingString );
+
+                    if( key != null )
+                    {
+                        sb.append( NLS.bind( HOVER, key, "Liferay Portal Language.properties" ) );
+                    }
                 }
             }
         }

@@ -17,9 +17,13 @@ package com.liferay.ide.xml.search.ui;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
 public interface XMLSearchConstants
 {
+    String ATTR_NAME = "attrname";
+    String ELEMENT_NAME = "elementName";
+    String FOR_JSP_QUICK_ASSIST = "fromJSPQuickAssist";
     String FULL_PATH = "fullPath";
     String LIFERAY_DISPLAY_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.liferaydisplayxml";
     String LIFERAY_HOOK_XML_CONTENT_TYPE = "com.liferay.ide.hook.core.liferayhookxml";
@@ -27,9 +31,11 @@ public interface XMLSearchConstants
     String LIFERAY_LAYOUTTPL_XML_CONTENT_TYPE = "com.liferay.ide.layouttpl.core.liferaylayouttplxml";
     String LIFERAY_PORTLET_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.liferayportletxml";
     String MARKER_TYPE = "markerType";
+    String NODE_TYPE = "nodeType";
     String PORTLET_ACTION_METHOD_QUERY_ID = "com.liferay.ide.xml.search.ui.portletActionMethodQuery";
     String PORTLET_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.portletxml";
     String RESOURCE_BUNDLE_QUERY_ID = "portlet.language.properties.querySpecification";
     String SERVICE_BUILDER_CONTENT_TYPE = "com.liferay.ide.service.core.servicebuildercontent";
+    String START_OFFSET = "startOffset";
     String TEXT_CONTENT = "textContent";
 }

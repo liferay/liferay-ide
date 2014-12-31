@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.editor;
 
+import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
+
 import java.util.Iterator;
 
 import org.eclipse.jface.text.IDocument;
@@ -28,6 +30,7 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
+import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 import org.eclipse.wst.xml.search.editor.hover.XMLReferencesInfoHoverProcessor;
 
 /**
@@ -75,6 +78,9 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
 
         CompoundRegion compoundRegion = new CompoundRegion( textViewer, offset );
 
+        // if there are MarkerRegion or TemporaryRegion, then don't add InfoRegion
+        boolean addInfoRegion = true;
+
         if( textViewer instanceof ISourceViewer )
         {
             ISourceViewer sourceViewer = (ISourceViewer) textViewer;
@@ -95,23 +101,44 @@ public class LiferayCustomXmlHover extends XMLReferencesInfoHoverProcessor imple
                         {
                             compoundRegion.addRegion( new MarkerRegion(
                                 pos.getOffset(), pos.getLength(), (MarkerAnnotation) annotation ) );
+                            addInfoRegion = false;
+                        }
+                    }
+                    else if( annotation instanceof TemporaryAnnotation )
+                    {
+                        TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
+
+                        if( temp.getAttributes() != null &&
+                            temp.getAttributes().get( LiferayBaseValidator.MARKER_QUERY_ID ) != null )
+                        {
+                            Position pos = sourceViewer.getAnnotationModel().getPosition( annotation );
+
+                            if( pos.includes( offset ) )
+                            {
+                                compoundRegion.addRegion( new TemporaryRegion(
+                                    pos.getOffset(), pos.getLength(), (TemporaryAnnotation) annotation ) );
+                                addInfoRegion = false;
+                            }
                         }
                     }
                 }
             }
 
-            final IRegion normalRegion = super.getHoverRegion( textViewer, offset );
-
-            if( normalRegion != null )
+            if( addInfoRegion )
             {
-                String content = getHoverInfo( textViewer, normalRegion );
+                final IRegion normalRegion = super.getHoverRegion( textViewer, offset );
 
-                if( content != null )
+                if( normalRegion != null )
                 {
-                    compoundRegion.addRegion( new InfoRegion(
-                        normalRegion.getOffset(), normalRegion.getLength(), getHoverInfo(
-                            textViewer, normalRegion ) ) );
+                    String content = getHoverInfo( textViewer, normalRegion );
+
+                    if( content != null )
+                    {
+                        compoundRegion.addRegion( new InfoRegion(
+                            normalRegion.getOffset(), normalRegion.getLength(), getHoverInfo( textViewer, normalRegion ) ) );
+                    }
                 }
+
             }
         }
 

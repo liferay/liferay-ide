@@ -14,6 +14,8 @@
 
 package com.liferay.ide.xml.search.ui.editor;
 
+import com.liferay.ide.xml.search.ui.TempMarker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.ICompletionProposalExtension;
 import org.eclipse.jface.text.contentassist.ICompletionProposalExtension2;
+import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -182,7 +185,7 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
         return new Point( width, height );
     }
 
-    private void createAnnotationInformation( Composite parent, final MarkerRegion annotation )
+    private void createAnnotationInformation( Composite parent, final Annotation annotation )
     {
         Composite composite = new Composite( parent, SWT.NONE );
         composite.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
@@ -206,7 +209,7 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
                 public void paintControl( PaintEvent e )
                 {
                     e.gc.setFont( null );
-                    markerAccess.paint( annotation.getAnnotation(), e.gc, canvas, new Rectangle( 0, 0, 16, 16 ) );
+                    markerAccess.paint( annotation, e.gc, canvas, new Rectangle( 0, 0, 16, 16 ) );
                 }
             }
         );
@@ -215,7 +218,7 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
         StyledText text = new StyledText( composite, SWT.MULTI | SWT.WRAP | SWT.READ_ONLY );
         GridData data = new GridData( SWT.FILL, SWT.FILL, true, true );
         text.setLayoutData( data );
-        String annotationText = annotation.getAnnotation().getText();
+        String annotationText = annotation.getText();
 
         if( annotationText != null )
         {
@@ -406,7 +409,7 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
                 if( reg instanceof MarkerRegion )
                 {
                     final MarkerRegion markerReg = (MarkerRegion) reg;
-                    createAnnotationInformation( composite, markerReg );
+                    createAnnotationInformation( composite, markerReg.getAnnotation() );
                     final IMarker marker = markerReg.getAnnotation().getMarker();
                     IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions( marker );
 
@@ -414,6 +417,19 @@ public class LiferayCustomXmlHoverControl extends AbstractInformationControl
                     {
                         createResolutionsControl( composite, marker, resolutions );
                         // createSeparator( composite );
+                    }
+                }
+                else if( reg instanceof TemporaryRegion )
+                {
+                    final TemporaryRegion tempReg = (TemporaryRegion) reg;
+                    createAnnotationInformation( composite, tempReg.getAnnotation() );
+                    final IMarker marker = new TempMarker( tempReg.getAnnotation() );
+
+                    IMarkerResolution[] resolutions = IDE.getMarkerHelpRegistry().getResolutions( marker );
+
+                    if( resolutions.length > 0 )
+                    {
+                        createResolutionsControl( composite, marker, resolutions );
                     }
                 }
                 else if( reg instanceof InfoRegion )

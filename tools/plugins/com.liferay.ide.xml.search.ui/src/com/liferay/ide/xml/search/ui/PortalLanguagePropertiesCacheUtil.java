@@ -51,6 +51,12 @@ public class PortalLanguagePropertiesCacheUtil
         try
         {
             final ILiferayPortal portal = project.adapt( ILiferayPortal.class );
+
+            if( portal == null )
+            {
+                return retval;
+            }
+
             final IPath appServerPortalDir = portal.getAppServerPortalDir();
 
             retval = languagePortalMap.get( appServerPortalDir );

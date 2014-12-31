@@ -59,4 +59,19 @@
       </include>
    </extension>
 
+    <extension point="org.eclipse.ui.editors">
+        <editor
+            name="Alloy JSP Editor"
+            icon="/icons/e16/sourceEditor.gif"
+            default="true"
+            contributorClass="org.eclipse.jst.jsp.ui.internal.editor.ActionContributorJSP"
+            class="org.eclipse.wst.sse.ui.StructuredTextEditor"
+            symbolicFontName="org.eclipse.wst.sse.ui.textfont"
+            id="com.liferay.ide.alloy.ui.alloyjspeditor" >
+        <contentTypeBinding
+            contentTypeId="com.liferay.ide.alloy.core.alloyjspsource">
+        </contentTypeBinding>
+        </editor>
+    </extension>
+
 </plugin>

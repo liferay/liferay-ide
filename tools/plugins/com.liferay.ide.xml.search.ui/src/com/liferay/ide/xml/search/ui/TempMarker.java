@@ -31,8 +31,9 @@ import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
 /**
  * @author Gregory Amerson
+ * @author Kuo Zhang
  */
-@SuppressWarnings( "restriction" )
+@SuppressWarnings( {"restriction", "unchecked"} )
 public class TempMarker implements IMarker
 {
     private final TemporaryAnnotation annotation;
@@ -162,16 +163,22 @@ public class TempMarker implements IMarker
     @Override
     public void setAttribute( String attributeName, boolean value ) throws CoreException
     {
+        this.attributes.put( attributeName, value );
+        this.annotation.getAttributes().put( attributeName, value );
     }
 
     @Override
     public void setAttribute( String attributeName, int value ) throws CoreException
     {
+        this.attributes.put( attributeName, value );
+        this.annotation.getAttributes().put( attributeName, value );
     }
 
     @Override
     public void setAttribute( String attributeName, Object value ) throws CoreException
     {
+        this.attributes.put( attributeName, value );
+        this.annotation.getAttributes().put( attributeName, value );
     }
 
     @Override

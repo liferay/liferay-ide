@@ -16,40 +16,28 @@ package com.liferay.ide.xml.search.ui.markerResolutions;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
-import com.liferay.ide.server.util.ComponentUtil;
-import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
 
-import java.net.URL;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IMarkerResolution2;
 
 
 /**
  * @author Kuo Zhang
  */
-public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolution2
+public class DecreaseInstanceScopeXmlValidationLevel extends DecreaseXMLValidationLevel
 {
+
+    public DecreaseInstanceScopeXmlValidationLevel()
+    {
+    }
 
     private final static String MESSAGE = "Decrease validation level of this marker for all projects to Ignore";
 
     @Override
     public String getDescription()
     {
-        return MESSAGE;
-    }
-
-    @Override
-    public Image getImage()
-    {
-        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/arrow_down.png" );
-        return ImageDescriptor.createFromURL( url ).createImage();
+        return getLabel();
     }
 
     @Override
@@ -59,7 +47,7 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
     }
 
     @Override
-    public void run( IMarker marker )
+    protected void resolve( IMarker marker )
     {
         // if the project scope is used, set its validation level to "Ignore" first.
         final IEclipsePreferences node =
@@ -71,7 +59,6 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
         }
 
         ValidationPreferences.setInstanceScopeValLevel( -1 );
-        ComponentUtil.validateFile( (IFile)marker.getResource(), new NullProgressMonitor() );
     }
 
 }

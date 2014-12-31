@@ -48,6 +48,7 @@ import org.w3c.dom.Node;
 
 /**
  * @author Terry Jia
+ * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayJspValidator extends LiferayBaseValidator
@@ -83,6 +84,43 @@ public class LiferayJspValidator extends LiferayBaseValidator
                 message.setAttribute( XMLSearchConstants.FULL_PATH, file.getFullPath().toPortableString() );
                 message.setAttribute( XMLSearchConstants.MARKER_TYPE, XMLSearchConstants.LIFERAY_JSP_MARKER_ID );
                 message.setTargetObject( file );
+
+                // all the below attributes are for reseting content in jsp editor
+                // because the quick assist of decreasing xml validation level doesn't make the wave lines go away
+                // we need to reset the content to trigger the editor to refresh
+                int nodeType = 0;
+                IDOMElement element = null;
+                IDOMAttr attr = null;
+
+                if( Node.ATTRIBUTE_NODE == node.getNodeType() )
+                {
+                    nodeType = Node.ATTRIBUTE_NODE;
+                    attr = (IDOMAttr) node;
+                    element = (IDOMElement) attr.getOwnerElement();
+                }
+                else if( Node.ELEMENT_NODE == node.getNodeType() )
+                {
+                    nodeType = Node.ELEMENT_NODE;
+                    element = (IDOMElement)node;
+                }
+
+                if( nodeType != 0 )
+                {
+                    message.setAttribute( XMLSearchConstants.NODE_TYPE, nodeType );
+
+                    if( element != null )
+                    {
+                        message.setAttribute( XMLSearchConstants.ELEMENT_NAME, element.getNodeName() );
+                        message.setAttribute( XMLSearchConstants.START_OFFSET, element.getStartOffset() );
+                    }
+
+                    if( nodeType == Node.ATTRIBUTE_NODE && attr != null )
+                    {
+                        message.setAttribute( XMLSearchConstants.ATTR_NAME, attr.getName() );
+                    }
+                }
+
+
                 reporter.addMessage( validator, message );
             }
         }

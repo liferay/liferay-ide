@@ -15,6 +15,7 @@
 package com.liferay.ide.xml.search.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.text.IRegion;
@@ -41,9 +42,37 @@ public class CompoundRegion implements IRegion
 
     public void addRegion( IRegion region )
     {
-        if( regions.contains( region ) )
+        Iterator<IRegion> it = regions.iterator();
+
+        IRegion r;
+
+        while( it.hasNext() )
         {
-            return;
+            r = it.next();
+
+            if( r.equals( region ) )
+            {
+                return;
+            }
+
+            // In jsp editor, TempMarker and TempRegion are used,
+            // but MarkerRegion still have a higher priority,
+            // if MarkerRegion and TemporaryRegion represent the same problem, keep the MarkerRegion
+            if( region instanceof TemporaryRegion && r instanceof MarkerRegion )
+            {
+                if( compareRegions( (MarkerRegion) r, (TemporaryRegion) region ) )
+                {
+                    return;
+                }
+            }
+
+            if( region instanceof MarkerRegion && r instanceof TemporaryRegion )
+            {
+                if( compareRegions( (MarkerRegion) region, (TemporaryRegion) r ) )
+                {
+                    it.remove();
+                }
+            }
         }
 
         regions.add( region );
@@ -51,6 +80,25 @@ public class CompoundRegion implements IRegion
         int end = Math.max( region.getOffset() + region.getLength(), offset + length );
         offset = start;
         length = end - start;
+    }
+
+    // Compare MarkerRegion and TemporayRegion
+    private boolean compareRegions( MarkerRegion m, TemporaryRegion t )
+    {
+        try
+        {
+            if( m.getLength() == t.getLength() && m.getOffset() == t.getOffset() &&
+                m.getAnnotation().getText().equals( t.getAnnotation().getText() ) )
+            {
+                return true;
+            }
+        }
+        catch( NullPointerException e )
+        {
+            return false;
+        }
+
+        return false;
     }
 
     public int getLength()

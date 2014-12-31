@@ -18,6 +18,9 @@ package com.liferay.ide.xml.search.ui;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseInstanceScopeXmlValidationLevel;
+import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseProjectScopeXmlValidationLevel;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 
 import java.util.ArrayList;
@@ -27,8 +30,10 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
@@ -124,6 +129,20 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
         }
     }
 
+    private void collectDecreaseValidationLevelResolutions(
+        IMarker marker, final List<IMarkerResolution> resolutions, final IProject project )
+    {
+        final IEclipsePreferences node =
+            new ProjectScope( marker.getResource().getProject() ).getNode( ProjectCore.PLUGIN_ID );
+
+        if( node.getBoolean( ProjectCore.USE_PROJECT_SETTINGS, false ) )
+        {
+            resolutions.add( new DecreaseProjectScopeXmlValidationLevel() );
+        }
+
+        resolutions.add( new DecreaseInstanceScopeXmlValidationLevel() );
+    }
+
     private List<IType> findTypes( IJavaProject javaProject, String typeName )
     {
         List<IType> retval = Collections.emptyList();
@@ -174,6 +193,8 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
             {
                 collectPortletActionMethodResolutions( marker, resolutions, project );
             }
+
+            collectDecreaseValidationLevelResolutions( marker, resolutions, project );
 
             retval = resolutions.toArray( new IMarkerResolution[0] );
         }

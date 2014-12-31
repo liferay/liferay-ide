@@ -14,10 +14,13 @@
 
 package com.liferay.ide.xml.search.ui.quickassist;
 
+import com.liferay.ide.xml.search.ui.TempMarker;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.text.quickassist.IQuickAssistInvocationContext;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.wst.sse.ui.internal.StructuredMarkerAnnotation;
+import org.eclipse.wst.sse.ui.internal.reconcile.TemporaryAnnotation;
 
 
 /**
@@ -57,6 +60,15 @@ public class XmlValidationQuickAssistProcessor extends AbstractQuickAssistProces
         if( annotation instanceof StructuredMarkerAnnotation )
         {
             return ( (StructuredMarkerAnnotation) annotation ).getMarker();
+        }
+        else if( annotation instanceof TemporaryAnnotation )
+        {
+            TemporaryAnnotation temp = (TemporaryAnnotation) annotation;
+
+            if( temp.getAttributes() != null )
+            {
+                return new TempMarker( (TemporaryAnnotation) annotation );
+            }
         }
 
         return null;
