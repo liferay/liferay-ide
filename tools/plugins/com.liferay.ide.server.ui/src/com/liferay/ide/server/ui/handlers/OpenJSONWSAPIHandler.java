@@ -47,7 +47,6 @@ public class OpenJSONWSAPIHandler extends OpenPortalURLHandler
 
     private static class Msgs extends NLS
     {
-
         public static String jsonWsApi;
 
         static

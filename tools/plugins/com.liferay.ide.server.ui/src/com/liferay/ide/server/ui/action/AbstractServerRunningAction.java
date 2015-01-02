@@ -31,14 +31,33 @@ import org.eclipse.wst.server.ui.IServerModule;
 public abstract class AbstractServerRunningAction implements IObjectActionDelegate
 {
 
-    protected IServer selectedServer;
-    protected IServerModule selectedModule;
     protected IWorkbenchPart activePart;
+    protected IServerModule selectedModule;
+    protected IServer selectedServer;
 
     public AbstractServerRunningAction()
     {
         super();
     }
+
+    protected IWorkbenchPart getActivePart()
+    {
+        return this.activePart;
+    }
+
+    protected Shell getActiveShell()
+    {
+        if( getActivePart() != null )
+        {
+            return getActivePart().getSite().getShell();
+        }
+        else
+        {
+            return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+        }
+    }
+
+    protected abstract int getRequiredServerState();
 
     public void selectionChanged( IAction action, ISelection selection )
     {
@@ -70,24 +89,5 @@ public abstract class AbstractServerRunningAction implements IObjectActionDelega
     {
         this.activePart = targetPart;
     }
-
-    protected IWorkbenchPart getActivePart()
-    {
-        return this.activePart;
-    }
-
-    protected Shell getActiveShell()
-    {
-        if( getActivePart() != null )
-        {
-            return getActivePart().getSite().getShell();
-        }
-        else
-        {
-            return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-        }
-    }
-
-    protected abstract int getRequiredServerState();
 
 }

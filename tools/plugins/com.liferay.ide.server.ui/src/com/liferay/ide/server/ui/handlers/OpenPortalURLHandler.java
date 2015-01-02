@@ -47,7 +47,6 @@ import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
 @SuppressWarnings( "restriction" )
 public abstract class OpenPortalURLHandler extends AbstractHandler
 {
-
     protected IWorkbenchPart activePart;
 
     public Object execute( ExecutionEvent event ) throws ExecutionException
@@ -101,15 +100,6 @@ public abstract class OpenPortalURLHandler extends AbstractHandler
         }
     }
 
-    protected abstract URL getPortalURL( Object selected );
-
-    protected abstract String getPortalURLTitle();
-
-    protected int getRequiredServerState()
-    {
-        return IServer.STATE_STARTED;
-    }
-
     protected ILiferayServer getLiferayServer( Object selected )
     {
         IServer iServer = null;
@@ -121,6 +111,15 @@ public abstract class OpenPortalURLHandler extends AbstractHandler
 
         return (ILiferayServer) iServer.loadAdapter( ILiferayServer.class, null );
 
+    }
+
+    protected abstract URL getPortalURL( Object selected );
+
+    protected abstract String getPortalURLTitle();
+
+    protected int getRequiredServerState()
+    {
+        return IServer.STATE_STARTED;
     }
 
     protected void openBrowser( final URL url, final String browserTitle )
@@ -166,8 +165,8 @@ public abstract class OpenPortalURLHandler extends AbstractHandler
     {
 
         public static String notDeterminePortalURL;
-        public static String openPortalURL;
         public static String openPortalUrl;
+        public static String openPortalURL;
 
         static
         {

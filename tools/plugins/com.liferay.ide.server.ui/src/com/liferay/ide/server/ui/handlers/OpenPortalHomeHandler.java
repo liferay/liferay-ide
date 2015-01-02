@@ -38,7 +38,6 @@ public class OpenPortalHomeHandler extends OpenPortalURLHandler
 
     private static class Msgs extends NLS
     {
-
         public static String liferayPortal;
 
         static

@@ -83,7 +83,8 @@ public class OpenDeployedFolderHandler extends AbstractHandler
                 moduleServer.getModule()[0].getProject();
 
                 final ILiferayServerBehavior liferayServerBehavior =
-                    (ILiferayServerBehavior) moduleServer.getServer().loadAdapter( ILiferayServerBehavior.class, null );
+                    (ILiferayServerBehavior) moduleServer.getServer().loadAdapter(
+                        ILiferayServerBehavior.class, null );
 
                 if( liferayServerBehavior != null )
                 {
