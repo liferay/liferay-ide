@@ -31,6 +31,7 @@ import javax.management.remote.JMXServiceURL;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.osgi.framework.Version;
 
 
 /**
@@ -70,7 +71,7 @@ public class OsgiConnectionImpl implements OsgiConnection
 
                 try
                 {
-                    retval.add( OsgiBundle.newFromData( cd ) );
+                    retval.add( newFromData( cd ) );
                 }
                 catch( Exception e)
                 {
@@ -84,6 +85,17 @@ public class OsgiConnectionImpl implements OsgiConnection
         }
 
         return retval.toArray( new OsgiBundle[0] );
+    }
+
+    public static OsgiBundle newFromData( CompositeData cd )
+    {
+        return new OsgiBundle
+        (
+            cd.get( "Identifier" ).toString(),
+            cd.get( "SymbolicName" ).toString(),
+            cd.get( "State" ).toString(),
+            new Version( cd.get( "Version" ).toString() )
+        );
     }
 
     public boolean ping()

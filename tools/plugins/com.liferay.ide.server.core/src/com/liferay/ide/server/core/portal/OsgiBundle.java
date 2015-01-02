@@ -14,8 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
-import javax.management.openmbean.CompositeData;
-
 import org.osgi.framework.Version;
 
 
@@ -56,17 +54,6 @@ public class OsgiBundle
     public String getSymbolicName()
     {
         return this.symbolicName;
-    }
-
-    public static OsgiBundle newFromData( CompositeData cd )
-    {
-        return new OsgiBundle
-        (
-            cd.get( "Identifier" ).toString(),
-            cd.get( "SymbolicName" ).toString(),
-            cd.get( "State" ).toString(),
-            new Version( cd.get( "Version" ).toString() )
-        );
     }
 
 }

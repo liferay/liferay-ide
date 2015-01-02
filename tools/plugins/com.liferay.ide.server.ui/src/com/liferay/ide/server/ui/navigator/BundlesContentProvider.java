@@ -87,7 +87,9 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
                             @Override
                             protected IStatus run( IProgressMonitor monitor )
                             {
-                                return checkApi( server, monitor );
+                                apiChecks.put( server.getId(), checkApi( server, monitor ) );
+
+                                return Status.OK_STATUS;
                             }
                         };
 

@@ -364,6 +364,7 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 		memoryArgs = toolkit.createText(composite, null);
 		data = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		data.widthHint = 300;
 		memoryArgs.setLayoutData(data);
 		memoryArgs.addModifyListener(new ModifyListener() {
 
