@@ -64,29 +64,37 @@ public class LiferayLanguagePropertiesListener implements IResourceChangeListene
 
             if( filename.equals( ILiferayConstants.PORTLET_XML_FILE ) )
             {
-                final ILiferayProject create = LiferayCore.create( CoreUtil.getLiferayProject( file ) );
-                final IFile portletXml = create.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+                final ILiferayProject lrproject = LiferayCore.create( CoreUtil.getLiferayProject( file ) );
 
-                if( file.equals( portletXml ) )
+                if( lrproject != null )
                 {
-                    final IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
-                    validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
+                    final IFile portletXml = lrproject.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
 
-                    return;
+                    if( file.equals( portletXml ) )
+                    {
+                        final IFile[] files = PropertiesUtil.getLanguagePropertiesFromPortletXml( portletXml );
+                        validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
+
+                        return;
+                    }
                 }
             }
 
             if( filename.equals( ILiferayConstants.LIFERAY_HOOK_XML_FILE ) )
             {
                 final ILiferayProject lrproject = LiferayCore.create( CoreUtil.getLiferayProject( file ) );
-                final IFile liferayHookXml = lrproject.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
 
-                if( file.equals( liferayHookXml ) )
+                if( lrproject != null )
                 {
-                    final IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
-                    validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
+                    final IFile liferayHookXml = lrproject.getDescriptorFile( ILiferayConstants.LIFERAY_HOOK_XML_FILE );
 
-                    return;
+                    if( file.equals( liferayHookXml ) )
+                    {
+                        final IFile[] files = PropertiesUtil.getLanguagePropertiesFromLiferayHookXml( liferayHookXml );
+                        validateLanguagePropertiesEncoding( files, CoreUtil.getLiferayProject( file ) );
+
+                        return;
+                    }
                 }
             }
         }
