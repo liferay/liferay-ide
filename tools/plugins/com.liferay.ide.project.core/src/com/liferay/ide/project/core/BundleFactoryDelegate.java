@@ -14,6 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,11 +45,14 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate
     {
         IModule[] retval = new IModule[0];
 
-        if( project != null && project.getName().startsWith( "sample.bundle" ) )
-        {
-            retval = new IModule[] { createModule( project.getName(), project.getName(), "liferay.bundle", "1.0", project ) };
-        }
+        ILiferayProject lrProject = LiferayCore.create( project );
 
+        if( lrProject instanceof IBundleProject )
+        {
+            retval =
+                new IModule[] { createModule(
+                    project.getName(), project.getName(), "liferay.bundle", "1.0", project ) };
+        }
 
         return retval;
     }
