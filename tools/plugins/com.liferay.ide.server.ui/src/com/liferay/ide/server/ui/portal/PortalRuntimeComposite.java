@@ -20,6 +20,7 @@ import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -156,7 +157,16 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
     @Override
     public void modifyText( ModifyEvent e )
     {
+        if( e.getSource().equals( dirField ) )
+        {
+            getRuntime().setLocation( new Path( dirField.getText() ) );
+        }
+        else if( e.getSource().equals( nameField ) )
+        {
+            getRuntime().setName( nameField.getText() );
+        }
 
+        validate();
     }
 
     public void setRuntime( IRuntimeWorkingCopy newRuntime )
