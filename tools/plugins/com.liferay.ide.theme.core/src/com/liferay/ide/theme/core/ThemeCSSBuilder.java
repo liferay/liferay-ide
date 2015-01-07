@@ -160,7 +160,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                     final String themeType = lProject.getProperty( "theme.type", "vm" );
 
                     themeDescriptorHelper.createDefaultFile(
-                        lrProject.getDefaultDocrootFolder(), version, id, name, themeType );
+                        lrProject.getDefaultDocrootFolder().getFolder( "WEB-INF" ), version, id, name, themeType );
                 }
                 catch( IOException e )
                 {
