@@ -17,9 +17,9 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
 import com.liferay.ide.server.tomcat.ui.command.SetExternalPropertiesCommand;
-import com.liferay.ide.server.tomcat.ui.command.SetUseDefaultPortalSeverSettingsCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetMemoryArgsCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetServerModeCommand;
+import com.liferay.ide.server.tomcat.ui.command.SetUseDefaultPortalSeverSettingsCommand;
 import com.liferay.ide.server.tomcat.ui.command.SetUserTimezoneCommand;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.cmd.SetPasswordCommand;
@@ -685,10 +685,11 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
                 developmentServerMode.setSelection(
                     tomcatServer.getDefaultServerMode() == ILiferayTomcatConstants.DEVELOPMENT_SERVER_MODE );
                 
-                execute( new SetUseDefaultPortalSeverSettingsCommand( tomcatServer, tomcatServer.getDefaultPortalServerSettings() ) );
-                useDefaultPortalServerSettings.setSelection( tomcatServer.getDefaultPortalServerSettings() );
-                applyDefaultPortalServerSetting(tomcatServer.getDefaultPortalServerSettings());
-                
+
+                execute( new SetUseDefaultPortalSeverSettingsCommand( tomcatServer, tomcatServer.getUseDefaultPortalServerSettings() ) );
+                useDefaultPortalServerSettings.setSelection( tomcatServer.getUseDefaultPortalServerSettings() );
+                applyDefaultPortalServerSetting(tomcatServer.getUseDefaultPortalServerSettings());
+
                 updating = false;
 				validate();
 			}

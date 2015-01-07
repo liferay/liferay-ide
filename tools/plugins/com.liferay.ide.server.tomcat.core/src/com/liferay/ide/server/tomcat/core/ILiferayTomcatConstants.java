@@ -38,6 +38,8 @@ public interface ILiferayTomcatConstants
 
     String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m" ); //$NON-NLS-1$ //$NON-NLS-2$
 
+    boolean DEFAULT_USE_DEFAULT_PORTAL_SERVER_SETTING = false;
+
     String DEFAULT_USER_TIMEZONE = _defaultPrefs.get( "default.user.timezone", "GMT" ); //$NON-NLS-1$ //$NON-NLS-2$
 
     int DEVELOPMENT_SERVER_MODE = 2;
@@ -47,7 +49,5 @@ public interface ILiferayTomcatConstants
     boolean PREVENT_MULTI_EXT_PLUGINS_DEPLOY = _defaultPrefs.getBoolean( "prevent.multi.ext.plugins.deploy", false ); //$NON-NLS-1$
 
     int STANDARD_SERVER_MODE = 1;
-    
-    boolean USE_DEFAULT_PORTAL_SERVER_SETTING = false;
 
 }

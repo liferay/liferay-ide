@@ -15,9 +15,9 @@
 
 package com.liferay.ide.server.tomcat.core;
 
-import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
-
 import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
+
+import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 
 /**
  * @author Greg Amerson
@@ -38,10 +38,10 @@ public interface ILiferayTomcatServer extends ILiferayServerWorkingCopy, ITomcat
     String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties"; //$NON-NLS-1$
 
     String PROPERTY_MEMORY_ARGS = "memoryArgs"; //$NON-NLS-1$
-    
-    String PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS = "userDefaultPortalServerSettings"; //$NON-NLS-1$
 
     String PROPERTY_SERVER_MODE = "serverMode"; //$NON-NLS-1$
+
+    String PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS = "useDefaultPortalServerSettings";
 
     String PROPERTY_USER_TIMEZONE = "userTimezone"; //$NON-NLS-1$
 

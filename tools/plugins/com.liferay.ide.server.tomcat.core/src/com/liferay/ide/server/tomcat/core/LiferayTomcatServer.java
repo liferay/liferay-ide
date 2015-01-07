@@ -98,11 +98,6 @@ public class LiferayTomcatServer extends TomcatServer
         return defaultServerMode;
     }
 
-    public boolean getDefaultPortalServerSettings()
-    {
-        return ILiferayTomcatConstants.USE_DEFAULT_PORTAL_SERVER_SETTING;
-    }
-
     public String getExternalProperties()
     {
         return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, StringPool.EMPTY );
@@ -170,7 +165,9 @@ public class LiferayTomcatServer extends TomcatServer
 
     public boolean getUseDefaultPortalServerSettings()
     {
-        return getAttribute( PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS, getDefaultPortalServerSettings() );
+        return getAttribute(
+            PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS,
+            ILiferayTomcatConstants.DEFAULT_USE_DEFAULT_PORTAL_SERVER_SETTING );
     }
 
     public int getServerMode()
