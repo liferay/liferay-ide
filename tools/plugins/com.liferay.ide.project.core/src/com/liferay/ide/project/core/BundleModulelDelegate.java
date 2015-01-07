@@ -34,7 +34,7 @@ public class BundleModulelDelegate extends ProjectModule
     @Override
     public IModuleResource[] members() throws CoreException
     {
-        return new IModuleResource[0];
+        return super.members();
     }
 
 }

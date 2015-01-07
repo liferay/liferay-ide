@@ -49,12 +49,15 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate
 
         if( lrProject instanceof IBundleProject )
         {
-            retval =
-                new IModule[] { createModule(
-                    project.getName(), project.getName(), "liferay.bundle", "1.0", project ) };
+            retval = new IModule[] { createSimpleModule( project ) };
         }
 
         return retval;
+    }
+
+    private IModule createSimpleModule( IProject project )
+    {
+        return createModule( project.getName(), project.getName(), "liferay.bundle", "1.0", project );
     }
 
     @Override

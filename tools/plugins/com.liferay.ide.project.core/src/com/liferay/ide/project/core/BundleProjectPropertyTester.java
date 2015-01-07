@@ -14,6 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
+
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
 
@@ -32,10 +35,11 @@ public class BundleProjectPropertyTester extends PropertyTester
     @Override
     public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
     {
-        boolean retval = property != null && property.equals( "isBundleProject" ) && receiver instanceof IProject &&
-            ( (IProject) receiver ).getName().startsWith( "sample.bundle" );
-
-        return retval;
+        return
+            property != null &&
+            property.equals( "isBundleProject" ) &&
+            receiver instanceof IProject &&
+            LiferayCore.create( IBundleProject.class, ( (IProject) receiver ) ) != null;
     }
 
 }

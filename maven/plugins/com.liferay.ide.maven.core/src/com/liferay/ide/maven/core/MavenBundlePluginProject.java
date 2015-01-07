@@ -16,6 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.server.core.portal.BundleModulePublisher;
 import com.liferay.ide.server.core.portal.ModulePublisher;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 

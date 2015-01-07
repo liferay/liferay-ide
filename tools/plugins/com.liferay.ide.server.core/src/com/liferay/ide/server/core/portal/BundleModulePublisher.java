@@ -12,12 +12,10 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.maven.core;
+package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.ModulePublisher;
-import com.liferay.ide.server.core.portal.PortalRuntime;
 
 import java.io.File;
 import java.util.ArrayList;

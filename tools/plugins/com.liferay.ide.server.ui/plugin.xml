@@ -132,9 +132,6 @@
                      value="com.liferay.ide.server.ui.navigator.BundlesFolder">
                </instanceof>
                <instanceof
-                     value="com.liferay.ide.server.ui.navigator.WorkspaceBundlesFolder">
-               </instanceof>
-               <instanceof
                      value="com.liferay.ide.server.core.portal.OsgiBundle">
                </instanceof>
             </or>
@@ -537,6 +534,24 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+M2+P">
        </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            id="com.liferay.ide.server.ui.bundleDecorator"
+            label="Bundle"
+            state="true">
+          <enablement>
+            <or>
+               <objectClass
+                     name="com.liferay.ide.server.ui.navigator.BundlesFolder">
+               </objectClass>
+               <objectClass
+                     name="com.liferay.ide.server.core.portal.OsgiBundle">
+               </objectClass>
+            </or>
+         </enablement>
+      </decorator>
    </extension>
    <!--
    <extension

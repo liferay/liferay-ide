@@ -15,7 +15,6 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -78,8 +77,7 @@ public class BundlePublishFullAdd implements PublishOp
     {
         IStatus retval = Status.OK_STATUS;
 
-        final ILiferayProject project = LiferayCore.create( module.getProject() );
-        final IBundleProject bundleProject = project.adapt( IBundleProject.class );
+        final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, module.getProject() );
 
         if( bundleProject != null )
         {

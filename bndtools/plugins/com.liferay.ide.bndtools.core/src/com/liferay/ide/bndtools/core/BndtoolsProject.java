@@ -18,12 +18,18 @@ import aQute.bnd.build.Project;
 
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.portal.BundleModulePublisher;
+import com.liferay.ide.server.core.portal.ModulePublisher;
+
+import java.io.File;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 
 
 /**
@@ -37,6 +43,26 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     {
         super( project );
         this.bndProject = bndProject;
+    }
+
+    @Override
+    public <T> T adapt( Class<T> adapterType )
+    {
+        T adapter = super.adapt( adapterType );
+
+        if( adapter != null )
+        {
+            return adapter;
+        }
+
+        T retval = null;
+
+        if( ModulePublisher.class.equals( adapterType ) )
+        {
+            return adapterType.cast( new BundleModulePublisher( this ) );
+        }
+
+        return retval;
     }
 
     @Override
@@ -63,8 +89,26 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     @Override
     public IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
-        // TODO Auto-generated method stub
-        return null;
+        IFile retval = null;
+
+        try
+        {
+            final File[] buildFiles = this.bndProject.getBuildFiles( buildIfNeeded );
+
+            if( !CoreUtil.isNullOrEmpty( buildFiles ) )
+            {
+                IPath projectLoc = this.getProject().getRawLocation();
+                IPath buildFile = new Path( buildFiles[0].getCanonicalPath() );
+
+                retval = this.getProject().getFile( buildFile.makeRelativeTo( projectLoc ) );
+            }
+        }
+        catch( Exception e )
+        {
+            BndtoolsCore.logError( "Unable to get output jar for " + this.getProject().getName(), e );
+        }
+
+        return retval;
     }
 
     @Override
