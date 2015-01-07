@@ -123,6 +123,12 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         return redeployModules;
     }
 
+    @Override
+    public String[] getRuntimeVMArguments()
+    {
+        return super.getRuntimeVMArguments();
+    }
+
     public IStatus moveContextToAutoDeployDir(
         IModule module, IPath deployDir, IPath baseDir, IPath autoDeployDir, boolean noPath, boolean serverStopped )
     {

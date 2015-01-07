@@ -19,7 +19,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
+import com.liferay.ide.server.tomcat.core.ILiferayTomcatServerWC;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.wst.server.core.IServer;
@@ -84,12 +86,85 @@ public class ServerCustomSettingTests extends ServerCoreBase
         IServer findServer = ServerCore.findServer( newServer.getId() );
 
         ILiferayTomcatServer portalServer =
-                        (ILiferayTomcatServer) findServer.loadAdapter( ILiferayTomcatServer.class, null );
+                        (ILiferayTomcatServer) findServer.loadAdapter( ILiferayTomcatServer.class, npm );
 
         final boolean useDefaultPortalServerSettings =
                         ( (LiferayTomcatServer) portalServer ).getUseDefaultPortalServerSettings();
 
         assertEquals( true, useDefaultPortalServerSettings );
+    }
+
+    @Test
+    public void testVMArgsWithDefaultUseDefaultPortalSettings() throws Exception
+    {
+        final NullProgressMonitor npm = new NullProgressMonitor();
+
+        if( runtime == null )
+        {
+            setupRuntime();
+        }
+
+        assertNotNull( runtime );
+
+        final IServerWorkingCopy serverWC = createServerForRuntime( "testvmargs", runtime );
+
+        final IServer newServer = serverWC.save( true, npm );
+
+        final LiferayTomcatServerBehavior behavior =
+            (LiferayTomcatServerBehavior) newServer.loadAdapter( LiferayTomcatServerBehavior.class, npm );
+
+        assertEquals( "-Xmx1024m", behavior.getRuntimeVMArguments()[6] );
+    }
+
+    @Test
+    public void testVMArgsWithCustomMemoryArgs() throws Exception
+    {
+        final NullProgressMonitor npm = new NullProgressMonitor();
+
+        if( runtime == null )
+        {
+            setupRuntime();
+        }
+
+        assertNotNull( runtime );
+
+        final IServerWorkingCopy serverWC = createServerForRuntime( "testvmargs", runtime );
+
+        ILiferayTomcatServerWC wc = (ILiferayTomcatServerWC) serverWC.loadAdapter( ILiferayTomcatServerWC.class, npm );
+        wc.setMemoryArgs( "-Xmx2048m" );
+
+        final IServer newServer = serverWC.save( true, npm );
+
+        final LiferayTomcatServerBehavior behavior =
+            (LiferayTomcatServerBehavior) newServer.loadAdapter( LiferayTomcatServerBehavior.class, npm );
+
+        assertEquals( "-Xmx2048m", behavior.getRuntimeVMArguments()[6] );
+    }
+
+    @Test
+    public void testVMArgsWithCustomMemoryArgsAndUseDefaultSetting() throws Exception
+    {
+        final NullProgressMonitor npm = new NullProgressMonitor();
+
+        if( runtime == null )
+        {
+            setupRuntime();
+        }
+
+        assertNotNull( runtime );
+
+        final IServerWorkingCopy serverWC = createServerForRuntime( "testvmargs", runtime );
+
+        LiferayTomcatServer wc = (LiferayTomcatServer) serverWC.loadAdapter( LiferayTomcatServer.class, npm );
+        wc.setMemoryArgs( "-Xmx2048m" );
+        wc.setUseDefaultPortalServerSettings( true );
+
+        final IServer newServer = serverWC.save( true, npm );
+
+        final LiferayTomcatServerBehavior behavior =
+            (LiferayTomcatServerBehavior) newServer.loadAdapter( LiferayTomcatServerBehavior.class, npm );
+
+        assertEquals( "-Xmx1024m", behavior.getRuntimeVMArguments()[6] );
     }
 
 }

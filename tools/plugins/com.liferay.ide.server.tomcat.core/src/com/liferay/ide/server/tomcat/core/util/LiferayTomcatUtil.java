@@ -27,7 +27,6 @@ import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime70;
-import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
@@ -111,8 +110,7 @@ public class LiferayTomcatUtil
             "/conf/logging.properties\"" ); //$NON-NLS-1$
         runtimeVMArgs.add( "-Djava.io.tmpdir=\"" + installPath.toOSString() + "/temp\"" ); //$NON-NLS-1$ //$NON-NLS-2$
 
-        final boolean useDefaultPortalServerSettings =
-            ( (LiferayTomcatServer) liferayTomcatServer ).getUseDefaultPortalServerSettings();
+        final boolean useDefaultPortalServerSettings = liferayTomcatServer.getUseDefaultPortalServerSettings();
 
         if ( useDefaultPortalServerSettings )
         {

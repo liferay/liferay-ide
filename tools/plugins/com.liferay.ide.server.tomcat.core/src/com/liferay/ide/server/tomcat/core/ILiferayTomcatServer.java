@@ -55,6 +55,8 @@ public interface ILiferayTomcatServer extends ILiferayServerWorkingCopy, ITomcat
 
     int getServerMode();
 
+    boolean getUseDefaultPortalServerSettings();
+
     String getUserTimezone();
 
 }
