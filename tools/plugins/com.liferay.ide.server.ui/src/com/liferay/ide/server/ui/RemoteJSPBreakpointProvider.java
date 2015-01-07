@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.ui;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.StringPool;
 
@@ -69,25 +69,32 @@ public class RemoteJSPBreakpointProvider extends JavaStratumBreakpointProvider {
 				String path = null;
                 // IDE-648 IDE-110
 				// get docroot relative path
-				final ILiferayProject lrproject = LiferayCore.create( res.getProject() );
-				final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
+				final IWebProject lrproject = LiferayCore.create( IWebProject.class, res.getProject() );
 
-				if (webappRoot != null && webappRoot.exists()) {
-                    IPath relativePath = res.getFullPath().makeRelativeTo(webappRoot.getFullPath());
+                if( lrproject != null )
+                {
+                    final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
-                    if( relativePath != null && relativePath.segmentCount() > 0 )
+                    if( webappRoot != null && webappRoot.exists() )
                     {
-                        path = "/" + relativePath.toPortableString(); //$NON-NLS-1$
-	                }
-				}
+                        IPath relativePath = res.getFullPath().makeRelativeTo( webappRoot.getFullPath() );
 
-				IBreakpoint point =
-					JDIDebugModel.createStratumBreakpoint(
-						res,
-						"JSP", res.getName(), path, getClassPattern(res), editorLineNumber, pos, pos, 0, true, null); //$NON-NLS-1$
-				if (point == null) {
-					status = new Status(IStatus.ERROR, JSPUIPlugin.ID, IStatus.ERROR, "unsupported input type", null); //$NON-NLS-1$
-				}
+                        if( relativePath != null && relativePath.segmentCount() > 0 )
+                        {
+                            path = "/" + relativePath.toPortableString(); //$NON-NLS-1$
+                        }
+                    }
+
+                    IBreakpoint point =
+                        JDIDebugModel.createStratumBreakpoint( res, "JSP", res.getName(), path,
+                            getClassPattern( res ), editorLineNumber, pos, pos, 0, true, null );
+                    if( point == null )
+                    {
+                        status =
+                            new Status(
+                                IStatus.ERROR, JSPUIPlugin.ID, IStatus.ERROR, "unsupported input type", null );
+                    }
+                }
 			}
 			else if (input instanceof IStorageEditorInput) {
 				// For non-resources, use the workspace root and a coordinated

@@ -19,6 +19,7 @@ import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.CustomJsp;
@@ -162,37 +163,43 @@ public class HookXmlEditor extends SapphireEditorForXml
             if( customJspDirElement != null && customJspDirElement.validation().ok() )
             {
                 Path customJspDir = customJspDirElement.getValue().content();
-                IFolder defaultDocroot = LiferayCore.create( getProject() ).getDefaultDocrootFolder();
-                IFolder customJspFolder = defaultDocroot.getFolder( customJspDir.toPortableString() );
+                final IWebProject webproject = LiferayCore.create( IWebProject.class, getProject() );
 
-                for( CustomJsp customJsp : customJsps )
+                if( webproject != null )
                 {
-                    String content = customJsp.getValue().content();
+                    IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+                    IFolder customJspFolder = defaultDocroot.getFolder( customJspDir.toPortableString() );
 
-                    if( !empty( content ) )
+                    for( CustomJsp customJsp : customJsps )
                     {
-                        IFile customJspFile = customJspFolder.getFile( content );
+                        String content = customJsp.getValue().content();
 
-                        if( !customJspFile.exists() )
+                        if( !empty( content ) )
                         {
-                            IPath portalJsp = portalDir.append( content );
+                            IFile customJspFile = customJspFolder.getFile( content );
 
-                            try
+                            if( !customJspFile.exists() )
                             {
-                                CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
+                                IPath portalJsp = portalDir.append( content );
 
-                                if( portalJsp.toFile().exists() )
+                                try
                                 {
-                                    customJspFile.create( new FileInputStream( portalJsp.toFile() ), true, null );
+                                    CoreUtil.makeFolders( (IFolder) customJspFile.getParent() );
+
+                                    if( portalJsp.toFile().exists() )
+                                    {
+                                        customJspFile.create(
+                                            new FileInputStream( portalJsp.toFile() ), true, null );
+                                    }
+                                    else
+                                    {
+                                        CoreUtil.createEmptyFile( customJspFile );
+                                    }
                                 }
-                                else
+                                catch( Exception e )
                                 {
-                                    CoreUtil.createEmptyFile( customJspFile );
+                                    HookUI.logError( e );
                                 }
-                            }
-                            catch( Exception e )
-                            {
-                                HookUI.logError( e );
                             }
                         }
                     }

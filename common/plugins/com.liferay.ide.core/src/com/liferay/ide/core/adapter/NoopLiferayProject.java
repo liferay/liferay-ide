@@ -17,9 +17,7 @@ package com.liferay.ide.core.adapter;
 import com.liferay.ide.core.BaseLiferayProject;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 
 
@@ -32,18 +30,6 @@ public class NoopLiferayProject extends BaseLiferayProject
     public NoopLiferayProject( IProject project )
     {
         super( project );
-    }
-
-    @Override
-    public IResource findDocrootResource( IPath path )
-    {
-        return null;
-    }
-
-    @Override
-    public IFolder getDefaultDocrootFolder()
-    {
-        return null;
     }
 
     @Override

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
@@ -164,7 +164,7 @@ public class PortletPluginFacetInstall extends PluginFacetInstall
                         if( fragmentModel.getBooleanProperty( IPluginWizardFragmentProperties.REMOVE_EXISTING_ARTIFACTS ) )
                         {
                             // IDE-110 IDE-648
-                            final ILiferayProject lrproject = LiferayCore.create( project );
+                            final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
                             final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
                             if( webappRoot != null && webappRoot.exists() )

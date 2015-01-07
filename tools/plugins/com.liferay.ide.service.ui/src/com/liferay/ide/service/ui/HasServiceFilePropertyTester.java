@@ -16,8 +16,8 @@
 package com.liferay.ide.service.ui;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IResource;
@@ -33,18 +33,17 @@ public class HasServiceFilePropertyTester extends PropertyTester
     {
         if( receiver instanceof IResource )
         {
-            IResource resource = (IResource) receiver;
+            final IResource resource = (IResource) receiver;
+            final IWebProject webproject = LiferayCore.create( IWebProject.class, resource.getProject() );
 
-            boolean isLiferayProject = CoreUtil.isLiferayProject( resource.getProject() );
-
-            if( isLiferayProject )
+            if( webproject != null )
             {
                 try
                 {
                     // IDE-110 IDE-648
                     final IResource serviceResource =
-                        LiferayCore.create( resource.getProject() ).findDocrootResource(
-                            new Path( "WEB-INF/" + ILiferayConstants.SERVICE_XML_FILE ) );
+                        webproject.findDocrootResource( new Path( "WEB-INF/" +
+                            ILiferayConstants.SERVICE_XML_FILE ) );
 
                     if( serviceResource != null && serviceResource.exists() )
                     {

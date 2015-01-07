@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -90,34 +91,37 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
             String pluginVersion = "1";
 
             final IPath pluginPropertiesPath = new Path( "WEB-INF/liferay-plugin-package.properties" );
-            final IResource propsRes =
-                LiferayCore.create( getProject() ).findDocrootResource( pluginPropertiesPath );
+            final IWebProject webproject = LiferayCore.create( IWebProject.class, getProject() );
 
-            if( propsRes instanceof IFile && propsRes.exists() )
+            if( webproject != null )
             {
-                try
+                final IResource propsRes = webproject.findDocrootResource( pluginPropertiesPath );
+
+                if( propsRes instanceof IFile && propsRes.exists() )
                 {
-                    final PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
-                    final InputStream is = ( (IFile) propsRes).getContents();
-                    pluginPackageProperties.load( is );
-                    pluginVersion = pluginPackageProperties.getString( "module-incremental-version" );
-                    is.close();
+                    try
+                    {
+                        final PropertiesConfiguration pluginPackageProperties = new PropertiesConfiguration();
+                        final InputStream is = ( (IFile) propsRes ).getContents();
+                        pluginPackageProperties.load( is );
+                        pluginVersion = pluginPackageProperties.getString( "module-incremental-version" );
+                        is.close();
+                    }
+                    catch( Exception e )
+                    {
+                        LiferayCore.logError( "error reading module-incremtnal-version. ", e );
+                    }
                 }
-                catch( Exception e )
+
+                warFile =
+                    sdk.getLocation().append( "dist" ).append(
+                        getProject().getName() + "-" + fileTimeStamp + "." + pluginVersion + ".0" + ".war" ).toFile();
+
+                if( !warFile.exists() )
                 {
-                    LiferayCore.logError( "error reading module-incremtnal-version. ", e );
+                    throw new CoreException( directDeployStatus );
                 }
             }
-
-            warFile =
-                sdk.getLocation().append( "dist" ).append(
-                    getProject().getName() + "-" + fileTimeStamp + "." + pluginVersion + ".0" + ".war" ).toFile();
-
-            if( !warFile.exists() )
-            {
-                throw new CoreException( directDeployStatus );
-            }
-
         }
 
         return new Path( warFile.getAbsolutePath() );

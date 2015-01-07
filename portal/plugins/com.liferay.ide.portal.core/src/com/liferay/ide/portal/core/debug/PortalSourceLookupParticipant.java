@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.portal.core.debug;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portal.core.debug.fm.FMDebugTarget;
@@ -132,24 +132,27 @@ public class PortalSourceLookupParticipant extends AbstractSourceLookupParticipa
 
                 IProject project = ServerUtil.findProjectByContextName( firstSegment );
 
-                ILiferayProject liferayProject = LiferayCore.create( project );
+                final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-                // first lets see if we can find
-
-                final String diffsPath = "_diffs/" +  resourcePath;
-                final IResource diffsResourceFile = liferayProject.findDocrootResource( new Path( diffsPath ) );
-
-                if( diffsResourceFile.exists() )
+                if( webproject != null )
                 {
-                    retval = diffsPath;
-                }
-                else
-                {
-                    final IResource resourceFile = liferayProject.findDocrootResource( new Path( resourcePath ) );
+                    // first lets see if we can find
 
-                    if( resourceFile.exists() )
+                    final String diffsPath = "_diffs/" + resourcePath;
+                    final IResource diffsResourceFile = webproject.findDocrootResource( new Path( diffsPath ) );
+
+                    if( diffsResourceFile.exists() )
                     {
-                        retval = resourcePath;
+                        retval = diffsPath;
+                    }
+                    else
+                    {
+                        final IResource resourceFile = webproject.findDocrootResource( new Path( resourcePath ) );
+
+                        if( resourceFile.exists() )
+                        {
+                            retval = resourcePath;
+                        }
                     }
                 }
             }

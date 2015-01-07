@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
@@ -128,7 +129,7 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
 
         final IProject webProject = createAntProject( op );
 
-        assertNotNull( LiferayCore.create( webProject ).getDefaultDocrootFolder() );
+        assertNotNull( LiferayCore.create( IWebProject.class, webProject ).getDefaultDocrootFolder() );
     }
 
 }

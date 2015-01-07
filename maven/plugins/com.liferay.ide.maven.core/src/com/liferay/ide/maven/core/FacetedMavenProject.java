@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.project.core.FlexibleProject;
 
 import java.util.Collection;
@@ -39,7 +40,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  * @author Cindy Li
  * @author Simon Jiang
  */
-public class FacetedMavenProject extends LiferayMavenProject
+public class FacetedMavenProject extends LiferayMavenProject implements IWebProject
 {
 
     private final FlexibleProject flexibleProject;

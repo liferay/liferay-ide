@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
 import com.liferay.ide.core.util.PropertiesUtil;
@@ -150,7 +151,8 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         final IProject hookProject = importProject( "hooks", "Hook-Encoding-Test-hook" );
         assertEquals( true, ProjectUtil.isHookProject( hookProject ) );
 
-        final IFolder defaultDocrootFolder = LiferayCore.create( hookProject ).getDefaultDocrootFolder();
+        final IFolder defaultDocrootFolder =
+            LiferayCore.create( IWebProject.class, hookProject ).getDefaultDocrootFolder();
         assertNotNull( defaultDocrootFolder );
         assertEquals( true, defaultDocrootFolder.exists() );
 
@@ -251,7 +253,8 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 
         assertEquals( true, ProjectUtil.isPortletProject( portletProject ) );
 
-        final IFolder defaultDocrootFolder = LiferayCore.create( portletProject ).getDefaultDocrootFolder();
+        final IFolder defaultDocrootFolder =
+            LiferayCore.create( IWebProject.class, portletProject ).getDefaultDocrootFolder();
         assertNotNull( defaultDocrootFolder );
         assertEquals( true, defaultDocrootFolder.exists() );
 

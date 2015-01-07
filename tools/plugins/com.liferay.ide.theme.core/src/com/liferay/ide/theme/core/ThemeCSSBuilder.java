@@ -18,6 +18,7 @@ package com.liferay.ide.theme.core;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -98,7 +99,12 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
     public static void ensureLookAndFeelFileExists( IProject project ) throws CoreException
     {
         // IDE-110 IDE-648
-        final ILiferayProject lrProject = LiferayCore.create( project );
+        final IWebProject lrProject = LiferayCore.create( IWebProject.class, project );
+
+        if( lrProject == null )
+        {
+            return;
+        }
 
         IFile lookAndFeelFile = null;
 
@@ -304,18 +310,23 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                         if( "_diffs".equals( segment ) ) //$NON-NLS-1$
                         {
                             // IDE-110 IDE-648
-                            IFolder webappRoot = LiferayCore.create( getProject() ).getDefaultDocrootFolder();
+                            final IWebProject webproject = LiferayCore.create( IWebProject.class, getProject() );
 
-                            if( webappRoot != null )
+                            if( webproject != null && webproject.getDefaultDocrootFolder() != null )
                             {
-                                IFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
+                                IFolder webappRoot = webproject.getDefaultDocrootFolder();
 
-                                if( diffs != null && diffs.exists() &&
-                                    diffs.getFullPath().isPrefixOf( fullResourcePath ) )
+                                if( webappRoot != null )
                                 {
-                                    applyDiffsDeltaToDocroot( delta, diffs.getParent(), monitor );
+                                    IFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
 
-                                    return false;
+                                    if( diffs != null && diffs.exists() &&
+                                        diffs.getFullPath().isPrefixOf( fullResourcePath ) )
+                                    {
+                                        applyDiffsDeltaToDocroot( delta, diffs.getParent(), monitor );
+
+                                        return false;
+                                    }
                                 }
                             }
                         }
@@ -349,26 +360,31 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
 
     protected boolean shouldFullBuild( Map args ) throws CoreException
     {
-        if( args != null && args.get( "force" ) != null && args.get( "force" ).equals( "true" ) ) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        if( args != null && args.get( "force" ) != null && args.get( "force" ).equals( "true" ) )
         {
             return true;
         }
 
         // check to see if there is any files in the _diffs folder
         // IDE-110 IDE-648
-        IFolder webappRoot = LiferayCore.create( getProject() ).getDefaultDocrootFolder();
+        final IWebProject lrproject = LiferayCore.create( IWebProject.class, getProject() );
 
-        if( webappRoot != null )
+        if( lrproject != null && lrproject.getDefaultDocrootFolder() != null )
         {
-            IFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) ); //$NON-NLS-1$
+            final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
-            if( diffs != null && diffs.exists() )
+            if( webappRoot != null )
             {
-                IResource[] diffMembers = diffs.members();
+                IFolder diffs = webappRoot.getFolder( new Path( "_diffs" ) );
 
-                if( !CoreUtil.isNullOrEmpty( diffMembers ) )
+                if( diffs != null && diffs.exists() )
                 {
-                    return true;
+                    IResource[] diffMembers = diffs.members();
+
+                    if( !CoreUtil.isNullOrEmpty( diffMembers ) )
+                    {
+                        return true;
+                    }
                 }
             }
         }

@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.util;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 
@@ -120,13 +120,18 @@ public class ComponentUtil
         {
             if( project.getName().equals( context ) )
             {
-                final ILiferayProject lrproject = LiferayCore.create( project );
-                final IResource resource =
-                    lrproject.findDocrootResource( new Path( "WEB-INF/lib/" + project.getName() + "-service.jar" ) );
+                final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
 
-                if( resource != null && resource.exists() )
+                if( lrproject != null )
                 {
-                    return (IFile) resource;
+                    final IResource resource =
+                        lrproject.findDocrootResource( new Path( "WEB-INF/lib/" + project.getName() +
+                            "-service.jar" ) );
+
+                    if( resource != null && resource.exists() )
+                    {
+                        return (IFile) resource;
+                    }
                 }
             }
         }

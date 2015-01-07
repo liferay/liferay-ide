@@ -16,6 +16,7 @@
 package com.liferay.ide.theme.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.AbstractPluginPublisher;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
@@ -81,20 +82,25 @@ public class ThemePluginPublisher extends AbstractPluginPublisher
 
         // check to make sure they have a look-and-feel.xml file
         // IDE-110 IDE-648
-        IFolder webappRoot = LiferayCore.create( project ).getDefaultDocrootFolder();
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-        if( webappRoot != null && webappRoot.exists())
+        if( webproject != null && webproject.getDefaultDocrootFolder() != null )
         {
-            if( !( webappRoot.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
-                !( webappRoot.exists( new Path( "css" ) ) ) ) //$NON-NLS-1$
+            IFolder webappRoot = webproject.getDefaultDocrootFolder();
+
+            if( webappRoot != null && webappRoot.exists() )
             {
-                ThemeCSSBuilder.compileTheme( project );
-                ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
+                if( !( webappRoot.exists( new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) ) ) ||
+                    !( webappRoot.exists( new Path( "css" ) ) ) )
+                {
+                    ThemeCSSBuilder.compileTheme( project );
+                    ( (ILiferayServerBehavior) delegate ).redeployModule( new IModule[] { module } );
+                }
             }
-        }
-        else
-        {
-            ThemeCore.logError( "Could not add theme module: webappRoot not found" ); //$NON-NLS-1$
+            else
+            {
+                ThemeCore.logError( "Could not add theme module: webappRoot not found" );
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -113,7 +114,7 @@ public class UpgradeLiferayProjectsAlloyUIOpTests extends ProjectCoreBase
 
         final UpgradeLiferayProjectsOp op = UpgradeLiferayProjectsOp.TYPE.instantiate();
 
-        final IFolder webappRoot = LiferayCore.create( project ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, project ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 

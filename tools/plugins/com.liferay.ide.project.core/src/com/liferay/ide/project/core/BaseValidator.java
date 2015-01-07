@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -246,16 +247,21 @@ public abstract class BaseValidator extends AbstractValidator
 
         if( resourceValue != null && resourceValue.length() > 0 )
         {
-            // IDE-110 IDE-648
-            final IResource resource =
-                LiferayCore.create( project ).findDocrootResource( new Path( resourceValue ) );
+            final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-            if( resource == null || ! resource.exists() )
+            if( webproject != null )
             {
-                String msg = MessageFormat.format( errorMessage, new Object[] { resourceValue } );
+                // IDE-110 IDE-648
+                final IResource resource = webproject.findDocrootResource( new Path( resourceValue ) );
 
-                return createMarkerValues(
-                    preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier, msg );
+                if( resource == null || !resource.exists() )
+                {
+                    String msg = MessageFormat.format( errorMessage, new Object[] { resourceValue } );
+
+                    return createMarkerValues(
+                        preferenceNodeQualifier, preferenceScopes, preferenceKey, (IDOMNode) resourceSpecifier,
+                        msg );
+                }
             }
         }
 

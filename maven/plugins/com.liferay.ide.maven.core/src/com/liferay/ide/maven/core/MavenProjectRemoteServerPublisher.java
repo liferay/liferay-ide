@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
@@ -125,11 +125,17 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
     {
         for( final IModuleResourceDelta delta : deltas )
         {
-            final int deltaKind = delta.getKind();
             final IResource deltaResource = (IResource) delta.getModuleResource().getAdapter( IResource.class );
             final IProject deltaProject = deltaResource.getProject();
-            final ILiferayProject lrproject = LiferayCore.create( deltaProject );
+            final IWebProject lrproject = LiferayCore.create( IWebProject.class, deltaProject );
+
+            if( lrproject == null || lrproject.getDefaultDocrootFolder() == null )
+            {
+                continue;
+            }
+
             final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
+            final int deltaKind = delta.getKind();
             final IPath deltaFullPath = deltaResource.getFullPath();
 
             boolean deltaZip = false;

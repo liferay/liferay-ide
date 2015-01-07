@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -45,7 +46,7 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PluginsSDKProject extends FlexibleProject
+public class PluginsSDKProject extends FlexibleProject implements IWebProject
 {
 
     private ILiferayRuntime liferayRuntime;

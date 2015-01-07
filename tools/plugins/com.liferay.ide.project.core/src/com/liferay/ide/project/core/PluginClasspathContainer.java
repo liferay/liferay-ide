@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -231,11 +232,12 @@ public abstract class PluginClasspathContainer implements IClasspathContainer
 
         if( serviceJar.exists() )
         {
-            IFolder defaultDocroot = LiferayCore.create( serviceJar.getProject() ).getDefaultDocrootFolder();
+            final IWebProject webproject = LiferayCore.create( IWebProject.class, serviceJar.getProject() );
 
             // IDE-110 IDE-648
-            if( defaultDocroot != null && defaultDocroot.exists() )
+            if( webproject != null && webproject.getDefaultDocrootFolder() != null )
             {
+                IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
                 IFolder serviceFolder = defaultDocroot.getFolder( new Path( "WEB-INF/service") ); //$NON-NLS-1$
 
                 if( serviceFolder.exists() )

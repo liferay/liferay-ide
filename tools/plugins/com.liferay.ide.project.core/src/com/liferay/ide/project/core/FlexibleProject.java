@@ -15,7 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
-import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.IWebProject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 /**
  * @author Gregory Amerson
  */
-public abstract class FlexibleProject extends BaseLiferayProject
+public abstract class FlexibleProject extends BaseLiferayProject implements IWebProject
 {
 
     private static IFolder getDefaultDocroot( IProject project )
@@ -93,16 +93,21 @@ public abstract class FlexibleProject extends BaseLiferayProject
     {
         IFile retval = null;
 
-        final IVirtualResource virtualResource = getVirtualDocroot( getProject() ).findMember( path );
+        final IVirtualFolder docroot = getVirtualDocroot( getProject() );
 
-        if( virtualResource != null && virtualResource.exists() )
+        if( docroot != null )
         {
-            for( IResource r : virtualResource.getUnderlyingResources() )
+            final IVirtualResource virtualResource = docroot.findMember( path );
+
+            if( virtualResource != null && virtualResource.exists() )
             {
-                if( r.exists() && r instanceof IFile )
+                for( IResource r : virtualResource.getUnderlyingResources() )
                 {
-                    retval = (IFile) r;
-                    break;
+                    if( r.exists() && r instanceof IFile )
+                    {
+                        retval = (IFile) r;
+                        break;
+                    }
                 }
             }
         }
@@ -126,7 +131,7 @@ public abstract class FlexibleProject extends BaseLiferayProject
 //            project = CoreUtil.getLiferayProject( project );
 //        }
 
-        final IFolder defaultDocrootFolder = LiferayCore.create( getProject() ).getDefaultDocrootFolder();
+        final IFolder defaultDocrootFolder = getDefaultDocrootFolder();
 
         if( defaultDocrootFolder != null && defaultDocrootFolder.exists() )
         {

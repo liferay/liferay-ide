@@ -17,6 +17,7 @@
 
 package com.liferay.ide.layouttpl.core.operation;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -50,9 +51,15 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
     private boolean checkDocrootFileExists( final IPath path )
     {
-        IFolder defaultDocroot = LiferayCore.create( getTargetProject() ).getDefaultDocrootFolder();
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, getTargetProject() );
 
-        return defaultDocroot != null && defaultDocroot.exists();
+        if( webproject != null )
+        {
+            final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+            return defaultDocroot != null && defaultDocroot.exists();
+        }
+
+        return false;
     }
 
     @Override

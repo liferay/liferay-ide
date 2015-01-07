@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.model.CustomJspDir;
 import com.liferay.ide.hook.core.model.Hook;
@@ -63,14 +63,19 @@ public class CustomJspsEnablementService extends EnablementService
 
             if( project != null && customJspDirPath != null )
             {
-                final ILiferayProject lrproject = LiferayCore.create( project );
-                final IFolder defaultWebappDir = lrproject.getDefaultDocrootFolder();
+                final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
 
-                if( defaultWebappDir != null && defaultWebappDir.exists() )
+                if( lrproject != null )
                 {
-                    final IFolder customJspFolder = defaultWebappDir.getFolder( PathBridge.create( customJspDirPath ) );
+                    final IFolder defaultWebappDir = lrproject.getDefaultDocrootFolder();
 
-                    enablement = customJspFolder.exists();
+                    if( defaultWebappDir != null && defaultWebappDir.exists() )
+                    {
+                        final IFolder customJspFolder =
+                            defaultWebappDir.getFolder( PathBridge.create( customJspDirPath ) );
+
+                        enablement = customJspFolder.exists();
+                    }
                 }
             }
         }

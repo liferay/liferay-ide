@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -289,21 +290,29 @@ public class NewLiferayPluginProjectOpMethods
                 // delete sample files: view.jsp, main.css, main.js
                 try
                 {
-                    final IFolder docroot = LiferayCore.create( project ).getDefaultDocrootFolder();
+                    final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-                    IFile[] sampleFiles = { docroot.getFile( "view.jsp" ),
-                                            docroot.getFile( "css/main.css" ),
-                                            docroot.getFile( "js/main.js" ) };
-
-                    for( IFile file : sampleFiles )
+                    if( webproject != null )
                     {
-                        if( file != null && file.exists() )
-                        {
-                            file.delete( true, new NullProgressMonitor() );
+                        final IFolder docroot = webproject.getDefaultDocrootFolder();
 
-                            if( file.getParent().members().length == 0 )
+                        final IFile[] sampleFiles =
+                        {
+                            docroot.getFile( "view.jsp" ),
+                            docroot.getFile( "css/main.css" ),
+                            docroot.getFile( "js/main.js" )
+                        };
+
+                        for( IFile file : sampleFiles )
+                        {
+                            if( file != null && file.exists() )
                             {
-                                CoreUtil.deleteResource( file.getParent() );
+                                file.delete( true, new NullProgressMonitor() );
+
+                                if( file.getParent().members().length == 0 )
+                                {
+                                    CoreUtil.deleteResource( file.getParent() );
+                                }
                             }
                         }
                     }

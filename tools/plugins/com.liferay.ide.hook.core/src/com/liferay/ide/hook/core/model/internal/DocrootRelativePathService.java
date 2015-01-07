@@ -18,7 +18,7 @@
 
 package com.liferay.ide.hook.core.model.internal;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.hook.core.model.Hook;
 
@@ -48,12 +48,16 @@ public class DocrootRelativePathService extends RelativePathService
             final IProject project = hook.adapt( IProject.class );
 
             // IDE-110
-            final ILiferayProject lrproject = LiferayCore.create( project );
-            final IFolder defaultDocroot = lrproject.getDefaultDocrootFolder();
+            final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
 
-            if( defaultDocroot != null && defaultDocroot.exists() )
+            if( lrproject != null )
             {
-                roots.add( new Path( defaultDocroot.getLocation().toPortableString() ) );
+                final IFolder defaultDocroot = lrproject.getDefaultDocrootFolder();
+
+                if( defaultDocroot != null && defaultDocroot.exists() )
+                {
+                    roots.add( new Path( defaultDocroot.getLocation().toPortableString() ) );
+                }
             }
         }
 

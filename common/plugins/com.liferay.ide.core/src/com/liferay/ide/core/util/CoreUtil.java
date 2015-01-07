@@ -16,6 +16,7 @@
 package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.adapter.NoopLiferayProject;
 
@@ -242,11 +243,11 @@ public class CoreUtil
     {
         IFolder retval = null;
 
-        final ILiferayProject liferayProject = LiferayCore.create( project );
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-        if( liferayProject != null )
+        if( webproject != null )
         {
-            retval = liferayProject.getDefaultDocrootFolder();
+            retval = webproject.getDefaultDocrootFolder();
         }
 
         return retval;

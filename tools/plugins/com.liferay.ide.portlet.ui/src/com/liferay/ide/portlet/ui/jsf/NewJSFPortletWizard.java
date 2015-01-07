@@ -15,6 +15,7 @@
 
 package com.liferay.ide.portlet.ui.jsf;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.portlet.core.jsf.INewJSFPortletClassDataModelProperties;
 import com.liferay.ide.portlet.core.jsf.NewJSFPortletClassDataModelProvider;
@@ -133,12 +134,13 @@ public class NewJSFPortletWizard extends NewPortletWizard implements INewJSFPort
                 final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
 
                 // IDE-110 IDE-648
-                final IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
+                final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-                if( defaultDocroot != null )
+                if( webproject != null && webproject.getDefaultDocrootFolder() != null )
                 {
+                    final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
                     final Path path = new Path( jspsFolder + "/view.xhtml" ); //$NON-NLS-1$
-                    IFile viewFile = defaultDocroot.getFile( path );
+                    final IFile viewFile = defaultDocroot.getFile( path );
 
                     if( viewFile.exists() )
                     {

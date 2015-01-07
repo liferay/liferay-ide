@@ -16,7 +16,7 @@
 package com.liferay.ide.hook.core.dd;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
@@ -224,56 +224,59 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
     public IStatus doSetCustomJSPDir( IDOMDocument document, IDataModel model )
     {
         // <hook> element
-        Element rootElement = document.getDocumentElement();
+        final Element rootElement = document.getDocumentElement();
+        final String customJSPsFolder = model.getStringProperty( CUSTOM_JSPS_FOLDER );
+        final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
 
-        final ILiferayProject lrproject = LiferayCore.create( project );
-        final IPath defaultWebappRootFolderFullPath = lrproject.getDefaultDocrootFolder().getFullPath();
-
-        String customJSPsFolder = model.getStringProperty( CUSTOM_JSPS_FOLDER );
-
-        String relativeJspFolderPath =
-            ProjectUtil.getRelativePathFromDocroot(
-                this.project, defaultWebappRootFolderFullPath.append( customJSPsFolder ).toPortableString() );
-
-        Element customJspElement = null;
-
-        // check for existing element
-        NodeList nodeList = rootElement.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
-
-        if( nodeList != null && nodeList.getLength() > 0 )
+        if( lrproject != null )
         {
-            customJspElement = (Element) nodeList.item( 0 );
+            final IPath defaultWebappRootFolderFullPath = lrproject.getDefaultDocrootFolder().getFullPath();
 
-            NodeUtil.removeChildren( customJspElement );
+            String relativeJspFolderPath =
+                ProjectUtil.getRelativePathFromDocroot(
+                    lrproject, defaultWebappRootFolderFullPath.append( customJSPsFolder ).toPortableString() );
 
-            Node textNode = document.createTextNode( relativeJspFolderPath );
+            Element customJspElement = null;
 
-            customJspElement.appendChild( textNode );
-        }
-        else
-        {
-            // need to insert customJspElement before any <service>
-            NodeList serviceTags = rootElement.getElementsByTagName( "service" ); //$NON-NLS-1$
+            // check for existing element
+            NodeList nodeList = rootElement.getElementsByTagName( "custom-jsp-dir" ); //$NON-NLS-1$
 
-            if( serviceTags != null && serviceTags.getLength() > 0 )
+            if( nodeList != null && nodeList.getLength() > 0 )
             {
-                customJspElement =
-                    NodeUtil.insertChildElement(
-                        rootElement, serviceTags.item( 0 ), "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
+                customJspElement = (Element) nodeList.item( 0 );
+
+                NodeUtil.removeChildren( customJspElement );
+
+                Node textNode = document.createTextNode( relativeJspFolderPath );
+
+                customJspElement.appendChild( textNode );
             }
             else
             {
-                customJspElement = NodeUtil.appendChildElement( rootElement, "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
+                // need to insert customJspElement before any <service>
+                NodeList serviceTags = rootElement.getElementsByTagName( "service" ); //$NON-NLS-1$
 
-                // append a newline text node
-                rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+                if( serviceTags != null && serviceTags.getLength() > 0 )
+                {
+                    customJspElement =
+                        NodeUtil.insertChildElement(
+                            rootElement, serviceTags.item( 0 ), "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
+                }
+                else
+                {
+                    customJspElement =
+                        NodeUtil.appendChildElement( rootElement, "custom-jsp-dir", relativeJspFolderPath ); //$NON-NLS-1$
+
+                    // append a newline text node
+                    rootElement.appendChild( document.createTextNode( System.getProperty( "line.separator" ) ) ); //$NON-NLS-1$
+                }
             }
+
+            // format the new node added to the model;
+            FormatProcessorXML processor = new FormatProcessorXML();
+
+            processor.formatNode( customJspElement );
         }
-
-        // format the new node added to the model;
-        FormatProcessorXML processor = new FormatProcessorXML();
-
-        processor.formatNode( customJspElement );
 
         return Status.OK_STATUS;
     }
@@ -319,7 +322,12 @@ public class HookDescriptorHelper extends LiferayDescriptorHelper implements INe
 
         final IFile descriptorFile = getDescriptorFile();
 
-        DOMModelOperation operation = new DOMModelReadOperation( descriptorFile )
+        if( descriptorFile == null || !descriptorFile.exists() )
+        {
+            return null;
+        }
+
+        final DOMModelOperation operation = new DOMModelReadOperation( descriptorFile )
         {
             protected IStatus doExecute( IDOMDocument document )
             {

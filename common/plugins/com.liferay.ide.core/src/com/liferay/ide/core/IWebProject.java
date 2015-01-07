@@ -14,27 +14,20 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+
 
 
 /**
  * @author Gregory Amerson
  */
-public interface ILiferayProject
+public interface IWebProject extends ILiferayProject
 {
 
-    <T> T adapt( Class<T> adapterType );
+    IResource findDocrootResource( IPath path );
 
-    IFile getDescriptorFile( String name );
-
-    IPath getLibraryPath( String filename );
-
-    String getProperty( String key, String defaultValue );
-
-    IFolder getSourceFolder( String classification );
-
-    IFolder[] getSourceFolders();
+    IFolder getDefaultDocrootFolder();
 
 }

@@ -18,6 +18,7 @@ package com.liferay.ide.service.core.operation;
 import static com.liferay.ide.core.util.CoreUtil.empty;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.service.core.AddServiceBuilderOperation;
@@ -443,16 +444,16 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
     protected IFile getServiceFile()
     {
         String serviceFileProperty = getStringProperty( SERVICE_FILE );
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, getTargetProject() );
 
-        if( CoreUtil.isNullOrEmpty( serviceFileProperty ) )
+        if( CoreUtil.isNullOrEmpty( serviceFileProperty ) || webproject == null )
         {
             return null;
         }
 
         // IDE-110 IDE-648
         final IResource serviceXmlResource =
-            LiferayCore.create( getTargetProject() ).findDocrootResource(
-                new Path( "WEB-INF/" + serviceFileProperty ) );
+            webproject.findDocrootResource( new Path( "WEB-INF/" + serviceFileProperty ) );
 
         if( serviceXmlResource != null && serviceXmlResource.exists() && serviceXmlResource instanceof IFile )
         {
@@ -491,8 +492,6 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
         public static String namespaceNotEmpty;
         public static String packagePathNotEmpty;
         public static String projectContainsServiceXmlFile;
-        public static String serviceFileHaveXmlFileExtension;
-        public static String serviceFileSpecified;
         public static String specifyOneItem;
 
         static

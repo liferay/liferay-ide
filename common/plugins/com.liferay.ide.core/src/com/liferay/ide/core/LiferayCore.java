@@ -48,6 +48,22 @@ public class LiferayCore extends Plugin
 
     private static LiferayProjectProviderReader providerReader;
 
+    public static <T> T create( Class<T> type, Object adaptable )
+    {
+        T retval = null;
+
+        if( type != null )
+        {
+            final ILiferayProject lrproject = create( adaptable );
+
+            if( lrproject != null && type.isAssignableFrom( lrproject.getClass() ) )
+            {
+                retval = type.cast( lrproject );
+            }
+        }
+
+        return retval;
+    }
 
     public static ILiferayProject create( Object adaptable )
     {

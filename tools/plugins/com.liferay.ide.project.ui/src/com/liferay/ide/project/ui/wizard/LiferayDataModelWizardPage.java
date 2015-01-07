@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.wizard;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.LiferayUIPlugin;
@@ -302,35 +303,42 @@ public abstract class LiferayDataModelWizardPage extends DataModelWizardPage
         dialog.setMessage( message );
         dialog.addFilter( filter );
 
-        // IDE-110
-        final IFolder defaultDocroot =
+        final IWebProject lrproject =
             LiferayCore.create(
+                IWebProject.class,
                 CoreUtil.getProject( getDataModel().getStringProperty(
-                    IArtifactEditOperationDataModelProperties.PROJECT_NAME ) ) ).getDefaultDocrootFolder();
+                    IArtifactEditOperationDataModelProperties.PROJECT_NAME ) ) );
 
-        if( defaultDocroot != null )
+        // IDE-110
+        if( lrproject != null )
         {
-            dialog.setInput( defaultDocroot );
+            final IFolder defaultDocroot = lrproject.getDefaultDocrootFolder();
 
-            if( dialog.open() == Window.OK )
+            if( defaultDocroot != null )
             {
-                Object element = dialog.getFirstResult();
+                dialog.setInput( defaultDocroot );
 
-                try
+                if( dialog.open() == Window.OK )
                 {
-                    if( element instanceof IFile )
+                    Object element = dialog.getFirstResult();
+
+                    try
                     {
-                        IFile file = (IFile) element;
+                        if( element instanceof IFile )
+                        {
+                            IFile file = (IFile) element;
 
-                        final IPath relativePath = file.getFullPath().makeRelativeTo( defaultDocroot.getFullPath() );
+                            final IPath relativePath =
+                                file.getFullPath().makeRelativeTo( defaultDocroot.getFullPath() );
 
-                        text.setText( "/" + relativePath.toPortableString() ); //$NON-NLS-1$
-                        // dealWithSelectedContainerResource(container);
+                            text.setText( "/" + relativePath.toPortableString() ); //$NON-NLS-1$
+                            // dealWithSelectedContainerResource(container);
+                        }
                     }
-                }
-                catch( Exception ex )
-                {
-                    // Do nothing
+                    catch( Exception ex )
+                    {
+                        // Do nothing
+                    }
                 }
             }
         }

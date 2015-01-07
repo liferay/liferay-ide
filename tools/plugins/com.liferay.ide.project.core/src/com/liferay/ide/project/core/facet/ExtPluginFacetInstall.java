@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -166,15 +166,17 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
     private void removeUnneededFolders( IProject project ) throws CoreException
     {
-        final ILiferayProject lrproject = LiferayCore.create( project );
-        final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-        deleteFolder( webappRoot.getFolder( "WEB-INF/lib" ) ); //$NON-NLS-1$
+        if( webproject != null && webproject.getDefaultDocrootFolder() != null )
+        {
+            final IFolder webappRoot = webproject.getDefaultDocrootFolder();
+            deleteFolder( webappRoot.getFolder( "WEB-INF/lib" ) ); //$NON-NLS-1$
+        }
     }
 
     protected void deleteFolder( IFolder folder ) throws CoreException
     {
-
         if( folder != null && folder.exists() )
         {
             folder.delete( true, null );
@@ -183,7 +185,8 @@ public class ExtPluginFacetInstall extends PluginFacetInstall
 
     protected void fixTilesDefExtFile()
     {
-        IFolder webappRoot = LiferayCore.create( this.project ).getDefaultDocrootFolder();
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, this.project );
+        final IFolder webappRoot = webproject.getDefaultDocrootFolder();
 
         IFile tilesDefExtFile = webappRoot.getFile( "WEB-INF/ext-web/docroot/WEB-INF/tiles-defs-ext.xml" ); //$NON-NLS-1$
 

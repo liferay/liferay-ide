@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -43,7 +44,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
         op.setPortletName( customPortletName );
         final IProject jsfProject = createAntProject( op );
 
-        final IFolder webappRoot = LiferayCore.create( jsfProject ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, jsfProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
@@ -64,7 +65,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 
         final IProject mvcProject = createAntProject( op );
 
-        assertNotNull( LiferayCore.create( mvcProject ).getDefaultDocrootFolder() );
+        assertNotNull( LiferayCore.create( IWebProject.class, mvcProject ).getDefaultDocrootFolder() );
 
         return mvcProject;
     }
@@ -80,7 +81,8 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 
         IProject jsfProject = createNewJSFPortletProjectCustomPortletName(jsfSuite,suffix,customPortletName);
 
-        final IFolder defaultDocroot = LiferayCore.create( jsfProject ).getDefaultDocrootFolder();
+        final IFolder defaultDocroot =
+            LiferayCore.create( IWebProject.class, jsfProject ).getDefaultDocrootFolder();
 
         final IFile portletXml = defaultDocroot.getFile( "WEB-INF/portlet.xml" );
 
@@ -116,7 +118,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 
         IProject jsfProject = createNewMVCPortletProjectCustomPortletName(customPortletName);
 
-        final IFolder docroot = LiferayCore.create( jsfProject ).getDefaultDocrootFolder();
+        final IFolder docroot = LiferayCore.create( IWebProject.class, jsfProject ).getDefaultDocrootFolder();
 
         final IFile portletXml = docroot.getFile( "WEB-INF/portlet.xml" );
 

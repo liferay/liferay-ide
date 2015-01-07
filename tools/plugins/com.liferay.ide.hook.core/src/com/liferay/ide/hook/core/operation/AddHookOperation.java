@@ -18,6 +18,7 @@ package com.liferay.ide.hook.core.operation;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.CoreUtil;
@@ -115,12 +116,14 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
     protected IStatus checkDescriptorFile( IProject project )
     {
-        final IFolder webappRoot = LiferayCore.create( project ).getDefaultDocrootFolder();
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-        if( webappRoot == null )
+        if( webproject == null || webproject.getDefaultDocrootFolder() == null )
         {
             return HookCore.createErrorStatus( "Could not find webapp root folder." ); //$NON-NLS-1$
         }
+
+        final IFolder webappRoot = webproject.getDefaultDocrootFolder();
 
         // IDE-648 IDE-110
         final Path path = new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_HOOK_XML_FILE ); //$NON-NLS-1$
@@ -177,7 +180,7 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
     {
         IProject project = getTargetProject();
 
-        IFolder defaultWebappRootFolder = LiferayCore.create( project ).getDefaultDocrootFolder();
+        IFolder defaultWebappRootFolder = LiferayCore.create( IWebProject.class, project ).getDefaultDocrootFolder();
 
         String customJSPsFolder = dm.getStringProperty( CUSTOM_JSPS_FOLDER );
 

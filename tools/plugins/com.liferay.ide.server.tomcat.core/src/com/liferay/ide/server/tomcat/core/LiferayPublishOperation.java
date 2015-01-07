@@ -10,7 +10,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.tomcat.core;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ComponentUtil;
@@ -316,18 +316,22 @@ public class LiferayPublishOperation extends PublishOperation {
 	private IModuleResource getWebXmlFile( IProject project, IPath modelDeployDirectory )
 	{
 	    // IDE-110 IDE-648
-	    final ILiferayProject lrproject = LiferayCore.create( project );
-	    final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
+	    final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
 
-		if( webappRoot != null && webappRoot.exists() )
-		{
-            IFile webXml = webappRoot.getFile( new Path( WEB_XML_PATH ) );
+        if( lrproject != null )
+        {
+            final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
-            if ( webXml.exists() )
+            if( webappRoot != null && webappRoot.exists() )
             {
-                return new ModuleFile( webXml, webXml.getName(), modelDeployDirectory.append( WEB_XML_PATH ) );
+                IFile webXml = webappRoot.getFile( new Path( WEB_XML_PATH ) );
+
+                if( webXml.exists() )
+                {
+                    return new ModuleFile( webXml, webXml.getName(), modelDeployDirectory.append( WEB_XML_PATH ) );
+                }
             }
-		}
+        }
 
 		return null;
 	}

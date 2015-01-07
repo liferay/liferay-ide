@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
@@ -320,10 +321,11 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             if ( customJSPFolder != null )
             {
-                final IFolder docFolder = LiferayCore.create( project ).getDefaultDocrootFolder();
+                final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-                if ( docFolder != null )
+                if ( webproject != null && webproject.getDefaultDocrootFolder() != null)
                 {
+                    final IFolder docFolder = webproject.getDefaultDocrootFolder();
                     final IPath newPath = Path.fromOSString( customJSPFolder );
                     final IPath pathValue = docFolder.getFullPath().append( newPath );
 

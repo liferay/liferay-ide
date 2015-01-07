@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.remote;
 
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -159,35 +159,40 @@ public abstract class AbstractRemoteServerPublisher implements IRemoteServerPubl
             final IProject deltaProject = deltaResource.getProject();
 
             // IDE-110 IDE-648
-            final ILiferayProject lrproject = LiferayCore.create( deltaProject );
-            final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
+            final IWebProject lrproject = LiferayCore.create( IWebProject.class, deltaProject );
 
-            IPath deltaPath = null;
-
-            if( webappRoot != null && webappRoot.exists())
+            if( lrproject != null )
             {
-                final IPath deltaFullPath = deltaResource.getFullPath();
-                final IPath containerFullPath = webappRoot.getFullPath();
-                deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
+                final IFolder webappRoot = lrproject.getDefaultDocrootFolder();
 
-                if( deltaPath != null && deltaPath.segmentCount() > 0 )
+                IPath deltaPath = null;
+
+                if( webappRoot != null && webappRoot.exists() )
                 {
-                    break;
-                }
-            }
+                    final IPath deltaFullPath = deltaResource.getFullPath();
+                    final IPath containerFullPath = webappRoot.getFullPath();
+                    deltaPath = new Path( deltaPrefix + deltaFullPath.makeRelativeTo( containerFullPath ) );
 
-            if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
-            {
-                addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
-            }
-            else if( deltaKind == IModuleResourceDelta.REMOVED )
-            {
-                addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
-            }
-            else if( deltaKind == IModuleResourceDelta.NO_CHANGE )
-            {
-                IModuleResourceDelta[] children = delta.getAffectedChildren();
-                processResourceDeltas( children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
+                    if( deltaPath != null && deltaPath.segmentCount() > 0 )
+                    {
+                        break;
+                    }
+                }
+
+                if( deltaKind == IModuleResourceDelta.ADDED || deltaKind == IModuleResourceDelta.CHANGED )
+                {
+                    addToZip( deltaPath, deltaResource, zip, adjustGMTOffset );
+                }
+                else if( deltaKind == IModuleResourceDelta.REMOVED )
+                {
+                    addRemoveProps( deltaPath, deltaResource, zip, deleteEntries, deletePrefix );
+                }
+                else if( deltaKind == IModuleResourceDelta.NO_CHANGE )
+                {
+                    IModuleResourceDelta[] children = delta.getAffectedChildren();
+                    processResourceDeltas(
+                        children, zip, deleteEntries, deletePrefix, deltaPrefix, adjustGMTOffset );
+                }
             }
         }
     }

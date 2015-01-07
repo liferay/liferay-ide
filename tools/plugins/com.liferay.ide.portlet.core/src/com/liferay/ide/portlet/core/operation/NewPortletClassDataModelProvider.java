@@ -18,6 +18,7 @@ package com.liferay.ide.portlet.core.operation;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -1040,19 +1041,24 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
 
             if( ( !CoreUtil.isNullOrEmpty( folderValue ) ) && targetProject != null )
             {
-                IFolder defaultDocroot = LiferayCore.create( targetProject ).getDefaultDocrootFolder();
-                String errorMsg = FileUtil.validateNewFolder( defaultDocroot, folderValue );
+                final IWebProject webproject = LiferayCore.create( IWebProject.class, targetProject );
 
-                if( errorMsg != null )
+                if( webproject != null )
                 {
-                    return PortletCore.createErrorStatus( errorMsg );
-                }
+                    IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+                    String errorMsg = FileUtil.validateNewFolder( defaultDocroot, folderValue );
 
-                // make sure path first segment isn't the same as the portlet name
-                String path = new Path( folderValue ).segment( 0 );
-                if( !CoreUtil.isNullOrEmpty( path ) && path.equals( getStringProperty( PORTLET_NAME ) ) )
-                {
-                    return PortletCore.createErrorStatus( Msgs.jspFolderNotMatchPortletName );
+                    if( errorMsg != null )
+                    {
+                        return PortletCore.createErrorStatus( errorMsg );
+                    }
+
+                    // make sure path first segment isn't the same as the portlet name
+                    String path = new Path( folderValue ).segment( 0 );
+                    if( !CoreUtil.isNullOrEmpty( path ) && path.equals( getStringProperty( PORTLET_NAME ) ) )
+                    {
+                        return PortletCore.createErrorStatus( Msgs.jspFolderNotMatchPortletName );
+                    }
                 }
             }
         }

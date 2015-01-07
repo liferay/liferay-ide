@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
@@ -357,7 +358,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
 
         IProject project = createServicePluginTypeAntProject( "service-builder");
 
-        final IFolder webappRoot = LiferayCore.create( project ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, project ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 

@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -82,7 +83,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     {
         final String themeParent = op.getThemeParent().content();
         final String themeFramework = op.getThemeFramework().content();
-        final IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
+        final IFolder defaultDocroot = LiferayCore.create( IWebProject.class, project ).getDefaultDocrootFolder();
         final IFile readme = defaultDocroot.getFile( "WEB-INF/src/resources-importer/readme.txt" );
 
         assertEquals( true, readme.exists() );
@@ -114,7 +115,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject jsfProject = createAntProject( op );
 
-        final IFolder defaultDocroot = LiferayCore.create( jsfProject ).getDefaultDocrootFolder();
+        final IFolder defaultDocroot =
+            LiferayCore.create( IWebProject.class, jsfProject ).getDefaultDocrootFolder();
 
         assertNotNull( defaultDocroot );
 
@@ -139,7 +141,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     {
         final IProject themeProject = createAntProject( op );
 
-        final IFolder defaultDocroot = LiferayCore.create( themeProject ).getDefaultDocrootFolder();
+        final IFolder defaultDocroot =
+            LiferayCore.create( IWebProject.class, themeProject ).getDefaultDocrootFolder();
 
         assertNotNull( defaultDocroot );
 
@@ -250,7 +253,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject extProject = createAntProject( op );
 
-        final IFolder defaultDocroot = LiferayCore.create( extProject ).getDefaultDocrootFolder();
+        final IFolder defaultDocroot =
+            LiferayCore.create( IWebProject.class, extProject ).getDefaultDocrootFolder();
 
         assertNotNull( defaultDocroot );
 
@@ -269,7 +273,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject hookProject = createAntProject( op );
 
-        final IFolder webappRoot = LiferayCore.create( hookProject ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, hookProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
@@ -315,7 +319,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject layouttplProject = createAntProject( op );
 
-        final IFolder webappRoot = LiferayCore.create( layouttplProject ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, layouttplProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
@@ -334,7 +338,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject portletProject = createAntProject( op );
 
-        final IFolder webappRoot = LiferayCore.create( portletProject ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, portletProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
@@ -471,7 +475,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         final IProject portletProject = createAntProject( op );
 
-        final IFolder webappRoot = LiferayCore.create( portletProject ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, portletProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 
@@ -503,7 +507,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         IProject vaadinProject = createAntProject( op );
 
-        final IFolder webappRoot = LiferayCore.create( vaadinProject ).getDefaultDocrootFolder();
+        final IFolder webappRoot = LiferayCore.create( IWebProject.class, vaadinProject ).getDefaultDocrootFolder();
 
         assertNotNull( webappRoot );
 

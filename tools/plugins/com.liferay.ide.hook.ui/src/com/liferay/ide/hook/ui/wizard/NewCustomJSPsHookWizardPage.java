@@ -17,6 +17,7 @@ package com.liferay.ide.hook.ui.wizard;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.operation.INewHookDataModelProperties;
@@ -245,9 +246,9 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
                 {
                     IFolder folder = (IFolder) element;
 
-                    IFolder docrootFolder = LiferayCore.create( folder.getProject() ).getDefaultDocrootFolder();
+                    final IWebProject webproject = LiferayCore.create( IWebProject.class, folder.getProject() );
 
-                    if( docrootFolder.contains( folder ) )
+                    if( webproject != null && webproject.getDefaultDocrootFolder().contains( folder ) )
                     {
                         return true;
                     }
@@ -295,24 +296,31 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
                     IProject project = CoreUtil.getProject( getDataModel().getStringProperty( PROJECT_NAME ) );
 
-                    IFolder defaultWebappRootFolder = LiferayCore.create( project ).getDefaultDocrootFolder();
+                    final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-                    if( folder.equals( defaultWebappRootFolder ) )
+                    if( webproject != null )
                     {
-                        folder = folder.getFolder( "custom_jsps" ); //$NON-NLS-1$
+                        IFolder defaultWebappRootFolder = webproject.getDefaultDocrootFolder();
+
+                        if( folder.equals( defaultWebappRootFolder ) )
+                        {
+                            folder = folder.getFolder( "custom_jsps" );
+                        }
+
+                        String defaultWebappRootFolderFullPath =
+                            defaultWebappRootFolder.getFullPath().toPortableString();
+                        String folderFullPath = folder.getFullPath().toPortableString();
+
+                        int index = folderFullPath.indexOf( defaultWebappRootFolderFullPath );
+
+                        if( index != -1 )
+                        {
+                            folderFullPath =
+                                folderFullPath.substring( index + defaultWebappRootFolderFullPath.length() );
+                        }
+
+                        text.setText( folderFullPath );
                     }
-
-                    String defaultWebappRootFolderFullPath = defaultWebappRootFolder.getFullPath().toPortableString();
-                    String folderFullPath = folder.getFullPath().toPortableString();
-
-                    int index = folderFullPath.indexOf( defaultWebappRootFolderFullPath );
-
-                    if( index != -1 )
-                    {
-                        folderFullPath = folderFullPath.substring( index + defaultWebappRootFolderFullPath.length() );
-                    }
-
-                    text.setText( folderFullPath );
                 }
             }
             catch( Exception ex )

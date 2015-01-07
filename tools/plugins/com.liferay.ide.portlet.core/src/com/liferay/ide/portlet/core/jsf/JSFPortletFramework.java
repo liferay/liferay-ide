@@ -15,6 +15,7 @@
 package com.liferay.ide.portlet.core.jsf;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.portlet.core.BasePortletFramework;
 import com.liferay.ide.portlet.core.PortletCore;
@@ -148,10 +149,15 @@ public class JSFPortletFramework extends BasePortletFramework
 
                 if( originalWebXmlFile.exists() )
                 {
-                    IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
+                    final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-                    defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents( //$NON-NLS-1$
-                        new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
+                    if( webproject != null )
+                    {
+                        IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
+
+                        defaultDocroot.getFile( "WEB-INF/web.xml" ).setContents(
+                            new FileInputStream( originalWebXmlFile ), IResource.FORCE, null );
+                    }
                 }
             }
             catch( Exception e )

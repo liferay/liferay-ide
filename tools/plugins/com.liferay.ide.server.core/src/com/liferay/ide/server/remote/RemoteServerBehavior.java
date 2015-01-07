@@ -17,6 +17,7 @@ package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.remote.APIException;
 import com.liferay.ide.core.util.CoreUtil;
@@ -862,22 +863,25 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
 
                     if( resourceFile != null )
                     {
-                        final ILiferayProject lrproject = LiferayCore.create( resourceFile.getProject() );
+                        final IWebProject lrproject = LiferayCore.create( IWebProject.class, resourceFile.getProject() );
 
-                        final IPath docrootPath = lrproject.getDefaultDocrootFolder().getFullPath();
-
-                        if( lrproject.findDocrootResource(
-                                resourceFile.getFullPath().makeRelativeTo( docrootPath ) ) != null )
+                        if( lrproject != null )
                         {
-                            if( resource.getName().equals( "web.xml" ) ||
-                                resource.getName().equals(
-                                    ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
+                            final IPath docrootPath = lrproject.getDefaultDocrootFolder().getFullPath();
+
+                            if( lrproject.findDocrootResource( resourceFile.getFullPath().makeRelativeTo(
+                                docrootPath ) ) != null )
                             {
-                                break;
-                            }
-                            else if( resource.getName().equals( "portlet.xml" ) )
-                            {
-                                break;
+                                if( resource.getName().equals( "web.xml" ) ||
+                                    resource.getName().equals(
+                                        ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
+                                {
+                                    break;
+                                }
+                                else if( resource.getName().equals( "portlet.xml" ) )
+                                {
+                                    break;
+                                }
                             }
                         }
                     }

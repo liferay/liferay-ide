@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -80,20 +79,6 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
             }
         }
 
-        return null;
-    }
-
-    @Override
-    public IResource findDocrootResource( IPath path )
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public IFolder getDefaultDocrootFolder()
-    {
-        // TODO Auto-generated method stub
         return null;
     }
 

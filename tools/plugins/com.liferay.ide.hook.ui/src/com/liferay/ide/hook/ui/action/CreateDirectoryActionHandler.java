@@ -17,6 +17,7 @@
 
 package com.liferay.ide.hook.ui.action;
 
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.model.CustomJspDir;
@@ -132,18 +133,24 @@ public class CreateDirectoryActionHandler extends PropertyEditorActionHandler
 
             if( !absolutePath.toFile().exists() )
             {
-                IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
+                final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-                IFolder customJspFolder =
-                    defaultDocroot.getFolder( new org.eclipse.core.runtime.Path( customJspDirValue.toPortableString() ) );
+                if( webproject != null && webproject.getDefaultDocrootFolder() != null )
+                {
+                    IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
 
-                CoreUtil.makeFolders( customJspFolder );
+                    IFolder customJspFolder =
+                        defaultDocroot.getFolder( new org.eclipse.core.runtime.Path(
+                            customJspDirValue.toPortableString() ) );
 
-                // force a refresh of validation
-                customJspDir.setValue( (Path) null );
-                customJspDir.setValue( customJspDirValue );
+                    CoreUtil.makeFolders( customJspFolder );
 
-                refreshEnablementState();
+                    // force a refresh of validation
+                    customJspDir.setValue( (Path) null );
+                    customJspDir.setValue( customJspDirValue );
+
+                    refreshEnablementState();
+                }
             }
         }
         catch( Exception e )

@@ -17,6 +17,7 @@ package com.liferay.ide.service.core;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -81,13 +82,14 @@ public class AddServiceBuilderOperation extends AbstractDataModelOperation
     private IStatus createServiceBuilderFile( IProject project, IProgressMonitor monitor )
     {
         // IDE-110 IDE-648
-        IFolder defaultDocroot = LiferayCore.create( project ).getDefaultDocrootFolder();
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
 
-        if( defaultDocroot == null )
+        if( webproject == null || webproject.getDefaultDocrootFolder() == null )
         {
             return ServiceCore.createErrorStatus( "Could not find webapp root folder." ); //$NON-NLS-1$
         }
 
+        final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
         final Path path = new Path( "WEB-INF/" + getDataModel().getStringProperty( SERVICE_FILE ) ); //$NON-NLS-1$
         final IFile serviceBuilderFile = defaultDocroot.getFile( path );
 

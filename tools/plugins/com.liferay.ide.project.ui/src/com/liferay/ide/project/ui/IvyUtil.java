@@ -18,6 +18,7 @@ import static org.eclipse.jst.j2ee.classpathdep.ClasspathDependencyUtil.getDefau
 import static org.eclipse.jst.j2ee.classpathdep.ClasspathDependencyUtil.modifyDependencyPath;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -165,7 +166,8 @@ public class IvyUtil
 
                     if( status.isOK() )
                     {
-                        final IFolder webinfFolder = LiferayCore.create( project ).getDefaultDocrootFolder().getFolder( "WEB-INF" ); //$NON-NLS-1$
+                        final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
+                        final IFolder webinfFolder = webproject.getDefaultDocrootFolder().getFolder( "WEB-INF" );
 
                         ComponentUtil.validateFolder( webinfFolder, monitor );
                     }

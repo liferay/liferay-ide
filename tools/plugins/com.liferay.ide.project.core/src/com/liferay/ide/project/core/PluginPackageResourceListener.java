@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayConstants;
-import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -161,7 +161,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
             fullPath.lastSegment().equals( ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) )
         {
             final IProject project = CoreUtil.getLiferayProject( delta.getResource() );
-            final ILiferayProject lrproject = LiferayCore.create( project );
+            final IWebProject lrproject = LiferayCore.create( IWebProject.class, project );
 
             if( lrproject != null )
             {

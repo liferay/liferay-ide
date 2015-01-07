@@ -18,6 +18,7 @@ package com.liferay.ide.theme.core;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -140,10 +141,17 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                     throw new CoreException( status );
                 }
 
+                final IWebProject webproject = LiferayCore.create( IWebProject.class, project );
+
+                if( webproject == null )
+                {
+                    return status;
+                }
+
                 // IDE-110 IDE-648
                 final IResource res =
-                    LiferayCore.create( project ).findDocrootResource(
-                        new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) );
+                    webproject.findDocrootResource( new Path( "WEB-INF/" +
+                        ILiferayConstants.LIFERAY_LOOK_AND_FEEL_XML_FILE ) );
 
                 IFile lookAndFeelFile = null;
 
@@ -158,8 +166,9 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                         project.getName().replaceAll( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX, StringPool.EMPTY );
 
                     final IResource propsRes =
-                        LiferayCore.create( project ).findDocrootResource(
-                            new Path( "WEB-INF/" + ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
+                        webproject.findDocrootResource( new Path( "WEB-INF/" +
+                            ILiferayConstants.LIFERAY_PLUGIN_PACKAGE_PROPERTIES_FILE ) );
+
                     String name = id;
 
                     if( propsRes instanceof IFile && propsRes.exists() )
@@ -197,11 +206,11 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                     }
 
                     themeDescriptorHelper.createDefaultFile(
-                        lProject.getDefaultDocrootFolder(), version, id, name, type );
+                        webproject.getDefaultDocrootFolder(), version, id, name, type );
 
                     try
                     {
-                        lProject.getDefaultDocrootFolder().refreshLocal( IResource.DEPTH_INFINITE, null );
+                        webproject.getDefaultDocrootFolder().refreshLocal( IResource.DEPTH_INFINITE, null );
                     }
                     catch( Exception e )
                     {
@@ -238,14 +247,16 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
         IPath fullPath = delta.getFullPath();
 
         // IDE-110 IDE-648
-        IFolder webappRoot = LiferayCore.create( delta.getResource().getProject() ).getDefaultDocrootFolder();
+        final IWebProject webproject = LiferayCore.create( IWebProject.class, delta.getResource().getProject() );
 
-        if( webappRoot == null || !webappRoot.exists() )
+        if( webproject == null || webproject.getDefaultDocrootFolder() == null )
         {
             return false;
         }
 
-        IPath diffPath = webappRoot.getFolder( new Path( "_diffs" ) ).getFullPath(); //$NON-NLS-1$
+        final IFolder webappRoot = webproject.getDefaultDocrootFolder();
+
+        final IPath diffPath = webappRoot.getFolder( new Path( "_diffs" ) ).getFullPath();
 
         return diffPath.isPrefixOf( fullPath );
     }
