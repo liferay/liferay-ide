@@ -20,10 +20,11 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatServer;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServer;
-import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
+import org.eclipse.wst.server.core.ServerCore;
 import org.junit.Test;
 
 /**
@@ -36,55 +37,59 @@ public class ServerCustomSettingTests extends ServerCoreBase
     public void testDefaultValueOfUseDefaultPortalSetting() throws Exception
     {
         final NullProgressMonitor npm = new NullProgressMonitor();
-        
+
         if( runtime == null )
         {
             setupRuntime();
         }
 
         assertNotNull( runtime );
-        
-        final IServerWorkingCopy serverWC = ServerUtil.createServerForRuntime( runtime );
 
-        server = serverWC.save( true, npm );
+        final IServerWorkingCopy serverWC = createServerForRuntime( "testdefault", runtime );
+
+        IServer newServer = serverWC.save( true, npm );
+
+        IServer findServer = ServerCore.findServer( newServer.getId() );
+
+        assertNotNull( findServer );
 
         ILiferayTomcatServer portalServer =
-                        (ILiferayTomcatServer) server.loadAdapter( ILiferayTomcatServer.class, null );
+                        (ILiferayTomcatServer) findServer.loadAdapter( ILiferayTomcatServer.class, null );
 
         final boolean useDefaultPortalServerSettings =
                         ( (LiferayTomcatServer) portalServer ).getUseDefaultPortalServerSettings();
 
         assertEquals( false, useDefaultPortalServerSettings );
-
     }
 
     @Test
     public void testSettingValueOfUseDefaultPortalSetting() throws Exception
     {
         final NullProgressMonitor npm = new NullProgressMonitor();
-        
+
         if( runtime == null )
         {
             setupRuntime();
         }
 
         assertNotNull( runtime );
-        
-        final IServerWorkingCopy serverWC = ServerUtil.createServerForRuntime( runtime );
+
+        final IServerWorkingCopy serverWC = createServerForRuntime( "testdefault2", runtime );
 
         serverWC.setAttribute(
             ILiferayTomcatServer.PROPERTY_USE_DEFAULT_PORTAL_SERVER_SETTINGS, true );
 
-        server = serverWC.save( true, npm );
+        IServer newServer = serverWC.save( true, npm );
+
+        IServer findServer = ServerCore.findServer( newServer.getId() );
 
         ILiferayTomcatServer portalServer =
-                        (ILiferayTomcatServer) server.loadAdapter( ILiferayTomcatServer.class, null );
+                        (ILiferayTomcatServer) findServer.loadAdapter( ILiferayTomcatServer.class, null );
 
         final boolean useDefaultPortalServerSettings =
                         ( (LiferayTomcatServer) portalServer ).getUseDefaultPortalServerSettings();
 
         assertEquals( true, useDefaultPortalServerSettings );
-
     }
 
 }

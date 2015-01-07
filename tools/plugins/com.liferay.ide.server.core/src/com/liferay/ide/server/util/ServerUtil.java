@@ -69,8 +69,6 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.IServerType;
-import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.osgi.framework.Version;
 import org.w3c.dom.Document;
@@ -108,25 +106,6 @@ public class ServerUtil
     public static IStatus createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, msg );
-    }
-
-    public static IServerWorkingCopy createServerForRuntime( IRuntime runtime )
-    {
-        for( IServerType serverType : ServerCore.getServerTypes() )
-        {
-            if( serverType.getRuntimeType().equals( runtime.getRuntimeType() ) )
-            {
-                try
-                {
-                    return serverType.createServer( "server", null, runtime, null ); //$NON-NLS-1$
-                }
-                catch( CoreException e )
-                {
-                }
-            }
-        }
-
-        return null;
     }
 
     public static IProject findProjectByContextName( String contextName )

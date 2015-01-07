@@ -24,7 +24,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,12 +31,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.junit.Before;
@@ -59,6 +60,25 @@ public abstract class ServerCoreBase extends BaseTests
     protected static IServer server;
     private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
     private final static String skipServerTests = System.getProperty( "skipServerTests" );
+
+    public static IServerWorkingCopy createServerForRuntime( String id, IRuntime runtime )
+    {
+        for( IServerType serverType : ServerCore.getServerTypes() )
+        {
+            if( serverType.getRuntimeType().equals( runtime.getRuntimeType() ) )
+            {
+                try
+                {
+                    return serverType.createServer( id, null, runtime, null ); //$NON-NLS-1$
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+        }
+
+        return null;
+    }
 
     protected void changeServerXmlPort( String currentPort, String targetPort )
     {
@@ -227,7 +247,7 @@ public abstract class ServerCoreBase extends BaseTests
             setupRuntime();
         }
 
-        final IServerWorkingCopy serverWC = ServerUtil.createServerForRuntime( runtime );
+        final IServerWorkingCopy serverWC = createServerForRuntime( "server", runtime );
 
         server = serverWC.save( true, npm );
 
