@@ -56,8 +56,8 @@ public abstract class ServerCoreBase extends BaseTests
     protected final static String liferayServerAjpPort = System.getProperty( "liferay.server.ajp.port" );
     protected final static String liferayServerShutdownPort = System.getProperty( "liferay.server.shutdown.port" );
     protected final static String liferayServerStartPort = System.getProperty( "liferay.server.start.port" );
-    protected static IRuntime runtime;
-    protected static IServer server;
+    protected IRuntime runtime;
+    protected IServer server;
     private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
     private final static String skipServerTests = System.getProperty( "skipServerTests" );
 

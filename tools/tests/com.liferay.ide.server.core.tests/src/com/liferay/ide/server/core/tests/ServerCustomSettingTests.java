@@ -38,6 +38,8 @@ public class ServerCustomSettingTests extends ServerCoreBase
     @Test
     public void testDefaultValueOfUseDefaultPortalSetting() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NullProgressMonitor npm = new NullProgressMonitor();
 
         if( runtime == null )
@@ -67,6 +69,8 @@ public class ServerCustomSettingTests extends ServerCoreBase
     @Test
     public void testSettingValueOfUseDefaultPortalSetting() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NullProgressMonitor npm = new NullProgressMonitor();
 
         if( runtime == null )
@@ -97,6 +101,8 @@ public class ServerCustomSettingTests extends ServerCoreBase
     @Test
     public void testVMArgsWithDefaultUseDefaultPortalSettings() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NullProgressMonitor npm = new NullProgressMonitor();
 
         if( runtime == null )
@@ -119,6 +125,8 @@ public class ServerCustomSettingTests extends ServerCoreBase
     @Test
     public void testVMArgsWithCustomMemoryArgs() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NullProgressMonitor npm = new NullProgressMonitor();
 
         if( runtime == null )
@@ -144,6 +152,8 @@ public class ServerCustomSettingTests extends ServerCoreBase
     @Test
     public void testVMArgsWithCustomMemoryArgsAndUseDefaultSetting() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NullProgressMonitor npm = new NullProgressMonitor();
 
         if( runtime == null )
