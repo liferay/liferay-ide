@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Bndtools Core
+Bundle-SymbolicName: com.liferay.ide.bndtools.core;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-Activator: com.liferay.ide.bndtools.core.BndtoolsCore
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ com.liferay.ide.core;bundle-version="2.0.0",
+ biz.aQute.bndlib;bundle-version="2.4.0",
+ bndtools.core;bundle-version="2.4.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.bndtools.core
+Bundle-ClassPath: .

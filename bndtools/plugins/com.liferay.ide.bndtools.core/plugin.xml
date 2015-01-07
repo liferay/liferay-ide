@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.liferay.ide.core.liferayProjectProviders">
+      <liferayProjectProvider
+            class="com.liferay.ide.bndtools.core.BndtoolsProvider"
+            displayName="Bndtools Project Provider"
+            id="com.liferay.ide.bndtools.core.bndtoolsProjectProvider"
+            shortName="bndtools">
+      </liferayProjectProvider>
+   </extension>
+</plugin>

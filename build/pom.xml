@@ -32,19 +32,22 @@
                 <!--<module>../velocity</module>-->
                 <module>../mobile</module>
                 <module>../jsdt</module>
+                <module>../bndtools</module>
                 <module>releng</module>
             </modules>
         </profile>
 
         <profile>
-            <id>mobile</id>
+            <id>tests</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <modules>
                 <module>../common</module>
-                <module>../mobile</module>
-                <module>releng/com.liferay.mobile.sdk-repository</module>
+                <module>../tools</module>
+                <module>../maven</module>
+                <module>../jsdt</module>
+                <module>../bndtools</module>
             </modules>
         </profile>
     </profiles>

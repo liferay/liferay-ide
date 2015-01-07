@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,21 +14,20 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
+ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
+    <parent>
+        <groupId>com.liferay.ide.bndtools.plugins</groupId>
+        <artifactId>bndtools-plugins</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+    </parent>
 
+    <artifactId>com.liferay.ide.bndtools.core</artifactId>
+    <packaging>eclipse-plugin</packaging>
 
-/**
- * @author Gregory Amerson
- */
-public interface IBundleProject extends ILiferayProject
-{
+    <name>Liferay IDE Bndtools Core</name>
 
-    IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException;
-
-    String getSymbolicName() throws CoreException;
-
-}
+</project>

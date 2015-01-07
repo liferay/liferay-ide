@@ -41,6 +41,7 @@
         <eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.0-SNAPSHOT/</eclipse-xml-search-site>
         <tern-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/tern.java-0.7.0.201410280110/</tern-site>
         <webresources-site>http://oss.opensagres.fr/eclipse-wtp-webresources/0.7.0-SNAPSHOT/</webresources-site>
+        <bndtools-site>http://bndtools-updates.s3.amazonaws.com/</bndtools-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
