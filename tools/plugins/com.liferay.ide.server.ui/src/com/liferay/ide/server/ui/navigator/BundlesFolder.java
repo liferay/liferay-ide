@@ -15,7 +15,6 @@
 package com.liferay.ide.server.ui.navigator;
 
 import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -59,7 +58,7 @@ public class BundlesFolder
 
     protected boolean filter( final OsgiBundle bundle )
     {
-        return bundle != null && !isWorkspaceBundle( bundle );
+        return bundle != null;
     }
 
     public synchronized OsgiBundle[] getBundles()
@@ -97,9 +96,7 @@ public class BundlesFolder
         {
             for( final IProject project : CoreUtil.getAllProjects() )
             {
-                final ILiferayProject lrproject = LiferayCore.create( project );
-
-                final IBundleProject bundleProject = lrproject.adapt( IBundleProject.class );
+                final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
                 try
                 {

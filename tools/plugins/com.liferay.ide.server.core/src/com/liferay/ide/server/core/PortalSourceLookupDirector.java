@@ -17,11 +17,8 @@ package com.liferay.ide.server.core;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.sourcelookup.ISourcePathComputer;
 import org.eclipse.jdt.internal.launching.JavaSourceLookupDirector;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -37,20 +34,30 @@ import org.eclipse.wst.server.core.ServerUtil;
 public class PortalSourceLookupDirector extends JavaSourceLookupDirector
 {
 
-    private ILaunchConfiguration configuration;
-    private String sourceComputerId;
-
-    public PortalSourceLookupDirector( ILaunchConfiguration configuration, String sourceComputerId )
+    public PortalSourceLookupDirector()
     {
         super();
+    }
 
-        this.configuration = configuration;
-        this.sourceComputerId = sourceComputerId;
+    @Override
+    public void initializeDefaults( ILaunchConfiguration configuration ) throws CoreException
+    {
+        super.initializeDefaults( configuration );
+
+        final String memento =
+            configuration.getAttribute( ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, (String) null );
+
+        if( memento != null )
+        {
+            this.initializeFromMemento( memento, configuration );
+        }
+
+        this.setSourcePathComputer( configuration.getType().getSourcePathComputer() );
     }
 
     public void configureLaunch( final ILaunch launch ) throws CoreException
     {
-        final IServer server = ServerUtil.getServer( configuration );
+        final IServer server = ServerUtil.getServer( launch.getLaunchConfiguration() );
 
         server.addServerListener
         (
@@ -98,7 +105,7 @@ public class PortalSourceLookupDirector extends JavaSourceLookupDirector
                             {
                                 final PortalSourceLookupDirector director =
                                     (PortalSourceLookupDirector) launch.getSourceLocator();
-                                director.initializeDefaults( configuration );
+                                director.initializeDefaults( launch.getLaunchConfiguration() );
                             }
                             catch( Exception e )
                             {
@@ -112,23 +119,7 @@ public class PortalSourceLookupDirector extends JavaSourceLookupDirector
             }
         );
 
-        final ISourcePathComputer sourcePathComputer = getLaunchManager().getSourcePathComputer( this.sourceComputerId );
-        this.setSourcePathComputer( sourcePathComputer );
-        this.initializeDefaults( configuration );
-
-        final String memento = configuration.getAttribute( ILaunchConfiguration.ATTR_SOURCE_LOCATOR_MEMENTO, (String) null);
-
-        if( memento != null )
-        {
-            this.initializeFromMemento( memento, configuration );
-        }
-
         launch.setSourceLocator( this );
-    }
-
-    private ILaunchManager getLaunchManager()
-    {
-        return DebugPlugin.getDefault().getLaunchManager();
     }
 
     @Override

@@ -60,16 +60,14 @@ public class LiferayTomcatLaunchConfigDelegate extends TomcatLaunchConfiguration
     {
         if( ILaunchManager.DEBUG_MODE.equals( mode ) )
         {
-            final PortalSourceLookupDirector sourceLocator =
-                new PortalSourceLookupDirector( configuration, LiferayTomcatSourcePathComputer.ID );
-            sourceLocator.configureLaunch( launch );
+            PortalSourceLookupDirector director = (PortalSourceLookupDirector) launch.getSourceLocator();
+            director.configureLaunch( launch );
         }
 
         for( PortalLaunchParticipant participant : LiferayServerCore.getPortalLaunchParticipants() )
         {
             participant.portalPreLaunch( configuration, mode, launch, monitor );
         }
-
 
         super.launch( configuration, mode, launch, monitor );
 

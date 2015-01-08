@@ -37,7 +37,7 @@ import org.eclipse.wst.server.core.ServerUtil;
 /**
  * @author Gregory Amerson
  */
-public class PortalServerLaunchConfig extends AbstractJavaLaunchConfigurationDelegate
+public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigurationDelegate
 {
 
     public void launch( ILaunchConfiguration config, String mode, ILaunch launch, IProgressMonitor monitor )
@@ -95,8 +95,6 @@ public class PortalServerLaunchConfig extends AbstractJavaLaunchConfigurationDel
         {
             runConfig.setBootClassPath( bootpath );
         }
-
-        setDefaultSourceLocator( launch, config );
 
         portalServer.launchServer( launch, mode, monitor );
 

@@ -59,11 +59,12 @@ public class PortalTomcatBundle implements PortalBundle
 
         // TODO detect tomcat installation
         final IPath location = this.runtime.getRuntime().getLocation();
+        this.tomcatPath = location.append( "tomcat-7.0.42" );
 
         this.autoDeployPath = location.append( "deploy" );
         this.liferayHome = location;
 
-        this.version = LiferayTomcatUtil.getVersion( location, LiferayTomcatUtil.getPortalDir( location ) );
+        this.version = LiferayTomcatUtil.getVersion( location, LiferayTomcatUtil.getPortalDir( tomcatPath ) );
 
         if( this.version != null && this.version.startsWith( "6" ) )
         {
@@ -73,8 +74,6 @@ public class PortalTomcatBundle implements PortalBundle
         {
             this.modulesPath = location.append( "osgi" );
         }
-
-        this.tomcatPath = location.append( "tomcat-7.0.42" );
     }
 
     public String[] getRuntimeProgArgs( String launchMode )

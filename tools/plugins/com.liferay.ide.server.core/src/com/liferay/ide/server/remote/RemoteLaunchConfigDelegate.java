@@ -18,7 +18,6 @@ package com.liferay.ide.server.remote;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.PortalLaunchParticipant;
-import com.liferay.ide.server.core.PortalSourceLookupDirector;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Map;
@@ -91,9 +90,9 @@ public class RemoteLaunchConfigDelegate extends AbstractJavaLaunchConfigurationD
             return;
         }
 
-        final PortalSourceLookupDirector sourceLocator =
-            new PortalSourceLookupDirector( configuration, "com.liferay.ide.server.tomcat.portalSourcePathComputer" ); //$NON-NLS-1$
-        sourceLocator.configureLaunch( launch );
+//        final PortalSourceLookupDirector sourceLocator =
+//            new PortalSourceLookupDirector( configuration, "com.liferay.ide.server.tomcat.portalSourcePathComputer" ); //$NON-NLS-1$
+//        sourceLocator.configureLaunch( launch );
 
         if( !launch.isTerminated() )
         {
