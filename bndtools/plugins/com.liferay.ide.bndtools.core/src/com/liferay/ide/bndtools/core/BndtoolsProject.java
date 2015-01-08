@@ -23,6 +23,7 @@ import com.liferay.ide.server.core.portal.BundleModulePublisher;
 import com.liferay.ide.server.core.portal.ModulePublisher;
 
 import java.io.File;
+import java.util.Collection;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -114,8 +115,21 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     @Override
     public String getSymbolicName() throws CoreException
     {
-        // TODO Auto-generated method stub
-        return null;
+        String retval = this.bndProject.getName();
+        try
+        {
+            final Collection<String> names = this.bndProject.getBsns();
+
+            if( names != null && names.size() > 0 )
+            {
+                retval = names.iterator().next();
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return retval;
     }
 
 

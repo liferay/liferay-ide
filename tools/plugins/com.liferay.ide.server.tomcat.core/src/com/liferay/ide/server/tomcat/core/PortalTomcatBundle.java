@@ -12,7 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.server.core.portal;
+package com.liferay.ide.server.tomcat.core;
+
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +36,7 @@ public class PortalTomcatBundle implements PortalBundle
     private final IPath modulesPath;
     private final PortalRuntime runtime;
     private final IPath tomcatPath;
+    private final String version;
 
     public PortalTomcatBundle()
     {
@@ -39,6 +45,7 @@ public class PortalTomcatBundle implements PortalBundle
         this.modulesPath = null;
         this.runtime = null;
         this.tomcatPath = null;
+        this.version = null;
     }
 
     public PortalTomcatBundle( PortalRuntime portalRuntime )
@@ -55,7 +62,18 @@ public class PortalTomcatBundle implements PortalBundle
 
         this.autoDeployPath = location.append( "deploy" );
         this.liferayHome = location;
-        this.modulesPath = location.append( "osgi" );
+
+        this.version = LiferayTomcatUtil.getVersion( location, LiferayTomcatUtil.getPortalDir( location ) );
+
+        if( this.version != null && this.version.startsWith( "6" ) )
+        {
+            this.modulesPath = location.append( "data/osgi" );
+        }
+        else
+        {
+            this.modulesPath = location.append( "osgi" );
+        }
+
         this.tomcatPath = location.append( "tomcat-7.0.42" );
     }
 
@@ -137,6 +155,12 @@ public class PortalTomcatBundle implements PortalBundle
     public IPath getLiferayHome()
     {
         return this.liferayHome;
+    }
+
+    @Override
+    public String getVersion()
+    {
+        return this.version;
     }
 
 }

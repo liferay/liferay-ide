@@ -29,6 +29,5 @@ public interface OsgiConnection
 
     boolean ping();
 
-    IStatus instalBundle( String location, File bundle );
-
+    IStatus deployBundle( String location, File bundle );
 }

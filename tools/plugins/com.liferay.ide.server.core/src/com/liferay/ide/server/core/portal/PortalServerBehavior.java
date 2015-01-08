@@ -81,44 +81,84 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements IJa
         final int kind, final int deltaKind, final IModule[] modules, final IProgressMonitor monitor )
         throws CoreException
     {
-        PublishOp op = null;
+        return;
 
-        switch( kind )
-        {
-            case IServer.PUBLISH_FULL:
-                switch( deltaKind )
-                {
-                    case ServerBehaviourDelegate.ADDED:
-                    case ServerBehaviourDelegate.CHANGED:
-                        op = new BundlePublishFullAdd( getServer() );
-                        break;
+//        PublishOperation op = null;
+//
+//        switch( kind )
+//        {
+//            case IServer.PUBLISH_FULL:
+//                switch( deltaKind )
+//                {
+//                    case ServerBehaviourDelegate.ADDED:
+//                    case ServerBehaviourDelegate.CHANGED:
+//                        op = new BundlePublishFullAdd( getServer(), modules );
+//                        break;
+//
+//                    case ServerBehaviourDelegate.REMOVED:
+//                        op = new BundlePublishFullRemove( getServer(), modules );
+//                        break;
+//
+//                    case ServerBehaviourDelegate.NO_CHANGE:
+//                        //TODO need to checkt to see if the latest jar is actually the one deployed
+//                        op = new BundlePublishFullAdd( getServer(), modules );
+//
+//                    default:
+//                        break;
+//                }
+//                break;
+//
+//            case IServer.PUBLISH_INCREMENTAL:
+//                switch( deltaKind )
+//                {
+//                    case ServerBehaviourDelegate.ADDED:
+//                    case ServerBehaviourDelegate.CHANGED:
+//                        op = new BundlePublishFullAdd( getServer(), modules );
+//                        break;
+//
+//                    case ServerBehaviourDelegate.NO_CHANGE:
+//                        //TODO need to checkt to see if the latest jar is actually the one deployed
+//                        op = new BundlePublishFullAdd( getServer(), modules );
+//
+//                    default:
+//                        System.out.println(deltaKind);
+//                        break;
+//                }
+//                break;
+//            default:
+//                break;
+//        }
+//
+//
+//        if( op != null )
+//        {
+//            try
+//            {
+//                op.execute( monitor, null );
+//                // publish succeeded so clear the state
+//                setModulePublishState( modules, IServer.PUBLISH_STATE_NONE );
+//            }
+//            catch( CoreException ce )
+//            {
+//                setModulePublishState( modules, IServer.PUBLISH_STATE_UNKNOWN );
+//            }
+//        }
+//        else
+//        {
+//            // clear the module publish state because nothing to be done
+//            setModulePublishState( modules, IServer.PUBLISH_STATE_NONE );
+//        }
+    }
 
-                    case ServerBehaviourDelegate.REMOVED:
-                        op = new BundlePublishFullRemove( getServer() );
-                        break;
+    public void setModulePublishState2( IModule[] module, int state  )
+    {
+        super.setModulePublishState( module, state );
+    }
 
-                    default:
-                        break;
-                }
-                break;
-
-            default:
-                break;
-        }
-
-        if( op != null )
-        {
-            for( IModule module : modules )
-            {
-                // TODO add a popup notification for CoreEx instead of letting bubble up to user
-                IStatus status = op.publish( module, monitor );
-
-                if( status.isOK() )
-                {
-                    setModulePublishState( new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
-                }
-            }
-        }
+    @Override
+    protected void publishStart( IProgressMonitor monitor ) throws CoreException
+    {
+        super.publishStart( monitor );
     }
 
     @Override

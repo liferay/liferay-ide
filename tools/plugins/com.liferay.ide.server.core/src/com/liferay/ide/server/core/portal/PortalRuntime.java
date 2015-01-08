@@ -36,6 +36,7 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
 public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime
 {
     public static final String PROP_PORTAL_BUNDLE_TYPE = "portal-bundle-type";
+    private PortalBundle portalBundle;
 
     public PortalRuntime()
     {
@@ -109,7 +110,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime
 
     public String getPortalVersion()
     {
-        return "7.0.0";
+        return getPortalBundle().getVersion();
     }
 
     public Properties getPortletCategories()
@@ -161,7 +162,12 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime
 
     public PortalBundle getPortalBundle()
     {
-        return LiferayServerCore.getPortalBundle( this, getPortalBundleType() );
+        if( this.portalBundle == null )
+        {
+            this.portalBundle = LiferayServerCore.getPortalBundle( this, getPortalBundleType() );
+        }
+
+        return this.portalBundle;
     }
 
     public String getPortalBundleType()
@@ -174,6 +180,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime
         if( type != null )
         {
             setAttribute( PROP_PORTAL_BUNDLE_TYPE, type );
+            this.portalBundle = null;
         }
     }
 

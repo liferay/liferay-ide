@@ -111,23 +111,45 @@ public class OsgiConnectionImpl implements OsgiConnection
         }
     }
 
-    public IStatus instalBundle( String location, File bundle )
+    public IStatus deployBundle( String location, File bundle )
     {
-        IStatus retval = Status.OK_STATUS;
+        IStatus retval = null;
 
         try
         {
             final ObjectName objectName =
                 this.mbsc.queryNames( new ObjectName( "osgi.core:type=framework,*" ), null ).iterator().next();
 
-            final Object[] params = new Object[] { location, bundle.toURI().toURL().toExternalForm() };
-            final String[] signature = new String[] { String.class.getName(), String.class.getName() };
-
-            Object installed = this.mbsc.invoke( objectName, "installBundleFromURL", params, signature );
+            Object installed = this.mbsc.invoke( objectName,
+                                                 "installBundleFromURL",
+                                                 new Object[] { location, bundle.toURI().toURL().toExternalForm() },
+                                                 new String[] { String.class.getName(), String.class.getName() } );
 
             if( installed instanceof Long )
             {
-                retval = Status.OK_STATUS;
+                long bundleId = (Long) installed;
+
+                if( bundleId > 0 )
+                {
+                    // may have already been installed so lets run update TODO only do this if needed
+
+                    this.mbsc.invoke( objectName,
+                                      "updateBundleFromURL",
+                                      new Object[] { bundleId, bundle.toURI().toURL().toExternalForm() },
+                                      new String[] { "long", String.class.getName() } );
+
+                    this.mbsc.invoke( objectName,
+                                      "refreshBundle",
+                                      new Object[] { bundleId },
+                                      new String[] { "long" } );
+
+                    this.mbsc.invoke( objectName,
+                                      "startBundle",
+                                      new Object[] { bundleId },
+                                      new String[] { "long" } );
+                }
+
+                retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) bundleId, null, null );
             }
         }
         catch( Exception e )

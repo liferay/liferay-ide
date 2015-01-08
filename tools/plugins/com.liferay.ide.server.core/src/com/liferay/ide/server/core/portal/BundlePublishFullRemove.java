@@ -12,66 +12,88 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 
-import org.eclipse.core.resources.IProject;
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
-
+import org.eclipse.wst.server.core.model.PublishOperation;
 
 /**
  * @author Gregory Amerson
  */
-public class BundlePublishFullRemove implements PublishOp
+public class BundlePublishFullRemove extends PublishOperation
 {
+
     private final IServer server;
     private final PortalRuntime portalRuntime;
+    private final List<IModule> modules;
+    private final PortalServerBehavior portalServerBehavior;
 
-    public BundlePublishFullRemove( IServer s )
+    public BundlePublishFullRemove( IServer s, IModule[] modules )
     {
         this.server = s;
+        this.modules = Arrays.asList( modules );
         this.portalRuntime = (PortalRuntime) this.server.getRuntime().loadAdapter( PortalRuntime.class, null );
 
         if( this.portalRuntime == null )
         {
             throw new IllegalArgumentException( "Could not get portal runtime from server " + s.getName() );
         }
+
+        this.portalServerBehavior = (PortalServerBehavior) this.server.loadAdapter( PortalServerBehavior.class, null );
+
+        if( this.portalServerBehavior == null )
+        {
+            throw new IllegalArgumentException( "Could not get portal server behavior from server " + s.getName() );
+        }
     }
 
-    public IStatus publish( IModule module, IProgressMonitor monitor ) throws CoreException
+    public int getKind()
     {
-        IStatus retval = null;
+        return REQUIRED;
+    }
 
-        final IProject project = module.getProject();
-        final ILiferayProject lrProject = LiferayCore.create( project );
-
-        if( lrProject != null )
+    public void execute( IProgressMonitor monitor, IAdaptable info ) throws CoreException
+    {
+        for( IModule module : modules )
         {
-            final ModulePublisher publisher = lrProject.adapt( ModulePublisher.class );
+            IStatus status = null;
+
+            final ModulePublisher publisher = LiferayCore.create( ModulePublisher.class, module.getProject() );
 
             if( publisher != null )
             {
-                retval = publisher.remove( this.server, module );
+                status = publisher.remove( server, module );
+                this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
             }
             else
             {
-                retval = LiferayServerCore.error( "Could not get module publisher for project " + project.getName() );
+                status =
+                    LiferayServerCore.error( "Could not get module publisher for project " +
+                        module.getProject().getName() );
+            }
+
+            if( !status.isOK() )
+            {
+                throw new CoreException( status );
             }
         }
-        else
-        {
-            retval =
-                LiferayServerCore.error( "Could not get liferay project to remove module " + module.getName() );
-        }
-
-        return retval;
     }
 
+    @Override
+    public int getOrder()
+    {
+        return 0;
+    }
 }

@@ -39,4 +39,6 @@ public interface PortalBundle
 
     String getType();
 
+    String getVersion();
+
 }

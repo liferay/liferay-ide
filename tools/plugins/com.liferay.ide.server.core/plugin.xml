@@ -1231,11 +1231,11 @@
       </moduleType>
    </extension>
    <extension
-         point="com.liferay.ide.server.core.portalBundles">
-      <portalBundle
-            class="com.liferay.ide.server.core.portal.PortalTomcatBundle"
-            type="tomcat">
-      </portalBundle>
+         point="org.eclipse.wst.server.core.publishTasks">
+      <publishTask
+            class="com.liferay.ide.server.core.portal.PortalPublishTask"
+            id="com.liferay.ide.server.portal.publishTask"
+            typeIds="com.liferay.ide.server.portal">
+      </publishTask>
    </extension>
-
 </plugin>
