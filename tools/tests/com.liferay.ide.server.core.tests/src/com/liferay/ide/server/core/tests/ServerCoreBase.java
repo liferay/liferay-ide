@@ -173,7 +173,7 @@ public abstract class ServerCoreBase extends BaseTests
     @Before
     public void setupRuntime() throws Exception
     {
-        if( shouldSkipServerTests() ) return;
+        if( shouldSkipBundleTests() ) return;
 
         assertNotNull(
             "Expected System.getProperty(\"liferay.bundles.dir\") to not be null",
