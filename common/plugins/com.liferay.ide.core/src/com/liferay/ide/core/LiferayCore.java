@@ -48,23 +48,6 @@ public class LiferayCore extends Plugin
 
     private static LiferayProjectProviderReader providerReader;
 
-    public static <T> T create( Class<T> type, Object adaptable )
-    {
-        T retval = null;
-
-        if( type != null )
-        {
-            final ILiferayProject lrproject = create( adaptable );
-
-            if( lrproject != null && type.isAssignableFrom( lrproject.getClass() ) )
-            {
-                retval = type.cast( lrproject );
-            }
-        }
-
-        return retval;
-    }
-
     public static ILiferayProject create( Object adaptable )
     {
         ILiferayProject project = null;
@@ -94,6 +77,28 @@ public class LiferayCore extends Plugin
         }
 
         return project;
+    }
+
+    public static <T> T create( Class<T> type, Object adaptable )
+    {
+        T retval = null;
+
+        if( type != null )
+        {
+            final ILiferayProject lrproject = create( adaptable );
+
+            if( lrproject != null && type.isAssignableFrom( lrproject.getClass() ) )
+            {
+                retval = type.cast( lrproject );
+            }
+
+            if( retval == null && lrproject != null )
+            {
+                retval = lrproject.adapt( type );
+            }
+        }
+
+        return retval;
     }
 
     public static IStatus createErrorStatus( Exception e )
