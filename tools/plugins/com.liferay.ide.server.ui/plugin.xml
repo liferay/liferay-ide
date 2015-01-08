@@ -538,8 +538,10 @@
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
+            class="com.liferay.ide.server.ui.navigator.BundlesDecorator"
             id="com.liferay.ide.server.ui.bundleDecorator"
-            label="Bundle"
+            label="Bundles Decorator"
+            lightweight="true"
             state="true">
           <enablement>
             <or>
