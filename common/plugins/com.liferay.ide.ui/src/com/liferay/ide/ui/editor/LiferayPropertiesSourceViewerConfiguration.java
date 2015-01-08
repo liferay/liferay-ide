@@ -65,6 +65,7 @@ import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSourceViewerConfiguration
@@ -167,6 +168,10 @@ public class LiferayPropertiesSourceViewerConfiguration extends PropertiesFileSo
                 {
                     LiferayUIPlugin.logError( "Unable to get portal properties file", e );
                 }
+            }
+            else
+            {
+                return assitant;
             }
 
             final Object adapter = input.getAdapter( IFile.class );
