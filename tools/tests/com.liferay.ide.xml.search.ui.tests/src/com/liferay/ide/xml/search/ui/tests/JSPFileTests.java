@@ -108,12 +108,9 @@ public class JSPFileTests extends XmlSearchTestsBase
     }
 
     @Test
-    public void testTagLiferayPortletParam() throws Exception
+    public void testTagLiferayPortletParams() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
 
         final IFile jspFile = getJspFile( "test-liferay-portlet-param.jsp" );
         assertNotNull( jspFile );
@@ -121,9 +118,11 @@ public class JSPFileTests extends XmlSearchTestsBase
         final String liferayPortletParamElementName = "liferay-portlet:param";
 
         String[][] paramsArray =
-            { { "<%= ActionRequest.ACTION_NAME %>", "sayHello1", "Type \"sayHello1\" not found.", "true", "0" },
-                { "javax.portlet.action", "sayHello2", "Type \"sayHello2\" not found.", "true", "0" },
-                { "bookName", "liferay-in-action", "", "false", "25" } };
+        {
+            { "<%= ActionRequest.ACTION_NAME %>", "sayHello1", "Type \"sayHello1\" not found.", "true", "0" },
+            { "javax.portlet.action", "sayHello2", "Type \"sayHello2\" not found.", "true", "0" },
+            { "bookName", "liferay-in-action", "", "false", "25" }
+        };
 
         for( String[] params : paramsArray )
         {
@@ -134,22 +133,22 @@ public class JSPFileTests extends XmlSearchTestsBase
     }
 
     @Test
-    public void testTagParam() throws Exception
+    public void testTagParams() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
 
         final IFile jspFile = getJspFile( "test-param.jsp" );
+
         assertNotNull( jspFile );
 
         final String paramElementName = "param";
 
         String[][] paramsArray =
-            { { "<%= ActionRequest.ACTION_NAME %>", "sayHello3", "", "false", "24" },
-                { "javax.portlet.action", "sayHello4", "", "false", "24" },
-                { "bookName", "liferay-in-action", "", "false", "24" } };
+        {
+            { "<%= ActionRequest.ACTION_NAME %>", "sayHello3", "", "false", "24" },
+            { "javax.portlet.action", "sayHello4", "", "false", "24" },
+            { "bookName", "liferay-in-action", "", "false", "24" }
+        };
 
         for( String[] params : paramsArray )
         {
@@ -160,22 +159,22 @@ public class JSPFileTests extends XmlSearchTestsBase
     }
 
     @Test
-    public void testTagPortletParam() throws Exception
+    public void testTagPortletParams() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
 
         final IFile jspFile = getJspFile( "test-portlet-param.jsp" );
+
         assertNotNull( jspFile );
 
         final String portletParamElementName = "portlet:param";
 
         String[][] paramsArray =
-            { { "<%= ActionRequest.ACTION_NAME %>", "sayHello5", "Type \"sayHello5\" not found.", "true", "0" },
-                { "javax.portlet.action", "sayHello6", "Type \"sayHello6\" not found.", "true", "0" },
-                { "bookName", "liferay-in-action", "", "false", "24" } };
+        {
+            { "<%= ActionRequest.ACTION_NAME %>", "sayHello5", "Type \"sayHello5\" not found.", "true", "0" },
+            { "javax.portlet.action", "sayHello6", "Type \"sayHello6\" not found.", "true", "0" },
+            { "bookName", "liferay-in-action", "", "false", "24" }
+        };
 
         for( String[] params : paramsArray )
         {

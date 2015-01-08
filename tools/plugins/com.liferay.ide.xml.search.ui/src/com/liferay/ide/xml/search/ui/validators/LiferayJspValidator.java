@@ -58,7 +58,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
     private final String JAVAX_PORTLET_ACTION = "javax.portlet.action";
     private final String JSP_TAG_START = "<%";
     private final String JSP_TAG_END = "%>";
-    private final String[] SUPPORT_PARAM_TAGS = { "liferay-portlet:param", "portlet:param" };
+    private final String[] SUPPORTED_TAGS = { "liferay-portlet:param", "portlet:param" };
 
     public static final String MESSAGE_CLASS_ATTRIBUTE_NOT_WORK = Msgs.classAttributeNotWork;
 
@@ -161,7 +161,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
     private boolean isSupportedTag( String tagName )
     {
-        for( String supportTag : SUPPORT_PARAM_TAGS )
+        for( String supportTag : SUPPORTED_TAGS )
         {
             if( supportTag.equals( tagName ) )
             {
@@ -197,9 +197,9 @@ public class LiferayJspValidator extends LiferayBaseValidator
             {
                 IDOMAttr nameAttr = DOMUtils.getAttr( (IDOMElement) parentNode, "name" );
 
-                if( ( nameAttr != null ) &&
-                    ( nameAttr.getNodeValue().contains( ACTION_REQUEST_ACTION_NAME ) || nameAttr.getNodeValue().contains(
-                        JAVAX_PORTLET_ACTION ) ) )
+                if( nameAttr != null &&
+                    ( nameAttr.getNodeValue().contains( ACTION_REQUEST_ACTION_NAME ) ||
+                      nameAttr.getNodeValue().contains( JAVAX_PORTLET_ACTION ) ) )
                 {
                     super.validateReferenceToJava( referenceTo, attrNode, file, validator, reporter, batchMode );
                 }
