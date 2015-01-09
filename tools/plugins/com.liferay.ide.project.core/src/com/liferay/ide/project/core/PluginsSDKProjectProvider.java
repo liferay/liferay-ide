@@ -18,6 +18,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -43,6 +44,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.wst.server.core.IRuntime;
 import org.osgi.framework.Version;
@@ -62,7 +64,9 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         super( new Class<?>[] { IProject.class, IRuntime.class } );
     }
 
-    public IStatus doCreateNewProject( NewLiferayPluginProjectOp op, IProgressMonitor monitor ) throws CoreException
+    public IStatus doCreateNewProject(
+        NewLiferayPluginProjectOp op, IProgressMonitor monitor, ElementList<ProjectName> projectNames )
+        throws CoreException
     {
         final String sdkName = op.getPluginsSDKName().content( true );
         final PluginType pluginType = op.getPluginType().content( true );
@@ -207,6 +211,8 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         // need to update project name incase the suffix was not correct
         op.setFinalProjectName( newProject.getName() );
+
+        projectNames.insert().setName( op.getFinalProjectName().content() );
 
         switch( op.getPluginType().content() )
         {

@@ -19,11 +19,15 @@ import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
 import org.eclipse.ant.internal.ui.model.AntProjectNodeProxy;
@@ -45,6 +49,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
@@ -68,6 +73,7 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Gregory Amerson
  * @author Kuo Zhang
  * @author Simon Jiang
+ * @author Eric Min
  */
 @SuppressWarnings( "restriction" )
 public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPluginProjectOp>
@@ -154,23 +160,41 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
     {
         super.performPostFinish();
 
+        final List<IProject> projects = new ArrayList<IProject>();
+
         final NewLiferayPluginProjectOp op = element().nearest( NewLiferayPluginProjectOp.class );
-        final IProject project = CoreUtil.getProject( op.getFinalProjectName().content() );
 
-        try
+        ElementList<ProjectName> projectNames = op.getProjectNames();
+
+        for( ProjectName projectName : projectNames )
         {
-            addToWorkingSets( project );
+            final IProject newProject = CoreUtil.getProject( projectName.getName().content() );
+
+            if( newProject != null )
+            {
+                projects.add( newProject );
+            }
         }
-        catch( Exception ex )
+
+        for( final IProject project : projects )
         {
-            ProjectUI.logError( "Unable to add project to working set", ex );
+            try
+            {
+                addToWorkingSets( project );
+            }
+            catch( Exception ex )
+            {
+                ProjectUI.logError( "Unable to add project to working set", ex );
+            }
         }
 
-        openLiferayPerspective( project );
+        final IProject finalProject = projects.get(0);
 
-        showInAntView( project );
+        openLiferayPerspective( finalProject );
 
-        if( project != null && project.getFile( ISDKConstants.IVY_XML_FILE ).exists() )
+        showInAntView( finalProject );
+
+        if( finalProject != null && finalProject.getFile( ISDKConstants.IVY_XML_FILE ).exists() )
         {
             new WorkspaceJob( "Configuring project with Ivy dependencies" ) //$NON-NLS-1$
             {
@@ -178,7 +202,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                 {
                     try
                     {
-                        IvyUtil.configureIvyProject( project, monitor );
+                        IvyUtil.configureIvyProject( finalProject, monitor );
                     }
                     catch( CoreException e )
                     {
@@ -214,7 +238,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
             if( wizardId != null )
             {
-                openNewPortletWizard( wizardId, project );
+                openNewPortletWizard( wizardId, finalProject );
             }
         }
     }
