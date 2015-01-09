@@ -15,26 +15,42 @@
 package com.liferay.ide.xml.search.ui.markerResolutions;
 
 import com.liferay.ide.project.core.ValidationPreferences;
+import com.liferay.ide.server.util.ComponentUtil;
+import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
 
+import java.net.URL;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IMarkerResolution2;
 
 
 /**
  * @author Kuo Zhang
  */
-public class DecreaseProjectScopeXmlValidationLevel extends DecreaseXMLValidationLevel
+public class DecreaseProjectScopeXmlValidationLevel implements IMarkerResolution2
 {
+
+    private final static String MESSAGE = "Decrease validation level of this marker for this project to Ignore";
 
     public DecreaseProjectScopeXmlValidationLevel()
     {
     }
 
-    private final static String MESSAGE = "Decrease validation level of this marker for this project to Ignore";
-
     @Override
     public String getDescription()
     {
-        return getLabel();
+        return MESSAGE;
+    }
+
+    @Override
+    public Image getImage()
+    {
+        final URL url = LiferayXMLSearchUI.getDefault().getBundle().getEntry( "/icons/arrow_down.png" );
+        return ImageDescriptor.createFromURL( url ).createImage();
     }
 
     @Override
@@ -44,9 +60,10 @@ public class DecreaseProjectScopeXmlValidationLevel extends DecreaseXMLValidatio
     }
 
     @Override
-    protected void resolve( IMarker marker )
+    public void run( IMarker marker )
     {
         ValidationPreferences.setProjectScopeValLevel( marker.getResource().getProject(), -1 );
+        ComponentUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
     }
 
 }

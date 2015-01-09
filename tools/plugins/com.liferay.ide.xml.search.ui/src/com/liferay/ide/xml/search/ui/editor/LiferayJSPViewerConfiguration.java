@@ -62,7 +62,7 @@ public class LiferayJSPViewerConfiguration extends JSDTStructuredTextViewerConfi
                 }
                 else if( TextHoverManager.DOCUMENTATION_HOVER.equalsIgnoreCase( hoverType ) )
                 {
-					ITextHover[] hovers = createDocumentationHovers(contentType);
+                    ITextHover[] hovers = createDocumentationHovers(contentType);
 
                     if( hovers != null && hovers.length > 0 )
                     {
