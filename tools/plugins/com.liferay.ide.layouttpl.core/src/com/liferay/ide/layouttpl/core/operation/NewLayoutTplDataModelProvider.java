@@ -56,7 +56,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         if( webproject != null )
         {
             final IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-            return defaultDocroot != null && defaultDocroot.exists();
+            return defaultDocroot != null && defaultDocroot.exists( path );
         }
 
         return false;
