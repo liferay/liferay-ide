@@ -10,4 +10,15 @@
             shortName="bndtools">
       </liferayProjectProvider>
    </extension>
+   <extension
+         point="bndtools.core.projectTemplates">
+      <template
+            class="com.liferay.ide.bndtools.core.templates.ContentTargetingRuleTemplate"
+            doc="html/contentTargetingRule.xml"
+            name="Content Targeting Rule"
+            priority="500"
+            icon="html/target_16x16.png"
+            category="Liferay">
+      </template>
+   </extension>
 </plugin>

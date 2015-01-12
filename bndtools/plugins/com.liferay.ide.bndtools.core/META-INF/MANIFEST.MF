@@ -10,7 +10,9 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.core;bundle-version="2.0.0",
  biz.aQute.bndlib;bundle-version="2.4.0",
  bndtools.core;bundle-version="2.4.0",
- com.liferay.ide.server.core
+ com.liferay.ide.server.core,
+ bndtools.api;bundle-version="2.0.0",
+ org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.bndtools.core

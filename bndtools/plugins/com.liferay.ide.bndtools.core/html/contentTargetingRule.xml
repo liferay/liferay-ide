@@ -1,0 +1,9 @@
+<form>
+    <p>Creates a project for defining a content targeting rule. The following dependencies are added to the build path:</p>
+    <li><a href="http://www.aqute.biz/Bnd/Components">Content Targeting API</a> — for the <span font="fixed">Rule</span> type classes.</li>
+    <li><a href="http://www.aqute.biz/Bnd/Components">Content Targeting Anonymous User API</a> — for the <span font="fixed">AnonymousUser</span> class.</li>
+    <p>The following example files are added to the project:</p>
+    <li><a href="http://www.aqute.biz/Bnd/Components">Rule.java</a> — for the <span font="fixed">Rule</span> class.</li>
+    <li><a href="http://www.aqute.biz/Bnd/Components">Language.properties</a> — for the language properties.</li>
+    <li><a href="http://www.aqute.biz/Bnd/Components">ct_fields.ftl</a> — for the freemarker template.</li>
+</form>
