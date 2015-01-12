@@ -158,7 +158,7 @@ public class NewLiferayPluginProjectOpMethods
         final File parentProjectDir = path.toFile();
         final IStatus locationStatus = op.getProjectProvider().content().validateProjectLocation( projectName, path );
 
-        if( locationStatus.isOK() && parentProjectDir.exists() )
+        if( locationStatus.isOK() && parentProjectDir.exists() && parentProjectDir.list().length > 0 )
         {
             List<String> version =
                 op.getProjectProvider().content().getData( "parentVersion", String.class, parentProjectDir );
