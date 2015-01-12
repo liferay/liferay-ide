@@ -61,13 +61,13 @@
 
     <extension point="org.eclipse.ui.editors">
         <editor
-            name="Alloy JSP Editor"
+            name="Portlt JSP Editor"
             icon="/icons/e16/sourceEditor.gif"
             default="true"
             contributorClass="org.eclipse.jst.jsp.ui.internal.editor.ActionContributorJSP"
             class="org.eclipse.wst.sse.ui.StructuredTextEditor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont"
-            id="com.liferay.ide.alloy.ui.alloyjspeditor" >
+            id="com.liferay.ide.alloy.ui.portletjspeditor" >
         <contentTypeBinding
             contentTypeId="com.liferay.ide.alloy.core.alloyjspsource">
         </contentTypeBinding>

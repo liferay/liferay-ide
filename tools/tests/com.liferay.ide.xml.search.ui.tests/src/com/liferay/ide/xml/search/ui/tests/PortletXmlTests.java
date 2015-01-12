@@ -29,6 +29,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlViewerConfiguration;
 import com.liferay.ide.xml.search.ui.validators.PortletDescriptorValidator;
 
 import java.text.MessageFormat;
@@ -413,5 +414,17 @@ public class PortletXmlTests extends XmlSearchTestsBase
         elementContent = "content.Language";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
+    }
+
+    @Test
+    public void testSourceViewerConfiguration() throws Exception
+    {
+        if( shouldSkipBundleTests() ) { return; }
+
+        final IFile descriptorFile = getDescriptorFile();
+        Object sourceViewerConfiguration =
+            XmlSearchTestsUtils.getSourceViewerConfiguraionFromOpenedEditor( descriptorFile );
+
+        assertEquals( true, sourceViewerConfiguration instanceof LiferayCustomXmlViewerConfiguration );
     }
 }

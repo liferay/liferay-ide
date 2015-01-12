@@ -30,7 +30,7 @@ import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
  * @author Kuo Zhang
  */
 @SuppressWarnings( "restriction" )
-public class LiferayJSPViewerConfiguration extends JSDTStructuredTextViewerConfigurationJSP
+public class PortletJSPSourceViewerConfiguration extends JSDTStructuredTextViewerConfigurationJSP
 {
     @Override
     public ITextHover getTextHover( ISourceViewer sourceViewer, String contentType, int stateMask )

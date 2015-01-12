@@ -25,6 +25,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.filesystem,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.validation,
+ org.eclipse.wst.jsdt.web.support.jsp,
  com.ibm.icu,
  org.junit,
  org.apache.commons.io,
@@ -33,7 +34,9 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.sdk.core,
  com.liferay.ide.project.core,
  com.liferay.ide.server.core,
- com.liferay.ide.server.tomcat.core
+ com.liferay.ide.server.tomcat.core,
+ com.liferay.ide.alloy.core,
+ com.liferay.ide.alloy.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.xml.search.ui.tests

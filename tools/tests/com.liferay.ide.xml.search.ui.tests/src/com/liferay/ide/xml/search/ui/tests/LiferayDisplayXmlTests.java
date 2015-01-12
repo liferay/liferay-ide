@@ -30,6 +30,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlViewerConfiguration;
 import com.liferay.ide.xml.search.ui.validators.LiferayDisplayDescriptorValidator;
 
 import java.text.MessageFormat;
@@ -171,6 +172,18 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
         setAttrValue( descriptorFile, elementName, attrName, correctAttrValue );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+    }
+
+    @Test
+    public void testSourceViewerConfiguration() throws Exception
+    {
+        if( shouldSkipBundleTests() ) { return; }
+
+        final IFile descriptorFile = getDescriptorFile();
+        Object sourceViewerConfiguration =
+            XmlSearchTestsUtils.getSourceViewerConfiguraionFromOpenedEditor( descriptorFile );
+
+        assertEquals( true, sourceViewerConfiguration instanceof LiferayCustomXmlViewerConfiguration );
     }
 
 }

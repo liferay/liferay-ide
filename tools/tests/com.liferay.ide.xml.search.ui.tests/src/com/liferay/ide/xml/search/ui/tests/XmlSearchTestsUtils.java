@@ -285,7 +285,7 @@ public class XmlSearchTestsUtils
         assertNotNull( targetNode );
 
         final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
-        final SourceViewerConfiguration conf = getSourceViewerConfiguraion( file );
+        final SourceViewerConfiguration conf = getSourceViewerConfiguraionFromExtensionPoint( file );
 
         final IHyperlinkDetector[] hyperlinkDetectors = conf.getHyperlinkDetectors( viewer );
         final IRegion region = getRegion( targetNode );
@@ -337,7 +337,7 @@ public class XmlSearchTestsUtils
         int offset = getRegion( targetNode ).getOffset();
 
         final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
-        final SourceViewerConfiguration srcViewConf = getSourceViewerConfiguraion( file );
+        final SourceViewerConfiguration srcViewConf = getSourceViewerConfiguraionFromExtensionPoint( file );
 
         final ContentAssistant contentAssistant = (ContentAssistant) srcViewConf.getContentAssistant( viewer );
         // viewer.configure( srcViewConf );
@@ -412,15 +412,52 @@ public class XmlSearchTestsUtils
         return null;
     }
 
-    public static SourceViewerConfiguration getSourceViewerConfiguraion( IFile file ) throws Exception
+    // get the SourceViewerConfiguration from extension point
+    public static SourceViewerConfiguration getSourceViewerConfiguraionFromExtensionPoint( IFile file ) throws Exception
     {
-        Object obj = ExtendedConfigurationBuilder.getInstance().
-                        getConfiguration( ExtendedConfigurationBuilder.SOURCEVIEWERCONFIGURATION,
-                            file.getContentDescription().getContentType().getId() );
+        final String contentTypeId = file.getContentDescription().getContentType().getId();
 
-        if( obj instanceof SourceViewerConfiguration )
+        // get Source Viewer Configuration from content type
+        Object viewerConfFromContentType =
+            ExtendedConfigurationBuilder.getInstance().getConfiguration(
+                ExtendedConfigurationBuilder.SOURCEVIEWERCONFIGURATION, contentTypeId );
+
+        // get Source Viewer Configuration from editorId, has a higher priority
+        final String editorId = IDE.getEditorDescriptor( file ).getId();
+        Object viewerConfFromEditor =
+            ExtendedConfigurationBuilder.getInstance().getConfiguration(
+                ExtendedConfigurationBuilder.SOURCEVIEWERCONFIGURATION, editorId );
+
+        if( viewerConfFromEditor != null && viewerConfFromEditor instanceof SourceViewerConfiguration )
         {
-            return (SourceViewerConfiguration) obj;
+            return (SourceViewerConfiguration) viewerConfFromEditor;
+        }
+        else if( viewerConfFromContentType != null && viewerConfFromContentType instanceof SourceViewerConfiguration )
+        {
+            return (SourceViewerConfiguration) viewerConfFromContentType;
+        }
+
+        return null;
+    }
+
+    // open the editor and get the actual SourceViewerConfiguration
+    public static SourceViewerConfiguration getSourceViewerConfiguraionFromOpenedEditor( IFile file ) throws Exception
+    {
+        StructuredTextEditor editor = XmlSearchTestsUtils.getEditor( file );
+
+        Method getConfMethod =
+            ReflectionUtil.getDeclaredMethod( editor.getClass(), "getSourceViewerConfiguration", true );
+
+        if( getConfMethod != null )
+        {
+            getConfMethod.setAccessible( true );
+
+            Object obj = getConfMethod.invoke( editor );
+
+            if( obj != null && obj instanceof SourceViewerConfiguration )
+            {
+                return (SourceViewerConfiguration) obj;
+            }
         }
 
         return null;
