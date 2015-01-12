@@ -12,8 +12,10 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.tomcat.core;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
@@ -21,9 +23,11 @@ import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IPath;
-
+import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Gregory Amerson
@@ -37,6 +41,7 @@ public class PortalTomcatBundle implements PortalBundle
     private final PortalRuntime runtime;
     private final IPath tomcatPath;
     private final String version;
+    private final int jmxRemotePort;
 
     public PortalTomcatBundle()
     {
@@ -46,6 +51,7 @@ public class PortalTomcatBundle implements PortalBundle
         this.runtime = null;
         this.tomcatPath = null;
         this.version = null;
+        this.jmxRemotePort = 8099;
     }
 
     public PortalTomcatBundle( PortalRuntime portalRuntime )
@@ -60,6 +66,7 @@ public class PortalTomcatBundle implements PortalBundle
         // TODO detect tomcat installation
         final IPath location = this.runtime.getRuntime().getLocation();
         this.tomcatPath = location.append( "tomcat-7.0.42" );
+        this.jmxRemotePort = detectJmxRemotePort();
 
         this.autoDeployPath = location.append( "deploy" );
         this.liferayHome = location;
@@ -106,7 +113,7 @@ public class PortalTomcatBundle implements PortalBundle
         // TODO use dynamic attach API
         args.add( "-Dcom.sun.management.jmxremote" );
         args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
-        args.add( "-Dcom.sun.management.jmxremote.port=33133" );
+        args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
         args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
         args.add( "-Dfile.encoding=UTF8" );
         args.add( "-Djava.endorsed.dirs=" + this.tomcatPath.append( "endorsed" ).toPortableString() );
@@ -120,15 +127,53 @@ public class PortalTomcatBundle implements PortalBundle
         return args.toArray( new String[0] );
     }
 
+    public int getJmxRemotePort()
+    {
+        return this.jmxRemotePort;
+    }
+
+    private int detectJmxRemotePort()
+    {
+        int retval = 8099;
+
+        final IPath setenv = this.tomcatPath.append( "bin/setenv." + getShellExtension() );
+        final String contents = FileUtil.readContents( setenv.toFile() );
+        String port = null;
+
+        if( contents != null )
+        {
+            final Matcher matcher =
+                Pattern.compile( ".*-Dcom.sun.management.jmxremote.port(\\s*)=(\\s*)([0-9]+).*" ).matcher(
+                    contents );
+
+            if( matcher.matches() )
+            {
+                port = matcher.group( 3 );
+            }
+        }
+
+        if( port != null )
+        {
+            retval = Integer.parseInt( port );
+        }
+
+        return retval;
+    }
+
+    private String getShellExtension()
+    {
+        return Platform.OS_WIN32.equals( Platform.getOS() ) ? "bat" : "sh";
+    }
+
     public IPath[] getRuntimeClasspath()
     {
         final List<IPath> paths = new ArrayList<IPath>();
 
         final IPath binPath = this.tomcatPath.append( "bin" );
 
-        if ( binPath.toFile().exists() )
+        if( binPath.toFile().exists() )
         {
-            paths.add( binPath.append("bootstrap.jar") );
+            paths.add( binPath.append( "bootstrap.jar" ) );
 
             final IPath juli = binPath.append( "tomcat-juli.jar" );
 

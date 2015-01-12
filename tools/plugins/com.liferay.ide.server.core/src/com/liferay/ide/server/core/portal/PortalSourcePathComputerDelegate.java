@@ -20,7 +20,9 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -89,6 +91,8 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer
     private void collectPortalContainers( List<ISourceContainer> collect,
         ILaunchConfiguration configuration, IProgressMonitor monitor ) throws CoreException
     {
+        final Map<IProject, ISourceContainer> containers = new HashMap<IProject, ISourceContainer>();
+
         final IServer server = ServerUtil.getServer( configuration );
 
         final IModule[] modules = server.getModules();
@@ -97,13 +101,40 @@ public class PortalSourcePathComputerDelegate extends JavaSourcePathComputer
         {
             final IProject project = modules[i].getProject();
 
-            ILiferayProject lrproject = LiferayCore.create( project );
+            final ILiferayProject lrproject = LiferayCore.create( project );
 
             if( lrproject != null && lrproject.getSourceFolders() != null )
             {
-                collect.add( new JavaProjectSourceContainer( JavaCore.create( project ) ) );
+                if( containers.get( project ) == null )
+                {
+                    putProject( containers, project );
+                }
             }
         }
+
+        for( IProject project : CoreUtil.getAllProjects() )
+        {
+            if( containers.get( project ) == null )
+            {
+                final ILiferayProject lrproject = LiferayCore.create( project );
+
+                if( lrproject.getSourceFolders() != null )
+                {
+                    putProject( containers, project );
+                }
+            }
+        }
+
+
+        if( containers.size() > 0 )
+        {
+            collect.addAll( containers.values() );
+        }
+    }
+
+    private void putProject( Map<IProject, ISourceContainer> containers, IProject project )
+    {
+        containers.put( project, new JavaProjectSourceContainer( JavaCore.create( project ) ) );
     }
 
 }

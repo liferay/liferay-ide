@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
 /**
@@ -76,7 +77,16 @@ public abstract class BaseLiferayProject implements ILiferayProject
     @Override
     public IFolder[] getSourceFolders()
     {
-        return CoreUtil.getSourceFolders( JavaCore.create( getProject() ) ).toArray( new IFolder[0] );
+        IFolder[] retval = null;
+
+        final IJavaProject javaproject = JavaCore.create( getProject() );
+
+        if( javaproject != null && javaproject.isOpen() )
+        {
+            retval = CoreUtil.getSourceFolders( javaproject ).toArray( new IFolder[0] );
+        }
+
+        return retval;
     }
 
 }

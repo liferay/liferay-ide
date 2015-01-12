@@ -264,6 +264,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
 
     public void aboutToRefresh( IServer server )
     {
+        this.apiChecks.remove( server.getId() );
         this.bundlesFolders.remove( server.getId() );
     }
 

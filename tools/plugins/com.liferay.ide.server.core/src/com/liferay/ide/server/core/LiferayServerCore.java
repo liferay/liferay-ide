@@ -897,7 +897,9 @@ public class LiferayServerCore extends Plugin
 
     public static OsgiConnection newOsgiConnection( IServer server )
     {
-        return new OsgiConnectionImpl( 33133 );
+        PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
+
+        return new OsgiConnectionImpl( runtime.getPortalBundle().getJmxRemotePort() );
     }
 
 }

@@ -27,6 +27,8 @@ public interface PortalBundle
 
     IPath getAutoDeployPath();
 
+    int getJmxRemotePort();
+
     IPath getLiferayHome();
 
     IPath getModulesPath();
