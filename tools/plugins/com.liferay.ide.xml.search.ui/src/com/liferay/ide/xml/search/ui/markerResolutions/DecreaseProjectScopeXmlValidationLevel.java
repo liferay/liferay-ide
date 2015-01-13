@@ -17,6 +17,7 @@ package com.liferay.ide.xml.search.ui.markerResolutions;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
+import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 
 import java.net.URL;
 
@@ -34,7 +35,7 @@ import org.eclipse.ui.IMarkerResolution2;
 public class DecreaseProjectScopeXmlValidationLevel implements IMarkerResolution2
 {
 
-    private final static String MESSAGE = "Decrease validation level of this marker for this project to Ignore";
+    private final static String MESSAGE = "Disable this type of validation in current project";
 
     public DecreaseProjectScopeXmlValidationLevel()
     {
@@ -62,8 +63,13 @@ public class DecreaseProjectScopeXmlValidationLevel implements IMarkerResolution
     @Override
     public void run( IMarker marker )
     {
-        ValidationPreferences.setProjectScopeValLevel( marker.getResource().getProject(), -1 );
-        ComponentUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
+        final String validationKey = marker.getAttribute( XMLSearchConstants.VALIDATION_KEY, null );
+
+        if( validationKey != null )
+        {
+            ValidationPreferences.setProjectScopeValidationLevel( marker.getResource().getProject(), validationKey, -1 );
+            ComponentUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
+        }
     }
 
 }

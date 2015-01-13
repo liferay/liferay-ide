@@ -168,43 +168,44 @@ public class ValidationPreferences
     }
 
     // Levels: IGNORE: -1, ERROR: 1, WARNNING: 2
-    public static void setInstanceScopeValLevel( int validationLevel )
+    public static void setInstanceScopeValidationLevel( String validationKey, int validationLevel )
     {
-        final IEclipsePreferences node = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+        if( preferenceKeys.contains( validationKey ) &&
+            ( validationLevel == -1 || validationLevel == 1 || validationLevel == 2 ) )
+        {
+            final IEclipsePreferences node = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
-        for( String key : preferenceKeys )
-        {
-            node.putInt( key, validationLevel );
+            node.putInt( validationKey, validationLevel );
+
+            try
+            {
+                node.flush();
+            }
+            catch( BackingStoreException e )
+            {
+                ProjectCore.logError( "Error setting validation preferences", e );
+            }
         }
 
-        try
-        {
-            node.flush();
-        }
-        catch( BackingStoreException e )
-        {
-            ProjectCore.logError( "Error setting validation preferences", e );
-        }
     }
 
-    public static void setProjectScopeValLevel( IProject project, int validationLevel )
+    public static void setProjectScopeValidationLevel( IProject project, String validationKey, int validationLevel )
     {
         final IEclipsePreferences node = new ProjectScope( project ).getNode( ProjectCore.PLUGIN_ID );
 
-        try
+        if( preferenceKeys.contains( validationKey ) &&
+            ( validationLevel == -1 || validationLevel == 1 || validationLevel == 2 ) )
         {
             node.putBoolean( ProjectCore.USE_PROJECT_SETTINGS, true );
-
-            for( String key : preferenceKeys )
+            node.putInt( validationKey, validationLevel );
+            try
             {
-                 node.putInt( key, validationLevel );
+                node.flush();
             }
-
-            node.flush();
-        }
-        catch( BackingStoreException e )
-        {
-            ProjectCore.logError( "Error setting validation preferences", e );
+            catch( BackingStoreException e )
+            {
+                ProjectCore.logError( "Error setting validation preferences", e );
+            }
         }
     }
 }

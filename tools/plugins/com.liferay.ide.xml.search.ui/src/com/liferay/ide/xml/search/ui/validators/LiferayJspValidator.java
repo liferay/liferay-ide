@@ -64,7 +64,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
     protected void addMessage(
         IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
-        int severity, String querySpecificationId )
+        int severity, String validationKey, String querySpecificationId )
     {
         final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
@@ -82,6 +82,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
                 message.setAttribute( XMLSearchConstants.TEXT_CONTENT, textContent );
                 message.setAttribute( XMLSearchConstants.FULL_PATH, file.getFullPath().toPortableString() );
                 message.setAttribute( XMLSearchConstants.MARKER_TYPE, XMLSearchConstants.LIFERAY_JSP_MARKER_ID );
+                message.setAttribute( XMLSearchConstants.VALIDATION_KEY, validationKey );
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );
             }
@@ -133,16 +134,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
     protected int getServerity( ValidationType validationType, IFile file )
     {
         int retval = -1;
-        String validationKey = null;
-
-        if( ValidationType.PROPERTY_NOT_FOUND.equals( validationType ) )
-        {
-            validationKey = ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND;
-        }
-        else if( ValidationType.METHOD_NOT_FOUND.equals( validationType ) )
-        {
-            validationKey = ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND;
-        }
+        String validationKey = getValidationKey( validationType, file );
 
         if( validationKey != null )
         {
@@ -157,6 +149,24 @@ public class LiferayJspValidator extends LiferayBaseValidator
         }
 
         return retval;
+    }
+
+
+    @Override
+    protected String getValidationKey( ValidationType validationType, IFile file )
+    {
+        String retval = null;
+
+        if( ValidationType.PROPERTY_NOT_FOUND.equals( validationType ) )
+        {
+            retval = ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND;
+        }
+        else if( ValidationType.METHOD_NOT_FOUND.equals( validationType ) )
+        {
+            retval = ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND;
+        }
+
+        return retval != null ? retval : super.getValidationKey( validationType, file );
     }
 
     private boolean isSupportedTag( String tagName )
@@ -264,12 +274,12 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
                             if( severity != ValidationMessage.IGNORE )
                             {
+                                final String validationKey = getValidationKey( validationType, file );
                                 final String querySpecificationId = referenceTo.getQuerySpecificationId();
-
                                 final String messageText = getMessageText( validationType, referenceTo, node, file );
 
                                 addMessage(
-                                    node, file, validator, reporter, batchMode, messageText, severity,
+                                    node, file, validator, reporter, batchMode, messageText, severity, validationKey,
                                     querySpecificationId );
                             }
                         }
@@ -306,12 +316,13 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
                     if( severity != ValidationMessage.IGNORE )
                     {
+                        final String validationKey = getValidationKey( validationType, file );
                         final String querySpecificationId = referenceTo.getQuerySpecificationId();
-
                         final String messageText = getMessageText( validationType, referenceTo, node, file );
 
                         addMessage(
-                            node, file, validator, reporter, batchMode, messageText, severity, querySpecificationId );
+                            node, file, validator, reporter, batchMode, messageText, severity, validationKey,
+                            querySpecificationId );
                     }
                 }
             }

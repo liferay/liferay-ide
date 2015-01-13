@@ -14,16 +14,13 @@
 
 package com.liferay.ide.xml.search.ui.markerResolutions;
 
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.IMarkerResolutionGenerator;
 
@@ -44,14 +41,7 @@ public class XmlValidationMarkerResolutionGenerator implements IMarkerResolution
         {
             if( marker.getType().contains( "liferay" ) )
             {
-                final IEclipsePreferences node =
-                    new ProjectScope( marker.getResource().getProject() ).getNode( ProjectCore.PLUGIN_ID );
-
-                if( node.getBoolean( ProjectCore.USE_PROJECT_SETTINGS, false ) )
-                {
-                    retval.add( new DecreaseProjectScopeXmlValidationLevel() );
-                }
-
+                retval.add( new DecreaseProjectScopeXmlValidationLevel() );
                 retval.add( new DecreaseInstanceScopeXmlValidationLevel() );
             }
         }

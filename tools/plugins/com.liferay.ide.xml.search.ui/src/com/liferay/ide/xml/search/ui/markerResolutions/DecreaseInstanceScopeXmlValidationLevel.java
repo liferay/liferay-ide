@@ -18,6 +18,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.server.util.ComponentUtil;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
+import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 
 import java.net.URL;
 
@@ -37,7 +38,7 @@ import org.eclipse.ui.IMarkerResolution2;
 public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolution2
 {
 
-    private final static String MESSAGE = "Decrease validation level of this marker for all projects to Ignore";
+    private final static String MESSAGE = "Disable this type of validation in all projects";
 
     public DecreaseInstanceScopeXmlValidationLevel()
     {
@@ -69,13 +70,18 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
         final IEclipsePreferences node =
             new ProjectScope( marker.getResource().getProject() ).getNode( ProjectCore.PLUGIN_ID );
 
-        if( node.getBoolean( ProjectCore.USE_PROJECT_SETTINGS ,false ) )
+        final String validationKey = marker.getAttribute( XMLSearchConstants.VALIDATION_KEY, null );
+        if( validationKey != null )
         {
-            ValidationPreferences.setProjectScopeValLevel( marker.getResource().getProject(), -1 );
-        }
+            if( node.getBoolean( ProjectCore.USE_PROJECT_SETTINGS, false ) )
+            {
+                ValidationPreferences.setProjectScopeValidationLevel(
+                    marker.getResource().getProject(), validationKey, -1 );
+            }
 
-        ValidationPreferences.setInstanceScopeValLevel( -1 );
-        ComponentUtil.validateFile( (IFile)marker.getResource(), new NullProgressMonitor() );
+            ValidationPreferences.setInstanceScopeValidationLevel( validationKey, -1 );
+            ComponentUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
+        }
     }
 
 }

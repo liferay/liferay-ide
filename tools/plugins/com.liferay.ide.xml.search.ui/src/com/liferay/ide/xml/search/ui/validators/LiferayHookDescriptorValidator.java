@@ -86,7 +86,9 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
                     if( validationMsg != null )
                     {
-                        addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );
+
+                        final String validationKey = getValidationKey( ValidationType.SYNTAX_INVALID, file );
+                        addMessage( node, file, validator, reporter, batchMode, validationMsg, severity, validationKey );
                         return false;
                     }
                 }
@@ -108,8 +110,10 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
                 if( valInfo != null )
                 {
-                    addMessage( node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
-                                getServerity( valInfo.getValidationType(), file ) );
+                    addMessage(
+                        node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
+                        getServerity( valInfo.getValidationType(), file ),
+                        getValidationKey( valInfo.getValidationType(), file ) );
                 }
 
                 return;
@@ -121,8 +125,10 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
                 if( valInfo != null )
                 {
-                    addMessage( node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
-                                getServerity( valInfo.getValidationType(), file ) );
+                    addMessage(
+                        node, file, validator, reporter, batchMode, valInfo.getValidationMessge(),
+                        getServerity( valInfo.getValidationType(), file ),
+                        getValidationKey( valInfo.getValidationType(), file ) );
                 }
 
                 return;

@@ -32,4 +32,5 @@ public interface XMLSearchConstants
     String RESOURCE_BUNDLE_QUERY_ID = "portlet.language.properties.querySpecification";
     String SERVICE_BUILDER_CONTENT_TYPE = "com.liferay.ide.service.core.servicebuildercontent";
     String TEXT_CONTENT = "textContent";
+    String VALIDATION_KEY = "validationKey";
 }

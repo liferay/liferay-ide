@@ -77,7 +77,10 @@ public class PortletDescriptorValidator extends LiferayBaseValidator
 
                 if( validationMsg != null )
                 {
-                    addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );
+                    final String validationKey = getValidationKey( ValidationType.SYNTAX_INVALID, file );
+
+                    addMessage(
+                        node, file, validator, reporter, batchMode, validationMsg, severity, validationKey );
                     return false;
                 }
             }

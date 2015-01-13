@@ -19,6 +19,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
+import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 
 import java.util.List;
 
@@ -191,16 +192,14 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         }
     }
 
-    protected void addMessage(
-        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
-        int severity)
+    protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
+                               String messageText, int severity, String validationKey )
     {
-        addMessage( node, file, validator, reporter, batchMode, messageText, severity, null );
+        addMessage( node, file, validator, reporter, batchMode, messageText, severity, validationKey, null );
     }
 
-    protected void addMessage(
-        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
-        int severity, String querySpecificationId )
+    protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
+                               String messageText, int severity, String validationKey, String querySpecificationId )
     {
         final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
@@ -216,6 +215,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
                 reporter.removeAllMessages( validator );
                 message.setTargetObject( file );
                 message.setAttribute( MARKER_QUERY_ID, querySpecificationId );
+                message.setAttribute( XMLSearchConstants.VALIDATION_KEY, validationKey );
                 reporter.addMessage( validator, message );
             }
         }
@@ -367,7 +367,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
 
     protected int getServerity( ValidationType validationType, IFile file )
     {
-        final String validationKey = ValidationPreferences.getValidationPreferenceKey( file.getName(), validationType );
+        final String validationKey = getValidationKey( validationType, file );
 
         // get severity from users' settings
         return Platform.getPreferencesService().getInt(
@@ -385,6 +385,11 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         }
 
         return node.getStartOffset();
+    }
+
+    protected String getValidationKey( ValidationType validationType, IFile file )
+    {
+        return ValidationPreferences.getValidationPreferenceKey( file.getName(), validationType );
     }
 
     protected ValidationType getValidationType( IXMLReferenceTo referenceTo, int nbElements )
@@ -468,11 +473,14 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
             {
                 ValidationType validationType = getValidationType( referenceTo, nbElements );
                 int severity = getServerity( validationType, file );
+                final String validationKey = getValidationKey( validationType, file );
 
                 if( severity != ValidationMessage.IGNORE )
                 {
                     final String messageText = getMessageText( validationType, referenceTo, node, file );
-                    addMessage( node, file, validator, reporter, batchMode, messageText, severity, referenceTo.getQuerySpecificationId() );
+                    addMessage(
+                        node, file, validator, reporter, batchMode, messageText, severity, validationKey,
+                        referenceTo.getQuerySpecificationId() );
                 }
             }
         }

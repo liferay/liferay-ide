@@ -51,7 +51,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
 
     public static final String PROJECT_UI_PROPERTIES_PAGE_ID = "com.liferay.ide.project.ui.propertyPage.validation";
 
-    public static final String VALIDATION_ID = "com.liferay.ide.project.ui.pluginValidationSettingsPage"; //$NON-NLS-1$
+    public static final String VALIDATION_ID = "com.liferay.ide.project.ui.pluginValidationSettingsPage";
 
     protected static final Map<Integer, Integer> ERROR_MAP = new HashMap<Integer, Integer>();
 
@@ -59,7 +59,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
 
     protected static final String[] ERRORS = new String[] { Msgs.error, Msgs.warning, Msgs.ignore };
 
-    protected static final String SETTINGS_SECTION_NAME = "PortletValidationSeverities"; //$NON-NLS-1$
+    protected static final String SETTINGS_SECTION_NAME = "PluginValidationSeverities";
 
     static
     {

@@ -62,8 +62,11 @@ public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator
             {
                 if( node.getNodeValue().matches( "\\s*" ) )
                 {
+                    final String validationKey = getValidationKey( ValidationType.SYNTAX_INVALID, file );
                     String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
-                    addMessage( node, file, validator, reporter, batchMode, validationMsg, severity );;
+
+                    addMessage(
+                        node, file, validator, reporter, batchMode, validationMsg, severity, validationKey );
                     return false;
                 }
             }
