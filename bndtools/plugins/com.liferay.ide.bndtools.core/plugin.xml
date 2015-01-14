@@ -13,12 +13,12 @@
    <extension
          point="bndtools.core.projectTemplates">
       <template
-            class="com.liferay.ide.bndtools.core.templates.ContentTargetingRuleTemplate"
-            doc="html/contentTargetingRule.xml"
-            name="Content Targeting Rule"
-            priority="500"
-            icon="html/target_16x16.png"
-            category="Liferay">
+            class="com.liferay.ide.bndtools.core.templates.RuleTemplate"
+            doc="html/ruleTemplate.xml"
+            name="Rule"
+            priority="510"
+            icon="html/ct_16x16.png"
+            category="Liferay Content Targeting">
       </template>
    </extension>
 </plugin>

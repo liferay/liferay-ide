@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -33,12 +34,22 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Version;
 
-
 /**
  * @author Gregory Amerson
  */
 public class OsgiConnectionImpl implements OsgiConnection
 {
+
+    public static OsgiBundle newFromData( CompositeData cd )
+    {
+        final String id = cd.get( "Identifier" ).toString();
+        final String bsn = cd.get( "SymbolicName" ).toString();
+        final String state = cd.get( "State" ).toString();
+        final Version version = new Version( cd.get( "Version" ).toString() );
+
+        return new OsgiBundle( id, bsn, state, version );
+    }
+
     private final MBeanServerConnection mbsc;
 
     public OsgiConnectionImpl( int port )
@@ -55,13 +66,60 @@ public class OsgiConnectionImpl implements OsgiConnection
         }
     }
 
+    public IStatus deployBundle( String location, File bundle )
+    {
+        IStatus retval = null;
+
+        try
+        {
+            final ObjectName framework =
+                this.mbsc.queryNames( new ObjectName( "osgi.core:type=framework,*" ), null ).iterator().next();
+
+            Object installed =
+                this.mbsc.invoke( framework, "installBundleFromURL", new Object[] { location,
+                    bundle.toURI().toURL().toExternalForm() }, new String[] { String.class.getName(),
+                    String.class.getName() } );
+
+            if( installed instanceof Long )
+            {
+                long bundleId = (Long) installed;
+
+                if( bundleId > 0 )
+                {
+                    // may have already been installed so lets run update TODO only do this if needed
+
+                    this.mbsc.invoke(
+                        framework, "updateBundleFromURL", new Object[] { bundleId,
+                            bundle.toURI().toURL().toExternalForm() },
+                        new String[] { "long", String.class.getName() } );
+
+                    this.mbsc.invoke(
+                        framework, "refreshBundle", new Object[] { bundleId }, new String[] { "long" } );
+
+                    this.mbsc.invoke(
+                        framework, "startBundle", new Object[] { bundleId }, new String[] { "long" } );
+                }
+
+                retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) bundleId, null, null );
+            }
+        }
+        catch( Exception e )
+        {
+            retval = LiferayServerCore.error( "Error installing bundle " + bundle.getName(), e );
+        }
+
+        return retval;
+    }
+
+    // TODO investigate why this is so slow
     public OsgiBundle[] getBundles()
     {
         final List<OsgiBundle> retval = new ArrayList<OsgiBundle>();
 
         try
         {
-            final Set<ObjectName> names = this.mbsc.queryNames( new ObjectName( "osgi.core:type=bundleState,*" ), null );
+            final Set<ObjectName> names =
+                this.mbsc.queryNames( new ObjectName( "osgi.core:type=bundleState,*" ), null );
             final TabularData data =
                 (TabularData) this.mbsc.invoke( names.iterator().next(), "listBundles", null, null );
 
@@ -73,7 +131,7 @@ public class OsgiConnectionImpl implements OsgiConnection
                 {
                     retval.add( newFromData( cd ) );
                 }
-                catch( Exception e)
+                catch( Exception e )
                 {
                     LiferayServerCore.logError( "Could not get bundle data " + cd );
                 }
@@ -85,17 +143,6 @@ public class OsgiConnectionImpl implements OsgiConnection
         }
 
         return retval.toArray( new OsgiBundle[0] );
-    }
-
-    public static OsgiBundle newFromData( CompositeData cd )
-    {
-        return new OsgiBundle
-        (
-            cd.get( "Identifier" ).toString(),
-            cd.get( "SymbolicName" ).toString(),
-            cd.get( "State" ).toString(),
-            new Version( cd.get( "Version" ).toString() )
-        );
     }
 
     public boolean ping()
@@ -111,50 +158,32 @@ public class OsgiConnectionImpl implements OsgiConnection
         }
     }
 
-    public IStatus deployBundle( String location, File bundle )
+    public IStatus uninstallBundle( String symbolicName )
     {
         IStatus retval = null;
 
-        try
+        for( OsgiBundle bundle : getBundles() )
         {
-            final ObjectName objectName =
-                this.mbsc.queryNames( new ObjectName( "osgi.core:type=framework,*" ), null ).iterator().next();
-
-            Object installed = this.mbsc.invoke( objectName,
-                                                 "installBundleFromURL",
-                                                 new Object[] { location, bundle.toURI().toURL().toExternalForm() },
-                                                 new String[] { String.class.getName(), String.class.getName() } );
-
-            if( installed instanceof Long )
+            if( bundle.getSymbolicName().equals( symbolicName ) )
             {
-                long bundleId = (Long) installed;
-
-                if( bundleId > 0 )
+                try
                 {
-                    // may have already been installed so lets run update TODO only do this if needed
+                    final ObjectName framework =
+                        this.mbsc.queryNames( new ObjectName( "osgi.core:type=framework,*" ), null ).iterator().next();
 
-                    this.mbsc.invoke( objectName,
-                                      "updateBundleFromURL",
-                                      new Object[] { bundleId, bundle.toURI().toURL().toExternalForm() },
-                                      new String[] { "long", String.class.getName() } );
+                    this.mbsc.invoke(
+                        framework, "uninstallBundle", new Object[] { Long.parseLong( bundle.getId() ) },
+                        new String[] { "long" } );
 
-                    this.mbsc.invoke( objectName,
-                                      "refreshBundle",
-                                      new Object[] { bundleId },
-                                      new String[] { "long" } );
-
-                    this.mbsc.invoke( objectName,
-                                      "startBundle",
-                                      new Object[] { bundleId },
-                                      new String[] { "long" } );
+                    retval = Status.OK_STATUS;
+                }
+                catch( Exception e )
+                {
+                    retval = LiferayServerCore.error( "Error uninstall bundle " + bundle.getSymbolicName(), e );
                 }
 
-                retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) bundleId, null, null );
+                break;
             }
-        }
-        catch( Exception e )
-        {
-            retval = LiferayServerCore.error( "Error installing bundle " + bundle.getName(), e );
         }
 
         return retval;

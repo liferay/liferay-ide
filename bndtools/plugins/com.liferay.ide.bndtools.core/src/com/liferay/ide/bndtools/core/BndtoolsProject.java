@@ -19,8 +19,6 @@ import aQute.bnd.build.Project;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.portal.BundleModulePublisher;
-import com.liferay.ide.server.core.portal.ModulePublisher;
 
 import java.io.File;
 import java.util.Collection;
@@ -44,26 +42,6 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     {
         super( project );
         this.bndProject = bndProject;
-    }
-
-    @Override
-    public <T> T adapt( Class<T> adapterType )
-    {
-        T adapter = super.adapt( adapterType );
-
-        if( adapter != null )
-        {
-            return adapter;
-        }
-
-        T retval = null;
-
-        if( ModulePublisher.class.equals( adapterType ) )
-        {
-            return adapterType.cast( new BundleModulePublisher( this ) );
-        }
-
-        return retval;
     }
 
     @Override

@@ -17,6 +17,9 @@ import com.liferay.ide.server.core.portal.OsgiBundle;
 import com.liferay.ide.server.core.portal.OsgiConnection;
 import com.liferay.ide.server.ui.BundlesImages;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -35,12 +38,11 @@ import org.osgi.framework.Version;
 public class BundlesDecorator extends LabelProvider implements ILightweightLabelDecorator
 {
 
-    private static final String LOADING = "Loading...";
-
-    private static BundlesDecorator instance;
-
-    private static final String WORKSPACE_BUNDLES_FOLDER_NAME = "Workspace Bundles";
     private static final String BUNDLES_FOLDER_NAME = "OSGi Bundles";
+    private static final Map<String, OsgiConnection> connections = new HashMap<String, OsgiConnection>();
+    private static BundlesDecorator instance;
+    private static final String LOADING = "Loading...";
+    private static final String WORKSPACE_BUNDLES_FOLDER_NAME = "Workspace Bundles";
 
     public static BundlesDecorator getDefault()
     {
@@ -104,7 +106,7 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 
             if( server.getServerState() == IServer.STATE_STARTED )
             {
-                final OsgiConnection osgi = LiferayServerCore.newOsgiConnection( module.getServer() );
+                final OsgiConnection osgi = getOsgiConnection( server );
 
                 //TODO this chould be cached somehow?
                 for( OsgiBundle bundle : osgi.getBundles() )
@@ -144,6 +146,37 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
         }
 
         return null;
+    }
+
+    private OsgiConnection getOsgiConnection( IServer server )
+    {
+        OsgiConnection retval = null;
+
+        final String id = server.getId();
+
+        if( connections.get( id ) != null )
+        {
+            OsgiConnection osgi = connections.get( id );
+
+            if( osgi.ping() )
+            {
+                retval = osgi;
+            }
+            else
+            {
+                connections.remove( id );
+                retval = null;
+            }
+        }
+
+        if( retval == null )
+        {
+            final OsgiConnection osgi = LiferayServerCore.newOsgiConnection( server );
+            connections.put( id, osgi );
+            retval = osgi;
+        }
+
+        return retval;
     }
 
     public StyledString getStyledText( Object element )

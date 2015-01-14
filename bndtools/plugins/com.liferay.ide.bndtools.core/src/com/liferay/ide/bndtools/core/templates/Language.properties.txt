@@ -2,5 +2,5 @@
 ## Model resources
 ##
 
-model.resource.com.liferay.content.targeting.rule.@rule.java.package.name@.@rule.java.class.name@Rule=@rule.java.class.name@
-model.resource.com.liferay.content.targeting.rule.@rule.java.package.name@.@rule.java.class.name@Rule.description=@rule.java.class.name@ rule
+model.resource.@rule.java.package.name@.@rule.java.class.name@=@rule.java.class.name@
+model.resource.@rule.java.package.name@.@rule.java.class.name@.description=@rule.java.class.name@ rule

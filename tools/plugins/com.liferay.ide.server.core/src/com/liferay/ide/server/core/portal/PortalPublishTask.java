@@ -16,6 +16,7 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,17 +38,35 @@ public class PortalPublishTask extends PublishTaskDelegate
         super();
     }
 
-    @SuppressWarnings( "rawtypes" )
-    @Override
-    public PublishOperation[] getTasks( IServer server, List modules )
+    private void addOperation(
+        Class<? extends BundlePublishOperation> opClass, List<BundlePublishOperation> tasks, IServer server,
+        IModule[] module )
     {
-        return super.getTasks( server, modules );
+        for( BundlePublishOperation task : tasks )
+        {
+            if( task.getClass().equals( opClass ) )
+            {
+                task.addModule( module );
+                return;
+            }
+        }
+
+        try
+        {
+            BundlePublishOperation op =
+                opClass.getConstructor( IServer.class, IModule[].class ).newInstance( server, module );
+            tasks.add( op );
+        }
+        catch( Exception e )
+        {
+            LiferayServerCore.logError( "Unable to add bundle operation", e );
+        }
     }
 
     @SuppressWarnings( "rawtypes" )
     public PublishOperation[] getTasks( IServer server, int kind, List modules, List kindList )
     {
-        List<PublishOperation> tasks = new ArrayList<PublishOperation>();
+        List<BundlePublishOperation> tasks = new ArrayList<BundlePublishOperation>();
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {
@@ -58,48 +77,25 @@ public class PortalPublishTask extends PublishTaskDelegate
                 IModule[] module = (IModule[]) modules.get( i );
                 Integer deltaKind = (Integer) kindList.get( i );
 
-                PublishOperation op = null;
-
                 switch( kind )
                 {
                     case IServer.PUBLISH_FULL:
-                        switch( deltaKind )
-                        {
-                            case ServerBehaviourDelegate.ADDED:
-                            case ServerBehaviourDelegate.CHANGED:
-                                op = new BundlePublishFullAdd( server, module );
-                                break;
-
-                            case ServerBehaviourDelegate.REMOVED:
-                                op = new BundlePublishFullRemove( server, module );
-                                break;
-
-                            case ServerBehaviourDelegate.NO_CHANGE:
-                                //TODO need to checkt to see if the latest jar is actually the one deployed
-                                op = new BundlePublishFullAdd( server, module );
-                                break;
-
-                            default:
-                                System.out.println( "Unhandled deltaKind " + deltaKind );
-                                break;
-                        }
-                        break;
-
                     case IServer.PUBLISH_INCREMENTAL:
+                    case IServer.PUBLISH_AUTO:
                         switch( deltaKind )
                         {
                             case ServerBehaviourDelegate.ADDED:
                             case ServerBehaviourDelegate.CHANGED:
-                                op = new BundlePublishFullAdd( server, module );
+                                addOperation( BundlePublishFullAdd.class, tasks, server, module );
                                 break;
 
                             case ServerBehaviourDelegate.REMOVED:
-                                op = new BundlePublishFullRemove( server, module );
+                                addOperation( BundlePublishFullRemove.class, tasks, server, module );
                                 break;
 
                             case ServerBehaviourDelegate.NO_CHANGE:
                                 //TODO need to checkt to see if the latest jar is actually the one deployed
-                                op = new BundlePublishFullAdd( server, module );
+                                addOperation( BundlePublishFullAdd.class, tasks, server, module );
                                 break;
 
                             default:
@@ -112,14 +108,16 @@ public class PortalPublishTask extends PublishTaskDelegate
                         System.out.println( "Unhandled kind " + kind );
                         break;
                 }
-
-                if( op != null )
-                {
-                    tasks.add( op );
-                }
             }
         }
 
         return tasks.toArray( new PublishOperation[0] );
+    }
+
+    @SuppressWarnings( "rawtypes" )
+    @Override
+    public PublishOperation[] getTasks( IServer server, List modules )
+    {
+        return super.getTasks( server, modules );
     }
 }

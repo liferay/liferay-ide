@@ -99,7 +99,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
                     {
                         if( apiCheck.isOK() )
                         {
-                            insertWorkspaceBundlesFolder( server, currentChildren );
+//                            insertWorkspaceBundlesFolder( server, currentChildren );
                             insertBundlesFolder( server, currentChildren );
                             this.apiChecks.remove( server.getId() );
                         }

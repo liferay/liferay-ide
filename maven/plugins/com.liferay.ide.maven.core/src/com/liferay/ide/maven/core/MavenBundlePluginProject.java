@@ -16,8 +16,6 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.project.core.IProjectBuilder;
-import com.liferay.ide.server.core.portal.BundleModulePublisher;
-import com.liferay.ide.server.core.portal.ModulePublisher;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import org.apache.maven.project.MavenProject;
@@ -73,10 +71,6 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
             else if( IBundleProject.class.equals( adapterType ) )
             {
                 return adapterType.cast( this );
-            }
-            else if( ModulePublisher.class.equals( adapterType ) )
-            {
-                return adapterType.cast( new BundleModulePublisher( this ) );
             }
         }
 

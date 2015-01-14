@@ -21,8 +21,6 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -33,41 +31,16 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.model.PublishOperation;
 
 /**
  * @author Gregory Amerson
  */
-public class BundlePublishFullAdd extends PublishOperation
+public class BundlePublishFullAdd extends BundlePublishOperation
 {
-
-    private final PortalRuntime portalRuntime;
-    private final IServer server;
-    private final List<IModule> modules;
-    private final PortalServerBehavior portalServerBehavior;
 
     public BundlePublishFullAdd( IServer s, IModule[] modules )
     {
-        this.server = s;
-        this.modules = Arrays.asList( modules );
-        this.portalRuntime = (PortalRuntime) this.server.getRuntime().loadAdapter( PortalRuntime.class, null );
-
-        if( this.portalRuntime == null )
-        {
-            throw new IllegalArgumentException( "Could not get portal runtime from server " + s.getName() );
-        }
-
-        this.portalServerBehavior = (PortalServerBehavior) this.server.loadAdapter( PortalServerBehavior.class, null );
-
-        if( this.portalServerBehavior == null )
-        {
-            throw new IllegalArgumentException( "Could not get portal server behavior from server " + s.getName() );
-        }
-    }
-
-    public int getKind()
-    {
-        return REQUIRED;
+        super( s, modules );
     }
 
     private IStatus autoDeploy( IFile output ) throws CoreException
@@ -75,6 +48,7 @@ public class BundlePublishFullAdd extends PublishOperation
         IStatus retval = null;
 
         final IPath autoDeployPath = portalRuntime.getPortalBundle().getAutoDeployPath();
+        final IPath statePath = portalRuntime.getPortalBundle().getModulesPath().append( "state" );
 
         if( autoDeployPath.toFile().exists() )
         {
@@ -91,35 +65,12 @@ public class BundlePublishFullAdd extends PublishOperation
             }
         }
 
-        return retval;
-    }
-
-    private IStatus remoteDeploy( IFile output )
-    {
-        IStatus retval = null;
-
-        final OsgiConnection osgi = LiferayServerCore.newOsgiConnection( this.server );
-
-        final IPath rawLocation = output.getRawLocation();
-
-        if( rawLocation != null )
+        if( statePath.toFile().exists() )
         {
-            retval = osgi.deployBundle( rawLocation.toPortableString(), rawLocation.toFile() );
-        }
-        else
-        {
-            retval =
-                LiferayServerCore.error( "Uninstall to deploy file remotely " +
-                    output.getLocation().toPortableString() );
+            FileUtil.deleteDir( statePath.toFile(), true );
         }
 
         return retval;
-    }
-
-    @Override
-    public int getOrder()
-    {
-        return 0;
     }
 
     @Override
@@ -160,5 +111,27 @@ public class BundlePublishFullAdd extends PublishOperation
 
             this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
         }
+    }
+
+    private IStatus remoteDeploy( IFile output )
+    {
+        IStatus retval = null;
+
+        final OsgiConnection osgi = getOsgiConnection();
+
+        final IPath rawLocation = output.getRawLocation();
+
+        if( rawLocation != null )
+        {
+            retval = osgi.deployBundle( rawLocation.toPortableString(), rawLocation.toFile() );
+        }
+        else
+        {
+            retval =
+                LiferayServerCore.error( "Unable to deploy bundle remotely " +
+                    output.getLocation().toPortableString() );
+        }
+
+        return retval;
     }
 }

@@ -15,67 +15,62 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 
-import java.util.Arrays;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.model.PublishOperation;
 
 /**
  * @author Gregory Amerson
  */
-public class BundlePublishFullRemove extends PublishOperation
+public class BundlePublishFullRemove extends BundlePublishOperation
 {
 
-    private final IServer server;
-    private final PortalRuntime portalRuntime;
-    private final List<IModule> modules;
-    private final PortalServerBehavior portalServerBehavior;
-
-    public BundlePublishFullRemove( IServer s, IModule[] modules )
+    public BundlePublishFullRemove( IServer server, IModule[] modules )
     {
-        this.server = s;
-        this.modules = Arrays.asList( modules );
-        this.portalRuntime = (PortalRuntime) this.server.getRuntime().loadAdapter( PortalRuntime.class, null );
-
-        if( this.portalRuntime == null )
-        {
-            throw new IllegalArgumentException( "Could not get portal runtime from server " + s.getName() );
-        }
-
-        this.portalServerBehavior = (PortalServerBehavior) this.server.loadAdapter( PortalServerBehavior.class, null );
-
-        if( this.portalServerBehavior == null )
-        {
-            throw new IllegalArgumentException( "Could not get portal server behavior from server " + s.getName() );
-        }
+        super( server, modules );
     }
 
-    public int getKind()
-    {
-        return REQUIRED;
-    }
-
+    @Override
     public void execute( IProgressMonitor monitor, IAdaptable info ) throws CoreException
     {
         for( IModule module : modules )
         {
             IStatus status = null;
 
-            final ModulePublisher publisher = LiferayCore.create( ModulePublisher.class, module.getProject() );
+            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, module.getProject() );
 
-            if( publisher != null )
+            if( bundleProject != null )
             {
-                status = publisher.remove( server, module );
-                this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
+                final String symbolicName = bundleProject.getSymbolicName();
+
+                if( this.server.getServerState() == IServer.STATE_STARTED )
+                {
+                    status = remoteUninstall( symbolicName );
+                }
+
+                if( status == null || status.isOK() ) // remote uninstall succeedded
+                {
+                    status = localUninstall( symbolicName );
+                }
+
+                if( status.isOK() )
+                {
+                    this.portalServerBehavior.setModulePublishState2(
+                        new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
+                }
             }
             else
             {
@@ -91,9 +86,84 @@ public class BundlePublishFullRemove extends PublishOperation
         }
     }
 
-    @Override
-    public int getOrder()
+    private void findFilesInPath( final File dir, final String pattern, List<File> retval  )
     {
-        return 0;
+        if( dir.exists() && dir.isDirectory() )
+        {
+            final File[] files = dir.listFiles();
+
+            for( File f : files )
+            {
+                if( f.isDirectory() )
+                {
+                    findFilesInPath( f, pattern, retval );
+                }
+                else if( f.getName().contains( pattern ) )
+                {
+                    retval.add( f );
+                }
+            }
+        }
     }
+
+    private IStatus localUninstall( String symbolicName )
+    {
+        IStatus retval = null;
+
+        final PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
+
+        final IPath modulesPath = runtime.getPortalBundle().getModulesPath();
+
+        final List<File> moduleFiles = new ArrayList<File>();
+
+        // TODO this may not always match
+        findFilesInPath( modulesPath.toFile(), symbolicName, moduleFiles );
+
+        final IPath deployPath = runtime.getPortalBundle().getAutoDeployPath();
+        findFilesInPath( deployPath.toFile(), symbolicName, moduleFiles );
+
+        if( moduleFiles.size() > 0 )
+        {
+            // TODO convert to multi-statuses
+            for( File moduleFile : moduleFiles )
+            {
+                if( moduleFile.delete() )
+                {
+                    retval = Status.OK_STATUS;
+                }
+                else
+                {
+                    retval = LiferayServerCore.error( "Could not delete module file " + moduleFile.getName() );
+                }
+            }
+        }
+
+        if( retval == null )
+        {
+            LiferayServerCore.logInfo( "No module to remove " + symbolicName );
+
+            retval = Status.OK_STATUS;
+        }
+
+        return retval;
+    }
+
+    private IStatus remoteUninstall( String symbolicName )
+    {
+        IStatus retval = null;
+
+        final OsgiConnection osgi = getOsgiConnection();
+
+        if( osgi != null )
+        {
+            retval = osgi.uninstallBundle( symbolicName );
+        }
+        else
+        {
+            retval = LiferayServerCore.error( "Unable to uninstall bundle remotely " + symbolicName );
+        }
+
+        return retval;
+    }
+
 }
