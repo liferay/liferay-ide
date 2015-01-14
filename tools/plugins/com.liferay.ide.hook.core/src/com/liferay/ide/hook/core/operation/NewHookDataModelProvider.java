@@ -96,7 +96,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
                         if( defaultDocroot != null )
                         {
-                            String containerFullPath = defaultDocroot.getFullPath().toPortableString();
+                            String containerFullPath = defaultDocroot.getFullPath().append( customJspFolder ).toPortableString();
 
                             int index = containerFullPath.indexOf( defaultWebappRootPath );
 
@@ -112,7 +112,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
 
                     if( defaultWebappRootFolder != null )
                     {
-                        return "/custom_jsps"; //$NON-NLS-1$
+                        return "/META-INF/custom_jsps"; //$NON-NLS-1$
                     }
                 }
             }
