@@ -61,7 +61,7 @@
 
     <extension point="org.eclipse.ui.editors">
         <editor
-            name="Portlt JSP Editor"
+            name="Portlet JSP Editor"
             icon="/icons/e16/sourceEditor.gif"
             default="true"
             contributorClass="org.eclipse.jst.jsp.ui.internal.editor.ActionContributorJSP"
