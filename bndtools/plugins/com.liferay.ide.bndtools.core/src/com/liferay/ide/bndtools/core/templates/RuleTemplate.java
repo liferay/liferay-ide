@@ -80,7 +80,7 @@ public class RuleTemplate extends AbstractProjectTemplate
             final CapReqBuilder cap =
                 new CapReqBuilder( IdentityNamespace.IDENTITY_NAMESPACE ).addDirective(
                     Namespace.REQUIREMENT_FILTER_DIRECTIVE, "(osgi.identity=" + safePackageName + ")" );
-            model.setRunRequires( Collections.singletonList( cap.buildRequirement() ) );
+            model.setRunRequires( Collections.singletonList( cap.buildSyntheticRequirement() ) );
         }
     }
 
