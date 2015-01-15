@@ -201,8 +201,14 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         twistie = createTwistie( body, Msgs.liferayJspFiles, columns );
         inner = createInnerComposite( parent, twistie, columns );
 
-        createCombo( inner, Msgs.propertyNotFound, ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND );
-        createCombo( inner, Msgs.methodNotFound, ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND );
+        createCombo( inner, Msgs.syntaxInvalid, ValidationPreferences.LIFERAY_JSP_SYNTAX_INVALID );
+        createCombo( inner, Msgs.typeNotFound , ValidationPreferences.LIFERAY_JSP_TYPE_NOT_FOUND );
+        createCombo( inner, Msgs.typeHierarchyIncorrect, ValidationPreferences.LIFERAY_JSP_TYPE_HIERARCHY_INCORRECT );
+        createCombo( inner, Msgs.methodNotFound, ValidationPreferences.LIFERAY_JSP_METHOD_NOT_FOUND );
+        createCombo( inner, Msgs.resourceNotFound, ValidationPreferences.LIFERAY_JSP_RESOURCE_NOT_FOUND );
+        createCombo( inner, Msgs.referenceNotFound, ValidationPreferences.LIFERAY_JSP_REFERENCE_NOT_FOUND );
+        createCombo( inner, Msgs.propertyNotFound, ValidationPreferences.LIFERAY_JSP_PROPERTY_NOT_FOUND );
+        createCombo( inner, Msgs.staticValueUndefined, ValidationPreferences.LIFERAY_JSP_STATIC_VALUE_UNDEFINED );
 
         return parent;
     }
@@ -291,6 +297,7 @@ public class PluginValidationSettingsPage extends AbstractValidationSettingsPage
         public static String syntaxInvalid;
         public static String propertyNotFound;
         public static String methodNotFound;
+        public static String staticValueUndefined;
 
         public static String error;
         public static String ignore;

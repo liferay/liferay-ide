@@ -91,7 +91,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
     protected String getMessageText( ValidationType validationType, IXMLReferenceTo referenceTo, Node node, IFile file )
     {
-        if( node.toString().equals( "class" ) && validationType.equals( ValidationType.STATIC_NOT_FOUND ) )
+        if( node.toString().equals( "class" ) && validationType.equals( ValidationType.STATIC_VALUE_UNDEFINED ) )
         {
             return NLS.bind( MESSAGE_CLASS_ATTRIBUTE_NOT_WORK, null );
         }
@@ -159,14 +159,34 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
         if( ValidationType.PROPERTY_NOT_FOUND.equals( validationType ) )
         {
-            retval = ValidationPreferences.LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND;
+            retval = ValidationPreferences.LIFERAY_JSP_PROPERTY_NOT_FOUND;
         }
         else if( ValidationType.METHOD_NOT_FOUND.equals( validationType ) )
         {
-            retval = ValidationPreferences.LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND;
+            retval = ValidationPreferences.LIFERAY_JSP_METHOD_NOT_FOUND;
+        }
+        else if( ValidationType.REFERENCE_NOT_FOUND.equals( validationType ) )
+        {
+            retval = ValidationPreferences.LIFERAY_JSP_REFERENCE_NOT_FOUND;
+        }
+        else if( ValidationType.RESOURCE_NOT_FOUND.equals( validationType ) )
+        {
+            retval = ValidationPreferences.LIFERAY_JSP_RESOURCE_NOT_FOUND;
+        }
+        else if( ValidationType.STATIC_VALUE_UNDEFINED.equals( validationType ) )
+        {
+            retval = ValidationPreferences.LIFERAY_JSP_STATIC_VALUE_UNDEFINED;
+        }
+        else if( ValidationType.TYPE_HIERARCHY_INCORRECT.equals( validationType ) )
+        {
+            retval = ValidationPreferences.LIFERAY_JSP_TYPE_HIERARCHY_INCORRECT;
+        }
+        else if( ValidationType.TYPE_NOT_FOUND.equals( validationType ) )
+        {
+            retval = ValidationPreferences.LIFERAY_JSP_TYPE_NOT_FOUND;
         }
 
-        return retval != null ? retval : super.getValidationKey( validationType, file );
+        return retval;
     }
 
     private boolean isSupportedTag( String tagName )
@@ -325,6 +345,10 @@ public class LiferayJspValidator extends LiferayBaseValidator
                             querySpecificationId );
                     }
                 }
+            }
+            else
+            {
+                super.validateReferenceToStatic( referenceTo, attrNode, file, validator, reporter, batchMode );
             }
         }
     }

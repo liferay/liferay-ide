@@ -18,6 +18,7 @@ package com.liferay.ide.xml.search.ui;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
+import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseInstanceScopeXmlValidationLevel;
 import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseProjectScopeXmlValidationLevel;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
@@ -196,7 +197,17 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
     {
         try
         {
-            return isJSPMarker( marker ) && isSupportedQuery( marker );
+            if( isJSPMarker( marker ) && isSupportedQuery( marker ) )
+            {
+                return true;
+            }
+
+            final String valKey = marker.getAttribute( XMLSearchConstants.VALIDATION_KEY, null );
+
+            if( valKey != null && ValidationPreferences.containsKey( valKey ) )
+            {
+                return true;
+            }
         }
         catch( CoreException e )
         {

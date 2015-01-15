@@ -72,7 +72,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
     public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
     public static final String MESSAGE_REFERENCE_NOT_FOUND = Msgs.referenceNotFound;
     public static final String MESSAGE_RESOURCE_NOT_FOUND = Msgs.resourceNotFound;
-    public static final String MESSAGE_STATIC_VALUE_NOT_FOUND = Msgs.staticValueNotFound;
+    public static final String MESSAGE_STATIC_VALUE_UNDEFINED = Msgs.staticValueUndefined;
     public static final String MESSAGE_SYNTAX_INVALID = Msgs.syntaxInvalid;
     public static final String MESSAGE_TYPE_HIERARCHY_INCORRECT = Msgs.typeHierarchyIncorrect;
     public static final String MESSAGE_TYPE_NOT_FOUND = Msgs.typeNotFound;
@@ -323,8 +323,8 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
             final IFile languagePropertiesFile = getReferencedFile( referenceTo, node, file );
             return NLS.bind( MESSAGE_PROPERTY_NOT_FOUND, textContent, languagePropertiesFile != null
                 ? languagePropertiesFile.getName() : "any resource files" );
-        case STATIC_NOT_FOUND:
-            return NLS.bind( MESSAGE_STATIC_VALUE_NOT_FOUND, textContent );
+        case STATIC_VALUE_UNDEFINED:
+            return NLS.bind( MESSAGE_STATIC_VALUE_UNDEFINED, textContent );
         }
 
         return null;
@@ -411,7 +411,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
             case PROPERTY:
                 return ValidationType.PROPERTY_NOT_FOUND;
             case STATIC:
-                return ValidationType.STATIC_NOT_FOUND;
+                return ValidationType.STATIC_VALUE_UNDEFINED;
             default:
                 return null;
         }
@@ -536,7 +536,7 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
         public static String propertyNotFound;
         public static String referenceNotFound;
         public static String resourceNotFound;
-        public static String staticValueNotFound;
+        public static String staticValueUndefined;
         public static String syntaxInvalid;
         public static String typeHierarchyIncorrect;
         public static String typeNotFound;

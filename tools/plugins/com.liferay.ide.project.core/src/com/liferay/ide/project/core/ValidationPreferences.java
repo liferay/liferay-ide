@@ -39,7 +39,7 @@ public class ValidationPreferences
         PROPERTY_NOT_FOUND,
         REFERENCE_NOT_FOUND,
         RESOURCE_NOT_FOUND,
-        STATIC_NOT_FOUND,
+        STATIC_VALUE_UNDEFINED,
         SYNTAX_INVALID,
         TYPE_NOT_FOUND,
         TYPE_HIERARCHY_INCORRECT,
@@ -100,8 +100,14 @@ public class ValidationPreferences
 
     // *** validation preferences of liferay jsp files ***
 
-    public static final String LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND = "liferay-jsp-files-java-method-not-found";
-    public static final String LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND = "liferay-jsp-files-resource-property-not-found";
+    public static final String LIFERAY_JSP_METHOD_NOT_FOUND = "liferay-jsp-method-not-found";
+    public static final String LIFERAY_JSP_PROPERTY_NOT_FOUND = "liferay-jsp--property-not-found";
+    public static final String LIFERAY_JSP_REFERENCE_NOT_FOUND = "liferay-jsp-reference-not-found";
+    public static final String LIFERAY_JSP_RESOURCE_NOT_FOUND = "liferya-jsp-resource-not-found";
+    public static final String LIFERAY_JSP_STATIC_VALUE_UNDEFINED = "liferay-jsp-static-value-undefined";
+    public static final String LIFERAY_JSP_SYNTAX_INVALID = "liferay-jsp-syntax-value_invalid";
+    public static final String LIFERAY_JSP_TYPE_NOT_FOUND = "liferay-jsp-type-not-found";
+    public static final String LIFERAY_JSP_TYPE_HIERARCHY_INCORRECT = "liferay-jsp-hierarchy-incorrect";
 
     private static Set<String> preferenceKeys;
 
@@ -145,8 +151,19 @@ public class ValidationPreferences
         preferenceKeys.add( SERVICE_XML_RESOURCE_NOT_FOUND );
         preferenceKeys.add( SERVICE_XML_SYNTAX_INVALID );
 
-        preferenceKeys.add( LIFERAY_JSP_FILES_JAVA_METHOD_NOT_FOUND );
-        preferenceKeys.add( LIFERAY_JSP_FILES_RESOURCE_PROPERTY_NOT_FOUND );
+        preferenceKeys.add( LIFERAY_JSP_METHOD_NOT_FOUND );
+        preferenceKeys.add( LIFERAY_JSP_PROPERTY_NOT_FOUND );
+        preferenceKeys.add( LIFERAY_JSP_REFERENCE_NOT_FOUND );
+        preferenceKeys.add( LIFERAY_JSP_RESOURCE_NOT_FOUND );
+        preferenceKeys.add( LIFERAY_JSP_STATIC_VALUE_UNDEFINED );
+        preferenceKeys.add( LIFERAY_JSP_SYNTAX_INVALID );
+        preferenceKeys.add( LIFERAY_JSP_TYPE_NOT_FOUND );
+        preferenceKeys.add( LIFERAY_JSP_TYPE_HIERARCHY_INCORRECT );
+    }
+
+    public static boolean containsKey( String validationKey )
+    {
+        return preferenceKeys.contains( validationKey );
     }
 
     public static String getValidationPreferenceKey( String descriptorFileName, ValidationType type )
