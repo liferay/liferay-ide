@@ -39,7 +39,7 @@
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/luna/1.1/1.1.0.20140611-1646/</m2e-wtp-site>
         <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-23/</adt-site>
         <eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.0-SNAPSHOT/</eclipse-xml-search-site>
-        <tern-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/tern.java-0.7.0.201410280110/</tern-site>
+        <tern-site>http://oss.opensagres.fr/tern.repository/0.8.0-SNAPSHOT/</tern-site>
         <webresources-site>http://oss.opensagres.fr/eclipse-wtp-webresources/0.7.0-SNAPSHOT/</webresources-site>
         <bndtools-site>http://bndtools-updates.s3.amazonaws.com/</bndtools-site>
         <gmaven.runtime>1.8</gmaven.runtime>
