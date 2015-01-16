@@ -381,6 +381,12 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     Value<String> getPortletName();
     void setPortletName( String value );
 
+    // *** ProjectNames ***
+
+    @Type( base = ProjectName.class )
+    ListProperty PROP_PROJECT_NAMES = new ListProperty( TYPE, "ProjectNames" );
+
+    ElementList<ProjectName> getProjectNames();
 
     // *** Method: execute ***
 

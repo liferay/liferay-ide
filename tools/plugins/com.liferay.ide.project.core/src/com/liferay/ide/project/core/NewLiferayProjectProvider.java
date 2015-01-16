@@ -16,11 +16,13 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.ProjectName;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.ElementList;
 
 
 /**
@@ -43,10 +45,13 @@ public abstract class NewLiferayProjectProvider extends AbstractLiferayProjectPr
 
         final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.class.cast( operation );
 
-        return doCreateNewProject( op, monitor );
+        ElementList<ProjectName> projectNames = op.getProjectNames();
+
+        return doCreateNewProject( op, monitor, projectNames );
     }
 
-    public abstract IStatus doCreateNewProject( final NewLiferayPluginProjectOp op, IProgressMonitor monitor )
+    public abstract IStatus doCreateNewProject(
+        final NewLiferayPluginProjectOp op, IProgressMonitor monitor, ElementList<ProjectName> projectNames )
         throws CoreException;
 
     public abstract IStatus validateProjectLocation( String projectName, IPath path );
