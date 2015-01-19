@@ -172,7 +172,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
     @Override
     public boolean hasPipelinedChildren( Object element, boolean currentHasChildren )
     {
-        return hasChildren( element );
+        return currentHasChildren ? true : hasChildren( element );
     }
 
     @SuppressWarnings( { "rawtypes", "unchecked" } )
