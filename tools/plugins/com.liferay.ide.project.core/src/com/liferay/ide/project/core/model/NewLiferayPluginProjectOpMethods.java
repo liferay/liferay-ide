@@ -22,7 +22,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
-import com.liferay.ide.project.core.model.internal.LocationListener;
+import com.liferay.ide.project.core.model.internal.ProjectNameListener;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
@@ -106,7 +106,8 @@ public class NewLiferayPluginProjectOpMethods
             final NewLiferayProjectProvider projectProvider = op.getProjectProvider().content( true );
 
             //IDE-1306  If the user types too quickly all the model changes may not have propagated
-            LocationListener.updateLocation( op );
+            final Path projectLocation = op.getLocation().content();
+            updateLocation( op, projectLocation );
 
             final IStatus status = projectProvider.createNewProject( op, monitor );
 
@@ -170,6 +171,33 @@ public class NewLiferayPluginProjectOpMethods
         }
 
         return retval;
+    }
+
+    public static String getProjectNameWithSuffix( final NewLiferayPluginProjectOp op )
+    {
+        final String projectName = op.getProjectName().content();
+
+        String suffix = null;
+
+        if( projectName != null )
+        {
+            if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
+            {
+                suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
+
+                if( suffix != null )
+                {
+                    // check if project name already contains suffix
+                    if( projectName.endsWith( suffix ) )
+                    {
+                        suffix = null;
+                    }
+                }
+            }
+        }
+
+        return ( projectName == null ? StringPool.EMPTY : projectName ) +
+                        ( suffix == null ? StringPool.EMPTY : suffix );
     }
 
     public static String getPluginTypeSuffix( final PluginType pluginType )
@@ -401,31 +429,19 @@ public class NewLiferayPluginProjectOpMethods
 
     public static void updateLocation( final NewLiferayPluginProjectOp op, final Path baseLocation )
     {
-        final String projectName = op.getProjectName().content();
+        final String projectName = getProjectNameWithSuffix( op );
 
-        String suffix = null;
+        final String lastSegment = baseLocation.lastSegment();
 
-        if( projectName != null )
+        if ( baseLocation!= null && baseLocation.segmentCount()>0)
         {
-            if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
+            if ( lastSegment.equals( projectName ))
             {
-                suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
-
-                if( suffix != null )
-                {
-                    // check if project name already contains suffix
-                    if( projectName.endsWith( suffix ) )
-                    {
-                        suffix = null;
-                    }
-                }
+                return;
             }
         }
 
-        final String dirName = ( projectName == null ? StringPool.EMPTY : projectName ) +
-                               ( suffix == null ? StringPool.EMPTY : suffix );
-
-        final Path newLocation = baseLocation.append( dirName );
+        final Path newLocation = baseLocation.append( projectName );
 
         op.setLocation( newLocation );
     }
