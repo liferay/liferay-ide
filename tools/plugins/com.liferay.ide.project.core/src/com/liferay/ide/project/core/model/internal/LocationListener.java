@@ -14,11 +14,44 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
+
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.ValuePropertyContentEvent;
+import org.eclipse.sapphire.modeling.Path;
+
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class LocationListener extends ProjectNameListener
+public class LocationListener extends FilteredListener<ValuePropertyContentEvent>
 {
 
+    protected NewLiferayPluginProjectOp op( PropertyContentEvent event )
+    {
+        return event.property().element().nearest( NewLiferayPluginProjectOp.class );
+    }
+
+    @Override
+    protected void handleTypedEvent( ValuePropertyContentEvent event )
+    {
+        NewLiferayPluginProjectOp op = op(event);
+
+        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+
+        if ( !useDefaultLocation)
+        {
+            final String afterValue = event.after();
+
+            final String beforeValue = event.before();
+            
+            if ( beforeValue == null && afterValue != null )
+            {
+                NewLiferayPluginProjectOpMethods.updateLocation( op, new Path(afterValue) );
+            }
+        }
+    }
 }
