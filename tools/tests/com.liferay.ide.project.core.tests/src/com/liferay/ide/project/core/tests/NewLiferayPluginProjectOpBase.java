@@ -235,8 +235,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         // Location does't have a type suffix, project name has one.
         op.setProjectName( projectNameWithoutSuffix + suffix );
         op.setLocation( locationWithoutSuffix );
-        assertEquals(
-            locationWithoutSuffix + "/" + projectNameWithoutSuffix + suffix, op.getLocation().content().toString() );
+        assertEquals( locationWithoutSuffix , op.getLocation().content().toString() );
 
         // Location has a type suffix.
         op.setLocation( locationWithoutSuffix + suffix );

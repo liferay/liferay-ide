@@ -30,6 +30,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Gregory Amerson
  * @author Terry Jia
  * @author Kuo Zhang
+ * @author Simon Jiang
  */
 public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
 {
@@ -106,25 +107,6 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
                 NewLiferayPluginProjectOpMethods.updateLocation( op, newLocationBase );
             }
         }
-        else
-        {
-            if( providerShortName.equals( "ant" ) )
-            {
-                final String suffix =
-                    NewLiferayPluginProjectOpMethods.getPluginTypeSuffix( op.getPluginType().content( true ) );
 
-                Path newLocationBase = op.getLocation().content( true );
-
-                if( newLocationBase != null && newLocationBase.segmentCount() > 0 )
-                {
-                    final String lastSegment = newLocationBase.lastSegment();
-
-                    if( ! lastSegment.endsWith( suffix ) )
-                    {
-                        NewLiferayPluginProjectOpMethods.updateLocation( op, newLocationBase );
-                    }
-                }
-            }
-        }
     }
 }

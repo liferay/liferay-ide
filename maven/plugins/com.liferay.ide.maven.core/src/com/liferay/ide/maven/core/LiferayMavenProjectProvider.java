@@ -773,6 +773,17 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         IStatus retval = Status.OK_STATUS;
         // if the path is a folder and it has a pom.xml that is a package type of 'pom' then this is a valid location
 
+
+        if ( path != null && path.segmentCount() > 0 )
+        {
+            final String lastSegment = path.lastSegment();
+            
+            if ( ! lastSegment.equals( projectName ) )
+            {
+                path = path.append( projectName );
+            }
+        }
+        
         final File dir = path.toFile();
 
         if( dir.exists() )
