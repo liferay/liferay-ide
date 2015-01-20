@@ -79,6 +79,12 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         for( IModule module : modules )
         {
             IStatus retval = Status.OK_STATUS;
+
+            if( module.getProject() == null )
+            {
+                continue;
+            }
+
             final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, module.getProject() );
 
             if( bundleProject != null )

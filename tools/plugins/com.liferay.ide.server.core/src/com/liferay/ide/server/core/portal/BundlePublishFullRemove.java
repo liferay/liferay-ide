@@ -48,6 +48,11 @@ public class BundlePublishFullRemove extends BundlePublishOperation
     {
         for( IModule module : modules )
         {
+            if( module.getProject() == null )
+            {
+                continue;
+            }
+
             IStatus status = null;
 
             final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, module.getProject() );
