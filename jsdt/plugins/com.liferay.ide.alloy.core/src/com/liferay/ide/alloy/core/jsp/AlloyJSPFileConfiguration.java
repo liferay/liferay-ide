@@ -28,7 +28,7 @@ import tern.server.protocol.html.ScriptTagRegion;
  */
 public class AlloyJSPFileConfiguration implements ITernFileConfiguration
 {
-    private static final ScriptTagRegion[] tags = new ScriptTagRegion[] { new ScriptTagRegion( "aui:script" ) };
+    private static final ScriptTagRegion[] tags = new ScriptTagRegion[] { ScriptTagRegion.SCRIPT_TAG, new ScriptTagRegion( "aui:script" ) };
 
     @Override
     public ScriptTagRegion[] getScriptTags( ITernFile ternFile )
