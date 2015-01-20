@@ -143,8 +143,9 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         String invalidLocation = null;
         invalidLocation = "not-absolute-location";
         op.setLocation( invalidLocation );
+        final String projectName = op.getProjectName().content();
 
-        final String expected = "\"" + invalidLocation + "\" is not an absolute path.";
+        final String expected = "\"" + invalidLocation + "\\" + projectName + "\"" + " is not an absolute path.";
 
         assertEquals( expected, vs.validation().message() );
         assertEquals( expected, op.getLocation().validation().message() );
