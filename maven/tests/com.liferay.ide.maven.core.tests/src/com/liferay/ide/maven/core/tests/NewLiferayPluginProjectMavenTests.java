@@ -147,8 +147,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         final String expected = "\"" + invalidLocation + "\\" + projectName + "\"" + " is not an absolute path.";
 
-        assertEquals( expected, vs.validation().message() );
-        assertEquals( expected, op.getLocation().validation().message() );
+        assertEquals( normalize( expected ), normalize( vs.validation().message() ) );
+        assertEquals( normalize( expected ), normalize( op.getLocation().validation().message() ) );
 
         if( CoreUtil.isWindows() )
         {
@@ -185,6 +185,11 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         final String expected4 = "Location must be specified.";
         assertEquals( expected4, vs.validation().message() );
         assertEquals( expected4, op.getLocation().validation().message() );
+    }
+
+    private String normalize( String val )
+    {
+        return val.replaceAll( "\\\\", "/" );
     }
 
     @Test
