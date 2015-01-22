@@ -22,15 +22,21 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.EnablementService;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -42,6 +48,7 @@ import org.junit.Test;
  */
 public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 {
+    protected final ProjectCoreBase base = new ProjectCoreBase();
 
     protected IProject createMavenProject( NewLiferayPluginProjectOp op ) throws Exception
     {
@@ -128,6 +135,23 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         final String expected2 = "'life*ray' is not a valid Java identifier";
         assertEquals( expected2, vs.validation().message() );
         assertEquals( expected2, op.getGroupId().validation().message() );
+    }
+
+    @Test
+    public void testHookProjectName() throws Exception
+    {
+        final NewLiferayPluginProjectOp op = newProjectOp( "test-hook" );
+        op.setProjectProvider( "maven" );
+        op.setPluginType( PluginType.hook );
+        op.setUseDefaultLocation( true );
+
+        IProject expectedProject = createMavenProject(op);
+
+        String expectedProjectName = expectedProject.getName();
+
+        String actualProjectName = op.getProjectNames().get(0).getName().content();
+
+        assertEquals( expectedProjectName, actualProjectName );
     }
 
     @Test
@@ -223,6 +247,25 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     }
 
     @Test
+    public void testPortletProjectName() throws Exception
+    {
+        final NewLiferayPluginProjectOp op = newProjectOp( "test-name" );
+        op.setProjectProvider( "maven" );
+        op.setPluginType( PluginType.portlet );
+        op.setUseDefaultLocation( true );
+        op.setPortletFramework( "mvc" );
+        op.setPortletName( "testPortlet" );
+
+        IProject expectedProject = createMavenProject(op);
+
+        String expectedProjectName = expectedProject.getName();
+
+        String actualProjectName = op.getProjectNames().get(0).getName().content();
+
+        assertEquals( expectedProjectName, actualProjectName );
+    }
+
+    @Test
     public void testProjectNameListener() throws Exception
     {
         if( shouldSkipBundleTests() ) return ;
@@ -298,6 +341,33 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         assertEquals( true, exceptedValues.containsAll( acturalValues ) );
         assertEquals( true, acturalValues.containsAll( exceptedValues ) );
+    }
+
+    @Test
+    public void testServiceBuilderProjectName() throws Exception
+    {
+        NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+        op.setProjectName( "test-name" );
+        op.setProjectProvider( "maven" );
+        op.setPluginType( PluginType.servicebuilder );
+
+        final IProject project = base.createProject( op, op.getProjectName() + "-portlet" );
+
+        String projectName = project.getName();
+        String finalProjectName = projectName.substring( 0, projectName.lastIndexOf( "-" ) );
+
+        ElementList<ProjectName> projectNames = op.getProjectNames();
+
+        List<String> finalProjectnames = new ArrayList<String>();
+
+        for( ProjectName expectedProjectName : projectNames )
+        {
+            finalProjectnames.add( expectedProjectName.getName().content() );
+        }
+
+        assertEquals( true, finalProjectnames.contains( finalProjectName ) );
+        assertEquals( true, finalProjectnames.contains( finalProjectName + "-portlet" ) );
+        assertEquals( true, finalProjectnames.contains( finalProjectName + "-portlet-service" ) );
     }
 
     @Test

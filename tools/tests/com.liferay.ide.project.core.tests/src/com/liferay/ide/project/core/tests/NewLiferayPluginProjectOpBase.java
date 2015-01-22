@@ -62,7 +62,6 @@ import org.junit.Test;
 @SuppressWarnings( "restriction" )
 public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 {
-
     protected IProject checkNewJsfAntProjectIvyFile( IProject jsfProject, String jsfSuite ) throws Exception
     {
         final IFile ivyXml = jsfProject.getFile( "ivy.xml" );
@@ -798,7 +797,22 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals( true, acturalLables.containsAll( exceptedLables ) );
     }
 
+    @Test
+    public void testServiceBuilderProjectName() throws Exception
+    {
+        final NewLiferayPluginProjectOp op = newProjectOp( "test-sb" );
 
+        op.setPluginType( PluginType.servicebuilder );
+        op.setUseDefaultLocation( true );
+
+        final IProject expectedProject = createAntProject( op );
+
+        String expectedProjectName = expectedProject.getName();
+
+        String actualProjectName = op.getProjectNames().get(0).getName().content();
+
+        assertEquals( expectedProjectName, actualProjectName );
+    }
 
     protected void testProjectNameValidation( final String initialProjectName ) throws Exception
     {
@@ -989,6 +1003,23 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         op.setUseSdkLocation( false );
         exceptedLocation = CoreUtil.getWorkspaceRoot().getLocation().append( projectName + "-portlet" );
         assertEquals( exceptedLocation, PathBridge.create( op.getLocation().content() ) );
+    }
+
+    @Test
+    public void testHookProjectName() throws Exception
+    {
+        final NewLiferayPluginProjectOp op = newProjectOp( "test-hook" );
+
+        op.setPluginType( PluginType.hook );
+        op.setUseDefaultLocation( true );
+
+        final IProject expectedProject = createAntProject( op );
+
+        String expectedProjectName = expectedProject.getName();
+
+        String actualProjectName = op.getProjectNames().get(0).getName().content();
+
+        assertEquals( expectedProjectName, actualProjectName );
     }
 
     @Test
