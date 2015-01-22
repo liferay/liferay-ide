@@ -52,8 +52,17 @@ public class NumberValueValidationService extends ValidationService
 
             if( !CoreUtil.isNullOrEmpty( triggerValue ) )
             {
-                value = Integer.valueOf( triggerValue );
-
+                try
+                {
+                	value = Integer.valueOf( triggerValue );
+                	
+                }catch( NumberFormatException e )
+                {	
+                	return Status.createErrorStatus( Resources.bind(
+                            StringEscapeUtils.unescapeJava( Resources.nonIntegerInvalid ), new Object[] { triggerValue, 
+                               "" } ) );          	
+                }
+                
                 if( !CoreUtil.isNullOrEmpty( min ) )
                 {
                     if( value < Integer.valueOf( min ) )
@@ -83,7 +92,8 @@ public class NumberValueValidationService extends ValidationService
     {
         public static String minNumberValueInvalid;
         public static String maxNumberValueInvalid;
-
+        public static String nonIntegerInvalid;
+        
         static
         {
             initializeMessages( NumberValueValidationService.class.getName(), Resources.class );
