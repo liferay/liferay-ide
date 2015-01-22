@@ -717,11 +717,11 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
         IStructuredModel editModel = null;
 
-        try
-        {
-            final IFile[] metaFiles = getLiferayMetaFiles( project );
+        final IFile[] metaFiles = getLiferayMetaFiles( project );
 
-            for( IFile file : metaFiles )
+        for( IFile file : metaFiles )
+        {
+            try
             {
                 editModel = StructuredModelManager.getModelManager().getModelForEdit( file );
 
@@ -749,23 +749,23 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     editModel.save();
                 }
             }
-
-            ProjectCore.operate( project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion );
-        }
-        catch( Exception e )
-        {
-            final IStatus error =
-                ProjectCore.createErrorStatus(
-                    "Unable to upgrade deployment meta file for " + project.getName(), e );
-            ProjectCore.logError( error );
-        }
-        finally
-        {
-            if( editModel != null )
+            catch( Exception e )
             {
-                editModel.releaseFromEdit();
+                final IStatus error =
+                    ProjectCore.createErrorStatus(
+                        "Unable to upgrade deployment meta file for " + file.getName(), e );
+                ProjectCore.logError( error );
+            }
+            finally
+            {
+                if ( editModel != null )
+                {
+                    editModel.releaseFromEdit();
+                }
             }
         }
+        
+        ProjectCore.operate( project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion );
     }
 
     public IStatus validateProjectLocation( String projectName, IPath path )
