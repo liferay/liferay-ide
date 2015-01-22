@@ -11,6 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *******************************************************************************/
+
 package com.liferay.ide.portlet.core.lfportlet.model.internal;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -24,6 +25,7 @@ import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Simon Jiang
+ * @Author Lu Li
  */
 public class NumberValueValidationService extends ValidationService
 {
@@ -48,28 +50,30 @@ public class NumberValueValidationService extends ValidationService
 
         if( !modelElement.disposed() )
         {
-            final String triggerValue = (String) modelElement.property( context( ValueProperty.class ) ).content();
+            final String triggerValue =
+                (String) modelElement.property( context( ValueProperty.class ) ).content();
 
             if( !CoreUtil.isNullOrEmpty( triggerValue ) )
             {
                 try
                 {
-                	value = Integer.valueOf( triggerValue );
-                	
-                }catch( NumberFormatException e )
-                {	
-                	return Status.createErrorStatus( Resources.bind(
-                            StringEscapeUtils.unescapeJava( Resources.nonIntegerInvalid ), new Object[] { triggerValue, 
-                               "" } ) );          	
+                    value = Integer.valueOf( triggerValue );
+
                 }
-                
+                catch( NumberFormatException e )
+                {
+                    return Status.createErrorStatus( Resources.bind(
+                        StringEscapeUtils.unescapeJava( Resources.nonIntegerInvalid ), new Object[] {
+                            triggerValue, "" } ) );
+                }
+
                 if( !CoreUtil.isNullOrEmpty( min ) )
                 {
                     if( value < Integer.valueOf( min ) )
                     {
                         return Status.createErrorStatus( Resources.bind(
-                            StringEscapeUtils.unescapeJava( Resources.minNumberValueInvalid ), new Object[] { value,
-                                min } ) );
+                            StringEscapeUtils.unescapeJava( Resources.minNumberValueInvalid ), new Object[] {
+                                value, min } ) );
                     }
                 }
 
@@ -78,8 +82,8 @@ public class NumberValueValidationService extends ValidationService
                     if( value > Integer.valueOf( max ) )
                     {
                         return Status.createErrorStatus( Resources.bind(
-                            StringEscapeUtils.unescapeJava( Resources.maxNumberValueInvalid ), new Object[] { value,
-                                max } ) );
+                            StringEscapeUtils.unescapeJava( Resources.maxNumberValueInvalid ), new Object[] {
+                                value, max } ) );
                     }
                 }
             }
@@ -90,10 +94,11 @@ public class NumberValueValidationService extends ValidationService
 
     private static final class Resources extends NLS
     {
+
         public static String minNumberValueInvalid;
         public static String maxNumberValueInvalid;
         public static String nonIntegerInvalid;
-        
+
         static
         {
             initializeMessages( NumberValueValidationService.class.getName(), Resources.class );
