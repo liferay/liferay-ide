@@ -7,7 +7,7 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.portlet.core.lfportlet.model.AssetRendererFactory;
-import com.liferay.ide.portlet.core.lfportlet.model.CronTriggeValueTrigger;
+import com.liferay.ide.portlet.core.lfportlet.model.CronTriggerValueTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.CronTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.CustomUserAttribute;
 import com.liferay.ide.portlet.core.lfportlet.model.CutomUserAttributeName;
@@ -21,7 +21,7 @@ import com.liferay.ide.portlet.core.lfportlet.model.PortletStyleElement;
 import com.liferay.ide.portlet.core.lfportlet.model.PropertyCronTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.PropertySimpleTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.SchedulerEntry;
-import com.liferay.ide.portlet.core.lfportlet.model.SimpleTriggeValueTrigger;
+import com.liferay.ide.portlet.core.lfportlet.model.SimpleTriggerValueTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.SimpleTrigger;
 import com.liferay.ide.portlet.core.lfportlet.model.SocialActivityInterpreterClass;
 import com.liferay.ide.portlet.core.lfportlet.model.StagedModelDataHandlerClass;
@@ -171,7 +171,7 @@ public class LiferayPortletXmlTest extends XmlTestsBase
         ElementHandle<ICronTrigger> cronTriggerValueTrigger =
             cronTrigger.content( true, CronTrigger.class ).getCronTrigger();
 
-        CronTriggeValueTrigger cronTriggerValue = cronTriggerValueTrigger.content( true, CronTriggeValueTrigger.class );
+        CronTriggerValueTrigger cronTriggerValue = cronTriggerValueTrigger.content( true, CronTriggerValueTrigger.class );
 
         NumberValueValidationService vs =
             cronTriggerValue.getCronTriggerValue().service( NumberValueValidationService.class );
@@ -287,9 +287,9 @@ public class LiferayPortletXmlTest extends XmlTestsBase
                     PropertyCronTrigger propertyTrigger = (PropertyCronTrigger) cronTriggerDetail.content();
                     assertEquals( "cron", propertyTrigger.getPropertyKey().content() );
                 }
-                else if( cronTriggerDetail.content() instanceof CronTriggeValueTrigger )
+                else if( cronTriggerDetail.content() instanceof CronTriggerValueTrigger )
                 {
-                    CronTriggeValueTrigger valueTrigger = (CronTriggeValueTrigger) cronTriggerDetail.content();
+                    CronTriggerValueTrigger valueTrigger = (CronTriggerValueTrigger) cronTriggerDetail.content();
                     assertEquals( "15", valueTrigger.getCronTriggerValue().content() );
                 }
 
@@ -305,9 +305,9 @@ public class LiferayPortletXmlTest extends XmlTestsBase
                     PropertySimpleTrigger propertyTrigger = (PropertySimpleTrigger) simpleTriggerDetail.content();
                     assertEquals( "simple", propertyTrigger.getPropertyKey().content() );
                 }
-                else if( simpleTriggerDetail.content() instanceof SimpleTriggeValueTrigger )
+                else if( simpleTriggerDetail.content() instanceof SimpleTriggerValueTrigger )
                 {
-                    SimpleTriggeValueTrigger valueTrigger = (SimpleTriggeValueTrigger) simpleTriggerDetail.content();
+                    SimpleTriggerValueTrigger valueTrigger = (SimpleTriggerValueTrigger) simpleTriggerDetail.content();
                     assertEquals( "15", valueTrigger.getSimpleTriggerValue().content() );
                 }
 

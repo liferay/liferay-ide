@@ -31,13 +31,13 @@ public interface CronTrigger extends ICronTrigger
     // *** Cron Trigger ***
 
     @Required
-    @Type( base = ICronTrigger.class, possible = { PropertyCronTrigger.class, CronTriggeValueTrigger.class } )
+    @Type( base = ICronTrigger.class, possible = { PropertyCronTrigger.class, CronTriggerValueTrigger.class } )
     @XmlElementBinding
     (
         mappings =
         {
             @XmlElementBinding.Mapping( element = "property-key", type = PropertyCronTrigger.class ),
-            @XmlElementBinding.Mapping( element = "cron-trigger-value", type = CronTriggeValueTrigger.class )
+            @XmlElementBinding.Mapping( element = "cron-trigger-value", type = CronTriggerValueTrigger.class )
         },
         path = ""
     )

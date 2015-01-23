@@ -39,14 +39,14 @@ public interface SimpleTrigger extends ISimpleTrigger
     // *** Simple Trigger ***
 
     @Required
-    @Type( base = ISimpleTrigger.class, possible = { PropertySimpleTrigger.class, SimpleTriggeValueTrigger.class } )
+    @Type( base = ISimpleTrigger.class, possible = { PropertySimpleTrigger.class, SimpleTriggerValueTrigger.class } )
     @XmlElementBinding
     (
         path = "",
         mappings =
         {
             @XmlElementBinding.Mapping( element = "property-key", type = PropertySimpleTrigger.class ),
-            @XmlElementBinding.Mapping( element = "simple-trigger-value", type = SimpleTriggeValueTrigger.class )
+            @XmlElementBinding.Mapping( element = "simple-trigger-value", type = SimpleTriggerValueTrigger.class )
         }
     )
     ElementProperty PROP_SIMPLE_TRIGGER = new ElementProperty( TYPE, "SimpleTrigger" );

@@ -27,14 +27,15 @@ import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 /**
  * @author Simon Jiang
  */
-public interface CronTriggeValueTrigger extends ICronTrigger
+public interface SimpleTriggerValueTrigger extends ISimpleTrigger
 {
 
-    ElementType TYPE = new ElementType( CronTriggeValueTrigger.class );
+    ElementType TYPE = new ElementType( SimpleTriggerValueTrigger.class );
 
-    // *** Cron Trigger Value ***
 
-    @Label( standard = "Cron Trigger Value" )
+    // *** Simple Trigger Value ***
+
+    @Label( standard = "Simple Trigger Value" )
     @Required
     @Service
     (
@@ -42,13 +43,13 @@ public interface CronTriggeValueTrigger extends ICronTrigger
         params =
         {
             @Service.Param( name = "min", value = "1" ),
-            @Service.Param( name = "max", value = "" ),
+            @Service.Param( name = "max", value = "" )
         }
     )
     @XmlBinding( path = "" )
-    ValueProperty PROP_CRON_TRIGGER_VALUE = new ValueProperty( TYPE, "CronTriggerValue" );
+    ValueProperty PROP_SIMPLE_TRIGGER_VALUE = new ValueProperty( TYPE, "SimpleTriggerValue" ); //$NON-NLS-1$
 
-    Value<String> getCronTriggerValue();
-    void setCronTriggerValue( String value );
+    Value<String> getSimpleTriggerValue();
+    void setSimpleTriggerValue( String value );
 
 }
