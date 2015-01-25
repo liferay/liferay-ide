@@ -16,23 +16,36 @@ package com.liferay.ide.alloy.core;
 
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
+import tern.eclipse.ide.core.DefaultTernModule;
+import tern.eclipse.ide.core.IDefaultTernModulesProvider;
 import tern.eclipse.ide.core.ITernNatureCapability;
-
+import tern.server.TernPlugin;
 
 /**
  * @author Gregory Amerson
  *
  */
-public class LiferayProjectTernAdapter implements ITernNatureCapability
-{
+public class LiferayProjectTernAdapter implements ITernNatureCapability,
+		IDefaultTernModulesProvider {
 
     @Override
     public boolean hasTernNature( IProject project ) throws CoreException
     {
         return ProjectUtil.isPortletProject( project );
     }
+    
+	@Override
+	public Collection<DefaultTernModule> getTernModules(IProject project) {
+		Collection<DefaultTernModule> modules = new ArrayList<DefaultTernModule>();
+		// here manage your condition to add aui2.0.x
+		modules.add(new DefaultTernModule(TernPlugin.aui2.getName()));
+		return modules;
+	}    
 
 }
