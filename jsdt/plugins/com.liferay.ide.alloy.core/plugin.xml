@@ -19,10 +19,6 @@
             name="Liferay Project Tern Adapter">
          <defaultModules>
             <module
-                  name="aui2.0.x"
-                  withDependencies="true">
-            </module>
-            <module
                   name="liferay"
                   withDependencies="true">
             </module>
