@@ -16,13 +16,12 @@ import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.wst.xml.search.core.queryspecifications.requestor.ContentTypeXMLSearchRequestor;
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
 
 /**
  * XML Search requestor for liferay-display.xml descriptors.
  */
-public class LiferayDisplaySearchRequestor extends ContentTypeXMLSearchRequestor
+public class LiferayDisplaySearchRequestor extends LiferayContentTypeXMLSearchRequestor
 {
 
     public static IXMLSearchRequestor INSTANCE = new LiferayDisplaySearchRequestor();

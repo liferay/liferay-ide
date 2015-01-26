@@ -20,7 +20,6 @@ import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.eclipse.wst.xml.search.core.queryspecifications.requestor.ContentTypeXMLSearchRequestor;
 import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
 
 
@@ -28,7 +27,7 @@ import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchR
 /**
  * @author Kuo Zhang
  */
-public class ServiceBuilderSearchRequestor extends ContentTypeXMLSearchRequestor
+public class ServiceBuilderSearchRequestor extends LiferayContentTypeXMLSearchRequestor
 {
 
     public static IXMLSearchRequestor INSTANCE = new ServiceBuilderSearchRequestor();

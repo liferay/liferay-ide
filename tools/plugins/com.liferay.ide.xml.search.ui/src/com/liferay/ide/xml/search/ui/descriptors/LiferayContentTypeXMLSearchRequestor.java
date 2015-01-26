@@ -12,33 +12,25 @@
  * details.
  *
  *******************************************************************************/
-
 package com.liferay.ide.xml.search.ui.descriptors;
 
-import com.liferay.ide.xml.search.ui.XMLSearchConstants;
+import com.liferay.ide.core.util.CoreUtil;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import org.eclipse.wst.xml.search.core.queryspecifications.requestor.IXMLSearchRequestor;
-
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.wst.xml.search.core.queryspecifications.requestor.ContentTypeXMLSearchRequestor;
 
 
 /**
- * @author Kuo Zhang
+ * @author Gregory Amerson
  */
-public class LiferayHookSearchRequestor extends LiferayContentTypeXMLSearchRequestor
+public abstract class LiferayContentTypeXMLSearchRequestor extends ContentTypeXMLSearchRequestor
 {
 
-    public static IXMLSearchRequestor INSTANCE = new LiferayHookSearchRequestor();
-
-    private static final Collection<String> contentTypeIds =
-        Collections.singleton( XMLSearchConstants.LIFERAY_HOOK_XML_CONTENT_TYPE );
-
     @Override
-    protected Collection<String> getSupportedContentTypeIds()
+    public boolean accept( IFile file, IResource rootResource )
     {
-        return contentTypeIds;
+        return super.accept( file, rootResource ) && CoreUtil.isLiferayProject( file.getProject() );
     }
 
 }
