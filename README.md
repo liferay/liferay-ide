@@ -26,7 +26,7 @@ the target folder of the `build/releng/com.liferay.ide-repository/` module.
 
 To get up and running quickly, *download* a [pre-built Liferay IDE
 release](http://www.liferay.com/downloads/liferay-projects/liferay-ide) and install it into
-your Eclipse install.  Follow the [Installation Guide](http://www.liferay.com/documentation/liferay-portal/6.1/development/-/ai/installati-6)
+your Eclipse install.  Follow the [Installation Guide](https://dev.liferay.com/develop/learning-paths/-/knowledge_base/6-2/developing-apps-with-liferay-ide)
 for instructions. Then use the Getting Started Tutorial for how to create and deploy a Liferay Project using Liferay IDE.
 
 ## Versioning
@@ -49,16 +49,6 @@ Stream](http://www.liferay.com/web/gregory.amerson/blog).
 
 Have questions? Ask them on our own category for Liferay IDE on the
 [forums](http://www.liferay.com/community/forums/-/message_boards/category/4627757)
-
-## Team
-
-Liferay IDE is written by these people and some community contributors.
-
-[![Gregory Amerson](http://gravatar.com/avatar/7fc2766b6aec8fe1803aefc4df1b8cf6?s=70)](https://github.com/gamerson) | [![Kuo Zhang](http://gravatar.com/avatar/34137a3bba5d84f1faeda7981c43f9f4?s=70)](https://github.com/kuozhang) | [![Simon Jiang](http://gravatar.com/avatar/aa87d5d5400ac8298c0851bd0589320a?s=70)](https://github.com/aquilabj) | [![Terry Jia](http://gravatar.com/avatar/67db5a472f85dc5010a861891af7efd4?s=70)](https://github.com/jtydhr88)
---- | --- | --- | --- 
-[Gregory Amerson](https://github.com/gamerson) | [Kuo Zhang](https://github.com/kuozhang) | [Simon Jiang](https://github.com/aquilabj) | [Terry Jia](https://github.com/jtydhr88)
-
-
 
 ## License
 
