@@ -57,6 +57,9 @@
       <include
             file="templates/aui-jsp-templates.xml">
       </include>
+      <include
+            file="templates/jsonws-js-templates.xml">
+      </include>
    </extension>
 
     <extension point="org.eclipse.ui.editors">
