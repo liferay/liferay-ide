@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -28,18 +29,22 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.tests.ServerCoreBase;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -58,6 +63,8 @@ import org.junit.Before;
  */
 public class ProjectCoreBase extends ServerCoreBase
 {
+
+    private static final String bundleId = "com.liferay.ide.project.core.tests";
 
     protected void waitForBuildAndValidation() throws Exception
     {
@@ -235,6 +242,11 @@ public class ProjectCoreBase extends ServerCoreBase
         return newLiferayPluginProject;
     }
 
+    protected String getBundleId()
+    {
+        return bundleId;
+    }
+
     @SuppressWarnings( "restriction" )
     protected IPath getCustomLocationBase()
     {
@@ -263,6 +275,49 @@ public class ProjectCoreBase extends ServerCoreBase
     protected String getLiferayPluginsSdkZipFolder()
     {
         return "liferay-plugins-sdk-6.2.0/";
+    }
+
+    protected IProject getProject( String path, String projectName ) throws Exception
+    {
+        IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
+
+        if( project != null && project.exists() )
+        {
+            return project;
+        }
+
+        return importProject( path, getBundleId(), projectName );
+    }
+
+    protected IProject importProject( String path, String bundleId, String projectName ) throws Exception
+    {
+        final IPath sdkLocation = SDKManager.getInstance().getDefaultSDK().getLocation();
+        final IPath hooksFolder = sdkLocation.append( path );
+
+        final URL hookZipUrl =
+            Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
+
+        final File hookZipFile = new File( FileLocator.toFileURL( hookZipUrl ).getFile() );
+
+        ZipUtil.unzip( hookZipFile, hooksFolder.toFile() );
+
+        final IPath projectFolder = hooksFolder.append( projectName );
+        assertEquals( true, projectFolder.toFile().exists() );
+
+        final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectFolder.toOSString() );
+        assertNotNull( projectRecord );
+
+        final IRuntime runtime = ServerCore.findRuntime( getRuntimeVersion() );
+        assertNotNull( runtime );
+
+        final IProject project = ProjectUtil.importProject(
+            projectRecord, ServerUtil.getFacetRuntime( runtime ), sdkLocation.toOSString(),new NullProgressMonitor() );
+
+        assertNotNull( project );
+
+        assertEquals( "Expected new project to exist.", true, project.exists() );
+
+        return project;
     }
 
     protected NewLiferayPluginProjectOp newProjectOp( final String projectName ) throws Exception

@@ -18,11 +18,10 @@ package com.liferay.ide.xml.search.ui.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ReflectionUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.ui.tests.UITestsUtils;
 import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
 import com.liferay.ide.xml.search.ui.editor.CompoundRegion;
 import com.liferay.ide.xml.search.ui.editor.InfoRegion;
@@ -30,18 +29,14 @@ import com.liferay.ide.xml.search.ui.editor.InfoRegion;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.Region;
@@ -51,14 +46,8 @@ import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
 import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
-import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMarkerResolution;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
@@ -70,7 +59,6 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
-import org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -80,13 +68,11 @@ import org.w3c.dom.NodeList;
  * Some methods are modified from eclipse wst sse tests
  *
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public class XmlSearchTestsUtils
+public class XmlSearchTestsUtils extends UITestsUtils
 {
-
-    private static Map<IFile, IEditorPart> fileToEditorMap = new HashMap<IFile, IEditorPart>();
-    private static Map<IFile, IDOMModel> fileToModelMap = new HashMap<IFile, IDOMModel>();
 
     private static ValManager valManager = ValManager.getDefault();
 
@@ -116,25 +102,6 @@ public class XmlSearchTestsUtils
                 return true;
             }
             else if( ! fullMatch && hyperlink.getHyperlinkText().contains( exceptedHyperlinkText ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    // check if the excepted proposal is in the given proposals
-    public static boolean containProposal( ICompletionProposal[] proposals,
-                                           String exceptedProposalString, boolean fullMatch )
-    {
-        for( ICompletionProposal proposal : proposals )
-        {
-            if( fullMatch && proposal.getDisplayString().equals( exceptedProposalString ) )
-            {
-                return true;
-            }
-            else if( ! fullMatch && proposal.getDisplayString().matches( exceptedProposalString ) )
             {
                 return true;
             }
@@ -186,64 +153,6 @@ public class XmlSearchTestsUtils
 
         return getRegion( attrNode ).getOffset();
 
-    }
-
-    private static IDOMModel getDOMModel( IFile file ) throws Exception
-    {
-        IDOMModel domModel = fileToModelMap.get( file );
-
-        if( domModel == null )
-        {
-            domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( file );
-        }
-
-        return domModel;
-    }
-
-    public static StructuredTextEditor getEditor( IFile file )
-    {
-        StructuredTextEditor editor = (StructuredTextEditor) fileToEditorMap.get( file );
-
-        if( editor == null )
-        {
-            try
-            {
-                final IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-                final IWorkbenchPage page = workbenchWindow.getActivePage();
-
-                final IEditorPart editorPart = IDE.openEditor( page, file, true, true );
-
-                // specify the editor id
-                // final EditorPart editorPart = page.openEditor(
-                // new FileEditorInput( file ), "com.liferay.ide.eclipse.portlet.ui.editor.PortletXmlEditor", true );
-
-                assertNotNull( editorPart );
-
-                if( editorPart instanceof SapphireEditorForXml )
-                {
-                    editor = ( (SapphireEditorForXml) editorPart ).getXmlEditor();
-                }
-                else if( editorPart instanceof StructuredTextEditor )
-                {
-                    editor = ( (StructuredTextEditor) editorPart );
-                }
-                else if( editorPart instanceof XMLMultiPageEditorPart )
-                {
-                    XMLMultiPageEditorPart xmlEditorPart = (XMLMultiPageEditorPart) editorPart;
-                    editor = (StructuredTextEditor) xmlEditorPart.getAdapter( StructuredTextEditor.class );
-                }
-
-                assertNotNull( editor );
-                standardizeLineEndings( editor );
-                fileToEditorMap.put( file, editor );
-            }
-            catch( Exception e )
-            {
-                fail( "Could not open editor for " + file + " exception: " + e.getMessage() );
-            }
-        }
-
-        return editor;
     }
 
     public static int getElementContentOffset( IFile file, String elementName ) throws Exception
@@ -440,29 +349,6 @@ public class XmlSearchTestsUtils
         return null;
     }
 
-    // open the editor and get the actual SourceViewerConfiguration
-    public static SourceViewerConfiguration getSourceViewerConfiguraionFromOpenedEditor( IFile file ) throws Exception
-    {
-        StructuredTextEditor editor = XmlSearchTestsUtils.getEditor( file );
-
-        Method getConfMethod =
-            ReflectionUtil.getDeclaredMethod( editor.getClass(), "getSourceViewerConfiguration", true );
-
-        if( getConfMethod != null )
-        {
-            getConfMethod.setAccessible( true );
-
-            Object obj = getConfMethod.invoke( editor );
-
-            if( obj != null && obj instanceof SourceViewerConfiguration )
-            {
-                return (SourceViewerConfiguration) obj;
-            }
-        }
-
-        return null;
-    }
-
     private static String[] getTextHover( IFile file, int nodeType, String... nodeNames ) throws Exception
     {
         List<String> retval = new ArrayList<String>();
@@ -585,15 +471,6 @@ public class XmlSearchTestsUtils
         file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }
 
-    public static void standardizeLineEndings( StructuredTextEditor editor )
-    {
-        final IDocument doc = editor.getTextViewer().getDocument();
-        String contents = doc.get();
-        contents = StringUtil.replace( contents, "\r\n", "\n" );
-        contents = StringUtil.replace( contents, "\r", "\n" );
-        doc.set( contents );
-    }
-
     // find the marker, use the given resolution to fix it and check if the marker is gone.
     public static void verifyQuickFix( IFile file, String markerType, String markerMessageRegex,
                                        Class<? extends IMarkerResolution> resolutionClazz ) throws Exception
@@ -612,16 +489,4 @@ public class XmlSearchTestsUtils
         assertNull( exceptedMarker );
     }
 
-    public static void deleteOtherProjects( IProject project ) throws Exception
-    {
-        final IProject[] projects = CoreUtil.getWorkspaceRoot().getProjects();
-
-        for( IProject proj : projects )
-        {
-            if( ! proj.getName().equals( project.getName() ) )
-            {
-                proj.delete( true, true, new NullProgressMonitor() );
-            }
-        }
-    }
 }
