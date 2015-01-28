@@ -50,7 +50,7 @@ public class LocaleTextNodeValueBinding extends XmlValueBindingImpl
 
             // System.out.println( "Locale Reading VALUE ___________________ " + value );
 
-            if( value != null )
+            if( !value.isEmpty() )
             {
                 value = value.trim();
                 for( int i = 0; i < AVAILABLE_LOCALES.length; i++ )

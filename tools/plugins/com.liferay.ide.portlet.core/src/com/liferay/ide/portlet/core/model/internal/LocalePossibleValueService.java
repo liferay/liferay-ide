@@ -41,7 +41,10 @@ public class LocalePossibleValueService extends PossibleValuesService
     {
         for( Locale locale : locales )
         {
-            values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
+        	if( !locale.toString().isEmpty() )
+        	{
+        		values.add( PortletUtil.buildLocaleDisplayString( locale.getDisplayName(), locale ) );
+        	}    
         }
     }
 
