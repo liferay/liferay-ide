@@ -7,7 +7,6 @@
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.hook.core.descriptor.LiferayHookContentDescriber"
-            file-extensions="xml"
             file-names="liferay-hook.xml"
             id="liferayhookxml"
             name="%hook.content.type.name"
