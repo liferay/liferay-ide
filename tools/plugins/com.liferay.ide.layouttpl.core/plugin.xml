@@ -108,7 +108,6 @@
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.layouttpl.core.descriptor.LayoutTplContentDescriber"
-            file-extensions="xml"
             file-names="liferay-layout-templates.xml"
             id="liferaylayouttplxml"
             name="%layout.content.type.name"

@@ -6,7 +6,6 @@
       <content-type
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
-            file-extensions="xml"
             file-names="portlet.xml"
             id="portletxml"
             name="%portlet.descriptor.name"
@@ -23,7 +22,6 @@
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.portlet.core.descriptor.LiferayPortletContentDescriber"
-            file-extensions="xml"
             file-names="liferay-portlet.xml"
             id="liferayportletxml"
             name="%liferay.portlet.descriptor.name"
@@ -36,7 +34,6 @@
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.portlet.core.descriptor.LiferayDisplayContentDescriber"
-            file-extensions="xml"
             file-names="liferay-display.xml"
             id="liferaydisplayxml"
             name="%display.descriptor.name"

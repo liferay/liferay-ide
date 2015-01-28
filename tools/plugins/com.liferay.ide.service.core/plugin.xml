@@ -7,7 +7,6 @@
             base-type="org.eclipse.core.runtime.xml"
             default-charset="UTF-8"
             describer="com.liferay.ide.service.core.ServiceBuilderContentDescriber"
-            file-extensions="xml"
             file-names="service.xml"
             id="servicebuildercontent"
             name="%service.content.type.name"
