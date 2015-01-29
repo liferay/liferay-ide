@@ -340,7 +340,15 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
                             else if( updateStatus.getSeverity() == IStatus.WARNING ||
                                 updateStatus.getSeverity() == IStatus.ERROR )
                             {
-                                wizard.setMessage( updateStatus.getMessage(), IMessageProvider.WARNING );
+                            	if( updateStatus.getMessage().contains("Your license key has expired") || 
+                            			updateStatus.getMessage().contains("Register Your Server or Application") )
+                            	{
+                            		wizard.setMessage( "Server is not registered or license key has expired ", IMessageProvider.WARNING );
+                            	}
+                            	else
+                            	{
+                            		wizard.setMessage( updateStatus.getMessage(), IMessageProvider.WARNING );
+                            	}
                             }
 
                             wizard.update();
