@@ -1146,4 +1146,14 @@
             markerType="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorMarker">
       </markerResolutionGenerator>
     </extension>
+
+    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.xml.search.ui.XMLSearchPreferencePage"
+            id="com.liferay.ide.xml.search.ui.XMLSearchPreferencePage"
+            name="XML Search">
+      </page>
+   </extension>
 </plugin>
