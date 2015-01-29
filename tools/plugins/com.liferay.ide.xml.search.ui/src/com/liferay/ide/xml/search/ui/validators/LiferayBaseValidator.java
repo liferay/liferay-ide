@@ -54,6 +54,7 @@ import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceToJava;
 import org.eclipse.wst.xml.search.editor.references.validators.IXMLReferenceValidator;
+import org.eclipse.wst.xml.search.editor.references.validators.IXMLReferenceValidator2;
 import org.eclipse.wst.xml.search.editor.validation.IValidationResult;
 import org.eclipse.wst.xml.search.editor.validation.LocalizedMessage;
 import org.eclipse.wst.xml.search.editor.validation.ValidatorUtils;
@@ -64,7 +65,7 @@ import org.w3c.dom.Node;
  * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public class LiferayBaseValidator implements IXMLReferenceValidator
+public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferenceValidator2
 {
     public static final String MARKER_QUERY_ID = "querySpecificationId";
     public static final String MESSAGE_PROPERTY_NOT_FOUND = Msgs.propertyNotFound;
@@ -406,6 +407,24 @@ public class LiferayBaseValidator implements IXMLReferenceValidator
 
     protected boolean isMultipleElementsAllowed( IDOMNode node, int nbElements )
     {
+        return true;
+    }
+
+    @Override
+    public boolean isValidTarget( IProject project )
+    {
+        final String[] ignoreList =
+            LiferayXMLSearchUI.getDefault().getPreferenceStore().getString(
+                LiferayXMLSearchUI.PREF_KEY_IGNORE_PROJECTS_LIST ).split( "," );
+
+        for( String ignore : ignoreList )
+        {
+            if( ignore.trim().equals( project.getName() ) )
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 

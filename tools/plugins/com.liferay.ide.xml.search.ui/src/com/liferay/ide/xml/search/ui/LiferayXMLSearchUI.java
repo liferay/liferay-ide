@@ -19,6 +19,8 @@ import java.net.URL;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -38,6 +40,8 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin
 
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.xml.search.ui";
+
+    public static final String PREF_KEY_IGNORE_PROJECTS_LIST = "ignore-projects-list";
 
     public static IStatus createErrorStatus( Exception e )
     {
@@ -67,6 +71,11 @@ public class LiferayXMLSearchUI extends AbstractUIPlugin
     public static LiferayXMLSearchUI getDefault()
     {
         return plugin;
+    }
+
+    public static IEclipsePreferences getInstancePrefs()
+    {
+        return InstanceScope.INSTANCE.getNode( PLUGIN_ID );
     }
 
     public static void logError( String msg, Exception e )
