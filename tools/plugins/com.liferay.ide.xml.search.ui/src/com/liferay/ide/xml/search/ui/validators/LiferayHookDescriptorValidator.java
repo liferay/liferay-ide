@@ -15,7 +15,6 @@
 
 package com.liferay.ide.xml.search.ui.validators;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
 
@@ -30,7 +29,6 @@ import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
 import org.eclipse.wst.xml.search.editor.references.IXMLReferenceTo;
 import org.eclipse.wst.xml.search.editor.util.JdtUtils;
-import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -41,22 +39,11 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 {
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayHookDescriptorMarker";
     public static final String MESSAGE_PROPERTIES_NOT_END_WITH_PROPERTIES = Msgs.propertiesNotEndWithProperties;
     public static final String MESSAGE_SERVICE_IMPL_TYPE_INCORRECT = Msgs.serviceImplTypeIncorrect;
     public static final String MESSAGE_SERVICE_TYPE_INVALID = Msgs.serviceTypeInvalid;
     public static final String MESSAGE_SERVICE_TYPE_NOT_INTERFACE = Msgs.serviceTypeNotInterface;
 
-
-    @Override
-    protected void setMarker( IValidator validator, IFile file )
-    {
-        if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.LIFERAY_HOOK_XML_FILE.equals( file.getName() ) )
-        {
-            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        }
-    }
 
     @Override
     protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,
@@ -75,7 +62,7 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
                 if( nodeValue != null && nodeValue.length() > 0 )
                 {
-                    if( "portal-properties".equals( node.getParentNode().getNodeName() ) || 
+                    if( "portal-properties".equals( node.getParentNode().getNodeName() ) ||
                         "language-properties".equals( node.getParentNode().getNodeName() ) )
                     {
                         if( ! nodeValue.endsWith( ".properties" ) )

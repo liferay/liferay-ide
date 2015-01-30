@@ -26,7 +26,6 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
-import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 
 /**
  * @author Kuo Zhang
@@ -34,7 +33,6 @@ import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 @SuppressWarnings( "restriction" )
 public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
 {
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayPortletDescriptorMarker";
     public static final String MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID = Msgs.entryWeightSyntaxInvalid;
 
     @Override
@@ -42,16 +40,6 @@ public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
                           IValidator validator, IReporter reporter, boolean batchMode )
     {
         super.doValidate( reference, node, file, validator, reporter, batchMode );
-    }
-
-    @Override
-    protected void setMarker( IValidator validator, IFile file )
-    {
-        if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.LIFERAY_PORTLET_XML_FILE.equals( file.getName() ) )
-        {
-            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        }
     }
 
     @Override

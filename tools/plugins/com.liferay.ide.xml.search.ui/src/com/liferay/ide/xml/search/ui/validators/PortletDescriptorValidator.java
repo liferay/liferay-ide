@@ -14,7 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.xml.search.ui.validators;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ValidationPreferences.ValidationType;
 
@@ -27,7 +26,6 @@ import org.eclipse.wst.validation.internal.provisional.core.IValidator;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMNode;
 import org.eclipse.wst.xml.search.core.util.DOMUtils;
 import org.eclipse.wst.xml.search.editor.references.IXMLReference;
-import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 
 /**
  * @author Kuo Zhang
@@ -36,19 +34,8 @@ import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 public class PortletDescriptorValidator extends LiferayBaseValidator
 {
 
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.portletDescriptorMarker";
     public static final String MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES = Msgs.resourceBundleEndProperties;
     public static final String MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR = Msgs.resourceBundleContainPathSeparator ;
-
-    @Override
-    protected void setMarker( IValidator validator, IFile file )
-    {
-        if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.PORTLET_XML_FILE.equals( file.getName() ) )
-        {
-            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        }
-    }
 
     @Override
     protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,

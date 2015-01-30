@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
@@ -77,6 +78,14 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
     public static final String MESSAGE_METHOD_NOT_FOUND = Msgs.methodNotFound;
 
     protected static final String PREFERENCE_NODE_QUALIFIER = ProjectCore.getDefault().getBundle().getSymbolicName();
+
+    private static final String[] oldMarkerTypes =
+    {   "liferayPortletDescriptorMarker",
+        "liferayLayoutTplDescriptorMarker",
+        "liferayDisplayDescriptorMarker",
+        "liferayHookDescriptorMarker",
+        "portletDescriptorMarker"
+    };
 
     private class ReferencedFileVisitor implements IResourceProxyVisitor
     {
@@ -213,7 +222,6 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
         {
             if( batchMode )
             {
-                reporter.removeAllMessages( validator );
                 message.setTargetObject( file );
                 message.setAttribute( MARKER_QUERY_ID, querySpecificationId );
                 reporter.addMessage( validator, message );
@@ -443,6 +451,32 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
         {
             setMarker( validator, file );
             doValidate( reference, node, file, validator, reporter, batchMode );
+        }
+
+        // clean old marker types added in 2.2.0 but removed in 2.2.2
+        for( String type : oldMarkerTypes )
+        {
+            try
+            {
+                final IMarker[] markers =
+                    file.findMarkers( LiferayXMLSearchUI.PLUGIN_ID + "." + type, false, IResource.DEPTH_ONE );
+
+                for( IMarker marker : markers )
+                {
+                    try
+                    {
+                        marker.delete();
+                    }
+                    catch( CoreException e )
+                    {
+                        // best effort
+                    }
+                }
+            }
+            catch( CoreException e )
+            {
+                // best effort
+            }
         }
     }
 
