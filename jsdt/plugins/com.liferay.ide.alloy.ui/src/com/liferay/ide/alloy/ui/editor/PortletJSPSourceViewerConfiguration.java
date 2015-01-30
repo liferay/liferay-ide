@@ -12,7 +12,9 @@
  * details.
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.ui.editor;
+package com.liferay.ide.alloy.ui.editor;
+
+import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlHover;
 
 import java.util.List;
 
@@ -24,7 +26,6 @@ import org.eclipse.wst.sse.ui.internal.SSEUIPlugin;
 import org.eclipse.wst.sse.ui.internal.taginfo.AnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.ProblemAnnotationHoverProcessor;
 import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
-
 
 /**
  * @author Kuo Zhang
@@ -58,7 +59,7 @@ public class PortletJSPSourceViewerConfiguration extends JSDTStructuredTextViewe
                 }
                 else if( TextHoverManager.COMBINATION_HOVER.equalsIgnoreCase( hoverType ) )
                 {
-                    textHover = new LiferayCustomXmlHover();
+                    textHover = (ITextHover) new LiferayCustomXmlHover();
                 }
                 else if( TextHoverManager.DOCUMENTATION_HOVER.equalsIgnoreCase( hoverType ) )
                 {

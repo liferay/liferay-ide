@@ -27,7 +27,6 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
 import com.liferay.ide.xml.search.ui.XMLSearchConstants;
-import com.liferay.ide.xml.search.ui.editor.PortletJSPSourceViewerConfiguration;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -106,19 +105,6 @@ public class JSPFileTests extends XmlSearchTestsBase
         final String exceptedMessageRegex = "Property.*not found in.*";
 
         verifyQuickFix( viewJspFile, markerType, exceptedMessageRegex, AddResourceKeyMarkerResolution.class );
-    }
-
-    @Test
-    public void testSourceViewerConfiguration() throws Exception
-    {
-        if( shouldSkipBundleTests() ) { return; }
-
-        final IFile viewJspFile = getJspFile( "view.jsp" );
-
-        Object sourceViewerConfiguration =
-            XmlSearchTestsUtils.getSourceViewerConfiguraionFromOpenedEditor( viewJspFile );
-
-        assertEquals( true, sourceViewerConfiguration instanceof PortletJSPSourceViewerConfiguration );
     }
 
     @Test

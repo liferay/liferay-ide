@@ -4,7 +4,8 @@ Bundle-Name: %pluginName
 Bundle-Vendor: %providerName
 Bundle-SymbolicName: com.liferay.ide.alloy.ui.tests
 Bundle-Version: 3.0.0.qualifier
-Require-Bundle: com.liferay.ide.core,
+Require-Bundle: com.liferay.ide.alloy.ui,
+ com.liferay.ide.core,
  com.liferay.ide.core.tests;bundle-version="2.0.0",
  com.liferay.ide.project.core;bundle-version="2.0.0",
  com.liferay.ide.project.core.tests,
@@ -18,6 +19,7 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.sapphire.ui.swt.xml.editor,
  org.eclipse.ui.ide,
  org.eclipse.ui.workbench,
+ org.eclipse.wst.jsdt.web.support.jsp,
  org.eclipse.wst.sse.core,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.xml.ui,

@@ -5,13 +5,19 @@ Bundle-SymbolicName: com.liferay.ide.alloy.ui;singleton:=true
 Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: com.liferay.ide.alloy.ui.AlloyUIPlugin
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: com.liferay.ide.alloy.core;bundle-version="2.0.0",
  com.liferay.ide.ui;bundle-version="2.0.0",
- com.liferay.ide.alloy.core;bundle-version="2.0.0",
+ com.liferay.ide.xml.search.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ org.eclipse.jst.jsp.ui,
+ org.eclipse.text,
+ org.eclipse.ui,
+ org.eclipse.ui.editors,
  org.eclipse.wst.jsdt.ui,
  org.eclipse.wst.sse.ui,
- org.eclipse.ui.editors,
- org.eclipse.jst.jsp.ui
+ org.eclipse.wst.jsdt.web.support.jsp,
+ org.eclipse.wst.xml.search.editor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.alloy.ui.editor

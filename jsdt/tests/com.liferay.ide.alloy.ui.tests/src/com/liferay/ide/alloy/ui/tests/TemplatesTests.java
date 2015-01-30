@@ -20,12 +20,12 @@ import static com.liferay.ide.alloy.ui.tests.AlloyTestsUtils.deleteOtherProjects
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 
+import com.liferay.ide.alloy.ui.editor.PortletJSPSourceViewerConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
-
 import org.junit.Test;
 
 /**
@@ -58,6 +58,21 @@ public class TemplatesTests extends AlloyTestsBase
         }
 
         return null;
+    }
+
+    @Test
+    public void testSourceViewerConfiguration() throws Exception
+    {
+        if( shouldSkipBundleTests() )
+        {
+            return;
+        }
+
+        final IFile viewJspFile = getJspFile( "view.jsp" );
+
+        Object sourceViewerConfiguration = AlloyTestsUtils.getSourceViewerConfiguraionFromOpenedEditor( viewJspFile );
+
+        assertEquals( true, sourceViewerConfiguration instanceof PortletJSPSourceViewerConfiguration );
     }
 
     @Test

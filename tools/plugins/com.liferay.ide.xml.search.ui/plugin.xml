@@ -999,9 +999,6 @@
         <sourceViewerConfiguration
             class="com.liferay.ide.xml.search.ui.editor.ServiceXmlViewerConfiguration"
             target="com.liferay.ide.service.core.servicebuildercontent" />
-        <sourceViewerConfiguration
-            class="com.liferay.ide.xml.search.ui.editor.PortletJSPSourceViewerConfiguration"
-            target="com.liferay.ide.alloy.ui.portletjspeditor" />
         <provisionalConfiguration
             type="org.eclipse.jface.text.quickassist.IQuickAssistProcessor"
             class="com.liferay.ide.xml.search.ui.quickassist.XmlValidationQuickAssistProcessor"

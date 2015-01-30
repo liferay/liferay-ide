@@ -5,8 +5,6 @@ Bundle-Vendor: %providerName
 Bundle-SymbolicName: com.liferay.ide.xml.search.ui.tests
 Bundle-Version: 3.0.0.qualifier
 Require-Bundle: com.ibm.icu,
- com.liferay.ide.alloy.core,
- com.liferay.ide.alloy.ui,
  com.liferay.ide.core,
  com.liferay.ide.core.tests,
  com.liferay.ide.project.core,
