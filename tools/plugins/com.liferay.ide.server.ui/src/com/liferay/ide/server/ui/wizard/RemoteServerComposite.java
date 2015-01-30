@@ -220,7 +220,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
         final String marketplaceLinkLabel = Msgs.installRemoteIDEConnector;
         final String appUrl = "http://www.liferay.com/marketplace/-/mp/application/15193785"; //$NON-NLS-1$
         SWTUtil.createHyperLink( this, SWT.NONE, marketplaceLinkLabel, 1, appUrl );
-        
+
         final String installLabel = NLS.bind( "<a>{0}</a>", Msgs.clickHereLink ); //$NON-NLS-1$
         final String installUrl = "{0}/group/control_panel/manage?p_p_id=1_WAR_marketplaceportlet&p_p_lifecycle=0&p_p_state=maximized&p_p_mode=view&appId=15193785";  //$NON-NLS-1$
         final Link installLink = SWTUtil.createLink( this, SWT.NONE, installLabel, 1 );
@@ -228,7 +228,7 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
         (
             new SelectionAdapter()
             {
-                public void widgetSelected(SelectionEvent e) 
+                public void widgetSelected(SelectionEvent e)
                 {
                     try
                     {
@@ -330,7 +330,6 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
 
                     RemoteServerComposite.this.getDisplay().syncExec( new Runnable()
                     {
-
                         public void run()
                         {
                             if( updateStatus == null || updateStatus.isOK() )
@@ -338,23 +337,25 @@ public class RemoteServerComposite extends Composite implements ModifyListener, 
                                 wizard.setMessage( null, IMessageProvider.NONE );
                             }
                             else if( updateStatus.getSeverity() == IStatus.WARNING ||
-                                updateStatus.getSeverity() == IStatus.ERROR )
+                                     updateStatus.getSeverity() == IStatus.ERROR )
                             {
-                            	if( updateStatus.getMessage().contains("Your license key has expired") || 
-                            			updateStatus.getMessage().contains("Register Your Server or Application") )
-                            	{
-                            		wizard.setMessage( "Server is not registered or license key has expired ", IMessageProvider.WARNING );
-                            	}
-                            	else
-                            	{
-                            		wizard.setMessage( updateStatus.getMessage(), IMessageProvider.WARNING );
-                            	}
+                                if( updateStatus.getMessage().contains( "Your license key has expired" ) ||
+                                    updateStatus.getMessage().contains( "Register Your Server or Application" ) )
+                                {
+                                    wizard.setMessage(
+                                        "Server is not registered or license key has expired ",
+                                        IMessageProvider.WARNING );
+                                }
+                                else
+                                {
+                                    wizard.setMessage( updateStatus.getMessage(), IMessageProvider.WARNING );
+                                }
                             }
 
                             wizard.update();
 
                         }
-                    } );
+                    });
                 }
             };
 
