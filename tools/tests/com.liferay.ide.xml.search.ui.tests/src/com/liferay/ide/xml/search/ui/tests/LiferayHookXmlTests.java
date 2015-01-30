@@ -37,7 +37,7 @@ import org.junit.Test;
  */
 public class LiferayHookXmlTests extends XmlSearchTestsBase
 {
-    private final static String MARKER_TYPE = LiferayHookDescriptorValidator.MARKER_TYPE;
+    private final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptor;
     private IProject project;
 

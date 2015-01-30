@@ -48,7 +48,7 @@ import org.junit.Test;
 public class LiferayDisplayXmlTests extends XmlSearchTestsBase
 {
 
-    private final static String MARKER_TYPE = LiferayDisplayDescriptorValidator.MARKER_TYPE;
+    private final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
     private IProject project;
 

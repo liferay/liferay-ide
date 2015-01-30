@@ -47,7 +47,7 @@ import org.junit.Test;
  */
 public class PortletXmlTests extends XmlSearchTestsBase
 {
-    private final static String MARKER_TYPE = PortletDescriptorValidator.MARKER_TYPE;
+    private final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
     private IProject project;
 

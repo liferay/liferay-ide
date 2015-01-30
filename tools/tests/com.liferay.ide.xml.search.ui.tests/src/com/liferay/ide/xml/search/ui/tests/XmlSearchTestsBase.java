@@ -50,13 +50,14 @@ import org.junit.Before;
 @SuppressWarnings( "restriction" )
 public class XmlSearchTestsBase
 {
-
+    public static final String XML_REFERENCES_MARKER_TYPE = "org.eclipse.wst.xml.search.editor.validationMarker";
     private static final String bundleId = "com.liferay.ide.xml.search.ui.tests";
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
     private static IPath liferayBundlesPath;
     protected static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of type \"{0}\" incorrect";
     private static IRuntime runtime;
     private final static String skipBundleTests = System.getProperty( "skipBundleTests" );
+
 
     protected IPath getCustomLocationBase()
     {

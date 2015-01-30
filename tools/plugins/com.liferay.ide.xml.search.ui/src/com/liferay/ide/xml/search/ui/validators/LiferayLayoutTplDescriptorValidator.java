@@ -14,11 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.xml.search.ui.validators;
 
-import com.liferay.ide.core.ILiferayConstants;
-
-import org.eclipse.core.resources.IFile;
-import org.eclipse.wst.validation.internal.provisional.core.IValidator;
-import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
 
 
 /**
@@ -26,16 +21,4 @@ import org.eclipse.wst.xml.search.editor.validation.XMLReferencesBatchValidator;
  */
 public class LiferayLayoutTplDescriptorValidator extends LiferayBaseValidator
 {
-    public static final String MARKER_TYPE = "com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorMarker";
-
-    @Override
-    protected void setMarker( IValidator validator, IFile file )
-    {
-        if( validator instanceof XMLReferencesBatchValidator &&
-            ILiferayConstants.LIFERAY_LAYOUTTPL_XML_FILE.equals( file.getName() ) )
-        {
-            ( (XMLReferencesBatchValidator) validator ).getParent().setMarkerId( MARKER_TYPE );
-        }
-    }
-
 }

@@ -927,28 +927,12 @@
        </validator>
     </extension>
 
-    <extension
-        id="portletDescriptorMarker"
-        name="%portlet.descriptor.marker.name"
-        point="org.eclipse.core.resources.markers">
-       <super type="org.eclipse.wst.validation.problemmarker"/>
-       <persistent value="true"/>
-    </extension>
-
     <!-- Liferay Portlet Descriptor -->
     <extension point="org.eclipse.wst.xml.search.editor.referenceValidators">
        <validator
             id="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator"
             class="com.liferay.ide.xml.search.ui.validators.LiferayPortletDescriptorValidator">
        </validator>
-    </extension>
-
-    <extension
-        id="liferayPortletDescriptorMarker"
-        name="%liferay.portlet.descriptor.marker.name"
-        point="org.eclipse.core.resources.markers">
-       <super type="org.eclipse.wst.validation.problemmarker"/>
-       <persistent value="true"/>
     </extension>
 
     <!-- Liferay Layout Template Descriptor -->
@@ -959,28 +943,12 @@
        </validator>
     </extension>
 
-    <extension
-        id="liferayLayoutTplDescriptorMarker"
-        name="%liferay.layouttpl.descriptor.marker.name"
-        point="org.eclipse.core.resources.markers">
-       <super type="org.eclipse.wst.validation.problemmarker"/>
-       <persistent value="true"/>
-    </extension>
-
     <!-- Liferay Display Descriptor -->
     <extension point="org.eclipse.wst.xml.search.editor.referenceValidators">
        <validator
             id="com.liferay.ide.xml.search.ui.liferayDisplayDescriptorValidator"
             class="com.liferay.ide.xml.search.ui.validators.LiferayDisplayDescriptorValidator">
        </validator>
-    </extension>
-
-    <extension
-        id="liferayDisplayDescriptorMarker"
-        name="%liferay.display.descriptor.marker.name"
-        point="org.eclipse.core.resources.markers">
-       <super type="org.eclipse.wst.validation.problemmarker"/>
-       <persistent value="true"/>
     </extension>
 
     <!-- Liferay Hook Descriptor -->
@@ -991,14 +959,6 @@
        </validator>
     </extension>
 
-    <extension
-        id="liferayHookDescriptorMarker"
-        name="%liferay.hook.descriptor.marker.name"
-        point="org.eclipse.core.resources.markers">
-       <super type="org.eclipse.wst.validation.problemmarker"/>
-       <persistent value="true"/>
-    </extension>
-
     <!-- Service Builder Descriptor -->
     <extension point="org.eclipse.wst.xml.search.editor.referenceValidators">
        <validator
@@ -1007,28 +967,12 @@
        </validator>
     </extension>
 
-    <extension
-        id="serviceBuilderDescriptorMarker"
-        name="%service.builder.descriptor.marker.name"
-        point="org.eclipse.core.resources.markers">
-       <super type="org.eclipse.wst.validation.problemmarker"/>
-       <persistent value="true"/>
-    </extension>
-
     <!-- Liferay Jsp Descriptor -->
     <extension point="org.eclipse.wst.xml.search.editor.referenceValidators">
        <validator
             id="com.liferay.ide.xml.search.ui.liferayJspValidator"
             class="com.liferay.ide.xml.search.ui.validators.LiferayJspValidator">
        </validator>
-    </extension>
-
-    <extension
-        id="liferayJspMarker"
-        name="%liferay.jsp.descriptor.marker.name"
-        point="org.eclipse.core.resources.markers">
-       <super type="org.eclipse.wst.validation.problemmarker"/>
-       <persistent value="true"/>
     </extension>
 
     <!--========== Content Assist Info Provider ==========-->
@@ -1123,27 +1067,7 @@
       </markerResolutionGenerator>
       <markerResolutionGenerator
             class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
-            markerType="com.liferay.ide.xml.search.ui.portletDescriptorMarker">
-      </markerResolutionGenerator>
-      <markerResolutionGenerator
-            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
-            markerType="com.liferay.ide.xml.search.ui.liferayPortletDescriptorMarker">
-      </markerResolutionGenerator>
-      <markerResolutionGenerator
-            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
-            markerType="com.liferay.ide.xml.search.ui.liferayDisplayDescriptorMarker">
-      </markerResolutionGenerator>
-      <markerResolutionGenerator
-            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
-            markerType="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorMarker">
-      </markerResolutionGenerator>
-      <markerResolutionGenerator
-            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
-            markerType="com.liferay.ide.xml.search.ui.liferayHookDescriptorMarker">
-      </markerResolutionGenerator>
-      <markerResolutionGenerator
-            class="com.liferay.ide.xml.search.ui.markerResolutions.XmlValidationMarkerResolutionGenerator"
-            markerType="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorMarker">
+            markerType="org.eclipse.wst.xml.search.editor.validationMarker">
       </markerResolutionGenerator>
     </extension>
 
