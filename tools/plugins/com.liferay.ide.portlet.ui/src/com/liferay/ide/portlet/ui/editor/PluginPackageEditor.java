@@ -30,6 +30,10 @@ import com.liferay.ide.ui.form.IDEFormEditor;
 import java.io.ByteArrayInputStream;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -40,11 +44,13 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.forms.widgets.BusyIndicator;
 import org.eclipse.ui.part.FileEditorInput;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( { "restriction", "rawtypes" } )
 public class PluginPackageEditor extends IDEFormEditor implements IModelChangedListener
@@ -59,6 +65,8 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
      */
     protected PropertiesFileEditor editor;
 
+    private IResourceChangeListener fileChangeListener;
+    
     protected boolean ignoreModelChanges = false;
 
     protected int lastPageIndex = -1;
@@ -188,6 +196,8 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
         addPluginPackageFormPage();
         // addDependenciesFormPage();
         addPropertiesEditorPage();
+        
+        createFileChangeListener();
     }
 
     protected void addPluginPackageFormPage()
@@ -203,7 +213,20 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
             PortletUIPlugin.logError( e );
         }
     }
-
+    
+    protected final void createFileChangeListener()
+    {
+        this.fileChangeListener = new IResourceChangeListener()
+        {
+            public void resourceChanged( final IResourceChangeEvent event )
+            {
+                handleFileChangedEvent( event );
+            }
+        };
+        
+        ResourcesPlugin.getWorkspace().addResourceChangeListener( this.fileChangeListener, IResourceChangeEvent.POST_CHANGE );
+    }
+    
     @Override
     protected InputContextManager createInputContextManager()
     {
@@ -230,11 +253,38 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
     }
 
     @Override
+    public void dispose() 
+    {
+        super.dispose();
+        
+        if( this.fileChangeListener != null )
+        {
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener( this.fileChangeListener );
+            this.fileChangeListener = null;
+        }
+    }
+    
+    @Override
     protected String getEditorID()
     {
         return EDITOR_ID;
     }
 
+    
+    public IFile getFile()
+    {
+        final IEditorInput editorInput = getEditorInput();
+        
+        if( editorInput instanceof FileEditorInput )
+        {
+            return ( (FileEditorInput) editorInput ).getFile();
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
     @Override
     protected InputContext getInputContext( Object object )
     {
@@ -248,6 +298,33 @@ public class PluginPackageEditor extends IDEFormEditor implements IModelChangedL
         return context;
     }
 
+    protected final void handleFileChangedEvent( final IResourceChangeEvent event )
+    {
+        final IResourceDelta delta = event.getDelta();
+        
+        if( delta != null && getFile() != null )
+        {
+            final IResourceDelta localDelta = delta.findMember( getFile().getFullPath() );
+            
+            if( localDelta != null )
+            {
+                PlatformUI.getWorkbench().getDisplay().asyncExec
+                (
+                    new Runnable()
+                    {
+                        public void run()
+                        {
+                            if( localDelta.getKind() == IResourceDelta.REMOVED )
+                            {
+                                getSite().getPage().closeEditor( PluginPackageEditor.this, false );
+                            }
+                        }
+                    }
+                );
+            }
+        }
+    }
+    
     @Override
     protected void pageChange( int newPageIndex )
     {
