@@ -17,18 +17,18 @@
 
 package com.liferay.ide.portlet.core.model;
 
-import com.liferay.ide.portlet.core.model.internal.InvertingBooleanXmlValueBinding;
-
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Type;
-import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
+import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author Kamesh Sampath
+ * @author Simon Jiang
  */
 public interface Preference extends Element, Identifiable, NameValue
 {
@@ -39,7 +39,8 @@ public interface Preference extends Element, Identifiable, NameValue
 
     @Type( base = Boolean.class )
     @Label( standard = "Read Only" )
-    @CustomXmlValueBinding( impl = InvertingBooleanXmlValueBinding.class, params = "read-only" )
+    @DefaultValue( text = "false" )
+    @XmlBinding( path = "read-only" )    
     ValueProperty PROP_READ_ONLY = new ValueProperty( TYPE, "ReadOnly" ); //$NON-NLS-1$
 
     Value<Boolean> getReadOnly();
