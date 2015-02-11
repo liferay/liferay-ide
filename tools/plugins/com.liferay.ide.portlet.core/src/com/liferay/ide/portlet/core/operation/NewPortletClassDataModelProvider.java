@@ -21,13 +21,13 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.LiferayDisplayDescriptorHelper;
 import com.liferay.ide.portlet.core.dd.PortletDescriptorHelper;
 import com.liferay.ide.project.core.IPluginWizardFragmentProperties;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
@@ -41,6 +41,8 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -71,6 +73,7 @@ import org.osgi.service.prefs.Preferences;
  * @author Cindy Li
  * @author Tao Tao
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings( { "restriction", "unchecked", "rawtypes" } )
 public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvider
@@ -1046,13 +1049,13 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 if( webproject != null )
                 {
                     IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-                    String errorMsg = FileUtil.validateNewFolder( defaultDocroot, folderValue );
+                    IStatus checkingStatus = validateFolder( defaultDocroot, folderValue );
 
-                    if( errorMsg != null )
+                    if( checkingStatus!=null && !checkingStatus.isOK() )
                     {
-                        return PortletCore.createErrorStatus( errorMsg );
+                        return checkingStatus;
                     }
-
+                    
                     // make sure path first segment isn't the same as the portlet name
                     String path = new Path( folderValue ).segment( 0 );
                     if( !CoreUtil.isNullOrEmpty( path ) && path.equals( getStringProperty( PORTLET_NAME ) ) )
@@ -1142,9 +1145,46 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         return super.validate( propertyName );
     }
 
+    private IStatus validateFolder( IFolder folder, String folderValue )
+    {
+        if( folder == null || folderValue == null )
+        {
+            return null;
+        }
+
+        if( !Path.ROOT.isValidPath( folderValue ) )
+        {
+            return LiferayCore.createErrorStatus( Msgs.folderValueInvalid );
+        }
+
+        IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+        IStatus result =
+            workspace.validatePath( folder.getFolder( folderValue ).getFullPath().toString(), IResource.FOLDER );
+
+        if( !result.isOK() )
+        {
+            return LiferayCore.createErrorStatus( Msgs.folderValueInvalid );
+        }
+
+        if( folder.getFolder( new Path( folderValue ) ).exists() )
+        {
+            List<IFile> viewJspFiles = new SearchFilesVisitor().searchFiles( folder, "view.jsp" );
+            
+            if ( viewJspFiles != null && viewJspFiles.size()>0 )
+            {
+                return LiferayCore.createWarningStatus( Msgs.viewJspAlreadyExists );    
+            }
+        }
+
+        return null;
+    }
+
+
     private static class Msgs extends NLS
     {
         public static String categoryNameEmpty;
+        public static String folderValueInvalid;
         public static String jspFolderNotEmpty;
         public static String jspFolderNotMatchPortletName;
         public static String portletNameEmpty;
@@ -1154,7 +1194,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         public static String resourceBundleFilePathValid;
         public static String specifyPortletSuperclass;
         public static String specifyValidDouble;
-
+        public static String viewJspAlreadyExists;
+        
         static
         {
             initializeMessages( NewPortletClassDataModelProvider.class.getName(), Msgs.class );
