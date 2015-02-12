@@ -129,9 +129,9 @@ public class WebServicesServlet extends HttpServlet {
 					element, "autoinsert", "true"));
 
 				StringBuffer sb = new StringBuffer();
-				sb.append("Liferay.Service(\n'");
+				sb.append("Liferay.Service(\n	'");
 				sb.append(path);
-				sb.append("',\n{");
+				sb.append("',\n	{\n");
 
 				MethodParameter[] methodParameters = jsonWebServiceActionMapping
 						.getMethodParameters();
@@ -140,8 +140,12 @@ public class WebServicesServlet extends HttpServlet {
 					for (int t = 0; t < methodParameters.length; t++) {
 						String parameterName = methodParameters[t].getName();
 
+						sb.append("		");
 						sb.append(parameterName);
 						sb.append(":");
+						sb.append( "${");
+						sb.append(parameterName);
+						sb.append("}");
 
 						if (t < methodParameters.length - 1) {
 							sb.append(",\n");
@@ -160,7 +164,7 @@ public class WebServicesServlet extends HttpServlet {
 						actionName));
 				}
 
-				sb.append("\n},\nfunction(obj) {\nconsole.log(obj);\n});");
+				sb.append("\n	},\n	function(obj) {\n		console.log(obj);\n	}\n);");
 				element.add(SAXReaderUtil.createText(sb.toString()));
 
 				root.add(element);
