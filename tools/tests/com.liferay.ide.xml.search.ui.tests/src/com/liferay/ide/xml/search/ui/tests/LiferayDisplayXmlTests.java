@@ -15,12 +15,12 @@
 
 package com.liferay.ide.xml.search.ui.tests;
 
+import static com.liferay.ide.ui.tests.UITestsUtils.containsProposal;
+import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkMarkerByMessage;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkNoMarker;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.containHyperlink;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.containProposal;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.deleteOtherProjects;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getHyperLinksForAttr;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getProposalsForAttr;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getTextHoverForAttr;

@@ -147,32 +147,41 @@ public class XmlSearchTestsUtils extends UITestsUtils
 
     public static int getAttrValueOffset( IFile file, String elementName, String attrName ) throws Exception
     {
-        final IDOMModel domModel = getDOMModel( file );
+        final IDOMModel domModel = getDOMModel( file, false );
         final Node attrNode = domModel.getDocument().getElementsByTagName( elementName ).
                               item( 0 ).getAttributes().getNamedItem( attrName );
 
-        return getRegion( attrNode ).getOffset();
+        int retval = getRegion( attrNode ).getOffset();
+
+        domModel.releaseFromRead();
+
+        return retval;
 
     }
 
     public static int getElementContentOffset( IFile file, String elementName ) throws Exception
     {
-        IDOMModel model = getDOMModel( file );
+        final IDOMModel model = getDOMModel( file, false );
 
         final Node element = model.getDocument().getElementsByTagName( elementName ).item( 0 );
 
-        return getRegion( element.getFirstChild() ).getOffset();
+        int retval = getRegion( element.getFirstChild() ).getOffset();
+
+        model.releaseFromRead();
+
+        return retval;
     }
 
     private static IHyperlink[] getHyperLinks( IFile file, int nodeType, String... nodeNames ) throws Exception
     {
         List<IHyperlink> retval = new ArrayList<IHyperlink>();
+        IDOMModel domModel = null;
         Node targetNode = null;
 
         if( nodeType == Node.ELEMENT_NODE )
         {
             String elementName = nodeNames[0];
-            IDOMModel domModel = getDOMModel( file );
+            domModel = getDOMModel( file, false );
 
             // the actual node is text node of this.element
             targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
@@ -182,7 +191,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
             String elementName = nodeNames[0];
             String attrName = nodeNames[1];
 
-            IDOMModel domModel = getDOMModel( file );
+            domModel = getDOMModel( file, false );
             targetNode = domModel.getDocument().getElementsByTagName( elementName ). item( 0 ).
                          getAttributes().getNamedItem( attrName );
         }
@@ -209,6 +218,8 @@ public class XmlSearchTestsUtils extends UITestsUtils
             }
         }
 
+        domModel.releaseFromRead();
+
         return retval.toArray( new IHyperlink[0] );
     }
 
@@ -225,12 +236,13 @@ public class XmlSearchTestsUtils extends UITestsUtils
     private static ICompletionProposal[] getProposals( IFile file, int nodeType, String... nodeNames ) throws Exception
     {
         Node targetNode = null;
+        IDOMModel domModel = null;
 
         if( nodeType == Node.ELEMENT_NODE )
         {
             String elementName = nodeNames[0];
 
-            IDOMModel domModel = getDOMModel( file );
+            domModel = getDOMModel( file, false );
             targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
         }
         else if( nodeType == Node.ATTRIBUTE_NODE )
@@ -238,7 +250,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
             String elementName = nodeNames[0];
             String attrName = nodeNames[1];
 
-            IDOMModel domModel = getDOMModel( file );
+            domModel = getDOMModel( file, false );
             targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).
                          getAttributes().getNamedItem( attrName );
         }
@@ -258,6 +270,8 @@ public class XmlSearchTestsUtils extends UITestsUtils
 
         // get content assist suggestions
         final ICompletionProposal[] proposals = processor.computeCompletionProposals( viewer, offset );
+
+        domModel.releaseFromRead();
 
         return proposals;
     }
@@ -352,12 +366,14 @@ public class XmlSearchTestsUtils extends UITestsUtils
     private static String[] getTextHover( IFile file, int nodeType, String... nodeNames ) throws Exception
     {
         List<String> retval = new ArrayList<String>();
+        IDOMModel domModel = null;
 
         Node targetNode = null;
+
         if( nodeType == Node.ELEMENT_NODE )
         {
             String elementName = nodeNames[0];
-            IDOMModel domModel = getDOMModel( file );
+            domModel = getDOMModel( file, false );
 
             // the actual node is text node of this.element
             targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
@@ -367,7 +383,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
             String elementName = nodeNames[0];
             String attrName = nodeNames[1];
 
-            IDOMModel domModel = getDOMModel( file );
+            domModel = getDOMModel( file, false );
             targetNode = domModel.getDocument().getElementsByTagName( elementName ). item( 0 ).
                          getAttributes().getNamedItem( attrName );
         }
@@ -401,6 +417,8 @@ public class XmlSearchTestsUtils extends UITestsUtils
             }
         }
 
+        domModel.releaseFromRead();
+
         return retval.toArray( new String[0] );
     }
 
@@ -423,7 +441,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
     // set the attribute value for the 1st element with the "elementName"
     public static void setAttrValue( IFile file, String elementName, String attrName, String attrValue ) throws Exception
     {
-        final IDOMModel domModel = getDOMModel( file );
+        final IDOMModel domModel = getDOMModel( file, true );
 
         assertNotNull( domModel );
 
@@ -440,13 +458,15 @@ public class XmlSearchTestsUtils extends UITestsUtils
 
         domModel.save();
 
+        domModel.releaseFromEdit();
+
         file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }
 
     // set the content for the 1st element with name of "elementName"
     public static void setElementContent( IFile file, String elementName, String content ) throws Exception
     {
-        final IDOMModel domModel = getDOMModel( file );
+        final IDOMModel domModel = getDOMModel( file, true );
 
         assertNotNull( domModel );
 
@@ -467,6 +487,8 @@ public class XmlSearchTestsUtils extends UITestsUtils
         element.appendChild( document.createTextNode( content ) );
 
         domModel.save();
+
+        domModel.releaseFromEdit();
 
         file.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
     }

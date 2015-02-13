@@ -90,13 +90,20 @@ public class UITestsUtils
         }
     }
 
-    public static IDOMModel getDOMModel( IFile file ) throws Exception
+    public static IDOMModel getDOMModel( IFile file, boolean edit ) throws Exception
     {
         IDOMModel domModel = fileToModelMap.get( file );
 
         if( domModel == null )
         {
-            domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( file );
+            if( edit )
+            {
+                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForEdit( file );
+            }
+            else
+            {
+                domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( file );
+            }
         }
 
         return domModel;
