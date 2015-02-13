@@ -103,7 +103,7 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
         assertEquals( true, proposals.length > 0 );
 
         final String exceptedProposalString = "Portlet-Xml-Test";
-        assertEquals( true, containProposal( proposals, exceptedProposalString, true ) );
+        assertEquals( true, containsProposal( proposals, exceptedProposalString, true ) );
 
         attrValue = "Portlet-Xml-Test";
         setAttrValue( descriptorFile, elementName, attrName, attrValue );

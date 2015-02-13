@@ -54,20 +54,21 @@ public class UITestsUtils
 {
 
     private static Map<IFile, IEditorPart> fileToEditorMap = new HashMap<IFile, IEditorPart>();
-
     private static Map<IFile, IDOMModel> fileToModelMap = new HashMap<IFile, IDOMModel>();
 
     // check if the excepted proposal is in the given proposals
-    public static boolean containProposal( ICompletionProposal[] proposals,
+    public static boolean containsProposal( ICompletionProposal[] proposals,
                                            String exceptedProposalString, boolean fullMatch )
     {
         for( ICompletionProposal proposal : proposals )
         {
-            if( fullMatch && proposal.getDisplayString().equals( exceptedProposalString ) )
+            final String displayString = proposal.getDisplayString();
+
+            if( fullMatch && displayString.equals( exceptedProposalString ) )
             {
                 return true;
             }
-            else if( ! fullMatch && proposal.getDisplayString().matches( exceptedProposalString ) )
+            else if( ! fullMatch && displayString.matches( exceptedProposalString ) )
             {
                 return true;
             }
