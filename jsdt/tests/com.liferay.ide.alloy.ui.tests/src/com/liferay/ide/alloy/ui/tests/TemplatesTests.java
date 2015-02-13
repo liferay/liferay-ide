@@ -16,12 +16,13 @@
 package com.liferay.ide.alloy.ui.tests;
 
 import static com.liferay.ide.alloy.ui.tests.AlloyTestsUtils.getWebSevicesProposals;
-import static com.liferay.ide.alloy.ui.tests.AlloyTestsUtils.deleteOtherProjects;
-import static org.junit.Assert.assertNotNull;
+import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.alloy.ui.editor.PortletJSPSourceViewerConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.tests.ProjectCoreBase;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -32,7 +33,7 @@ import org.junit.Test;
  * @author Kuo Zhang
  * @author Terry Jia
  */
-public class TemplatesTests extends AlloyTestsBase
+public class TemplatesTests extends ProjectCoreBase
 {
 
     private IProject project;
