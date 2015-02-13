@@ -14,6 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.server.core.model.IModuleResource;
@@ -34,7 +40,22 @@ public class BundleModulelDelegate extends ProjectModule
     @Override
     public IModuleResource[] members() throws CoreException
     {
-        return super.members();
+        final List<IModuleResource> retval = new ArrayList<IModuleResource>();
+        final IModuleResource[] members = super.members();
+        final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, getProject() );
+
+        for( IModuleResource moduleResource : members )
+        {
+            if( bundleProject.filterResource(
+                moduleResource.getModuleRelativePath().append( moduleResource.getName() ) ) )
+            {
+               continue;
+            }
+
+            retval.add( moduleResource );
+        }
+
+        return retval.toArray( new IModuleResource[0] );
     }
 
 }

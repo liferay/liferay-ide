@@ -29,7 +29,7 @@ public interface OsgiConnection
 
     boolean ping();
 
-    IStatus deployBundle( String location, File bundle );
+    IStatus deployBundle( String bsn, String location , File bundle );
 
     IStatus uninstallBundle( String symbolicName );
 }

@@ -20,9 +20,9 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
@@ -43,7 +43,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         super( s, modules );
     }
 
-    private IStatus autoDeploy( IFile output ) throws CoreException
+    private IStatus autoDeploy( IPath output ) throws CoreException
     {
         IStatus retval = null;
 
@@ -55,7 +55,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             try
             {
                 FileUtil.writeFileFromStream(
-                    autoDeployPath.append( output.getName() ).toFile(), output.getContents( true ) );
+                    autoDeployPath.append( output.lastSegment() ).toFile(), new FileInputStream( output.toFile() ) );
 
                 retval = Status.OK_STATUS;
             }
@@ -90,13 +90,13 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             if( bundleProject != null )
             {
                 // TODO catch error in getOUtputJar and show a popup notification instead
-                final IFile outputJar = bundleProject.getOutputJar( true, monitor );
+                final IPath outputJar = bundleProject.getOutputJar( true, monitor );
 
-                if( outputJar.exists() )
+                if( outputJar!= null && outputJar.toFile().exists() )
                 {
                     if( this.server.getServerState() == IServer.STATE_STARTED )
                     {
-                        retval = remoteDeploy( outputJar );
+                        retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar );
                     }
                     else
                     {
@@ -109,33 +109,32 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                 retval = LiferayServerCore.error( "Unable to get bundle project for " + module.getProject().getName() );
             }
 
-            if( ! retval.isOK() )
+            if( retval.isOK() )
             {
-                this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_UNKNOWN );
-                throw new CoreException( retval );
+                this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
             }
-
-            this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
+            else
+            {
+                this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_FULL );
+            }
         }
     }
 
-    private IStatus remoteDeploy( IFile output )
+    private IStatus remoteDeploy( String bsn , IPath output )
     {
         IStatus retval = null;
 
         final OsgiConnection osgi = getOsgiConnection();
 
-        final IPath rawLocation = output.getRawLocation();
-
-        if( rawLocation != null )
+        if( output != null && output.toFile().exists() )
         {
-            retval = osgi.deployBundle( rawLocation.toPortableString(), rawLocation.toFile() );
+            retval = osgi.deployBundle( bsn, output.toPortableString(), output.toFile() );
         }
         else
         {
             retval =
                 LiferayServerCore.error( "Unable to deploy bundle remotely " +
-                    output.getLocation().toPortableString() );
+                    output.toPortableString() );
         }
 
         return retval;

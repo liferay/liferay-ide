@@ -22,9 +22,8 @@ import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -85,22 +84,23 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     }
 
     @Override
-    public IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
-        IFile outputJar = null;
+        IPath outputJar = null;
 
         if( buildIfNeeded )
         {
-            try
-            {
-                this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-            }
-            catch( CoreException e )
-            {
-            }
+//            try
+//            {
+//                this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+//            }
+//            catch( CoreException e )
+//            {
+//            }
 
             final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
 
+            // TODO update status
             final IStatus status = mavenProjectBuilder.execGoal( "package", monitor );
 
             if( status != null && status.isOK() )
@@ -115,10 +115,11 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
                 if( targetFolder.exists() )
                 {
-                    targetFolder.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                    final IFile targetFile = targetFolder.getFile( targetName );
+//                    targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
+//                    final IFile targetFile = targetFolder.getFile( targetName );
+                    final IPath targetFile = targetFolder.getRawLocation().append( targetName );
 
-                    if( targetFile.exists() )
+                    if( targetFile.toFile().exists() )
                     {
                         outputJar = targetFile;
                     }
@@ -136,9 +137,22 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
         final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
         final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
 
-        // TODO this may not necessarily be the project name
+        // TODO need to implement the full process here
+        // http://felix.apache.org/site/apache-felix-maven-bundle-plugin-bnd.html
 
-        return mavenProject.getArtifactId();
+        return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
+    }
+
+    @Override
+    public boolean filterResource( IPath resourcePath )
+    {
+        if( resourcePath.segmentCount() > 0 && resourcePath.segment( 0 ).equals( "target" ) )
+        {
+            System.out.println("Filtering path " + resourcePath.toPortableString());
+            return true;
+        }
+
+        return false;
     }
 
 }

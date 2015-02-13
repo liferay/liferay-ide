@@ -15,6 +15,7 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.PingThread;
 
@@ -23,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -50,7 +52,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
-public class PortalServerBehavior extends ServerBehaviourDelegate implements IJavaLaunchConfigurationConstants
+public class PortalServerBehavior extends ServerBehaviourDelegate implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants
 {
     private static final String[] JMX_EXCLUDE_ARGS = new String []
     {
@@ -683,5 +685,45 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements IJa
         };
 
         DebugPlugin.getDefault().addDebugEventListener( processListener );
+    }
+
+    @Override
+    public IPath getDeployedPath( IModule[] module )
+    {
+        return null;
+    }
+
+    @Override
+    public void redeployModule( IModule[] module )
+    {
+        setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
+
+        IAdaptable info = new IAdaptable()
+        {
+
+            public Object getAdapter( Class adapter )
+            {
+                if( String.class.equals( adapter ) )
+                {
+                    return "user"; //$NON-NLS-1$
+                }
+
+                return null;
+            }
+        };
+
+        final List<IModule[]> modules = new ArrayList<IModule[]>();
+        modules.add( module );
+
+        try
+        {
+            publish( IServer.PUBLISH_FULL, modules, null, info );
+        }
+        catch( CoreException e )
+        {
+        }
+        finally
+        {
+        }
     }
 }

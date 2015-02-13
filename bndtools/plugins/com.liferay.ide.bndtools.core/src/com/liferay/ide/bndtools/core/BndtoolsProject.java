@@ -66,7 +66,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     }
 
     @Override
-    public IFile getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
         IFile retval = null;
 
@@ -87,7 +87,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
             BndtoolsCore.logError( "Unable to get output jar for " + this.getProject().getName(), e );
         }
 
-        return retval;
+        return retval.getRawLocation();
     }
 
     @Override
@@ -108,6 +108,13 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
         }
 
         return retval;
+    }
+
+    @Override
+    public boolean filterResource( IPath moduleRelativePath )
+    {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 
