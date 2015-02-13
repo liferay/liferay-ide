@@ -86,7 +86,8 @@ public class TemplatesTests extends ProjectCoreBase
 
         IFile file = getJspFile( "view.jsp" );
 
-        String[] testNames = {
+        String[] testNames =
+        {
             "jsonws-DDMStructure-delete-structure",
             "jsonws-ExpandoColumn-update-type-settings",
             "jsonws-JournalArticle-unsubscribe"
