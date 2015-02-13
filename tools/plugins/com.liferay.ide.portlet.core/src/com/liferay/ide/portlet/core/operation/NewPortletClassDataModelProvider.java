@@ -1049,15 +1049,16 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
                 if( webproject != null )
                 {
                     IFolder defaultDocroot = webproject.getDefaultDocrootFolder();
-                    IStatus checkingStatus = validateFolder( defaultDocroot, folderValue );
+                    IStatus validation = validateFolder( defaultDocroot, folderValue );
 
-                    if( checkingStatus!=null && !checkingStatus.isOK() )
+                    if( validation != null && !validation.isOK() )
                     {
-                        return checkingStatus;
+                        return validation;
                     }
-                    
+
                     // make sure path first segment isn't the same as the portlet name
                     String path = new Path( folderValue ).segment( 0 );
+
                     if( !CoreUtil.isNullOrEmpty( path ) && path.equals( getStringProperty( PORTLET_NAME ) ) )
                     {
                         return PortletCore.createErrorStatus( Msgs.jspFolderNotMatchPortletName );
@@ -1170,10 +1171,10 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         if( folder.getFolder( new Path( folderValue ) ).exists() )
         {
             List<IFile> viewJspFiles = new SearchFilesVisitor().searchFiles( folder, "view.jsp" );
-            
-            if ( viewJspFiles != null && viewJspFiles.size()>0 )
+
+            if( viewJspFiles != null && viewJspFiles.size() > 0 )
             {
-                return LiferayCore.createWarningStatus( Msgs.viewJspAlreadyExists );    
+                return LiferayCore.createWarningStatus( Msgs.viewJspAlreadyExists );
             }
         }
 
@@ -1195,7 +1196,7 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
         public static String specifyPortletSuperclass;
         public static String specifyValidDouble;
         public static String viewJspAlreadyExists;
-        
+
         static
         {
             initializeMessages( NewPortletClassDataModelProvider.class.getName(), Msgs.class );
