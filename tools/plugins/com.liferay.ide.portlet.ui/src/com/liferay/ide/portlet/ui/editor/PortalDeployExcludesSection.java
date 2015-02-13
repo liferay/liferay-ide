@@ -10,6 +10,23 @@
  *******************************************************************************/
 package com.liferay.ide.portlet.ui.editor;
 
+import com.liferay.ide.core.model.IBaseModel;
+import com.liferay.ide.core.model.IModelChangedEvent;
+import com.liferay.ide.core.model.IModelChangedListener;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.portlet.core.IPluginPackageModel;
+import com.liferay.ide.portlet.core.PluginPackageModel;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.ui.form.DefaultContentProvider;
+import com.liferay.ide.ui.form.FormLayoutFactory;
+import com.liferay.ide.ui.form.IDEFormPage;
+import com.liferay.ide.ui.form.TablePart;
+import com.liferay.ide.ui.form.TableSection;
+import com.liferay.ide.ui.wizard.ExternalFileSelectionDialog;
+
 import java.io.File;
 import java.util.Iterator;
 import java.util.Vector;
@@ -47,24 +64,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.liferay.ide.core.model.IBaseModel;
-import com.liferay.ide.core.model.IModelChangedEvent;
-import com.liferay.ide.core.model.IModelChangedListener;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
-import com.liferay.ide.portlet.core.IPluginPackageModel;
-import com.liferay.ide.portlet.core.PluginPackageModel;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.ui.form.DefaultContentProvider;
-import com.liferay.ide.ui.form.FormLayoutFactory;
-import com.liferay.ide.ui.form.IDEFormPage;
-import com.liferay.ide.ui.form.TablePart;
-import com.liferay.ide.ui.form.TableSection;
-import com.liferay.ide.ui.wizard.ExternalFileSelectionDialog;
-
 public class PortalDeployExcludesSection extends TableSection implements IModelChangedListener, IPropertyChangeListener {
 
 	private static final int ADD_INDEX = 0;
@@ -98,7 +97,7 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 
         IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
-        if ( ProjectUtil.isMavenProject( project ) || ProjectUtil.isExtProject( project ))
+        if ( docroot == null || ProjectUtil.isMavenProject( project ) || ProjectUtil.isExtProject( project ) )
         {
             TablePart tablePart = getTablePart();
             tablePart.setButtonEnabled(ADD_INDEX, false);
@@ -254,7 +253,7 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 	}
 
 	public void dispose() {
-		
+
 		IBaseModel model =  getPage().getModel();
 		if (model != null) {
 			model.dispose();
@@ -301,7 +300,7 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 	 */
 	protected void doPaste(Object targetObject, Object[] sourceObjects) {
 		// Get the model
-		
+
 	}
 
 	public boolean setFormInput(Object object) {
@@ -430,13 +429,13 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 				handleAdd();
 			}
 		};
-		
+
 		fRemoveAction = new Action(Msgs.remove) {
 			public void run() {
 				handleRemove();
 			}
 		};
-		
+
 	}
 
 	public void refresh() {
