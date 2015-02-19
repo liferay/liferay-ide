@@ -88,6 +88,9 @@ public class OsgiConnectionImpl implements OsgiConnection
             if( bundleId > -1 )
             {
                 this.mbsc.invoke(
+                    framework, "stopBundle", new Object[] { bundleId }, new String[] { "long" } );
+
+                this.mbsc.invoke(
                     framework, "updateBundleFromURL", new Object[] { bundleId,
                         bundle.toURI().toURL().toExternalForm() },
                     new String[] { "long", String.class.getName() } );

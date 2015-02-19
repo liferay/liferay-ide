@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -64,7 +65,14 @@ public class RedeployHandler extends AbstractHandler
 
             if( liferayServerBehavior != null )
             {
-                liferayServerBehavior.redeployModule( moduleServer.getModule() );
+                try
+                {
+                    liferayServerBehavior.redeployModule( moduleServer.getModule() );
+                }
+                catch( CoreException e )
+                {
+                    throw new ExecutionException( e.getMessage(), e.getCause() );
+                }
             }
         }
 

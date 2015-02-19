@@ -268,9 +268,8 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         super.publishModules( kind, ( redeployModules == null ) ? modules : redeployModules, deltaKind2, multi, monitor );
     }
 
-    public void redeployModule( IModule[] module )
+    public void redeployModule( IModule[] module ) throws CoreException
     {
-
         setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
 
         IAdaptable info = new IAdaptable()
@@ -290,14 +289,14 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
         final List<IModule[]> modules = new ArrayList<IModule[]>();
         modules.add( module );
 
+        redeployModules = modules;
         try
         {
-            redeployModules = modules;
             publish( IServer.PUBLISH_FULL, modules, null, info );
         }
         catch( CoreException e )
         {
-            LiferayTomcatPlugin.logError( "redploying module " + module[0].getName() + " failed.", e );
+            throw e;
         }
         finally
         {

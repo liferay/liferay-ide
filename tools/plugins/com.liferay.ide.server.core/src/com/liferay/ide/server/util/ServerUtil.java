@@ -24,6 +24,7 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.OsgiBundle;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
@@ -85,6 +86,19 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class ServerUtil
 {
+
+    public static boolean bsnExists( String bsn, OsgiBundle[] bundles )
+    {
+        for( OsgiBundle bundle : bundles )
+        {
+            if( bundle.getSymbolicName().equals( bsn ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public static Map<String, String> configureAppServerProperties( ILiferayRuntime liferayRuntime )
     {
@@ -373,6 +387,24 @@ public class ServerUtil
         return getLiferayRuntime( getRuntime( name ) );
     }
 
+    public static ILiferayServer getLiferayServer( IServer server, IProgressMonitor monitor )
+    {
+        ILiferayServer retval = null;
+
+        if( server != null )
+        {
+            try
+            {
+                retval = (ILiferayServer) server.loadAdapter( ILiferayServer.class, monitor );
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        return retval;
+    }
+
     public static IPath getPortalDir( IJavaProject project )
     {
         return getPortalDir( project.getProject() );
@@ -655,7 +687,6 @@ public class ServerUtil
 
         return retval.toArray( new String[0] );
     }
-
     public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet )
     {
         boolean retval = false;
@@ -685,7 +716,6 @@ public class ServerUtil
         }
         return retval;
     }
-
     public static boolean isExistingVMName( String name )
     {
         for( IVMInstall vm : JavaRuntime.getVMInstallType( StandardVMType.ID_STANDARD_VM_TYPE ).getVMInstalls() )
@@ -697,10 +727,12 @@ public class ServerUtil
         }
         return false;
     }
+
     public static boolean isExtProject( IProject project )
     {
         return hasFacet( project, ProjectFacetsManager.getProjectFacet( "liferay.ext" ) ); //$NON-NLS-1$
     }
+
     public static boolean isLiferayFacet( IProjectFacet projectFacet )
     {
         return projectFacet != null && projectFacet.getId().startsWith( "liferay" ); //$NON-NLS-1$
@@ -764,23 +796,5 @@ public class ServerUtil
                 launch.terminate();
             }
         }
-    }
-
-    public static ILiferayServer getLiferayServer( IServer server, IProgressMonitor monitor )
-    {
-        ILiferayServer retval = null;
-
-        if( server != null )
-        {
-            try
-            {
-                retval = (ILiferayServer) server.loadAdapter( ILiferayServer.class, monitor );
-            }
-            catch( Exception e )
-            {
-            }
-        }
-
-        return retval;
     }
 }

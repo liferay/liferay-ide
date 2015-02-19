@@ -15,12 +15,17 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.PublishOperation;
@@ -63,10 +68,29 @@ public class PortalPublishTask extends PublishTaskDelegate
         }
     }
 
+    private OsgiBundle[] getExistingBundles( IServer server )
+    {
+        try
+        {
+            final OsgiConnection osgiConnection = LiferayServerCore.newOsgiConnection( server );
+            return osgiConnection.getBundles();
+        }
+        catch( IllegalArgumentException e )
+        {
+        }
+
+        return new OsgiBundle[0];
+    }
+
     @SuppressWarnings( "rawtypes" )
     public PublishOperation[] getTasks( IServer server, int kind, List modules, List kindList )
     {
-        List<BundlePublishOperation> tasks = new ArrayList<BundlePublishOperation>();
+        final List<BundlePublishOperation> tasks = new ArrayList<BundlePublishOperation>();
+
+        final PortalServerBehavior serverBehavior =
+            (PortalServerBehavior) server.loadAdapter( PortalServerBehavior.class, null );
+
+        final OsgiBundle[] existingBundles = getExistingBundles( server );
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {
@@ -82,6 +106,8 @@ public class PortalPublishTask extends PublishTaskDelegate
                     case IServer.PUBLISH_FULL:
                     case IServer.PUBLISH_INCREMENTAL:
                     case IServer.PUBLISH_AUTO:
+                        final IProject project = module[0].getProject();
+
                         switch( deltaKind )
                         {
                             case ServerBehaviourDelegate.ADDED:
@@ -94,14 +120,32 @@ public class PortalPublishTask extends PublishTaskDelegate
                                 break;
 
                             case ServerBehaviourDelegate.NO_CHANGE:
-                                //TODO need to checkt to see if the latest jar is actually the one deployed
-                                addOperation( BundlePublishFullAdd.class, tasks, server, module );
+                                final IBundleProject bundleProject =
+                                    LiferayCore.create( IBundleProject.class, project );
+
+                                if( bundleProject != null )
+                                {
+                                    try
+                                    {
+                                        if( isUserRedeploy( serverBehavior, module[0] ) ||
+                                            !ServerUtil.bsnExists( bundleProject.getSymbolicName(), existingBundles ) )
+                                        {
+                                            addOperation( BundlePublishFullAdd.class, tasks, server, module );
+                                        }
+                                    }
+                                    catch( CoreException e )
+                                    {
+                                        LiferayServerCore.logError(
+                                            "Unable to get bsn for project " + project.getName(), e );
+                                    }
+                                }
+
                                 break;
 
                             default:
                                 System.out.println( "Unhandled deltaKind " + deltaKind );
                                 break;
-                        }
+                            }
                         break;
 
                     default:
@@ -119,5 +163,17 @@ public class PortalPublishTask extends PublishTaskDelegate
     public PublishOperation[] getTasks( IServer server, List modules )
     {
         return super.getTasks( server, modules );
+    }
+
+    private boolean isUserRedeploy( PortalServerBehavior serverBehavior, IModule module  )
+    {
+        if( serverBehavior.getInfo() != null )
+        {
+            Object moduleInfo = serverBehavior.getInfo().getAdapter( IModule.class );
+
+            return module.equals( moduleInfo );
+        }
+
+        return false;
     }
 }

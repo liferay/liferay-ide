@@ -21,9 +21,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.statushandlers.StatusManager;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 
@@ -64,7 +66,14 @@ public class RedeployAction extends AbstractServerRunningAction
 
                 if( liferayServerBehavior != null )
                 {
-                    liferayServerBehavior.redeployModule( moduleServer.getModule() );
+                    try
+                    {
+                        liferayServerBehavior.redeployModule( moduleServer.getModule() );
+                    }
+                    catch( CoreException e )
+                    {
+                        StatusManager.getManager().handle( e.getStatus(), StatusManager.SHOW );
+                    }
                 }
             }
         }

@@ -15,6 +15,8 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.MultiStatusBuilder;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Platform;
@@ -44,11 +46,11 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ADD_MAVEN_PLUGIN_SUFFIX = "add-maven-plugin-suffix";
 
     public static final String PREF_ARCHETYPE_GAV_EXT = "archetype-gav-ext";
-    public static final String PREF_ARCHETYPE_GAV_LIFERAY_FACES_ALLOY = "archetype-gav-liferay-faces-alloy";
     public static final String PREF_ARCHETYPE_GAV_HOOK = "archetype-gav-hook";
     public static final String PREF_ARCHETYPE_GAV_ICEFACES = "archetype-gav-icefaces";
     public static final String PREF_ARCHETYPE_GAV_JSF = "archetype-gav-jsf";
     public static final String PREF_ARCHETYPE_GAV_LAYOUTTPL = "archetype-gav-layouttpl";
+    public static final String PREF_ARCHETYPE_GAV_LIFERAY_FACES_ALLOY = "archetype-gav-liferay-faces-alloy";
     public static final String PREF_ARCHETYPE_GAV_MVC = "archetype-gav-mvc";
     public static final String PREF_ARCHETYPE_GAV_PRIMEFACES = "archetype-gav-primefaces";
     public static final String PREF_ARCHETYPE_GAV_RICHFACES = "archetype-gav-richfaces";
@@ -122,6 +124,11 @@ public class LiferayMavenCore extends Plugin
     public static void logError( Throwable t )
     {
         log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
+    }
+
+    public static MultiStatusBuilder newMultiStatus()
+    {
+        return new MultiStatusBuilder( PLUGIN_ID );
     }
 
     /**

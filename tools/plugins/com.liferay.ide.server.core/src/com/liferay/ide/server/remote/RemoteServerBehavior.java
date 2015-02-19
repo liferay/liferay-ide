@@ -713,7 +713,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
     }
 
     @SuppressWarnings( "rawtypes" )
-    public void redeployModule( IModule[] module )
+    public void redeployModule( IModule[] module ) throws CoreException
     {
         setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
 
@@ -737,7 +737,7 @@ public class RemoteServerBehavior extends ServerBehaviourDelegate
         }
         catch( CoreException e )
         {
-            LiferayServerCore.logError( "redploying module " + module[0].getName() + " failed.", e );
+            throw e;
         }
         finally
         {

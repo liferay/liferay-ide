@@ -19,6 +19,8 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 
+import java.util.List;
+
 import org.apache.maven.model.Plugin;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
@@ -166,7 +168,11 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         {
             public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
             {
-                return MavenUtil.executeGoal( facade, context, goal, monitor );
+                final IStatus execStatus = MavenUtil.executeGoal( facade, context, goal, monitor );
+
+                final List<Throwable> exceptions = context.getSession().getResult().getExceptions();
+
+                return LiferayMavenCore.newMultiStatus().add( execStatus ).addAll( exceptions ).retval();
             }
         };
 

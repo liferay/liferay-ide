@@ -555,6 +555,23 @@
          </enablement>
       </decorator>
    </extension>
+
+   <extension
+         point="org.eclipse.wst.server.core.moduleArtifactAdapters">
+      <moduleArtifactAdapter
+            class="com.liferay.ide.server.ui.portal.BundleModuleArtifactAdapterDelegate"
+            id="com.liferay.ide.server.ui.bundleModuleArtifactAdapter">
+         <enablement>
+           <with variable="selection">
+             <adapt type="org.eclipse.core.resources.IProject">
+              <test forcePluginActivation="true"
+                    property="com.liferay.ide.project.core.isBundleProject"
+                    value="true" />
+             </adapt>
+           </with>
+         </enablement>
+      </moduleArtifactAdapter>
+   </extension>
    <!--
    <extension
          point="org.eclipse.jdt.ui.classpathContainerPage">

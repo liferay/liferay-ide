@@ -67,6 +67,8 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
     private transient IDebugEventSetListener processListener;
     private transient PingThread ping = null;
 
+    private IAdaptable info;
+
     public PortalServerBehavior()
     {
         super();
@@ -694,7 +696,23 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
     }
 
     @Override
-    public void redeployModule( IModule[] module )
+    public void publish( int kind, List<IModule[]> modules, IProgressMonitor monitor, IAdaptable info )
+        throws CoreException
+    {
+        this.info = info;// save info
+
+        super.publish( kind, modules, monitor, info );
+
+        this.info = null;
+    }
+
+    public IAdaptable getInfo()
+    {
+        return this.info;
+    }
+
+    @Override
+    public void redeployModule( final IModule[] module ) throws CoreException
     {
         setModulePublishState( module, IServer.PUBLISH_STATE_FULL );
 
@@ -707,6 +725,10 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
                 {
                     return "user"; //$NON-NLS-1$
                 }
+                else if( IModule.class.equals( adapter ) )
+                {
+                    return module[0];
+                }
 
                 return null;
             }
@@ -715,15 +737,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
         final List<IModule[]> modules = new ArrayList<IModule[]>();
         modules.add( module );
 
-        try
-        {
-            publish( IServer.PUBLISH_FULL, modules, null, info );
-        }
-        catch( CoreException e )
-        {
-        }
-        finally
-        {
-        }
+        publish( IServer.PUBLISH_FULL, modules, null, info );
     }
 }

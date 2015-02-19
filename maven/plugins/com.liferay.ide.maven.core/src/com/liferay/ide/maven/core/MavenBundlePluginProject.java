@@ -15,9 +15,13 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
+import java.io.File;
+
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -90,14 +94,6 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
         if( buildIfNeeded )
         {
-//            try
-//            {
-//                this.getProject().build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
-//            }
-//            catch( CoreException e )
-//            {
-//            }
-
             final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
 
             // TODO update status
@@ -115,8 +111,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
                 if( targetFolder.exists() )
                 {
-//                    targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
-//                    final IFile targetFile = targetFolder.getFile( targetName );
+                    //targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
                     final IPath targetFile = targetFolder.getRawLocation().append( targetName );
 
                     if( targetFile.toFile().exists() )
@@ -124,6 +119,10 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
                         outputJar = targetFile;
                     }
                 }
+            }
+            else
+            {
+                throw new CoreException( status );
             }
         }
 
@@ -133,14 +132,21 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     @Override
     public String getSymbolicName() throws CoreException
     {
+        String retval = null;
+
         final IProgressMonitor monitor = new NullProgressMonitor();
         final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
         final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
 
-        // TODO need to implement the full process here
-        // http://felix.apache.org/site/apache-felix-maven-bundle-plugin-bnd.html
+        final Artifact artifact = mavenProject.getArtifact();
+        final File file = artifact.getFile();
 
-        return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
+        if( file.exists() && !artifact.getFile().getName().equals( "classes" ) )
+        {
+            retval = new DefaultMaven2OsgiConverter().getBundleSymbolicName( artifact );
+        }
+
+        return retval;
     }
 
     @Override
