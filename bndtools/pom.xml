@@ -38,13 +38,5 @@
         <module>plugins</module>
     </modules>
 
-    <repositories>
-        <repository>
-            <id>bndtools</id>
-            <layout>p2</layout>
-            <url>${bndtools-site}</url>
-        </repository>
-    </repositories>
-
 </project>
 
