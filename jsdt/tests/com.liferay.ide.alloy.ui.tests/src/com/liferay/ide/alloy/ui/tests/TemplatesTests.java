@@ -36,7 +36,13 @@ import org.junit.Test;
 public class TemplatesTests extends ProjectCoreBase
 {
 
+    private static final String bundleId = "com.liferay.ide.alloy.ui.tests";
     private IProject project;
+
+    protected String getBundleId()
+    {
+        return bundleId;
+    }
 
     private IProject getProject() throws Exception
     {

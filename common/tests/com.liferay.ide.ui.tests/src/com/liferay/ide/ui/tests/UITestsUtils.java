@@ -30,6 +30,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.sapphire.ui.swt.xml.editor.SapphireEditorForXml;
@@ -40,8 +42,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
 import org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart;
+import org.w3c.dom.Node;
 
 /**
  * Some methods are modified from eclipse wst sse tests
@@ -149,6 +155,70 @@ public class UITestsUtils
         }
 
         return editor;
+    }
+
+    public static int getElementContentEndOffset( IFile file, String elementName ) throws Exception
+    {
+        final IDOMModel model = getDOMModel( file, false );
+
+        final Node element = model.getDocument().getElementsByTagName( elementName ).item( 0 );
+
+        final IRegion region = getRegion( element.getFirstChild() );
+
+        int retval = region.getOffset() + region.getLength() - 1;
+
+        model.releaseFromRead();
+
+        return retval;
+    }
+
+    public static IRegion getRegion( Node node )
+    {
+        if( node != null )
+        {
+            switch( node.getNodeType() )
+            {
+                case Node.ELEMENT_NODE:
+
+                    IDOMElement element = (IDOMElement) node;
+                    int endOffset;
+
+                    if( element.hasEndTag() && element.isClosed() )
+                    {
+                        endOffset = element.getStartEndOffset();
+                    }
+                    else
+                    {
+                        endOffset = element.getEndOffset();
+                    }
+
+                    return new Region( element.getStartOffset(), endOffset - element.getStartOffset() );
+
+                case Node.ATTRIBUTE_NODE:
+
+                    IDOMAttr att = (IDOMAttr) node;
+                    int regOffset = att.getValueRegionStartOffset();
+                    int regLength = att.getValueRegionText().length();
+                    String attValue = att.getValueRegionText();
+                    if( StringUtil.isQuoted( attValue ) )
+                    {
+                        regOffset++;
+                        regLength -= 2;
+                    }
+
+                    return new Region( regOffset, regLength );
+
+                case Node.TEXT_NODE:
+
+                    IDOMText text = (IDOMText) node;
+                    int startOffset = text.getStartOffset();
+                    int length = text.getLength();
+
+                    return new Region( startOffset, length );
+            }
+        }
+
+        return null;
     }
 
     // open the editor and get the actual SourceViewerConfiguration

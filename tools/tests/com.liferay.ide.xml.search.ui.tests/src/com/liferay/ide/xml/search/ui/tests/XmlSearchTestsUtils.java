@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.liferay.ide.core.util.ReflectionUtil;
-import com.liferay.ide.core.util.StringUtil;
 import com.liferay.ide.ui.tests.UITestsUtils;
 import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
 import com.liferay.ide.xml.search.ui.editor.CompoundRegion;
@@ -39,7 +38,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.ITextHover;
-import org.eclipse.jface.text.Region;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
@@ -54,11 +52,8 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 import org.eclipse.wst.validation.internal.ValManager;
 import org.eclipse.wst.validation.internal.ValOperation;
 import org.eclipse.wst.validation.internal.ValType;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMAttr;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMText;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -286,54 +281,6 @@ public class XmlSearchTestsUtils extends UITestsUtils
         return getProposals( file, Node.ELEMENT_NODE, elementName );
     }
 
-    private static IRegion getRegion( Node node )
-    {
-        if( node != null )
-        {
-            switch( node.getNodeType() )
-            {
-                case Node.ELEMENT_NODE:
-
-                    IDOMElement element = (IDOMElement) node;
-                    int endOffset;
-
-                    if( element.hasEndTag() && element.isClosed() )
-                    {
-                        endOffset = element.getStartEndOffset();
-                    }
-                    else
-                    {
-                        endOffset = element.getEndOffset();
-                    }
-
-                    return new Region( element.getStartOffset(), endOffset - element.getStartOffset() );
-
-                case Node.ATTRIBUTE_NODE:
-
-                    IDOMAttr att = (IDOMAttr) node;
-                    int regOffset = att.getValueRegionStartOffset();
-                    int regLength = att.getValueRegionText().length();
-                    String attValue = att.getValueRegionText();
-                    if( StringUtil.isQuoted( attValue ) )
-                    {
-                        regOffset++;
-                        regLength -= 2;
-                    }
-
-                    return new Region( regOffset, regLength );
-
-                case Node.TEXT_NODE:
-
-                    IDOMText text = (IDOMText) node;
-                    int startOffset = text.getStartOffset();
-                    int length = text.getLength();
-
-                    return new Region( startOffset, length );
-            }
-        }
-
-        return null;
-    }
 
     // get the SourceViewerConfiguration from extension point
     public static SourceViewerConfiguration getSourceViewerConfiguraionFromExtensionPoint( IFile file ) throws Exception
