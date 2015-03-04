@@ -51,6 +51,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Kuo Zhang
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class PropertiesUtil
 {
@@ -515,7 +516,7 @@ public class PropertiesUtil
         final ILiferayProject lrproject = LiferayCore.create( proj );
         final IFolder[] srcFolders = lrproject.getSourceFolders();
 
-        if( srcFolders.length < 1 )
+        if( CoreUtil.isNullOrEmpty( srcFolders ) )
         {
             return new IFile[0];
         }
@@ -556,7 +557,7 @@ public class PropertiesUtil
         final ILiferayProject lrproject = LiferayCore.create( proj );
         final IFolder[] srcFolders = lrproject.getSourceFolders();
 
-        if( srcFolders.length < 1 )
+        if( CoreUtil.isNullOrEmpty( srcFolders ) )
         {
             return new IFile[0];
         }
