@@ -59,6 +59,7 @@ import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelWizardPa
 /**
  * @author Greg Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements INewHookDataModelProperties
@@ -248,7 +249,8 @@ public class NewCustomJSPsHookWizardPage extends DataModelWizardPage implements 
 
                     final IWebProject webproject = LiferayCore.create( IWebProject.class, folder.getProject() );
 
-                    if( webproject != null && webproject.getDefaultDocrootFolder().contains( folder ) )
+                    if( webproject != null && webproject.getDefaultDocrootFolder().contains( folder ) ||
+                        folder.contains( webproject.getDefaultDocrootFolder() ) )
                     {
                         return true;
                     }
