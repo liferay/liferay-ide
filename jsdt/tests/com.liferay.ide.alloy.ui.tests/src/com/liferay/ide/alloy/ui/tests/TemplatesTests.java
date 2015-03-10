@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.alloy.ui.editor.PortletJSPSourceViewerConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
+import com.liferay.ide.ui.tests.UITestsUtils;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -77,7 +78,8 @@ public class TemplatesTests extends ProjectCoreBase
 
         final IFile viewJspFile = getJspFile( "view.jsp" );
 
-        Object sourceViewerConfiguration = AlloyTestsUtils.getSourceViewerConfiguraionFromOpenedEditor( viewJspFile );
+        Object sourceViewerConfiguration =
+            UITestsUtils.getSourceViewerConfiguraionFromOpenedEditor( viewJspFile );
 
         assertEquals( true, sourceViewerConfiguration instanceof PortletJSPSourceViewerConfiguration );
     }

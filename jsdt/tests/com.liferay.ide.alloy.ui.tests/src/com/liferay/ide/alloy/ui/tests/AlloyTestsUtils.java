@@ -15,7 +15,9 @@
 
 package com.liferay.ide.alloy.ui.tests;
 
-import com.liferay.ide.ui.tests.UITestsUtils;
+import static com.liferay.ide.ui.tests.UITestsUtils.getEditor;
+import static com.liferay.ide.ui.tests.UITestsUtils.getElementContentEndOffset;
+import static com.liferay.ide.ui.tests.UITestsUtils.getSourceViewerConfiguraionFromOpenedEditor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
@@ -32,7 +34,7 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
  */
 
 @SuppressWarnings( "restriction" )
-public class AlloyTestsUtils extends UITestsUtils
+public class AlloyTestsUtils
 {
 
     public static ICompletionProposal[] getWebSevicesProposals( IFile file ) throws Exception
