@@ -31,6 +31,13 @@
    </license>
 
    <plugin
+         id="com.google.guava"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="com.liferay.ide.core.tests"
          download-size="0"
          install-size="0"
@@ -38,21 +45,28 @@
          unpack="false"/>
 
    <plugin
-         id="org.objectweb.asm"
+         id="com.liferay.ide.project.core.tests"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.json"
+         id="com.liferay.ide.server.core.tests"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.apache.commons.io"
+         id="com.liferay.ide.ui.tests"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="minimal-json"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -73,6 +87,13 @@
          unpack="false"/>
 
    <plugin
+         id="org.apache.commons.io"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="org.apache.commons.lang"
          download-size="0"
          install-size="0"
@@ -81,13 +102,6 @@
 
    <plugin
          id="org.apache.commons.logging"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.google.guava"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -108,28 +122,14 @@
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.server.core.tests"
+         id="org.json"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.project.core.tests"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="minimal-json"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.ui.tests"
+         id="org.objectweb.asm"
          download-size="0"
          install-size="0"
          version="0.0.0"
