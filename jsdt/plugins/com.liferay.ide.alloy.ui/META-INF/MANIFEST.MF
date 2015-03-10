@@ -20,4 +20,6 @@ Require-Bundle: com.liferay.ide.alloy.core;bundle-version="2.0.0",
  org.eclipse.wst.xml.search.editor
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.alloy.ui.editor
+Export-Package: com.liferay.ide.alloy.ui,
+ com.liferay.ide.alloy.ui.action,
+ com.liferay.ide.alloy.ui.editor
