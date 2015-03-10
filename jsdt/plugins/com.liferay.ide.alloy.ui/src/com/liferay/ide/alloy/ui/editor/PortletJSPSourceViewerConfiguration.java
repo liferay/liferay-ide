@@ -33,6 +33,16 @@ import org.eclipse.wst.sse.ui.internal.taginfo.TextHoverManager;
 @SuppressWarnings( "restriction" )
 public class PortletJSPSourceViewerConfiguration extends JSDTStructuredTextViewerConfigurationJSP
 {
+    @SuppressWarnings( { "rawtypes", "unchecked" } )
+    protected ITextHover[] createDocumentationHovers( String partitionType )
+    {
+        List extendedTextHover =
+            ExtendedConfigurationBuilder.getInstance().getConfigurations(
+                ExtendedConfigurationBuilder.DOCUMENTATIONTEXTHOVER, partitionType );
+
+        return (ITextHover[]) extendedTextHover.toArray( new ITextHover[extendedTextHover.size()] );
+    }
+
     @Override
     public ITextHover getTextHover( ISourceViewer sourceViewer, String contentType, int stateMask )
     {
@@ -76,15 +86,5 @@ public class PortletJSPSourceViewerConfiguration extends JSDTStructuredTextViewe
         }
 
         return textHover;
-    }
-
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
-    protected ITextHover[] createDocumentationHovers( String partitionType )
-    {
-        List extendedTextHover =
-            ExtendedConfigurationBuilder.getInstance().getConfigurations(
-                ExtendedConfigurationBuilder.DOCUMENTATIONTEXTHOVER, partitionType );
-
-        return (ITextHover[]) extendedTextHover.toArray( new ITextHover[extendedTextHover.size()] );
     }
 }
