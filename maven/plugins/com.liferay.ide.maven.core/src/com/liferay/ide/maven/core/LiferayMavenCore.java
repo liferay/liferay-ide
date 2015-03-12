@@ -32,6 +32,7 @@ import org.osgi.framework.BundleContext;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Eric Min
+ * @author Terry Jia
  */
 public class LiferayMavenCore extends Plugin
 {
@@ -55,6 +56,7 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ARCHETYPE_GAV_PRIMEFACES = "archetype-gav-primefaces";
     public static final String PREF_ARCHETYPE_GAV_RICHFACES = "archetype-gav-richfaces";
     public static final String PREF_ARCHETYPE_GAV_SERVICEBUILDER = "archetype-gav-servicebuilder";
+    public static final String PREF_ARCHETYPE_GAV_SPRING_MVC = "archetype-gav-spring-mvc";
     public static final String PREF_ARCHETYPE_GAV_THEME = "archetype-gav-theme";
     public static final String PREF_ARCHETYPE_GAV_VAADIN = "archetype-gav-vaadin";
     public static final String PREF_ARCHETYPE_GAV_WEB = "archetype-gav-web";

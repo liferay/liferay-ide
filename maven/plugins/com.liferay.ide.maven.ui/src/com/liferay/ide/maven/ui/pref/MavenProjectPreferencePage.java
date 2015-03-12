@@ -74,6 +74,8 @@ public class MavenProjectPreferencePage extends FieldEditorPreferencePage implem
         createStringEditior(
             archetypeComposite, Msgs.portletJSFRichFacesArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_RICHFACES );
         createStringEditior(
+            archetypeComposite, Msgs.portletSpringMVCArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_SPRING_MVC );
+        createStringEditior(
             archetypeComposite, Msgs.portletVaadinArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_VAADIN );
         createStringEditior( archetypeComposite, Msgs.hookArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_HOOK );
         createStringEditior( archetypeComposite, Msgs.themeArchetype, LiferayMavenCore.PREF_ARCHETYPE_GAV_THEME );
@@ -135,6 +137,7 @@ public class MavenProjectPreferencePage extends FieldEditorPreferencePage implem
         public static String portletJSFPrimeFacesArchetype;
         public static String portletJSFRichFacesArchetype;
         public static String portletMVCArchetype;
+        public static String portletSpringMVCArchetype;
         public static String portletVaadinArchetype;
         public static String serviceBuilderArchetype;
         public static String themeArchetype;

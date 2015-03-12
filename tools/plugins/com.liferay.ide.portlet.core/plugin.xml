@@ -181,10 +181,11 @@
          point="com.liferay.ide.project.core.portletFrameworks">
       <portletFramework
             class="com.liferay.ide.portlet.core.spring.SpringPortletFramework"
-            description="The Spring MVC portlet that run inside of Lifreay Portlet"
+            description="Enables development of Spring MVC web applications using Spring's own Portlet MVC Framework."
             displayName="Spring MVC"
             id="com.liferay.ide.project.core.framework.spring-mvc"
             requiredSDKVersion="7.0.0"
+            helpUrl="http://docs.spring.io/autorepo/docs/spring/3.2.x/spring-framework-reference/html/portlet.html"
             shortName="spring_mvc">
       </portletFramework>
    </extension>

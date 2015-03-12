@@ -36,6 +36,7 @@ public class SpringPortletFramework extends BasePortletFramework
 
     public boolean supports( ILiferayProjectProvider provider )
     {
-        return ( provider != null ) && ( "ant".equals( provider.getShortName() ) );
+        return ( provider != null ) &&
+            ( "ant".equals( provider.getShortName() ) || "maven".equals( provider.getShortName() ) );
     }
 }
