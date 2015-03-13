@@ -19,9 +19,11 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.LaunchHelper;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -32,6 +34,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
@@ -118,7 +121,29 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
             }
         };
 
-        final IStatus retval = executeMaven( facade, callable, monitor );
+        IStatus retval = null;
+
+        final IStatus executeStatus = executeMaven( facade, callable, monitor );
+
+        if( !executeStatus.isOK() && executeStatus.getException() instanceof MojoExecutionException )
+        {
+             MojoExecutionException mojoException = (MojoExecutionException) executeStatus.getException();
+
+             if( mojoException.getCause() instanceof InvocationTargetException )
+             {
+                 InvocationTargetException ex = (InvocationTargetException) mojoException.getCause();
+
+                 retval = LiferayMavenCore.createErrorStatus( ex.getTargetException() );
+             }
+             else
+             {
+                 retval = LiferayMavenCore.createErrorStatus( mojoException );
+             }
+        }
+        else
+        {
+            retval = Status.OK_STATUS;
+        }
 
         monitor.worked( 70 );
 
