@@ -35,12 +35,12 @@
         <sapphire-site>http://download.eclipse.org/sapphire/8.1/repository/</sapphire-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
-        <m2e-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/m2e-core-1.5.0.20140623-0838/</m2e-site>
-        <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/luna/1.1/1.1.0.20140611-1646/</m2e-wtp-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.0.20150203-1921/</m2e-site>
+        <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/milestones/mars/1.2.0/</m2e-wtp-site>
         <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-23/</adt-site>
         <eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.1-SNAPSHOT/</eclipse-xml-search-site>
         <tern-site>http://oss.opensagres.fr/tern.repository/0.9.0-SNAPSHOT/</tern-site>
-        <webresources-site>http://oss.opensagres.fr/eclipse-wtp-webresources/0.7.0-SNAPSHOT/</webresources-site>
+        <webresources-site>http://oss.opensagres.fr/eclipse-wtp-webresources/0.9.0-SNAPSHOT/</webresources-site>
         <bndtools-site>https://bndtools.ci.cloudbees.com/job/bndtools.master/lastSuccessfulBuild/artifact/build/generated/p2/</bndtools-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
@@ -286,16 +286,16 @@
 
     <profiles>
         <profile>
-            <id>juno</id>
+            <id>luna</id>
             <activation>
                 <property>
-                    <name>!skipJuno</name>
+                    <name>!skipLuna</name>
                 </property>
             </activation>
             <properties>
-                <eclipse-site>http://download.eclipse.org/releases/juno/201303010900/</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.2</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.4.1/R-3.4.1-20120917174803/repository</wtp-site>
+                <eclipse-site>http://download.eclipse.org/releases/luna/201502271000/</eclipse-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4</eclipse-project-update-site>
+                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.6.3/R-3.6.3-20150216091848/repository/</wtp-site>
             </properties>
             <repositories>
                 <repository>
