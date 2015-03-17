@@ -758,6 +758,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         exceptedFrameworks.add( "mvc" );
         exceptedFrameworks.add( "jsf-2.x" );
         exceptedFrameworks.add( "vaadin" );
+        exceptedFrameworks.add( "spring_mvc" );
 
         assertNotNull( exceptedFrameworks );
 
@@ -792,6 +793,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         exceptedLables.add( "Liferay Faces Alloy" );
         exceptedLables.add( "PrimeFaces" );
         exceptedLables.add( "RichFaces" );
+        exceptedLables.add( "Spring MVC" );
 
         assertEquals( true, exceptedLables.containsAll( acturalLables ) );
         assertEquals( true, acturalLables.containsAll( exceptedLables ) );

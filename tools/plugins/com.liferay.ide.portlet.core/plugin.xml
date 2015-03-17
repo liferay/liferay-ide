@@ -177,4 +177,15 @@
             id="com.liferay.ide.portlet.core.jsf.jsfLiferayPortletDescriptorHelper">
       </liferayDescriptorHelper>
    </extension>
+   <extension
+         point="com.liferay.ide.project.core.portletFrameworks">
+      <portletFramework
+            class="com.liferay.ide.portlet.core.spring.SpringPortletFramework"
+            description="The Spring MVC portlet that run inside of Lifreay Portlet"
+            displayName="Spring MVC"
+            id="com.liferay.ide.project.core.framework.spring-mvc"
+            requiredSDKVersion="7.0.0"
+            shortName="spring_mvc">
+      </portletFramework>
+   </extension>
 </plugin>
