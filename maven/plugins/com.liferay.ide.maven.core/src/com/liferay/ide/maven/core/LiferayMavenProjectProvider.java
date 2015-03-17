@@ -818,9 +818,21 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     }
                     else
                     {
-                        final IPath newProjectPath = path.append( projectName );
+                        final String name = result.getName();
 
-                        retval = validateProjectLocation( projectName, newProjectPath );
+                        if( projectName.equals( name ) )
+                        {
+                            retval =
+                                LiferayMavenCore.createErrorStatus( "The project name \"" + projectName +
+                                    "\" can't be same as the parent folder." );
+                        }
+                        else
+                        {
+                            final IPath newProjectPath = path.append( projectName );
+
+                            retval = validateProjectLocation( projectName, newProjectPath );
+                        }
+
                     }
                 }
                 catch( CoreException e )
