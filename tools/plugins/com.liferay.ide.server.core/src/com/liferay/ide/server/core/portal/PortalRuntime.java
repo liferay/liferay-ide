@@ -40,22 +40,6 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
     private PortalBundle portalBundle;
 
     @Override
-    protected void initialize()
-    {
-        super.initialize();
-
-        if( this.getRuntimeWorkingCopy() != null )
-        {
-            this.getRuntimeWorkingCopy().addPropertyChangeListener( this );
-        }
-
-        if( this.portalBundle == null )
-        {
-            initPortalBundle();
-        }
-    }
-
-    @Override
     public void dispose()
     {
         super.dispose();
@@ -64,43 +48,6 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         {
             this.getRuntimeWorkingCopy().removePropertyChangeListener( this );
         }
-    }
-
-    private void initPortalBundle()
-    {
-        if( this.getRuntime().getLocation() != null )
-        {
-            final PortalBundleFactory[] factories = LiferayServerCore.getPortalBundleFactories();
-
-            for( PortalBundleFactory factory : factories )
-            {
-                final IPath path = factory.canCreateFromPath( this.getRuntime().getLocation() );
-
-                if( path != null )
-                {
-                    this.portalBundle = factory.create( path );
-                    return;
-                }
-            }
-        }
-    }
-
-    @Override
-    public IStatus validate()
-    {
-        return Status.OK_STATUS;
-    }
-
-    public IVMInstall getVMInstall()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public boolean isUsingDefaultJRE()
-    {
-        // TODO Auto-generated method stub
-        return false;
     }
 
     public IPath getAppServerDeployDir()
@@ -150,6 +97,16 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         return getPortalBundle().getLiferayHome();
     }
 
+    public PortalBundle getPortalBundle()
+    {
+        if( this.portalBundle == null )
+        {
+            initPortalBundle();
+        }
+
+        return this.portalBundle;
+    }
+
     public String getPortalVersion()
     {
         return getPortalBundle().getVersion();
@@ -162,24 +119,6 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
     }
 
     public Properties getPortletEntryCategories()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public IPath getRuntimeLocation()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public IPath getSourceLocation()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public IPath[] getUserLibs()
     {
         // TODO Auto-generated method stub
         return null;
@@ -202,14 +141,69 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         return entries;
     }
 
-    public PortalBundle getPortalBundle()
+    public IPath getRuntimeLocation()
     {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public IPath getSourceLocation()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public IPath[] getUserLibs()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public IVMInstall getVMInstall()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    protected void initialize()
+    {
+        super.initialize();
+
+        if( this.getRuntimeWorkingCopy() != null )
+        {
+            this.getRuntimeWorkingCopy().addPropertyChangeListener( this );
+        }
+
         if( this.portalBundle == null )
         {
             initPortalBundle();
         }
+    }
 
-        return this.portalBundle;
+    private void initPortalBundle()
+    {
+        if( this.getRuntime().getLocation() != null )
+        {
+            final PortalBundleFactory[] factories = LiferayServerCore.getPortalBundleFactories();
+
+            for( PortalBundleFactory factory : factories )
+            {
+                final IPath path = factory.canCreateFromPath( this.getRuntime().getLocation() );
+
+                if( path != null )
+                {
+                    this.portalBundle = factory.create( path );
+                    return;
+                }
+            }
+        }
+    }
+
+    public boolean isUsingDefaultJRE()
+    {
+        // TODO Auto-generated method stub
+        return false;
     }
 
     @Override
@@ -224,6 +218,12 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
                 initPortalBundle();
             }
         }
+    }
+
+    @Override
+    public IStatus validate()
+    {
+        return Status.OK_STATUS;
     }
 
 }
