@@ -17,6 +17,8 @@ package com.liferay.ide.server.core.portal;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.LiferayServerCore;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -33,14 +35,54 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
 /**
  * @author Gregory Amerson
  */
-public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime
+public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, PropertyChangeListener
 {
-    public static final String PROP_PORTAL_BUNDLE_TYPE = "portal-bundle-type";
     private PortalBundle portalBundle;
 
-    public PortalRuntime()
+    @Override
+    protected void initialize()
     {
-        super();
+        super.initialize();
+
+        if( this.getRuntimeWorkingCopy() != null )
+        {
+            this.getRuntimeWorkingCopy().addPropertyChangeListener( this );
+        }
+
+        if( this.portalBundle == null )
+        {
+            initPortalBundle();
+        }
+    }
+
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+
+        if( this.getRuntimeWorkingCopy() != null )
+        {
+            this.getRuntimeWorkingCopy().removePropertyChangeListener( this );
+        }
+    }
+
+    private void initPortalBundle()
+    {
+        if( this.getRuntime().getLocation() != null )
+        {
+            final PortalBundleFactory[] factories = LiferayServerCore.getPortalBundleFactories();
+
+            for( PortalBundleFactory factory : factories )
+            {
+                final IPath path = factory.canCreateFromPath( this.getRuntime().getLocation() );
+
+                if( path != null )
+                {
+                    this.portalBundle = factory.create( path );
+                    return;
+                }
+            }
+        }
     }
 
     @Override
@@ -164,23 +206,23 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime
     {
         if( this.portalBundle == null )
         {
-            this.portalBundle = LiferayServerCore.getPortalBundle( this, getPortalBundleType() );
+            initPortalBundle();
         }
 
         return this.portalBundle;
     }
 
-    public String getPortalBundleType()
+    @Override
+    public void propertyChange( PropertyChangeEvent evt )
     {
-        return getAttribute( PROP_PORTAL_BUNDLE_TYPE, (String) null );
-    }
-
-    public void setPortalBundleType( String type )
-    {
-        if( type != null )
+        if( "location".equals( evt.getPropertyName() ) )
         {
-            setAttribute( PROP_PORTAL_BUNDLE_TYPE, type );
             this.portalBundle = null;
+
+            if( evt.getNewValue() != null )
+            {
+                initPortalBundle();
+            }
         }
     }
 

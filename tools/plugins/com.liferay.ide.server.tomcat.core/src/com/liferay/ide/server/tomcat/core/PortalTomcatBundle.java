@@ -17,7 +17,6 @@ package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.portal.PortalBundle;
-import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 
@@ -38,48 +37,32 @@ public class PortalTomcatBundle implements PortalBundle
     private final IPath autoDeployPath;
     private final IPath liferayHome;
     private final IPath modulesPath;
-    private final PortalRuntime runtime;
     private final IPath tomcatPath;
     private final String version;
     private final int jmxRemotePort;
 
-    public PortalTomcatBundle()
+    public PortalTomcatBundle( IPath path )
     {
-        this.autoDeployPath = null;
-        this.liferayHome = null;
-        this.modulesPath = null;
-        this.runtime = null;
-        this.tomcatPath = null;
-        this.version = null;
-        this.jmxRemotePort = 8099;
-    }
-
-    public PortalTomcatBundle( PortalRuntime portalRuntime )
-    {
-        if( portalRuntime == null )
+        if( path == null )
         {
-            throw new IllegalArgumentException( "portalRuntime cannot be null" );
+            throw new IllegalArgumentException( "path cannot be null" );
         }
 
-        this.runtime = portalRuntime;
-
-        // TODO detect tomcat installation
-        final IPath location = this.runtime.getRuntime().getLocation();
-        this.tomcatPath = location.append( "tomcat-7.0.42" );
+        this.tomcatPath = path;
+        this.liferayHome = tomcatPath.append( ".." );
         this.jmxRemotePort = detectJmxRemotePort();
 
-        this.autoDeployPath = location.append( "deploy" );
-        this.liferayHome = location;
+        this.autoDeployPath = this.liferayHome.append( "deploy" );
 
-        this.version = LiferayTomcatUtil.getVersion( location, LiferayTomcatUtil.getPortalDir( tomcatPath ) );
+        this.version = LiferayTomcatUtil.getVersion( this.tomcatPath, LiferayTomcatUtil.getPortalDir( tomcatPath ) );
 
         if( this.version != null && this.version.startsWith( "6" ) )
         {
-            this.modulesPath = location.append( "data/osgi" );
+            this.modulesPath = this.liferayHome.append( "data/osgi" );
         }
         else
         {
-            this.modulesPath = location.append( "osgi" );
+            this.modulesPath = this.liferayHome.append( "osgi" );
         }
     }
 

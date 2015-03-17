@@ -16,6 +16,8 @@
 package com.liferay.ide.server.ui.portal;
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
@@ -44,17 +46,11 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
  */
 public class PortalRuntimeComposite extends Composite implements ModifyListener
 {
-    public static void setFieldValue( Text field, String value )
-    {
-        if( field != null && !field.isDisposed() )
-        {
-            field.setText( value != null ? value : StringPool.EMPTY );
-        }
-    }
 
     private Text dirField;
     private Text nameField;
     private IRuntimeWorkingCopy runtimeWC;
+    private Text typeField;
     private final IWizardHandle wizard;
 
     public PortalRuntimeComposite( Composite parent, IWizardHandle wizard )
@@ -105,6 +101,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
                 }
             }
         });
+
+        this.typeField = createReadOnlyTextField( "Detected bundle type" );
     }
 
     protected Label createLabel( String text )
@@ -127,14 +125,29 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         return new GridData( GridData.FILL_BOTH );
     }
 
+    protected Text createReadOnlyTextField( String labelText )
+    {
+        return createTextField( labelText, SWT.READ_ONLY );
+    }
+
     protected Text createTextField( String labelText )
+    {
+        return createTextField( labelText, SWT.NONE );
+    }
+
+    protected Text createTextField( String labelText, int style )
     {
         createLabel( labelText );
 
-        Text text = new Text( this, SWT.BORDER );
+        Text text = new Text( this, SWT.BORDER | style );
         text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
 
         return text;
+    }
+
+    protected PortalRuntime getPortalRuntime()
+    {
+        return (PortalRuntime) getRuntime().loadAdapter( PortalRuntime.class, null );
     }
 
     protected IRuntimeWorkingCopy getRuntime()
@@ -152,6 +165,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         setFieldValue( this.nameField, getRuntime().getName() );
         setFieldValue( this.dirField, getRuntime().getLocation() != null ?
             getRuntime().getLocation().toOSString() : StringPool.EMPTY );
+
+        updateFields();
     }
 
     @Override
@@ -165,6 +180,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         {
             getRuntime().setName( nameField.getText() );
         }
+
+        updateFields();
 
         validate();
     }
@@ -182,6 +199,18 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
         init();
         validate();
+    }
+
+    private void updateFields()
+    {
+        final PortalRuntime portalRuntime = getPortalRuntime();
+
+        if( portalRuntime != null )
+        {
+            final PortalBundle portalBundle = portalRuntime.getPortalBundle();
+
+            setFieldValue( this.typeField, portalBundle != null ? portalBundle.getType() : StringPool.BLANK );
+        }
     }
 
     protected void validate()
@@ -202,6 +231,14 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         }
 
         this.wizard.update();
+    }
+
+    public static void setFieldValue( Text field, String value )
+    {
+        if( field != null && !field.isDisposed() )
+        {
+            field.setText( value != null ? value : StringPool.EMPTY );
+        }
     }
 
 }

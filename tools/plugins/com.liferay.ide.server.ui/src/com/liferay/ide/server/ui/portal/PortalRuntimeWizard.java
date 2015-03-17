@@ -15,8 +15,6 @@
 
 package com.liferay.ide.server.ui.portal;
 
-import com.liferay.ide.server.core.portal.PortalRuntime;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -53,9 +51,8 @@ public class PortalRuntimeWizard extends WizardFragment
     @Override
     public void enter()
     {
-        final IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
-
-        ( ( PortalRuntime) runtime.loadAdapter( PortalRuntime.class, null ) ).setPortalBundleType( "tomcat" );
+        final IRuntimeWorkingCopy runtime =
+            (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
 
         this.composite.setRuntime(runtime);
     }
@@ -65,7 +62,8 @@ public class PortalRuntimeWizard extends WizardFragment
     {
         boolean retval = false;
 
-        final IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
+        final IRuntimeWorkingCopy runtime =
+            (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
 
         if( runtime != null )
         {

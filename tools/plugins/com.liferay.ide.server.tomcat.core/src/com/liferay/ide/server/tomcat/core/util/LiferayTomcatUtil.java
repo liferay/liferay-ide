@@ -75,16 +75,17 @@ import org.osgi.framework.Version;
 public class LiferayTomcatUtil
 {
 
-    // to read liferay info from manifest need at least version 6.2.0
-    private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V620;
-
     private static String CONFIG_DIR = "conf"; //$NON-NLS-1$
+
     public static final String CONFIG_TYPE_SERVER = "server"; //$NON-NLS-1$
     public static final String CONFIG_TYPE_VERSION = "version"; //$NON-NLS-1$
-
     private static String DEFAULT_PORTAL_CONTEXT_FILE = "ROOT.xml"; //$NON-NLS-1$
+
     private static String DEFAULT_PORTAL_DIR = "/webapps/ROOT"; //$NON-NLS-1$
     private static String HOST_NAME = "localhost"; //$NON-NLS-1$
+
+    // to read liferay info from manifest need at least version 6.2.0
+    private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V620;
     private static String SERVICE_NAME = "Catalina"; //$NON-NLS-1$
 
     public static void addRuntimeVMArgments(
@@ -247,6 +248,45 @@ public class LiferayTomcatUtil
         }
 
         return retval;
+    }
+
+    public static boolean detectCatalinaDir( IPath path )
+    {
+        if( !path.toFile().exists() )
+        {
+            return false;
+        }
+
+        if( path.append( "bin" ).toFile().exists() &&
+            path.append( "conf" ).toFile().exists() &&
+            path.append( "lib" ).toFile().exists() &&
+            path.append( "webapps" ).toFile().exists() )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static boolean detectLiferayHome( IPath path )
+    {
+        if( !path.toFile().exists() )
+        {
+            return false;
+        }
+
+        if( path.append( "data" ).toFile().exists() && path.append( "osgi" ).toFile().exists() )
+        {
+            return true;
+        }
+
+        if( path.append( "portal-ext.properties" ).toFile().exists() ||
+            path.append( "portal-setup-wizard.properties" ).toFile().exists() )
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public static void displayToggleMessage( String msg, String key )
@@ -617,9 +657,6 @@ public class LiferayTomcatUtil
         return context;
     }
 
-
-
-
     public static IPath modifyLocationForBundle( IPath currentLocation )
     {
         IPath modifiedLocation = null;
@@ -821,7 +858,6 @@ public class LiferayTomcatUtil
         {
             return LiferayTomcatPlugin.createErrorStatus( e );
         }
-
     }
 
 }
