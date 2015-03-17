@@ -22,7 +22,7 @@ import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.core.portal.OsgiConnection;
 import com.liferay.ide.server.core.portal.OsgiConnectionImpl;
-import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
@@ -86,7 +86,7 @@ public class LiferayServerCore extends Plugin
 
     private static ILiferayRuntimeStub[] runtimeStubs;
 
-    private static PortalBundle[] portalBundles;
+    private static PortalBundleFactory[] portalBundleFactories;
 
 //    private static Map<String, OsgiConnection> osgiConnections;
 //
@@ -399,65 +399,37 @@ public class LiferayServerCore extends Plugin
         return retval;
     }
 
-    public static PortalBundle getPortalBundle( PortalRuntime portalRuntime , String type )
+    public static PortalBundleFactory[] getPortalBundleFactories()
     {
-        PortalBundle retval = null;
-
-        if( type != null )
-        {
-            for( PortalBundle portalBundle : getPortalBundles() )
-            {
-                if( type.equals( portalBundle.getType() ) )
-                {
-                    try
-                    {
-                        retval =
-                            portalBundle.getClass().getConstructor( PortalRuntime.class ).newInstance( portalRuntime );
-                    }
-                    catch( Exception e )
-                    {
-                        logError( "Unable to get portal bundle class", e );
-                    }
-
-                    break;
-                }
-            }
-        }
-
-        return retval;
-    }
-
-    public static PortalBundle[] getPortalBundles()
-    {
-        if( portalBundles == null )
+        if( portalBundleFactories == null )
         {
             final IConfigurationElement[] elements =
-                Platform.getExtensionRegistry().getConfigurationElementsFor( PortalBundle.EXTENSION_ID );
+                Platform.getExtensionRegistry().getConfigurationElementsFor( PortalBundleFactory.EXTENSION_ID );
 
             try
             {
-                List<PortalBundle> bundles = new ArrayList<PortalBundle>();
+                final List<PortalBundleFactory> bundleFactories = new ArrayList<PortalBundleFactory>();
 
                 for( IConfigurationElement element : elements )
                 {
                     final Object o = element.createExecutableExtension( "class" );
 
-                    if( o instanceof PortalBundle )
+                    if( o instanceof PortalBundleFactory )
                     {
-                        PortalBundle portalBundle = (PortalBundle) o;
-                        bundles.add( portalBundle );
+                        PortalBundleFactory portalBundleFactory = (PortalBundleFactory) o;
+                        bundleFactories.add( portalBundleFactory );
                     }
                 }
 
-                portalBundles = bundles.toArray( new PortalBundle[0] );
+                portalBundleFactories = bundleFactories.toArray( new PortalBundleFactory[0] );
             }
             catch( Exception e )
             {
-                logError( "Unable to get PortalBundle extensions", e ); //$NON-NLS-1$
+                logError( "Unable to get PortalBundleFactory extensions", e ); //$NON-NLS-1$
             }
         }
 
-        return portalBundles;
+        return portalBundleFactories;
     }
 
     public static ILiferayRuntimeStub[] getRuntimeStubs()

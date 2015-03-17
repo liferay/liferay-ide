@@ -20,25 +20,11 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @author Gregory Amerson
  */
-public interface PortalBundle
+public interface PortalBundleFactory
 {
+    String EXTENSION_ID = "com.liferay.ide.server.core.portalBundleFactories";
 
-    IPath getAutoDeployPath();
+    IPath canCreateFromPath( IPath location );
 
-    int getJmxRemotePort();
-
-    IPath getLiferayHome();
-
-    IPath getModulesPath();
-
-    IPath[] getRuntimeClasspath();
-
-    String[] getRuntimeProgArgs( String launchMode );
-
-    String[] getRuntimeVMArgs();
-
-    String getType();
-
-    String getVersion();
-
+    PortalBundle create( IPath location );
 }
