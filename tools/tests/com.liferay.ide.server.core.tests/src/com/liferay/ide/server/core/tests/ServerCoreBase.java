@@ -185,20 +185,7 @@ public abstract class ServerCoreBase extends BaseTests
             "Expected liferayBundlesPath to exist: " + getLiferayBundlesPath().toOSString(), true,
             getLiferayBundlesPath().toFile().exists() );
 
-        final File liferayRuntimeDirFile = getLiferayRuntimeDir().toFile();
-
-        if( !liferayRuntimeDirFile.exists() )
-        {
-            final File liferayRuntimeZipFile = getLiferayRuntimeZip().toFile();
-
-            assertEquals(
-                "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
-                liferayRuntimeZipFile.exists() );
-
-            ZipUtil.unzip( liferayRuntimeZipFile, ProjectCore.getDefault().getStateLocation().toFile() );
-        }
-
-        assertEquals( true, liferayRuntimeDirFile.exists() );
+        extractRuntime( getLiferayRuntimeZip(), getLiferayRuntimeDir() );
 
         final NullProgressMonitor npm = new NullProgressMonitor();
 
@@ -236,6 +223,24 @@ public abstract class ServerCoreBase extends BaseTests
         }
 
         assertEquals( "Expected the deploy folder to exist:" + deployPath.toOSString(), true, deployFolder.exists() );
+    }
+
+    protected static void extractRuntime( IPath zip , IPath dir ) throws Exception
+    {
+        final File liferayRuntimeDirFile = dir.toFile();
+
+        if( !liferayRuntimeDirFile.exists() )
+        {
+            final File liferayRuntimeZipFile = zip.toFile();
+
+            assertEquals(
+                "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
+                liferayRuntimeZipFile.exists() );
+
+            ZipUtil.unzip( liferayRuntimeZipFile, ProjectCore.getDefault().getStateLocation().toFile() );
+        }
+
+        assertEquals( true, liferayRuntimeDirFile.exists() );
     }
 
     protected void setupServer() throws Exception
