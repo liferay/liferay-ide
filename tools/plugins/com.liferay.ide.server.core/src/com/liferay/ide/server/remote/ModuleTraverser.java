@@ -4,13 +4,14 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *    Igor Fedorenko & Fabrizio Giustina - Initial API and implementation
  **********************************************************************/
 package com.liferay.ide.server.remote;
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,9 +36,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jst.server.tomcat.core.internal.TomcatPlugin;
-import org.eclipse.jst.server.tomcat.core.internal.Trace;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.ComponentCore;
 import org.eclipse.wst.common.componentcore.UnresolveableURIException;
 import org.eclipse.wst.common.componentcore.internal.ComponentResource;
@@ -76,16 +74,16 @@ public class ModuleTraverser {
      * which should be exposed as module dependencies via the virtual component API.
      */
 	public static final String CLASSPATH_COMPONENT_DEPENDENCY = "org.eclipse.jst.component.dependency"; //$NON-NLS-1$
-    
+
 	/**
 	 * Name of the custom Java classpath entry attribute that is used to flag
 	 * the resolved entries of classpath containers that should not be exposed
 	 * via the virtual component API.
 	 */
 	public static final String CLASSPATH_COMPONENT_NON_DEPENDENCY = "org.eclipse.jst.component.nondependency"; //$NON-NLS-1$
-	
+
 	/**
-	 * Argument values that are used to select component dependency attribute type. 
+	 * Argument values that are used to select component dependency attribute type.
 	 */
 	private static final int DEPENDECYATTRIBUTETYPE_DEPENDENCY_OR_NONDEPENDENCY = 0;
 	private static final int DEPENDECYATTRIBUTETYPE_CLASSPATH_COMPONENT_DEPENDENCY = 1;
@@ -93,7 +91,7 @@ public class ModuleTraverser {
 
 	/**
      * Scans the module using the specified visitor.
-     * 
+     *
      * @param module module to traverse
      * @param visitor visitor to handle resources
      * @param monitor a progress monitor
@@ -109,8 +107,8 @@ public class ModuleTraverser {
 
         if (component == null) {
             // can happen if project has been closed
-            Trace.trace(Trace.WARNING, "Unable to create component for module " //$NON-NLS-1$
-                    + module.getName());
+//            Trace.trace(Trace.WARNING, "Unable to create component for module " //$NON-NLS-1$
+//                    + module.getName());
             return;
         }
 
@@ -163,10 +161,10 @@ public class ModuleTraverser {
         try {
             WorkbenchComponent comp = warStruct.getComponent();
             if (comp == null) {
-                Trace.trace(Trace.SEVERE,
-                        "Error getting WorkbenchComponent from war project. IProject=\"" //$NON-NLS-1$
-                                + proj + "\" StructureEdit=\"" + warStruct //$NON-NLS-1$
-                                + "\" WorkbenchComponent=\"" + comp + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+//                Trace.trace(Trace.SEVERE,
+//                        "Error getting WorkbenchComponent from war project. IProject=\"" //$NON-NLS-1$
+//                                + proj + "\" StructureEdit=\"" + warStruct //$NON-NLS-1$
+//                                + "\" WorkbenchComponent=\"" + comp + "\""); //$NON-NLS-1$ //$NON-NLS-2$
                 return;
             }
             traverseWebComponentLocalEntries(comp, visitor, monitor);
@@ -190,9 +188,9 @@ public class ModuleTraverser {
                     			visitor.visitArchiveComponent(rtFolder, refPath2);
                     		}
                     		else {
-                    			Trace.trace(Trace.WARNING, NLS.bind(
-                    					"Could not get the location of a referenced component.  It may not exist.  Project={0}, Parent Component={1}, Referenced Component Path={2}", //$NON-NLS-1$
-                    					new Object[] { proj.getName(), comp.getName(), refPath}));
+//                    			Trace.trace(Trace.WARNING, NLS.bind(
+//                    					"Could not get the location of a referenced component.  It may not exist.  Project={0}, Parent Component={1}, Referenced Component Path={2}", //$NON-NLS-1$
+//                    					new Object[] { proj.getName(), comp.getName(), refPath}));
                     		}
                     	}
                     	else {
@@ -212,7 +210,7 @@ public class ModuleTraverser {
                         traverseDependentEntries(visitor, rtFolder, childCom,
                                 monitor);
                     } catch (UnresolveableURIException e) {
-                        TomcatPlugin.log(e);
+                        LiferayServerCore.logError(e);
                     }
                 }
             }
@@ -255,7 +253,7 @@ public class ModuleTraverser {
 				} else {
 					rtFolder = "/WEB-INF/lib"; //$NON-NLS-1$
 				}
-			} 
+			}
 			IPath entryPath = entry.getPath();
 			IResource entryRes = ResourcesPlugin.getWorkspace().getRoot().findMember(entryPath);
 			if (entryRes != null) {
@@ -263,10 +261,10 @@ public class ModuleTraverser {
 			}
 			// TODO Determine if different handling is needed for some use cases
 			if (isClassFolder) {
-				 visitor.visitWebResource(new Path(rtFolder), 
+				 visitor.visitWebResource(new Path(rtFolder),
 		                    getOSPath(warProject, project, entry.getPath()));
 			} else {
-				visitor.visitArchiveComponent(new Path(rtFolder), entryPath);				
+				visitor.visitArchiveComponent(new Path(rtFolder), entryPath);
 			}
 		}
     }
@@ -403,8 +401,8 @@ public class ModuleTraverser {
 					return Path.fromOSString(finaluri.toString());
 				}
 			}
-			Trace.trace(Trace.WARNING,
-					NLS.bind("Tomcat publishing could not resolve dependency URI \"{0}\".  A value for classpath variable {1} was not found.", uri, classpathVar)); //$NON-NLS-1$
+//			Trace.trace(Trace.WARNING,
+//					NLS.bind("Tomcat publishing could not resolve dependency URI \"{0}\".  A value for classpath variable {1} was not found.", uri, classpathVar)); //$NON-NLS-1$
 		}
 		return null;
 	}
@@ -439,30 +437,30 @@ public class ModuleTraverser {
 		// mapping and, because IPackageFragmentRoots do not maintain IClasspathEntry data, a prior
 		// call is needed to getResolvedClasspath() and the resolved IClasspathEntries have to be stored in a Map from IPath-to-IClasspathEntry to
 		// support retrieval using the resolved IPackageFragmentRoot
-		
+
 		// retrieve the resolved classpath
 		final IClasspathEntry[] entries = javaProject.getResolvedClasspath(true);
 		final Map<IPath, IClasspathEntry> pathToResolvedEntry = new HashMap<IPath, IClasspathEntry>();
-		
+
 		// store in a map from path to entry
 		for (int j = 0; j < entries.length; j++) {
 			pathToResolvedEntry.put(entries[j].getPath(), entries[j]);
 		}
 
 		final Map<IClasspathEntry, IClasspathAttribute> referencedEntries = new LinkedHashMap<IClasspathEntry, IClasspathAttribute>();
-		
+
 		// grab all IPackageFragmentRoots
 		final IPackageFragmentRoot[] roots = javaProject.getPackageFragmentRoots();
 		for (int j = 0; j < roots.length; j++) {
 			final IPackageFragmentRoot root = roots[j];
 			final IClasspathEntry rawEntry = root.getRawClasspathEntry();
-			
+
 			// is the raw entry valid?
 			IClasspathAttribute attrib = validRawEntries.get(rawEntry);
 			if (attrib == null) {
 				continue;
 			}
-			
+
 			final IPath pkgFragPath = root.getPath();
 			final IClasspathEntry resolvedEntry = pathToResolvedEntry.get(pkgFragPath);
 			final IClasspathAttribute resolvedAttrib = checkForComponentDependencyAttribute(resolvedEntry,
@@ -478,9 +476,9 @@ public class ModuleTraverser {
 					}
 					referencedEntries.put(resolvedEntry, attrib);
 				}
-			} 
+			}
 		}
-		
+
         return referencedEntries;
 	}
 
@@ -536,7 +534,7 @@ public class ModuleTraverser {
 	private static boolean isValid(final IClasspathEntry entry, final IClasspathAttribute attrib, boolean isWebApp, final IProject project) {
 		int kind = entry.getEntryKind();
 		boolean isClassFolder = isClassFolderEntry(entry);
-		
+
 		if (kind == IClasspathEntry.CPE_PROJECT || kind == IClasspathEntry.CPE_SOURCE) {
 			return false;
 		}
@@ -562,7 +560,7 @@ public class ModuleTraverser {
 		}
 		return true;
 	}
-	
+
 	/*
 	 * Derived from ClasspathDependencyUtil.isClassFolderEntry()
 	 */
@@ -583,7 +581,7 @@ public class ModuleTraverser {
 		}
 		return !isFile;
 	}
-	
+
 	/*
 	 * Derived from ClasspathDependencyUtil.getRuntimePath()
 	 */

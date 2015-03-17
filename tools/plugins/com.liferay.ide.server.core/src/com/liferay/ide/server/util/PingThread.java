@@ -50,7 +50,7 @@ public class PingThread {
 		this.url = url;
 		this.maxPings = maxPings;
 		this.behaviour = behaviour;
-		Thread t = new Thread("Tomcat Ping Thread") {
+		Thread t = new Thread("Liferay Ping Thread") {
 			public void run() {
 				ping();
 			}
