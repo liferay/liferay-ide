@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -28,8 +29,8 @@ import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -214,6 +215,39 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     private String normalize( String val )
     {
         return val.replaceAll( "\\\\", "/" );
+    }
+
+    @Test
+    public void testParentFolderLocationValidation() throws Exception
+    {
+        File parentFolder =
+            CoreUtil.getWorkspaceRoot().getLocation().append(
+                "test-parent-folder-location-validation-service-" + getRuntimeVersion() ).toFile();
+
+        if( !parentFolder.exists() )
+        {
+            parentFolder.mkdir();
+        }
+
+        File pomFile = new File( "projects/validations/location/pom.xml" );
+
+        FileUtil.copyFileToDir( pomFile, parentFolder );
+
+        final NewLiferayPluginProjectOp op = newProjectOp( "test-parent-folder-location-validation-service" );
+
+        final ValidationService vs = op.getLocation().service( ValidationService.class );
+
+        op.setProjectProvider( "maven" );
+        op.setPluginType( "portlet" );
+        op.setUseDefaultLocation( false );
+        op.setLocation( parentFolder.getAbsolutePath() );
+
+        String projectName = op.getProjectName().content();
+
+        String expected = "The project name \"" + projectName + "\" can't be same as the parent folder.";
+
+        assertEquals( expected, vs.validation().message() );
+        assertEquals( expected, op.getLocation().validation().message() );
     }
 
     @Test
