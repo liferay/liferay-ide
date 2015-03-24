@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>test</groupId>
-	<artifactId>test-parent-folder-location-validation-service-6.2.0</artifactId>
+	<artifactId>test-parent-folder-location-validation-service</artifactId>
 	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>test-parent-folder-location-validation-service-6.2.0</name>
+	<name>test-parent-folder-location-validation-service</name>
 </project>

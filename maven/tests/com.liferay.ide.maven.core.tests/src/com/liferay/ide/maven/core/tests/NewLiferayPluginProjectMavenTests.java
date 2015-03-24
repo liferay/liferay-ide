@@ -222,7 +222,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     {
         File parentFolder =
             CoreUtil.getWorkspaceRoot().getLocation().append(
-                "test-parent-folder-location-validation-service-" + getRuntimeVersion() ).toFile();
+                "test-parent-folder-location-validation-service" ).toFile();
 
         if( !parentFolder.exists() )
         {
@@ -233,7 +233,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         FileUtil.copyFileToDir( pomFile, parentFolder );
 
-        final NewLiferayPluginProjectOp op = newProjectOp( "test-parent-folder-location-validation-service" );
+        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
+        op.setProjectName( "test-parent-folder-location-validation-service" );
 
         final ValidationService vs = op.getLocation().service( ValidationService.class );
 
@@ -244,7 +245,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         String projectName = op.getProjectName().content();
 
-        String expected = "The project name \"" + projectName + "\" can't be same as the parent folder.";
+        String expected = "The project name \"" + projectName + "\" can't be the same as the parent.";
 
         assertEquals( expected, vs.validation().message() );
         assertEquals( expected, op.getLocation().validation().message() );
