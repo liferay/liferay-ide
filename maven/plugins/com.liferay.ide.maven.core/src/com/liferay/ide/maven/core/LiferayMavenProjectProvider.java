@@ -776,7 +776,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 }
             }
         }
-        
+
         ProjectCore.operate( project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion );
     }
 
@@ -789,13 +789,13 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         if ( path != null && path.segmentCount() > 0 )
         {
             final String lastSegment = path.lastSegment();
-            
+
             if ( ! lastSegment.equals( projectName ) )
             {
                 path = path.append( projectName );
             }
         }
-        
+
         final File dir = path.toFile();
 
         if( dir.exists() )
@@ -824,7 +824,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                         {
                             retval =
                                 LiferayMavenCore.createErrorStatus( "The project name \"" + projectName +
-                                    "\" can't be same as the parent folder." );
+                                    "\" can't be the same as the parent." );
                         }
                         else
                         {
@@ -832,7 +832,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                             retval = validateProjectLocation( projectName, newProjectPath );
                         }
-
                     }
                 }
                 catch( CoreException e )
