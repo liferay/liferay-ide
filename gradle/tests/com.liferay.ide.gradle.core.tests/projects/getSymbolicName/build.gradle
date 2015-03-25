@@ -1,0 +1,27 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.dm.gradle:gradle-bundle-plugin:0.6.2'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'org.dm.bundle'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.7
+version = '1.0'
+
+dependencies {
+    compile 'org.osgi:org.osgi.compendium:5.0.0'
+}
+
+bundle {
+    instructions << [ 'Bundle-SymbolicName' : 'com.liferay.test.bsn' ]
+}

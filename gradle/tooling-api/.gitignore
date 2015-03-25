@@ -1,0 +1,6 @@
+/repo
+.classpath
+.project
+.settings/
+.gradle/
+/build/

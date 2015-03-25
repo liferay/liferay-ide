@@ -1,0 +1,15 @@
+initscript {
+    repositories {
+        maven {
+            url new File('%repo%').toURI().toURL()
+        }
+    }
+
+    dependencies {
+        classpath 'com.liferay.ide.gradle.toolingapi:plugin:1.0'
+    }
+}
+
+allprojects {
+    apply plugin: com.liferay.ide.gradle.toolingapi.custom.CustomModelPlugin
+}

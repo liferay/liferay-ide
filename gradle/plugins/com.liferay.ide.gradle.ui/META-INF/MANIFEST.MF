@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Gradle UI
+Bundle-SymbolicName: com.liferay.ide.gradle.ui;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-Activator: com.liferay.ide.gradle.ui.LRGradleUI
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ com.liferay.ide.project.ui;bundle-version="3.0.0",
+ com.liferay.ide.ui;bundle-version="3.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Export-Package: com.liferay.ide.gradle.ui
+
