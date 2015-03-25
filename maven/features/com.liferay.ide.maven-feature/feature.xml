@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.liferay.ide.maven"
-      label="m2e-liferay - Maven Integration for Liferay IDE"
+      label="Liferay IDE Maven Support (includes Eclipse m2e plugins)"
       version="3.0.0.qualifier"
       provider-name="Liferay, Inc."
-      plugin="com.liferay.ide.maven.branding">
+      plugin="com.liferay.ide.maven.ui">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
       Maven integration for Liferay IDE. Extends m2e-core and m2e-wtp plugins to support Liferay IDE development
@@ -48,13 +48,6 @@
 
     <plugin
          id="com.liferay.ide.maven.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.maven.branding"
          download-size="0"
          install-size="0"
          version="0.0.0"

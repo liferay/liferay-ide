@@ -154,7 +154,6 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     {
         if( resourcePath.segmentCount() > 0 && resourcePath.segment( 0 ).equals( "target" ) )
         {
-            System.out.println("Filtering path " + resourcePath.toPortableString());
             return true;
         }
 

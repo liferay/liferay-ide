@@ -39,27 +39,5 @@
         <module>tests</module>
     </modules>
 
-    <repositories>
-        <repository>
-            <id>m2e</id>
-            <layout>p2</layout>
-            <url>${m2e-site}</url>
-        </repository>
-        <repository>
-            <id>m2e-wtp</id>
-            <layout>p2</layout>
-            <url>${m2e-wtp-site}</url>
-        </repository>
-        <repository>
-            <id>ivyde</id>
-            <layout>p2</layout>
-            <url>${ivyde-site}</url>
-        </repository>
-        <repository>
-            <id>ivy</id>
-            <layout>p2</layout>
-            <url>${ivy-site}</url>
-        </repository>
-    </repositories>
 </project>
 

@@ -11,8 +11,6 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- * Contributors:
- * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
 package com.liferay.ide.maven.ui;
@@ -29,14 +27,14 @@ public class LiferayMavenUI extends Plugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "com.liferay.ide.portal.ui"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "com.liferay.ide.maven.ui"; //$NON-NLS-1$
 
     // The shared instance
     private static LiferayMavenUI plugin;
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static LiferayMavenUI getDefault()
@@ -48,7 +46,7 @@ public class LiferayMavenUI extends Plugin
     {
         logError( t.getMessage(), t );
     }
-    
+
     public static void logError( String msg, Throwable t )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, t ) );

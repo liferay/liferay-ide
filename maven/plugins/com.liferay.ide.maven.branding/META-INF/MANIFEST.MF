@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: %bundle.name
-Bundle-SymbolicName: com.liferay.ide.maven.branding
-Bundle-Version: 3.0.0.qualifier
-Bundle-Vendor: %bundle.vendor
