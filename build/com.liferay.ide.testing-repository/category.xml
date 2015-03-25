@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+    <bundle id="com.liferay.ide.core.tests" version="0.0.0" />
+    <bundle id="com.liferay.ide.project.core.tests" version="0.0.0" />
+    <bundle id="com.liferay.ide.server.core.tests" version="0.0.0" />
+    <bundle id="com.liferay.ide.ui.tests" version="0.0.0" />
+</site>

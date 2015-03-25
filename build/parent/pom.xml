@@ -35,8 +35,8 @@
         <sapphire-site>http://download.eclipse.org/sapphire/8.1/repository/</sapphire-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
-        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.0.20150203-1921/</m2e-site>
-        <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/milestones/mars/1.2.0/</m2e-wtp-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.0.20150324-2020/</m2e-site>
+        <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/milestones/mars/1.2.0/1.2.0.20150204-1807/</m2e-wtp-site>
         <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-23/</adt-site>
         <eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.1-SNAPSHOT/</eclipse-xml-search-site>
         <tern-site>http://oss.opensagres.fr/tern.repository/0.9.0-SNAPSHOT/</tern-site>
@@ -92,6 +92,21 @@
             <layout>p2</layout>
             <url>${ivy-site}</url>
         </repository>
+        <repository>
+            <id>ivyde</id>
+            <layout>p2</layout>
+            <url>${ivyde-site}</url>
+        </repository>
+        <repository>
+            <id>m2e</id>
+            <layout>p2</layout>
+            <url>${m2e-site}</url>
+        </repository>
+        <repository>
+            <id>m2e-wtp</id>
+            <layout>p2</layout>
+            <url>${m2e-wtp-site}</url>
+        </repository>
     </repositories>
 
     <build>
@@ -114,11 +129,6 @@
 
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-source-plugin</artifactId>
-            </plugin>
-
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-versions-plugin</artifactId>
             </plugin>
         </plugins>
@@ -130,8 +140,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.1</version>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>1.7</source>
+                        <target>1.7</target>
                         <meminitial>256m</meminitial>
                         <maxmem>1024m</maxmem>
                         <compilerArgument>-proc:none</compilerArgument>
@@ -151,20 +161,6 @@
                     <configuration>
                         <encoding>UTF-8</encoding>
                     </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.eclipse.tycho</groupId>
-                    <artifactId>tycho-source-plugin</artifactId>
-                    <version>${tycho-version}</version>
-                    <executions>
-                        <execution>
-                            <id>plugin-source</id>
-                            <goals>
-                                <goal>plugin-source</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
 
                 <plugin>

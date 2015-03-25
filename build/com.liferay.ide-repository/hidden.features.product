@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="Liferay IDE Hidden Features" uid="com.liferay.ide-repository.hidden.features" id="com.liferay.ide-repository.hidden.features" application="org.eclipse.ui.ide.workbench" version="3.0.0.qualifier" useFeatures="true" includeLaunchers="false">
+
+   <aboutInfo>
+   </aboutInfo>
+
+   <configIni>
+   </configIni>
+
+   <launcherArgs>
+   </launcherArgs>
+
+   <windowImages>
+   </windowImages>
+
+   <splash>
+   </splash>
+   <launcher>
+   </launcher>
+
+   <vm>
+   </vm>
+
+   <license>
+   </license>
+
+   <plugins>
+   </plugins>
+
+   <features>
+      <feature id="com.liferay.ide.common" />
+      <feature id="com.liferay.ide.hidden" />
+      <feature id="org.apache.ivyde.feature" />
+      <feature id="org.apache.ivy.feature" />
+      <feature id="org.eclipse.m2e.feature" />
+      <feature id="org.eclipse.m2e.logback.feature" />
+      <feature id="org.eclipse.m2e.wtp.feature" />
+      <feature id="org.eclipse.m2e.wtp.jsf.feature" />
+      <feature id="org.eclipse.sapphire" />
+      <feature id="org.eclipse.sapphire.java" />
+      <feature id="org.eclipse.sapphire.java.jdt" />
+      <feature id="org.eclipse.sapphire.modeling.xml" />
+      <feature id="org.eclipse.sapphire.osgi" />
+      <feature id="org.eclipse.sapphire.platform" />
+      <feature id="org.eclipse.sapphire.ui" />
+      <feature id="org.eclipse.sapphire.ui.swt.gef" />
+      <feature id="org.eclipse.sapphire.ui.swt.xml.editor" />
+      <feature id="org.eclipse.wst.xml.search.core-feature" />
+      <feature id="org.sonatype.m2e.mavenarchiver.feature" />
+      <feature id="org.springsource.ide.eclipse.gradle.feature" />
+      <feature id="tern-feature" />
+      <feature id="tern-jsdt-feature" />
+      <feature id="tern-server-nodejs-feature" />
+      <feature id="tern.eclipse.ide.server.nodejs.embed" />
+   </features>
+
+   <configurations>
+   </configurations>
+
+</product>

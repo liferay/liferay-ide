@@ -15,30 +15,19 @@
  *
  *******************************************************************************/
  -->
-
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>com.liferay.ide.build</groupId>
+        <artifactId>build</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../build/parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liferay.ide.tools</groupId>
-    <artifactId>tools</artifactId>
+    <artifactId>com.liferay.ide.testing-repository</artifactId>
+    <packaging>eclipse-repository</packaging>
 
-    <name>Liferay IDE Tools</name>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>plugins</module>
-        <module>features</module>
-        <module>tests</module>
-    </modules>
+    <name>Liferay IDE Testing Repository</name>
 
 </project>
-
