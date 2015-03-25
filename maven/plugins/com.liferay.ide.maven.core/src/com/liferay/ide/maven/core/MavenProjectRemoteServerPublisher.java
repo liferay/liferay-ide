@@ -77,6 +77,8 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
         final String newName = launchManager.generateLaunchConfigurationName( basedirLocation.lastSegment() );
 
         final ILaunchConfigurationWorkingCopy workingCopy = launchConfigurationType.newInstance( null, newName );
+        workingCopy.setAttribute(
+            IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dmaven.multiModuleProjectDirectory" );
         workingCopy.setAttribute( ATTR_POM_DIR, basedirLocation.toString() );
         workingCopy.setAttribute( ATTR_GOALS, goal );
         workingCopy.setAttribute( ATTR_UPDATE_SNAPSHOTS, true );
