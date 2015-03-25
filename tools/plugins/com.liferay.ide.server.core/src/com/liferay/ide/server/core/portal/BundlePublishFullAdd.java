@@ -106,16 +106,19 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             }
             else
             {
-                retval = LiferayServerCore.error( "Unable to get bundle project for " + module.getProject().getName() );
+                retval =
+                    LiferayServerCore.error( "Unable to get bundle project for " + module.getProject().getName() );
             }
 
             if( retval.isOK() )
             {
-                this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
+                this.portalServerBehavior.setModulePublishState2(
+                    new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
             }
             else
             {
-                this.portalServerBehavior.setModulePublishState2( new IModule[] { module }, IServer.PUBLISH_STATE_FULL );
+                this.portalServerBehavior.setModulePublishState2(
+                    new IModule[] { module }, IServer.PUBLISH_STATE_FULL );
             }
         }
     }

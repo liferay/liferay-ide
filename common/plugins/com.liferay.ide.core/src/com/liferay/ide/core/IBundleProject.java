@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IBundleProject extends ILiferayProject
 {
 
-    boolean filterResource( IPath moduleRelativePath );
+    boolean filterResource( IPath resourcePath );
 
     IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException;
 

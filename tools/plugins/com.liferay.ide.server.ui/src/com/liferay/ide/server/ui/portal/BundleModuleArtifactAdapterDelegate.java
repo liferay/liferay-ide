@@ -35,23 +35,23 @@ import org.eclipse.wst.server.core.util.WebResource;
 public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDelegate implements IAdapterFactory
 {
 
-    public Object getAdapter(Object adaptableObject, Class adapterType)
+    public Object getAdapter( Object adaptableObject, Class adapterType )
     {
         return null;
     }
 
     public Class[] getAdapterList()
     {
-        return new Class[]{ ILaunchable.class };
+        return new Class[] { ILaunchable.class };
     }
 
     private IModule getModule( IProject project )
     {
-        final IModule[] modules = ServerUtil.getModules("liferay.bundle");
+        final IModule[] modules = ServerUtil.getModules( "liferay.bundle" );
 
-        for (IModule module : modules)
+        for( IModule module : modules )
         {
-            if ( project == null || project.equals(module.getProject() ) )
+            if( project == null || project.equals( module.getProject() ) )
             {
                 return module;
             }

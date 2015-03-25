@@ -52,7 +52,7 @@ import org.apache.maven.archetype.catalog.Archetype;
 import org.apache.maven.archetype.exception.UnknownArchetype;
 import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.cli.MavenCli;
+import org.apache.maven.cli.configuration.SettingsXmlConfigurationProcessor;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
@@ -165,7 +165,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
         archetype.setGroupId( gav[0] );
         archetype.setArtifactId( gav[1] );
-        archetype.setModelEncoding( "UTF-8" );
         archetype.setVersion( archetypeVersion );
 
         final ArchetypeManager archetypeManager = MavenPluginActivator.getDefault().getArchetypeManager();
@@ -241,7 +240,8 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
                     if( CoreUtil.isNullOrEmpty( userSettingsFile ) )
                     {
-                        userSettingsPath = MavenCli.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
+                        userSettingsPath =
+                            SettingsXmlConfigurationProcessor.DEFAULT_USER_SETTINGS_FILE.getAbsolutePath();
                     }
                     else
                     {
