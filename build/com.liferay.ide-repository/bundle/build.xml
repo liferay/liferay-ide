@@ -55,25 +55,11 @@
                 <property name="output.macosx64.tar.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar" />
                 <property name="output.macosx64.gz.name" value="liferay-ide-eclipse-macosx-x64-QUALIFIED_VERSION.tar.gz" />
             </then>
-            <elseif>
-                <isset property="create.adt.bundles" />
-                <then>
-                    <property name="output.win32.zip.name" value="liferay-ide-mobile-sdk-windows-x32-QUALIFIED_VERSION.zip" />
-                    <property name="output.linux.tar.name" value="liferay-ide-mobile-sdk-linux-x32-QUALIFIED_VERSION.tar" />
-                    <property name="output.linux.gz.name" value="liferay-ide-mobile-sdk-linux-x32-QUALIFIED_VERSION.tar.gz" />
-                    <property name="output.win64.zip.name" value="liferay-ide-mobile-sdk-windows-x64-QUALIFIED_VERSION.zip" />
-                    <property name="output.linux64.tar.name" value="liferay-ide-mobile-sdk-linux-x64-QUALIFIED_VERSION.tar" />
-                    <property name="output.linux64.gz.name" value="liferay-ide-mobile-sdk-linux-x64-QUALIFIED_VERSION.tar.gz" />
-                    <property name="output.macosx64.tar.name" value="liferay-ide-mobile-sdk-macosx-x64-QUALIFIED_VERSION.tar" />
-                    <property name="output.macosx64.gz.name" value="liferay-ide-mobile-sdk-macosx-x64-QUALIFIED_VERSION.tar.gz" />
-                </then>
-            </elseif>
         </if>
 
         <condition property="checkParameters" value="true">
             <or>
                 <isset property="createBundles" />
-                <isset property="create.adt.bundles" />
             </or>
         </condition>
 
@@ -111,19 +97,9 @@
             <then>
                 <antcall target="clean-eclipse" />
                 <antcall target="setup-eclipse" />
-                <antcallback target="install-tools-features" return="version" />
-                <antcall target="install-maven-features" />
+                <antcallback target="install-all-features" return="version" />
                 <antcallback target="${package.target}" return="final.name" />
             </then>
-            <elseif>
-                <isset property="create.adt.bundles" />
-                <then>
-                    <antcall target="copy-liferay-mobile-sdk" />
-                    <antcall target="install-adt-ide-features" />
-                    <antcallback target="install-tools-features" return="version" />
-                    <antcallback target="install-adt-features" return="final.name" />
-                </then>
-            </elseif>
         </if>
 
         <propertyregex property="final.name.versioned" input="${final.name}" regexp="(.*)QUALIFIED_VERSION(.*)" replace="\1${version}\2" />
@@ -131,19 +107,19 @@
         <move file="${final.name}" tofile="${final.name.versioned}" verbose="true" />
 
         <path id="updatesite.path">
-            <fileset dir="${target.dir}" includes="Liferay_IDE_*.zip" />
+            <fileset dir="${target.dir}" includes="liferay-ide-*-updatesite.zip" />
         </path>
 
         <property name="updatesite.name" value="${toString:updatesite.path}" />
 
         <condition property="check.updatesite" value="true">
-            <matches pattern=".*Liferay_IDE_.*-updatesite\.zip" string="${updatesite.name}" />
+            <matches pattern=".*liferay-ide-.*-updatesite\.zip" string="${updatesite.name}" />
         </condition>
 
         <if>
             <isset property="check.updatesite" />
             <then>
-                <propertyregex property="final.updatesite.name" input="${updatesite.name}" regexp="(.*)Liferay_IDE_.*-updatesite(.*)" replace="\1liferay-ide-updatesite-${version}\2" />
+                <propertyregex property="final.updatesite.name" input="${updatesite.name}" regexp="(.*)liferay-ide-.*-updatesite(.*)" replace="\1liferay-ide-updatesite-${version}\2" />
 
                 <move file="${updatesite.name}" tofile="${final.updatesite.name}" verbose="true" />
             </then>
@@ -364,7 +340,7 @@
         <echo>${output}</echo>
     </target>
 
-    <target name="install-tools-features" depends="setup-builder">
+    <target name="install-all-features" depends="setup-builder">
         <if>
             <available file="${builder.dir}/eclipse" />
             <then>
@@ -384,7 +360,7 @@
 
         <echo>${repositoryURL}</echo>
         <antcallback target="install-feature" return="output">
-            <param name="featureId" value="${tools.features}" />
+            <param name="featureId" value="${all.features}" />
         </antcallback>
 
         <echo>${output}</echo>
@@ -415,50 +391,6 @@
         </if>
 
         <delete file="${target.dir}/temp.txt" />
-    </target>
-
-    <target name="install-adt-features" depends="setup-builder">
-        <if>
-            <available file="${builder.dir}/eclipse" />
-            <then>
-                <chmod file="${builder.dir}/eclipse" perm="+x" />
-            </then>
-        </if>
-
-        <echo>${adt.updatesite}</echo>
-        <antcallback target="install-feature" return="output">
-            <param name="repositoryURL" value="file://${adt.updatesite}" />
-            <param name="featureId" value="${adt.features}" />
-        </antcallback>
-
-        <echo>${output}</echo>
-        <antcallback target="${package.target}" return="final.name" />
-        <echo>${final.name}</echo>
-    </target>
-
-    <target name="install-maven-features" depends="setup-builder">
-        <if>
-            <available file="${builder.dir}/eclipse" />
-            <then>
-                <chmod file="${builder.dir}/eclipse" perm="+x" />
-            </then>
-        </if>
-
-        <if>
-            <available file="${updatesite}" />
-            <then>
-                <property name="repositoryURL" value="file://${updatesite}" />
-            </then>
-            <else>
-                <property name="repositoryURL" value="${updatesite}" />
-            </else>
-        </if>
-
-        <antcallback target="install-feature" return="output">
-            <param name="featureId" value="${maven.features}" />
-        </antcallback>
-
-        <echo>${output}</echo>
     </target>
 
     <target name="clean-output-dir">
