@@ -238,7 +238,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
             String elementName = nodeNames[0];
 
             domModel = getDOMModel( file, false );
-            targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 );
         }
         else if( nodeType == Node.ATTRIBUTE_NODE )
         {

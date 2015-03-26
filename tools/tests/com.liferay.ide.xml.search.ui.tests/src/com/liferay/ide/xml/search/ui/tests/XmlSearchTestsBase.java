@@ -28,7 +28,7 @@ public class XmlSearchTestsBase extends ProjectCoreBase
 
     private static final String bundleId = "com.liferay.ide.xml.search.ui.tests";
 
-    public static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of type \"{0}\" incorrect";
+    public static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of type \"{0}\" incorrect.";
 
     protected String getBundleId()
     {

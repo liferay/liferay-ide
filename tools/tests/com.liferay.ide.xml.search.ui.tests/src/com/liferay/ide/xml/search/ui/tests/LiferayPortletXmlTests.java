@@ -15,10 +15,8 @@
 
 package com.liferay.ide.xml.search.ui.tests;
 
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.deleteOtherProjects;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getTextHoverForElement;
+import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
@@ -33,13 +31,15 @@ import org.junit.Test;
  */
 public class LiferayPortletXmlTests extends XmlSearchTestsBase
 {
+
+    protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
     private IProject project;
 
-    private IFile getDescriptorFile() throws Exception
+    protected IFile getDescriptorFile() throws Exception
     {
-        return descriptorFile != null ? descriptorFile :
-            LiferayCore.create( getProject() ).getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile(
+            ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
     }
 
     private IProject getProject() throws Exception
@@ -53,209 +53,13 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
         return project;
     }
 
-    // TODO
-    public void testAssetRenderFactory()
-    {
-
-    }
-
-    // TODO
-    public void testAtomCollectionAdapter()
-    {
-
-    }
-
-    // TODO
-    public void testConfigurationActionClass()
-    {
-
-    }
-
-    // TODO
-    public void testControlPanelEntryClass()
-    {
-
-    }
-
-    // TODO
-    public void testControlPanelEntryWeight()
-    {
-    }
-
-    // TODO
-    public void testCustomAttributesDisplay()
-    {
-    }
-
-    // TODO
-    public void testDDMDisplay()
-    {
-    }
-
-    // TODO
-    public void testFooterPortletCss()
-    {
-    }
-
-    // TODO
-    public void testFooterPortletJavaScript()
-    {
-    }
-
-    // TODO
-    public void testFriendlyURLMapperClass()
-    {
-    }
-
-    // TODO
-    public void testHeaderPortletCss()
-    {
-    }
-
-    // TODO
-    public void testHeaderPortletJavascript()
-    {
-    }
-
-    // TODO
-    public void testIcon()
-    {
-    }
-
-    // TODO
-    public void testIndexerClass()
-    {
-    }
-
-    // TODO
-    public void testPermissionPropagator()
-    {
-    }
-
-    // TODO
-    public void testPollerProcessorClass()
-    {
-    }
-
-    // TODO
-    public void testPopMessageListenerClass()
-    {
-    }
-
-    // TODO
-    public void testPortletDataHandlerClass()
-    {
-    }
-
-    // TODO
-    public void testPortletLayoutListenerClass()
-    {
-    }
-
     @Test
-    public void testPortletName() throws Exception
+    public void testSourceViewerConfiguration() throws Exception
     {
         if( shouldSkipBundleTests() )
         {
             return;
         }
-
-        testPortletNameValidation();
-        testPortletNameContentAssist();
-        testPortletNameTextHover();
-    }
-
-    // TODO
-    protected void testPortletNameContentAssist() throws Exception
-    {
-    }
-
-    // TODO
-    protected void testPortletNameHyperlink() throws Exception
-    {
-    }
-
-    // example of testing text hover
-    protected void testPortletNameTextHover() throws Exception
-    {
-        final IFile descriptorFile = getDescriptorFile();
-        final String elementName = "portlet-name";
-
-        final String[] displayTexts = getTextHoverForElement( descriptorFile, elementName );
-        assertNotNull( displayTexts );
-        assertEquals( true, displayTexts.length > 0 );
-
-        boolean flag = false;
-
-        for( String text : displayTexts )
-        {
-            if( text.contains( "Portlet name" ) &&
-                text.contains( "Display name" ) &&
-                text.contains( "Portlet class" ) &&
-                text.contains( "File" ) )
-            {
-                flag = true;
-                break;
-            }
-        }
-
-        assertEquals( true, flag );
-    }
-
-    // TODO
-    protected void testPortletNameValidation() throws Exception
-    {
-    }
-
-    // TODO
-    public void testSchedulerEventListenerClass()
-    {
-    }
-
-    // TODO
-    public void testSocialActivityInterpreterClass()
-    {
-    }
-
-    // TODO
-    public void testSocialRequestInterpreterClass()
-    {
-    }
-
-    // TODO
-    public void testStagedModelDataHandlerClass()
-    {
-    }
-
-    // TODO
-    public void testTemplateHandler()
-    {
-    }
-
-    // TODO
-    public void testURLEncoderClass()
-    {
-    }
-
-    // TODO
-    public void testUserNotificationHandlerClass()
-    {
-    }
-
-    // TODO
-    public void testWebdavStorageClass()
-    {
-    }
-
-    // TODO
-    public void testXmlRpcMethodClass()
-    {
-    }
-
-    @Test
-    public void testSourceViewerConfiguration() throws Exception
-    {
-        if( shouldSkipBundleTests() ) { return; }
 
         final IFile descriptorFile = getDescriptorFile();
         Object sourceViewerConfiguration =
@@ -263,4 +67,5 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         assertEquals( true, sourceViewerConfiguration instanceof LiferayCustomXmlViewerConfiguration );
     }
+
 }
