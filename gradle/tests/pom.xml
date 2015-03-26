@@ -34,7 +34,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>com.liferay.ide.gradle.core.tests</module>
+        <!--module>com.liferay.ide.gradle.core.tests</module-->
     </modules>
 
 </project>
