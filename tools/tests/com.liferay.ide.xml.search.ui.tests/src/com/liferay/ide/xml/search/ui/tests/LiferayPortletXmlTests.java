@@ -24,6 +24,7 @@ import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlViewerConfiguration;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -66,6 +67,13 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
             XmlSearchTestsUtils.getSourceViewerConfiguraionFromOpenedEditor( descriptorFile );
 
         assertEquals( true, sourceViewerConfiguration instanceof LiferayCustomXmlViewerConfiguration );
+    }
+
+    //TODO test all content assists
+    @Test
+    @Ignore
+    public void testContentAssists() throws Exception
+    {
     }
 
 }

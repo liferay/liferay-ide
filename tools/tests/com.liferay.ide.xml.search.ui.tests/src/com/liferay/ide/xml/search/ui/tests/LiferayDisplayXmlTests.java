@@ -64,8 +64,6 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
         return project;
     }
 
-    // TODO
-
     @Test
     public void testPortletAtIdContentAssist() throws Exception
     {

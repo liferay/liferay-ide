@@ -65,7 +65,9 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
     {
 
         if( shouldSkipBundleTests() )
+        {
             return;
+        }
 
         final IFile descriptorFile = getDescriptorFile();
         String elementName = "namespace";
@@ -81,6 +83,7 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         elementValue = "namespace";
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
+
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
@@ -91,6 +94,7 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         {
             return;
         }
+
         final IFile descriptorFile = getDescriptorFile();
         String elementName = "service-builder";
         String attrName = "package-path";
@@ -107,8 +111,8 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         String defaultAttrValue = "com.example.plugins";
         setAttrValue( descriptorFile, elementName, attrName, defaultAttrValue );
         buildAndValidate( descriptorFile );
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
 
+        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
 }

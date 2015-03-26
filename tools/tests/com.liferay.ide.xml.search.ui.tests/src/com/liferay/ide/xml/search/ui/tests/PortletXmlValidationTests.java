@@ -58,7 +58,9 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
         markerMessage =
-            MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+            MessageFormat.format(
+                PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
@@ -67,13 +69,14 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         markerMessage =
             NLS.bind( PortletDescriptorValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT.toString(), new Object[] {
                 elementValue, "javax.portlet.GenericPortlet" } );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.util.bridges.mvc.MVCPortlet";
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
 
+        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -83,6 +86,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         {
             return;
         }
+
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "listener-class";
         String elementValue = "Foo";
@@ -91,7 +95,9 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
         markerMessage =
-            MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+            MessageFormat.format(
+                PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
@@ -101,13 +107,14 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         markerMessage =
             NLS.bind( PortletDescriptorValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT.toString(), new Object[] {
                 elementValue, "javax.portlet.PortletURLGenerationListener" } );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
 
+        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -121,6 +128,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         String markerMessage =
             MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.Orphan";
@@ -132,11 +140,13 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
                     elementValue,
                     "javax.portlet.filter.ResourceFilter, javax.portlet.filter.RenderFilter, javax.portlet.filter.ActionFilter, javax.portlet.filter.EventFilter" } );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         elementValue = "com.liferay.ide.tests.ResourceFilterImpl";
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
@@ -155,12 +165,14 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             MessageFormat.format(
                 PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES, new Object[] { elementContent } );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         // resource-bundle doesn't end with ".properties"
         elementContent = "ResourceBundleNotEndWithProperties";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
 
         // resource-bundle values contains "/"
@@ -171,12 +183,14 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
                 PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR,
                 new Object[] { elementContent } );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         // resource-bundle values doesn't contain "/"
         elementContent = "ResourceBundleWithoutSlash";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
 
         // resource bundle file doesn't exist
@@ -186,12 +200,14 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             MessageFormat.format(
                 PortletDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementContent } );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         // resource bundle file exists
         elementContent = "ResourceBundleExist";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
 
         // resource bundle file doesn't exist
@@ -201,18 +217,21 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             MessageFormat.format(
                 PortletDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementContent } );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         // resource bundle file exists
         elementContent = "ResourceBundleExist";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
 
         // set a right content
         elementContent = "content.Language";
         setElementContent( descriptorFile, elementName, elementContent );
         buildAndValidate( descriptorFile );
+
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 

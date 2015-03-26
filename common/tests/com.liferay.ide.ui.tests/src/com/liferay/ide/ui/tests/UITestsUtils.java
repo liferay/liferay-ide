@@ -191,7 +191,7 @@ public class UITestsUtils
                     {
                         endOffset = element.getEndOffset();
                     }
-                    
+
                     if( element.getFirstChild() == null || element.getFirstChild().getTextContent().isEmpty() )
                     {
                         return new Region( endOffset, 0 );
