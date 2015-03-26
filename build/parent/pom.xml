@@ -35,7 +35,7 @@
         <sapphire-site>http://download.eclipse.org/sapphire/8.1/repository/</sapphire-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
-        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.0.20150324-2020/</m2e-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.0.20150325-2013/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/milestones/mars/1.2.0/1.2.0.20150204-1807/</m2e-wtp-site>
         <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-23/</adt-site>
         <eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.1-SNAPSHOT/</eclipse-xml-search-site>
