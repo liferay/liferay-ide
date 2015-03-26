@@ -51,6 +51,17 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
         return project;
     }
 
+
+    @Before
+    public void cleanupMarkers() throws Exception
+    {
+        ZipFile projectFile = new ZipFile( getProjectZip( getBundleId(), "Portlet-Xml-Test-portlet" ) );
+        ZipEntry entry = projectFile.getEntry( "Portlet-Xml-Test-portlet/docroot/WEB-INF/liferay-portlet.xml" );
+
+        getDescriptorFile().setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
+        projectFile.close();
+    }
+
     @Test
     public void testAssetRenderFactory() throws Exception
     {

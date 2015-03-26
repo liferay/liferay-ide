@@ -211,9 +211,8 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
     protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
                                String messageText, int severity, String validationKey, String querySpecificationId )
     {
-        final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
-        int length = textContent.trim().length() + 2;
+        int length = node.getEndOffset() - startOffset;
 
         final LocalizedMessage message =
             createMessage( startOffset, length, messageText, severity, node.getStructuredDocument() );
@@ -288,12 +287,8 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
 
     protected String getMessageText( ValidationType validationType, IXMLReferenceTo referenceTo, Node node, IFile file )
     {
-        final String textContent = DOMUtils.getNodeValue( node );
-
-        if( textContent == null )
-        {
-            return null;
-        }
+        final String nodeValue = DOMUtils.getNodeValue( node );
+        final String textContent = nodeValue == null ? "" : nodeValue;
 
         switch( validationType )
         {

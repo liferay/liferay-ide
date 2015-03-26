@@ -198,10 +198,20 @@
             <toJava extends="com.liferay.portal.kernel.portlet.FriendlyURLMapper"/>
             </reference>
 
+<!--
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
                     path="/liferay-portlet-app/portlet/indexer-class"
                     targetNodes="text()"
+                    querySpecificationId="liferay.liferayportletxml.querySpecification" />
+                <toJava extends="com.liferay.portal.kernel.search.Indexer"/>
+            </reference>
+-->
+
+            <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
+                <from
+                    path="/liferay-portlet-app/portlet/indexer-class/text() | /liferay-portlet-app/portlet/indexer-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.search.Indexer"/>
             </reference>

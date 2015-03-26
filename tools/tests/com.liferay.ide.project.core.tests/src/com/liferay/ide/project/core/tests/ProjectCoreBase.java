@@ -32,6 +32,7 @@ import com.liferay.ide.server.core.tests.ServerCoreBase;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
@@ -294,10 +295,7 @@ public class ProjectCoreBase extends ServerCoreBase
         final IPath sdkLocation = SDKManager.getInstance().getDefaultSDK().getLocation();
         final IPath hooksFolder = sdkLocation.append( path );
 
-        final URL hookZipUrl =
-            Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
-
-        final File hookZipFile = new File( FileLocator.toFileURL( hookZipUrl ).getFile() );
+        final File hookZipFile = getProjectZip( bundleId, projectName );
 
         ZipUtil.unzip( hookZipFile, hooksFolder.toFile() );
 
@@ -318,6 +316,15 @@ public class ProjectCoreBase extends ServerCoreBase
         assertEquals( "Expected new project to exist.", true, project.exists() );
 
         return project;
+    }
+
+    protected File getProjectZip( String bundleId, String projectName ) throws IOException
+    {
+        final URL hookZipUrl =
+            Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
+
+        final File hookZipFile = new File( FileLocator.toFileURL( hookZipUrl ).getFile() );
+        return hookZipFile;
     }
 
     protected NewLiferayPluginProjectOp newProjectOp( final String projectName ) throws Exception
