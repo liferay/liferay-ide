@@ -28,6 +28,7 @@ import com.liferay.ide.project.core.model.ProfileLocation;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.util.ComponentUtil;
+import com.liferay.ide.theme.core.util.ThemeUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,6 +100,7 @@ import org.w3c.dom.Document;
  * @author Gregory Amerson
  * @author Simon Jiang
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
@@ -176,18 +178,35 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             final List<?> archProps =
                 archetypeManager.getRequiredProperties( archetype, remoteArchetypeRepository, monitor );
 
-           if( ! CoreUtil.isNullOrEmpty( archProps ) )
-           {
-               for( Object prop : archProps )
-               {
-                   if( prop instanceof RequiredProperty )
-                   {
-                       final RequiredProperty rProp = (RequiredProperty) prop;
+            if( !CoreUtil.isNullOrEmpty( archProps ) )
+            {
+                for( Object prop : archProps )
+                {
+                    if( prop instanceof RequiredProperty )
+                    {
+                        final RequiredProperty rProp = (RequiredProperty) prop;
 
-                       properties.put( rProp.getKey(), rProp.getDefaultValue() );
-                   }
-               }
-           }
+                        if( op.getPluginType().content().equals( PluginType.theme ) )
+                        {
+                            final String key = rProp.getKey();
+
+                            if( key.equals( "themeParent" ) )
+                            {
+                                properties.put( key, op.getThemeParent().content( true ) );
+                            }
+                            else if( key.equals( "themeType" ) )
+                            {
+                                properties.put(
+                                    key, ThemeUtil.getTemplateExtension( op.getThemeFramework().content( true ) ) );
+                            }
+                        }
+                        else
+                        {
+                            properties.put( rProp.getKey(), rProp.getDefaultValue() );
+                        }
+                    }
+                }
+            }
         }
         catch( UnknownArchetype e1 )
         {

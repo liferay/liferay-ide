@@ -24,14 +24,13 @@ import com.liferay.ide.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.theme.core.ThemeCSSBuilder;
 import com.liferay.ide.theme.core.ThemeCore;
+import com.liferay.ide.theme.core.util.ThemeUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
@@ -161,17 +160,6 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
         return IPluginFacetConstants.THEME_PLUGIN_SDK_DEFAULT_OUTPUT_FOLDER;
     }
 
-    public String getTemplateExtension( String tplFramework )
-    {
-        Map<String, String> tplMap = new HashMap<String, String>();
-
-        tplMap.put( "Velocity", "vm" ); //$NON-NLS-1$ //$NON-NLS-2$
-        tplMap.put( "Freemarker", "ftl" ); //$NON-NLS-1$ //$NON-NLS-2$
-        tplMap.put( "JSP", "jsp" ); //$NON-NLS-1$ //$NON-NLS-2$
-
-        return tplMap.get( tplFramework );
-    }
-
     protected void installThemeBuilder( IProject project ) throws CoreException
     {
         if( project == null )
@@ -283,7 +271,7 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
 
                 if( !tplFramework.equals( this.masterModel.getDefaultProperty( THEME_TEMPLATE_FRAMEWORK ) ) )
                 {
-                    String tplExtension = getTemplateExtension( tplFramework );
+                    String tplExtension = ThemeUtil.getTemplateExtension( tplFramework );
                     strCon = strCon.replace(
                             "</project>", "\t<property name=\"theme.type\" value=\"" + tplExtension + "\" />\n</project>" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 }
