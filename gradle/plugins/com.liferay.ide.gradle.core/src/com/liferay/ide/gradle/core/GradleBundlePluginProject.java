@@ -39,6 +39,7 @@ import org.springsource.ide.eclipse.gradle.core.util.JobUtil;
  */
 public class GradleBundlePluginProject extends BaseLiferayProject implements IBundleProject
 {
+    private static final String[] ignorePaths = new String[] { ".gradle", "build" };
 
     public GradleBundlePluginProject( IProject project )
     {
@@ -48,7 +49,7 @@ public class GradleBundlePluginProject extends BaseLiferayProject implements IBu
     @Override
     public boolean filterResource( IPath resourcePath )
     {
-        if( resourcePath.segmentCount() > 0 && resourcePath.segment( 0 ).equals( "build" ) )
+        if( filterResource( resourcePath, ignorePaths ) )
         {
             return true;
         }
@@ -75,37 +76,37 @@ public class GradleBundlePluginProject extends BaseLiferayProject implements IBu
 
         final GradleProject gradleProject = GradleCore.create( getProject() );
 
+        // need to rerun the jar task to make sure the jar is correct
+
+        final String task = "jar";
+        final ILaunchConfiguration conf =
+            GradleLaunchConfigurationDelegate.createDefault( gradleProject, task, false );
+
+        final GradleRunnable gradleRunnable = new GradleRunnable( task )
+        {
+
+            @Override
+            public void doit( IProgressMonitor mon ) throws Exception
+            {
+                conf.launch( "run", mon, false, false );
+            }
+        };
+
+        try
+        {
+            JobUtil.schedule( NO_RULE, gradleRunnable ).join();
+
+            retval = GradleProjectMethods.getOutputJar( gradleProject );
+        }
+        catch( InterruptedException e )
+        {
+        };
+
         final IPath outputJar = GradleProjectMethods.getOutputJar( gradleProject );
 
         if( outputJar.toFile().exists() )
         {
             retval = outputJar;
-        }
-        else
-        {
-            final String task = "jar";
-            final ILaunchConfiguration conf =
-                GradleLaunchConfigurationDelegate.createDefault( gradleProject, task, false );
-
-            final GradleRunnable gradleRunnable = new GradleRunnable( task )
-            {
-
-                @Override
-                public void doit( IProgressMonitor mon ) throws Exception
-                {
-                    conf.launch( "run", mon, true, true );
-                }
-            };
-
-            try
-            {
-                JobUtil.schedule( NO_RULE, gradleRunnable ).join();
-
-                retval = GradleProjectMethods.getOutputJar( gradleProject );
-            }
-            catch( InterruptedException e )
-            {
-            };
         }
 
         return retval;

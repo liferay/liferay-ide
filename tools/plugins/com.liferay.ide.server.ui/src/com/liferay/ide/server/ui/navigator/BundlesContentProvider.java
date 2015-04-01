@@ -15,8 +15,8 @@
 package com.liferay.ide.server.ui.navigator;
 
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.OsgiBundle;
-import com.liferay.ide.server.core.portal.OsgiConnection;
+import com.liferay.ide.server.core.portal.BundleDeployer;
+import com.liferay.ide.server.core.portal.OSGiBundle;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
@@ -133,7 +133,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
             final BundlesFolder bundlesFolder = (BundlesFolder) element;
             retval = bundlesFolder.getParent();
         }
-        else if( element instanceof OsgiBundle )
+        else if( element instanceof OSGiBundle )
         {
             retval = null;
         }
@@ -175,7 +175,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
         return currentHasChildren ? true : hasChildren( element );
     }
 
-    @SuppressWarnings( { "rawtypes", "unchecked" } )
+    /*@SuppressWarnings( { "rawtypes", "unchecked" } )
     private void insertWorkspaceBundlesFolder( final IServer server, final Set currentChildren )
     {
         final BundlesFolder folder = new WorkspaceBundlesFolder( this.getConfig(), server );
@@ -183,7 +183,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
         this.bundlesFolders.put( server.getId(), folder );
 
         currentChildren.add( folder );
-    }
+    }*/
 
     @SuppressWarnings( { "rawtypes", "unchecked" } )
     private void insertBundlesFolder( final IServer server, final Set currentChildren )
@@ -201,9 +201,9 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
 
         try
         {
-            OsgiConnection osgi = LiferayServerCore.newOsgiConnection( server );
+            BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
 
-            osgi.ping();
+            deployer.ping();
 
             this.apiChecks.put( server.getId(), Status.OK_STATUS );
 

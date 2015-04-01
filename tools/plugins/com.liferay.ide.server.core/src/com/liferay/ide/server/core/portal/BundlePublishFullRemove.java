@@ -157,15 +157,23 @@ public class BundlePublishFullRemove extends BundlePublishOperation
     {
         IStatus retval = null;
 
-        final OsgiConnection osgi = getOsgiConnection();
+        final BundleDeployer deployer = getBundleDeployer();
 
-        if( osgi != null )
+        if( deployer != null )
         {
-            retval = osgi.uninstallBundle( symbolicName );
+            try
+            {
+                deployer.uninstallBundle( symbolicName );
+                retval = Status.OK_STATUS;
+            }
+            catch( Exception e )
+            {
+                retval = LiferayServerCore.error( "Unable to uninstall bundle" + symbolicName, e );
+            }
         }
         else
         {
-            retval = LiferayServerCore.error( "Unable to uninstall bundle remotely " + symbolicName );
+            retval = LiferayServerCore.error( "Unable to uninstall bundle" + symbolicName );
         }
 
         return retval;

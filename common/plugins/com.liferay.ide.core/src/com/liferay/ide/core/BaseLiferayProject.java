@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
@@ -55,6 +56,24 @@ public abstract class BaseLiferayProject implements ILiferayProject
         }
 
         return null;
+    }
+
+    protected boolean filterResource( IPath resourcePath, String[] ignorePaths )
+    {
+        if( resourcePath == null || resourcePath.segmentCount() < 1 )
+        {
+            return false;
+        }
+
+        for( String ignorePath : ignorePaths )
+        {
+            if( resourcePath.segment( 0 ).equals( ignorePath ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public IProject getProject()

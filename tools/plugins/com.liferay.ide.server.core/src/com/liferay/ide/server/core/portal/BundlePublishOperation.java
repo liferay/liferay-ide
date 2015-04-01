@@ -34,11 +34,11 @@ import org.eclipse.wst.server.core.model.PublishOperation;
 public class BundlePublishOperation extends PublishOperation
 {
 
-    protected OsgiConnection connection;
     protected final List<IModule> modules;
     protected final PortalRuntime portalRuntime;
     protected final PortalServerBehavior portalServerBehavior;
     protected final IServer server;
+    protected BundleDeployer deployer;
 
     public BundlePublishOperation( IServer s, IModule[] modules )
     {
@@ -83,14 +83,14 @@ public class BundlePublishOperation extends PublishOperation
         return 0;
     }
 
-    protected OsgiConnection getOsgiConnection()
+    protected BundleDeployer getBundleDeployer()
     {
-        if( this.connection == null )
+        if( this.deployer == null )
         {
-            this.connection = LiferayServerCore.newOsgiConnection( this.server );
+            this.deployer = LiferayServerCore.newBundleDeployer( this.server );
         }
 
-        return this.connection;
+        return this.deployer;
     }
 
 }

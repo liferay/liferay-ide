@@ -24,7 +24,7 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.OsgiBundle;
+import com.liferay.ide.server.core.portal.OSGiBundle;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
@@ -87,9 +87,9 @@ import org.w3c.dom.NodeList;
 public class ServerUtil
 {
 
-    public static boolean bsnExists( String bsn, OsgiBundle[] bundles )
+    public static boolean bsnExists( String bsn, OSGiBundle[] bundles )
     {
-        for( OsgiBundle bundle : bundles )
+        for( OSGiBundle bundle : bundles )
         {
             if( bundle.getSymbolicName().equals( bsn ) )
             {

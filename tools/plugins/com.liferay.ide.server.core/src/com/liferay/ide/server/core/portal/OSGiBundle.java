@@ -14,22 +14,33 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
-import java.io.File;
+public class OSGiBundle {
+    final long id;
+    final String symbolicName;
 
-import org.eclipse.core.runtime.IStatus;
+    public OSGiBundle(long id, String symbolicName) {
+        this.id = id;
+        this.symbolicName = symbolicName;
+    }
 
+    @Override
+    public String toString() {
+        return id + " " + symbolicName;
+    }
 
-/**
- * @author Gregory Amerson
- */
-public interface OsgiConnection
-{
+    public String getSymbolicName() {
+        return symbolicName;
+    }
 
-    OsgiBundle[] getBundles();
+    public String getId() {
+        return id + "";
+    }
 
-    boolean ping();
+    public String getState() {
+        return "no state";
+    }
 
-    IStatus deployBundle( String bsn, String location , File bundle );
-
-    IStatus uninstallBundle( String symbolicName );
+    public String getVersion() {
+        return "0.0.0";
+    }
 }

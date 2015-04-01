@@ -20,8 +20,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.server.core.portal.OsgiConnection;
-import com.liferay.ide.server.core.portal.OsgiConnectionImpl;
+import com.liferay.ide.server.core.portal.BundleDeployer;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -798,7 +797,6 @@ public class LiferayServerCore extends Plugin
         }
     }
 
-
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
@@ -867,11 +865,11 @@ public class LiferayServerCore extends Plugin
         ServerCore.removeServerLifecycleListener( serverLifecycleListener );
     }
 
-    public static OsgiConnection newOsgiConnection( IServer server )
+    public static BundleDeployer newBundleDeployer( IServer server )
     {
         PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
 
-        return new OsgiConnectionImpl( runtime.getPortalBundle().getJmxRemotePort() );
+        return new BundleDeployer( runtime.getPortalBundle().getJmxRemotePort() );
     }
 
 }

@@ -13,8 +13,8 @@ package com.liferay.ide.server.ui.navigator;
 
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.BundleAPIException;
-import com.liferay.ide.server.core.portal.OsgiBundle;
-import com.liferay.ide.server.core.portal.OsgiConnection;
+import com.liferay.ide.server.core.portal.BundleDeployer;
+import com.liferay.ide.server.core.portal.OSGiBundle;
 import com.liferay.ide.server.ui.BundlesImages;
 
 import java.util.HashMap;
@@ -30,7 +30,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.ui.IServerModule;
-import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -39,7 +38,7 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 {
 
     private static final String BUNDLES_FOLDER_NAME = "OSGi Bundles";
-    private static final Map<String, OsgiConnection> connections = new HashMap<String, OsgiConnection>();
+    private static final Map<String, BundleDeployer> connections = new HashMap<String, BundleDeployer>();
     private static BundlesDecorator instance;
     private static final String LOADING = "Loading...";
     private static final String WORKSPACE_BUNDLES_FOLDER_NAME = "Workspace Bundles";
@@ -61,17 +60,17 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 
     public void decorate( Object element, IDecoration decoration )
     {
-        if( element instanceof OsgiBundle )
+        if( element instanceof OSGiBundle )
         {
-            OsgiBundle bundle = (OsgiBundle) element;
+            OSGiBundle bundle = (OSGiBundle) element;
 
-            if( ! ( bundle instanceof OsgiBundleLoading ) )
+            if( ! ( bundle instanceof OSGiBundleLoading ) )
             {
                 String id = bundle.getId();
                 String state = bundle.getState();
-                Version version = bundle.getVersion();
+                String version = bundle.getVersion();
 
-                decoration.addSuffix( combine( id, state, version.toString() ) );
+                decoration.addSuffix( combine( id, state, version ) );
             }
         }
         else if( element instanceof BundlesFolder )
@@ -106,18 +105,18 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 
             if( server.getServerState() == IServer.STATE_STARTED )
             {
-                final OsgiConnection osgi = getOsgiConnection( server );
+                final BundleDeployer deployer = getDeployer( server );
 
                 //TODO this chould be cached somehow?
-                for( OsgiBundle bundle : osgi.getBundles() )
+                for( OSGiBundle bundle : deployer.listBundles() )
                 {
                     if( module.getModule()[0].getName().equals( bundle.getSymbolicName() ) )
                     {
                         String id = bundle.getId();
                         String state = bundle.getState();
-                        Version version = bundle.getVersion();
+                        String version = bundle.getVersion();
 
-                        decoration.addSuffix( combine( id, state, version.toString() ) );
+                        decoration.addSuffix( combine( id, state, version ) );
                     }
                 }
             }
@@ -131,11 +130,11 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
         {
             return BundlesImages.IMG_BUNDLES_FOLDER;
         }
-        else if( element instanceof OsgiBundle )
+        else if( element instanceof OSGiBundle )
         {
-            OsgiBundle bundle = (OsgiBundle) element;
+            OSGiBundle bundle = (OSGiBundle) element;
 
-            if( bundle instanceof OsgiBundleLoading )
+            if( bundle instanceof OSGiBundleLoading )
             {
                 return BundlesImages.IMG_LOADING;
             }
@@ -148,19 +147,19 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
         return null;
     }
 
-    private OsgiConnection getOsgiConnection( IServer server )
+    private BundleDeployer getDeployer( IServer server )
     {
-        OsgiConnection retval = null;
+        BundleDeployer retval = null;
 
         final String id = server.getId();
 
         if( connections.get( id ) != null )
         {
-            OsgiConnection osgi = connections.get( id );
+            BundleDeployer deployer = connections.get( id );
 
-            if( osgi.ping() )
+            if( deployer.ping() )
             {
-                retval = osgi;
+                retval = deployer;
             }
             else
             {
@@ -171,9 +170,9 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 
         if( retval == null )
         {
-            final OsgiConnection osgi = LiferayServerCore.newOsgiConnection( server );
-            connections.put( id, osgi );
-            retval = osgi;
+            final BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
+            connections.put( id, deployer );
+            retval = deployer;
         }
 
         return retval;
@@ -189,13 +188,13 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
         {
             return new StyledString( BUNDLES_FOLDER_NAME );
         }
-        else if( element instanceof OsgiBundleLoading )
+        else if( element instanceof OSGiBundleLoading )
         {
             return new StyledString( LOADING );
         }
-        else if( element instanceof OsgiBundle )
+        else if( element instanceof OSGiBundle )
         {
-            OsgiBundle bundle = (OsgiBundle) element;
+            OSGiBundle bundle = (OSGiBundle) element;
             return new StyledString( bundle.getSymbolicName() );
         }
         else
@@ -215,13 +214,13 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
         {
             return BUNDLES_FOLDER_NAME;
         }
-        else if( element instanceof OsgiBundleLoading )
+        else if( element instanceof OSGiBundleLoading )
         {
             return LOADING;
         }
-        else if( element instanceof OsgiBundle )
+        else if( element instanceof OSGiBundle )
         {
-            OsgiBundle definitionNode = (OsgiBundle) element;
+            OSGiBundle definitionNode = (OSGiBundle) element;
 
             return definitionNode.getSymbolicName();
         }

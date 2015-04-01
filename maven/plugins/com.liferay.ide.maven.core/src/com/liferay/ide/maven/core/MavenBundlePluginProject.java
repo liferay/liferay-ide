@@ -39,6 +39,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  */
 public class MavenBundlePluginProject extends LiferayMavenProject implements IBundleProject
 {
+    private final String[] ignorePaths = new String[] { "target" };
 
     public MavenBundlePluginProject( IProject project )
     {
@@ -152,7 +153,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     @Override
     public boolean filterResource( IPath resourcePath )
     {
-        if( resourcePath.segmentCount() > 0 && resourcePath.segment( 0 ).equals( "target" ) )
+        if( filterResource( resourcePath, ignorePaths ) )
         {
             return true;
         }

@@ -68,18 +68,18 @@ public class PortalPublishTask extends PublishTaskDelegate
         }
     }
 
-    private OsgiBundle[] getExistingBundles( IServer server )
+    private OSGiBundle[] getExistingBundles( IServer server )
     {
         try
         {
-            final OsgiConnection osgiConnection = LiferayServerCore.newOsgiConnection( server );
-            return osgiConnection.getBundles();
+            final BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
+            return deployer.listBundles();
         }
         catch( IllegalArgumentException e )
         {
         }
 
-        return new OsgiBundle[0];
+        return new OSGiBundle[0];
     }
 
     @SuppressWarnings( "rawtypes" )
@@ -90,7 +90,7 @@ public class PortalPublishTask extends PublishTaskDelegate
         final PortalServerBehavior serverBehavior =
             (PortalServerBehavior) server.loadAdapter( PortalServerBehavior.class, null );
 
-        final OsgiBundle[] existingBundles = getExistingBundles( server );
+        final OSGiBundle[] existingBundles = getExistingBundles( server );
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {

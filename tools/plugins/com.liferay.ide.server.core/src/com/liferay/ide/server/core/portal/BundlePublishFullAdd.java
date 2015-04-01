@@ -127,11 +127,21 @@ public class BundlePublishFullAdd extends BundlePublishOperation
     {
         IStatus retval = null;
 
-        final OsgiConnection osgi = getOsgiConnection();
+        final BundleDeployer deployer = getBundleDeployer();
 
         if( output != null && output.toFile().exists() )
         {
-            retval = osgi.deployBundle( bsn, output.toPortableString(), output.toFile() );
+            try
+            {
+                long bundleId = deployer.deployBundle( bsn, output.toFile() );
+
+                retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) bundleId, null, null );
+            }
+            catch( Exception e )
+            {
+                retval = LiferayServerCore.error( "Unable to deploy bundle remotely " +
+                    output.toPortableString(), e );
+            }
         }
         else
         {

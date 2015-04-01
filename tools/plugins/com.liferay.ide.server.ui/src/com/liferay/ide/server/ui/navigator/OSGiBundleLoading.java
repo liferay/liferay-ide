@@ -14,18 +14,18 @@
  *******************************************************************************/
 package com.liferay.ide.server.ui.navigator;
 
-import com.liferay.ide.server.core.portal.OsgiBundle;
+import com.liferay.ide.server.core.portal.OSGiBundle;
 
 
 /**
  * @author Gregory Amerson
  */
-public class OsgiBundleLoading extends OsgiBundle
+public class OSGiBundleLoading extends OSGiBundle
 {
 
-    public OsgiBundleLoading()
+    public OSGiBundleLoading()
     {
-        super( null, null, null, null );
+        super( 0, "" );
     }
 
 }

@@ -18,8 +18,8 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.OsgiBundle;
-import com.liferay.ide.server.core.portal.OsgiConnection;
+import com.liferay.ide.server.core.portal.BundleDeployer;
+import com.liferay.ide.server.core.portal.OSGiBundle;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -44,10 +44,10 @@ public class BundlesFolder
 {
 
     private Job cacheBundlesJob;
-    private OsgiBundle[] cachedBundles;
+    private OSGiBundle[] cachedBundles;
     private final ICommonContentExtensionSite config;
     private IStatus currentStatus;
-    private OsgiBundle[] loading = new OsgiBundle[] { new OsgiBundleLoading() };
+    private OSGiBundle[] loading = new OSGiBundle[] { new OSGiBundleLoading() };
     private final IServer server;
 
     public BundlesFolder( ICommonContentExtensionSite config, IServer server )
@@ -56,12 +56,12 @@ public class BundlesFolder
         this.server = server;
     }
 
-    protected boolean filter( final OsgiBundle bundle )
+    protected boolean filter( final OSGiBundle bundle )
     {
         return bundle != null;
     }
 
-    public synchronized OsgiBundle[] getBundles()
+    public synchronized OSGiBundle[] getBundles()
     {
         if( this.server.getServerState() != IServer.STATE_STARTED )
         {
@@ -88,7 +88,7 @@ public class BundlesFolder
         return this.currentStatus;
     }
 
-    protected boolean isWorkspaceBundle( final OsgiBundle bundle )
+    protected boolean isWorkspaceBundle( final OSGiBundle bundle )
     {
         final String bundleName = bundle.getSymbolicName();
 
@@ -118,24 +118,24 @@ public class BundlesFolder
     {
         if( cacheBundlesJob == null )
         {
-            cacheBundlesJob = new Job( "Loading osgi bundles..." )
+            cacheBundlesJob = new Job( "Loading OSGi bundles..." )
             {
                 @Override
                 protected IStatus run( IProgressMonitor monitor )
                 {
-                    currentStatus = LiferayServerCore.info( "Loading osgi bundles..." );
+                    currentStatus = LiferayServerCore.info( "Loading OSGi bundles..." );
 
-                    final OsgiConnection osgi = LiferayServerCore.newOsgiConnection( server );
+                    final BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
 
-                    List<OsgiBundle> bundlesToShow = new ArrayList<OsgiBundle>();
+                    List<OSGiBundle> bundlesToShow = new ArrayList<OSGiBundle>();
 
                     IStatus errorStatus = null;
 
                     try
                     {
-                        OsgiBundle[] bundles = osgi.getBundles();
+                        OSGiBundle[] bundles = deployer.listBundles();
 
-                        for( OsgiBundle bundle : bundles )
+                        for( OSGiBundle bundle : bundles )
                         {
                             if( filter( bundle ) )
                             {
@@ -143,7 +143,7 @@ public class BundlesFolder
                             }
                         }
 
-                        cachedBundles = bundlesToShow.toArray( new OsgiBundle[0] );
+                        cachedBundles = bundlesToShow.toArray( new OSGiBundle[0] );
                     }
                     catch( Exception e )
                     {
