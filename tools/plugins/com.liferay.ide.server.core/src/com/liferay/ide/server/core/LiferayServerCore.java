@@ -48,6 +48,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.IRuntimeType;
@@ -60,6 +61,7 @@ import org.eclipse.wst.server.core.internal.IMemento;
 import org.eclipse.wst.server.core.internal.XMLMemento;
 import org.eclipse.wst.server.core.model.RuntimeDelegate;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * The activator class controls the plugin life cycle
@@ -264,6 +266,18 @@ public class LiferayServerCore extends Plugin
         return pluginPublishers;
     }
 
+    /**
+     * Return the install location preference.
+     * 
+     * @param id a runtime type id
+     * @return the install location
+     */
+    
+    public static String getPreference(String id) 
+    {
+        return InstanceScope.INSTANCE.getNode( PLUGIN_ID ).get( id, "" );
+    }
+    
     public static PortalLaunchParticipant[] getPortalLaunchParticipants()
     {
         PortalLaunchParticipant[] retval = null;
@@ -797,6 +811,25 @@ public class LiferayServerCore extends Plugin
         }
     }
 
+    /**
+     * Set the install location preference.
+     * 
+     * @param id the runtimt type id
+     * @param value the location
+     */
+    public static void setPreference(String id, String value) 
+    {
+        try
+        {
+            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).put( id, value );
+            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).flush();
+        }
+        catch( BackingStoreException e )
+        {
+            LiferayServerCore.logError( "Unable to save preference", e );
+        }
+    }    
+    
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )

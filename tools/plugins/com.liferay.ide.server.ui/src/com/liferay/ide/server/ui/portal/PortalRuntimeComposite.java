@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
@@ -21,11 +21,18 @@ import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.SWTUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstallType;
+import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -33,6 +40,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
@@ -43,14 +52,24 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class PortalRuntimeComposite extends Composite implements ModifyListener
 {
 
     private Text dirField;
+
+    private List<IVMInstall> installedJREs;
+    private String[] jreNames;
+    private Button jreButton;
+    private Combo jreCombo;
+    private Label jreLabel;
+
     private Text nameField;
+
     private IRuntimeWorkingCopy runtimeWC;
     private Text typeField;
+
     private final IWizardHandle wizard;
 
     public PortalRuntimeComposite( Composite parent, IWizardHandle wizard )
@@ -58,9 +77,8 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         super( parent, SWT.NONE );
         this.wizard = wizard;
 
-        wizard.setTitle( "Liferay Portal Runtime" );
-        wizard.setDescription( "Liferay Portal Runtime" );
-        wizard.setDescription( "Specify the installation directory of the Liferay Portal bundle." );
+        wizard.setTitle( Msgs.liferayPortalRuntime );
+        wizard.setDescription( Msgs.specifyInstallationDirectory );
         wizard.setImageDescriptor( LiferayServerUI.getImageDescriptor( LiferayServerUI.IMG_WIZ_RUNTIME ) );
 
         createControl( parent );
@@ -74,24 +92,26 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         setBackground( parent.getBackground() );
         createFields();
 
+        enableJREControls( false );
+
         Dialog.applyDialogFont( this );
     }
 
     private void createFields()
     {
-        this.nameField = createTextField( "Name" );
+        this.nameField = createTextField( Msgs.name );
         this.nameField.addModifyListener( this );
 
-        this.dirField = createTextField( "Liferay Portal Bundle Directory" );
+        this.dirField = createTextField( Msgs.liferayPortalRuntimeDirectory );
         this.dirField.addModifyListener( this );
 
-        SWTUtil.createButton( this, "Browse..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( this, Msgs.browse ).addSelectionListener( new SelectionAdapter()
         {
             @Override
             public void widgetSelected( SelectionEvent e )
             {
                 final DirectoryDialog dd = new DirectoryDialog( getShell() );
-                dd.setMessage( "Select Liferay Portal bundle directory" );
+                dd.setMessage( Msgs.selectLiferayPortalDirectory );
 
                 final String selectedDir = dd.open();
 
@@ -102,7 +122,50 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
             }
         });
 
-        this.typeField = createReadOnlyTextField( "Detected bundle type" );
+        this.typeField = createReadOnlyTextField( Msgs.detectedPortalBundleType );
+
+        jreLabel = createLabel( Msgs.selecteRuntimeJRE );
+
+        jreCombo = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
+        jreCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        jreCombo.addSelectionListener( new SelectionAdapter()
+        {
+
+            public void widgetSelected( SelectionEvent e )
+            {
+                int sel = jreCombo.getSelectionIndex();
+
+                IVMInstall vmInstall = null;
+
+                if( sel > 0 )
+                {
+                    vmInstall = (IVMInstall) installedJREs.get( sel - 1 );
+                }
+
+                PortalRuntime portalRuntime = getPortalRuntime();
+
+                if ( portalRuntime!=null)
+                {
+                    portalRuntime.setVMInstall( vmInstall );
+                }
+
+                validate();
+            }
+        } );
+
+        jreButton = SWTUtil.createButton( this, Msgs.installedJREs );
+        jreButton.addSelectionListener( new SelectionAdapter()
+        {
+
+            public void widgetSelected( SelectionEvent e )
+            {
+                if( SWTUtil.showPreferencePage( "org.eclipse.jdt.debug.ui.preferences.VMPreferencePage", getShell() ) ) //$NON-NLS-1$
+                {
+                    updateJREs();
+                    validate();
+                }
+            }
+        } );
     }
 
     protected Label createLabel( String text )
@@ -145,6 +208,13 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         return text;
     }
 
+    protected void enableJREControls( boolean enabled )
+    {
+        jreLabel.setEnabled( enabled );
+        jreCombo.setEnabled( enabled );
+        jreButton.setEnabled( enabled );
+    }
+
     protected PortalRuntime getPortalRuntime()
     {
         return (PortalRuntime) getRuntime().loadAdapter( PortalRuntime.class, null );
@@ -167,6 +237,34 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
             getRuntime().getLocation().toOSString() : StringPool.EMPTY );
 
         updateFields();
+
+        PortalRuntime runtime = getPortalRuntime();
+
+        // set selection
+        if (runtime.isUsingDefaultJRE())
+        {
+            jreCombo.select(0);
+        }
+        else 
+        {
+            boolean found = false;
+            int size = installedJREs.size();
+            for (int i = 0; i < size; i++) 
+            {
+                IVMInstall vmInstall = (IVMInstall) installedJREs.get(i);
+
+                if (vmInstall.equals(runtime.getVMInstall())) 
+                {
+                    jreCombo.select(i + 1);
+                    found = true;
+                }
+            }
+
+            if (!found)
+            {
+                jreCombo.select(0);
+            }
+        }
     }
 
     @Override
@@ -184,6 +282,10 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         updateFields();
 
         validate();
+
+        enableJREControls( true );
+
+        updateJREs();
     }
 
     public void setRuntime( IRuntimeWorkingCopy newRuntime )
@@ -241,4 +343,83 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         }
     }
 
+    protected void updateJREs()
+    {
+        PortalRuntime portalRuntime = getPortalRuntime();
+
+        IVMInstall currentVM = null;
+
+        if ( portalRuntime!=null && portalRuntime.getVMInstall()!=null )
+        {
+            currentVM = portalRuntime.getVMInstall();
+        }
+        else
+        {
+            currentVM = JavaRuntime.getDefaultVMInstall();
+        }
+        
+        int currentJREIndex = -1;
+
+        // get all installed JVMs
+        installedJREs = new ArrayList<IVMInstall>();
+
+        IVMInstallType[] vmInstallTypes = JavaRuntime.getVMInstallTypes();
+
+        int size = vmInstallTypes.length;
+
+        for( int i = 0; i < size; i++ )
+        {
+            IVMInstall[] vmInstalls = vmInstallTypes[i].getVMInstalls();
+
+            int size2 = vmInstalls.length;
+
+            for( int j = 0; j < size2; j++ )
+            {
+                installedJREs.add( vmInstalls[j] );
+            }
+        }
+
+        // get names
+        size = installedJREs.size();
+
+        jreNames = new String[size + 1];
+        jreNames[0] = "<Default Workbench JRE>"; //$NON-NLS-1$
+
+        for( int i = 0; i < size; i++ )
+        {
+            IVMInstall vmInstall = (IVMInstall) installedJREs.get( i );
+
+            jreNames[i + 1] = vmInstall.getName();
+
+            if( vmInstall.equals( currentVM ) )
+            {
+                currentJREIndex = i + 1;
+            }
+        }
+
+        if( jreCombo != null )
+        {
+            jreCombo.setItems( jreNames );
+            jreCombo.select( currentJREIndex );
+         }
+    }
+
+
+    private static class Msgs extends NLS
+    {
+        public static String browse;
+        public static String detectedPortalBundleType;
+        public static String installedJREs;
+        public static String liferayPortalRuntime;
+        public static String liferayPortalRuntimeDirectory;
+        public static String name;
+        public static String selecteRuntimeJRE;
+        public static String selectLiferayPortalDirectory;
+        public static String specifyInstallationDirectory;
+
+        static
+        {
+            initializeMessages( PortalRuntimeComposite.class.getName(), Msgs.class );
+        }
+    }
 }

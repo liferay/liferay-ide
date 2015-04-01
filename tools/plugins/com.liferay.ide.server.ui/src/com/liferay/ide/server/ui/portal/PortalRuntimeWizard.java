@@ -15,6 +15,9 @@
 
 package com.liferay.ide.server.ui.portal;
 
+import com.liferay.ide.server.core.LiferayServerCore;
+
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
@@ -24,6 +27,7 @@ import org.eclipse.wst.server.ui.wizard.WizardFragment;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class PortalRuntimeWizard extends WizardFragment
 {
@@ -55,6 +59,17 @@ public class PortalRuntimeWizard extends WizardFragment
             (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
 
         this.composite.setRuntime(runtime);
+    }
+
+    public void exit()
+    {
+        IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
+        IPath path = runtime.getLocation();
+     
+        if( runtime.validate( null ).getSeverity() != IStatus.ERROR )
+        {
+            LiferayServerCore.setPreference( "location." + runtime.getRuntimeType().getId(), path.toPortableString() );
+        }
     }
 
     @Override
