@@ -15,6 +15,8 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.osgi.framework.dto.BundleDTO;
+
 /**
  * @author Gregory Amerson
  */
@@ -61,9 +63,9 @@ public class BundleDeployer {
 
         long bundleId = -1;
 
-        for (OSGiBundle osgiBundle : listBundles()) {
-            if (osgiBundle.symbolicName.equals(bsn)) {
-                bundleId = osgiBundle.id;
+        for (BundleDTO BundleDTO : listBundles()) {
+            if (BundleDTO.symbolicName.equals(bsn)) {
+                bundleId = BundleDTO.id;
                 break;
             }
         }
@@ -120,8 +122,8 @@ public class BundleDeployer {
         return null;
     }
 
-    public OSGiBundle[] listBundles() {
-        final List<OSGiBundle> retval = new ArrayList<OSGiBundle>();
+    public BundleDTO[] listBundles() {
+        final List<BundleDTO> retval = new ArrayList<BundleDTO>();
 
         try {
             final ObjectName bundleState = getBundleState();
@@ -155,20 +157,21 @@ public class BundleDeployer {
             e.printStackTrace();
         }
 
-        return retval.toArray(new OSGiBundle[0]);
+        return retval.toArray(new BundleDTO[0]);
     }
 
-    private static OSGiBundle newFromData(CompositeData cd) {
-        final long identifier = Long.parseLong(cd.get("Identifier").toString());
-        final String symbolicName = cd.get("SymbolicName").toString();
+    private static BundleDTO newFromData(CompositeData cd) {
+        final BundleDTO bundle = new BundleDTO();
+        bundle.id = Long.parseLong(cd.get("Identifier").toString());
+        bundle.symbolicName = cd.get("SymbolicName").toString();
 
-        return new OSGiBundle(identifier, symbolicName);
+        return bundle;
     }
 
     public void uninstallBundle(String bsn) throws Exception {
-        for (OSGiBundle osgiBundle : listBundles()) {
-            if (osgiBundle.symbolicName.equals(bsn)) {
-                uninstallBundle(osgiBundle.id);
+        for (BundleDTO BundleDTO : listBundles()) {
+            if (BundleDTO.symbolicName.equals(bsn)) {
+                uninstallBundle(BundleDTO.id);
 
                 return;
             }

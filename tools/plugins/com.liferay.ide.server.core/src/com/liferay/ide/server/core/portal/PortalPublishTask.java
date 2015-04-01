@@ -31,6 +31,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.PublishOperation;
 import org.eclipse.wst.server.core.model.PublishTaskDelegate;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Gregory Amerson
@@ -68,7 +69,7 @@ public class PortalPublishTask extends PublishTaskDelegate
         }
     }
 
-    private OSGiBundle[] getExistingBundles( IServer server )
+    private BundleDTO[] getExistingBundles( IServer server )
     {
         try
         {
@@ -79,7 +80,7 @@ public class PortalPublishTask extends PublishTaskDelegate
         {
         }
 
-        return new OSGiBundle[0];
+        return new BundleDTO[0];
     }
 
     @SuppressWarnings( "rawtypes" )
@@ -90,7 +91,7 @@ public class PortalPublishTask extends PublishTaskDelegate
         final PortalServerBehavior serverBehavior =
             (PortalServerBehavior) server.loadAdapter( PortalServerBehavior.class, null );
 
-        final OSGiBundle[] existingBundles = getExistingBundles( server );
+        final BundleDTO[] existingBundles = getExistingBundles( server );
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {

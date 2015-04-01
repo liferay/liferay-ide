@@ -14,18 +14,13 @@
  *******************************************************************************/
 package com.liferay.ide.server.ui.navigator;
 
-import com.liferay.ide.server.core.portal.OSGiBundle;
+import org.osgi.framework.dto.BundleDTO;
 
 
 /**
  * @author Gregory Amerson
  */
-public class OSGiBundleLoading extends OSGiBundle
+public class BundleDTOLoading extends BundleDTO
 {
-
-    public OSGiBundleLoading()
-    {
-        super( 0, "" );
-    }
 
 }

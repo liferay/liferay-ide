@@ -19,7 +19,6 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.BundleDeployer;
-import com.liferay.ide.server.core.portal.OSGiBundle;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -35,6 +34,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.wst.server.core.IServer;
+import org.osgi.framework.dto.BundleDTO;
 
 
 /**
@@ -44,10 +44,10 @@ public class BundlesFolder
 {
 
     private Job cacheBundlesJob;
-    private OSGiBundle[] cachedBundles;
+    private BundleDTO[] cachedBundles;
     private final ICommonContentExtensionSite config;
     private IStatus currentStatus;
-    private OSGiBundle[] loading = new OSGiBundle[] { new OSGiBundleLoading() };
+    private BundleDTO[] loading = new BundleDTO[] { new BundleDTOLoading() };
     private final IServer server;
 
     public BundlesFolder( ICommonContentExtensionSite config, IServer server )
@@ -56,12 +56,12 @@ public class BundlesFolder
         this.server = server;
     }
 
-    protected boolean filter( final OSGiBundle bundle )
+    protected boolean filter( final BundleDTO bundle )
     {
         return bundle != null;
     }
 
-    public synchronized OSGiBundle[] getBundles()
+    public synchronized BundleDTO[] getBundles()
     {
         if( this.server.getServerState() != IServer.STATE_STARTED )
         {
@@ -88,11 +88,11 @@ public class BundlesFolder
         return this.currentStatus;
     }
 
-    protected boolean isWorkspaceBundle( final OSGiBundle bundle )
+    protected boolean isWorkspaceBundle( final BundleDTO bundle )
     {
-        final String bundleName = bundle.getSymbolicName();
+        final String bsn = bundle.symbolicName;
 
-        if( bundleName != null )
+        if( bsn != null )
         {
             for( final IProject project : CoreUtil.getAllProjects() )
             {
@@ -100,7 +100,7 @@ public class BundlesFolder
 
                 try
                 {
-                    if( bundleProject != null && bundleName.equals( bundleProject.getSymbolicName() ) )
+                    if( bundleProject != null && bsn.equals( bundleProject.getSymbolicName() ) )
                     {
                         return true;
                     }
@@ -127,15 +127,15 @@ public class BundlesFolder
 
                     final BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
 
-                    List<OSGiBundle> bundlesToShow = new ArrayList<OSGiBundle>();
+                    List<BundleDTO> bundlesToShow = new ArrayList<BundleDTO>();
 
                     IStatus errorStatus = null;
 
                     try
                     {
-                        OSGiBundle[] bundles = deployer.listBundles();
+                        BundleDTO[] bundles = deployer.listBundles();
 
-                        for( OSGiBundle bundle : bundles )
+                        for( BundleDTO bundle : bundles )
                         {
                             if( filter( bundle ) )
                             {
@@ -143,7 +143,7 @@ public class BundlesFolder
                             }
                         }
 
-                        cachedBundles = bundlesToShow.toArray( new OSGiBundle[0] );
+                        cachedBundles = bundlesToShow.toArray( new BundleDTO[0] );
                     }
                     catch( Exception e )
                     {

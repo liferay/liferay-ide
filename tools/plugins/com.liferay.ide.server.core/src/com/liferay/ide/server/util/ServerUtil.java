@@ -24,7 +24,6 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.OSGiBundle;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
@@ -72,6 +71,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 import org.osgi.framework.Version;
+import org.osgi.framework.dto.BundleDTO;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -87,11 +87,11 @@ import org.w3c.dom.NodeList;
 public class ServerUtil
 {
 
-    public static boolean bsnExists( String bsn, OSGiBundle[] bundles )
+    public static boolean bsnExists( String bsn, BundleDTO[] bundles )
     {
-        for( OSGiBundle bundle : bundles )
+        for( BundleDTO bundle : bundles )
         {
-            if( bundle.getSymbolicName().equals( bsn ) )
+            if( bundle.symbolicName.equals( bsn ) )
             {
                 return true;
             }

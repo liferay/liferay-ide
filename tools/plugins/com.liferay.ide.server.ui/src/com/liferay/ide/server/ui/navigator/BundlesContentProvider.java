@@ -16,7 +16,6 @@ package com.liferay.ide.server.ui.navigator;
 
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.BundleDeployer;
-import com.liferay.ide.server.core.portal.OSGiBundle;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.navigator.AbstractNavigatorContentProvider;
@@ -31,6 +30,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.navigator.PipelinedViewerUpdate;
 import org.eclipse.wst.server.core.IServer;
+import org.osgi.framework.dto.BundleDTO;
 
 
 /**
@@ -133,7 +133,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
             final BundlesFolder bundlesFolder = (BundlesFolder) element;
             retval = bundlesFolder.getParent();
         }
-        else if( element instanceof OSGiBundle )
+        else if( element instanceof BundleDTO )
         {
             retval = null;
         }

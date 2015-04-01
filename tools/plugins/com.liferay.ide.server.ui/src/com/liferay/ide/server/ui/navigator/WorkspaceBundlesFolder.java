@@ -14,10 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.server.ui.navigator;
 
-import com.liferay.ide.server.core.portal.OSGiBundle;
-
 import org.eclipse.ui.navigator.ICommonContentExtensionSite;
 import org.eclipse.wst.server.core.IServer;
+import org.osgi.framework.dto.BundleDTO;
 
 
 /**
@@ -32,7 +31,7 @@ public class WorkspaceBundlesFolder extends BundlesFolder
     }
 
     @Override
-    protected boolean filter( OSGiBundle bundle )
+    protected boolean filter( BundleDTO bundle )
     {
         return bundle != null && isWorkspaceBundle( bundle );
     }
