@@ -344,9 +344,15 @@
       </image>
       <image
             category="liferay.plugins"
+            facet="liferay.theme"
+            path="icons/e16/theme.png">
+      </image>
+      <image
+            category="liferay.plugins"
             path="icons/e16/liferay.png">
       </image>
    </extension>
+
    <extension
          point="org.eclipse.wst.common.project.facet.ui.wizardPages">
       <wizard-pages

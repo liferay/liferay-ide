@@ -33,7 +33,4 @@
 
     <packaging>pom</packaging>
 
-    <modules>
-        <module>com.liferay.ide.alloy.core.tests</module>
-    </modules>
 </project>

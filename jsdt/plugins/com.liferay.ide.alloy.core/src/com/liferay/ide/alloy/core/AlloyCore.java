@@ -28,8 +28,6 @@ import org.osgi.framework.BundleContext;
 public class AlloyCore extends Plugin
 {
 
-    private static LautRunner lautRunner;
-
     // The shared instance
     private static AlloyCore plugin;
 
@@ -66,16 +64,6 @@ public class AlloyCore extends Plugin
         return plugin;
     }
 
-
-    public static LautRunner getLautRunner()
-    {
-        if( lautRunner == null )
-        {
-            lautRunner = new LautRunner();
-        }
-
-        return lautRunner;
-    }
 
     public static void logError( Exception ex )
     {

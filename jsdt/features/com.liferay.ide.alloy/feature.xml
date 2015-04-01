@@ -4,7 +4,7 @@
       label="Liferay IDE AlloyUI"
       version="3.0.0.qualifier"
       provider-name="Liferay, Inc."
-      plugin="com.liferay.ide.alloy.branding">
+      plugin="com.liferay.ide.alloy.ui">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
       Liferay IDE AlloyUI includes javascript development tooling for AlloyUI framework including Tern integration, and css webresources feature.
@@ -32,20 +32,13 @@
    </license>
 
    <requires>
-      <import feature="com.liferay.ide.common" version="2.2.0" match="greaterOrEqual"/>
-      <import feature="com.liferay.ide.eclipse.tools" version="2.2.0" match="greaterOrEqual"/>
-      <import feature="tern-feature" version="0.7.0" match="greaterOrEqual"/>
-      <import feature="tern-jsdt-feature" version="0.7.0" match="greaterOrEqual"/>
-      <import feature="tern-server-nodejs-feature" version="0.7.0" match="greaterOrEqual"/>
-      <import feature="tern.eclipse.ide.server.nodejs.embed" version="0.7.0" match="greaterOrEqual"/>
+      <import feature="com.liferay.ide.common" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="tern-feature" version="0.9.0" match="greaterOrEqual"/>
+      <import feature="tern-jsdt-feature" version="0.9.0" match="greaterOrEqual"/>
+      <import feature="tern-server-nodejs-feature" version="0.9.0" match="greaterOrEqual"/>
+      <import feature="tern.eclipse.ide.server.nodejs.embed" version="0.9.0" match="greaterOrEqual"/>
    </requires>
-
-   <plugin
-         id="com.liferay.ide.alloy.branding"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="com.liferay.ide.alloy.core"
@@ -61,50 +54,4 @@
          version="0.0.0"
          unpack="false"/>
 
-<!--
-   <plugin
-         id="com.liferay.laut.linux.gtk.x86"
-         os="linux"
-         ws="gtk"
-         arch="x86"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="com.liferay.laut.linux.gtk.x86_64"
-         os="linux"
-         ws="gtk"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="com.liferay.laut.macosx.cocoa.x86_64"
-         os="macosx"
-         ws="cocoa"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="com.liferay.laut.win32.win32.x86"
-         os="win32"
-         ws="win32"
-         arch="x86"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="com.liferay.laut.win32.win32.x86_64"
-         os="win32"
-         ws="win32"
-         arch="x86_64"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
--->
 </feature>

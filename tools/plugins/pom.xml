@@ -53,7 +53,6 @@
         <module>com.liferay.ide.service.core</module>
         <module>com.liferay.ide.service.ui</module>
         <module>com.liferay.ide.theme.core</module>
-        <module>com.liferay.ide.theme.ui</module>
         <module>com.liferay.ide.ui.snippets</module>
         <module>com.liferay.ide.xml.search.ui</module>
     </modules>
