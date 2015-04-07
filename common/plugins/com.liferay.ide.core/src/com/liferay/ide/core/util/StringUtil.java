@@ -19,6 +19,7 @@ import static com.liferay.ide.core.util.StringPool.DOUBLE_QUOTE_CHAR;
 
 /**
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 public class StringUtil
 {
@@ -36,6 +37,33 @@ public class StringUtil
 
         return( ( firstChar == SINGLE_QUOTE_CHAR && lastChar == SINGLE_QUOTE_CHAR ) ||
                 ( firstChar == DOUBLE_QUOTE_CHAR && lastChar == DOUBLE_QUOTE_CHAR ) );
+    }
+
+    public static String merge( String[] array, String delimiter )
+    {
+        if( array == null )
+        {
+            return null;
+        }
+
+        if( array.length == 0 )
+        {
+            return StringPool.BLANK;
+        }
+
+        StringBuilder sb = new StringBuilder( 2 * array.length - 1 );
+
+        for( int i = 0; i < array.length; i++ )
+        {
+            if( i != 0 )
+            {
+                sb.append( delimiter );
+            }
+
+            sb.append( array[i] );
+        }
+
+        return sb.toString();
     }
 
     public static String replace( String content, String source, String target )

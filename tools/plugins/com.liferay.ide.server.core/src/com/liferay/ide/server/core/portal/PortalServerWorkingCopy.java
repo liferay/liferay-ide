@@ -15,25 +15,19 @@
 
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.server.core.LiferayServerCore;
-
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import com.liferay.ide.server.core.ILiferayServerWorkingCopy;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface PortalServerConstants
+public interface PortalServerWorkingCopy extends PortalServer, ILiferayServerWorkingCopy
 {
-    IEclipsePreferences _defaultPrefs = DefaultScope.INSTANCE.getNode( LiferayServerCore.PLUGIN_ID );
 
-    boolean DEFAULT_DEVELOPER_MODE = false;
+    public void setDeveloperMode( boolean developmentMode );
 
-    boolean DEFAULT_LAUNCH_SETTING = true;
+    public void setExternalProperties( String externalProperties );
 
-    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m" );
+    public void setLaunchSettings( boolean launchSettings );
 
-    String DEFAULT_USERNAME = "test@liferay.com";
-
+    public void setMemoryArgs( String memoryArgs );
 }

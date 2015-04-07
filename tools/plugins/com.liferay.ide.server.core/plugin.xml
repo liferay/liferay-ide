@@ -78,6 +78,8 @@
             name="Liferay 7.x"
             runtime="true"
             runtimeTypeId="com.liferay.ide.server.portal.runtime"
+            startTimeout="900000"
+            stopTimeout="300000"
             supportsRemoteHosts="true">
       </serverType>
    </extension>

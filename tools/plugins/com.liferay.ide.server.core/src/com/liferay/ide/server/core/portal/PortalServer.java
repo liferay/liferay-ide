@@ -12,19 +12,39 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.server.core.ILiferayServer;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
-public interface PortalServer
+public interface PortalServer extends ILiferayServer
 {
 
     String START = "start";
     String STOP = "stop";
+
+    String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
+
     String PROPERTY_MEMORY_ARGS = "memoryArgs";
-    
+
+    String PROPERTY_SERVER_MODE = "serverMode";
+
+    String PROPERTY_LAUNCH_SETTINGS = "launchSettings";
+
+    String PROPERTY_DEVELOPER_MODE = "developerMode";
+
+    int getAutoPublishTime();
+
+    boolean getDeveloperMode();
+
+    String getExternalProperties();
+
+    boolean getLaunchSettings();
+
     String[] getMemoryArgs();
 
 }
