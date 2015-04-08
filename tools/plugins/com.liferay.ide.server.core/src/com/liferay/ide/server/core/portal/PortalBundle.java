@@ -12,13 +12,14 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.server.core.portal;
 
 import org.eclipse.core.runtime.IPath;
 
-
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public interface PortalBundle
 {
@@ -29,16 +30,21 @@ public interface PortalBundle
 
     IPath getLiferayHome();
 
+    String getMainClass();
+    
     IPath getModulesPath();
 
     IPath[] getRuntimeClasspath();
 
-    String[] getRuntimeProgArgs( String launchMode );
+    String[] getRuntimeStartVMArgs();
 
-    String[] getRuntimeVMArgs();
+    String[] getRuntimeStopVMArgs();
+
+    String[] getRuntimeStartProgArgs();
+
+    String[] getRuntimeStopProgArgs();
 
     String getType();
 
     String getVersion();
-
 }

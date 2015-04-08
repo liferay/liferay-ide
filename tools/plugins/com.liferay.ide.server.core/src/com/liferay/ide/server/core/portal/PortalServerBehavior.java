@@ -50,8 +50,9 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-@SuppressWarnings( "restriction" )
+@SuppressWarnings( {"restriction","rawtypes"} )
 public class PortalServerBehavior extends ServerBehaviourDelegate implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants
 {
     private static final String[] JMX_EXCLUDE_ARGS = new String []
@@ -123,10 +124,10 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
                 setServerState( IServer.STATE_STOPPING );
             }
 
-            final ILaunchConfiguration launchConfig = ( (Server) getServer() ).getLaunchConfiguration( true, null );
+            final ILaunchConfiguration launchConfig = ( (Server) getServer() ).getLaunchConfiguration( false, null );
             final ILaunchConfigurationWorkingCopy wc = launchConfig.getWorkingCopy();
 
-            final String args = renderCommandLine( getRuntimeProgArgs( "stop" ), " " );
+            final String args = renderCommandLine( getRuntimeStopProgArgs(), " " );
             // Remove JMX arguments if present
             final String existingVMArgs =
                 wc.getAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, (String) null );
@@ -135,9 +136,13 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
             {
                 wc.setAttribute(
                     IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS,
-                    mergeArguments( existingVMArgs, new String[] {}, JMX_EXCLUDE_ARGS, false ) );
+                    mergeArguments( existingVMArgs, getRuntimeStopVMArguments(), JMX_EXCLUDE_ARGS, false ) );
             }
-
+            else
+            {
+                wc.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, mergeArguments( existingVMArgs, getRuntimeStopVMArguments(), null, true ) );    
+            }
+            
             wc.setAttribute( IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args );
             wc.setAttribute( "org.eclipse.debug.ui.private", true );
             wc.setAttribute( ATTR_STOP, "true" );
@@ -197,7 +202,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
         throws CoreException
     {
         final String existingProgArgs = launch.getAttribute( ATTR_PROGRAM_ARGUMENTS, (String) null );
-        launch.setAttribute( ATTR_PROGRAM_ARGUMENTS, mergeArguments( existingProgArgs, getRuntimeProgArgs( PortalServer.START ), null, true ) );
+        launch.setAttribute( ATTR_PROGRAM_ARGUMENTS, mergeArguments( existingProgArgs, getRuntimeStartProgArgs(), null, true ) );
 
         final String existingVMArgs = launch.getAttribute( ATTR_VM_ARGUMENTS, (String) null );
 
@@ -208,7 +213,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
 //          parsedVMArgs = DebugPlugin.parseArguments( existingVMArgs );
 //      }
 
-        final String[] configVMArgs = getRuntimeVMArguments();
+        final String[] configVMArgs = getRuntimeStartVMArguments();
         launch.setAttribute( ATTR_VM_ARGUMENTS, mergeArguments( existingVMArgs, configVMArgs, null, false ) );
 
         final PortalRuntime portalRuntime = getPortalRuntime();
@@ -333,6 +338,11 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
         oldCpEntries.add( cpEntry );
     }
 
+    public String getClassToLaunch()
+    {
+        return getPortalRuntime().getPortalBundle().getMainClass();
+    }
+    
     private PortalRuntime getPortalRuntime()
     {
         PortalRuntime retval = null;
@@ -345,17 +355,28 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
         return retval;
     }
 
-    private String[] getRuntimeVMArguments()
+    private String[] getRuntimeStartVMArguments()
     {
         final List<String> retval = new ArrayList<String>();
 
         Collections.addAll( retval, getPortalServer().getMemoryArgs() );
 
-        Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeVMArgs() );
+        Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStartVMArgs() );
 
         return retval.toArray( new String[0] );
     }
 
+    private String[] getRuntimeStopVMArguments()
+    {
+        final List<String> retval = new ArrayList<String>();
+
+        Collections.addAll( retval, getPortalServer().getMemoryArgs() );
+
+        Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStopVMArgs() );
+
+        return retval.toArray( new String[0] );
+    }
+    
     private PortalServer getPortalServer()
     {
         PortalServer retval = null;
@@ -593,15 +614,16 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
         return -1;
     }
 
-    private String[] getRuntimeProgArgs( String launchMode )
+    private String[] getRuntimeStartProgArgs()
     {
-        return getPortalRuntime().getPortalBundle().getRuntimeProgArgs( launchMode );
+        return getPortalRuntime().getPortalBundle().getRuntimeStartProgArgs();
     }
 
-    public String getClassToLaunch()
+    private String[] getRuntimeStopProgArgs()
     {
-        return "org.apache.catalina.startup.Bootstrap";
-    }
+        return getPortalRuntime().getPortalBundle().getRuntimeStopProgArgs();
+    }    
+    
 
     public void launchServer( ILaunch launch, String mode, IProgressMonitor monitor ) throws CoreException
     {

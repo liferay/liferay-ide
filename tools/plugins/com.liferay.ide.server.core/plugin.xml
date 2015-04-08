@@ -214,4 +214,11 @@
             id="com.liferay.ide.server.core.portal.sourcePathComputer">
       </sourcePathComputer>
    </extension>
+   <extension
+         point="com.liferay.ide.server.core.portalBundleFactories">
+      <portalBundle
+            class="com.liferay.ide.server.core.portal.PortalJBossBundleFactory"
+           type="jboss">
+	  </portalBundle>
+   </extension>
 </plugin>

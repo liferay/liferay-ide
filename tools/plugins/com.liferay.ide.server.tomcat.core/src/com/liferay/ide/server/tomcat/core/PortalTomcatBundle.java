@@ -16,9 +16,8 @@
 package com.liferay.ide.server.tomcat.core;
 
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.server.core.portal.AbstractPortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundle;
-import com.liferay.ide.server.core.portal.PortalServer;
-import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,96 +29,20 @@ import org.eclipse.core.runtime.Platform;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class PortalTomcatBundle implements PortalBundle
+public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBundle
 {
-
-    private final IPath autoDeployPath;
-    private final IPath liferayHome;
-    private final IPath modulesPath;
-    private final IPath tomcatPath;
-    private final String version;
-    private final int jmxRemotePort;
-
     public PortalTomcatBundle( IPath path )
     {
-        if( path == null )
-        {
-            throw new IllegalArgumentException( "path cannot be null" );
-        }
-
-        this.tomcatPath = path;
-        this.liferayHome = tomcatPath.append( ".." );
-        this.jmxRemotePort = detectJmxRemotePort();
-
-        this.autoDeployPath = this.liferayHome.append( "deploy" );
-
-        this.version = LiferayTomcatUtil.getVersion( this.tomcatPath, LiferayTomcatUtil.getPortalDir( tomcatPath ) );
-
-        if( this.version != null && this.version.startsWith( "6" ) )
-        {
-            this.modulesPath = this.liferayHome.append( "data/osgi" );
-        }
-        else
-        {
-            this.modulesPath = this.liferayHome.append( "osgi" );
-        }
+       super(path);
     }
 
-    public String[] getRuntimeProgArgs( String launchMode )
-    {
-        final String[] retval = new String[1];
-
-        if( PortalServer.STOP.equals( launchMode ) )
-        {
-            retval[0] = "stop";
-        }
-        else
-        {
-            retval[0] = "start";
-        }
-
-        return retval;
-    }
-
-    public String getType()
-    {
-        return "tomcat";
-    }
-
-    public String[] getRuntimeVMArgs()
-    {
-        final List<String> args = new ArrayList<String>();
-
-        args.add( "-Dcatalina.base=" + this.tomcatPath.toPortableString() );
-        args.add( "-Dcatalina.home=" + this.tomcatPath.toPortableString() );
-        // TODO use dynamic attach API
-        args.add( "-Dcom.sun.management.jmxremote" );
-        args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
-        args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
-        args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
-        args.add( "-Dfile.encoding=UTF8" );
-        args.add( "-Djava.endorsed.dirs=" + this.tomcatPath.append( "endorsed" ).toPortableString() );
-        args.add( "-Djava.io.tmpdir=" + this.tomcatPath.append( "temp" ).toPortableString() );
-        args.add( "-Djava.net.preferIPv4Stack=true" );
-        args.add( "-Djava.util.logging.config.file=" + this.tomcatPath.append( "conf/logging.properties" ) );
-        args.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" );
-        args.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" );
-        args.add( "-Duser.timezone=GMT" );
-
-        return args.toArray( new String[0] );
-    }
-
-    public int getJmxRemotePort()
-    {
-        return this.jmxRemotePort;
-    }
-
-    private int detectJmxRemotePort()
+    protected int detectJmxRemotePort()
     {
         int retval = 8099;
 
-        final IPath setenv = this.tomcatPath.append( "bin/setenv." + getShellExtension() );
+        final IPath setenv = this.bundlePath.append( "bin/setenv." + getShellExtension() );
         final String contents = FileUtil.readContents( setenv.toFile() );
         String port = null;
 
@@ -143,16 +66,31 @@ public class PortalTomcatBundle implements PortalBundle
         return retval;
     }
 
-    private String getShellExtension()
+    @Override
+    public String getMainClass()
     {
-        return Platform.OS_WIN32.equals( Platform.getOS() ) ? "bat" : "sh";
+        return "org.apache.catalina.startup.Bootstrap";
     }
+
+
+    @Override
+    protected IPath getPortalDir( IPath appServerDir )
+    {
+        IPath retval = null;
+
+        if( appServerDir != null )
+        {
+            retval = appServerDir.append( "webapps/ROOT" );
+        }
+
+        return retval;
+    }    
 
     public IPath[] getRuntimeClasspath()
     {
         final List<IPath> paths = new ArrayList<IPath>();
 
-        final IPath binPath = this.tomcatPath.append( "bin" );
+        final IPath binPath = this.bundlePath.append( "bin" );
 
         if( binPath.toFile().exists() )
         {
@@ -169,25 +107,64 @@ public class PortalTomcatBundle implements PortalBundle
         return paths.toArray( new IPath[0] );
     }
 
-    public IPath getAutoDeployPath()
+    @Override
+    public String[] getRuntimeStartProgArgs()
     {
-        return this.autoDeployPath;
-    }
-
-    public IPath getModulesPath()
-    {
-        return this.modulesPath;
-    }
-
-    public IPath getLiferayHome()
-    {
-        return this.liferayHome;
+        final String[] retval = new String[1];
+        retval[0] = "start";
+        return retval;
     }
 
     @Override
-    public String getVersion()
+    public String[] getRuntimeStopProgArgs()
     {
-        return this.version;
+        final String[] retval = new String[1];
+        retval[0] = "stop";
+        return retval;
     }
 
+    @Override
+    public String[] getRuntimeStartVMArgs()
+    {
+        return getRuntimeVMArgs();
+    }
+
+    @Override
+    public String[] getRuntimeStopVMArgs()
+    {
+        return getRuntimeVMArgs();
+    }
+    
+    private String[] getRuntimeVMArgs()
+    {
+        final List<String> args = new ArrayList<String>();
+
+        args.add( "-Dcatalina.base=" + this.bundlePath.toPortableString() );
+        args.add( "-Dcatalina.home=" + this.bundlePath.toPortableString() );
+        // TODO use dynamic attach API
+        args.add( "-Dcom.sun.management.jmxremote" );
+        args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
+        args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
+        args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
+        args.add( "-Dfile.encoding=UTF8" );
+        args.add( "-Djava.endorsed.dirs=" + this.bundlePath.append( "endorsed" ).toPortableString() );
+        args.add( "-Djava.io.tmpdir=" + this.bundlePath.append( "temp" ).toPortableString() );
+        args.add( "-Djava.net.preferIPv4Stack=true" );
+        args.add( "-Djava.util.logging.config.file=" + this.bundlePath.append( "conf/logging.properties" ) );
+        args.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" );
+        args.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" );
+        args.add( "-Duser.timezone=GMT" );
+
+        return args.toArray( new String[0] );
+    }
+    
+    private String getShellExtension()
+    {
+        return Platform.OS_WIN32.equals( Platform.getOS() ) ? "bat" : "sh";
+    }
+
+    public String getType()
+    {
+        return "tomcat";
+    }    
 }
