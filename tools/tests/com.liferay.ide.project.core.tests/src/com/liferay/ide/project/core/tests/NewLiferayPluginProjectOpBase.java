@@ -58,6 +58,7 @@ import org.junit.Test;
 /**
  * @author Gregory Amerson
  * @author Kuo Zhang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
@@ -75,6 +76,22 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals( stripCarriageReturns( expectedIvyXmlContent ), stripCarriageReturns( ivyXmlContent ) );
 
         return jsfProject;
+    }
+
+    protected void checkNewJsfAntProjectXHtmlPagesLocation( IProject jsfProject ) throws Exception
+    {
+        final IFolder docroot = CoreUtil.getDefaultDocrootFolder( jsfProject );
+        final IFolder views = docroot.getFolder( "/WEB-INF/views" );
+
+        assertEquals( true, views.exists() );
+
+        final String contents =
+            CoreUtil.readStreamToString( docroot.getFile( "/WEB-INF/portlet.xml" ).getContents( true ) );
+
+        if( contents.contains( "init-param" ) )
+        {
+            assertEquals( true, contents.contains( "/WEB-INF/views/view.xhtml" ) );
+        }
     }
 
     protected IProject checkNewThemeAntProject( NewLiferayPluginProjectOp op, IProject project, String expectedBuildFile )
@@ -122,6 +139,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         final IFile config = defaultDocroot.getFile( "WEB-INF/faces-config.xml" );
 
         assertEquals( true, config.exists() );
+
+        checkNewJsfAntProjectXHtmlPagesLocation( jsfProject );
 
         return checkNewJsfAntProjectIvyFile( jsfProject, jsfSuite );
     }

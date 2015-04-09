@@ -17,17 +17,21 @@ package com.liferay.ide.portlet.core.jsf;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.portlet.core.BasePortletFramework;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -164,6 +168,36 @@ public class JSFPortletFramework extends BasePortletFramework
             {
                 return PortletCore.createErrorStatus( "Could not copy original web.xml from JSF template in SDK.", e ); //$NON-NLS-1$
             }
+        }
+
+        try
+        {
+            IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
+
+            IFolder views = docroot.getFolder( "views" );
+
+            if( views.exists() )
+            {
+                views.move( docroot.getFolder( "WEB-INF/views" ).getFullPath(), true, monitor );
+
+                IFile portletXml = docroot.getFile( "WEB-INF/portlet.xml" );
+
+                File portletXmlFile = portletXml.getLocation().toFile();
+
+                String contents = FileUtil.readContents( portletXmlFile, true );
+
+                if( contents.contains( "init-param" ) )
+                {
+                    contents = contents.replaceAll( "/views/view.xhtml", "/WEB-INF/views/view.xhtml" );
+
+                    portletXml.setContents(
+                        new ByteArrayInputStream( contents.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            return PortletCore.createErrorStatus( e );
         }
 
         return Status.OK_STATUS;

@@ -92,7 +92,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
         }
         else if( CREATE_JSPS_FOLDER.equals( propertyName ) )
         {
-            return "/views/" + getProperty( PORTLET_NAME ).toString().toLowerCase(); //$NON-NLS-1$
+            return "/WEB-INF/views/" + getProperty( PORTLET_NAME ).toString().toLowerCase(); //$NON-NLS-1$
         }
         else if( SHOW_NEW_CLASS_OPTION.equals( propertyName ) )
         {
@@ -188,12 +188,23 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
             return Status.OK_STATUS;
         }
 
+        if( CREATE_JSPS_FOLDER.equals( propertyName ) )
+        {
+            String jspsFolder = getStringProperty( propertyName );
+
+            if( !jspsFolder.startsWith( "/WEB-INF/" ) )
+            {
+                return PortletCore.createErrorStatus( Msgs.jsfFolderValid );
+            }
+        }
+
         return super.validate( propertyName );
     }
 
     private static class Msgs extends NLS
     {
         public static String duplicatePortletName;
+        public static String jsfFolderValid;
         public static String jsfPortletClassValid;
         public static String specifyJSFPortletClass;
 
