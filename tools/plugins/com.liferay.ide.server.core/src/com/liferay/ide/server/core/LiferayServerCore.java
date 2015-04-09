@@ -83,11 +83,11 @@ public class LiferayServerCore extends Plugin
 
     private static IPluginPublisher[] pluginPublishers = null;
 
+    private static PortalBundleFactory[] portalBundleFactories;
+
     private static IRuntimeDelegateValidator[] runtimeDelegateValidators;
 
     private static ILiferayRuntimeStub[] runtimeStubs;
-
-    private static PortalBundleFactory[] portalBundleFactories;
 
 //    private static Map<String, OsgiConnection> osgiConnections;
 //
@@ -150,11 +150,6 @@ public class LiferayServerCore extends Plugin
         return error( e.getMessage(), e );
     }
 
-    public static IStatus error( String msg )
-    {
-        return createErrorStatus( PLUGIN_ID, msg );
-    }
-
     public static IStatus createErrorStatus( String pluginId, String msg )
     {
         return new Status( IStatus.ERROR, pluginId, msg );
@@ -163,16 +158,6 @@ public class LiferayServerCore extends Plugin
     public static IStatus createErrorStatus( String pluginId, String msg, Throwable e )
     {
         return new Status( IStatus.ERROR, pluginId, msg, e );
-    }
-
-    public static IStatus error( String msg, Throwable t )
-    {
-        return new Status( IStatus.ERROR, PLUGIN_ID, msg, t );
-    }
-
-    public static IStatus info( String msg )
-    {
-        return new Status( IStatus.INFO, PLUGIN_ID, msg );
     }
 
     public static IStatus createWarningStatus( String message )
@@ -188,6 +173,16 @@ public class LiferayServerCore extends Plugin
     public static IStatus createWarningStatus( String message, String id, Exception e )
     {
         return new Status( IStatus.WARNING, id, message, e );
+    }
+
+    public static IStatus error( String msg )
+    {
+        return createErrorStatus( PLUGIN_ID, msg );
+    }
+
+    public static IStatus error( String msg, Throwable t )
+    {
+        return new Status( IStatus.ERROR, PLUGIN_ID, msg, t );
     }
 
     /**
@@ -266,16 +261,37 @@ public class LiferayServerCore extends Plugin
         return pluginPublishers;
     }
 
-    /**
-     * Return the install location preference.
-     *
-     * @param key a runtime type id
-     * @return the install location
-     */
-
-    public static String getPreference( String key )
+    public static PortalBundleFactory[] getPortalBundleFactories()
     {
-        return InstanceScope.INSTANCE.getNode( PLUGIN_ID ).get( key, "" );
+        if( portalBundleFactories == null )
+        {
+            final IConfigurationElement[] elements =
+                Platform.getExtensionRegistry().getConfigurationElementsFor( PortalBundleFactory.EXTENSION_ID );
+
+            try
+            {
+                final List<PortalBundleFactory> bundleFactories = new ArrayList<PortalBundleFactory>();
+
+                for( IConfigurationElement element : elements )
+                {
+                    final Object o = element.createExecutableExtension( "class" );
+
+                    if( o instanceof PortalBundleFactory )
+                    {
+                        PortalBundleFactory portalBundleFactory = (PortalBundleFactory) o;
+                        bundleFactories.add( portalBundleFactory );
+                    }
+                }
+
+                portalBundleFactories = bundleFactories.toArray( new PortalBundleFactory[0] );
+            }
+            catch( Exception e )
+            {
+                logError( "Unable to get PortalBundleFactory extensions", e ); //$NON-NLS-1$
+            }
+        }
+
+        return portalBundleFactories;
     }
 
     public static PortalLaunchParticipant[] getPortalLaunchParticipants()
@@ -322,6 +338,18 @@ public class LiferayServerCore extends Plugin
         }
 
         return null;
+    }
+
+    /**
+     * Return the install location preference.
+     *
+     * @param key a runtime type id
+     * @return the install location
+     */
+
+    public static String getPreference( String key )
+    {
+        return InstanceScope.INSTANCE.getNode( PLUGIN_ID ).get( key, "" );
     }
 
     public static IServerManagerConnection getRemoteConnection( final IRemoteServer server )
@@ -412,39 +440,6 @@ public class LiferayServerCore extends Plugin
         return retval;
     }
 
-    public static PortalBundleFactory[] getPortalBundleFactories()
-    {
-        if( portalBundleFactories == null )
-        {
-            final IConfigurationElement[] elements =
-                Platform.getExtensionRegistry().getConfigurationElementsFor( PortalBundleFactory.EXTENSION_ID );
-
-            try
-            {
-                final List<PortalBundleFactory> bundleFactories = new ArrayList<PortalBundleFactory>();
-
-                for( IConfigurationElement element : elements )
-                {
-                    final Object o = element.createExecutableExtension( "class" );
-
-                    if( o instanceof PortalBundleFactory )
-                    {
-                        PortalBundleFactory portalBundleFactory = (PortalBundleFactory) o;
-                        bundleFactories.add( portalBundleFactory );
-                    }
-                }
-
-                portalBundleFactories = bundleFactories.toArray( new PortalBundleFactory[0] );
-            }
-            catch( Exception e )
-            {
-                logError( "Unable to get PortalBundleFactory extensions", e ); //$NON-NLS-1$
-            }
-        }
-
-        return portalBundleFactories;
-    }
-
     public static ILiferayRuntimeStub[] getRuntimeStubs()
     {
         if( runtimeStubs == null )
@@ -490,6 +485,11 @@ public class LiferayServerCore extends Plugin
             prefix + "/" + System.currentTimeMillis() + ( CoreUtil.isNullOrEmpty( fileName ) ? StringPool.EMPTY : "/" + fileName ) ); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
+    public static IStatus info( String msg )
+    {
+        return new Status( IStatus.INFO, PLUGIN_ID, msg );
+    }
+
     public static void logError( Exception e )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, e.getMessage(), e ) );
@@ -505,16 +505,6 @@ public class LiferayServerCore extends Plugin
         logError( error( msg ) );
     }
 
-    public static void logInfo( String msg )
-    {
-        logInfo( info( msg ) );
-    }
-
-    public static void logInfo( IStatus status )
-    {
-        getDefault().getLog().log( status );
-    }
-
     public static void logError( String msg, Throwable e )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, msg, e ) );
@@ -523,6 +513,36 @@ public class LiferayServerCore extends Plugin
     public static void logError( Throwable t )
     {
         getDefault().getLog().log( new Status( IStatus.ERROR, PLUGIN_ID, t.getMessage(), t ) );
+    }
+
+    public static void logInfo( IStatus status )
+    {
+        getDefault().getLog().log( status );
+    }
+
+    public static void logInfo( String msg )
+    {
+        logInfo( info( msg ) );
+    }
+
+    public static BundleDeployer newBundleDeployer( IServer server )
+    {
+        PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
+
+        return new BundleDeployer( runtime.getPortalBundle().getJmxRemotePort() );
+    }
+
+    public static void setPreference( String key, String value )
+    {
+        try
+        {
+            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).put( key, value );
+            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).flush();
+        }
+        catch( BackingStoreException e )
+        {
+            LiferayServerCore.logError( "Unable to save preference", e );
+        }
     }
 
     public static void updateConnectionSettings( IRemoteServer server )
@@ -811,19 +831,6 @@ public class LiferayServerCore extends Plugin
         }
     }
 
-    public static void setPreference( String key, String value )
-    {
-        try
-        {
-            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).put( key, value );
-            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).flush();
-        }
-        catch( BackingStoreException e )
-        {
-            LiferayServerCore.logError( "Unable to save preference", e );
-        }
-    }
-
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
@@ -890,13 +897,6 @@ public class LiferayServerCore extends Plugin
         SDKManager.getInstance().removeSDKListener( this.sdkListener );
         ServerCore.removeRuntimeLifecycleListener( runtimeLifecycleListener );
         ServerCore.removeServerLifecycleListener( serverLifecycleListener );
-    }
-
-    public static BundleDeployer newBundleDeployer( IServer server )
-    {
-        PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
-
-        return new BundleDeployer( runtime.getPortalBundle().getJmxRemotePort() );
     }
 
 }

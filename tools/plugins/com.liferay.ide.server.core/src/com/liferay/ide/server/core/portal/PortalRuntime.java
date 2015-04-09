@@ -42,8 +42,8 @@ import org.eclipse.wst.server.core.model.RuntimeDelegate;
  */
 public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, PropertyChangeListener
 {
-    static final String PROP_VM_INSTALL_TYPE_ID = "vm-install-type-id";
     static final String PROP_VM_INSTALL_ID = "vm-install-id";
+    static final String PROP_VM_INSTALL_TYPE_ID = "vm-install-type-id";
 
     private PortalBundle portalBundle;
 
@@ -208,51 +208,6 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
     }
 
     @Override
-    public void setDefaults( IProgressMonitor monitor )
-    {
-        final IRuntimeType type = getRuntimeWorkingCopy().getRuntimeType();
-
-        if( type != null )
-        {
-            getRuntimeWorkingCopy().setLocation(
-                new Path( LiferayServerCore.getPreference( "location." + type.getId() ) ) );
-        }
-    }
-
-    public void setVMInstall( IVMInstall vmInstall )
-    {
-        if( vmInstall == null )
-        {
-            setVMInstall( null, null );
-        }
-        else
-        {
-            setVMInstall( vmInstall.getVMInstallType().getId(), vmInstall.getId() );
-        }
-    }
-
-    protected void setVMInstall( String typeId, String id )
-    {
-        if( typeId == null )
-        {
-            setAttribute( PROP_VM_INSTALL_TYPE_ID, (String) null );
-        }
-        else
-        {
-            setAttribute( PROP_VM_INSTALL_TYPE_ID, typeId );
-        }
-
-        if( id == null )
-        {
-            setAttribute( PROP_VM_INSTALL_ID, (String) null );
-        }
-        else
-        {
-            setAttribute( PROP_VM_INSTALL_ID, id );
-        }
-    }
-
-    @Override
     protected void initialize()
     {
         super.initialize();
@@ -304,6 +259,51 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
             {
                 initPortalBundle();
             }
+        }
+    }
+
+    @Override
+    public void setDefaults( IProgressMonitor monitor )
+    {
+        final IRuntimeType type = getRuntimeWorkingCopy().getRuntimeType();
+
+        if( type != null )
+        {
+            getRuntimeWorkingCopy().setLocation(
+                new Path( LiferayServerCore.getPreference( "location." + type.getId() ) ) );
+        }
+    }
+
+    public void setVMInstall( IVMInstall vmInstall )
+    {
+        if( vmInstall == null )
+        {
+            setVMInstall( null, null );
+        }
+        else
+        {
+            setVMInstall( vmInstall.getVMInstallType().getId(), vmInstall.getId() );
+        }
+    }
+
+    protected void setVMInstall( String typeId, String id )
+    {
+        if( typeId == null )
+        {
+            setAttribute( PROP_VM_INSTALL_TYPE_ID, (String) null );
+        }
+        else
+        {
+            setAttribute( PROP_VM_INSTALL_TYPE_ID, typeId );
+        }
+
+        if( id == null )
+        {
+            setAttribute( PROP_VM_INSTALL_ID, (String) null );
+        }
+        else
+        {
+            setAttribute( PROP_VM_INSTALL_ID, id );
         }
     }
 
