@@ -268,16 +268,16 @@ public class LiferayServerCore extends Plugin
 
     /**
      * Return the install location preference.
-     * 
-     * @param id a runtime type id
+     *
+     * @param key a runtime type id
      * @return the install location
      */
-    
-    public static String getPreference(String id) 
+
+    public static String getPreference( String key )
     {
-        return InstanceScope.INSTANCE.getNode( PLUGIN_ID ).get( id, "" );
+        return InstanceScope.INSTANCE.getNode( PLUGIN_ID ).get( key, "" );
     }
-    
+
     public static PortalLaunchParticipant[] getPortalLaunchParticipants()
     {
         PortalLaunchParticipant[] retval = null;
@@ -811,25 +811,19 @@ public class LiferayServerCore extends Plugin
         }
     }
 
-    /**
-     * Set the install location preference.
-     * 
-     * @param id the runtimt type id
-     * @param value the location
-     */
-    public static void setPreference(String id, String value) 
+    public static void setPreference( String key, String value )
     {
         try
         {
-            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).put( id, value );
+            InstanceScope.INSTANCE.getNode( PLUGIN_ID ).put( key, value );
             InstanceScope.INSTANCE.getNode( PLUGIN_ID ).flush();
         }
         catch( BackingStoreException e )
         {
             LiferayServerCore.logError( "Unable to save preference", e );
         }
-    }    
-    
+    }
+
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
