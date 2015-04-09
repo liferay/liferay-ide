@@ -58,17 +58,18 @@ public class PortalRuntimeWizard extends WizardFragment
         final IRuntimeWorkingCopy runtime =
             (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
 
-        this.composite.setRuntime(runtime);
+        this.composite.setRuntime( runtime );
     }
 
     public void exit()
     {
         IRuntimeWorkingCopy runtime = (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
         IPath path = runtime.getLocation();
-     
+
         if( runtime.validate( null ).getSeverity() != IStatus.ERROR )
         {
-            LiferayServerCore.setPreference( "location." + runtime.getRuntimeType().getId(), path.toPortableString() );
+            LiferayServerCore.setPreference(
+                "location." + runtime.getRuntimeType().getId(), path.toPortableString() );
         }
     }
 

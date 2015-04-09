@@ -58,15 +58,12 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 {
 
     private Text dirField;
-
     private List<IVMInstall> installedJREs;
     private String[] jreNames;
     private Button jreButton;
     private Combo jreCombo;
     private Label jreLabel;
-
     private Text nameField;
-
     private IRuntimeWorkingCopy runtimeWC;
     private Text typeField;
 
@@ -107,7 +104,6 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
         SWTUtil.createButton( this, Msgs.browse ).addSelectionListener( new SelectionAdapter()
         {
-            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 final DirectoryDialog dd = new DirectoryDialog( getShell() );
@@ -130,7 +126,6 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         jreCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         jreCombo.addSelectionListener( new SelectionAdapter()
         {
-
             public void widgetSelected( SelectionEvent e )
             {
                 int sel = jreCombo.getSelectionIndex();
@@ -151,21 +146,21 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
                 validate();
             }
-        } );
+        });
 
         jreButton = SWTUtil.createButton( this, Msgs.installedJREs );
         jreButton.addSelectionListener( new SelectionAdapter()
         {
-
             public void widgetSelected( SelectionEvent e )
             {
-                if( SWTUtil.showPreferencePage( "org.eclipse.jdt.debug.ui.preferences.VMPreferencePage", getShell() ) ) //$NON-NLS-1$
+                if( SWTUtil.showPreferencePage(
+                    "org.eclipse.jdt.debug.ui.preferences.VMPreferencePage", getShell() ) )
                 {
                     updateJREs();
                     validate();
                 }
             }
-        } );
+        });
     }
 
     protected Label createLabel( String text )
@@ -245,15 +240,16 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         {
             jreCombo.select(0);
         }
-        else 
+        else
         {
             boolean found = false;
             int size = installedJREs.size();
-            for (int i = 0; i < size; i++) 
+
+            for (int i = 0; i < size; i++)
             {
                 IVMInstall vmInstall = (IVMInstall) installedJREs.get(i);
 
-                if (vmInstall.equals(runtime.getVMInstall())) 
+                if (vmInstall.equals(runtime.getVMInstall()))
                 {
                     jreCombo.select(i + 1);
                     found = true;
@@ -357,7 +353,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         {
             currentVM = JavaRuntime.getDefaultVMInstall();
         }
-        
+
         int currentJREIndex = -1;
 
         // get all installed JVMs
@@ -383,7 +379,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         size = installedJREs.size();
 
         jreNames = new String[size + 1];
-        jreNames[0] = "<Default Workbench JRE>"; //$NON-NLS-1$
+        jreNames[0] = Msgs.defaultWorkbenchJRE;
 
         for( int i = 0; i < size; i++ )
         {
@@ -405,9 +401,10 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
     }
 
 
-    private static class Msgs extends NLS
+    static class Msgs extends NLS
     {
         public static String browse;
+        public static String defaultWorkbenchJRE;
         public static String detectedPortalBundleType;
         public static String installedJREs;
         public static String liferayPortalRuntime;
