@@ -246,10 +246,9 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
     public boolean isUsingDefaultJRE()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return getVMInstallTypeId() == null;
     }
-    
+
     private boolean isVMMinimumVersion( String javaVersion, int minimumVersion )
     {
         Integer version = null;
@@ -280,6 +279,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         {
             return false;
         }
+
         return true;
     }
 
@@ -370,17 +370,18 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
         if( portalBundle.getVersion().startsWith( "7" ) )
         {
             IVMInstall vmInstall = getVMInstall();
-            
+
             if( vmInstall instanceof IVMInstall2 )
             {
                 String javaVersion = ( (IVMInstall2) vmInstall ).getJavaVersion();
-                
+
                 if( javaVersion != null && !isVMMinimumVersion( javaVersion, 107 ) )
                 {
                     return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, 0, Msgs.errorJRE70, null );
                 }
             }
         }
+
         return Status.OK_STATUS;
     }
 
