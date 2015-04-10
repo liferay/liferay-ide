@@ -25,7 +25,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.GradleBundlePluginProject;
+import com.liferay.ide.gradle.core.GradleBundleProject;
 import com.liferay.ide.gradle.core.LRGradleCore;
 import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 
@@ -185,7 +185,7 @@ public class GradleProjectTests
 
         assertNotNull( bundleProject );
 
-        assertEquals( GradleBundlePluginProject.class, bundleProject.getClass() );
+        assertEquals( GradleBundleProject.class, bundleProject.getClass() );
 
         assertEquals( 1, consolesAdded[0] );
 
@@ -193,7 +193,7 @@ public class GradleProjectTests
 
         assertNotNull( bundleProject );
 
-        assertEquals( GradleBundlePluginProject.class, bundleProject.getClass() );
+        assertEquals( GradleBundleProject.class, bundleProject.getClass() );
 
         assertEquals( 1, consolesAdded[0] );
 
@@ -261,7 +261,7 @@ public class GradleProjectTests
 
         assertNotNull( bundleProject );
 
-        assertEquals( GradleBundlePluginProject.class, bundleProject.getClass() );
+        assertEquals( GradleBundleProject.class, bundleProject.getClass() );
     }
 
     @Test

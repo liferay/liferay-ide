@@ -52,11 +52,6 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
         return model != null && model.hasPlugin( pluginClass );
     }
 
-    private boolean hasGradleBndPlugin( GradleProject gradleProject )
-    {
-        return false;
-    }
-
     private boolean hasPlugin( GradleProject gradleProject, String pluginClass )
     {
         Boolean retval = null;
@@ -108,13 +103,10 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
             {
                 final GradleProject gradleProject = GradleCore.create( project );
 
-                if( hasPlugin( gradleProject, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
+                if( hasPlugin( gradleProject, "aQute.bnd.gradle.BndBuilderPlugin" ) ||
+                    hasPlugin( gradleProject, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
                 {
-                    return new GradleBundlePluginProject( project );
-                }
-                else if( hasGradleBndPlugin( gradleProject ) )
-                {
-                    return new GradleBndPluginProject( project );
+                    return new GradleBundleProject( project );
                 }
             }
         }

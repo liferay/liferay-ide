@@ -37,11 +37,11 @@ import org.springsource.ide.eclipse.gradle.core.util.JobUtil;
 /**
  * @author Gregory Amerson
  */
-public class GradleBundlePluginProject extends BaseLiferayProject implements IBundleProject
+public class GradleBundleProject extends BaseLiferayProject implements IBundleProject
 {
     private static final String[] ignorePaths = new String[] { ".gradle", "build" };
 
-    public GradleBundlePluginProject( IProject project )
+    public GradleBundleProject( IProject project )
     {
         super( project );
     }
@@ -84,7 +84,6 @@ public class GradleBundlePluginProject extends BaseLiferayProject implements IBu
 
         final GradleRunnable gradleRunnable = new GradleRunnable( task )
         {
-
             @Override
             public void doit( IProgressMonitor mon ) throws Exception
             {
