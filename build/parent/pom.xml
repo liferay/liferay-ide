@@ -37,6 +37,7 @@
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.0.20150325-2013/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/milestones/mars/1.2.0/1.2.0.20150204-1807/</m2e-wtp-site>
+        <m2e-archiver-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.0/N/LATEST/</m2e-archiver-site>
         <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-23/</adt-site>
         <eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.1-SNAPSHOT/</eclipse-xml-search-site>
         <tern-site>http://oss.opensagres.fr/tern.repository/0.9.0-SNAPSHOT/</tern-site>
@@ -106,6 +107,11 @@
             <id>m2e-wtp</id>
             <layout>p2</layout>
             <url>${m2e-wtp-site}</url>
+        </repository>
+        <repository>
+            <id>m2e-archiver</id>
+            <layout>p2</layout>
+            <url>${m2e-archiver-site}</url>
         </repository>
     </repositories>
 
