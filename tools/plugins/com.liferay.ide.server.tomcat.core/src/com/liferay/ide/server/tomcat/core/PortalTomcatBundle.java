@@ -84,7 +84,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
         }
 
         return retval;
-    }    
+    }
 
     public IPath[] getRuntimeClasspath()
     {
@@ -134,7 +134,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     {
         return getRuntimeVMArgs();
     }
-    
+
     private String[] getRuntimeVMArgs()
     {
         final List<String> args = new ArrayList<String>();
@@ -157,7 +157,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
 
         return args.toArray( new String[0] );
     }
-    
+
     private String getShellExtension()
     {
         return Platform.OS_WIN32.equals( Platform.getOS() ) ? "bat" : "sh";
@@ -166,5 +166,5 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     public String getType()
     {
         return "tomcat";
-    }    
+    }
 }

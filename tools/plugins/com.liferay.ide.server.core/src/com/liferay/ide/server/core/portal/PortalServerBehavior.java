@@ -140,9 +140,9 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
             }
             else
             {
-                wc.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, mergeArguments( existingVMArgs, getRuntimeStopVMArguments(), null, true ) );    
+                wc.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, mergeArguments( existingVMArgs, getRuntimeStopVMArguments(), null, true ) );
             }
-            
+
             wc.setAttribute( IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args );
             wc.setAttribute( "org.eclipse.debug.ui.private", true );
             wc.setAttribute( ATTR_STOP, "true" );
@@ -342,7 +342,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
     {
         return getPortalRuntime().getPortalBundle().getMainClass();
     }
-    
+
     private PortalRuntime getPortalRuntime()
     {
         PortalRuntime retval = null;
@@ -376,7 +376,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
 
         return retval.toArray( new String[0] );
     }
-    
+
     private PortalServer getPortalServer()
     {
         PortalServer retval = null;
@@ -622,8 +622,8 @@ public class PortalServerBehavior extends ServerBehaviourDelegate implements ILi
     private String[] getRuntimeStopProgArgs()
     {
         return getPortalRuntime().getPortalBundle().getRuntimeStopProgArgs();
-    }    
-    
+    }
+
 
     public void launchServer( ILaunch launch, String mode, IProgressMonitor monitor ) throws CoreException
     {

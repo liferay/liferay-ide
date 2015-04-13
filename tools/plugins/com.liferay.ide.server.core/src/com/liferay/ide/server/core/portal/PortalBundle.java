@@ -31,7 +31,7 @@ public interface PortalBundle
     IPath getLiferayHome();
 
     String getMainClass();
-    
+
     IPath getModulesPath();
 
     IPath[] getRuntimeClasspath();

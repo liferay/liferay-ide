@@ -37,11 +37,10 @@ import org.osgi.framework.Version;
  */
 public abstract class AbstractPortalBundle implements PortalBundle
 {
-    
-    private static final String CONFIG_TYPE_SERVER = "server"; //$NON-NLS-1$
-    private static final String CONFIG_TYPE_VERSION = "version"; //$NON-NLS-1$
-    private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V700;
 
+    private static final String CONFIG_TYPE_SERVER = "server";
+    private static final String CONFIG_TYPE_VERSION = "version";
+    private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V700;
 
     protected IPath autoDeployPath;
     protected IPath liferayHome;
@@ -49,7 +48,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
     protected IPath bundlePath;
     protected String version;
     protected int jmxRemotePort;
- 
+
     public AbstractPortalBundle( IPath path )
     {
         if( path == null )
@@ -58,7 +57,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
         }
 
         this.bundlePath = path;
-        
+
         this.liferayHome = bundlePath.append( ".." );
         this.jmxRemotePort = detectJmxRemotePort();
 
@@ -72,7 +71,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
     protected abstract int detectJmxRemotePort();
     
     protected abstract IPath getPortalDir( IPath portalDir );
-    
+
     @Override
     public int getJmxRemotePort()
     {
@@ -177,7 +176,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
     private String getConfigInfoFromManifest( String configType, IPath portalDir )
     {
-        File implJar = portalDir.append( "/WEB-INF/lib/portal-impl.jar").toFile(); 
+        File implJar = portalDir.append( "/WEB-INF/lib/portal-impl.jar").toFile();
 
         String version = null;
         String serverInfo = null;

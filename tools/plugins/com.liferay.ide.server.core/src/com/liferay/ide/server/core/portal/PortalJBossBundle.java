@@ -25,9 +25,9 @@ import org.eclipse.core.runtime.IPath;
  */
 public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBundle
 {
-    
+
     public static final int DEFAULT_JMX_PORT = 2099;
-    
+
     public PortalJBossBundle( IPath path )
     {
        super(path);
@@ -37,7 +37,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
     {
         return DEFAULT_JMX_PORT;
     }
-    
+
     public String getMainClass()
     {
         return "org.jboss.modules.Main";
@@ -72,7 +72,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
     public String[] getRuntimeStartProgArgs()
     {
         final List<String> args = new ArrayList<String>();
-        
+
         args.add( "-mp");
         args.add( "\"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
         args.add( "-jaxpmodule");
@@ -81,27 +81,27 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         args.add( "-b");
         args.add( "localhost" );
         args.add( "--server-config=standalone.xml" );
-        args.add( "-Djboss.server.base.dir=" + "\"" + this.bundlePath.toPortableString() + "/standalone/"+ "\"");       
-        
+        args.add( "-Djboss.server.base.dir=" + "\"" + this.bundlePath.toPortableString() + "/standalone/"+ "\"");
+
         return args.toArray( new String[0] );
 
-    }    
+    }
 
     @Override
     public String[] getRuntimeStopProgArgs()
     {
         final List<String> args = new ArrayList<String>();
-        
+
         args.add( "-mp" );
         args.add( "\"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
         args.add( "org.jboss.as.cli" );
         args.add( "--controller=localhost:" + this.jmxRemotePort );
         args.add( "--connect" );
         args.add( "--command=:shutdown" );
-        
+
         return args.toArray( new String[0] );
     }
-    
+
     @Override
     public String[] getRuntimeStartVMArgs()
     {
@@ -114,26 +114,26 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         args.add( "-Djboss.modules.system.pkgs=org.jboss.byteman");
         args.add( "-Djava.awt.headless=true");
         args.add( "-Dfile.encoding=UTF8" );
-        args.add( "-server"); 
+        args.add( "-server");
         args.add( "-Dorg.jboss.boot.log.file=" +  "\""  + this.bundlePath.append("/standalone/log/boot.log") + "\"");
         args.add( "-Dlogging.configuration=file:" + "\"" + this.bundlePath + "/standalone/configuration/logging.properties" + "\"");
         args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"");
         args.add( "-Djboss.bind.address.management=localhost");
         args.add( "-Duser.timezone=GMT" );
-        args.add( "-Djboss.management.native.port=2099"); 
-        
+        args.add( "-Djboss.management.native.port=2099");
+
         return args.toArray( new String[0] );
     }
-    
+
     @Override
     public String[] getRuntimeStopVMArgs()
     {
         final List<String> args = new ArrayList<String>();
         args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"");
-        
+
         return args.toArray( new String[0] );
     }
-    
+
     public String getType()
     {
         return "jboss";

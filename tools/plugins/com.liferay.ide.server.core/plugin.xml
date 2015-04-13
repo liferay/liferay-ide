@@ -219,6 +219,6 @@
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossBundleFactory"
            type="jboss">
-	  </portalBundle>
+      </portalBundle>
    </extension>
 </plugin>
