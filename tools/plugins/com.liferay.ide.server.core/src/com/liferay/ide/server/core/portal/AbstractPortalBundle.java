@@ -226,11 +226,11 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         if( configType.equals( CONFIG_TYPE_VERSION ) )
         {
-            versionsInfoPath = LiferayServerCore.getDefault().getStateLocation().append( "version.properties" ); //$NON-NLS-1$
+            versionsInfoPath = LiferayServerCore.getDefault().getStateLocation().append( "version.properties" );
         }
         else if( configType.equals( CONFIG_TYPE_SERVER ) )
         {
-            versionsInfoPath = LiferayServerCore.getDefault().getStateLocation().append( "serverInfos.properties" ); //$NON-NLS-1$
+            versionsInfoPath = LiferayServerCore.getDefault().getStateLocation().append( "serverInfos.properties" );
         }
 
         if( versionsInfoPath != null )
