@@ -183,11 +183,8 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         if( implJar.exists() )
         {
-            try
+            try ( JarFile jar = new JarFile( implJar ) )
             {
-                @SuppressWarnings( "resource" )
-                JarFile jar = new JarFile( implJar );
-
                 Manifest manifest = jar.getManifest();
 
                 Attributes attributes = manifest.getMainAttributes();
