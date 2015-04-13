@@ -85,6 +85,10 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         assertEquals( true, views.exists() );
 
+        final IFolder oldViews = docroot.getFolder( "/views" );
+
+        assertEquals( false, oldViews.exists() );
+
         final String contents =
             CoreUtil.readStreamToString( docroot.getFile( "/WEB-INF/portlet.xml" ).getContents( true ) );
 
