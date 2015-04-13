@@ -33,7 +33,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
        super(path);
     }
 
-    protected int detectJmxRemotePort()
+    protected int getDefaultJMXRemotePort()
     {
         return DEFAULT_JMX_PORT;
     }

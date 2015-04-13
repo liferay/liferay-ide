@@ -59,7 +59,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
         this.bundlePath = path;
 
         this.liferayHome = bundlePath.append( ".." );
-        this.jmxRemotePort = detectJmxRemotePort();
+        this.jmxRemotePort = getDefaultJMXRemotePort();
 
         this.autoDeployPath = this.liferayHome.append( "deploy" );
 
@@ -67,9 +67,9 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         this.modulesPath = this.liferayHome.append( "osgi" );
     }
-    
-    protected abstract int detectJmxRemotePort();
-    
+
+    protected abstract int getDefaultJMXRemotePort();
+
     protected abstract IPath getPortalDir( IPath portalDir );
 
     @Override

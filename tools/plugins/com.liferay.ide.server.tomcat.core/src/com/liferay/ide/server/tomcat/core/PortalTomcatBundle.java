@@ -38,7 +38,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
        super(path);
     }
 
-    protected int detectJmxRemotePort()
+    protected int getDefaultJMXRemotePort()
     {
         int retval = 8099;
 
