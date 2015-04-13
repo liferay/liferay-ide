@@ -192,7 +192,7 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
         {
             String jspsFolder = getStringProperty( propertyName );
 
-            if( !jspsFolder.startsWith( "/WEB-INF/" ) )
+            if( !jspsFolder.startsWith( "/WEB-INF/" ) || !jspsFolder.startsWith( "WEB-INF/" ) )
             {
                 return PortletCore.createErrorStatus( Msgs.jsfFolderValid );
             }
