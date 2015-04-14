@@ -26,6 +26,8 @@ public interface ILiferayMavenConstants
 
     String _LIFERAY_MOJO_PREFIX = "liferay:";  //$NON-NLS-1$
 
+    String BND_MAVEN_PLUGIN_KEY = "biz.aQute.bnd:bnd-maven-plugin";
+
     String DEFAULT_PLUGIN_TYPE = "portlet"; //$NON-NLS-1$
 
     String EXT_PLUGIN_TYPE = "ext"; //$NON-NLS-1$

@@ -731,6 +731,17 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                     {
                         return true;
                     }
+
+                }
+                else if( mavenProject != null && "jar".equals( mavenProject.getPackaging() ) )
+                {
+                    final Plugin bndMavenPlugin =
+                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY, monitor );
+
+                    if( bndMavenPlugin != null )
+                    {
+                        return true;
+                    }
                 }
             }
             catch( CoreException e )

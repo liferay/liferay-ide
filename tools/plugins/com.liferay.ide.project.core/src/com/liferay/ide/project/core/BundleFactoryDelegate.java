@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.model.ModuleDelegate;
 import org.eclipse.wst.server.core.util.ProjectModuleFactoryDelegate;
@@ -38,6 +40,12 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate
     public BundleFactoryDelegate()
     {
         super();
+    }
+
+    @Override
+    protected IPath[] getListenerPaths()
+    {
+        return new IPath[] { new Path( "pom.xml" ), new Path( "bnd.bnd" ), new Path( "build.gradle" ) };
     }
 
     @Override
