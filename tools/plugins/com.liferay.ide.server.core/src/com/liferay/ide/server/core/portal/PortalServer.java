@@ -25,6 +25,7 @@ public interface PortalServer extends ILiferayServer
 {
 
     String START = "start";
+
     String STOP = "stop";
 
     String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";

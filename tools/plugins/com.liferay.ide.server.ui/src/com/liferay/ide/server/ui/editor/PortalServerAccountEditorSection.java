@@ -57,15 +57,11 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
 
     protected Section section;
     protected PortalServer portalServer;
-
     protected Hyperlink setDefault;
-
     protected boolean defaultDeployDirIsSet;
-
     protected Text password;
     protected Text username;
     protected boolean updating;
-
     protected PropertyChangeListener listener;
     protected IPublishListener publishListener;
 
@@ -73,17 +69,19 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
 
     public PortalServerAccountEditorSection()
     {
+        super();
     }
 
     protected void addChangeListeners()
     {
         listener = new PropertyChangeListener()
         {
-
             public void propertyChange( PropertyChangeEvent event )
             {
                 if( updating )
+                {
                     return;
+                }
 
                 updating = true;
 
@@ -108,7 +106,6 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
 
         publishListener = new PublishAdapter()
         {
-
             public void publishFinished( IServer server2, IStatus status )
             {
                 boolean flag = false;
@@ -160,7 +157,6 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
         username.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
         username.addModifyListener( new ModifyListener()
         {
-
             public void modifyText( ModifyEvent e )
             {
                 if( updating )
@@ -172,8 +168,7 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
                 execute( new SetPortalServerUsernameCommand( server, username.getText().trim() ) );
                 updating = false;
             }
-
-        } );
+        });
 
         label = createLabel( toolkit, composite, StringPool.EMPTY );
         data = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
@@ -186,7 +181,6 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
         password.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
         password.addModifyListener( new ModifyListener()
         {
-
             public void modifyText( ModifyEvent e )
             {
                 if( updating )
@@ -198,13 +192,11 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
                 execute( new SetPortalServerPasswordCommand( server, password.getText().trim() ) );
                 updating = false;
             }
-
-        } );
+        });
 
         setDefault = toolkit.createHyperlink( composite, Msgs.restoreDefaultsLink, SWT.WRAP );
         setDefault.addHyperlinkListener( new HyperlinkAdapter()
         {
-
             public void linkActivated( HyperlinkEvent e )
             {
                 updating = true;
@@ -217,7 +209,7 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
                 updating = false;
                 validate();
             }
-        } );
+        });
 
         data = new GridData( SWT.FILL, SWT.CENTER, true, false );
         data.horizontalSpan = 3;
@@ -239,7 +231,9 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
         {
             server.removePropertyChangeListener( listener );
             if( server.getOriginal() != null )
+            {
                 server.getOriginal().removePublishListener( publishListener );
+            }
         }
     }
 
@@ -280,7 +274,6 @@ public class PortalServerAccountEditorSection extends ServerEditorSection
 
     private static class Msgs extends NLS
     {
-
         public static String liferayAccount;
         public static String password;
         public static String username;

@@ -65,7 +65,8 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
         return retval;
     }
 
-    public int getAutoPublishTime() {
+    public int getAutoPublishTime()
+    {
         return getAttribute(Server.PROP_AUTO_PUBLISH_TIME, 1);
     }
 
@@ -209,7 +210,6 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     @Override
     public void modifyModules( IModule[] add, IModule[] remove, IProgressMonitor monitor ) throws CoreException
     {
-        System.out.println();
     }
 
     @Override
