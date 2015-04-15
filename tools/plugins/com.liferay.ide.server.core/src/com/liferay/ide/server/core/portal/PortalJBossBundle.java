@@ -62,7 +62,6 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         if( this.bundlePath.toFile().exists() )
         {
             paths.add( bundlePath.append( "jboss-modules.jar" ) );
-
         }
 
         return paths.toArray( new IPath[0] );
@@ -95,7 +94,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         args.add( "-mp" );
         args.add( "\"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
         args.add( "org.jboss.as.cli" );
-        args.add( "--controller=localhost:" + this.jmxRemotePort );
+        args.add( "--controller=localhost:" + 9999 );
         args.add( "--connect" );
         args.add( "--command=:shutdown" );
 
@@ -107,21 +106,29 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
     {
         final List<String> args = new ArrayList<String>();
 
-        args.add( "-Dorg.jboss.resolver.warning=true");
-        args.add( "-Djava.net.preferIPv4Stack=true");
-        args.add( "-Dsun.rmi.dgc.client.gcInterval=3600000");
-        args.add( "-Dsun.rmi.dgc.server.gcInterval=3600000");
-        args.add( "-Djboss.modules.system.pkgs=org.jboss.byteman");
-        args.add( "-Djava.awt.headless=true");
+        args.add( "-Dcom.sun.management.jmxremote" );
+        args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
+        args.add( "-Dcom.sun.management.jmxremote.port=" + jmxRemotePort );
+        args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
+        args.add( "-Dorg.jboss.resolver.warning=true" );
+        args.add( "-Djava.net.preferIPv4Stack=true" );
+        args.add( "-Dsun.rmi.dgc.client.gcInterval=3600000" );
+        args.add( "-Dsun.rmi.dgc.server.gcInterval=3600000" );
+        args.add( "-Djboss.modules.system.pkgs=org.jboss.byteman" );
+        args.add( "-Djava.awt.headless=true" );
         args.add( "-Dfile.encoding=UTF8" );
-        args.add( "-server");
-        args.add( "-Dorg.jboss.boot.log.file=" +  "\""  + this.bundlePath.append("/standalone/log/boot.log") + "\"");
-        args.add( "-Dlogging.configuration=file:" + "\"" + this.bundlePath + "/standalone/configuration/logging.properties" + "\"");
-        args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"");
-        args.add( "-Djboss.bind.address.management=localhost");
+        args.add( "-server" );
+        args.add( "-Djava.util.logging.manager=org.jboss.logmanager.LogManager" );
+        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/org/jboss/logmanager/main/jboss-logmanager-1.2.2.GA.jar"  +  "\"" );
+        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/org/jboss/logmanager/log4j/main/jboss-logmanager-log4j-1.0.0.GA.jar"  +  "\"" );
+        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/org/apache/log4j/main/log4j-1.2.16.jar"  +  "\"" );
+        args.add( "-Djboss.modules.system.pkgs=org.jboss.logmanager");
+        args.add( "-Dorg.jboss.boot.log.file=" +  "\""  + this.bundlePath.append("/standalone/log/boot.log") + "\"" );
+        args.add( "-Dlogging.configuration=file:" + "\"" + this.bundlePath + "/standalone/configuration/logging.properties" + "\"" );
+        args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"" );
+        args.add( "-Djboss.bind.address.management=localhost" );
         args.add( "-Duser.timezone=GMT" );
-        args.add( "-Djboss.management.native.port=2099");
-
+     
         return args.toArray( new String[0] );
     }
 
