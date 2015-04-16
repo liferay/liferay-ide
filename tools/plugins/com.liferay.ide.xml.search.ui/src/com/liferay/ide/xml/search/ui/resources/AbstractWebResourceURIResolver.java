@@ -42,7 +42,7 @@ public abstract class AbstractWebResourceURIResolver extends ResourceBaseURIReso
             return false;
         }
 
-        matching = matching.toLowerCase();
+        matching = ( matching == null ? matching : matching.toLowerCase() );
 
         if( fullMatch )
         {

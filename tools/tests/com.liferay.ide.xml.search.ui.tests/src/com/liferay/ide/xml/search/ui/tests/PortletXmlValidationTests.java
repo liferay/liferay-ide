@@ -6,17 +6,23 @@ import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndVa
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkMarkerByMessage;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkNoMarker;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setElementContent;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 import com.liferay.ide.xml.search.ui.validators.PortletDescriptorValidator;
 
 import java.text.MessageFormat;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.osgi.util.NLS;
+import org.junit.Before;
 import org.junit.Test;
 
 public class PortletXmlValidationTests extends XmlSearchTestsBase
@@ -43,6 +49,70 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         return project;
     }
 
+    @Before
+    public void cleanupMarkers() throws Exception
+    {
+        descriptorFile = getDescriptorFile();
+        ZipFile projectFile = new ZipFile( getProjectZip( getBundleId(), "Portlet-Xml-Test-portlet" ) );
+        ZipEntry entry = projectFile.getEntry( "Portlet-Xml-Test-portlet/docroot/WEB-INF/portlet.xml" );
+
+        descriptorFile.setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
+        projectFile.close();
+    }
+
+    public void validateElementTypeNotFound( String elementName ,String elementValue) throws Exception
+    {
+        final IFile descriptorFile = getDescriptorFile();
+
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        String markerMessage =
+            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+
+    }
+
+    public void validateElementTypeHierarchyInocorrect( String elementName, String extendType ) throws Exception
+    {
+
+        String elementValue = "com.liferay.ide.tests.Orphan";
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        String markerMessage =
+            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue,
+                extendType } );
+
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+    }
+    
+    public void validateElementResourceNotFound( String elementName ,String elementValue) throws Exception
+    {
+        final IFile descriptorFile = getDescriptorFile();
+        
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        String markerMessage =
+            MessageFormat.format( LiferayBaseValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
+
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+    }
+
+    public void validateElementcorrectValue( String elementName, String elementValue ) throws Exception
+    {
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+
+    }
+
     @Test
     public void testPortletClass() throws Exception
     {
@@ -50,33 +120,11 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         {
             return;
         }
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-class";
-        String elementValue = "Foo";
-        String markerMessage = null;
-
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format(
-                PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            NLS.bind( PortletDescriptorValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT.toString(), new Object[] {
-                elementValue, "javax.portlet.GenericPortlet" } );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.util.bridges.mvc.MVCPortlet";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementTypeNotFound( elementName ,"foo");
+        validateElementTypeNotFound( elementName ,"");
+        validateElementTypeHierarchyInocorrect( elementName, "javax.portlet.GenericPortlet" );
+        validateElementcorrectValue( elementName, "com.liferay.util.bridges.mvc.MVCPortlet" );
     }
 
     @Test
@@ -87,152 +135,67 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "listener-class";
-        String elementValue = "Foo";
-        String markerMessage = null;
-
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format(
-                PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        markerMessage =
-            NLS.bind( PortletDescriptorValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT.toString(), new Object[] {
-                elementValue, "javax.portlet.PortletURLGenerationListener" } );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.PortletURLGenerationListenerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementTypeNotFound( elementName ,"foo");
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "javax.portlet.PortletURLGenerationListener" );
+        validateElementcorrectValue( elementName, "com.liferay.ide.tests.PortletURLGenerationListenerImpl" );
     }
 
     @Test
     public void testFilterClass() throws Exception
     {
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "filter-class";
 
-        String elementValue = "Foo";
-        setElementContent( descriptorFile, elementName, elementValue );
-        String markerMessage =
-            MessageFormat.format( PortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        markerMessage =
-            NLS.bind(
-                PortletDescriptorValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT.toString(),
-                new Object[] {
-                    elementValue,
-                    "javax.portlet.filter.ResourceFilter, javax.portlet.filter.RenderFilter, javax.portlet.filter.ActionFilter, javax.portlet.filter.EventFilter" } );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.ResourceFilterImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementTypeNotFound( elementName ,"foo");
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "javax.portlet.filter.ResourceFilter, javax.portlet.filter.RenderFilter, javax.portlet.filter.ActionFilter, javax.portlet.filter.EventFilter" );
+        validateElementcorrectValue( elementName, "com.liferay.ide.tests.ResourceFilterImpl" );
+        
     }
 
     @Test
     public void testResourceBundle() throws Exception
     {
-        IFile descriptorFile = getDescriptorFile();
         final String elementName = "resource-bundle";
-        String elementContent = null;
+        String elementValue = null;
         String markerMessage = null;
 
         // resource-bundle value ends with ".properties"
-        elementContent = "ResourceBundleEndWithProperties.properties";
-        setElementContent( descriptorFile, elementName, elementContent );
+        elementValue = "ResourceBundleEndWithProperties.properties";
         markerMessage =
             MessageFormat.format(
-                PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES, new Object[] { elementContent } );
+                PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_END_PROPERTIES, new Object[] { elementValue } );
+        setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         // resource-bundle doesn't end with ".properties"
-        elementContent = "ResourceBundleNotEndWithProperties";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        elementValue = "ResourceBundleNotEndWithProperties";
+        validateElementcorrectValue( elementName, elementValue );
 
         // resource-bundle values contains "/"
-        elementContent = "ResourceBundle/WithSlash";
-        setElementContent( descriptorFile, elementName, elementContent );
-        markerMessage =
+        elementValue = "ResourceBundle/WithSlash";
+        markerMessage = 
             MessageFormat.format(
                 PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR,
-                new Object[] { elementContent } );
+                new Object[] { elementValue } );
+        setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
         // resource-bundle values doesn't contain "/"
-        elementContent = "ResourceBundleWithoutSlash";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementcorrectValue( elementName, "ResourceBundleWithoutSlash" );
 
         // resource bundle file doesn't exist
-        elementContent = "ResourceBundleNotExist";
-        setElementContent( descriptorFile, elementName, elementContent );
-        markerMessage =
-            MessageFormat.format(
-                PortletDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementContent } );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+        validateElementResourceNotFound( elementName, "" );
+        validateElementResourceNotFound( elementName, "ResourceBundleNotExist" );
+        validateElementResourceNotFound( elementName, "content.ResourceBundleNotExist" );
 
         // resource bundle file exists
-        elementContent = "ResourceBundleExist";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
+        validateElementcorrectValue( elementName, "ResourceBundleExist" );
+        validateElementcorrectValue( elementName, "content.Language" );
 
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
-        // resource bundle file doesn't exist
-        elementContent = "content.ResourceBundleNotExist";
-        setElementContent( descriptorFile, elementName, elementContent );
-        markerMessage =
-            MessageFormat.format(
-                PortletDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementContent } );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        // resource bundle file exists
-        elementContent = "ResourceBundleExist";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
-        // set a right content
-        elementContent = "content.Language";
-        setElementContent( descriptorFile, elementName, elementContent );
-        buildAndValidate( descriptorFile );
-
-        assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
 }

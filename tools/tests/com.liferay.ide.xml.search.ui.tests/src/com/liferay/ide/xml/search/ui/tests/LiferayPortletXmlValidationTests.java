@@ -36,6 +36,7 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
 
     protected IFile getDescriptorFile() throws Exception
     {
+
         return descriptorFile != null ? descriptorFile : LiferayCore.create( getProject() ).getDescriptorFile(
             ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
     }
@@ -51,14 +52,81 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
         return project;
     }
 
+    public void validateElementResourceNotFound( String elementName, String elementValue ) throws Exception
+    {
+        final IFile descriptorFile = getDescriptorFile();
+
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        String markerMessage =
+            MessageFormat.format( LiferayBaseValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
+
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+    }
+
+    public void validateElementTypeNotFound( String elementName, String elementValue ) throws Exception
+    {
+        final IFile descriptorFile = getDescriptorFile();
+
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        String markerMessage =
+            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
+
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+    }
+
+    public void validateElementTypeHierarchyInocorrect( String elementName, String extendType ) throws Exception
+    {
+
+        String elementValue = "com.liferay.ide.tests.Orphan";
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        String markerMessage =
+            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { elementValue,
+                extendType } );
+
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+
+    }
+
+    public void validateElementReferenceNotFound( String elementName, String elementValue ) throws Exception
+    {
+        final IFile descriptorFile = getDescriptorFile();
+
+        setElementContent( descriptorFile, elementName, elementValue );
+        buildAndValidate( descriptorFile );
+
+        String markerMessage =
+            MessageFormat.format( LiferayBaseValidator.MESSAGE_REFERENCE_NOT_FOUND, new Object[] { elementValue,
+                "portlet.xml" } );
+
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
+    }
+
+    public void validateElementCorrectValue( String elementName, String correctValue ) throws Exception
+    {
+        // IFile descriptorFile = getDescriptorFile();
+        setElementContent( descriptorFile, elementName, correctValue );
+
+        buildAndValidate( descriptorFile );
+
+        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+
+    }
 
     @Before
     public void cleanupMarkers() throws Exception
     {
+        descriptorFile = getDescriptorFile();
         ZipFile projectFile = new ZipFile( getProjectZip( getBundleId(), "Portlet-Xml-Test-portlet" ) );
         ZipEntry entry = projectFile.getEntry( "Portlet-Xml-Test-portlet/docroot/WEB-INF/liferay-portlet.xml" );
 
-        getDescriptorFile().setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
+        descriptorFile.setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
         projectFile.close();
     }
 
@@ -68,33 +136,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
         if( shouldSkipBundleTests() )
             return;
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "asset-renderer-factory";
-        String elementValue = "asset-renderer-factory";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portlet.asset.model.AssetRendererFactory" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.AssetRendererFactoryImp" );
 
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portlet.asset.model.AssetRendererFactory" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.AssetRendererFactoryImp";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     public void testAtomCollectionAdapter() throws Exception
@@ -104,33 +152,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "atom-collection-adapter";
-        String elementValue = "atom-collection-adapter";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.atom.AtomCollectionAdapter" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.AtomCollectionAdapterImpl" );
 
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.atom.AtomCollectionAdapter" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.AtomCollectionAdapterImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -141,33 +169,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "configuration-action-class";
-        String elementValue = "configuration-action-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.portlet.ConfigurationAction" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.ConfigurationActionImpl" );
 
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.portlet.ConfigurationAction" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.ConfigurationActionImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -178,33 +186,12 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "control-panel-entry-class";
-        String elementValue = "control-panel-entry-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portlet.ControlPanelEntry" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.ControlPanelEntryImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portlet.ControlPanelEntry" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.ControlPanelEntryImpl" );
 
     }
 
@@ -225,8 +212,7 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
 
         String markerMessage =
             MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID,
-                new Object[] { elementValue } );
+                LiferayPortletDescriptorValidator.MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID, new Object[] { elementValue } );
 
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
 
@@ -246,33 +232,14 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "custom-attributes-display";
-        String elementValue = "custom-attributes-display";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect(
+            elementName, "com.liferay.portlet.expando.model.CustomAttributesDisplay" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.CustomAttributesDisplayImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portlet.expando.model.CustomAttributesDisplay" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.CustomAttributesDisplayImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -283,33 +250,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "ddm-display";
-        String elementValue = "ddm-display";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portlet.dynamicdatamapping.util.DDMDisplay" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.DDMDisplayImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portlet.dynamicdatamapping.util.DDMDisplay" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.DDMDisplayImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -320,25 +267,11 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "footer-portlet-css";
-        String elementValue = "footer-portlet-css";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "/css/main.css";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
+        validateElementResourceNotFound( elementName, "foo" );
+        validateElementResourceNotFound( elementName, "" );
+        validateElementCorrectValue( elementName, "/css/main.css" );
     }
 
     @Test
@@ -349,23 +282,11 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "footer-portlet-javascript";
-        String elementValue = "footer-portlet-javascript";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "/js/main.js";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementResourceNotFound( elementName, "foo" );
+        validateElementResourceNotFound( elementName, "" );
+        validateElementCorrectValue( elementName, "/js/main.js" );
     }
 
     @Test
@@ -376,33 +297,12 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "friendly-url-mapper-class";
-        String elementValue = "friendly-url-mapper-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.portlet.FriendlyURLMapper" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.FriendlyURLMapperImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.portlet.FriendlyURLMapper" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.FriendlyURLMapperImpl" );
 
     }
 
@@ -414,23 +314,11 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "header-portlet-css";
-        String elementValue = "header-portlet-css";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "/css/main.css";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementResourceNotFound( elementName, "foo" );
+        validateElementResourceNotFound( elementName, "" );
+        validateElementCorrectValue( elementName, "/css/main.css" );
     }
 
     @Test
@@ -441,23 +329,12 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "header-portlet-javascript";
-        String elementValue = "header-portlet-javascript";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementResourceNotFound( elementName, "foo" );
+        validateElementResourceNotFound( elementName, "" );
+        validateElementCorrectValue( elementName, "/js/main.js" );
 
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "/js/main.js";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -468,23 +345,11 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "icon";
-        String elementValue = "icon";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "/icon.png";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        validateElementResourceNotFound( elementName, "foo" );
+        validateElementResourceNotFound( elementName, "" );
+        validateElementCorrectValue( elementName, "/icon.png" );
     }
 
     @Test
@@ -495,43 +360,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "indexer-class";
-        String elementValue = "indexer-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.search.Indexer" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.IndexerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.search.Indexer" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.IndexerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
-        elementValue = "";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
     }
 
     @Test
@@ -542,33 +377,14 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "permission-propagator";
-        String elementValue = "permission-propagator";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect(
+            elementName, "com.liferay.portal.security.permission.PermissionPropagator" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.PermissionPropagatorImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.security.permission.PermissionPropagator" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.PermissionPropagatorImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -579,33 +395,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "poller-processor-class";
-        String elementValue = "poller-processor-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.poller.PollerProcessor" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.PollerProcessorImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.poller.PollerProcessor" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.PollerProcessorImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -616,33 +412,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "pop-message-listener-class";
-        String elementValue = "pop-message-listener-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.pop.MessageListener" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.PopMessageListenerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.pop.MessageListener" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.PopMessageListenerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -653,33 +429,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-data-handler-class";
-        String elementValue = "portlet-data-handler-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.lar.PortletDataHandler" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.PortletDataHandlerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.lar.PortletDataHandler" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.PortletDataHandlerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -690,34 +446,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-layout-listener-class";
-        String elementValue = "portlet-layout-listener-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.portlet.PortletLayoutListener" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.PortletLayoutListenerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.portlet.PortletLayoutListener" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.PortletLayoutListenerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -728,24 +463,12 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet-name";
-        String elementValue = "portlet-name";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementReferenceNotFound( elementName, "foo" );
+        validateElementReferenceNotFound( elementName, "" );
+        validateElementCorrectValue( elementName, "Portlet-Xml-Test" );
 
-        String markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_REFERENCE_NOT_FOUND, new Object[] { elementValue,
-                "portlet.xml" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "Portlet-Xml-Test";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -756,33 +479,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "scheduler-event-listener-class";
-        String elementValue = "scheduler-event-listener-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.messaging.MessageListener" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.MessageListenerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.messaging.MessageListener" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.MessageListenerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -793,33 +496,14 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "social-activity-interpreter-class";
-        String elementValue = "portlet-layout-listener-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect(
+            elementName, "com.liferay.portlet.social.model.SocialActivityInterpreter" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.SocialActivityInterpreterImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portlet.social.model.SocialActivityInterpreter" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.SocialActivityInterpreterImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -830,33 +514,14 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "social-request-interpreter-class";
-        String elementValue = "social-request-interpreter-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect(
+            elementName, "com.liferay.portlet.social.model.SocialRequestInterpreter" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.SocialRequestInterpreterImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portlet.social.model.SocialRequestInterpreter" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.SocialRequestInterpreterImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -867,33 +532,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "staged-model-data-handler-class";
-        String elementValue = "staged-model-data-handler-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.lar.StagedModelDataHandler" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.StagedModelDataHandlerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.lar.StagedModelDataHandler" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.StagedModelDataHandlerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -904,33 +549,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "template-handler";
-        String elementValue = "template-handler";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.template.TemplateHandler" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.TemplateHandlerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.template.TemplateHandler" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.TemplateHandlerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -941,33 +566,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "url-encoder-class";
-        String elementValue = "url-encoder-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.servlet.URLEncoder" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.URLEncoderImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.servlet.URLEncoder" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.URLEncoderImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -978,33 +583,14 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "user-notification-handler-class";
-        String elementValue = "user-notification-handler-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect(
+            elementName, "com.liferay.portal.kernel.notifications.UserNotificationHandler" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.UserNotificationHandlerImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.notifications.UserNotificationHandler" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.UserNotificationHandlerImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -1015,33 +601,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "webdav-storage-class";
-        String elementValue = "webdav-storage-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.webdav.WebDAVStorage" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.WebDAVStorageImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.webdav.WebDAVStorage" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.WebDAVStorageImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
     @Test
@@ -1052,33 +618,13 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "xml-rpc-method-class";
-        String elementValue = "xml-rpc-method-class";
 
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
+        validateElementTypeNotFound( elementName, "foo" );
+        validateElementTypeNotFound( elementName, "" );
+        validateElementTypeHierarchyInocorrect( elementName, "com.liferay.portal.kernel.xmlrpc.Method" );
+        validateElementCorrectValue( elementName, "com.liferay.ide.tests.XmlrpcMethodImpl" );
 
-        String markerMessage =
-            MessageFormat.format(
-                LiferayPortletDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.Orphan";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-        markerMessage =
-            MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] {
-                elementValue, "com.liferay.portal.kernel.xmlrpc.Method" } );
-
-        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-        elementValue = "com.liferay.ide.tests.XmlrpcMethodImpl";
-        setElementContent( descriptorFile, elementName, elementValue );
-        buildAndValidate( descriptorFile );
-
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
 }

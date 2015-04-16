@@ -27,9 +27,14 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
 
 import java.text.MessageFormat;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -60,6 +65,17 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         return project;
     }
 
+    @Before
+    public void cleanupMarkers() throws Exception
+    {
+        descriptorFile = getDescriptorFile();
+        ZipFile projectFile = new ZipFile( getProjectZip( getBundleId(), "Portlet-Xml-Test-portlet" ) );
+        ZipEntry entry = projectFile.getEntry( "Portlet-Xml-Test-portlet/docroot/WEB-INF/service.xml" );
+
+        descriptorFile.setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
+        projectFile.close();
+    }
+
     @Test
     public void testNamespace() throws Exception
     {
@@ -69,7 +85,6 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         String elementName = "namespace";
         String elementValue = "namespace1";
         setElementContent( descriptorFile, elementName, elementValue );
@@ -85,6 +100,7 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
 
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+
     }
 
     @Test
@@ -95,7 +111,6 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
             return;
         }
 
-        final IFile descriptorFile = getDescriptorFile();
         String elementName = "service-builder";
         String attrName = "package-path";
         String invalidAttrValue = "com.liferay test";
@@ -113,6 +128,11 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
 
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+
+        setAttrValue( descriptorFile, elementName, attrName, "" );
+        buildAndValidate( descriptorFile );
+        markerMessage = "Invalid Java package name: A package name must not be empty";
+        assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
     }
 
 }

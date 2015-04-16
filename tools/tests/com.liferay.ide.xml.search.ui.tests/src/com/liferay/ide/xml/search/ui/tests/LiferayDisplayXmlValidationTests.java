@@ -27,9 +27,14 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.xml.search.ui.validators.LiferayDisplayDescriptorValidator;
 
 import java.text.MessageFormat;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -37,6 +42,7 @@ import org.junit.Test;
  */
 public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
 {
+
     protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
     private IProject project;
@@ -58,10 +64,21 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
         return project;
     }
 
+    @Before
+    public void cleanupMarkers() throws Exception
+    {
+        descriptorFile = getDescriptorFile();
+        ZipFile projectFile = new ZipFile( getProjectZip( getBundleId(), "Portlet-Xml-Test-portlet" ) );
+        ZipEntry entry = projectFile.getEntry( "Portlet-Xml-Test-portlet/docroot/WEB-INF/liferay-display.xml" );
+
+        descriptorFile.setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
+        projectFile.close();
+    }
+
     @Test
     public void testPortletAtId() throws Exception
     {
-        final IFile descriptorFile = new LiferayDisplayXmlTests().getDescriptorFile();
+
         final String elementName = "portlet";
         final String attrName = "id";
 
@@ -85,7 +102,6 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testCategoryAtName() throws Exception
     {
-        final IFile descriptorFile = getDescriptorFile();
         final String elementName = "category";
         final String attrName = "name";
 

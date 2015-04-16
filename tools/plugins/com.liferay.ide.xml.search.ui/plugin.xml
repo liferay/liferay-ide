@@ -102,24 +102,24 @@
             <!-- References of Java class -->
             <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
                 <from
-                    path="/ns:portlet-app/ns:portlet/ns:portlet-class"
-                    targetNodes="text()"
+                    path="/ns:portlet-app/ns:portlet/ns:portlet-class/text() | /ns:portlet-app/ns:portlet/ns:portlet-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.portletxml.querySpecification" />
                <toJava extends="javax.portlet.GenericPortlet" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
                 <from
-                    path="/ns:portlet-app/ns:listener/ns:listener-class"
-                    targetNodes="text()"
+                    path="/ns:portlet-app/ns:listener/ns:listener-class/text() | /ns:portlet-app/ns:listener/ns:listener-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.portletxml.querySpecification" />
                 <toJava extends="javax.portlet.PortletURLGenerationListener" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
                 <from
-                    path="/ns:portlet-app/ns:filter/ns:filter-class"
-                    targetNodes="text()"
+                    path="/ns:portlet-app/ns:filter/ns:filter-class/text() | /ns:portlet-app/ns:filter/ns:filter-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.portletxml.querySpecification" />
                 <toJava extends="javax.portlet.filter.ResourceFilter, javax.portlet.filter.RenderFilter, javax.portlet.filter.ActionFilter, javax.portlet.filter.EventFilter" />
             </reference>
@@ -127,8 +127,8 @@
             <!-- References of resource bundle properties files -->
             <reference validatorId="com.liferay.ide.xml.search.ui.portletDescriptorValidator">
                 <from
-                    path="/ns:portlet-app/ns:portlet/ns:resource-bundle"
-                    targetNodes="text()"
+                    path="/ns:portlet-app/ns:portlet/ns:resource-bundle/text() | /ns:portlet-app/ns:portlet/ns:resource-bundle[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.portletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.resourcebundle.querySpecification" />
             </reference>
@@ -144,56 +144,56 @@
             <!-- References of Java class -->
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/asset-renderer-factory"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/asset-renderer-factory/text() | /liferay-portlet-app/portlet/asset-renderer-factory[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portlet.asset.model.AssetRendererFactory" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/atom-collection-adapter"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/atom-collection-adapter/text() | /liferay-portlet-app/portlet/atom-collection-adapter[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.atom.AtomCollectionAdapter" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/configuration-action-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/configuration-action-class/text() | /liferay-portlet-app/portlet/configuration-action-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.portlet.ConfigurationAction"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/control-panel-entry-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/control-panel-entry-class/text() | /liferay-portlet-app/portlet/control-panel-entry-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portlet.ControlPanelEntry"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/custom-attributes-display"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/custom-attributes-display/text() | /liferay-portlet-app/portlet/custom-attributes-display[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portlet.expando.model.CustomAttributesDisplay"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/ddm-display"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/ddm-display/text() | /liferay-portlet-app/portlet/ddm-display[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portlet.dynamicdatamapping.util.DDMDisplay"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                path="/liferay-portlet-app/portlet/friendly-url-mapper-class"
-                targetNodes="text()"
+                path="/liferay-portlet-app/portlet/friendly-url-mapper-class/text() | /liferay-portlet-app/portlet/friendly-url-mapper-class[not(text())]"
+                targetNodes=""
                 querySpecificationId="liferay.liferayportletxml.querySpecification" />
             <toJava extends="com.liferay.portal.kernel.portlet.FriendlyURLMapper"/>
             </reference>
@@ -218,112 +218,112 @@
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/permission-propagator"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/permission-propagator/text() | /liferay-portlet-app/portlet/permission-propagator[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.security.permission.PermissionPropagator"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/poller-processor-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/poller-processor-class/text() | /liferay-portlet-app/portlet/poller-processor-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.poller.PollerProcessor"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/pop-message-listener-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/pop-message-listener-class/text() | /liferay-portlet-app/portlet/pop-message-listener-class[not(text())] "
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.pop.MessageListener"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/portlet-data-handler-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/portlet-data-handler-class/text() | /liferay-portlet-app/portlet/portlet-data-handler-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.lar.PortletDataHandler"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/portlet-layout-listener-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/portlet-layout-listener-class/text() | /liferay-portlet-app/portlet/portlet-layout-listener-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.portlet.PortletLayoutListener"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/scheduler-entry/scheduler-event-listener-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/scheduler-entry/scheduler-event-listener-class/text() | /liferay-portlet-app/portlet/scheduler-entry/scheduler-event-listener-class[not(text())] "
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.messaging.MessageListener"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/social-activity-interpreter-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/social-activity-interpreter-class/text() | /liferay-portlet-app/portlet/social-activity-interpreter-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portlet.social.model.SocialActivityInterpreter"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/social-request-interpreter-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/social-request-interpreter-class/text() | /liferay-portlet-app/portlet/social-request-interpreter-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portlet.social.model.SocialRequestInterpreter"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/staged-model-data-handler-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/staged-model-data-handler-class/text() | /liferay-portlet-app/portlet/staged-model-data-handler-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.lar.StagedModelDataHandler"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/template-handler"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/template-handler/text() | /liferay-portlet-app/portlet/template-handler[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.template.TemplateHandler"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/url-encoder-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/url-encoder-class/text() | /liferay-portlet-app/portlet/url-encoder-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.servlet.URLEncoder"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/user-notification-handler-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/user-notification-handler-class/text() | /liferay-portlet-app/portlet/user-notification-handler-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.notifications.UserNotificationHandler"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/webdav-storage-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/webdav-storage-class/text() | /liferay-portlet-app/portlet/webdav-storage-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.webdav.WebDAVStorage"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator" >
                 <from
-                    path="/liferay-portlet-app/portlet/xml-rpc-method-class"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/xml-rpc-method-class/text() | /liferay-portlet-app/portlet/xml-rpc-method-class[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.xmlrpc.Method"/>
             </reference>
@@ -331,16 +331,16 @@
             <!-- References of CSS resources files -->
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
                 <from
-                    path="/liferay-portlet-app/portlet/header-portlet-css"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/header-portlet-css/text() | /liferay-portlet-app/portlet/header-portlet-css[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.css.querySpecification" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
                 <from
-                    path="/liferay-portlet-app/portlet/footer-portlet-css"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/footer-portlet-css/text() | /liferay-portlet-app/portlet/footer-portlet-css[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.css.querySpecification" />
             </reference>
@@ -348,16 +348,16 @@
             <!-- References of JS resources files -->
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
                 <from
-                    path="/liferay-portlet-app/portlet/header-portlet-javascript"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/header-portlet-javascript/text() | /liferay-portlet-app/portlet/header-portlet-javascript[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.js.querySpecification" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
                 <from
-                    path="/liferay-portlet-app/portlet/footer-portlet-javascript"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/footer-portlet-javascript/text() | /liferay-portlet-app/portlet/footer-portlet-javascript[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.js.querySpecification" />
             </reference>
@@ -365,8 +365,8 @@
             <!-- References of Images files -->
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
                 <from
-                    path="/liferay-portlet-app/portlet/icon"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/icon/text() | /liferay-portlet-app/portlet/icon[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.image.querySpecification" />
             </reference>
@@ -374,8 +374,8 @@
             <!-- References of XML //portlet-name => //portlet-name -->
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
                 <from
-                    path="/liferay-portlet-app/portlet/portlet-name"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/portlet-name/text() | /liferay-portlet-app/portlet/portlet-name[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
                 <to
                     path="/ns:portlet-app/ns:portlet/ns:portlet-name"
@@ -387,8 +387,8 @@
             <!-- syntax validation -->
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayPortletDescriptorValidator">
                 <from
-                    path="/liferay-portlet-app/portlet/control-panel-entry-weight"
-                    targetNodes="text()"
+                    path="/liferay-portlet-app/portlet/control-panel-entry-weight/text() | /liferay-portlet-app/portlet/control-panel-entry-weight[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayportletxml.querySpecification" />
             </reference>
         </references>
@@ -432,72 +432,72 @@
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/portal-properties"
-                    targetNodes="text()"
+                    path="/hook/portal-properties/text() | /hook/portal-properties[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.portalproperties.querySpecification"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/language-properties"
-                    targetNodes="text()"
+                    path="/hook/language-properties/text() | /hook/language-properties[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.languageproperties.querySpecification" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/custom-jsp-dir"
-                    targetNodes="text()"
+                    path="/hook/custom-jsp-dir/text() | /hook/custom-jsp-dir[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.jspdir.querySpecification" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/service/service-type"
-                    targetNodes="text()"
+                    path="/hook/service/service-type/text() | /hook/service/service-type[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toJava />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/service/service-impl"
-                    targetNodes="text()"
+                    path="/hook/service/service-impl/text() | /hook/service/service-impl[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toJava />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/indexer-post-processor/indexer-class-name"
-                    targetNodes="text()"
+                    path="/hook/indexer-post-processor/indexer-class-name/text() | /hook/indexer-post-processor/indexer-class-name[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toJava extends="com.liferay.portal.model.BaseModel" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/indexer-post-processor/indexer-post-processor-impl"
-                    targetNodes="text()"
+                    path="/hook/indexer-post-processor/indexer-post-processor-impl/text() | /hook/indexer-post-processor/indexer-post-processor-impl[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.search.IndexerPostProcessor" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/servlet-filter/servlet-filter-impl"
-                    targetNodes="text()"
+                    path="/hook/servlet-filter/servlet-filter-impl/text() | /hook/servlet-filter/servlet-filter-impl[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toJava extends="javax.servlet.Filter" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayHookDescriptorValidator">
                 <from
-                    path="/hook/struts-action/struts-action-impl"
-                    targetNodes="text()"
+                    path="/hook/struts-action/struts-action-impl/text() | /hook/struts-action/struts-action-impl[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferayhookxml.querySpecification" />
                 <toJava extends="com.liferay.portal.kernel.struts.StrutsAction,com.liferay.portal.kernel.struts.StrutsPortletAction" />
             </reference>
@@ -513,24 +513,24 @@
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorValidator">
                 <from
-                    path="/layout-templates/custom/layout-template/template-path"
-                    targetNodes="text()"
+                    path="/layout-templates/custom/layout-template/template-path/text() | /layout-templates/custom/layout-template/template-path[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferaylayouttplxml.querySpecification" />
                 <toResource querySpecificationId="liferay.webresources.tpl.querySpecification" />
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorValidator">
                 <from
-                    path="/layout-templates/custom/layout-template/wap-template-path"
-                    targetNodes="text()"
+                    path="/layout-templates/custom/layout-template/wap-template-path/text() | /layout-templates/custom/layout-template/wap-template-path[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferaylayouttplxml.querySpecification"/>
                 <toResource querySpecificationId="liferay.webresources.tpl.querySpecification"/>
             </reference>
 
             <reference validatorId="com.liferay.ide.xml.search.ui.liferayLayoutTplDescriptorValidator">
                 <from
-                    path="/layout-templates/custom/layout-template/thumbnail-path"
-                    targetNodes="text()"
+                    path="/layout-templates/custom/layout-template/thumbnail-path/text() | /layout-templates/custom/layout-template/thumbnail-path[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.liferaylayouttplxml.querySpecification"/>
                 <toResource querySpecificationId="liferay.webresources.image.querySpecification"/>
             </reference>
@@ -546,8 +546,8 @@
 
             <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
                 <from
-                    path="/service-builder/namespace"
-                    targetNodes="text()"
+                    path="/service-builder/namespace/text() | /service-builder/namespace[not(text())]"
+                    targetNodes=""
                     querySpecificationId="liferay.servicexml.querySpecification"/>
             </reference>
 
