@@ -1,4 +1,17 @@
-
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.xml.search.ui.tests;
 
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
@@ -21,7 +34,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.osgi.util.NLS;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,13 +83,10 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { elementValue } );
 
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
-
     }
 
     public void validateElementTypeHierarchyInocorrect( String elementName, String extendType ) throws Exception
     {
-
         String elementValue = "com.liferay.ide.tests.Orphan";
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
@@ -87,13 +96,12 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
                 extendType } );
 
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
     }
-    
+
     public void validateElementResourceNotFound( String elementName ,String elementValue) throws Exception
     {
         final IFile descriptorFile = getDescriptorFile();
-        
+
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
 
@@ -101,7 +109,6 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
             MessageFormat.format( LiferayBaseValidator.MESSAGE_RESOURCE_NOT_FOUND, new Object[] { elementValue } );
 
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
     }
 
     public void validateElementcorrectValue( String elementName, String elementValue ) throws Exception
@@ -110,16 +117,13 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
 
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
     }
 
     @Test
     public void testPortletClass() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
+
         final String elementName = "portlet-class";
         validateElementTypeNotFound( elementName ,"foo");
         validateElementTypeNotFound( elementName ,"");
@@ -130,10 +134,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testListenerClass() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
 
         final String elementName = "listener-class";
         validateElementTypeNotFound( elementName ,"foo");
@@ -151,7 +152,6 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         validateElementTypeNotFound( elementName, "" );
         validateElementTypeHierarchyInocorrect( elementName, "javax.portlet.filter.ResourceFilter, javax.portlet.filter.RenderFilter, javax.portlet.filter.ActionFilter, javax.portlet.filter.EventFilter" );
         validateElementcorrectValue( elementName, "com.liferay.ide.tests.ResourceFilterImpl" );
-        
     }
 
     @Test
@@ -176,7 +176,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
 
         // resource-bundle values contains "/"
         elementValue = "ResourceBundle/WithSlash";
-        markerMessage = 
+        markerMessage =
             MessageFormat.format(
                 PortletDescriptorValidator.MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR,
                 new Object[] { elementValue } );
@@ -195,7 +195,6 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
         // resource bundle file exists
         validateElementcorrectValue( elementName, "ResourceBundleExist" );
         validateElementcorrectValue( elementName, "content.Language" );
-
     }
 
 }

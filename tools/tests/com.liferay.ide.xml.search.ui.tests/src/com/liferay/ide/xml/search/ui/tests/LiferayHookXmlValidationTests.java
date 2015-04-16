@@ -1,4 +1,17 @@
-
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.xml.search.ui.tests;
 
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
@@ -69,7 +82,6 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
 
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
-
     }
 
     public void validateElementcorrectValue( String elementName, String elementValue ) throws Exception
@@ -78,7 +90,6 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
 
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
     }
 
     @Test
@@ -118,7 +129,6 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testLanguageProperties() throws Exception
     {
-
         final String elementName = "language-properties";
         String elementValue = null;
         String markerMessage = null;
@@ -171,7 +181,6 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testCustomJspDir() throws Exception
     {
-
         final String elementName = "custom-jsp-dir";
 
         String elementValue = "/custom_jspsNotExist";
@@ -200,7 +209,6 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testServiceTypeAndServiceImpl() throws Exception
     {
-
         String elementName = "service-type";
 
         // type not exist
@@ -250,13 +258,11 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         markerMessage =
             MessageFormat.format( LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { "" } );
         validateElementsIncorrectValue( elementName, "", markerMessage );
-
     }
 
     @Test
     public void testIndexerClassName() throws Exception
     {
-
         final String elementName = "indexer-class-name";
 
         String elementValue = "Foo";
@@ -281,7 +287,6 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testIndexerPostProcesserImpl() throws Exception
     {
-
         final String elementName = "indexer-post-processor-impl";
 
         String elementValue = "Foo";
@@ -306,7 +311,6 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testServletFilterImpl() throws Exception
     {
-
         final String elementName = "servlet-filter-impl";
 
         String elementValue = "Foo";
@@ -326,13 +330,11 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         markerMessage =
             MessageFormat.format( LiferayHookDescriptorValidator.MESSAGE_TYPE_NOT_FOUND, new Object[] { "" } );
         validateElementsIncorrectValue( elementName, "", markerMessage );
-
     }
 
     @Test
     public void testStrutsActionImpl() throws Exception
     {
-
         final String elementName = "struts-action-impl";
 
         String elementValue = "Foo";

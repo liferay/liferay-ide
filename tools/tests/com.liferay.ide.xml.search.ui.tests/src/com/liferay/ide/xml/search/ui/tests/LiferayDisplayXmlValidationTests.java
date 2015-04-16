@@ -78,7 +78,6 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testPortletAtId() throws Exception
     {
-
         final String elementName = "portlet";
         final String attrName = "id";
 
@@ -96,7 +95,6 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
         setAttrValue( descriptorFile, elementName, attrName, correctAttrValue );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
     }
 
     @Test
@@ -116,6 +114,5 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
         setAttrValue( descriptorFile, elementName, attrName, correctAttrValue );
         buildAndValidate( descriptorFile );
         assertEquals( true, checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
     }
 }

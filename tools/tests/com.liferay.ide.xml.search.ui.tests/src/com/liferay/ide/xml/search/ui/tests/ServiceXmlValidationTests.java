@@ -79,11 +79,7 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testNamespace() throws Exception
     {
-
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
 
         String elementName = "namespace";
         String elementValue = "namespace1";
@@ -100,16 +96,12 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         buildAndValidate( descriptorFile );
 
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
-
     }
 
     @Test
     public void testPackagePath() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
 
         String elementName = "service-builder";
         String attrName = "package-path";
