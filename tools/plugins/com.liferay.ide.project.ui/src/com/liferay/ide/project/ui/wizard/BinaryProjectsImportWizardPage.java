@@ -454,7 +454,6 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
             getDataModel().setProperty( SELECTED_PROJECTS, selectedProjects );
         }
     }
-    
 
     private static class Msgs extends NLS
     {
