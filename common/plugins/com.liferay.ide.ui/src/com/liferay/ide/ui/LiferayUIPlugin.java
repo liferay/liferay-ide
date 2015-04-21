@@ -15,10 +15,14 @@
 
 package com.liferay.ide.ui;
 
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -50,7 +54,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * The activator class controls the plugin life cycle
- * 
+ *
  * @author Greg Amerson
  */
 @SuppressWarnings( { "restriction", "deprecation" } )
@@ -83,7 +87,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, string );
     }
-    
+
     public static void logError( String msg, Exception e )
     {
         getDefault().getLog().log(new Status(IStatus.ERROR, PLUGIN_ID, msg, e));
@@ -96,7 +100,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
 
     /**
      * Returns the shared instance
-     * 
+     *
      * @return the shared instance
      */
     public static LiferayUIPlugin getDefault()
@@ -141,7 +145,11 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
 
             firstStartupComplete();
         }
+
+        registerMBeans();
     }
+
+
 
     public Image getImage( String key )
     {
@@ -163,6 +171,21 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         }
 
         return fTextFileDocumentProvider;
+    }
+
+    private void registerMBeans()
+    {
+        try
+        {
+            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+            ObjectName name = new ObjectName("com.liferay.ide.ui:type=WorkspaceHelper");
+            WorkspaceHelper mbean = new WorkspaceHelper();
+            mbs.registerMBean(mbean, name);
+        }
+        catch( Exception e )
+        {
+            logError( "Unable to start workspaceHelper MBean", e );
+        }
     }
 
     /*
