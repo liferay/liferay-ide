@@ -103,6 +103,10 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                         retval = autoDeploy( outputJar );
                     }
                 }
+                else
+                {
+                    retval = LiferayServerCore.error( "Could not create output jar" );
+                }
             }
             else
             {

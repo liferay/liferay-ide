@@ -142,7 +142,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
         final Artifact artifact = mavenProject.getArtifact();
         final File file = artifact.getFile();
 
-        if( file.exists() && !artifact.getFile().getName().equals( "classes" ) )
+        if( file != null && file.exists() && !artifact.getFile().getName().equals( "classes" ) )
         {
             retval = new DefaultMaven2OsgiConverter().getBundleSymbolicName( artifact );
         }
