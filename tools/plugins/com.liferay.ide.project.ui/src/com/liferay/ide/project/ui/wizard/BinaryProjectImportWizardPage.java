@@ -92,6 +92,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
                 else
                 {
                     File binaryFile = new File( binariesLocation.getText() );
+
                     if( ProjectImportUtil.isValidLiferayPlugin( binaryFile ) )
                     {
                         selectedBinary = new BinaryProjectRecord( new File( binariesLocation.getText() ) );
@@ -108,7 +109,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
 
         Button browse = SWTUtil.createButton( parent, Msgs.browse );
         browse.addSelectionListener
-        ( 
+        (
             new SelectionAdapter()
             {
                 @Override
