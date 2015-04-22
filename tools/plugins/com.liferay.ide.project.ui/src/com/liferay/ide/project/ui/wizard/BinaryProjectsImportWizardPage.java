@@ -42,6 +42,8 @@ import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -137,6 +139,17 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
 
         binariesLocation = SWTUtil.createSingleText( parent, 1 );
+        binariesLocation.addModifyListener( new ModifyListener()
+        {
+            @Override
+            public void modifyText( ModifyEvent e )
+            {
+                if( binariesLocation.isFocusControl() && "" == binariesLocation.getText() )
+                {
+                    setMessage( null );
+                }
+            }
+        } );
 
         Button browse = SWTUtil.createButton( parent, Msgs.browse );
         browse.addSelectionListener
