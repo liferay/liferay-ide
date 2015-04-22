@@ -35,7 +35,7 @@ import org.osgi.resource.Namespace;
 /**
  * @author Gregory Amerson
  */
-public class RuleTemplate extends AbstractProjectTemplate
+public class PortletTemplate extends AbstractProjectTemplate
 {
 
     @Override
@@ -44,23 +44,15 @@ public class RuleTemplate extends AbstractProjectTemplate
         return false;
     }
 
-    private boolean isTest( String projectName )
-    {
-        return projectName.endsWith( ".test" );
-    }
-
     @Override
     public void modifyInitialBndModel( BndEditModel model, String projectName, ProjectPaths projectPaths )
     {
         super.modifyInitialBndModel( model, projectName, projectPaths );
 
-        final String buildpath = "${buildpath-rule" + ( isTest( projectName ) ? "-test}" : "}" );
+        final String buildpath = "${buildpath-rule}";
         model.setBuildPath( Collections.singletonList( new VersionedClause( buildpath, Attrs.EMPTY_ATTRS ) ) );
 
-        if( !isTest(projectName) )
-        {
-            model.setIncludeResource( Collections.singletonList( "${includeresource-rule}" ) );
-        }
+        model.setIncludeResource( Collections.singletonList( "${includeresource-rule}" ) );
 
         final ImportPattern[] patterns =
         {
@@ -71,17 +63,14 @@ public class RuleTemplate extends AbstractProjectTemplate
         patterns[1].setOptional( true );
             model.setImportPatterns( Arrays.asList( patterns ) );
 
-        if( !isTest( projectName ) )
-        {
-            model.setGenericString( "Web-ContextPath", "/" + projectName );
+        model.setGenericString( "Web-ContextPath", "/" + projectName );
 
-            final String safePackageName = safePackageName( projectName );
+        final String safePackageName = safePackageName( projectName );
 
-            final CapReqBuilder cap =
-                new CapReqBuilder( IdentityNamespace.IDENTITY_NAMESPACE ).addDirective(
-                    Namespace.REQUIREMENT_FILTER_DIRECTIVE, "(osgi.identity=" + safePackageName + ")" );
-            model.setRunRequires( Collections.singletonList( cap.buildSyntheticRequirement() ) );
-        }
+        final CapReqBuilder cap =
+            new CapReqBuilder( IdentityNamespace.IDENTITY_NAMESPACE ).addDirective(
+                Namespace.REQUIREMENT_FILTER_DIRECTIVE, "(osgi.identity=" + safePackageName + ")" );
+        model.setRunRequires( Collections.singletonList( cap.buildSyntheticRequirement() ) );
     }
 
     @Override
@@ -97,26 +86,18 @@ public class RuleTemplate extends AbstractProjectTemplate
         exprs.put( "@rule.java.package.name@", safePackageName );
         exprs.put( "@rule.java.class.name@", ruleJavaClassName );
 
-        project.addResource(
-            src + "/" + pkgPath + "/" + ruleJavaClassName + ( isTest( projectName ) ? "RuleTest.java" : "Rule.java" ),
-            newResource( isTest( projectName) ? "ExampleRuleTest.java.txt" : "ExampleRule.java.txt", exprs ) );
+        project.addResource( src + "/" + pkgPath + "/" + ruleJavaClassName + "Rule.java",
+            newResource( "ExampleRule.java.txt", exprs ) );
 
-        if( isTest( projectName ) )
-        {
-            project.addResource( src + "/arquillian.xml", newResource( "arquillian.xml", exprs ) ) ;
-        }
-        else
-        {
-            project.addResource( "/META-INF/liferay-hook.xml", newResource( "liferay-hook.xml", exprs ) ) ;
-            project.addResource(
-                src + "/content/Language.properties", newResource( "Language.properties.txt", exprs ) );
-            project.addResource( src + "/templates/ct_fields.ftl", newResource( "ct_fields.ftl", exprs ) );
-        }
+        project.addResource( "/META-INF/liferay-hook.xml", newResource( "liferay-hook.xml", exprs ) ) ;
+        project.addResource(
+            src + "/content/Language.properties", newResource( "Language.properties.txt", exprs ) );
+        project.addResource( src + "/templates/ct_fields.ftl", newResource( "ct_fields.ftl", exprs ) );
     }
 
     private BndProjectResource newResource( String resource, Map<String, String> exprs )
     {
-        return new BndProjectResource( RuleTemplate.class.getResource( resource ), exprs );
+        return new BndProjectResource( PortletTemplate.class.getResource( resource ), exprs );
     }
 
 }

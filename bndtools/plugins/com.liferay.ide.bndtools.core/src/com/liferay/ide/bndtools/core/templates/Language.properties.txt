@@ -1,6 +1,0 @@
-##
-## Model resources
-##
-
-model.resource.@rule.java.package.name@.@rule.java.class.name@=@rule.java.class.name@
-model.resource.@rule.java.package.name@.@rule.java.class.name@.description=@rule.java.class.name@ rule
