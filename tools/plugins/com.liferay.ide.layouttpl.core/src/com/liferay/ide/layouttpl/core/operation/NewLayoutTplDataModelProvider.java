@@ -192,6 +192,13 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
             {
                 return LayoutTplCore.createErrorStatus( Msgs.templateIdInvalid );
             }
+
+            String idText = getStringProperty( propertyName );
+
+            if( CoreUtil.isNullOrEmpty( idText ) )
+            {
+                return LayoutTplCore.createErrorStatus( "Id can't be empty." );
+            }
         }
         else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )
         {
