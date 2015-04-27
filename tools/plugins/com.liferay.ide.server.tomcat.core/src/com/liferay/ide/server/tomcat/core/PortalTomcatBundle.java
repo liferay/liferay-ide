@@ -139,18 +139,19 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     {
         final List<String> args = new ArrayList<String>();
 
-        args.add( "-Dcatalina.base=" + this.bundlePath.toPortableString() );
-        args.add( "-Dcatalina.home=" + this.bundlePath.toPortableString() );
+        args.add( "-Dcatalina.base=" + "\"" + this.bundlePath.toPortableString() + "\"" );
+        args.add( "-Dcatalina.home=" + "\"" + this.bundlePath.toPortableString() + "\"" );
         // TODO use dynamic attach API
         args.add( "-Dcom.sun.management.jmxremote" );
         args.add( "-Dcom.sun.management.jmxremote.authenticate=false" );
         args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
         args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
         args.add( "-Dfile.encoding=UTF8" );
-        args.add( "-Djava.endorsed.dirs=" + this.bundlePath.append( "endorsed" ).toPortableString() );
-        args.add( "-Djava.io.tmpdir=" + this.bundlePath.append( "temp" ).toPortableString() );
+        args.add( "-Djava.endorsed.dirs=" + "\"" + this.bundlePath.append( "endorsed" ).toPortableString() + "\"" );
+        args.add( "-Djava.io.tmpdir=" + "\"" + this.bundlePath.append( "temp" ).toPortableString() + "\"" );
         args.add( "-Djava.net.preferIPv4Stack=true" );
-        args.add( "-Djava.util.logging.config.file=" + this.bundlePath.append( "conf/logging.properties" ) );
+        args.add( "-Djava.util.logging.config.file=" + "\"" + this.bundlePath.append( "conf/logging.properties" ) +
+            "\"" );
         args.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" );
         args.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" );
         args.add( "-Duser.timezone=GMT" );
