@@ -202,7 +202,7 @@ public class JSPMarkerResolutionGenerator implements IMarkerResolutionGenerator2
                 return true;
             }
 
-            final String valKey = marker.getAttribute( XMLSearchConstants.VALIDATION_KEY, null );
+            final String valKey = marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null );
 
             if( valKey != null && ValidationPreferences.containsKey( valKey ) )
             {

@@ -70,16 +70,21 @@ public class DecreaseInstanceScopeXmlValidationLevel implements IMarkerResolutio
         final IEclipsePreferences node =
             new ProjectScope( marker.getResource().getProject() ).getNode( ProjectCore.PLUGIN_ID );
 
-        final String validationKey = marker.getAttribute( XMLSearchConstants.VALIDATION_KEY, null );
-        if( validationKey != null )
+        String liferayPluginValidationType = marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null );
+        
+        if( liferayPluginValidationType == null )
+        {
+            liferayPluginValidationType = marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD, null );
+        }
+        if( liferayPluginValidationType != null )
         {
             if( node.getBoolean( ProjectCore.USE_PROJECT_SETTINGS, false ) )
             {
                 ValidationPreferences.setProjectScopeValidationLevel(
-                    marker.getResource().getProject(), validationKey, -1 );
+                    marker.getResource().getProject(), liferayPluginValidationType, -1 );
             }
 
-            ValidationPreferences.setInstanceScopeValidationLevel( validationKey, -1 );
+            ValidationPreferences.setInstanceScopeValidationLevel( liferayPluginValidationType, -1 );
             ComponentUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
         }
     }

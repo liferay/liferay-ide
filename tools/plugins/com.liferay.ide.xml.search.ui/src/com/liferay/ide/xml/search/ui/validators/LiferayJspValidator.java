@@ -64,7 +64,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
     protected void addMessage(
         IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
-        int severity, String validationKey, String querySpecificationId )
+        int severity, String liferayPluginValidationType, String querySpecificationId )
     {
         final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
@@ -82,7 +82,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
                 message.setAttribute( XMLSearchConstants.TEXT_CONTENT, textContent );
                 message.setAttribute( XMLSearchConstants.FULL_PATH, file.getFullPath().toPortableString() );
                 message.setAttribute( XMLSearchConstants.MARKER_TYPE, XMLSearchConstants.LIFERAY_JSP_MARKER_ID );
-                message.setAttribute( XMLSearchConstants.VALIDATION_KEY, validationKey );
+                message.setAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, liferayPluginValidationType );
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );
             }
@@ -134,13 +134,13 @@ public class LiferayJspValidator extends LiferayBaseValidator
     protected int getServerity( ValidationType validationType, IFile file )
     {
         int retval = -1;
-        String validationKey = getValidationKey( validationType, file );
+        String liferayPluginValidationType = getLiferayPluginValidationType( validationType, file );
 
-        if( validationKey != null )
+        if( liferayPluginValidationType != null )
         {
             retval =
                 Platform.getPreferencesService().getInt(
-                    PREFERENCE_NODE_QUALIFIER, validationKey, IMessage.NORMAL_SEVERITY,
+                    PREFERENCE_NODE_QUALIFIER, liferayPluginValidationType, IMessage.NORMAL_SEVERITY,
                     getScopeContexts( file.getProject() ) );
         }
         else
@@ -153,7 +153,7 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
 
     @Override
-    protected String getValidationKey( ValidationType validationType, IFile file )
+    protected String getLiferayPluginValidationType( ValidationType validationType, IFile file )
     {
         String retval = null;
 
@@ -294,12 +294,12 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
                             if( severity != ValidationMessage.IGNORE )
                             {
-                                final String validationKey = getValidationKey( validationType, file );
+                                final String liferayPluginValidationType = getLiferayPluginValidationType( validationType, file );
                                 final String querySpecificationId = referenceTo.getQuerySpecificationId();
                                 final String messageText = getMessageText( validationType, referenceTo, node, file );
 
                                 addMessage(
-                                    node, file, validator, reporter, batchMode, messageText, severity, validationKey,
+                                    node, file, validator, reporter, batchMode, messageText, severity, liferayPluginValidationType,
                                     querySpecificationId );
                             }
                         }
@@ -336,12 +336,12 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
                     if( severity != ValidationMessage.IGNORE )
                     {
-                        final String validationKey = getValidationKey( validationType, file );
+                        final String liferayPluginValidationType = getLiferayPluginValidationType( validationType, file );
                         final String querySpecificationId = referenceTo.getQuerySpecificationId();
                         final String messageText = getMessageText( validationType, referenceTo, node, file );
 
                         addMessage(
-                            node, file, validator, reporter, batchMode, messageText, severity, validationKey,
+                            node, file, validator, reporter, batchMode, messageText, severity, liferayPluginValidationType,
                             querySpecificationId );
                     }
                 }

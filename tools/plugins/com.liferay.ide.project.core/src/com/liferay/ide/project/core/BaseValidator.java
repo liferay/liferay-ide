@@ -220,7 +220,7 @@ public abstract class BaseValidator extends AbstractValidator
 
     protected void checkDocrootElement(
         IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String validationKey, String messageKey, List<Map<String, Object>> problems )
+        IScopeContext[] preferenceScopes, String liferayPluginValidationType, String messageKey, List<Map<String, Object>> problems )
     {
         NodeList elements = document.getElementsByTagName( element );
 
@@ -230,7 +230,7 @@ public abstract class BaseValidator extends AbstractValidator
 
             Map<String, Object> problem =
                 checkDocrootResource(
-                    item, project, preferenceNodeQualifier, preferenceScopes, validationKey, messageKey );
+                    item, project, preferenceNodeQualifier, preferenceScopes, liferayPluginValidationType, messageKey );
 
             if( problem != null )
             {

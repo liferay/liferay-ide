@@ -14,9 +14,9 @@
 
 package com.liferay.ide.xml.search.ui.markerResolutions;
 
+import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.xml.search.ui.LiferayXMLSearchUI;
-import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
-
+import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +40,13 @@ public class XmlValidationMarkerResolutionGenerator implements IMarkerResolution
 
         try
         {
-            if( marker.getAttribute( LiferayBaseValidator.MARKER_QUERY_ID ) != null )
+            String liferayPluginValidationType=marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE ).toString();
+            
+            if( liferayPluginValidationType == null )
+            {
+                liferayPluginValidationType=marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD ).toString();
+            }
+            if( liferayPluginValidationType != null && ValidationPreferences.containsKey( liferayPluginValidationType ) )
             {
                 retval.add( new DecreaseProjectScopeXmlValidationLevel() );
                 retval.add( new DecreaseInstanceScopeXmlValidationLevel() );

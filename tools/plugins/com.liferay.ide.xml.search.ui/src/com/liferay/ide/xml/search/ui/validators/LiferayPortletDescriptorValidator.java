@@ -68,10 +68,10 @@ public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
 
                 if( validationMsg != null )
                 {
-                    final String validationKey = getValidationKey( ValidationType.SYNTAX_INVALID, file );
+                    final String liferayPluginValidationType = getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
 
                     addMessage(
-                        node, file, validator, reporter, batchMode, validationMsg, severity, validationKey );
+                        node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType );
                     return false;
                 }
             }

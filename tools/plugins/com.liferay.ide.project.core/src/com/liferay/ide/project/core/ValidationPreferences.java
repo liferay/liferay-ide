@@ -161,9 +161,9 @@ public class ValidationPreferences
         preferenceKeys.add( LIFERAY_JSP_TYPE_HIERARCHY_INCORRECT );
     }
 
-    public static boolean containsKey( String validationKey )
+    public static boolean containsKey( String liferayPluginValidationType )
     {
-        return preferenceKeys.contains( validationKey );
+        return preferenceKeys.contains( liferayPluginValidationType );
     }
 
     public static String getValidationPreferenceKey( String descriptorFileName, ValidationType type )
@@ -185,14 +185,14 @@ public class ValidationPreferences
     }
 
     // Levels: IGNORE: -1, ERROR: 1, WARNNING: 2
-    public static void setInstanceScopeValidationLevel( String validationKey, int validationLevel )
+    public static void setInstanceScopeValidationLevel( String liferayPluginValidationType, int validationLevel )
     {
-        if( preferenceKeys.contains( validationKey ) &&
+        if( preferenceKeys.contains( liferayPluginValidationType ) &&
             ( validationLevel == -1 || validationLevel == 1 || validationLevel == 2 ) )
         {
             final IEclipsePreferences node = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
-            node.putInt( validationKey, validationLevel );
+            node.putInt( liferayPluginValidationType, validationLevel );
 
             try
             {
@@ -206,15 +206,15 @@ public class ValidationPreferences
 
     }
 
-    public static void setProjectScopeValidationLevel( IProject project, String validationKey, int validationLevel )
+    public static void setProjectScopeValidationLevel( IProject project, String liferayPluginValidationType, int validationLevel )
     {
         final IEclipsePreferences node = new ProjectScope( project ).getNode( ProjectCore.PLUGIN_ID );
 
-        if( preferenceKeys.contains( validationKey ) &&
+        if( preferenceKeys.contains( liferayPluginValidationType ) &&
             ( validationLevel == -1 || validationLevel == 1 || validationLevel == 2 ) )
         {
             node.putBoolean( ProjectCore.USE_PROJECT_SETTINGS, true );
-            node.putInt( validationKey, validationLevel );
+            node.putInt( liferayPluginValidationType, validationLevel );
             try
             {
                 node.flush();
