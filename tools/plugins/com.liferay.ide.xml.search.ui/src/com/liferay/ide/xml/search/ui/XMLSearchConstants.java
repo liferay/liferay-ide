@@ -25,6 +25,8 @@ public interface XMLSearchConstants
     String LIFERAY_HOOK_XML_CONTENT_TYPE = "com.liferay.ide.hook.core.liferayhookxml";
     String LIFERAY_JSP_MARKER_ID = "org.eclipse.jst.jsp.core.validationMarker";
     String LIFERAY_LAYOUTTPL_XML_CONTENT_TYPE = "com.liferay.ide.layouttpl.core.liferaylayouttplxml";
+    String LIFERAY_PLUGIN_VALIDATION_TYPE = "liferayPluginValidationType";
+    String LIFERAY_PLUGIN_VALIDATION_TYPE_OLD = "validationKey";
     String LIFERAY_PORTLET_XML_CONTENT_TYPE = "com.liferay.ide.portlet.core.liferayportletxml";
     String MARKER_TYPE = "markerType";
     String PORTLET_ACTION_METHOD_QUERY_ID = "com.liferay.ide.xml.search.ui.portletActionMethodQuery";
@@ -32,6 +34,4 @@ public interface XMLSearchConstants
     String RESOURCE_BUNDLE_QUERY_ID = "portlet.language.properties.querySpecification";
     String SERVICE_BUILDER_CONTENT_TYPE = "com.liferay.ide.service.core.servicebuildercontent";
     String TEXT_CONTENT = "textContent";
-    String LIFERAY_PLUGIN_VALIDATION_TYPE_OLD = "validationKey";
-    String LIFERAY_PLUGIN_VALIDATION_TYPE = "liferayPluginValidationType";
 }

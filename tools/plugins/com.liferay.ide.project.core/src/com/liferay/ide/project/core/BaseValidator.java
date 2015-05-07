@@ -77,16 +77,17 @@ public abstract class BaseValidator extends AbstractValidator
 
     @SuppressWarnings( "unchecked" )
     protected Map<String, Object>[] checkAllClassElements(
-        Map<String, String> map, IJavaProject javaProject, IFile liferayDescriptorXml, String classExistPreferenceKey,
-        String classHierarchyPreferenceKey, IScopeContext[] preferenceScopes, String preferenceNodeQualifier,
-        List<Map<String, Object>> problems ) throws CoreException
+        Map<String, String> map, IJavaProject javaProject, IFile liferayDescriptorXml,
+        String classExistPreferenceKey, String classHierarchyPreferenceKey, IScopeContext[] preferenceScopes,
+        String preferenceNodeQualifier, List<Map<String, Object>> problems ) throws CoreException
     {
         IStructuredModel liferayDescriptorXmlModel = null;
         IDOMDocument liferayDescriptorXmlDocument = null;
 
         try
         {
-            liferayDescriptorXmlModel = StructuredModelManager.getModelManager().getModelForRead( liferayDescriptorXml );
+            liferayDescriptorXmlModel =
+                StructuredModelManager.getModelManager().getModelForRead( liferayDescriptorXml );
 
             if( liferayDescriptorXmlModel != null && liferayDescriptorXmlModel instanceof IDOMModel && map != null )
             {
@@ -133,13 +134,14 @@ public abstract class BaseValidator extends AbstractValidator
             {
                 type = javaProject.findType( className );
 
-                if( type == null || !type.exists() || className.startsWith( "." ) ) //$NON-NLS-1$
+                if( type == null || !type.exists() || className.startsWith( "." ) )
                 {
-                    final String msg = MessageFormat.format( MESSAGE_CLASS_NOT_FOUND, new Object[] { className } );
+                    final String msg =
+                        MessageFormat.format( MESSAGE_CLASS_NOT_FOUND, new Object[] { className } );
 
                     return createMarkerValues(
-                        preferenceNodeQualifier, preferenceScopes, classExistPreferenceKey, (IDOMNode) classSpecifier,
-                        msg );
+                        preferenceNodeQualifier, preferenceScopes, classExistPreferenceKey,
+                        (IDOMNode) classSpecifier, msg );
                 }
 
                 else if( superTypeNames != null )
@@ -220,7 +222,8 @@ public abstract class BaseValidator extends AbstractValidator
 
     protected void checkDocrootElement(
         IDOMDocument document, String element, IProject project, String preferenceNodeQualifier,
-        IScopeContext[] preferenceScopes, String liferayPluginValidationType, String messageKey, List<Map<String, Object>> problems )
+        IScopeContext[] preferenceScopes, String liferayPluginValidationType, String messageKey,
+        List<Map<String, Object>> problems )
     {
         NodeList elements = document.getElementsByTagName( element );
 
@@ -230,7 +233,8 @@ public abstract class BaseValidator extends AbstractValidator
 
             Map<String, Object> problem =
                 checkDocrootResource(
-                    item, project, preferenceNodeQualifier, preferenceScopes, liferayPluginValidationType, messageKey );
+                    item, project, preferenceNodeQualifier, preferenceScopes, liferayPluginValidationType,
+                    messageKey );
 
             if( problem != null )
             {
@@ -293,7 +297,8 @@ public abstract class BaseValidator extends AbstractValidator
 
         try
         {
-            resource = this.getClass().getClassLoader().getResourceAsStream( liferayDescriptorClassElementsProperties );
+            resource =
+                this.getClass().getClassLoader().getResourceAsStream( liferayDescriptorClassElementsProperties );
             p.load( resource );
 
             for( Object key : p.keySet() )
@@ -371,7 +376,8 @@ public abstract class BaseValidator extends AbstractValidator
         return new Integer( IMarker.SEVERITY_WARNING );
     }
 
-    protected void setMarkerValues( Map<String, Object> markerValues, Object severity, IDOMNode domNode, String message )
+    protected void setMarkerValues(
+        Map<String, Object> markerValues, Object severity, IDOMNode domNode, String message )
     {
         markerValues.put( IMarker.SEVERITY, severity );
 
@@ -384,7 +390,8 @@ public abstract class BaseValidator extends AbstractValidator
 
         int end = domNode.getEndOffset();
 
-        if( domNode.getStartStructuredDocumentRegion() != null && domNode.getEndStructuredDocumentRegion() != null )
+        if( domNode.getStartStructuredDocumentRegion() != null &&
+            domNode.getEndStructuredDocumentRegion() != null )
         {
             end = domNode.getEndStructuredDocumentRegion().getStartOffset();
         }

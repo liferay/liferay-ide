@@ -202,14 +202,17 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
         }
     }
 
-    protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
-                               String messageText, int severity, String liferayPluginValidationType )
+    protected void addMessage(
+        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
+        String messageText, int severity, String liferayPluginValidationType )
     {
-        addMessage( node, file, validator, reporter, batchMode, messageText, severity, liferayPluginValidationType, null );
+        addMessage(
+            node, file, validator, reporter, batchMode, messageText, severity, liferayPluginValidationType, null );
     }
 
-    protected void addMessage( IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
-                               String messageText, int severity, String liferayPluginValidationType, String querySpecificationId )
+    protected void addMessage(
+        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
+        String messageText, int severity, String liferayPluginValidationType, String querySpecificationId )
     {
         int startOffset = getStartOffset( node );
         int length = node.getEndOffset() - startOffset;
@@ -223,7 +226,8 @@ public class LiferayBaseValidator implements IXMLReferenceValidator, IXMLReferen
             {
                 message.setTargetObject( file );
                 message.setAttribute( MARKER_QUERY_ID, querySpecificationId );
-                message.setAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, liferayPluginValidationType );
+                message.setAttribute(
+                    XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, liferayPluginValidationType );
                 reporter.addMessage( validator, message );
             }
         }

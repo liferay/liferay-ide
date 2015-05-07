@@ -73,9 +73,12 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
                     if( validationMsg != null )
                     {
+                        final String liferayPluginValidationType =
+                            getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
+                        addMessage(
+                            node, file, validator, reporter, batchMode, validationMsg, severity,
+                            liferayPluginValidationType );
 
-                        final String liferayPluginValidationType = getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
-                        addMessage( node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType );
                         return false;
                     }
                 }
@@ -154,7 +157,8 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
         try
         {
-            if( serviceTypeNode != null && validateServiceType( (IDOMNode) serviceTypeNode.getFirstChild(), file ) == null )
+            if( serviceTypeNode != null &&
+                validateServiceType( (IDOMNode) serviceTypeNode.getFirstChild(), file ) == null )
             {
                 // validate type hierarchy
                 final String serviceTypeContent = serviceTypeNode.getFirstChild().getNodeValue().trim();
@@ -164,7 +168,8 @@ public class LiferayHookDescriptorValidator extends LiferayBaseValidator
 
                 boolean typeCorrect = false;
 
-                if( superType != null && JdtUtils.hierarchyContainsComponent( type, superType.getFullyQualifiedName() ) )
+                if( superType != null &&
+                    JdtUtils.hierarchyContainsComponent( type, superType.getFullyQualifiedName() ) )
                 {
                     typeCorrect = true;
                 }

@@ -63,8 +63,8 @@ public class LiferayJspValidator extends LiferayBaseValidator
     public static final String MESSAGE_CLASS_ATTRIBUTE_NOT_WORK = Msgs.classAttributeNotWork;
 
     protected void addMessage(
-        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode, String messageText,
-        int severity, String liferayPluginValidationType, String querySpecificationId )
+        IDOMNode node, IFile file, IValidator validator, IReporter reporter, boolean batchMode,
+        String messageText, int severity, String liferayPluginValidationType, String querySpecificationId )
     {
         final String textContent = DOMUtils.getNodeValue( node );
         int startOffset = getStartOffset( node );
@@ -82,14 +82,16 @@ public class LiferayJspValidator extends LiferayBaseValidator
                 message.setAttribute( XMLSearchConstants.TEXT_CONTENT, textContent );
                 message.setAttribute( XMLSearchConstants.FULL_PATH, file.getFullPath().toPortableString() );
                 message.setAttribute( XMLSearchConstants.MARKER_TYPE, XMLSearchConstants.LIFERAY_JSP_MARKER_ID );
-                message.setAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, liferayPluginValidationType );
+                message.setAttribute(
+                    XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, liferayPluginValidationType );
                 message.setTargetObject( file );
                 reporter.addMessage( validator, message );
             }
         }
     }
 
-    protected String getMessageText( ValidationType validationType, IXMLReferenceTo referenceTo, Node node, IFile file )
+    protected String getMessageText(
+        ValidationType validationType, IXMLReferenceTo referenceTo, Node node, IFile file )
     {
         if( node.toString().equals( "class" ) && validationType.equals( ValidationType.STATIC_VALUE_UNDEFINED ) )
         {
@@ -294,13 +296,15 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
                             if( severity != ValidationMessage.IGNORE )
                             {
-                                final String liferayPluginValidationType = getLiferayPluginValidationType( validationType, file );
+                                final String liferayPluginValidationType =
+                                    getLiferayPluginValidationType( validationType, file );
                                 final String querySpecificationId = referenceTo.getQuerySpecificationId();
-                                final String messageText = getMessageText( validationType, referenceTo, node, file );
+                                final String messageText =
+                                    getMessageText( validationType, referenceTo, node, file );
 
                                 addMessage(
-                                    node, file, validator, reporter, batchMode, messageText, severity, liferayPluginValidationType,
-                                    querySpecificationId );
+                                    node, file, validator, reporter, batchMode, messageText, severity,
+                                    liferayPluginValidationType, querySpecificationId );
                             }
                         }
                     }
@@ -313,7 +317,6 @@ public class LiferayJspValidator extends LiferayBaseValidator
         IXMLReferenceTo referenceTo, IDOMNode node, IFile file, IValidator validator, IReporter reporter,
         boolean batchMode )
     {
-
         if( node instanceof AttrImpl )
         {
             final AttrImpl attrNode = (AttrImpl) node;
@@ -355,7 +358,6 @@ public class LiferayJspValidator extends LiferayBaseValidator
 
     protected static class Msgs extends NLS
     {
-
         public static String classAttributeNotWork;
 
         static

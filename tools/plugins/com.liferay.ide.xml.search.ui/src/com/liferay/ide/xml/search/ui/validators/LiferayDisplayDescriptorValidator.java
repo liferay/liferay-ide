@@ -44,16 +44,19 @@ public class LiferayDisplayDescriptorValidator extends LiferayBaseValidator
 
         if( severity != ValidationMessage.IGNORE )
         {
-            if( node.getNodeType() == Node.ATTRIBUTE_NODE && "name".equals( node.getNodeName() )
-                && "category".equals( ( (Attr) node ).getOwnerElement().getNodeName() ) )
+            if( node.getNodeType() == Node.ATTRIBUTE_NODE && "name".equals( node.getNodeName() ) &&
+                "category".equals( ( (Attr) node ).getOwnerElement().getNodeName() ) )
             {
                 if( node.getNodeValue().matches( "\\s*" ) )
                 {
-                    final String liferayPluginValidationType = getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
+                    final String liferayPluginValidationType =
+                        getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
                     String validationMsg = MESSAGE_CATEGORY_NAME_CANNOT_BE_EMPTY;
 
                     addMessage(
-                        node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType );
+                        node, file, validator, reporter, batchMode, validationMsg, severity,
+                        liferayPluginValidationType );
+
                     return false;
                 }
             }

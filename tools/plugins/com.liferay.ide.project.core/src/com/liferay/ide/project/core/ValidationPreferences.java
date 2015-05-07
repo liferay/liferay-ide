@@ -206,7 +206,8 @@ public class ValidationPreferences
 
     }
 
-    public static void setProjectScopeValidationLevel( IProject project, String liferayPluginValidationType, int validationLevel )
+    public static void setProjectScopeValidationLevel(
+        IProject project, String liferayPluginValidationType, int validationLevel )
     {
         final IEclipsePreferences node = new ProjectScope( project ).getNode( ProjectCore.PLUGIN_ID );
 

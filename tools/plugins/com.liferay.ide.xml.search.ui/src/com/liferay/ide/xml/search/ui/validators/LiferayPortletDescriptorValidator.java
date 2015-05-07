@@ -34,13 +34,6 @@ public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
     public static final String MESSAGE_ENTRY_WEIGHT_SYNTAX_INVALID = Msgs.entryWeightSyntaxInvalid;
 
     @Override
-    public void doValidate( IXMLReference reference, IDOMNode node, IFile file,
-                          IValidator validator, IReporter reporter, boolean batchMode )
-    {
-        super.doValidate( reference, node, file, validator, reporter, batchMode );
-    }
-
-    @Override
     protected boolean validateSyntax( IXMLReference reference, IDOMNode node, IFile file,
                                       IValidator validator, IReporter reporter, boolean batchMode )
     {
@@ -68,10 +61,12 @@ public class LiferayPortletDescriptorValidator extends LiferayBaseValidator
 
                 if( validationMsg != null )
                 {
-                    final String liferayPluginValidationType = getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
+                    final String liferayPluginValidationType =
+                        getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
 
                     addMessage(
-                        node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType );
+                        node, file, validator, reporter, batchMode, validationMsg, severity,
+                        liferayPluginValidationType );
                     return false;
                 }
             }

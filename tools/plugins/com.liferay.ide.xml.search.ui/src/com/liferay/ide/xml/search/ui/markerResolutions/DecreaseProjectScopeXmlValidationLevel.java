@@ -63,16 +63,19 @@ public class DecreaseProjectScopeXmlValidationLevel implements IMarkerResolution
     @Override
     public void run( IMarker marker )
     {
-        String liferayPluginValidationType = marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null );
-        
+        String liferayPluginValidationType =
+            marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null );
+
         if( liferayPluginValidationType == null )
         {
-            liferayPluginValidationType = marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD, null );
+            liferayPluginValidationType =
+                marker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE_OLD, null );
         }
 
         if( liferayPluginValidationType != null )
         {
-            ValidationPreferences.setProjectScopeValidationLevel( marker.getResource().getProject(), liferayPluginValidationType, -1 );
+            ValidationPreferences.setProjectScopeValidationLevel(
+                marker.getResource().getProject(), liferayPluginValidationType, -1 );
             ComponentUtil.validateFile( (IFile) marker.getResource(), new NullProgressMonitor() );
         }
     }

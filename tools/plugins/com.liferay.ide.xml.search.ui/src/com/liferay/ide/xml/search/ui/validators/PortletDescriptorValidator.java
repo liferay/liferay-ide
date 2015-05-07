@@ -57,17 +57,20 @@ public class PortletDescriptorValidator extends LiferayBaseValidator
                 }
 
                 if( validationMsg == null &&
-                  ( nodeValue.contains( IPath.SEPARATOR + "" ) || ( CoreUtil.isWindows() && nodeValue.contains( "\\" ) ) ) )
+                    ( nodeValue.contains( IPath.SEPARATOR + "" ) || ( CoreUtil.isWindows() && nodeValue.contains( "\\" ) ) ) )
                 {
                     validationMsg = NLS.bind( MESSAGE_RESOURCE_BUNDLE_CONTAIN_PATH_SEPARATOR, nodeValue );
                 }
 
                 if( validationMsg != null )
                 {
-                    final String liferayPluginValidationType = getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
+                    final String liferayPluginValidationType =
+                        getLiferayPluginValidationType( ValidationType.SYNTAX_INVALID, file );
 
                     addMessage(
-                        node, file, validator, reporter, batchMode, validationMsg, severity, liferayPluginValidationType );
+                        node, file, validator, reporter, batchMode, validationMsg, severity,
+                        liferayPluginValidationType );
+
                     return false;
                 }
             }
