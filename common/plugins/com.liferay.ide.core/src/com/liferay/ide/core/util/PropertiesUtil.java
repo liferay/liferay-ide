@@ -708,6 +708,9 @@ public class PropertiesUtil
 
                 contents.close();
             }
+            catch( SAXException se )
+            {
+            }
             catch( Exception e )
             {
                 LiferayCore.logError( "Error resolving" + ILiferayConstants.PORTLET_XML_FILE, e );
