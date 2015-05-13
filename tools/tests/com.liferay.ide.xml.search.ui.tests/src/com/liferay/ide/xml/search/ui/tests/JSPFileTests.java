@@ -15,33 +15,37 @@
 
 package com.liferay.ide.xml.search.ui.tests;
 
+import static com.liferay.ide.ui.tests.UITestsUtils.containsProposal;
+import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkMarkerByMessage;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.deleteOtherProjects;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.containHyperlink;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getHyperLinksForAttr;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getProposalsForAttr;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getTextHoverForAttr;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setAttrValue;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.verifyQuickFix;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
-import com.liferay.ide.xml.search.ui.XMLSearchConstants;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
+import org.eclipse.jface.text.hyperlink.IHyperlink;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
  * @author Kuo Zhang
  * @author Terry Jia
+ * @author Li Lu
  */
 public class JSPFileTests extends XmlSearchTestsBase
 {
 
-    private IProject project;
+    private static IProject project;
+    private IFile jspFile;
 
     private IProject getProject() throws Exception
     {
@@ -54,9 +58,9 @@ public class JSPFileTests extends XmlSearchTestsBase
         return project;
     }
 
-    private IFile getJspFile(String fileName) throws Exception
+    private IFile getJspFile( String fileName ) throws Exception
     {
-        final IFile file =  CoreUtil.getDefaultDocrootFolder( getProject() ).getFile( fileName );
+        final IFile file = CoreUtil.getDefaultDocrootFolder( getProject() ).getFile( fileName );
 
         if( file != null && file.exists() )
         {
@@ -65,152 +69,385 @@ public class JSPFileTests extends XmlSearchTestsBase
 
         return null;
     }
+    
+    @AfterClass
+    public static void deleteProject() throws Exception
+    {
+        try
+        {
+            project.close( null );
+            project.delete( true, null );
+        }
+        catch( Exception e )
+        {
+        }
+    }
+
+    public void validateContentAssistForEmptyAttr( String elementName, String attrName ) throws Exception
+    {
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        setAttrValue( jspFile, elementName, attrName, "" );
+        buildAndValidate( jspFile );
+
+        final ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        final String[] expectedProposalString =
+            { "javax.portlet.title - [Language.properties]", "MessageKeyHoverTest - [Language.properties]",
+                "Test - [Language.properties]" };
+        for( String proposal : expectedProposalString )
+        {
+            assertTrue(
+                "can't get proposal " + proposal + " in " + elementName + attrName,
+                containsProposal( proposals, proposal, true ) );
+
+        }
+    }
+
+    public void validateContentAssistForAttr( String elementName, String attrName ) throws Exception
+    {
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        setAttrValue( jspFile, elementName, attrName, "MessageKeyHove" );
+        buildAndValidate( jspFile );
+        final ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        final String expectedProposalString = "MessageKeyHoverTest - [Language.properties]";
+
+        assertEquals( true, containsProposal( proposals, expectedProposalString, true ) );
+
+    }
+
+    public void validateTextHoverForAttr( String elementName, String attrName ) throws Exception
+    {
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        String[] hover = getTextHoverForAttr( jspFile, elementName, attrName );
+        String expectMessageRegex =
+            ".*this is the test for message key text hover.* in /Portlet-Xml-Test-portlet/docroot/WEB-INF/src/content/Language.properties.*";
+
+        hover = getTextHoverForAttr( jspFile, elementName, attrName );
+        if( hover.length == 0 || !hover[0].toString().matches( expectMessageRegex ) )
+        {
+            buildAndValidate( jspFile );
+            hover = getTextHoverForAttr( jspFile, elementName, attrName );
+        }
+        assertTrue( hover[0].toString().matches( expectMessageRegex ) );
+
+    }
+
+    public void validateHyperLinksForAttr( String elementName, String attrName ) throws Exception
+    {
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        String expectedHyperlinkText1 = "Open 'MessageKeyHoverTest' in Language.properties";
+        String expectedHyperlinkText2 = "Open";
+
+        IHyperlink[] hyperLinks = getHyperLinksForAttr( jspFile, elementName, attrName );
+
+        boolean haslink =
+            containHyperlink( hyperLinks, expectedHyperlinkText1, true ) ||
+                containHyperlink( hyperLinks, expectedHyperlinkText2, false );
+
+        hyperLinks = getHyperLinksForAttr( jspFile, elementName, attrName );
+        assertTrue( "can'get hyper link at <" + elementName + "  " + attrName + ">", haslink );
+    }
 
     @Test
     public void testMessageKey() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() )return;
 
-        testMessageKeyValidation();
-        testMessageKeyContentAssist();
-        testMessageKeyQuickFix();
-    }
-
-    // TODO
-    public void testMessageKeyValidation()
-    {
-    }
-
-    // TODO
-    public void testMessageKeyContentAssist()
-    {
-    }
-
-    // an example of testing quick fix
-    protected void testMessageKeyQuickFix() throws Exception
-    {
-        final IFile viewJspFile = getJspFile("view.jsp");
-        assertNotNull( viewJspFile );
-
-        final String elementName = "liferay-ui:message";
-        final String attrName = "key";
-
-        setAttrValue( viewJspFile, elementName, attrName, "Foo" );
-        buildAndValidate( viewJspFile );
-
-        final String markerType = XMLSearchConstants.LIFERAY_JSP_MARKER_ID;
-        final String exceptedMessageRegex = "Property.*not found in.*";
-
-        verifyQuickFix( viewJspFile, markerType, exceptedMessageRegex, AddResourceKeyMarkerResolution.class );
+        String elementName = "liferay-ui:message";
+        String attrName = "key";
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
     }
 
     @Test
-    public void testTagLiferayPortletParams() throws Exception
+    public void testMessage() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )return;
 
-        final IFile jspFile = getJspFile( "test-liferay-portlet-param.jsp" );
-        assertNotNull( jspFile );
+        String elementName = "liferay-ui:error";
+        String attrName = "message";
 
-        final String liferayPortletParamElementName = "liferay-portlet:param";
-
-        String[][] paramsArray =
-        {
-            { "<%= ActionRequest.ACTION_NAME %>", "sayHello1", "Type \"sayHello1\" not found.", "true", "0" },
-            { "javax.portlet.action", "sayHello2", "Type \"sayHello2\" not found.", "true", "0" },
-            { "bookName", "liferay-in-action", "", "false", "25" }
-        };
-
-        for( String[] params : paramsArray )
-        {
-            testTagParamValidation(
-                jspFile, liferayPortletParamElementName, params[0], params[1], params[2], Boolean.valueOf( params[3] ),
-                Integer.valueOf( params[4] ) );
-        }
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
     }
 
     @Test
-    public void testTagParams() throws Exception
+    public void testLable() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
+        if( shouldSkipBundleTests() )return;
 
-        final IFile jspFile = getJspFile( "test-param.jsp" );
+        String elementName = "aui:input";
+        String attrName = "label";
 
-        assertNotNull( jspFile );
-
-        final String paramElementName = "param";
-
-        String[][] paramsArray =
-        {
-            { "<%= ActionRequest.ACTION_NAME %>", "sayHello3", "", "false", "24" },
-            { "javax.portlet.action", "sayHello4", "", "false", "24" },
-            { "bookName", "liferay-in-action", "", "false", "24" }
-        };
-
-        for( String[] params : paramsArray )
-        {
-            testTagParamValidation(
-                jspFile, paramElementName, params[0], params[1], params[2], Boolean.valueOf( params[3] ),
-                Integer.valueOf( params[4] ) );
-        }
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
     }
 
     @Test
-    public void testTagPortletParams() throws Exception
+    public void testHelpMessage() throws Exception
     {
-        if( shouldSkipBundleTests() ) return;
 
-        final IFile jspFile = getJspFile( "test-portlet-param.jsp" );
+        if( shouldSkipBundleTests() )return;
 
-        assertNotNull( jspFile );
+        String elementName = "aui:input";
+        String attrName = "helpMessage";
 
-        final String portletParamElementName = "portlet:param";
-
-        String[][] paramsArray =
-        {
-            { "<%= ActionRequest.ACTION_NAME %>", "sayHello5", "Type \"sayHello5\" not found.", "true", "0" },
-            { "javax.portlet.action", "sayHello6", "Type \"sayHello6\" not found.", "true", "0" },
-            { "bookName", "liferay-in-action", "", "false", "24" }
-        };
-
-        for( String[] params : paramsArray )
-        {
-            testTagParamValidation(
-                jspFile, portletParamElementName, params[0], params[1], params[2], Boolean.valueOf( params[3] ),
-                Integer.valueOf( params[4] ) );
-        }
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
     }
 
-    protected void testTagParamValidation(
-        IFile file, String tagName, String nameAttr, String valueAttr, String exceptedMessageRegex,
-        boolean exceptedFindWarning, int lineNumber ) throws Exception
+    @Test
+    public void testSuffix() throws Exception
     {
-        final String markerType = XMLSearchConstants.LIFERAY_JSP_MARKER_ID;
 
-        setAttrValue( file, tagName, "name", nameAttr );
-        setAttrValue( file, tagName, "value", valueAttr );
+        if( shouldSkipBundleTests() )return;
 
-        buildAndValidate( file );
+        String elementName = "aui:input";
+        String attrName = "suffix";
 
-        if( exceptedFindWarning )
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testATitle() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:a";
+        String attrName = "title";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testHeaderTitle() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-ui:header";
+        String attrName = "title";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testPanelTitle() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-ui:panel";
+        String attrName = "title";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testALable() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:a";
+        String attrName = "label";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testButtonValue() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:button";
+        String attrName = "value";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testPlaceholder() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:input";
+        String attrName = "placeholder";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testWorkflowstatusStatusMessage() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:workflow-status";
+        String attrName = "statusMessage";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testIcondeleteConfirmation() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-ui:icon-delete";
+        String attrName = "confirmation";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testInputmoveboxesRighgtitle() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-ui:input-move-boxes";
+        String attrName = "rightTitle";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testInputmoveboxesLefttitle() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-ui:input-move-boxes";
+        String attrName = "leftTitle";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testSocialActivitiesFeedLinkMessage() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-ui:social-activities";
+        String attrName = "feedLinkMessage";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testSearchContainerEmptyResulsMessage() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-ui:search-container";
+        String attrName = "emptyResultsMessage";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testActionURLName() throws Exception
+    {
+
+        if( shouldSkipBundleTests() )return;
+
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+
+        String elementName = "liferay-portlet:actionURL";
+        String attrName = "name";
+
+        Thread.sleep( 10000 );
+        validateHyperLinksForAttr( elementName, attrName );
+        setAttrValue( jspFile, elementName, attrName, "" );
+        buildAndValidate( jspFile );
+
+        ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        if( !containsProposal( proposals, "actionTest - NewPortlet", true ) )
         {
-            assertEquals( true, checkMarkerByMessage( file, markerType, exceptedMessageRegex, true ) );
+            buildAndValidate( jspFile );
+            proposals=getProposalsForAttr( jspFile, elementName, attrName );
         }
-        else
-        {
-            final IMarker[] markers = file.findMarkers( markerType, false, IResource.DEPTH_ZERO );
+        assertEquals( true, containsProposal( proposals, "actionTest - NewPortlet", true ) );
+    }
 
-            if( markers.length > 0 )
-            {
-                for( IMarker marker : markers )
-                {
-                    assertNotEquals( lineNumber, marker.getAttribute( IMarker.LINE_NUMBER ) );
-                }
-            }
-        }
+    @Test
+    public void testLiferayPortletParamValueMessage() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "liferay-portlet:param";
+        String attrName = "value";
+
+        validateHyperLinksForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testPortletParamValueMessage() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "portlet:param";
+        String attrName = "value";
+
+        validateHyperLinksForAttr( elementName, attrName );
     }
 
 }

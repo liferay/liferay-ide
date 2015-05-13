@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +46,7 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
 
     protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
-    private IProject project;
+    private static IProject project;
 
     protected IFile getDescriptorFile() throws Exception
     {
@@ -124,7 +125,10 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
         setElementContent( descriptorFile, elementName, correctValue );
 
         buildAndValidate( descriptorFile );
-
+        if( !checkNoMarker( descriptorFile, MARKER_TYPE ) )
+        {
+            buildAndValidate( descriptorFile );
+        }
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 
@@ -137,6 +141,19 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
 
         descriptorFile.setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
         projectFile.close();
+    }
+
+    @AfterClass
+    public static void deleteProject() throws Exception
+    {
+        try
+        {
+            project.close( null );
+            project.delete( true, null );
+        }
+        catch( Exception e )
+        {
+        }
     }
 
     @Test
@@ -152,6 +169,7 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
         validateElementCorrectValue( elementName, "com.liferay.ide.tests.AssetRendererFactoryImp" );
     }
 
+    @Test
     public void testAtomCollectionAdapter() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
