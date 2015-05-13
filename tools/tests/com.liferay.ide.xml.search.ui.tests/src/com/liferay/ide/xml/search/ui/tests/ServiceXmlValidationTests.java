@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,7 +47,7 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
     protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     public static final String SERVICE_XML_SYNTAX_INVALID = "Syntax of \"{0}\" is invalid.";
     private IFile descriptorFile;
-    private IProject project;
+    private static IProject project;
 
     protected IFile getDescriptorFile() throws Exception
     {
@@ -74,6 +75,19 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
 
         descriptorFile.setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
         projectFile.close();
+    }
+
+    @AfterClass
+    public static void deleteProject() throws Exception
+    {
+        try
+        {
+            project.close( null );
+            project.delete( true, null );
+        }
+        catch( Exception e )
+        {
+        }
     }
 
     @Test

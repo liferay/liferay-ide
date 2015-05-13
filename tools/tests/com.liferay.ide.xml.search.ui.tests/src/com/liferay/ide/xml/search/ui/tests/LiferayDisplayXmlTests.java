@@ -19,6 +19,8 @@ import static com.liferay.ide.ui.tests.UITestsUtils.containsProposal;
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.containHyperlink;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.findMarkerByMessage;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.findMarkerResolutionByClass;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getHyperLinksForAttr;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getProposalsForAttr;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getTextHoverForAttr;
@@ -29,11 +31,15 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlViewerConfiguration;
+import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseInstanceScopeXmlValidationLevel;
+import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseProjectScopeXmlValidationLevel;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
@@ -45,7 +51,7 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
 
     protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
-    private IProject project;
+    private static IProject project;
 
     protected IFile getDescriptorFile() throws Exception
     {
@@ -64,9 +70,24 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
         return project;
     }
 
+    @AfterClass
+    public static void deleteProject() throws Exception
+    {
+        try
+        {
+            project.close( null );
+            project.delete( true, null );
+        }
+        catch( Exception e )
+        {
+        }
+    }
+
     @Test
     public void testPortletAtIdContentAssist() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet";
         final String attrName = "id";
@@ -78,8 +99,8 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
         assertNotNull( proposals );
         assertEquals( true, proposals.length > 0 );
 
-        final String exceptedProposalString = "Portlet-Xml-Test";
-        assertEquals( true, containsProposal( proposals, exceptedProposalString, true ) );
+        final String expectedProposalString = "Portlet-Xml-Test";
+        assertEquals( true, containsProposal( proposals, expectedProposalString, true ) );
 
         attrValue = "Portlet-Xml-Test";
         setAttrValue( descriptorFile, elementName, attrName, attrValue );
@@ -89,14 +110,16 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
     @Test
     public void testPortletAtIdHyperlink() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet";
         final String attrName = "id";
 
         IHyperlink[] hyperlinks = getHyperLinksForAttr( descriptorFile, elementName, attrName );
-        final String exceptedHyperlinkText = "/Portlet-Xml-Test-portlet/docroot/WEB-INF/portlet.xml";
+        final String expectedHyperlinkText = "/Portlet-Xml-Test-portlet/docroot/WEB-INF/portlet.xml";
 
-        containHyperlink( hyperlinks, exceptedHyperlinkText, false );
+        containHyperlink( hyperlinks, expectedHyperlinkText, false );
     }
 
     // a better way to test text hover ?
@@ -104,6 +127,8 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
     @Test
     public void testPortletAtIdTextHover() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet";
         final String attrName = "id";
@@ -133,16 +158,31 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
     @Test
     public void testSourceViewerConfiguration() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() ) return;
 
         final IFile descriptorFile = getDescriptorFile();
         Object sourceViewerConfiguration =
             XmlSearchTestsUtils.getSourceViewerConfiguraionFromOpenedEditor( descriptorFile );
 
         assertEquals( true, sourceViewerConfiguration instanceof LiferayCustomXmlViewerConfiguration );
+    }
+    
+    @Test
+    public void testPortletAtIdQuickFix() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        final IFile descriptorFile = getDescriptorFile();
+        final String elementName = "portlet";
+        final String attrName = "id";
+
+        setAttrValue( descriptorFile, elementName, attrName, "Wrong-Xml-Reference" );
+        buildAndValidate( descriptorFile );
+
+        String markerMessageRegex = ".*" + "Wrong-Xml-Reference" + ".*";
+        IMarker expectedMarker = findMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false );
+        assertNotNull( findMarkerResolutionByClass( expectedMarker, DecreaseProjectScopeXmlValidationLevel.class ) );
+        assertNotNull( findMarkerResolutionByClass( expectedMarker, DecreaseInstanceScopeXmlValidationLevel.class ) );
     }
 
 }
