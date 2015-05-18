@@ -62,6 +62,31 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         return false;
     }
 
+    private boolean checkoutDocrootFileNameCorrect( String filename, String type )
+    {
+        int firstindex = filename.indexOf( "/" );
+        int lastindex = filename.lastIndexOf( "." + type );
+        String filetype = filename.substring( lastindex + 1 );
+
+        if( lastindex != -1 )
+        {
+            if( firstindex != -1 )
+            {
+                filename = filename.substring( firstindex + 1, lastindex );
+            }
+            else
+            {
+                filename = filename.substring( 0, lastindex );
+            }
+            if( !CoreUtil.isNullOrEmpty( filename ) && !filename.startsWith( "/" ) && !filename.startsWith( "." ) &&
+                !CoreUtil.isNullOrEmpty( filetype ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public Object getDefaultProperty( String propertyName )
     {
@@ -202,6 +227,13 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         }
         else if( LAYOUT_TEMPLATE_FILE.equals( propertyName ) )
         {
+            String filename = getStringProperty( propertyName );
+
+            if( !checkoutDocrootFileNameCorrect( filename, "tpl" ) )
+            {
+                return LayoutTplCore.createErrorStatus( "Template file name is invaild." );
+            }
+
             final IPath filePath = new Path( getStringProperty( LAYOUT_TEMPLATE_FILE ) );
 
             if( checkDocrootFileExists( filePath ) )
@@ -211,6 +243,13 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         }
         else if( LAYOUT_WAP_TEMPLATE_FILE.equals( propertyName ) )
         {
+            String filename = getStringProperty( propertyName );
+
+            if( !checkoutDocrootFileNameCorrect( filename, "tpl" ) )
+            {
+                return LayoutTplCore.createErrorStatus( "WAP template file name is invaild." );
+            }
+
             final IPath filePath = new Path( getStringProperty( LAYOUT_WAP_TEMPLATE_FILE ) );
 
             if( checkDocrootFileExists( filePath ) )
@@ -220,6 +259,13 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
         }
         else if( LAYOUT_THUMBNAIL_FILE.equals( propertyName ) )
         {
+            String filename = getStringProperty( propertyName );
+
+            if( !checkoutDocrootFileNameCorrect( filename, "" ) )
+            {
+                return LayoutTplCore.createErrorStatus( "Thumbnail file name is invaild." );
+            }
+
             final IPath filePath = new Path( getStringProperty( LAYOUT_THUMBNAIL_FILE ) );
 
             if( checkDocrootFileExists( filePath ) )
