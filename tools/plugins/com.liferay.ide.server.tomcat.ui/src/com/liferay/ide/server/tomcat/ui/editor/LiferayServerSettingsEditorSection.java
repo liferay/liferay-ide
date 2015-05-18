@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.jst.server.tomcat.core.internal.ITomcatServer;
 import org.eclipse.jst.server.tomcat.ui.internal.ContextIds;
 import org.eclipse.osgi.util.NLS;
@@ -962,6 +963,21 @@ public class LiferayServerSettingsEditorSection extends ServerEditorSection {
 
 			}
 			*/
+            String memoryValue = memoryArgs.getText();
+            String[] memory = DebugPlugin.parseArguments( memoryValue );
+
+            if( !CoreUtil.isNullOrEmpty( memoryValue ) )
+            {
+                for( String str : memory )
+                {
+                    if( !( str.startsWith( "-X" ) ) ) //$NON-NLS-1$
+                    {
+                        return new IStatus[] { new Status(
+                            IStatus.ERROR, LiferayServerUI.PLUGIN_ID,
+                            "Error in memory argument format, expecting it to start with '-X'" ) }; //$NON-NLS-1$
+                    }
+                }
+            }
 		}
 		// use default implementation to return success
 		return super.getSaveStatus();
