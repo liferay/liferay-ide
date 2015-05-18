@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +46,7 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
 
     protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
-    private IProject project;
+    private static IProject project;
 
     protected IFile getDescriptorFile() throws Exception
     {
@@ -75,9 +76,24 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
         projectFile.close();
     }
 
+    @AfterClass
+    public static void deleteProject() throws Exception
+    {
+        try
+        {
+            project.close( null );
+            project.delete( true, null );
+        }
+        catch( Exception e )
+        {
+        }
+    }
+
     @Test
     public void testPortletAtId() throws Exception
     {
+        if( shouldSkipBundleTests() )return;
+        
         final String elementName = "portlet";
         final String attrName = "id";
 
@@ -100,6 +116,8 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testCategoryAtName() throws Exception
     {
+        if( shouldSkipBundleTests() )return;
+        
         final String elementName = "category";
         final String attrName = "name";
 

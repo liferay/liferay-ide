@@ -17,8 +17,8 @@ package com.liferay.ide.xml.search.ui.tests;
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkMarkerByMessage;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkNoMarker;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setElementContent;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayConstants;
@@ -34,6 +34,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +46,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
 
     protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
     private IFile descriptorFile;
-    private IProject project;
+    private static IProject project;
 
     protected IFile getDescriptorFile() throws Exception
     {
@@ -75,6 +76,19 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         projectFile.close();
     }
 
+    @AfterClass
+    public static void deleteProject() throws Exception
+    {
+        try
+        {
+            project.close( null );
+            project.delete( true, null );
+        }
+        catch( Exception e )
+        {
+        }
+    }
+
     public void validateElementsIncorrectValue( String elementName, String elementValue, String markerMessage )
         throws Exception
     {
@@ -84,17 +98,21 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
     }
 
-    public void validateElementcorrectValue( String elementName, String elementValue ) throws Exception
+    public void validateElementcorrectValue( String elementName, String elementValue )
+        throws Exception
     {
+        String markerMessageRegex = ".*" + elementValue +".*";
         setElementContent( descriptorFile, elementName, elementValue );
         buildAndValidate( descriptorFile );
 
-        assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
+        assertFalse( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false ) );
     }
 
     @Test
     public void testPortalProperties() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final String elementName = "portal-properties";
         String elementValue = null;
         String markerMessage = null;
@@ -129,6 +147,8 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testLanguageProperties() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final String elementName = "language-properties";
         String elementValue = null;
         String markerMessage = null;
@@ -181,6 +201,8 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testCustomJspDir() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final String elementName = "custom-jsp-dir";
 
         String elementValue = "/custom_jspsNotExist";
@@ -209,6 +231,8 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testServiceTypeAndServiceImpl() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         String elementName = "service-type";
 
         // type not exist
@@ -263,6 +287,8 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testIndexerClassName() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final String elementName = "indexer-class-name";
 
         String elementValue = "Foo";
@@ -287,6 +313,8 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testIndexerPostProcesserImpl() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final String elementName = "indexer-post-processor-impl";
 
         String elementValue = "Foo";
@@ -311,6 +339,8 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testServletFilterImpl() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final String elementName = "servlet-filter-impl";
 
         String elementValue = "Foo";
@@ -335,6 +365,8 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     @Test
     public void testStrutsActionImpl() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+        
         final String elementName = "struts-action-impl";
 
         String elementValue = "Foo";
