@@ -78,8 +78,9 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
             {
                 filename = filename.substring( 0, lastindex );
             }
-            if( !CoreUtil.isNullOrEmpty( filename ) && !filename.startsWith( "/" ) && !filename.startsWith( "." ) &&
-                !CoreUtil.isNullOrEmpty( filetype ) )
+
+            if( !CoreUtil.isNullOrEmpty( filename ) && !filename.startsWith( "/" ) &&
+                !filename.startsWith( "." ) && !CoreUtil.isNullOrEmpty( filetype ) )
             {
                 return true;
             }
