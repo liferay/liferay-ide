@@ -118,7 +118,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         }
 
         final String expectedbuildXmlContent =
-            CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/" + expectedBuildFile ) ).replaceAll(
+            CoreUtil.readStreamToString(
+                this.getClass().getResourceAsStream( "files/" + getRuntimeVersion() + "/" + expectedBuildFile ) ).replaceAll(
                 "RUNTIMEVERSION", getRuntimeVersion() );
 
         assertEquals( stripCarriageReturns( expectedbuildXmlContent ), stripCarriageReturns( buildXmlContent ) );

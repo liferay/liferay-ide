@@ -44,17 +44,17 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
 
     protected IPath getLiferayPluginsSdkDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0.0" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0" );
     }
 
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0.0.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-m4-20150224120313668.zip" );
     }
 
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "liferay-plugins-sdk-7.0.0/";
+        return "liferay-plugins-sdk-7.0/";
     }
 
     @Test
