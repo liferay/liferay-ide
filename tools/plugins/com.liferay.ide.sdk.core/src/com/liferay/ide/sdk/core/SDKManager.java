@@ -81,7 +81,10 @@ public final class SDKManager
             initialize();
         }
 
-        sdkList.add( sdk );
+        if( !containsSDK( sdk ) )
+        {
+            sdkList.add( sdk );
+        }
 
         if( sdkList.size() == 1 )
         {
