@@ -34,5 +34,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.liferay.ide.xml.search.ui,
- com.liferay.ide.xml.search.ui.validators,
- com.liferay.ide.xml.search.ui.editor
+ com.liferay.ide.xml.search.ui.editor,
+ com.liferay.ide.xml.search.ui.markerResolutions,
+ com.liferay.ide.xml.search.ui.validators
