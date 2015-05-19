@@ -22,9 +22,9 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
-import com.liferay.ide.project.core.model.internal.ProjectNameListener;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.File;
 import java.util.HashSet;
@@ -74,7 +74,7 @@ public class NewLiferayPluginProjectOpMethods
         {
             final SDK sdk = SDKManager.getInstance().getSDK( op.getPluginsSDKName().content( true ) );
 
-            if( sdk != null )
+            if( sdk != null && !SDKUtil.hasGradleTools( sdk.getLocation() ) )
             {
                 final Version version = new Version( sdk.getVersion() );
 

@@ -25,6 +25,7 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -102,6 +103,10 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             updateBaseDir = true;
         }
 
+        final boolean hasGradleTools = SDKUtil.hasGradleTools( sdk.getLocation() );
+
+        String arguments = "\"" + projectName + "\"" + " " + "\"" + displayName + "\"";
+
         IPath newSDKProjectPath = null;
 
         switch( pluginType )
@@ -112,78 +117,137 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 final String frameworkName = getFrameworkName( op );
 
                 workingDir = sdk.getLocation().append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER ).toOSString();
-                baseDir = updateBaseDir ? workingDir : null;
 
-                newSDKProjectPath =
-                    sdk.createNewPortletProject(
-                        projectName, displayName, frameworkName, appServerProperties, separateJRE, workingDir, baseDir,
-                        monitor );
+                if( hasGradleTools )
+                {
+                    arguments = arguments + " " + frameworkName;
+    
+                    sdk.createNewProject( projectName, arguments, "portlet", separateJRE, workingDir, monitor );
+                }
+                else
+                {
+                    baseDir = updateBaseDir ? workingDir : null;
+
+                    newSDKProjectPath =
+                        sdk.createNewPortletProject(
+                            projectName, displayName, frameworkName, appServerProperties, separateJRE, workingDir,
+                            baseDir, monitor );
+                }
+
                 break;
 
             case hook:
                 workingDir = sdk.getLocation().append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER ).toOSString();
-                baseDir = updateBaseDir ? workingDir : null;
 
-                newSDKProjectPath =
-                    sdk.createNewHookProject(
-                        projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
-            break;
+                if( hasGradleTools )
+                {
+                    sdk.createNewProject( projectName, arguments, "hook", separateJRE, workingDir, monitor );
+                }
+                else
+                {
+                    baseDir = updateBaseDir ? workingDir : null;
+
+                    newSDKProjectPath =
+                        sdk.createNewHookProject(
+                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                }
+
+                break;
 
             case ext:
                 workingDir = sdk.getLocation().append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER ).toOSString();
-                baseDir = updateBaseDir ? workingDir : null;
 
-                newSDKProjectPath =
-                    sdk.createNewExtProject(
-                        projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                if( hasGradleTools )
+                {
+                    sdk.createNewProject( projectName, arguments, "ext", separateJRE, workingDir, monitor );
+                }
+                else
+                {
+                    baseDir = updateBaseDir ? workingDir : null;
+
+                    newSDKProjectPath =
+                        sdk.createNewExtProject(
+                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                }
+
                 break;
 
             case layouttpl:
                 workingDir = sdk.getLocation().append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER ).toOSString();
-                baseDir = updateBaseDir ? workingDir : null;
 
-                newSDKProjectPath =
-                    sdk.createNewLayoutTplProject(
-                        projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                if( hasGradleTools )
+                {
+                    sdk.createNewProject( projectName, arguments, "layouttpl", separateJRE, workingDir, monitor );
+                }
+                else
+                {
+                    baseDir = updateBaseDir ? workingDir : null;
+
+                    newSDKProjectPath =
+                        sdk.createNewLayoutTplProject(
+                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                }
+
                 break;
 
             case theme:
                 workingDir = sdk.getLocation().append( ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER ).toOSString();
-                baseDir = updateBaseDir ? workingDir : null;
 
-                newSDKProjectPath =
-                    sdk.createNewThemeProject( projectName, displayName, separateJRE, workingDir, baseDir, monitor );
+                if( hasGradleTools )
+                {
+                    sdk.createNewProject( projectName, arguments, "theme", separateJRE, workingDir, monitor );
+                }
+                else
+                {
+                    baseDir = updateBaseDir ? workingDir : null;
+
+                    newSDKProjectPath =
+                        sdk.createNewThemeProject( projectName, displayName, separateJRE, workingDir, baseDir, monitor );
+                }
+
                 break;
 
             case web:
                 workingDir = sdk.getLocation().append( ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER ).toOSString();
-                baseDir = updateBaseDir ? workingDir : null;
 
-                newSDKProjectPath =
+                if( hasGradleTools )
+                {
+                    sdk.createNewProject( projectName, arguments, "web", separateJRE, workingDir, monitor );
+                }
+                else
+                {
+                    baseDir = updateBaseDir ? workingDir : null;
+
+                    newSDKProjectPath =
                     sdk.createNewWebProject(
                         projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                }
+
                 break;
         }
 
         final Path projectLocation = op.getLocation().content();
 
-        final File projectDir = projectLocation.toFile();
-
-        final File projectParent = projectDir.getParentFile();
-
-        projectParent.mkdirs();
-
-        final File newSDKProjectDir = newSDKProjectPath.toFile();
-
-        try
+        if( !hasGradleTools )
         {
-            FileUtils.copyDirectory( newSDKProjectDir, projectParent );
+            final File projectDir = projectLocation.toFile();
 
-            FileUtils.deleteDirectory( newSDKProjectDir );
-        }
-        catch( IOException e )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            final File projectParent = projectDir.getParentFile();
+
+            projectParent.mkdirs();
+
+            final File newSDKProjectDir = newSDKProjectPath.toFile();
+
+            try
+            {
+                FileUtils.copyDirectory( newSDKProjectDir, projectParent );
+
+                FileUtils.deleteDirectory( newSDKProjectDir );
+            }
+            catch( IOException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
         }
 
         final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectLocation.toOSString() );
