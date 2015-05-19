@@ -18,8 +18,6 @@ package com.liferay.ide.xml.search.ui.tests;
 import static com.liferay.ide.ui.tests.UITestsUtils.containsProposal;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.containHyperlink;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.findMarkerByMessage;
-import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.findMarkerResolutionByClass;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getHyperLinksForElement;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getProposalsForElement;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setElementContent;
@@ -30,11 +28,8 @@ import static org.junit.Assert.assertTrue;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.xml.search.ui.editor.LiferayCustomXmlViewerConfiguration;
-import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseInstanceScopeXmlValidationLevel;
-import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseProjectScopeXmlValidationLevel;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
@@ -136,7 +131,7 @@ public class LiferayLayoutTplXmlTests extends XmlSearchTestsBase
     public void testWapTemplatePath() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "wap-template-path";
         String expectedHyperlinkText = "Open '/Liferay-Layout-Templates-Xml-Test-layouttpl/docroot/Liferay_Layout_Templates_Xml_Test.wap.tpl'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
@@ -148,7 +143,7 @@ public class LiferayLayoutTplXmlTests extends XmlSearchTestsBase
         elementContent = "/Liferay_Layout_Template";
         validateContentAssistForElement( elementName, elementContent, expectedProposal );
     }
-    
+
     @Test
     public void testSourceViewerConfiguration() throws Exception
     {
@@ -160,5 +155,5 @@ public class LiferayLayoutTplXmlTests extends XmlSearchTestsBase
 
         assertEquals( true, sourceViewerConfiguration instanceof LiferayCustomXmlViewerConfiguration );
     }
-    
+
 }

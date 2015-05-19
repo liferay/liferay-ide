@@ -112,7 +112,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testPortalProperties() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "portal-properties";
         String elementValue = null;
         String markerMessage = null;
@@ -148,7 +148,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testLanguageProperties() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "language-properties";
         String elementValue = null;
         String markerMessage = null;
@@ -202,7 +202,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testCustomJspDir() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "custom-jsp-dir";
 
         String elementValue = "/custom_jspsNotExist";
@@ -232,7 +232,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testServiceTypeAndServiceImpl() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         String elementName = "service-type";
 
         // type not exist
@@ -288,7 +288,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testIndexerClassName() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "indexer-class-name";
 
         String elementValue = "Foo";
@@ -314,7 +314,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testIndexerPostProcesserImpl() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "indexer-post-processor-impl";
 
         String elementValue = "Foo";
@@ -340,7 +340,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testServletFilterImpl() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "servlet-filter-impl";
 
         String elementValue = "Foo";
@@ -366,7 +366,7 @@ public class LiferayHookXmlValidationTests extends XmlSearchTestsBase
     public void testStrutsActionImpl() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "struts-action-impl";
 
         String elementValue = "Foo";

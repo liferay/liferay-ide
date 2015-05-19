@@ -85,7 +85,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
         descriptorFile.setContents( projectFile.getInputStream( entry ), IResource.FORCE, new NullProgressMonitor() );
         projectFile.close();
     }
-    
+
     @AfterClass
     public static void deleteProject() throws Exception
     {
@@ -105,7 +105,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
         IHyperlink[] hyperLinks = getHyperLinksForElement( descriptorFile, elementName );
         assertTrue( containHyperlink( hyperLinks, expectedHyperlinkText, true ) );
     }
-    
+
     public void validateContentAssistForElement( String elementName, String expectedProposal ) throws Exception
     {
         descriptorFile = getDescriptorFile();
@@ -115,7 +115,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         assertTrue( containsProposal( proposals, expectedProposal, true ) );
     }
-    
+
     public void validateQuickFixForElements( String elementName ) throws Exception
     {
         descriptorFile = getDescriptorFile();
@@ -127,8 +127,8 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
         IMarker expectedMarker = findMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessageRegex, false );
         assertNotNull( findMarkerResolutionByClass( expectedMarker, DecreaseProjectScopeXmlValidationLevel.class ) );
         assertNotNull( findMarkerResolutionByClass( expectedMarker, DecreaseInstanceScopeXmlValidationLevel.class ) );
-    }  
-    
+    }
+
     @Test
     public void testSourceViewerConfiguration() throws Exception
     {
@@ -145,15 +145,15 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
     public void testAssetRenderFactory() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "asset-renderer-factory";
-       
+
         String expectedHyperlinkText = "Open 'AssetRendererFactoryImp - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-       
+
         String expectedProposal = "AssetRendererFactoryImp - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -166,10 +166,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'AtomCollectionAdapterImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "AtomCollectionAdapterImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -182,10 +182,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'ConfigurationActionImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "ConfigurationActionImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -198,10 +198,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'ControlPanelEntryImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "ControlPanelEntryImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -214,10 +214,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'CustomAttributesDisplayImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "CustomAttributesDisplayImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -230,10 +230,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'DDMDisplayImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "DDMDisplayImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -246,10 +246,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open '/Portlet-Xml-Test-portlet/docroot/css/main.css'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "/css/main.css";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -262,10 +262,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open '/Portlet-Xml-Test-portlet/docroot/js/main.js'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "/js/main.js";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -278,10 +278,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'FriendlyURLMapperImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "FriendlyURLMapperImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -294,10 +294,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open '/Portlet-Xml-Test-portlet/docroot/css/main.css'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "/css/main.css";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -310,10 +310,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open '/Portlet-Xml-Test-portlet/docroot/js/main.js'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "/js/main.js";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -326,10 +326,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open '/Portlet-Xml-Test-portlet/docroot/icon.png'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "/icon.png";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -342,10 +342,10 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'IndexerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "IndexerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
-        
+
         validateQuickFixForElements( elementName );
     }
 
@@ -358,7 +358,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'PermissionPropagatorImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "PermissionPropagatorImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -374,7 +374,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'PollerProcessorImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "PollerProcessorImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -390,7 +390,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'PopMessageListenerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "PopMessageListenerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -406,7 +406,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'PortletDataHandlerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "PortletDataHandlerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
     }
@@ -420,7 +420,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'PortletLayoutListenerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "PortletLayoutListenerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
     }
@@ -434,7 +434,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'MessageListenerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "MessageListenerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
     }
@@ -448,7 +448,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'SocialActivityInterpreterImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "SocialActivityInterpreterImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
     }
@@ -462,7 +462,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'SocialRequestInterpreterImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "SocialRequestInterpreterImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -473,12 +473,12 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
     public void testStagedModelDataHandlerClass() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "staged-model-data-handler-class";
 
         String expectedHyperlinkText = "Open 'StagedModelDataHandlerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "StagedModelDataHandlerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -494,7 +494,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'TemplateHandlerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "TemplateHandlerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -510,7 +510,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'URLEncoderImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "URLEncoderImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -526,7 +526,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'UserNotificationHandlerImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "UserNotificationHandlerImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -537,12 +537,12 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
     public void testWebdavStorageClass() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "webdav-storage-class";
 
         String expectedHyperlinkText = "Open 'WebDAVStorageImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "WebDAVStorageImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 
@@ -558,7 +558,7 @@ public class LiferayPortletXmlTests extends XmlSearchTestsBase
 
         String expectedHyperlinkText = "Open 'XmlrpcMethodImpl - com.liferay.ide.tests'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
         String expectedProposal = "XmlrpcMethodImpl - com.liferay.ide.tests";
         validateContentAssistForElement( elementName, expectedProposal );
 

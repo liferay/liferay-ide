@@ -161,7 +161,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
     public void testFilterClass() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "filter-class";
 
         validateElementTypeNotFound( elementName, "foo" );
@@ -176,7 +176,7 @@ public class PortletXmlValidationTests extends XmlSearchTestsBase
     public void testResourceBundle() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "resource-bundle";
         String elementValue = null;
         String markerMessage = null;

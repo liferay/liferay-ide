@@ -93,7 +93,7 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
     public void testPortletAtId() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         final String elementName = "portlet";
         final String attrName = "id";
 
@@ -117,7 +117,7 @@ public class LiferayDisplayXmlValidationTests extends XmlSearchTestsBase
     public void testCategoryAtName() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         final String elementName = "category";
         final String attrName = "name";
 

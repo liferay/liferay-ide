@@ -47,7 +47,6 @@ import org.eclipse.jface.text.hyperlink.IHyperlinkDetector;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.ui.IMarkerResolution;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.texteditor.MarkerAnnotation;
 import org.eclipse.wst.sse.ui.internal.ExtendedConfigurationBuilder;
 import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
@@ -77,7 +76,6 @@ public class XmlSearchTestsUtils extends UITestsUtils
     {
         valManager.validate( file.getProject(), file, IResourceDelta.CHANGED, ValType.Build,
                              IncrementalProjectBuilder.FULL_BUILD, new ValOperation(), new NullProgressMonitor() );
-        
     }
     public static boolean checkMarkerByMessage( IResource resource, String markerType,
                                                 String markerMessage, boolean fullMatch ) throws Exception
@@ -111,7 +109,6 @@ public class XmlSearchTestsUtils extends UITestsUtils
     public static IMarker findMarkerByMessage( IResource resource, String markerType,
                                                String markerMessage, boolean fullMatch ) throws Exception
     {
-        
         resource.refreshLocal( IResource.DEPTH_ZERO, new NullProgressMonitor() );
         final IMarker[] markers = resource.findMarkers( markerType, false, IResource.DEPTH_ZERO );
 
@@ -243,7 +240,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
         final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
         final SourceViewerConfiguration srcViewConf = getSourceViewerConfiguraionFromExtensionPoint( file );
         viewer.refresh();
-        
+
         if( nodeType == Node.ELEMENT_NODE )
         {
             String elementName = nodeNames[0];
@@ -263,7 +260,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
         }
 
         int offset = getRegion( targetNode ).getOffset() + getRegion( targetNode ).getLength();
-        
+
         final ContentAssistant contentAssistant = (ContentAssistant) srcViewConf.getContentAssistant( viewer );
         // viewer.configure( srcViewConf );
         // viewer.setSelectedRange( offset, 0 );
@@ -289,7 +286,6 @@ public class XmlSearchTestsUtils extends UITestsUtils
     {
         return getProposals( file, Node.ELEMENT_NODE, elementName );
     }
-
 
     // get the SourceViewerConfiguration from extension point
     public static SourceViewerConfiguration getSourceViewerConfiguraionFromExtensionPoint( IFile file ) throws Exception
@@ -327,6 +323,7 @@ public class XmlSearchTestsUtils extends UITestsUtils
         Node targetNode = null;
 
         final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
+
         if( nodeType == Node.ELEMENT_NODE )
         {
             String elementName = nodeNames[0];
@@ -441,7 +438,6 @@ public class XmlSearchTestsUtils extends UITestsUtils
         }
 
         return element;
-
     }
 
     // set the content for the 1st element with name of "elementName"

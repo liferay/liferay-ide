@@ -87,7 +87,7 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
     public void testPortletAtIdContentAssist() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet";
         final String attrName = "id";
@@ -111,7 +111,7 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
     public void testPortletAtIdHyperlink() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet";
         final String attrName = "id";
@@ -128,7 +128,7 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
     public void testPortletAtIdTextHover() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final IFile descriptorFile = getDescriptorFile();
         final String elementName = "portlet";
         final String attrName = "id";
@@ -166,7 +166,7 @@ public class LiferayDisplayXmlTests extends XmlSearchTestsBase
 
         assertEquals( true, sourceViewerConfiguration instanceof LiferayCustomXmlViewerConfiguration );
     }
-    
+
     @Test
     public void testPortletAtIdQuickFix() throws Exception
     {

@@ -69,7 +69,7 @@ public class JSPFileTests extends XmlSearchTestsBase
 
         return null;
     }
-    
+
     @AfterClass
     public static void deleteProject() throws Exception
     {
@@ -100,7 +100,6 @@ public class JSPFileTests extends XmlSearchTestsBase
             assertTrue(
                 "can't get proposal " + proposal + " in " + elementName + attrName,
                 containsProposal( proposals, proposal, true ) );
-
         }
     }
 
@@ -116,7 +115,6 @@ public class JSPFileTests extends XmlSearchTestsBase
         final String expectedProposalString = "MessageKeyHoverTest - [Language.properties]";
 
         assertEquals( true, containsProposal( proposals, expectedProposalString, true ) );
-
     }
 
     public void validateTextHoverForAttr( String elementName, String attrName ) throws Exception
@@ -127,13 +125,14 @@ public class JSPFileTests extends XmlSearchTestsBase
             ".*this is the test for message key text hover.* in /Portlet-Xml-Test-portlet/docroot/WEB-INF/src/content/Language.properties.*";
 
         hover = getTextHoverForAttr( jspFile, elementName, attrName );
+
         if( hover.length == 0 || !hover[0].toString().matches( expectMessageRegex ) )
         {
             buildAndValidate( jspFile );
             hover = getTextHoverForAttr( jspFile, elementName, attrName );
         }
-        assertTrue( hover[0].toString().matches( expectMessageRegex ) );
 
+        assertTrue( hover[0].toString().matches( expectMessageRegex ) );
     }
 
     public void validateHyperLinksForAttr( String elementName, String attrName ) throws Exception
@@ -196,7 +195,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testHelpMessage() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "aui:input";
@@ -211,7 +209,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testSuffix() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "aui:input";
@@ -226,7 +223,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testATitle() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "aui:a";
@@ -241,7 +237,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testHeaderTitle() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "liferay-ui:header";
@@ -256,7 +251,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testPanelTitle() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "liferay-ui:panel";
@@ -271,7 +265,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testALable() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "aui:a";
@@ -286,7 +279,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testButtonValue() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "aui:button";
@@ -301,7 +293,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testPlaceholder() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "aui:input";
@@ -316,7 +307,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testWorkflowstatusStatusMessage() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "aui:workflow-status";
@@ -331,7 +321,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testIcondeleteConfirmation() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "liferay-ui:icon-delete";
@@ -346,7 +335,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testInputmoveboxesRighgtitle() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "liferay-ui:input-move-boxes";
@@ -361,7 +349,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testInputmoveboxesLefttitle() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "liferay-ui:input-move-boxes";
@@ -376,7 +363,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testSocialActivitiesFeedLinkMessage() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "liferay-ui:social-activities";
@@ -391,7 +377,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testSearchContainerEmptyResulsMessage() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         String elementName = "liferay-ui:search-container";
@@ -406,7 +391,6 @@ public class JSPFileTests extends XmlSearchTestsBase
     @Test
     public void testActionURLName() throws Exception
     {
-
         if( shouldSkipBundleTests() )return;
 
         jspFile = getJspFile( "test-jsp-validation.jsp" );
@@ -420,11 +404,13 @@ public class JSPFileTests extends XmlSearchTestsBase
         buildAndValidate( jspFile );
 
         ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+
         if( !containsProposal( proposals, "actionTest - NewPortlet", true ) )
         {
             buildAndValidate( jspFile );
-            proposals=getProposalsForAttr( jspFile, elementName, attrName );
+            proposals = getProposalsForAttr( jspFile, elementName, attrName );
         }
+
         assertEquals( true, containsProposal( proposals, "actionTest - NewPortlet", true ) );
     }
 

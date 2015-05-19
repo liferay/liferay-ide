@@ -125,10 +125,12 @@ public class LiferayPortletXmlValidationTests extends XmlSearchTestsBase
         setElementContent( descriptorFile, elementName, correctValue );
 
         buildAndValidate( descriptorFile );
+
         if( !checkNoMarker( descriptorFile, MARKER_TYPE ) )
         {
             buildAndValidate( descriptorFile );
         }
+
         assertTrue( checkNoMarker( descriptorFile, MARKER_TYPE ) );
     }
 

@@ -87,7 +87,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
         {
         }
     }
-    
+
     @Before
     public void cleanupMarkers() throws Exception
     {
@@ -126,7 +126,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
     public void validateQuickFixForElements( String elementName, String elementContent, String markerMessageRegex )
         throws Exception
-    {   
+    {
         //check all types of elements has quick fix for decrease validation level in current project and all project
         descriptorFile = getDescriptorFile();
         setElementContent( descriptorFile, elementName, elementContent );
@@ -141,7 +141,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
     public void testIndexerClassName() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "indexer-class-name";
         String elementContent = "";
 
@@ -162,7 +162,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
     public void testIndexerPostProcesserImpl() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "indexer-post-processor-impl";
         String elementContent = "";
 
@@ -183,7 +183,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
     public void testLanguageProperties() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "language-properties";
         String elementContent = "";
 
@@ -196,7 +196,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
         elementContent = "content/";
         validateContentAssistForElement( elementName, elementContent, expectedProposal );
-        
+
         String markerMessageRegex = ".*" + elementContent + ".*";
         validateQuickFixForElements( elementName, elementContent, markerMessageRegex );
     }
@@ -205,7 +205,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
     public void testPortalProperties() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "portal-properties";
         String elementContent = "";
 
@@ -217,17 +217,17 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
         elementContent = "content/";
         validateContentAssistForElement( elementName, elementContent, expectedProposal );
-        
+
         String markerMessageRegex = ".*" + elementContent + ".*";
         validateQuickFixForElements( elementName, elementContent, markerMessageRegex );
-            
+
     }
 
     @Test
     public void testCustomJspDir() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "custom-jsp-dir";
         String elementContent = "";
 
@@ -246,31 +246,30 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
     public void testServiceType() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "service-type";
 
         String expectedHyperlinkText = "Open 'AccountService - com.liferay.portal.service'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
-        
+
     }
 
     @Test
     public void testServiceImpl() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "service-impl";
-
         String expectedHyperlinkText = "Open 'AccountServiceWrapperImpl - com.liferay.ide.tests'";
-        validateHyperLinksForElement( elementName, expectedHyperlinkText );        
 
+        validateHyperLinksForElement( elementName, expectedHyperlinkText );
     }
 
     @Test
     public void testServletFilterImpl() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "servlet-filter-impl";
         String elementContent = "";
 
@@ -291,7 +290,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
     public void testStrutsActionImpl() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         String elementName = "struts-action-impl";
         String elementContent = "";
 
@@ -303,7 +302,7 @@ public class LiferayHookXmlTests extends XmlSearchTestsBase
 
         elementContent = "com.liferay.ide.tests";
         validateContentAssistForElement( elementName, elementContent, expectedProposal );
-        
+
         String markerMessageRegex = ".*" + elementContent + ".*";
         validateQuickFixForElements( elementName, elementContent, markerMessageRegex );
     }

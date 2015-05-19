@@ -96,18 +96,17 @@ public class PortletXmlTests extends XmlSearchTestsBase
 
         assertNotNull( proposals );
         assertEquals( true, proposals.length > 0 );
-        
-        assertEquals( true, containsProposal( proposals, expectedProposalString, true ) );
 
+        assertEquals( true, containsProposal( proposals, expectedProposalString, true ) );
     }
-    
+
     public void validateHyperLinksForElement( String elementName, String expectedHyperlinkText ) throws Exception
     {
         descriptorFile = getDescriptorFile();
         IHyperlink[] hyperLinks = getHyperLinksForElement( descriptorFile, elementName );
         assertTrue( containHyperlink( hyperLinks, expectedHyperlinkText, true ) );
     }
-  
+
     public void validateQuickFixForElements( String elementName , String elementContent ) throws Exception
     {
         descriptorFile = getDescriptorFile();
@@ -119,12 +118,12 @@ public class PortletXmlTests extends XmlSearchTestsBase
         assertNotNull( findMarkerResolutionByClass( expectedMarker, DecreaseProjectScopeXmlValidationLevel.class ) );
         assertNotNull( findMarkerResolutionByClass( expectedMarker, DecreaseInstanceScopeXmlValidationLevel.class ) );
     }
-    
+
     @Test
     public void testPortletClass() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final String elementName = "portlet-class";
         String expectedHyperlinkText = "Open 'MVCPortlet - com.liferay.util.bridges.mvc'";
         validateHyperLinksForElement( elementName, expectedHyperlinkText );
@@ -189,7 +188,7 @@ public class PortletXmlTests extends XmlSearchTestsBase
         validateContentAssistForElement( elementName, elementContent, expectedProposalString );
         validateQuickFixForElements( elementName, elementContent );
     }
-   
+
     @Test
     public void testSourceViewerConfiguration() throws Exception
     {

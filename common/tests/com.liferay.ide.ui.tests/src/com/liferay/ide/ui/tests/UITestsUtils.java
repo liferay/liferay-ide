@@ -196,6 +196,7 @@ public class UITestsUtils
                     {
                         return new Region( endOffset, 0 );
                     }
+
                     return new Region( endOffset, element.getTextContent().length() );
 
                 case Node.ATTRIBUTE_NODE:
