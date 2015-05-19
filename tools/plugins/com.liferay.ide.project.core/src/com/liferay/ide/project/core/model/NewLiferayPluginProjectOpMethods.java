@@ -23,6 +23,7 @@ import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
 import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.File;
 import java.util.HashSet;
@@ -72,7 +73,7 @@ public class NewLiferayPluginProjectOpMethods
         {
             final SDK sdk = SDKManager.getInstance().getSDK( op.getPluginsSDKName().content( true ) );
 
-            if( sdk != null )
+            if( sdk != null && !SDKUtil.hasGradleTools( sdk.getLocation() ) )
             {
                 final Version version = new Version( sdk.getVersion() );
 

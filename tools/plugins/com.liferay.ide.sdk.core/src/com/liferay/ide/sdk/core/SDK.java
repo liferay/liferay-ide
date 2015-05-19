@@ -16,6 +16,7 @@
 package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
@@ -301,6 +302,39 @@ public class SDK
         copy.setVersion( getVersion() );
 
         return copy;
+    }
+
+    public IPath createNewProject(
+        String projectName, String arguments, String type, boolean separateJRE, String workingDir,
+        IProgressMonitor monitor )
+    {
+        CreateHelper createHelper = new CreateHelper( this, monitor );
+
+        try
+        {
+            final IPath pluginFolder = getLocation().append( getPluginFolder( type ) );
+
+            final IPath newPath = pluginFolder.append( projectName + getPluginSuffix( type ) );
+
+            String createScript = ISDKConstants.CREATE_BAT;
+
+            if( CoreUtil.isLinux() || CoreUtil.isMac() )
+            {
+                createScript = ISDKConstants.CREATE_SH;
+            }
+
+            final IPath createFile = pluginFolder.append( createScript );
+
+            createHelper.runTarget( createFile, arguments, separateJRE, workingDir );
+
+            return newPath;
+        }
+        catch( CoreException e )
+        {
+            SDKCorePlugin.logError( e );
+        }
+
+        return null;
     }
 
     public IPath createNewExtProject( String extName, String extDisplayName, Map<String, String> appServerProperties,
@@ -659,6 +693,48 @@ public class SDK
         }
 
         return version;
+    }
+
+    private String getPluginFolder( String type )
+    {
+        switch( type )
+        {
+        case "ext":
+            return ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER;
+        case "portlet":
+            return ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER;
+        case "hook":
+            return ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER;
+        case "layouttpl":
+            return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER;
+        case "theme":
+            return ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER;
+        case "web":
+            return ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER;
+        default:
+            return "";
+        }
+    }
+
+    private String getPluginSuffix( String type )
+    {
+        switch( type )
+        {
+        case "ext":
+            return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
+        case "portlet":
+            return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+        case "hook":
+            return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
+        case "layouttpl":
+            return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+        case "theme":
+            return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+        case "web":
+            return ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
+        default:
+            return "";
+        }
     }
 
     private boolean hasAppServerSpecificProps( Properties props )

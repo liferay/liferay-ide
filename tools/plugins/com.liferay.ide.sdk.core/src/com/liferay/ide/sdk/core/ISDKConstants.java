@@ -60,6 +60,10 @@ public interface ISDKConstants
 
     public static final String BUILD_PROPERTIES = "build.properties"; //$NON-NLS-1$
 
+    public static final String CREATE_BAT = "create.bat"; //$NON-NLS-1$
+
+    public static final String CREATE_SH = "create.sh"; //$NON-NLS-1$
+
     public static final String DEFAULT_DOCROOT_FOLDER = "docroot";  //$NON-NLS-1$
 
     public static final String EXT_PLUGIN_ANT_BUILD = __defaultPrefs.get( "ext.plugin.ant.build", null ); //$NON-NLS-1$
