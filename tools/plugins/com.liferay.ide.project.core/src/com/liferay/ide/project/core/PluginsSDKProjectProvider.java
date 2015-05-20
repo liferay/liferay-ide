@@ -124,7 +124,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 if( hasGradleTools )
                 {
                     arguments.add( frameworkName );
-    
+
                     sdk.createNewProject( projectName, arguments, "portlet", workingDir, monitor );
                 }
                 else
