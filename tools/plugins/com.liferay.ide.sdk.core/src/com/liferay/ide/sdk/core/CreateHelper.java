@@ -35,7 +35,8 @@ import org.eclipse.debug.core.ILaunchManager;
 public class CreateHelper extends LaunchHelper
 {
 
-    public static final String PROGRAM_CONFIG_TYPE_ID = IExternalToolConstants.ID_PROGRAM_LAUNCH_CONFIGURATION_TYPE;
+    public static final String PROGRAM_CONFIG_TYPE_ID =
+        IExternalToolConstants.ID_PROGRAM_LAUNCH_CONFIGURATION_TYPE;
 
     protected IPath currentCreateFile;
 
@@ -76,15 +77,10 @@ public class CreateHelper extends LaunchHelper
         }
 
         ILaunchConfigurationWorkingCopy launchConfig = super.createLaunchConfiguration();
-
         launchConfig.setAttribute( IExternalToolConstants.ATTR_LOCATION, buildFile.toOSString() );
-        
         launchConfig.setAttribute( IExternalToolConstants.ATTR_WORKING_DIRECTORY, workingDir );
-
         launchConfig.setAttribute( IExternalToolConstants.ATTR_TOOL_ARGUMENTS, sb.toString().trim() );
-
         launchConfig.setAttribute( DebugPlugin.ATTR_CAPTURE_OUTPUT, true);
-
         launchConfig.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE",
             SDKCorePlugin.getDefault().getStateLocation().append( "sdk.log" ).toOSString() );
 
