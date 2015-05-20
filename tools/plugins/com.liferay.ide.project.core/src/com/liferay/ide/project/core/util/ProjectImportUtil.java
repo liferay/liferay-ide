@@ -122,7 +122,10 @@ public class ProjectImportUtil
             // IDE-110 IDE-648
             String webappRootFolder = null;
             IProgressMonitor npm = new NullProgressMonitor();
-            String arguments = displayName + " " + displayName;
+
+            ArrayList<String> arguments = new ArrayList<String>();
+            arguments.add( displayName );
+            arguments.add( displayName );
 
             // Create Project
             if( pluginBinaryRecord.isHook() )
@@ -131,7 +134,7 @@ public class ProjectImportUtil
 
                 projectPath =
                     liferaySDK.createNewProject(
-                        displayName, arguments, "hook", true, sdkPluginProjectFolder.toOSString(), npm );
+                        displayName, arguments, "hook", sdkPluginProjectFolder.toOSString(), npm );
 
                 webappRootFolder = IPluginFacetConstants.HOOK_PLUGIN_SDK_CONFIG_FOLDER;
             }
@@ -153,11 +156,11 @@ public class ProjectImportUtil
 
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER );
 
-                arguments = arguments + " " + portletFrameworkName;
+                arguments.add( portletFrameworkName );
 
                 projectPath =
                     liferaySDK.createNewProject(
-                        displayName, arguments, "portlet", true, sdkPluginProjectFolder.toOSString(), npm );
+                        displayName, arguments, "portlet", sdkPluginProjectFolder.toOSString(), npm );
 
                 webappRootFolder = IPluginFacetConstants.PORTLET_PLUGIN_SDK_CONFIG_FOLDER;
             }
@@ -166,7 +169,7 @@ public class ProjectImportUtil
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER );
                 projectPath =
                     liferaySDK.createNewProject(
-                        displayName, arguments, "theme", true, sdkPluginProjectFolder.toOSString(), npm );
+                        displayName, arguments, "theme", sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.THEME_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isLayoutTpl() )
@@ -174,7 +177,7 @@ public class ProjectImportUtil
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER );
                 projectPath =
                     liferaySDK.createNewProject(
-                        displayName, arguments, "layouttpl", true, sdkPluginProjectFolder.toOSString(), npm );
+                        displayName, arguments, "layouttpl", sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.LAYOUTTPL_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isExt() )
@@ -182,7 +185,7 @@ public class ProjectImportUtil
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER );
                 projectPath =
                     liferaySDK.createNewProject(
-                        displayName, arguments, "ext", true, sdkPluginProjectFolder.toOSString(), npm );
+                        displayName, arguments, "ext", sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.EXT_PLUGIN_SDK_CONFIG_FOLDER;
             }
             else if( pluginBinaryRecord.isWeb() )
@@ -190,7 +193,7 @@ public class ProjectImportUtil
                 sdkPluginProjectFolder = sdkPluginProjectFolder.append( ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER );
                 projectPath =
                     liferaySDK.createNewProject(
-                        displayName, arguments, "web", true, sdkPluginProjectFolder.toOSString(), npm );
+                        displayName, arguments, "web", sdkPluginProjectFolder.toOSString(), npm );
                 webappRootFolder = IPluginFacetConstants.WEB_PLUGIN_SDK_CONFIG_FOLDER;
             }
 

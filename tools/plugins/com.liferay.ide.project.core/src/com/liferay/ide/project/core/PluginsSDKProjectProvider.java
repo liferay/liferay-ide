@@ -30,6 +30,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,7 +102,9 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         final boolean hasGradleTools = SDKUtil.hasGradleTools( sdk.getLocation() );
 
-        String arguments = "\"" + projectName + "\"" + " " + "\"" + displayName + "\"";
+        ArrayList<String> arguments = new ArrayList<String>();
+        arguments.add( projectName );
+        arguments.add( displayName );
 
         IPath newSDKProjectPath = null;
 
@@ -116,9 +119,9 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                 if( hasGradleTools )
                 {
-                    arguments = arguments + " " + frameworkName;
+                    arguments.add( frameworkName );
     
-                    sdk.createNewProject( projectName, arguments, "portlet", separateJRE, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "portlet", workingDir, monitor );
                 }
                 else
                 {
@@ -137,7 +140,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, "hook", separateJRE, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "hook", workingDir, monitor );
                 }
                 else
                 {
@@ -155,7 +158,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, "ext", separateJRE, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "ext", workingDir, monitor );
                 }
                 else
                 {
@@ -173,7 +176,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, "layouttpl", separateJRE, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "layouttpl", workingDir, monitor );
                 }
                 else
                 {
@@ -191,7 +194,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, "theme", separateJRE, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "theme", workingDir, monitor );
                 }
                 else
                 {
@@ -208,15 +211,15 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, "web", separateJRE, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "web", workingDir, monitor );
                 }
                 else
                 {
                     baseDir = updateBaseDir ? workingDir : null;
 
                     newSDKProjectPath =
-                    sdk.createNewWebProject(
-                        projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                        sdk.createNewWebProject(
+                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
                 }
 
                 break;
@@ -296,8 +299,6 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         return Status.OK_STATUS;
     }
-
-
 
     private void portletProjectCreated( NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor )
         throws CoreException

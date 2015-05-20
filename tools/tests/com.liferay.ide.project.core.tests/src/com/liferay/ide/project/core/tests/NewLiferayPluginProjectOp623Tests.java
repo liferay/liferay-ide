@@ -16,6 +16,8 @@
 package com.liferay.ide.project.core.tests;
 
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
 
 import org.eclipse.core.runtime.IPath;
 import org.junit.Ignore;
@@ -157,6 +159,21 @@ public class NewLiferayPluginProjectOp623Tests extends NewLiferayPluginProjectOp
         if( shouldSkipBundleTests() ) return;
 
         super.testProjectNameValidation( "project-name-validation-623" );
+    }
+
+    @Test
+    public void testNewSDKProjects() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
+
+        createAntProject( newProjectOp( "test-name-1" ) );
+        createAntProject( newProjectOp( "test_name_1" ) );
+        createAntProject( newProjectOp( "-portlet-portlet" ) );
+        createAntProject( newProjectOp( "-portlet-hook" ) );
+
+        final NewLiferayPluginProjectOp op = newProjectOp( "-hook-hook" );
+        op.setPluginType( PluginType.hook );
+        createAntProject( op );
     }
 
     @Test

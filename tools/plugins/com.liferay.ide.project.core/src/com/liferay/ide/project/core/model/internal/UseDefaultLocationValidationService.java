@@ -63,7 +63,7 @@ public class UseDefaultLocationValidationService extends ValidationService
         {
             if( ! NewLiferayPluginProjectOpMethods.canUseCustomLocation( op ) )
             {
-                retval = Status.createErrorStatus( "The sdk of specified version is not allowed to use custom location." );
+                retval = Status.createErrorStatus( "The specified SDK version is not allowed to use custom location." );
             }
         }
 
