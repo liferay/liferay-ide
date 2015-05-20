@@ -25,14 +25,10 @@ import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.osgi.framework.Version;
@@ -91,16 +87,7 @@ public class SDKUtil
                 {
                     final SDK newSDK = retval;
 
-                    new WorkspaceJob("Adding Plugins SDK")
-                    {
-                        @Override
-                        public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                        {
-                            SDKManager.getInstance().addSDK( newSDK );
-
-                            return Status.OK_STATUS;
-                        }
-                    }.schedule();
+                    SDKManager.getInstance().addSDK( newSDK );
                 }
             }
         }
