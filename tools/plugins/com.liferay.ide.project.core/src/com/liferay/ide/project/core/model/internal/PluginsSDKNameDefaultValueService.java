@@ -18,6 +18,11 @@ import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.DefaultValueService;
 
 
@@ -66,17 +71,31 @@ public class PluginsSDKNameDefaultValueService extends DefaultValueService imple
 
     public void sdksAdded( SDK[] sdk )
     {
-        refresh();
+        refreshSafe();
     }
 
     public void sdksChanged( SDK[] sdk )
     {
-        refresh();
+        refreshSafe();
     }
 
     public void sdksRemoved( SDK[] sdk )
     {
-        refresh();
+        refreshSafe();
+    }
+
+    private void refreshSafe()
+    {
+        new WorkspaceJob("Adding Plugins SDK")
+        {
+            @Override
+            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            {
+                refresh();
+
+                return Status.OK_STATUS;
+            }
+        }.schedule();
     }
 
 }
