@@ -49,7 +49,7 @@ public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
 
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-m4-20150224120313668.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-m5-20150515112305685.zip" );
     }
 
     protected String getLiferayPluginsSdkZipFolder()

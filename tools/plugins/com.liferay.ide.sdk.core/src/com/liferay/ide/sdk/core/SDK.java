@@ -305,8 +305,7 @@ public class SDK
     }
 
     public IPath createNewProject(
-        String projectName, String arguments, String type, boolean separateJRE, String workingDir,
-        IProgressMonitor monitor )
+        String projectName, ArrayList<String> arguments, String type, String workingDir, IProgressMonitor monitor )
     {
         CreateHelper createHelper = new CreateHelper( this, monitor );
 
@@ -325,7 +324,7 @@ public class SDK
 
             final IPath createFile = pluginFolder.append( createScript );
 
-            createHelper.runTarget( createFile, arguments, separateJRE, workingDir );
+            createHelper.runTarget( createFile, arguments, workingDir );
 
             return newPath;
         }
