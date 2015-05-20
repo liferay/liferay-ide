@@ -317,7 +317,7 @@ public class SDK
 
             String createScript = ISDKConstants.CREATE_BAT;
 
-            if( CoreUtil.isLinux() || CoreUtil.isMac() )
+            if( !CoreUtil.isWindows() )
             {
                 createScript = ISDKConstants.CREATE_SH;
             }
