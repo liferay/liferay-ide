@@ -20,6 +20,7 @@ import com.liferay.ide.core.model.IModelChangedListener;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPackageModel;
+import com.liferay.ide.portlet.ui.PortletUIPlugin;
 import com.liferay.ide.ui.form.FormEntry;
 import com.liferay.ide.ui.form.FormEntryAdapter;
 import com.liferay.ide.ui.form.FormLayoutFactory;
@@ -28,6 +29,9 @@ import com.liferay.ide.ui.form.IDEFormPage;
 import com.liferay.ide.ui.form.IDESection;
 import com.liferay.ide.ui.util.SWTUtil;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -100,6 +104,21 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
     public boolean isEditable()
     {
         return true;
+    }
+
+    @Override
+    public void commit( boolean onSave )
+    {
+        if( validate().isOK() )
+        {
+            page.form.setMessage( "", IMessageProvider.NONE );
+            refresh();
+            super.commit( onSave );
+        }
+        else
+        {
+            page.form.setMessage( validate().getMessage(), IMessageProvider.ERROR );
+        }
     }
 
     public void modelChanged( IModelChangedEvent event )
@@ -482,6 +501,19 @@ public class PluginPackageGeneralSection extends IDESection implements IContextP
     protected PluginPackageModel getModel()
     {
         return (PluginPackageModel) getPage().getLiferayFormEditor().getModel();
+    }
+
+    protected IStatus validate()
+    {
+        if( "" == getModel().getModuleGroupId() )
+        {
+            return new Status( IStatus.ERROR, PortletUIPlugin.PLUGIN_ID, "Module Group Id can't be empty" );
+        }
+        if( getModel().getModuleGroupId().startsWith( "/" ) )
+        {
+            return new Status( IStatus.ERROR, PortletUIPlugin.PLUGIN_ID, "Module Group Id can't start with '/'" );
+        }
+        return new Status( IStatus.OK, PortletUIPlugin.PLUGIN_ID, "" );
     }
 
     private static class Msgs extends NLS
