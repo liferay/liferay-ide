@@ -100,7 +100,12 @@ public class CreateHelper extends LaunchHelper
 
         ILaunchConfiguration launchConfig = createLaunchConfiguration( createFile, arguments, workingDir );
 
-        launch( launchConfig, ILaunchManager.RUN_MODE, monitor );
+        int exitValue = launch( launchConfig, ILaunchManager.RUN_MODE, monitor );
+
+        if( exitValue > 0 )
+        {
+            throw new CoreException( SDKCorePlugin.createErrorStatus( "create script failed with error code " + exitValue ) );
+        }
 
         this.currentCreateFile = null;
     }

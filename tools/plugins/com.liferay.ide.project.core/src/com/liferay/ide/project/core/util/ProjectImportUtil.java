@@ -105,9 +105,10 @@ public class ProjectImportUtil
      * @param liferaySDK
      * @return
      * @throws IOException
+     * @throws CoreException
      */
     public static ProjectRecord createSDKPluginProject(
-        BridgedRuntime bridgedRuntime, BinaryProjectRecord pluginBinaryRecord, SDK liferaySDK ) throws IOException
+        BridgedRuntime bridgedRuntime, BinaryProjectRecord pluginBinaryRecord, SDK liferaySDK ) throws IOException, CoreException
     {
         ProjectRecord projectRecord = null;
 

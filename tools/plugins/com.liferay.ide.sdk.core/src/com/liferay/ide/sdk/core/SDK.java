@@ -305,35 +305,31 @@ public class SDK
     }
 
     public IPath createNewProject(
-        String projectName, ArrayList<String> arguments, String type, String workingDir, IProgressMonitor monitor )
+        String projectName, ArrayList<String> arguments, String type, String workingDir, IProgressMonitor monitor ) throws CoreException
     {
         CreateHelper createHelper = new CreateHelper( this, monitor );
 
-        try
+        final IPath pluginFolder = getLocation().append( getPluginFolder( type ) );
+
+        final IPath newPath = pluginFolder.append( projectName + getPluginSuffix( type ) );
+
+        String createScript = ISDKConstants.CREATE_BAT;
+
+        if( !CoreUtil.isWindows() )
         {
-            final IPath pluginFolder = getLocation().append( getPluginFolder( type ) );
-
-            final IPath newPath = pluginFolder.append( projectName + getPluginSuffix( type ) );
-
-            String createScript = ISDKConstants.CREATE_BAT;
-
-            if( !CoreUtil.isWindows() )
-            {
-                createScript = ISDKConstants.CREATE_SH;
-            }
-
-            final IPath createFile = pluginFolder.append( createScript );
-
-            createHelper.runTarget( createFile, arguments, workingDir );
-
-            return newPath;
-        }
-        catch( CoreException e )
-        {
-            SDKCorePlugin.logError( e );
+            createScript = ISDKConstants.CREATE_SH;
         }
 
-        return null;
+        final IPath createFile = pluginFolder.append( createScript );
+
+        createHelper.runTarget( createFile, arguments, workingDir );
+
+        if( !newPath.toFile().exists() )
+        {
+            throw new CoreException( SDKCorePlugin.createErrorStatus( "Create script did not complete successfully." ) );
+        }
+
+        return newPath;
     }
 
     public IPath createNewExtProject( String extName, String extDisplayName, Map<String, String> appServerProperties,
