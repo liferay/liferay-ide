@@ -183,7 +183,7 @@ public class LaunchHelper implements IDebugEventSetListener
         return this.launchSync;
     }
 
-    public void launch( final ILaunchConfiguration config, final String mode, IProgressMonitor monitor ) throws CoreException
+    public int launch( final ILaunchConfiguration config, final String mode, IProgressMonitor monitor ) throws CoreException
     {
         if( config == null )
         {
@@ -197,6 +197,8 @@ public class LaunchHelper implements IDebugEventSetListener
 
         final ILaunch launch = config.launch( mode, new NullProgressMonitor() );
 
+        final IProcess process = launch.getProcesses()[0];
+
         if( isLaunchSync() )
         {
             runningLaunch = launch;
@@ -207,7 +209,7 @@ public class LaunchHelper implements IDebugEventSetListener
                 {
                     if( monitor != null && monitor.isCanceled() && !launch.isTerminated() )
                     {
-                        launch.getProcesses()[0].terminate();
+                        process.terminate();
                         launch.terminate();
                     }
                     else
@@ -225,13 +227,15 @@ public class LaunchHelper implements IDebugEventSetListener
                 runningLaunch = null;
             }
         }
+
+        return process.getExitValue();
     }
 
-    public void launch( IProgressMonitor monitor ) throws CoreException
+    public int launch( IProgressMonitor monitor ) throws CoreException
     {
         final ILaunchConfigurationWorkingCopy config = createLaunchConfiguration();
 
-        launch( config, mode, monitor );
+        return launch( config, mode, monitor );
     }
 
     public void setLaunchArgs( String[] launchArgs )

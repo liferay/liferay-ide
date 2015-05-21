@@ -21,8 +21,6 @@ import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 
-import java.io.IOException;
-
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -74,7 +72,7 @@ public class BinaryProjectImportOperation extends SDKProjectsImportOperation
                     projectRecords[0] =
                         ProjectImportUtil.createSDKPluginProject( bridgedRuntime, pluginBinaryRecord, liferaySDK );
                 }
-                catch( IOException e )
+                catch( Exception e )
                 {
                     throw new ExecutionException(
                         "Error while importing Binary:" + pluginBinaryRecord.getBinaryName(), e ); //$NON-NLS-1$
