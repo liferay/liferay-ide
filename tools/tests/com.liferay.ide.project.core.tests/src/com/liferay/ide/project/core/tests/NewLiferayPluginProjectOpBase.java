@@ -614,6 +614,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         exceptedSDKNames.add( originSDK.getName() );
         exceptedSDKNames.add( newSDK.getName() );
 
+        Thread.sleep( 500 );
         final Set<String> acturalSDKNames = op.getPluginsSDKName().service( PossibleValuesService.class ).values();
 
         assertEquals( true, exceptedSDKNames.containsAll( acturalSDKNames ) );

@@ -20,10 +20,9 @@ import com.liferay.ide.sdk.core.SDKManager;
 
 import java.util.Set;
 
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
@@ -99,10 +98,10 @@ public class PluginsSDKNamePossibleValuesService extends PossibleValuesService i
 
     private void refreshSafe()
     {
-        new WorkspaceJob("Adding Plugins SDK")
+        new Job("refreshing")
         {
             @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            protected IStatus run( IProgressMonitor monitor )
             {
                 refresh();
 
