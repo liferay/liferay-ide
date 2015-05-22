@@ -300,8 +300,12 @@ public class ProjectImportUtil
     {
         boolean isValid = false;
 
-        try( JarFile pluginBinary = new JarFile( binaryFile ) )
+        JarFile pluginBinary = null;
+
+        try
         {
+            pluginBinary = new JarFile( binaryFile );
+
             BinaryProjectRecord tempRecord = new BinaryProjectRecord( binaryFile );
 
             // Check for liferay-plugin-package.properties or liferay-plugin-package.xml
@@ -351,6 +355,19 @@ public class ProjectImportUtil
         catch( IOException e )
         {
             isValid = false;
+        }
+        finally
+        {
+            if( pluginBinary != null )
+            {
+                try
+                {
+                    pluginBinary.close();
+                }
+                catch( IOException e )
+                {
+                }
+            }
         }
 
         return isValid;
