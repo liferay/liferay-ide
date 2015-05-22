@@ -228,7 +228,7 @@ public class LaunchHelper implements IDebugEventSetListener
             }
         }
 
-        return process.getExitValue();
+        return isLaunchSync() ? process.getExitValue() : 0;
     }
 
     public int launch( IProgressMonitor monitor ) throws CoreException
