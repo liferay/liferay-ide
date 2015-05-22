@@ -24,7 +24,7 @@
     <parent>
         <groupId>com.liferay.mobile.sdk.plugins</groupId>
         <artifactId>mobile-sdk-plugins</artifactId>
-        <version>2.2.2-SNAPSHOT</version>
+        <version>2.2.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.mobile.sdk.core</artifactId>
