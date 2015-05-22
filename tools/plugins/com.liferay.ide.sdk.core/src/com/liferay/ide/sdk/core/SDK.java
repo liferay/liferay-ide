@@ -692,42 +692,64 @@ public class SDK
 
     private String getPluginFolder( String type )
     {
-        switch( type )
+        if( "ext".equals( type ) )
         {
-        case "ext":
             return ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER;
-        case "portlet":
+        }
+        else if( "portlet".equals( type ) )
+        {
             return ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER;
-        case "hook":
+        }
+        else if( "hook".equals( type ) )
+        {
             return ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER;
-        case "layouttpl":
+        }
+        else if( "layouttpl".equals( type ) )
+        {
             return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER;
-        case "theme":
+        }
+        else if( "theme".equals( type ) )
+        {
             return ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER;
-        case "web":
+        }
+        else if( "web".equals( type ) )
+        {
             return ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER;
-        default:
+        }
+        else
+        {
             return "";
         }
     }
 
     private String getPluginSuffix( String type )
     {
-        switch( type )
+        if( "ext".equals( type ) )
         {
-        case "ext":
             return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
-        case "portlet":
+        }
+        else if( "portlet".equals( type ) )
+        {
             return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
-        case "hook":
+        }
+        else if( "hook".equals( type ) )
+        {
             return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
-        case "layouttpl":
+        }
+        else if( "layouttpl".equals( type ) )
+        {
             return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
-        case "theme":
+        }
+        else if( "theme".equals( type ) )
+        {
             return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
-        case "web":
+        }
+        else if( "web".equals( type ) )
+        {
             return ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
-        default:
+        }
+        else
+        {
             return "";
         }
     }
