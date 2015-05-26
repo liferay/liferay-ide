@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
@@ -29,6 +30,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,12 +40,14 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.sapphire.ElementList;
@@ -233,6 +237,8 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         projectNames.insert().setName( op.getFinalProjectName().content() );
 
+        projectCreated( newProject );
+
         switch( op.getPluginType().content() )
         {
             case portlet:
@@ -270,6 +276,29 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         if( ! status.isOK() )
         {
             throw new CoreException( status );
+        }
+    }
+
+    private void projectCreated( IProject project )
+    {
+        final IFile ivyFile = project.getFile( "ivy.xml" );
+
+        if( ivyFile.exists() )
+        {
+            try
+            {
+                String contents = CoreUtil.readStreamToString( ivyFile.getContents() );
+
+                contents = contents.replace( "${sdk.dir}/ivy.xml", "../../ivy.xml" );
+
+                ivyFile.setContents(
+                    new ByteArrayInputStream( contents.toString().getBytes( "UTF-8" ) ), IResource.FORCE,
+                    new NullProgressMonitor() );
+            }
+            catch( Exception e )
+            {
+                ProjectCore.logError( e );
+            }
         }
     }
 
