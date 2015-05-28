@@ -320,13 +320,50 @@ public class SDK
             createScript = ISDKConstants.CREATE_SH;
         }
 
-        final IPath createFile = pluginFolder.append( createScript );
+        final IPath createFilePath = pluginFolder.append( createScript );
 
-        createHelper.runTarget( createFile, arguments, workingDir );
+        final File createFile = createFilePath.toFile();
+
+        String originalCreateConetent = "";
+
+        if( !CoreUtil.isWindows() && createFile.exists() )
+        {
+            originalCreateConetent = FileUtil.readContents( createFile, true );
+
+            if( originalCreateConetent.contains( "DisplayName=\\\"$2\\\"" ) )
+            {
+                String createContent = originalCreateConetent.replace( "DisplayName=\\\"$2\\\"", "DisplayName=\"$2\"" );
+
+                try
+                {
+                    FileUtil.writeFile(
+                        createFile, new ByteArrayInputStream( createContent.toString().getBytes( "UTF-8" ) ), null );
+                }
+                catch( Exception e )
+                {
+                    SDKCorePlugin.logError( e );
+                }
+            }
+        }
+
+        createHelper.runTarget( createFilePath, arguments, workingDir );
 
         if( !newPath.toFile().exists() )
         {
             throw new CoreException( SDKCorePlugin.createErrorStatus( "Create script did not complete successfully." ) );
+        }
+
+        if( !CoreUtil.isNullOrEmpty( originalCreateConetent ) )
+        {
+            try
+            {
+                FileUtil.writeFile(
+                    createFile, new ByteArrayInputStream( originalCreateConetent.toString().getBytes( "UTF-8" ) ), null );
+            }
+            catch( Exception e )
+            {
+                SDKCorePlugin.logError( e );
+            }
         }
 
         return newPath;
