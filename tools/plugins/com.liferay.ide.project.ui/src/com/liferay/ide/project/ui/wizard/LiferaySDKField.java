@@ -15,10 +15,8 @@
 
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.sdk.ui.SDKsPreferencePage;
 import com.liferay.ide.ui.util.SWTUtil;
 
-import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,9 +24,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Link;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 import org.eclipse.wst.common.frameworks.internal.datamodel.ui.DataModelSynchHelper;
 
@@ -73,40 +68,12 @@ public class LiferaySDKField
             }
         } );
 
-        Link configureSDKsLink = new Link( parent, SWT.UNDERLINE_LINK );
-        // Button configureSDKsLink = new Button(group, SWT.PUSH);
-        configureSDKsLink.setText( NLS.bind( "<a href=\"#\">{0}</a>", Msgs.configure ) ); //$NON-NLS-1$
-        // configureSDKsLink.setText("Configure ...");
-        configureSDKsLink.setLayoutData( new GridData( SWT.LEFT, SWT.TOP, false, false ) );
-        configureSDKsLink.addSelectionListener( new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                configureSDKsLinkSelected( e );
-                LiferaySDKField.this.selectionAdapter.widgetSelected( e );
-            }
-        } );
-        synchHelper.synchCombo( sdkCombo, fieldPropertyName, new Control[] { configureSDKsLink } );
+        synchHelper.synchCombo( sdkCombo, fieldPropertyName, null );
     }
 
-    protected void configureSDKsLinkSelected( SelectionEvent e )
-    {
-        int retval =
-            PreferencesUtil.createPreferenceDialogOn(
-                e.display.getActiveShell(), SDKsPreferencePage.ID, new String[] { SDKsPreferencePage.ID }, null ).open();
-
-        if( retval == Window.OK )
-        {
-            model.notifyPropertyChange( propertyName, IDataModel.VALID_VALUES_CHG );
-
-            selectionAdapter.widgetSelected( e );
-        }
-    }
 
     private static class Msgs extends NLS
     {
-        public static String configure;
         public static String liferayPluginsSDK;
 
         static

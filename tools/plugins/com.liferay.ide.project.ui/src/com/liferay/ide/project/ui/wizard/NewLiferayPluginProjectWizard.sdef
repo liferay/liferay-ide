@@ -57,16 +57,6 @@
                     <visible-when>${ ProjectProvider == 'ant' }</visible-when>
                     <property>PluginsSDKName</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                    <action>
-                        <id>ConfigureSDKs</id>
-                        <label>Configure SDKs...</label>
-                        <image>configure_16x16.gif</image>
-                    </action>
-                    <action-handler>
-                        <action>ConfigureSDKs</action>
-                        <id>ConfigureSDKsHandler</id>
-                        <impl>ConfigureSDKsAction</impl>
-                    </action-handler>
                 </property-editor>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'ant' }</visible-when>

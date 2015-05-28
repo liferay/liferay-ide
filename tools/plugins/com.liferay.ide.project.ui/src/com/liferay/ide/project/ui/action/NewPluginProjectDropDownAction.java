@@ -215,7 +215,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
 
             new Separator().fill( fMenu, -1 );
 
-            Action[] sdkActions = getSdkActions( parent.getShell() );
+            Action[] sdkActions = getServerActions( parent.getShell() );
 
             for( Action action : sdkActions )
             {
@@ -271,9 +271,9 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
         return "liferay_artifact"; //$NON-NLS-1$
     }
 
-    protected Action[] getSdkActions( Shell shell )
+    protected Action[] getServerActions( Shell shell )
     {
-        return new Action[] { new NewPluginsSDKAction( shell ), new NewServerAction( shell ) };
+        return new Action[] { new NewServerAction( shell ) };
     }
 
     protected static String getTypeAttribute()

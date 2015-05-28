@@ -45,7 +45,6 @@
         <module>com.liferay.ide.project.core</module>
         <module>com.liferay.ide.project.ui</module>
         <module>com.liferay.ide.sdk.core</module>
-        <module>com.liferay.ide.sdk.ui</module>
         <module>com.liferay.ide.server.core</module>
         <module>com.liferay.ide.server.tomcat.core</module>
         <module>com.liferay.ide.server.tomcat.ui</module>

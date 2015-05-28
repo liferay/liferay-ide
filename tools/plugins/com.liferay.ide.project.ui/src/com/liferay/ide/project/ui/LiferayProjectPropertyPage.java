@@ -23,7 +23,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.sdk.ui.SDKsPreferencePage;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
@@ -43,15 +42,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.def.DefinitionLoader.Reference;
 import org.eclipse.sapphire.ui.forms.DialogDef;
 import org.eclipse.sapphire.ui.forms.swt.SapphireDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -61,7 +57,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPropertyPage;
-import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.dialogs.PropertyPage;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -94,22 +89,6 @@ public class LiferayProjectPropertyPage extends PropertyPage
         noDefaultAndApplyButton();
     }
 
-    protected void configureSDKsLinkSelected( SelectionEvent e )
-    {
-        // boolean noSDKs = SDKManager.getAllSDKs().length == 0;
-
-        String[] id = new String[] { SDKsPreferencePage.ID };
-
-        PreferenceDialog dialog =
-            PreferencesUtil.createPreferenceDialogOn( this.getShell(), SDKsPreferencePage.ID, id, null );
-
-        int retval = dialog.open();
-
-        if( retval == Window.OK )
-        {
-            getContainer().updateButtons();
-        }
-    }
 
     @Override
     protected Control createContents( Composite parent )
