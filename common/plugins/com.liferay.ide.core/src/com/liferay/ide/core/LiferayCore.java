@@ -46,6 +46,8 @@ public class LiferayCore extends Plugin
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.core";
 
+    public static final String NATURE_ID = PLUGIN_ID + ".liferayNature";
+
     private static LiferayProjectProviderReader providerReader;
 
     public static ILiferayProject create( Object adaptable )
