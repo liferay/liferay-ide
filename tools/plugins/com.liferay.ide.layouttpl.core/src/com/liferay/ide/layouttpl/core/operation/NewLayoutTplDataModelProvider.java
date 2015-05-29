@@ -232,7 +232,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( !checkoutDocrootFileNameCorrect( filename, "tpl" ) )
             {
-                return LayoutTplCore.createErrorStatus( "Template file name is invaild." );
+                return LayoutTplCore.createErrorStatus( "Template file name is invalid." );
             }
 
             final IPath filePath = new Path( getStringProperty( LAYOUT_TEMPLATE_FILE ) );
@@ -248,7 +248,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( !checkoutDocrootFileNameCorrect( filename, "tpl" ) )
             {
-                return LayoutTplCore.createErrorStatus( "WAP template file name is invaild." );
+                return LayoutTplCore.createErrorStatus( "WAP template file name is invalid." );
             }
 
             final IPath filePath = new Path( getStringProperty( LAYOUT_WAP_TEMPLATE_FILE ) );
@@ -264,7 +264,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
 
             if( !checkoutDocrootFileNameCorrect( filename, "" ) )
             {
-                return LayoutTplCore.createErrorStatus( "Thumbnail file name is invaild." );
+                return LayoutTplCore.createErrorStatus( "Thumbnail file name is invalid." );
             }
 
             final IPath filePath = new Path( getStringProperty( LAYOUT_THUMBNAIL_FILE ) );
