@@ -15,9 +15,9 @@
 
 package com.liferay.ide.xml.search.ui.jsp;
 
-import com.liferay.ide.xml.search.ui.base.StaticValueQuerySpecification;
 
 import org.eclipse.wst.xml.search.core.statics.DefaultStaticValueVisitor;
+import org.eclipse.wst.xml.search.core.statics.StaticValueQuerySpecification;
 
 /**
  * @author Terry Jia
