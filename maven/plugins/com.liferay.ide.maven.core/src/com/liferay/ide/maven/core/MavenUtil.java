@@ -474,6 +474,47 @@ public class MavenUtil
         return retval;
     }
 
+    public static boolean isMavenBundlePlugin( IProject project )
+    {
+        final NullProgressMonitor monitor = new NullProgressMonitor();
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
+
+        if( facade != null )
+        {
+            try
+            {
+                final MavenProject mavenProject = facade.getMavenProject( new NullProgressMonitor() );
+
+                if( mavenProject != null && "bundle".equals( mavenProject.getPackaging() ) )
+                {
+                    final Plugin mavenBundlePlugin =
+                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY, monitor );
+
+                    if( mavenBundlePlugin != null )
+                    {
+                        return true;
+                    }
+
+                }
+                else if( mavenProject != null && "jar".equals( mavenProject.getPackaging() ) )
+                {
+                    final Plugin bndMavenPlugin =
+                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY, monitor );
+
+                    if( bndMavenPlugin != null )
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch( CoreException e )
+            {
+            }
+        }
+
+        return false;
+    }
+
     public static boolean isMavenProject( IProject project ) throws CoreException
     {
         return project != null && project.exists() && project.isAccessible() &&

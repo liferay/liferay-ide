@@ -12,19 +12,24 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.project.LiferayNature;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.core.project.configurator.AbstractProjectConfigurator;
 import org.eclipse.m2e.core.project.configurator.ProjectConfigurationRequest;
 import org.eclipse.m2e.jdt.IClasspathDescriptor;
 import org.eclipse.m2e.jdt.IJavaProjectConfigurator;
 
-
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class BundleProjectConfigurator extends AbstractProjectConfigurator implements IJavaProjectConfigurator
 {
@@ -48,6 +53,25 @@ public class BundleProjectConfigurator extends AbstractProjectConfigurator imple
     @Override
     public void configure( ProjectConfigurationRequest request, IProgressMonitor monitor ) throws CoreException
     {
+        if( monitor == null )
+        {
+            monitor = new NullProgressMonitor();
+        }
+
+        IProject project = request.getProject();
+
+        if( isOSGiBundlePlugin( project ) )
+        {
+            LiferayNature.addLiferayNature( project, monitor );
+        }
+
+        monitor.worked( 100 );
+        monitor.done();
+    }
+
+    private boolean isOSGiBundlePlugin( IProject project ) throws CoreException
+    {
+        return MavenUtil.isMavenProject( project );
     }
 
 }

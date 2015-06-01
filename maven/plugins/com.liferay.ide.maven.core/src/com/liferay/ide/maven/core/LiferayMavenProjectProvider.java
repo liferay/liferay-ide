@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.project.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -55,8 +56,6 @@ import org.apache.maven.archetype.metadata.RequiredProperty;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.cli.configuration.SettingsXmlConfigurationProcessor;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Profile;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.RepositorySystemSession;
@@ -72,7 +71,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
@@ -679,7 +677,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
             {
                 if( MavenUtil.isMavenProject( project ) )
                 {
-                    if( hasMavenBundlePlugin( project ) )
+                    if( LiferayNature.hasNature( project ) )
                     {
                         return new MavenBundlePluginProject( project );
                     }
@@ -709,47 +707,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         }
 
         return null;
-    }
-
-    private boolean hasMavenBundlePlugin( IProject project )
-    {
-        final NullProgressMonitor monitor = new NullProgressMonitor();
-        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
-
-        if( facade != null )
-        {
-            try
-            {
-                final MavenProject mavenProject = facade.getMavenProject( new NullProgressMonitor() );
-
-                if( mavenProject != null && "bundle".equals( mavenProject.getPackaging() ) )
-                {
-                    final Plugin mavenBundlePlugin =
-                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY, monitor );
-
-                    if( mavenBundlePlugin != null )
-                    {
-                        return true;
-                    }
-
-                }
-                else if( mavenProject != null && "jar".equals( mavenProject.getPackaging() ) )
-                {
-                    final Plugin bndMavenPlugin =
-                        MavenUtil.getPlugin( facade, ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY, monitor );
-
-                    if( bndMavenPlugin != null )
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch( CoreException e )
-            {
-            }
-        }
-
-        return false;
     }
 
     private void updateDtdVersion( IProject project, String dtdVersion, String archetypeVesion )
