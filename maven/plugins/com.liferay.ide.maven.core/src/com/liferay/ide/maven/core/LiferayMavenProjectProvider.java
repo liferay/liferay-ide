@@ -15,7 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.project.LiferayNature;
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.IPortletFramework;

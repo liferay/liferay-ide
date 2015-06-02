@@ -70,7 +70,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="com.liferay.ide.core.project.LiferayNature">
+               class="com.liferay.ide.core.LiferayNature">
          </run>
       </runtime>
    </extension>

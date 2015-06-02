@@ -13,9 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.core.project;
-
-import com.liferay.ide.core.LiferayCore;
+package com.liferay.ide.core;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
