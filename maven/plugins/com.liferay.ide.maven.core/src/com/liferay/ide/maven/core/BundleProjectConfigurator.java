@@ -62,18 +62,13 @@ public class BundleProjectConfigurator extends AbstractProjectConfigurator imple
 
         IProject project = request.getProject();
 
-        if( isOSGiBundlePlugin( project ) )
+        if( isMavenBundlePlugin( project ) )
         {
             LiferayNature.addLiferayNature( project, monitor );
         }
 
         monitor.worked( 100 );
         monitor.done();
-    }
-
-    private boolean isOSGiBundlePlugin( IProject project )
-    {
-        return isMavenBundlePlugin( project );
     }
 
     private boolean isMavenBundlePlugin( IProject project )
