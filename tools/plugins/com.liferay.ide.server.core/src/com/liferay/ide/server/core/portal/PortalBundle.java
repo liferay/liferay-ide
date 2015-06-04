@@ -26,13 +26,21 @@ public interface PortalBundle
 
     IPath getAutoDeployPath();
 
+    IPath getAppServerDeployDir();
+    
+    IPath getAppServerLibGlobalDir();
+    
     int getJmxRemotePort();
 
     IPath getLiferayHome();
+    
+    IPath getAppServerDir();
 
     String getMainClass();
 
     IPath getModulesPath();
+    
+    IPath getPortalDir();
 
     IPath[] getRuntimeClasspath();
 
@@ -47,4 +55,8 @@ public interface PortalBundle
     String getType();
 
     String getVersion();
+
+    IPath[] getBundleDependencyJars();
+
+    IPath[] getUserLibs();
 }
