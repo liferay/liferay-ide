@@ -18,7 +18,10 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.sdk.core.SDKCorePlugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -57,8 +60,15 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
 
     public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
     {
+        Map<String, String> appServerProperties = sdk.getSDKProperties( getProject().getLocation() );
+
+        if ( appServerProperties == null )
+        {
+            return SDKCorePlugin.createErrorStatus( "Can't get correct sdk properties" );
+        }
+
         return sdk.buildLanguage(
-            getProject(), langFile, null, ServerUtil.configureAppServerProperties( getProject() ), monitor );
+            getProject(), langFile, null, appServerProperties, monitor );
     }
 
     @Override
@@ -80,9 +90,16 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
 
     private IStatus buildService( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
+        Map<String, String> appServerProperties = sdk.getSDKProperties( getProject().getLocation());
+
+        if ( appServerProperties == null )
+        {
+            return SDKCorePlugin.createErrorStatus( "Can't get correct sdk properties" );
+        }
+
         IStatus retval =
             sdk.buildService(
-                getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
+                getProject(), serviceXmlFile, null, appServerProperties );
 
         try
         {
@@ -121,8 +138,15 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
 
     private IStatus buildWSDD( IFile serviceXmlFile, IProgressMonitor monitor ) throws CoreException
     {
+        Map<String, String> appServerProperties = sdk.getSDKProperties( getProject().getLocation() );
+
+        if ( appServerProperties == null )
+        {
+            return SDKCorePlugin.createErrorStatus( "Can't get correct sdk properties" );
+        }
+
         IStatus retval =
-            sdk.buildWSDD( getProject(), serviceXmlFile, null, ServerUtil.configureAppServerProperties( getProject() ) );
+            sdk.buildWSDD( getProject(), serviceXmlFile, null, appServerProperties );
 
         try
         {

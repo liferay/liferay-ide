@@ -62,32 +62,27 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
     public IPath getAppServerDeployDir()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getPortalBundle().getAppServerDeployDir();
     }
 
     public IPath getAppServerDir()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getPortalBundle().getAppServerDir();
     }
 
     public IPath getAppServerLibGlobalDir()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getPortalBundle().getAppServerLibGlobalDir();
     }
 
     public IPath getAppServerPortalDir()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getPortalBundle().getPortalDir();
     }
 
     public String getAppServerType()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getPortalBundle().getType();
     }
 
     public String[] getHookSupportedProperties()
@@ -153,8 +148,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
     public IPath getRuntimeLocation()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getRuntime().getLocation();
     }
 
     public IPath getSourceLocation()
@@ -165,8 +159,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
     public IPath[] getUserLibs()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return this.portalBundle.getUserLibs();
     }
 
     public IVMInstall getVMInstall()

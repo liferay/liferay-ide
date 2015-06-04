@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -28,6 +29,7 @@ import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.ByteArrayInputStream;
@@ -67,7 +69,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
     public PluginsSDKProjectProvider()
     {
-        super( new Class<?>[] { IProject.class, IRuntime.class } );
+        super( new Class<?>[] { IProject.class } );
     }
 
     public IStatus doCreateNewProject(
@@ -95,7 +97,10 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         final IRuntime runtime = NewLiferayPluginProjectOpMethods.getRuntime( op );
         final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime, monitor );
         final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
+      
+        //final Map<String, String> appServerProperties = sdk.getSDKProperties( PathBridge.create( op.getLocation().content(true) ) );
 
+        
         // workingDir should always be the directory of the type of plugin /sdk/portlets/ for a portlet, etc
         String workingDir = null;
         // baseDir should only be set when we are wanting to specifically allow 'out-of-sdk' projects, i.e. custom/workspace
@@ -354,7 +359,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
     public ILiferayProject provide( Object type )
     {
-        PluginsSDKProject retval = null;
+        ILiferayProject retval = null;
         IProject project = null;
         ILiferayRuntime liferayRuntime = null;
 
@@ -364,7 +369,24 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
             try
             {
-                liferayRuntime = ServerUtil.getLiferayRuntime( project );
+                if ( SDKUtil.isSDKProject( project ) && LiferayNature.hasNature( project ) )
+                {
+                    PortalBundle portalBundle = ServerUtil.getPortalBundle( project );  
+                    
+                    if( portalBundle != null )
+                    {
+                        retval = new PluginsSDKProject( project, portalBundle );
+                    }                    
+                }
+                else if ( SDKUtil.isSDKProject( project ))
+                {
+                    liferayRuntime = ServerUtil.getLiferayRuntime( project );
+                    
+                    if( liferayRuntime != null )
+                    {
+                        retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
+                    }                    
+                }
             }
             catch( CoreException e )
             {
@@ -381,13 +403,13 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             catch( Exception e )
             {
             }
+            
+            if( liferayRuntime != null )
+            {
+                retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
+            }     
         }
-
-        if( liferayRuntime != null )
-        {
-            retval = new PluginsSDKProject( project, liferayRuntime );
-        }
-
+        
         return retval;
     }
 

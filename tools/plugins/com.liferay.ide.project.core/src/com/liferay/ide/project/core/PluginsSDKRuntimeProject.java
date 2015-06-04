@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
@@ -22,8 +22,9 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -45,16 +46,16 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PluginsSDKProject extends FlexibleProject implements IWebProject
+public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebProject
 {
 
-    private PortalBundle portalBundle;
+    private ILiferayRuntime liferayRuntime;
 
-    public PluginsSDKProject( IProject project, PortalBundle portalBundle )
+    public PluginsSDKRuntimeProject( IProject project, ILiferayRuntime liferayRuntime )
     {
         super( project );
 
-        this.portalBundle = portalBundle;
+        this.liferayRuntime = liferayRuntime;
     }
 
     public <T> T adapt( Class<T> adapterType )
@@ -90,7 +91,7 @@ public class PluginsSDKProject extends FlexibleProject implements IWebProject
         }
         else if( ILiferayPortal.class.equals( adapterType ) )
         {
-            final ILiferayPortal portal = new PluginsSDKBundle( this.portalBundle );
+            final ILiferayPortal portal = new PluginsSDKPortal( this.liferayRuntime );
 
             return adapterType.cast( portal );
         }
@@ -171,7 +172,7 @@ public class PluginsSDKProject extends FlexibleProject implements IWebProject
 
     public IPath[] getUserLibs()
     {
-        return this.portalBundle.getUserLibs();
+        return this.liferayRuntime.getUserLibs();
     }
 
     public Collection<IFile> getOutputs( boolean build, IProgressMonitor monitor ) throws CoreException
@@ -184,9 +185,7 @@ public class PluginsSDKProject extends FlexibleProject implements IWebProject
 
             final SDK sdk = SDKUtil.getSDK( this.getProject() );
 
-            PluginsSDKBundle sdkBundle = new PluginsSDKBundle(this.portalBundle);
-            
-            final Map<String, String> appServerProperties = sdkBundle.getRequiredProperties();
+            final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( getProject() );
 
             final IStatus warStatus = sdk.war( this.getProject(), null, true, appServerProperties, monitor );
 

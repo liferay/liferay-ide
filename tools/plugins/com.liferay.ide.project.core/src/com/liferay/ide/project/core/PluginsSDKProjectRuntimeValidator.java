@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -23,6 +24,9 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectValidator;
@@ -57,6 +61,18 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
 
             if( SDKUtil.isSDKProject( fproj.getProject() ) )
             {
+                IJavaProject javaProject = JavaCore.create( proj );
+
+                for( IClasspathEntry entry : javaProject.getRawClasspath() )
+                {
+                    if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
+                        entry.getPath().segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ) 
+                        && LiferayNature.hasNature( proj ))
+                    {
+                        return;
+                    }
+                }
+
                 if( fproj.getPrimaryRuntime() == null )
                 {
                     setMarker(

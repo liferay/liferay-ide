@@ -16,20 +16,27 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Version;
 
 /**
@@ -37,7 +44,6 @@ import org.osgi.framework.Version;
  */
 public abstract class AbstractPortalBundle implements PortalBundle
 {
-
     private static final String CONFIG_TYPE_SERVER = "server";
     private static final String CONFIG_TYPE_VERSION = "version";
     private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V700;
@@ -59,18 +65,78 @@ public abstract class AbstractPortalBundle implements PortalBundle
         this.bundlePath = path;
 
         this.liferayHome = bundlePath.append( ".." );
+        
         this.jmxRemotePort = getDefaultJMXRemotePort();
 
         this.autoDeployPath = this.liferayHome.append( "deploy" );
 
-        this.version = getPortalVersion( this.bundlePath, getPortalDir( bundlePath ) );
+        this.version = getPortalVersion( this.bundlePath, getPortalDir() );
 
         this.modulesPath = this.liferayHome.append( "osgi" );
     }
 
-    protected abstract int getDefaultJMXRemotePort();
+    public AbstractPortalBundle( Map<String, String> appServerProperties)
+    {
+        if( appServerProperties == null )
+        {
+            throw new IllegalArgumentException( "bundler parameters cannot be null" );
+        }
 
-    protected abstract IPath getPortalDir( IPath portalDir );
+        final String appServerPath = (String) (appServerProperties.get( "app.server.dir"));
+        final String appServerDeployPath = (String) (appServerProperties.get( "app.server.deploy.dir"));
+        //final String appServerLibPath = (String) (appServerProperties.get( "app.server.lib.global.dir"));
+        final String appServerParentPath = (String) (appServerProperties.get( "app.server.parent.dir"));
+        //final String appServerPortalPath = (String) (appServerProperties.get( "app.server.portal.dir"));
+
+        this.bundlePath = new Path(appServerPath);
+
+        this.liferayHome = new Path(appServerParentPath);
+
+        this.jmxRemotePort = getDefaultJMXRemotePort();
+
+        this.autoDeployPath = new Path(appServerDeployPath);
+
+        this.version = getPortalVersion( this.bundlePath, getPortalDir() );
+
+        this.modulesPath = null;
+    }
+
+    @Override
+    public IPath getAppServerDir()
+    {
+        return this.bundlePath;
+    }
+
+    public IPath[] getBundleDependencyJars()
+    {
+        List<IPath> libs = new ArrayList<IPath>();
+        IPath bundleLibPath =  getAppServerLibDir();
+        Collection<String> jarLibs = getPortalDependencyJars();
+        List<File> libFiles;
+        try
+        {
+            libFiles = FileListing.getFileListing( new File( bundleLibPath.toOSString() ) );
+            for( File lib : libFiles )
+            {
+                if( lib.exists() && lib.getName().endsWith( ".jar" ) && 
+                                ( jarLibs.size()>0?jarLibs.contains( lib.getName() ):true) ) //$NON-NLS-1$
+                {
+                    libs.add( new Path( lib.getPath() ) );
+                }
+            }
+        }
+        catch( FileNotFoundException e )
+        {
+        }
+
+        return libs.toArray( new IPath[libs.size()] );
+    }
+
+    protected abstract IPath getAppServerLibDir();
+
+    protected abstract Collection<String> getPortalDependencyJars();
+
+    protected abstract int getDefaultJMXRemotePort();
 
     @Override
     public int getJmxRemotePort()

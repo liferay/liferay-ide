@@ -16,10 +16,12 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,80 +30,105 @@ import org.eclipse.core.runtime.IPath;
 
 
 /**
- * @author Gregory Amerson
- * @author Simon Jiang
+ * @author Simon.Jiang
  */
-public class PluginsSDKPortal implements ILiferayPortal
+public class PluginsSDKBundle implements ILiferayPortal
 {
-    private final ILiferayRuntime runtime;
+    private final PortalBundle portalBundle;
 
-    public PluginsSDKPortal( ILiferayRuntime runtime )
+    public PluginsSDKBundle( PortalBundle portalBundle )
     {
-        this.runtime = runtime;
+        this.portalBundle = portalBundle;
     }
 
     @Override
     public IPath getAppServerPortalDir()
     {
-        return this.runtime.getAppServerPortalDir();
+        return this.portalBundle.getPortalDir();
     }
 
     @Override
     public String[] getHookSupportedProperties()
     {
-        return this.runtime.getHookSupportedProperties();
+        IPath portalDir = portalBundle.getPortalDir();
+        IPath[] extraLibs = portalBundle.getBundleDependencyJars();
+        return new LiferayPortalValueLoader( portalDir, extraLibs ).loadHookPropertiesFromClass();
     }
 
     @Override
     public Properties getPortletCategories()
     {
-        return this.runtime.getPortletCategories();
+        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
     }
 
     @Override
     public Properties getPortletEntryCategories()
     {
-        return this.runtime.getPortletEntryCategories();
+        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
     }
 
     @Override
     public String getVersion()
     {
-        return this.runtime.getPortalVersion();
+        return portalBundle.getVersion();
     }
 
+    
+    private String getAppServerPropertyKey( String propertyAppServerDeployDir )
+    {
+        String retval = null;
+
+        try
+        {
+            final String type = this.portalBundle.getType();
+
+            retval = MessageFormat.format( propertyAppServerDeployDir, "." + type + "." ); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        catch( Exception e )
+        {
+        }
+        finally
+        {
+            if( retval == null )
+            {
+                retval = MessageFormat.format( propertyAppServerDeployDir, "." ); //$NON-NLS-1$
+            }
+        }
+
+        return retval;
+    }
+    
     @Override
     public Map<String, String> getRequiredProperties()
     {
         Map<String, String> properties = new HashMap<String, String>();
 
-        String type = runtime.getAppServerType();
+        String type = portalBundle.getType();
 
-        String dir = runtime.getAppServerDir().toOSString();
+        String dir = portalBundle.getAppServerDir().toOSString();
 
-        String deployDir = runtime.getAppServerDeployDir().toOSString();
+        String deployDir = portalBundle.getAppServerDeployDir().toOSString();
 
-        String libGlobalDir = runtime.getAppServerLibGlobalDir().toOSString();
+        String libGlobalDir = portalBundle.getAppServerLibGlobalDir().toOSString();
 
         String parentDir = new File( dir ).getParent();
 
-        String portalDir = runtime.getAppServerPortalDir().toOSString();
+        String portalDir = portalBundle.getPortalDir().toOSString();
 
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_TYPE, type );
 
         final String appServerDirKey =
-            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, runtime );
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR );
         final String appServerDeployDirKey =
-            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR, runtime );
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DEPLOY_DIR );
         final String appServerLibGlobalDirKey =
-            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR, runtime );
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_LIB_GLOBAL_DIR );
         final String appServerPortalDirKey =
-            ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR, runtime );
+            getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_PORTAL_DIR );
 
         properties.put( appServerDirKey, dir );
         properties.put( appServerDeployDirKey, deployDir );
         properties.put( appServerLibGlobalDirKey, libGlobalDir );
-        //IDE-1268 need to always specify app.server.parent.dir, even though it is only useful in 6.1.2/6.2.0 or greater
         properties.put( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR, parentDir );
         properties.put( appServerPortalDirKey, portalDir );
 
