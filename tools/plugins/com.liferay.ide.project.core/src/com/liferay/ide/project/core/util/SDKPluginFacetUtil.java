@@ -55,6 +55,7 @@ import org.osgi.framework.Version;
 /**
  * @author Greg Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class SDKPluginFacetUtil
 {
@@ -220,6 +221,94 @@ public class SDKPluginFacetUtil
         configureLiferayFacet( fpjwc, requiredFacetVersion.getProjectFacet(), sdkLocation );
     }
 
+    public static void configureProjectAsPlugin(
+        final IFacetedProjectWorkingCopy fpjwc, final String pluginType,
+        final String sdkLocation, final ProjectRecord projectRecord ) throws CoreException
+    {
+        IFacetedProjectTemplate template = getLiferayTemplateForProject( pluginType );
+        IPreset preset = getLiferayPresetForProject( pluginType );
+
+        if( preset == null )
+        {
+            throw new CoreException( ProjectCore.createErrorStatus( NLS.bind(
+                Msgs.noFacetPreset, fpjwc.getProjectName() ) ) );
+        }
+
+        IRuntime primaryRuntime = fpjwc.getPrimaryRuntime();
+
+        if (primaryRuntime!=null)
+        {
+            fpjwc.removeTargetedRuntime( primaryRuntime );
+        }
+
+        Set<IProjectFacetVersion> currentProjectFacetVersions = fpjwc.getProjectFacets();
+
+        Set<IProjectFacet> requiredFacets = template.getFixedProjectFacets();
+
+        for( IProjectFacet requiredFacet : requiredFacets )
+        {
+            boolean hasRequiredFacet = false;
+
+            for( IProjectFacetVersion currentFacetVersion : currentProjectFacetVersions )
+            {
+                if( currentFacetVersion.getProjectFacet().equals( requiredFacet ) )
+                {
+                    // TODO how to check the bundle support status?
+                    boolean requiredVersion = isRequiredVersion( currentFacetVersion );
+
+                    if( requiredVersion )
+                    {
+                        hasRequiredFacet = true;
+                    }
+                    else
+                    {
+                        fpjwc.removeProjectFacet( currentFacetVersion );
+                    }
+
+                    break;
+                }
+            }
+
+            if( !hasRequiredFacet )
+            {
+                IProjectFacetVersion requiredFacetVersion = getRequiredFacetVersionFromPreset( requiredFacet, preset );
+
+                if( requiredFacetVersion != null )
+                {
+                    fpjwc.addProjectFacet( requiredFacetVersion );
+
+                    if( ProjectUtil.isJavaFacet( requiredFacetVersion ) )
+                    {
+                        configureJavaFacet( fpjwc, requiredFacetVersion.getProjectFacet(), preset, projectRecord );
+                    }
+                    else if( ProjectUtil.isLiferayFacet( requiredFacetVersion ) )
+                    {
+                        configureLiferayFacet( fpjwc, requiredFacetVersion, sdkLocation );
+                    }
+                    else if( ProjectUtil.isDynamicWebFacet( requiredFacetVersion ) )
+                    {
+                        configureWebFacet( fpjwc, requiredFacetVersion.getProjectFacet(), preset );
+                    }
+                }
+            }
+            else
+            {
+                if( ProjectUtil.isJavaFacet( requiredFacet ) )
+                {
+                    configureJavaFacet( fpjwc, requiredFacet, preset, projectRecord );
+                }
+                else if( ProjectUtil.isLiferayFacet( requiredFacet ) )
+                {
+                    configureLiferayFacet( fpjwc, requiredFacet, sdkLocation );
+                }
+                else if( ProjectUtil.isDynamicWebFacet( requiredFacet ) )
+                {
+                    configureWebFacet( fpjwc, requiredFacet, preset );
+                }
+            }
+        }
+    }
+
     public static void configureProjectAsPlugin( final IFacetedProjectWorkingCopy fpjwc,
                                                  final IRuntime runtime,
                                                  final String pluginType,
@@ -234,7 +323,6 @@ public class SDKPluginFacetUtil
         }
 
         fpjwc.setPrimaryRuntime( runtime );
-
         // fpjwc.setSelectedPreset(
         // FacetedProjectFramework.DEFAULT_CONFIGURATION_PRESET_ID );
 
@@ -259,8 +347,8 @@ public class SDKPluginFacetUtil
                 if( currentFacetVersion.getProjectFacet().equals( requiredFacet ) )
                 {
                     boolean supports = runtime.supports( currentFacetVersion );
-                    boolean requiredVersion = isRequiredVersion( currentFacetVersion );
 
+                    boolean requiredVersion = isRequiredVersion( currentFacetVersion );
                     if( supports && requiredVersion )
                     {
                         hasRequiredFacet = true;

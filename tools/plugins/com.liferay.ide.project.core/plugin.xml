@@ -397,6 +397,7 @@
                      value="liferay.portlet">
                </test>
             </with>
+            <!--
             <with
                   variable="context">
                <test
@@ -405,6 +406,7 @@
                      value="true">
                </test>
             </with>
+            -->
          </enablement>
          <action
                type="INSTALL">
@@ -431,6 +433,7 @@
                      value="liferay.hook">
                </test>
             </with>
+            <!--
             <with
                   variable="context">
                <test
@@ -439,6 +442,7 @@
                      value="true">
                </test>
             </with>
+            -->
          </enablement>
          <action
                type="INSTALL">
@@ -465,6 +469,7 @@
                      value="liferay.ext">
                </test>
             </with>
+            <!--
             <with
                   variable="context">
                <test
@@ -473,6 +478,7 @@
                      value="true">
                </test>
             </with>
+            -->
          </enablement>
          <action
                type="INSTALL">
@@ -499,6 +505,7 @@
                      value="liferay.web">
                </test>
             </with>
+            <!--
             <with
                   variable="context">
                <test
@@ -507,6 +514,7 @@
                      value="true">
                </test>
             </with>
+            -->
          </enablement>
          <action
                type="INSTALL">
@@ -551,6 +559,10 @@
       <classpathContainerInitializer
             class="com.liferay.ide.project.core.PluginClasspathContainerInitializer"
             id="com.liferay.ide.eclipse.server.plugin.container">
+      </classpathContainerInitializer>
+      <classpathContainerInitializer
+            class="com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer"
+            id="com.liferay.ide.eclipse.plugin.dependency.container">
       </classpathContainerInitializer>
    </extension>
    <extension
@@ -623,6 +635,5 @@
             eventTypes="POST_INSTALL">
       </listener>
    </extension>
-   -->
-
+   --> 
 </plugin>

@@ -133,11 +133,17 @@ public class LiferayPortalValueLoader
         {
             final File libDir = globalDir.append( "lib" ).toFile();
 
-            addLibs( libDir, libUrlList );
+            if (libDir.exists())
+            {
+                addLibs( libDir, libUrlList );
+            }
 
             final File extLibDir = globalDir.append( "lib/ext" ).toFile();
 
-            addLibs( extLibDir, libUrlList );
+            if ( extLibDir.exists())
+            {
+                addLibs( extLibDir, libUrlList );
+            }
         }
 
         if( ! CoreUtil.isNullOrEmpty( extraLibs ) )

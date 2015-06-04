@@ -32,9 +32,14 @@ import com.liferay.ide.server.core.tests.ServerCoreBase;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -335,6 +340,39 @@ public class ProjectCoreBase extends ServerCoreBase
         return op;
     }
 
+    private void persistAppServerProperties() throws FileNotFoundException, IOException, ConfigurationException
+    {
+        Properties initProps = new Properties();
+        initProps.put( "app.server.type", "tomcat" );
+        initProps.put( "app.server.tomcat.dir", getLiferayRuntimeDir().toPortableString() );
+        initProps.put( "app.server.tomcat.deploy.dir", getLiferayRuntimeDir().append( "webapps" ).toPortableString() );
+        initProps.put( "app.server.tomcat.lib.global.dir", getLiferayRuntimeDir().append( "lib/ext" ).toPortableString() );
+        initProps.put( "app.server.parent.dir", getLiferayRuntimeDir().removeLastSegments( 1 ).toPortableString() );
+        initProps.put( "app.server.tomcat.portal.dir", getLiferayRuntimeDir().append( "webapps/ROOT" ).toPortableString() );
+
+        IPath loc = getLiferayPluginsSdkDir();
+        String userName = System.getProperty( "user.name" ); //$NON-NLS-1$
+        File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile(); //$NON-NLS-1$ //$NON-NLS-2$
+
+        if( userBuildFile.exists() )
+        {
+            PropertiesConfiguration propsConfig = new PropertiesConfiguration( userBuildFile );
+            for( Object key : initProps.keySet() )
+            {
+                propsConfig.setProperty( (String) key, initProps.get( key ) );
+            }
+            propsConfig.setHeader( "" );
+            propsConfig.save( userBuildFile );
+
+        }
+        else
+        {
+            Properties props = new Properties();
+            props.putAll( initProps );
+            props.store( new FileOutputStream( userBuildFile ), "" );
+        }
+    }
+
     protected void removeAllRuntimes() throws Exception
     {
         for( IRuntime r : ServerCore.getRuntimes() )
@@ -431,6 +469,8 @@ public class ProjectCoreBase extends ServerCoreBase
 
             assertEquals( "Unable to delete pre-existing customBaseDir", false, customBaseDir.exists() );
         }
+
+        persistAppServerProperties();
     }
 
     @Override

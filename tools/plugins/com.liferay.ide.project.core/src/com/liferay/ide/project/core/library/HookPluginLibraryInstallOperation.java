@@ -16,20 +16,21 @@
 package com.liferay.ide.project.core.library;
 
 import com.liferay.ide.project.core.HookClasspathContainer;
-import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
+import com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class HookPluginLibraryInstallOperation extends PluginLibraryInstallOperation
 {
 
     protected IPath getClasspathContainerPath()
     {
-        return new Path( PluginClasspathContainerInitializer.ID + "/" + HookClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
+        return new Path( PluginClasspathDependencyContainerInitializer.ID + "/" + HookClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
     }
 
 }

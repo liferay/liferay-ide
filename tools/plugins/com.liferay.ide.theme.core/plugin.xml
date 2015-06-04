@@ -143,6 +143,7 @@
                      value="liferay.theme">
                </test>
             </with>
+            <!--
             <with
                   variable="context">
                <test
@@ -151,6 +152,7 @@
                      value="true">
                </test>
             </with>
+            -->
          </enablement>
          <action
                type="INSTALL">

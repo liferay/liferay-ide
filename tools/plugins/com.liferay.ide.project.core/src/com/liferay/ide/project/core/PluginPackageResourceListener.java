@@ -81,6 +81,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class PluginPackageResourceListener implements IResourceChangeListener, IResourceDeltaVisitor
@@ -424,7 +425,8 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         {
             if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
             {
-                if( entry.getPath().segment( 0 ).equals( PluginClasspathContainerInitializer.ID ) )
+                if( entry.getPath().segment( 0 ).equals( PluginClasspathContainerInitializer.ID ) || 
+                                entry.getPath().segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ))
                 {
                     containerPath = entry.getPath();
 
@@ -437,10 +439,18 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         {
             IClasspathContainer classpathContainer = JavaCore.getClasspathContainer( containerPath, javaProject );
 
-            PluginClasspathContainerInitializer initializer =
-                (PluginClasspathContainerInitializer) JavaCore.getClasspathContainerInitializer( PluginClasspathContainerInitializer.ID );
-
-            initializer.requestClasspathContainerUpdate( containerPath, javaProject, classpathContainer );
+            if (containerPath.segment( 0 ).equals( PluginClasspathContainerInitializer.ID ) )
+            {
+                PluginClasspathContainerInitializer initializer =
+                                (PluginClasspathContainerInitializer) JavaCore.getClasspathContainerInitializer( PluginClasspathContainerInitializer.ID );
+                initializer.requestClasspathContainerUpdate( containerPath, javaProject, classpathContainer );
+            }
+            else if (containerPath.segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ) )
+            {
+                PluginClasspathDependencyContainerInitializer dependencyInitializer = 
+                                (PluginClasspathDependencyContainerInitializer)JavaCore.getClasspathContainerInitializer( PluginClasspathDependencyContainerInitializer.ID );
+                dependencyInitializer.requestClasspathContainerUpdate( containerPath, javaProject, classpathContainer );
+            }
         }
 
         Properties props = new Properties();

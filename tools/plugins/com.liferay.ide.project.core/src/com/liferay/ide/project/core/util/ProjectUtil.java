@@ -17,11 +17,14 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
+import com.liferay.ide.project.core.PluginClasspathDependencyContainer;
+import com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
@@ -30,6 +33,7 @@ import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelPro
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -54,16 +58,21 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jst.common.project.facet.core.JavaFacet;
+import org.eclipse.jst.j2ee.classpathdep.IClasspathDependencyConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetConstants;
 import org.eclipse.jst.j2ee.project.facet.IJ2EEFacetInstallDataModelProperties;
 import org.eclipse.osgi.util.NLS;
@@ -92,12 +101,18 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
  * @author Gregory Amerson
  * @author Kuo Zhang
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class ProjectUtil
 {
-
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
+
+    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_WEB_SEGMENT_PATH = "web";
+    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_HOOK_SEGMENT_PATH = "hook";
+    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_THEME_SEGMENT_PATH = "theme";
+    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_EXT_SEGMENT_PATH = "ext";
+    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_PORTLET_SEGMENT_PATH = "portlet";
 
     public static boolean collectProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -330,6 +345,120 @@ public class ProjectUtil
         return project;
     }
 
+    public static IProject createNewSDKProject( final ProjectRecord projectRecord,
+                                                final IPath sdkLocation,
+                                                IProgressMonitor monitor )
+        throws CoreException
+    {
+        final IDataModel newProjectDataModel =
+            DataModelFactory.createDataModel( new PluginFacetProjectCreationDataModelProvider() );
+
+        // we are importing so set flag to not create anything
+        newProjectDataModel.setBooleanProperty( IPluginProjectDataModelProperties.CREATE_PROJECT_OPERATION, false );
+
+        final IDataModel nestedModel =
+            newProjectDataModel.getNestedModel( IPluginProjectDataModelProperties.NESTED_PROJECT_DM );
+
+        // using sdk location
+        nestedModel.setBooleanProperty( IPluginProjectDataModelProperties.USE_DEFAULT_LOCATION, true );
+        newProjectDataModel.setBooleanProperty(
+            IPluginProjectDataModelProperties.LIFERAY_USE_SDK_LOCATION, false );
+        newProjectDataModel.setBooleanProperty(
+            IPluginProjectDataModelProperties.LIFERAY_USE_WORKSPACE_LOCATION, true );
+
+        String sdkName = SDKPluginFacetUtil.getSDKName( sdkLocation.toPortableString() );
+        newProjectDataModel.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName );
+
+        setGenerateDD( newProjectDataModel, false );
+
+        IPath webXmlPath =
+            projectRecord.getProjectLocation().append( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/web.xml" ); //$NON-NLS-1$
+
+        if( projectRecord.getProjectName().endsWith( ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_PORTLET, true );
+
+            if( ! ( webXmlPath.toFile().exists() ) )
+            {
+                createDefaultWebXml( webXmlPath.toFile(), projectRecord.getProjectName() );
+            }
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_HOOK, true );
+
+            if( ! ( webXmlPath.toFile().exists() ) )
+            {
+                createDefaultWebXml( webXmlPath.toFile(), projectRecord.getProjectName() );
+            }
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            webXmlPath =
+                webXmlPath.removeLastSegments( 3 ).append(
+                    new Path( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/ext-web/docroot/WEB-INF/web.xml" ) ); //$NON-NLS-1$
+
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_EXT, true );
+
+            if( ! ( webXmlPath.toFile().exists() ) )
+            {
+                createDefaultWebXml( webXmlPath.toFile(), projectRecord.getProjectName() );
+            }
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_LAYOUTTPL, true );
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_THEME, true );
+        }
+        else if( projectRecord.getProjectName().endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            newProjectDataModel.setProperty( IPluginProjectDataModelProperties.PLUGIN_TYPE_WEB, true );
+        }
+
+        IFacetedProjectWorkingCopy fpwc =
+            (IFacetedProjectWorkingCopy) newProjectDataModel.
+                getProperty( IFacetProjectCreationDataModelProperties.FACETED_PROJECT_WORKING_COPY );
+        fpwc.setProjectName( projectRecord.getProjectName() );
+
+        final IPath projectLocation = projectRecord.getProjectLocation();
+
+        final String projectDirName = projectLocation.lastSegment();
+
+        // for now always set a project location (so it can be used by facet install methods) may be unset later
+        fpwc.setProjectLocation( projectRecord.getProjectLocation() );
+
+        String pluginType = null;
+
+        pluginType = guessPluginType( fpwc );
+
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, pluginType, sdkLocation.toPortableString(), projectRecord );
+
+        // if project is located in natural workspace location then don't need to set a project location
+        if( CoreUtil.getWorkspaceRoot().getLocation().append( projectDirName ).equals( projectLocation ) )
+        {
+            fpwc.setProjectLocation( null );
+        }
+
+        fpwc.commitChanges( monitor );
+
+        LiferayNature.addLiferayNature( fpwc.getProject(), monitor );
+
+        ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
+        {
+            public void run( IProgressMonitor monitor ) throws CoreException
+            {
+                final SDK sdk = SDKUtil.createSDKFromLocation( sdkLocation );
+
+                sdk.openSDKInEclipse();
+            }
+        }, monitor );
+
+        return fpwc.getProject();
+    }
+
     public static IProject createNewSDKProject( ProjectRecord projectRecord,
                                                 IRuntime runtime,
                                                 String sdkLocation,
@@ -473,6 +602,153 @@ public class ProjectUtil
         fpwc.commitChanges( monitor );
 
         return fpwc.getProject();
+    }
+
+    public static IProject createExistingProject(
+        final ProjectRecord record, final IPath sdkLocation, IProgressMonitor monitor )
+        throws CoreException
+    {
+        String projectName = record.getProjectName();
+
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+        IProject project = workspace.getRoot().getProject( projectName );
+
+        if( record.description == null )
+        {
+            // error case
+            record.description = workspace.newProjectDescription( projectName );
+            IPath locationPath = new Path( record.projectSystemFile.getAbsolutePath() ) ;
+
+            // If it is under the root use the default location
+            if( Platform.getLocation().isPrefixOf( locationPath ) )
+            {
+                record.description.setLocation( null );
+            }
+            else
+            {
+                record.description.setLocation( locationPath );
+            }
+        }
+        else
+        {
+            record.description.setName( projectName );
+        }
+
+        project.create( record.description, new SubProgressMonitor( monitor, 30 ) );
+
+        project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
+
+        LiferayNature.addLiferayNature( project, monitor );
+
+        // need to check to see if we an ext project with source folders with incorrect parent attributes
+        if( project.getName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
+        {
+            fixExtProjectClasspathEntries( project );
+        }
+
+        IFacetedProject fProject = ProjectFacetsManager.create( project, true, monitor );
+
+        FacetedProjectWorkingCopy fpwc = new FacetedProjectWorkingCopy( fProject );
+
+        final String pluginType = guessPluginType( fpwc );
+
+        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, pluginType, sdkLocation.toPortableString(), record );
+
+        fpwc.commitChanges( monitor );
+
+        final IJavaProject javaProject = JavaCore.create( fProject.getProject() );
+
+        ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
+        {
+            public void run( IProgressMonitor monitor ) throws CoreException
+            {
+                List<IClasspathEntry> rawClasspaths = new ArrayList<IClasspathEntry>();
+
+                IPath containerPath = null;
+
+                for( IClasspathEntry entry : javaProject.getRawClasspath() )
+                {
+                    if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
+                        entry.getPath().segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ) )
+                    {
+                        containerPath = entry.getPath(); 
+                        break;
+                    }
+
+                    if( !isLiferayRuntimePluginClassPath(entry) )
+                    {
+                        rawClasspaths.add( entry );
+                    }
+                }
+
+                if (containerPath != null)
+                {
+                    JavaCore.getClasspathContainerInitializer( PluginClasspathDependencyContainerInitializer.ID ).initialize(
+                        containerPath, javaProject );
+                }
+                else
+                {
+                    javaProject.setRawClasspath( rawClasspaths.toArray( new IClasspathEntry[rawClasspaths.size()] ), new NullProgressMonitor() );
+
+                    javaProject.setRawClasspath(
+                        rawClasspaths.toArray( new IClasspathEntry[rawClasspaths.size()] ), new NullProgressMonitor() );
+
+                    IAccessRule[] accessRules = new IAccessRule[] {};
+
+                    IClasspathAttribute[] attributes =
+                        new IClasspathAttribute[] { JavaCore.newClasspathAttribute(
+                            IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, StringPool.EMPTY ) };
+
+                    IPath cpePath = new Path( PluginClasspathDependencyContainer.ID + "/" +  pluginType );;
+
+                    IClasspathEntry newEntry = JavaCore.newContainerEntry( cpePath, accessRules, attributes, false );
+
+                    IClasspathEntry[] entries = javaProject.getRawClasspath();
+
+                    for( IClasspathEntry entry : entries )
+                    {
+                        if( entry.getPath().equals( cpePath ) )
+                        {
+                            return;
+                        }
+                    }
+
+                    IClasspathEntry[] newEntries = new IClasspathEntry[entries.length + 1];
+
+                    System.arraycopy( entries, 0, newEntries, 0, entries.length );
+
+                    newEntries[entries.length] = newEntry;
+
+                    javaProject.setRawClasspath( newEntries, monitor );
+                }
+                monitor.done();
+
+                final SDK sdk = SDKUtil.createSDKFromLocation( sdkLocation );
+
+                sdk.openSDKInEclipse();
+            }
+        }, monitor );
+        return project;
+    }
+
+    private static boolean isLiferayRuntimePluginClassPath(IClasspathEntry entry)
+    {
+        boolean retval = false;
+
+        if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
+        {
+            for( String path : entry.getPath().segments() )
+            {
+                if ( path.equals( PluginClasspathContainerInitializer.ID ) || path.equals( "com.liferay.studio.server.tomcat.runtimeClasspathProvider" )
+                                || path.equals( "com.liferay.ide.eclipse.server.tomcat.runtimeClasspathProvider" ) )
+                {
+                    retval = true;
+                    break;
+                }
+            }
+        }
+        return retval;
     }
 
     public static void deleteProjectMarkers( IProject proj, String markerType, Set<String> markerSourceIds )
@@ -957,6 +1233,137 @@ public class ProjectUtil
             }
         }
 
+        return project;
+    }
+
+    private static SDK getSdkInWorkspace()
+    {
+        SDK retVal = null;
+        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+        for( IProject project : projects )
+        {
+            IPath projectLocation = project.getLocation();
+
+            if ( SDKUtil.isValidSDKLocation( projectLocation.toPortableString() ) )
+            {
+                retVal = SDKUtil.createSDKFromLocation( projectLocation );
+                break;
+            }
+        }
+        return retVal; 
+    }
+
+    public static IStatus validateProject(final String currentPath)
+    {
+        IStatus retVal = Status.OK_STATUS;
+
+        if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
+        {
+            retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not a valid path." ); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        else
+        {
+            IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+
+            if( !osPath.toFile().isAbsolute() )
+            {
+                retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." ); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+            else
+            {
+                if( !osPath.toFile().exists() )
+                {
+                    retVal = ProjectCore.createErrorStatus( "Project isn't exist at \"" + currentPath + "\"" ); //$NON-NLS-1$
+                }
+                else
+                {
+                    ProjectRecord record = ProjectUtil.getProjectRecordForDir( currentPath );
+
+                    if( record != null )
+                    {
+                        String projectName = record.getProjectName();
+
+                        IProject existingProject =
+                            ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
+
+                        if( existingProject != null && existingProject.exists() )
+                        {
+                            retVal = ProjectCore.createErrorStatus( "Project name already exists." );
+                        }
+                        else
+                        {
+                            File projectDir = record.getProjectLocation().toFile();
+
+                            SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
+
+                            if( sdk != null )
+                            {
+                                final SDK workspaceSdk = getSdkInWorkspace();
+
+                                if( workspaceSdk != null )
+                                {
+                                    if ( !workspaceSdk.getLocation().equals( sdk.getLocation() ) )
+                                    {
+                                        return ProjectCore.createErrorStatus("The import project has different sdk with current workspace");
+                                    }
+                                }
+
+                                MultiStatus status = sdk.validate();
+                                retVal = status.getChildren()[0];
+                            }
+                            else
+                            {
+                                retVal = ProjectCore.createErrorStatus( "SDK is not exist" );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        retVal = ProjectCore.createErrorStatus( "Invalid project location" );
+                    }
+                }
+            }
+        }
+        return retVal;
+    }
+    public static IProject importProject(IPath projectdir,IProgressMonitor monitor ) throws CoreException
+    {
+        IStatus retVal = validateProject(projectdir.toPortableString());
+
+        if ( !retVal.isOK() )
+        {
+            throw new CoreException( ProjectCore.createErrorStatus( retVal.getMessage() ) );
+        }
+
+        IProject project = null;
+
+        ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectdir.toPortableString() );
+
+        File projectDir = projectRecord.getProjectLocation().toFile();
+        SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
+
+        if( projectRecord.projectSystemFile != null )
+        {
+            try
+            {
+                project = createExistingProject( projectRecord, sdk.getLocation(), monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
+        }
+        else if( projectRecord.liferayProjectDir != null )
+        {
+            try
+            {
+                project = createNewSDKProject( projectRecord, sdk.getLocation(), monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
+        }
         return project;
     }
 

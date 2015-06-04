@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.library;
 
-import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
+import com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer;
 import com.liferay.ide.project.core.PortletClasspathContainer;
 
 import org.eclipse.core.runtime.IPath;
@@ -23,12 +23,13 @@ import org.eclipse.core.runtime.Path;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class PortletPluginLibraryInstallOperation extends PluginLibraryInstallOperation
 {
 
     protected IPath getClasspathContainerPath()
     {
-        return new Path( PluginClasspathContainerInitializer.ID + "/" + PortletClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
+        return new Path( PluginClasspathDependencyContainerInitializer.ID + "/" + PortletClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
     }
 }

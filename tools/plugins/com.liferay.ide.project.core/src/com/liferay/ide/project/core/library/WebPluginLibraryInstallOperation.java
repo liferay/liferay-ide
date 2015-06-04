@@ -15,21 +15,22 @@
 
 package com.liferay.ide.project.core.library;
 
+import com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer;
 import com.liferay.ide.project.core.WebClasspathContainer;
-import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 /**
  * @author Terry Jia
+ * @author Simon Jiang
  */
 public class WebPluginLibraryInstallOperation extends PluginLibraryInstallOperation
 {
 
     protected IPath getClasspathContainerPath()
     {
-        return new Path( PluginClasspathContainerInitializer.ID + "/" + WebClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
+        return new Path( PluginClasspathDependencyContainerInitializer.ID + "/" + WebClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
     }
 
 }

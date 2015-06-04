@@ -32,7 +32,7 @@ import org.eclipse.sapphire.ValuePropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class ImportProjectsLocationListener extends FilteredListener<ValuePropertyContentEvent>
+public class SDKImportProjectsLocationListener extends FilteredListener<ValuePropertyContentEvent>
 {
     protected SDKProjectsImportOp30 op( PropertyContentEvent event )
     {

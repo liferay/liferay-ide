@@ -14,8 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model;
 
-import com.liferay.ide.project.core.model.internal.ImportProjectLocationValidationService;
-import com.liferay.ide.project.core.model.internal.ImportProjectsLocationListener;
+import com.liferay.ide.project.core.model.internal.SDKImportProjectLocationValidationService;
+import com.liferay.ide.project.core.model.internal.SDKImportProjectsLocationListener;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -31,6 +31,7 @@ import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
@@ -46,8 +47,14 @@ public interface SDKProjectsImportOp30 extends ExecutableElement
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "Project Diectory" )
-    @Listeners( ImportProjectsLocationListener.class )
-    @Service( impl = ImportProjectLocationValidationService.class )
+    @Listeners( SDKImportProjectsLocationListener.class )
+    @Services
+    (
+        value=
+        {
+            @Service( impl = SDKImportProjectLocationValidationService.class )
+        }
+    )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" ); //$NON-NLS-1$
 
     Value<Path> getLocation();

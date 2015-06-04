@@ -350,6 +350,7 @@ public class UpgradeLiferayProjectsOpTests extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testExecServiceBuilder() throws Exception
     {
         if( shouldSkipBundleTests() ) return;

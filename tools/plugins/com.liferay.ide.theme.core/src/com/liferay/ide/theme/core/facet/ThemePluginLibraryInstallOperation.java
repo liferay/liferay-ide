@@ -15,7 +15,7 @@
 
 package com.liferay.ide.theme.core.facet;
 
-import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
+import com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer;
 import com.liferay.ide.project.core.ThemeClasspathContainer;
 import com.liferay.ide.project.core.library.PluginLibraryInstallOperation;
 
@@ -24,13 +24,14 @@ import org.eclipse.core.runtime.Path;
 
 /**
  * @author Cindy Li
+ * @author Simon Jiang
  */
 public class ThemePluginLibraryInstallOperation extends PluginLibraryInstallOperation
 {
 
     protected IPath getClasspathContainerPath()
     {
-        return new Path( PluginClasspathContainerInitializer.ID + "/" + ThemeClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
+        return new Path( PluginClasspathDependencyContainerInitializer.ID + "/" + ThemeClasspathContainer.SEGMENT_PATH ); //$NON-NLS-1$
     }
 
 }
