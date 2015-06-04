@@ -170,6 +170,16 @@
       </wizard>
       <wizard
             category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.wizard.SDKProjectsImportWizard30"
+            icon="icons/e16/import.png"
+            id="com.liferay.ide.project.ui.importSDKProjectWizard.30"
+            name="%import.projects.sdk.wizard.name.30">
+         <description>
+            %import.projects.sdk.wizard.description
+         </description>
+      </wizard>      
+      <wizard
+            category="com.liferay.ide.projects.import"
             class="com.liferay.ide.project.ui.wizard.BinaryProjectImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.wizard.PluginBinaryProjectImportWizard"
@@ -1140,4 +1150,10 @@
       </category>
    </extension>
    -->
+   <extension point="org.eclipse.ui.ide.projectNatureImages">
+  	  <image id="com.liferay.ide.code.nature.img"
+     		 natureId="com.liferay.ide.core.liferayNature"
+    	  	 icon="icons/ovr/liferay_ovr.png">
+  	  </image>
+   </extension>   
 </plugin>
