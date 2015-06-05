@@ -24,9 +24,14 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -36,6 +41,7 @@ import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Greg Amerson
+ * @author Lovett Li
  */
 public class SDKUtil
 {
@@ -131,6 +137,28 @@ public class SDKUtil
         return null;
     }
 
+    public static IProject getWorkspaceSDKProject() throws CoreException
+    {
+        IProject retval = null;
+        final IProject[] projects = CoreUtil.getAllProjects();
+
+        for( IProject project : projects )
+        {
+            if( isValidSDKLocation( project.getLocation().toOSString() ) )
+            {
+                if( retval != null )
+                {
+                    throw new CoreException( SDKCorePlugin.createErrorStatus(
+                        new IllegalStateException( "Workspace can't have more than one SDK project open" ) ) );
+                }
+
+                retval = project;
+            }
+        }
+
+        return retval;
+    }
+
     public static boolean hasGradleTools( IPath path )
     {
         return path.append( "tools" ).append( "gradle" ).toFile().exists();
@@ -220,6 +248,31 @@ public class SDKUtil
         }
 
         return false;
+    }
+
+    public static void openAsProject( SDK sdk )
+    {
+        final IProject sdkProject = CoreUtil.getProject( sdk.getName() );
+
+        if( sdkProject == null || ( !sdkProject.exists() ) )
+        {
+            final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+            final IProjectDescription description = workspace.newProjectDescription( sdk.getLocation().lastSegment() );
+            description.setLocationURI( sdk.getLocation().toFile().toURI() );
+
+            IProgressMonitor npm = new NullProgressMonitor();
+
+            try
+            {
+                sdkProject.create( description, npm );
+                sdkProject.open( npm );
+            }
+            catch( Exception e )
+            {
+                SDKCorePlugin.logError( e );
+            }
+        }
     }
 
     static String readSDKVersion( String path ) throws FileNotFoundException, IOException

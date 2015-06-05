@@ -26,7 +26,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -94,35 +93,6 @@ public class SDK
     public SDK( IPath location )
     {
         this.location = location;
-    }
-
-    public void addProjectFile()
-    {
-        if( hasProjectFile() )
-        {
-            return;
-        }
-
-        if( this.location.toFile().exists() )
-        {
-            // check for existing project file
-            File projectFile = this.location.append( ".project" ).toFile(); //$NON-NLS-1$
-
-            if( !projectFile.exists() )
-            {
-                try
-                {
-                    FileUtil.writeFileFromStream(
-                        projectFile,
-                        new ByteArrayInputStream( MessageFormat.format(
-                            PROJECT_FILE_PATTERN, new Object[] { this.name } ).getBytes( "UTF-8" ) ) ); //$NON-NLS-1$
-                }
-                catch( Exception e )
-                {
-                    SDKCorePlugin.logError( e );
-                }
-            }
-        }
     }
 
     public IStatus buildLanguage(
