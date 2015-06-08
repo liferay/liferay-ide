@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.xml.search.ui.tests;
+package com.liferay.ide.alloy.ui.tests;
 
 import static com.liferay.ide.ui.tests.UITestsUtils.containsProposal;
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
@@ -28,6 +28,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.xml.search.ui.tests.XmlSearchTestsBase;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -68,19 +69,6 @@ public class JSPFileTests extends XmlSearchTestsBase
         }
 
         return null;
-    }
-
-    @AfterClass
-    public static void deleteProject() throws Exception
-    {
-        try
-        {
-            project.close( null );
-            project.delete( true, null );
-        }
-        catch( Exception e )
-        {
-        }
     }
 
     public void validateContentAssistForEmptyAttr( String elementName, String attrName ) throws Exception
