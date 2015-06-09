@@ -100,38 +100,6 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
     }
 
     @Test
-    public void testNewProjectCustomLocationPortlet() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        super.testNewProjectCustomLocationPortlet();
-    }
-
-    @Test
-    public void testNewProjectCustomLocationWrongSuffix() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        super.testNewProjectCustomLocationWrongSuffix();
-    }
-
-    @Test
-    public void testNewSDKProjectCustomLocation() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        super.testNewSDKProjectCustomLocation();
-    }
-
-    @Test
-    public void testNewSDKProjectEclipseWorkspace() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        super.testNewSDKProjectEclipseWorkspace();
-    }
-
-    @Test
     public void testNewSDKProjectInSDK() throws Exception
     {
         if( shouldSkipBundleTests() ) return;

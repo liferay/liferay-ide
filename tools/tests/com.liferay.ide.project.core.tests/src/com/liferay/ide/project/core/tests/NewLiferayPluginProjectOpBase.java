@@ -33,7 +33,6 @@ import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -367,80 +366,6 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         final IFile serviceXml = webappRoot.getFile( "WEB-INF/service.xml" );
 
         assertEquals( false, serviceXml.exists() );
-    }
-
-    protected void testNewProjectCustomLocationPortlet() throws Exception
-    {
-        final IPath customLocationBase = getCustomLocationBase();
-
-        final NewLiferayPluginProjectOp op = newProjectOp( "test-project-custom-2-location" );
-        final String testProjectCustomLocationPortletName = op.getProjectName().content() + "-portlet";
-        final IPath customLocationPortlet = customLocationBase.append( testProjectCustomLocationPortletName );
-
-        final IProject newProjectPortlet = createNewSDKProjectCustomLocation( op, customLocationPortlet );
-
-        assertEquals(
-            "Project not at expected custom location", newProjectPortlet.getLocation(), customLocationPortlet );
-    }
-
-
-    protected void testNewProjectCustomLocationWrongSuffix() throws Exception
-    {
-        final IPath customLocationBase = getCustomLocationBase();
-
-        final NewLiferayPluginProjectOp op = newProjectOp( "test-project-custom-1-wrong-suffix" );
-        final String testProjectCustomWrongSuffix = op.getProjectName().content();
-        final IPath customLocationWrongSuffix = customLocationBase.append( testProjectCustomWrongSuffix );
-
-        final IProject newProjectWrongSuffix = createNewSDKProjectCustomLocation( op, customLocationWrongSuffix );
-
-        assertEquals(
-            "Project not at expected custom location",
-            true,
-            newProjectWrongSuffix.getLocation().equals(
-                customLocationWrongSuffix.append( testProjectCustomWrongSuffix + "-portlet" ) ) );
-    }
-
-
-    protected void testNewSDKProjectCustomLocation() throws Exception
-    {
-        final IPath customLocationBase = getCustomLocationBase();
-
-        final NewLiferayPluginProjectOp op = newProjectOp( "test-project-custom-1-location" );
-        final String testProjectCustomLocationName = op.getProjectName().content();
-        final IPath customLocation = customLocationBase.append( testProjectCustomLocationName + "-portlet" );
-
-        final IProject newProject = createNewSDKProjectCustomLocation( op, customLocation );
-
-        assertEquals( "Project expected to be at custom location", true, newProject.getLocation().equals( customLocation ) );
-
-        final IFile buildXml = newProject.getFile( "build.xml" );
-
-        assertEquals( true, buildXml.exists() );
-
-        final InputStream contents = buildXml.getContents( true );
-        final String buildXmlContent = CoreUtil.readStreamToString( contents );
-        contents.close();
-
-        final Pattern p =
-            Pattern.compile( ".*<import file=\".*portlets/build-common-portlet.xml\".*", Pattern.MULTILINE |
-                Pattern.DOTALL );
-
-        final Matcher m = p.matcher( buildXmlContent );
-
-        assertEquals( "sdk project build.xml didn't use correct plugin type dir.", true, m.matches() );
-    }
-
-    protected void testNewSDKProjectEclipseWorkspace() throws Exception
-    {
-        final NewLiferayPluginProjectOp newProjectOp = newProjectOp( "test-project-in-workspace" );
-        newProjectOp.setUseSdkLocation( false );
-
-        final IProject projectInWorkspace = createAntProject( newProjectOp );
-
-        assertEquals(
-            "project was not located in the eclipse workspace.", true,
-            CoreUtil.getWorkspace().getRoot().getLocation().isPrefixOf( projectInWorkspace.getLocation() ) );
     }
 
     protected void testNewSDKProjectInSDK() throws Exception

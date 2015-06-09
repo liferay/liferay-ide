@@ -77,30 +77,6 @@ public class NewLiferayPluginProjectOp611Tests extends NewLiferayPluginProjectOp
         return "6.1.1";
     }
 
-    @Override
-    public void testNewProjectCustomLocationPortlet() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    public void testNewProjectCustomLocationWrongSuffix() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    public void testNewSDKProjectCustomLocation() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
-    @Override
-    public void testNewSDKProjectEclipseWorkspace() throws Exception
-    {
-        // not supported in 6.1.1
-    }
-
     @Test
     public void testPluginTypeListener() throws Exception
     {

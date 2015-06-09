@@ -114,30 +114,6 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
     }
 
     @Override
-    public void testNewProjectCustomLocationPortlet() throws Exception
-    {
-        // not supported in 6.0.6
-    }
-
-    @Override
-    public void testNewProjectCustomLocationWrongSuffix() throws Exception
-    {
-        // not supported in 6.0.6
-    }
-
-    @Override
-    public void testNewSDKProjectCustomLocation() throws Exception
-    {
-        // not supported in 6.0.6
-    }
-
-    @Override
-    public void testNewSDKProjectEclipseWorkspace() throws Exception
-    {
-        // not supported in 6.0.6
-    }
-
-    @Override
     public void testNewVaadinAntProject() throws Exception
     {
         // vaadin projets not supported in 6.0.6
