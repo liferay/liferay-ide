@@ -191,6 +191,15 @@
                     <groupId>org.eclipse.tycho</groupId>
                     <artifactId>tycho-surefire-plugin</artifactId>
                     <version>${tycho-version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-test</id>
+                            <phase>none</phase>
+                            <goals>
+	                            <goal>test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                     <configuration>
                         <useUIHarness>true</useUIHarness>
                         <useUIThread>true</useUIThread>
@@ -215,4 +224,24 @@
             </plugins>
         </pluginManagement>
     </build>
+    <profiles>
+        <profile>
+            <id>runtest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.tycho</groupId>
+                        <artifactId>tycho-surefire-plugin</artifactId>
+                        <executions>
+	                        <execution>
+	                            <goals>
+	                                <goal>test</goal>
+	                            </goals>
+	                        </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+	</profiles>
 </project>

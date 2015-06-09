@@ -34,7 +34,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.text.hyperlink.IHyperlink;
-import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
@@ -45,9 +44,15 @@ import org.junit.Test;
 public class JSPFileTests extends XmlSearchTestsBase
 {
 
+    private static final String bundleId = "com.liferay.ide.alloy.ui.tests";
     private static IProject project;
     private IFile jspFile;
 
+    @Override
+    protected String getBundleId()
+    {
+        return bundleId;
+    }
     private IProject getProject() throws Exception
     {
         if( project == null )

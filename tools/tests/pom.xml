@@ -40,5 +40,6 @@
         <module>com.liferay.ide.server.core.tests</module>
         <module>com.liferay.ide.service.core.tests</module>
         <module>com.liferay.ide.project.core.tests</module>
+        <module>com.liferay.ide.xml.search.ui.tests</module>
     </modules>
 </project>
