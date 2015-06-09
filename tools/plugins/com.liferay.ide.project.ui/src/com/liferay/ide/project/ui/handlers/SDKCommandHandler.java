@@ -5,9 +5,6 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.util.ServerUtil;
-
-import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -34,6 +31,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public abstract class SDKCommandHandler extends AbstractHandler
 {
 
+    @Override
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
         IStatus retval = null;
@@ -106,9 +104,7 @@ public abstract class SDKCommandHandler extends AbstractHandler
                         {
                             final SDK sdk = SDKUtil.getSDK( p );
 
-                            final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( p );
-
-                            sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties, monitor );
+                            sdk.runCommand( p, buildFile, getSDKCommand(), null, monitor );
 
                             p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
                         }

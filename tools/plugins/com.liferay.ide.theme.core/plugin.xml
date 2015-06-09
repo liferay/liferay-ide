@@ -157,7 +157,7 @@
          <action
                type="INSTALL">
             <operation
-                  class="com.liferay.ide.theme.core.facet.ThemePluginLibraryInstallOperation">
+                  class="com.liferay.ide.project.core.library.SDKClasspathContainerInstallOperation">
             </operation>
             <config
                   class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">

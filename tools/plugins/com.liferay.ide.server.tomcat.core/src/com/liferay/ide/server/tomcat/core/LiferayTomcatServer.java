@@ -16,6 +16,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 
 import java.net.MalformedURLException;
@@ -54,21 +55,25 @@ public class LiferayTomcatServer extends TomcatServer
         super();
     }
 
+    @Override
     public String getId()
     {
         return getServer().getId();
     }
 
+    @Override
     public String getHost()
     {
         return getServer().getHost();
     }
 
+    @Override
     public String getAutoDeployDirectory()
     {
         return getAttribute( PROPERTY_AUTO_DEPLOY_DIR, "../deploy" ); //$NON-NLS-1$
     }
 
+    @Override
     public String getAutoDeployInterval()
     {
         return getAttribute( PROPERTY_AUTO_DEPLOY_INTERVAL, ILiferayTomcatConstants.DEFAULT_AUTO_DEPLOY_INTERVAL );
@@ -80,10 +85,7 @@ public class LiferayTomcatServer extends TomcatServer
 
         try
         {
-            IPath location = getServer().getRuntime().getLocation();
-
-            String version = LiferayTomcatUtil.getVersion( location, LiferayTomcatUtil.getPortalDir( location ) );
-
+            String version = LiferayTomcatUtil.getVersion( ((ILiferayRuntime)getServer().getRuntime() ) );
             Version portalVersion = Version.parseVersion( version );
 
             if( CoreUtil.compareVersions( portalVersion, ILiferayConstants.V620 ) < 0 )
@@ -98,16 +100,19 @@ public class LiferayTomcatServer extends TomcatServer
         return defaultServerMode;
     }
 
+    @Override
     public String getExternalProperties()
     {
         return getAttribute( PROPERTY_EXTERNAL_PROPERTIES, StringPool.EMPTY );
     }
 
+    @Override
     public String getMemoryArgs()
     {
         return getAttribute( PROPERTY_MEMORY_ARGS, ILiferayTomcatConstants.DEFAULT_MEMORY_ARGS );
     }
 
+    @Override
     public URL getPluginContextURL( String context )
     {
         try
@@ -120,6 +125,7 @@ public class LiferayTomcatServer extends TomcatServer
         }
     }
 
+    @Override
     public String getHttpPort()
     {
         try
@@ -132,6 +138,7 @@ public class LiferayTomcatServer extends TomcatServer
         }
     }
 
+    @Override
     public URL getPortalHomeUrl()
     {
         try
@@ -153,6 +160,7 @@ public class LiferayTomcatServer extends TomcatServer
         }
     }
 
+    @Override
     public String getPassword()
     {
         return getAttribute( ATTR_PASSWORD, DEFAULT_PASSWORD );
@@ -163,6 +171,7 @@ public class LiferayTomcatServer extends TomcatServer
         return (ILiferayTomcatConfiguration) getTomcatConfiguration();
     }
 
+    @Override
     public boolean getUseDefaultPortalServerSettings()
     {
         return getAttribute(
@@ -170,6 +179,7 @@ public class LiferayTomcatServer extends TomcatServer
             ILiferayTomcatConstants.DEFAULT_USE_DEFAULT_PORTAL_SERVER_SETTING );
     }
 
+    @Override
     public int getServerMode()
     {
         return getAttribute( PROPERTY_SERVER_MODE, getDefaultServerMode() );
@@ -230,16 +240,19 @@ public class LiferayTomcatServer extends TomcatServer
         return handler;
     }
 
+    @Override
     public String getUsername()
     {
         return getAttribute( ATTR_USERNAME, DEFAULT_USERNAME );
     }
 
+    @Override
     public String getUserTimezone()
     {
         return getAttribute( PROPERTY_USER_TIMEZONE, ILiferayTomcatConstants.DEFAULT_USER_TIMEZONE );
     }
 
+    @Override
     public URL getWebServicesListURL()
     {
         try
@@ -403,11 +416,13 @@ public class LiferayTomcatServer extends TomcatServer
         setAttribute( PROPERTY_EXTERNAL_PROPERTIES, externalProperties );
     }
 
+    @Override
     public void setMemoryArgs( String memoryArgs )
     {
         setAttribute( PROPERTY_MEMORY_ARGS, memoryArgs );
     }
 
+    @Override
     public void setPassword( String password )
     {
         setAttribute( ATTR_PASSWORD, password );
@@ -423,11 +438,13 @@ public class LiferayTomcatServer extends TomcatServer
         setAttribute( PROPERTY_SERVER_MODE, serverMode );
     }
 
+    @Override
     public void setUsername( String username )
     {
         setAttribute( ATTR_USERNAME, username );
     }
 
+    @Override
     public void setUserTimezone( String userTimezone )
     {
         setAttribute( PROPERTY_USER_TIMEZONE, userTimezone );

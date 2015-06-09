@@ -23,8 +23,6 @@ import com.liferay.ide.server.core.portal.PortalBundle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -40,34 +38,6 @@ import org.eclipse.core.runtime.Platform;
  */
 public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBundle
 {
-    private static final Collection<String> portalDependencyJars = Arrays.asList
-    (
-        "annotations-api.jar",
-        "ecj-4.2.2.jar",
-        "el-api.jar",
-        "activation.jar",
-        "ccpp.jar",
-        "hsql.jar",
-        "jms.jar",
-        "jta.jar",
-        "jtds.jar",
-        "junit.jar",
-        "jutf7.jar",
-        "mail.jar",
-        "persitenece.jar",
-        "portal-service.jar",
-        "portlet.jar",
-        "postgresql.jar",
-        "support-tomcat.jar",
-        "jasper-el.jar",
-        "jasper.jar",
-        "jsp-api.jar",
-        "servlet-api.jar",
-        "tomcat-api.jar",
-        "tomcat-jdbc.jar",
-        "tomcat-util.jar"
-    );
-
     public PortalTomcatBundle( IPath path )
     {
        super(path);
@@ -96,7 +66,8 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     {
         return getAppServerDir().append( "/lib/ext" );
     }
-    
+
+    @Override
     protected int getDefaultJMXRemotePort()
     {
         int retval = 8099;
@@ -131,13 +102,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
         return "org.apache.catalina.startup.Bootstrap";
     }
 
-
-    @Override
-    protected Collection<String> getPortalDependencyJars()
-    {
-        return portalDependencyJars;
-    }
-
     @Override
     public IPath getPortalDir()
     {
@@ -151,6 +115,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
         return retval;
     }
 
+    @Override
     public IPath[] getRuntimeClasspath()
     {
         final List<IPath> paths = new ArrayList<IPath>();
@@ -229,6 +194,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
         return Platform.OS_WIN32.equals( Platform.getOS() ) ? "bat" : "sh";
     }
 
+    @Override
     public String getType()
     {
         return "tomcat";
@@ -265,7 +231,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
                 {
                     libs.add( new Path( lib.getPath() ) );
                 }
-            }            
+            }
         }
         catch( FileNotFoundException e )
         {

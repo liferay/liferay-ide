@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.IPluginPublisher;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatConstants;
@@ -96,7 +97,8 @@ public class LiferayTomcatUtil
         runtimeVMArgs.add( "-Dorg.apache.catalina.loader.WebappClassLoader.ENABLE_CLEAR_REFERENCES=false" ); //$NON-NLS-1$
         runtimeVMArgs.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" ); //$NON-NLS-1$
 
-        Version portalVersion = new Version( getVersion( installPath, getPortalDir( installPath ) ) );
+        ILiferayRuntime runtime = ServerUtil.getLiferayRuntime( currentServer );
+        Version portalVersion = new Version( getVersion( runtime ) );
 
         if( CoreUtil.compareVersions( portalVersion, LiferayTomcatRuntime70.leastSupportedVersion ) < 0 )
         {
@@ -394,7 +396,8 @@ public class LiferayTomcatUtil
     public static IPath[] getAllUserClasspathLibraries( IPath runtimeLocation, IPath portalDir )
     {
         List<IPath> libs = new ArrayList<IPath>();
-        IPath libFolder = runtimeLocation.append( "lib/ext" ); //$NON-NLS-1$
+        IPath libFolder = runtimeLocation.append( "lib" ); //$NON-NLS-1$
+        IPath extLibFolder = runtimeLocation.append( "lib/ext" ); //$NON-NLS-1$
         IPath webinfLibFolder = portalDir.append( "WEB-INF/lib" ); //$NON-NLS-1$
 
         try
@@ -402,6 +405,16 @@ public class LiferayTomcatUtil
             List<File> libFiles = FileListing.getFileListing( new File( libFolder.toOSString() ) );
 
             for( File lib : libFiles )
+            {
+                if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
+                {
+                    libs.add( new Path( lib.getPath() ) );
+                }
+            }
+
+            List<File> extLibFiles = FileListing.getFileListing( new File( extLibFolder.toOSString() ) );
+
+            for( File lib : extLibFiles )
             {
                 if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
                 {
@@ -563,17 +576,17 @@ public class LiferayTomcatUtil
         return checkAndReturnCustomPortalDir( appServerDir );
     }
 
-    public static String getVersion( IPath location, IPath portalDir )
+    public static String getVersion( ILiferayRuntime runtime )
     {
-        String version = getConfigInfoFromCache( CONFIG_TYPE_VERSION, portalDir );
+        String version = getConfigInfoFromCache( CONFIG_TYPE_VERSION, runtime.getAppServerPortalDir() );
 
         if( version == null )
         {
-            version = getConfigInfoFromManifest( CONFIG_TYPE_VERSION, portalDir );
+            version = getConfigInfoFromManifest( CONFIG_TYPE_VERSION, runtime.getAppServerPortalDir() );
 
             if( version == null )
             {
-                final LiferayPortalValueLoader loader = new LiferayPortalValueLoader( location, portalDir );
+                final LiferayPortalValueLoader loader = new LiferayPortalValueLoader( runtime.getUserLibs() );
 
                 final Version loadedVersion = loader.loadVersionFromClass();
 
@@ -585,7 +598,7 @@ public class LiferayTomcatUtil
 
             if( version != null )
             {
-                saveConfigInfoIntoCache( CONFIG_TYPE_VERSION, version, portalDir );
+                saveConfigInfoIntoCache( CONFIG_TYPE_VERSION, version, runtime.getAppServerPortalDir() );
             }
         }
 
@@ -819,6 +832,7 @@ public class LiferayTomcatUtil
 
         IServerListener shutdownListener = new IServerListener()
         {
+            @Override
             public void serverChanged( ServerEvent event )
             {
                 if( event.getState() == IServer.STATE_STOPPED )

@@ -14,7 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.runtime.IPath;
@@ -22,7 +21,6 @@ import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Gregory Amerson
- * @author Simon Jiang
  */
 public interface ILiferayPortal
 {
@@ -36,7 +34,5 @@ public interface ILiferayPortal
     Properties getPortletEntryCategories();
 
     String getVersion();
-
-    Map<String, String> getRequiredProperties();
 
 }

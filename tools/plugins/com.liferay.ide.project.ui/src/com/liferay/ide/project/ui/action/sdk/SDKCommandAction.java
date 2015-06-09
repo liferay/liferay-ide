@@ -15,15 +15,12 @@
 
 package com.liferay.ide.project.ui.action.sdk;
 
-import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
-
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -47,6 +44,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction
 
     protected abstract String getSDKCommand();
 
+    @Override
     public void run( IAction action )
     {
         if( fSelection instanceof IStructuredSelection )
@@ -86,9 +84,7 @@ public abstract class SDKCommandAction extends AbstractObjectAction
 
                             if ( liferayProject != null)
                             {
-                                final ILiferayPortal portal = liferayProject.adapt( ILiferayPortal.class );
-                                Map<String, String> appServerProperties = portal.getRequiredProperties();
-                                sdk.runCommand( p, buildFile, getSDKCommand(), null, appServerProperties, monitor );
+                                sdk.runCommand( p, buildFile, getSDKCommand(), null,monitor );
                                 p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
                             }
                         }

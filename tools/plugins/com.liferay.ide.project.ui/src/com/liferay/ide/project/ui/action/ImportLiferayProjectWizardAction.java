@@ -19,18 +19,20 @@ package com.liferay.ide.project.ui.action;
 
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.wizard.NewProjectFromSourceWizard;
+import com.liferay.ide.project.ui.wizard.SDKProjectImportWizard;
 
 import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 public class ImportLiferayProjectWizardAction extends NewWizardAction
 {
 
     static class ImportLiferayProjectElement extends AbstractNewProjectWizardProjectElement
     {
+        @Override
         protected String getContributorID()
         {
             return ProjectUI.PLUGIN_ID;
@@ -54,7 +56,7 @@ public class ImportLiferayProjectWizardAction extends NewWizardAction
         @Override
         protected Object createNewWizard()
         {
-            return new NewProjectFromSourceWizard();
+            return new SDKProjectImportWizard("New Project from existed project");
         }
 
         @Override

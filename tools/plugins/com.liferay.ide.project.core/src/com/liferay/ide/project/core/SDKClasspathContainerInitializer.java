@@ -33,12 +33,9 @@ import org.eclipse.jst.common.jdt.internal.classpath.ClasspathDecorationsManager
  * @author Simon.Jiang
  */
 @SuppressWarnings( "restriction" )
-public class PluginClasspathDependencyContainerInitializer extends ClasspathContainerInitializer
+public class SDKClasspathContainerInitializer extends ClasspathContainerInitializer
 {
-
-    public static final String ID = "com.liferay.ide.eclipse.plugin.dependency.container"; //$NON-NLS-1$
-
-    protected static final ClasspathDecorationsManager cpDecorations = PluginClasspathDependencyContainer.getDecorationsManager();
+    protected static final ClasspathDecorationsManager cpDecorations = SDKClasspathContainer.getDecorationsManager();
 
     @Override
     public boolean canUpdateClasspathContainer( IPath containerPath, IJavaProject project )
@@ -51,36 +48,28 @@ public class PluginClasspathDependencyContainerInitializer extends ClasspathCont
     {
         IClasspathContainer classpathContainer = null;
 
-        int count = containerPath.segmentCount();
-
-        if( count != 2 )
-        {
-            final String msg = "Invalid plugin classpath container should expecting 2 segments."; //$NON-NLS-1$
-            throw new CoreException( ProjectCore.createErrorStatus( msg ) );
-        }
-
         String root = containerPath.segment( 0 );
 
-        if( !ID.equals( root ) )
+        if( !SDKClasspathContainer.ID.equals( root ) )
         {
             final String msg = "Invalid plugin classpath container, expecting container root "; //$NON-NLS-1$
-            throw new CoreException( ProjectCore.createErrorStatus( msg + ID ) );
+            throw new CoreException( ProjectCore.createErrorStatus( msg + SDKClasspathContainer.ID ) );
         }
 
         PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
-        
+
         if ( bundle == null )
         {
             final String msg = "Invalid sdk properties setting.";
             throw new CoreException( ProjectCore.createErrorStatus( msg ) );
         }
-        
+
         IPath globalDir = bundle.getAppServerLibGlobalDir();
-        
+
         IPath portalDir = bundle.getPortalDir();
-        
+
         IPath bundleDir = bundle.getAppServerDir();
-        
+
         IPath[] bundleDependencyLibDir = bundle.getBundleDependencyJars();
 
         if( portalDir == null )
@@ -88,7 +77,7 @@ public class PluginClasspathDependencyContainerInitializer extends ClasspathCont
             return;
         }
 
-        classpathContainer = new PluginClasspathDependencyContainer( containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyLibDir);
+        classpathContainer = new SDKClasspathContainer( containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyLibDir);
 
         JavaCore.setClasspathContainer(
             containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { classpathContainer }, null );
@@ -100,7 +89,7 @@ public class PluginClasspathDependencyContainerInitializer extends ClasspathCont
     {
 
         final String key =
-            PluginClasspathDependencyContainer.getDecorationManagerKey( project.getProject(), containerPath.toString() );
+            SDKClasspathContainer.getDecorationManagerKey( project.getProject(), containerPath.toString() );
 
         final IClasspathEntry[] entries = containerSuggestion.getClasspathEntries();
 
@@ -135,26 +124,26 @@ public class PluginClasspathDependencyContainerInitializer extends ClasspathCont
         IPath sourceLocation = null;
         IPath bundleDir = null;
         IPath[] bundleLibDependencyPath = null;
-        
-        if( containerSuggestion instanceof PluginClasspathDependencyContainer )
+
+        if( containerSuggestion instanceof SDKClasspathContainer )
         {
-            portalDir = ( (PluginClasspathDependencyContainer) containerSuggestion ).getPortalDir();
-            bundleDir = ( (PluginClasspathDependencyContainer) containerSuggestion ).getBundleDir();
-            portalGlobalDir = ( (PluginClasspathDependencyContainer) containerSuggestion ).getPortalGlobalDir();
-            javadocURL = ( (PluginClasspathDependencyContainer) containerSuggestion ).getJavadocURL();
-            sourceLocation = ( (PluginClasspathDependencyContainer) containerSuggestion ).getSourceLocation();
-            bundleLibDependencyPath = ( (PluginClasspathDependencyContainer) containerSuggestion ).getBundleLibDependencyPath();
+            portalDir = ( (SDKClasspathContainer) containerSuggestion ).getPortalDir();
+            bundleDir = ( (SDKClasspathContainer) containerSuggestion ).getBundleDir();
+            portalGlobalDir = ( (SDKClasspathContainer) containerSuggestion ).getPortalGlobalDir();
+            javadocURL = ( (SDKClasspathContainer) containerSuggestion ).getJavadocURL();
+            sourceLocation = ( (SDKClasspathContainer) containerSuggestion ).getSourceLocation();
+            bundleLibDependencyPath = ( (SDKClasspathContainer) containerSuggestion ).getBundleLibDependencyPath();
         }
         else
         {
             PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
-            
+
             if ( bundle == null )
             {
                 final String msg = "Invalid sdk properties setting.";
                 throw new CoreException( ProjectCore.createErrorStatus( msg ) );
             }
-            
+
             portalDir = bundle.getPortalDir();
             portalGlobalDir = bundle.getAppServerLibGlobalDir();
             bundleLibDependencyPath = bundle.getBundleDependencyJars();
@@ -162,8 +151,7 @@ public class PluginClasspathDependencyContainerInitializer extends ClasspathCont
 
         if( portalDir != null && portalGlobalDir != null )
         {
-            IClasspathContainer newContainer = new PluginClasspathDependencyContainer( containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir, bundleLibDependencyPath);
-
+            IClasspathContainer newContainer = new SDKClasspathContainer( containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir, bundleLibDependencyPath);
 
             JavaCore.setClasspathContainer(
                 containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { newContainer }, null );

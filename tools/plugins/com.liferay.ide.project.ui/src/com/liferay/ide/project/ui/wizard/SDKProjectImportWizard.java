@@ -15,9 +15,8 @@
 package com.liferay.ide.project.ui.wizard;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.model.SDKProjectsImportOp30;
+import com.liferay.ide.project.core.model.SDKProjectImportOp;
 
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
@@ -32,14 +31,22 @@ import org.eclipse.ui.IWorkbenchWizard;
  * @author Simon Jiang
  */
 
-public class SDKProjectsImportWizard30 extends SapphireWizard<SDKProjectsImportOp30>
+public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
     implements IWorkbenchWizard, INewWizard
 {
-    private boolean firstErrorMessageRemoved = false;
 
-    public SDKProjectsImportWizard30()
+    private String title;
+
+
+    public SDKProjectImportWizard(final String newTitle)
     {
-        super( createDefaultOp(), DefinitionLoader.sdef( SDKProjectsImportWizard30.class ).wizard() );
+        super( createDefaultOp(), DefinitionLoader.sdef( SDKProjectImportWizard.class ).wizard() );
+        this.title = newTitle;
+    }
+
+    public SDKProjectImportWizard()
+    {
+        super( createDefaultOp(), DefinitionLoader.sdef( SDKProjectImportWizard.class ).wizard() );
     }
 
     @Override
@@ -47,37 +54,36 @@ public class SDKProjectsImportWizard30 extends SapphireWizard<SDKProjectsImportO
     {
         final IWizardPage[] wizardPages = super.getPages();
 
-        if( !firstErrorMessageRemoved && wizardPages != null )
+        if( wizardPages != null )
         {
             final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
 
-            final String message = wizardPage.getMessage();
-            final int messageType = wizardPage.getMessageType();
 
-            if( messageType == IMessageProvider.ERROR && ! CoreUtil.isNullOrEmpty( message ) )
+            final String message = wizardPage.getMessage();
+
+            if( CoreUtil.isNullOrEmpty( message ) )
             {
-                //wizardPage.setMessage( "Please select .", SapphireWizardPage.NONE ); //$NON-NLS-1$
-                firstErrorMessageRemoved = true;
+                wizardPage.setMessage( "Please select an exsiting project" );
             }
+        }
+        if ( title != null)
+        {
+            this.getContainer().getShell().setText( title );
         }
 
         return wizardPages;
     }
 
+    @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
+
     }
 
 
-    @Override
-    protected void performPostFinish()
+    private static SDKProjectImportOp createDefaultOp()
     {
-    }
-
-
-    private static SDKProjectsImportOp30 createDefaultOp()
-    {
-        return SDKProjectsImportOp30.TYPE.instantiate();
+        return SDKProjectImportOp.TYPE.instantiate();
     }
 
 }

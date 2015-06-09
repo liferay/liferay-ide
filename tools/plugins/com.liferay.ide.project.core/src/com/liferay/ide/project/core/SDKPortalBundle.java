@@ -15,7 +15,9 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayPortal;
-import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.util.LiferayPortalValueLoader;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Properties;
 
@@ -23,44 +25,46 @@ import org.eclipse.core.runtime.IPath;
 
 
 /**
- * @author Gregory Amerson
+ * @author Simon.Jiang
  */
-public class PluginsSDKPortal implements ILiferayPortal
+public class SDKPortalBundle implements ILiferayPortal
 {
-    private final ILiferayRuntime runtime;
+    private final PortalBundle portalBundle;
 
-    public PluginsSDKPortal( ILiferayRuntime runtime )
+    public SDKPortalBundle( PortalBundle portalBundle )
     {
-        this.runtime = runtime;
+        this.portalBundle = portalBundle;
     }
 
     @Override
     public IPath getAppServerPortalDir()
     {
-        return this.runtime.getAppServerPortalDir();
+        return this.portalBundle.getPortalDir();
     }
 
     @Override
     public String[] getHookSupportedProperties()
     {
-        return this.runtime.getHookSupportedProperties();
+        IPath portalDir = portalBundle.getPortalDir();
+        IPath[] extraLibs = portalBundle.getBundleDependencyJars();
+        return new LiferayPortalValueLoader( portalDir, extraLibs ).loadHookPropertiesFromClass();
     }
 
     @Override
     public Properties getPortletCategories()
     {
-        return this.runtime.getPortletCategories();
+        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
     }
 
     @Override
     public Properties getPortletEntryCategories()
     {
-        return this.runtime.getPortletEntryCategories();
+        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
     }
 
     @Override
     public String getVersion()
     {
-        return this.runtime.getPortalVersion();
+        return portalBundle.getVersion();
     }
 }

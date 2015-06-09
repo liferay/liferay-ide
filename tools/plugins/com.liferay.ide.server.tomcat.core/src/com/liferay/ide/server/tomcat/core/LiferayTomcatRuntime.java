@@ -77,6 +77,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
             String[] jre = tomcat.list( new FilenameFilter()
             {
 
+                @Override
                 public boolean accept( File dir, String name )
                 {
                     return name.startsWith( "jre" ); //$NON-NLS-1$
@@ -142,31 +143,37 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return null;
     }
 
+    @Override
     public IPath getAppServerDeployDir()
     {
         return getAppServerDir().append( "webapps" ); //$NON-NLS-1$
     }
 
+    @Override
     public IPath getAppServerDir()
     {
         return getRuntime().getLocation();
     }
 
+    @Override
     public IPath getAppServerLibGlobalDir()
     {
         return getAppServerDir().append( "lib/ext" ); //$NON-NLS-1$
     }
 
+    @Override
     public IPath getAppServerPortalDir()
     {
         return LiferayTomcatUtil.getPortalDir( getAppServerDir() );
     }
 
+    @Override
     public String getAppServerType()
     {
         return "tomcat"; //$NON-NLS-1$
     }
 
+    @Override
     public IPath getBundleZipLocation()
     {
         String zipLocation = getAttribute( PROP_BUNDLE_ZIP_LOCATION, (String) null );
@@ -184,11 +191,13 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return Msgs.liferayPortal;
     }
 
+    @Override
     public String[] getHookSupportedProperties()
     {
-        return new LiferayPortalValueLoader( getRuntimeLocation(), getAppServerPortalDir() ).loadHookPropertiesFromClass();
+        return new LiferayPortalValueLoader( getUserLibs() ).loadHookPropertiesFromClass();
     }
 
+    @Override
     public String getJavadocURL()
     {
         return getAttribute( PROP_JAVADOC_URL, (String) null );
@@ -199,37 +208,38 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return ILiferayConstants.LEAST_SUPPORTED_VERSION;
     }
 
-    public IPath getLibGlobalDir()
-    {
-        return getAppServerDir().append( "/lib/ext" ); //$NON-NLS-1$
-    }
-
+    @Override
     public IPath getLiferayHome()
     {
         return getAppServerDir().removeLastSegments( 1 );
     }
 
+    @Override
     public String getPortalVersion()
     {
         // check for existing release info
-        return LiferayTomcatUtil.getVersion( getRuntimeLocation(), getAppServerPortalDir() );
+        return LiferayTomcatUtil.getVersion( this );
     }
 
+    @Override
     public Properties getPortletCategories()
     {
         return ServerUtil.getPortletCategories( getAppServerPortalDir() );
     }
 
+    @Override
     public Properties getPortletEntryCategories()
     {
         return ServerUtil.getEntryCategories( getAppServerPortalDir(), getPortalVersion() );
     }
 
+    @Override
     public IPath getRuntimeLocation()
     {
         return getRuntime().getLocation();
     }
 
+    @Override
     public String getServerInfo()
     {
         String serverInfo = null;
@@ -250,7 +260,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
                     try
                     {
                         serverInfo =
-                            new LiferayPortalValueLoader( getRuntimeLocation(), getAppServerPortalDir() ).loadServerInfoFromClass();
+                            new LiferayPortalValueLoader( getUserLibs() ).loadServerInfoFromClass();
                     }
                     catch( Exception e )
                     {
@@ -286,6 +296,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
     }
 
+    @Override
     public IPath getSourceLocation()
     {
         String location = getAttribute( PROP_SOURCE_LOCATION, (String) null );
@@ -293,10 +304,10 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return location != null ? new Path( location ) : null;
     }
 
+    @Override
     public IPath[] getUserLibs()
     {
         return LiferayTomcatUtil.getAllUserClasspathLibraries( getRuntimeLocation(), getAppServerPortalDir() );
-
     }
 
     @Override
@@ -315,6 +326,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return null;
     }
 
+    @Override
     public IVMInstall getVMInstall()
     {
         if( getVMInstallTypeId() == null )
@@ -349,6 +361,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         return null;
     }
 
+    @Override
     public void setBundleZipLocation( IPath path )
     {
         if( path != null )
@@ -357,6 +370,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
     }
 
+    @Override
     public void setJavadocURL( String url )
     {
         if( url != null )
@@ -365,6 +379,7 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
         }
     }
 
+    @Override
     public void setSourceLocation( IPath location )
     {
         if( location != null )

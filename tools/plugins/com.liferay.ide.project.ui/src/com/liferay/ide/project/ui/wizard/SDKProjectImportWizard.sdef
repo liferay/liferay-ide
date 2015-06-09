@@ -24,11 +24,11 @@
     </import>
     <wizard>
         <id>SDKProjectsImportWizard30</id>
-        <element-type>com.liferay.ide.project.core.model.SDKProjectsImportOp30</element-type>
-        <label>Import Projects</label>
+        <element-type>com.liferay.ide.project.core.model.SDKProjectImportOp</element-type>
+        <label>Import Project</label>
         <page>
-            <id>ImportLiferaySDKProjectsPage</id>
-            <label>Import Liferay SDK Projects</label>
+            <id>ImportLiferaySDKProjectPage</id>
+            <label>Import Liferay SDK Project</label>
             <content>
                 <property-editor>Location</property-editor>
                 <spacer></spacer>

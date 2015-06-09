@@ -142,7 +142,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                     newSDKProjectPath =
                         sdk.createNewPortletProject(
-                            projectName, displayName, frameworkName, appServerProperties, separateJRE, workingDir,
+                            projectName, displayName, frameworkName, separateJRE, workingDir,
                             baseDir, monitor );
                 }
 
@@ -163,7 +163,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                     newSDKProjectPath =
                         sdk.createNewHookProject(
-                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                            projectName, displayName, separateJRE, workingDir, baseDir, monitor );
                 }
 
                 break;
@@ -234,7 +234,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
                     newSDKProjectPath =
                         sdk.createNewWebProject(
-                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                            projectName, displayName, separateJRE, workingDir, baseDir, monitor );
                 }
 
                 break;
@@ -375,7 +375,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                     
                     if( portalBundle != null )
                     {
-                        retval = new PluginsSDKProject( project, portalBundle );
+                        retval = new PluginsSDKBundleProject( project, portalBundle );
                     }                    
                 }
                 else if ( SDKUtil.isSDKProject( project ))

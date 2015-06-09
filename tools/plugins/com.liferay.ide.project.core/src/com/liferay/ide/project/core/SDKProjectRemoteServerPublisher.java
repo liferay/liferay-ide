@@ -52,6 +52,7 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
         this.sdk = sdk;
     }
 
+    @Override
     public IPath publishModuleFull( IProgressMonitor monitor ) throws CoreException
     {
         final IPath deployPath = LiferayServerCore.getTempLocation( "direct-deploy", StringPool.EMPTY ); //$NON-NLS-1$
@@ -80,11 +81,16 @@ public class SDKProjectRemoteServerPublisher extends AbstractRemoteServerPublish
 
         properties.put( ISDKConstants.PROPERTY_LP_VERSION_SUFFIX, ".0" );
 
-        final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( getProject() );
+        IStatus status = sdk.validate();
+
+        if ( !status.isOK() )
+        {
+            throw new CoreException( status );
+        }
 
         final IStatus directDeployStatus =
             sdk.war(
-                getProject(), properties, true, appServerProperties, new String[] { "-Duser.timezone=GMT" }, monitor );
+                getProject(), properties, true, new String[] { "-Duser.timezone=GMT" }, monitor );
 
         if( !directDeployStatus.isOK() || ( !warFile.exists() ) )
         {

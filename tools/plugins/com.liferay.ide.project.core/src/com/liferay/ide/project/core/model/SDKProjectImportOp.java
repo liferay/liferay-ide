@@ -15,7 +15,8 @@
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.project.core.model.internal.SDKImportProjectLocationValidationService;
-import com.liferay.ide.project.core.model.internal.SDKImportProjectsLocationListener;
+import com.liferay.ide.project.core.model.internal.SDKProjectImportPluginTypeDefaultValueService;
+import com.liferay.ide.project.core.model.internal.SDKProjectImportVersionDefaultValueService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -26,59 +27,53 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
+import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Simon Jiang
  */
-public interface SDKProjectsImportOp30 extends ExecutableElement
+public interface SDKProjectImportOp extends ExecutableElement
 {
-    ElementType TYPE = new ElementType( SDKProjectsImportOp30.class );
+    ElementType TYPE = new ElementType( SDKProjectImportOp.class );
 
-    // *** project localtion *** 
+    // *** Location ***
     @Type( base = Path.class )
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "Project Diectory" )
-    @Listeners( SDKImportProjectsLocationListener.class )
-    @Services
-    (
-        value=
-        {
-            @Service( impl = SDKImportProjectLocationValidationService.class )
-        }
-    )
+    @Label( standard = "Project Directory" )
+    @Service( impl = SDKImportProjectLocationValidationService.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" ); //$NON-NLS-1$
 
     Value<Path> getLocation();
     void setLocation( String value );
     void setLocation( Path value );
 
-    
-    // *** SDK Version ***    
+
+    // *** SDK Version ***
     @Label( standard = "SDK Version" )
-    @Enablement(expr = "false")
+    @Derived
+    @Service( impl = SDKProjectImportVersionDefaultValueService.class )
     ValueProperty PROP_SDK_VERSION = new ValueProperty( TYPE, "SdkVersion" ); //$NON-NLS-1$
 
     Value<String> getSdkVersion();
     void setSdkVersion( String value );
-    
-    
-    // *** Plugin Type ***    
+
+
+    // *** Plugin Type ***
     @Label( standard = "Plugin Type" )
-    @Enablement(expr = "false")
+    @Derived
+    @Service( impl = SDKProjectImportPluginTypeDefaultValueService.class )
     ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
 
     Value<String> getPluginType();
-    void setPluginType( String value );    
-    
-    @DelegateImplementation( SDKImportProjectsOpMethods.class )
+    void setPluginType( String value );
+
+    @Override
+    @DelegateImplementation( SDKImportProjectOpMethods.class )
     Status execute( ProgressMonitor monitor );
 }

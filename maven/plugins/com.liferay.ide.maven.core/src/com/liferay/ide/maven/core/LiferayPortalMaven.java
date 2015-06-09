@@ -20,7 +20,6 @@ import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.maven.model.Dependency;
@@ -34,7 +33,6 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 /**
  * @author Gregory Amerson
- * @author Simon Jiang
  */
 public class LiferayPortalMaven implements ILiferayPortal
 {
@@ -168,11 +166,5 @@ public class LiferayPortalMaven implements ILiferayPortal
         }
 
         return retval;
-    }
-
-    @Override
-    public Map<String, String> getRequiredProperties()
-    {
-        return null;
     }
 }

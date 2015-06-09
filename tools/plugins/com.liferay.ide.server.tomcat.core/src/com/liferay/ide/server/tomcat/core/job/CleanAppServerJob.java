@@ -15,15 +15,12 @@
 
 package com.liferay.ide.server.tomcat.core.job;
 
-import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDKJob;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.ServerUtil;
-
-import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -94,15 +91,10 @@ public class CleanAppServerJob extends SDKJob
             ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime( runtime );
             IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
 
-            Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
-
-            final String appServerDirKey =
-                ServerUtil.getAppServerPropertyKey( ISDKConstants.PROPERTY_APP_SERVER_DIR, portalTomcatRuntime );
-
-            final String appServerDir = appServerProperties.get( appServerDirKey );
+            final String appServerDir = portalTomcatRuntime.getAppServerDir().toPortableString();
 
             IStatus status =
-                getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, appServerProperties, monitor );
+                getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, monitor );
 
             assertStatus( status );
 

@@ -16,11 +16,13 @@
 package com.liferay.ide.project.core.library;
 
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.SDKClasspathContainer;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -34,10 +36,10 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProjectBase;
 /**
  * @author Greg Amerson
  */
-public abstract class PluginLibraryInstallOperation extends LibraryProviderOperation
+public class SDKClasspathContainerInstallOperation extends LibraryProviderOperation
 {
 
-    public PluginLibraryInstallOperation()
+    public SDKClasspathContainerInstallOperation()
     {
         super();
     }
@@ -82,6 +84,9 @@ public abstract class PluginLibraryInstallOperation extends LibraryProviderOpera
         javaProject.setRawClasspath( newEntries, monitor );
     }
 
-    protected abstract IPath getClasspathContainerPath();
+    public  IPath getClasspathContainerPath()
+    {
+        return new Path(SDKClasspathContainer.ID);
+    }
 
 }

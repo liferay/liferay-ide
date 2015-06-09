@@ -66,7 +66,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                 for( IClasspathEntry entry : javaProject.getRawClasspath() )
                 {
                     if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-                        entry.getPath().segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ) 
+                        entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ) 
                         && LiferayNature.hasNature( proj ))
                     {
                         return;

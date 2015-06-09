@@ -20,7 +20,7 @@ package com.liferay.ide.layouttpl.core.facet;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.layouttpl.core.LayoutTplCore;
-import com.liferay.ide.project.core.PluginsSDKProject;
+import com.liferay.ide.project.core.PluginsSDKBundleProject;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -104,7 +104,7 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
 
         removeUnneededClasspathEntries();
 
-        final IFolder folder = new PluginsSDKProject( project, null ).getDefaultDocrootFolder();
+        final IFolder folder = new PluginsSDKBundleProject( project, null ).getDefaultDocrootFolder();
 
         if( folder != null && folder.exists() )
         {

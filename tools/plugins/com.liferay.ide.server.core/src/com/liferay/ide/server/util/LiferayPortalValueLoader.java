@@ -38,20 +38,18 @@ import org.osgi.framework.Version;
 public class LiferayPortalValueLoader
 {
 
-    private IPath[] extraLibs;
-    private IPath globalDir;
+    private IPath[] userLibs;
     private IPath portalDir;
 
-    public LiferayPortalValueLoader( IPath appServerGlobalDir, IPath appServerPortalDir )
+    public LiferayPortalValueLoader( IPath[] extraLibs )
     {
-        this.portalDir = appServerPortalDir;
-        this.globalDir = appServerGlobalDir;
+        this.userLibs = extraLibs;
     }
 
     public LiferayPortalValueLoader( IPath appServerPortalDir, IPath[] extraLibs )
     {
         this.portalDir = appServerPortalDir;
-        this.extraLibs = extraLibs;
+        this.userLibs = extraLibs;
     }
 
     private void addLibs( File libDir, List<URL> libUrlList ) throws MalformedURLException
@@ -62,6 +60,7 @@ public class LiferayPortalValueLoader
             (
                 new FilenameFilter()
                 {
+                    @Override
                     public boolean accept( File dir, String fileName )
                     {
                         return fileName.toLowerCase().endsWith( ".jar" );
@@ -128,27 +127,9 @@ public class LiferayPortalValueLoader
             addLibs( libDir, libUrlList );
         }
 
-        //TODO this block assumes globaDir points to Tomcat which may not be the case in the future.
-        if ( globalDir != null )
+        if( ! CoreUtil.isNullOrEmpty( userLibs ) )
         {
-            final File libDir = globalDir.append( "lib" ).toFile();
-
-            if (libDir.exists())
-            {
-                addLibs( libDir, libUrlList );
-            }
-
-            final File extLibDir = globalDir.append( "lib/ext" ).toFile();
-
-            if ( extLibDir.exists())
-            {
-                addLibs( extLibDir, libUrlList );
-            }
-        }
-
-        if( ! CoreUtil.isNullOrEmpty( extraLibs ) )
-        {
-            for( IPath url : extraLibs )
+            for( IPath url : userLibs )
             {
                 libUrlList.add( new File( url.toOSString() ).toURI().toURL() );
             }

@@ -185,9 +185,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
 
             final SDK sdk = SDKUtil.getSDK( this.getProject() );
 
-            final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( getProject() );
-
-            final IStatus warStatus = sdk.war( this.getProject(), null, true, appServerProperties, monitor );
+            final IStatus warStatus = sdk.war( this.getProject(), null, true, monitor );
 
             if( warStatus.isOK() )
             {

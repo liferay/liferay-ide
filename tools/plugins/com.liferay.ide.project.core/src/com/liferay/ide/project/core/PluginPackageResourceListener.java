@@ -426,7 +426,7 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
             if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
             {
                 if( entry.getPath().segment( 0 ).equals( PluginClasspathContainerInitializer.ID ) || 
-                                entry.getPath().segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ))
+                                entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ))
                 {
                     containerPath = entry.getPath();
 
@@ -445,10 +445,10 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
                                 (PluginClasspathContainerInitializer) JavaCore.getClasspathContainerInitializer( PluginClasspathContainerInitializer.ID );
                 initializer.requestClasspathContainerUpdate( containerPath, javaProject, classpathContainer );
             }
-            else if (containerPath.segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ) )
+            else if (containerPath.segment( 0 ).equals( SDKClasspathContainer.ID ) )
             {
-                PluginClasspathDependencyContainerInitializer dependencyInitializer = 
-                                (PluginClasspathDependencyContainerInitializer)JavaCore.getClasspathContainerInitializer( PluginClasspathDependencyContainerInitializer.ID );
+                SDKClasspathContainerInitializer dependencyInitializer = 
+                                (SDKClasspathContainerInitializer)JavaCore.getClasspathContainerInitializer( SDKClasspathContainer.ID );
                 dependencyInitializer.requestClasspathContainerUpdate( containerPath, javaProject, classpathContainer );
             }
         }

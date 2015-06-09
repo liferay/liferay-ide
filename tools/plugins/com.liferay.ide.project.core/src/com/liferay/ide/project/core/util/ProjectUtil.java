@@ -23,10 +23,9 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
-import com.liferay.ide.project.core.PluginClasspathDependencyContainer;
-import com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
+import com.liferay.ide.project.core.SDKClasspathContainer;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.project.core.facet.PluginFacetProjectCreationDataModelProvider;
@@ -59,11 +58,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
@@ -107,12 +104,6 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 public class ProjectUtil
 {
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
-
-    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_WEB_SEGMENT_PATH = "web";
-    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_HOOK_SEGMENT_PATH = "hook";
-    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_THEME_SEGMENT_PATH = "theme";
-    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_EXT_SEGMENT_PATH = "ext";
-    public static final String PLUGINCLASSPATHDEPENDENCYCONTAINER_PORTLET_SEGMENT_PATH = "portlet";
 
     public static boolean collectProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -325,6 +316,7 @@ public class ProjectUtil
 
         ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
         {
+            @Override
             public void run( IProgressMonitor monitor ) throws CoreException
             {
                 for( IClasspathEntry entry : javaProject.getRawClasspath() )
@@ -365,9 +357,6 @@ public class ProjectUtil
             IPluginProjectDataModelProperties.LIFERAY_USE_SDK_LOCATION, false );
         newProjectDataModel.setBooleanProperty(
             IPluginProjectDataModelProperties.LIFERAY_USE_WORKSPACE_LOCATION, true );
-
-        String sdkName = SDKPluginFacetUtil.getSDKName( sdkLocation.toPortableString() );
-        newProjectDataModel.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName );
 
         setGenerateDD( newProjectDataModel, false );
 
@@ -448,11 +437,12 @@ public class ProjectUtil
 
         ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
         {
+            @Override
             public void run( IProgressMonitor monitor ) throws CoreException
             {
                 final SDK sdk = SDKUtil.createSDKFromLocation( sdkLocation );
 
-                sdk.openSDKInEclipse();
+                SDKUtil.openAsProject( sdk );
             }
         }, monitor );
 
@@ -500,10 +490,6 @@ public class ProjectUtil
                 }
             }
         }
-
-        String sdkName = SDKPluginFacetUtil.getSDKName( sdkLocation );
-        // if the get sdk from the location
-        newProjectDataModel.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, sdkName );
 
         setGenerateDD( newProjectDataModel, false );
 
@@ -661,6 +647,7 @@ public class ProjectUtil
 
         ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
         {
+            @Override
             public void run( IProgressMonitor monitor ) throws CoreException
             {
                 List<IClasspathEntry> rawClasspaths = new ArrayList<IClasspathEntry>();
@@ -670,9 +657,9 @@ public class ProjectUtil
                 for( IClasspathEntry entry : javaProject.getRawClasspath() )
                 {
                     if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-                        entry.getPath().segment( 0 ).equals( PluginClasspathDependencyContainerInitializer.ID ) )
+                        entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ) )
                     {
-                        containerPath = entry.getPath(); 
+                        containerPath = entry.getPath();
                         break;
                     }
 
@@ -684,7 +671,7 @@ public class ProjectUtil
 
                 if (containerPath != null)
                 {
-                    JavaCore.getClasspathContainerInitializer( PluginClasspathDependencyContainerInitializer.ID ).initialize(
+                    JavaCore.getClasspathContainerInitializer( SDKClasspathContainer.ID ).initialize(
                         containerPath, javaProject );
                 }
                 else
@@ -700,7 +687,7 @@ public class ProjectUtil
                         new IClasspathAttribute[] { JavaCore.newClasspathAttribute(
                             IClasspathDependencyConstants.CLASSPATH_COMPONENT_NON_DEPENDENCY, StringPool.EMPTY ) };
 
-                    IPath cpePath = new Path( PluginClasspathDependencyContainer.ID + "/" +  pluginType );;
+                    IPath cpePath = new Path( SDKClasspathContainer.ID );;
 
                     IClasspathEntry newEntry = JavaCore.newContainerEntry( cpePath, accessRules, attributes, false );
 
@@ -726,7 +713,7 @@ public class ProjectUtil
 
                 final SDK sdk = SDKUtil.createSDKFromLocation( sdkLocation );
 
-                sdk.openSDKInEclipse();
+                SDKUtil.openAsProject( sdk );
             }
         }, monitor );
         return project;
@@ -1236,99 +1223,9 @@ public class ProjectUtil
         return project;
     }
 
-    private static SDK getSdkInWorkspace()
-    {
-        SDK retVal = null;
-        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-        for( IProject project : projects )
-        {
-            IPath projectLocation = project.getLocation();
-
-            if ( SDKUtil.isValidSDKLocation( projectLocation.toPortableString() ) )
-            {
-                retVal = SDKUtil.createSDKFromLocation( projectLocation );
-                break;
-            }
-        }
-        return retVal; 
-    }
-
-    public static IStatus validateProject(final String currentPath)
-    {
-        IStatus retVal = Status.OK_STATUS;
-
-        if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
-        {
-            retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not a valid path." ); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-        else
-        {
-            IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
-
-            if( !osPath.toFile().isAbsolute() )
-            {
-                retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." ); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-            else
-            {
-                if( !osPath.toFile().exists() )
-                {
-                    retVal = ProjectCore.createErrorStatus( "Project isn't exist at \"" + currentPath + "\"" ); //$NON-NLS-1$
-                }
-                else
-                {
-                    ProjectRecord record = ProjectUtil.getProjectRecordForDir( currentPath );
-
-                    if( record != null )
-                    {
-                        String projectName = record.getProjectName();
-
-                        IProject existingProject =
-                            ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
-
-                        if( existingProject != null && existingProject.exists() )
-                        {
-                            retVal = ProjectCore.createErrorStatus( "Project name already exists." );
-                        }
-                        else
-                        {
-                            File projectDir = record.getProjectLocation().toFile();
-
-                            SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
-
-                            if( sdk != null )
-                            {
-                                final SDK workspaceSdk = getSdkInWorkspace();
-
-                                if( workspaceSdk != null )
-                                {
-                                    if ( !workspaceSdk.getLocation().equals( sdk.getLocation() ) )
-                                    {
-                                        return ProjectCore.createErrorStatus("The import project has different sdk with current workspace");
-                                    }
-                                }
-
-                                MultiStatus status = sdk.validate();
-                                retVal = status.getChildren()[0];
-                            }
-                            else
-                            {
-                                retVal = ProjectCore.createErrorStatus( "SDK is not exist" );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        retVal = ProjectCore.createErrorStatus( "Invalid project location" );
-                    }
-                }
-            }
-        }
-        return retVal;
-    }
     public static IProject importProject(IPath projectdir,IProgressMonitor monitor ) throws CoreException
     {
-        IStatus retVal = validateProject(projectdir.toPortableString());
+        IStatus retVal = SDKProjectUtil.validateProjectPath(projectdir.toPortableString());
 
         if ( !retVal.isOK() )
         {

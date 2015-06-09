@@ -27,7 +27,6 @@ import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -45,12 +44,12 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PluginsSDKProject extends FlexibleProject implements IWebProject
+public class PluginsSDKBundleProject extends FlexibleProject implements IWebProject
 {
 
     private PortalBundle portalBundle;
 
-    public PluginsSDKProject( IProject project, PortalBundle portalBundle )
+    public PluginsSDKBundleProject( IProject project, PortalBundle portalBundle )
     {
         super( project );
 
@@ -90,7 +89,7 @@ public class PluginsSDKProject extends FlexibleProject implements IWebProject
         }
         else if( ILiferayPortal.class.equals( adapterType ) )
         {
-            final ILiferayPortal portal = new PluginsSDKBundle( this.portalBundle );
+            final ILiferayPortal portal = new SDKPortalBundle( this.portalBundle );
 
             return adapterType.cast( portal );
         }
@@ -184,11 +183,7 @@ public class PluginsSDKProject extends FlexibleProject implements IWebProject
 
             final SDK sdk = SDKUtil.getSDK( this.getProject() );
 
-            PluginsSDKBundle sdkBundle = new PluginsSDKBundle(this.portalBundle);
-            
-            final Map<String, String> appServerProperties = sdkBundle.getRequiredProperties();
-
-            final IStatus warStatus = sdk.war( this.getProject(), null, true, appServerProperties, monitor );
+            final IStatus warStatus = sdk.war( this.getProject(), null, true, monitor );
 
             if( warStatus.isOK() )
             {

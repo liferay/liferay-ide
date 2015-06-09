@@ -19,9 +19,6 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.AbstractPluginPublisher;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
-import com.liferay.ide.server.util.ServerUtil;
-
-import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -135,9 +132,7 @@ public class TomcatExtPluginPublisher extends AbstractPluginPublisher
             LiferayTomcatUtil.syncStopServer( delegate.getServer() );
         }
 
-        Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
-
-        IStatus status = sdk.directDeploy( project, null, true, appServerProperties, monitor );
+        IStatus status = sdk.directDeploy( project, null, true, monitor );
 
         assertStatus( status );
 

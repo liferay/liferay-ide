@@ -22,16 +22,15 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.osgi.util.NLS;
 
 /**
  * @author Simon.Jiang
  */
-public class PluginClasspathDependencyContainer extends AbstractLiferayClasspathContainer implements IClasspathContainer
+public class SDKClasspathContainer extends PluginClasspathContainer implements IClasspathContainer
 {
-    public static final String ID = "com.liferay.ide.eclipse.plugin.dependency.container";
+    public static final String ID = "com.liferay.ide.sdk.container";
 
-    protected static final String[] portalJars =
+    protected static final String[] commonJars =
     {
         "commons-logging.jar",  //$NON-NLS-1$
         "log4j.jar",  //$NON-NLS-1$
@@ -41,12 +40,12 @@ public class PluginClasspathDependencyContainer extends AbstractLiferayClasspath
     };
 
     protected IPath portalGlobalDir;
-    
+
     protected IPath bundleDir;
-    
+
     protected IPath[] bundleLibDependencyPath;
 
-    public PluginClasspathDependencyContainer(
+    public SDKClasspathContainer(
         IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL, IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPath )
     {
         super(containerPath,project,portalDir,javadocURL,sourceURL);
@@ -65,14 +64,14 @@ public class PluginClasspathDependencyContainer extends AbstractLiferayClasspath
             for( IPath pluginJarPath : bundleLibDependencyPath )
             {
                 IPath sourcePath = null;
-                
+
                 if( portalSourceJars.contains( pluginJarPath.lastSegment() ) )
                 {
                     sourcePath = getSourceLocation();
                 }
                 entries.add( createClasspathEntry( pluginJarPath, sourcePath, this.javadocURL ) );
             }
-                
+
             if( this.portalDir != null )
             {
                 for( String pluginJar : getPortalJars() )
@@ -92,11 +91,12 @@ public class PluginClasspathDependencyContainer extends AbstractLiferayClasspath
         return this.classpathEntries;
     }
 
+    @Override
     public String getDescription()
     {
-        return Msgs.liferayPluginDependency;
+        return "Plugins SDK Dependencies";
     }
-    
+
     public IPath getPortalGlobalDir()
     {
         return portalGlobalDir;
@@ -106,29 +106,19 @@ public class PluginClasspathDependencyContainer extends AbstractLiferayClasspath
     {
         return bundleDir;
     }
-    
+
     public IPath[] getBundleLibDependencyPath()
     {
         return this.bundleLibDependencyPath;
     }
 
+    @Override
     protected String[] getPortalJars()
     {
-        return portalJars;
+        return commonJars;
     }
 
     public static boolean isPluginContainerEntry(IClasspathEntry e) {
         return e!=null && e.getEntryKind()==IClasspathEntry.CPE_CONTAINER && e.getPath().segment(0).equals(ID);
     }
-
-    private static class Msgs extends NLS
-    {
-        public static String liferayPluginDependency;
-
-        static
-        {
-            initializeMessages( PluginClasspathDependencyContainer.class.getName(), Msgs.class );
-        }
-    }
-
 }

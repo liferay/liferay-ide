@@ -19,9 +19,11 @@ import static com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil.detectLi
 
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
@@ -75,21 +77,35 @@ public class PortalTomcatBundleFactory implements PortalBundleFactory
     }
 
     @Override
-    public IPath canCreateFromPath( Map<String, String> appServerProperties )
+    public IPath canCreateFromPath( Hashtable<String, Object> appServerProperties )
     {
         IPath retval = null;
 
         final String appServerPath = (String) (appServerProperties.get( "app.server.dir"));
+        final String appServerParentPath = (String) (appServerProperties.get( "app.server.parent.dir"));
+        final String appServerDeployPath = (String) (appServerProperties.get( "app.server.deploy.dir"));
+        final String appServerGlobalLibPath = (String) (appServerProperties.get( "app.server.lib.global.dir"));
+        final String appServerPortalPath = (String) (appServerProperties.get( "app.server.portal.dir"));
 
-        final IPath location = new Path(appServerPath);
-
-        if( detectCatalinaDir( location )  )
+        if ( !ServerUtil.verifyPath(appServerPath) ||
+             !ServerUtil.verifyPath(appServerParentPath) ||
+             !ServerUtil.verifyPath(appServerDeployPath) ||
+             !ServerUtil.verifyPath(appServerPortalPath) ||
+             !ServerUtil.verifyPath(appServerGlobalLibPath) )
         {
-            retval = location;
+            return retval;
         }
-        else if( detectLiferayHome( location ) )
+
+        final IPath appServerLocation = new Path(appServerPath);
+        final IPath liferayHomelocation = new Path(appServerParentPath);
+
+        if( detectCatalinaDir( appServerLocation )  )
         {
-            final File[] directories = location.toFile().listFiles
+            retval = appServerLocation;
+        }
+        else if( detectLiferayHome( liferayHomelocation ) )
+        {
+            final File[] directories = liferayHomelocation.toFile().listFiles
             (
                 new FileFilter()
                 {

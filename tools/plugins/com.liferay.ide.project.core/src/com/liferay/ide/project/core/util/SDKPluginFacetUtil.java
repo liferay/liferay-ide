@@ -19,11 +19,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
-import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.File;
 import java.util.Collections;
@@ -202,25 +198,6 @@ public class SDKPluginFacetUtil
         }
     }
 
-    public static void configureLiferayFacet(
-        IFacetedProjectWorkingCopy fpjwc, IProjectFacet requiredFacet, String sdkLocation )
-    {
-        Action action = fpjwc.getProjectFacetAction( requiredFacet );
-
-        if( action != null )
-        {
-            Object config = action.getConfig();
-            IDataModel dm = (IDataModel) config;
-            dm.setProperty( IPluginProjectDataModelProperties.LIFERAY_SDK_NAME, getSDKName( sdkLocation ) );
-        }
-    }
-
-    public static void configureLiferayFacet(
-        IFacetedProjectWorkingCopy fpjwc, IProjectFacetVersion requiredFacetVersion, String sdkLocation )
-    {
-        configureLiferayFacet( fpjwc, requiredFacetVersion.getProjectFacet(), sdkLocation );
-    }
-
     public static void configureProjectAsPlugin(
         final IFacetedProjectWorkingCopy fpjwc, final String pluginType,
         final String sdkLocation, final ProjectRecord projectRecord ) throws CoreException
@@ -281,10 +258,6 @@ public class SDKPluginFacetUtil
                     {
                         configureJavaFacet( fpjwc, requiredFacetVersion.getProjectFacet(), preset, projectRecord );
                     }
-                    else if( ProjectUtil.isLiferayFacet( requiredFacetVersion ) )
-                    {
-                        configureLiferayFacet( fpjwc, requiredFacetVersion, sdkLocation );
-                    }
                     else if( ProjectUtil.isDynamicWebFacet( requiredFacetVersion ) )
                     {
                         configureWebFacet( fpjwc, requiredFacetVersion.getProjectFacet(), preset );
@@ -296,10 +269,6 @@ public class SDKPluginFacetUtil
                 if( ProjectUtil.isJavaFacet( requiredFacet ) )
                 {
                     configureJavaFacet( fpjwc, requiredFacet, preset, projectRecord );
-                }
-                else if( ProjectUtil.isLiferayFacet( requiredFacet ) )
-                {
-                    configureLiferayFacet( fpjwc, requiredFacet, sdkLocation );
                 }
                 else if( ProjectUtil.isDynamicWebFacet( requiredFacet ) )
                 {
@@ -323,6 +292,7 @@ public class SDKPluginFacetUtil
         }
 
         fpjwc.setPrimaryRuntime( runtime );
+
         // fpjwc.setSelectedPreset(
         // FacetedProjectFramework.DEFAULT_CONFIGURATION_PRESET_ID );
 
@@ -347,8 +317,8 @@ public class SDKPluginFacetUtil
                 if( currentFacetVersion.getProjectFacet().equals( requiredFacet ) )
                 {
                     boolean supports = runtime.supports( currentFacetVersion );
-
                     boolean requiredVersion = isRequiredVersion( currentFacetVersion );
+
                     if( supports && requiredVersion )
                     {
                         hasRequiredFacet = true;
@@ -374,10 +344,6 @@ public class SDKPluginFacetUtil
                     {
                         configureJavaFacet( fpjwc, requiredFacetVersion.getProjectFacet(), preset, projectRecord );
                     }
-                    else if( ProjectUtil.isLiferayFacet( requiredFacetVersion ) )
-                    {
-                        configureLiferayFacet( fpjwc, requiredFacetVersion, sdkLocation );
-                    }
                     else if( ProjectUtil.isDynamicWebFacet( requiredFacetVersion ) )
                     {
                         configureWebFacet( fpjwc, requiredFacetVersion.getProjectFacet(), preset );
@@ -389,10 +355,6 @@ public class SDKPluginFacetUtil
                 if( ProjectUtil.isJavaFacet( requiredFacet ) )
                 {
                     configureJavaFacet( fpjwc, requiredFacet, preset, projectRecord );
-                }
-                else if( ProjectUtil.isLiferayFacet( requiredFacet ) )
-                {
-                    configureLiferayFacet( fpjwc, requiredFacet, sdkLocation );
                 }
                 else if( ProjectUtil.isDynamicWebFacet( requiredFacet ) )
                 {
@@ -553,28 +515,6 @@ public class SDKPluginFacetUtil
         }
 
         return null;
-    }
-
-    public static String getSDKName( String sdkLocation )
-    {
-        IPath sdkLocationPath = new Path( sdkLocation );
-
-        SDK sdk = SDKManager.getInstance().getSDK( sdkLocationPath );
-
-        String sdkName = null;
-
-        if( sdk != null )
-        {
-            sdkName = sdk.getName();
-        }
-        else
-        {
-            sdk = SDKUtil.createSDKFromLocation( sdkLocationPath );
-            SDKManager.getInstance().addSDK( sdk );
-            sdkName = sdk.getName();
-        }
-
-        return sdkName;
     }
 
     private static boolean isRequiredVersion( IProjectFacetVersion facetVersion )

@@ -411,7 +411,7 @@
          <action
                type="INSTALL">
             <operation
-                  class="com.liferay.ide.project.core.library.PortletPluginLibraryInstallOperation">
+                  class="com.liferay.ide.project.core.library.SDKClasspathContainerInstallOperation">
             </operation>
             <config
                   class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
@@ -447,7 +447,7 @@
          <action
                type="INSTALL">
             <operation
-                  class="com.liferay.ide.project.core.library.HookPluginLibraryInstallOperation">
+                  class="com.liferay.ide.project.core.library.SDKClasspathContainerInstallOperation">
             </operation>
             <config
                   class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
@@ -483,7 +483,7 @@
          <action
                type="INSTALL">
             <operation
-                  class="com.liferay.ide.project.core.library.ExtPluginLibraryInstallOperation">
+                  class="com.liferay.ide.project.core.library.SDKClasspathContainerInstallOperation">
             </operation>
             <config
                   class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
@@ -519,7 +519,7 @@
          <action
                type="INSTALL">
             <operation
-                  class="com.liferay.ide.project.core.library.WebPluginLibraryInstallOperation">
+                  class="com.liferay.ide.project.core.library.SDKClasspathContainerInstallOperation">
             </operation>
             <config
                   class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
@@ -561,8 +561,8 @@
             id="com.liferay.ide.eclipse.server.plugin.container">
       </classpathContainerInitializer>
       <classpathContainerInitializer
-            class="com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer"
-            id="com.liferay.ide.eclipse.plugin.dependency.container">
+            class="com.liferay.ide.project.core.SDKClasspathContainerInitializer"
+            id="com.liferay.ide.sdk.container">
       </classpathContainerInitializer>
    </extension>
    <extension

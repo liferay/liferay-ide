@@ -15,15 +15,8 @@
 
 package com.liferay.ide.project.core.facet;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
-
 import java.util.Set;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
@@ -89,7 +82,6 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
         propNames.add( INSTALL_LIFERAY_PLUGIN_LIBRARY_DELEGATE );
         propNames.add( INSTALL_THEME_CSS_BUILDER );
         propNames.add( LIFERAY_PLUGIN_LIBRARY_DELEGATE );
-        propNames.add( LIFERAY_SDK_NAME );
         propNames.add( SETUP_DEFAULT_OUTPUT_LOCATION );
         propNames.add( SETUP_EXT_CLASSPATH );
         propNames.add( UPDATE_BUILD_XML );
@@ -109,31 +101,6 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
         }
 
         return super.propertySet( propertyName, propertyValue );
-    }
-
-    @Override
-    public IStatus validate( String name )
-    {
-        if( LIFERAY_SDK_NAME.equals( name ) )
-        {
-            String sdkName = getStringProperty( LIFERAY_SDK_NAME );
-
-            if( CoreUtil.isNullOrEmpty( sdkName ) )
-            {
-                return ProjectCore.createErrorStatus( Msgs.noPluginSDKConfigured );
-            }
-
-            SDK sdk = SDKManager.getInstance().getSDK( sdkName );
-
-            if( sdk == null )
-            {
-                return ProjectCore.createErrorStatus( NLS.bind( Msgs.pluginSDKNotDefined, sdkName ) );
-            }
-
-            return Status.OK_STATUS;
-        }
-
-        return super.validate( name );
     }
 
     protected abstract String getPluginFacetId();

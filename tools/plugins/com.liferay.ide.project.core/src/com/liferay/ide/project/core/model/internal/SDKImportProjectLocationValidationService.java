@@ -15,8 +15,8 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.project.core.model.SDKProjectsImportOp30;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.model.SDKProjectImportOp;
+import com.liferay.ide.project.core.util.SDKProjectUtil;
 
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
@@ -39,18 +39,18 @@ public class SDKImportProjectLocationValidationService extends ValidationService
         {
             final String currentPath = currentProjectLocation.toOSString();
 
-            retval = StatusBridge.create( ProjectUtil.validateProject( currentPath ) );
+            retval = StatusBridge.create( SDKProjectUtil.validateProjectPath( currentPath ) );
         }
-        else
-        {
-            retval = Status.createErrorStatus( "Location must be specified." ); //$NON-NLS-1$
-        }
+//        else
+//        {
+//            retval = Status.createErrorStatus( "Location must be specified." ); //$NON-NLS-1$
+//        }
 
         return retval;
     }
 
-    private SDKProjectsImportOp30 op()
+    private SDKProjectImportOp op()
     {
-        return context( SDKProjectsImportOp30.class );
+        return context( SDKProjectImportOp.class );
     }
 }

@@ -20,8 +20,6 @@ import com.liferay.ide.core.util.FileListing;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -33,10 +31,6 @@ import org.eclipse.core.runtime.Path;
  */
 public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBundle
 {
-    private static final Collection<String> portalDependencyJars = Arrays.asList
-    (
-    );
-
     public static final int DEFAULT_JMX_PORT = 2099;
 
     public PortalJBossBundle( IPath path )
@@ -68,44 +62,15 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
     }
 
     @Override
-    public IPath[] getBundleDependencyJars()
-    {
-        List<IPath> libs = new ArrayList<IPath>();
-        IPath bundleLibPath =  getAppServerLibDir();
-        List<File> libFiles = new ArrayList<File>();
-        try
-        {
-            libFiles = FileListing.getFileListing( new File( bundleLibPath.toOSString() ) );
-            for( File lib : libFiles )
-            {
-                if( lib.exists() && lib.getName().endsWith( ".jar" ) && 
-                                (portalDependencyJars.size()>0?portalDependencyJars.contains( lib.getName() ):true) ) //$NON-NLS-1$
-                {
-                    libs.add( new Path( lib.getPath() ) );
-                }
-            }
-        }
-        catch( FileNotFoundException e )
-        {
-        }
-
-        return libs.toArray( new IPath[libs.size()] );
-    }
-
     protected int getDefaultJMXRemotePort()
     {
         return DEFAULT_JMX_PORT;
     }
 
+    @Override
     public String getMainClass()
     {
         return "org.jboss.modules.Main";
-    }
-
-    @Override
-    protected Collection<String> getPortalDependencyJars()
-    {
-        return portalDependencyJars;
     }
 
     @Override
@@ -121,6 +86,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         return retval;
     }
 
+    @Override
     public IPath[] getRuntimeClasspath()
     {
         final List<IPath> paths = new ArrayList<IPath>();
@@ -194,7 +160,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"" );
         args.add( "-Djboss.bind.address.management=localhost" );
         args.add( "-Duser.timezone=GMT" );
-     
+
         return args.toArray( new String[0] );
     }
 
@@ -207,6 +173,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         return args.toArray( new String[0] );
     }
 
+    @Override
     public String getType()
     {
         return "jboss";

@@ -20,8 +20,8 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
-import com.liferay.ide.project.core.PluginClasspathDependencyContainerInitializer;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.SDKClasspathContainer;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -32,9 +32,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -64,7 +64,7 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
         boolean retval = false;
         for( Iterator<IClasspathEntry> iterator = entries.iterator(); iterator.hasNext(); )
         {
-            IClasspathEntry entry = (IClasspathEntry) iterator.next();
+            IClasspathEntry entry = iterator.next();
 
             if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
             {
@@ -194,9 +194,8 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     @Test
     public void testSDKSetting() throws Exception
     {
-        final IPath hookPath = importProject( "portlets", "Import-IDE3.0-hook" );
         SDK sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
-        Map<String, String> sdkProperties = sdk.getProperties();
+        Hashtable<String, Object> sdkProperties = sdk.getBuildProperties();
 
         assertNotNull( sdkProperties.get( "app.server.type" ) );
         assertNotNull( sdkProperties.get( "app.server.dir" ) );
@@ -226,8 +225,8 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
         IJavaProject javaProject = JavaCore.create( hookProjectForIDE3 );
         IClasspathEntry[] rawClasspath = javaProject.getRawClasspath();
         List<IClasspathEntry> rawClasspaths = Arrays.asList( rawClasspath );
-        final boolean hasPluginClasspathDependencyContainer = 
-                        isLiferayRuntimePluginClassPath(rawClasspaths, PluginClasspathDependencyContainerInitializer.ID);
+        final boolean hasPluginClasspathDependencyContainer =
+                        isLiferayRuntimePluginClassPath(rawClasspaths, SDKClasspathContainer.ID);
 
         assertEquals( hasPluginClasspathDependencyContainer, true );
     }
@@ -245,11 +244,11 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
         IClasspathEntry[] rawClasspath = javaProject.getRawClasspath();
         List<IClasspathEntry> rawClasspaths = Arrays.asList( rawClasspath );
 
-        final boolean hasOldPluginClasspathContainer = 
+        final boolean hasOldPluginClasspathContainer =
                         isLiferayRuntimePluginClassPath(rawClasspaths, PluginClasspathContainerInitializer.ID);
-        final boolean hasPluginClasspathDependencyContainer = 
-                        isLiferayRuntimePluginClassPath(rawClasspaths, PluginClasspathDependencyContainerInitializer.ID);
-        final boolean hasOldRuntimeClasspathContainer = 
+        final boolean hasPluginClasspathDependencyContainer =
+                        isLiferayRuntimePluginClassPath(rawClasspaths, SDKClasspathContainer.ID);
+        final boolean hasOldRuntimeClasspathContainer =
                         isLiferayRuntimePluginClassPath(rawClasspaths, "com.liferay.studio.server.tomcat.runtimeClasspathProvider");
 
         assertEquals( hasOldPluginClasspathContainer, false );

@@ -26,7 +26,6 @@ import com.liferay.ide.project.core.facet.IPluginProjectDataModelProperties;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.theme.core.operation.ThemeDescriptorHelper;
 import com.liferay.ide.theme.core.util.BuildHelper;
 
@@ -73,9 +72,7 @@ public class ThemeCSSBuilder extends IncrementalProjectBuilder
                 ThemeCore.createErrorStatus( "No SDK for project configured. Could not build theme." ) ); //$NON-NLS-1$
         }
 
-        final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
-
-        final IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
+        final IStatus status = sdk.compileThemePlugin( project, null );
 
         if( !status.isOK() )
         {

@@ -26,11 +26,9 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
-import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.theme.core.operation.ThemeDescriptorHelper;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
@@ -132,9 +130,7 @@ public class ThemeDiffResourceListener implements IResourceChangeListener
                         ThemeCore.createErrorStatus( "No SDK for project configured. Could not deploy theme module" ) ); //$NON-NLS-1$
                 }
 
-                Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( project );
-
-                IStatus status = sdk.compileThemePlugin( project, null, appServerProperties );
+                IStatus status = sdk.compileThemePlugin( project, null );
 
                 if( !status.isOK() )
                 {
