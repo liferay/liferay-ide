@@ -198,7 +198,7 @@ public class SDKPluginFacetUtil
         }
     }
 
-    public static void configureProjectAsPlugin(
+    public static void configureProjectAsSDKProject(
         final IFacetedProjectWorkingCopy fpjwc, final String pluginType,
         final String sdkLocation, final ProjectRecord projectRecord ) throws CoreException
     {
@@ -278,7 +278,7 @@ public class SDKPluginFacetUtil
         }
     }
 
-    public static void configureProjectAsPlugin( final IFacetedProjectWorkingCopy fpjwc,
+    public static void configureProjectAsRuntimeProject( final IFacetedProjectWorkingCopy fpjwc,
                                                  final IRuntime runtime,
                                                  final String pluginType,
                                                  final String sdkLocation,

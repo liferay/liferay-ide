@@ -5,6 +5,10 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.taskdefs.Property;
 
+
+/**
+ * Copied from ant lib
+ */
 public abstract class AbstractPropertySetterTask extends Task {
     private boolean override;
     private String property;

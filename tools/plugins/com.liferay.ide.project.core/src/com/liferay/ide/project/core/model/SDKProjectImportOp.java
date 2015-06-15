@@ -14,9 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model;
 
-import com.liferay.ide.project.core.model.internal.SDKImportProjectLocationValidationService;
-import com.liferay.ide.project.core.model.internal.SDKProjectImportPluginTypeDefaultValueService;
-import com.liferay.ide.project.core.model.internal.SDKProjectImportVersionDefaultValueService;
+import com.liferay.ide.project.core.model.internal.SDKProjectImportLocationValidationService;
+import com.liferay.ide.project.core.model.internal.SDKProjectImportPluginTypeDerivedValueService;
+import com.liferay.ide.project.core.model.internal.SDKProjectImportVersionDerivedValueService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -46,7 +46,7 @@ public interface SDKProjectImportOp extends ExecutableElement
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "Project Directory" )
-    @Service( impl = SDKImportProjectLocationValidationService.class )
+    @Service( impl = SDKProjectImportLocationValidationService.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" ); //$NON-NLS-1$
 
     Value<Path> getLocation();
@@ -57,7 +57,7 @@ public interface SDKProjectImportOp extends ExecutableElement
     // *** SDK Version ***
     @Label( standard = "SDK Version" )
     @Derived
-    @Service( impl = SDKProjectImportVersionDefaultValueService.class )
+    @Service( impl = SDKProjectImportVersionDerivedValueService.class )
     ValueProperty PROP_SDK_VERSION = new ValueProperty( TYPE, "SdkVersion" ); //$NON-NLS-1$
 
     Value<String> getSdkVersion();
@@ -67,7 +67,7 @@ public interface SDKProjectImportOp extends ExecutableElement
     // *** Plugin Type ***
     @Label( standard = "Plugin Type" )
     @Derived
-    @Service( impl = SDKProjectImportPluginTypeDefaultValueService.class )
+    @Service( impl = SDKProjectImportPluginTypeDerivedValueService.class )
     ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
 
     Value<String> getPluginType();

@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -42,11 +43,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
@@ -58,6 +62,8 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 @SuppressWarnings( "restriction" )
 public class ProjectImportUtil
 {
+
+
 
     /**
      * This method was added as part of the IDE-381 fix, this method will collect all the binaries based on the binaries
@@ -303,7 +309,7 @@ public class ProjectImportUtil
             if( projects[i] instanceof ProjectRecord )
             {
                 IProject project =
-                    ProjectUtil.importProject( (ProjectRecord) projects[i], runtime, sdkLocation, monitor );
+                    ProjectImportUtil.importProject( (ProjectRecord) projects[i], runtime, sdkLocation, monitor );
 
                 if( project != null )
                 {
@@ -323,6 +329,91 @@ public class ProjectImportUtil
         sb.append( configFile );
         return sb.toString();
 
+    }
+
+    public static IProject importProject(IPath projectdir,IProgressMonitor monitor ) throws CoreException
+    {
+        IStatus retVal = ProjectImportUtil.validateSDKProjectPath(projectdir.toPortableString());
+
+        if ( !retVal.isOK() )
+        {
+            throw new CoreException( ProjectCore.createErrorStatus( retVal.getMessage() ) );
+        }
+
+        IProject project = null;
+
+        ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectdir.toPortableString() );
+
+        File projectDir = projectRecord.getProjectLocation().toFile();
+        SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
+
+        if( projectRecord.projectSystemFile != null )
+        {
+            try
+            {
+                project = ProjectUtil.createExistingProject( projectRecord, sdk.getLocation(), monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
+        }
+        else if( projectRecord.liferayProjectDir != null )
+        {
+            try
+            {
+                project = ProjectUtil.createNewSDKProject( projectRecord, sdk.getLocation(), monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
+        }
+        return project;
+    }
+
+    public static IProject importProject( ProjectRecord projectRecord,
+                                          IRuntime runtime,
+                                          String sdkLocation,
+                                          IProgressMonitor monitor )
+        throws CoreException
+    {
+        return importProject( projectRecord, runtime, sdkLocation, null, monitor );
+    }
+
+    public static IProject importProject( ProjectRecord projectRecord,
+                                          IRuntime runtime,
+                                          String sdkLocation,
+                                          NewLiferayPluginProjectOp op,
+                                          IProgressMonitor monitor )
+        throws CoreException
+    {
+        IProject project = null;
+
+        if( projectRecord.projectSystemFile != null )
+        {
+            try
+            {
+                project = ProjectUtil.createExistingProject( projectRecord, runtime, sdkLocation, monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
+        }
+        else if( projectRecord.liferayProjectDir != null )
+        {
+            try
+            {
+                project = ProjectUtil.createNewSDKProject( projectRecord, runtime, sdkLocation, op, monitor );
+            }
+            catch( CoreException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
+        }
+
+        return project;
     }
 
     /**
@@ -409,6 +500,87 @@ public class ProjectImportUtil
         return isValid;
     }
 
+
+    public static IStatus validateSDKProjectPath(final String currentPath)
+    {
+        IStatus retVal = Status.OK_STATUS;
+
+        if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
+        {
+            retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not a valid path." );
+        }
+        else
+        {
+            IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+
+            if( !osPath.toFile().isAbsolute() )
+            {
+                retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." );
+            }
+            else
+            {
+                if( !osPath.toFile().exists() )
+                {
+                    retVal = ProjectCore.createErrorStatus( "Project isn't exist at \"" + currentPath + "\"" );
+                }
+                else
+                {
+                    ProjectRecord record = ProjectUtil.getProjectRecordForDir( currentPath );
+
+                    if( record != null )
+                    {
+                        String projectName = record.getProjectName();
+
+                        IProject existingProject =
+                            ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
+
+                        if( existingProject != null && existingProject.exists() )
+                        {
+                            retVal = ProjectCore.createErrorStatus( "Project name already exists." );
+                        }
+                        else
+                        {
+                            File projectDir = record.getProjectLocation().toFile();
+
+                            SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
+
+                            if( sdk != null )
+                            {
+                                try
+                                {
+                                    IProject workspaceSdkProject = SDKUtil.getWorkspaceSDKProject();
+
+                                    if( workspaceSdkProject != null )
+                                    {
+                                        if( !workspaceSdkProject.getLocation().equals( sdk.getLocation() ) )
+                                        {
+                                            return ProjectCore.createErrorStatus( "This project has different sdk than current workspace sdk" );
+                                        }
+                                    }
+                                }
+                                catch( CoreException e )
+                                {
+                                    return ProjectCore.createErrorStatus("Can't find sdk in workspace");
+                                }
+                                retVal = sdk.validate();
+                            }
+                            else
+                            {
+                                retVal = ProjectCore.createErrorStatus( "SDK is not exist" );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        retVal = ProjectCore.createErrorStatus( "Invalid project location" );
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
     private static class Msgs extends NLS
     {
         public static String checking;
@@ -419,4 +591,5 @@ public class ProjectImportUtil
             initializeMessages( ProjectImportUtil.class.getName(), Msgs.class );
         }
     }
+
 }

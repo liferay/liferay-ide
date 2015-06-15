@@ -124,7 +124,7 @@ public class SDKProjectConvertOperation extends AbstractDataModelOperation
 
         final String pluginType = ProjectUtil.guessPluginType( fpwc );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, pluginType, sdkLocation, record );
+        SDKPluginFacetUtil.configureProjectAsRuntimeProject( fpwc, runtime, pluginType, sdkLocation, record );
 
         fpwc.commitChanges( monitor );
 

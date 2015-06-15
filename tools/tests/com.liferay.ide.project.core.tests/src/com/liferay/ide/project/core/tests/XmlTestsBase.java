@@ -20,6 +20,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectRecord;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.util.ServerUtil;
@@ -80,7 +81,7 @@ public class XmlTestsBase extends ProjectCoreBase
         final IRuntime runtime = ServerCore.findRuntime( getRuntimeVersion() );
         assertNotNull( runtime );
 
-        final IProject project = ProjectUtil.importProject(
+        final IProject project = ProjectImportUtil.importProject(
             projectRecord, ServerUtil.getFacetRuntime( runtime ), sdkLocation.toOSString(),new NullProgressMonitor() );
 
         assertNotNull( project );

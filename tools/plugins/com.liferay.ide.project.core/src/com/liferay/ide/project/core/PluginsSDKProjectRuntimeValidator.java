@@ -15,7 +15,6 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -66,8 +65,7 @@ public class PluginsSDKProjectRuntimeValidator implements IFacetedProjectValidat
                 for( IClasspathEntry entry : javaProject.getRawClasspath() )
                 {
                     if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-                        entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ) 
-                        && LiferayNature.hasNature( proj ))
+                        entry.getPath().segment( 0 ).equals( SDKClasspathContainer.ID ) )
                     {
                         return;
                     }

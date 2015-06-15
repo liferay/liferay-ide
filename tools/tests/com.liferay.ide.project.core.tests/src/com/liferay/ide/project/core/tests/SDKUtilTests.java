@@ -17,11 +17,14 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Before;
 import org.junit.Test;
 
 
@@ -30,6 +33,15 @@ import org.junit.Test;
  */
 public class SDKUtilTests extends ProjectCoreBase
 {
+
+    @Before
+    public void deleteAllProjects() throws Exception
+    {
+        for( IProject p : CoreUtil.getAllProjects() )
+        {
+            p.delete( true, new NullProgressMonitor() );
+        }
+    }
 
     @Test
     public void nullWorkSpaceSDKProject() throws Exception

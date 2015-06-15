@@ -15,32 +15,32 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.ILiferayPortal;
+
 import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public interface PortalBundle
+public interface PortalBundle extends ILiferayPortal
 {
 
     IPath getAutoDeployPath();
 
     IPath getAppServerDeployDir();
-    
+
     IPath getAppServerLibGlobalDir();
-    
+
     int getJmxRemotePort();
 
     IPath getLiferayHome();
-    
+
     IPath getAppServerDir();
 
     String getMainClass();
 
     IPath getModulesPath();
-    
-    IPath getPortalDir();
 
     IPath[] getRuntimeClasspath();
 
@@ -53,8 +53,6 @@ public interface PortalBundle
     String[] getRuntimeStopProgArgs();
 
     String getType();
-
-    String getVersion();
 
     IPath[] getBundleDependencyJars();
 

@@ -17,7 +17,6 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.StringPool;
@@ -57,7 +56,6 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -308,7 +306,7 @@ public class ProjectUtil
 
         String pluginType = guessPluginType( fpwc );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, pluginType, sdkLocation, record );
+        SDKPluginFacetUtil.configureProjectAsRuntimeProject( fpwc, runtime, pluginType, sdkLocation, record );
 
         fpwc.commitChanges( monitor );
 
@@ -423,7 +421,7 @@ public class ProjectUtil
 
         pluginType = guessPluginType( fpwc );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, pluginType, sdkLocation.toPortableString(), projectRecord );
+        SDKPluginFacetUtil.configureProjectAsSDKProject( fpwc, pluginType, sdkLocation.toPortableString(), projectRecord );
 
         // if project is located in natural workspace location then don't need to set a project location
         if( CoreUtil.getWorkspaceRoot().getLocation().append( projectDirName ).equals( projectLocation ) )
@@ -432,8 +430,6 @@ public class ProjectUtil
         }
 
         fpwc.commitChanges( monitor );
-
-        LiferayNature.addLiferayNature( fpwc.getProject(), monitor );
 
         ResourcesPlugin.getWorkspace().run( new IWorkspaceRunnable()
         {
@@ -571,7 +567,7 @@ public class ProjectUtil
             pluginType = guessPluginType( fpwc );
         }
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, runtime, pluginType, sdkLocation, projectRecord );
+        SDKPluginFacetUtil.configureProjectAsRuntimeProject( fpwc, runtime, pluginType, sdkLocation, projectRecord );
 
         if( op != null && PluginType.portlet.name().equals( pluginType ) )
         {
@@ -625,8 +621,6 @@ public class ProjectUtil
 
         project.open( IResource.FORCE, new SubProgressMonitor( monitor, 70 ) );
 
-        LiferayNature.addLiferayNature( project, monitor );
-
         // need to check to see if we an ext project with source folders with incorrect parent attributes
         if( project.getName().endsWith( ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX ) )
         {
@@ -639,7 +633,7 @@ public class ProjectUtil
 
         final String pluginType = guessPluginType( fpwc );
 
-        SDKPluginFacetUtil.configureProjectAsPlugin( fpwc, pluginType, sdkLocation.toPortableString(), record );
+        SDKPluginFacetUtil.configureProjectAsSDKProject( fpwc, pluginType, sdkLocation.toPortableString(), record );
 
         fpwc.commitChanges( monitor );
 
@@ -1177,91 +1171,6 @@ public class ProjectUtil
         }
 
         return retval;
-    }
-
-    public static IProject importProject( ProjectRecord projectRecord,
-                                          IRuntime runtime,
-                                          String sdkLocation,
-                                          IProgressMonitor monitor )
-        throws CoreException
-    {
-        return importProject( projectRecord, runtime, sdkLocation, null, monitor );
-    }
-
-    public static IProject importProject( ProjectRecord projectRecord,
-                                          IRuntime runtime,
-                                          String sdkLocation,
-                                          NewLiferayPluginProjectOp op,
-                                          IProgressMonitor monitor )
-        throws CoreException
-    {
-        IProject project = null;
-
-        if( projectRecord.projectSystemFile != null )
-        {
-            try
-            {
-                project = createExistingProject( projectRecord, runtime, sdkLocation, monitor );
-            }
-            catch( CoreException e )
-            {
-                throw new CoreException( ProjectCore.createErrorStatus( e ) );
-            }
-        }
-        else if( projectRecord.liferayProjectDir != null )
-        {
-            try
-            {
-                project = createNewSDKProject( projectRecord, runtime, sdkLocation, op, monitor );
-            }
-            catch( CoreException e )
-            {
-                throw new CoreException( ProjectCore.createErrorStatus( e ) );
-            }
-        }
-
-        return project;
-    }
-
-    public static IProject importProject(IPath projectdir,IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retVal = SDKProjectUtil.validateProjectPath(projectdir.toPortableString());
-
-        if ( !retVal.isOK() )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( retVal.getMessage() ) );
-        }
-
-        IProject project = null;
-
-        ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectdir.toPortableString() );
-
-        File projectDir = projectRecord.getProjectLocation().toFile();
-        SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
-
-        if( projectRecord.projectSystemFile != null )
-        {
-            try
-            {
-                project = createExistingProject( projectRecord, sdk.getLocation(), monitor );
-            }
-            catch( CoreException e )
-            {
-                throw new CoreException( ProjectCore.createErrorStatus( e ) );
-            }
-        }
-        else if( projectRecord.liferayProjectDir != null )
-        {
-            try
-            {
-                project = createNewSDKProject( projectRecord, sdk.getLocation(), monitor );
-            }
-            catch( CoreException e )
-            {
-                throw new CoreException( ProjectCore.createErrorStatus( e ) );
-            }
-        }
-        return project;
     }
 
     public static boolean isDynamicWebFacet( IProjectFacet facet )

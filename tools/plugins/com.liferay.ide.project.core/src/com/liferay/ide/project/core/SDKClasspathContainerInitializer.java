@@ -66,7 +66,7 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
 
         IPath globalDir = bundle.getAppServerLibGlobalDir();
 
-        IPath portalDir = bundle.getPortalDir();
+        IPath portalDir = bundle.getAppServerPortalDir();
 
         IPath bundleDir = bundle.getAppServerDir();
 
@@ -77,7 +77,9 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
             return;
         }
 
-        classpathContainer = new SDKClasspathContainer( containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyLibDir);
+        classpathContainer =
+            new SDKClasspathContainer(
+                containerPath, project, portalDir, null, null, globalDir, bundleDir, bundleDependencyLibDir );
 
         JavaCore.setClasspathContainer(
             containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { classpathContainer }, null );
@@ -144,14 +146,17 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
                 throw new CoreException( ProjectCore.createErrorStatus( msg ) );
             }
 
-            portalDir = bundle.getPortalDir();
+            portalDir = bundle.getAppServerPortalDir();
             portalGlobalDir = bundle.getAppServerLibGlobalDir();
             bundleLibDependencyPath = bundle.getBundleDependencyJars();
         }
 
         if( portalDir != null && portalGlobalDir != null )
         {
-            IClasspathContainer newContainer = new SDKClasspathContainer( containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir, bundleLibDependencyPath);
+            IClasspathContainer newContainer =
+                new SDKClasspathContainer(
+                    containerPath, project, portalDir, javadocURL, sourceLocation, portalGlobalDir, bundleDir,
+                    bundleLibDependencyPath );
 
             JavaCore.setClasspathContainer(
                 containerPath, new IJavaProject[] { project }, new IClasspathContainer[] { newContainer }, null );

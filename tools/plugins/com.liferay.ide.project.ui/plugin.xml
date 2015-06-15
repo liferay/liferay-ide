@@ -148,18 +148,6 @@
             id="com.liferay.ide.projects.import"
             name="%category.name">
       </category>
-      <!--
-      <wizard
-            category="com.liferay.ide.projects.import"
-            class="com.liferay.ide.project.ui.wizard.LiferayProjectImportWizard"
-            icon="icons/e16/import.png"
-            id="com.liferay.ide.project.ui.importExistingProjectWizard"
-            name="%import.existing.project.wizard.name">
-         <description>
-            %import.existing.project.wizard.description
-         </description>
-      </wizard>
-      -->
       <wizard
             category="com.liferay.ide.projects.import"
             class="com.liferay.ide.project.ui.wizard.SDKProjectsImportWizard"
@@ -179,7 +167,7 @@
          <description>
             %import.projects.sdk.wizard.description
          </description>
-      </wizard>       
+      </wizard>
       <wizard
             category="com.liferay.ide.projects.import"
             class="com.liferay.ide.project.ui.wizard.BinaryProjectImportWizard"

@@ -15,8 +15,8 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.SDKProjectImportOp;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
-import com.liferay.ide.project.core.util.SDKProjectUtil;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.DerivedValueService;
@@ -27,7 +27,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Simon Jiang
  */
-public class SDKProjectImportPluginTypeDefaultValueService extends DerivedValueService
+public class SDKProjectImportPluginTypeDerivedValueService extends DerivedValueService
 {
     private FilteredListener<PropertyContentEvent> listener;
 
@@ -57,7 +57,7 @@ public class SDKProjectImportPluginTypeDefaultValueService extends DerivedValueS
         {
             if ( op().getLocation().content() != null && !op().getLocation().content().isEmpty() )
             {
-                IStatus status = SDKProjectUtil.validateProjectPath( op().getLocation().content().toPortableString() );
+                IStatus status = ProjectImportUtil.validateSDKProjectPath( op().getLocation().content().toPortableString() );
 
                 if ( status.isOK() )
                 {

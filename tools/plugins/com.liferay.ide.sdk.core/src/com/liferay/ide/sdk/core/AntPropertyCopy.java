@@ -2,6 +2,9 @@ package com.liferay.ide.sdk.core;
 
 import org.apache.tools.ant.BuildException;
 
+/**
+ * Copied from ant lib
+ */
 public class AntPropertyCopy extends AbstractPropertySetterTask {
     private String from;
     private boolean silent;

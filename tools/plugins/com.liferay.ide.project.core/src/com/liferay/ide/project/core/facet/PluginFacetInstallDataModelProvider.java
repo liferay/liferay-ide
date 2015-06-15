@@ -18,7 +18,6 @@ package com.liferay.ide.project.core.facet;
 import java.util.Set;
 
 import org.eclipse.jst.common.project.facet.core.libprov.LibraryInstallDelegate;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.datamodel.FacetInstallDataModelProvider;
 import org.eclipse.wst.common.componentcore.datamodel.properties.IFacetDataModelProperties;
 import org.eclipse.wst.common.project.facet.core.IFacetedProjectWorkingCopy;
@@ -105,14 +104,4 @@ public abstract class PluginFacetInstallDataModelProvider extends FacetInstallDa
 
     protected abstract String getPluginFacetId();
 
-    private static class Msgs extends NLS
-    {
-        public static String noPluginSDKConfigured;
-        public static String pluginSDKNotDefined;
-
-        static
-        {
-            initializeMessages( PluginFacetInstallDataModelProvider.class.getName(), Msgs.class );
-        }
-    }
 }

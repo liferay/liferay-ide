@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProjectName;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
@@ -69,7 +70,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
     public PluginsSDKProjectProvider()
     {
-        super( new Class<?>[] { IProject.class } );
+        super( new Class<?>[] { IProject.class, IRuntime.class } );
     }
 
     public IStatus doCreateNewProject(
@@ -97,10 +98,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         final IRuntime runtime = NewLiferayPluginProjectOpMethods.getRuntime( op );
         final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime, monitor );
         final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
-      
-        //final Map<String, String> appServerProperties = sdk.getSDKProperties( PathBridge.create( op.getLocation().content(true) ) );
 
-        
         // workingDir should always be the directory of the type of plugin /sdk/portlets/ for a portlet, etc
         String workingDir = null;
         // baseDir should only be set when we are wanting to specifically allow 'out-of-sdk' projects, i.e. custom/workspace
@@ -196,7 +194,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 else
                 {
                     baseDir = updateBaseDir ? workingDir : null;
-    
+
                     newSDKProjectPath =
                         sdk.createNewLayoutTplProject(
                             projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
@@ -268,7 +266,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         final String sdkLocation = sdk.getLocation().toOSString();
         final IProject newProject =
-            ProjectUtil.importProject( projectRecord, ServerUtil.getFacetRuntime( runtime ), sdkLocation, op, monitor );
+            ProjectImportUtil.importProject( projectRecord, ServerUtil.getFacetRuntime( runtime ), sdkLocation, op, monitor );
 
         newProject.open( monitor );
 
@@ -371,21 +369,21 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             {
                 if ( SDKUtil.isSDKProject( project ) && LiferayNature.hasNature( project ) )
                 {
-                    PortalBundle portalBundle = ServerUtil.getPortalBundle( project );  
-                    
+                    PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
+
                     if( portalBundle != null )
                     {
                         retval = new PluginsSDKBundleProject( project, portalBundle );
-                    }                    
+                    }
                 }
                 else if ( SDKUtil.isSDKProject( project ))
                 {
                     liferayRuntime = ServerUtil.getLiferayRuntime( project );
-                    
+
                     if( liferayRuntime != null )
                     {
                         retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
-                    }                    
+                    }
                 }
             }
             catch( CoreException e )
@@ -403,13 +401,13 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             catch( Exception e )
             {
             }
-            
+
             if( liferayRuntime != null )
             {
                 retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
-            }     
+            }
         }
-        
+
         return retval;
     }
 

@@ -77,7 +77,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
     public IPath getAppServerPortalDir()
     {
-        return getPortalBundle().getPortalDir();
+        return getPortalBundle().getAppServerPortalDir();
     }
 
     public String getAppServerType()

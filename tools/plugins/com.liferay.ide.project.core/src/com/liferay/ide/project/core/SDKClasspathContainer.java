@@ -46,7 +46,8 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
     protected IPath[] bundleLibDependencyPath;
 
     public SDKClasspathContainer(
-        IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL, IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPath )
+        IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL,
+        IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPath )
     {
         super(containerPath,project,portalDir,javadocURL,sourceURL);
         this.portalGlobalDir = portalGlobalDir;
@@ -118,7 +119,9 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
         return commonJars;
     }
 
-    public static boolean isPluginContainerEntry(IClasspathEntry e) {
-        return e!=null && e.getEntryKind()==IClasspathEntry.CPE_CONTAINER && e.getPath().segment(0).equals(ID);
+    public static boolean isPluginContainerEntry( IClasspathEntry e )
+    {
+        return e != null && e.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
+            e.getPath().segment( 0 ).equals( ID );
     }
 }

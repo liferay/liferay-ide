@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -71,7 +71,7 @@ public class LiferayProjectImportOperation extends AbstractDataModelOperation
 
         try
         {
-            ProjectUtil.importProject( projectRecord, runtime, sdk.getLocation().toOSString(), monitor );
+            ProjectImportUtil.importProject( projectRecord, runtime, sdk.getLocation().toOSString(), monitor );
         }
         catch( CoreException e )
         {

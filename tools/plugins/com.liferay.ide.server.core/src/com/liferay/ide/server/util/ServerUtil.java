@@ -38,7 +38,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -493,7 +492,7 @@ public class ServerUtil
             return null;
         }
 
-        Hashtable<String, Object> appServerProperties = sdk.getBuildProperties();
+        Map<String, Object> appServerProperties = sdk.getBuildProperties();
 
         final PortalBundleFactory[] factories = LiferayServerCore.getPortalBundleFactories();
         for( PortalBundleFactory factory : factories )

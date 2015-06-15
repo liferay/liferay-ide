@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -313,7 +314,7 @@ public class ProjectCoreBase extends ServerCoreBase
         final IRuntime runtime = ServerCore.findRuntime( getRuntimeVersion() );
         assertNotNull( runtime );
 
-        final IProject project = ProjectUtil.importProject(
+        final IProject project = ProjectImportUtil.importProject(
             projectRecord, ServerUtil.getFacetRuntime( runtime ), sdkLocation.toOSString(),new NullProgressMonitor() );
 
         assertNotNull( project );

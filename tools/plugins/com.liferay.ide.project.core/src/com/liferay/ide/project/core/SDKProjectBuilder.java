@@ -89,7 +89,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
     {
         IStatus status = sdk.validate();
 
-        if ( !status.isOK())
+        if ( !status.isOK() )
         {
             return status;
         }
@@ -137,7 +137,7 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
     {
         IStatus status = sdk.validate();
 
-        if ( !status.isOK())
+        if ( !status.isOK() )
         {
             return status;
         }

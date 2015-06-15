@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,7 +36,7 @@ public class SDKImportProjectOpMethods
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Importing Liferay plugin project...", 100 ); //$NON-NLS-1$
+        monitor.beginTask( "Importing Liferay plugin project...", 100 );
 
         Status retval = Status.createOkStatus();
 
@@ -44,12 +44,13 @@ public class SDKImportProjectOpMethods
         {
             final Path projectLocation = op.getLocation().content();
 
-            if ( projectLocation == null || projectLocation.isEmpty() )
+            if( projectLocation == null || projectLocation.isEmpty() )
             {
-                throw new CoreException( StatusBridge.create( Status.createErrorStatus( "Project can not be empty" ) ) );
+                throw new CoreException(
+                    StatusBridge.create( Status.createErrorStatus( "Project can not be empty" ) ) );
             }
 
-            ProjectUtil.importProject( PathBridge.create( projectLocation ),new NullProgressMonitor());
+            ProjectImportUtil.importProject( PathBridge.create( projectLocation ),new NullProgressMonitor());
         }
         catch( CoreException e )
         {

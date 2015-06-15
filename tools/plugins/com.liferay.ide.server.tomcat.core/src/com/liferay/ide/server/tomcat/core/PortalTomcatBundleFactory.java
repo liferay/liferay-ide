@@ -23,7 +23,6 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
@@ -77,7 +76,7 @@ public class PortalTomcatBundleFactory implements PortalBundleFactory
     }
 
     @Override
-    public IPath canCreateFromPath( Hashtable<String, Object> appServerProperties )
+    public IPath canCreateFromPath( Map<String, Object> appServerProperties )
     {
         IPath retval = null;
 

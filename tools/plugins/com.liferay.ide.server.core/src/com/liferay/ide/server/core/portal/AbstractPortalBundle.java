@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -69,7 +70,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         this.autoDeployPath = this.liferayHome.append( "deploy" );
 
-        this.version = getPortalVersion( getPortalDir(), getBundleDependencyJars()  );
+        this.version = getPortalVersion( getAppServerPortalDir(), getBundleDependencyJars()  );
 
         this.modulesPath = this.liferayHome.append( "osgi" );
     }
@@ -95,7 +96,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         this.autoDeployPath = new Path(appServerDeployPath);
 
-        this.version = getPortalVersion( getPortalDir(), getBundleDependencyJars() );
+        this.version = getPortalVersion( getAppServerPortalDir(), getBundleDependencyJars() );
 
         this.modulesPath = null;
     }
@@ -135,6 +136,15 @@ public abstract class AbstractPortalBundle implements PortalBundle
     protected abstract int getDefaultJMXRemotePort();
 
     @Override
+    public String[] getHookSupportedProperties()
+    {
+        IPath portalDir = getAppServerPortalDir();
+        IPath[] extraLibs = getBundleDependencyJars();
+
+        return new LiferayPortalValueLoader( portalDir, extraLibs ).loadHookPropertiesFromClass();
+    }
+
+    @Override
     public int getJmxRemotePort()
     {
         return this.jmxRemotePort;
@@ -162,6 +172,18 @@ public abstract class AbstractPortalBundle implements PortalBundle
     public String getVersion()
     {
         return this.version;
+    }
+
+    @Override
+    public Properties getPortletCategories()
+    {
+        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
+    }
+
+    @Override
+    public Properties getPortletEntryCategories()
+    {
+        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
     }
 
     private String getConfigInfoFromCache( String configType, IPath portalDir )

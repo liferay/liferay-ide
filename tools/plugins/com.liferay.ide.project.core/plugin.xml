@@ -397,16 +397,6 @@
                      value="liferay.portlet">
                </test>
             </with>
-            <!--
-            <with
-                  variable="context">
-               <test
-                     forcePluginActivation="true"
-                     property="com.liferay.ide.project.core.isLiferayRuntime"
-                     value="true">
-               </test>
-            </with>
-            -->
          </enablement>
          <action
                type="INSTALL">
@@ -433,16 +423,6 @@
                      value="liferay.hook">
                </test>
             </with>
-            <!--
-            <with
-                  variable="context">
-               <test
-                     forcePluginActivation="true"
-                     property="com.liferay.ide.project.core.isLiferayRuntime"
-                     value="true">
-               </test>
-            </with>
-            -->
          </enablement>
          <action
                type="INSTALL">
@@ -469,16 +449,6 @@
                      value="liferay.ext">
                </test>
             </with>
-            <!--
-            <with
-                  variable="context">
-               <test
-                     forcePluginActivation="true"
-                     property="com.liferay.ide.project.core.isLiferayRuntime"
-                     value="true">
-               </test>
-            </with>
-            -->
          </enablement>
          <action
                type="INSTALL">
@@ -505,16 +475,6 @@
                      value="liferay.web">
                </test>
             </with>
-            <!--
-            <with
-                  variable="context">
-               <test
-                     forcePluginActivation="true"
-                     property="com.liferay.ide.project.core.isLiferayRuntime"
-                     value="true">
-               </test>
-            </with>
-            -->
          </enablement>
          <action
                type="INSTALL">
@@ -627,13 +587,4 @@
          </enablement>
       </moduleFactory>
    </extension>
-   <!--
-   <extension
-         point="org.eclipse.wst.common.project.facet.core.listeners">
-      <listener
-            class="com.liferay.ide.project.core.facet.LiferayFacetedProjectListener"
-            eventTypes="POST_INSTALL">
-      </listener>
-   </extension>
-   --> 
 </plugin>

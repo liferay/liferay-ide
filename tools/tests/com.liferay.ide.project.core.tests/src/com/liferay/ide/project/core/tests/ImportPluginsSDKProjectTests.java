@@ -17,12 +17,11 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.SDKClasspathContainer;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
@@ -32,9 +31,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -195,7 +194,7 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     public void testSDKSetting() throws Exception
     {
         SDK sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
-        Hashtable<String, Object> sdkProperties = sdk.getBuildProperties();
+        Map<String, Object> sdkProperties = sdk.getBuildProperties();
 
         assertNotNull( sdkProperties.get( "app.server.type" ) );
         assertNotNull( sdkProperties.get( "app.server.dir" ) );
@@ -217,10 +216,9 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     public void testImportBasicHookProject() throws Exception
     {
         final IPath projectPath = importProject( "hooks", "Import-IDE3.0-hook" );
-        IProject hookProjectForIDE3 = ProjectUtil.importProject( projectPath, new NullProgressMonitor() );
+        IProject hookProjectForIDE3 = ProjectImportUtil.importProject( projectPath, new NullProgressMonitor() );
 
         assertNotNull( hookProjectForIDE3 );
-        assertEquals( LiferayNature.hasNature( hookProjectForIDE3 ), true );
 
         IJavaProject javaProject = JavaCore.create( hookProjectForIDE3 );
         IClasspathEntry[] rawClasspath = javaProject.getRawClasspath();
@@ -235,10 +233,9 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     public void testImportConfiguredPortletProject() throws Exception
     {
         final IPath projectPath = importProject( "portlets", "Import-Old-Configured-portlet" );
-        IProject portletProjectForIDE3 = ProjectUtil.importProject( projectPath, new NullProgressMonitor() );
+        IProject portletProjectForIDE3 = ProjectImportUtil.importProject( projectPath, new NullProgressMonitor() );
 
         assertNotNull( portletProjectForIDE3 );
-        assertEquals( LiferayNature.hasNature( portletProjectForIDE3 ), true );
 
         IJavaProject javaProject = JavaCore.create( portletProjectForIDE3 );
         IClasspathEntry[] rawClasspath = javaProject.getRawClasspath();

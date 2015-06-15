@@ -89,9 +89,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
         }
         else if( ILiferayPortal.class.equals( adapterType ) )
         {
-            final ILiferayPortal portal = new SDKPortalBundle( this.portalBundle );
-
-            return adapterType.cast( portal );
+            return adapterType.cast( this.portalBundle );
         }
 
         return null;

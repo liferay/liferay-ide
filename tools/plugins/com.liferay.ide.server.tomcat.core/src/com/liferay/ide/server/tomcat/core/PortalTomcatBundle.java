@@ -103,7 +103,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     }
 
     @Override
-    public IPath getPortalDir()
+    public IPath getAppServerPortalDir()
     {
         IPath retval = null;
 
@@ -206,7 +206,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
         List<IPath> libs = new ArrayList<IPath>();
         try
         {
-            List<File>  portallibFiles = FileListing.getFileListing( new File( getPortalDir().append( "WEB-INF/lib" ).toPortableString() ) );
+            List<File>  portallibFiles = FileListing.getFileListing( new File( getAppServerPortalDir().append( "WEB-INF/lib" ).toPortableString() ) );
             for( File lib : portallibFiles )
             {
                 if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$

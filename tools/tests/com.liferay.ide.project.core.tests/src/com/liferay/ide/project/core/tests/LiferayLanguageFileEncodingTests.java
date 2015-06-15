@@ -25,6 +25,7 @@ import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectRecord;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.util.ServerUtil;
@@ -106,7 +107,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         assertNotNull( projectRecord );
 
         final IProject project =
-            ProjectUtil.importProject(
+            ProjectImportUtil.importProject(
                 projectRecord, ServerUtil.getFacetRuntime( getRuntime() ), sdkLocation.toOSString(),
                 new NullProgressMonitor() );
 
