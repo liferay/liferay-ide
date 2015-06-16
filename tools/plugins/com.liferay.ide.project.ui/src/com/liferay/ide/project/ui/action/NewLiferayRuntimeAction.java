@@ -14,6 +14,7 @@
  *******************************************************************************/
 
 package com.liferay.ide.project.ui.action;
+import com.liferay.ide.project.core.model.HasLiferayRuntime;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.sapphire.modeling.Status;
@@ -42,7 +43,7 @@ public class NewLiferayRuntimeAction extends SapphireActionHandler
 
         if( isOK )
         {
-            op.property( NewLiferayPluginProjectOp.PROP_RUNTIME_NAME ).refresh();
+            op.property( HasLiferayRuntime.PROP_RUNTIME_NAME ).refresh();
         }
 
         return Status.createOkStatus();

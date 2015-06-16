@@ -14,16 +14,21 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,14 +38,30 @@ import org.junit.Test;
  */
 public class SDKUtilTests extends ProjectCoreBase
 {
-
-    @Before
-    public void deleteAllProjects() throws Exception
+    @AfterClass
+    public static void removePluginsSDK()
     {
-        for( IProject p : CoreUtil.getAllProjects() )
+        IProject[] projects = CoreUtil.getAllProjects();
+        for( IProject iProject : projects )
         {
-            p.delete( true, new NullProgressMonitor() );
+            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            {
+                try
+                {
+                    iProject.delete( true, true, new NullProgressMonitor() );
+                }
+                catch( CoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
         }
+    }
+
+    @Override
+    @Before
+    public void setupPluginsSDK() throws Exception
+    {
     }
 
     @Test
@@ -54,8 +75,40 @@ public class SDKUtilTests extends ProjectCoreBase
     @Test
     public void singleWorkSpaceProject() throws Exception
     {
-        SDK sdkProject = SDKManager.getInstance().getDefaultSDK();
-        SDKUtil.openAsProject( sdkProject );
+
+        if( shouldSkipBundleTests() ) return;
+
+        final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
+
+        if( ! liferayPluginsSdkDirFile.exists() )
+        {
+            final File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
+
+            assertEquals(
+                "Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
+                liferayPluginsSdkZipFile.exists() );
+
+            liferayPluginsSdkDirFile.mkdirs();
+
+            final String liferayPluginsSdkZipFolder = getLiferayPluginsSdkZipFolder();
+
+            if( CoreUtil.isNullOrEmpty( liferayPluginsSdkZipFolder ) )
+            {
+                ZipUtil.unzip( liferayPluginsSdkZipFile, liferayPluginsSdkDirFile );
+            }
+            else
+            {
+                ZipUtil.unzip(
+                    liferayPluginsSdkZipFile, liferayPluginsSdkZipFolder, liferayPluginsSdkDirFile,
+                    new NullProgressMonitor() );
+            }
+        }
+
+        assertEquals( true, liferayPluginsSdkDirFile.exists() );
+
+        SDK sdk = SDKUtil.createSDKFromLocation( getLiferayPluginsSdkDir() );
+
+        SDKUtil.openAsProject( sdk );
 
         IProject project = SDKUtil.getWorkspaceSDKProject();
 

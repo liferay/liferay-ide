@@ -39,6 +39,7 @@ public class PluginTypeValidationService extends ValidationService
 
         final Listener listener = new FilteredListener<PropertyContentEvent>()
         {
+            @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
                 refresh();
@@ -46,7 +47,6 @@ public class PluginTypeValidationService extends ValidationService
         };
 
         op().getProjectProvider().attach( listener );
-        op().getPluginsSDKName().attach( listener );
     }
 
     @Override

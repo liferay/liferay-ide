@@ -22,6 +22,7 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectRecord;
@@ -48,6 +49,7 @@ import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.junit.AfterClass;
 import org.junit.Test;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -59,6 +61,27 @@ import org.w3c.dom.NodeList;
 @SuppressWarnings( "restriction" )
 public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 {
+
+    @AfterClass
+    public static void removePluginsSDK()
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+        for( IProject iProject : projects )
+        {
+            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            {
+                try
+                {
+                    iProject.delete( true, true, new NullProgressMonitor() );
+                }
+                catch( Exception e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     /*
      * In order to test the encoding feature, mainly test the markers on the non-default encoding language files,
      * encode them to default then check if the markers are gone. Since the LiferayLanguagePropertiesListener does't

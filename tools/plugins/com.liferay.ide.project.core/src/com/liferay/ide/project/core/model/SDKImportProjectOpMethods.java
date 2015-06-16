@@ -50,7 +50,7 @@ public class SDKImportProjectOpMethods
                     StatusBridge.create( Status.createErrorStatus( "Project can not be empty" ) ) );
             }
 
-            ProjectImportUtil.importProject( PathBridge.create( projectLocation ),new NullProgressMonitor());
+            ProjectImportUtil.importProject( PathBridge.create( projectLocation ),new NullProgressMonitor(), null);
         }
         catch( CoreException e )
         {

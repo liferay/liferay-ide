@@ -15,7 +15,6 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
@@ -26,8 +25,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKCorePlugin;
-import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -45,19 +42,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.wst.server.core.IRuntime;
 import org.osgi.framework.Version;
-import org.osgi.service.prefs.BackingStoreException;
 
 
 /**
@@ -73,11 +67,11 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         super( new Class<?>[] { IProject.class, IRuntime.class } );
     }
 
+    @Override
     public IStatus doCreateNewProject(
         NewLiferayPluginProjectOp op, IProgressMonitor monitor, ElementList<ProjectName> projectNames )
         throws CoreException
     {
-        final String sdkName = op.getPluginsSDKName().content( true );
         final PluginType pluginType = op.getPluginType().content( true );
         final String originalProjectName = op.getProjectName().content();
         final String pluginTypeSuffix = NewLiferayPluginProjectOpMethods.getPluginTypeSuffix( pluginType );
@@ -94,22 +88,10 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         final String displayName = op.getDisplayName().content( true );
         final boolean separateJRE = true;
 
-        final SDK sdk = SDKManager.getInstance().getSDK( sdkName );
-        final IRuntime runtime = NewLiferayPluginProjectOpMethods.getRuntime( op );
-        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime, monitor );
-        final Map<String, String> appServerProperties = ServerUtil.configureAppServerProperties( liferayRuntime );
+        final SDK sdk = SDKUtil.getWorkspaceSDK();
 
         // workingDir should always be the directory of the type of plugin /sdk/portlets/ for a portlet, etc
         String workingDir = null;
-        // baseDir should only be set when we are wanting to specifically allow 'out-of-sdk' projects, i.e. custom/workspace
-        String baseDir = null;
-        boolean updateBaseDir = false;
-
-        if( ( !op.getUseDefaultLocation().content() ) ||
-            ( op.getUseDefaultLocation().content() && ( !op.getUseSdkLocation().content() ) ) )
-        {
-            updateBaseDir = true;
-        }
 
         ArrayList<String> arguments = new ArrayList<String>();
         arguments.add( projectName );
@@ -136,12 +118,10 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 }
                 else
                 {
-                    baseDir = updateBaseDir ? workingDir : null;
-
                     newSDKProjectPath =
                         sdk.createNewPortletProject(
                             projectName, displayName, frameworkName, separateJRE, workingDir,
-                            baseDir, monitor );
+                            null, monitor );
                 }
 
                 break;
@@ -149,19 +129,15 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             case hook:
                 workingDir = sdk.getLocation().append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER ).toOSString();
 
-                baseDir = updateBaseDir ? workingDir : null;
-
                 if( hasGradleTools )
                 {
                     sdk.createNewProject( projectName, arguments, "hook", workingDir, monitor );
                 }
                 else
                 {
-                    baseDir = updateBaseDir ? workingDir : null;
-
                     newSDKProjectPath =
                         sdk.createNewHookProject(
-                            projectName, displayName, separateJRE, workingDir, baseDir, monitor );
+                            projectName, displayName, separateJRE, workingDir, null, monitor );
                 }
 
                 break;
@@ -175,11 +151,9 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 }
                 else
                 {
-                    baseDir = updateBaseDir ? workingDir : null;
-
                     newSDKProjectPath =
                         sdk.createNewExtProject(
-                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                            projectName, displayName, separateJRE, workingDir, null, monitor );
                 }
 
                 break;
@@ -193,11 +167,9 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 }
                 else
                 {
-                    baseDir = updateBaseDir ? workingDir : null;
-
                     newSDKProjectPath =
                         sdk.createNewLayoutTplProject(
-                            projectName, displayName, appServerProperties, separateJRE, workingDir, baseDir, monitor );
+                            projectName, displayName, separateJRE, workingDir, null, monitor );
                 }
 
                 break;
@@ -211,10 +183,8 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 }
                 else
                 {
-                    baseDir = updateBaseDir ? workingDir : null;
-
                     newSDKProjectPath =
-                        sdk.createNewThemeProject( projectName, displayName, separateJRE, workingDir, baseDir, monitor );
+                        sdk.createNewThemeProject( projectName, displayName, separateJRE, workingDir, null, monitor );
                 }
 
                 break;
@@ -228,11 +198,9 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
                 }
                 else
                 {
-                    baseDir = updateBaseDir ? workingDir : null;
-
                     newSDKProjectPath =
                         sdk.createNewWebProject(
-                            projectName, displayName, separateJRE, workingDir, baseDir, monitor );
+                            projectName, displayName, separateJRE, workingDir, null, monitor );
                 }
 
                 break;
@@ -264,26 +232,10 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectLocation.toOSString() );
 
-        final String sdkLocation = sdk.getLocation().toOSString();
         final IProject newProject =
-            ProjectImportUtil.importProject( projectRecord, ServerUtil.getFacetRuntime( runtime ), sdkLocation, op, monitor );
+            ProjectImportUtil.importProject( projectRecord.getProjectLocation(), monitor, op );
 
         newProject.open( monitor );
-
-        if( baseDir != null )
-        {
-            try
-            {
-                // we have an 'out-of-sdk' style project so we need to persist the SDK name
-                final IEclipsePreferences prefs = new ProjectScope( newProject ).getNode( SDKCorePlugin.PLUGIN_ID );
-                prefs.put( SDKCorePlugin.PREF_KEY_SDK_NAME, sdkName );
-                prefs.flush();
-            }
-            catch( BackingStoreException e )
-            {
-                ProjectCore.logError( "Unable to persist sdk name to project " + projectName, e );
-            }
-        }
 
         // need to update project name incase the suffix was not correct
         op.setFinalProjectName( newProject.getName() );
@@ -302,7 +254,8 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
             case servicebuilder:
 
-                serviceBuilderProjectCreated( op, liferayRuntime.getPortalVersion(), newProject, monitor );
+                PortalBundle bundle = ServerUtil.getPortalBundle( newProject );
+                serviceBuilderProjectCreated( op, bundle.getVersion(), newProject, monitor );
 
                 break;
             case theme:
@@ -355,6 +308,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         }
     }
 
+    @Override
     public ILiferayProject provide( Object type )
     {
         ILiferayProject retval = null;
@@ -367,7 +321,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
             try
             {
-                if ( SDKUtil.isSDKProject( project ) && LiferayNature.hasNature( project ) )
+                if ( SDKUtil.isSDKProject( project ) )
                 {
                     PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
 
@@ -444,6 +398,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
     }
 
+    @Override
     public IStatus validateProjectLocation( String name, IPath path )
     {
         IStatus retval = Status.OK_STATUS;

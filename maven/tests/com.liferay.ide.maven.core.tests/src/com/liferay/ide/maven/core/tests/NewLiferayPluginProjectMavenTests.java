@@ -269,7 +269,6 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         op.setProjectProvider( "ant" );
         op.setPortletFramework( "jsf" );
-        op.setPluginsSDKName( newSDK.getName() );
 
         assertEquals(
             "Selected portlet framework requires SDK version at least " + jsf.getRequiredSDKVersion(),

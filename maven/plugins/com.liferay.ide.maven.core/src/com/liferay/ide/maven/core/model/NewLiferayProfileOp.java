@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core.model;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.model.HasLiferayRuntime;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.sapphire.ElementType;
@@ -27,7 +28,7 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 /**
  * @author Gregory Amerson
  */
-public interface NewLiferayProfileOp extends NewLiferayPluginProjectOp
+public interface NewLiferayProfileOp extends NewLiferayPluginProjectOp, HasLiferayRuntime
 {
     ElementType TYPE = new ElementType( NewLiferayProfileOp.class );
 

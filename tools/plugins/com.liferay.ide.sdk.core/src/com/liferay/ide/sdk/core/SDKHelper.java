@@ -141,6 +141,7 @@ public class SDKHelper extends LaunchHelper
         return args.toString();
     }
 
+    @Override
     public String getClasspathProviderAttributeValue()
     {
         // return ANT_CLASSPATH_PROVIDER;
@@ -155,6 +156,7 @@ public class SDKHelper extends LaunchHelper
      * @param targetAttribute
      * @return
      */
+    @Override
     public String getNewLaunchConfigurationName()
     {
         StringBuffer buffer = new StringBuffer();
@@ -201,6 +203,7 @@ public class SDKHelper extends LaunchHelper
         this.currentTargets = null;
     }
 
+    @Override
     protected void addUserEntries( RuntimeClasspathModel model ) throws CoreException
     {
         IPath[] antLibs = sdk.getAntLibraries();

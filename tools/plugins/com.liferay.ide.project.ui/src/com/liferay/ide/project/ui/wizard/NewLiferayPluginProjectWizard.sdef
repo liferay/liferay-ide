@@ -32,48 +32,12 @@
             <content>
                 <property-editor>ProjectName</property-editor>
                 <property-editor>DisplayName</property-editor>
-                <spacer>
-                </spacer>
-                <property-editor>UseDefaultLocation</property-editor>
-                <property-editor>Location</property-editor>
-                <separator></separator>
+                <spacer/>
                 <property-editor>
                     <property>ProjectProvider</property>
-                    <action>
-                        <id>UseSdkLocation</id>
-                        <label>Use Eclipse workspace</label>
-                        <type>TOGGLE</type>
-                        <tooltip>Use Eclipse workspace as base for project location.</tooltip>
-                        <image>workspace_obj_16x16.gif</image>
-                    </action>
-                    <action-handler>
-                        <action>UseSdkLocation</action>
-                        <id>UseSdkLocationHandler</id>
-                        <impl>UseSdkLocationAction</impl>
-                    </action-handler>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                 </property-editor>
-                <property-editor>
-                    <visible-when>${ ProjectProvider == 'ant' }</visible-when>
-                    <property>PluginsSDKName</property>
-                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                </property-editor>
-                <property-editor>
-                    <visible-when>${ ProjectProvider == 'ant' }</visible-when>
-                    <property>RuntimeName</property>
-                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
-                    <label>Liferay runtime</label>
-                    <action>
-                        <id>NewLiferayRuntime</id>
-                        <label>New Liferay runtime...</label>
-                        <image>server_new.png</image>
-                    </action>
-                    <action-handler>
-                        <action>NewLiferayRuntime</action>
-                        <id>NewLiferayRuntimeHandler</id>
-                        <impl>NewLiferayRuntimeAction</impl>
-                    </action-handler>
-                </property-editor>
+                <spacer/>
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'maven' }</visible-when>
                     <property>ArtifactVersion</property>
@@ -107,7 +71,15 @@
                         <impl>NewLiferayProfileActionHandler</impl>
                     </action-handler>
                 </property-editor>
-                <separator></separator>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'maven' }</visible-when>
+                    <property>UseDefaultLocation</property>
+                </property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectProvider == 'maven' }</visible-when>
+                    <property>Location</property>
+                </property-editor>   
+                <spacer/>               
                 <property-editor>
                     <action-handler>
                         <action>OpenPluginTypeDescriptionDialog</action>

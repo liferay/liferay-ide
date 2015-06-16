@@ -15,25 +15,20 @@
 
 package com.liferay.ide.project.core.tests;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
-import com.liferay.ide.sdk.core.SDKUtil;
-
-import java.io.File;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
@@ -42,79 +37,42 @@ import org.junit.Test;
 public class NewLiferayWebPluginProjectTests extends ProjectCoreBase
 {
 
+    @AfterClass
+    public static void removePluginsSDK()
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+        for( IProject iProject : projects )
+        {
+            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            {
+                try
+                {
+                    iProject.delete( true, true, new NullProgressMonitor() );
+                }
+                catch( CoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
     protected IPath getLiferayPluginsSdkDir()
     {
         return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0" );
     }
 
+    @Override
     protected IPath getLiferayPluginsSDKZip()
     {
         return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-m5-20150515112305685.zip" );
     }
 
+    @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
         return "liferay-plugins-sdk-7.0/";
-    }
-
-    @Test
-    public void testNewWebAntProjectValidation() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        IPath liferayPluginsSdkDir = super.getLiferayPluginsSdkDir();
-
-        final File liferayPluginsSdkDirFile = liferayPluginsSdkDir.toFile();
-
-        if( !liferayPluginsSdkDirFile.exists() )
-        {
-            final File liferayPluginsSdkZipFile = super.getLiferayPluginsSDKZip().toFile();
-
-            assertEquals(
-                "Expected file to exist: " + liferayPluginsSdkZipFile.getAbsolutePath(), true,
-                liferayPluginsSdkZipFile.exists() );
-
-            liferayPluginsSdkDirFile.mkdirs();
-
-            final String liferayPluginsSdkZipFolder = super.getLiferayPluginsSdkZipFolder();
-
-            if( CoreUtil.isNullOrEmpty( liferayPluginsSdkZipFolder ) )
-            {
-                ZipUtil.unzip( liferayPluginsSdkZipFile, liferayPluginsSdkDirFile );
-            }
-            else
-            {
-                ZipUtil.unzip(
-                    liferayPluginsSdkZipFile, liferayPluginsSdkZipFolder, liferayPluginsSdkDirFile,
-                    new NullProgressMonitor() );
-            }
-        }
-
-        assertEquals( true, liferayPluginsSdkDirFile.exists() );
-
-        SDK sdk = null;
-
-        final SDK existingSdk = SDKManager.getInstance().getSDK( liferayPluginsSdkDir );
-
-        if( existingSdk == null )
-        {
-            sdk = SDKUtil.createSDKFromLocation( liferayPluginsSdkDir );
-        }
-        else
-        {
-            sdk = existingSdk;
-        }
-
-        final String projectName = "test-web-project-sdk";
-
-        final NewLiferayPluginProjectOp op = newProjectOp( projectName );
-
-        op.setPluginsSDKName( sdk.getName() );
-        op.setPluginType( PluginType.web );
-
-        assertEquals(
-            "The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0.0 or greater.",
-            op.getPluginType().validation().message() );
     }
 
     @Test

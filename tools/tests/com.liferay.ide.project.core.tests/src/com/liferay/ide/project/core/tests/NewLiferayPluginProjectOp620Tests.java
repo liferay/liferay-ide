@@ -15,9 +15,15 @@
 
 package com.liferay.ide.project.core.tests;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -26,6 +32,26 @@ import org.junit.Test;
  */
 public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOpBase
 {
+
+    @AfterClass
+    public static void removePluginsSDK()
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+        for( IProject iProject : projects )
+        {
+            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            {
+                try
+                {
+                    iProject.delete( true, true, new NullProgressMonitor() );
+                }
+                catch( CoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     @Override
     protected IPath getLiferayPluginsSdkDir()
@@ -75,6 +101,7 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         return "service-builder PUBLIC \"-//Liferay//DTD Service Builder 6.2.0//EN\" \"http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd";
     }
 
+    @Override
     @Test
     public void testLocationListener() throws Exception
     {
@@ -83,6 +110,7 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         super.testLocationListener();
     }
 
+    @Override
     @Test
     public void testNewJsfRichfacesProjects() throws Exception
     {
@@ -91,6 +119,7 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         super.testNewJsfRichfacesProjects();
     }
 
+    @Override
     @Test
     public void testNewLayoutAntProject() throws Exception
     {
@@ -99,6 +128,7 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         super.testNewLayoutAntProject();
     }
 
+    @Override
     @Test
     public void testNewSDKProjectInSDK() throws Exception
     {
@@ -107,6 +137,7 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         super.testNewSDKProjectInSDK();
     }
 
+    @Override
     @Test
     public void testNewThemeProjects() throws Exception
     {
@@ -115,7 +146,9 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         super.testNewThemeProjects();
     }
 
+    @Override
     @Test
+    @Ignore
     public void testPluginTypeListener() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
@@ -129,13 +162,5 @@ public class NewLiferayPluginProjectOp620Tests extends NewLiferayPluginProjectOp
         if( shouldSkipBundleTests() ) return;
 
         super.testProjectNameValidation( "project-name-validation-620" );
-    }
-
-    @Test
-    public void testUseSdkLocationListener() throws Exception
-    {
-        if( shouldSkipBundleTests() ) return;
-
-        super.testUseSdkLocationListener();
     }
 }

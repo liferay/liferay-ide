@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
@@ -32,18 +33,40 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.ServerCore;
+import org.junit.AfterClass;
 
 /**
  * @author Kuo Zhang
  */
 public class XmlTestsBase extends ProjectCoreBase
 {
+    @AfterClass
+    public static void removePluginsSDK()
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+        for( IProject iProject : projects )
+        {
+            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            {
+                try
+                {
+                    iProject.delete( true, true, new NullProgressMonitor() );
+                }
+                catch( CoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     protected boolean checkMarker( IFile descriptorFile, String markerType, String markerMessage ) throws Exception
     {
         final IMarker[] markers = descriptorFile.findMarkers( markerType, false, IResource.DEPTH_ZERO );
@@ -60,6 +83,7 @@ public class XmlTestsBase extends ProjectCoreBase
         return false;
     }
 
+    @Override
     protected IProject importProject( String path, String bundleId, String projectName ) throws Exception
     {
         final IPath sdkLocation = SDKManager.getInstance().getDefaultSDK().getLocation();

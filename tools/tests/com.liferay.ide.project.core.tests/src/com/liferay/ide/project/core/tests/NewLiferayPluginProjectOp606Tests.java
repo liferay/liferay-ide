@@ -23,7 +23,10 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
@@ -32,6 +35,26 @@ import org.junit.Test;
  */
 public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOpBase
 {
+
+    @AfterClass
+    public static void removePluginsSDK()
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+        for( IProject iProject : projects )
+        {
+            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            {
+                try
+                {
+                    iProject.delete( true, true, new NullProgressMonitor() );
+                }
+                catch( CoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     @Override
     protected IProject checkNewJsfAntProjectIvyFile( IProject jsfProject, String jsfSuite ) throws Exception
@@ -119,6 +142,7 @@ public class NewLiferayPluginProjectOp606Tests extends NewLiferayPluginProjectOp
         // vaadin projets not supported in 6.0.6
     }
 
+    @Override
     @Test
     public void testPluginTypeListener() throws Exception
     {

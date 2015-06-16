@@ -57,10 +57,15 @@ public class LocationValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
+        if ( op().getProjectProvider().content().equals( "ant" ) )
+        {
+            return retval;
+        }
+
         final Path currentProjectLocation = op().getLocation().content( true );
         final String currentProjectName = op().getProjectName().content();
 
-        // Location won't be validated if the UseDefaultLocation has an error. Get the validation of the property might 
+        // Location won't be validated if the UseDefaultLocation has an error. Get the validation of the property might
         // not work as excepted, let's use call the validation service manually.
         if( ! op().getUseDefaultLocation().content( true ) &&
             op().getUseDefaultLocation().service( UseDefaultLocationValidationService.class ).validation().ok() )
@@ -140,6 +145,7 @@ public class LocationValidationService extends ValidationService
     {
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
+            @Override
             protected void handleTypedEvent( final PropertyContentEvent event )
             {
                 refresh();
@@ -147,7 +153,6 @@ public class LocationValidationService extends ValidationService
         };
 
         op().getProjectName().attach( this.listener );
-        op().getPluginsSDKName().attach( this.listener );
         op().getProjectProvider().attach( this.listener );
     }
 

@@ -323,7 +323,7 @@ public class SDK
         return newPath;
     }
 
-    public IPath createNewExtProject( String extName, String extDisplayName, Map<String, String> appServerProperties,
+    public IPath createNewExtProject( String extName, String extDisplayName,
         boolean separateJRE, String workingDir, String baseDir, IProgressMonitor monitor )
     {
         try
@@ -331,8 +331,6 @@ public class SDK
             SDKHelper antHelper = new SDKHelper( this, monitor );
 
             Map<String, String> properties = new HashMap<String, String>();
-
-            properties.putAll( appServerProperties );
 
             properties.put( ISDKConstants.PROPERTY_EXT_NAME, extName );
             properties.put( ISDKConstants.PROPERTY_EXT_DISPLAY_NAME, extDisplayName );
@@ -405,15 +403,13 @@ public class SDK
     }
 
     public IPath createNewLayoutTplProject( String layoutTplName, String layoutTplDisplayName,
-        Map<String, String> appServerProperties, boolean separateJRE, String workingDir, String baseDir, IProgressMonitor monitor )
+        boolean separateJRE, String workingDir, String baseDir, IProgressMonitor monitor )
     {
         SDKHelper antHelper = new SDKHelper( this, monitor );
 
         try
         {
             Map<String, String> properties = new HashMap<String, String>();
-
-            properties.putAll( appServerProperties );
 
             properties.put( ISDKConstants.PROPERTY_LAYOUTTPL_NAME, layoutTplName );
             properties.put( ISDKConstants.PROPERTY_LAYOUTTPL_DISPLAY_NAME, layoutTplDisplayName );
@@ -600,7 +596,12 @@ public class SDK
 
         for( String antLib : ISDKConstants.ANT_LIBRARIES )
         {
-            antLibs.add( getLocation().append( antLib ) );
+            final IPath antLibPath = getLocation().append( antLib );
+
+            if ( antLibPath.toFile().exists() )
+            {
+                antLibs.add( antLibPath );
+            }
         }
 
         return antLibs.toArray( new IPath[0] );

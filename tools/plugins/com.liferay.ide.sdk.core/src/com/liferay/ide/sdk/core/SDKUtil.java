@@ -296,4 +296,17 @@ public class SDKUtil
             SDKCorePlugin.logError( "Unable to persist sdk name to project " + project, e );  //$NON-NLS-1$
         }
     }
+
+    public static SDK getWorkspaceSDK() throws CoreException
+    {
+        SDK sdk = null;
+        IProject workspaceSDKProject = getWorkspaceSDKProject();
+
+        if (workspaceSDKProject != null)
+        {
+            sdk = SDKUtil.createSDKFromLocation( workspaceSDKProject.getLocation() );
+        }
+
+        return sdk;
+    }
 }

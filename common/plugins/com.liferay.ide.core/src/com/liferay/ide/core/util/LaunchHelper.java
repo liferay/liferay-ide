@@ -15,6 +15,8 @@
 
 package com.liferay.ide.core.util;
 
+import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,7 @@ import org.eclipse.jdt.launching.JavaRuntime;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( { "restriction" } )
 public class LaunchHelper implements IDebugEventSetListener
@@ -136,6 +139,7 @@ public class LaunchHelper implements IDebugEventSetListener
         return mode;
     }
 
+    @Override
     public void handleDebugEvents( DebugEvent[] events )
     {
         for( DebugEvent event : events )
@@ -357,7 +361,7 @@ public class LaunchHelper implements IDebugEventSetListener
             }
             else if( userEntry instanceof IClasspathEntry )
             {
-                entry = new RuntimeClasspathEntry( userEntry );
+                entry = new LiferayRuntimeClasspathEntry(new RuntimeClasspathEntry( userEntry ) );
             }
 
             if( entry != null )
@@ -368,7 +372,7 @@ public class LaunchHelper implements IDebugEventSetListener
             }
         }
 
-        return (IRuntimeClasspathEntry[]) entries.toArray( new IRuntimeClasspathEntry[entries.size()] );
+        return entries.toArray( new IRuntimeClasspathEntry[entries.size()] );
     }
 
     protected String getClasspathProviderAttributeValue()

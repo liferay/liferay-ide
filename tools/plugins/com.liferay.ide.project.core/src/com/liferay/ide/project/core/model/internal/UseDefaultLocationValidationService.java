@@ -37,6 +37,7 @@ public class UseDefaultLocationValidationService extends ValidationService
 
         this.listener = new FilteredListener<Event>()
         {
+            @Override
             protected void handleTypedEvent( Event event )
             {
                 refresh();
@@ -46,7 +47,6 @@ public class UseDefaultLocationValidationService extends ValidationService
         final NewLiferayPluginProjectOp op = op();
 
         op.getProjectProvider().attach( this.listener );
-        op.getPluginsSDKName().attach( this.listener );
         op.getProjectName().attach( this.listener );
     }
 
@@ -76,7 +76,6 @@ public class UseDefaultLocationValidationService extends ValidationService
         final NewLiferayPluginProjectOp op = op();
 
         op.getProjectProvider().detach( this.listener );
-        op.getPluginsSDKName().detach( this.listener );
         op.getProjectName().detach( this.listener );
     }
 

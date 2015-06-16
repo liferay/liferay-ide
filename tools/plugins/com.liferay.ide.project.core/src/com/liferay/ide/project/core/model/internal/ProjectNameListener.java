@@ -18,8 +18,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.sdk.core.SDKUtil;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
@@ -62,11 +63,17 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
         {
             Path newLocationBase = null;
 
-            if( providerShortName.equals( "ant" ) && op.getUseSdkLocation().content( true ) )
+            if( providerShortName.equals( "ant" ) )
             {
-                String pluginsSdk = op.getPluginsSDKName().content( true );
+                SDK sdk = null;
 
-                SDK sdk = SDKManager.getInstance().getSDK( pluginsSdk );
+                try
+                {
+                    sdk = SDKUtil.getWorkspaceSDK();
+                }
+                catch( CoreException e )
+                {
+                }
 
                 if( sdk != null )
                 {
@@ -94,7 +101,10 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
                             newLocationBase = sdkLocation.append( "webs" ); //$NON-NLS-1$
                             break;
                     }
-
+                }
+                else
+                {
+                    return;
                 }
             }
             else

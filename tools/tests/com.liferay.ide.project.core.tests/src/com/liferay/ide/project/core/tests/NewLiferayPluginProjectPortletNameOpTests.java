@@ -21,11 +21,16 @@ import static org.junit.Assert.assertNotNull;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 /**
@@ -33,6 +38,44 @@ import org.junit.Test;
  */
 public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
 {
+    @Override
+    protected IPath getLiferayPluginsSdkDir()
+    {
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0" );
+    }
+
+    @Override
+    protected IPath getLiferayPluginsSDKZip()
+    {
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-m5-20150515112305685.zip" );
+    }
+
+    @Override
+    protected String getLiferayPluginsSdkZipFolder()
+    {
+        return "liferay-plugins-sdk-7.0/";
+    }
+
+    @AfterClass
+    public static void removePluginsSDK()
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+        for( IProject iProject : projects )
+        {
+            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            {
+                try
+                {
+                    iProject.delete( true, true, new NullProgressMonitor() );
+                }
+                catch( CoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     protected IProject createNewJSFPortletProjectCustomPortletName(
         final String  jsfSuite, String suffix, String customPortletName ) throws Exception
     {

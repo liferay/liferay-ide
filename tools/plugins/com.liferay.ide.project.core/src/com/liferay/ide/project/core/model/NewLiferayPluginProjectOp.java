@@ -30,25 +30,17 @@ import com.liferay.ide.project.core.model.internal.LocationValidationService;
 import com.liferay.ide.project.core.model.internal.PluginTypeListener;
 import com.liferay.ide.project.core.model.internal.PluginTypePossibleValuesService;
 import com.liferay.ide.project.core.model.internal.PluginTypeValidationService;
-import com.liferay.ide.project.core.model.internal.PluginsSDKNameDefaultValueService;
-import com.liferay.ide.project.core.model.internal.PluginsSDKNameListener;
-import com.liferay.ide.project.core.model.internal.PluginsSDKNamePossibleValuesService;
-import com.liferay.ide.project.core.model.internal.PluginsSDKNameValidationService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkAdvancedPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkPossibleValuesService;
-import com.liferay.ide.project.core.model.internal.PortletFrameworkValidationService;
 import com.liferay.ide.project.core.model.internal.ProfileIdPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.ProjectNameListener;
 import com.liferay.ide.project.core.model.internal.ProjectNameValidationService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderDefaultValueService;
 import com.liferay.ide.project.core.model.internal.ProjectProviderListener;
 import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
-import com.liferay.ide.project.core.model.internal.ProjectProviderValidationService;
-import com.liferay.ide.project.core.model.internal.RuntimeNameValidationService;
 import com.liferay.ide.project.core.model.internal.ThemeFrameworkValidationService;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationListener;
 import com.liferay.ide.project.core.model.internal.UseDefaultLocationValidationService;
-import com.liferay.ide.project.core.model.internal.UseSdkLocationListener;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -81,7 +73,7 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
  * @author Kuo Zhang
  * @author Tao Tao
  */
-public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferayRuntime
+public interface NewLiferayPluginProjectOp extends ExecutableElement
 {
     ElementType TYPE = new ElementType( NewLiferayPluginProjectOp.class );
 
@@ -119,6 +111,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
 
     @Type( base = Boolean.class )
     @DefaultValue( text = "true" )
+    @Enablement( expr = "${ ProjectProvider != 'ant' }" )
     @Label( standard = "use default location" )
     @Listeners( UseDefaultLocationListener.class )
     @Service( impl = UseDefaultLocationValidationService.class )
@@ -133,7 +126,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
 
     @Type( base = Path.class )
     @AbsolutePath
-    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
+    @Enablement( expr = "${ UseDefaultLocation == 'false' && ProjectProvider != 'ant' }" )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "location" )
     @Service( impl = LocationValidationService.class )
@@ -155,8 +148,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
         value=
         {
             @Service( impl = ProjectProviderPossibleValuesService.class ),
-            @Service( impl = ProjectProviderDefaultValueService.class ),
-            @Service( impl = ProjectProviderValidationService.class )
+            @Service( impl = ProjectProviderDefaultValueService.class )
         }
     )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$
@@ -165,7 +157,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     void setProjectProvider( String value );
     void setProjectProvider( NewLiferayProjectProvider value );
 
-
+/*
     // *** UseSDKLocation ***
 
     @Type( base = Boolean.class )
@@ -203,7 +195,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     @Service( impl = RuntimeNameValidationService.class )
     ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME ); //$NON-NLS-1$
 
-
+*/
     // *** PluginType ***
 
     @Type( base = PluginType.class )
@@ -252,14 +244,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
     @Type( base = IPortletFramework.class )
     @Label( standard = "portlet framework" )
     @DefaultValue( text = "mvc" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = PortletFrameworkPossibleValuesService.class ),
-            @Service( impl = PortletFrameworkValidationService.class )
-        }
-    )
+    @Service( impl = PortletFrameworkPossibleValuesService.class )
     ValueProperty PROP_PORTLET_FRAMEWORK = new ValueProperty( TYPE, "PortletFramework" ); //$NON-NLS-1$
 
     Value<IPortletFramework> getPortletFramework();
@@ -390,6 +375,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement, HasLiferay
 
     // *** Method: execute ***
 
+    @Override
     @DelegateImplementation( NewLiferayPluginProjectOpMethods.class )
     Status execute( ProgressMonitor monitor );
 }

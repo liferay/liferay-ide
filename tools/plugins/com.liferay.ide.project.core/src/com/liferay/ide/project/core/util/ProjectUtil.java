@@ -337,7 +337,8 @@ public class ProjectUtil
 
     public static IProject createNewSDKProject( final ProjectRecord projectRecord,
                                                 final IPath sdkLocation,
-                                                IProgressMonitor monitor )
+                                                IProgressMonitor monitor,
+                                                NewLiferayPluginProjectOp op)
         throws CoreException
     {
         final IDataModel newProjectDataModel =
@@ -419,9 +420,30 @@ public class ProjectUtil
 
         String pluginType = null;
 
-        pluginType = guessPluginType( fpwc );
+        if( op != null )
+        {
+            pluginType = op.getPluginType().content().name();
+
+            if( PluginType.theme.name().equals( pluginType ) )
+            {
+                newProjectDataModel.setProperty(
+                    IPluginProjectDataModelProperties.THEME_PARENT, op.getThemeParent().content( true ) );
+                newProjectDataModel.setProperty(
+                    IPluginProjectDataModelProperties.THEME_TEMPLATE_FRAMEWORK, op.getThemeFramework().content( true ) );
+            }
+        }
+        else
+        {
+            pluginType = guessPluginType( fpwc );
+        }
 
         SDKPluginFacetUtil.configureProjectAsSDKProject( fpwc, pluginType, sdkLocation.toPortableString(), projectRecord );
+
+        if( op != null && PluginType.portlet.name().equals( pluginType ) )
+        {
+            IPortletFramework portletFramework = op.getPortletFramework().content( true );
+            portletFramework.configureNewProject( newProjectDataModel, fpwc );
+        }
 
         // if project is located in natural workspace location then don't need to set a project location
         if( CoreUtil.getWorkspaceRoot().getLocation().append( projectDirName ).equals( projectLocation ) )
@@ -463,7 +485,7 @@ public class ProjectUtil
 
         if( op != null )
         {
-            if( op.getUseDefaultLocation().content( true ) && ! op.getUseSdkLocation().content( true ) )
+            if( op.getUseDefaultLocation().content( true ) )
             {
                 // using Eclipse workspace location
                 nestedModel.setBooleanProperty( IPluginProjectDataModelProperties.USE_DEFAULT_LOCATION, true );
