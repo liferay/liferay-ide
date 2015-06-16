@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jst.j2ee.common.ParamValue;
@@ -190,11 +191,31 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
 
         if( CREATE_JSPS_FOLDER.equals( propertyName ) )
         {
+            if( !getBooleanProperty( CREATE_JSPS ) )
+            {
+                return Status.OK_STATUS;
+            }
+            
             String jspsFolder = getStringProperty( propertyName );
+
+            if( CoreUtil.isNullOrEmpty( jspsFolder ) )
+            {
+                return PortletCore.createErrorStatus( Msgs.jspFolderNotEmpty );
+            }
 
             if( !jspsFolder.startsWith( "/WEB-INF/" ) && !jspsFolder.startsWith( "WEB-INF/" ) )
             {
                 return PortletCore.createErrorStatus( Msgs.jsfFolderValid );
+            }
+
+            IFolder viewFolder = CoreUtil.getDefaultDocrootFolder( getProject() ).getFolder( jspsFolder );
+
+            if( viewFolder.exists() )
+            {
+                if( viewFolder.getFile( "view.xhtml" ).exists() )
+                {
+                    return PortletCore.createWarningStatus( Msgs.viewFileAlreadyExists );
+                }
             }
         }
 
@@ -203,6 +224,8 @@ public class NewJSFPortletClassDataModelProvider extends NewPortletClassDataMode
 
     private static class Msgs extends NLS
     {
+        public static String jspFolderNotEmpty;
+        public static String viewFileAlreadyExists;
         public static String duplicatePortletName;
         public static String jsfFolderValid;
         public static String jsfPortletClassValid;
