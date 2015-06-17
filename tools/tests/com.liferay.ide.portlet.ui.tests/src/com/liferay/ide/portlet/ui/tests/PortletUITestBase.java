@@ -15,18 +15,27 @@
 
 package com.liferay.ide.portlet.ui.tests;
 
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
+import static com.liferay.ide.ui.tests.UITestsUtils.getDOMModel;
+import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.wst.common.frameworks.datamodel.DataModelPropertyDescriptor;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 /**
  * @author Li Lu
  */
+@SuppressWarnings( { "restriction" } )
 public class PortletUITestBase extends ProjectCoreBase
 {
 
@@ -76,5 +85,40 @@ public class PortletUITestBase extends ProjectCoreBase
         op.setPortletFramework( portletFramework );
         op.setIncludeSampleCode( false );
         return createAntProject( op );
+    }
+
+    public boolean checkFileHasContent( IFile file, String elementName, String attrName, String matchString )
+        throws Exception
+    {
+        String contents[] = getElementContent( file, elementName, attrName );
+        for( String content : contents )
+        {
+            if( content.equals( matchString ) )
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public static String[] getElementContent( IFile file, String elementName, String attrName ) throws Exception
+    {
+        final IDOMModel domModel = getDOMModel( file, true );
+        final IDOMDocument document = domModel.getDocument();
+        final NodeList elements = document.getElementsByTagName( elementName );
+        assertNotNull( elements );
+
+        String[] contents = new String[elements.getLength()];
+        for( int i = 0; i < elements.getLength(); i++ )
+        {
+            Element element = (Element) elements.item( i );
+
+            if( attrName != null && element.hasAttribute( attrName ) )
+                contents[i] = element.getAttribute( attrName );
+            else
+                contents[i] = element.getFirstChild().getNodeValue();
+        }
+        return contents;
     }
 }
