@@ -46,7 +46,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -62,7 +61,6 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
-import org.junit.AfterClass;
 import org.junit.Before;
 
 /**
@@ -73,26 +71,18 @@ import org.junit.Before;
 public class ProjectCoreBase extends ServerCoreBase
 {
 
-    @AfterClass
-    public static void removePluginsSDK()
+    private static final String bundleId = "com.liferay.ide.project.core.tests";
+
+    public static void deleteAllWorkspaceProjects() throws Exception
     {
-        IProject[] projects = CoreUtil.getAllProjects();
-        for( IProject iProject : projects )
+        for( IProject project : CoreUtil.getAllProjects() )
         {
-            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            if ( project != null && project.isAccessible() && project.exists())
             {
-                try
-                {
-                    iProject.delete( true, true, new NullProgressMonitor() );
-                }
-                catch( CoreException e )
-                {
-                    e.printStackTrace();
-                }
+                project.delete( true, true, new NullProgressMonitor() );
             }
         }
     }
-    private static final String bundleId = "com.liferay.ide.project.core.tests";
 
     @SuppressWarnings( "restriction" )
     protected void waitForBuildAndValidation() throws Exception

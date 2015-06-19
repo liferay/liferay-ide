@@ -22,7 +22,6 @@ import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectRecord;
@@ -63,23 +62,9 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
 {
 
     @AfterClass
-    public static void removePluginsSDK()
+    public static void removePluginsSDK() throws Exception
     {
-        IProject[] projects = CoreUtil.getAllProjects();
-        for( IProject iProject : projects )
-        {
-            if ( iProject != null && iProject.isAccessible() && iProject.exists())
-            {
-                try
-                {
-                    iProject.delete( true, true, new NullProgressMonitor() );
-                }
-                catch( Exception e )
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
+        deleteAllWorkspaceProjects();
     }
 
     /*

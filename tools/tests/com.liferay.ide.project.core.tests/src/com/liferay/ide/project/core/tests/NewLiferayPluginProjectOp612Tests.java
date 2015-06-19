@@ -15,13 +15,9 @@
 
 package com.liferay.ide.project.core.tests;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.AfterClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,23 +30,9 @@ public class NewLiferayPluginProjectOp612Tests extends NewLiferayPluginProjectOp
 {
 
     @AfterClass
-    public static void removePluginsSDK()
+    public static void removePluginsSDK() throws Exception
     {
-        IProject[] projects = CoreUtil.getAllProjects();
-        for( IProject iProject : projects )
-        {
-            if ( iProject != null && iProject.isAccessible() && iProject.exists())
-            {
-                try
-                {
-                    iProject.delete( true, true, new NullProgressMonitor() );
-                }
-                catch( CoreException e )
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
+        deleteAllWorkspaceProjects();
 
         IPath sdkPath = ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.2" );
 
