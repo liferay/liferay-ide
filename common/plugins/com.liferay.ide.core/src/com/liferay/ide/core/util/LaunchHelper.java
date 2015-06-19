@@ -33,7 +33,6 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.internal.launching.RuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -43,7 +42,6 @@ import org.eclipse.jdt.launching.JavaRuntime;
  * @author Greg Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( { "restriction" } )
 public class LaunchHelper implements IDebugEventSetListener
 {
 
@@ -361,7 +359,7 @@ public class LaunchHelper implements IDebugEventSetListener
             }
             else if( userEntry instanceof IClasspathEntry )
             {
-                entry = new LiferayRuntimeClasspathEntry(new RuntimeClasspathEntry( userEntry ) );
+                entry = new LiferayRuntimeClasspathEntry( userEntry );
             }
 
             if( entry != null )
