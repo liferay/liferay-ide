@@ -107,6 +107,10 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     void setDisplayName( String value );
 
 
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
+    ValueProperty PROP_HAS_WORKSPACE_SDK = new ValueProperty( TYPE, "HasWorkspaceSDK" ); //$NON-NLS-1$
+
     // *** UseDefaultLocation ***
 
     @Type( base = Boolean.class )
