@@ -157,45 +157,6 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     void setProjectProvider( String value );
     void setProjectProvider( NewLiferayProjectProvider value );
 
-/*
-    // *** UseSDKLocation ***
-
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "true" )
-    @Label( standard = "use sdk location" )
-    @Listeners( UseSdkLocationListener.class )
-    ValueProperty PROP_USE_SDK_LOCATION = new ValueProperty( TYPE, "UseSdkLocation" ); //$NON-NLS-1$
-
-    Value<Boolean> getUseSdkLocation();
-    void setUseSdkLocation( String value );
-    void setUseSdkLocation( Boolean value );
-
-
-    // *** PluginsSDKName ***
-
-    @Label( standard = "Plugins SDK" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = PluginsSDKNamePossibleValuesService.class ),
-            @Service( impl = PluginsSDKNameDefaultValueService.class ),
-            @Service( impl = PluginsSDKNameValidationService.class )
-        }
-    )
-    @Listeners( PluginsSDKNameListener.class )
-    ValueProperty PROP_PLUGINS_SDK_NAME = new ValueProperty( TYPE, "PluginsSDKName" ); //$NON-NLS-1$
-
-    Value<String> getPluginsSDKName();
-    void setPluginsSDKName( String value );
-
-
-    // *** RuntimeName ***
-
-    @Service( impl = RuntimeNameValidationService.class )
-    ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME ); //$NON-NLS-1$
-
-*/
     // *** PluginType ***
 
     @Type( base = PluginType.class )
