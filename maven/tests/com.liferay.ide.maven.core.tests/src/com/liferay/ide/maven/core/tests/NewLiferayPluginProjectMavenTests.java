@@ -42,6 +42,7 @@ import org.eclipse.sapphire.EnablementService;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.ValidationService;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -252,6 +253,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testPortletFrameworkValidation() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
@@ -422,8 +424,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         {
             op.setProjectProvider( "ant" );
 
-            assertEquals( true, op.getUseDefaultLocation().service( EnablementService.class ).enablement() );
-            assertEquals( true, op.getUseDefaultLocation().enabled() );
+            assertEquals( false, op.getUseDefaultLocation().service( EnablementService.class ).enablement() );
+            assertEquals( false, op.getUseDefaultLocation().enabled() );
         }
     }
 

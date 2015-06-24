@@ -50,6 +50,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.wst.server.core.IRuntime;
 import org.osgi.framework.Version;
 
@@ -88,7 +89,17 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         final String displayName = op.getDisplayName().content( true );
         final boolean separateJRE = true;
 
-        final SDK sdk = SDKUtil.getWorkspaceSDK();
+        SDK sdk = SDKUtil.getWorkspaceSDK();
+
+        if ( sdk == null )
+        {
+            sdk = SDKUtil.createSDKFromLocation( PathBridge.create( op.getSdkLocation().content() ) );
+        }
+
+        if ( sdk == null || !sdk.validate().isOK() )
+        {
+            throw new CoreException( ProjectCore.createErrorStatus( "sdk is not set or setting not correct." ) );
+        }
 
         // workingDir should always be the directory of the type of plugin /sdk/portlets/ for a portlet, etc
         String workingDir = null;

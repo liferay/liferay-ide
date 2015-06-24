@@ -23,10 +23,13 @@ import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
@@ -125,9 +128,23 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
             }
         }
 
+        try
+        {
+            SDK sdk = SDKUtil.getWorkspaceSDK();
+
+            if ( sdk != null && sdk.validate().isOK() )
+            {
+                return Arrays.copyOf( wizardPages, wizardPages.length-1 );
+            }
+        }
+        catch( CoreException e )
+        {
+        }
+
         return wizardPages;
     }
 
+    @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
     }
@@ -138,6 +155,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
         // open the "final" perspective
         final IConfigurationElement element = new DelegateConfigurationElement( null )
         {
+            @Override
             public String getAttribute( String aName )
             {
                 if( aName.equals( "finalPerspective" ) )
@@ -198,6 +216,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
         {
             new WorkspaceJob( "Configuring project with Ivy dependencies" ) //$NON-NLS-1$
             {
+                @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                 {
                     try
@@ -257,6 +276,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
             {
                 UIUtil.async( new Runnable()
                 {
+                    @Override
                     public void run()
                     {
                         try
@@ -338,6 +358,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                     viewer.refresh( true );
                 }
 
+                @Override
                 public void run()
                 {
                     refreshProjectExplorer();

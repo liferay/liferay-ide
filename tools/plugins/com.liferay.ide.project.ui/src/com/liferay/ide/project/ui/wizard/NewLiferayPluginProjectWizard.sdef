@@ -223,25 +223,9 @@
         </page>
         <page>
             <content>
-                <group>
-                    <content>
-                        <property-editor>
-                            <hint>
-                                <name>factory</name>
-                                <value>PortletFrameworkPropertyEditorPresentationFactory</value>
-                            </hint>
-                            <hint>
-                                <name>possible.values.aux.text.provider</name>
-                                <value>com.liferay.ide.project.ui.wizard.PortletFrameworkPropertyAuxTextProvider</value>
-                            </hint>
-                            <property>PortletFrameworkAdvanced</property>
-                            <show-label>false</show-label>
-                        </property-editor>
-                    </content>
-                    <label>JSF Component Suite</label>
-                </group>
+                <property-editor>SdkLocation</property-editor>
             </content>
-            <visible-when>${HasWorkspaceSDK == 'true' &amp;&amp; ProjectProvider == 'ant'}</visible-when>
+            <visible-when>${HasWorkspaceSDK == 'false' &amp;&amp; ProjectProvider == 'ant'}</visible-when>
             <id>LiferayPluginSDKWizardPage</id>
             <label>Liferay Plugins SDK Setting Page</label>
             <description>Choose Plugins SDK and Open in Workspace</description>
