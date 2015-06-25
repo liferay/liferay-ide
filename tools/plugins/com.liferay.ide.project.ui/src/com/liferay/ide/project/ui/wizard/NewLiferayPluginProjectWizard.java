@@ -128,6 +128,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
         return wizardPages;
     }
 
+    @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
     }
@@ -138,6 +139,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
         // open the "final" perspective
         final IConfigurationElement element = new DelegateConfigurationElement( null )
         {
+            @Override
             public String getAttribute( String aName )
             {
                 if( aName.equals( "finalPerspective" ) )
@@ -198,6 +200,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
         {
             new WorkspaceJob( "Configuring project with Ivy dependencies" ) //$NON-NLS-1$
             {
+                @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                 {
                     try
@@ -257,6 +260,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
             {
                 UIUtil.async( new Runnable()
                 {
+                    @Override
                     public void run()
                     {
                         try
@@ -338,6 +342,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                     viewer.refresh( true );
                 }
 
+                @Override
                 public void run()
                 {
                     refreshProjectExplorer();

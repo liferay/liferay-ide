@@ -221,6 +221,18 @@
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
         </page>
+        <page>
+            <content>
+                <property-editor>SdkLocation</property-editor>
+            </content>
+            <visible-when>${HasWorkspaceSDK == 'false' &amp;&amp; ProjectProvider == 'ant'}</visible-when>
+            <id>LiferayPluginSDKWizardPage</id>
+            <label>Liferay Plugins SDK Setting Page</label>
+            <description>Choose Plugins SDK and Open in Workspace</description>
+            <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
+        </page>        
+        
         <image>NewLiferayPluginProjectWizard.png</image>
     </wizard>
     <dialog>
