@@ -23,13 +23,10 @@ import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.ant.internal.ui.model.AntProjectNode;
@@ -126,19 +123,6 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
                 wizardPage.setMessage( "Please enter a project name.", SapphireWizardPage.NONE ); //$NON-NLS-1$
                 firstErrorMessageRemoved = true;
             }
-        }
-
-        try
-        {
-            SDK sdk = SDKUtil.getWorkspaceSDK();
-
-            if ( sdk != null && sdk.validate().isOK() )
-            {
-                return Arrays.copyOf( wizardPages, wizardPages.length-1 );
-            }
-        }
-        catch( CoreException e )
-        {
         }
 
         return wizardPages;

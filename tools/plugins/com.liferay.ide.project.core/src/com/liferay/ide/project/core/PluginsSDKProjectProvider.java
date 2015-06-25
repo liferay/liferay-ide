@@ -94,11 +94,18 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         if ( sdk == null )
         {
             sdk = SDKUtil.createSDKFromLocation( PathBridge.create( op.getSdkLocation().content() ) );
+
+            if ( sdk == null )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( "Can't get correct sdk." ) );
+            }
         }
 
-        if ( sdk == null || !sdk.validate().isOK() )
+        IStatus sdkStatus = sdk.validate();
+
+        if ( !sdkStatus.isOK() )
         {
-            throw new CoreException( ProjectCore.createErrorStatus( "sdk is not set or setting not correct." ) );
+            throw new CoreException( sdkStatus );
         }
 
         // workingDir should always be the directory of the type of plugin /sdk/portlets/ for a portlet, etc

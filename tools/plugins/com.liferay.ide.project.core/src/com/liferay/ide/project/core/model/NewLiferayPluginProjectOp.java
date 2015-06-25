@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.model.internal.CreateNewPortletDefaultValueS
 import com.liferay.ide.project.core.model.internal.DisplayNameDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
+import com.liferay.ide.project.core.model.internal.HasWorkspaceSdkDefaultValueService;
 import com.liferay.ide.project.core.model.internal.IncludeSampleCodeDefaultValueService;
 import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.model.internal.LocationValidationService;
@@ -110,7 +111,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
 
 
     @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
+    @Service( impl = HasWorkspaceSdkDefaultValueService.class )
     ValueProperty PROP_HAS_WORKSPACE_SDK = new ValueProperty( TYPE, "HasWorkspaceSDK" ); //$NON-NLS-1$
 
 
