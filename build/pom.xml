@@ -29,7 +29,7 @@
                 <module>../tools</module>
                 <module>../jsdt</module>
                 <module>../maven</module>
-                <module>../gradle</module>
+                <!--<module>../gradle</module>-->
                 <module>com.liferay.ide-repository</module>
                 <module>com.liferay.ide.testing-repository</module>
             </modules>
@@ -46,8 +46,8 @@
                 <module>../jsdt/features</module>
                 <module>../maven/plugins</module>
                 <module>../maven/features</module>
-                <module>../gradle/plugins</module>
-                <module>../gradle/features</module>
+                <!--<module>../gradle/plugins</module>
+                <module>../gradle/features</module>-->
                 <module>com.liferay.ide-repository</module>
             </modules>
         </profile>

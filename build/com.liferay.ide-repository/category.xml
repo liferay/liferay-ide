@@ -9,9 +9,9 @@
     <feature id="com.liferay.ide.maven" version="0.0.0">
         <category name="liferay-ide" />
     </feature>
-    <feature id="com.liferay.ide.gradle" version="0.0.0">
+    <!--feature id="com.liferay.ide.gradle" version="0.0.0">
         <category name="liferay-ide" />
-    </feature>
+    </feature-->
 
     <bundle id="org.slf4j.api" version="0.0.0"/>
 
