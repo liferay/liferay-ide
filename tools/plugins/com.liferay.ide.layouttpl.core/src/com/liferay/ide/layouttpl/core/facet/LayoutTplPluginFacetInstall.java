@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.PluginsSDKBundleProject;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.facet.PluginFacetInstall;
 import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,7 +190,14 @@ public class LayoutTplPluginFacetInstall extends PluginFacetInstall
     @Override
     protected boolean shouldInstallPluginLibraryDelegate()
     {
-        return true;
+        if (SDKUtil.isSDKProject( project ))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }

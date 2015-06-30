@@ -163,7 +163,7 @@
             class="com.liferay.ide.project.ui.wizard.SDKProjectImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.importSDKProjectWizard.30"
-            name="Import Liferay PluginsSDK Project">
+            name="Import Liferay Plugins SDK Project">
          <description>
             %import.projects.sdk.wizard.description
          </description>
