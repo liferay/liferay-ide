@@ -99,6 +99,35 @@
    </extension>
 
    <extension
+         point="org.eclipse.jst.common.project.facet.core.libraryProviders">
+      <provider
+            id="com.liferay.ide.eclipse.plugin.layouttpl.libraryProvider">
+         <label>
+            Liferay layouttpl plugin library
+         </label>
+         <enablement>
+            <with
+                  variable="requestingProjectFacet">
+               <test
+                     forcePluginActivation="true"
+                     property="org.eclipse.wst.common.project.facet.core.projectFacet"
+                     value="liferay.layouttpl">
+               </test>
+            </with>
+         </enablement>
+         <action
+               type="INSTALL">
+            <operation
+                  class="com.liferay.ide.project.core.library.SDKClasspathContainerInstallOperation">
+            </operation>
+            <config
+                  class="org.eclipse.jst.common.project.facet.core.libprov.LibraryProviderOperationConfig">
+            </config>
+         </action>
+      </provider>
+   </extension>
+
+   <extension
          point="org.eclipse.core.contenttype.contentTypes">
       <file-association
             content-type="org.eclipse.wst.html.core.htmlsource"
