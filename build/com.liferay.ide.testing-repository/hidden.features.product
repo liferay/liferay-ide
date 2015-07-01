@@ -33,7 +33,7 @@
       <feature id="com.liferay.ide.eclipse.tools" />
       <feature id="com.liferay.ide.alloy" />
       <feature id="com.liferay.ide.maven" />
-      <feature id="com.liferay.ide.gradle" />
+      <!--feature id="com.liferay.ide.gradle" /-->
    </features>
 
    <configurations>
