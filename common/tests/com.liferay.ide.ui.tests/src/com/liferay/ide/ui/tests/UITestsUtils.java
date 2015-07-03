@@ -21,6 +21,8 @@ import static org.junit.Assert.fail;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ReflectionUtil;
 import com.liferay.ide.core.util.StringUtil;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKManager;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -89,6 +91,12 @@ public class UITestsUtils
 
         for( IProject proj : projects )
         {
+            SDK sdk = SDKManager.getInstance().getDefaultSDK();
+            
+            if(  proj.getName().equals( sdk.getName() ) )
+            {
+                return;
+            }
             if( !proj.getName().equals( project.getName() ) )
             {
                 proj.delete( true, true, new NullProgressMonitor() );

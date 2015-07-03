@@ -36,8 +36,8 @@
         <tycho-extras-version>0.20.0</tycho-extras-version>
         <eclipse-site>http://download.eclipse.org/releases/luna/</eclipse-site>
         <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-project-update-site>
-        <liferay-ide-site>http://build-1:9090/userContent/liferay-ide/latest/testing-repository/</liferay-ide-site>
-        <liferay-ide-testing-site>http://build-1:9090/userContent/liferay-ide/latest/repository</liferay-ide-testing-site>
+        <liferay-ide-site>http://build-1:9090/userContent/liferay-ide/latest/repository/</liferay-ide-site>
+        <liferay-ide-testing-site>http://build-1:9090/userContent/liferay-ide/latest/testing-repository/</liferay-ide-testing-site>
     </properties>
 
     <build>
@@ -130,6 +130,11 @@
                                 </dependency>
                             </dependencies>
                         </configuration>
+                        <executions>
+                            <execution>
+                                <goals><goal>test</goal></goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
