@@ -104,6 +104,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
         SWTUtil.createButton( this, Msgs.browse ).addSelectionListener( new SelectionAdapter()
         {
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 final DirectoryDialog dd = new DirectoryDialog( getShell() );
@@ -126,6 +127,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         jreCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         jreCombo.addSelectionListener( new SelectionAdapter()
         {
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 int sel = jreCombo.getSelectionIndex();
@@ -134,7 +136,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
                 if( sel > 0 )
                 {
-                    vmInstall = (IVMInstall) installedJREs.get( sel - 1 );
+                    vmInstall = installedJREs.get( sel - 1 );
                 }
 
                 PortalRuntime portalRuntime = getPortalRuntime();
@@ -151,6 +153,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         jreButton = SWTUtil.createButton( this, Msgs.installedJREs );
         jreButton.addSelectionListener( new SelectionAdapter()
         {
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 if( SWTUtil.showPreferencePage(
@@ -232,35 +235,6 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
             getRuntime().getLocation().toOSString() : StringPool.EMPTY );
 
         updateFields();
-
-        PortalRuntime runtime = getPortalRuntime();
-
-        // set selection
-        if (runtime.isUsingDefaultJRE())
-        {
-            jreCombo.select(0);
-        }
-        else
-        {
-            boolean found = false;
-            int size = installedJREs.size();
-
-            for (int i = 0; i < size; i++)
-            {
-                IVMInstall vmInstall = (IVMInstall) installedJREs.get(i);
-
-                if (vmInstall.equals(runtime.getVMInstall()))
-                {
-                    jreCombo.select(i + 1);
-                    found = true;
-                }
-            }
-
-            if (!found)
-            {
-                jreCombo.select(0);
-            }
-        }
     }
 
     @Override
@@ -383,7 +357,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
         for( int i = 0; i < size; i++ )
         {
-            IVMInstall vmInstall = (IVMInstall) installedJREs.get( i );
+            IVMInstall vmInstall = installedJREs.get( i );
 
             jreNames[i + 1] = vmInstall.getName();
 
