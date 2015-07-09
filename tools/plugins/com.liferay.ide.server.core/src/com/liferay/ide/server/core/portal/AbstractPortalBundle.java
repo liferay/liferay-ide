@@ -183,7 +183,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
     @Override
     public Properties getPortletEntryCategories()
     {
-        return ServerUtil.getPortletCategories( getAppServerPortalDir() );
+        return ServerUtil.getEntryCategories( getAppServerPortalDir(), getVersion() );
     }
 
     private String getConfigInfoFromCache( String configType, IPath portalDir )
