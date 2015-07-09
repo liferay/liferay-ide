@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.model.internal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
+import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 
@@ -50,9 +51,12 @@ public class ProjectNameValidationService extends ValidationService
 
         listener = new FilteredListener<PropertyContentEvent>()
         {
+            @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
-                if( ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_FINAL_PROJECT_NAME ) )
+                if( ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_FINAL_PROJECT_NAME )
+                                && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PROJECT_NAMES )
+                                && ! event.property().definition().equals( ProjectName.PROP_PROJECT_NAME ) )
                 {
                     refresh();
                 }
