@@ -73,37 +73,6 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
         Composite pageParent = new Composite( parent, SWT.NONE );
         pageParent.setLayout( GridLayoutFactory.swtDefaults().create() );
 
-        Group group = new Group( pageParent, SWT.NONE );
-        group.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
-        group.setText( Msgs.liferayShortcuts );
-        group.setLayout( new GridLayout( 1, false ) );
-
-        Hyperlink link = new Hyperlink( group, SWT.NULL );
-        link.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
-        link.setUnderlined( true );
-        link.setText( Msgs.configureSDKs );
-        link.addHyperlinkListener
-        (
-            new HyperlinkAdapter()
-            {
-                public void linkActivated( HyperlinkEvent e )
-                {
-                    final IWorkbenchPreferenceContainer container = (IWorkbenchPreferenceContainer) getContainer();
-
-                    parent.getDisplay().asyncExec
-                    (
-                        new Runnable()
-                        {
-                            public void run()
-                            {
-                                container.openPage( "com.liferay.ide.sdk.preferences.installedSDKs", null ); //$NON-NLS-1$
-                            }
-                        }
-                    );
-                }
-            }
-        );
-
 //        Hyperlink link2 = new Hyperlink( group, SWT.NULL );
 //        link2.setForeground( parent.getDisplay().getSystemColor( SWT.COLOR_BLUE ) );
 //        link2.setUnderlined( true );
@@ -136,7 +105,7 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
 //            }
 //        );
 
-        group = new Group( pageParent, SWT.NONE );
+        Group group = new Group( pageParent, SWT.NONE );
         group.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 1, 1 ) );
         group.setText( Msgs.messageDialogs );
         group.setLayout( new GridLayout( 2, false ) );
@@ -172,10 +141,8 @@ public class LiferayUIPreferencePage extends PreferencePage implements IWorkbenc
     {
         public static String clear;
         public static String clearAllSettings;
-        public static String configureSDKs;
         public static String createNewLiferayRuntime;
         public static String createNewLiferayServer;
-        public static String liferayShortcuts;
         public static String messageDialogs;
 
         static
