@@ -21,6 +21,7 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
@@ -73,6 +74,22 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
                 }
                 catch( CoreException e )
                 {
+
+                }
+
+                if ( sdk == null )
+                {
+                    if ( op.getSdkLocation() != null)
+                    {
+                        final Path sdkPath = op.getSdkLocation().content();
+
+                        if ( sdkPath != null )
+                        {
+                            final IPath sdkLocation = PathBridge.create( sdkPath);
+
+                            sdk = SDKUtil.createSDKFromLocation( sdkLocation );
+                        }
+                    }
                 }
 
                 if( sdk != null )

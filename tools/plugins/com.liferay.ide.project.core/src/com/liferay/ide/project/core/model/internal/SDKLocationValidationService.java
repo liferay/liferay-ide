@@ -20,7 +20,10 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -32,6 +35,26 @@ import org.eclipse.sapphire.services.ValidationService;
  */
 public class SDKLocationValidationService extends ValidationService
 {
+    private FilteredListener<PropertyContentEvent> listener;
+
+    @Override
+    protected void initValidationService()
+    {
+        super.initValidationService();
+
+        this.listener = new FilteredListener<PropertyContentEvent>()
+        {
+            @Override
+            protected void handleTypedEvent( final PropertyContentEvent event )
+            {
+                refresh();
+            }
+        };
+
+        op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
+
+    }
+
     @Override
     protected Status compute()
     {
@@ -60,7 +83,28 @@ public class SDKLocationValidationService extends ValidationService
             return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is not correct" ) );
         }
 
+        final Path projectLocation = op().getLocation().content();
+
+        final String projectName = op().getProjectName().content();
+
+        IPath projectPath = PathBridge.create( projectLocation );
+
+        if ( projectPath != null && projectPath.toFile().exists() )
+        {
+            return StatusBridge.create( ProjectCore.createErrorStatus( "Project(" + projectName + ") is existed in sdk folder, please set new project name" ) );
+        }
+
+
+
         return retval;
+    }
+
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+
+        op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
     }
 
     private NewLiferayPluginProjectOp op()
