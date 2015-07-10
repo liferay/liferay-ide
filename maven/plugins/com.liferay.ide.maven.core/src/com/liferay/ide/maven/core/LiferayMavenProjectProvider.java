@@ -122,6 +122,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         super( new Class<?>[] { IProject.class } );
     }
 
+    @Override
     public IStatus doCreateNewProject( final NewLiferayPluginProjectOp op, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
@@ -157,8 +158,15 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
 
         archetype.setGroupId( gav[0] );
         archetype.setArtifactId( gav[1] );
-        archetype.setModelEncoding( "UTF-8" );
         archetype.setVersion( archetypeVersion );
+
+        try
+        {
+            archetype.setModelEncoding( "UTF-8" );
+        }
+        catch(Throwable e)
+        {
+        }
 
         final ArchetypeManager archetypeManager = MavenPluginActivator.getDefault().getArchetypeManager();
         final ArtifactRepository remoteArchetypeRepository = archetypeManager.getArchetypeRepository( archetype );
@@ -712,7 +720,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 }
             }
         }
-        
+
         ProjectCore.operate( project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion );
     }
 
