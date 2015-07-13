@@ -903,6 +903,7 @@
       </page>
    </extension>
 
+   <!--
    <extension
          point="org.eclipse.ui.commands">
       <command
@@ -918,7 +919,6 @@
       </category>
    </extension>
 
-   <!--
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution
@@ -933,7 +933,7 @@
          </command>
       </menuContribution>
    </extension>
-   -->
+   
    
    <extension
          point="org.eclipse.ui.handlers">
@@ -942,7 +942,7 @@
             commandId="com.liferay.ide.project.ui.handlers.projectUpgrade">
       </handler>
    </extension>
-
+   -->
 
    <extension
          point="org.eclipse.ui.commands">
