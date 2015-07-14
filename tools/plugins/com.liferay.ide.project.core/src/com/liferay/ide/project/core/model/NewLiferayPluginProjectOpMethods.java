@@ -44,6 +44,7 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.osgi.framework.Version;
@@ -346,6 +347,16 @@ public class NewLiferayPluginProjectOpMethods
             {
             }
 
+            if ( sdk == null )
+            {
+                final Path sdkLocation = op.getSdkLocation().content();
+
+                if ( sdkLocation != null )
+                {
+                    sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
+                }
+            }
+
             if( sdk != null )
             {
                 final Version version = new Version( sdk.getVersion() );
@@ -356,6 +367,10 @@ public class NewLiferayPluginProjectOpMethods
                 {
                     retval = true;
                 }
+            }
+            else
+            {
+                retval = true;
             }
         }
 

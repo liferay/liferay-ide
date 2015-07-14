@@ -22,6 +22,7 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.junit.AfterClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -203,9 +204,11 @@ public class NewLiferayPluginProjectOp623Tests extends NewLiferayPluginProjectOp
 
         op.setPluginType( PluginType.web );
 
+        op.setSdkLocation( PathBridge.create( getLiferayPluginsSdkDir() ) );
+
         assertEquals(
             "The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0.0 or greater.",
-            op.getPluginType().validation().message() );
+            op.getSdkLocation().validation().message() );
     }
 
 }

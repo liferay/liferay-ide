@@ -903,15 +903,8 @@
       </page>
    </extension>
 
-   <!--
    <extension
          point="org.eclipse.ui.commands">
-      <command
-            categoryId="com.liferay.ide.project.ui.handlers"
-            description="Upgrade Liferay Projects"
-            id="com.liferay.ide.project.ui.handlers.projectUpgrade"
-            name="Upgrade Liferay Projects">
-      </command>
       <category
             description="Liferay Commands"
             id="com.liferay.ide.project.ui.handlers"
@@ -919,6 +912,7 @@
       </category>
    </extension>
 
+   <!--
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution

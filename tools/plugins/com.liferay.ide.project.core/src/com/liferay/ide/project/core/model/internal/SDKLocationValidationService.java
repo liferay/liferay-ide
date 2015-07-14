@@ -15,8 +15,11 @@
 
 package com.liferay.ide.project.core.model.internal;
 
+import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsWebTypePlugin;
+
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
@@ -94,6 +97,13 @@ public class SDKLocationValidationService extends ValidationService
             return StatusBridge.create( ProjectCore.createErrorStatus( "Project(" + projectName + ") is existed in sdk folder, please set new project name" ) );
         }
 
+        if( op().getPluginType().content().equals( PluginType.web ) && ! supportsWebTypePlugin( op() ) )
+        {
+            retval =
+                Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  " +
+                    "Please configure version 7.0.0 or greater." );
+        }
+
 
 
         return retval;
@@ -104,7 +114,7 @@ public class SDKLocationValidationService extends ValidationService
     {
         super.dispose();
 
-        op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
+        op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
     }
 
     private NewLiferayPluginProjectOp op()

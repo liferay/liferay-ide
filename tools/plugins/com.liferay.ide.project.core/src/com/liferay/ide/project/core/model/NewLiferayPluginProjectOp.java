@@ -30,7 +30,6 @@ import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.model.internal.LocationValidationService;
 import com.liferay.ide.project.core.model.internal.PluginTypeListener;
 import com.liferay.ide.project.core.model.internal.PluginTypePossibleValuesService;
-import com.liferay.ide.project.core.model.internal.PluginTypeValidationService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkAdvancedPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.ProfileIdPossibleValuesService;
@@ -184,14 +183,7 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     @Label( standard = "plugin type" )
     @Listeners( PluginTypeListener.class )
     @DefaultValue( text = "portlet" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = PluginTypeValidationService.class ),
-            @Service( impl = PluginTypePossibleValuesService.class ),
-        }
-    )
+    @Service( impl = PluginTypePossibleValuesService.class )
     ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
 
     Value<PluginType> getPluginType();
