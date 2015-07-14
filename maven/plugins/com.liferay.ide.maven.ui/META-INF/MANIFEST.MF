@@ -18,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.ui;bundle-version="2.0.0",
  org.eclipse.core.expressions,
  org.eclipse.ui.ide,
- org.eclipse.sapphire.ui,
+ org.eclipse.sapphire.ui;bundle-version="[8.1.0,9.0.0)",
  org.eclipse.m2e.maven.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
