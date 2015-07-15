@@ -771,7 +771,9 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
     {
         IStatus retval = Status.OK_STATUS;
         // if the path is a folder and it has a pom.xml that is a package type of 'pom' then this is a valid location
-
+        //if projectName is null or empty , don't need to check , just return
+        if( CoreUtil.isNullOrEmpty(projectName) )
+            return  retval;
 
         if ( path != null && path.segmentCount() > 0 )
         {
