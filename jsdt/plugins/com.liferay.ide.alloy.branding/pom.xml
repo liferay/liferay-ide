@@ -22,7 +22,7 @@
     <parent>
         <groupId>com.liferay.ide.jsdt.plugins</groupId>
         <artifactId>jsdt-plugins</artifactId>
-        <version>2.2.3-SNAPSHOT</version>
+        <version>2.2.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>com.liferay.ide.alloy.branding</artifactId>
