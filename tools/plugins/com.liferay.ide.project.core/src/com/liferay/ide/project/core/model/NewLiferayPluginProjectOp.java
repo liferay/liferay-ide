@@ -30,8 +30,10 @@ import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.model.internal.LocationValidationService;
 import com.liferay.ide.project.core.model.internal.PluginTypeListener;
 import com.liferay.ide.project.core.model.internal.PluginTypePossibleValuesService;
+import com.liferay.ide.project.core.model.internal.PluginTypeValidationService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkAdvancedPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.PortletFrameworkPossibleValuesService;
+import com.liferay.ide.project.core.model.internal.PortletFrameworkValidationService;
 import com.liferay.ide.project.core.model.internal.ProfileIdPossibleValuesService;
 import com.liferay.ide.project.core.model.internal.ProjectNameListener;
 import com.liferay.ide.project.core.model.internal.ProjectNameValidationService;
@@ -183,7 +185,14 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     @Label( standard = "plugin type" )
     @Listeners( PluginTypeListener.class )
     @DefaultValue( text = "portlet" )
-    @Service( impl = PluginTypePossibleValuesService.class )
+    @Services
+    (
+        value=
+        {
+            @Service( impl = PluginTypePossibleValuesService.class ),
+            @Service( impl = PluginTypeValidationService.class )
+        }
+    )
     ValueProperty PROP_PLUGIN_TYPE = new ValueProperty( TYPE, "PluginType" ); //$NON-NLS-1$
 
     Value<PluginType> getPluginType();
@@ -218,7 +227,14 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     @Type( base = IPortletFramework.class )
     @Label( standard = "portlet framework" )
     @DefaultValue( text = "mvc" )
-    @Service( impl = PortletFrameworkPossibleValuesService.class )
+    @Services
+    (
+        value=
+        {
+            @Service( impl = PortletFrameworkValidationService.class ),
+            @Service( impl = PortletFrameworkPossibleValuesService.class )
+        }
+    )
     ValueProperty PROP_PORTLET_FRAMEWORK = new ValueProperty( TYPE, "PortletFramework" ); //$NON-NLS-1$
 
     Value<IPortletFramework> getPortletFramework();

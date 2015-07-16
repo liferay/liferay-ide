@@ -17,6 +17,8 @@ package com.liferay.ide.project.core.model.internal;
 
 import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsWebTypePlugin;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
@@ -32,6 +34,7 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
+import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
@@ -55,7 +58,7 @@ public class SDKLocationValidationService extends ValidationService
         };
 
         op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
-
+        op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).attach( this.listener );
     }
 
     @Override
@@ -104,7 +107,16 @@ public class SDKLocationValidationService extends ValidationService
                     "Please configure version 7.0.0 or greater." );
         }
 
+        final IPortletFramework portletFramework = op().getPortletFramework().content();
+        final Version requiredVersion = new Version( portletFramework.getRequiredSDKVersion() );
+        final Version sdkVersion = new Version( sdk.getVersion() );
 
+        if( CoreUtil.compareVersions( requiredVersion, sdkVersion ) > 0 )
+        {
+            retval =
+                Status.createErrorStatus( "Selected portlet framework requires SDK version at least " +
+                    requiredVersion );
+        }
 
         return retval;
     }
@@ -115,6 +127,7 @@ public class SDKLocationValidationService extends ValidationService
         super.dispose();
 
         op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
+        op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).detach( this.listener );
     }
 
     private NewLiferayPluginProjectOp op()

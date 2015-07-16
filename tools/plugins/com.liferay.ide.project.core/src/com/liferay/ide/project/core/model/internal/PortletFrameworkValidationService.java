@@ -21,7 +21,6 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -72,19 +71,23 @@ public class PortletFrameworkValidationService extends ValidationService
         {
             try
             {
-                IProject sdkParentProject = SDKUtil.getWorkspaceSDKProject();
 
-                if( "ant".equals( projectProvider.getShortName() ) && portletFramework != null && sdkParentProject != null )
+                if( "ant".equals( projectProvider.getShortName() ) && portletFramework != null )
                 {
-                    SDK sdk = SDKUtil.createSDKFromLocation( sdkParentProject.getLocation());
-                    final Version requiredVersion = new Version( portletFramework.getRequiredSDKVersion() );
-                    final Version sdkVersion = new Version( sdk.getVersion() );
+                    SDK sdk = SDKUtil.getWorkspaceSDK();
 
-                    if( CoreUtil.compareVersions( requiredVersion, sdkVersion ) > 0 )
+                    if ( sdk != null )
                     {
-                        retval =
-                            Status.createErrorStatus( "Selected portlet framework requires SDK version at least " +
-                                requiredVersion );
+                        final Version requiredVersion = new Version( portletFramework.getRequiredSDKVersion() );
+                        final Version sdkVersion = new Version( sdk.getVersion() );
+
+                        if( CoreUtil.compareVersions( requiredVersion, sdkVersion ) > 0 )
+                        {
+                            retval =
+                                Status.createErrorStatus( "Selected portlet framework requires SDK version at least " +
+                                    requiredVersion );
+                        }
+
                     }
                 }
 
@@ -101,7 +104,6 @@ public class PortletFrameworkValidationService extends ValidationService
     public void dispose()
     {
         op().property( NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER ).detach( this.listener );
-
         super.dispose();
     }
 
