@@ -549,7 +549,8 @@ public class NewPortletClassDataModelProvider extends NewWebClassDataModelProvid
             //check for null is for switching projects of different portal versions
             final Object entryCategory = getProperty( ENTRY_CATEGORY );
 
-            if( entryCategory != null && getEntryCategories().get( entryCategory ) != null )
+            if( entryCategory != null && getEntryCategories() != null &&
+                getEntryCategories().get( entryCategory ) != null )
             {
                 return new DataModelPropertyDescriptor(
                     entryCategory, getEntryCategories().get( entryCategory ).toString() );

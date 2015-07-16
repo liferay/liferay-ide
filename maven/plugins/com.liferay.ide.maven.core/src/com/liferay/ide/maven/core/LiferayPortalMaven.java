@@ -30,9 +30,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
-
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class LiferayPortalMaven implements ILiferayPortal
 {
@@ -90,6 +90,13 @@ public class LiferayPortalMaven implements ILiferayPortal
         if( appServerPortalDir != null && appServerPortalDir.toFile().exists() )
         {
             retval = ServerUtil.getPortletCategories( appServerPortalDir );
+        }
+
+        if( retval == null )
+        {
+            retval = new Properties();
+
+            retval.put( "category.sample", "Sample" );
         }
 
         return retval;
