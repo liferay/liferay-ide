@@ -158,7 +158,7 @@ public class JSPFileTests extends XmlSearchTestsBase
     }
 
     @Test
-    public void testMessage() throws Exception
+    public void testErrorMessage() throws Exception
     {
         if( shouldSkipBundleTests() )return;
 
@@ -169,6 +169,16 @@ public class JSPFileTests extends XmlSearchTestsBase
         validateTextHoverForAttr( elementName, attrName );
         validateContentAssistForEmptyAttr( elementName, attrName );
         validateContentAssistForAttr( elementName, attrName );
+        
+        // test on IDE-1774
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        setAttrValue( jspFile, elementName, attrName, "aaa-bb" );
+        buildAndValidate( jspFile );
+        
+        String[] hover = getTextHoverForAttr( jspFile, elementName, attrName );
+        String expectMessageRegex = ".*" + "aaa bb" + ".*" + "src/content/Language.properties.*";
+
+        assertTrue( hover[0].toString().matches( expectMessageRegex ) );
     }
 
     @Test
@@ -281,6 +291,34 @@ public class JSPFileTests extends XmlSearchTestsBase
         validateTextHoverForAttr( elementName, attrName );
         validateContentAssistForEmptyAttr( elementName, attrName );
         validateContentAssistForAttr( elementName, attrName );
+    }
+
+    @Test
+    public void testButtonType() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:button";
+        String attrName = "type";
+
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        setAttrValue( jspFile, elementName, attrName, "" );
+        buildAndValidate( jspFile );
+
+        ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        final String[] expectedProposalString = { "cancel", "reset", "submit" };
+        for( String proposal : expectedProposalString )
+        {
+            assertTrue( containsProposal( proposals, proposal, true ) );
+        }
+
+        setAttrValue( jspFile, elementName, attrName, "can" );
+
+        proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertEquals( true, proposals.length > 0 );
+        assertTrue( containsProposal( proposals, "cancel", true ) );
     }
 
     @Test
@@ -428,5 +466,118 @@ public class JSPFileTests extends XmlSearchTestsBase
 
         validateHyperLinksForAttr( elementName, attrName );
     }
+    
+    @Test
+    public void testAInputType() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
 
+        String elementName = "aui:input";
+        String attrName = "type";
+
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        setAttrValue( jspFile, elementName, attrName, "" );
+        buildAndValidate( jspFile );
+
+        ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        final String[] expectedProposalString =
+            { "assetCategories", "assetTags", "checkbox", "hidden", "radio", "text", "textarea", "timeZone" };
+        for( String proposal : expectedProposalString )
+        {
+            assertTrue( containsProposal( proposals, proposal, true ) );
+        }
+
+        setAttrValue( jspFile, elementName, attrName, "asse" );
+
+        proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertEquals( true, proposals.length > 0 );
+        assertTrue( containsProposal( proposals, "assetCategories", true ) );
+    }
+    
+    @Test
+    public void testAValidatorName() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:validator";
+        String attrName = "name";
+
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+
+        ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        final String[] expectedProposalString =
+            { "acceptFiles", "alpha", "alphanum", "date", "digits", "email", "equalTo", "iri", "max", "min",
+                "minLength", "number", "range", "rangeLength", "required", "url" };
+        for( String proposal : expectedProposalString )
+        {
+            assertTrue( "can't get proposal of " + expectedProposalString, containsProposal( proposals, proposal, true ) );
+        }
+    }
+    
+    @Test
+    public void testAValidatorErrorMessage() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:validator";
+        String attrName = "errorMessage";
+
+        validateHyperLinksForAttr( elementName, attrName );
+        validateTextHoverForAttr( elementName, attrName );
+        validateContentAssistForEmptyAttr( elementName, attrName );
+        validateContentAssistForAttr( elementName, attrName );
+    }
+    
+    
+    @Test
+    public void testInputInlineLabel() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:input";
+        String attrName = "inlineLabel";
+
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        assertTrue( containsProposal( proposals, "left", true ) );
+        assertTrue( containsProposal( proposals, "right", true ) );
+    }
+    
+    @Test
+    public void testInputChecked() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:input";
+        String attrName = "checked";
+
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        assertTrue( containsProposal( proposals, "false", true ) );
+        assertTrue( containsProposal( proposals, "true", true ) );
+    }
+    
+    @Test
+    public void testInputDisabled() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:input";
+        String attrName = "disabled";
+
+        jspFile = getJspFile( "test-jsp-validation.jsp" );
+        ICompletionProposal[] proposals = getProposalsForAttr( jspFile, elementName, attrName );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        assertTrue( containsProposal( proposals, "false", true ) );
+        assertTrue( containsProposal( proposals, "true", true ) );
+    }
 }

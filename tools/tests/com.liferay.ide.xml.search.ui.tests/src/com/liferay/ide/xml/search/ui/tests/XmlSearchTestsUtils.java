@@ -258,6 +258,12 @@ public class XmlSearchTestsUtils extends UITestsUtils
             Element element = getElementByAttr( elements, attrName );
             targetNode = element.getAttributes().getNamedItem( attrName );
         }
+        if( nodeType == Node.TEXT_NODE )
+        {
+            String elementName = nodeNames[0];
+            domModel = getDOMModel( file, false );
+            targetNode = domModel.getDocument().getElementsByTagName( elementName ).item( 0 ).getFirstChild();
+        }
 
         int offset = getRegion( targetNode ).getOffset() + getRegion( targetNode ).getLength();
 
@@ -285,6 +291,11 @@ public class XmlSearchTestsUtils extends UITestsUtils
     public static ICompletionProposal[] getProposalsForElement( IFile file, String elementName ) throws Exception
     {
         return getProposals( file, Node.ELEMENT_NODE, elementName );
+    }
+    
+    public static ICompletionProposal[] getProposalsForText( IFile file, String... nodeNames) throws Exception
+    {
+        return getProposals( file, Node.TEXT_NODE, nodeNames);
     }
 
     // get the SourceViewerConfiguration from extension point

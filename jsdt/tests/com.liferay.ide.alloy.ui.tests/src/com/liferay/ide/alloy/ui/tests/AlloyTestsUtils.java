@@ -37,7 +37,7 @@ import org.eclipse.wst.sse.ui.internal.StructuredTextViewer;
 public class AlloyTestsUtils
 {
 
-    public static ICompletionProposal[] getWebSevicesProposals( IFile file ) throws Exception
+    public static ICompletionProposal[] getWebSevicesProposals( IFile file , String elementName ) throws Exception
     {
         final StructuredTextViewer viewer = getEditor( file ).getTextViewer();
         final SourceViewerConfiguration srcViewConf = getSourceViewerConfiguraionFromOpenedEditor( file );
@@ -45,12 +45,12 @@ public class AlloyTestsUtils
         final ContentAssistant contentAssistant = (ContentAssistant) srcViewConf.getContentAssistant( viewer );
 
         final String partitionTypeID =
-            viewer.getDocument().getPartition( getElementContentEndOffset( file, "aui:script" ) ).getType();
+            viewer.getDocument().getPartition( getElementContentEndOffset( file, elementName ) ).getType();
 
         final IContentAssistProcessor processor = contentAssistant.getContentAssistProcessor( partitionTypeID );
 
         final ICompletionProposal[] proposals =
-            processor.computeCompletionProposals( viewer, getElementContentEndOffset( file, "aui:script" ) );
+            processor.computeCompletionProposals( viewer, getElementContentEndOffset( file, elementName ) );
 
         return proposals;
     }

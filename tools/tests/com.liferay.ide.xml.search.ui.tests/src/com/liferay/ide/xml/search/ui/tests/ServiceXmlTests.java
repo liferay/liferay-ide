@@ -15,12 +15,15 @@
 
 package com.liferay.ide.xml.search.ui.tests;
 
+import static com.liferay.ide.ui.tests.UITestsUtils.containsProposal;
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkMarkerByMessage;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkNoMarker;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.getProposalsForText;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setAttrValue;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setElementContent;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayConstants;
@@ -34,6 +37,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +45,7 @@ import org.junit.Test;
 /**
  * @author Li Lu
  */
-public class ServiceXmlValidationTests extends XmlSearchTestsBase
+public class ServiceXmlTests extends XmlSearchTestsBase
 {
 
     protected final static String MARKER_TYPE = XML_REFERENCES_MARKER_TYPE;
@@ -91,7 +95,7 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
     }
 
     @Test
-    public void testNamespace() throws Exception
+    public void testNamespaceValidation() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
 
@@ -113,7 +117,7 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
     }
 
     @Test
-    public void testPackagePath() throws Exception
+    public void testPackagePathValidation() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
 
@@ -140,5 +144,41 @@ public class ServiceXmlValidationTests extends XmlSearchTestsBase
         markerMessage = "Invalid Java package name: A package name must not be empty";
         assertTrue( checkMarkerByMessage( descriptorFile, MARKER_TYPE, markerMessage, true ) );
     }
+    
+    @Test
+    public void testServiceXMLTemplates() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
 
+        descriptorFile = getDescriptorFile();
+        ICompletionProposal[] proposals = getProposalsForText( descriptorFile, "entity" );
+        final String[] expectedProposalStrings =
+            { "column", "finder", "order", "reference", "tx-required", "sb-column - a column for an entity",
+                "sb-columnp-primary - a primary column for an entity", "sb-entity - an entity element",
+                "sb-entity-sample - a simple entity element", "sb-exceptions - an exceptions element",
+                "sb-finder - a finder element", "sb-finder-column - a finder column for a finder",
+                "sb-order - an order element", "sb-order-column - an order column for an order" };
+
+        for( String expectedProposalString : expectedProposalStrings )
+        {
+            assertTrue( "can't get proposal at :" + expectedProposalString, containsProposal( proposals, expectedProposalString, true ) );
+        }
+        
+        //test on IDE-1683
+        descriptorFile = LiferayCore.create( project ).getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE );
+        proposals = getProposalsForText( descriptorFile, "portlet" );
+        
+        for( String expectedProposalString : expectedProposalStrings )
+        {
+            assertFalse( "service builder proposal at :" + descriptorFile, containsProposal( proposals, expectedProposalString, true ) );
+        }
+        
+        descriptorFile = LiferayCore.create( project ).getDescriptorFile( ILiferayConstants.LIFERAY_PORTLET_XML_FILE );
+        proposals = getProposalsForText( descriptorFile, "portlet" );
+
+        for( String expectedProposalString : expectedProposalStrings )
+        {
+            assertFalse( "service builder proposal at :" + descriptorFile, containsProposal( proposals, expectedProposalString, true ) );
+        }
+    }
 }

@@ -4,6 +4,8 @@ package com.liferay.ide.xml.search.ui.tests;
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.buildAndValidate;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.checkMarkerByMessage;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.findMarkerByMessage;
+import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.findMarkerResolutionByClass;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.setAttrValue;
 import static com.liferay.ide.xml.search.ui.tests.XmlSearchTestsUtils.verifyQuickFix;
 import static org.junit.Assert.assertEquals;
@@ -11,8 +13,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ValidationPreferences;
 import com.liferay.ide.xml.search.ui.AddResourceKeyMarkerResolution;
 import com.liferay.ide.xml.search.ui.XMLSearchConstants;
+import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseInstanceScopeXmlValidationLevel;
+import com.liferay.ide.xml.search.ui.markerResolutions.DecreaseProjectScopeXmlValidationLevel;
 import com.liferay.ide.xml.search.ui.validators.LiferayBaseValidator;
 import com.liferay.ide.xml.search.ui.validators.LiferayJspValidator;
 
@@ -21,6 +26,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -111,6 +117,9 @@ public class JSPFileValidationTests extends XmlSearchTestsBase
         String markerMessageRegex =
             MessageFormat.format( LiferayBaseValidator.MESSAGE_PROPERTY_NOT_FOUND, new Object[] { attrValue,
                 "Language.properties" } );
+        
+        quickFixChangeValidationLevel( markerMessageRegex );
+        buildAndValidate( jspFile );
         verifyQuickFix( jspFile, markerType, markerMessageRegex, AddResourceKeyMarkerResolution.class );
 
     }
@@ -122,6 +131,21 @@ public class JSPFileValidationTests extends XmlSearchTestsBase
 
         final String expectedMessage = "Method " + '"' + attrValue + '"' + " not found.";
         assertEquals( true, checkMarkerByMessage( jspFile, markerType, expectedMessage, true ) );
+        quickFixChangeValidationLevel( expectedMessage+".*" );
+    }
+
+    public void quickFixChangeValidationLevel( String markerMessageRegex ) throws Exception
+    {
+        IMarker expectedMarker = findMarkerByMessage( jspFile, markerType, markerMessageRegex + ".*", false );
+        String liferayPluginValidationType =
+            expectedMarker.getAttribute( XMLSearchConstants.LIFERAY_PLUGIN_VALIDATION_TYPE, null );
+
+        assertNotNull( findMarkerResolutionByClass( expectedMarker, DecreaseInstanceScopeXmlValidationLevel.class ) );
+
+        verifyQuickFix( jspFile, markerType, markerMessageRegex, DecreaseProjectScopeXmlValidationLevel.class );
+
+        ValidationPreferences.setProjectScopeValidationLevel(
+            expectedMarker.getResource().getProject(), liferayPluginValidationType, 2 );
     }
 
     @Test
@@ -348,16 +372,16 @@ public class JSPFileValidationTests extends XmlSearchTestsBase
 
         String elementName = "liferay-portlet:actionURL";
         String attrName = "name";
-        Thread.sleep( 12000 );
+        buildAndValidate( jspFile );
+        Thread.sleep( 15000 );
         ValidateAttrMethodNotFound( elementName, attrName, "foo" );
         ValidateAttrMethodNotFound( elementName, attrName, "" );
-        try
-        {
-            ValidateAttrMethodNotFound( elementName, attrName, "foo2" );
-        }
-        catch( AssertionError e )
-        {
-        }
+        
+        setAttrValue( jspFile, elementName, attrName, "beamMe" );
+        buildAndValidate( jspFile );
+        
+        String markerMessage = ".*" + "beamMe" + ".*";
+        assertEquals( false, checkMarkerByMessage( jspFile, elementName, markerMessage, false ) );
     }
 
     @Test
@@ -450,5 +474,18 @@ public class JSPFileValidationTests extends XmlSearchTestsBase
             MessageFormat.format( LiferayBaseValidator.MESSAGE_TYPE_HIERARCHY_INCORRECT, new Object[] { valueAttr,
                 "com.liferay.util.bridges.mvc.ActionCommand" } );
         assertEquals( false, checkMarkerByMessage( jspFile, markerType, markerMessage, true ) );
+    }
+    
+    @Test
+    public void testValidatorErrorMessage() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        String elementName = "aui:validator";
+        String attrName = "errorMessage";
+
+        ValidateAttrPropertyNotFound( elementName, attrName, "foo" );
+        ValidateAttrPropertyNotFound( elementName, attrName, "" );
+        ValidateAttrPropertyCorrect( elementName, attrName );
     }
 }

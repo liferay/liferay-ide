@@ -16,9 +16,11 @@
 package com.liferay.ide.alloy.ui.tests;
 
 import static com.liferay.ide.alloy.ui.tests.AlloyTestsUtils.getWebSevicesProposals;
+import static com.liferay.ide.ui.tests.UITestsUtils.containsProposal;
 import static com.liferay.ide.ui.tests.UITestsUtils.deleteOtherProjects;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.alloy.ui.editor.PortletJSPSourceViewerConfiguration;
 import com.liferay.ide.core.util.CoreUtil;
@@ -71,10 +73,7 @@ public class TemplatesTests extends ProjectCoreBase
     @Test
     public void testSourceViewerConfiguration() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() )return;
 
         final IFile viewJspFile = getJspFile( "view.jsp" );
 
@@ -87,10 +86,7 @@ public class TemplatesTests extends ProjectCoreBase
     @Test
     public void testTemplatesPropsals() throws Exception
     {
-        if( shouldSkipBundleTests() )
-        {
-            return;
-        }
+        if( shouldSkipBundleTests() )return;
 
         IFile file = getJspFile( "view.jsp" );
 
@@ -101,7 +97,7 @@ public class TemplatesTests extends ProjectCoreBase
             "jsonws-JournalArticle-unsubscribe"
         };
 
-        ICompletionProposal[] proposals = getWebSevicesProposals( file );
+        ICompletionProposal[] proposals = getWebSevicesProposals( file, "aui:script" );
 
         assertEquals( "the proposals' length should be greater than 1000", true, proposals.length > 1000 );
 
@@ -122,5 +118,26 @@ public class TemplatesTests extends ProjectCoreBase
 
         assertEquals( "No liferay webservices templates been found. ", 3, i );
     }
+    
+    @Test
+    public void testJSPTagTemplates() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
 
+        IFile file = getJspFile( "view.jsp" );
+
+        ICompletionProposal[] proposals = getWebSevicesProposals( file, "aui:form" );
+        assertNotNull( proposals );
+        assertEquals( true, proposals.length > 0 );
+        String[] expectedProposalStrings =
+            { "actionURL - A portlet:actionURL tag with its most commonly used attributes",
+                "actionURLForm - A portlet:actionURL tag and a aui:form",
+                "aui-form - An aui:form tag with all of the most commonly used attributes",
+                "currentURL - Create a jsp variable for currentURL" };
+
+        for( String expectedProposalString : expectedProposalStrings )
+        {
+            assertTrue( "can't get proposal at "+ expectedProposalString , containsProposal( proposals, expectedProposalString, true ) );
+        }
+    }
 }
