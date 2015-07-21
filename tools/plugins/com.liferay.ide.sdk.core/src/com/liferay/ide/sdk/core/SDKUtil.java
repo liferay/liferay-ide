@@ -16,11 +16,13 @@
 package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
@@ -29,6 +31,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -266,6 +269,26 @@ public class SDKUtil
             try
             {
                 sdkProject.create( description, npm );
+
+                IPath settingFolderPath = sdkProject.getLocation().append( ".settings" );
+                File settingFolder = settingFolderPath.toFile();
+
+                if( !settingFolder.exists() )
+                {
+                    settingFolder.mkdir();
+                }
+
+                if( !settingFolderPath.append( "org.eclipse.wst.validation.prefs" ).toFile().exists() )
+                {
+                    URL url =
+                        FileLocator.toFileURL( SDKCorePlugin.getDefault().getBundle().getEntry(
+                            "files/org.eclipse.wst.validation.prefs" ) );
+
+                    File file = new File( url.getFile() );
+
+                    FileUtil.copyFileToDir( file, settingFolder );
+                }
+
                 sdkProject.open( npm );
             }
             catch( Exception e )
