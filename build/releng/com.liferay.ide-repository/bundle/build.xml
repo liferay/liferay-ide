@@ -233,7 +233,6 @@
             <param name="output.tar.name" value="${output.macosx64.tar.name}" />
             <param name="output.gz.name" value="${output.macosx64.gz.name}" />
             <param name="upload.output.file" value="${output.macosx64.gz.name}" />
-            <param name="eclipse.dir" value="${work.dir}" />
         </antcall>
     </target>
 
@@ -247,13 +246,6 @@
                 <if>
                     <isset property="builder.tar.name" />
                     <then>
-                        <if>
-                            <isset property="isMac" />
-                            <then>
-                                <property name="builder.tar.name" value="${builder.tar.name.mac}" />
-                                <property name="builder.zip.name" value="${builder.zip.name.mac}" />    
-                            </then>
-                        </if>
                         <gunzip src="${downloads.dir}/${builder.zip.name}" dest="${downloads.dir}" />
                         <untar src="${downloads.dir}/${builder.tar.name}" dest="${builder.dir}/../" />
                     </then>
@@ -275,13 +267,6 @@
                 <available file="${downloads.dir}/${builder.zip.name}" />
             </not>
             <then>
-                <if>
-                    <isset property="isMac" />
-                    <then>
-                        <property name="builder.zip.name" value="${builder.zip.name.mac}" />
-                        <property name="builder.zip.url" value="${builder.zip.url.mac}" />    
-                    </then>
-                </if>
                 <get dest="${downloads.dir}/${builder.zip.name}" src="${builder.zip.url}" verbose="true" />
             </then>
         </if>
@@ -298,14 +283,13 @@
                     <isset property="isUnix" />
                     <then>
                         <gunzip src="${downloads.dir}/${eclipse.zip.name}" dest="${downloads.dir}" />
+                        <untar src="${downloads.dir}/${eclipse.tar.name}" dest="${eclipse.dir}/../" />
                         <if>
                             <isset property="isMac" />
                             <then>
-                                <untar src="${downloads.dir}/${eclipse.tar.name}" dest="${eclipse.dir}/" />
                                 <chmod file="${eclipse.dir}/Eclipse.app/Contents/MacOS/eclipse" perm="ugo+rx" />
                             </then>
                             <else>
-                                <untar src="${downloads.dir}/${eclipse.tar.name}" dest="${eclipse.dir}/../" />
                                 <chmod file="${eclipse.dir}/eclipse" perm="ugo+rx" />
                             </else>
                         </if>
@@ -387,6 +371,7 @@
                 <chmod file="${builder.dir}/eclipse" perm="+x" />
             </then>
         </if>
+
         <if>
             <available file="${updatesite}" />
             <then>
@@ -398,21 +383,11 @@
         </if>
 
         <echo>${repositoryURL}</echo>
-        <if>
-            <isset property="isMac" />
-            <then>
-                <antcallback target="install-feature" return="output">
-                    <param name="featureId" value="${tools.features}" />
-                    <param name="eclipse.dir" value="${work.dir}/Eclipse.app/Contents/Eclipse" />
-                </antcallback>
-            </then>
-            <else>
-                <antcallback target="install-feature" return="output">
-                    <param name="featureId" value="${tools.features}" />
-                </antcallback>
-            </else>
-        </if>
+        <antcallback target="install-feature" return="output">
+            <param name="featureId" value="${tools.features}" />
+        </antcallback>
 
+        <echo>${output}</echo>
         <propertyregex property="temp" input="${output}" regexp=".*feature.group (.*)\..*" replace="\1" />
 
         <echo file="${target.dir}/temp.txt" append="true">${temp}</echo>
@@ -478,20 +453,12 @@
                 <property name="repositoryURL" value="${updatesite}" />
             </else>
         </if>
-		<if>
-            <isset property="isMac" />
-            <then>
-                <antcallback target="install-feature" return="output">
-                    <param name="featureId" value="${maven.features}" />
-                    <param name="eclipse.dir" value="${work.dir}/Eclipse.app/Contents/Eclipse" />
-                </antcallback>
-            </then>
-            <else>
-                <antcallback target="install-feature" return="output">
-                    <param name="featureId" value="${maven.features}" />
-                </antcallback>
-            </else>
-		</if>
+
+        <antcallback target="install-feature" return="output">
+            <param name="featureId" value="${maven.features}" />
+        </antcallback>
+
+        <echo>${output}</echo>
     </target>
 
     <target name="clean-output-dir">
@@ -526,7 +493,7 @@
         <if>
             <isset property="isMac" />
             <then>
-                <property name="eclipse.ini.dir" value="${work.dir}/Eclipse.app/Contents/Eclipse/eclipse.ini" />
+                <property name="eclipse.ini.dir" value="${work.dir}/eclipse/Eclipse.app/Contents/MacOS/eclipse.ini" />
             </then>
             <else>
                 <property name="eclipse.ini.dir" value="${eclipse.dir}/eclipse.ini"/>
@@ -539,28 +506,13 @@
             <isset property="isUnix" />
             <then>
                 <if>
-                    <or>
-                        <available file="${work.dir}/eclipse/eclipse" />
-                        <available file="${work.dir}/Eclipse.app" />
-                    </or>
+                    <available file="${work.dir}/eclipse/eclipse" />
                     <then>
-                        <if>
-                            <isset property="isMac" />
-                            <then>
-                                <exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
-                                    <arg value="cf" />
-                                    <arg value="${output.dir}/${output.tar.name}" />
-                                    <arg value="Eclipse.app" />
-                                </exec>
-                            </then>
-                            <else>
-                                <exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
-                                    <arg value="cf" />
-                                    <arg value="${output.dir}/${output.tar.name}" />
-                                    <arg value="eclipse" />
-                                </exec>
-                            </else>
-                        </if>
+                        <exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
+                            <arg value="cf" />
+                            <arg value="${output.dir}/${output.tar.name}" />
+                            <arg value="eclipse" />
+                        </exec>
                         <gzip destfile="${output.dir}/${output.gz.name}" src="${output.dir}/${output.tar.name}" />
                         <delete file="${output.dir}/${output.tar.name}" />
                         <property name="final.name" value="${output.dir}/${output.gz.name}"/>
