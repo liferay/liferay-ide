@@ -59,6 +59,7 @@ public class SDKLocationValidationService extends ValidationService
 
         op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).attach( this.listener );
+        op().property( NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE ).attach( this.listener );
     }
 
     @Override
@@ -124,10 +125,11 @@ public class SDKLocationValidationService extends ValidationService
     @Override
     public void dispose()
     {
-        super.dispose();
-
         op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).detach( this.listener );
+        op().property( NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE ).detach( this.listener );
+
+        super.dispose();
     }
 
     private NewLiferayPluginProjectOp op()
