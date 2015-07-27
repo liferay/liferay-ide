@@ -52,8 +52,6 @@ public abstract class AbstractPortalBundle implements PortalBundle
     protected IPath liferayHome;
     protected IPath modulesPath;
     protected IPath bundlePath;
-    protected String version;
-    protected int jmxRemotePort;
 
     public AbstractPortalBundle( IPath path )
     {
@@ -66,11 +64,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         this.liferayHome = bundlePath.append( ".." );
 
-        this.jmxRemotePort = getDefaultJMXRemotePort();
-
         this.autoDeployPath = this.liferayHome.append( "deploy" );
-
-        this.version = getPortalVersion( getAppServerPortalDir(), getBundleDependencyJars()  );
 
         this.modulesPath = this.liferayHome.append( "osgi" );
     }
@@ -84,19 +78,13 @@ public abstract class AbstractPortalBundle implements PortalBundle
 
         final String appServerPath = (appServerProperties.get( "app.server.dir"));
         final String appServerDeployPath = (appServerProperties.get( "app.server.deploy.dir"));
-        //final String appServerLibPath = (String) (appServerProperties.get( "app.server.lib.global.dir"));
         final String appServerParentPath = (appServerProperties.get( "app.server.parent.dir"));
-        //final String appServerPortalPath = (String) (appServerProperties.get( "app.server.portal.dir"));
 
         this.bundlePath = new Path(appServerPath);
 
         this.liferayHome = new Path(appServerParentPath);
 
-        this.jmxRemotePort = getDefaultJMXRemotePort();
-
         this.autoDeployPath = new Path(appServerDeployPath);
-
-        this.version = getPortalVersion( getAppServerPortalDir(), getBundleDependencyJars() );
 
         this.modulesPath = null;
     }
@@ -147,7 +135,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
     @Override
     public int getJmxRemotePort()
     {
-        return this.jmxRemotePort;
+        return getDefaultJMXRemotePort();
     }
 
     @Override
@@ -171,7 +159,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
     @Override
     public String getVersion()
     {
-        return this.version;
+        return getPortalVersion( getAppServerPortalDir(), getBundleDependencyJars()  );
     }
 
     @Override

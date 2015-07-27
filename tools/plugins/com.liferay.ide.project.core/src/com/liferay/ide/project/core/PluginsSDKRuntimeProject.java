@@ -24,11 +24,9 @@ import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
-import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -58,6 +56,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
         this.liferayRuntime = liferayRuntime;
     }
 
+    @Override
     public <T> T adapt( Class<T> adapterType )
     {
         T adapter = super.adapt( adapterType );
@@ -99,6 +98,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
         return null;
     }
 
+    @Override
     public IPath getLibraryPath( String filename )
     {
         final IPath[] libs = getUserLibs();
@@ -117,6 +117,7 @@ public class PluginsSDKRuntimeProject extends FlexibleProject implements IWebPro
         return null;
     }
 
+    @Override
     public String getProperty( final String key, final String defaultValue )
     {
         String retval = defaultValue;

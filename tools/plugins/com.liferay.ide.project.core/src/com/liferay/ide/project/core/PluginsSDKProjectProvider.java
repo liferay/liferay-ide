@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProjectName;
+import com.liferay.ide.project.core.util.ClasspathUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
@@ -48,6 +49,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -339,7 +342,12 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
             try
             {
-                if ( SDKUtil.isSDKProject( project ) )
+                IJavaProject javaProject = JavaCore.create( project );
+
+                final boolean hasNewSdk =
+                    ClasspathUtil.hasNewLiferaySDKContainer( javaProject.getRawClasspath() );
+
+                if ( SDKUtil.isSDKProject( project ) && hasNewSdk == true )
                 {
                     PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
 

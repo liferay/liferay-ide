@@ -47,6 +47,7 @@ import java.util.Set;
 import org.apache.commons.lang.WordUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -102,6 +103,30 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 public class ProjectUtil
 {
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
+
+
+    public static void clearMarkers( IProject proj, final String sourceId, final String makerType )
+    {
+        try
+        {
+            if( proj.isOpen() )
+            {
+                IMarker[] markers = proj.findMarkers( makerType, true, IResource.DEPTH_INFINITE );
+
+                for( IMarker marker : markers )
+                {
+                    if( marker.getAttribute( IMarker.SOURCE_ID ).equals( sourceId ) )
+                    {
+                        marker.delete();
+                    }
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+            ProjectCore.logError( e );
+        }
+    }
 
     public static boolean collectProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
@@ -758,6 +783,31 @@ public class ProjectUtil
         throws CoreException
     {
 
+    }
+
+    public static boolean findMakers( IProject proj, final String sourceId, final String markerType )
+    {
+        try
+        {
+            if( proj.isOpen() )
+            {
+                IMarker[] markers = proj.findMarkers( markerType, true, IResource.DEPTH_INFINITE );
+
+                for( IMarker marker : markers )
+                {
+                    if( marker.getAttribute( IMarker.SOURCE_ID ).equals( sourceId ) )
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        catch( Exception e)
+        {
+            ProjectCore.logError( e );
+        }
+
+        return false;
     }
 
     private static void fixExtProjectClasspathEntries( IProject project )
@@ -1483,6 +1533,17 @@ public class ProjectUtil
             ddModel.setBooleanProperty( IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD );
         }
     }
+
+    public static void setMarker( IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
+        String markerSourceId ) throws CoreException
+    {
+        IMarker marker = proj.createMarker( markerType );
+        marker.setAttribute( IMarker.SEVERITY, markerSeverity );
+        marker.setAttribute( IMarker.MESSAGE, markerMsg );
+        marker.setAttribute( IMarker.LOCATION, markerLocation );
+        marker.setAttribute( IMarker.SOURCE_ID, markerSourceId );
+    }
+
 
     private static class Msgs extends NLS
     {
