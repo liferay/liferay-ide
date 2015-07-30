@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -57,6 +58,7 @@ public class SDKLocationValidationService extends ValidationService
             }
         };
 
+        op().property( NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER ).attach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).attach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).attach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE ).attach( this.listener );
@@ -67,56 +69,64 @@ public class SDKLocationValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final Path sdkLocation = op().getSdkLocation().content( true );
-
-        if( sdkLocation == null || sdkLocation.isEmpty() )
+        if ( op().getProjectProvider().content().getShortName().equals( "ant" ))
         {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is empty " ) );
-        }
+            final Path sdkLocation = op().getSdkLocation().content( true );
 
-        SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
-
-        if( sdk != null )
-        {
-            IStatus status = sdk.validate();
-
-            if( !status.isOK() )
+            if( sdkLocation == null || sdkLocation.isEmpty() )
             {
-                return StatusBridge.create( status );
+                return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is empty " ) );
             }
-        }
-        else
-        {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is not correct" ) );
-        }
 
-        final Path projectLocation = op().getLocation().content();
+            SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
 
-        final String projectName = op().getProjectName().content();
+            if( sdk != null )
+            {
+                IStatus status = sdk.validate();
 
-        IPath projectPath = PathBridge.create( projectLocation );
+                if( !status.isOK() )
+                {
+                    return StatusBridge.create( status );
+                }
+            }
+            else
+            {
+                return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is not correct" ) );
+            }
 
-        if ( projectPath != null && projectPath.toFile().exists() )
-        {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "Project(" + projectName + ") is existed in sdk folder, please set new project name" ) );
-        }
+            final Path projectLocation = op().getLocation().content();
 
-        if( op().getPluginType().content().equals( PluginType.web ) && ! supportsWebTypePlugin( op() ) )
-        {
-            retval =
-                Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  " +
-                    "Please configure version 7.0.0 or greater." );
-        }
+            final String projectName = op().getProjectName().content();
 
-        final IPortletFramework portletFramework = op().getPortletFramework().content();
-        final Version requiredVersion = new Version( portletFramework.getRequiredSDKVersion() );
-        final Version sdkVersion = new Version( sdk.getVersion() );
+            IPath projectPath = PathBridge.create( projectLocation );
 
-        if( CoreUtil.compareVersions( requiredVersion, sdkVersion ) > 0 )
-        {
-            retval =
-                Status.createErrorStatus( "Selected portlet framework requires SDK version at least " +
-                    requiredVersion );
+            if ( projectPath != null && projectPath.toFile().exists() )
+            {
+                return StatusBridge.create( ProjectCore.createErrorStatus( "Project(" + projectName + ") is existed in sdk folder, please set new project name" ) );
+            }
+
+            if( op().getPluginType().content().equals( PluginType.web ) )
+            {
+                if ( ! supportsWebTypePlugin( op() ) )
+                {
+                    retval =
+                        Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  "
+                            + "Please configure version 7.0.0 or greater." );
+                }
+            }
+            else if (op().getPluginType().content().equals( PluginType.portlet ))
+            {
+                final IPortletFramework portletFramework = op().getPortletFramework().content();
+                final Version requiredVersion = new Version( portletFramework.getRequiredSDKVersion() );
+                final Version sdkVersion = new Version( sdk.getVersion() );
+
+                if( CoreUtil.compareVersions( requiredVersion, sdkVersion ) > 0 )
+                {
+                    retval =
+                        Status.createErrorStatus( "Selected portlet framework requires SDK version at least " +
+                            requiredVersion );
+                }
+            }
         }
 
         return retval;
@@ -128,6 +138,7 @@ public class SDKLocationValidationService extends ValidationService
         op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PORTLET_FRAMEWORK ).detach( this.listener );
         op().property( NewLiferayPluginProjectOp.PROP_PLUGIN_TYPE ).detach( this.listener );
+        op().property( NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER ).detach( this.listener );
 
         super.dispose();
     }
