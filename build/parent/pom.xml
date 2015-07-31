@@ -44,7 +44,7 @@
         <tern-site>http://oss.opensagres.fr/tern.repository/0.10.0/</tern-site>
         <webresources-site>http://oss.opensagres.fr/eclipse-wtp-webresources/0.9.0-SNAPSHOT/</webresources-site>
         <bndtools-site>https://bndtools.ci.cloudbees.com/job/bndtools.master/lastSuccessfulBuild/artifact/build/generated/p2/</bndtools-site>
-        <gradle-site>http://download.eclipse.org/buildship/updates/snapshots/1.0</gradle-site>
+        <gradle-site>http://download.eclipse.org/buildship/updates/e45/snapshots/1.0/</gradle-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
