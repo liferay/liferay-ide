@@ -45,6 +45,7 @@
         <webresources-site>http://oss.opensagres.fr/eclipse-wtp-webresources/0.9.0-SNAPSHOT/</webresources-site>
         <bndtools-site>https://bndtools.ci.cloudbees.com/job/bndtools.master/lastSuccessfulBuild/artifact/build/generated/p2/</bndtools-site>
         <gradle-site>http://download.eclipse.org/buildship/updates/e45/snapshots/1.0/</gradle-site>
+        <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.0/N/LATEST/</tycho-m2e-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
@@ -113,6 +114,11 @@
             <id>m2e-archiver</id>
             <layout>p2</layout>
             <url>${m2e-archiver-site}</url>
+        </repository>
+        <repository>
+            <id>tycho-m2e</id>
+            <layout>p2</layout>
+            <url>${tycho-m2e-site}</url>
         </repository>
     </repositories>
 

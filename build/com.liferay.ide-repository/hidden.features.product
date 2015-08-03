@@ -49,6 +49,7 @@
       <feature id="org.eclipse.sapphire.ui.swt.xml.editor" />
       <feature id="org.eclipse.wst.xml.search.core-feature" />
       <feature id="org.sonatype.m2e.mavenarchiver.feature" />
+      <feature id="org.sonatype.tycho.m2e.feature" />
       <feature id="tern-feature" />
       <feature id="tern-jsdt-feature" />
       <feature id="tern-server-nodejs-feature" />
