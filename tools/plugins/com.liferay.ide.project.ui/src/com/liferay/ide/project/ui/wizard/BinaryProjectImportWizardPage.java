@@ -87,6 +87,7 @@ public class BinaryProjectImportWizardPage extends DataModelFacetCreationWizardP
             {
                 if( binariesLocation.isFocusControl() && "" == binariesLocation.getText() )
                 {
+                    setErrorMessage( "Select a binary to import." );
                     getDataModel().setProperty( SELECTED_PROJECTS, null );
                 }
                 else
