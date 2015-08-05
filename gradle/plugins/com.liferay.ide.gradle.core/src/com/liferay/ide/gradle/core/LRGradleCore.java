@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -31,12 +32,12 @@ import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
 import org.osgi.framework.BundleContext;
-import org.springsource.ide.eclipse.gradle.core.GradleProject;
 
 /**
  * The activator class controls the plugin life cycle
  *
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class LRGradleCore extends Plugin
 {
@@ -77,16 +78,15 @@ public class LRGradleCore extends Plugin
         return plugin;
     }
 
-
     @SuppressWarnings( "unchecked" )
-    public static <T> T getToolingModel( Class<?> modelClass, GradleProject gradleProject )
+    public static <T> T getToolingModel( Class<?> modelClass, IProject gradleProject )
     {
         T retval = null;
 
         try
         {
             GradleConnector connector = GradleConnector.newConnector();
-            connector.forProjectDirectory( gradleProject.getLocation() );
+            connector.forProjectDirectory( gradleProject.getLocation().toFile() );
             ProjectConnection connection = null;
 
             try
@@ -95,22 +95,21 @@ public class LRGradleCore extends Plugin
                 ModelBuilder<T> modelBuilder = (ModelBuilder<T>) connection.model( modelClass );
 
                 final File localRepo =
-                    new File( FileLocator.toFileURL(
-                        getDefault().getBundle().getEntry( "repo" ) ).getFile() );
+                    new File( FileLocator.toFileURL( getDefault().getBundle().getEntry( "repo" ) ).getFile() );
 
                 final String initScriptTemplate =
-                    CoreUtil.readStreamToString(
-                        new FileInputStream( new File( localRepo, "init.gradle" ) ) );
+                    CoreUtil.readStreamToString( new FileInputStream( new File( localRepo, "init.gradle" ) ) );
 
-                final String initScriptContents =
-                    initScriptTemplate.replaceFirst( "%repo%", localRepo.getAbsolutePath() );
+                String path = localRepo.getAbsolutePath();
+
+                path = path.replaceAll( "\\\\", "/" );
+                final String initScriptContents = initScriptTemplate.replaceFirst( "%repo%", path );
 
                 final IPath scriptPath = getDefault().getStateLocation().append( "init.gradle" );
 
                 final File scriptFile = scriptPath.toFile();
 
-                FileUtil.writeFileFromStream(
-                    scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
+                FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
 
                 modelBuilder.withArguments( "--init-script", scriptFile.getAbsolutePath() );
 

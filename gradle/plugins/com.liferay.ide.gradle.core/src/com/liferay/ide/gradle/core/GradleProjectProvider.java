@@ -12,8 +12,8 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.gradle.core;
 
+package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
@@ -24,35 +24,32 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.core.resources.IProject;
-import org.springsource.ide.eclipse.gradle.core.GradleCore;
-import org.springsource.ide.eclipse.gradle.core.GradleNature;
-import org.springsource.ide.eclipse.gradle.core.GradleProject;
-import org.springsource.ide.eclipse.gradle.core.modelmanager.IGradleModelListener;
-
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class GradleProjectProvider extends AbstractLiferayProjectProvider implements ILiferayProjectProvider, IGradleModelListener
+public class GradleProjectProvider extends AbstractLiferayProjectProvider implements ILiferayProjectProvider
 {
 
-    private final Map<GradleProject, Map<String, Boolean>> projectPluginsMap =
-        new WeakHashMap<GradleProject, Map<String, Boolean>>();
+    private final Map<IProject, Map<String, Boolean>> projectPluginsMap =
+        new WeakHashMap<IProject, Map<String, Boolean>>();
 
     public GradleProjectProvider()
     {
         super( new Class<?>[] { IProject.class } );
     }
 
-    private Boolean checkModel( GradleProject gradleProject, String pluginClass )
+    private Boolean checkModel( IProject gradleProject, String pluginClass )
     {
         final CustomModel model = LRGradleCore.getToolingModel( CustomModel.class, gradleProject );
 
         return model != null && model.hasPlugin( pluginClass );
     }
 
-    private boolean hasPlugin( GradleProject gradleProject, String pluginClass )
+    private boolean hasPlugin( IProject gradleProject, String pluginClass )
     {
         Boolean retval = null;
 
@@ -77,17 +74,9 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
             final Map<String, Boolean> plugins = new HashMap<String, Boolean>();
             plugins.put( pluginClass, retval );
             this.projectPluginsMap.put( gradleProject, plugins );
-
-            gradleProject.addModelListener( this );
         }
 
         return retval == null ? false : retval;
-    }
-
-    @Override
-    public synchronized <T> void modelChanged( GradleProject project, Class<T> type, T model )
-    {
-        this.projectPluginsMap.remove( project );
     }
 
     @Override
@@ -99,12 +88,10 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
         {
             final IProject project = (IProject) adaptable;
 
-            if( GradleNature.hasNature( project ) )
+            if( GradleProjectNature.INSTANCE.isPresentOn( project ) )
             {
-                final GradleProject gradleProject = GradleCore.create( project );
-
-                if( hasPlugin( gradleProject, "aQute.bnd.gradle.BndBuilderPlugin" ) ||
-                    hasPlugin( gradleProject, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
+                if( hasPlugin( project, "aQute.bnd.gradle.BndBuilderPlugin" ) ||
+                    hasPlugin( project, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
                 {
                     return new GradleBundleProject( project );
                 }

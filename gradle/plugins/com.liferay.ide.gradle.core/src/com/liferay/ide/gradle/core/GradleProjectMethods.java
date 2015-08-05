@@ -19,15 +19,18 @@ import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 import java.io.File;
 import java.util.Set;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.springsource.ide.eclipse.gradle.core.GradleProject;
 
-
+/**
+ * @author Gregory Amerson
+ * @author Terry Jia
+ */
 public class GradleProjectMethods
 {
 
-    public static IPath getOutputJar( GradleProject gradleProject )
+    public static IPath getOutputJar( IProject gradleProject )
     {
         final CustomModel model = LRGradleCore.getToolingModel( CustomModel.class, gradleProject );
 
