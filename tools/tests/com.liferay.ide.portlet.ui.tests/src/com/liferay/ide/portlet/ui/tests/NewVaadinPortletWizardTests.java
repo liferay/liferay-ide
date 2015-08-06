@@ -141,7 +141,8 @@ public class NewVaadinPortletWizardTests extends PortletUITestBase
     {
         dataModel.setProperty( PROJECT_NAME, project.getName() );
         dataModel.setProperty( CLASS_NAME, "" );
-        String message = dataModel.validate().getMessage();
+        
+        String message = dataModel.validateProperty( CLASS_NAME ).getMessage();
         assertEquals( "The class name cannot be empty.", message );
         assertEquals( false, wizard.canFinish() );
         // todo:add class validation
