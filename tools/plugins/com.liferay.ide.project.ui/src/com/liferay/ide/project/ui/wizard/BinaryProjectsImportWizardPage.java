@@ -360,6 +360,10 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
         {
             // since the file/folder was not modified and the path did not
             // change, no refreshing is required
+            if( selectedProjects.length == 0 )
+            {
+                setMessage( StringPool.EMPTY, WARNING );
+            }
             return;
         }
 
