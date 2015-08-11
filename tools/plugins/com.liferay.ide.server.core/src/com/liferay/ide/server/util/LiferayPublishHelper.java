@@ -57,7 +57,7 @@ public class LiferayPublishHelper
 
                     try
                     {
-                        runtime = ServerUtil.getRuntime( project );
+                        runtime = delegate.getServer().getRuntime();
 
                         if( runtime != null )
                         {
