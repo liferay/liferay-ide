@@ -775,16 +775,6 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         if( CoreUtil.isNullOrEmpty(projectName) )
             return  retval;
 
-        if ( path != null && path.segmentCount() > 0 )
-        {
-            final String lastSegment = path.lastSegment();
-
-            if ( ! lastSegment.equals( projectName ) )
-            {
-                path = path.append( projectName );
-            }
-        }
-
         final File dir = path.toFile();
 
         if( dir.exists() )
