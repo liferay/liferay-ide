@@ -51,3 +51,4 @@ Export-Package: com.liferay.ide.project.ui,
  com.liferay.ide.project.ui.handlers,
  com.liferay.ide.project.ui.pref,
  com.liferay.ide.project.ui.wizard
+Import-Package: blade.migrate.api;version="1.0.0"

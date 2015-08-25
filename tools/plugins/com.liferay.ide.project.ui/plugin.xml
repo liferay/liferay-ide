@@ -927,8 +927,8 @@
          </command>
       </menuContribution>
    </extension>
-   
-   
+
+
    <extension
          point="org.eclipse.ui.handlers">
       <handler
@@ -1104,6 +1104,45 @@
             class="com.liferay.ide.project.ui.handlers.WarSDKHandler"
             commandId="com.liferay.ide.project.ui.command.war">
       </handler>
+   </extension>
+   <extension
+            point="org.eclipse.ui.views">
+        <view
+            allowMultiple="false"
+            class="com.liferay.ide.project.ui.migration.MigrationView"
+            icon="icons/e16/liferay.png"
+            id="com.liferay.ide.project.ui.migrationView"
+            name="Liferay Plugin Migration"
+            restorable="true">
+      </view>
+   </extension>
+
+   <extension point="org.eclipse.ui.commands">
+      <command
+         id="com.liferay.ide.project.ui.migrateProject"
+         name="Migrate Project"
+         description="Start a migration task for the selected project"
+      />
+   </extension>
+   <extension point="org.eclipse.ui.commandImages">
+      <image
+         commandId="com.liferay.ide.project.ui.migrateProject"
+         icon="icons/e16/liferay.png"
+      />
+   </extension>
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+         commandId="com.liferay.ide.project.ui.migrateProject"
+         class="com.liferay.ide.project.ui.migration.MigrateProjectHandler">
+         <enabledWhen>
+            <with variable="selection">
+               <count value="+" />
+               <iterate operator="and">
+                  <adapt type="org.eclipse.core.resources.IProject" />
+               </iterate>
+            </with>
+         </enabledWhen>
+       </handler>
    </extension>
 <!--
 
