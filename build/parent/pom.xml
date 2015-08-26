@@ -87,6 +87,11 @@
             <url>${bndtools-site}</url>
         </repository>
         <repository>
+            <id>blade</id>
+            <layout>p2</layout>
+            <url>${blade-site}</url>
+        </repository>
+        <repository>
             <id>gradle</id>
             <layout>p2</layout>
             <url>${gradle-site}</url>
