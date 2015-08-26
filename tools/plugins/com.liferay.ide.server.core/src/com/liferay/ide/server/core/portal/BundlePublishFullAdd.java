@@ -137,7 +137,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         {
             try
             {
-                long bundleId = deployer.deployBundle( bsn, output.toFile() );
+                long bundleId = deployer.deploy( bsn, output.toFile() );
 
                 retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) bundleId, null, null );
             }

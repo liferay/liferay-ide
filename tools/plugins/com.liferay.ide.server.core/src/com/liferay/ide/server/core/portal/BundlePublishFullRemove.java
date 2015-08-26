@@ -163,7 +163,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         {
             try
             {
-                deployer.uninstallBundle( symbolicName );
+                deployer.uninstall( symbolicName );
                 retval = Status.OK_STATUS;
             }
             catch( Exception e )
