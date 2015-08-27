@@ -16,8 +16,8 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.util.ClasspathUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
@@ -56,7 +56,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
         {
             final IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
 
-            ProjectUtil.clearMarkers( sdkProject, ID_SDK_PROPERTIES_INVALID, IMarker.PROBLEM );
+            MarkerUtil.clearMarkers( sdkProject, IMarker.PROBLEM, ID_SDK_PROPERTIES_INVALID );
 
             final IStatus sdkValid = sdk.reloadProperties();
 
@@ -66,7 +66,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 
                 for( final IStatus status : statuses )
                 {
-                    ProjectUtil.setMarker(
+                    MarkerUtil.setMarker(
                         sdkProject, IMarker.PROBLEM, IMarker.SEVERITY_ERROR, status.getMessage(),
                         sdkProject.getFullPath().toPortableString(), ID_SDK_PROPERTIES_INVALID );
                 }
