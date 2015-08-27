@@ -333,12 +333,10 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
     public ILiferayProject provide( Object type )
     {
         ILiferayProject retval = null;
-        IProject project = null;
-        ILiferayRuntime liferayRuntime = null;
 
         if( type instanceof IProject )
         {
-            project = (IProject) type;
+            final IProject project = (IProject) type;
 
             try
             {
@@ -379,15 +377,15 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             {
                 final IRuntime runtime = (IRuntime) type;
 
-                liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+                final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+
+                if( liferayRuntime != null )
+                {
+                    retval = new PluginsSDKRuntimeProject( null, liferayRuntime );
+                }
             }
             catch( Exception e )
             {
-            }
-
-            if( liferayRuntime != null )
-            {
-                retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
             }
         }
 
