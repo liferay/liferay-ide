@@ -326,8 +326,6 @@ public class ProjectCore extends Plugin
 
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
             sdkBuildPropertiesResourceListener, IResourceChangeEvent.POST_CHANGE );
-
-
     }
 
     /*
@@ -351,6 +349,5 @@ public class ProjectCore extends Plugin
             ResourcesPlugin.getWorkspace().removeResourceChangeListener( sdkBuildPropertiesResourceListener );
         }
     }
-
 
 }
