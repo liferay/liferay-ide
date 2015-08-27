@@ -342,27 +342,30 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
             try
             {
-                IJavaProject javaProject = JavaCore.create( project );
-
-                final boolean hasNewSdk =
-                    ClasspathUtil.hasNewLiferaySDKContainer( javaProject.getRawClasspath() );
-
-                if ( SDKUtil.isSDKProject( project ) && hasNewSdk == true )
+                if( SDKUtil.isSDKProject( project ) )
                 {
-                    PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
+                    final IJavaProject javaProject = JavaCore.create( project );
 
-                    if( portalBundle != null )
+                    final boolean hasNewSdk =
+                        ClasspathUtil.hasNewLiferaySDKContainer( javaProject.getRawClasspath() );
+
+                    if( hasNewSdk )
                     {
-                        retval = new PluginsSDKBundleProject( project, portalBundle );
+                        final PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
+
+                        if( portalBundle != null )
+                        {
+                            retval = new PluginsSDKBundleProject( project, portalBundle );
+                        }
                     }
-                }
-                else if ( SDKUtil.isSDKProject( project ))
-                {
-                    liferayRuntime = ServerUtil.getLiferayRuntime( project );
-
-                    if( liferayRuntime != null )
+                    else
                     {
-                        retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
+                        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+
+                        if( liferayRuntime != null )
+                        {
+                            retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
+                        }
                     }
                 }
             }
