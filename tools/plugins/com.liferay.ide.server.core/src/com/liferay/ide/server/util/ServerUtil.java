@@ -487,23 +487,29 @@ public class ServerUtil
 
         IStatus status = sdk.validate();
 
-        if ( !status.isOK())
+        if ( !status.isOK() )
         {
             return null;
         }
 
-        Map<String, Object> appServerProperties = sdk.getBuildProperties();
+        Map<String, Object> appServerProperties = sdk.getBuildProperties( false );
 
-        final PortalBundleFactory[] factories = LiferayServerCore.getPortalBundleFactories();
-        for( PortalBundleFactory factory : factories )
+        final String appServerType = (String) ( appServerProperties.get( "app.server.type" ) );
+
+        PortalBundleFactory factory = LiferayServerCore.getPortalBundleFactories( appServerType );
+
+        if ( factory != null )
         {
             final IPath path = factory.canCreateFromPath( appServerProperties );
 
             if( path != null )
             {
-                return factory.create( path );
+                PortalBundle bundle = factory.create( path );
+
+                return bundle;
             }
         }
+
         return null;
     }
 

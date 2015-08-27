@@ -252,45 +252,6 @@ public class LiferayTomcatUtil
         return retval;
     }
 
-    public static boolean detectCatalinaDir( IPath path )
-    {
-        if( !path.toFile().exists() )
-        {
-            return false;
-        }
-
-        if( path.append( "bin" ).toFile().exists() &&
-            path.append( "conf" ).toFile().exists() &&
-            path.append( "lib" ).toFile().exists() &&
-            path.append( "webapps" ).toFile().exists() )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static boolean detectLiferayHome( IPath path )
-    {
-        if( !path.toFile().exists() )
-        {
-            return false;
-        }
-
-        if( path.append( "data" ).toFile().exists() && path.append( "osgi" ).toFile().exists() )
-        {
-            return true;
-        }
-
-        if( path.append( "portal-ext.properties" ).toFile().exists() ||
-            path.append( "portal-setup-wizard.properties" ).toFile().exists() )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     public static void displayToggleMessage( String msg, String key )
     {
 //        UIUtil.postInfoWithToggle(

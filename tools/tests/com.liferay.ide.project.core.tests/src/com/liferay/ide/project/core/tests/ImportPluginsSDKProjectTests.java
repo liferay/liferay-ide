@@ -136,7 +136,7 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     public void testSDKSetting() throws Exception
     {
         SDK sdk = SDKUtil.getWorkspaceSDK();
-        Map<String, Object> sdkProperties = sdk.getBuildProperties();
+        Map<String, Object> sdkProperties = sdk.getBuildProperties(true);
 
         assertNotNull( sdkProperties.get( "app.server.type" ) );
         assertNotNull( sdkProperties.get( "app.server.dir" ) );

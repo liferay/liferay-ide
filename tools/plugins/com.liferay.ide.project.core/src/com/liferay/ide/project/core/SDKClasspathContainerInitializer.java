@@ -127,6 +127,10 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
         IPath bundleDir = null;
         IPath[] bundleLibDependencyPath = null;
 
+        PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
+
+        boolean containerChanged = true;
+
         if( containerSuggestion instanceof SDKClasspathContainer )
         {
             portalDir = ( (SDKClasspathContainer) containerSuggestion ).getPortalDir();
@@ -135,15 +139,18 @@ public class SDKClasspathContainerInitializer extends ClasspathContainerInitiali
             javadocURL = ( (SDKClasspathContainer) containerSuggestion ).getJavadocURL();
             sourceLocation = ( (SDKClasspathContainer) containerSuggestion ).getSourceLocation();
             bundleLibDependencyPath = ( (SDKClasspathContainer) containerSuggestion ).getBundleLibDependencyPath();
-        }
-        else
-        {
-            PortalBundle bundle = ServerUtil.getPortalBundle(project.getProject());
 
+            if ( bundle != null && bundle.getAppServerPortalDir().equals( portalDir ) )
+            {
+                containerChanged = false;
+            }
+        }
+
+        if ( containerChanged == true)
+        {
             if ( bundle == null )
             {
-                final String msg = "Invalid sdk properties setting.";
-                throw new CoreException( ProjectCore.createErrorStatus( msg ) );
+                return;
             }
 
             portalDir = bundle.getAppServerPortalDir();
