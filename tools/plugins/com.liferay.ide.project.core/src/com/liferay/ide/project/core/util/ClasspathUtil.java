@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.project.core.SDKClasspathContainer;
@@ -28,19 +29,13 @@ import org.eclipse.jdt.core.JavaCore;
 /**
  * @author Simon Jiang
  */
-
 public class ClasspathUtil
 {
-
-    public static boolean isPluginContainerEntry( IClasspathEntry e )
-    {
-        return e != null && e.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-            e.getPath().segment( 0 ).equals( SDKClasspathContainer.ID );
-    }
 
     public static boolean hasNewLiferaySDKContainer( IClasspathEntry[] entries )
     {
         boolean retVal = false;
+
         for( IClasspathEntry entry : entries )
         {
             if( entry.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
@@ -54,8 +49,13 @@ public class ClasspathUtil
         return retVal;
     }
 
+    public static boolean isPluginContainerEntry( IClasspathEntry e )
+    {
+        return e != null && e.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
+            e.getPath().segment( 0 ).equals( SDKClasspathContainer.ID );
+    }
 
-    public static void updateRequestContainer(IProject project) throws CoreException
+    public static void updateRequestContainer( IProject project ) throws CoreException
     {
         final IJavaProject javaProject = JavaCore.create( project );
         IPath containerPath = null;
@@ -76,11 +76,12 @@ public class ClasspathUtil
 
         if( containerPath != null )
         {
-            final IClasspathContainer classpathContainer = JavaCore.getClasspathContainer( containerPath, javaProject );
+            final IClasspathContainer classpathContainer =
+                JavaCore.getClasspathContainer( containerPath, javaProject );
 
             final String id = containerPath.segment( 0 );
 
-            if ( id.equals( SDKClasspathContainer.ID ) )
+            if( id.equals( SDKClasspathContainer.ID ) )
             {
                 ClasspathContainerInitializer initializer = JavaCore.getClasspathContainerInitializer( id );
                 initializer.requestClasspathContainerUpdate( containerPath, javaProject, classpathContainer );

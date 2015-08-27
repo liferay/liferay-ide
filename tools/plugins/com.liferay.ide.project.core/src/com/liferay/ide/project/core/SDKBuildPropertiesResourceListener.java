@@ -46,30 +46,29 @@ import org.eclipse.core.runtime.jobs.Job;
 public class SDKBuildPropertiesResourceListener implements IResourceChangeListener, IResourceDeltaVisitor
 {
     private static final String ID_SDK_PROPERTIES_INVALID = "sdk-properties-invalid";
-
     private static final Pattern PATTERN_BUILD_PROPERTIES = Pattern.compile("build.[\\w|\\W.]*properties");
 
-    protected void processPropertiesFile(final IFile buildPropertiesFile ) throws CoreException
+    protected void processPropertiesFile( final IFile buildPropertiesFile ) throws CoreException
     {
-
         final SDK sdk = SDKUtil.getWorkspaceSDK();
 
-        if ( sdk != null )
+        if( sdk != null )
         {
             final IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
 
-            ProjectUtil.clearMarkers(sdkProject, ID_SDK_PROPERTIES_INVALID, IMarker.PROBLEM);
+            ProjectUtil.clearMarkers( sdkProject, ID_SDK_PROPERTIES_INVALID, IMarker.PROBLEM );
 
             final IStatus sdkValid = sdk.reloadProperties();
 
-            if ( !sdkValid.isOK() )
+            if( !sdkValid.isOK() )
             {
                 final IStatus[] statuses = sdkValid.getChildren();
 
-                for( final IStatus iStatus : statuses )
+                for( final IStatus status : statuses )
                 {
-                    ProjectUtil.setMarker(sdkProject, IMarker.PROBLEM, IMarker.SEVERITY_ERROR,
-                        iStatus.getMessage(), sdkProject.getFullPath().toPortableString(),ID_SDK_PROPERTIES_INVALID);
+                    ProjectUtil.setMarker(
+                        sdkProject, IMarker.PROBLEM, IMarker.SEVERITY_ERROR, status.getMessage(),
+                        sdkProject.getFullPath().toPortableString(), ID_SDK_PROPERTIES_INVALID );
                 }
 
                 return;
@@ -78,17 +77,19 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 
         for( final IProject project : CoreUtil.getAllProjects() )
         {
-            if ( SDKUtil.isSDKProject( project ) && sdk.getLocation().isPrefixOf( project.getLocation() ))
+            if( SDKUtil.isSDKProject( project ) && sdk.getLocation().isPrefixOf( project.getLocation() ) )
             {
-                Job job = new WorkspaceJob( "Updating project setting base on new sdk properties for " + project.getName() )
+                Job job = new WorkspaceJob( "Updating project sdk properties for " + project.getName() )
                 {
                     @Override
                     public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
                     {
-                        ClasspathUtil.updateRequestContainer(project);
+                        ClasspathUtil.updateRequestContainer( project );
+
                         return Status.OK_STATUS;
                     }
                 };
+
                 job.setRule( project );
                 job.schedule();
             }
@@ -123,17 +124,19 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
         }
 
         final IPath fullPath = deltaResource.getRawLocation();
+
         try
         {
             final SDK sdk = SDKUtil.getWorkspaceSDK();
 
-            if ( sdk != null && sdk.getLocation().isPrefixOf( fullPath ))
+            if( sdk != null && sdk.getLocation().isPrefixOf( fullPath ) )
             {
-                if( fullPath.lastSegment() != null &&  PATTERN_BUILD_PROPERTIES.matcher( fullPath.lastSegment() ).matches() )
+                if( fullPath.lastSegment() != null &&
+                    PATTERN_BUILD_PROPERTIES.matcher( fullPath.lastSegment() ).matches() )
                 {
                     int kind = delta.getKind();
 
-                    if ( kind == IResourceDelta.ADDED || kind == IResourceDelta.CHANGED)
+                    if( kind == IResourceDelta.ADDED || kind == IResourceDelta.CHANGED )
                     {
                         final File propertiesFile = fullPath.toFile();
 
@@ -179,6 +182,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
                         public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
                         {
                             final IResource resource = delta.getResource();
+
                             try
                             {
                                 processPropertiesFile( (IFile) resource );

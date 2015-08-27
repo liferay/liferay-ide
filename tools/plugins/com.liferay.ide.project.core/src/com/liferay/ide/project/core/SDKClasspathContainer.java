@@ -39,20 +39,31 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
         "util-taglib.jar",  //$NON-NLS-1$
     };
 
-    protected IPath portalGlobalDir;
+    private final IPath bundleDir;
 
-    protected IPath bundleDir;
+    private final IPath[] bundleLibDependencyPath;
 
-    protected IPath[] bundleLibDependencyPath;
+    private final IPath portalGlobalDir;
 
     public SDKClasspathContainer(
         IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL,
         IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPath )
     {
-        super(containerPath,project,portalDir,javadocURL,sourceURL);
+        super( containerPath, project, portalDir, javadocURL, sourceURL );
+
         this.portalGlobalDir = portalGlobalDir;
         this.bundleDir = bundleDir;
         this.bundleLibDependencyPath = bundleLibDependencyPath;
+    }
+
+    public IPath getBundleDir()
+    {
+        return this.bundleDir;
+    }
+
+    public IPath[] getBundleLibDependencyPath()
+    {
+        return this.bundleLibDependencyPath;
     }
 
     @Override
@@ -60,9 +71,9 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
     {
         if( this.classpathEntries == null )
         {
-            List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
+            final List<IClasspathEntry> entries = new ArrayList<IClasspathEntry>();
 
-            for( IPath pluginJarPath : bundleLibDependencyPath )
+            for( IPath pluginJarPath : this.bundleLibDependencyPath )
             {
                 IPath sourcePath = null;
 
@@ -70,6 +81,7 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
                 {
                     sourcePath = getSourceLocation();
                 }
+
                 entries.add( createClasspathEntry( pluginJarPath, sourcePath, this.javadocURL ) );
             }
 
@@ -100,17 +112,7 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
 
     public IPath getPortalGlobalDir()
     {
-        return portalGlobalDir;
-    }
-
-    public IPath getBundleDir()
-    {
-        return bundleDir;
-    }
-
-    public IPath[] getBundleLibDependencyPath()
-    {
-        return this.bundleLibDependencyPath;
+        return this.portalGlobalDir;
     }
 
     @Override
