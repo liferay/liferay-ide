@@ -207,7 +207,15 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         //assertEquals( expected3, op.getLocation().validation().message() );
 
         op.setLocation( "" );
+        
+        //IDE-2069
+        invalidLocation = getLiferayRuntimeDir().removeLastSegments( 2 ).toOSString();
+        op.setLocation( invalidLocation );
 
+        final String expected5 = "Project location is not empty or a parent pom.";
+
+        assertEquals( expected5, vs.validation().message() );
+        
         final String expected4 = "Location must be specified.";
         assertEquals( expected4, vs.validation().message() );
         assertEquals( expected4, op.getLocation().validation().message() );

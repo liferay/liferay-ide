@@ -92,6 +92,16 @@ public class PortalBundleTests extends ServerCoreBase
         runtimeWC.setLocation( getLiferayRuntimeDir() );
 
         assertNotNull( portalRuntime.getPortalBundle() );
+
+        // set 7.x server with 6.2 location
+        IPath zip = getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2-ce-ga4-20150416163831865.zip" );
+        IPath dir = ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2-ce-ga4/tomcat-7.0.42" );
+
+        extractRuntime( zip, dir );
+
+        runtimeWC.setLocation( dir );
+
+        assertNull( portalRuntime.getPortalBundle() );
     }
 
     @Test
@@ -170,6 +180,5 @@ public class PortalBundleTests extends ServerCoreBase
 
         assertNull( portalRuntime.getPortalBundle() );
     }
-
 }
 
