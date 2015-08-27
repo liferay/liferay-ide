@@ -45,11 +45,9 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class SDKBuildPropertiesResourceListener implements IResourceChangeListener, IResourceDeltaVisitor
 {
-
     private static final String ID_SDK_PROPERTIES_INVALID = "sdk-properties-invalid";
 
-
-    private final static Pattern buildPropertiesPattern = Pattern.compile("build.[\\w|\\W.]*properties");
+    private static final Pattern PATTERN_BUILD_PROPERTIES = Pattern.compile("build.[\\w|\\W.]*properties");
 
     protected void processPropertiesFile(final IFile buildPropertiesFile ) throws CoreException
     {
@@ -131,7 +129,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 
             if ( sdk != null && sdk.getLocation().isPrefixOf( fullPath ))
             {
-                if( fullPath.lastSegment() != null &&  buildPropertiesPattern.matcher( fullPath.lastSegment() ).matches() )
+                if( fullPath.lastSegment() != null &&  PATTERN_BUILD_PROPERTIES.matcher( fullPath.lastSegment() ).matches() )
                 {
                     int kind = delta.getKind();
 
