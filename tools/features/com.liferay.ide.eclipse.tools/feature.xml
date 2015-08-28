@@ -32,6 +32,7 @@
    </license>
 
    <requires>
+      <import feature="blade.tools" version="1.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.sapphire" version="8.2" match="compatible"/>
       <import feature="org.eclipse.sapphire.java" version="8.2" match="compatible"/>
       <import feature="org.eclipse.sapphire.java.jdt" version="8.2" match="compatible"/>

@@ -30,6 +30,7 @@
    </plugins>
 
    <features>
+      <feature id="blade.tools" />
       <feature id="com.liferay.ide.common" />
       <feature id="com.liferay.ide.hidden" />
       <feature id="org.apache.ivyde.feature" />
