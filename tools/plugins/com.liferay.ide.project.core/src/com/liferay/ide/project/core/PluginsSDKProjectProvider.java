@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProjectName;
+import com.liferay.ide.project.core.util.ClasspathUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.WizardUtil;
@@ -48,6 +49,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -330,31 +333,37 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
     public ILiferayProject provide( Object type )
     {
         ILiferayProject retval = null;
-        IProject project = null;
-        ILiferayRuntime liferayRuntime = null;
 
         if( type instanceof IProject )
         {
-            project = (IProject) type;
+            final IProject project = (IProject) type;
 
             try
             {
-                if ( SDKUtil.isSDKProject( project ) )
+                if( SDKUtil.isSDKProject( project ) )
                 {
-                    PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
+                    final IJavaProject javaProject = JavaCore.create( project );
 
-                    if( portalBundle != null )
+                    final boolean hasNewSdk =
+                        ClasspathUtil.hasNewLiferaySDKContainer( javaProject.getRawClasspath() );
+
+                    if( hasNewSdk )
                     {
-                        retval = new PluginsSDKBundleProject( project, portalBundle );
+                        final PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
+
+                        if( portalBundle != null )
+                        {
+                            retval = new PluginsSDKBundleProject( project, portalBundle );
+                        }
                     }
-                }
-                else if ( SDKUtil.isSDKProject( project ))
-                {
-                    liferayRuntime = ServerUtil.getLiferayRuntime( project );
-
-                    if( liferayRuntime != null )
+                    else
                     {
-                        retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
+                        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+
+                        if( liferayRuntime != null )
+                        {
+                            retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
+                        }
                     }
                 }
             }
@@ -368,15 +377,15 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             {
                 final IRuntime runtime = (IRuntime) type;
 
-                liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+                final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+
+                if( liferayRuntime != null )
+                {
+                    retval = new PluginsSDKRuntimeProject( null, liferayRuntime );
+                }
             }
             catch( Exception e )
             {
-            }
-
-            if( liferayRuntime != null )
-            {
-                retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
             }
         }
 
@@ -439,5 +448,4 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
         return retval;
     }
-
 }

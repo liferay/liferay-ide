@@ -89,6 +89,7 @@ public class NewLiferayPluginProjectOp623Tests extends NewLiferayPluginProjectOp
 
     @Override
     @Test
+    @Ignore
     public void testLocationListener() throws Exception
     {
         if( shouldSkipBundleTests() ) return;

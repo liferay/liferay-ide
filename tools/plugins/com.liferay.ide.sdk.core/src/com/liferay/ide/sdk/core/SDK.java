@@ -61,9 +61,11 @@ public class SDK
         return name + "=\"" + value + "\" "; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
-    public static List<String> SUPPORT_SERVER_TYPES = Arrays.asList( new String[]{ "tomcat", "jboss", "glassfish", "jetty"} );
+    public List<String> support_server_type = Arrays.asList( new String[]{ "tomcat", "jboss", "glassfish", "jetty"} );
 
-    public static List<String> KEY_BUILD_PROPERTIES = Arrays.asList( new String[] { "app.server.dir",
+    public static Map<String, Map<String,Object>> build_prperties = new HashMap<String, Map<String,Object>>();
+
+    public static List<String> KEY_BUILD_PROPERTIES = Arrays.asList( new String[] { "app.server.type", "app.server.dir",
         "app.server.deploy.dir", "app.server.lib.global.dir", "app.server.parent.dir", "app.server.portal.dir" } );
 
     @SuppressWarnings( "deprecation" )
@@ -770,64 +772,78 @@ public class SDK
 
     public Map<String,Object> getBuildProperties() throws CoreException
     {
+        return getBuildProperties(false);
+    }
+
+    public Map<String,Object> getBuildProperties( final boolean reload) throws CoreException
+    {
         final Project project = new Project();
 
+        Map<String, Object> sdkProperties = build_prperties.get( getLocation().toPortableString() );
         try
         {
-            project.setBaseDir( new File( getLocation().toPortableString() ) );
-            project.setSystemProperties();
-
-            Property envTask = new Property();
-            envTask.setProject( project );
-            envTask.setEnvironment( "env" );
-            envTask.execute();
-
-            loadProperties( project, project.getProperty( "user.name" ) );
-            loadProperties( project, project.getProperty( "env.COMPUTERNAME" ) );
-            loadProperties( project, project.getProperty( "env.HOST" ) );
-            loadProperties( project, project.getProperty( "env.HOSTNAME" ) );
-
-            Property propertyTask = new Property();
-            propertyTask.setProject( project );
-            propertyTask.setFile( new File( getLocation().append( "build.properties" ).toPortableString() ) );
-            propertyTask.execute();
-
-            if ( project.getProperty( "app.server.type" ) == null )
+            if ( sdkProperties == null || reload == true )
             {
-                throw new CoreException( SDKCorePlugin.createErrorStatus( "Missing ${app.server.type} setting in build.properties file." ) );
-            }
+                project.setBaseDir( new File( getLocation().toPortableString() ) );
+                project.setSystemProperties();
 
-            final Map<String, String> propertyCopyList = new HashMap<String, String>();
-            propertyCopyList.put(
-                "app.server." + project.getProperty( "app.server.type" ) + ".dir", "app.server.dir" );
-            propertyCopyList.put(
-                "app.server." + project.getProperty( "app.server.type" ) + ".deploy.dir",
-                "app.server.deploy.dir" );
-            propertyCopyList.put(
-                "app.server." + project.getProperty( "app.server.type" ) + ".lib.global.dir",
-                "app.server.lib.global.dir" );
-            propertyCopyList.put(
-                "app.server." + project.getProperty( "app.server.type" ) + ".portal.dir",
-                "app.server.portal.dir" );
+                Property envTask = new Property();
+                envTask.setProject( project );
+                envTask.setEnvironment( "env" );
+                envTask.execute();
 
-            for( Iterator<String> iterator = propertyCopyList.keySet().iterator(); iterator.hasNext(); )
-            {
-                AntPropertyCopy propertyCopyTask = new AntPropertyCopy();
-                propertyCopyTask.setOverride( true );
-                propertyCopyTask.setProject( project );
-                String from = iterator.next();
-                String to = propertyCopyList.get( from );
-                propertyCopyTask.setFrom( from );
-                propertyCopyTask.setName( to );
-                propertyCopyTask.execute();
-            }
+                loadProperties( project, project.getProperty( "user.name" ) );
+                loadProperties( project, project.getProperty( "env.COMPUTERNAME" ) );
+                loadProperties( project, project.getProperty( "env.HOST" ) );
+                loadProperties( project, project.getProperty( "env.HOSTNAME" ) );
 
-            for( String propertyKey : KEY_BUILD_PROPERTIES )
-            {
-                if ( !project.getProperties().keySet().contains( propertyKey ) )
+                Property propertyTask = new Property();
+                propertyTask.setProject( project );
+                File buildPropertyFile = new File( getLocation().append( "build.properties" ).toPortableString() );
+                propertyTask.setFile( buildPropertyFile );
+                propertyTask.execute();
+
+                if ( project.getProperty( "app.server.type" ) == null )
                 {
-                    throw new CoreException( SDKCorePlugin.createErrorStatus( "Missing ${" + propertyKey + "} setting in build.properties file." ) );
+                    throw new CoreException( SDKCorePlugin.createErrorStatus( "Missing ${app.server.type} setting in build.properties file." ) );
                 }
+
+                final Map<String, String> propertyCopyList = new HashMap<String, String>();
+                propertyCopyList.put(
+                    "app.server." + project.getProperty( "app.server.type" ) + ".dir", "app.server.dir" );
+                propertyCopyList.put(
+                    "app.server." + project.getProperty( "app.server.type" ) + ".deploy.dir",
+                    "app.server.deploy.dir" );
+                propertyCopyList.put(
+                    "app.server." + project.getProperty( "app.server.type" ) + ".lib.global.dir",
+                    "app.server.lib.global.dir" );
+                propertyCopyList.put(
+                    "app.server." + project.getProperty( "app.server.type" ) + ".portal.dir",
+                    "app.server.portal.dir" );
+
+                for( Iterator<String> iterator = propertyCopyList.keySet().iterator(); iterator.hasNext(); )
+                {
+                    AntPropertyCopy propertyCopyTask = new AntPropertyCopy();
+                    propertyCopyTask.setOverride( true );
+                    propertyCopyTask.setProject( project );
+                    String from = iterator.next();
+                    String to = propertyCopyList.get( from );
+                    propertyCopyTask.setFrom( from );
+                    propertyCopyTask.setName( to );
+                    propertyCopyTask.execute();
+                }
+
+                sdkProperties = project.getProperties();
+
+                for( String propertyKey : KEY_BUILD_PROPERTIES )
+                {
+                    if ( !sdkProperties.keySet().contains( propertyKey ) )
+                    {
+                        throw new CoreException( SDKCorePlugin.createErrorStatus( "Missing ${" + propertyKey + "} setting in build.properties file." ) );
+                    }
+                }
+
+                build_prperties.put( getLocation().toPortableString(), sdkProperties );
             }
         }
         catch( Exception e )
@@ -835,7 +851,7 @@ public class SDK
             throw new CoreException( SDKCorePlugin.createErrorStatus(e.getMessage()));
         }
 
-        return project.getProperties();
+        return sdkProperties;
     }
 
     public boolean hasProjectFile()
@@ -1005,6 +1021,11 @@ public class SDK
 
     public IStatus validate()
     {
+        return validate( false );
+    }
+
+    public IStatus validate( final boolean reload )
+    {
         MultiStatus status = new MultiStatus( SDKCorePlugin.PLUGIN_ID, IStatus.OK, "", null );
 
         boolean validLocation = SDKUtil.isValidSDKLocation( getLocation().toOSString() );
@@ -1023,88 +1044,74 @@ public class SDK
             return status;
         }
 
+        Map<String,Object> sdkProperties = null;
+
         try
         {
-            Map<String, Object> sdkProperties = getBuildProperties();
+            sdkProperties = getBuildProperties( reload );
+
             if ( sdkProperties == null )
             {
                 status.add( SDKCorePlugin.createErrorStatus( "Could not find any sdk settting." ) );
                 return status;
             }
+        }
+        catch( Exception e)
+        {
+            status.add( SDKCorePlugin.createErrorStatus( e.getMessage() ) );
+            return status;
+        }
 
-            for( String propertyKey : sdkProperties.keySet() )
+        for( String propertyKey : KEY_BUILD_PROPERTIES )
+        {
+            final String propertyValue = (String)sdkProperties.get( propertyKey );
+
+            if ( propertyValue == null )
             {
-                final String propertyValue = (String)sdkProperties.get( propertyKey );
-
-                if ( propertyValue == null )
+                status.add( SDKCorePlugin.createErrorStatus( propertyKey + " is null." ) );
+            }
+            else
+            {
+                switch (propertyKey)
                 {
-                    status.add( SDKCorePlugin.createErrorStatus( propertyKey + " is null." ) );
-                }
-                else
-                {
-                    switch (propertyKey)
+                    case "app.server.type":
                     {
-                        case "app.server.type":
+                        if( !support_server_type.contains( propertyValue ) )
                         {
-                            if( !SUPPORT_SERVER_TYPES.contains( propertyValue ) )
-                            {
-                                status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                    ") server is not supported by Liferay IDE." ) );
-                            }
-
-                            break;
+                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
+                                ") server is not supported by Liferay IDE." ) );
                         }
 
-                        case "app.server.dir":
-                        case "app.server.deploy.dir":
-                        case "app.server.lib.global.dir":
-                        case "app.server.parent.dir":
+                        break;
+                    }
+
+                    case "app.server.dir":
+                    case "app.server.deploy.dir":
+                    case "app.server.lib.global.dir":
+                    case "app.server.parent.dir":
+                    case "app.server.portal.dir":
+                    {
+                        IPath propertyPath = new Path( propertyValue );
+
+                        if( !propertyPath.isAbsolute() )
                         {
-                            IPath propertyPath = new Path( propertyValue );
-
-                            if( !propertyPath.isAbsolute() )
-                            {
-                                status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                    ") is not absolute path." ) );
-                            }
-
-                            if( !propertyPath.toFile().exists() )
-                            {
-                                status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                    ") is not exsit." ) );
-                            }
-
-                            break;
+                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
+                                ") is not absolute path." ) );
                         }
-                        case "app.server.portal.dir":
+
+                        if( !propertyPath.toFile().exists() )
                         {
-                            IPath propertyPath = new Path( propertyValue );
-
-                            if( !propertyPath.isAbsolute() )
-                            {
-                                status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                    ") is not absolute path." ) );
-                            }
-
-                            if( !propertyPath.toFile().exists() )
-                            {
-                                status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                    ") is not exsit." ) );
-                            }
-
-                            break;
+                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
+                                ") is not exsit." ) );
                         }
-                        default:
-                        {
-                        }
+
+                        break;
+                    }
+                    default:
+                    {
                     }
                 }
             }
-            return status;
-        }
-        catch (CoreException e)
-        {
-            status.add(SDKCorePlugin.createErrorStatus( e.getMessage() ) );
         }
 
         return status;

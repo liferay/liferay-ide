@@ -169,9 +169,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         String invalidLocation = null;
         invalidLocation = "not-absolute-location";
         op.setLocation( invalidLocation );
-        final String projectName = op.getProjectName().content();
 
-        final String expected = "\"" + invalidLocation + "\\" + projectName + "\"" + " is not an absolute path.";
+        final String expected = "\"" + invalidLocation + "\"" + " is not an absolute path.";
 
         assertEquals( normalize( expected ), normalize( vs.validation().message() ) );
         assertEquals( normalize( expected ), normalize( op.getLocation().validation().message() ) );
@@ -206,8 +205,6 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         assertEquals( expected3, vs.validation().message() );
         //assertEquals( expected3, op.getLocation().validation().message() );
 
-        op.setLocation( "" );
-        
         //IDE-2069
         invalidLocation = getLiferayRuntimeDir().removeLastSegments( 2 ).toOSString();
         op.setLocation( invalidLocation );
@@ -215,7 +212,8 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         final String expected5 = "Project location is not empty or a parent pom.";
 
         assertEquals( expected5, vs.validation().message() );
-        
+
+        op.setLocation( "" );
         final String expected4 = "Location must be specified.";
         assertEquals( expected4, vs.validation().message() );
         assertEquals( expected4, op.getLocation().validation().message() );

@@ -26,7 +26,6 @@ import com.liferay.ide.project.core.model.internal.GroupIdDefaultValueService;
 import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
 import com.liferay.ide.project.core.model.internal.HasWorkspaceSdkDefaultValueService;
 import com.liferay.ide.project.core.model.internal.IncludeSampleCodeDefaultValueService;
-import com.liferay.ide.project.core.model.internal.LocationListener;
 import com.liferay.ide.project.core.model.internal.LocationValidationService;
 import com.liferay.ide.project.core.model.internal.PluginTypeListener;
 import com.liferay.ide.project.core.model.internal.PluginTypePossibleValuesService;
@@ -139,7 +138,6 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "location" )
     @Service( impl = LocationValidationService.class )
-    @Listeners( LocationListener.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" ); //$NON-NLS-1$
 
     Value<Path> getLocation();

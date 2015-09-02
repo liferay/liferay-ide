@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
@@ -367,22 +368,25 @@ public class ProjectCoreBase extends ServerCoreBase
         String userName = System.getProperty( "user.name" ); //$NON-NLS-1$
         File userBuildFile = loc.append( "build." + userName + ".properties" ).toFile(); //$NON-NLS-1$ //$NON-NLS-2$
 
-        if( userBuildFile.exists() )
+        try ( FileOutputStream fileOutput = new FileOutputStream( userBuildFile ) )
         {
-            PropertiesConfiguration propsConfig = new PropertiesConfiguration( userBuildFile );
-            for( Object key : initProps.keySet() )
+            if( userBuildFile.exists() )
             {
-                propsConfig.setProperty( (String) key, initProps.get( key ) );
-            }
-            propsConfig.setHeader( "" );
-            propsConfig.save( userBuildFile );
+                PropertiesConfiguration propsConfig = new PropertiesConfiguration( userBuildFile );
+                for( Object key : initProps.keySet() )
+                {
+                    propsConfig.setProperty( (String) key, initProps.get( key ) );
+                }
+                propsConfig.setHeader( "" );
+                propsConfig.save( fileOutput );
 
-        }
-        else
-        {
-            Properties props = new Properties();
-            props.putAll( initProps );
-            props.store( new FileOutputStream( userBuildFile ), "" );
+            }
+            else
+            {
+                Properties props = new Properties();
+                props.putAll( initProps );
+                props.store( fileOutput, StringPool.EMPTY );
+            }
         }
     }
 

@@ -57,6 +57,8 @@ public class ProjectCore extends Plugin
 
     private static PluginPackageResourceListener pluginPackageResourceListener;
 
+    private static SDKBuildPropertiesResourceListener sdkBuildPropertiesResourceListener;
+
     private static IPortletFramework[] portletFrameworks;
 
     public static final String PREF_CREATE_NEW_PORLET = "create-new-portlet";
@@ -233,6 +235,7 @@ public class ProjectCore extends Plugin
                     portletFrameworks, 0, portletFrameworks.length, new Comparator<IPortletFramework>()
                     {
 
+                        @Override
                         public int compare( IPortletFramework o1, IPortletFramework o2 )
                         {
                             if( o1.isDefault() && ( !o2.isDefault() ) )
@@ -304,12 +307,14 @@ public class ProjectCore extends Plugin
     public ProjectCore()
     {
         pluginPackageResourceListener = new PluginPackageResourceListener();
+        sdkBuildPropertiesResourceListener = new SDKBuildPropertiesResourceListener();
     }
 
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
      */
+    @Override
     public void start( BundleContext context ) throws Exception
     {
         super.start( context );
@@ -319,12 +324,15 @@ public class ProjectCore extends Plugin
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
             pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );
 
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+            sdkBuildPropertiesResourceListener, IResourceChangeEvent.POST_CHANGE );
     }
 
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
      */
+    @Override
     public void stop( BundleContext context ) throws Exception
     {
         plugin = null;
@@ -335,6 +343,10 @@ public class ProjectCore extends Plugin
         {
             ResourcesPlugin.getWorkspace().removeResourceChangeListener( pluginPackageResourceListener );
         }
-    }
 
+        if( sdkBuildPropertiesResourceListener != null )
+        {
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener( sdkBuildPropertiesResourceListener );
+        }
+    }
 }

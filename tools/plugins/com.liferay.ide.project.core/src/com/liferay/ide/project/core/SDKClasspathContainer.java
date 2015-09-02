@@ -119,9 +119,4 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
         return commonJars;
     }
 
-    public static boolean isPluginContainerEntry( IClasspathEntry e )
-    {
-        return e != null && e.getEntryKind() == IClasspathEntry.CPE_CONTAINER &&
-            e.getPath().segment( 0 ).equals( ID );
-    }
 }

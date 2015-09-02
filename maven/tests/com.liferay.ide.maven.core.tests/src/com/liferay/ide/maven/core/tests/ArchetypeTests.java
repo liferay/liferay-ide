@@ -25,6 +25,7 @@ import org.junit.Test;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class ArchetypeTests extends AbstractMavenProjectTestCase

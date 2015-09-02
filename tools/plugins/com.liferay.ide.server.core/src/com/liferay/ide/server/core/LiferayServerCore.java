@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.BundleDeployer;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
@@ -278,7 +279,8 @@ public class LiferayServerCore extends Plugin
 
                     if( o instanceof PortalBundleFactory )
                     {
-                        PortalBundleFactory portalBundleFactory = (PortalBundleFactory) o;
+                        AbstractPortalBundleFactory portalBundleFactory = (AbstractPortalBundleFactory) o;
+                        portalBundleFactory.setBundleFactoryType( element.getAttribute( "type" ) );
                         bundleFactories.add( portalBundleFactory );
                     }
                 }
@@ -292,6 +294,25 @@ public class LiferayServerCore extends Plugin
         }
 
         return portalBundleFactories;
+    }
+
+
+    public static PortalBundleFactory getPortalBundleFactories(final String type)
+    {
+        PortalBundleFactory[] factories = getPortalBundleFactories();
+
+        if ( factories != null )
+        {
+            for( PortalBundleFactory portalBundleFactory : factories )
+            {
+                if ( portalBundleFactory.getType().equals( type ))
+                {
+                    return portalBundleFactory;
+                }
+            }
+        }
+
+        return null;
     }
 
     public static PortalLaunchParticipant[] getPortalLaunchParticipants()
@@ -835,6 +856,7 @@ public class LiferayServerCore extends Plugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
      */
+    @Override
     public void start( BundleContext context ) throws Exception
     {
         super.start( context );
@@ -842,16 +864,19 @@ public class LiferayServerCore extends Plugin
 
         this.runtimeLifecycleListener = new IRuntimeLifecycleListener()
         {
+            @Override
             public void runtimeAdded( IRuntime runtime )
             {
                 saveGlobalRuntimeSettings( runtime );
             }
 
+            @Override
             public void runtimeChanged( IRuntime runtime )
             {
                 saveGlobalRuntimeSettings( runtime );
             }
 
+            @Override
             public void runtimeRemoved( IRuntime runtime )
             {
                 saveGlobalRuntimeSettings( runtime );
@@ -860,16 +885,19 @@ public class LiferayServerCore extends Plugin
 
         this.serverLifecycleListener = new IServerLifecycleListener()
         {
+            @Override
             public void serverAdded( IServer server )
             {
                 saveGlobalServerSettings( server );
             }
 
+            @Override
             public void serverChanged( IServer server )
             {
                 saveGlobalServerSettings( server );
             }
 
+            @Override
             public void serverRemoved( IServer server )
             {
                 saveGlobalServerSettings( server );
@@ -889,6 +917,7 @@ public class LiferayServerCore extends Plugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
      */
+    @Override
     public void stop( BundleContext context ) throws Exception
     {
         plugin = null;

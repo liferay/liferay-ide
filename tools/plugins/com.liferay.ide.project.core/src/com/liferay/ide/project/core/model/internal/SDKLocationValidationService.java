@@ -82,7 +82,7 @@ public class SDKLocationValidationService extends ValidationService
 
             if( sdk != null )
             {
-                IStatus status = sdk.validate();
+                IStatus status = sdk.validate(true);
 
                 if( !status.isOK() )
                 {

@@ -754,12 +754,6 @@ public class ProjectUtil
         return retval;
     }
 
-    public static void deleteProjectMarkers( IProject proj, String markerType, Set<String> markerSourceIds )
-        throws CoreException
-    {
-
-    }
-
     private static void fixExtProjectClasspathEntries( IProject project )
     {
         try

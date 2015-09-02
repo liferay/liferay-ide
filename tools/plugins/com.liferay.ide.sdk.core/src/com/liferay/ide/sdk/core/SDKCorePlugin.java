@@ -193,6 +193,7 @@ public class SDKCorePlugin extends Plugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext )
      */
+    @Override
     public void start( BundleContext context ) throws Exception
     {
         super.start( context );
@@ -200,16 +201,19 @@ public class SDKCorePlugin extends Plugin
 
         this.sdkListener = new ISDKListener()
         {
+            @Override
             public void sdksAdded( SDK[] sdks )
             {
                 saveGlobalSDKSettings( sdks );
             }
 
+            @Override
             public void sdksChanged( SDK[] sdks )
             {
                 saveGlobalSDKSettings( sdks );
             }
 
+            @Override
             public void sdksRemoved( SDK[] sdks )
             {
                 saveGlobalSDKSettings( sdks );
@@ -223,6 +227,7 @@ public class SDKCorePlugin extends Plugin
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext )
      */
+    @Override
     public void stop( BundleContext context ) throws Exception
     {
         // delete tmp folder
