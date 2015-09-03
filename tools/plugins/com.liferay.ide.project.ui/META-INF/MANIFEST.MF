@@ -40,7 +40,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.workbench,
  org.eclipse.ui.views,
  org.eclipse.jem.util,
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ org.eclipse.osgi.services,
+ org.eclipse.equinox.ds,
+ org.eclipse.equinox.util,
+ blade.migrate.api;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,
@@ -51,4 +55,5 @@ Export-Package: com.liferay.ide.project.ui,
  com.liferay.ide.project.ui.handlers,
  com.liferay.ide.project.ui.pref,
  com.liferay.ide.project.ui.wizard
-Import-Package: blade.migrate.api;version="1.0.0"
+Service-Component: OSGI-INF/com.liferay.ide.project.ui.migration.IDEReporter.xml,
+ OSGI-INF/com.liferay.ide.project.ui.migration.WorkspaceMigrationImpl.xml

@@ -17,6 +17,9 @@ package com.liferay.ide.project.ui.migration;
 
 import blade.migrate.api.Problem;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -36,6 +39,12 @@ public class MigrationLabelProvider extends StyledCellLabelProvider
         if( element instanceof String )
         {
             text.append( element.toString() );
+        }
+        if( element instanceof MigrationTask )
+        {
+            final MigrationTask task = (MigrationTask) element;
+
+            text.append( "Migration Task - " + new SimpleDateFormat().format( new Date(task.getTimestamp() ) ) );
         }
         else if( element instanceof Problem )
         {

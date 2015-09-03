@@ -15,27 +15,26 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.Problem;
-import blade.migrate.api.WorkspaceMigration;
-
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 
 /**
  * @author Gregory Amerson
  */
 public class MigrationView extends ViewPart
 {
-
     private TreeViewer _viewer;
+    private List<MigrationTask> _tasks;
 
     @Override
     public void createPartControl( Composite parent )
@@ -43,13 +42,22 @@ public class MigrationView extends ViewPart
         _viewer = new TreeViewer( parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL );
         _viewer.setContentProvider( new MigrationContentProvider() );
         _viewer.setLabelProvider( new MigrationLabelProvider() );
+        _viewer.setInput( _tasks.toArray( new MigrationTask[0] ) );
+    }
 
-        final BundleContext context = ProjectUI.getDefault().getBundle().getBundleContext();
-        ServiceReference<WorkspaceMigration> sr = context.getServiceReference( WorkspaceMigration.class );
-        WorkspaceMigration migration = context.getService( sr );
-        List<Problem> problems = migration.getStoredProblems( false );
+    @Override
+    public void init( IViewSite site, IMemento memento ) throws PartInitException
+    {
+        super.init( site, memento );
 
-        _viewer.setInput( problems );
+        try
+        {
+            _tasks = ProjectUI.getDefault().getMigrationTasks( false );
+        }
+        catch( CoreException e )
+        {
+            throw new PartInitException( e.getStatus() );
+        }
     }
 
     @Override

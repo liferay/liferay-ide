@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="com.liferay.ide.project.ui.migration.IDEReporter" immediate="true">
+  <implementation class="com.liferay.ide.project.ui.migration.IDEReporter"/>
+  <service>
+    <provide interface="blade.migrate.api.Reporter"/>
+  </service>
+  <property name="service.ranking" type="Integer" value="100"/>
+  <property name="format" type="String" value="ide"/>
+</component>

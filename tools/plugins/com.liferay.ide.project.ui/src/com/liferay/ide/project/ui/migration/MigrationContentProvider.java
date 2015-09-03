@@ -29,7 +29,7 @@ public class MigrationContentProvider implements ITreeContentProvider
 {
 
     private Object _input;
-    private Problem[] _problems;
+    private MigrationTask[] _tasks;
 
     @Override
     public void dispose()
@@ -43,24 +43,34 @@ public class MigrationContentProvider implements ITreeContentProvider
 
         if( _input instanceof List<?> )
         {
-            List<?> problems = (List<?>) _input;
+            List<?> tasks = (List<?>) _input;
 
-            _problems = problems.toArray( new Problem[0] );
+            _tasks = tasks.toArray( new MigrationTask[0] );
+        }
+        else if( _input instanceof MigrationTask[] )
+        {
+            _tasks = (MigrationTask[]) _input;
         }
     }
 
     @Override
     public Object[] getElements( Object inputElement )
     {
-        return _problems;
+        return _tasks;
     }
 
     @Override
     public Object[] getChildren( Object parentElement )
     {
-        if( parentElement instanceof Problem )
+        if( parentElement instanceof MigrationTask )
         {
-            Problem problem = (Problem) parentElement;
+            final MigrationTask task = (MigrationTask) parentElement;
+
+            return task.getProblems().toArray( new Problem[0] );
+        }
+        else if( parentElement instanceof TaskProblem )
+        {
+            TaskProblem problem = (TaskProblem) parentElement;
 
             return new String[] { (String) problem.summary, problem.ticket };
         }
@@ -71,13 +81,20 @@ public class MigrationContentProvider implements ITreeContentProvider
     @Override
     public Object getParent( Object element )
     {
+        if( element instanceof TaskProblem )
+        {
+            final TaskProblem problem = (TaskProblem) element;
+
+            return problem.getParent();
+        }
+
         return null;
     }
 
     @Override
     public boolean hasChildren( Object element )
     {
-        return element instanceof Problem;
+        return element instanceof Problem || element instanceof MigrationTask;
     }
 
 }
