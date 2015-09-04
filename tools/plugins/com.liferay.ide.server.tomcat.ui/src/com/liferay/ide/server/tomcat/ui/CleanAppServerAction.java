@@ -15,20 +15,27 @@
 
 package com.liferay.ide.server.tomcat.ui;
 
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.job.CleanAppServerJob;
-import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.action.AbstractObjectAction;
 
+import java.io.FileInputStream;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -75,66 +82,50 @@ public class CleanAppServerAction extends AbstractObjectAction
 
             IProject project = (IProject) elem;
 
-            IRuntime runtime = ServerUtil.getRuntime( project );
+            SDK sdk = SDKUtil.getSDK( project );
 
-            ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime( runtime );
-
-            if( portalTomcatRuntime == null )
+            if( sdk == null )
             {
                 return;
             }
 
-            IStatus status = runtime.validate( new NullProgressMonitor() );
+            IStatus status = sdk.validate();
 
-            IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
-
-            if( !status.isOK() || bundleZipLocation == null || ( !bundleZipLocation.toFile().exists() ) )
+            if( !status.isOK() )
             {
-                boolean retval =
-                    MessageDialog.openQuestion(
-                        getDisplay().getActiveShell(), getTitle(),
-                        NLS.bind( Msgs.validBundleZipLocationRequired, runtime.getName() ) );
-
-                if( retval )
-                {
-                    editRuntime( runtime );
-
-                    // refresh the portalTomcatRuntime
-                    portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime( runtime );
-
-                    bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
-
-                    if( bundleZipLocation == null )
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        run( action );
-                        return;
-                    }
-                }
-                else
-                {
-                    return;
-                }
+                MessageDialog.openError( null, Msgs.cleanAppServer, status.getChildren()[0].getMessage() );
+                return;
             }
 
-            cleanAppServer( project );
+            Map<String, Object> sdkProperties = sdk.getBuildProperties();
+
+            String bundleZipLocation = (String) sdkProperties.get( "app.server.zip.name" );//$NON-NLS-1$
+
+            status = validate( project, bundleZipLocation );
+
+            if( status.isOK() )
+            {
+                cleanAppServer( project, bundleZipLocation );
+            }
+            else
+            {
+                MessageDialog.openError( null, Msgs.cleanAppServer, status.getMessage() );
+                return;
+            }
         }
         catch( Exception ex )
         {
             ProjectUI.logError( ex );
         }
     }
-
+    
     @Override
     public void selectionChanged( IAction action, ISelection selection )
     {
         super.selectionChanged( action, selection );
     }
 
-    protected void cleanAppServer( IProject project ) throws CoreException
+    protected void cleanAppServer( IProject project, String bundleZipLocation ) throws CoreException
     {
 
         String[] labels = new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL };
@@ -148,7 +139,7 @@ public class CleanAppServerAction extends AbstractObjectAction
 
         if( retval == MessageDialog.OK )
         {
-            new CleanAppServerJob( project ).schedule();
+            new CleanAppServerJob( project, bundleZipLocation ).schedule();
         }
     }
 
@@ -199,11 +190,79 @@ public class CleanAppServerAction extends AbstractObjectAction
         return dialog.open();
     }
 
+    protected IStatus validate( IProject project, String bundleZipLocation ) throws CoreException
+    {
+        IStatus result = Status.OK_STATUS;
+
+        if( bundleZipLocation == null )
+        {
+            return result = LiferayTomcatPlugin.createErrorStatus( Msgs.bundleZipNotdefined );
+        }
+        else
+        {
+            String rootEntryName = null;
+
+            try
+            {
+                ZipInputStream zis = new ZipInputStream( new FileInputStream( bundleZipLocation ) );
+
+                ZipEntry rootEntry = zis.getNextEntry();
+                rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
+
+                if( rootEntryName.endsWith( StringPool.FORWARD_SLASH ) )
+                {
+                    rootEntryName = rootEntryName.substring( 0, rootEntryName.length() - 1 );
+                }
+
+                boolean foundBundle = false;
+
+                ZipEntry entry = zis.getNextEntry();
+
+                while( entry != null && !foundBundle )
+                {
+                    String entryName = entry.getName();
+
+                    if( entryName.startsWith( rootEntryName + "/tomcat-" ) ) //$NON-NLS-1$
+                    {
+                        foundBundle = true;
+                    }
+                    else if( entryName.startsWith( rootEntryName + "/jboss-" ) ) //$NON-NLS-1$
+                    {
+                        foundBundle = true;
+                    }
+
+                    entry = zis.getNextEntry();
+                };
+
+                zis.close();
+            }
+            catch( Exception e )
+            {
+                return result = LiferayTomcatPlugin.createErrorStatus( Msgs.bundleZipLocationNotValid );
+            }
+
+            final IPath appServerDir = ServerUtil.getPortalBundle( project ).getAppServerDir();
+
+            String bundleDir = appServerDir.removeLastSegments( 1 ).lastSegment();
+
+            if( !bundleDir.equals( rootEntryName ) )
+            {
+                return result =
+                    LiferayTomcatPlugin.createErrorStatus( NLS.bind(
+                        Msgs.runtimeLocationDirectoryNotMatch, bundleDir, rootEntryName ) );
+            }
+        }
+
+        return result;
+    }
+    
     private static class Msgs extends NLS
     {
+        public static String bundleZipNotdefined;
+        public static String bundleZipLocationNotValid;
+        public static String runtimeLocationDirectoryNotMatch;
         public static String cleanAppServer;
         public static String deleteEntireTomcatDirectory;
-        public static String validBundleZipLocationRequired;
         public static String wizEditRuntimeWizardTitle;
 
         static

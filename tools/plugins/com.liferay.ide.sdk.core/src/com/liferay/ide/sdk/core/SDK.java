@@ -192,7 +192,7 @@ public class SDK
     }
 
     public IStatus cleanAppServer(
-        IProject project, IPath bundleZipLocation, String appServerDir,
+        IProject project, String bundleZipLocation, String appServerDir,
         IProgressMonitor monitor )
     {
         try
@@ -201,7 +201,7 @@ public class SDK
 
             IPath workPath = new Path( appServerDir ).removeLastSegments( 2 );
 
-            properties.put( ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation.toOSString() );
+            properties.put( ISDKConstants.PROPERTY_APP_ZIP_NAME, bundleZipLocation );
             properties.put( ISDKConstants.PROPERTY_EXT_WORK_DIR, workPath.toOSString() );
 
             IStatus status = runTarget( project, properties, "clean-app-server", true, monitor ); //$NON-NLS-1$
@@ -1059,6 +1059,23 @@ public class SDK
                         case "app.server.deploy.dir":
                         case "app.server.lib.global.dir":
                         case "app.server.parent.dir":
+                        {
+                            IPath propertyPath = new Path( propertyValue );
+
+                            if( !propertyPath.isAbsolute() )
+                            {
+                                status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
+                                    ") is not absolute path." ) );
+                            }
+
+                            if( !propertyPath.toFile().exists() )
+                            {
+                                status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
+                                    ") is not exsit." ) );
+                            }
+
+                            break;
+                        }
                         case "app.server.portal.dir":
                         {
                             IPath propertyPath = new Path( propertyValue );

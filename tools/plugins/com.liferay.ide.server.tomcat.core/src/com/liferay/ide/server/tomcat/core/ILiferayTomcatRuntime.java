@@ -27,11 +27,7 @@ import org.eclipse.core.runtime.IPath;
 public interface ILiferayTomcatRuntime extends ILiferayRuntime
 {
 
-    IPath getBundleZipLocation();
-
     String getServerInfo();
-
-    void setBundleZipLocation( IPath path );
 
     void setJavadocURL( String url );
 

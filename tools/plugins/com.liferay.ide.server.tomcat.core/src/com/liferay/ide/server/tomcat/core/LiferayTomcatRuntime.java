@@ -17,7 +17,6 @@ import static com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin.warning;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
 import com.liferay.ide.server.util.JavaUtil;
@@ -25,11 +24,8 @@ import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.util.Properties;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -54,8 +50,6 @@ import org.osgi.framework.Version;
 @SuppressWarnings( "restriction" )
 public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomcatRuntime
 {
-
-    public static final String PROP_BUNDLE_ZIP_LOCATION = "bundle-zip-location"; //$NON-NLS-1$
 
     public static final String PROP_JAVADOC_URL = "javadoc-url"; //$NON-NLS-1$
 
@@ -171,14 +165,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
     public String getAppServerType()
     {
         return "tomcat"; //$NON-NLS-1$
-    }
-
-    @Override
-    public IPath getBundleZipLocation()
-    {
-        String zipLocation = getAttribute( PROP_BUNDLE_ZIP_LOCATION, (String) null );
-
-        return zipLocation != null ? new Path( zipLocation ) : null;
     }
 
     public IPath getDeployDir()
@@ -362,15 +348,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
     }
 
     @Override
-    public void setBundleZipLocation( IPath path )
-    {
-        if( path != null )
-        {
-            setAttribute( PROP_BUNDLE_ZIP_LOCATION, path.toPortableString() );
-        }
-    }
-
-    @Override
     public void setJavadocURL( String url )
     {
         if( url != null )
@@ -444,60 +421,6 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
                 return javadocUrlStatus;
             }
         }
-
-        // need to check if this runtime is specifying a zip file for a bundle package, if so validate it
-        IPath bundleZip = getBundleZipLocation();
-
-        if( bundleZip != null && ( !CoreUtil.isNullOrEmpty( bundleZip.toString() ) ) )
-        {
-            String rootEntryName = null;
-
-            try
-            {
-                @SuppressWarnings( "resource" )
-                ZipInputStream zis = new ZipInputStream( new FileInputStream( bundleZip.toFile() ) );
-
-                ZipEntry rootEntry = zis.getNextEntry();
-                rootEntryName = new Path( rootEntry.getName() ).segment( 0 );
-
-                if( rootEntryName.endsWith( StringPool.FORWARD_SLASH ) )
-                {
-                    rootEntryName = rootEntryName.substring( 0, rootEntryName.length() - 1 );
-                }
-
-                boolean foundTomcat = false;
-
-                ZipEntry entry = zis.getNextEntry();
-
-                while( entry != null && !foundTomcat )
-                {
-                    String entryName = entry.getName();
-
-                    if( entryName.startsWith( rootEntryName + "/tomcat-" ) ) //$NON-NLS-1$
-                    {
-                        foundTomcat = true;
-                    }
-
-                    entry = zis.getNextEntry();
-                };
-            }
-            catch( Exception e )
-            {
-                return LiferayTomcatPlugin.createWarningStatus( Msgs.bundleZipLocationNotValid );
-            }
-
-            // if we get here then the user has specified a good zip installation so now we need to see if the
-            // installation of the runtime will work for EXT plugins.
-            IPath location = getRuntime().getLocation();
-            String bundleDir = location.removeLastSegments( 1 ).lastSegment();
-
-            if( !bundleDir.equals( rootEntryName ) )
-            {
-                return LiferayTomcatPlugin.createWarningStatus( NLS.bind(
-                    Msgs.runtimeLocationDirectoryNotMatch, bundleDir, rootEntryName ) );
-            }
-        }
-
         return status;
     }
 
@@ -514,13 +437,10 @@ public class LiferayTomcatRuntime extends TomcatRuntime implements ILiferayTomca
 
     private static class Msgs extends NLS
     {
-        public static String bundleZipLocationNotValid;
         public static String javadocURLStart;
         public static String liferayPortal;
         public static String portalServerNotSupported;
         public static String portalVersionNotSupported;
-        public static String runtimeLocationDirectoryNotMatch;
-
         static
         {
             initializeMessages( LiferayTomcatRuntime.class.getName(), Msgs.class );

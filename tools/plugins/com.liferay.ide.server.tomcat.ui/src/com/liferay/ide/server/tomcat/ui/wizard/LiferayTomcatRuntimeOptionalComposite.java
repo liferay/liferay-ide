@@ -71,7 +71,6 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
         }
     }
 
-    protected Text bundleZipField;
     protected boolean ignoreModifyEvent;
     private Text javadocField;
     private Text sourceField;
@@ -106,9 +105,6 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
         this.sourceField = createSourceField( this );
         this.sourceField.addModifyListener( this );
-
-        this.bundleZipField = createBundleZipField( this );
-        this.bundleZipField.addModifyListener( this );
 
         init();
 
@@ -226,33 +222,6 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
         } );
 
         return sourceField;
-    }
-
-    public static Text createBundleZipField( final Composite parent )
-    {
-
-        final Text bundleZipField = createTextField( parent, Msgs.liferayTomcatBundleZipFile );
-
-        SWTUtil.createButton( parent, Msgs.browse ).addSelectionListener( new SelectionAdapter()
-        {
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                FileDialog fd = new FileDialog( parent.getShell() );
-
-                fd.setText( Msgs.selectLiferayTomcatBundleZipFile );
-                fd.setFilterPath( bundleZipField.getText() );
-
-                String selectedFile = fd.open();
-
-                if( selectedFile != null )
-                {
-                    bundleZipField.setText( selectedFile );
-                }
-            }
-        } );
-
-        return bundleZipField;
     }
 
     protected static Label createLabel( Composite parent, String text )
@@ -382,6 +351,8 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             {
                 retval = "jar:" + javadocFile.toURI().toURL().toExternalForm() + "!/" + javadocEntry.getName(); //$NON-NLS-1$ //$NON-NLS-2$
             }
+            
+            zipFile.close();
         }
         catch( Exception e )
         {
@@ -409,13 +380,10 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
     @Override
     protected void init()
     {
-        if( ( bundleZipField == null ) || getRuntime() == null )
+        if( getRuntime() == null )
         {
             return;
         }
-
-        IPath bundleZipLocation = getLiferayTomcatRuntime().getBundleZipLocation();
-        setFieldValue( bundleZipField, bundleZipLocation != null ? bundleZipLocation.toOSString() : StringPool.EMPTY );
 
         String javadocURL = getLiferayTomcatRuntime().getJavadocURL();
         setFieldValue( javadocField, javadocURL != null ? javadocURL : StringPool.EMPTY );
@@ -432,10 +400,6 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
             return;
         }
 
-        if( e.getSource().equals( bundleZipField ) )
-        {
-            getLiferayTomcatRuntime().setBundleZipLocation( new Path( bundleZipField.getText() ) );
-        }
         else if( e.getSource().equals( javadocField ) )
         {
             String newJavadocURL = null;
@@ -505,7 +469,6 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
 
     private static class Msgs extends NLS
     {
-        public static String browse;
         public static String browseDirectory;
         public static String browseZip;
         public static String directoryNotValid;
@@ -513,13 +476,11 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
         public static String liferayJavadocURL;
         public static String liferayRuntimeTomcatBundle;
         public static String liferaysourceLocation;
-        public static String liferayTomcatBundleZipFile;
         public static String liferayTomcatRuntime;
         public static String selectLiferayJavadocDirectory;
         public static String selectLiferayJavadocZipFile;
         public static String selectLiferaySourceDirectory;
         public static String selectLiferaySourceZipFile;
-        public static String selectLiferayTomcatBundleZipFile;
         public static String specifyExtraSettings;
 
         static

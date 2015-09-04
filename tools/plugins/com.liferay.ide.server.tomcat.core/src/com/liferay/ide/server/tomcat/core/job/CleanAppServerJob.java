@@ -16,7 +16,6 @@
 package com.liferay.ide.server.tomcat.core.job;
 
 import com.liferay.ide.sdk.core.SDKJob;
-import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatPlugin;
 import com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior;
 import com.liferay.ide.server.tomcat.core.util.LiferayTomcatUtil;
@@ -24,14 +23,13 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.server.core.IModule;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Greg Amerson
@@ -40,13 +38,17 @@ import org.eclipse.wst.server.core.IServer;
 public class CleanAppServerJob extends SDKJob
 {
 
-    public CleanAppServerJob( IProject project )
+    private String bundleZipLocation;
+
+    public CleanAppServerJob( IProject project, String bundleZipLocation )
     {
         super( "Clean App Server" ); //$NON-NLS-1$
 
         setUser( true );
 
         setProject( project );
+
+        setAppServerZipDir( bundleZipLocation );
     }
 
     protected void assertStatus( IStatus status ) throws CoreException
@@ -63,6 +65,11 @@ public class CleanAppServerJob extends SDKJob
         }
     }
 
+    public String getAppServerZipDir()
+    {
+        return bundleZipLocation;
+    }
+
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
@@ -75,8 +82,9 @@ public class CleanAppServerJob extends SDKJob
 
         try
         {
-            IRuntime runtime = ServerUtil.getRuntime( project );
-            IServer[] servers = ServerUtil.getServersForRuntime( runtime );
+            final String appServerDir = ServerUtil.getPortalBundle( project ).getAppServerDir().toOSString();
+
+            IServer[] servers = ServerCore.getServers();
 
             for( IServer server : servers )
             {
@@ -84,17 +92,12 @@ public class CleanAppServerJob extends SDKJob
 
                 if( mode != null )
                 {
-                    LiferayTomcatUtil.syncStopServer( server );
+                    if( server.getRuntime().getLocation().toOSString().equals( appServerDir ) )
+                        LiferayTomcatUtil.syncStopServer( server );
                 }
             }
 
-            ILiferayTomcatRuntime portalTomcatRuntime = LiferayTomcatUtil.getLiferayTomcatRuntime( runtime );
-            IPath bundleZipLocation = portalTomcatRuntime.getBundleZipLocation();
-
-            final String appServerDir = portalTomcatRuntime.getAppServerDir().toPortableString();
-
-            IStatus status =
-                getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, monitor );
+            IStatus status = getSDK().cleanAppServer( project, bundleZipLocation, appServerDir, monitor );
 
             assertStatus( status );
 
@@ -124,6 +127,11 @@ public class CleanAppServerJob extends SDKJob
         }
 
         return retval;
+    }
+
+    public void setAppServerZipDir( String bundleZipLocation )
+    {
+        this.bundleZipLocation = bundleZipLocation;
     }
 
     private static class Msgs extends NLS
