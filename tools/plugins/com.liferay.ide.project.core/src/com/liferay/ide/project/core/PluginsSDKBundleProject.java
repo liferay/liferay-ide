@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.util.CoreUtil;
@@ -25,6 +26,9 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -35,6 +39,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -44,8 +49,10 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class PluginsSDKBundleProject extends FlexibleProject implements IWebProject
+public class PluginsSDKBundleProject extends FlexibleProject implements IWebProject, IBundleProject
 {
+
+    private final String[] IGNORE_PATHS = new String[] { "docroot/WEB-INF/classes" };
 
     private PortalBundle portalBundle;
 
@@ -190,6 +197,68 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
         }
 
         return outputs;
+    }
+
+    @Override
+    public boolean filterResource( IPath resourcePath )
+    {
+        if( filterResource( resourcePath, IGNORE_PATHS ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    {
+        IPath retval = null;
+
+        final SDK sdk = getSDK();
+        final IStatus status = sdk.validate();
+
+        if ( !status.isOK() )
+        {
+            throw new CoreException( status );
+        }
+
+        final IStatus warStatus =
+            sdk.war(
+                getProject(), null, true, new String[] { "-Duser.timezone=GMT" }, monitor );
+
+        final IPath distPath = sdk.getLocation().append( "dist" );
+
+        // TODO need to find a better way to determine the actual output file.
+
+        final File[] distFiles = distPath.toFile().listFiles( new FilenameFilter()
+        {
+            @Override
+            public boolean accept( File dir, String name )
+            {
+                return name.contains( getProject().getLocation().lastSegment() );
+            }
+        });
+
+        if( warStatus.isOK() )
+        {
+            try
+            {
+                retval = new Path( distFiles[0].getCanonicalPath() );
+            }
+            catch( IOException e )
+            {
+                throw new CoreException( ProjectCore.createErrorStatus( e ) );
+            }
+        }
+
+        return retval;
+    }
+
+    @Override
+    public String getSymbolicName() throws CoreException
+    {
+        return this.getProject().getLocation().lastSegment();
     }
 
 }

@@ -20,8 +20,10 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -127,6 +129,22 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         }
     }
 
+    private String getBundleUrl( File bundleFile, String bsn ) throws MalformedURLException
+    {
+        String bundleUrl = null;
+
+        if( bundleFile.toPath().toString().toLowerCase().endsWith( ".war" ) )
+        {
+            bundleUrl = "webbundle:" + bundleFile.toURI().toURL().toExternalForm() + "?Web-ContextPath=/" + bsn;
+        }
+        else
+        {
+            bundleUrl = bundleFile.toURI().toURL().toExternalForm();
+        }
+
+        return bundleUrl;
+    }
+
     private IStatus remoteDeploy( String bsn , IPath output )
     {
         IStatus retval = null;
@@ -137,7 +155,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         {
             try
             {
-                long bundleId = deployer.deploy( bsn, output.toFile() );
+                long bundleId = deployer.deploy( bsn, getBundleUrl( output.toFile(), bsn ) );
 
                 retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) bundleId, null, null );
             }
