@@ -37,46 +37,46 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
 
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_EXT,
-            "com.liferay.maven.archetypes:liferay-ext-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-ext-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_LIFERAY_FACES_ALLOY,
-            "com.liferay.maven.archetypes:liferay-portlet-liferay-faces-alloy-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-portlet-liferay-faces-alloy-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_HOOK,
-            "com.liferay.maven.archetypes:liferay-hook-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-hook-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_ICEFACES,
-            "com.liferay.maven.archetypes:liferay-portlet-icefaces-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-portlet-icefaces-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_JSF,
-            "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_LAYOUTTPL,
-            "com.liferay.maven.archetypes:liferay-layouttpl-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-layouttpl-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_MVC,
-            "com.liferay.maven.archetypes:liferay-portlet-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-portlet-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_PRIMEFACES,
-            "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_RICHFACES,
-            "com.liferay.maven.archetypes:liferay-portlet-richfaces-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-portlet-richfaces-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_SPRING_MVC,
             "com.liferay.maven.archetypes:liferay-portlet-spring-mvc-archetype:7.0.0-SNAPSHOT" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_SERVICEBUILDER,
-            "com.liferay.maven.archetypes:liferay-servicebuilder-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-servicebuilder-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_THEME,
-            "com.liferay.maven.archetypes:liferay-theme-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-theme-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_VAADIN,
             "com.vaadin:vaadin-archetype-liferay-portlet:7.4.0.alpha2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_WEB,
-            "com.liferay.maven.archetypes:liferay-web-archetype:6.2.1" );
+            "com.liferay.maven.archetypes:liferay-web-archetype:6.2.2" );
     }
 
 }
