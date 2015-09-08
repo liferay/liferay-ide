@@ -64,12 +64,12 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
                 if( this.server.getServerState() == IServer.STATE_STARTED )
                 {
-                    status = remoteUninstall( symbolicName );
+                    status = remoteUninstall( bundleProject, symbolicName );
                 }
 
                 if( status == null || status.isOK() ) // remote uninstall succeedded
                 {
-                    status = localUninstall( symbolicName );
+                    status = localUninstall( bundleProject, symbolicName );
                 }
 
                 if( status.isOK() )
@@ -112,7 +112,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         }
     }
 
-    private IStatus localUninstall( String symbolicName )
+    private IStatus localUninstall( IBundleProject bundleProject , String symbolicName )
     {
         IStatus retval = null;
 
@@ -127,6 +127,17 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         final IPath deployPath = runtime.getPortalBundle().getAutoDeployPath();
         findFilesInPath( deployPath.toFile(), symbolicName, moduleFiles );
+
+        try
+        {
+            IPath outputFile = bundleProject.getOutputJar( false, null );
+
+            findFilesInPath( modulesPath.toFile(), symbolicName, moduleFiles );
+            findFilesInPath( deployPath.toFile(), outputFile.lastSegment(), moduleFiles );
+        }
+        catch( CoreException e )
+        {
+        }
 
         // look for wabs that have been deployed
         final IPath appServerDeployDir = runtime.getPortalBundle().getAppServerDeployDir();
@@ -165,7 +176,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         return retval;
     }
 
-    private IStatus remoteUninstall( String symbolicName )
+    private IStatus remoteUninstall( IBundleProject bundleProject , String symbolicName )
     {
         IStatus retval = null;
 

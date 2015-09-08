@@ -16,10 +16,17 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.maven.project.MavenProject;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 
 /**
@@ -46,7 +53,38 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
     @Override
     public IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
-        return this.bundleProject.getOutputJar( buildIfNeeded, monitor );
+        IPath outputJar = null;
+
+        if( buildIfNeeded )
+        {
+            final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
+
+            // TODO update status
+            final List<String> goals = Arrays.asList( "package" );
+            final IStatus status = mavenProjectBuilder.execGoals( goals, monitor );
+        }
+
+        // we are going to try to get the output jar even if the package failed.
+        final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+        final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+
+        final String targetName = mavenProject.getBuild().getFinalName() + ".war";
+
+        // TODO find a better way to get the target folder
+        final IFolder targetFolder = getProject().getFolder( "target" );
+
+        if( targetFolder.exists() )
+        {
+            //targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
+            final IPath targetFile = targetFolder.getRawLocation().append( targetName );
+
+            if( targetFile.toFile().exists() )
+            {
+                outputJar = targetFile;
+            }
+        }
+
+        return outputJar;
     }
 
     @Override
