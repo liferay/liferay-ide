@@ -35,7 +35,7 @@
         <sapphire-site>http://download.eclipse.org/sapphire/8.2/repository/</sapphire-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
-        <m2e-site>http://download.eclipse.org/technology/m2e/releases/1.6/1.6.0.20150526-2032/</m2e-site>
+        <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.2.20150902-0001/</m2e-site>
         <m2e-wtp-site>http://download.eclipse.org/m2e-wtp/releases/mars/1.2/1.2.0.20150602-1740/</m2e-wtp-site>
         <m2e-archiver-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-mavenarchiver/0.17.0/N/LATEST/</m2e-archiver-site>
         <!-- <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-23/</adt-site>-->
