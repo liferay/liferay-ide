@@ -47,15 +47,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleListener;
+import org.gradle.tooling.model.GradleProject;
 import org.gradle.tooling.model.eclipse.HierarchicalEclipseProject;
 import org.junit.Test;
-import org.springsource.ide.eclipse.gradle.core.GradleCore;
-import org.springsource.ide.eclipse.gradle.core.GradleNature;
-import org.springsource.ide.eclipse.gradle.core.GradleProject;
-import org.springsource.ide.eclipse.gradle.core.modelmanager.IGradleModelListener;
-import org.springsource.ide.eclipse.gradle.core.util.NatureUtils;
-import org.springsource.ide.eclipse.gradle.core.wizards.FlatPrecomputedProjectMapper;
-import org.springsource.ide.eclipse.gradle.core.wizards.GradleImportOperation;
 
 /**
  * @author Gregory Amerson
