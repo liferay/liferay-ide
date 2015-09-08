@@ -154,7 +154,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                 }
                 else
                 {
-                    if( moduleFile.delete() )
+                    if( moduleFile.exists() && moduleFile.delete() )
                     {
                         retval = Status.OK_STATUS;
                     }

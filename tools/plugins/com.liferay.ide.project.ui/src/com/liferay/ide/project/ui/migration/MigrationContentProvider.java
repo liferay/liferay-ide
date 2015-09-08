@@ -68,12 +68,6 @@ public class MigrationContentProvider implements ITreeContentProvider
 
             return task.getProblems().toArray( new Problem[0] );
         }
-        else if( parentElement instanceof TaskProblem )
-        {
-            TaskProblem problem = (TaskProblem) parentElement;
-
-            return new String[] { (String) problem.summary, problem.ticket };
-        }
 
         return null;
     }
@@ -94,7 +88,7 @@ public class MigrationContentProvider implements ITreeContentProvider
     @Override
     public boolean hasChildren( Object element )
     {
-        return element instanceof Problem || element instanceof MigrationTask;
+        return element instanceof MigrationTask;
     }
 
 }

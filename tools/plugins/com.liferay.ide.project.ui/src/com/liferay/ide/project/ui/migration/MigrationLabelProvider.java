@@ -23,6 +23,8 @@ import java.util.Date;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Gregory Amerson
@@ -45,10 +47,14 @@ public class MigrationLabelProvider extends StyledCellLabelProvider
             final MigrationTask task = (MigrationTask) element;
 
             text.append( "Migration Task - " + new SimpleDateFormat().format( new Date(task.getTimestamp() ) ) );
+
+            cell.setImage( PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FOLDER ) );
         }
         else if( element instanceof Problem )
         {
-            text.append( (String) ( (Problem) element ).title );
+            text.append( ( (Problem) element ).file.getName() );
+
+            cell.setImage( PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FILE ) );
         }
 
         cell.setText( text.toString() );
@@ -56,4 +62,5 @@ public class MigrationLabelProvider extends StyledCellLabelProvider
 
         super.update( cell );
     }
+
 }
