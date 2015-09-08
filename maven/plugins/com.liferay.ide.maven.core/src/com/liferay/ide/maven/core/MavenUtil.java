@@ -152,13 +152,12 @@ public class MavenUtil
         return newNode;
     }
 
-    public static IStatus executeGoal( final IMavenProjectFacade facade,
+    public static IStatus executeGoals( final IMavenProjectFacade facade,
                                        final IMavenExecutionContext context,
-                                       final String goal,
+                                       final List<String> goals,
                                        final IProgressMonitor monitor ) throws CoreException
     {
         final IMaven maven = MavenPlugin.getMaven();
-        final List<String> goals = Collections.singletonList( goal );
         final MavenProject mavenProject = facade.getMavenProject( monitor );
         final MavenExecutionPlan plan = maven.calculateExecutionPlan( mavenProject, goals, true, monitor );
         final List<MojoExecution> mojos = plan.getMojoExecutions();

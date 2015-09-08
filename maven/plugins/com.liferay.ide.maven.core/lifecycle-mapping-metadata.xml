@@ -50,5 +50,20 @@
                 </configurator>
             </action>
         </pluginExecution>
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <groupId>biz.aQute.bnd</groupId>
+                <artifactId>bnd-maven-plugin</artifactId>
+                <versionRange>[3.0.0,)</versionRange>
+                <goals>
+                    <goal>bnd-process</goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <configurator>
+                    <id>com.liferay.ide.maven.core.bundle.configurator</id>
+                </configurator>
+            </action>
+        </pluginExecution>
     </pluginExecutions>
 </lifecycleMappingMetadata>

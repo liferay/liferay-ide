@@ -20,6 +20,8 @@ import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.project.MavenProject;
@@ -98,32 +100,27 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
             final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
 
             // TODO update status
-            final IStatus status = mavenProjectBuilder.execGoal( "package", monitor );
+            final List<String> goals = Arrays.asList( "package" );
+            final IStatus status = mavenProjectBuilder.execGoals( goals, monitor );
+            // we are going to try to get the output jar even if the package failed.
 
-            if( status != null && status.isOK() )
+            final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+            final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+
+            final String targetName = mavenProject.getBuild().getFinalName() + ".jar";
+
+            // TODO find a better way to get the target folder
+            final IFolder targetFolder = getProject().getFolder( "target" );
+
+            if( targetFolder.exists() )
             {
-                final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
-                final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
+                //targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
+                final IPath targetFile = targetFolder.getRawLocation().append( targetName );
 
-                final String targetName = mavenProject.getBuild().getFinalName() + ".jar";
-
-                // TODO find a better way to get the target folder
-                final IFolder targetFolder = getProject().getFolder( "target" );
-
-                if( targetFolder.exists() )
+                if( targetFile.toFile().exists() )
                 {
-                    //targetFolder.refreshLocal( IResource.DEPTH_ONE, monitor );
-                    final IPath targetFile = targetFolder.getRawLocation().append( targetName );
-
-                    if( targetFile.toFile().exists() )
-                    {
-                        outputJar = targetFile;
-                    }
+                    outputJar = targetFile;
                 }
-            }
-            else
-            {
-                throw new CoreException( status );
             }
         }
 
@@ -145,6 +142,11 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
         if( file != null && file.exists() && !artifact.getFile().getName().equals( "classes" ) )
         {
             retval = new DefaultMaven2OsgiConverter().getBundleSymbolicName( artifact );
+        }
+        else
+        {
+            // fallback to project name
+            retval = getProject().getLocation().lastSegment();
         }
 
         return retval;

@@ -183,7 +183,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         return buildSB( serviceFile, ILiferayMavenConstants.PLUGIN_GOAL_BUILD_WSDD, sub );
     }
 
-    public IStatus execGoal( final String goal, final IProgressMonitor monitor ) throws CoreException
+    public IStatus execGoals( final List<String> goals, final IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
 
@@ -193,7 +193,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         {
             public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
             {
-                final IStatus execStatus = MavenUtil.executeGoal( facade, context, goal, monitor );
+                final IStatus execStatus = MavenUtil.executeGoals( facade, context, goals, monitor );
 
                 final List<Throwable> exceptions = context.getSession().getResult().getExceptions();
 

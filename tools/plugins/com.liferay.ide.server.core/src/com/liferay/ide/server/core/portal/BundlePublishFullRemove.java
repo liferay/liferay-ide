@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.io.File;
@@ -99,13 +100,13 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
             for( File f : files )
             {
-                if( f.isDirectory() )
-                {
-                    findFilesInPath( f, pattern, retval );
-                }
-                else if( f.getName().contains( pattern ) )
+                if( f.getName().contains( pattern ) )
                 {
                     retval.add( f );
+                }
+                else if( f.isDirectory() )
+                {
+                    findFilesInPath( f, pattern, retval );
                 }
             }
         }
@@ -127,18 +128,29 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         final IPath deployPath = runtime.getPortalBundle().getAutoDeployPath();
         findFilesInPath( deployPath.toFile(), symbolicName, moduleFiles );
 
+        // look for wabs that have been deployed
+        final IPath appServerDeployDir = runtime.getPortalBundle().getAppServerDeployDir();
+        findFilesInPath( appServerDeployDir.toFile(), symbolicName, moduleFiles );
+
         if( moduleFiles.size() > 0 )
         {
             // TODO convert to multi-statuses
             for( File moduleFile : moduleFiles )
             {
-                if( moduleFile.delete() )
+                if( moduleFile.isDirectory() )
                 {
-                    retval = Status.OK_STATUS;
+                    FileUtil.deleteDir( moduleFile, true );
                 }
                 else
                 {
-                    retval = LiferayServerCore.error( "Could not delete module file " + moduleFile.getName() );
+                    if( moduleFile.delete() )
+                    {
+                        retval = Status.OK_STATUS;
+                    }
+                    else
+                    {
+                        retval = LiferayServerCore.error( "Could not delete module file " + moduleFile.getName() );
+                    }
                 }
             }
         }

@@ -25,6 +25,12 @@
             name="Liferay Bundle Project Configurator"
             secondaryTo="maven-bundle-plugin">
       </configurator>
+      <configurator
+            class="com.liferay.ide.maven.core.BundleProjectConfigurator"
+            id="com.liferay.ide.maven.core.bnd.configurator"
+            name="Liferay BND Project Configurator"
+            secondaryTo="bnd-maven-plugin">
+      </configurator>
    </extension>
    <extension
          point="com.liferay.ide.core.liferayProjectProviders">

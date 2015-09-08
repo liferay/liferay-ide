@@ -679,7 +679,14 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
                 {
                     if( LiferayNature.hasNature( project ) )
                     {
-                        return new MavenBundlePluginProject( project );
+                        if( ComponentUtil.hasLiferayFacet( project ) )
+                        {
+                            return new FacetedMavenBundleProject( project );
+                        }
+                        else
+                        {
+                            return new MavenBundlePluginProject( project );
+                        }
                     }
                     else if( ComponentUtil.hasLiferayFacet( project ) )
                     {
