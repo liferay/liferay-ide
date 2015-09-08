@@ -38,7 +38,7 @@ import org.eclipse.wst.server.core.ServerCore;
 public class CleanAppServerJob extends SDKJob
 {
 
-    private String bundleZipLocation;
+    private final String bundleZipLocation;
 
     public CleanAppServerJob( IProject project, String bundleZipLocation )
     {
@@ -48,7 +48,7 @@ public class CleanAppServerJob extends SDKJob
 
         setProject( project );
 
-        setAppServerZipDir( bundleZipLocation );
+        this.bundleZipLocation = bundleZipLocation;
     }
 
     protected void assertStatus( IStatus status ) throws CoreException
@@ -63,11 +63,6 @@ public class CleanAppServerJob extends SDKJob
         {
             throw new CoreException( status );
         }
-    }
-
-    public String getAppServerZipDir()
-    {
-        return bundleZipLocation;
     }
 
     @Override
@@ -127,11 +122,6 @@ public class CleanAppServerJob extends SDKJob
         }
 
         return retval;
-    }
-
-    public void setAppServerZipDir( String bundleZipLocation )
-    {
-        this.bundleZipLocation = bundleZipLocation;
     }
 
     private static class Msgs extends NLS

@@ -39,7 +39,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -118,16 +117,9 @@ public class CleanAppServerAction extends AbstractObjectAction
             ProjectUI.logError( ex );
         }
     }
-    
-    @Override
-    public void selectionChanged( IAction action, ISelection selection )
-    {
-        super.selectionChanged( action, selection );
-    }
 
     protected void cleanAppServer( IProject project, String bundleZipLocation ) throws CoreException
     {
-
         String[] labels = new String[] { IDialogConstants.YES_LABEL, IDialogConstants.NO_LABEL };
 
         MessageDialog dialog =
@@ -255,7 +247,7 @@ public class CleanAppServerAction extends AbstractObjectAction
 
         return result;
     }
-    
+
     private static class Msgs extends NLS
     {
         public static String bundleZipNotdefined;
