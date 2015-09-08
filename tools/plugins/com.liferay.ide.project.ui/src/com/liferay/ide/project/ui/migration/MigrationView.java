@@ -15,8 +15,13 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import blade.migrate.api.MigrationListener;
+import blade.migrate.api.Problem;
+
 import com.liferay.ide.project.ui.ProjectUI;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -27,14 +32,16 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author Gregory Amerson
  */
-public class MigrationView extends ViewPart
+public class MigrationView extends ViewPart implements MigrationListener
 {
     private TreeViewer _viewer;
     private List<MigrationTask> _tasks;
+    private ServiceRegistration<MigrationListener> _listenerRef;
 
     @Override
     public void createPartControl( Composite parent )
@@ -58,6 +65,22 @@ public class MigrationView extends ViewPart
         {
             throw new PartInitException( e.getStatus() );
         }
+
+        Dictionary<String, ?> properties = new Hashtable<>();
+        _listenerRef =
+            ProjectUI.getDefault().getBundle().getBundleContext().registerService(
+                MigrationListener.class, this, properties );
+    }
+
+    @Override
+    public void dispose()
+    {
+        super.dispose();
+
+        if( _listenerRef != null )
+        {
+            _listenerRef.unregister();
+        }
     }
 
     @Override
@@ -67,6 +90,11 @@ public class MigrationView extends ViewPart
         {
             _viewer.getControl().setFocus();
         }
+    }
+
+    @Override
+    public void problemsFound( List<Problem> problems )
+    {
     }
 
 }

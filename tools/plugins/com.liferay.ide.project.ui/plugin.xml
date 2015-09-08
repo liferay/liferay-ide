@@ -1144,6 +1144,24 @@
          </enabledWhen>
        </handler>
    </extension>
+
+   <extension
+         point="org.eclipse.jdt.ui.javaElementFilters">
+      <filter
+            class="com.liferay.ide.project.ui.migration.MigrationHelperProjectFilter"
+            enabled="true"
+            id="com.liferay.studio.kaleo.ui.WorkflowSupportProjectFilter"
+            name="Migration Helper support project"
+            targetId="org.eclipse.jdt.ui.PackageExplorer">
+      </filter>
+      <filter
+            class="com.liferay.ide.project.ui.migration.MigrationHelperProjectFilter"
+            enabled="true"
+            id="com.liferay.ide.project.ui.migration.MigrationHelperProjectFilter"
+            name="Migration Helper support project"
+            targetId="org.eclipse.jdt.ui.ProjectsView">
+      </filter>
+   </extension>
 <!--
 
    <extension
