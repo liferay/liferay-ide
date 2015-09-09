@@ -69,15 +69,15 @@ public class ArchetypeTests extends AbstractMavenProjectTestCase
         op.setProjectProvider( "maven" );
 
         assertEquals(
-            "com.liferay.maven.archetypes:liferay-portlet-archetype:6.2.1", op.getArchetype().content() );
+            "com.liferay.maven.archetypes:liferay-portlet-archetype:6.2.2", op.getArchetype().content() );
 
         op.setPortletFramework( "jsf-2.x" );
         assertEquals(
-            "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype:6.2.1", op.getArchetype().content() );
+            "com.liferay.maven.archetypes:liferay-portlet-jsf-archetype:6.2.2", op.getArchetype().content() );
 
         op.setPortletFrameworkAdvanced( "primefaces" );
         assertEquals(
-            "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype:6.2.1",
+            "com.liferay.maven.archetypes:liferay-portlet-primefaces-archetype:6.2.2",
             op.getArchetype().content() );
     }
 
