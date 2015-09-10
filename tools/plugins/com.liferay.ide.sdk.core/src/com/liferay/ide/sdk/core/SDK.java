@@ -25,9 +25,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -56,20 +56,25 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings( "restriction" )
 public class SDK
 {
-    public static Map<String, Map<String,Object>> build_prperties = new HashMap<String, Map<String,Object>>();
+    public final static List<String> APP_SERVER_PROPERTIES_KEYS =
+        Collections.unmodifiableList( Arrays.asList( new String[] {
+            "app.server.type",
+            "app.server.dir",
+            "app.server.deploy.dir",
+            "app.server.lib.global.dir",
+            "app.server.parent.dir",
+            "app.server.portal.dir"
+     }));
 
-    public static List<String> KEY_BUILD_PROPERTIES = Arrays.asList( new String[] { "app.server.type", "app.server.dir",
-        "app.server.deploy.dir", "app.server.lib.global.dir", "app.server.parent.dir", "app.server.portal.dir" } );
+    public final static Map<String, Map<String, Object>> buildPropertiesCache = new HashMap<>();
 
-    public static String createXMLNameValuePair( String name, String value )
-    {
-        return name + "=\"" + value + "\" ";
-    }
-
-    protected static IEclipsePreferences getPrefStore()
-    {
-        return InstanceScope.INSTANCE.getNode( SDKCorePlugin.PREFERENCE_ID );
-    }
+    public final static List<String> SUPPORTED_SERVER_TYPES =
+        Collections.unmodifiableList( Arrays.asList( new String[] {
+            "tomcat",
+            "jboss",
+            "glassfish",
+            "jetty"
+    }));
 
     protected boolean contributed;
 
@@ -78,8 +83,6 @@ public class SDK
     protected IPath location;
 
     protected String name;
-
-    public List<String> support_server_type = Arrays.asList( new String[]{ "tomcat", "jboss", "glassfish", "jetty"} );
 
     protected String version;
 
@@ -516,14 +519,6 @@ public class SDK
         return null;
     }
 
-//    This code is not used since IDE-810 and it may cause the new identical sdk checking state covers the old one's.
-//    @Override
-//    public boolean equals( Object obj )
-//    {
-//        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
-//            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
-//    }
-
     public IPath createNewWebProject(
         String webName, String webDisplayName, boolean separateJRE,
         String workingDir, String baseDir, IProgressMonitor monitor )
@@ -560,6 +555,19 @@ public class SDK
         }
 
         return null;
+    }
+
+//    This code is not used since IDE-810 and it may cause the new identical sdk checking state covers the old one's.
+//    @Override
+//    public boolean equals( Object obj )
+//    {
+//        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
+//            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
+//    }
+
+    public String createXMLNameValuePair( String name, String value )
+    {
+        return name + "=\"" + value + "\" ";
     }
 
     public IStatus directDeploy(
@@ -608,16 +616,17 @@ public class SDK
         return antLibs.toArray( new IPath[0] );
     }
 
-    public Map<String,Object> getBuildProperties() throws CoreException
+    public Map<String, Object> getBuildProperties() throws CoreException
     {
-        return getBuildProperties(false);
+        return getBuildProperties( false );
     }
 
-    public Map<String,Object> getBuildProperties( final boolean reload) throws CoreException
+    public Map<String, Object> getBuildProperties( final boolean reload ) throws CoreException
     {
         final Project project = new Project();
 
-        Map<String, Object> sdkProperties = build_prperties.get( getLocation().toPortableString() );
+        Map<String, Object> sdkProperties = buildPropertiesCache.get( getLocation().toPortableString() );
+
         try
         {
             if ( sdkProperties == null || reload == true )
@@ -625,25 +634,21 @@ public class SDK
                 project.setBaseDir( new File( getLocation().toPortableString() ) );
                 project.setSystemProperties();
 
-                Property envTask = new Property();
+                final Property envTask = new Property();
                 envTask.setProject( project );
                 envTask.setEnvironment( "env" );
                 envTask.execute();
 
-                loadProperties( project, project.getProperty( "user.name" ) );
-                loadProperties( project, project.getProperty( "env.COMPUTERNAME" ) );
-                loadProperties( project, project.getProperty( "env.HOST" ) );
-                loadProperties( project, project.getProperty( "env.HOSTNAME" ) );
-
-                Property propertyTask = new Property();
-                propertyTask.setProject( project );
-                File buildPropertyFile = new File( getLocation().append( "build.properties" ).toPortableString() );
-                propertyTask.setFile( buildPropertyFile );
-                propertyTask.execute();
+                loadPropertiesFile( project, "build." + project.getProperty( "user.name" ) + ".properties" );
+                loadPropertiesFile( project, "build." + project.getProperty( "env.COMPUTERNAME" ) + ".properties" );
+                loadPropertiesFile( project, "build." + project.getProperty( "env.HOST" ) + ".properties" );
+                loadPropertiesFile( project, "build." + project.getProperty( "env.HOSTNAME" ) + ".properties" );
+                loadPropertiesFile( project, "build.properties" );
 
                 if ( project.getProperty( "app.server.type" ) == null )
                 {
-                    throw new CoreException( SDKCorePlugin.createErrorStatus( "Missing ${app.server.type} setting in build.properties file." ) );
+                    throw new CoreException( SDKCorePlugin.createErrorStatus(
+                        "Missing ${app.server.type} setting in build.properties file." ) );
                 }
 
                 final Map<String, String> propertyCopyList = new HashMap<String, String>();
@@ -659,12 +664,12 @@ public class SDK
                     "app.server." + project.getProperty( "app.server.type" ) + ".portal.dir",
                     "app.server.portal.dir" );
 
-                for( Iterator<String> iterator = propertyCopyList.keySet().iterator(); iterator.hasNext(); )
+                for( String key : propertyCopyList.keySet() )
                 {
                     AntPropertyCopy propertyCopyTask = new AntPropertyCopy();
                     propertyCopyTask.setOverride( true );
                     propertyCopyTask.setProject( project );
-                    String from = iterator.next();
+                    String from = key;
                     String to = propertyCopyList.get( from );
                     propertyCopyTask.setFrom( from );
                     propertyCopyTask.setName( to );
@@ -673,15 +678,16 @@ public class SDK
 
                 sdkProperties = project.getProperties();
 
-                for( String propertyKey : KEY_BUILD_PROPERTIES )
+                for( String propertyKey : APP_SERVER_PROPERTIES_KEYS )
                 {
-                    if ( !sdkProperties.keySet().contains( propertyKey ) )
+                    if( !sdkProperties.keySet().contains( propertyKey ) )
                     {
-                        throw new CoreException( SDKCorePlugin.createErrorStatus( "Missing ${" + propertyKey + "} setting in build.properties file." ) );
+                        throw new CoreException( SDKCorePlugin.createErrorStatus( "Missing ${" + propertyKey +
+                            "} setting in build.properties file." ) );
                     }
                 }
 
-                build_prperties.put( getLocation().toPortableString(), sdkProperties );
+                buildPropertiesCache.put( getLocation().toPortableString(), sdkProperties );
             }
         }
         catch( Exception e )
@@ -776,6 +782,11 @@ public class SDK
         return getLocation().append( ISDKConstants.PORTLET_PLUGIN_ZIP_PATH );
     }
 
+    protected IEclipsePreferences getPrefStore()
+    {
+        return InstanceScope.INSTANCE.getNode( SDKCorePlugin.PREFERENCE_ID );
+    }
+
     private Properties getProperties( File file )
     {
         Properties properties = new Properties();
@@ -868,6 +879,7 @@ public class SDK
         return defaultSDK;
     }
 
+
     public boolean isValid()
     {
         IPath sdkLocation = getLocation();
@@ -890,7 +902,6 @@ public class SDK
         return true;
     }
 
-
     public void loadFromMemento( XMLMemento sdkElement )
     {
         setName( sdkElement.getString( "name" ) ); //$NON-NLS-1$
@@ -898,17 +909,17 @@ public class SDK
         // setRuntime(sdkElement.getString("runtime"));
     }
 
-    private void loadProperties(Project project, final String keyName)
+    private void loadPropertiesFile( Project project, final String fileName )
     {
-        if ( keyName != null )
+        if( project != null && fileName != null )
         {
-            File customerProperties = new File(getLocation().append( "build." + keyName +".properties" ).toPortableString());
+            File propertiesFile = new File( getLocation().append( fileName ).toPortableString() );
 
-            if ( customerProperties.exists() )
+            if( propertiesFile.exists() )
             {
-                Property loadPropetiesTask = new Property();
+                final Property loadPropetiesTask = new Property();
                 loadPropetiesTask.setProject( project );
-                loadPropetiesTask.setFile( customerProperties );
+                loadPropetiesTask.setFile( propertiesFile );
                 loadPropetiesTask.execute();
             }
         }
@@ -1061,7 +1072,7 @@ public class SDK
             return status;
         }
 
-        for( String propertyKey : KEY_BUILD_PROPERTIES )
+        for( String propertyKey : APP_SERVER_PROPERTIES_KEYS )
         {
             final String propertyValue = (String)sdkProperties.get( propertyKey );
 
@@ -1075,10 +1086,10 @@ public class SDK
                 {
                     case "app.server.type":
                     {
-                        if( !support_server_type.contains( propertyValue ) )
+                        if( !SUPPORTED_SERVER_TYPES.contains( propertyValue ) )
                         {
-                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                ") server is not supported by Liferay IDE." ) );
+                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" +
+                                            propertyValue + ") server is not supported by Liferay IDE." ) );
                         }
 
                         break;
@@ -1094,21 +1105,19 @@ public class SDK
 
                         if( !propertyPath.isAbsolute() )
                         {
-                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                ") is not absolute path." ) );
+                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" +
+                                            propertyValue + ") is not absolute path." ) );
                         }
 
                         if( !propertyPath.toFile().exists() )
                         {
-                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" + propertyValue +
-                                ") is not exsit." ) );
+                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" +
+                                            propertyValue + ") is not exsit." ) );
                         }
 
                         break;
                     }
                     default:
-                    {
-                    }
                 }
             }
         }
