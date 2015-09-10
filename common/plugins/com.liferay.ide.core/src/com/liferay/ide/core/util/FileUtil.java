@@ -20,6 +20,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -58,8 +59,6 @@ import org.xml.sax.ErrorHandler;
  */
 public class FileUtil
 {
-
-
 
     public static void clearContents( File versionFile )
     {
@@ -196,6 +195,21 @@ public class FileUtil
             }
         }
 
+    }
+
+    public static File[] getDirectories( File directory )
+    {
+        return directory.listFiles
+        (
+            new FileFilter()
+            {
+                @Override
+                public boolean accept( File file )
+                {
+                    return file.isDirectory();
+                }
+            }
+        );
     }
 
     public static IContainer getWorkspaceContainer( final File f )

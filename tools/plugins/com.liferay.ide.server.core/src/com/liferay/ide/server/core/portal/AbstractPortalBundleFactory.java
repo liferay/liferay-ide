@@ -15,10 +15,10 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
@@ -36,23 +36,23 @@ public abstract class AbstractPortalBundleFactory implements PortalBundleFactory
     {
         IPath retval = null;
 
-        final String appServerPath = (String) (appServerProperties.get( "app.server.dir"));
-        final String appServerParentPath = (String) (appServerProperties.get( "app.server.parent.dir"));
-        final String appServerDeployPath = (String) (appServerProperties.get( "app.server.deploy.dir"));
-        final String appServerGlobalLibPath = (String) (appServerProperties.get( "app.server.lib.global.dir"));
-        final String appServerPortalPath = (String) (appServerProperties.get( "app.server.portal.dir"));
+        final String appServerPath = (String) ( appServerProperties.get( "app.server.dir" ) );
+        final String appServerParentPath = (String) ( appServerProperties.get( "app.server.parent.dir" ) );
+        final String appServerDeployPath = (String) ( appServerProperties.get( "app.server.deploy.dir" ) );
+        final String appServerGlobalLibPath = (String) ( appServerProperties.get( "app.server.lib.global.dir" ) );
+        final String appServerPortalPath = (String) ( appServerProperties.get( "app.server.portal.dir" ) );
 
-        if ( !ServerUtil.verifyPath(appServerPath) ||
-             !ServerUtil.verifyPath(appServerParentPath) ||
-             !ServerUtil.verifyPath(appServerDeployPath) ||
-             !ServerUtil.verifyPath(appServerPortalPath) ||
-             !ServerUtil.verifyPath(appServerGlobalLibPath) )
+        if( !ServerUtil.verifyPath( appServerPath ) ||
+            !ServerUtil.verifyPath( appServerParentPath ) ||
+            !ServerUtil.verifyPath( appServerDeployPath ) ||
+            !ServerUtil.verifyPath( appServerPortalPath ) ||
+            !ServerUtil.verifyPath( appServerGlobalLibPath ) )
         {
             return retval;
         }
 
-        final IPath appServerLocation = new Path(appServerPath);
-        final IPath liferayHomelocation = new Path(appServerParentPath);
+        final IPath appServerLocation = new Path( appServerPath );
+        final IPath liferayHomelocation = new Path( appServerParentPath );
 
         if( detectBundleDir( appServerLocation )  )
         {
@@ -60,17 +60,7 @@ public abstract class AbstractPortalBundleFactory implements PortalBundleFactory
         }
         else if( detectLiferayHome( liferayHomelocation ) )
         {
-            final File[] directories = liferayHomelocation.toFile().listFiles
-            (
-                new FileFilter()
-                {
-                    @Override
-                    public boolean accept( File file )
-                    {
-                        return file.isDirectory();
-                    }
-                }
-            );
+            final File[] directories = FileUtil.getDirectories( liferayHomelocation.toFile() );
 
             for( File directory : directories )
             {
@@ -98,15 +88,7 @@ public abstract class AbstractPortalBundleFactory implements PortalBundleFactory
         }
         else if( detectLiferayHome( location ) )
         {
-            final File[] directories = location.toFile().listFiles( new FileFilter()
-            {
-
-                @Override
-                public boolean accept( File file )
-                {
-                    return file.isDirectory();
-                }
-            } );
+            final File[] directories = FileUtil.getDirectories( location.toFile() );
 
             for( File directory : directories )
             {
