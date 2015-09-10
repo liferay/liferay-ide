@@ -56,22 +56,19 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings( "restriction" )
 public class SDK
 {
-    public static String createXMLNameValuePair( String name, String value )
-    {
-        return name + "=\"" + value + "\" "; //$NON-NLS-1$ //$NON-NLS-2$
-    }
-
-    public List<String> support_server_type = Arrays.asList( new String[]{ "tomcat", "jboss", "glassfish", "jetty"} );
-
     public static Map<String, Map<String,Object>> build_prperties = new HashMap<String, Map<String,Object>>();
 
     public static List<String> KEY_BUILD_PROPERTIES = Arrays.asList( new String[] { "app.server.type", "app.server.dir",
         "app.server.deploy.dir", "app.server.lib.global.dir", "app.server.parent.dir", "app.server.portal.dir" } );
 
-    @SuppressWarnings( "deprecation" )
+    public static String createXMLNameValuePair( String name, String value )
+    {
+        return name + "=\"" + value + "\" ";
+    }
+
     protected static IEclipsePreferences getPrefStore()
     {
-        return new InstanceScope().getNode( SDKCorePlugin.PREFERENCE_ID );
+        return InstanceScope.INSTANCE.getNode( SDKCorePlugin.PREFERENCE_ID );
     }
 
     protected boolean contributed;
@@ -81,6 +78,8 @@ public class SDK
     protected IPath location;
 
     protected String name;
+
+    public List<String> support_server_type = Arrays.asList( new String[]{ "tomcat", "jboss", "glassfish", "jetty"} );
 
     protected String version;
 
@@ -260,71 +259,6 @@ public class SDK
         return copy;
     }
 
-    public IPath createNewProject(
-        String projectName, ArrayList<String> arguments, String type, String workingDir, IProgressMonitor monitor ) throws CoreException
-    {
-        CreateHelper createHelper = new CreateHelper( this, monitor );
-
-        final IPath pluginFolder = getLocation().append( getPluginFolder( type ) );
-
-        final IPath newPath = pluginFolder.append( projectName + getPluginSuffix( type ) );
-
-        String createScript = ISDKConstants.CREATE_BAT;
-
-        if( !CoreUtil.isWindows() )
-        {
-            createScript = ISDKConstants.CREATE_SH;
-        }
-
-        final IPath createFilePath = pluginFolder.append( createScript );
-
-        final File createFile = createFilePath.toFile();
-
-        String originalCreateConetent = "";
-
-        if( !CoreUtil.isWindows() && createFile.exists() )
-        {
-            originalCreateConetent = FileUtil.readContents( createFile, true );
-
-            if( originalCreateConetent.contains( "DisplayName=\\\"$2\\\"" ) )
-            {
-                String createContent = originalCreateConetent.replace( "DisplayName=\\\"$2\\\"", "DisplayName=\"$2\"" );
-
-                try
-                {
-                    FileUtil.writeFile(
-                        createFile, new ByteArrayInputStream( createContent.toString().getBytes( "UTF-8" ) ), null );
-                }
-                catch( Exception e )
-                {
-                    SDKCorePlugin.logError( e );
-                }
-            }
-        }
-
-        createHelper.runTarget( createFilePath, arguments, workingDir );
-
-        if( !newPath.toFile().exists() )
-        {
-            throw new CoreException( SDKCorePlugin.createErrorStatus( "Create script did not complete successfully." ) );
-        }
-
-        if( !CoreUtil.isNullOrEmpty( originalCreateConetent ) )
-        {
-            try
-            {
-                FileUtil.writeFile(
-                    createFile, new ByteArrayInputStream( originalCreateConetent.toString().getBytes( "UTF-8" ) ), null );
-            }
-            catch( Exception e )
-            {
-                SDKCorePlugin.logError( e );
-            }
-        }
-
-        return newPath;
-    }
-
     public IPath createNewExtProject( String extName, String extDisplayName,
         boolean separateJRE, String workingDir, String baseDir, IProgressMonitor monitor )
     {
@@ -480,6 +414,71 @@ public class SDK
         return null;
     }
 
+    public IPath createNewProject(
+        String projectName, ArrayList<String> arguments, String type, String workingDir, IProgressMonitor monitor ) throws CoreException
+    {
+        CreateHelper createHelper = new CreateHelper( this, monitor );
+
+        final IPath pluginFolder = getLocation().append( getPluginFolder( type ) );
+
+        final IPath newPath = pluginFolder.append( projectName + getPluginSuffix( type ) );
+
+        String createScript = ISDKConstants.CREATE_BAT;
+
+        if( !CoreUtil.isWindows() )
+        {
+            createScript = ISDKConstants.CREATE_SH;
+        }
+
+        final IPath createFilePath = pluginFolder.append( createScript );
+
+        final File createFile = createFilePath.toFile();
+
+        String originalCreateConetent = "";
+
+        if( !CoreUtil.isWindows() && createFile.exists() )
+        {
+            originalCreateConetent = FileUtil.readContents( createFile, true );
+
+            if( originalCreateConetent.contains( "DisplayName=\\\"$2\\\"" ) )
+            {
+                String createContent = originalCreateConetent.replace( "DisplayName=\\\"$2\\\"", "DisplayName=\"$2\"" );
+
+                try
+                {
+                    FileUtil.writeFile(
+                        createFile, new ByteArrayInputStream( createContent.toString().getBytes( "UTF-8" ) ), null );
+                }
+                catch( Exception e )
+                {
+                    SDKCorePlugin.logError( e );
+                }
+            }
+        }
+
+        createHelper.runTarget( createFilePath, arguments, workingDir );
+
+        if( !newPath.toFile().exists() )
+        {
+            throw new CoreException( SDKCorePlugin.createErrorStatus( "Create script did not complete successfully." ) );
+        }
+
+        if( !CoreUtil.isNullOrEmpty( originalCreateConetent ) )
+        {
+            try
+            {
+                FileUtil.writeFile(
+                    createFile, new ByteArrayInputStream( originalCreateConetent.toString().getBytes( "UTF-8" ) ), null );
+            }
+            catch( Exception e )
+            {
+                SDKCorePlugin.logError( e );
+            }
+        }
+
+        return newPath;
+    }
+
     public IPath createNewThemeProject(
         String themeName, String themeDisplayName, boolean separateJRE, String workingDir, String baseDir,
         IProgressMonitor monitor )
@@ -516,6 +515,14 @@ public class SDK
 
         return null;
     }
+
+//    This code is not used since IDE-810 and it may cause the new identical sdk checking state covers the old one's.
+//    @Override
+//    public boolean equals( Object obj )
+//    {
+//        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
+//            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
+//    }
 
     public IPath createNewWebProject(
         String webName, String webDisplayName, boolean separateJRE,
@@ -554,14 +561,6 @@ public class SDK
 
         return null;
     }
-
-//    This code is not used since IDE-810 and it may cause the new identical sdk checking state covers the old one's.
-//    @Override
-//    public boolean equals( Object obj )
-//    {
-//        return obj instanceof SDK && getName() != null && getName().equals( ( (SDK) obj ).getName() ) &&
-//            getLocation() != null && getLocation().equals( ( (SDK) obj ).getLocation() );
-//    }
 
     public IStatus directDeploy(
         IProject project, Map<String, String> overrideProperties, boolean separateJRE,
@@ -607,167 +606,6 @@ public class SDK
         }
 
         return antLibs.toArray( new IPath[0] );
-    }
-
-    private String getDefaultWorkingDir( final IPath buildFile )
-    {
-        return buildFile.removeLastSegments( 1 ).toOSString();
-    }
-
-    public IPath getLocation()
-    {
-        return location;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public IPath getPortletTemplatePath()
-    {
-        return getLocation().append( ISDKConstants.PORTLET_PLUGIN_ZIP_PATH );
-    }
-
-    public String getVersion()
-    {
-        if( version == null )
-        {
-            IPath sdkLocation = getLocation().makeAbsolute();
-
-            if( !sdkLocation.isEmpty() )
-            {
-                try
-                {
-                    version = SDKUtil.readSDKVersion( sdkLocation.toOSString() );
-
-                    if( version.equals( ILiferayConstants.V611.toString() ) )
-                    {
-                        Properties buildProperties = getProperties( sdkLocation.append( "build.properties" ).toFile() ); //$NON-NLS-1$
-
-                        if( hasAppServerSpecificProps( buildProperties ) )
-                        {
-                            version = ILiferayConstants.V612.toString();
-                        }
-                    }
-
-                    if( version.equals( ILiferayConstants.V6120.toString() ) )
-                    {
-                        Properties buildProperties = getProperties( sdkLocation.append( "build.properties" ).toFile() ); //$NON-NLS-1$
-
-                        if( hasAppServerSpecificProps( buildProperties ) )
-                        {
-                            version = ILiferayConstants.V6130.toString();
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                    SDKCorePlugin.logError( "Could not detect the sdk version.", e); //$NON-NLS-1$
-                }
-            }
-        }
-
-        return version;
-    }
-
-    private String getPluginFolder( String type )
-    {
-        if( "ext".equals( type ) )
-        {
-            return ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER;
-        }
-        else if( "portlet".equals( type ) )
-        {
-            return ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER;
-        }
-        else if( "hook".equals( type ) )
-        {
-            return ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER;
-        }
-        else if( "layouttpl".equals( type ) )
-        {
-            return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER;
-        }
-        else if( "theme".equals( type ) )
-        {
-            return ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER;
-        }
-        else if( "web".equals( type ) )
-        {
-            return ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER;
-        }
-        else
-        {
-            return "";
-        }
-    }
-
-    private String getPluginSuffix( String type )
-    {
-        if( "ext".equals( type ) )
-        {
-            return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
-        }
-        else if( "portlet".equals( type ) )
-        {
-            return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
-        }
-        else if( "hook".equals( type ) )
-        {
-            return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
-        }
-        else if( "layouttpl".equals( type ) )
-        {
-            return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
-        }
-        else if( "theme".equals( type ) )
-        {
-            return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
-        }
-        else if( "web".equals( type ) )
-        {
-            return ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
-        }
-        else
-        {
-            return "";
-        }
-    }
-
-    private boolean hasAppServerSpecificProps( Properties props )
-    {
-        Enumeration<?> names = props.propertyNames();
-
-        while( names.hasMoreElements() )
-        {
-            String name = names.nextElement().toString();
-
-            if( name.matches( "app.server.tomcat.*" ) ) //$NON-NLS-1$
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private Properties getProperties( File file )
-    {
-        Properties properties = new Properties();
-
-        try
-        {
-            InputStream propertiesInput = new FileInputStream( file );
-            properties.load( propertiesInput );
-            propertiesInput.close();
-        }
-        catch( Exception e )
-        {
-            SDKCorePlugin.logError( e );
-        }
-
-        return properties;
     }
 
     public Map<String,Object> getBuildProperties() throws CoreException
@@ -854,6 +692,167 @@ public class SDK
         return sdkProperties;
     }
 
+    private String getDefaultWorkingDir( final IPath buildFile )
+    {
+        return buildFile.removeLastSegments( 1 ).toOSString();
+    }
+
+    public IPath getLocation()
+    {
+        return location;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    private String getPluginFolder( String type )
+    {
+        if( "ext".equals( type ) )
+        {
+            return ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER;
+        }
+        else if( "portlet".equals( type ) )
+        {
+            return ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER;
+        }
+        else if( "hook".equals( type ) )
+        {
+            return ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER;
+        }
+        else if( "layouttpl".equals( type ) )
+        {
+            return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER;
+        }
+        else if( "theme".equals( type ) )
+        {
+            return ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER;
+        }
+        else if( "web".equals( type ) )
+        {
+            return ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER;
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    private String getPluginSuffix( String type )
+    {
+        if( "ext".equals( type ) )
+        {
+            return ISDKConstants.EXT_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( "portlet".equals( type ) )
+        {
+            return ISDKConstants.PORTLET_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( "hook".equals( type ) )
+        {
+            return ISDKConstants.HOOK_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( "layouttpl".equals( type ) )
+        {
+            return ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( "theme".equals( type ) )
+        {
+            return ISDKConstants.THEME_PLUGIN_PROJECT_SUFFIX;
+        }
+        else if( "web".equals( type ) )
+        {
+            return ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX;
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    public IPath getPortletTemplatePath()
+    {
+        return getLocation().append( ISDKConstants.PORTLET_PLUGIN_ZIP_PATH );
+    }
+
+    private Properties getProperties( File file )
+    {
+        Properties properties = new Properties();
+
+        try
+        {
+            InputStream propertiesInput = new FileInputStream( file );
+            properties.load( propertiesInput );
+            propertiesInput.close();
+        }
+        catch( Exception e )
+        {
+            SDKCorePlugin.logError( e );
+        }
+
+        return properties;
+    }
+
+    public String getVersion()
+    {
+        if( version == null )
+        {
+            IPath sdkLocation = getLocation().makeAbsolute();
+
+            if( !sdkLocation.isEmpty() )
+            {
+                try
+                {
+                    version = SDKUtil.readSDKVersion( sdkLocation.toOSString() );
+
+                    if( version.equals( ILiferayConstants.V611.toString() ) )
+                    {
+                        Properties buildProperties = getProperties( sdkLocation.append( "build.properties" ).toFile() ); //$NON-NLS-1$
+
+                        if( hasAppServerSpecificProps( buildProperties ) )
+                        {
+                            version = ILiferayConstants.V612.toString();
+                        }
+                    }
+
+                    if( version.equals( ILiferayConstants.V6120.toString() ) )
+                    {
+                        Properties buildProperties = getProperties( sdkLocation.append( "build.properties" ).toFile() ); //$NON-NLS-1$
+
+                        if( hasAppServerSpecificProps( buildProperties ) )
+                        {
+                            version = ILiferayConstants.V6130.toString();
+                        }
+                    }
+                }
+                catch( Exception e )
+                {
+                    SDKCorePlugin.logError( "Could not detect the sdk version.", e); //$NON-NLS-1$
+                }
+            }
+        }
+
+        return version;
+    }
+
+    private boolean hasAppServerSpecificProps( Properties props )
+    {
+        Enumeration<?> names = props.propertyNames();
+
+        while( names.hasMoreElements() )
+        {
+            String name = names.nextElement().toString();
+
+            if( name.matches( "app.server.tomcat.*" ) ) //$NON-NLS-1$
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public boolean hasProjectFile()
     {
         return this.location != null && this.location.append( ".project" ).toFile().exists(); //$NON-NLS-1$
@@ -891,13 +890,13 @@ public class SDK
         return true;
     }
 
+
     public void loadFromMemento( XMLMemento sdkElement )
     {
         setName( sdkElement.getString( "name" ) ); //$NON-NLS-1$
         setLocation( Path.fromPortableString( sdkElement.getString( "location" ) ) ); //$NON-NLS-1$
         // setRuntime(sdkElement.getString("runtime"));
     }
-
 
     private void loadProperties(Project project, final String keyName)
     {
