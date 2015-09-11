@@ -78,7 +78,7 @@ public class BinaryProjectsImportWizardPage extends SDKProjectsImportWizardPage
 
         public Image getImage()
         {
-            Image image = ProjectUI.getDefault().getImageRegistry().get( ProjectUI.IMAGE_ID );
+            Image image = ProjectUI.getDefault().getImageRegistry().get( ProjectUI.WAR_IMAGE_ID );
 
             return image;
         }

@@ -12,90 +12,143 @@
  * details.
  *
  *******************************************************************************/
-
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.MigrationListener;
-import blade.migrate.api.Problem;
+import blade.migrate.api.MigrationConstants;
 
 import com.liferay.ide.project.ui.ProjectUI;
 
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.IOpenListener;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.osgi.framework.ServiceRegistration;
+
 
 /**
  * @author Gregory Amerson
  */
-public class MigrationView extends ViewPart implements MigrationListener
+public class MigrationView extends CommonNavigator implements IDoubleClickListener
 {
-    private TreeViewer _viewer;
-    private List<MigrationTask> _tasks;
-    private ServiceRegistration<MigrationListener> _listenerRef;
+
+    public static final String ID = "com.liferay.ide.project.ui.migrationView";
+    private static final Image IMAGE_CHECKED = ProjectUI.getDefault().getImageRegistry().get( ProjectUI.CHECKED_IMAGE_ID );
+    private static final Image IMAGE_UNCHECKED = ProjectUI.getDefault().getImageRegistry().get( ProjectUI.UNCHECKED_IMAGE_ID );
+
     private FormText _form;
+    private TableViewer _problemsViewer;
+
+    private void createColumns( TableViewer _problemsViewer )
+    {
+        final String[] titles = { "Title", "Summary", "Line", "Resolved" };
+        final int[] bounds = { 100, 100, 100, 100 };
+
+        TableViewerColumn col = createTableViewerColumn( titles[0], bounds[0], 0, _problemsViewer );
+        col.setLabelProvider( new ColumnLabelProvider()
+        {
+            public String getText( Object element )
+            {
+                TaskProblem p = (TaskProblem) element;
+
+                return p.title;
+            }
+        });
+
+        col = createTableViewerColumn( titles[1], bounds[1], 1, _problemsViewer );
+        col.setLabelProvider( new ColumnLabelProvider()
+        {
+            public String getText( Object element )
+            {
+                TaskProblem p = (TaskProblem) element;
+
+                return p.summary;
+            }
+        });
+
+        col = createTableViewerColumn( titles[2], bounds[2], 2, _problemsViewer );
+        col.setLabelProvider( new ColumnLabelProvider()
+        {
+            public String getText( Object element )
+            {
+                TaskProblem p = (TaskProblem) element;
+
+                return p.lineNumber + "";
+            }
+        });
+
+        col = createTableViewerColumn( titles[3], bounds[3], 3, _problemsViewer );
+        col.setLabelProvider( new ColumnLabelProvider()
+        {
+            @Override
+            public Image getImage( Object element )
+            {
+                TaskProblem p = (TaskProblem) element;
+
+                if( p.isResolved() )
+                {
+                    return IMAGE_CHECKED;
+                }
+                else
+                {
+                    return IMAGE_UNCHECKED;
+                }
+            }
+
+            public String getText( Object element )
+            {
+                return null;
+            }
+        });
+    }
 
     @Override
     public void createPartControl( Composite parent )
     {
         SashForm viewParent = new SashForm( parent, SWT.HORIZONTAL );
 
-        _viewer = new TreeViewer( viewParent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL );
-        _viewer.setContentProvider( new MigrationContentProvider() );
-        _viewer.setLabelProvider( new MigrationLabelProvider() );
-        _viewer.setInput( _tasks.toArray( new MigrationTask[0] ) );
-        _viewer.addOpenListener( new IOpenListener()
-        {
-            @Override
-            public void open( OpenEvent event )
-            {
-                TaskProblem taskProblem = getTaskProblemFromSelection( event.getSelection() );
+        super.createPartControl( viewParent );
 
-                if( taskProblem != null )
-                {
-                    try
-                    {
-                        IEditorPart editor = IDE.openEditor( getSite().getPage(), getIFileFromTaskProblem( taskProblem ) );
+        SashForm detailParent = new SashForm( viewParent, SWT.VERTICAL );
 
-                        if( editor instanceof ITextEditor )
-                        {
-                            ITextEditor textEditor = (ITextEditor) editor;
-                            textEditor.selectAndReveal( taskProblem.startOffset, taskProblem.endOffset - taskProblem.startOffset );
-                        }
-                    }
-                    catch( PartInitException e )
-                    {
-                    }
-                }
-            }
-        });
+        _problemsViewer = new TableViewer( detailParent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL |
+            SWT.FULL_SELECTION | SWT.BORDER );
+
+        createColumns( _problemsViewer );
+
+        final Table table = _problemsViewer.getTable();
+        table.setHeaderVisible( true );
+
+        _problemsViewer.setContentProvider( ArrayContentProvider.getInstance() );
 
         MenuManager menuMgr = new MenuManager();
         menuMgr.setRemoveAllWhenShown( true );
@@ -103,52 +156,84 @@ public class MigrationView extends ViewPart implements MigrationListener
         {
             public void menuAboutToShow( IMenuManager manager )
             {
-                MigrationView.this.fillContextMenu( manager );
+                MigrationView.this.fillContextMenu( manager, _problemsViewer );
             }
         });
-        Menu menu = menuMgr.createContextMenu( _viewer.getControl() );
-        _viewer.getControl().setMenu( menu );
-        getSite().registerContextMenu( menuMgr, _viewer );
 
-        _form = new FormText( viewParent, SWT.NONE );
+        Menu menu = menuMgr.createContextMenu( _problemsViewer.getControl() );
+        _problemsViewer.getControl().setMenu( menu );
+        getSite().registerContextMenu( menuMgr, _problemsViewer );
 
-        _viewer.addSelectionChangedListener( new ISelectionChangedListener()
+        _problemsViewer.addDoubleClickListener( this );
+
+        _form = new FormText( detailParent, SWT.NONE );
+
+        getCommonViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
-            @Override
+            public void selectionChanged( SelectionChangedEvent event )
+            {
+                List<TaskProblem> problems = getTaskProblemsFromSelection( event.getSelection() );
+
+                if( problems != null )
+                {
+                    _problemsViewer.setInput( problems.toArray() );
+                }
+            }
+        });
+
+        _problemsViewer.addSelectionChangedListener( new ISelectionChangedListener()
+        {
             public void selectionChanged( SelectionChangedEvent event )
             {
                 updateForm( event );
             }
         });
+
+        getCommonViewer().addDoubleClickListener( this );
     }
 
-    protected void fillContextMenu( IMenuManager manager )
+    private TableViewerColumn createTableViewerColumn(
+        String title, int bound, final int colNumber, TableViewer viewer )
     {
-        manager.add( new OpenAction( _viewer, "Open" ) );
-        manager.add( new OpenAction( _viewer, "Auto-migrate" ) );
-        manager.add( new Separator() );
-        manager.add( new OpenAction( _viewer, "Mark done" ) );
-        manager.add( new OpenAction( _viewer, "Mark undone" ) );
-        manager.add( new OpenAction( _viewer, "Ignore" ) );
-        manager.add( new Separator() );
-        manager.add( new OpenAction( _viewer, "Remove from task" ) );
+        final TableViewerColumn viewerColumn = new TableViewerColumn( viewer, SWT.NONE );
+        final TableColumn column = viewerColumn.getColumn();
+        column.setText( title );
+        column.setWidth( bound );
+        column.setResizable( true );
+        column.setMoveable( true );
+
+        return viewerColumn;
     }
 
-    protected IFile getIFileFromTaskProblem( TaskProblem taskProblem )
+    @Override
+    public void doubleClick( DoubleClickEvent event )
     {
-        return ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() )[0];
-    }
-
-    private void updateForm( SelectionChangedEvent event )
-    {
-        ISelection selection = event.getSelection();
-
-        TaskProblem taskProblem = getTaskProblemFromSelection( selection );
+        TaskProblem taskProblem = getTaskProblemFromSelection( event.getSelection() );
 
         if( taskProblem != null )
         {
-            _form.setText( generateFormText( taskProblem ), true, false );
+            try
+            {
+                final IEditorPart editor =
+                    IDE.openEditor( getSite().getPage(), getIFileFromTaskProblem( taskProblem ) );
+
+                if( editor instanceof ITextEditor )
+                {
+                    final ITextEditor textEditor = (ITextEditor) editor;
+
+                    textEditor.selectAndReveal( taskProblem.startOffset, taskProblem.endOffset -
+                        taskProblem.startOffset );
+                }
+            }
+            catch( PartInitException e )
+            {
+            }
         }
+    }
+
+    private void fillContextMenu( IMenuManager manager, ISelectionProvider provider  )
+    {
+       new MigrationActionProvider().makeActions( provider ).fillContextMenu( manager );
     }
 
     private String generateFormText( TaskProblem taskProblem )
@@ -180,6 +265,12 @@ public class MigrationView extends ViewPart implements MigrationListener
         return sb.toString();
     }
 
+    private IFile getIFileFromTaskProblem( TaskProblem taskProblem )
+    {
+        return ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() )[0];
+    }
+
+
     private TaskProblem getTaskProblemFromSelection( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
@@ -197,49 +288,65 @@ public class MigrationView extends ViewPart implements MigrationListener
         return null;
     }
 
-    @Override
-    public void init( IViewSite site, IMemento memento ) throws PartInitException
+    private List<TaskProblem> getTaskProblemsFromFile( IFile file )
     {
-        super.init( site, memento );
+        final List<TaskProblem> problems = new ArrayList<>();
 
         try
         {
-            _tasks = ProjectUI.getDefault().getMigrationTasks( false );
+            final IMarker[] markers =
+                file.findMarkers( MigrationConstants.MIGRATION_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+
+            for( IMarker marker : markers )
+            {
+                TaskProblem taskProblem = MigrationUtil.markerToTaskProblem( marker );
+
+                if( taskProblem != null )
+                {
+                    problems.add( taskProblem );
+                }
+            }
         }
         catch( CoreException e )
         {
-            throw new PartInitException( e.getStatus() );
         }
 
-        Dictionary<String, ?> properties = new Hashtable<>();
-        _listenerRef =
-            ProjectUI.getDefault().getBundle().getBundleContext().registerService(
-                MigrationListener.class, this, properties );
+        return problems;
     }
 
-    @Override
-    public void dispose()
+    private List<TaskProblem> getTaskProblemsFromSelection( ISelection selection )
     {
-        super.dispose();
-
-        if( _listenerRef != null )
+        if( selection instanceof IStructuredSelection )
         {
-            _listenerRef.unregister();
+            final IStructuredSelection ss = (IStructuredSelection) selection;
+
+            Object element = ss.getFirstElement();
+
+            if( element instanceof IFile )
+            {
+                final IFile file = (IFile) element;
+
+                return getTaskProblemsFromFile( file );
+            }
         }
+
+        return null;
     }
 
-    @Override
-    public void setFocus()
+    private void updateForm( SelectionChangedEvent event )
     {
-        if( _viewer != null && _viewer.getControl() != null )
+        ISelection selection = event.getSelection();
+
+        TaskProblem taskProblem = getTaskProblemFromSelection( selection );
+
+        if( taskProblem != null )
         {
-            _viewer.getControl().setFocus();
+            _form.setText( generateFormText( taskProblem ), true, false );
         }
-    }
-
-    @Override
-    public void problemsFound( List<Problem> problems )
-    {
-    }
+        else
+        {
+            _form.setText( "", false, false );
+        }
+    };
 
 }

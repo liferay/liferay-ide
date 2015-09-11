@@ -15,19 +15,48 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import org.eclipse.jface.viewers.DecoratingLabelProvider;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
-
 /**
  * @author Gregory Amerson
  */
-public class MigrationLabelProvider extends DecoratingLabelProvider
+public class MPTree
 {
+    MPNode root;
+    MPNode commonRoot;
 
-    public MigrationLabelProvider()
+    public MPTree( MPNode root )
     {
-        super( new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
+        this.root = root;
+        commonRoot = null;
+    }
+
+    public void addElement( String elementValue )
+    {
+        String[] list = elementValue.split( "/" );
+
+        // latest element of the list is the filename.extrension
+        root.addElement( root.incrementalPath, list );
+    }
+
+    public MPNode getCommonRoot()
+    {
+        if( commonRoot != null )
+        {
+            return commonRoot;
+        }
+        else
+        {
+            MPNode current = root;
+
+            while( current.leafs.size() <= 0 && current.childs.size() == 1 )
+            {
+                current = current.childs.get( 0 );
+            }
+
+            commonRoot = current;
+
+            return commonRoot;
+        }
+
     }
 
 }

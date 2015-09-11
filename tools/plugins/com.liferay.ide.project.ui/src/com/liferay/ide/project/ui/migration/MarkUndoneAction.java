@@ -14,43 +14,20 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.SelectionProviderAction;
-import org.eclipse.ui.ide.IDE;
 
 
 /**
  * @author Gregory Amerson
  */
-public class OpenAction extends SelectionProviderAction implements IAction
+public class MarkUndoneAction extends SelectionProviderAction implements IAction
 {
 
-    protected OpenAction( ISelectionProvider provider )
+    public MarkUndoneAction( ISelectionProvider provider )
     {
-        super( provider, "Open" );
-    }
-
-    @Override
-    public void run()
-    {
-        final Object selection = getStructuredSelection().getFirstElement();
-
-        if( selection instanceof IFile )
-        {
-            final IFile file = (IFile) selection;
-
-            try
-            {
-                IDE.openEditor( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), file );
-            }
-            catch( PartInitException e )
-            {
-            }
-        }
+        super( provider, "Mark undone" );
     }
 
 }

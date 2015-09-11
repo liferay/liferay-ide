@@ -25,13 +25,14 @@ import java.io.File;
 public class TaskProblem extends Problem
 {
 
-    private MigrationTask _parent = null;
     private boolean _resolved = false;
-
+    private final long _timestamp;
 
     public TaskProblem()
     {
         super();
+
+        _timestamp = System.currentTimeMillis();
     }
 
     public TaskProblem( Problem problem, boolean resolved )
@@ -40,6 +41,7 @@ public class TaskProblem extends Problem
                problem.lineNumber, problem.startOffset, problem.endOffset );
 
         _resolved = resolved;
+        _timestamp = System.currentTimeMillis();
     }
 
     public TaskProblem(
@@ -49,21 +51,27 @@ public class TaskProblem extends Problem
         super( title, url, summary, type, ticket, file, lineNumber, startOffset, endOffset );
 
         _resolved = resolved;
+        _timestamp = System.currentTimeMillis();
     }
 
-    public MigrationTask getParent()
+    public TaskProblem(
+        String title, String url, String summary, String type, String ticket, File file, int lineNumber,
+        int startOffset, int endOffset, boolean resolved, long timestamp )
     {
-        return _parent;
+        super( title, url, summary, type, ticket, file, lineNumber, startOffset, endOffset );
+
+        _resolved = resolved;
+        _timestamp = timestamp;
+    }
+
+    public long getTimestamp()
+    {
+        return _timestamp;
     }
 
     public boolean isResolved()
     {
         return _resolved;
-    }
-
-    public void setParent( MigrationTask parent )
-    {
-        _parent = parent;
     }
 
 }

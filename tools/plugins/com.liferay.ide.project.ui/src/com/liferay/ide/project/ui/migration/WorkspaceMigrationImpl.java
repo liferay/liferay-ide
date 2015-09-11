@@ -15,15 +15,18 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import blade.migrate.api.MigrationConstants;
 import blade.migrate.api.MigrationListener;
 import blade.migrate.api.Problem;
 
-import com.liferay.ide.project.ui.ProjectUI;
-
+import java.io.File;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.ui.statushandlers.StatusManager;
 
 /**
  * @author Gregory Amerson
@@ -34,17 +37,27 @@ public class WorkspaceMigrationImpl implements MigrationListener
     @Override
     public void problemsFound( List<Problem> problems )
     {
-        final MigrationTask task = new MigrationTask();
-
-        task.addProblems( problems );
-
-        try
+        for( Problem problem : problems )
         {
-            ProjectUI.getDefault().saveMigrationTask( task );
-        }
-        catch( CoreException e )
-        {
-            StatusManager.getManager().handle( e.getStatus(), StatusManager.SHOW );
+            final File file = problem.file;
+            final IWorkspaceRoot ws = ResourcesPlugin.getWorkspace().getRoot();
+            final IFile[] files = ws.findFilesForLocationURI( file.toURI() );
+
+            if( files != null && files.length > 0 )
+            {
+                final IFile wsFile = files[0];
+
+                try
+                {
+                    final TaskProblem taskProblem = new TaskProblem( problem, false );
+                    final IMarker marker = wsFile.createMarker( MigrationConstants.MIGRATION_MARKER_TYPE );
+
+                    MigrationUtil.taskProblemToMarker( taskProblem, marker );
+                }
+                catch( CoreException e )
+                {
+                }
+            }
         }
     }
 
