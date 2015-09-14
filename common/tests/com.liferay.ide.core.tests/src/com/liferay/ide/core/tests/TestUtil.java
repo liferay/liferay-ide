@@ -35,7 +35,7 @@ public class TestUtil
         copyDir( src, dst, true );
     }
 
-    private static void copyDir( File src, File dst, boolean deleteDst ) throws IOException
+    public static void copyDir( File src, File dst, boolean deleteDst ) throws IOException
     {
         if( !src.isDirectory() )
         {
