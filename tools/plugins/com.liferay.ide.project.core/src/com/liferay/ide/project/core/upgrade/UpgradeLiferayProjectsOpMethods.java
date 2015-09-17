@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.project.core.AbstractUpgradeProjectHandler;
 import com.liferay.ide.project.core.UpgradeProjectHandlerReader;
+import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;

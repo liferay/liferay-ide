@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.upgrade;
+package com.liferay.ide.project.core.model;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
@@ -32,5 +32,12 @@ public interface NamedItem extends Element
     ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
     Value<String> getName();
+
     void setName( String value );
+
+    ValueProperty PROP_EXT_DESC = new ValueProperty( TYPE, "ExtDesc" );
+
+    Value<String> getExtDesc();
+
+    void setExtDesc( String value );
 }

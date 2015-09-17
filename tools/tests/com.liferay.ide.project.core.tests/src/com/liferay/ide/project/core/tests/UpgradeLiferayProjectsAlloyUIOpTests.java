@@ -22,9 +22,9 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.upgrade.NamedItem;
 import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOp;
 import com.liferay.ide.project.core.upgrade.UpgradeLiferayProjectsOpMethods;
 

@@ -14,7 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.wizard;
 
-import com.liferay.ide.project.core.upgrade.NamedItem;
 import com.liferay.ide.ui.util.SWTUtil;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -24,7 +23,6 @@ import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelP
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.swt.FormComponentPresentation;
@@ -46,6 +44,12 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
     {
 
         @Override
+        public void dispose()
+        {
+
+        }
+
+        @Override
         public Object[] getElements( Object inputElement )
         {
             if( inputElement instanceof CheckboxElement[] )
@@ -57,12 +61,6 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
         }
 
         @Override
-        public void dispose()
-        {
-
-        }
-
-        @Override
         public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
         {
 
@@ -70,25 +68,28 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
 
     }
 
+    protected class CheckboxElement
+    {
+        public String name;
+        public String context;
+
+        public CheckboxElement( final String name, final String context )
+        {
+            this.context = context;
+            this.name = name;
+        }
+    }
     protected Status retval = Status.createOkStatus();
+
     protected CheckboxTableViewer checkBoxViewer;
-    protected CheckboxElement[] checkboxElements;
+
+    protected abstract void checkAndUpdateCheckboxElement();
 
     @Override
     protected Status computeValidation()
     {
         return retval;
     }
-
-    protected abstract void checkAndUpdateCheckboxElement();
-
-    protected abstract void handleCheckStateChangedEvent( CheckStateChangedEvent event );
-
-    protected abstract ElementList<NamedItem> getCheckboxList();
-
-    protected abstract IStyledLabelProvider getLableProvider();
-
-    protected abstract void updateValidation();
 
     @Override
     public FormComponentPresentation createPresentation( SwtPresentation parent, Composite composite )
@@ -106,6 +107,7 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
                 (
                     new ICheckStateListener()
                     {
+                        @Override
                         public void checkStateChanged( CheckStateChangedEvent event )
                         {
                             handleCheckStateChangedEvent( event );
@@ -132,19 +134,10 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
                     SWT.Selection,
                     new Listener()
                     {
+                        @Override
                         public void handleEvent( Event event )
                         {
-                            for( CheckboxElement checkboxElement : checkboxElements )
-                            {
-                                checkBoxViewer.setChecked( checkboxElement, true );
-                                ElementList<NamedItem> projectItems = getCheckboxList();
-                                if ( !projectItems.contains( checkboxElement ) )
-                                {
-                                    NamedItem projectItem = projectItems.insert();
-                                    projectItem.setName( checkboxElement.name  );
-                                }
-                            }
-                            updateValidation();
+                            handleSelectAllEvent();
                         }
                     }
                 );
@@ -157,16 +150,27 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
                     SWT.Selection,
                     new Listener()
                     {
+                        @Override
                         public void handleEvent( Event event )
                         {
-                            for( CheckboxElement checkboxElement : checkboxElements )
-                            {
-                                checkBoxViewer.setChecked( checkboxElement, false );
-                            }
-                            getCheckboxList().clear();
-                            updateValidation();
+                            handleDeSelectAllEvent();
                         }
+                    }
+                );
 
+                final Button refreshButton = new Button( parent, SWT.NONE );
+                refreshButton.setText( "Refresh" );
+                refreshButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+                refreshButton.addListener
+                (
+                    SWT.Selection,
+                    new Listener()
+                    {
+                        @Override
+                        public void handleEvent( Event event )
+                        {
+                            checkAndUpdateCheckboxElement();
+                        }
                     }
                 );
 
@@ -177,6 +181,7 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
             {
                 final Thread t = new Thread()
                 {
+                    @Override
                     public void run()
                     {
                         checkAndUpdateCheckboxElement();
@@ -188,16 +193,14 @@ public abstract class AbstractCheckboxCustomPart extends FormComponentPart
         };
     }
 
-    protected class CheckboxElement
-    {
-        public String name;
-        public String context;
+    protected abstract IStyledLabelProvider getLableProvider();
 
-        public CheckboxElement( String name, String context )
-        {
-            this.context = context;
-            this.name = name;
-        }
-    }
+    protected abstract void handleCheckStateChangedEvent( CheckStateChangedEvent event );
+
+    protected abstract void handleDeSelectAllEvent();
+
+    protected abstract void handleSelectAllEvent();
+
+    protected abstract void updateValidation();
 
 }

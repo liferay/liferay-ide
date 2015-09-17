@@ -15,8 +15,7 @@
 
 package com.liferay.ide.project.ui.action;
 
-import com.liferay.ide.project.ui.wizard.SDKProjectsImportWizard;
-import com.liferay.ide.sdk.core.SDKManager;
+import com.liferay.ide.project.ui.wizard.ImportSDKProjectsWizard;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
@@ -30,6 +29,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class SDKProjectsImportAction implements IObjectActionDelegate
 {
@@ -49,6 +49,7 @@ public class SDKProjectsImportAction implements IObjectActionDelegate
         return display;
     }
 
+    @Override
     public void run( IAction action )
     {
         if( fSelection instanceof IStructuredSelection )
@@ -64,18 +65,19 @@ public class SDKProjectsImportAction implements IObjectActionDelegate
                 project = (IProject) elem;
             }
 
-            SDKProjectsImportWizard wizard =
-                new SDKProjectsImportWizard( SDKManager.getInstance().getSDK( project.getLocation() ) );
+            ImportSDKProjectsWizard wizard =
+                new ImportSDKProjectsWizard( project.getLocation() );
 
             final Display display = getDisplay();
 
             final WizardDialog dialog = new WizardDialog( display.getActiveShell(), wizard );
 
             BusyIndicator.showWhile
-            ( 
-                display, 
+            (
+                display,
                 new Runnable()
                 {
+                    @Override
                     public void run()
                     {
                         dialog.open();
@@ -86,11 +88,13 @@ public class SDKProjectsImportAction implements IObjectActionDelegate
 
     }
 
+    @Override
     public void selectionChanged( IAction action, ISelection selection )
     {
         fSelection = selection;
     }
 
+    @Override
     public void setActivePart( IAction action, IWorkbenchPart targetPart )
     {
     }

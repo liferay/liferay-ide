@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.project.core.model.HasLiferayRuntime;
+import com.liferay.ide.project.core.model.NamedItem;
 import com.liferay.ide.project.core.model.internal.LeastVersionRuntimeValidationService;
 
 import org.eclipse.sapphire.ElementList;

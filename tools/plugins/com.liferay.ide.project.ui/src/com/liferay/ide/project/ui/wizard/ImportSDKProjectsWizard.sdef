@@ -23,17 +23,20 @@
         <package>org.eclipse.sapphire.ui.forms.swt</package>
     </import>
     <wizard>
-        <id>SDKProjectsImportWizard30</id>
-        <element-type>com.liferay.ide.project.core.model.SDKProjectImportOp</element-type>
-        <label>Import Project</label>
+        <id>ImportSDKProjectsWizard</id>
+        <element-type>com.liferay.ide.project.core.model.SDKProjectsImportOp</element-type>
+        <label>Import Projects</label>
         <page>
-            <id>ImportLiferaySDKProjectPage</id>
-            <label>Import Liferay Project</label>
+            <id>ImportLiferaySDKProjectsPage</id>
+            <label>Import Liferay Projects</label>
             <content>
-                <property-editor>Location</property-editor>
-                <spacer></spacer>
-                <property-editor>PluginType</property-editor>
+                <property-editor>SdkLocation</property-editor>
                 <property-editor>SdkVersion</property-editor>
+                <spacer></spacer>
+                <custom>
+                	<scale-vertically>true</scale-vertically>
+                    <class>com.liferay.ide.project.ui.wizard.ImportSDKProjectsCheckboxCustomPart</class>
+                </custom>                
             </content>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
@@ -45,6 +48,6 @@
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
         </page>
-        <description>Create a new project configured as a Liferay plugin</description>
+        <description>Import Liferay plugin Projects</description>
     </wizard>
 </definition>
