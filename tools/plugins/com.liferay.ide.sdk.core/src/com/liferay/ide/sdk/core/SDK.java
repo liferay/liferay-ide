@@ -706,25 +706,25 @@ public class SDK
         return buildFile.removeLastSegments( 1 ).toOSString();
     }
 
-    public IPath[] getSDKDependencyJars()
+    public IPath[] getDependencyJarPaths()
     {
-        List<IPath> libs = new ArrayList<IPath>();
+        final List<IPath> retval = new ArrayList<IPath>();
 
-        List<File> libFiles;
         try
         {
-            IPath sdkLibPath =  getLocation().append( "dependencies" );
+            final IPath sdkLibPath =  getLocation().append( "dependencies" );
 
-            int compareVersions = CoreUtil.compareVersions( new Version( getVersion() ), ILiferayConstants.V700 );
+            final int compareVersions = CoreUtil.compareVersions( new Version( getVersion() ), ILiferayConstants.V700 );
 
             if ( sdkLibPath.toFile().exists() && compareVersions >= 0 )
             {
-                libFiles = FileListing.getFileListing( new File( sdkLibPath.toOSString() ) );
+                final List<File> libFiles = FileListing.getFileListing( new File( sdkLibPath.toOSString() ) );
+
                 for( File lib : libFiles )
                 {
-                    if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
+                    if( lib.exists() && lib.getName().endsWith( ".jar" ) )
                     {
-                        libs.add( new Path( lib.getPath() ) );
+                        retval.add( new Path( lib.getPath() ) );
                     }
                 }
             }
@@ -733,7 +733,7 @@ public class SDK
         {
         }
 
-        return libs.toArray( new IPath[libs.size()] );
+        return retval.toArray( new IPath[0] );
     }
 
     public IPath getLocation()
