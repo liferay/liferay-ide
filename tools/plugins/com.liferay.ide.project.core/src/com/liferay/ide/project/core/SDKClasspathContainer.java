@@ -45,14 +45,17 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
 
     protected IPath[] bundleLibDependencyPath;
 
+    protected IPath[] sdkDependencyPath;
+
     public SDKClasspathContainer(
         IPath containerPath, IJavaProject project, IPath portalDir, String javadocURL, IPath sourceURL,
-        IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPath )
+        IPath portalGlobalDir, IPath bundleDir, IPath[] bundleLibDependencyPath, IPath[] sdkDependencyPath )
     {
         super(containerPath,project,portalDir,javadocURL,sourceURL);
         this.portalGlobalDir = portalGlobalDir;
         this.bundleDir = bundleDir;
         this.bundleLibDependencyPath = bundleLibDependencyPath;
+        this.sdkDependencyPath = sdkDependencyPath;
     }
 
     @Override
@@ -83,6 +86,14 @@ public class SDKClasspathContainer extends PluginClasspathContainer implements I
                 for( String pluginPackageJar : getPortalDependencyJars() )
                 {
                     entries.add( createPortalJarClasspathEntry( pluginPackageJar ) );
+                }
+            }
+
+            if ( sdkDependencyPath != null )
+            {
+                for( IPath sdkDependencyJarPath : sdkDependencyPath )
+                {
+                    entries.add( createClasspathEntry( sdkDependencyJarPath, null, null ) );
                 }
             }
 

@@ -17,11 +17,13 @@ package com.liferay.ide.sdk.core;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +49,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.debug.internal.core.XMLMemento;
 import org.eclipse.osgi.util.NLS;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -701,6 +704,36 @@ public class SDK
     private String getDefaultWorkingDir( final IPath buildFile )
     {
         return buildFile.removeLastSegments( 1 ).toOSString();
+    }
+
+    public IPath[] getSDKDependencyJars()
+    {
+        List<IPath> libs = new ArrayList<IPath>();
+
+        List<File> libFiles;
+        try
+        {
+            IPath sdkLibPath =  getLocation().append( "dependencies" );
+
+            int compareVersions = CoreUtil.compareVersions( new Version( getVersion() ), ILiferayConstants.V700 );
+
+            if ( sdkLibPath.toFile().exists() && compareVersions >= 0 )
+            {
+                libFiles = FileListing.getFileListing( new File( sdkLibPath.toOSString() ) );
+                for( File lib : libFiles )
+                {
+                    if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
+                    {
+                        libs.add( new Path( lib.getPath() ) );
+                    }
+                }
+            }
+        }
+        catch( FileNotFoundException e )
+        {
+        }
+
+        return libs.toArray( new IPath[libs.size()] );
     }
 
     public IPath getLocation()
