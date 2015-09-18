@@ -50,16 +50,24 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
 
         if( webappRoot != null )
         {
-            final IPath defaultFolder = J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder( webappRoot );
-
-            if( defaultFolder != null )
+            try
             {
-                IFolder f = project.getFolder( defaultFolder );
+                final IPath defaultFolder =
+                    J2EEModuleVirtualComponent.getDefaultDeploymentDescriptorFolder( webappRoot );
 
-                if( f.exists() )
+                if( defaultFolder != null )
                 {
-                    folder = f;
+                    IFolder f = project.getFolder( defaultFolder );
+
+                    if( f.exists() )
+                    {
+                        folder = f;
+                    }
                 }
+            }
+            catch( Exception e )
+            {
+                ProjectCore.logError( "Could not determine default docroot", e );
             }
         }
 
