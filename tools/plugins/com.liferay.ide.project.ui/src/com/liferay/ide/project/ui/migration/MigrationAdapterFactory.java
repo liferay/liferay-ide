@@ -14,10 +14,16 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.ui.model.IWorkbenchAdapter;
 
 
@@ -52,13 +58,23 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
     {
         if( element instanceof MPTree )
         {
-            return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
-                ISharedImages.IMG_OBJ_FOLDER ) );
+            return ProjectUI.getDefault().getImageRegistry().getDescriptor( ProjectUI.MIGRATION_TASKS_IMAGE_ID );
         }
         else if( element instanceof MPNode )
         {
-            return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
-                ISharedImages.IMG_OBJ_FOLDER ) );
+            final MPNode node = (MPNode) element;
+            final IResource resource = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
+
+            if( resource != null && resource.exists() && resource instanceof IProject )
+            {
+                return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
+                    SharedImages.IMG_OBJ_PROJECT ) );
+            }
+            else
+            {
+                return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
+                    ISharedImages.IMG_OBJ_FOLDER ) );
+            }
         }
 
         return null;

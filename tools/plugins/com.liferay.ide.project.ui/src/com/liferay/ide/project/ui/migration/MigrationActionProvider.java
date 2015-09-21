@@ -36,12 +36,10 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 public class MigrationActionProvider extends CommonActionProvider
 {
 
-    private SelectionProviderAction _autoMigrateAction;
     private SelectionProviderAction _ignoreAction;
     private SelectionProviderAction _markDoneAction;
     private SelectionProviderAction _markUndoneAction;
     private SelectionProviderAction _openAction;
-    private SelectionProviderAction _removeAction;
 
     public MigrationActionProvider()
     {
@@ -76,14 +74,34 @@ public class MigrationActionProvider extends CommonActionProvider
     @Override
     public void fillContextMenu( IMenuManager menu )
     {
-        menu.add( _openAction );
-        menu.add( _autoMigrateAction );
-        menu.add( new Separator() );
-        menu.add( _markDoneAction );
-        menu.add( _markUndoneAction );
-        menu.add( _ignoreAction );
-        menu.add( new Separator() );
-        menu.add( _removeAction );
+        final Object selection = getFirstSelectedElement();
+
+        if( selection != null )
+        {
+            menu.add( _openAction );
+
+            if( selection instanceof TaskProblem )
+            {
+                menu.add( new Separator() );
+                menu.add( _markDoneAction );
+                menu.add( _markUndoneAction );
+                menu.add( _ignoreAction );
+            }
+        }
+    }
+
+    private Object getFirstSelectedElement()
+    {
+        final Object selection = getContext().getSelection();
+
+        if( selection instanceof IStructuredSelection )
+        {
+            final IStructuredSelection sSelection = (IStructuredSelection) selection;
+
+            return sSelection.getFirstElement();
+        }
+
+        return null;
     }
 
     public void init( ICommonActionExtensionSite site )
@@ -112,12 +130,18 @@ public class MigrationActionProvider extends CommonActionProvider
     {
         // create the open action
         _openAction = new OpenAction( provider );
-        _autoMigrateAction = new AutoMigrateAction( provider );
         _markDoneAction = new MarkDoneAction( provider );
         _markUndoneAction = new MarkUndoneAction( provider );
         _ignoreAction = new IgnoreAction( provider );
-        _removeAction = new RemoveAction( provider );
 
         return this;
+    }
+
+    void registerSelectionProvider( ISelectionProvider provider )
+    {
+        provider.addSelectionChangedListener( _openAction );
+        provider.addSelectionChangedListener( _markDoneAction );
+        provider.addSelectionChangedListener( _markUndoneAction );
+        provider.addSelectionChangedListener( _ignoreAction );
     }
 }

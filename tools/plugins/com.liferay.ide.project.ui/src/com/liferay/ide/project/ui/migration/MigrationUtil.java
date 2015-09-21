@@ -14,10 +14,22 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import java.io.File;
+import blade.migrate.api.MigrationConstants;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.texteditor.ITextEditor;
 
 
 /**
@@ -25,6 +37,38 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class MigrationUtil
 {
+
+    private static IFile getIFileFromTaskProblem( TaskProblem taskProblem )
+    {
+        // TODO could return more than one
+        return ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() )[0];
+    }
+
+    public static List<TaskProblem> getTaskProblemsFromResource( IResource resource )
+    {
+        final List<TaskProblem> problems = new ArrayList<>();
+
+        try
+        {
+            final IMarker[] markers =
+                resource.findMarkers( MigrationConstants.MIGRATION_MARKER_TYPE, true, IResource.DEPTH_ZERO );
+
+            for( IMarker marker : markers )
+            {
+                TaskProblem taskProblem = markerToTaskProblem( marker );
+
+                if( taskProblem != null )
+                {
+                    problems.add( taskProblem );
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+        }
+
+        return problems;
+    }
 
     public static TaskProblem markerToTaskProblem( IMarker marker )
     {
@@ -43,6 +87,28 @@ public class MigrationUtil
 
         return new TaskProblem(
             title, url, summary, type, ticket, file, lineNumber, startOffset, endOffset, resolved, timestamp );
+    }
+
+    public static void openEditor( TaskProblem taskProblem )
+    {
+        try
+        {
+            final IEditorPart editor =
+                IDE.openEditor(
+                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+                    getIFileFromTaskProblem( taskProblem ) );
+
+            if( editor instanceof ITextEditor )
+            {
+                final ITextEditor textEditor = (ITextEditor) editor;
+
+                textEditor.selectAndReveal( taskProblem.startOffset, taskProblem.endOffset -
+                    taskProblem.startOffset );
+            }
+        }
+        catch( PartInitException e )
+        {
+        }
     }
 
     public static void taskProblemToMarker( TaskProblem taskProblem, IMarker marker ) throws CoreException

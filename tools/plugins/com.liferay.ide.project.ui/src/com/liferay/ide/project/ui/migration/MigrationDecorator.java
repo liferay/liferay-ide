@@ -14,6 +14,11 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.core.util.CoreUtil;
+
+import java.util.List;
+
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -28,11 +33,29 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
     @Override
     public void decorate( Object element, IDecoration decoration )
     {
-        if( element instanceof MPTree )
+        if( element instanceof MPNode )
         {
-//            final MXMTree tree = (MXMTree) element;
+            final MPNode node = (MPNode) element;
 
-//            decoration.addSuffix( " [" + new SimpleDateFormat().format( new Date( task.getTimestamp() ) ) + "]" );
+            final IResource member = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
+
+            if( member != null && member.exists() )
+            {
+                element = member;
+            }
+        }
+
+
+        if( element instanceof IResource )
+        {
+            final IResource resource = (IResource) element;
+
+            final List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromResource( resource );
+
+            if( problems.size() > 0 )
+            {
+                decoration.addSuffix( " [" + problems.size() + " problems]" );
+            }
         }
     }
 

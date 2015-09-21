@@ -16,7 +16,6 @@
 package com.liferay.ide.project.ui.migration;
 
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 /**
@@ -27,7 +26,7 @@ public class MigrationLabelProvider extends DecoratingLabelProvider
 
     public MigrationLabelProvider()
     {
-        super( new WorkbenchLabelProvider(), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator() );
+        super( new WorkbenchLabelProvider(), null );
     }
 
 }

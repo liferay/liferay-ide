@@ -14,19 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.MigrationConstants;
-
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -49,17 +42,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.forms.widgets.FormText;
-import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.internal.navigator.actions.CommonActionDescriptorManager;
+import org.eclipse.ui.internal.navigator.actions.CommonActionProviderDescriptor;
+import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonNavigator;
-import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.navigator.INavigatorContentService;
+import org.eclipse.ui.navigator.NavigatorActionService;
 
 
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class MigrationView extends CommonNavigator implements IDoubleClickListener
 {
 
@@ -167,6 +163,14 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         getSite().registerContextMenu( menuMgr, _problemsViewer );
 
         _problemsViewer.addDoubleClickListener( this );
+        CommonActionProvider ap = getCommonActionProvider( new StructuredSelection( new TaskProblem() ) );
+
+        if( ap instanceof MigrationActionProvider )
+        {
+            MigrationActionProvider mp = (MigrationActionProvider)ap;
+
+            mp.registerSelectionProvider( _problemsViewer );
+        }
 
         _form = new FormText( detailParent, SWT.NONE );
 
@@ -180,6 +184,10 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                 {
                     _problemsViewer.setInput( problems.toArray() );
                     _problemsViewer.setSelection( new StructuredSelection( problems.get( 0 ) ) );
+                }
+                else
+                {
+                    _problemsViewer.setInput( null );
                 }
             }
         });
@@ -215,28 +223,16 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         if( taskProblem != null )
         {
-            try
-            {
-                final IEditorPart editor =
-                    IDE.openEditor( getSite().getPage(), getIFileFromTaskProblem( taskProblem ) );
-
-                if( editor instanceof ITextEditor )
-                {
-                    final ITextEditor textEditor = (ITextEditor) editor;
-
-                    textEditor.selectAndReveal( taskProblem.startOffset, taskProblem.endOffset -
-                        taskProblem.startOffset );
-                }
-            }
-            catch( PartInitException e )
-            {
-            }
+            MigrationUtil.openEditor( taskProblem );
         }
     }
 
     private void fillContextMenu( IMenuManager manager, ISelectionProvider provider  )
     {
-       new MigrationActionProvider().makeActions( provider ).fillContextMenu( manager );
+        CommonActionProvider instance = getCommonActionProvider( provider.getSelection() );
+
+        instance.setContext( new ActionContext( provider.getSelection() ) );
+        instance.fillContextMenu( manager );
     }
 
     private String generateFormText( TaskProblem taskProblem )
@@ -268,11 +264,16 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         return sb.toString();
     }
 
-    private IFile getIFileFromTaskProblem( TaskProblem taskProblem )
+    CommonActionProvider getCommonActionProvider( ISelection selection )
     {
-        return ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() )[0];
-    }
+        final INavigatorContentService contentService = getCommonViewer().getCommonNavigator().getNavigatorContentService();
+        final ActionContext context = new ActionContext( selection );
+        final CommonActionProviderDescriptor[] providerDescriptors = CommonActionDescriptorManager
+                        .getInstance().findRelevantActionDescriptors(contentService, context);
+        final NavigatorActionService navigatorActionService = getCommonViewer().getCommonNavigator().getNavigatorActionService();
 
+        return navigatorActionService.getActionProviderInstance( providerDescriptors[0] );
+    }
 
     private TaskProblem getTaskProblemFromSelection( ISelection selection )
     {
@@ -289,32 +290,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         }
 
         return null;
-    }
-
-    private List<TaskProblem> getTaskProblemsFromResource( IResource resource )
-    {
-        final List<TaskProblem> problems = new ArrayList<>();
-
-        try
-        {
-            final IMarker[] markers =
-                resource.findMarkers( MigrationConstants.MIGRATION_MARKER_TYPE, true, IResource.DEPTH_ONE );
-
-            for( IMarker marker : markers )
-            {
-                TaskProblem taskProblem = MigrationUtil.markerToTaskProblem( marker );
-
-                if( taskProblem != null )
-                {
-                    problems.add( taskProblem );
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-        }
-
-        return problems;
     }
 
     private List<TaskProblem> getTaskProblemsFromSelection( ISelection selection )
@@ -345,7 +320,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
             if( resource != null )
             {
-                return getTaskProblemsFromResource( resource );
+                return MigrationUtil.getTaskProblemsFromResource( resource );
             }
         }
 

@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.migration;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.SelectionProviderAction;
@@ -51,6 +52,19 @@ public class OpenAction extends SelectionProviderAction implements IAction
             {
             }
         }
+        else if( selection instanceof TaskProblem )
+        {
+            TaskProblem taskProblem = (TaskProblem) selection;
+
+            MigrationUtil.openEditor( taskProblem );
+        }
     }
 
+    @Override
+    public void selectionChanged( IStructuredSelection selection )
+    {
+        final Object element = getStructuredSelection().getFirstElement();
+
+        setEnabled( element instanceof IFile || element instanceof TaskProblem );
+    }
 }

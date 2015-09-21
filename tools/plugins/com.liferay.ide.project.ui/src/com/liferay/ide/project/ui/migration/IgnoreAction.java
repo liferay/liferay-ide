@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.migration;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
 
@@ -30,4 +31,18 @@ public class IgnoreAction extends SelectionProviderAction implements IAction
         super( provider, "Ignore" );
     }
 
+
+    @Override
+    public void run()
+    {
+        // TODO get the resource and remove all migration markers on view and then refresh migration view
+    }
+
+    @Override
+    public void selectionChanged( IStructuredSelection selection )
+    {
+        Object element = selection.getFirstElement();
+
+        setEnabled( element instanceof TaskProblem );
+    }
 }

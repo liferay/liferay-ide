@@ -1110,7 +1110,7 @@
         <view
             allowMultiple="false"
             class="com.liferay.ide.project.ui.migration.MigrationView"
-            icon="icons/e16/liferay.png"
+            icon="icons/e16/migration-tasks.png"
             id="com.liferay.ide.project.ui.migrationView"
             name="Liferay Plugin Migration"
             restorable="true">
@@ -1180,6 +1180,9 @@
                      value="com.liferay.ide.project.ui.migration.MPNode">
                </instanceof>
                <instanceof
+                     value="com.liferay.ide.project.ui.migration.TaskProblem">
+               </instanceof>
+               <instanceof
                      value="org.eclipse.core.resources.IFile">
                </instanceof>
                <instanceof
@@ -1194,6 +1197,9 @@
                </instanceof>
                <instanceof
                      value="com.liferay.ide.project.ui.migration.MPNode">
+               </instanceof>
+               <instanceof
+                     value="com.liferay.ide.project.ui.migration.TaskProblem">
                </instanceof>
                <instanceof
                      value="org.eclipse.core.resources.IFile">
@@ -1238,6 +1244,9 @@
                <objectClass
                      name="com.liferay.ide.project.ui.migration.MPNode">
                </objectClass>
+               <objectClass
+                     name="org.eclipse.core.resources.IResource">
+               </objectClass>
            </or>
         </enablement>
       </decorator>
@@ -1267,7 +1276,6 @@
             locationURI="menu:project?after=additions">
          <command
                commandId="com.liferay.ide.project.ui.migrateProject"
-               icon="icons/e16/liferay.png"
                label="Migrate Liferay plugin project..."
                style="push"
                tooltip="Run a migration tool to help with migration Liferay plugin projects to latest version of Liferay Portal version">
