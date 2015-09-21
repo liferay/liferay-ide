@@ -70,6 +70,7 @@ public class MigrateProjectHandler extends AbstractHandler
             else if( element instanceof IAdaptable )
             {
                 IAdaptable adaptable = (IAdaptable) element;
+
                 project = (IProject) adaptable.getAdapter( IProject.class );
             }
 
@@ -139,7 +140,6 @@ public class MigrateProjectHandler extends AbstractHandler
                 }
                 catch( Exception e )
                 {
-                    e.printStackTrace();
                 }
 
                 job.schedule();

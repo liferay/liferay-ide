@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.migration;
 
 import blade.migrate.api.MigrationConstants;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -174,9 +176,10 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             {
                 List<TaskProblem> problems = getTaskProblemsFromSelection( event.getSelection() );
 
-                if( problems != null )
+                if( problems != null && problems.size() > 0 )
                 {
                     _problemsViewer.setInput( problems.toArray() );
+                    _problemsViewer.setSelection( new StructuredSelection( problems.get( 0 ) ) );
                 }
             }
         });
@@ -288,14 +291,14 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         return null;
     }
 
-    private List<TaskProblem> getTaskProblemsFromFile( IFile file )
+    private List<TaskProblem> getTaskProblemsFromResource( IResource resource )
     {
         final List<TaskProblem> problems = new ArrayList<>();
 
         try
         {
             final IMarker[] markers =
-                file.findMarkers( MigrationConstants.MIGRATION_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+                resource.findMarkers( MigrationConstants.MIGRATION_MARKER_TYPE, true, IResource.DEPTH_ONE );
 
             for( IMarker marker : markers )
             {
@@ -320,13 +323,29 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             final IStructuredSelection ss = (IStructuredSelection) selection;
 
-            Object element = ss.getFirstElement();
+            final Object element = ss.getFirstElement();
 
-            if( element instanceof IFile )
+            IResource resource = null;
+
+            if( element instanceof IResource )
             {
-                final IFile file = (IFile) element;
+                resource = (IResource) element;
+            }
+            else if( element instanceof MPNode )
+            {
+                final MPNode node = (MPNode) element;
 
-                return getTaskProblemsFromFile( file );
+                final IResource member = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
+
+                if( member != null && member.exists() )
+                {
+                    resource = member;
+                }
+            }
+
+            if( resource != null )
+            {
+                return getTaskProblemsFromResource( resource );
             }
         }
 

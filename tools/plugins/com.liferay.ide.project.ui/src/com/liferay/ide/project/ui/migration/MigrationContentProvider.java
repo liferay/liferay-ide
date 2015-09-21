@@ -22,7 +22,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -37,7 +36,7 @@ import org.eclipse.jface.viewers.Viewer;
 public class MigrationContentProvider implements ITreeContentProvider
 {
 
-    List<IFile> _files;
+    List<IResource> _resources;
     MPTree _root;
 
     @Override
@@ -50,8 +49,8 @@ public class MigrationContentProvider implements ITreeContentProvider
     {
         if( parentElement != null && parentElement.equals( _root ) )
         {
-
             final MPNode commonRoot = _root.getCommonRoot();
+
             commonRoot.data = commonRoot.incrementalPath;
 
             if( commonRoot.data.equals( "" ) )
@@ -102,12 +101,12 @@ public class MigrationContentProvider implements ITreeContentProvider
 
         for( IMarker marker : markers )
         {
-            final IFile file = (IFile) marker.getResource();
+            final IResource resource = marker.getResource();
 
-            if( ! _files.contains(  file ) )
+            if( ! _resources.contains( resource ) )
             {
-                _files.add( file );
-                tree.addElement( file.getFullPath().toPortableString() );
+                _resources.add( resource );
+                tree.addElement( resource.getFullPath().toPortableString() );
             }
         }
 
@@ -144,7 +143,7 @@ public class MigrationContentProvider implements ITreeContentProvider
         {
             final IWorkspaceRoot root = (IWorkspaceRoot) newInput;
 
-            _files = new ArrayList<>();
+            _resources = new ArrayList<>();
 
             try
             {

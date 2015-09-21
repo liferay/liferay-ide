@@ -19,11 +19,15 @@ import blade.migrate.api.MigrationConstants;
 import blade.migrate.api.MigrationListener;
 import blade.migrate.api.Problem;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.File;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -37,20 +41,86 @@ public class WorkspaceMigrationImpl implements MigrationListener
     @Override
     public void problemsFound( List<Problem> problems )
     {
+        final IWorkspaceRoot ws = ResourcesPlugin.getWorkspace().getRoot();
+
         for( Problem problem : problems )
         {
+            IResource workspaceResource = null;
+
             final File file = problem.file;
-            final IWorkspaceRoot ws = ResourcesPlugin.getWorkspace().getRoot();
-            final IFile[] files = ws.findFilesForLocationURI( file.toURI() );
 
-            if( files != null && files.length > 0 )
+            final IResource[] containers = ws.findContainersForLocationURI( file.toURI() );
+
+            if( containers != null && containers.length > 0 )
             {
-                final IFile wsFile = files[0];
+                // prefer project containers
+                for( IResource container : containers )
+                {
+                    if( container.exists() )
+                    {
+                        if( container.getType() == IResource.PROJECT )
+                        {
+                            workspaceResource = container;
+                            break;
+                        }
+                        else
+                        {
+                            final IProject project = container.getProject();
 
+                            if( CoreUtil.isLiferayProject( project ) )
+                            {
+                                workspaceResource = container;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if( workspaceResource == null )
+                {
+                    final IFile[] files = ws.findFilesForLocationURI( file.toURI() );
+
+                    for( IFile ifile : files )
+                    {
+                        if( ifile.exists() )
+                        {
+                            if( CoreUtil.isLiferayProject( ifile.getProject() ) )
+                            {
+                                workspaceResource = ifile;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
+                if( workspaceResource == null )
+                {
+                    for( IResource container : containers )
+                    {
+                        if( workspaceResource == null )
+                        {
+                            workspaceResource = container;
+                        }
+                        else
+                        {
+                            // prefer the path that is shortest (to avoid a nested version)
+                            if( container.getLocation().segmentCount() < workspaceResource.getLocation().segmentCount() )
+                            {
+                                workspaceResource = container;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( workspaceResource != null && workspaceResource.exists() )
+            {
                 try
                 {
                     final TaskProblem taskProblem = new TaskProblem( problem, false );
-                    final IMarker marker = wsFile.createMarker( MigrationConstants.MIGRATION_MARKER_TYPE );
+                    final IMarker marker =
+                        workspaceResource.createMarker( MigrationConstants.MIGRATION_MARKER_TYPE );
 
                     MigrationUtil.taskProblemToMarker( taskProblem, marker );
                 }
