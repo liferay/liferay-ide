@@ -80,7 +80,7 @@ public class MigrateProjectHandler extends AbstractHandler
             {
                 final IPath location = project.getLocation();
 
-                Job job = new WorkspaceJob( "Project migration" )
+                Job job = new WorkspaceJob( "Finding migration problems..." )
                 {
                     @Override
                     public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
