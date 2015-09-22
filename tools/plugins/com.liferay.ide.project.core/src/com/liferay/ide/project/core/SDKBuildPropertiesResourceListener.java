@@ -119,27 +119,29 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 
         try
         {
-            IResourceDelta delta = event.getDelta();
+            final IResourceDelta delta = event.getDelta();
+            final SDK sdk = SDKUtil.getWorkspaceSDK();
 
-            if( delta != null )
+            if( delta != null && sdk != null )
             {
-                final SDK sdk = SDKUtil.getWorkspaceSDK();
-
                 for( IResourceDelta child : delta.getAffectedChildren() )
                 {
-                    IPath deltaLocation = child.getResource().getLocation();
+                    final IPath deltaLocation = child.getResource().getLocation();
 
                     if( deltaLocation != null )
                     {
                         if( sdk.getLocation().isPrefixOf( deltaLocation ) )
                         {
-                            IResourceDelta[] sdkChangedFiles = child.getAffectedChildren( IResourceDelta.CHANGED | IResourceDelta.ADDED | IResourceDelta.REMOVED );
+                            final IResourceDelta[] sdkChangedFiles =
+                                child.getAffectedChildren( IResourceDelta.CHANGED | IResourceDelta.ADDED |
+                                    IResourceDelta.REMOVED );
 
                             for( IResourceDelta sdkDelta : sdkChangedFiles )
                             {
                                 final String deltaLastSegment = sdkDelta.getResource().getLocation().lastSegment();
 
-                                final Matcher propertiesMatcher = PATTERN_BUILD_PROPERTIES.matcher( deltaLastSegment );
+                                final Matcher propertiesMatcher =
+                                    PATTERN_BUILD_PROPERTIES.matcher( deltaLastSegment );
 
                                 if( propertiesMatcher.matches() )
                                 {
@@ -153,7 +155,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
         }
         catch( Throwable e )
         {
-           ProjectCore.logError( e );
+           ProjectCore.logError( "build.properties resource listener failed.", e );
         }
     }
 

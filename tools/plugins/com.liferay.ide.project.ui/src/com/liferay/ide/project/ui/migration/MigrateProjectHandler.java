@@ -19,6 +19,8 @@ import blade.migrate.api.Migration;
 import blade.migrate.api.Problem;
 import blade.migrate.api.ProgressMonitor;
 
+import com.liferay.ide.project.ui.ProjectUI;
+
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
@@ -83,6 +85,8 @@ public class MigrateProjectHandler extends AbstractHandler
                     @Override
                     public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
                     {
+                        IStatus retval = Status.OK_STATUS;
+
                         final BundleContext context =
                             FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
 
@@ -117,19 +121,26 @@ public class MigrateProjectHandler extends AbstractHandler
 
                         properties.put( Constants.SERVICE_RANKING, 1000 );
 
-                        final ServiceRegistration<ProgressMonitor> reg =
-                            context.registerService( ProgressMonitor.class, override, properties );
+                        try
+                        {
+                            final ServiceRegistration<ProgressMonitor> reg =
+                                context.registerService( ProgressMonitor.class, override, properties );
 
-                        final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
-                        Migration m = context.getService( sr );
+                            final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
+                            final Migration m = context.getService( sr );
 
-                        final List<Problem> problems = m.findProblems( location.toFile() );
+                            final List<Problem> problems = m.findProblems( location.toFile() );
 
-                        m.reportProblems( problems, Migration.DETAIL_LONG, "ide" );
+                            m.reportProblems( problems, Migration.DETAIL_LONG, "ide" );
 
-                        reg.unregister();
+                            reg.unregister();
+                        }
+                        catch( Exception e )
+                        {
+                            retval = ProjectUI.createErrorStatus( "Error in migrate command", e );
+                        }
 
-                        return Status.OK_STATUS;
+                        return retval;
                     }
                 };
 
