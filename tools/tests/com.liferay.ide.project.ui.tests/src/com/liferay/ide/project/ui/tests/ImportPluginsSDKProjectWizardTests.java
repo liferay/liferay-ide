@@ -147,7 +147,7 @@ public class ImportPluginsSDKProjectWizardTests extends ProjectCoreBase
 
         project.delete( false, false, null );
         op.setLocation( projectCopyDir );
-        assertEquals( "SDK is not exist", op.validation().message() );
+        assertTrue( op.validation().message().startsWith( "Could not determine SDK from project location" ) );
     }
 
     @Test
