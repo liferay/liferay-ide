@@ -59,12 +59,13 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 
         if ( sdk != null )
         {
-            final IMarker[] findMarkers = MarkerUtil.findMarkers( deltaFile, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
+            final IMarker[] problemMarkers =
+                MarkerUtil.findMarkers( deltaFile, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
             final IStatus sdkStatus = sdk.validate( true );
 
             if( sdkStatus.isOK() )
             {
-                if ( findMarkers != null && findMarkers.length > 0)
+                if ( problemMarkers != null && problemMarkers.length > 0)
                 {
                     MarkerUtil.clearMarkers( deltaFile, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
                 }
@@ -92,21 +93,20 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
             }
             else
             {
-                if ( findMarkers == null || findMarkers.length < 1 )
+                if ( problemMarkers == null || problemMarkers.length < 1 )
                 {
-                    final IStatus[] sdkMultiStatus = sdkStatus.getChildren();
+                    final IStatus[] statuses = sdkStatus.getChildren();
 
-                    for( final IStatus status : sdkMultiStatus )
+                    for( final IStatus status : statuses )
                     {
-                        MarkerUtil.setMarker(deltaFile, IMarker.PROBLEM, IMarker.SEVERITY_ERROR,
-                            status.getMessage(), deltaFile.getFullPath().toPortableString(),MARKER_ID_SDK_PROPERTIES_INVALID);
+                        MarkerUtil.setMarker(
+                            deltaFile, IMarker.PROBLEM, IMarker.SEVERITY_ERROR, status.getMessage(),
+                            deltaFile.getFullPath().toPortableString(), MARKER_ID_SDK_PROPERTIES_INVALID );
                     }
                 }
             }
         }
     }
-
-
 
     @Override
     public void resourceChanged( final IResourceChangeEvent event )
