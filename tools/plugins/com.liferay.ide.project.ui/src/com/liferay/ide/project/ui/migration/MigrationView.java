@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
+import java.net.URL;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
@@ -39,10 +40,14 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.actions.ActionContext;
+import org.eclipse.ui.browser.IWebBrowser;
+import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
+import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.FormText;
 import org.eclipse.ui.internal.navigator.actions.CommonActionDescriptorManager;
 import org.eclipse.ui.internal.navigator.actions.CommonActionProviderDescriptor;
@@ -50,10 +55,12 @@ import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.NavigatorActionService;
+import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
 
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class MigrationView extends CommonNavigator implements IDoubleClickListener
@@ -174,6 +181,31 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         _form = new FormText( detailParent, SWT.NONE );
 
+        _form.addHyperlinkListener( new IHyperlinkListener()
+        {
+
+            @Override
+            public void linkExited( org.eclipse.ui.forms.events.HyperlinkEvent e )
+            {
+            }
+
+            @Override
+            public void linkEntered( org.eclipse.ui.forms.events.HyperlinkEvent e )
+            {
+            }
+
+            @Override
+            public void linkActivated( org.eclipse.ui.forms.events.HyperlinkEvent e )
+            {
+                if( e.data instanceof String )
+                {
+                    String url = (String) e.data;
+
+                    openBrowser( url );
+                }
+            }
+        } );
+
         getCommonViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
             public void selectionChanged( SelectionChangedEvent event )
@@ -254,10 +286,12 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         sb.append( "\t" + taskProblem.lineNumber + "<br/>" );
 
         sb.append( "<b>Tickets:</b><br/>" );
-        sb.append( "\t" + "<a href='lps'>" + taskProblem.ticket + "</a><br/>" );
+        sb.append( "\t" );
+        sb.append( getLinkTags( taskProblem.ticket ) );
+        sb.append( "<br/>" );
 
         sb.append( "<b>More details:</b><br/>" );
-        sb.append( "\t" + "<a href='lps'>See full Breaking Changes document</a><br/>" );
+        sb.append( "\t" + "<a href='" + taskProblem.url + "'>See full Breaking Changes document</a><br/>" );
 
         sb.append( "</p></form>" );
 
@@ -273,6 +307,28 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         final NavigatorActionService navigatorActionService = getCommonViewer().getCommonNavigator().getNavigatorActionService();
 
         return navigatorActionService.getActionProviderInstance( providerDescriptors[0] );
+    }
+
+    private String getLinkTags(String ticketNumbers) {
+        String[] ticketNumberArray =  ticketNumbers.split( "," );
+
+        StringBuilder sb =  new StringBuilder();
+
+        for (int i=0;i<ticketNumberArray.length;i++) {
+            String ticketNumber = ticketNumberArray[i];
+            sb.append( "<a href='https://issues.liferay.com/browse/" );
+            sb.append( ticketNumber );
+            sb.append( "'>" );
+            sb.append( ticketNumber );
+            sb.append( "</a>" );
+
+            if( ticketNumberArray.length > 1 && i != ticketNumberArray.length - 1 )
+            {
+                sb.append( "," );
+            }
+        }
+
+        return sb.toString();
     }
 
     private TaskProblem getTaskProblemFromSelection( ISelection selection )
@@ -325,6 +381,32 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         }
 
         return null;
+    }
+
+    private void openBrowser( final String url )
+    {
+        Display.getDefault().asyncExec( new Runnable()
+        {
+
+            public void run()
+            {
+                try
+                {
+                    IWorkbenchBrowserSupport browserSupport =
+                        ServerUIPlugin.getInstance().getWorkbench().getBrowserSupport();
+
+                    IWebBrowser browser =
+                        browserSupport.createBrowser( IWorkbenchBrowserSupport.AS_EXTERNAL |
+                            IWorkbenchBrowserSupport.NAVIGATION_BAR, null, "", null );
+
+                    browser.openURL( new URL( url ) );
+                }
+                catch( Exception e )
+                {
+                    ProjectUI.logError( e );
+                }
+            }
+        } );
     }
 
     private void updateForm( SelectionChangedEvent event )

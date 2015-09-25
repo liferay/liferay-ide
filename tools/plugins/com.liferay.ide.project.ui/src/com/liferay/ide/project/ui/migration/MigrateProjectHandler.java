@@ -64,7 +64,7 @@ public class MigrateProjectHandler extends AbstractHandler
 
             IProject project = null;
 
-            if( project instanceof IProject )
+            if( element instanceof IProject )
             {
                 project = (IProject) element;
             }
