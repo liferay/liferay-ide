@@ -316,7 +316,21 @@
            </adapt>
          </enablement>
       </objectContribution>
-
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.project.ui.migrator"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               definitionId="com.liferay.ide.project.ui.migrateProject"
+               class="com.liferay.ide.project.ui.migration.MigrationAction"
+               enablesFor="1"
+               icon="icons/e16/liferay.png"
+               id="com.liferay.ide.project.ui.migrate.project"
+               label="Migrate Liferay project to 7.0..."
+               menubarPath="liferayPopupMenuCategory/slot1"
+               tooltip="Start a migration task for the selected project">
+         </action>
+      </objectContribution>
    </extension>
 
 
