@@ -59,14 +59,16 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
 
         if ( sdk != null )
         {
-            final IProject workspaceSDKProject = SDKUtil.getWorkspaceSDKProject();
-
-            MarkerUtil.clearMarkers( workspaceSDKProject, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
-
+            final IMarker[] findMarkers = MarkerUtil.findMarkers( deltaFile, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
             final IStatus sdkStatus = sdk.validate( true );
 
             if( sdkStatus.isOK() )
             {
+                if ( findMarkers != null && findMarkers.length > 0)
+                {
+                    MarkerUtil.clearMarkers( deltaFile, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
+                }
+
                 for( final IProject project : CoreUtil.getAllProjects() )
                 {
                     if( SDKUtil.isSDKProject( project ) && sdk.getLocation().isPrefixOf( project.getLocation() ) )
@@ -90,19 +92,16 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
             }
             else
             {
-                final IStatus[] sdkMultiStatus = sdkStatus.getChildren();
-
-                for( final IStatus status : sdkMultiStatus )
+                if ( findMarkers == null || findMarkers.length < 1 )
                 {
-                    MarkerUtil.setMarker(deltaProject, IMarker.PROBLEM, IMarker.SEVERITY_ERROR,
-                        status.getMessage(), workspaceSDKProject .getFullPath().toPortableString(),MARKER_ID_SDK_PROPERTIES_INVALID);
+                    final IStatus[] sdkMultiStatus = sdkStatus.getChildren();
 
-                    MarkerUtil.setMarker(deltaProject, IMarker.PROBLEM, IMarker.SEVERITY_ERROR,
-                        status.getMessage(), deltaFile.getFullPath().toPortableString(),MARKER_ID_SDK_PROPERTIES_INVALID);
-
+                    for( final IStatus status : sdkMultiStatus )
+                    {
+                        MarkerUtil.setMarker(deltaFile, IMarker.PROBLEM, IMarker.SEVERITY_ERROR,
+                            status.getMessage(), deltaFile.getFullPath().toPortableString(),MARKER_ID_SDK_PROPERTIES_INVALID);
+                    }
                 }
-
-                return;
             }
         }
     }
@@ -189,8 +188,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
                         return Status.OK_STATUS;
                     }
                 };
-
-                job.setRule( CoreUtil.getWorkspaceRoot() );
+                job.setRule( deltaFile );
                 job.schedule();
             }
 

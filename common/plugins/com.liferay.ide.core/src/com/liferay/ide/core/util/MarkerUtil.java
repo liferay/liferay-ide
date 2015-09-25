@@ -17,7 +17,6 @@ package com.liferay.ide.core.util;
 import com.liferay.ide.core.LiferayCore;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
@@ -27,13 +26,13 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class MarkerUtil
 {
-    public static void clearMarkers( IProject project, final String makerType, final String sourceId )
+    public static void clearMarkers( IResource resource, final String makerType, final String sourceId )
     {
         try
         {
-            if( project.isOpen() )
+            if( resource.isAccessible() )
             {
-                final IMarker[] markers = project.findMarkers( makerType, true, IResource.DEPTH_INFINITE );
+                final IMarker[] markers = resource.findMarkers( makerType, true, IResource.DEPTH_INFINITE );
 
                 for( IMarker marker : markers )
                 {
@@ -50,11 +49,28 @@ public class MarkerUtil
         }
     }
 
+    public static IMarker[] findMarkers( IResource resource, final String makerType, final String sourceId )
+    {
+        try
+        {
+            if( resource.isAccessible() )
+            {
+                return resource.findMarkers( makerType, true, IResource.DEPTH_INFINITE );
+            }
+        }
+        catch( CoreException e )
+        {
+            LiferayCore.logError( e );
+        }
+
+        return null;
+    }
+
     public static void setMarker(
-        IProject proj, String markerType, int markerSeverity, String markerMsg, String markerLocation,
+        IResource resource, String markerType, int markerSeverity, String markerMsg, String markerLocation,
         String markerSourceId ) throws CoreException
     {
-        final IMarker marker = proj.createMarker( markerType );
+        final IMarker marker = resource.createMarker( markerType );
 
         marker.setAttribute( IMarker.SEVERITY, markerSeverity );
         marker.setAttribute( IMarker.MESSAGE, markerMsg );

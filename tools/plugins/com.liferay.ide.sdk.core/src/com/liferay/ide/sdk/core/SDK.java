@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Dirname;
 import org.apache.tools.ant.taskdefs.Property;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -637,6 +638,12 @@ public class SDK
                 project.setBaseDir( new File( getLocation().toPortableString() ) );
                 project.setSystemProperties();
 
+                final Dirname dirname = new Dirname();
+                dirname.setProject( project );
+                dirname.setFile( new File( getLocation().append( "build-common.xml" ).toPortableString() ) );
+                dirname.setProperty( "sdk.dir" );
+                dirname.execute();
+
                 final Property envTask = new Property();
                 envTask.setProject( project );
                 envTask.setEnvironment( "env" );
@@ -1137,12 +1144,6 @@ public class SDK
                     case "app.server.portal.dir":
                     {
                         IPath propertyPath = new Path( propertyValue );
-
-                        if( !propertyPath.isAbsolute() )
-                        {
-                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" +
-                                            propertyValue + ") is not absolute path." ) );
-                        }
 
                         if( !propertyPath.toFile().exists() )
                         {

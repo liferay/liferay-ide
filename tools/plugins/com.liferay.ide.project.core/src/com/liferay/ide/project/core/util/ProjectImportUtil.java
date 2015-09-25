@@ -623,7 +623,7 @@ public class ProjectImportUtil
                                     return ProjectCore.createErrorStatus("Can't find sdk in workspace");
                                 }
 
-                                retVal = sdk.validate();
+                                retVal = sdk.validate( true );
                             }
                             else
                             {
