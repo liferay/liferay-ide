@@ -309,12 +309,14 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         return navigatorActionService.getActionProviderInstance( providerDescriptors[0] );
     }
 
-    private String getLinkTags(String ticketNumbers) {
-        String[] ticketNumberArray =  ticketNumbers.split( "," );
+    private String getLinkTags( String ticketNumbers )
+    {
+        String[] ticketNumberArray = ticketNumbers.split( "," );
 
-        StringBuilder sb =  new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-        for (int i=0;i<ticketNumberArray.length;i++) {
+        for( int i = 0; i < ticketNumberArray.length; i++ )
+        {
             String ticketNumber = ticketNumberArray[i];
             sb.append( "<a href='https://issues.liferay.com/browse/" );
             sb.append( ticketNumber );
@@ -387,7 +389,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     {
         Display.getDefault().asyncExec( new Runnable()
         {
-
             public void run()
             {
                 try
@@ -403,10 +404,10 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                 }
                 catch( Exception e )
                 {
-                    ProjectUI.logError( e );
+                    ProjectUI.logError( "error opening browser", e );
                 }
             }
-        } );
+        });
     }
 
     private void updateForm( SelectionChangedEvent event )
