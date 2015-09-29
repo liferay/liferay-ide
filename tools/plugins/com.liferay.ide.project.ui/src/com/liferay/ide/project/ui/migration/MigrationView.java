@@ -50,6 +50,7 @@ import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.FormText;
+import org.eclipse.ui.forms.widgets.ScrolledFormText;
 import org.eclipse.ui.internal.navigator.actions.CommonActionDescriptorManager;
 import org.eclipse.ui.internal.navigator.actions.CommonActionProviderDescriptor;
 import org.eclipse.ui.navigator.CommonActionProvider;
@@ -180,7 +181,11 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             mp.registerSelectionProvider( _problemsViewer );
         }
 
-        _form = new FormText( detailParent, SWT.NONE );
+        ScrolledFormText sft = new ScrolledFormText( detailParent , false );
+        sft.setExpandVertical( true );
+
+        _form = new FormText( sft, SWT.NONE );
+        sft.setFormText( _form );
 
         _form.addHyperlinkListener( new IHyperlinkListener()
         {
