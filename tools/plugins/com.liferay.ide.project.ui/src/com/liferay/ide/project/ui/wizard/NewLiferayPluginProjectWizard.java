@@ -196,27 +196,7 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
 
         showInAntView( finalProject );
 
-        if( finalProject != null && finalProject.getFile( ISDKConstants.IVY_XML_FILE ).exists() )
-        {
-            new WorkspaceJob( "Configuring project with Ivy dependencies" ) //$NON-NLS-1$
-            {
-                @Override
-                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                {
-                    try
-                    {
-                        IvyUtil.configureIvyProject( finalProject, monitor );
-                    }
-                    catch( CoreException e )
-                    {
-                        return ProjectCore.createErrorStatus(
-                            ProjectCore.PLUGIN_ID, "Failed to configured ivy project.", e ); //$NON-NLS-1$
-                    }
-
-                    return Status.OK_STATUS;
-                }
-            }.schedule();
-        }
+        checkAndConfigureIvy( finalProject );
 
         // check if a new portlet wizard is needed, available for portlet projects.
         final boolean createNewPortlet = op.getCreateNewPortlet().content();
@@ -243,6 +223,31 @@ public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPlug
             {
                 openNewPortletWizard( wizardId, finalProject );
             }
+        }
+    }
+
+    public static void checkAndConfigureIvy( final IProject project )
+    {
+        if( project != null && project.getFile( ISDKConstants.IVY_XML_FILE ).exists() )
+        {
+            new WorkspaceJob( "Configuring project with Ivy dependencies" ) //$NON-NLS-1$
+            {
+                @Override
+                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                {
+                    try
+                    {
+                        IvyUtil.configureIvyProject( project, monitor );
+                    }
+                    catch( CoreException e )
+                    {
+                        return ProjectCore.createErrorStatus(
+                            ProjectCore.PLUGIN_ID, "Failed to configured ivy project.", e ); //$NON-NLS-1$
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            }.schedule();
         }
     }
 

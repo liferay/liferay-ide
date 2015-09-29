@@ -371,6 +371,7 @@ public class ProjectImportUtil
                 throw new CoreException( ProjectCore.createErrorStatus( e ) );
             }
         }
+
         return project;
     }
 

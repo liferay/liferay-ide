@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.wizard;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.SDKProjectImportOp;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
@@ -49,6 +50,11 @@ public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
         super( createDefaultOp(), DefinitionLoader.sdef( SDKProjectImportWizard.class ).wizard() );
     }
 
+    private static SDKProjectImportOp createDefaultOp()
+    {
+        return SDKProjectImportOp.TYPE.instantiate();
+    }
+
     @Override
     public IWizardPage[] getPages()
     {
@@ -66,6 +72,7 @@ public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
                 wizardPage.setMessage( "Please select an exsiting project" );
             }
         }
+
         if ( title != null)
         {
             this.getContainer().getShell().setText( title );
@@ -77,13 +84,21 @@ public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
     @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
-
     }
 
 
-    private static SDKProjectImportOp createDefaultOp()
+    @Override
+    protected void performPostFinish()
     {
-        return SDKProjectImportOp.TYPE.instantiate();
-    }
+        super.performPostFinish();
 
+        final String projectName = element().getFinalProjectName().content();
+
+        final IProject project = CoreUtil.getProject( projectName );
+
+        if( project != null && project.isAccessible() )
+        {
+            NewLiferayPluginProjectWizard.checkAndConfigureIvy( project );
+        }
+    }
 }

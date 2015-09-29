@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -50,7 +51,10 @@ public class SDKImportProjectOpMethods
                     StatusBridge.create( Status.createErrorStatus( "Project can not be empty" ) ) );
             }
 
-            ProjectImportUtil.importProject( PathBridge.create( projectLocation ),new NullProgressMonitor(), null);
+            final IProject project = ProjectImportUtil.importProject(
+                PathBridge.create( projectLocation ), new NullProgressMonitor(), null );
+
+            op.setFinalProjectName( project.getName() );
         }
         catch( CoreException e )
         {

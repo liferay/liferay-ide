@@ -73,6 +73,12 @@ public interface SDKProjectImportOp extends ExecutableElement
     Value<String> getPluginType();
     void setPluginType( String value );
 
+    // *** Final Project Name
+    ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty( TYPE, "FinalProjectName" );
+
+    Value<String> getFinalProjectName();
+    void setFinalProjectName( String value );
+
     @Override
     @DelegateImplementation( SDKImportProjectOpMethods.class )
     Status execute( ProgressMonitor monitor );
