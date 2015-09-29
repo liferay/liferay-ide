@@ -46,7 +46,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 
 /**
  * @author Gregory Amerson
@@ -105,6 +104,12 @@ public class MigrateProjectHandler extends AbstractHandler
                             }
 
                             @Override
+                            public boolean isCanceled()
+                            {
+                                return monitor.isCanceled();
+                            }
+
+                            @Override
                             public void done()
                             {
                                 monitor.done();
@@ -123,17 +128,12 @@ public class MigrateProjectHandler extends AbstractHandler
 
                         try
                         {
-                            final ServiceRegistration<ProgressMonitor> reg =
-                                context.registerService( ProgressMonitor.class, override, properties );
-
                             final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
                             final Migration m = context.getService( sr );
 
-                            final List<Problem> problems = m.findProblems( location.toFile() );
+                            final List<Problem> problems = m.findProblems( location.toFile(), override );
 
                             m.reportProblems( problems, Migration.DETAIL_LONG, "ide" );
-
-                            reg.unregister();
                         }
                         catch( Exception e )
                         {
