@@ -16,6 +16,7 @@ package com.liferay.ide.project.ui.migration;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
 import java.util.List;
@@ -226,9 +227,15 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         _problemsViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
-            public void selectionChanged( SelectionChangedEvent event )
+            public void selectionChanged( final SelectionChangedEvent event )
             {
-                updateForm( event );
+                UIUtil.async( new Runnable()
+                {
+                    public void run()
+                    {
+                        updateForm( event );
+                    }
+                }, 50 );
             }
         });
 
