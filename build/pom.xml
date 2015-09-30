@@ -29,7 +29,7 @@
                 <module>../tools</module>
                 <module>../jsdt</module>
                 <module>../maven</module>
-                <!--<module>../gradle</module>-->
+                <module>../gradle</module>
                 <module>com.liferay.ide-repository</module>
                 <module>com.liferay.ide.testing-repository</module>
             </modules>

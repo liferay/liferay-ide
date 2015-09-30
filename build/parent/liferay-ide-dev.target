@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="liferay-ide" sequenceNumber="104">
+<?pde version="3.8"?><target name="liferay-ide" sequenceNumber="105">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.m2e.wtp.feature.feature.group" version="1.2.0.20150602-1740"/>
@@ -26,10 +26,6 @@
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.mylyn.commons.notifications.feature.group" version="1.8.0.v20150602-2344"/>
 <repository location="http://download.eclipse.org/mylyn/releases/latest"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.buildship.feature.group" version="1.0.5.v20150922-2202"/>
-<repository location="http://download.eclipse.org/buildship/updates/e45/releases/1.0/"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.apache.ivy.feature.feature.group" version="2.4.0.final_20141213170938"/>
@@ -117,6 +113,10 @@
 <unit id="org.eclipse.wst.xml.search.web-feature.feature.group" version="1.0.1.201504170511"/>
 <unit id="org.eclipse.wst.xml.search.core-feature.feature.group" version="1.0.1.201504170511"/>
 <repository location="http://106.187.96.36/gamerson/eclipse-wtp-xml-search-1.0.0.20150417/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.buildship.feature.group" version="1.0.5.v20150922-2202"/>
+<repository location="http://download.eclipse.org/buildship/updates/e45/releases/1.0/"/>
 </location>
 </locations>
 <environment>

@@ -28,8 +28,8 @@
 
     <properties>
         <tycho-packaging-format>yyyyMMddHHmm</tycho-packaging-format>
-        <tycho-version>0.20.0</tycho-version>
-        <tycho-extras-version>0.20.0</tycho-extras-version>
+        <tycho-version>0.23.0</tycho-version>
+        <tycho-extras-version>0.23.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</orbit-site>
         <osgi-bundles-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/osgi-bundles-repository/</osgi-bundles-site>
         <sapphire-site>http://download.eclipse.org/sapphire/8.2.1/repository/</sapphire-site>
