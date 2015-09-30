@@ -69,7 +69,7 @@ public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
 
             if( CoreUtil.isNullOrEmpty( message ) )
             {
-                wizardPage.setMessage( "Please select an exsiting project" );
+                wizardPage.setMessage( "Please select an existing project" );
             }
         }
 

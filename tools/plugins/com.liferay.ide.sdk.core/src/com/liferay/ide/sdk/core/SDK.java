@@ -1116,7 +1116,7 @@ public class SDK
 
         for( String propertyKey : APP_SERVER_PROPERTIES_KEYS )
         {
-            final String propertyValue = (String)sdkProperties.get( propertyKey );
+            final String propertyValue = (String) sdkProperties.get( propertyKey );
 
             if ( propertyValue == null )
             {
@@ -1148,7 +1148,7 @@ public class SDK
                         if( !propertyPath.toFile().exists() )
                         {
                             status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" +
-                                            propertyValue + ") is not exsit." ) );
+                                            propertyValue + ") is not valid." ) );
                         }
 
                         break;

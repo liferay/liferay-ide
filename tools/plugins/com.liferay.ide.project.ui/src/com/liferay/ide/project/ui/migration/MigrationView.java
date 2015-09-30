@@ -109,7 +109,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             {
                 TaskProblem p = (TaskProblem) element;
 
-                return p.lineNumber + "";
+                return p.lineNumber > -1 ? ( p.lineNumber  + "" ) : "";
             }
         });
 
@@ -285,22 +285,23 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         sb.append( "<form><p>" );
 
-        sb.append( "<b>Problem:</b><br/>" );
-        sb.append( "\t" + taskProblem.title + "<br/>" );
+        sb.append( "<b>Problem:</b> " + taskProblem.title + "<br/><br/>" );
 
         sb.append( "<b>Description:</b><br/>" );
-        sb.append( "\t" + taskProblem.summary + "<br/>" );
+        sb.append( "\t" + taskProblem.summary + "<br/><br/>" );
 
-        sb.append( "<b>Type:</b><br/>" );
-        sb.append( "\t" + taskProblem.type + "<br/>" );
+//        sb.append( "<b>Type:</b><br/>" );
+//        sb.append( "\t" + taskProblem.type + "<br/>" );
 
-        sb.append( "<b>Line:</b><br/>" );
-        sb.append( "\t" + taskProblem.lineNumber + "<br/>" );
+        if( taskProblem.lineNumber > -1 )
+        {
+            sb.append( "<b>Line:</b> " + taskProblem.lineNumber + "<br/><br/>" );
+        }
 
-        sb.append( "<b>Tickets:</b><br/>" );
-        sb.append( "\t" );
-        sb.append( getLinkTags( taskProblem.ticket ) );
-        sb.append( "<br/>" );
+        if( taskProblem.ticket != null && taskProblem.ticket.length() > 0 )
+        {
+            sb.append( "<b>Tickets:</b> " + getLinkTags( taskProblem.ticket ) + "<br/><br/>" );
+        }
 
         sb.append( "<b>More details:</b><br/>" );
         sb.append( "\t" + "<a href='" + taskProblem.url + "'>See full Breaking Changes document</a><br/>" );

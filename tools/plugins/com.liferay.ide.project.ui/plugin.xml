@@ -1290,7 +1290,7 @@
             locationURI="menu:project?after=additions">
          <command
                commandId="com.liferay.ide.project.ui.migrateProject"
-               label="Migrate Liferay plugin project..."
+               label="Migrate Liferay project to 7.0..."
                style="push"
                tooltip="Run a migration tool to help with migration Liferay plugin projects to latest version of Liferay Portal version">
          </command>
