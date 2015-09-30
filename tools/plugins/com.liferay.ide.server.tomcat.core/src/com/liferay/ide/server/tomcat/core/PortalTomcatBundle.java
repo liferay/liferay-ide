@@ -179,7 +179,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
         args.add( "-Dfile.encoding=UTF8" );
         args.add( "-Djava.endorsed.dirs=" + "\"" + this.bundlePath.append( "endorsed" ).toPortableString() + "\"" );
         args.add( "-Djava.io.tmpdir=" + "\"" + this.bundlePath.append( "temp" ).toPortableString() + "\"" );
-        args.add( "-Djava.net.preferIPv4Stack=true" );
+//        args.add( "-Djava.net.preferIPv4Stack=true" );
         args.add( "-Djava.util.logging.config.file=" + "\"" + this.bundlePath.append( "conf/logging.properties" ) +
             "\"" );
         args.add( "-Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager" );
