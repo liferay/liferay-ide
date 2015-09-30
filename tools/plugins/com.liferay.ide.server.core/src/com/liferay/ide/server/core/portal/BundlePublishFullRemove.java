@@ -118,22 +118,26 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         final PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
 
-        final IPath modulesPath = runtime.getPortalBundle().getModulesPath();
 
         final List<File> moduleFiles = new ArrayList<File>();
 
         // TODO this may not always match
+        final IPath modulesPath = runtime.getPortalBundle().getModulesPath();
         findFilesInPath( modulesPath.toFile(), symbolicName, moduleFiles );
 
         final IPath deployPath = runtime.getPortalBundle().getAutoDeployPath();
         findFilesInPath( deployPath.toFile(), symbolicName, moduleFiles );
 
+        final IPath appServerDeployPath = runtime.getPortalBundle().getAppServerDeployDir();
+        findFilesInPath( appServerDeployPath.toFile(), symbolicName, moduleFiles );
+
         try
         {
             IPath outputFile = bundleProject.getOutputJar( false, null );
 
-            findFilesInPath( modulesPath.toFile(), symbolicName, moduleFiles );
+            findFilesInPath( modulesPath.toFile(), outputFile.lastSegment(), moduleFiles );
             findFilesInPath( deployPath.toFile(), outputFile.lastSegment(), moduleFiles );
+            findFilesInPath( appServerDeployPath.toFile(), symbolicName, moduleFiles );
         }
         catch( CoreException e )
         {
