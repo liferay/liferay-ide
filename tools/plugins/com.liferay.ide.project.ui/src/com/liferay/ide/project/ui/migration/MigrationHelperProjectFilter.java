@@ -48,7 +48,7 @@ public class MigrationHelperProjectFilter extends ViewerFilter
         {
             String projectName = project.getName();
 
-            if( projectName.equals( MigrationConstants.MIGRATION_HELPER_PROJECT_NAME ) )
+            if( projectName.equals( MigrationConstants.HELPER_PROJECT_NAME ) )
             {
                 return false;
             }

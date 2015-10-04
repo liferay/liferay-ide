@@ -123,7 +123,7 @@ public class WorkspaceMigrationImpl implements MigrationListener
                     if( shouldAddMarker(workspaceResource) )
                     {
                         final IMarker marker =
-                            workspaceResource.createMarker( MigrationConstants.MIGRATION_MARKER_TYPE );
+                            workspaceResource.createMarker( MigrationConstants.MARKER_TYPE );
 
                         MigrationUtil.taskProblemToMarker( taskProblem, marker );
                     }

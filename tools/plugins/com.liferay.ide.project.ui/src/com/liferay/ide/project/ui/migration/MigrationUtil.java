@@ -16,6 +16,8 @@ package com.liferay.ide.project.ui.migration;
 
 import blade.migrate.api.MigrationConstants;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +42,38 @@ public class MigrationUtil
 
     private static IFile getIFileFromTaskProblem( TaskProblem taskProblem )
     {
-        // TODO could return more than one
-        return ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() )[0];
+        IFile retval = null;
+
+        final IFile[] files =
+            ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() );
+
+        for( IFile file : files )
+        {
+            if( file.exists() )
+            {
+                // always prefer the file in a liferay project
+                if( CoreUtil.isLiferayProject( file.getProject() ) )
+                {
+                    retval = file;
+                    break;
+                }
+
+                // if not lets pick the one that is shortest path
+                if( retval == null )
+                {
+                    retval = file;
+                }
+                else
+                {
+                    if( file.getLocation().segmentCount() < retval.getLocation().segmentCount() )
+                    {
+                        retval = file;
+                    }
+                }
+            }
+        }
+
+        return retval;
     }
 
     public static List<TaskProblem> getTaskProblemsFromResource( IResource resource )
@@ -51,7 +83,7 @@ public class MigrationUtil
         try
         {
             final IMarker[] markers =
-                resource.findMarkers( MigrationConstants.MIGRATION_MARKER_TYPE, true, IResource.DEPTH_ZERO );
+                resource.findMarkers( MigrationConstants.MARKER_TYPE, true, IResource.DEPTH_ZERO );
 
             for( IMarker marker : markers )
             {
@@ -73,20 +105,22 @@ public class MigrationUtil
     public static TaskProblem markerToTaskProblem( IMarker marker )
     {
         final String title = marker.getAttribute( IMarker.MESSAGE, "" );
-        final String url = marker.getAttribute( "migrationProblem.url", "" );
         final String summary = marker.getAttribute( "migrationProblem.summary", "" );
         final String type = marker.getAttribute( "migrationProblem.type", "" );
         final String ticket = marker.getAttribute( "migrationProblem.ticket", "" );
         final int lineNumber = marker.getAttribute( IMarker.LINE_NUMBER, 0 );
         final int startOffset = marker.getAttribute( IMarker.CHAR_START, 0 );
         final int endOffset = marker.getAttribute( IMarker.CHAR_END, 0 );
+        final String html = marker.getAttribute( "migrationProblem.html", "" );
+        final String autoCorrectContext = marker.getAttribute( "migrationProblem.autoCorrectContext", "" );
         final boolean resolved = marker.getAttribute( "migrationProblem.resolved", false );
         final long timestamp = Long.parseLong( marker.getAttribute( "migrationProblem.timestamp", "0" ) );
 
         final File file = new File( marker.getResource().getLocationURI() );
 
         return new TaskProblem(
-            title, url, summary, type, ticket, file, lineNumber, startOffset, endOffset, resolved, timestamp );
+            title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext,
+            resolved, timestamp );
     }
 
     public static void openEditor( TaskProblem taskProblem )
@@ -114,7 +148,6 @@ public class MigrationUtil
     public static void taskProblemToMarker( TaskProblem taskProblem, IMarker marker ) throws CoreException
     {
         marker.setAttribute( IMarker.MESSAGE, taskProblem.title );
-        marker.setAttribute( "migrationProblem.url", taskProblem.url );
         marker.setAttribute( "migrationProblem.summary", taskProblem.summary );
         marker.setAttribute( "migrationProblem.type", taskProblem.type );
         marker.setAttribute( "migrationProblem.ticket", taskProblem.ticket );
@@ -123,6 +156,8 @@ public class MigrationUtil
         marker.setAttribute( IMarker.CHAR_END, taskProblem.endOffset );
         marker.setAttribute( "migrationProblem.resolved", taskProblem.isResolved() );
         marker.setAttribute( "migrationProblem.timestamp", taskProblem.getTimestamp() + "" );
+        marker.setAttribute( "migrationProblem.html", taskProblem.html );
+        marker.setAttribute( "migrationProblem.autoCorrectContext", taskProblem.getAutoCorrectContext() );
 
         marker.setAttribute( IMarker.LOCATION, taskProblem.file.getName() );
         marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );

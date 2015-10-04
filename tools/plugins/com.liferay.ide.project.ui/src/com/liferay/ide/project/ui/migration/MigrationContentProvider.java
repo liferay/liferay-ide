@@ -148,7 +148,7 @@ public class MigrationContentProvider implements ITreeContentProvider
             try
             {
                 final IMarker[] markers =
-                    root.findMarkers( MigrationConstants.MIGRATION_MARKER_TYPE, true, IResource.DEPTH_INFINITE );
+                    root.findMarkers( MigrationConstants.MARKER_TYPE, true, IResource.DEPTH_INFINITE );
 
                 _root = getFileTree( markers );
             }

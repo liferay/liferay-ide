@@ -37,28 +37,28 @@ public class TaskProblem extends Problem
 
     public TaskProblem( Problem problem, boolean resolved )
     {
-        super( problem.title, problem.url, problem.summary, problem.type, problem.ticket, problem.file,
-               problem.lineNumber, problem.startOffset, problem.endOffset );
+        super( problem.title, problem.summary, problem.type, problem.ticket, problem.file,
+               problem.lineNumber, problem.startOffset, problem.endOffset, problem.html, problem.autoCorrectContext );
 
         _resolved = resolved;
         _timestamp = System.currentTimeMillis();
     }
 
     public TaskProblem(
-        String title, String url, String summary, String type, String ticket, File file, int lineNumber,
-        int startOffset, int endOffset, boolean resolved )
+        String title, String summary, String type, String ticket, File file, int lineNumber,
+        int startOffset, int endOffset, String html, String autoCorrectContext, boolean resolved )
     {
-        super( title, url, summary, type, ticket, file, lineNumber, startOffset, endOffset );
+        super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext );
 
         _resolved = resolved;
         _timestamp = System.currentTimeMillis();
     }
 
     public TaskProblem(
-        String title, String url, String summary, String type, String ticket, File file, int lineNumber,
-        int startOffset, int endOffset, boolean resolved, long timestamp )
+        String title, String summary, String type, String ticket, File file, int lineNumber,
+        int startOffset, int endOffset, String html, String autoCorrectContext, boolean resolved, long timestamp )
     {
-        super( title, url, summary, type, ticket, file, lineNumber, startOffset, endOffset );
+        super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext );
 
         _resolved = resolved;
         _timestamp = timestamp;
