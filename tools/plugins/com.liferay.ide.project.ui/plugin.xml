@@ -1181,7 +1181,7 @@
       <navigatorContent
             activeByDefault="true"
             contentProvider="com.liferay.ide.project.ui.migration.MigrationContentProvider"
-            icon="icons/e16/liferay.png"
+            icon="icons/e16/server.png"
             id="com.liferay.ide.project.ui.migration.content"
             labelProvider="com.liferay.ide.project.ui.migration.MigrationLabelProvider"
             name="Liferay Plugin Migration">

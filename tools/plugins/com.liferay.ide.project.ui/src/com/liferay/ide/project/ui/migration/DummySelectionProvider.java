@@ -12,48 +12,39 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.ui.migration;
 
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 
 /**
  * @author Gregory Amerson
  */
-public class MarkUndoneAction extends TaskProblemAction
+public class DummySelectionProvider implements ISelectionProvider
 {
 
-    public MarkUndoneAction()
+    @Override
+    public void addSelectionChangedListener( ISelectionChangedListener listener )
     {
-        this( new DummySelectionProvider() );
-    }
-
-    public MarkUndoneAction( ISelectionProvider provider )
-    {
-        super( provider, "Mark undone" );
     }
 
     @Override
-    protected IStatus runWithMarker( TaskProblem taskProblem, IMarker marker )
+    public ISelection getSelection()
     {
-        IStatus retval = Status.OK_STATUS;
+        return null;
+    }
 
-        try
-        {
-            marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
-            marker.setAttribute( "migrationProblem.resolved", false );
-            taskProblem.setResolved( false );
-        }
-        catch( CoreException e )
-        {
-            retval = e.getStatus();
-        }
+    @Override
+    public void removeSelectionChangedListener( ISelectionChangedListener listener )
+    {
+    }
 
-        return retval;
+    @Override
+    public void setSelection( ISelection selection )
+    {
     }
 
 }

@@ -14,20 +14,48 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import org.eclipse.jface.action.IAction;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.ui.actions.SelectionProviderAction;
 
 
 /**
  * @author Gregory Amerson
  */
-public class MarkDoneAction extends SelectionProviderAction implements IAction
+public class MarkDoneAction extends TaskProblemAction
 {
+
+    public MarkDoneAction()
+    {
+        this( new DummySelectionProvider() );
+    }
 
     public MarkDoneAction( ISelectionProvider provider )
     {
         super( provider, "Mark done" );
     }
+
+    @Override
+    protected IStatus runWithMarker( TaskProblem taskProblem, IMarker marker )
+    {
+        IStatus retval = Status.OK_STATUS;
+
+        try
+        {
+            marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_INFO );
+            marker.setAttribute( "migrationProblem.resolved", true );
+            taskProblem.setResolved( true );
+        }
+        catch( CoreException e )
+        {
+            retval = e.getStatus();
+        }
+
+        return retval;
+    }
+
+
 
 }

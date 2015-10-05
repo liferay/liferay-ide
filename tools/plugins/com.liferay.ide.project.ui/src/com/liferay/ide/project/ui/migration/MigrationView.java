@@ -15,38 +15,25 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.AutoMigrateException;
-import blade.migrate.api.AutoMigrator;
-import blade.migrate.api.Problem;
-
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -81,10 +68,6 @@ import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.NavigatorActionService;
 import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 
 /**
  * @author Gregory Amerson
@@ -103,7 +86,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     private FormText _form;
     private TableViewer _problemsViewer;
 
-    private void createColumns( TableViewer _problemsViewer )
+    private void createColumns( final TableViewer _problemsViewer )
     {
         final String[] titles = { "Title", "Summary", "Line", "Resolved" };
         final int[] bounds = { 100, 100, 100, 100 };
@@ -142,6 +125,40 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         });
 
         col = createTableViewerColumn( titles[3], bounds[3], 3, _problemsViewer );
+        col.setEditingSupport( new EditingSupport( _problemsViewer )
+        {
+            @Override
+            protected void setValue( Object element, Object value )
+            {
+                if( value == Boolean.TRUE )
+                {
+                    new MarkDoneAction().run( (TaskProblem) element, _problemsViewer );
+                }
+                else
+                {
+                    new MarkUndoneAction().run( (TaskProblem) element, _problemsViewer );
+                }
+            }
+
+            @Override
+            protected Object getValue( Object element )
+            {
+                return ( (TaskProblem) element ).isResolved();
+            }
+
+            @Override
+            protected CellEditor getCellEditor( Object element )
+            {
+                return new CheckboxCellEditor( _problemsViewer.getTable() );
+            }
+
+            @Override
+            protected boolean canEdit( Object element )
+            {
+                return true;
+            }
+        });
+
         col.setLabelProvider( new ColumnLabelProvider()
         {
             @Override
@@ -206,6 +223,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             MigrationActionProvider mp = (MigrationActionProvider) ap;
 
+            mp.makeActions( _problemsViewer );
             mp.registerSelectionProvider( _problemsViewer );
         }
 
@@ -235,11 +253,12 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                 {
                     final String url = (String) e.data;
 
-                    final TaskProblem taskProblem = getTaskProblemFromSelection( _problemsViewer.getSelection() );
+                    final TaskProblem taskProblem =
+                        MigrationUtil.getTaskProblemFromSelection( _problemsViewer.getSelection() );
 
                     if( "autoCorrect".equals( url ) )
                     {
-                        autoCorrect( taskProblem );
+                        AutoCorrectAction.run( taskProblem, _problemsViewer );
                     }
                     else if( "html".equals( url ) )
                     {
@@ -251,14 +270,13 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                     }
                 }
             }
-        } );
+        });
 
         getCommonViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
-
             public void selectionChanged( SelectionChangedEvent event )
             {
-                List<TaskProblem> problems = getTaskProblemsFromSelection( event.getSelection() );
+                List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromSelection( event.getSelection() );
 
                 if( problems != null && problems.size() > 0 )
                 {
@@ -352,62 +370,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         shell.open();
     }
 
-    private void savePopupState( Shell shell )
-    {
-        final Point location = shell.getLocation();
-        final Point size = shell.getSize();
-
-        MigrationView.this.getMemento().putInteger( "popupLastX", location.x );
-        MigrationView.this.getMemento().putInteger( "popupLastY", location.y );
-        MigrationView.this.getMemento().putInteger( "popupSizeX", size.x );
-        MigrationView.this.getMemento().putInteger( "popupSizeY", size.y );
-
-    }
-
-    private void autoCorrect( final TaskProblem problem )
-    {
-        final BundleContext context = FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
-        final IFile[] files = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( problem.file.toURI() );
-
-        new WorkspaceJob( "auto correct")
-        {
-
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                try
-                {
-                    final String autoCorrectKey =
-                        problem.autoCorrectContext.substring( 0, problem.autoCorrectContext.indexOf( ":" ) );
-                    final Collection<ServiceReference<AutoMigrator>> refs =
-                        context.getServiceReferences( AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
-
-                    for( ServiceReference<AutoMigrator> ref : refs )
-                    {
-                        final AutoMigrator autoMigrator = context.getService( ref );
-                        List<Problem> problems = new ArrayList<>();
-                        problems.add( problem );
-                        autoMigrator.correctProblems( problem.file, problems );
-                    }
-
-                    for( IFile file : files )
-                    {
-                        file.refreshLocal( IResource.DEPTH_ONE, monitor );
-                    }
-                }
-                catch( InvalidSyntaxException e )
-                {
-                }
-                catch( AutoMigrateException | CoreException e )
-                {
-                    return ProjectUI.createErrorStatus( "Unable to auto correct problem", e );
-                }
-
-                return Status.OK_STATUS;
-            }
-        }.schedule();
-    }
-
     private TableViewerColumn createTableViewerColumn(
         String title, int bound, final int colNumber, TableViewer viewer )
     {
@@ -424,7 +386,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     @Override
     public void doubleClick( DoubleClickEvent event )
     {
-        TaskProblem taskProblem = getTaskProblemFromSelection( event.getSelection() );
+        TaskProblem taskProblem = MigrationUtil.getTaskProblemFromSelection( event.getSelection() );
 
         if( taskProblem != null )
         {
@@ -451,14 +413,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         sb.append( "<b>Description:</b><br/>" );
         sb.append( "\t" + taskProblem.summary + "<br/><br/>" );
 
-        // sb.append( "<b>Type:</b><br/>" );
-        // sb.append( "\t" + taskProblem.type + "<br/>" );
-
-        if( taskProblem.lineNumber > -1 )
-        {
-            sb.append( "<b>Line:</b> " + taskProblem.lineNumber + "<br/><br/>" );
-        }
-
         if( taskProblem.getAutoCorrectContext() != null && taskProblem.autoCorrectContext.length() > 0 )
         {
             sb.append( "<a href='autoCorrect'>Correct this problem automatically</a><br/><br/>" );
@@ -473,9 +427,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             sb.append( "<b>Tickets:</b> " + getLinkTags( taskProblem.ticket ) + "<br/><br/>" );
         }
-
-        // sb.append( "<b>More details:</b><br/>" );
-        // sb.append( "\t" + "<a href='" + taskProblem.url + "'>See full Breaking Changes document</a><br/>" );
 
         sb.append( "</p></form>" );
 
@@ -519,58 +470,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         return sb.toString();
     }
 
-    private TaskProblem getTaskProblemFromSelection( ISelection selection )
-    {
-        if( selection instanceof IStructuredSelection )
-        {
-            final IStructuredSelection ss = (IStructuredSelection) selection;
-
-            Object element = ss.getFirstElement();
-
-            if( element instanceof TaskProblem )
-            {
-                return (TaskProblem) element;
-            }
-        }
-
-        return null;
-    }
-
-    private List<TaskProblem> getTaskProblemsFromSelection( ISelection selection )
-    {
-        if( selection instanceof IStructuredSelection )
-        {
-            final IStructuredSelection ss = (IStructuredSelection) selection;
-
-            final Object element = ss.getFirstElement();
-
-            IResource resource = null;
-
-            if( element instanceof IResource )
-            {
-                resource = (IResource) element;
-            }
-            else if( element instanceof MPNode )
-            {
-                final MPNode node = (MPNode) element;
-
-                final IResource member = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
-
-                if( member != null && member.exists() )
-                {
-                    resource = member;
-                }
-            }
-
-            if( resource != null )
-            {
-                return MigrationUtil.getTaskProblemsFromResource( resource );
-            }
-        }
-
-        return null;
-    }
-
     private void openBrowser( final String url )
     {
         Display.getDefault().asyncExec( new Runnable()
@@ -596,11 +495,22 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         });
     }
 
+    private void savePopupState( Shell shell )
+    {
+        final Point location = shell.getLocation();
+        final Point size = shell.getSize();
+
+        MigrationView.this.getMemento().putInteger( "popupLastX", location.x );
+        MigrationView.this.getMemento().putInteger( "popupLastY", location.y );
+        MigrationView.this.getMemento().putInteger( "popupSizeX", size.x );
+        MigrationView.this.getMemento().putInteger( "popupSizeY", size.y );
+    }
+
     private void updateForm( SelectionChangedEvent event )
     {
-        ISelection selection = event.getSelection();
+        final ISelection selection = event.getSelection();
 
-        TaskProblem taskProblem = getTaskProblemFromSelection( selection );
+        final TaskProblem taskProblem = MigrationUtil.getTaskProblemFromSelection( selection );
 
         if( taskProblem != null )
         {

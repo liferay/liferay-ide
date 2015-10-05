@@ -27,6 +27,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -40,7 +42,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class MigrationUtil
 {
 
-    private static IFile getIFileFromTaskProblem( TaskProblem taskProblem )
+    public static IFile getIFileFromTaskProblem( TaskProblem taskProblem )
     {
         IFile retval = null;
 
@@ -65,7 +67,7 @@ public class MigrationUtil
                 }
                 else
                 {
-                    if( file.getLocation().segmentCount() < retval.getLocation().segmentCount() )
+                    if( file.getFullPath().segmentCount() < retval.getFullPath().segmentCount() )
                     {
                         retval = file;
                     }
@@ -74,6 +76,23 @@ public class MigrationUtil
         }
 
         return retval;
+    }
+
+    public static TaskProblem getTaskProblemFromSelection( ISelection selection )
+    {
+        if( selection instanceof IStructuredSelection )
+        {
+            final IStructuredSelection ss = (IStructuredSelection) selection;
+
+            Object element = ss.getFirstElement();
+
+            if( element instanceof TaskProblem )
+            {
+                return (TaskProblem) element;
+            }
+        }
+
+        return null;
     }
 
     public static List<TaskProblem> getTaskProblemsFromResource( IResource resource )
@@ -102,6 +121,41 @@ public class MigrationUtil
         return problems;
     }
 
+    public static List<TaskProblem> getTaskProblemsFromSelection( ISelection selection )
+    {
+        if( selection instanceof IStructuredSelection )
+        {
+            final IStructuredSelection ss = (IStructuredSelection) selection;
+
+            final Object element = ss.getFirstElement();
+
+            IResource resource = null;
+
+            if( element instanceof IResource )
+            {
+                resource = (IResource) element;
+            }
+            else if( element instanceof MPNode )
+            {
+                final MPNode node = (MPNode) element;
+
+                final IResource member = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
+
+                if( member != null && member.exists() )
+                {
+                    resource = member;
+                }
+            }
+
+            if( resource != null )
+            {
+                return getTaskProblemsFromResource( resource );
+            }
+        }
+
+        return null;
+    }
+
     public static TaskProblem markerToTaskProblem( IMarker marker )
     {
         final String title = marker.getAttribute( IMarker.MESSAGE, "" );
@@ -114,13 +168,13 @@ public class MigrationUtil
         final String html = marker.getAttribute( "migrationProblem.html", "" );
         final String autoCorrectContext = marker.getAttribute( "migrationProblem.autoCorrectContext", "" );
         final boolean resolved = marker.getAttribute( "migrationProblem.resolved", false );
-        final long timestamp = Long.parseLong( marker.getAttribute( "migrationProblem.timestamp", "0" ) );
+        final long markerId = marker.getId();
 
         final File file = new File( marker.getResource().getLocationURI() );
 
         return new TaskProblem(
             title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext,
-            resolved, timestamp );
+            resolved, markerId );
     }
 
     public static void openEditor( TaskProblem taskProblem )
@@ -155,7 +209,6 @@ public class MigrationUtil
         marker.setAttribute( IMarker.CHAR_START, taskProblem.startOffset );
         marker.setAttribute( IMarker.CHAR_END, taskProblem.endOffset );
         marker.setAttribute( "migrationProblem.resolved", taskProblem.isResolved() );
-        marker.setAttribute( "migrationProblem.timestamp", taskProblem.getTimestamp() + "" );
         marker.setAttribute( "migrationProblem.html", taskProblem.html );
         marker.setAttribute( "migrationProblem.autoCorrectContext", taskProblem.getAutoCorrectContext() );
 

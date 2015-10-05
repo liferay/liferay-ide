@@ -26,52 +26,46 @@ public class TaskProblem extends Problem
 {
 
     private boolean _resolved = false;
-    private final long _timestamp;
+    private final long _markerId;
+
 
     public TaskProblem()
     {
-        super();
-
-        _timestamp = System.currentTimeMillis();
+        _markerId = -1;
     }
 
-    public TaskProblem( Problem problem, boolean resolved )
+    public TaskProblem( Problem problem, boolean resolved, long markerId )
     {
         super( problem.title, problem.summary, problem.type, problem.ticket, problem.file,
                problem.lineNumber, problem.startOffset, problem.endOffset, problem.html, problem.autoCorrectContext );
 
         _resolved = resolved;
-        _timestamp = System.currentTimeMillis();
+        _markerId = markerId;
     }
 
     public TaskProblem(
         String title, String summary, String type, String ticket, File file, int lineNumber,
-        int startOffset, int endOffset, String html, String autoCorrectContext, boolean resolved )
+        int startOffset, int endOffset, String html, String autoCorrectContext, boolean resolved, long markerId)
     {
         super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext );
 
         _resolved = resolved;
-        _timestamp = System.currentTimeMillis();
-    }
-
-    public TaskProblem(
-        String title, String summary, String type, String ticket, File file, int lineNumber,
-        int startOffset, int endOffset, String html, String autoCorrectContext, boolean resolved, long timestamp )
-    {
-        super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext );
-
-        _resolved = resolved;
-        _timestamp = timestamp;
-    }
-
-    public long getTimestamp()
-    {
-        return _timestamp;
+        _markerId = markerId;
     }
 
     public boolean isResolved()
     {
         return _resolved;
+    }
+
+    public long getMarkerId()
+    {
+        return _markerId;
+    }
+
+    public void setResolved( boolean b )
+    {
+        _resolved = b;
     }
 
 }

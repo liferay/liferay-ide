@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
@@ -36,6 +38,7 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 public class MigrationActionProvider extends CommonActionProvider
 {
 
+    private SelectionProviderAction _autoCorrectAction;
     private SelectionProviderAction _ignoreAction;
     private SelectionProviderAction _markDoneAction;
     private SelectionProviderAction _markUndoneAction;
@@ -76,17 +79,21 @@ public class MigrationActionProvider extends CommonActionProvider
     {
         final Object selection = getFirstSelectedElement();
 
-        if( selection != null )
+        if( selection instanceof TaskProblem )
         {
-            menu.add( _openAction );
+            menu.add( new Separator() );
+            menu.add( _markDoneAction );
+            menu.add( _markUndoneAction );
+            menu.add( _ignoreAction );
 
-            if( selection instanceof TaskProblem )
+            final TaskProblem problem = (TaskProblem) selection;
+
+            if( !CoreUtil.isNullOrEmpty( problem.autoCorrectContext ) )
             {
-                menu.add( new Separator() );
-                menu.add( _markDoneAction );
-                menu.add( _markUndoneAction );
-                menu.add( _ignoreAction );
+                menu.add( _autoCorrectAction );
             }
+
+            menu.add( new Separator() );
         }
     }
 
@@ -117,9 +124,6 @@ public class MigrationActionProvider extends CommonActionProvider
             if( v instanceof CommonViewer )
             {
                 CommonViewer cv = (CommonViewer) v;
-                ICommonViewerWorkbenchSite wsSite = (ICommonViewerWorkbenchSite) viewerSite;
-
-                makeActions( wsSite.getSelectionProvider() );
 
                 addListeners( cv );
             }
@@ -133,6 +137,7 @@ public class MigrationActionProvider extends CommonActionProvider
         _markDoneAction = new MarkDoneAction( provider );
         _markUndoneAction = new MarkUndoneAction( provider );
         _ignoreAction = new IgnoreAction( provider );
+        _autoCorrectAction = new AutoCorrectAction( provider );
 
         return this;
     }
@@ -143,5 +148,6 @@ public class MigrationActionProvider extends CommonActionProvider
         provider.addSelectionChangedListener( _markDoneAction );
         provider.addSelectionChangedListener( _markUndoneAction );
         provider.addSelectionChangedListener( _ignoreAction );
+        provider.addSelectionChangedListener( _autoCorrectAction );
     }
 }
