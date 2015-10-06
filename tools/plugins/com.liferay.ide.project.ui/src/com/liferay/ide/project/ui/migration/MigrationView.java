@@ -21,6 +21,7 @@ import com.liferay.ide.ui.util.UIUtil;
 import java.net.URL;
 import java.util.List;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -83,6 +84,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     private static final Image IMAGE_UNCHECKED =
         ProjectUI.getDefault().getImageRegistry().get( ProjectUI.UNCHECKED_IMAGE_ID );
 
+    private Browser _browser;
     private FormText _form;
     private TableViewer _problemsViewer;
 
@@ -227,50 +229,54 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             mp.registerSelectionProvider( _problemsViewer );
         }
 
-        ScrolledFormText sft = new ScrolledFormText( detailParent, false );
-        sft.setExpandVertical( true );
 
-        _form = new FormText( sft, SWT.NONE );
-        sft.setFormText( _form );
-
-        _form.addHyperlinkListener( new IHyperlinkListener()
+        if( Platform.getOS().equals( Platform.OS_LINUX ) )
         {
+            ScrolledFormText sft = new ScrolledFormText( detailParent, false );
+            sft.setExpandVertical( true );
 
-            @Override
-            public void linkExited( org.eclipse.ui.forms.events.HyperlinkEvent e )
-            {
-            }
+            _form = new FormText( sft, SWT.NONE );
+            sft.setFormText( _form );
 
-            @Override
-            public void linkEntered( org.eclipse.ui.forms.events.HyperlinkEvent e )
+            _form.addHyperlinkListener( new IHyperlinkListener()
             {
-            }
-
-            @Override
-            public void linkActivated( org.eclipse.ui.forms.events.HyperlinkEvent e )
-            {
-                if( e.data instanceof String )
+                public void linkExited( org.eclipse.ui.forms.events.HyperlinkEvent e )
                 {
-                    final String url = (String) e.data;
+                }
 
-                    final TaskProblem taskProblem =
-                        MigrationUtil.getTaskProblemFromSelection( _problemsViewer.getSelection() );
+                public void linkEntered( org.eclipse.ui.forms.events.HyperlinkEvent e )
+                {
+                }
 
-                    if( "autoCorrect".equals( url ) )
+                public void linkActivated( org.eclipse.ui.forms.events.HyperlinkEvent e )
+                {
+                    if( e.data instanceof String )
                     {
-                        AutoCorrectAction.run( taskProblem, _problemsViewer );
-                    }
-                    else if( "html".equals( url ) )
-                    {
-                        displayPopupHtml( taskProblem.title, taskProblem.html );
-                    }
-                    else if( url.startsWith( "http" ) )
-                    {
-                        openBrowser( url );
+                        final String url = (String) e.data;
+
+                        final TaskProblem taskProblem =
+                            MigrationUtil.getTaskProblemFromSelection( _problemsViewer.getSelection() );
+
+                        if( "autoCorrect".equals( url ) )
+                        {
+                            AutoCorrectAction.run( taskProblem, _problemsViewer );
+                        }
+                        else if( "html".equals( url ) )
+                        {
+                            displayPopupHtml( taskProblem.title, taskProblem.html );
+                        }
+                        else if( url.startsWith( "http" ) )
+                        {
+                            openBrowser( url );
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+        else
+        {
+            _browser = new Browser( detailParent, SWT.BORDER );
+        }
 
         getCommonViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
@@ -514,11 +520,25 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         if( taskProblem != null )
         {
-            _form.setText( generateFormText( taskProblem ), true, false );
+            if( Platform.getOS().equals( Platform.OS_LINUX ) )
+            {
+                _form.setText( generateFormText( taskProblem ), true, false );
+            }
+            else
+            {
+                _browser.setText( taskProblem.html );
+            }
         }
         else
         {
-            _form.setText( "", false, false );
+            if( Platform.getOS().equals( Platform.OS_LINUX ) )
+            {
+                _form.setText( "", false, false );
+            }
+            else
+            {
+                _browser.setUrl( "about:blank" );
+            }
         }
     };
 
