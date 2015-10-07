@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -95,6 +96,30 @@ public class MigrationUtil
         return null;
     }
 
+    public static List<TaskProblem> getTaskProblemsFromSelection( ISelection selection )
+    {
+        final List<TaskProblem> problems = new ArrayList<>();
+
+        if( selection instanceof IStructuredSelection )
+        {
+            final IStructuredSelection ss = (IStructuredSelection) selection;
+
+            Iterator<?> elements = ss.iterator();
+
+            while( elements.hasNext() )
+            {
+                Object element = elements.next();
+
+                if( element instanceof TaskProblem )
+                {
+                    problems.add( (TaskProblem) element );
+                }
+            }
+        }
+
+        return problems;
+    }
+
     public static List<TaskProblem> getTaskProblemsFromResource( IResource resource )
     {
         final List<TaskProblem> problems = new ArrayList<>();
@@ -121,7 +146,7 @@ public class MigrationUtil
         return problems;
     }
 
-    public static List<TaskProblem> getTaskProblemsFromSelection( ISelection selection )
+    public static List<TaskProblem> getTaskProblemsFromTreeNode( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
         {

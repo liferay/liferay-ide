@@ -44,8 +44,12 @@ public class MarkDoneAction extends TaskProblemAction
 
         try
         {
-            marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_INFO );
-            marker.setAttribute( "migrationProblem.resolved", true );
+            if (marker.exists() )
+            {
+                marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_INFO );
+                marker.setAttribute( "migrationProblem.resolved", true );
+            }
+
             taskProblem.setResolved( true );
         }
         catch( CoreException e )

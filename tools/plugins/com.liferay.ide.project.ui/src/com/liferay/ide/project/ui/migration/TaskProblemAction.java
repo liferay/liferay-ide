@@ -18,6 +18,8 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,6 +28,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
@@ -39,6 +42,17 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
     public TaskProblemAction( ISelectionProvider provider, String text )
     {
         super( provider, text );
+    }
+
+    @Override
+    public void run()
+    {
+        final List<TaskProblem> taskProblems = MigrationUtil.getTaskProblemsFromSelection( getSelection() );
+
+        for( TaskProblem taskProblem : taskProblems )
+        {
+            run( taskProblem, getSelectionProvider() );
+        }
     }
 
     public void run( final TaskProblem taskProblem, final ISelectionProvider provider )
@@ -92,10 +106,10 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
     protected abstract IStatus runWithMarker( TaskProblem taskProblem, IMarker marker );
 
     @Override
-    public void run()
+    public void selectionChanged( IStructuredSelection selection )
     {
-        final TaskProblem taskProblem = MigrationUtil.getTaskProblemFromSelection( getSelection() );
+        Object element = selection.getFirstElement();
 
-        run( taskProblem, getSelectionProvider() );
+        setEnabled( element instanceof TaskProblem );
     }
 }

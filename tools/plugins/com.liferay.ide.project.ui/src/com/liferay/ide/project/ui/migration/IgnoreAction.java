@@ -14,35 +14,46 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import org.eclipse.jface.action.IAction;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.actions.SelectionProviderAction;
 
 
 /**
  * @author Gregory Amerson
  */
-public class IgnoreAction extends SelectionProviderAction implements IAction
+public class IgnoreAction extends TaskProblemAction
 {
+
+    public IgnoreAction()
+    {
+        this( new DummySelectionProvider() );
+    }
 
     public IgnoreAction( ISelectionProvider provider )
     {
         super( provider, "Ignore" );
     }
 
-
     @Override
-    public void run()
+    protected IStatus runWithMarker( TaskProblem taskProblem, IMarker marker )
     {
-        // TODO get the resource and remove all migration markers on view and then refresh migration view
-    }
+        IStatus retval = Status.OK_STATUS;
 
-    @Override
-    public void selectionChanged( IStructuredSelection selection )
-    {
-        Object element = selection.getFirstElement();
+        try
+        {
+            if ( marker.exists() )
+            {
+                marker.delete();
+            }
+        }
+        catch( CoreException e )
+        {
+            retval = e.getStatus();
+        }
 
-        setEnabled( element instanceof TaskProblem );
+        return retval;
     }
 }

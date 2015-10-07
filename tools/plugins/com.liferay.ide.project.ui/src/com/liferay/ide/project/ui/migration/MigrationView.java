@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -90,8 +91,8 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
     private void createColumns( final TableViewer _problemsViewer )
     {
-        final String[] titles = { "Title", "Summary", "Line", "Resolved" };
-        final int[] bounds = { 100, 100, 100, 100 };
+        final String[] titles = { "Problem", "Line", "Resolved" };
+        final int[] bounds = { 200, 100, 100 };
 
         TableViewerColumn col = createTableViewerColumn( titles[0], bounds[0], 0, _problemsViewer );
         col.setLabelProvider( new ColumnLabelProvider()
@@ -111,22 +112,11 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             {
                 TaskProblem p = (TaskProblem) element;
 
-                return p.summary;
-            }
-        });
-
-        col = createTableViewerColumn( titles[2], bounds[2], 2, _problemsViewer );
-        col.setLabelProvider( new ColumnLabelProvider()
-        {
-            public String getText( Object element )
-            {
-                TaskProblem p = (TaskProblem) element;
-
                 return p.lineNumber > -1 ? ( p.lineNumber + "" ) : "";
             }
         });
 
-        col = createTableViewerColumn( titles[3], bounds[3], 3, _problemsViewer );
+        col = createTableViewerColumn( titles[2], bounds[2], 2, _problemsViewer );
         col.setEditingSupport( new EditingSupport( _problemsViewer )
         {
             @Override
@@ -282,7 +272,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             public void selectionChanged( SelectionChangedEvent event )
             {
-                List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromSelection( event.getSelection() );
+                List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromTreeNode( event.getSelection() );
 
                 if( problems != null && problems.size() > 0 )
                 {
@@ -526,7 +516,14 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             }
             else
             {
-                _browser.setText( taskProblem.html );
+                if( CoreUtil.isNullOrEmpty( taskProblem.html ) )
+                {
+                    _browser.setText( generateFormText( taskProblem ) );
+                }
+                else
+                {
+                    _browser.setText( taskProblem.html );
+                }
             }
         }
         else
