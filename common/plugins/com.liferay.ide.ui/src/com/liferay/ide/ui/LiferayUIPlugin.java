@@ -15,6 +15,9 @@
 
 package com.liferay.ide.ui;
 
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
+
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +29,11 @@ import javax.management.ObjectName;
 
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -147,9 +154,33 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         }
 
         registerMBeans();
+
+        lookupLiferay7SDKDir();
     }
 
+    private void lookupLiferay7SDKDir()
+    {
+        final String liferay7SDKdir = System.getProperty( "liferay7.sdk.dir" );
 
+        if( liferay7SDKdir != null )
+        {
+            final SDK sdk = SDKUtil.createSDKFromLocation( new Path( liferay7SDKdir ) );
+
+            if( sdk != null )
+            {
+                new WorkspaceJob("Opening Liferay 7 Plugins SDK Project")
+                {
+                    @Override
+                    public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                    {
+                        SDKUtil.openAsProject( sdk );
+
+                        return Status.OK_STATUS;
+                    }
+                }.schedule();
+            }
+        }
+    }
 
     public Image getImage( String key )
     {
