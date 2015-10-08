@@ -17,19 +17,12 @@ package com.liferay.ide.project.ui.dialog;
 
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
-
 /**
- * A dialog for selecting a project to configure project specific settings for
- *
- * @since 1.0.0
- *
  * @author Andy Wu
  */
-public class LiferayProjectSelectionDialog extends ProjectSelectionDialog
+public class JavaProjectSelectionDialog extends ProjectSelectionDialog
 {
     /**
      * Constructor
@@ -37,28 +30,17 @@ public class LiferayProjectSelectionDialog extends ProjectSelectionDialog
      * @param parentShell
      * @param projectsWithSpecifics
      */
-    public LiferayProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
+    public JavaProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
     {
         super( parentShell , filter );
-        setTitle( Msgs.projectSelection );
-        setMessage( Msgs.selectProject );
-    }
-
-    private static class Msgs extends NLS
-    {
-        public static String projectSelection;
-        public static String selectProject;
-
-        static
-        {
-            initializeMessages( LiferayProjectSelectionDialog.class.getName(), Msgs.class );
-        }
+        setTitle( "Project Selection" );
+        setMessage( "Select project" );
     }
 
     @Override
     protected boolean checkProject( IJavaProject project )
     {
-        return ProjectUtil.isLiferayFacetedProject( project.getProject() );
+        return true;
     }
 
 }

@@ -15,16 +15,14 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.ui.util.UIUtil;
-
 import java.net.URL;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -59,6 +57,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
@@ -72,6 +71,10 @@ import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.NavigatorActionService;
 import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
+
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Gregory Amerson
@@ -214,6 +217,8 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         Menu menu = menuMgr.createContextMenu( _problemsViewer.getControl() );
         _problemsViewer.getControl().setMenu( menu );
         getSite().registerContextMenu( menuMgr, _problemsViewer );
+
+        contributeToActionBars();
 
         _problemsViewer.addDoubleClickListener( this );
         CommonActionProvider ap = getCommonActionProvider( new StructuredSelection( new TaskProblem() ) );
@@ -371,6 +376,14 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         });
 
         shell.open();
+    }
+
+    private void contributeToActionBars()
+    {
+        IAction migrateAction = new MigrationViewAction( "Run Migration Tool" , getViewSite().getShell() );
+        IActionBars bars = getViewSite().getActionBars();
+        IToolBarManager manager = bars.getToolBarManager();
+        manager.add( migrateAction );
     }
 
     private TableViewerColumn createTableViewerColumn(
