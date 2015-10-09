@@ -98,7 +98,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         final String[] titles = { "Problem", "Line", "Resolved" };
         final int[] bounds = { 200, 100, 100 };
 
-        TableViewerColumn col = createTableViewerColumn( titles[0], bounds[0], 0, _problemsViewer );
+        TableViewerColumn col = createTableViewerColumn( titles[0], bounds[0], _problemsViewer );
         col.setLabelProvider( new ColumnLabelProvider()
         {
             public String getText( Object element )
@@ -109,7 +109,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             }
         });
 
-        col = createTableViewerColumn( titles[1], bounds[1], 1, _problemsViewer );
+        col = createTableViewerColumn( titles[1], bounds[1], _problemsViewer );
         col.setLabelProvider( new ColumnLabelProvider()
         {
             public String getText( Object element )
@@ -120,7 +120,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             }
         });
 
-        col = createTableViewerColumn( titles[2], bounds[2], 2, _problemsViewer );
+        col = createTableViewerColumn( titles[2], bounds[2], _problemsViewer );
         col.setEditingSupport( new EditingSupport( _problemsViewer )
         {
             @Override
@@ -374,7 +374,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     }
 
     private TableViewerColumn createTableViewerColumn(
-        String title, int bound, final int colNumber, TableViewer viewer )
+        String title, int bound, TableViewer viewer )
     {
         final TableViewerColumn viewerColumn = new TableViewerColumn( viewer, SWT.NONE );
         final TableColumn column = viewerColumn.getColumn();
