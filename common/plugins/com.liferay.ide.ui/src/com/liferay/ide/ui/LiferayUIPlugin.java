@@ -160,7 +160,18 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
 
     private void lookupLiferay7SDKDir()
     {
-        final String liferay7SDKdir = System.getProperty( "liferay7.sdk.dir" );
+        String liferay7SDKdir = System.getProperty( "liferay7.sdk.dir" );
+
+        if( liferay7SDKdir != null && liferay7SDKdir.startsWith( "\"" ) )
+        {
+            liferay7SDKdir = liferay7SDKdir.substring( 1 );
+        }
+
+        if( liferay7SDKdir != null && liferay7SDKdir.endsWith( "\"" ) )
+        {
+            liferay7SDKdir = liferay7SDKdir.substring( 0, liferay7SDKdir.length() - 1 );
+        }
+
 
         if( liferay7SDKdir != null )
         {
