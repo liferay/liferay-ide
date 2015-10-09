@@ -387,24 +387,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         return viewerColumn;
     }
 
-    private SelectionAdapter getSelectionAdapter( final TableColumn column, final int index )
-    {
-        SelectionAdapter selectionAdapter = new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                _comparator.setColumn( index );
-                int dir = _comparator.getDirection();
-                _problemsViewer.getTable().setSortDirection( dir );
-                _problemsViewer.getTable().setSortColumn( column );
-                _problemsViewer.refresh();
-            }
-        };
-        return selectionAdapter;
-    }
-
     @Override
     public void doubleClick( DoubleClickEvent event )
     {
@@ -490,6 +472,21 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         }
 
         return sb.toString();
+    }
+
+    private SelectionAdapter getSelectionAdapter( final TableColumn column, final int index )
+    {
+        return new SelectionAdapter()
+        {
+            public void widgetSelected( SelectionEvent e )
+            {
+                _comparator.setColumn( index );
+                int dir = _comparator.getDirection();
+                _problemsViewer.getTable().setSortDirection( dir );
+                _problemsViewer.getTable().setSortColumn( column );
+                _problemsViewer.refresh();
+            }
+        };
     }
 
     private void openBrowser( final String url )
