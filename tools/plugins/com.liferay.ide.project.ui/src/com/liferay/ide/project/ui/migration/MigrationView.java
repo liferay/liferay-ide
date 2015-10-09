@@ -382,7 +382,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         column.setWidth( bound );
         column.setResizable( true );
         column.setMoveable( true );
-        column.addSelectionListener( getSelectionAdapter( column, colNumber ) );
+        column.addSelectionListener( getSelectionAdapter( column, viewer.getTable().indexOf( column ) ) );
 
         return viewerColumn;
     }

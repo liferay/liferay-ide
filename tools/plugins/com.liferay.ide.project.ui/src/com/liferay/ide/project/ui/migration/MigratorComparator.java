@@ -67,10 +67,6 @@ public class MigratorComparator extends ViewerComparator
                 break;
 
             case 1:
-                flag = t1.getSummary().compareTo( t2.getSummary() );
-                break;
-
-            case 2:
                 if( t1.getLineNumber() == t2.getLineNumber() )
                 {
                     flag = 0;
@@ -79,6 +75,10 @@ public class MigratorComparator extends ViewerComparator
                 {
                     flag = t1.getLineNumber() > t2.getLineNumber() ? 1 : -1;
                 }
+                break;
+
+            case 2:
+                flag = t1.isResolved() == true ? 1 : -1;
                 break;
 
             default:
