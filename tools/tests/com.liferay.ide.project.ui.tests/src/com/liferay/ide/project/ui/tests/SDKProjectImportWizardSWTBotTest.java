@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.tests;
 
+import static org.eclipse.swtbot.swt.finder.waits.Conditions.shellIsActive;
 import static org.eclipse.swtbot.swt.finder.waits.Conditions.widgetIsEnabled;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -39,10 +40,39 @@ import org.junit.runner.RunWith;
  * @author Li Lu
  */
 @RunWith( SWTBotJunit4ClassRunner.class )
-public class SDKProjectImportWizardSWTBotTest extends SDKProjectImportWizardSWTBot
+public class SDKProjectImportWizardSWTBotTest extends SWTBotTestBase
 {
 
     private static IPath sdkLocation;
+
+    @AfterClass
+	public static void cleanUp()
+	{
+		try
+		{
+			deleteAllWorkspaceProjects();
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public static void openWizard()
+    {
+        bot.menu( "File" ).setFocus();
+        bot.menu( "File" ).click();
+        bot.menu( "Import..." ).click();
+
+        bot.tree().getTreeItem( "Liferay" ).select();
+        bot.tree().getTreeItem( "Liferay" ).expand();
+        bot.tree().getTreeItem( "Liferay" ).getNode( "Liferay Project From Existing Source" ).select();
+
+        bot.button( "Next >" ).click();
+
+        ICondition condition = shellIsActive( "Import Project" );
+        bot.waitUntil( condition, 5000 );
+    }
 
     @After
     public void after()
@@ -57,19 +87,6 @@ public class SDKProjectImportWizardSWTBotTest extends SDKProjectImportWizardSWTB
         }
     }
 
-	@AfterClass
-	public static void cleanUp() {
-
-		try
-		{
-			deleteAllWorkspaceProjects();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
-
     public void importSDKProject( String path, String projectName ) throws Exception
     {
         if( sdkLocation == null )
@@ -79,7 +96,36 @@ public class SDKProjectImportWizardSWTBotTest extends SDKProjectImportWizardSWTB
 
         path = sdkLocation.append( path ).toOSString();
 
-        super.importSDKProject( path, projectName );
+        final File projectZipFile = getProjectZip( BUNDLE_ID, projectName );
+
+        ZipUtil.unzip( projectZipFile, new File( path ) );
+
+        openWizard();
+
+        bot.text( 0 ).setText( path + "/" + projectName );
+
+        bot.sleep( 500 );
+
+        String FILE_SEPARATOR = System.getProperty( "file.separator" );
+        String[] sdkPath = path.split( "\\" + FILE_SEPARATOR );
+
+        String projectFolder = sdkPath[sdkPath.length - 1];
+
+        String pluginType = projectFolder.endsWith( "s" )
+            ? projectFolder.substring( 0, projectFolder.lastIndexOf( 's' ) ) : projectFolder;
+
+        assertTrue( bot.text( pluginType ).isVisible() );
+        assertEquals( pluginType, bot.text( pluginType ).getText() );
+
+        assertEquals( pluginType, bot.text( 1 ).getText() );
+
+        assertEquals( "6.2.0", bot.text( 2 ).getText() );
+
+        assertTrue( bot.button( "Finish" ).isEnabled() );
+        bot.button( "Finish" ).click();
+
+        ICondition condition = widgetIsEnabled( bot.tree().getTreeItem( projectName ) );
+        bot.waitUntil( condition, 5000 );
     }
 
     @Test
@@ -109,7 +155,18 @@ public class SDKProjectImportWizardSWTBotTest extends SDKProjectImportWizardSWTB
     }
 
     @Test
-    public void testValidation() throws Exception
+    public void testPluginType() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        importSDKProject( "hooks", "Import-223-hook" );
+        importSDKProject( "themes", "Import-223-theme" );
+        importSDKProject( "ext", "Import-223-ext" );
+        importSDKProject( "layouttpl", "Import-223-layouttpl" );
+    }
+
+    @Test
+    public void testValidationProjectPath() throws Exception
     {
         if( shouldSkipBundleTests() )return;
 
@@ -130,10 +187,13 @@ public class SDKProjectImportWizardSWTBotTest extends SDKProjectImportWizardSWTB
         assertEquals( " Project isn't exist at \"" + "C:\\AAA" + "\"", bot.text( 3 ).getText() );
         assertFalse( bot.button( "Finish" ).isEnabled() );
 
-        bot.button( "Cancel" ).click();
+    }
 
+    @Test
+    public void testValidationProjectLocation() throws Exception
+    {
         // import project outside of SDK
-        final File projectZipFile = getProjectZip( bundleId, "Import-223-portlet" );
+        final File projectZipFile = getProjectZip( BUNDLE_ID, "Import-223-portlet" );
 
         SDK sdk = SDKUtil.getWorkspaceSDK();
         ZipUtil.unzip( projectZipFile, sdk.getLocation().removeLastSegments( 2 ).toFile() );
@@ -145,12 +205,14 @@ public class SDKProjectImportWizardSWTBotTest extends SDKProjectImportWizardSWTB
         bot.text( 0 ).setText( projectCopyDir );
 
         bot.sleep( 1000 );
-        
+
         assertTrue( bot.text( 3 ).getText().startsWith( " Could not determine SDK from project location" ) );
         assertFalse( bot.button( "Finish" ).isEnabled() );
+    }
 
-        bot.button( "Cancel" ).click();
-
+    @Test
+    public void testValidationNoSDK() throws Exception
+    {
         // test import project when no sdk in wrokspace
         sdkLocation = SDKUtil.getWorkspaceSDKProject().getRawLocation();
 
@@ -173,18 +235,5 @@ public class SDKProjectImportWizardSWTBotTest extends SDKProjectImportWizardSWTB
         bot.sleep( 1000 );
         assertEquals( " Project name already exists.", bot.text( 3 ).getText() );
         assertFalse( bot.button( "Finish" ).isEnabled() );
-
-        bot.button( "Cancel" ).click();
-    }
-
-    @Test
-    public void testPluginType() throws Exception
-    {
-        if( shouldSkipBundleTests() )return;
-
-        importSDKProject( "hooks", "Import-223-hook" );
-        importSDKProject( "themes", "Import-223-theme" );
-        importSDKProject( "ext", "Import-223-ext" );
-        importSDKProject( "layouttpl", "Import-223-layouttpl" );
     }
 }

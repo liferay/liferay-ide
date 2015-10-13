@@ -25,9 +25,8 @@ import com.liferay.ide.project.core.tests.ProjectCoreBase;
  */
 public class SWTBotTestBase extends ProjectCoreBase
 {
-
-    protected static String bundleId = "com.liferay.ide.project.ui.tests";
-    protected static SWTWorkbenchBot bot = new SWTWorkbenchBot();
+    public static final String BUNDLE_ID = "com.liferay.ide.project.ui.tests";
+    protected static final SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
     @BeforeClass
     public static void closeWelcomeSwitchToLiferay()
