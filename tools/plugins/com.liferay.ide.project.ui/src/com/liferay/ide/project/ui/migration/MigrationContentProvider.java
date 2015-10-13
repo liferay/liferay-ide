@@ -79,6 +79,7 @@ public class MigrationContentProvider implements ITreeContentProvider
                 for( MPNode child : node.childs )
                 {
                     final MPNode collapsedNode = tryToCollapseNodes( child );
+
                     if( collapsedNode != null )
                     {
                         children.add( collapsedNode );
