@@ -59,12 +59,13 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
         {
             if( element instanceof IJavaModel )
             {
-                IJavaModel model = (IJavaModel) element;
-                Set<IJavaProject> set = new HashSet<IJavaProject>();
+                final IJavaModel model = (IJavaModel) element;
+                final Set<IJavaProject> set = new HashSet<IJavaProject>();
 
                 try
                 {
-                    IJavaProject[] projects = model.getJavaProjects();
+                    final IJavaProject[] projects = model.getJavaProjects();
+
                     for( int i = 0; i < projects.length; i++ )
                     {
                         if( checkProject(projects[i]) )
@@ -85,17 +86,17 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
         }
     }
 
-    // the visual selection widget group
-    private TableViewer fTableViewer;
-
     // sizing constants
     private final static int SIZING_SELECTION_WIDGET_HEIGHT = 250;
-    private final static int SIZING_SELECTION_WIDGET_WIDTH = 300;
 
+    private final static int SIZING_SELECTION_WIDGET_WIDTH = 300;
     /**
      * The filter for the viewer
      */
     private ViewerFilter fFilter;
+
+    // the visual selection widget group
+    private TableViewer fTableViewer;
 
     /**
      * Constructor
@@ -108,6 +109,16 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
         super( parentShell );
 
         fFilter = filter;
+    }
+
+    protected abstract boolean checkProject(IJavaProject project);
+
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.ui.dialogs.SelectionStatusDialog#computeResult()
+     */
+    protected void computeResult()
+    {
     }
 
     /*
@@ -126,21 +137,19 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
         fTableViewer = new TableViewer( composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
         fTableViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
-
             public void selectionChanged( SelectionChangedEvent event )
             {
                 doSelectionChanged( ( (IStructuredSelection) event.getSelection() ).toArray() );
             }
-        } );
+        });
 
         fTableViewer.addDoubleClickListener( new IDoubleClickListener()
         {
-
             public void doubleClick( DoubleClickEvent event )
             {
                 okPressed();
             }
-        } );
+        });
 
         GridData data = new GridData( SWT.FILL, SWT.FILL, true, true );
         data.heightHint = SIZING_SELECTION_WIDGET_HEIGHT;
@@ -182,6 +191,11 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
         }
     }
 
+    protected IContentProvider getContentProvider()
+    {
+        return new JavaProjectProvider();
+    }
+
     /**
      * Updates the viewer filter based on the selection of the 'show project with...' button
      *
@@ -203,20 +217,5 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
             fTableViewer.removeFilter( fFilter );
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * @see org.eclipse.ui.dialogs.SelectionStatusDialog#computeResult()
-     */
-    protected void computeResult()
-    {
-    }
-
-    protected IContentProvider getContentProvider()
-    {
-        return new JavaProjectProvider();
-    }
-
-    protected abstract boolean checkProject(IJavaProject project);
 
 }

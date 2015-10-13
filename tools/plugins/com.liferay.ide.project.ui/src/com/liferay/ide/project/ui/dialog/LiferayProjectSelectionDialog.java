@@ -25,8 +25,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 /**
  * A dialog for selecting a project to configure project specific settings for
  *
- * @since 1.0.0
- *
  * @author Andy Wu
  */
 public class LiferayProjectSelectionDialog extends ProjectSelectionDialog
@@ -40,6 +38,7 @@ public class LiferayProjectSelectionDialog extends ProjectSelectionDialog
     public LiferayProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
     {
         super( parentShell , filter );
+
         setTitle( Msgs.projectSelection );
         setMessage( Msgs.selectProject );
     }

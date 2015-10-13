@@ -33,6 +33,7 @@ public class JavaProjectSelectionDialog extends ProjectSelectionDialog
     public JavaProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
     {
         super( parentShell , filter );
+
         setTitle( "Project Selection" );
         setMessage( "Select project" );
     }
