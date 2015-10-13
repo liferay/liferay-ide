@@ -14,32 +14,28 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import java.util.List;
+import java.util.HashMap;
 
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.expressions.EvaluationContext;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
-
-import blade.migrate.api.Migration;
-import blade.migrate.api.Problem;
-import blade.migrate.api.ProgressMonitor;
+import org.eclipse.ui.commands.ICommandService;
 
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
@@ -88,89 +84,32 @@ public class MigrationViewAction extends Action
         JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog( shell , filter );
         dialog.create();
 
-        if (dialog.open() == Window.OK)
+        if( dialog.open() == Window.OK )
         {
             Object[] selectedProjects = dialog.getResult();
-            if( selectedProjects!=null ){
-                IJavaProject javaProject = (IJavaProject) selectedProjects[0];
-                migration(javaProject.getProject().getLocation());
-            }
-        }
-    }
 
-    public static void migration(final IPath location)
-    {
-        Job job = new WorkspaceJob( "Finding migration problems..." )
-        {
-            @Override
-            public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
+            if( selectedProjects != null )
             {
-                IStatus retval = Status.OK_STATUS;
-
-                final BundleContext context =
-                    FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
-
-                ProgressMonitor override = new ProgressMonitor()
-                {
-                    @Override
-                    public void worked( int work )
-                    {
-                        monitor.worked( work );
-                    }
-
-                    @Override
-                    public void setTaskName( String taskName )
-                    {
-                        monitor.setTaskName( taskName );
-                    }
-
-                    @Override
-                    public boolean isCanceled()
-                    {
-                        return monitor.isCanceled();
-                    }
-
-                    @Override
-                    public void done()
-                    {
-                        monitor.done();
-                    }
-
-                    @Override
-                    public void beginTask( String taskName, int totalWork )
-                    {
-                        monitor.beginTask( taskName, totalWork );
-                    }
-                };
+                IJavaProject javaProject = (IJavaProject) selectedProjects[0];
+                ICommandService cs = (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
 
                 try
                 {
-                    final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
-                    final Migration m = context.getService( sr );
+                    IEvaluationContext evaluationContext = new EvaluationContext( null, null );
+                    ISelection selection = new StructuredSelection( javaProject.getProject() );
 
-                    final List<Problem> problems = m.findProblems( location.toFile(), override );
+                    evaluationContext.addVariable( ISources.ACTIVE_CURRENT_SELECTION_NAME, selection );
 
-                    m.reportProblems( problems, Migration.DETAIL_LONG, "ide" );
+                    ExecutionEvent executionEvent = new ExecutionEvent( null, new HashMap(), null, evaluationContext );
+
+                    cs.getCommand( "com.liferay.ide.project.ui.migrateProject" ).executeWithChecks( executionEvent );
                 }
-                catch( Exception e )
+                catch( ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e )
                 {
-                    retval = ProjectUI.createErrorStatus( "Error in migrate command", e );
+                    ProjectUI.createErrorStatus( "Error in migrate command", e );
                 }
-
-                return retval;
             }
-        };
-
-        try
-        {
-            PlatformUI.getWorkbench().getProgressService().showInDialog(
-                Display.getDefault().getActiveShell(), job );
         }
-        catch( Exception e )
-        {
-        }
-
-        job.schedule();
     }
 
 }
