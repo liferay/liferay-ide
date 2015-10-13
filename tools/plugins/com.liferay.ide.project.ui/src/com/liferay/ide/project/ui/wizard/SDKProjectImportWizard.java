@@ -18,8 +18,10 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.SDKProjectImportOp;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
@@ -38,16 +40,28 @@ public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
 
     private String title;
 
-
     public SDKProjectImportWizard(final String newTitle)
     {
         super( createDefaultOp(), DefinitionLoader.sdef( SDKProjectImportWizard.class ).wizard() );
         this.title = newTitle;
     }
 
+    public SDKProjectImportWizard(final IPath projectLocation)
+    {
+        super( createDefaultOp(projectLocation), DefinitionLoader.sdef( SDKProjectImportWizard.class ).wizard() );
+    }
+
     public SDKProjectImportWizard()
     {
         super( createDefaultOp(), DefinitionLoader.sdef( SDKProjectImportWizard.class ).wizard() );
+    }
+
+
+    private static SDKProjectImportOp createDefaultOp( final IPath projectLocation )
+    {
+        SDKProjectImportOp op = SDKProjectImportOp.TYPE.instantiate();
+        op.setLocation( PathBridge.create( projectLocation ) );
+        return op;
     }
 
     private static SDKProjectImportOp createDefaultOp()

@@ -303,7 +303,7 @@
             id="com.liferay.ide.project.ui.existingLiferayProject"
             objectClass="org.eclipse.core.resources.IFolder">
          <action
-               class="com.liferay.ide.project.ui.action.ImportLiferayProjectAction"
+               class="com.liferay.ide.project.ui.action.ImportSDKProjectAction"
                enablesFor="1"
                icon="icons/e16/import.png"
                id="com.liferay.ide.project.ui.import.liferay.project"
