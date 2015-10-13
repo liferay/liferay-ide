@@ -71,11 +71,23 @@ public class MigrationContentProvider implements ITreeContentProvider
             {
                 return new Object[] { CoreUtil.getWorkspace().getRoot().getFile( new Path( node.incrementalPath ) ) };
             }
+
             else
             {
                 final List<Object> children = new ArrayList<>();
 
-                children.addAll( node.childs );
+                for( MPNode child : node.childs )
+                {
+                    final MPNode collapsedNode = tryToCollapseNodes( child );
+                    if( collapsedNode != null )
+                    {
+                        children.add( collapsedNode );
+                    }
+                    else
+                    {
+                        children.add( child );
+                    }
+                }
 
                 for( MPNode leaf : node.leafs )
                 {
@@ -84,6 +96,30 @@ public class MigrationContentProvider implements ITreeContentProvider
 
                 return children.toArray();
             }
+
+        }
+
+        return null;
+    }
+
+    private MPNode tryToCollapseNodes( MPNode node )
+    {
+        MPNode collapsedNode = node;
+
+        while( collapsedNode.childs.size() == 1 && collapsedNode.leafs.size() == 0 )
+        {
+            collapsedNode = collapsedNode.childs.get( 0 );
+        }
+
+        if( !collapsedNode.equals(node) )
+        {
+            String data =
+                node.data +
+                    collapsedNode.incrementalPath.substring(
+                        node.incrementalPath.length(), collapsedNode.incrementalPath.length() );
+            collapsedNode.data = data;
+
+            return collapsedNode;
         }
 
         return null;
