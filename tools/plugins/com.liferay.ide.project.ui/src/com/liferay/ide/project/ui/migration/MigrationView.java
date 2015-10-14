@@ -232,7 +232,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         }
 
 
-        if( Platform.getOS().equals( Platform.OS_LINUX ) )
+        /*if( Platform.getOS().equals( Platform.OS_LINUX ) )
         {
             ScrolledFormText sft = new ScrolledFormText( detailParent, false );
             sft.setExpandVertical( true );
@@ -276,9 +276,9 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             });
         }
         else
-        {
+        {*/
             _browser = new Browser( detailParent, SWT.BORDER );
-        }
+        //}
 
         getCommonViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
@@ -549,12 +549,12 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         if( taskProblem != null )
         {
-            if( Platform.getOS().equals( Platform.OS_LINUX ) )
+        /*if( Platform.getOS().equals( Platform.OS_LINUX ) )
             {
                 _form.setText( generateFormText( taskProblem ), true, false );
             }
             else
-            {
+            {*/
                 if( CoreUtil.isNullOrEmpty( taskProblem.html ) )
                 {
                     _browser.setText( generateFormText( taskProblem ) );
@@ -563,18 +563,18 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                 {
                     _browser.setText( taskProblem.html );
                 }
-            }
+            //}
         }
         else
         {
-            if( Platform.getOS().equals( Platform.OS_LINUX ) )
+           /* if( Platform.getOS().equals( Platform.OS_LINUX ) )
             {
                 _form.setText( "", false, false );
             }
             else
-            {
+            {*/
                 _browser.setUrl( "about:blank" );
-            }
+            //}
         }
     };
 
