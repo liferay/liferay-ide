@@ -397,7 +397,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         final IActionBars bars = getViewSite().getActionBars();
         final IToolBarManager manager = bars.getToolBarManager();
 
-        final IAction migrateAction = new MigrationViewAction( "Run Migration Tool" , getViewSite().getShell() );
+        final IAction migrateAction = new RunMigrationToolAction( "Run Migration Tool" , getViewSite().getShell() );
         manager.add( migrateAction );
     }
 

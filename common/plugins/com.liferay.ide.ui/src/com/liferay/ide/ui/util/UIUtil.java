@@ -20,7 +20,16 @@ import com.liferay.ide.ui.LiferayUIPlugin;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.expressions.EvaluationContext;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,17 +37,21 @@ import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
@@ -150,6 +163,24 @@ public class UIUtil
         return result == IDialogConstants.YES_ID;
     }
 
+    public static void executeCommand( final String commandId, final ISelection selection )
+        throws ExecutionException, NotDefinedException, NotEnabledException, NotHandledException
+    {
+        final IEvaluationContext evaluationContext = new EvaluationContext( null, Collections.EMPTY_LIST );
+        evaluationContext.addVariable( ISources.ACTIVE_CURRENT_SELECTION_NAME, selection );
+
+        final ICommandService commandService =
+            (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
+
+        final Command migrate = commandService.getCommand( commandId );
+
+        final IHandlerService handlerService =
+            (IHandlerService) PlatformUI.getWorkbench().getService( IHandlerService.class );
+
+        handlerService.executeCommandInContext(
+            ParameterizedCommand.generateCommand( migrate, null ), null, evaluationContext );
+    }
+
     public static IWorkbenchPage getActivePage()
     {
         return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -252,30 +283,6 @@ public class UIUtil
         return retval[0];
     }
 
-    public static void refreshContent( ICommonContentExtensionSite site, final Object elementOrTreePath )
-    {
-        final NavigatorContentService s = (NavigatorContentService) site.getService();
-
-        sync
-        (
-            new Runnable()
-            {
-                public void run()
-                {
-                    try
-                    {
-                        final CommonViewer viewer = (CommonViewer) s.getViewer();
-                        viewer.refresh( true );
-                        viewer.setExpandedState( elementOrTreePath, true );
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                }
-            }
-        );
-    }
-
     public static void refreshCommonView( final String viewId )
     {
         try
@@ -298,6 +305,30 @@ public class UIUtil
         {
             LiferayUIPlugin.logError( "Unable to refresh view " + viewId, e );
         }
+    }
+
+    public static void refreshContent( ICommonContentExtensionSite site, final Object elementOrTreePath )
+    {
+        final NavigatorContentService s = (NavigatorContentService) site.getService();
+
+        sync
+        (
+            new Runnable()
+            {
+                public void run()
+                {
+                    try
+                    {
+                        final CommonViewer viewer = (CommonViewer) s.getViewer();
+                        viewer.refresh( true );
+                        viewer.setExpandedState( elementOrTreePath, true );
+                    }
+                    catch (Exception e)
+                    {
+                    }
+                }
+            }
+        );
     }
 
     private static void replaceCurrentPerspective( IPerspectiveDescriptor persp )
