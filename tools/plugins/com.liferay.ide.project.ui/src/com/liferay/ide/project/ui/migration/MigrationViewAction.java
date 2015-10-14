@@ -42,14 +42,13 @@ import org.eclipse.ui.commands.ICommandService;
  */
 public class MigrationViewAction extends Action
 {
-
     private Shell shell ;
 
-    protected MigrationViewAction( String text ,Shell shell)
+    public MigrationViewAction( String text, Shell shell )
     {
         super( text );
-        setImageDescriptor( ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry(
-            "/icons/e16/liferay.png" ) ) );
+        setImageDescriptor(
+            ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry( "/icons/e16/liferay.png" ) ) );
         this.shell = shell;
     }
 
@@ -60,23 +59,25 @@ public class MigrationViewAction extends Action
 
         if( dialog.open() == Window.OK )
         {
-            Object[] selectedProjects = dialog.getResult();
+            final Object[] selectedProjects = dialog.getResult();
 
             if( selectedProjects != null )
             {
-                IJavaProject javaProject = (IJavaProject) selectedProjects[0];
-                ICommandService cs = (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
+                final IJavaProject javaProject = (IJavaProject) selectedProjects[0];
+                final ICommandService commandService = PlatformUI.getWorkbench().getService( ICommandService.class );
 
                 try
                 {
-                    IEvaluationContext evaluationContext = new EvaluationContext( null, null );
-                    ISelection selection = new StructuredSelection( javaProject.getProject() );
+                    final IEvaluationContext evaluationContext = new EvaluationContext( null, null );
+                    final ISelection selection = new StructuredSelection( javaProject.getProject() );
 
                     evaluationContext.addVariable( ISources.ACTIVE_CURRENT_SELECTION_NAME, selection );
 
-                    ExecutionEvent executionEvent = new ExecutionEvent( null, new HashMap(), null, evaluationContext );
+                    final ExecutionEvent executionEvent =
+                        new ExecutionEvent( null, new HashMap<String, String>(), null, evaluationContext );
 
-                    cs.getCommand( "com.liferay.ide.project.ui.migrateProject" ).executeWithChecks( executionEvent );
+                    commandService.getCommand( "com.liferay.ide.project.ui.migrateProject" ).executeWithChecks(
+                        executionEvent );
                 }
                 catch( ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e )
                 {

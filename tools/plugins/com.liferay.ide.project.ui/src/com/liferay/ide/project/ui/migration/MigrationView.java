@@ -378,14 +378,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         shell.open();
     }
 
-    private void contributeToActionBars()
-    {
-        IAction migrateAction = new MigrationViewAction( "Run Migration Tool" , getViewSite().getShell() );
-        IActionBars bars = getViewSite().getActionBars();
-        IToolBarManager manager = bars.getToolBarManager();
-        manager.add( migrateAction );
-    }
-
     private TableViewerColumn createTableViewerColumn(
         String title, int bound, TableViewer viewer )
     {
@@ -398,6 +390,15 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         column.addSelectionListener( getSelectionAdapter( column, viewer.getTable().indexOf( column ) ) );
 
         return viewerColumn;
+    }
+
+    private void contributeToActionBars()
+    {
+        final IActionBars bars = getViewSite().getActionBars();
+        final IToolBarManager manager = bars.getToolBarManager();
+
+        final IAction migrateAction = new MigrationViewAction( "Run Migration Tool" , getViewSite().getShell() );
+        manager.add( migrateAction );
     }
 
     @Override
