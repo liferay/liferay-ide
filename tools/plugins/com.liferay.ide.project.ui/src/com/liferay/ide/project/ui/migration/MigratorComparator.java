@@ -31,7 +31,7 @@ public class MigratorComparator extends ViewerComparator
 
     public MigratorComparator()
     {
-        this.columnIndex = 0;
+        this.columnIndex = 1;
         direction = DESCENDING;
     }
 
@@ -85,7 +85,7 @@ public class MigratorComparator extends ViewerComparator
                 flag = 0;
         }
 
-        if( direction == DESCENDING )
+        if( direction != DESCENDING )
         {
             flag = -flag;
         }
