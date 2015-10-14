@@ -42,6 +42,7 @@ public class ProjectUI extends AbstractUIPlugin
     public static final String CHECKED_IMAGE_ID = "checked.image"; //$NON-NLS-1$
     public static final String MIGRATION_TASKS_IMAGE_ID = "migration.tasks.image"; //$NON-NLS-1$
     public static final String UNCHECKED_IMAGE_ID = "unchecked.image"; //$NON-NLS-1$
+    public static final String EXPANDALL_IMAGE_ID = "expandall.image"; //$NON-NLS-1$
 
     public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location"; //$NON-NLS-1$
 
@@ -159,6 +160,11 @@ public class ProjectUI extends AbstractUIPlugin
         URL migrationtasksurl = FileLocator.find( bundle, migrationtasks, null );
         ImageDescriptor migrationtasksdesc = ImageDescriptor.createFromURL( migrationtasksurl );
         registry.put( MIGRATION_TASKS_IMAGE_ID, migrationtasksdesc );
+
+        IPath expandall = new Path( "icons/e16/expandall.gif" ); //$NON-NLS-1$
+        URL expandallurl = FileLocator.find( bundle, expandall, null );
+        ImageDescriptor expandalldesc = ImageDescriptor.createFromURL( expandallurl );
+        registry.put( EXPANDALL_IMAGE_ID, expandalldesc );
     }
 
     /*
