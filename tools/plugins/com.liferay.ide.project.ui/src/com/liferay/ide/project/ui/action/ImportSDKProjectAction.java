@@ -59,14 +59,7 @@ public class ImportSDKProjectAction implements IObjectActionDelegate
 
             final WizardDialog dialog = new WizardDialog( Display.getDefault().getActiveShell(), wizard );
 
-            Display.getDefault().asyncExec( new Runnable()
-            {
-            	@Override
-                public void run()
-                {
-                    dialog.open();
-                }
-            });
+            dialog.open();
        }
     }
 
@@ -76,7 +69,7 @@ public class ImportSDKProjectAction implements IObjectActionDelegate
         fSelection = selection;
     }
 
-    @Override	
+    @Override
     public void setActivePart( IAction action, IWorkbenchPart targetPart )
     {
     }
