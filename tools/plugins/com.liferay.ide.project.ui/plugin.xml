@@ -1228,6 +1228,10 @@
                id="com.liferay.ide.project.ui.migration.MigrationActionProvider"
                priority="highest">
          </actionProvider>
+         <commonSorter
+               class="com.liferay.ide.project.ui.migration.MigrationViewSorter"
+               id="com.liferay.ide.project.ui.migration.MigrationViewSorter">
+         </commonSorter>
       </navigatorContent>
    </extension>
    <extension
