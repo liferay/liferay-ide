@@ -33,11 +33,9 @@ import org.eclipse.ui.IWorkbenchWizard;
 /**
  * @author Simon Jiang
  */
-
 public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
     implements IWorkbenchWizard, INewWizard
 {
-
     private String title;
 
     public SDKProjectImportWizard(final String newTitle)
@@ -56,11 +54,11 @@ public class SDKProjectImportWizard extends SapphireWizard<SDKProjectImportOp>
         super( createDefaultOp(), DefinitionLoader.sdef( SDKProjectImportWizard.class ).wizard() );
     }
 
-
     private static SDKProjectImportOp createDefaultOp( final IPath projectLocation )
     {
-        SDKProjectImportOp op = SDKProjectImportOp.TYPE.instantiate();
+        final SDKProjectImportOp op = SDKProjectImportOp.TYPE.instantiate();
         op.setLocation( PathBridge.create( projectLocation ) );
+
         return op;
     }
 
