@@ -14,6 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
+
 import java.util.HashMap;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -23,22 +26,16 @@ import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.expressions.IEvaluationContext;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
-
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 
 /**
  * @author Andy Wu
@@ -59,30 +56,7 @@ public class MigrationViewAction extends Action
     @Override
     public void run()
     {
-        ViewerFilter filter = new ViewerFilter()
-        {
-
-            @Override
-            public boolean select( Viewer viewer, Object parentElement, Object element )
-            {
-                if( element instanceof IJavaProject )
-                {
-                    IProject project = ( (IJavaProject) element ).getProject();
-
-                    if( project.getName().equals( "External Plug-in Libraries" ) )
-                    {
-                        return false;
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
-        };
-
-        JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog( shell , filter );
-        dialog.create();
+        final JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog( shell );
 
         if( dialog.open() == Window.OK )
         {

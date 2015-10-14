@@ -15,7 +15,9 @@
 
 package com.liferay.ide.project.ui.dialog;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Shell;
 
@@ -24,12 +26,35 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class JavaProjectSelectionDialog extends ProjectSelectionDialog
 {
-    /**
-     * Constructor
-     *
-     * @param parentShell
-     * @param projectsWithSpecifics
-     */
+    static final ViewerFilter defaultFilter = new ViewerFilter()
+    {
+        @Override
+        public boolean select( Viewer viewer, Object parentElement, Object element )
+        {
+            if( element instanceof IJavaProject )
+            {
+                IProject project = ( (IJavaProject) element ).getProject();
+
+                if( project.getName().equals( "External Plug-in Libraries" ) )
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+    };
+
+    public JavaProjectSelectionDialog( Shell parentShell )
+    {
+        super( parentShell, defaultFilter );
+
+        setTitle( "Project Selection" );
+        setMessage( "Select project" );
+    }
+
     public JavaProjectSelectionDialog( Shell parentShell, ViewerFilter filter )
     {
         super( parentShell , filter );
