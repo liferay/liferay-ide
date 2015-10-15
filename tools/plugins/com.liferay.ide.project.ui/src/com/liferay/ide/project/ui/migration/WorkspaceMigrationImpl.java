@@ -43,6 +43,8 @@ public class WorkspaceMigrationImpl implements MigrationListener
     {
         final IWorkspaceRoot ws = ResourcesPlugin.getWorkspace().getRoot();
 
+        clearExistMarker( ws );
+
         for( Problem problem : problems )
         {
             IResource workspaceResource = null;
@@ -145,6 +147,26 @@ public class WorkspaceMigrationImpl implements MigrationListener
 
         return true;
 
+    }
+
+    private void clearExistMarker( IWorkspaceRoot ws )
+    {
+        try
+        {
+            IMarker[] markers = ws.findMarkers( MigrationConstants.MARKER_TYPE, false, IResource.DEPTH_INFINITE );
+
+            if( markers.length > 0 )
+            {
+                for( IMarker m : markers )
+                {
+                    m.delete();
+                }
+            }
+        }
+        catch( CoreException e1 )
+        {
+            e1.printStackTrace();
+        }
     }
 
 }
