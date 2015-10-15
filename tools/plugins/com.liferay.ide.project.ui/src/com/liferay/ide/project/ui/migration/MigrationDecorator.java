@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class MigrationDecorator extends BaseLabelProvider implements ILightweightLabelDecorator
 {
@@ -45,17 +46,22 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
             }
         }
 
+        List<TaskProblem> problems = null;
 
         if( element instanceof IResource )
         {
             final IResource resource = (IResource) element;
 
-            final List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromResource( resource );
+            problems = MigrationUtil.getTaskProblemsFromResource( resource );
+        }
+        else if( element instanceof MPTree )
+        {
+            problems = MigrationUtil.getAllTaskProblems();
+        }
 
-            if( problems.size() > 0 )
-            {
-                decoration.addSuffix( " [" + problems.size() + " problems]" );
-            }
+        if( problems != null && problems.size() > 0 )
+        {
+            decoration.addSuffix( " [" + problems.size() + " problems]" );
         }
     }
 

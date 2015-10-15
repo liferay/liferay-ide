@@ -30,18 +30,64 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class MigrationUtil
 {
+
+    private final static String CONTENT_PROVIDER_ID = "com.liferay.ide.project.ui.migration.content";
+
+    private static List<IResource> _resources;
+
+    public static List<TaskProblem> getAllTaskProblems()
+    {
+        if( _resources == null )
+        {
+            return null;
+        }
+
+        final List<TaskProblem> problems = new ArrayList<>();
+
+        for( IResource resource : _resources )
+        {
+            problems.addAll( getTaskProblemsFromResource( resource ) );
+        }
+
+        return problems;
+    }
+
+    public static List<TaskProblem> getAllTaskProblems( CommonViewer commonViewer )
+    {
+        final List<TaskProblem> problems = new ArrayList<>();
+
+        final ITreeContentProvider contentProvider =
+            commonViewer.getNavigatorContentService().getContentExtensionById( CONTENT_PROVIDER_ID ).getContentProvider();
+
+        if( contentProvider != null && contentProvider instanceof MigrationContentProvider )
+        {
+            final MigrationContentProvider mcp = (MigrationContentProvider) contentProvider;
+
+            _resources = mcp._resources;
+
+            for( IResource resource : mcp._resources )
+            {
+                problems.addAll( getTaskProblemsFromResource( resource ) );
+            }
+        }
+
+        return problems;
+    }
 
     public static IFile getIFileFromTaskProblem( TaskProblem taskProblem )
     {

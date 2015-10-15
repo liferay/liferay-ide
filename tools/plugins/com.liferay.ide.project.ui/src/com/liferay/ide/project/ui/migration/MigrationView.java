@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -284,7 +285,17 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             public void selectionChanged( SelectionChangedEvent event )
             {
-                List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromTreeNode( event.getSelection() );
+                List<TaskProblem> problems;
+
+                if( event.getSelection() instanceof IStructuredSelection &&
+                    ( (IStructuredSelection) event.getSelection() ).getFirstElement() instanceof MPTree )
+                {
+                    problems = MigrationUtil.getAllTaskProblems( getCommonViewer() );
+                }
+                else
+                {
+                    problems = MigrationUtil.getTaskProblemsFromTreeNode( event.getSelection() );
+                }
 
                 if( problems != null && problems.size() > 0 )
                 {
