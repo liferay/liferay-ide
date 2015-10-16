@@ -88,13 +88,20 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
         {
             final IProject project = (IProject) adaptable;
 
-            if( GradleProjectNature.INSTANCE.isPresentOn( project ) )
+            try
             {
-                if( hasPlugin( project, "aQute.bnd.gradle.BndBuilderPlugin" ) ||
-                    hasPlugin( project, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
+                if( GradleProjectNature.INSTANCE.isPresentOn( project ) )
                 {
-                    return new GradleBundleProject( project );
+                    if( hasPlugin( project, "aQute.bnd.gradle.BndBuilderPlugin" ) ||
+                        hasPlugin( project, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
+                    {
+                        return new GradleBundleProject( project );
+                    }
                 }
+            }
+            catch( Exception e )
+            {
+                // ignore errors
             }
         }
 
