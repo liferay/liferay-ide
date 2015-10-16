@@ -26,13 +26,13 @@ public class XmlSearchTestsBase extends ProjectCoreBase
 
     public static final String XML_REFERENCES_MARKER_TYPE = "org.eclipse.wst.xml.search.editor.validationMarker";
 
-    private static final String bundleId = "com.liferay.ide.xml.search.ui.tests";
+    private static final String BUNDLE_ID = "com.liferay.ide.xml.search.ui.tests";
 
     public static String MESSAGE_TYPE_HIERARCHY_INCORRECT = "Type hierarchy of class \"{0}\" is incorrect";
 
     protected String getBundleId()
     {
-        return bundleId;
+        return BUNDLE_ID;
     }
 
 }

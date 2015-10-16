@@ -41,7 +41,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 public class ImportPluginsSDKProjectWizardTests extends ProjectCoreBase
 {
 
-    private static final String bundleId = "com.liferay.ide.project.ui.tests";
+    private static final String BUNDLE_ID = "com.liferay.ide.project.ui.tests";
 
     static private IProject project;
 
@@ -63,7 +63,7 @@ public class ImportPluginsSDKProjectWizardTests extends ProjectCoreBase
 
     protected String getBundleId()
     {
-        return bundleId;
+        return BUNDLE_ID;
     }
 
     protected IProject importSDKProjectTest( String path, String projectName ) throws Exception
@@ -119,9 +119,9 @@ public class ImportPluginsSDKProjectWizardTests extends ProjectCoreBase
         IPath dir = project.getRawLocation();
         String location = dir.toOSString();
 
-        final File hookZipFile = getProjectZip( bundleId, "Import-223-portlet" );
+        final File projectZipFile = getProjectZip( BUNDLE_ID, "Import-223-portlet" );
 
-        ZipUtil.unzip( hookZipFile, dir.removeLastSegments( 2 ).toFile() );
+        ZipUtil.unzip( projectZipFile, dir.removeLastSegments( 2 ).toFile() );
 
         String projectCopyDir = dir.removeLastSegments( 2 ).append( project.getName() ).toOSString();
 

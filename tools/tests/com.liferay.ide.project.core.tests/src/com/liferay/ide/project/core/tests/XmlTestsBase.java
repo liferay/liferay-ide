@@ -71,19 +71,19 @@ public class XmlTestsBase extends ProjectCoreBase
     protected IProject importProject( String path, String bundleId, String projectName ) throws Exception
     {
         final IPath sdkLocation = SDKManager.getInstance().getDefaultSDK().getLocation();
-        final IPath hooksFolder = sdkLocation.append( path );
+        final IPath projectFolder = sdkLocation.append( path );
 
-        final URL hookZipUrl =
+        final URL projectZipUrl =
             Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
 
-        final File hookZipFile = new File( FileLocator.toFileURL( hookZipUrl ).getFile() );
+        final File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
 
-        ZipUtil.unzip( hookZipFile, hooksFolder.toFile() );
+        ZipUtil.unzip( projectZipFile, projectFolder.toFile() );
 
-        final IPath projectFolder = hooksFolder.append( projectName );
-        assertEquals( true, projectFolder.toFile().exists() );
+        final IPath projectPath = projectFolder.append( projectName );
+        assertEquals( true, projectPath.toFile().exists() );
 
-        final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectFolder.toOSString() );
+        final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectPath.toOSString() );
         assertNotNull( projectRecord );
 
         final IRuntime runtime = ServerCore.findRuntime( getRuntimeVersion() );

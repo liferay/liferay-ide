@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.waits.ICondition;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -44,25 +43,10 @@ public class SDKProjectImportWizardSWTBotTest extends SWTBotTestBase
 {
 
     private static IPath sdkLocation;
-
-    @AfterClass
-	public static void cleanUp()
-	{
-		try
-		{
-			deleteAllWorkspaceProjects();
-		}
-		catch( Exception e )
-		{
-			e.printStackTrace();
-		}
-	}
-
-	public static void openWizard()
+    
+    public static void openWizard()
     {
-        bot.menu( "File" ).setFocus();
-        bot.menu( "File" ).click();
-        bot.menu( "Import..." ).click();
+        bot.menu( "File" ).menu( "Import..." ).click();
 
         bot.tree().getTreeItem( "Liferay" ).select();
         bot.tree().getTreeItem( "Liferay" ).expand();
@@ -73,9 +57,9 @@ public class SDKProjectImportWizardSWTBotTest extends SWTBotTestBase
         ICondition condition = shellIsActive( "Import Project" );
         bot.waitUntil( condition, 5000 );
     }
-
+    
     @After
-    public void after()
+    public void cleanUp()
     {
         try
         {
@@ -85,6 +69,20 @@ public class SDKProjectImportWizardSWTBotTest extends SWTBotTestBase
         catch( Exception e )
         {
         }
+        
+		try
+		{
+			deleteAllWorkspaceProjects();
+		}
+		catch( Exception e )
+		{
+			e.printStackTrace();
+		}
+	}
+
+	protected String getBundleId()
+    {
+        return BUNDLE_ID;
     }
 
     public void importSDKProject( String path, String projectName ) throws Exception
@@ -166,6 +164,57 @@ public class SDKProjectImportWizardSWTBotTest extends SWTBotTestBase
     }
 
     @Test
+    public void testValidationNoSDK() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+        
+        // test import project when no sdk in wrokspace
+        sdkLocation = SDKUtil.getWorkspaceSDKProject().getRawLocation();
+
+        SDKUtil.getWorkspaceSDKProject().delete( false, false, null );
+
+        importSDKProject( "portlet", "Import-223-portlet" );
+
+        assertNotNull( SDKUtil.getWorkspaceSDK() );
+
+        ICondition condition = widgetIsEnabled( bot.tree().getTreeItem( SDKUtil.getWorkspaceSDK().getName() ) );
+        bot.waitUntil( condition, 5000 );
+
+        openWizard();
+
+        String projectPath = SDKUtil.getWorkspaceSDK().getLocation().append( "portlet/Import-223-portlet" ).toOSString();
+
+        bot.text( 0 ).setText( projectPath );
+
+        bot.sleep( 1000 );
+        assertEquals( " Project name already exists.", bot.text( 3 ).getText() );
+        assertFalse( bot.button( "Finish" ).isEnabled() );
+    }
+
+    @Test
+    public void testValidationProjectLocation() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+        
+        // import project outside of SDK
+        final File projectZipFile = getProjectZip( BUNDLE_ID, "Import-223-portlet" );
+
+        SDK sdk = SDKUtil.getWorkspaceSDK();
+        ZipUtil.unzip( projectZipFile, sdk.getLocation().removeLastSegments( 2 ).toFile() );
+
+        String projectCopyDir = sdk.getLocation().removeLastSegments( 2 ).append( "Import-223-portlet" ).toOSString();
+
+        openWizard();
+
+        bot.text( 0 ).setText( projectCopyDir );
+
+        bot.sleep( 1000 );
+
+        assertTrue( bot.text( 3 ).getText().startsWith( " Could not determine SDK from project location" ) );
+        assertFalse( bot.button( "Finish" ).isEnabled() );
+    }
+
+    @Test
     public void testValidationProjectPath() throws Exception
     {
         if( shouldSkipBundleTests() )return;
@@ -187,53 +236,5 @@ public class SDKProjectImportWizardSWTBotTest extends SWTBotTestBase
         assertEquals( " Project isn't exist at \"" + "C:\\AAA" + "\"", bot.text( 3 ).getText() );
         assertFalse( bot.button( "Finish" ).isEnabled() );
 
-    }
-
-    @Test
-    public void testValidationProjectLocation() throws Exception
-    {
-        // import project outside of SDK
-        final File projectZipFile = getProjectZip( BUNDLE_ID, "Import-223-portlet" );
-
-        SDK sdk = SDKUtil.getWorkspaceSDK();
-        ZipUtil.unzip( projectZipFile, sdk.getLocation().removeLastSegments( 2 ).toFile() );
-
-        String projectCopyDir = sdk.getLocation().removeLastSegments( 2 ).append( "Import-223-portlet" ).toOSString();
-
-        openWizard();
-
-        bot.text( 0 ).setText( projectCopyDir );
-
-        bot.sleep( 1000 );
-
-        assertTrue( bot.text( 3 ).getText().startsWith( " Could not determine SDK from project location" ) );
-        assertFalse( bot.button( "Finish" ).isEnabled() );
-    }
-
-    @Test
-    public void testValidationNoSDK() throws Exception
-    {
-        // test import project when no sdk in wrokspace
-        sdkLocation = SDKUtil.getWorkspaceSDKProject().getRawLocation();
-
-        SDKUtil.getWorkspaceSDKProject().delete( false, false, null );
-
-        importSDKProject( "portlet", "Import-223-portlet" );
-
-        assertNotNull( SDKUtil.getWorkspaceSDK() );
-
-        ICondition condition = widgetIsEnabled( bot.tree().getTreeItem( SDKUtil.getWorkspaceSDK().getName() ) );
-        bot.waitUntil( condition, 5000 );
-
-        openWizard();
-
-        String projectPath =
-            SDKUtil.getWorkspaceSDK().getLocation().append( "portlet/Import-223-portlet" ).toOSString();
-
-        bot.text( 0 ).setText( projectPath );
-
-        bot.sleep( 1000 );
-        assertEquals( " Project name already exists.", bot.text( 3 ).getText() );
-        assertFalse( bot.button( "Finish" ).isEnabled() );
     }
 }

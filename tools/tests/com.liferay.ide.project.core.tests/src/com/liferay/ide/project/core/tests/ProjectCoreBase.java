@@ -72,7 +72,7 @@ import org.junit.Before;
 public class ProjectCoreBase extends ServerCoreBase
 {
 
-    private static final String bundleId = "com.liferay.ide.project.core.tests";
+    private static final String BUNDLE_ID = "com.liferay.ide.project.core.tests";
 
     public static void deleteAllWorkspaceProjects() throws Exception
     {
@@ -264,7 +264,7 @@ public class ProjectCoreBase extends ServerCoreBase
 
     protected String getBundleId()
     {
-        return bundleId;
+        return BUNDLE_ID;
     }
 
     @SuppressWarnings( "restriction" )
@@ -312,16 +312,16 @@ public class ProjectCoreBase extends ServerCoreBase
     protected IProject importProject( String path, String bundleId, String projectName ) throws Exception
     {
         final IPath sdkLocation = SDKManager.getInstance().getDefaultSDK().getLocation();
-        final IPath hooksFolder = sdkLocation.append( path );
+        final IPath projectFolder = sdkLocation.append( path );
 
-        final File hookZipFile = getProjectZip( bundleId, projectName );
+        final File projectZipFile = getProjectZip( bundleId, projectName );
 
-        ZipUtil.unzip( hookZipFile, hooksFolder.toFile() );
+        ZipUtil.unzip( projectZipFile, projectFolder.toFile() );
 
-        final IPath projectFolder = hooksFolder.append( projectName );
-        assertEquals( true, projectFolder.toFile().exists() );
+        final IPath projectPath = projectFolder.append( projectName );
+        assertEquals( true, projectPath.toFile().exists() );
 
-        final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectFolder.toOSString() );
+        final ProjectRecord projectRecord = ProjectUtil.getProjectRecordForDir( projectPath.toOSString() );
         assertNotNull( projectRecord );
 
         final IRuntime runtime = ServerCore.findRuntime( getRuntimeVersion() );
@@ -339,11 +339,11 @@ public class ProjectCoreBase extends ServerCoreBase
 
     protected File getProjectZip( String bundleId, String projectName ) throws IOException
     {
-        final URL hookZipUrl =
+        final URL projectZipUrl =
             Platform.getBundle( bundleId ).getEntry( "projects/" + projectName + ".zip" );
 
-        final File hookZipFile = new File( FileLocator.toFileURL( hookZipUrl ).getFile() );
-        return hookZipFile;
+        final File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
+        return projectZipFile;
     }
 
     protected NewLiferayPluginProjectOp newProjectOp( final String projectName ) throws Exception
