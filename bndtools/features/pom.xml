@@ -21,23 +21,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>com.liferay.ide.bndtools</groupId>
+        <artifactId>bndtools</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../build/parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liferay.ide.bndtools</groupId>
-    <artifactId>bndtools</artifactId>
-
-    <name>Liferay IDE Bndtools</name>
-
+    <groupId>com.liferay.ide.bndtools.features</groupId>
+    <artifactId>bndtools-features</artifactId>
     <packaging>pom</packaging>
 
-    <modules>
-        <module>plugins</module>
-        <module>features</module>
-    </modules>
+    <name>Liferay IDE bndtools Features</name>
 
+    <modules>
+        <module>com.liferay.ide.bndtools-feature</module>
+    </modules>
 </project>
 

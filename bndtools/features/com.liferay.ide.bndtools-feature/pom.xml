@@ -15,29 +15,19 @@
  *
  *******************************************************************************/
  -->
-
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide</groupId>
-        <artifactId>parent</artifactId>
+        <groupId>com.liferay.ide.bndtools.features</groupId>
+        <artifactId>bndtools-features</artifactId>
         <version>3.0.0-SNAPSHOT</version>
-        <relativePath>../build/parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.liferay.ide.bndtools</groupId>
-    <artifactId>bndtools</artifactId>
+    <artifactId>com.liferay.ide.bndtools</artifactId>
+    <packaging>eclipse-feature</packaging>
 
-    <name>Liferay IDE Bndtools</name>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>plugins</module>
-        <module>features</module>
-    </modules>
+    <name>Liferay IDE bndtools Feature</name>
 
 </project>
-

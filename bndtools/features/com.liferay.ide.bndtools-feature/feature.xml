@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.liferay.ide.gradle"
-      label="Liferay IDE Gradle Support (includes Buildship plugins)"
+      id="com.liferay.ide.bndtools"
+      label="Liferay IDE bndtools Support (includes bndtools plugins)"
       version="3.0.0.qualifier"
       provider-name="Liferay, Inc.">
 
    <description url="http://www.liferay.com/community/liferay-projects/liferay-ide/overview">
-      Buildship integration for Liferay IDE.
+      bndtools integration for Liferay IDE.
    </description>
 
    <copyright url="http://www.liferay.com/products/liferay-portal/lgpl">
@@ -31,19 +31,12 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.buildship" version="1.0.5" match="greaterOrEqual"/>
+      <import feature="bndtools.main.feature" version="3.0.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
-         id="com.liferay.ide.gradle.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.liferay.ide.gradle.ui"
+         id="com.liferay.ide.bndtools.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
