@@ -48,25 +48,6 @@ public class MigrationUtil
 
     private final static String CONTENT_PROVIDER_ID = "com.liferay.ide.project.ui.migration.content";
 
-    private static List<IResource> _resources;
-
-    public static List<TaskProblem> getAllTaskProblems()
-    {
-        if( _resources == null )
-        {
-            return null;
-        }
-
-        final List<TaskProblem> problems = new ArrayList<>();
-
-        for( IResource resource : _resources )
-        {
-            problems.addAll( getTaskProblemsFromResource( resource ) );
-        }
-
-        return problems;
-    }
-
     public static List<TaskProblem> getAllTaskProblems( CommonViewer commonViewer )
     {
         final List<TaskProblem> problems = new ArrayList<>();
@@ -77,8 +58,6 @@ public class MigrationUtil
         if( contentProvider != null && contentProvider instanceof MigrationContentProvider )
         {
             final MigrationContentProvider mcp = (MigrationContentProvider) contentProvider;
-
-            _resources = mcp._resources;
 
             for( IResource resource : mcp._resources )
             {
@@ -192,7 +171,7 @@ public class MigrationUtil
         return problems;
     }
 
-    public static List<TaskProblem> getTaskProblemsFromTreeNode( ISelection selection )
+    public static List<TaskProblem> getTaskProblemsFromTreeNode( ISelection selection, CommonViewer commonViewer )
     {
         if( selection instanceof IStructuredSelection )
         {
@@ -221,6 +200,10 @@ public class MigrationUtil
             if( resource != null )
             {
                 return getTaskProblemsFromResource( resource );
+            }
+            else if( element instanceof MPTree )
+            {
+                return getAllTaskProblems( commonViewer );
             }
         }
 

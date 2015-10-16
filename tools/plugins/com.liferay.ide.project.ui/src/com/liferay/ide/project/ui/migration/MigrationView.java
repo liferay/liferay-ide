@@ -285,17 +285,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             public void selectionChanged( SelectionChangedEvent event )
             {
-                List<TaskProblem> problems;
-
-                if( event.getSelection() instanceof IStructuredSelection &&
-                    ( (IStructuredSelection) event.getSelection() ).getFirstElement() instanceof MPTree )
-                {
-                    problems = MigrationUtil.getAllTaskProblems( getCommonViewer() );
-                }
-                else
-                {
-                    problems = MigrationUtil.getTaskProblemsFromTreeNode( event.getSelection() );
-                }
+                List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromTreeNode( event.getSelection(), getCommonViewer() );
 
                 if( problems != null && problems.size() > 0 )
                 {

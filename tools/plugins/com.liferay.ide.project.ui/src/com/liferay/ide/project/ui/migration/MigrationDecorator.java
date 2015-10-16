@@ -23,6 +23,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.PlatformUI;
 
 
 /**
@@ -31,6 +33,8 @@ import org.eclipse.jface.viewers.ILightweightLabelDecorator;
  */
 public class MigrationDecorator extends BaseLabelProvider implements ILightweightLabelDecorator
 {
+
+    private final String VIEW_ID = "com.liferay.ide.project.ui.migration.content";
 
     @Override
     public void decorate( Object element, IDecoration decoration )
@@ -57,7 +61,12 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
         }
         else if( element instanceof MPTree )
         {
-            problems.addAll( MigrationUtil.getAllTaskProblems() );
+            IViewPart view = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView( VIEW_ID );
+
+            if( view instanceof MigrationView )
+            {
+                problems.addAll( MigrationUtil.getAllTaskProblems( ( (MigrationView) view ).getCommonViewer() ) );
+            }
         }
 
         if( problems != null && problems.size() > 0 )
