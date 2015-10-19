@@ -96,7 +96,7 @@ public class MigrationToolTests extends SWTBotTestBase
     public void testMigrateProjectHandlerCancelOnMenu() throws Exception
     {
         if(shouldSkipBundleTests())return;
-        
+
         project = getProject( "portlets", "knowledge-base-portlet" );
 
         IMarker marker = findMigrationMarker( project, ".*", false );
@@ -109,9 +109,9 @@ public class MigrationToolTests extends SWTBotTestBase
         bot.tree().getTreeItem( "knowledge-base-portlet" ).select();
 
         bot.menu( "Migrate Liferay project to 7.0..." ).click();
-       
+
         assertTrue( bot.shell( "Finding migration problems..." ).isOpen() );
-        
+
         bot.button( "Cancel" ).click();
 
         waitForBuildAndValidation();
@@ -124,29 +124,4 @@ public class MigrationToolTests extends SWTBotTestBase
         assertNotNull( marker );
     }
 
-    @Test
-    public void testMigrateProjectHandlerCancelOnProject() throws Exception
-    {
-        if(shouldSkipBundleTests())return;
-        
-        project = getProject( "portlets", "knowledge-base-portlet" );
-
-        IMarker marker = findMigrationMarker( project, ".*", false );
-        assertNull( marker );
-
-        bot.sleep( 2000 );
-        bot.tree().getTreeItem( "knowledge-base-portlet" ).contextMenu( "Liferay" ).menu( "Migrate Liferay project to 7.0..." ).click();
-
-        assertTrue( bot.shell( "Finding migration problems..." ).isOpen() );
-        
-        bot.button( "Cancel" ).click();
-
-        waitForBuildAndValidation();
-
-        bot.viewByTitle( "Liferay Plugin Migration" ).show();
-
-        bot.sleep( 2000 );
-        marker = findMigrationMarker( project, ".*", false );
-        assertNotNull( marker );
-    }
 }
