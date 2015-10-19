@@ -15,10 +15,12 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import java.net.URL;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.util.List;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -34,48 +36,28 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTError;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionContext;
-import org.eclipse.ui.browser.IWebBrowser;
-import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
-import org.eclipse.ui.forms.events.IHyperlinkListener;
-import org.eclipse.ui.forms.widgets.FormText;
-import org.eclipse.ui.forms.widgets.ScrolledFormText;
 import org.eclipse.ui.internal.navigator.actions.CommonActionDescriptorManager;
 import org.eclipse.ui.internal.navigator.actions.CommonActionProviderDescriptor;
 import org.eclipse.ui.navigator.CommonActionProvider;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.INavigatorContentService;
 import org.eclipse.ui.navigator.NavigatorActionService;
-import org.eclipse.wst.server.ui.internal.ServerUIPlugin;
-
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Gregory Amerson
@@ -93,7 +75,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         ProjectUI.getDefault().getImageRegistry().get( ProjectUI.UNCHECKED_IMAGE_ID );
 
     private Browser _browser;
-    private FormText _form;
+//    private FormText _form;
     private TableViewer _problemsViewer;
     private MigratorComparator _comparator;
 
@@ -316,7 +298,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         getCommonViewer().addDoubleClickListener( this );
     }
 
-    private void displayPopupHtml( final String title, final String html )
+    /*private void displayPopupHtml( final String title, final String html )
     {
         final Shell shell = new Shell( this.getViewSite().getShell(), SWT.DIALOG_TRIM | SWT.ON_TOP | SWT.RESIZE );
         shell.setText( title );
@@ -377,7 +359,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         });
 
         shell.open();
-    }
+    }*/
 
     private TableViewerColumn createTableViewerColumn(
         String title, int bound, TableViewer viewer )
@@ -506,7 +488,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         };
     }
 
-    private void openBrowser( final String url )
+    /*private void openBrowser( final String url )
     {
         Display.getDefault().asyncExec( new Runnable()
         {
@@ -540,7 +522,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         MigrationView.this.getMemento().putInteger( "popupLastY", location.y );
         MigrationView.this.getMemento().putInteger( "popupSizeX", size.x );
         MigrationView.this.getMemento().putInteger( "popupSizeY", size.y );
-    }
+    }*/
 
     private void updateForm( SelectionChangedEvent event )
     {
