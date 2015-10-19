@@ -39,7 +39,7 @@ import org.junit.runner.RunWith;
  * @author Li Lu
  */
 @RunWith( SWTBotJunit4ClassRunner.class )
-public class SDKProjectImportWizardSWTBotTest extends SWTBotTestBase
+public class SDKProjectImportWizardTests extends SWTBotTestBase
 {
 
     private static IPath sdkLocation;
