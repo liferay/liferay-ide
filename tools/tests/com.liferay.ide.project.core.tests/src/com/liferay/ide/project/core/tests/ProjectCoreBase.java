@@ -69,6 +69,7 @@ import org.junit.Before;
  * @author Terry Jia
  * @author Simon Jiang
  */
+@SuppressWarnings( "restriction" )
 public class ProjectCoreBase extends ServerCoreBase
 {
 
@@ -85,7 +86,6 @@ public class ProjectCoreBase extends ServerCoreBase
         }
     }
 
-    @SuppressWarnings( "restriction" )
     protected void waitForBuildAndValidation() throws Exception
     {
         IWorkspaceRoot root = null;
@@ -267,7 +267,6 @@ public class ProjectCoreBase extends ServerCoreBase
         return BUNDLE_ID;
     }
 
-    @SuppressWarnings( "restriction" )
     protected IPath getCustomLocationBase()
     {
         final IPath customLocationBase =
