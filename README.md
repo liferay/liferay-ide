@@ -2,25 +2,16 @@
 
 [Liferay IDE](http://www.liferay.com/community/liferay-projects/liferay-ide) is a
 collection of Eclipse plugins created by Liferay, Inc. to support developing
-applications, e.g. portlets, hooks, themes, etc, for the Liferay Portal platform.
+plugins, e.g. portlets, hooks, themes, etc, for the Liferay Portal platform.
 
 To get started, check out the project's community homepage at
 [http://www.liferay.com/community/liferay-projects/liferay-ide](http://www.liferay.com/community/liferay-projects/liferay-ide)
 
 To install the Liferay IDE plugins into your Eclipse install using either the stable or milestone updatesite:
 
-- Latest stable release (2.0.x): [http://releases.liferay.com/tools/ide/stable/](http://releases.liferay.com/tools/ide/latest/stable/)
-- Latest milestone release towards 2.1: [http://releases.liferay.com/tools/ide/latest/milestone/](http://releases.liferay.com/tools/ide/latest/milestone/)
+- Latest stable release (2.2.x): [http://releases.liferay.com/tools/ide/stable/](http://releases.liferay.com/tools/ide/latest/stable/)
+- Latest milestone release towards 3.0: [http://releases.liferay.com/tools/ide/latest/milestone/](http://releases.liferay.com/tools/ide/latest/milestone/)
 - Additional downloads available here: [https://www.liferay.com/downloads/liferay-projects/liferay-ide](https://www.liferay.com/downloads/liferay-projects/liferay-ide)
- 
-
-## Source Code
-
-All of Liferay IDE's source code resides in this current repository. Liferay IDE
-*releases* are built from this repository and the output of the build is an
-Eclipse style update-site that can be used to install the Liferay IDE plugins
-into a user's Eclipse installation.  Freshly built updatesites will reside in
-the target folder of the `build/releng/com.liferay.ide-repository/` module.
 
 ## Quick Start
 
@@ -29,12 +20,21 @@ release](http://www.liferay.com/downloads/liferay-projects/liferay-ide) and inst
 your Eclipse install.  Follow the [Installation Guide](https://dev.liferay.com/develop/learning-paths/-/knowledge_base/6-2/developing-apps-with-liferay-ide)
 for instructions. Then use the Getting Started Tutorial for how to create and deploy a Liferay Project using Liferay IDE.
 
-## Versioning
+## Building from source
 
-Liferay IDE versions do not coorespond with [Liferay Portal](http://www.liferay.com/community/liferay-projects/liferay-portal) but instead follow their own versions.
+If you would like to build from source, use one of the two following commands:
 
-- 1.x - supports Liferay Portal 6.0 and 6.1 and only PluginsSDK based projects
-- 2.x - (at this time still in development) supports Liferay Portal 6.2 and also Maven based Liferay projects
+```
+$ mvn clean verify -DskipTests
+```
+
+Once it finishes the locally built Eclipse updatesite will be located here:
+
+```
+build/com.liferay.ide-respoitory/target/liferay-ide-updatesite-<version>-<timestamp>.zip
+```
+
+You can install this using _Help > Install New Software... > Add > Archive > Point to newly built zip file_
 
 ## Bug Tracker
 
