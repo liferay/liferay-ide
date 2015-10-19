@@ -47,6 +47,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
@@ -138,7 +139,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                 }
             }
 
-            @Override
             public String getText( Object element )
             {
                 return null;
@@ -209,7 +209,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         menuMgr.setRemoveAllWhenShown( true );
         menuMgr.addMenuListener( new IMenuListener()
         {
-            @Override
             public void menuAboutToShow( IMenuManager manager )
             {
                 MigrationView.this.fillContextMenu( manager, _problemsViewer );
@@ -244,17 +243,14 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
             _form.addHyperlinkListener( new IHyperlinkListener()
             {
-                @Override
                 public void linkExited( org.eclipse.ui.forms.events.HyperlinkEvent e )
                 {
                 }
 
-                @Override
                 public void linkEntered( org.eclipse.ui.forms.events.HyperlinkEvent e )
                 {
                 }
 
-                @Override
                 public void linkActivated( org.eclipse.ui.forms.events.HyperlinkEvent e )
                 {
                     if( e.data instanceof String )
@@ -289,7 +285,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         getCommonViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
-            @Override
             public void selectionChanged( SelectionChangedEvent event )
             {
                 List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromTreeNode( event.getSelection(), getCommonViewer() );
@@ -308,12 +303,10 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         _problemsViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
-            @Override
             public void selectionChanged( final SelectionChangedEvent event )
             {
                 UIUtil.async( new Runnable()
                 {
-                    @Override
                     public void run()
                     {
                         updateForm( event );
@@ -362,7 +355,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         shell.addDisposeListener( new DisposeListener()
         {
-            @Override
             public void widgetDisposed( DisposeEvent e )
             {
                 savePopupState( shell );
@@ -372,7 +364,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         shell.addListener( SWT.Traverse, new Listener()
         {
-            @Override
             public void handleEvent( Event event )
             {
                 switch( event.detail )
@@ -506,7 +497,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     {
         return new SelectionAdapter()
         {
-            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 _comparator.setColumn( index );
@@ -522,7 +512,6 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     {
         Display.getDefault().asyncExec( new Runnable()
         {
-            @Override
             public void run()
             {
                 try
