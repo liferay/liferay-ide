@@ -22,7 +22,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -47,11 +46,13 @@ import blade.migrate.api.MigrationConstants;
 import blade.migrate.api.Problem;
 import blade.migrate.api.ProgressMonitor;
 
+import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
 /**
  * @author Gregory Amerson
  * @author Andy Wu
+ * @author Lovett Li
  */
 public class MigrateProjectHandler extends AbstractHandler
 {
@@ -82,12 +83,16 @@ public class MigrateProjectHandler extends AbstractHandler
             {
                 if( shouldShowMessageDialog( project ) )
                 {
-                    if( !showMessageDialog( project ) )
+                    final boolean shouldContinue = showMessageDialog( project );
+
+                    if( !shouldContinue )
                     {
                         return null;
                     }
-                    clearExistingMarkersFromResourcet( project );
+
+                    MarkerUtil.clearMarkers( project, MigrationConstants.MARKER_TYPE, null );
                 }
+
                 final IPath location = project.getLocation();
 
                 Job job = new WorkspaceJob( "Finding migration problems..." )
@@ -167,50 +172,21 @@ public class MigrateProjectHandler extends AbstractHandler
         return null;
     }
 
-    private void clearExistingMarkersFromResourcet( IProject project )
-    {
-        try
-        {
-            IMarker[] markers = project.findMarkers( MigrationConstants.MARKER_TYPE, false, IResource.DEPTH_INFINITE );
-
-            if( markers.length > 0 )
-            {
-                for( IMarker m : markers )
-                {
-                    m.delete();
-                }
-            }
-        }
-        catch( CoreException e1 )
-        {
-        }
-    }
-
     private boolean showMessageDialog( IProject project )
     {
-        Display display = Display.getCurrent();
-        Shell shell = display.getActiveShell();
+        final Display display = Display.getDefault();
+        final Shell shell = display.getActiveShell();
 
         return MessageDialog.openConfirm(
-            shell, "Migrator",
-            "Do you want to continue migrator this project, it will cause all the Markers of this project are cleared ?" );
+            shell, "Migrate Liferay Plugin",
+            "This project already contains migration problem markers.  All existing markers will be deleted.  " +
+            "Do you want to continue to run migration tool?" );
     }
 
     private boolean shouldShowMessageDialog( IProject project )
     {
-        try
-        {
-            IMarker[] markers = project.findMarkers( MigrationConstants.MARKER_TYPE, false, IResource.DEPTH_INFINITE );
-            if( markers.length > 0 )
-            {
-                return true;
-            }
-            return false;
+        final IMarker[] markers = MarkerUtil.findMarkers( project, MigrationConstants.MARKER_TYPE, null );
 
-        }
-        catch( CoreException e )
-        {
-        }
-        return false;
+        return markers != null && markers.length > 0;
     }
 }

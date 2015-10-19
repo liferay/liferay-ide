@@ -16,6 +16,10 @@ package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.LiferayCore;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -28,18 +32,57 @@ public class MarkerUtil
 {
     public static void clearMarkers( IResource resource, final String makerType, final String sourceId )
     {
-        try
+        if( resource.isAccessible() )
         {
-            if( resource.isAccessible() )
+            try
             {
                 final IMarker[] markers = resource.findMarkers( makerType, true, IResource.DEPTH_INFINITE );
 
                 for( IMarker marker : markers )
                 {
-                    if( marker.getAttribute( IMarker.SOURCE_ID ).equals( sourceId ) )
+                    try
                     {
-                        marker.delete();
+                        if( sourceId != null && marker.getAttribute( IMarker.SOURCE_ID ).equals( sourceId ) )
+                        {
+                            marker.delete();
+                        }
                     }
+                    catch( CoreException e )
+                    {
+                        LiferayCore.logError( "Unable to delete marker", e );
+                    }
+                }
+            }
+            catch( CoreException e )
+            {
+                LiferayCore.logError( "Unable to find markers", e );
+            }
+        }
+    }
+
+    public static IMarker[] findMarkers( IResource resource, final String markerType, final String sourceId )
+    {
+        final List<IMarker> retval = new ArrayList<>();
+
+        try
+        {
+            if( resource.isAccessible() )
+            {
+                final IMarker[] markers = resource.findMarkers( markerType, true, IResource.DEPTH_INFINITE );
+
+                if( sourceId != null )
+                {
+                    for( IMarker marker : markers )
+                    {
+                        if( sourceId.equals( marker.getAttribute( IMarker.SOURCE_ID, "" ) ) )
+                        {
+                            retval.add( marker );
+                        }
+                    }
+                }
+                else
+                {
+                    Collections.addAll( retval, markers );
                 }
             }
         }
@@ -47,23 +90,8 @@ public class MarkerUtil
         {
             LiferayCore.logError( e );
         }
-    }
 
-    public static IMarker[] findMarkers( IResource resource, final String makerType, final String sourceId )
-    {
-        try
-        {
-            if( resource.isAccessible() )
-            {
-                return resource.findMarkers( makerType, true, IResource.DEPTH_INFINITE );
-            }
-        }
-        catch( CoreException e )
-        {
-            LiferayCore.logError( e );
-        }
-
-        return null;
+        return retval.toArray( new IMarker[0] );
     }
 
     public static void setMarker(
