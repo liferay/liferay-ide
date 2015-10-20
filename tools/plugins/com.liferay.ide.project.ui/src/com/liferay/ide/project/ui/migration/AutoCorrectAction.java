@@ -53,7 +53,7 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
 
     public static void run( final TaskProblem problem, final ISelectionProvider provider )
     {
-        final IFile file = MigrationUtil.getIFileFromTaskProblem( problem );
+        final IFile file = (IFile) MigrationUtil.getIFileOrProjectFromTaskProblem( problem );
         final BundleContext context = FrameworkUtil.getBundle( AutoCorrectAction.class ).getBundleContext();
 
         new WorkspaceJob( "Auto correcting migration problem.")

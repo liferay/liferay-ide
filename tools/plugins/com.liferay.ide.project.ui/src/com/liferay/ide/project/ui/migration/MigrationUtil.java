@@ -25,9 +25,11 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -68,9 +70,9 @@ public class MigrationUtil
         return problems;
     }
 
-    public static IFile getIFileFromTaskProblem( TaskProblem taskProblem )
+    public static IResource getIFileOrProjectFromTaskProblem( TaskProblem taskProblem )
     {
-        IFile retval = null;
+        IResource retval = null;
 
         final IFile[] files =
             ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() );
@@ -97,6 +99,17 @@ public class MigrationUtil
                     {
                         retval = file;
                     }
+                }
+            }
+            else {
+                IPath path = file.getFullPath();
+
+                IProject project =
+                    ResourcesPlugin.getWorkspace().getRoot().getProject( path.segment( path.segmentCount() - 1 ) );
+
+                if( project.exists() )
+                {
+                    retval = project;
                 }
             }
         }
@@ -238,7 +251,7 @@ public class MigrationUtil
             final IEditorPart editor =
                 IDE.openEditor(
                     PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-                    getIFileFromTaskProblem( taskProblem ) );
+                    (IFile) getIFileOrProjectFromTaskProblem( taskProblem ) );
 
             if( editor instanceof ITextEditor )
             {

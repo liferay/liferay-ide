@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -57,7 +58,7 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
 
     public void run( final TaskProblem taskProblem, final ISelectionProvider provider )
     {
-        final IFile file = MigrationUtil.getIFileFromTaskProblem( taskProblem );
+        final IResource resource = MigrationUtil.getIFileOrProjectFromTaskProblem( taskProblem );
 
         new Job( "Marking migration problem as done" )
         {
@@ -65,9 +66,9 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
             {
                 IStatus retval = Status.OK_STATUS;
 
-                if( file != null && file.exists() )
+                if( resource != null && resource.exists() )
                 {
-                    final IMarker marker = file.getMarker( taskProblem.getMarkerId() );
+                    final IMarker marker = resource.getMarker( taskProblem.getMarkerId() );
 
                     if( marker != null )
                     {
