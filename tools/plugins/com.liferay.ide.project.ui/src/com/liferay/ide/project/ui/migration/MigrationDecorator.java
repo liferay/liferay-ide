@@ -53,11 +53,14 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
 
         final List<TaskProblem> problems = new ArrayList<>();
 
+        final List<TaskProblem> resolvedProblems = new ArrayList<>();
+
         if( element instanceof IResource )
         {
             final IResource resource = (IResource) element;
 
             problems.addAll( MigrationUtil.getTaskProblemsFromResource( resource ) );
+            resolvedProblems.addAll( MigrationUtil.getResolvedTaskProblemsFromResource( resource ) );
         }
         else if( element instanceof MPTree )
         {
@@ -71,11 +74,20 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
 
         if( problems != null && problems.size() > 0 )
         {
-            final String suffix = String.format(
-                " [ %d %s problem%s]",
+            String suffix = String.format(
+                " [ %d %s problem%s",
                 problems.size(),
                 ( element instanceof MPTree ? "total" : ""),
                 ( problems.size() > 1 ? "s" : "") );
+
+            if( resolvedProblems.size() > 0 )
+            {
+                String resolvedSuffix = resolvedProblems.size() + " resolved";
+                suffix = suffix + ", " + resolvedSuffix;
+            }
+
+            suffix = suffix + " ]";
+
             decoration.addSuffix( suffix );
         }
     }
