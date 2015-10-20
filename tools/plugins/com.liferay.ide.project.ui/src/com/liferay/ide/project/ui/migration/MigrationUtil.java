@@ -117,6 +117,32 @@ public class MigrationUtil
         return retval;
     }
 
+    public static List<TaskProblem> getResolvedTaskProblemsFromResource( IResource resource )
+    {
+        final List<TaskProblem> problems = new ArrayList<>();
+
+        try
+        {
+            final IMarker[] markers =
+                resource.findMarkers( MigrationConstants.MARKER_TYPE, true, IResource.DEPTH_ZERO );
+
+            for( IMarker marker : markers )
+            {
+                TaskProblem taskProblem = markerToTaskProblem( marker );
+
+                if( taskProblem != null && taskProblem.isResolved() )
+                {
+                    problems.add( taskProblem );
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+        }
+
+        return problems;
+    }
+
     public static TaskProblem getTaskProblemFromSelection( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
