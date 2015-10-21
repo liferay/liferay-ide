@@ -70,7 +70,7 @@ public class MigrationUtil
         return problems;
     }
 
-    public static IResource getIFileOrProjectFromTaskProblem( TaskProblem taskProblem )
+    public static IResource getIResourceFromTaskProblem( TaskProblem taskProblem )
     {
         IResource retval = null;
 
@@ -248,17 +248,22 @@ public class MigrationUtil
     {
         try
         {
-            final IEditorPart editor =
-                IDE.openEditor(
-                    PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-                    (IFile) getIFileOrProjectFromTaskProblem( taskProblem ) );
+            final IResource resource = getIResourceFromTaskProblem( taskProblem );
 
-            if( editor instanceof ITextEditor )
+            if( resource instanceof IFile )
             {
-                final ITextEditor textEditor = (ITextEditor) editor;
+                final IEditorPart editor =
+                    IDE.openEditor(
+                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
+                        (IFile) resource );
 
-                textEditor.selectAndReveal( taskProblem.startOffset, taskProblem.endOffset -
-                    taskProblem.startOffset );
+                if( editor instanceof ITextEditor )
+                {
+                    final ITextEditor textEditor = (ITextEditor) editor;
+
+                    textEditor.selectAndReveal( taskProblem.startOffset, taskProblem.endOffset -
+                        taskProblem.startOffset );
+                }
             }
         }
         catch( PartInitException e )

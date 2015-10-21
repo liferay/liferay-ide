@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -53,7 +52,7 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
 
     public static void run( final TaskProblem problem, final ISelectionProvider provider )
     {
-        final IFile file = (IFile) MigrationUtil.getIFileOrProjectFromTaskProblem( problem );
+        final IResource file = MigrationUtil.getIResourceFromTaskProblem( problem );
         final BundleContext context = FrameworkUtil.getBundle( AutoCorrectAction.class ).getBundleContext();
 
         new WorkspaceJob( "Auto correcting migration problem.")

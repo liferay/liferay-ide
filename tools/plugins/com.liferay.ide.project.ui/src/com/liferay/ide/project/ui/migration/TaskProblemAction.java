@@ -20,7 +20,6 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -58,7 +57,7 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
 
     public void run( final TaskProblem taskProblem, final ISelectionProvider provider )
     {
-        final IResource resource = MigrationUtil.getIFileOrProjectFromTaskProblem( taskProblem );
+        final IResource resource = MigrationUtil.getIResourceFromTaskProblem( taskProblem );
 
         new Job( "Marking migration problem as done" )
         {
