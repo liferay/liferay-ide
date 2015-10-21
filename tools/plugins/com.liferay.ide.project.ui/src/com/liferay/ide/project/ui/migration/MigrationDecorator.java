@@ -15,6 +15,7 @@
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,6 @@ import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.PlatformUI;
 
 
 /**
@@ -34,7 +34,7 @@ import org.eclipse.ui.PlatformUI;
 public class MigrationDecorator extends BaseLabelProvider implements ILightweightLabelDecorator
 {
 
-    private final String VIEW_ID = "com.liferay.ide.project.ui.migration.content";
+    private final String VIEW_ID = "com.liferay.ide.project.ui.migrationView";
 
     @Override
     public void decorate( Object element, IDecoration decoration )
@@ -64,7 +64,7 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
         }
         else if( element instanceof MPTree )
         {
-            IViewPart view = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView( VIEW_ID );
+            final IViewPart view = UIUtil.findView( VIEW_ID );
 
             if( view instanceof MigrationView )
             {
@@ -74,21 +74,30 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
 
         if( problems != null && problems.size() > 0 )
         {
-            String suffix = String.format(
-                " [ %d %s problem%s",
+            for( TaskProblem problem : problems )
+            {
+                if( problem.isResolved() && !resolvedProblems.contains( problem ))
+                {
+                    resolvedProblems.add( problem );
+                }
+            }
+
+            final StringBuilder sb = new StringBuilder();
+
+            sb.append( String.format(
+                " [%d%s problem%s",
                 problems.size(),
-                ( element instanceof MPTree ? "total" : ""),
-                ( problems.size() > 1 ? "s" : "") );
+                ( element instanceof MPTree ? " total" : ""),
+                ( problems.size() > 1 ? "s" : "") ) );
 
             if( resolvedProblems.size() > 0 )
             {
-                String resolvedSuffix = resolvedProblems.size() + " resolved";
-                suffix = suffix + ", " + resolvedSuffix;
+                sb.append( ", " + resolvedProblems.size() + " resolved" );
             }
 
-            suffix = suffix + " ]";
+            sb.append( "]" );
 
-            decoration.addSuffix( suffix );
+            decoration.addSuffix( sb.toString() );
         }
     }
 
