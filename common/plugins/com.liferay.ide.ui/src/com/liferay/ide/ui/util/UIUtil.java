@@ -181,6 +181,24 @@ public class UIUtil
             ParameterizedCommand.generateCommand( migrate, null ), null, evaluationContext );
     }
 
+    public static IViewPart findView( String viewId )
+    {
+        for( IWorkbenchWindow window : PlatformUI.getWorkbench().getWorkbenchWindows())
+        {
+            for( IWorkbenchPage page : window.getPages() )
+            {
+                IViewPart view = page.findView( viewId );
+
+                if( view != null )
+                {
+                    return view;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public static IWorkbenchPage getActivePage()
     {
         return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
