@@ -42,7 +42,8 @@ public class MarkerUtil
                 {
                     try
                     {
-                        if( sourceId != null && marker.getAttribute( IMarker.SOURCE_ID ).equals( sourceId ) )
+                        if( sourceId == null ||
+                            ( sourceId != null && marker.getAttribute( IMarker.SOURCE_ID ).equals( sourceId ) ) )
                         {
                             marker.delete();
                         }
