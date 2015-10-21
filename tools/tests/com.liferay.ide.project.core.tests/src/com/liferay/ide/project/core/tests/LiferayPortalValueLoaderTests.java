@@ -18,7 +18,6 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.LiferayPortalValueLoader;
 import com.liferay.ide.server.util.ServerUtil;
@@ -83,7 +82,7 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
 
         assertNotNull( info );
 
-        assertEquals( "Liferay Portal Community Edition / 6.2.0", info );
+        assertEquals( "Liferay Portal Community Edition / 6.2.3", info );
     }
 
     @Test
@@ -99,7 +98,7 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
 
         assertNotNull( version );
 
-        assertEquals( ILiferayConstants.V620, version );
+        assertEquals( "6.2.3", version.toString() );
     }
 
 }

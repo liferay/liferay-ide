@@ -52,7 +52,7 @@ public class NewLiferayPluginProjectOp611Tests extends NewLiferayPluginProjectOp
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.1.1-ce-ga2-20121004092655026.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.1.1-ce-ga2-20120731132656558.zip" );
     }
 
     @Override

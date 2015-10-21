@@ -24,6 +24,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.tomcat.core.ILiferayTomcatRuntime;
+import com.liferay.ide.server.util.LiferayPublishHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -41,13 +43,19 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.internal.Module;
+import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.eclipse.wst.server.core.model.ServerDelegate;
+import org.junit.AfterClass;
 import org.junit.Before;
 
 /**
  * @author Terry Jia
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Li Lu
  */
+@SuppressWarnings( "restriction" )
 public abstract class ServerCoreBase extends BaseTests
 {
 
@@ -80,6 +88,58 @@ public abstract class ServerCoreBase extends BaseTests
         return null;
     }
 
+    @AfterClass
+    public static void deleteServer()
+    {
+        IServer[] servers = ServerCore.getServers();
+        IServer server;
+        if( servers.length != 0 )
+            server = servers[0];
+        else
+            return;
+
+        server.stop( false );
+
+        long timeoutExpiredMs = System.currentTimeMillis() + 30000;
+        while( true )
+        {
+            if( server.getServerState() == IServer.STATE_STOPPED )
+            {
+                break;
+            }
+            if( System.currentTimeMillis() >= timeoutExpiredMs )
+            {
+                break;
+            }
+        }
+        try
+        {
+            server.getRuntime().delete();
+            server.delete();
+        }
+        catch( CoreException e )
+        {
+        }
+    }
+
+    protected static void extractRuntime( IPath zip , IPath dir ) throws Exception
+    {
+        final File liferayRuntimeDirFile = dir.toFile();
+
+        if( !liferayRuntimeDirFile.exists() )
+        {
+            final File liferayRuntimeZipFile = zip.toFile();
+
+            assertEquals(
+                "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
+                liferayRuntimeZipFile.exists() );
+
+            ZipUtil.unzip( liferayRuntimeZipFile, ProjectCore.getDefault().getStateLocation().toFile() );
+        }
+
+        assertEquals( true, liferayRuntimeDirFile.exists() );
+    }
+
     protected void changeServerXmlPort( String currentPort, String targetPort )
     {
         final File serverXml = server.getRuntime().getLocation().append( "conf" ).append( "server.xml" ).toFile();
@@ -104,7 +164,7 @@ public abstract class ServerCoreBase extends BaseTests
     public void copyFileToServer( IServer server, String targetFolderLocation, String fileDir, String fileName )
         throws IOException
     {
-        InputStream is = getClass().getResourceAsStream( fileDir + "/" + fileName );
+        InputStream is = ServerCoreBase.class.getResourceAsStream( fileDir + "/" + fileName );
 
         assertNotNull( is );
 
@@ -143,12 +203,12 @@ public abstract class ServerCoreBase extends BaseTests
 
     protected IPath getLiferayRuntimeDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2-ce-ga4/tomcat-7.0.42" );
     }
 
     protected IPath getLiferayRuntimeZip()
     {
-        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
+        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2-ce-ga4-20150416163831865.zip" );
     }
 
     protected String getRuntimeId()
@@ -158,16 +218,36 @@ public abstract class ServerCoreBase extends BaseTests
 
     public String getRuntimeVersion()
     {
-        return "6.2.0";
+        return "6.2.3";
     }
 
     public IServer getServer() throws Exception
     {
         if( server == null )
         {
+            IServer[] servers = ServerCore.getServers();
+            if( servers.length != 0 )
+                server = servers[0];
+            else
+                setupServer();
+        }
+        if( server.getRuntime() == null )
+        {
+            server.delete();
             setupServer();
         }
+
         return server;
+    }
+
+    protected void publishToServer( IProject project )
+    {
+        ServerBehaviourDelegate delegate =
+            (ServerBehaviourDelegate) server.loadAdapter( ServerBehaviourDelegate.class, null );
+
+        Module[] moduleTree = { new Module( null, project.getName(), project.getName(), "jst.web", "3.0", project ) };
+
+        LiferayPublishHelper.prePublishModule( delegate, 1, 1, moduleTree, null, null );
     }
 
     @Before
@@ -225,35 +305,14 @@ public abstract class ServerCoreBase extends BaseTests
         assertEquals( "Expected the deploy folder to exist:" + deployPath.toOSString(), true, deployFolder.exists() );
     }
 
-    protected static void extractRuntime( IPath zip , IPath dir ) throws Exception
-    {
-        final File liferayRuntimeDirFile = dir.toFile();
-
-        if( !liferayRuntimeDirFile.exists() )
-        {
-            final File liferayRuntimeZipFile = zip.toFile();
-
-            assertEquals(
-                "Expected file to exist: " + liferayRuntimeZipFile.getAbsolutePath(), true,
-                liferayRuntimeZipFile.exists() );
-
-            ZipUtil.unzip( liferayRuntimeZipFile, ProjectCore.getDefault().getStateLocation().toFile() );
-        }
-
-        assertEquals( true, liferayRuntimeDirFile.exists() );
-    }
-
     protected void setupServer() throws Exception
     {
         final NullProgressMonitor npm = new NullProgressMonitor();
 
-        if( runtime == null )
-        {
-            setupRuntime();
-        }
+        final IServerWorkingCopy serverWC = createServerForRuntime( "6.2.0", runtime );
 
-        final IServerWorkingCopy serverWC = createServerForRuntime( "server", runtime );
-
+        ServerDelegate delegate = (ServerDelegate) serverWC.loadAdapter( ServerDelegate.class, null );
+        delegate.importRuntimeConfiguration( serverWC.getRuntime(), null );
         server = serverWC.save( true, npm );
 
         assertNotNull( server );
@@ -269,4 +328,30 @@ public abstract class ServerCoreBase extends BaseTests
         return "true".equals( skipServerTests );
     }
 
+    public void startServer() throws Exception
+    {
+        server = getServer();
+        if( server.getServerState() == IServer.STATE_STARTED )
+        {
+            return;
+        }
+
+        copyFileToServer( server, "", "files", "portal-setup-wizard.properties" );
+
+        server.start( "run", new NullProgressMonitor() );
+        long timeoutExpiredMs = System.currentTimeMillis() + 120000;
+        while( true )
+        {
+            Thread.sleep( 500 );
+            if( server.getServerState() == IServer.STATE_STARTED )
+            {
+                break;
+            }
+            if( System.currentTimeMillis() >= timeoutExpiredMs )
+            {
+                break;
+            }
+        }
+        Thread.sleep( 10000 );
+    }
 }

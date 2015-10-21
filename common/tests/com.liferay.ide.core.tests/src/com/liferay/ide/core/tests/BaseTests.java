@@ -157,7 +157,7 @@ public class BaseTests
         }
     }
 
-    protected void failTest( Exception e )
+    protected static void failTest( Exception e )
     {
         StringWriter s = new StringWriter();
         e.printStackTrace(new PrintWriter(s));

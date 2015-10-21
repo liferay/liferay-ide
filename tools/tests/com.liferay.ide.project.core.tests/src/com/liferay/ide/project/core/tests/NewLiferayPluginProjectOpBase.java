@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
@@ -41,6 +42,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.ValidationService;
 import org.eclipse.sapphire.services.ValueLabelService;
@@ -606,6 +608,51 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         String actualProjectName = op.getProjectNames().get(0).getName().content();
 
         assertEquals( expectedProjectName, actualProjectName );
+    }
+
+    @Test
+    public void testSDKLocationValidation() throws Exception
+    {
+        if( shouldSkipBundleTests() )return;
+
+        NewLiferayPluginProjectOp op = newProjectOp( "test-sdk" );
+
+        op.setProjectProvider( "ant" );
+
+        op.execute( new ProgressMonitor() );
+
+        SDK sdk = SDKUtil.getWorkspaceSDK();
+
+        IPath sdkLocation = sdk.getLocation();
+
+        if( sdk != null )
+        {
+            CoreUtil.getWorkspaceRoot().getProject( sdk.getName() ).delete( false, false, null );
+        }
+
+        // set existed project name
+        IProject project = getProject( "portlets", "test-sdk-" + getRuntimeVersion() + "-portlet" );
+        project.delete( false, false, null );
+        op.setSdkLocation( sdkLocation.toOSString() );
+        assertTrue( op.validation().message().contains(
+            "is not valid because a project already exists at that location." ) );
+
+        op = newProjectOp( "test2-sdk" );
+
+        op.setSdkLocation( "" );
+        assertEquals( "This sdk location is empty ", op.validation().message() );
+
+        op.setSdkLocation( sdk.getLocation().getDevice() + "/" );
+        assertEquals( "This sdk location is not correct", op.validation().message() );
+
+        // sdk has no build.USERNAME.properties file
+        sdkLocation.append( "build." + System.getenv().get( "USERNAME" ) + ".properties" ).toFile().delete();
+        op.setSdkLocation( sdkLocation.toOSString() );
+        
+        String expectedMessageRegx = ".*app.server.*";
+        assertTrue( op.validation().message().matches( expectedMessageRegx ) );
+        
+        assertEquals( false, op.validation().ok() );
     }
 
     protected void testProjectNameValidation( final String initialProjectName ) throws Exception

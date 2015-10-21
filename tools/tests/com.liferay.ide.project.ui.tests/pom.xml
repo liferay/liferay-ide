@@ -34,7 +34,6 @@
         <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-project-update-site>
         <liferay-ide-site>http://build-1:9090/userContent/liferay-ide/latest/repository/</liferay-ide-site>
         <liferay-ide-testing-site>http://build-1:9090/userContent/liferay-ide/latest/testing-repository</liferay-ide-testing-site>
-        <swtbot-test>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot-test>
     </properties>
 
     <repositories>
@@ -58,11 +57,6 @@
             <layout>p2</layout>
             <url>${eclipse-project-update-site}</url>
         </repository>
-		<repository>
-			<id>swtbot</id>
-			<layout>p2</layout>
-			<url>${swtbot-test}</url>
-		</repository>
     </repositories>
 
     <build>
@@ -198,9 +192,6 @@
                     <artifactId>tycho-surefire-plugin</artifactId>
                     <version>${tycho-version}</version>
                     <configuration>
-                        <useUIHarness>true</useUIHarness>
-                        <useUIThread>false</useUIThread>
-                        <artifactId>tycho-surefire-plugin</artifactId>
                         <application>org.eclipse.ui.ide.workbench</application>
                         <includes>
                             <include>**/*Test*.class</include>

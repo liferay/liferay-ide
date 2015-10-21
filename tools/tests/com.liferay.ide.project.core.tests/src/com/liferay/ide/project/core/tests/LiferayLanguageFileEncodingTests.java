@@ -329,11 +329,13 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
             fileNameWithUnderscore_IncorrectEncoding, new NullProgressMonitor() );
 
         waitForBuildAndValidation( portletProject );
+        Thread.sleep( 5000 );
         assertEquals( false, hasEncodingMarker( fileNameWithUnderscore_IncorrectEncoding ) );
 
         // test encoding all files of this project to default
         PropertiesUtil.encodeLanguagePropertiesFilesToDefault( portletProject, new NullProgressMonitor() );
 
+        Thread.sleep( 5000 );
         waitForBuildAndValidation( portletProject );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding ) );
         assertEquals( false, hasEncodingMarker( fileNameWithoutUnderscore_IncorrectEncoding1 ) );

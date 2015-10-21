@@ -31,14 +31,13 @@ import org.junit.Test;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.model.SDKProjectImportOp;
-import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.sdk.core.SDKUtil;
 
 /**
  * @author Li Lu
  */
 
-public class ImportPluginsSDKProjectWizardTests extends ProjectCoreBase
+public class ImportPluginsSDKProjectWizardTests extends ProjectUITestBase
 {
 
     private static final String BUNDLE_ID = "com.liferay.ide.project.ui.tests";
