@@ -20,6 +20,7 @@ import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,12 +30,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
 
 /**
  * @author Gregory Amerson
+ * @author Lovett Li
  */
 public abstract class TaskProblemAction extends SelectionProviderAction implements IAction
 {
@@ -47,7 +50,16 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
     @Override
     public void run()
     {
-        final List<TaskProblem> taskProblems = MigrationUtil.getTaskProblemsFromSelection( getSelection() );
+        final Object selection = getStructuredSelection().getFirstElement();
+        final List<TaskProblem> taskProblems;
+        if( selection instanceof IFile )
+        {
+            IFile file = (IFile)selection;
+           taskProblems = MigrationUtil.getTaskProblemsFromResource( file );
+        }else{
+           taskProblems = MigrationUtil.getTaskProblemsFromSelection( getSelection() );
+
+        }
 
         for( TaskProblem taskProblem : taskProblems )
         {
@@ -111,5 +123,35 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
         Object element = selection.getFirstElement();
 
         setEnabled( element instanceof TaskProblem );
+    }
+
+    protected void refreshTableViewer()
+    {
+        final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
+        UIUtil.async( new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                final Object selection = getStructuredSelection().getFirstElement();
+                List<TaskProblem> problems = null;
+                if( selection instanceof IFile )
+                {
+                    IFile file = (IFile) selection;
+                    problems = MigrationUtil.getTaskProblemsFromResource( file );
+                }
+
+                if( problems != null && problems.size() > 0 )
+                {
+                    mv.get_problemsViewer().setInput( problems.toArray() );
+                    mv.get_problemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
+                }
+                else
+                {
+                    mv.get_problemsViewer().setInput( null );
+                }
+            }
+        } );
     }
 }

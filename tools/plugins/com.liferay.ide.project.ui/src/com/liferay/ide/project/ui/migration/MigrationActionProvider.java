@@ -38,6 +38,7 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 public class MigrationActionProvider extends CommonActionProvider
 {
 
+    private ICommonViewerSite viewerSite;
     private SelectionProviderAction _autoCorrectAction;
     private SelectionProviderAction _ignoreAction;
     private SelectionProviderAction _markDoneAction;
@@ -95,6 +96,12 @@ public class MigrationActionProvider extends CommonActionProvider
 
             menu.add( new Separator() );
         }
+        if( selection instanceof IFile )
+        {
+            menu.add( new MarkDoneAllAction( viewerSite.getSelectionProvider() ) );
+            menu.add( new MarkUnDoneAllAction( viewerSite.getSelectionProvider() ) );
+            menu.add( new IgnoreAllAction( viewerSite.getSelectionProvider() ) );
+        }
     }
 
     private Object getFirstSelectedElement()
@@ -115,7 +122,7 @@ public class MigrationActionProvider extends CommonActionProvider
     {
         super.init( site );
 
-        final ICommonViewerSite viewerSite = site.getViewSite();
+        viewerSite = site.getViewSite();
 
         if( viewerSite instanceof ICommonViewerWorkbenchSite )
         {
