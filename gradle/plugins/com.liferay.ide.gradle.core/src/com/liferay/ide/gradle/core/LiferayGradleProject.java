@@ -49,12 +49,12 @@ import org.eclipse.debug.core.ILaunchManager;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class GradleBundleProject extends BaseLiferayProject implements IBundleProject
+public class LiferayGradleProject extends BaseLiferayProject implements IBundleProject
 {
 
     private static final String[] ignorePaths = new String[] { ".gradle", "build" };
 
-    public GradleBundleProject( IProject project )
+    public LiferayGradleProject( IProject project )
     {
         super( project );
     }

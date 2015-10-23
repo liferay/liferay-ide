@@ -18,6 +18,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 
 import java.util.HashMap;
@@ -90,13 +91,13 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
 
             try
             {
-                if( GradleProjectNature.INSTANCE.isPresentOn( project ) )
+                if( LiferayNature.hasNature(  project ) )
                 {
-                    if( hasPlugin( project, "aQute.bnd.gradle.BndBuilderPlugin" ) ||
-                        hasPlugin( project, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
-                    {
-                        return new GradleBundleProject( project );
-                    }
+//                    if( hasPlugin( project, "aQute.bnd.gradle.BndBuilderPlugin" ) ||
+//                        hasPlugin( project, "org.dm.gradle.plugins.bundle.BundlePlugin" ) )
+//                    {
+                        return new LiferayGradleProject( project );
+//                    }
                 }
             }
             catch( Exception e )
