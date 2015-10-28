@@ -1264,4 +1264,11 @@
            type="jboss">
       </portalBundle>
    </extension>
+   <extension
+         point="com.liferay.ide.server.core.portalBundleFactories">
+      <portalBundle
+            class="com.liferay.ide.server.core.portal.PortalWildFlyBundleFactory"
+           type="wildfly">
+      </portalBundle>
+   </extension>
 </plugin>
