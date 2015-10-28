@@ -15,6 +15,9 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.server.util.JavaUtil;
+
+import java.io.File;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
@@ -24,6 +27,9 @@ import org.eclipse.core.runtime.IPath;
  */
 public class PortalJBossBundleFactory extends AbstractPortalBundleFactory
 {
+
+    private static final String JBAS7_RELEASE_VERSION = "JBossAS-Release-Version";
+
     @Override
     public PortalBundle create( Map<String, String> appServerProperties )
     {
@@ -47,10 +53,24 @@ public class PortalJBossBundleFactory extends AbstractPortalBundleFactory
         if( path.append( "bundles" ).toFile().exists() && path.append( "modules" ).toFile().exists() &&
             path.append( "standalone" ).toFile().exists() && path.append( "bin" ).toFile().exists() )
         {
-            return true;
+            final String mainFolder = asPath( "modules","org","jboss","as","server","main");
+            final boolean isJbas7 = JavaUtil.scanFolderJarsForManifestProp(path.toFile(), mainFolder, JBAS7_RELEASE_VERSION, "7.");
+
+            return isJbas7;
         }
 
         return false;
     }
 
+
+    protected String asPath(String... vals) {
+        StringBuffer sb = new StringBuffer();
+        for ( String v : vals ) {
+            sb.append(v);
+            sb.append(File.separatorChar);
+        }
+        String s = sb.toString();
+        s = s.substring(0, s.length() - 1);
+        return s;
+    }
 }

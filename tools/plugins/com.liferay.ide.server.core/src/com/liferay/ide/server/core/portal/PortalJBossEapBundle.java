@@ -21,44 +21,20 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IPath;
 
-
 /**
  * @author Simon Jiang
  */
-public class PortalWildFlyBundle extends PortalJBossBundle
+public class PortalJBossEapBundle extends PortalJBossBundle
 {
-    public PortalWildFlyBundle( IPath path )
+    public PortalJBossEapBundle( IPath path )
     {
        super(path);
     }
 
-    public PortalWildFlyBundle( Map<String, String> appServerProperties )
+    public PortalJBossEapBundle( Map<String, String> appServerProperties )
     {
        super(appServerProperties);
     }
-
-    @Override
-    public String getType()
-    {
-        return "JBoss WildFly";
-    }
-
-
-    @Override
-    public String[] getRuntimeStopProgArgs()
-    {
-        final List<String> args = new ArrayList<String>();
-
-        args.add( "-mp" );
-        args.add( "\"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
-        args.add( "org.jboss.as.cli" );
-        args.add( "--controller=localhost:" + 9990 );
-        args.add( "--connect" );
-        args.add( "--command=:shutdown" );
-
-        return args.toArray( new String[0] );
-    }
-
 
     @Override
     public String[] getRuntimeStartVMArgs()
@@ -81,8 +57,8 @@ public class PortalWildFlyBundle extends PortalJBossBundle
         args.add( "-server" );
         args.add( "-Djava.util.logging.manager=org.jboss.logmanager.LogManager" );
 
-        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.0.Final.jar"  +  "\"" );
-        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.2.Final.jar"  +  "\"" );
+        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-1.5.4.Final-redhat-1.jar"  +  "\"" );
+        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.1.Final-redhat-1.jar"  +  "\"" );
         args.add( "-Djboss.modules.system.pkgs=org.jboss.logmanager");
 
         args.add( "-Dorg.jboss.boot.log.file=" +  "\""  + this.bundlePath.append("/standalone/log/boot.log") + "\"" );
@@ -92,5 +68,11 @@ public class PortalWildFlyBundle extends PortalJBossBundle
         args.add( "-Duser.timezone=GMT" );
         args.add( "-Dorg.jboss.logmanager.nocolor=true" );
         return args.toArray( new String[0] );
+    }
+
+    @Override
+    public String getType()
+    {
+        return "JBoss EAP";
     }
 }

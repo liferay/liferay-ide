@@ -22,6 +22,7 @@ import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
 import com.liferay.ide.server.core.portal.BundleDeployer;
+import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.remote.IRemoteServer;
@@ -144,14 +145,17 @@ public class LiferayServerCore extends Plugin
 
             ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
             {
+                @Override
                 public void serverAdded( IServer server )
                 {
                 }
 
+                @Override
                 public void serverChanged( IServer server )
                 {
                 }
 
+                @Override
                 public void serverRemoved( IServer s )
                 {
                     if( server.equals( s ) )
@@ -188,6 +192,7 @@ public class LiferayServerCore extends Plugin
 
             server.addServerListener( new IServerListener()
             {
+                @Override
                 public void serverChanged( ServerEvent event )
                 {
                     bundleDeployers.remove( server.getId() );
@@ -272,6 +277,26 @@ public class LiferayServerCore extends Plugin
         }
 
         return pluginPublishers;
+    }
+
+    public static PortalBundle getPortalBundle( final IPath bundlePath )
+    {
+        PortalBundleFactory[] factories = getPortalBundleFactories();
+
+        if ( factories != null )
+        {
+            for( PortalBundleFactory portalBundleFactory : factories )
+            {
+                IPath path = portalBundleFactory.canCreateFromPath( bundlePath );
+
+                if ( path != null )
+                {
+                    return portalBundleFactory.create( path );
+                }
+            }
+        }
+
+        return null;
     }
 
     public static PortalBundleFactory[] getPortalBundleFactories()

@@ -143,7 +143,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
         args.add( "-Dcom.sun.management.jmxremote.port=" + getJmxRemotePort() );
         args.add( "-Dcom.sun.management.jmxremote.ssl=false" );
         args.add( "-Dorg.jboss.resolver.warning=true" );
-//        args.add( "-Djava.net.preferIPv4Stack=true" );
+        args.add( "-Djava.net.preferIPv4Stack=true" );
         args.add( "-Dsun.rmi.dgc.client.gcInterval=3600000" );
         args.add( "-Dsun.rmi.dgc.server.gcInterval=3600000" );
         args.add( "-Djboss.modules.system.pkgs=org.jboss.byteman" );
@@ -176,7 +176,7 @@ public class PortalJBossBundle extends AbstractPortalBundle  implements PortalBu
     @Override
     public String getType()
     {
-        return "jboss";
+        return "JBoss AS";
     }
 
     @Override

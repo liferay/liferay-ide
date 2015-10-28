@@ -1261,14 +1261,21 @@
          point="com.liferay.ide.server.core.portalBundleFactories">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossBundleFactory"
-           type="jboss">
+            type="JBoss AS">
       </portalBundle>
    </extension>
    <extension
          point="com.liferay.ide.server.core.portalBundleFactories">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalWildFlyBundleFactory"
-           type="wildfly">
+            type="JBoss Wildfly">
+      </portalBundle>
+   </extension>
+   <extension
+         point="com.liferay.ide.server.core.portalBundleFactories">
+      <portalBundle
+            class="com.liferay.ide.server.core.portal.PortalJBossEapBundleFactory"
+            type="JBoss EAP">
       </portalBundle>
    </extension>
 </plugin>
