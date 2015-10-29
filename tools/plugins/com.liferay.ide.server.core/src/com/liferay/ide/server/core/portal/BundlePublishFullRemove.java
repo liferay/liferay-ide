@@ -100,7 +100,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
             for( File f : files )
             {
-                if( f.getName().contains( pattern ) )
+                if( f.getName().contains( pattern ) && !retval.contains( f ) )
                 {
                     retval.add( f );
                 }
