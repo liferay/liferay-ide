@@ -15,14 +15,13 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -33,11 +32,15 @@ import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
 import org.osgi.framework.BundleContext;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+
 /**
  * The activator class controls the plugin life cycle
  *
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class LRGradleCore extends Plugin
 {
@@ -47,6 +50,8 @@ public class LRGradleCore extends Plugin
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
+
+    private static GradleProjectConfigurator gradleProjectConfigurator ;
 
     public static IStatus createErrorStatus( Exception ex )
     {
@@ -160,6 +165,14 @@ public class LRGradleCore extends Plugin
     {
         super.start( context );
         plugin = this;
+
+        if( gradleProjectConfigurator == null )
+        {
+            gradleProjectConfigurator = new GradleProjectConfigurator();
+
+            ResourcesPlugin.getWorkspace().addResourceChangeListener(
+                gradleProjectConfigurator, IResourceChangeEvent.POST_CHANGE );
+        }
     }
 
     /*
@@ -170,5 +183,11 @@ public class LRGradleCore extends Plugin
     {
         plugin = null;
         super.stop( context );
+
+        if( gradleProjectConfigurator != null )
+        {
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener( gradleProjectConfigurator );
+            gradleProjectConfigurator = null;
+        }
     }
 }
