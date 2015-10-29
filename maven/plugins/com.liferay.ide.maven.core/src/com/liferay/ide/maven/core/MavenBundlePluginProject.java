@@ -100,9 +100,17 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
 
             // TODO update status
             final List<String> goals = Arrays.asList( "package" );
-            mavenProjectBuilder.execGoals( goals, monitor );
-            // we are going to try to get the output jar even if the package failed.
+
+            try
+            {
+                mavenProjectBuilder.execGoals( goals, monitor );
+            }
+            catch( CoreException e )
+            {
+                LiferayMavenCore.logError( "Error building package", e );
+            }
         }
+
         final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
         final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
 
