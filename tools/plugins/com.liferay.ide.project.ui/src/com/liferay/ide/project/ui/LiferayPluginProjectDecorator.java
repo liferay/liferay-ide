@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.project.core.BundleProjectNature;
+import com.liferay.ide.core.LiferayNature;
 
 import java.net.URL;
 
@@ -38,54 +38,22 @@ import org.eclipse.wst.common.project.facet.core.FacetedProjectFramework;
 public class LiferayPluginProjectDecorator extends LabelProvider implements ILightweightLabelDecorator
 {
 
-    private static ImageDescriptor EXT;
-
     private static final String EXT_FACET = "liferay.ext"; //$NON-NLS-1$
-
-    private static ImageDescriptor HOOK;
 
     private static final String HOOK_FACET = "liferay.hook"; //$NON-NLS-1$
 
     private static final String ICON_DIR = "icons/ovr"; //$NON-NLS-1$
 
-    private static ImageDescriptor LAYOUTTPL;
-
     private static final String LAYOUTTPL_FACET = "liferay.layouttpl"; //$NON-NLS-1$
 
-    private static ImageDescriptor PORTLET;
-
-    private static ImageDescriptor BUNDLE;
+    private static ImageDescriptor LIFERAY;
 
     /* The constants are duplicated here to avoid plugin loading. */
     private static final String PORTLET_FACET = "liferay.portlet"; //$NON-NLS-1$
 
-    private static ImageDescriptor THEME;
-
     private static final String THEME_FACET = "liferay.theme"; //$NON-NLS-1$
 
-    private static ImageDescriptor WEB;
-
     private static final String WEB_FACET = "liferay.web"; //$NON-NLS-1$
-
-    private static ImageDescriptor getExt()
-    {
-        if( EXT == null )
-        {
-            EXT = getImageDescriptor( "liferay_ovr" ); //$NON-NLS-1$
-        }
-
-        return EXT;
-    }
-
-    private static ImageDescriptor getHook()
-    {
-        if( HOOK == null )
-        {
-            HOOK = getImageDescriptor( "liferay_ovr" ); //$NON-NLS-1$
-        }
-
-        return HOOK;
-    }
 
     /**
      * This gets a .gif from the icons folder.
@@ -110,54 +78,14 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
         return imageDescriptor;
     }
 
-    private static ImageDescriptor getLayoutTpl()
+    private static ImageDescriptor getLiferay()
     {
-        if( LAYOUTTPL == null )
+        if( LIFERAY == null )
         {
-            LAYOUTTPL = getImageDescriptor( "liferay_ovr" ); //$NON-NLS-1$
+            LIFERAY = getImageDescriptor( "liferay_decoration" );
         }
 
-        return LAYOUTTPL;
-    }
-
-    private static ImageDescriptor getPortlet()
-    {
-        if( PORTLET == null )
-        {
-            PORTLET = getImageDescriptor( "liferay_ovr" ); //$NON-NLS-1$
-        }
-
-        return PORTLET;
-    }
-
-    private static ImageDescriptor getBundle()
-    {
-        if( BUNDLE == null )
-        {
-            BUNDLE = getImageDescriptor( "liferay_bundle_ovr" ); //$NON-NLS-1$
-        }
-
-        return BUNDLE;
-    }
-
-    private static ImageDescriptor getTheme()
-    {
-        if( THEME == null )
-        {
-            THEME = getImageDescriptor( "liferay_ovr" ); //$NON-NLS-1$
-        }
-
-        return THEME;
-    }
-
-    private static ImageDescriptor getWeb()
-    {
-        if( WEB == null )
-        {
-            WEB = getImageDescriptor( "liferay_ovr" ); //$NON-NLS-1$
-        }
-
-        return WEB;
+        return LIFERAY;
     }
 
     public void decorate( Object element, IDecoration decoration )
@@ -170,31 +98,31 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 
             if( hasFacet( project, PORTLET_FACET ) )
             {
-                overlay = getPortlet();
+                overlay = getLiferay();
             }
             else if( hasFacet( project, HOOK_FACET ) )
             {
-                overlay = getHook();
+                overlay = getLiferay();
             }
             else if( hasFacet( project, EXT_FACET ) )
             {
-                overlay = getExt();
+                overlay = getLiferay();
             }
             else if( hasFacet( project, LAYOUTTPL_FACET ) )
             {
-                overlay = getLayoutTpl();
+                overlay = getLiferay();
             }
             else if( hasFacet( project, THEME_FACET ) )
             {
-                overlay = getTheme();
+                overlay = getLiferay();
             }
             else if( hasFacet( project, WEB_FACET ) )
             {
-                overlay = getWeb();
+                overlay = getLiferay();
             }
-            else if ( hasNature( project, BundleProjectNature.ID ) )
+            else if ( hasNature( project, LiferayNature.NATURE_ID ) )
             {
-                overlay = getBundle();
+                overlay = getLiferay();
             }
 
             if( overlay != null )
@@ -203,7 +131,7 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
                 // DecorationContext ctx = (DecorationContext) decoration.getDecorationContext();
                 // ctx.putProperty( IDecoration.ENABLE_REPLACE, true );
 
-                decoration.addOverlay( overlay );
+                decoration.addOverlay( overlay, IDecoration.TOP_RIGHT );
             }
         }
     }

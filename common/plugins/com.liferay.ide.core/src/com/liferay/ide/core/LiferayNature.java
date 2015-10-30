@@ -30,10 +30,12 @@ import org.eclipse.core.runtime.OperationCanceledException;
 public class LiferayNature implements IProjectNature
 {
 
-    private static final String NATURE_IDS[] = { LiferayCore.NATURE_ID };
+    public static final String NATURE_ID = LiferayCore.PLUGIN_ID + ".liferayNature";
+    private static final String NATURE_IDS[] = { LiferayNature.NATURE_ID };
 
     private IProject currentProject;
     private IProgressMonitor monitor;
+
 
     public LiferayNature()
     {
