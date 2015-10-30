@@ -15,6 +15,7 @@
 
 package com.liferay.ide.gradle.core;
 
+import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.core.resources.IProject;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
@@ -46,7 +47,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
 
             try
             {
-                if( LiferayNature.hasNature(  project ) )
+                if( LiferayNature.hasNature(  project ) && GradleProjectNature.INSTANCE.isPresentOn( project ) )
                 {
                     return new LiferayGradleProject( project );
                 }
