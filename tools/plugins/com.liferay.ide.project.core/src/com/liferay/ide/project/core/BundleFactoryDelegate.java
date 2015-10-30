@@ -53,9 +53,9 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate
     {
         IModule[] retval = new IModule[0];
 
-        ILiferayProject lrProject = LiferayCore.create( project );
+        ILiferayProject liferayProject = LiferayCore.create( project );
 
-        if( lrProject instanceof IBundleProject )
+        if( liferayProject instanceof IBundleProject )
         {
             retval = new IModule[] { createSimpleModule( project ) };
         }
