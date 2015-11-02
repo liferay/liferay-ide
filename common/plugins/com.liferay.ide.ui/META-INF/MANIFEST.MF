@@ -42,4 +42,5 @@ Export-Package: com.liferay.ide.ui,
  com.liferay.ide.ui.pref,
  com.liferay.ide.ui.toolbar,
  com.liferay.ide.ui.util,
- com.liferay.ide.ui.wizard
+ com.liferay.ide.ui.wizard,
+ com.liferay.ide.ui.workspace

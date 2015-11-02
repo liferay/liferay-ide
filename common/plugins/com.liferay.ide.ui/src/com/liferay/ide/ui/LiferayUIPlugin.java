@@ -15,8 +15,10 @@
 
 package com.liferay.ide.ui;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
@@ -50,6 +52,10 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TaskBar;
+import org.eclipse.swt.widgets.TaskItem;
 import org.eclipse.ui.IStartup;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
@@ -115,7 +121,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         return plugin;
     }
 
-    @SuppressWarnings( "rawtypes" )
+    @SuppressWarnings( { "rawtypes", "unchecked" } )
     public static Map getLiferaySettings()
     {
         final Map options = new DefaultCodeFormatterOptions( LiferayDefaultCodeFormatterSettings.settings ).getMap();
@@ -144,6 +150,37 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     {
     }
 
+    private void applyWorkspaceBadge()
+    {
+        final String workspaceName = CoreUtil.getWorkspaceRoot().getLocation().lastSegment();
+
+        UIUtil.async( new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    final Display display = Display.getDefault();
+                    final Shell shell = display.getActiveShell();
+                    final TaskBar taskBar = display.getSystemTaskBar();
+
+                    TaskItem taskItem = taskBar.getItem(shell);
+
+                    if( taskItem == null)
+                    {
+                        taskItem = taskBar.getItem(null);
+                    }
+
+                    taskItem.setOverlayText( workspaceName );
+                }
+                catch( Exception e )
+                {
+                    //ignore
+                }
+            }
+         });
+    }
+
     public void earlyStartup()
     {
         if( isFirstStartup() )
@@ -156,6 +193,8 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         registerMBeans();
 
         lookupLiferay7SDKDir();
+
+        applyWorkspaceBadge();
     }
 
     private void lookupLiferay7SDKDir()
@@ -336,12 +375,4 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         }
     }
 
-    // public synchronized IDocumentProvider
-    // getPluginPropertiesFileDocumentProvider() {
-    // if (fPluginPropertiesFileDocumentProvider == null) {
-    // fPluginPropertiesFileDocumentProvider = new
-    // PluginPropertiesFileDocumentProvider();
-    // }
-    // return fPluginPropertiesFileDocumentProvider;
-    // }
 }
