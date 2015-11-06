@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compositeCheatsheet name="Liferay 7.0 Upgrade">
+   <taskGroup kind="sequence" name="Upgrade workflow tasks" skip="false">
+      <intro>
+         <b>Introduction</b>
+      </intro>
+      <onCompletion>
+         <b>Conclusion</b>
+      </onCompletion>
+      <taskGroup kind="sequence" name="Upgrading to Liferay 7 server" skip="false">
+         <intro>
+            <b>Introduction</b>
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <task kind="cheatsheet" name="Migrate portal settings" skip="true">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="migrate_portal_settings.xml">
+            </param>
+         </task>
+         <task kind="cheatsheet" name="Upgrade database" skip="true">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="database.xml">
+            </param>
+         </task>
+         <task kind="cheatsheet" name="Start Liferay 7 server" skip="false">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="start_liferay_7.xml">
+            </param>
+         </task>
+         <task kind="cheatsheet" name="Re-install Marketplace apps" skip="true">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="marketplace.xml">
+            </param>
+         </task>
+         <task kind="cheatsheet" name="Migrate Portal Templates" skip="false">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="portal_templates.xml">
+            </param>
+         </task>
+      </taskGroup>
+      <taskGroup kind="set" name="Migrating plugin source code to Liferay 7" skip="false">
+         <intro>
+            <b>Introduction</b>
+         </intro>
+         <onCompletion>
+            <b>Conclusion</b>
+         </onCompletion>
+         <task kind="cheatsheet" name="Migrate back-end code" skip="false">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="back_end_migration.xml">
+            </param>
+         </task>
+         <task kind="cheatsheet" name="Migrate front-end code" skip="false">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="front_end_migration.xml">
+            </param>
+         </task>
+         <task kind="cheatsheet" name="Optional: Convert projects to OSGi modules" skip="true">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="osgi_module_conversion.xml">
+            </param>
+         </task>
+         <task kind="cheatsheet" name="Optional: Convert projects to use gradle" skip="true">
+            <intro>
+               <b>Introduction</b>
+            </intro>
+            <onCompletion>
+               <b>Conclusion</b>
+            </onCompletion>
+            <param name="path" value="gradle_build_conversion.xml">
+            </param>
+         </task>
+      </taskGroup>
+   </taskGroup>
+</compositeCheatsheet>
