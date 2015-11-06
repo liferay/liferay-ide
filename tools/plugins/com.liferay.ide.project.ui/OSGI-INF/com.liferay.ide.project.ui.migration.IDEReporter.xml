@@ -2,7 +2,7 @@
 <component name="com.liferay.ide.project.ui.migration.IDEReporter" immediate="true">
   <implementation class="com.liferay.ide.project.ui.migration.IDEReporter"/>
   <service>
-    <provide interface="blade.migrate.api.Reporter"/>
+    <provide interface="com.liferay.blade.api.Reporter"/>
   </service>
   <property name="service.ranking" type="Integer" value="100"/>
   <property name="format" type="String" value="ide"/>

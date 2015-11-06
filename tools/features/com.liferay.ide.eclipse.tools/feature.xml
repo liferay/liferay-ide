@@ -207,21 +207,21 @@
          unpack="false"/>
 
    <plugin
-         id="blade.migrate.api"
+         id="com.liferay.blade.api"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="blade.migrate.liferay70"
+         id="com.liferay.blade.eclipse.provider"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="blade.migrate.provider"
+         id="com.liferay.blade.upgrade.liferay70"
          download-size="0"
          install-size="0"
          version="0.0.0"

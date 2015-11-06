@@ -1,6 +1,6 @@
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.Problem;
+import com.liferay.blade.migration.api.Problem;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -41,10 +41,10 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import blade.migrate.api.Migration;
-import blade.migrate.api.MigrationConstants;
-import blade.migrate.api.Problem;
-import blade.migrate.api.ProgressMonitor;
+import com.liferay.blade.api.Migration;
+import com.liferay.blade.api.MigrationConstants;
+import com.liferay.blade.api.Problem;
+import com.liferay.blade.api.ProgressMonitor;
 
 import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.ui.ProjectUI;

@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.MigrationConstants;
+import com.liferay.blade.api.MigrationConstants;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;

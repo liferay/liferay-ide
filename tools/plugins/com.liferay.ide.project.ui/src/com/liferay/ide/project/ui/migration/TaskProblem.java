@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.Problem;
+import com.liferay.blade.api.Problem;
 
 import java.io.File;
 

@@ -15,8 +15,8 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.Problem;
-import blade.migrate.api.Reporter;
+import com.liferay.blade.api.Problem;
+import com.liferay.blade.api.Reporter;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.ui.util.UIUtil;

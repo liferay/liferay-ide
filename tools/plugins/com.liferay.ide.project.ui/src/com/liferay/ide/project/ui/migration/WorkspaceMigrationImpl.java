@@ -15,9 +15,9 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.MigrationConstants;
-import blade.migrate.api.MigrationListener;
-import blade.migrate.api.Problem;
+import com.liferay.blade.api.MigrationConstants;
+import com.liferay.blade.api.MigrationListener;
+import com.liferay.blade.api.Problem;
 
 import com.liferay.ide.core.util.CoreUtil;
 

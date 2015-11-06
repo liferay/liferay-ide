@@ -14,9 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
-import blade.migrate.api.AutoMigrateException;
-import blade.migrate.api.AutoMigrator;
-import blade.migrate.api.Problem;
+import com.liferay.blade.api.AutoMigrateException;
+import com.liferay.blade.api.AutoMigrator;
+import com.liferay.blade.api.Problem;
 
 import com.liferay.ide.project.ui.ProjectUI;
 

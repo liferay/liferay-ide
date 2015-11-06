@@ -34,7 +34,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import blade.migrate.api.MigrationConstants;
+import com.liferay.blade.api.MigrationConstants;
 
 /**
  * @author Li Lu
