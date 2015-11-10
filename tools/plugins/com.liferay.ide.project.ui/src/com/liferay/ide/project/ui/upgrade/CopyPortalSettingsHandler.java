@@ -41,17 +41,17 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
         parameters.put( "source", op.getSourceLiferayLocation().content().toFile() );
         parameters.put( "dest", op.getDestinationLiferayLocation().content().toFile() );
 
-        Object error = command.execute( parameters );
+        try
+        {
+            command.execute( parameters );
 
-        if( error != null )
-        {
-            retval = Status.createErrorStatus( error.toString() );
-        }
-        else
-        {
             retval = Status.createOkStatus();
 
             // TODO save source/dest locations into preferences so they are used the next time by default value services
+        }
+        catch( Exception e )
+        {
+            retval = Status.createErrorStatus( e );
         }
 
         return retval;
