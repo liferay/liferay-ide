@@ -54,6 +54,6 @@ public abstract class AbstractOSGiCommandHandler extends AbstractHandler
         return execute( event, getCommand() );
     }
 
-    protected abstract Object execute( ExecutionEvent event, Command command );
+    protected abstract Object execute( ExecutionEvent event, Command command ) throws ExecutionException;
 
 }

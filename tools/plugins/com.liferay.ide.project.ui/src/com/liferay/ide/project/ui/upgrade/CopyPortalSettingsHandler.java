@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -24,6 +27,9 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
         super( "copyPortalSettings" );
     }
 
+    /**
+     * This executes on a job/worker thread
+     */
     public static final Status execute( final CopyPortalSettingsOp op, final ProgressMonitor pm )
     {
         Status retval = null;
@@ -44,21 +50,34 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
         else
         {
             retval = Status.createOkStatus();
-        }
 
-        // TODO save source/dest locations into preferences so they are used the next time by default value services
+            // TODO save source/dest locations into preferences so they are used the next time by default value services
+        }
 
         return retval;
     }
 
+    /**
+     * This executes on UI thread
+     * @throws ExecutionException
+     */
     @Override
-    protected Object execute( ExecutionEvent event, Command command )
+    protected Object execute( ExecutionEvent event, Command command ) throws ExecutionException
     {
         final CopyPortalSettingsWizard wizard = new CopyPortalSettingsWizard();
 
-        new WizardDialog( UIUtil.getActiveShell(), wizard ).open();
+        int retval = new WizardDialog( UIUtil.getActiveShell(), wizard ).open();
 
-        return null;
+        if( retval == Window.OK )
+        {
+            MessageDialog.openInformation( UIUtil.getActiveShell(), "Copy Portal Settings", "Copy successful." );
+
+            return null;
+        }
+        else
+        {
+            throw new ExecutionException( "Copy portal settings command failed" );
+        }
     }
 
 }
