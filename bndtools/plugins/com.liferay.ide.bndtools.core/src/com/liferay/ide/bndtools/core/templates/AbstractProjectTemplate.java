@@ -21,21 +21,19 @@ import aQute.bnd.header.Attrs;
 import java.util.Collections;
 
 import org.apache.commons.lang.WordUtils;
-import org.bndtools.api.IProjectTemplate;
 import org.bndtools.api.ProjectPaths;
 
 
 /**
  * @author Gregory Amerson
  */
-public abstract class AbstractProjectTemplate implements IProjectTemplate
+public abstract class AbstractProjectTemplate /*implements IProjectTemplate*/
 {
 
     public AbstractProjectTemplate()
     {
     }
 
-    @Override
     public void modifyInitialBndModel( BndEditModel model, String projectName, ProjectPaths projectPaths )
     {
         model.setBundleVersion( "1.0.0.${tstamp}" );

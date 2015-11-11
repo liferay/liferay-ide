@@ -10,7 +10,7 @@
             shortName="bndtools">
       </liferayProjectProvider>
    </extension>
-   <extension
+   <!--extension
          point="bndtools.core.projectTemplates">
       <template
             class="com.liferay.ide.bndtools.core.templates.PortletTemplate"
@@ -20,5 +20,5 @@
             icon="html/portlet.png"
             category="Liferay">
       </template>
-   </extension>
+   </extension-->
 </plugin>

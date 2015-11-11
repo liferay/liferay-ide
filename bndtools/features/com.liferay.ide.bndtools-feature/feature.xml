@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.liferay.ide.bndtools"
-      label="Liferay IDE bndtools Support (includes bndtools plugins)"
+      label="Liferay IDE bndtools Support (includes bndtools plugin)"
       version="3.0.0.qualifier"
       provider-name="Liferay, Inc.">
 
@@ -31,7 +31,7 @@
    </license>
 
    <requires>
-      <import feature="bndtools.main.feature" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="bndtools.main.feature" version="3.1.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
    </requires>
 

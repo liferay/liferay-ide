@@ -38,7 +38,6 @@ import org.osgi.resource.Namespace;
 public class PortletTemplate extends AbstractProjectTemplate
 {
 
-    @Override
     public boolean enableTestSourceFolder()
     {
         return false;
@@ -73,7 +72,6 @@ public class PortletTemplate extends AbstractProjectTemplate
         model.setRunRequires( Collections.singletonList( cap.buildSyntheticRequirement() ) );
     }
 
-    @Override
     public void modifyInitialBndProject( IBndProject project, String projectName, ProjectPaths projectPaths )
     {
         final String src = projectPaths.getSrc();
