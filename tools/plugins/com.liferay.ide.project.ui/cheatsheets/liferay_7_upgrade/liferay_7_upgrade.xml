@@ -7,7 +7,7 @@
       <onCompletion>
          <b>Conclusion</b>
       </onCompletion>
-      <taskGroup kind="sequence" name="Upgrading to Liferay 7 server" skip="false">
+      <taskGroup kind="sequence" name="Upgrading to Liferay 7 server" skip="true">
          <intro>
             <b>Introduction</b>
          </intro>
@@ -44,16 +44,6 @@
             <param name="path" value="start_liferay_7.xml">
             </param>
          </task>
-         <task kind="cheatsheet" name="Re-install Marketplace apps" skip="true">
-            <intro>
-               <b>Introduction</b>
-            </intro>
-            <onCompletion>
-               <b>Conclusion</b>
-            </onCompletion>
-            <param name="path" value="marketplace.xml">
-            </param>
-         </task>
          <task kind="cheatsheet" name="Migrate Portal Templates" skip="false">
             <intro>
                <b>Introduction</b>
@@ -65,7 +55,7 @@
             </param>
          </task>
       </taskGroup>
-      <taskGroup kind="set" name="Migrating plugin source code to Liferay 7" skip="false">
+      <taskGroup kind="set" name="Migrating plugin source code to Liferay 7" skip="true">
          <intro>
             <b>Introduction</b>
          </intro>
