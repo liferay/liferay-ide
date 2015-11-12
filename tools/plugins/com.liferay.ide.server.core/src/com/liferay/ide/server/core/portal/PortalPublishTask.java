@@ -73,7 +73,7 @@ public class PortalPublishTask extends PublishTaskDelegate
     {
         try
         {
-            final BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
+            final BundleDeployer deployer = LiferayServerCore.getBundleDeployer( server );
             return deployer.listBundles();
         }
         catch( IllegalArgumentException e )

@@ -12,6 +12,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
@@ -51,8 +56,7 @@ public class JMXBundleDeployer {
 	public JMXBundleDeployer(String serviceURL) {
 		try {
 			final JMXServiceURL jmxServiceUrl = new JMXServiceURL(serviceURL);
-			final JMXConnector jmxConnector = JMXConnectorFactory.connect(
-				jmxServiceUrl, null);
+			final JMXConnector jmxConnector = connectWithTimeout( jmxServiceUrl, 5, TimeUnit.SECONDS );
 
 			mBeanServerConnection = jmxConnector.getMBeanServerConnection();
 		} catch (Exception e) {
@@ -60,6 +64,43 @@ public class JMXBundleDeployer {
 				"Unable to get JMX connection", e);
 		}
 	}
+
+    JMXConnector connectWithTimeout( final JMXServiceURL url, long timeout, TimeUnit unit ) throws Exception
+    {
+        final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>( 1 );
+        final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        executor.submit( new Runnable()
+        {
+            public void run()
+            {
+                try
+                {
+                    JMXConnector connector = JMXConnectorFactory.connect( url );
+
+                    if( !queue.offer( connector ) )
+                    {
+                        connector.close();
+                    }
+                }
+                catch( IOException e )
+                {
+                }
+            }
+        });
+
+        Object result = queue.poll( timeout, unit );
+
+        if( result == null )
+        {
+            if( !queue.offer( "" ) )
+            {
+                result = queue.take();
+            }
+        }
+
+        return (JMXConnector) result;
+    }
 
 	/**
 	 * Gets the current list of installed bsns, compares it to the bsn provided.

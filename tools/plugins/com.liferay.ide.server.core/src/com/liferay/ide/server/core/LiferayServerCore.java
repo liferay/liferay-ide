@@ -55,8 +55,10 @@ import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
+import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.core.ServerEvent;
 import org.eclipse.wst.server.core.internal.Base;
 import org.eclipse.wst.server.core.internal.IMemento;
 import org.eclipse.wst.server.core.internal.XMLMemento;
@@ -74,6 +76,8 @@ import org.osgi.service.prefs.BackingStoreException;
 public class LiferayServerCore extends Plugin
 {
 
+    private static Map<String, BundleDeployer> bundleDeployers;
+
     private static Map<String, IServerManagerConnection> connections = null;
 
     // The shared instance
@@ -89,62 +93,6 @@ public class LiferayServerCore extends Plugin
     private static IRuntimeDelegateValidator[] runtimeDelegateValidators;
 
     private static ILiferayRuntimeStub[] runtimeStubs;
-
-//    private static Map<String, OsgiConnection> osgiConnections;
-//
-//    private static OsgiConnection getOsgiConnection( final IServer server )
-//    {
-//        OsgiConnection retval = null;
-//
-//        if( osgiConnections == null )
-//        {
-//            osgiConnections = new HashMap<String, OsgiConnection>();
-//
-//            ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
-//            {
-//                public void serverAdded( IServer server )
-//                {
-//                }
-//
-//                public void serverChanged( IServer server )
-//                {
-//                }
-//
-//                public void serverRemoved( IServer s )
-//                {
-//                    if( server.equals( s ) )
-//                    {
-//                        OsgiConnection service = osgiConnections.get( server.getId() );
-//
-//                        if( service != null )
-//                        {
-//                            service = null;
-//                            osgiConnections.remove( server.getId() );
-//                        }
-//                    }
-//                }
-//            });
-//        }
-//
-//        retval = osgiConnections.get( server.getId() );
-//
-//        if( retval == null )
-//        {
-//            retval = new OsgiConnectionImpl( 33133 );
-//
-//            osgiConnections.put( server.getId(), retval );
-//
-//            server.addServerListener( new IServerListener()
-//            {
-//                public void serverChanged( ServerEvent event )
-//                {
-//                    osgiConnections.remove( server.getId() );
-//                }
-//            });
-//        }
-//
-//        return retval;
-//    }
 
     public static IStatus createErrorStatus( Exception e )
     {
@@ -184,6 +132,70 @@ public class LiferayServerCore extends Plugin
     public static IStatus error( String msg, Throwable t )
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, t );
+    }
+
+    public static BundleDeployer getBundleDeployer( final IServer server )
+    {
+        BundleDeployer retval = null;
+
+        if( bundleDeployers == null )
+        {
+            bundleDeployers = new HashMap<>();
+
+            ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
+            {
+                public void serverAdded( IServer server )
+                {
+                }
+
+                public void serverChanged( IServer server )
+                {
+                }
+
+                public void serverRemoved( IServer s )
+                {
+                    if( server.equals( s ) )
+                    {
+                        BundleDeployer deployer = bundleDeployers.get( server.getId() );
+
+                        if( deployer != null )
+                        {
+                            deployer = null;
+                            bundleDeployers.remove( server.getId() );
+                        }
+                    }
+                }
+            });
+        }
+
+        retval = bundleDeployers.get( server.getId() );
+
+        if( retval != null )
+        {
+            if( !retval.ping() )
+            {
+                retval = null;
+            }
+        }
+
+        if( retval == null )
+        {
+            PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
+
+            retval = new BundleDeployer( runtime.getPortalBundle().getJmxRemotePort() );
+
+            bundleDeployers.put( server.getId(), retval );
+
+            server.addServerListener( new IServerListener()
+            {
+                public void serverChanged( ServerEvent event )
+                {
+                    bundleDeployers.remove( server.getId() );
+                }
+            });
+        }
+
+        return retval;
     }
 
     /**
@@ -544,13 +556,6 @@ public class LiferayServerCore extends Plugin
     public static void logInfo( String msg )
     {
         logInfo( info( msg ) );
-    }
-
-    public static BundleDeployer newBundleDeployer( IServer server )
-    {
-        PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
-
-        return new BundleDeployer( runtime.getPortalBundle().getJmxRemotePort() );
     }
 
     public static void setPreference( String key, String value )

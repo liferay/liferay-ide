@@ -201,7 +201,7 @@ public class BundlesContentProvider extends AbstractNavigatorContentProvider
 
         try
         {
-            BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
+            BundleDeployer deployer = LiferayServerCore.getBundleDeployer( server );
 
             deployer.ping();
 

@@ -87,7 +87,7 @@ public class BundlePublishOperation extends PublishOperation
     {
         if( this.deployer == null )
         {
-            this.deployer = LiferayServerCore.newBundleDeployer( this.server );
+            this.deployer = LiferayServerCore.getBundleDeployer( this.server );
         }
 
         return this.deployer;

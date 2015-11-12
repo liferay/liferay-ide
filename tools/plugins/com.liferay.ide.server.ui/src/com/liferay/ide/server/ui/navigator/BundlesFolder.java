@@ -125,7 +125,7 @@ public class BundlesFolder
                 {
                     currentStatus = LiferayServerCore.info( "Loading OSGi bundles..." );
 
-                    final BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
+                    final BundleDeployer deployer = LiferayServerCore.getBundleDeployer( server );
 
                     List<BundleDTO> bundlesToShow = new ArrayList<BundleDTO>();
 

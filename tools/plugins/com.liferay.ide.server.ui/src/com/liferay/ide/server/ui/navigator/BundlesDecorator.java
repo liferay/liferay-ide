@@ -170,7 +170,7 @@ public class BundlesDecorator extends LabelProvider implements ILightweightLabel
 
         if( retval == null )
         {
-            final BundleDeployer deployer = LiferayServerCore.newBundleDeployer( server );
+            final BundleDeployer deployer = LiferayServerCore.getBundleDeployer( server );
             connections.put( id, deployer );
             retval = deployer;
         }
