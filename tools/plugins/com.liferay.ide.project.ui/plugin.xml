@@ -47,6 +47,26 @@
          </selection>
       </wizard>
 
+      <wizard
+            category="com.liferay.ide.newWizards"
+            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+            icon="icons/n16/bundle.png"
+            id="com.liferay.ide.project.ui.modules.newModuleProjectWizard"
+            name="Liferay Module Project"
+            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
+            project="true">
+         <class class="com.liferay.ide.project.ui.modules.NewLiferayModuleProjectWizard">
+            <parameter name="liferay_project" value="true"/>
+            <parameter name="menuIndex" value="12" />
+         </class>
+
+         <description>
+            %new.project.wizard.description
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
    </extension>
 
    <extension

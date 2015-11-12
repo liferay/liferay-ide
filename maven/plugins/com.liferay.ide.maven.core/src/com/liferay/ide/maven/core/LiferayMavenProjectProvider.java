@@ -123,15 +123,30 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         "^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd", Pattern.CASE_INSENSITIVE |
             Pattern.DOTALL );
 
+    public LiferayMavenProjectProvider( Class<?>[] types )
+    {
+        super( types );
+    }
+
     public LiferayMavenProjectProvider()
     {
         super( new Class<?>[] { IProject.class } );
     }
 
-    public IStatus doCreateNewProject(
-        final NewLiferayPluginProjectOp op, IProgressMonitor monitor, ElementList<ProjectName> projectNames )
-        throws CoreException
+    @Override
+    public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
     {
+
+        if( ! (operation instanceof NewLiferayPluginProjectOp ) )
+        {
+            throw new IllegalArgumentException( "Operation must be of type NewLiferayPluginProjectOp" ); //$NON-NLS-1$
+        }
+
+
+        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.class.cast( operation );
+
+        ElementList<ProjectName> projectNames = op.getProjectNames();
+
         IStatus retval = null;
 
         final IMavenConfiguration mavenConfiguration = MavenPlugin.getMavenConfiguration();
@@ -667,6 +682,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         return profilesToSave;
     }
 
+    @Override
     public ILiferayProject provide( Object adaptable )
     {
         if( adaptable instanceof IProject )
@@ -767,6 +783,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         ProjectCore.operate( project, UpdateDescriptorVersionOperation.class, archetypeVesion, dtdVersion );
     }
 
+    @Override
     public IStatus validateProjectLocation( String projectName, IPath path )
     {
         IStatus retval = Status.OK_STATUS;

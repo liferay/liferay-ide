@@ -13,33 +13,32 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.model.internal;
+package com.liferay.ide.project.core.model.modules.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.model.internal.ProjectProviderDefaultValueService;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Simon Jiang
  */
-public class ProjectProviderDefaultValueService extends DefaultValueService
+public class ModuleProjectProviderDefaultValueService extends ProjectProviderDefaultValueService
 {
-
     @Override
     protected String compute()
     {
-        String retval = "ant";
+        String retval = "maven-module";
 
         final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
         final String defaultProjectBuildType =
             Platform.getPreferencesService().getString(
-                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION, null,
+                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, null,
                     prefContexts );
 
         if( defaultProjectBuildType != null )
@@ -54,5 +53,4 @@ public class ProjectProviderDefaultValueService extends DefaultValueService
 
         return retval;
     }
-
 }

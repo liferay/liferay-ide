@@ -12,27 +12,24 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model.internal;
+package com.liferay.ide.project.core.model.modules.internal;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ILiferayModuleProjectProvider;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.sapphire.PossibleValuesService;
-
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class ProjectProviderPossibleValuesService extends PossibleValuesService
+public class ModuleProjectProviderPossibleValuesService extends ProjectProviderPossibleValuesService
 {
-
     private List<String> possibleValues;
 
     @Override
@@ -44,7 +41,7 @@ public class ProjectProviderPossibleValuesService extends PossibleValuesService
 
         for( final ILiferayProjectProvider provider : LiferayCore.getProviders() )
         {
-            if( provider instanceof NewLiferayProjectProvider && !( provider instanceof ILiferayModuleProjectProvider ) )
+            if( provider instanceof ILiferayModuleProjectProvider )
             {
                 possibleValues.add( provider.getShortName() );
             }

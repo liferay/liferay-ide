@@ -5,9 +5,9 @@
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
             class="com.liferay.ide.gradle.core.GradleProjectProvider"
-            displayName="Gradle Project Provider"
-            id="com.liferay.ide.gradle.core.gradleProjectProvider"
-            shortName="gradle">
+            displayName="Gradle Module Project Provider"
+            id="com.liferay.ide.gradle.core.gradleModuleProjectProvider"
+            shortName="gradle-module">
       </liferayProjectProvider>
    </extension>
 </plugin>

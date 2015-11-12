@@ -71,11 +71,180 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         super( new Class<?>[] { IProject.class, IRuntime.class } );
     }
 
-    @Override
-    public IStatus doCreateNewProject(
-        NewLiferayPluginProjectOp op, IProgressMonitor monitor, ElementList<ProjectName> projectNames )
+    private void portletProjectCreated( NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor )
         throws CoreException
     {
+        final IPortletFramework portletFramework = op.getPortletFramework().content();
+        final String portletName = op.getPortletName().content( false );
+        final String frameworkName = getFrameworkName( op );
+
+        final IStatus status = portletFramework.postProjectCreated( newProject, frameworkName, portletName, monitor );
+
+        if( ! status.isOK() )
+        {
+            throw new CoreException( status );
+        }
+    }
+
+    private void projectCreated( IProject project )
+    {
+        final IFile ivyFile = project.getFile( "ivy.xml" );
+
+        if( ivyFile.exists() )
+        {
+            try
+            {
+                String contents = CoreUtil.readStreamToString( ivyFile.getContents() );
+
+                contents = contents.replace( "${sdk.dir}/ivy.xml", "../../ivy.xml" );
+
+                ivyFile.setContents(
+                    new ByteArrayInputStream( contents.toString().getBytes( "UTF-8" ) ), IResource.FORCE,
+                    new NullProgressMonitor() );
+            }
+            catch( Exception e )
+            {
+                ProjectCore.logError( e );
+            }
+        }
+    }
+
+    @Override
+    public ILiferayProject provide( Object type )
+    {
+        ILiferayProject retval = null;
+
+        if( type instanceof IProject )
+        {
+            final IProject project = (IProject) type;
+
+            try
+            {
+                if( SDKUtil.isSDKProject( project ) )
+                {
+                    final IJavaProject javaProject = JavaCore.create( project );
+
+                    final boolean hasNewSdk =
+                        ClasspathUtil.hasNewLiferaySDKContainer( javaProject.getRawClasspath() );
+
+                    if( hasNewSdk )
+                    {
+                        final PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
+
+                        if( portalBundle != null )
+                        {
+                            retval = new PluginsSDKBundleProject( project, portalBundle );
+                        }
+                    }
+                    else
+                    {
+                        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
+
+                        if( liferayRuntime != null )
+                        {
+                            retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
+                        }
+                    }
+                }
+            }
+            catch( CoreException e )
+            {
+            }
+        }
+        else if( type instanceof IRuntime )
+        {
+            try
+            {
+                final IRuntime runtime = (IRuntime) type;
+
+                final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+
+                if( liferayRuntime != null )
+                {
+                    retval = new PluginsSDKRuntimeProject( null, liferayRuntime );
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        return retval;
+    }
+
+    private void serviceBuilderProjectCreated(
+        NewLiferayPluginProjectOp op, String version, IProject newProject, IProgressMonitor monitor ) throws CoreException
+    {
+        // create a default service.xml file in the project
+        final IFile serviceXmlFile = newProject.getFile( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service.xml" );
+
+        String descriptorVersion = null;
+
+        try
+        {
+            Version portalVersion = new Version( version );
+
+            descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";  //$NON-NLS-1$//$NON-NLS-2$
+        }
+        catch( Exception e )
+        {
+            ProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
+            descriptorVersion = "6.0.0"; //$NON-NLS-1$
+        }
+
+        WizardUtil.createDefaultServiceBuilderFile(
+            serviceXmlFile, descriptorVersion, true, "com.liferay.sample", "SAMPLE", System.getProperty( "user.name" ), monitor );
+    }
+
+    private void themeProjectCreated( IProject newProject ) throws CoreException
+    {
+        final Map<String, String> args = new HashMap<String, String>();
+        args.put( "force", "true" );
+
+        newProject.build(
+            IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
+    }
+
+    @Override
+    public IStatus validateProjectLocation( String name, IPath path )
+    {
+        IStatus retval = Status.OK_STATUS;
+
+        if( path.append(".project").toFile().exists() ) //$NON-NLS-1$
+        {
+            retval = ProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
+                    "\" is not valid because a project already exists at that location." ); //$NON-NLS-1$
+        }
+        else
+        {
+            final File pathFile = path.toFile();
+
+            if( pathFile.exists() && pathFile.isDirectory() && pathFile.listFiles().length > 0 )
+            {
+                retval = ProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
+                        "\" is not valid because it already contains files." ); //$NON-NLS-1$
+            }
+        }
+
+        return retval;
+    }
+
+
+
+    @Override
+    public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
+    {
+
+        if( ! (operation instanceof NewLiferayPluginProjectOp ) )
+        {
+            throw new IllegalArgumentException( "Operation must be of type NewLiferayPluginProjectOp" ); //$NON-NLS-1$
+        }
+
+
+        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.class.cast( operation );
+
+        ElementList<ProjectName> projectNames = op.getProjectNames();
+
         final PluginType pluginType = op.getPluginType().content( true );
         final String originalProjectName = op.getProjectName().content();
         final String pluginTypeSuffix = NewLiferayPluginProjectOpMethods.getPluginTypeSuffix( pluginType );
@@ -289,163 +458,6 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
         }
 
         return Status.OK_STATUS;
-    }
 
-    private void portletProjectCreated( NewLiferayPluginProjectOp op, IProject newProject, IProgressMonitor monitor )
-        throws CoreException
-    {
-        final IPortletFramework portletFramework = op.getPortletFramework().content();
-        final String portletName = op.getPortletName().content( false );
-        final String frameworkName = getFrameworkName( op );
-
-        final IStatus status = portletFramework.postProjectCreated( newProject, frameworkName, portletName, monitor );
-
-        if( ! status.isOK() )
-        {
-            throw new CoreException( status );
-        }
-    }
-
-    private void projectCreated( IProject project )
-    {
-        final IFile ivyFile = project.getFile( "ivy.xml" );
-
-        if( ivyFile.exists() )
-        {
-            try
-            {
-                String contents = CoreUtil.readStreamToString( ivyFile.getContents() );
-
-                contents = contents.replace( "${sdk.dir}/ivy.xml", "../../ivy.xml" );
-
-                ivyFile.setContents(
-                    new ByteArrayInputStream( contents.toString().getBytes( "UTF-8" ) ), IResource.FORCE,
-                    new NullProgressMonitor() );
-            }
-            catch( Exception e )
-            {
-                ProjectCore.logError( e );
-            }
-        }
-    }
-
-    @Override
-    public ILiferayProject provide( Object type )
-    {
-        ILiferayProject retval = null;
-
-        if( type instanceof IProject )
-        {
-            final IProject project = (IProject) type;
-
-            try
-            {
-                if( SDKUtil.isSDKProject( project ) )
-                {
-                    final IJavaProject javaProject = JavaCore.create( project );
-
-                    final boolean hasNewSdk =
-                        ClasspathUtil.hasNewLiferaySDKContainer( javaProject.getRawClasspath() );
-
-                    if( hasNewSdk )
-                    {
-                        final PortalBundle portalBundle = ServerUtil.getPortalBundle( project );
-
-                        if( portalBundle != null )
-                        {
-                            retval = new PluginsSDKBundleProject( project, portalBundle );
-                        }
-                    }
-                    else
-                    {
-                        final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( project );
-
-                        if( liferayRuntime != null )
-                        {
-                            retval = new PluginsSDKRuntimeProject( project, liferayRuntime );
-                        }
-                    }
-                }
-            }
-            catch( CoreException e )
-            {
-            }
-        }
-        else if( type instanceof IRuntime )
-        {
-            try
-            {
-                final IRuntime runtime = (IRuntime) type;
-
-                final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
-
-                if( liferayRuntime != null )
-                {
-                    retval = new PluginsSDKRuntimeProject( null, liferayRuntime );
-                }
-            }
-            catch( Exception e )
-            {
-            }
-        }
-
-        return retval;
-    }
-
-    private void serviceBuilderProjectCreated(
-        NewLiferayPluginProjectOp op, String version, IProject newProject, IProgressMonitor monitor ) throws CoreException
-    {
-        // create a default service.xml file in the project
-        final IFile serviceXmlFile = newProject.getFile( ISDKConstants.DEFAULT_DOCROOT_FOLDER + "/WEB-INF/service.xml" );
-
-        String descriptorVersion = null;
-
-        try
-        {
-            Version portalVersion = new Version( version );
-
-            descriptorVersion = portalVersion.getMajor() + "." + portalVersion.getMinor() + ".0";  //$NON-NLS-1$//$NON-NLS-2$
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "Could not determine liferay runtime version", e ); //$NON-NLS-1$
-            descriptorVersion = "6.0.0"; //$NON-NLS-1$
-        }
-
-        WizardUtil.createDefaultServiceBuilderFile(
-            serviceXmlFile, descriptorVersion, true, "com.liferay.sample", "SAMPLE", System.getProperty( "user.name" ), monitor );
-    }
-
-    private void themeProjectCreated( IProject newProject ) throws CoreException
-    {
-        final Map<String, String> args = new HashMap<String, String>();
-        args.put( "force", "true" );
-
-        newProject.build(
-            IncrementalProjectBuilder.FULL_BUILD, "com.liferay.ide.eclipse.theme.core.cssBuilder", args, null );
-    }
-
-    @Override
-    public IStatus validateProjectLocation( String name, IPath path )
-    {
-        IStatus retval = Status.OK_STATUS;
-
-        if( path.append(".project").toFile().exists() ) //$NON-NLS-1$
-        {
-            retval = ProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
-                    "\" is not valid because a project already exists at that location." ); //$NON-NLS-1$
-        }
-        else
-        {
-            final File pathFile = path.toFile();
-
-            if( pathFile.exists() && pathFile.isDirectory() && pathFile.listFiles().length > 0 )
-            {
-                retval = ProjectCore.createErrorStatus( "\"" + path + //$NON-NLS-1$
-                        "\" is not valid because it already contains files." ); //$NON-NLS-1$
-            }
-        }
-
-        return retval;
     }
 }

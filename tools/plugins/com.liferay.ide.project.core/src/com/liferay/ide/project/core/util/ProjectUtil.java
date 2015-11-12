@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.core.util;
 
+import com.liferay.blade.api.Command;
+import com.liferay.blade.api.CommandException;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -40,8 +42,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
@@ -56,9 +60,11 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
@@ -91,6 +97,10 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 /**
  * @author Gregory Amerson
@@ -734,6 +744,54 @@ public class ProjectUtil
         }, monitor );
         return project;
     }
+
+    public static IStatus createOSGIBundleProject(
+        File baseLocation, File dir, String projectType, String buildType, String projectName, String className,
+        String serviceName )
+    {
+        IStatus retVal = Status.OK_STATUS;
+
+        final BundleContext bundleContext = FrameworkUtil.getBundle( ProjectUtil.class ).getBundleContext();
+
+        final Collection<ServiceReference<Command>> refs;
+        try
+        {
+            refs = bundleContext.getServiceReferences( Command.class, "(osgi.command.function=createProject)" );
+
+            if( refs != null && refs.size() > 0 )
+            {
+                final Command command = bundleContext.getService( refs.iterator().next() );
+
+                final Map<String, Object> parameters = new HashMap<>();
+
+                parameters.put( "base", baseLocation );
+                parameters.put( "dir", dir );
+                parameters.put( "typeValue", projectType );
+                parameters.put( "buildValue", buildType );
+                parameters.put( "name", projectName );
+                parameters.put( "classname", projectName );
+                parameters.put( "service", projectName );
+
+                final Object errors = command.execute( parameters );
+
+                if( errors != null )
+                {
+                    retVal = ProjectCore.createErrorStatus( "Create this Project error " );
+                }
+            }
+            else
+            {
+                retVal = ProjectCore.createErrorStatus( "Unable to create this Project " );
+            }
+        }
+        catch( InvalidSyntaxException | CommandException e )
+        {
+            retVal = ProjectCore.createErrorStatus( "Can not invoke blade tools to create project " );
+        }
+
+        return retVal;
+    }
+
 
     private static boolean isLiferayRuntimePluginClassPath(IClasspathEntry entry)
     {

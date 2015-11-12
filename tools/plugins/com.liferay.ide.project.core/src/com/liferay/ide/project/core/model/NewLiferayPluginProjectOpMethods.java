@@ -403,13 +403,13 @@ public class NewLiferayPluginProjectOpMethods
         {
             final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
-            prefs.put( ProjectCore.PREF_DEFAULT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+            prefs.put( ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
             prefs.putBoolean( ProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
             prefs.putBoolean( ProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
 
             if( "maven".equalsIgnoreCase( op.getProjectProvider().text() ) )
             {
-                prefs.put( ProjectCore.PREF_DEFAULT_PROJECT_MAVEN_GROUPID, op.getGroupId().content() );
+                prefs.put( ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, op.getGroupId().content() );
             }
 
             prefs.flush();

@@ -12,15 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.ILiferayModuleProjectProvider;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
+package com.liferay.ide.project.core.model.modules.internal;
+
+import com.liferay.blade.api.ProjectType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -28,35 +25,27 @@ import org.eclipse.sapphire.PossibleValuesService;
 
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class ProjectProviderPossibleValuesService extends PossibleValuesService
+public class ModuleProjectTypePossibleValuesService extends PossibleValuesService
 {
-
     private List<String> possibleValues;
 
     @Override
     protected void initPossibleValuesService()
     {
-        super.initPossibleValuesService();
-
         possibleValues = new ArrayList<String>();
 
-        for( final ILiferayProjectProvider provider : LiferayCore.getProviders() )
+        for( ProjectType pluginType : ProjectType.values() )
         {
-            if( provider instanceof NewLiferayProjectProvider && !( provider instanceof ILiferayModuleProjectProvider ) )
-            {
-                possibleValues.add( provider.getShortName() );
-            }
+            possibleValues.add( pluginType.name() );
         }
-
-        Collections.sort( possibleValues );
     }
 
     @Override
     protected void compute( Set<String> values )
     {
-        values.addAll( this.possibleValues );
+        values.addAll( possibleValues );
     }
 
     @Override
@@ -64,5 +53,4 @@ public class ProjectProviderPossibleValuesService extends PossibleValuesService
     {
         return true;
     }
-
 }

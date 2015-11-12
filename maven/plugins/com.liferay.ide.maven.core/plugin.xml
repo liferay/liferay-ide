@@ -43,6 +43,16 @@
       </liferayProjectProvider>
    </extension>
    <extension
+         point="com.liferay.ide.core.liferayProjectProviders">
+      <liferayProjectProvider
+            class="com.liferay.ide.maven.core.LiferayMavenModuleProjectProvider"
+            displayName="Maven (liferay-maven-module)"
+            id="com.liferay.ide.maven.core.mavenModuleProjectProvider"
+            priority="high"
+            shortName="maven-module">
+      </liferayProjectProvider>
+   </extension>
+   <extension
          id="com.liferay.ide.maven.core.configurationProblem"
          name="%liferay.project.maven.project.configuration.problem"
          point="org.eclipse.core.resources.markers">
