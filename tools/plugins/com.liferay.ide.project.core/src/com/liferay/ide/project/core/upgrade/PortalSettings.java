@@ -6,10 +6,10 @@ package com.liferay.ide.project.core.upgrade;
 public class PortalSettings
 {
 
-    private String previousName;
-    private String liferayPortalLocation;
-    private String newName;
-    private String newliferayPortalLocation;
+    private String _previousName;
+    private String _previousLiferayPortalLocation;
+    private String _newName;
+    private String _newliferayPortalLocation;
 
     public PortalSettings()
     {
@@ -17,53 +17,53 @@ public class PortalSettings
     }
 
     public PortalSettings(
-        String previousName, String liferayPortalLocation, String newName, String newliferayPortalLocation )
+        String previousName, String previousLiferayPortalLocation, String newName, String newliferayPortalLocation )
     {
         super();
-        this.previousName = previousName;
-        this.liferayPortalLocation = liferayPortalLocation;
-        this.newName = newName;
-        this.newliferayPortalLocation = newliferayPortalLocation;
+        _previousName = previousName;
+        _previousLiferayPortalLocation = previousLiferayPortalLocation;
+        _newName = newName;
+        _newliferayPortalLocation = newliferayPortalLocation;
     }
 
     public String getPreviousName()
     {
-        return previousName;
+        return _previousName;
     }
 
     public void setPreviousName( String previousName )
     {
-        this.previousName = previousName;
+        _previousName = previousName;
     }
 
-    public String getLiferayPortalLocation()
+    public String getPreviousLiferayPortalLocation()
     {
-        return liferayPortalLocation;
+        return _previousLiferayPortalLocation;
     }
 
-    public void setLiferayPortalLocation( String liferayPortalLocation )
+    public void setPreviousLiferayPortalLocation( String liferayPortalLocation )
     {
-        this.liferayPortalLocation = liferayPortalLocation;
+        _previousLiferayPortalLocation = liferayPortalLocation;
     }
 
     public String getNewName()
     {
-        return newName;
+        return _newName;
     }
 
     public void setNewName( String newName )
     {
-        this.newName = newName;
+        _newName = newName;
     }
 
-    public String getNewliferayPortalLocation()
+    public String getNewLiferayPortalLocation()
     {
-        return newliferayPortalLocation;
+        return _newliferayPortalLocation;
     }
 
-    public void setNewliferayPortalLocation( String newliferayPortalLocation )
+    public void setNewLiferayPortalLocation( String newliferayPortalLocation )
     {
-        this.newliferayPortalLocation = newliferayPortalLocation;
+        _newliferayPortalLocation = newliferayPortalLocation;
     }
 
 }
