@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*******************************************************************************
+ * Copyright (c) 2000-2014 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+ -->
+<definition>
+    <wizard>
+        <id>ConvertJspHookWizard</id>
+        <element-type>com.liferay.ide.project.ui.upgrade.ConvertJspHookOp</element-type>
+        <label>Convert Jsp Hook</label>
+        <page>
+            <id>ConvertJspHookPage</id>
+            <label>Convert Jsp Hook</label>
+            <content>
+                <property-editor>SourceJspHookLocation</property-editor>
+            </content>
+            <description>Convert Jsp Hook</description>
+        </page>
+    </wizard>
+</definition>

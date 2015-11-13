@@ -1136,6 +1136,10 @@
             id="com.liferay.ide.project.ui.upgrade.runVerifyProperties"
             name="Liferay 7 Upgrade Run Verify Properties">
       </command>
+      <command
+            id="com.liferay.ide.project.ui.upgrade.convertJspHook"
+            name="Convert Jsp Hooks">
+      </command>
    </extension>
    <extension point="org.eclipse.ui.commandImages">
       <image
@@ -1163,6 +1167,10 @@
        <handler
          commandId="com.liferay.ide.project.ui.upgrade.runVerifyProperties"
          class="com.liferay.ide.project.ui.upgrade.RunVerifyPropertiesHandler">
+       </handler>
+       <handler
+             class="com.liferay.ide.project.ui.upgrade.ConvertJspHookHandler"
+             commandId="com.liferay.ide.project.ui.upgrade.convertJspHook">
        </handler>
    </extension>
 
@@ -1307,5 +1315,13 @@
          </command>
       </menuContribution>
    </extension>
-  
+   <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <cheatsheet
+            composite="true"
+            contentFile="$nl$/cheatsheets/liferay_7_upgrade/liferay_7_upgrade.xml"
+            id="com.liferay.ide.project.ui.cheatsheet1075543798"
+            name="Liferay 7.0 Upgrade">
+      </cheatsheet>
+   </extension>
 </plugin>

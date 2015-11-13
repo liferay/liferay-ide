@@ -36,8 +36,8 @@ public class TaskProblem extends Problem
 
     public TaskProblem( Problem problem, boolean resolved, long markerId )
     {
-        super( problem.title, problem.summary, problem.type, problem.ticket, problem.file,
-               problem.lineNumber, problem.startOffset, problem.endOffset, problem.html, problem.autoCorrectContext );
+        //super( problem.title, problem.summary, problem.type, problem.ticket, problem.file,
+          //     problem.lineNumber, problem.startOffset, problem.endOffset, problem.html, problem.autoCorrectContext );
 
         _resolved = resolved;
         _markerId = markerId;
@@ -47,7 +47,7 @@ public class TaskProblem extends Problem
         String title, String summary, String type, String ticket, File file, int lineNumber,
         int startOffset, int endOffset, String html, String autoCorrectContext, boolean resolved, long markerId)
     {
-        super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext );
+        //super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext );
 
         _resolved = resolved;
         _markerId = markerId;
