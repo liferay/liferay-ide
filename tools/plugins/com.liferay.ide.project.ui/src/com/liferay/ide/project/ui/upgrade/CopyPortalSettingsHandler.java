@@ -1,6 +1,9 @@
 package com.liferay.ide.project.ui.upgrade;
 
 import com.liferay.blade.api.Command;
+import com.liferay.ide.project.core.upgrade.PortalSettings;
+import com.liferay.ide.project.core.util.UpgradeAssistantSettingsUtil;
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
@@ -18,6 +21,7 @@ import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Gregory Amerson
+ * @author Lovett Li
  */
 public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 {
@@ -38,11 +42,16 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 
         final Map<String, File> parameters = new HashMap<>();
 
-        parameters.put( "source", op.getSourceLiferayLocation().content().toFile() );
-        parameters.put( "dest", op.getDestinationLiferayLocation().content().toFile() );
-
         try
         {
+            UpgradeAssistantSettingsUtil.JavaObjectToJSONFile(
+                ProjectUI.getDefault().getStateLocation().toOSString(), new PortalSettings(
+                    op.getSourceLiferayName().toString(), op.getSourceLiferayLocation().toString(),
+                    op.getDestinationLiferayName().toString(), op.getDestinationLiferayLocation().toString() ) );
+
+            parameters.put( "source", op.getSourceLiferayLocation().content().toFile() );
+            parameters.put( "dest", op.getDestinationLiferayLocation().content().toFile() );
+
             command.execute( parameters );
 
             retval = Status.createOkStatus();
