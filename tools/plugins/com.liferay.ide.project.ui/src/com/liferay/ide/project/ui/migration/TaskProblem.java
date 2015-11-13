@@ -21,6 +21,7 @@ import java.io.File;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class TaskProblem extends Problem
 {
@@ -37,7 +38,8 @@ public class TaskProblem extends Problem
     public TaskProblem( Problem problem, boolean resolved, long markerId )
     {
         super( problem.title, problem.summary, problem.type, problem.ticket, problem.file,
-               problem.lineNumber, problem.startOffset, problem.endOffset, problem.html, problem.autoCorrectContext );
+               problem.lineNumber, problem.startOffset, problem.endOffset, problem.html, problem.autoCorrectContext,
+               Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID );
 
         _resolved = resolved;
         _markerId = markerId;
@@ -47,7 +49,8 @@ public class TaskProblem extends Problem
         String title, String summary, String type, String ticket, File file, int lineNumber,
         int startOffset, int endOffset, String html, String autoCorrectContext, boolean resolved, long markerId)
     {
-        super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext );
+        super( title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext,
+            Problem.STATUS_NOT_RESOLVED, Problem.DEFAULT_MARKER_ID );
 
         _resolved = resolved;
         _markerId = markerId;
