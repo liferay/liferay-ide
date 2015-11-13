@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.upgrade.PortalSettings;
-import com.liferay.ide.project.core.util.UpgradeAssistantSettingsUtil;
+import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 
 /**
  * @author Lovett Li

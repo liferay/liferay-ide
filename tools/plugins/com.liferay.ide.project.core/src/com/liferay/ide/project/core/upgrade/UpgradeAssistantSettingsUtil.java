@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.util;
+package com.liferay.ide.project.core.upgrade;
 
 import java.io.File;
 import org.codehaus.jackson.map.ObjectMapper;

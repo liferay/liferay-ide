@@ -2,7 +2,7 @@ package com.liferay.ide.project.ui.upgrade;
 
 import com.liferay.blade.api.Command;
 import com.liferay.ide.project.core.upgrade.PortalSettings;
-import com.liferay.ide.project.core.util.UpgradeAssistantSettingsUtil;
+import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
