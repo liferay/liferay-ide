@@ -32,7 +32,7 @@
         <tycho-extras-version>0.23.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</orbit-site>
         <osgi-bundles-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/osgi-bundles-repository/</osgi-bundles-site>
-        <sapphire-site>http://download.eclipse.org/sapphire/8.2.1/repository/</sapphire-site>
+        <sapphire-site>http://download.eclipse.org/sapphire/8.2.3/repository/</sapphire-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.2.20150902-0001/</m2e-site>
@@ -41,7 +41,7 @@
         <!-- <adt-site>http://files.liferay.org.es/staged/public-files/liferay-ide/dependencies/adt-23/</adt-site>-->
         <!--eclipse-xml-search-site>http://oss.opensagres.fr/eclipse-wtp-xml-search/1.0.1-SNAPSHOT/</eclipse-xml-search-site-->
         <eclipse-xml-search-site>http://106.187.96.36/gamerson/eclipse-wtp-xml-search-1.0.0.20150417/</eclipse-xml-search-site>
-        <tern-site>http://oss.opensagres.fr/tern.repository/1.0.0/</tern-site>
+        <tern-site>http://oss.opensagres.fr/tern.repository/1.1.0/</tern-site>
         <webresources-site>http://oss.opensagres.fr/eclipse-wtp-webresources/1.0.0/</webresources-site>
         <bndtools-site>https://bndtools.ci.cloudbees.com/job/bndtools.master/1627/artifact/build/generated/p2/</bndtools-site>
         <gradle-site>http://download.eclipse.org/buildship/updates/e45/releases/1.0/</gradle-site>
