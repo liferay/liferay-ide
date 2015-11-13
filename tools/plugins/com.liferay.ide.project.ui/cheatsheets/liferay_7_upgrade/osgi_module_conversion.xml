@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet
+      title="Convert Jsp Hooks">
+   <intro>
+      <description>
+         <b>convert 6.2 jsp hook portlets to 7.0 osgi fragment bundles</b>
+      </description>
+   </intro>
+   <item
+         skip="false"
+         title="Run converting">
+      <description>
+         <b>...</b>
+      </description>
+      <command
+            required="false"
+            serialization="com.liferay.ide.project.ui.upgrade.convertJspHook"/>
+   </item>
+</cheatsheet>
