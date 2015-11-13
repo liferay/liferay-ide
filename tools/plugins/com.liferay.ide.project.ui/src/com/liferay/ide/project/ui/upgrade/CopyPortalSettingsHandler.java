@@ -1,12 +1,14 @@
 package com.liferay.ide.project.ui.upgrade;
 
 import com.liferay.blade.api.Command;
+import com.liferay.ide.project.core.upgrade.Liferay7UpgradeAssistantSettings;
 import com.liferay.ide.project.core.upgrade.PortalSettings;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,23 +42,46 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 
         final Command command = new CopyPortalSettingsHandler().getCommand();
 
+        final File sourceLiferayLocationDir = op.getSourceLiferayLocation().content().toFile();
+        final File destLiferayLocationDir = op.getDestinationLiferayLocation().content().toFile();
+
         final Map<String, File> parameters = new HashMap<>();
+        parameters.put( "source", sourceLiferayLocationDir );
+        parameters.put( "dest", destLiferayLocationDir );
 
         try
         {
-            UpgradeAssistantSettingsUtil.JavaObjectToJSONFile(
-                ProjectUI.getDefault().getStateLocation().toOSString(), new PortalSettings(
-                    op.getSourceLiferayName().toString(), op.getSourceLiferayLocation().toString(),
-                    op.getDestinationLiferayName().toString(), op.getDestinationLiferayLocation().toString() ) );
+            synchronized( ProjectUI.getDefault() )
+            {
+                Liferay7UpgradeAssistantSettings settings =
+                    UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
 
-            parameters.put( "source", op.getSourceLiferayLocation().content().toFile() );
-            parameters.put( "dest", op.getDestinationLiferayLocation().content().toFile() );
+                if( settings == null )
+                {
+                    settings = new Liferay7UpgradeAssistantSettings();
+                }
+
+                PortalSettings portalSettings = settings.getPortalSettings();
+
+                if( portalSettings == null )
+                {
+                    portalSettings = new PortalSettings();
+                    settings.setPortalSettings( portalSettings );
+                }
+
+                try
+                {
+                    UpgradeAssistantSettingsUtil.setObjectToStore( Liferay7UpgradeAssistantSettings.class, settings );
+                }
+                catch( IOException e )
+                {
+                    e.printStackTrace();
+                }
+            }
 
             command.execute( parameters );
 
             retval = Status.createOkStatus();
-
-            // TODO save source/dest locations into preferences so they are used the next time by default value services
         }
         catch( Exception e )
         {

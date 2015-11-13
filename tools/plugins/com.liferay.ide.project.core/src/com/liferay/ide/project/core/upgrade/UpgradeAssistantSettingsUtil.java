@@ -14,42 +14,35 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.upgrade;
 
+import com.liferay.ide.project.core.ProjectCore;
+
 import java.io.File;
+import java.io.IOException;
+
 import org.codehaus.jackson.map.ObjectMapper;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * @author Lovett Li
  */
 public class UpgradeAssistantSettingsUtil
 {
+    private static final IPath storageLocation = ProjectCore.getDefault().getStateLocation();
 
-    public static boolean JavaObjectToJSONFile( String path, Object obj ) throws Exception
+    public static <T> T getObjectFromStore( Class<T> clazz ) throws IOException
     {
-        ObjectMapper mapper = new ObjectMapper();
-        if( new File(path).exists() )
-        {
-            mapper.writeValue( new File( path + "/liferayPortalSetup.json" ), obj );
-        }
-        else
-        {
-            return false;
-        }
-        return true;
+        final ObjectMapper mapper = new ObjectMapper();
+
+        return mapper.readValue( storageLocation.append( clazz.getSimpleName() + ".json" ).toFile(), clazz );
     }
 
-    public static <T> T JSONFileToJavaObject( String path, Class<T> T ) throws Exception
+    public static <T> void setObjectToStore( Class<T> clazz, T object ) throws IOException
     {
-        ObjectMapper mapper = new ObjectMapper();
-        T t;
-        if( new File(path).exists() )
-        {
-            t = mapper.readValue( new File( path + "/liferayPortalSetup.json" ), T );
-        }
-        else
-        {
-            return null;
-        }
-        return t;
+        final ObjectMapper mapper = new ObjectMapper();
+
+        final File storageFile = storageLocation.append( clazz.getSimpleName() + ".json" ).toFile();
+
+        mapper.writeValue( storageFile, object );
     }
 
 }
