@@ -15,6 +15,14 @@
 
 package com.liferay.ide.project.core.upgrade;
 
+import com.liferay.ide.project.core.upgrade.service.LayoutPossibleValuesService;
+import com.liferay.ide.project.core.upgrade.service.Liferay62ServerLocationDerivedValueService;
+import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameDefaultValueService;
+import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNamePossibleValuesService;
+import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameValidationService;
+import com.liferay.ide.project.core.upgrade.service.LocationDefaultValueService;
+import com.liferay.ide.project.core.upgrade.service.LocationListener;
+
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Type;
@@ -23,6 +31,7 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
@@ -30,13 +39,6 @@ import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
-
-import com.liferay.ide.project.core.upgrade.service.LayoutPossibleValuesService;
-import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameDefaultValueService;
-import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNamePossibleValuesService;
-import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameValidationService;
-import com.liferay.ide.project.core.upgrade.service.LocationDefaultValueService;
-import com.liferay.ide.project.core.upgrade.service.LocationListener;
 
 @XmlBinding( path = "CodeUpgrade" )
 public interface CodeUpgradeOp extends Element
@@ -89,6 +91,13 @@ public interface CodeUpgradeOp extends Element
 
     Value<String> getLiferayServerName();
     void setLiferayServerName( String value );
+
+    @Derived
+    @Service( impl = Liferay62ServerLocationDerivedValueService.class )
+    ValueProperty PROP_LIFERAY_62SERVER_LOCATION = new ValueProperty( TYPE, "Liferay62ServerLocation" );
+
+    Value<String> getLiferay62ServerLocation();
+    void setLiferay62ServerLocation( String value );
 
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )

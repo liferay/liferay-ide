@@ -20,6 +20,7 @@ import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -35,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -44,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
@@ -488,6 +491,145 @@ public class ServerUtil
         });
 
         return files;
+    }
+
+    public static File getModuleFileFrom70Server(IRuntime runtime , String hostOsgiBundle , IPath temp)
+    {
+        PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+
+        File moduleOsgiBundle = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostOsgiBundle ).toFile();
+
+        if( !moduleOsgiBundle.exists() )
+        {
+            final File f = new File( temp.toFile(), hostOsgiBundle );
+
+            if( f.exists() )
+            {
+                return f;
+            }
+
+            File[] files = getMarketplaceLpkgFiles( portalBundle );
+
+            InputStream in = null;
+
+            try
+            {
+                boolean found = false;
+
+                for( File file : files )
+                {
+                    try(JarFile jar = new JarFile( file ))
+                    {
+                        Enumeration<JarEntry> enu = jar.entries();
+
+                        while( enu.hasMoreElements() )
+                        {
+                            JarEntry entry = enu.nextElement();
+
+                            String name = entry.getName();
+
+                            if( name.contains( hostOsgiBundle ) )
+                            {
+                                in = jar.getInputStream( entry );
+                                found = true;
+
+                                FileUtil.writeFile( f, in );
+
+                                break;
+                            }
+                        }
+
+                        if( found )
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+            }
+            finally
+            {
+                if( in != null )
+                {
+                    try
+                    {
+                        in.close();
+                    }
+                    catch( IOException e )
+                    {
+                    }
+                }
+            }
+
+            return f;
+        }
+
+        return moduleOsgiBundle;
+    }
+    
+    public static List<String> getModuleFileListFrom70Server(IRuntime runtime )
+    {
+        List<String> bundles = new ArrayList<String>();
+
+        PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+
+        if( portalBundle != null )
+        {
+            try
+            {
+                File modules = portalBundle.getOSGiBundlesDir().append( "modules" ).toFile();
+
+                File[] files = modules.listFiles( new FilenameFilter()
+                {
+                    @Override
+                    public boolean accept( File dir, String name )
+                    {
+                        return name.matches( ".*\\.web\\.jar" );
+                    }
+                });
+
+                for( File file : files )
+                {
+                    bundles.add( file.getName() );
+                }
+            }
+            catch( Exception e )
+            {
+                LiferayServerCore.logError( "Could not determine possible files.", e );
+            }
+
+            if( bundles.size() == 0 )
+            {
+                File[] files = ServerUtil.getMarketplaceLpkgFiles( portalBundle );
+
+                for( File file : files )
+                {
+                    try(JarFile jar = new JarFile( file ))
+                    {
+                        Enumeration<JarEntry> enu = jar.entries();
+
+                        while( enu.hasMoreElements() )
+                        {
+                            JarEntry entry = enu.nextElement();
+
+                            String name = entry.getName();
+
+                            if( name.contains( ".web" ) )
+                            {
+                                bundles.add( name );
+                            }
+                        }
+                    }
+                    catch( IOException e )
+                    {
+                    }
+                }
+            }
+        }
+
+        return bundles;
     }
 
     public static IPath getPortalDir( IJavaProject project )

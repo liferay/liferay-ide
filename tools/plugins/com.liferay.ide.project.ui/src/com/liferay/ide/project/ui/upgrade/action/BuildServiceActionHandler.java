@@ -16,7 +16,7 @@
 package com.liferay.ide.project.ui.upgrade.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.ui.dialog.LiferayServiceProjectSelectionDialog;
+import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -88,8 +88,8 @@ public class BuildServiceActionHandler extends BaseActionHandler
     {
         List<IProject> projects = getServiceBuilderProjects();
 
-        LiferayServiceProjectSelectionDialog dialog =
-            new LiferayServiceProjectSelectionDialog( UIUtil.getActiveShell() );
+        CustomProjectSelectionDialog dialog =
+            new CustomProjectSelectionDialog( UIUtil.getActiveShell() );
 
         dialog.setProjects( projects );
 

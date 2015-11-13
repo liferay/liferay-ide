@@ -1267,11 +1267,6 @@
             id="com.liferay.ide.project.ui.upgrade.findJavaProblems"
             name="Liferay 7 Find Java Problems">
       </command>
-      <command
-            description="Convert JSP Hook into fragments"
-            id="com.liferay.ide.project.ui.upgrade.convertJspHookFragments"
-            name="Liferay 7 Convert JSP Hooks">
-      </command>
    </extension>
    <extension point="org.eclipse.ui.commandImages">
       <image
@@ -1323,10 +1318,6 @@
        <handler
          commandId="com.liferay.ide.project.ui.upgrade.findJavaProblems"
          class="com.liferay.ide.project.ui.upgrade.FindJavaProblemsHandler">
-       </handler>
-       <handler
-         commandId="com.liferay.ide.project.ui.upgrade.convertJspHookFragments"
-         class="com.liferay.ide.project.ui.upgrade.ConvertJspHookFragmentsHandler">
        </handler>
    </extension>
 

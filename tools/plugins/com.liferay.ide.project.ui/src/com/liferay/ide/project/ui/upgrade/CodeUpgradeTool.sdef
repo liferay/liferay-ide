@@ -401,22 +401,24 @@
 				<label>Custom Jsp</label>
 				<section>
 					<content>
-						<label>We will do:</label>
-						<actuator>
-							<action-id>CustomJspNextAction</action-id>
-							<action>
-								<id>CustomJspNextAction</id>
-								<label>Next</label>
-							</action>
-							<action-handler>
-								<id>CustomJspNextAction</id>
-								<action>CustomJspNextAction</action>
-								<impl>com.liferay.ide.project.ui.upgrade.action.CustomJspNextActionHandler
-								</impl>
-							</action-handler>
-							<horizontal-align>right</horizontal-align>
-							<style>Sapphire.Actuator.Button</style>
-						</actuator>
+						<label>We will do: convert jsp hook projects into fragments or modules and show results to compare between original and changed jsp files</label>
+                        <custom>
+                            <class>com.liferay.ide.project.ui.upgrade.ConvertedProjectTreesPart</class>
+                        </custom>
+                        <actuator>
+                            <action-handler>
+                                <action>CustomJspNextAction</action>
+                                <id>CustomJspNextAction</id>
+                                <impl>com.liferay.ide.project.ui.upgrade.action.CustomJspNextActionHandler</impl>
+                            </action-handler>
+                            <action-id>CustomJspNextAction</action-id>
+                            <action>
+                                <id>CustomJspNextAction</id>
+                                <label>Next</label>
+                            </action>
+                            <horizontal-align>right</horizontal-align>
+                            <style>Sapphire.Actuator.Button</style>
+                        </actuator>
 					</content>
 				</section>
 				<visible-when>${Confirm == 'true' &amp;&amp; HasHook == 'true' }

@@ -148,7 +148,7 @@ public class ImportProjectActionHandler extends BaseActionHandler
 
     private void copyNewSDK( IPath targetSDKLocation, IProgressMonitor monitor ) throws IOException
     {
-        final URL sdkZipUrl = Platform.getBundle( "com.liferay.ide.project.ui" ).getEntry( "sdk/sdk70ga2.zip" );
+        final URL sdkZipUrl = Platform.getBundle( "com.liferay.ide.project.ui" ).getEntry( "resources/sdk70ga2.zip" );
 
         final File sdkZipFile = new File( FileLocator.toFileURL( sdkZipUrl ).getFile() );
 

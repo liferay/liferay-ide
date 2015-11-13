@@ -56,14 +56,14 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.filesystem,
  org.eclipse.ui.console,
  org.eclipse.debug.ui,
+ com.liferay.ide.core,
  com.liferay.ide.server.core,
  org.eclipse.wst.server.core,
- org.eclipse.compare,
  org.jdom,
- com.liferay.ide.core,
  org.apache.commons.io,
  org.apache.commons.lang;bundle-version="2.6.0",
- org.eclipse.core.jobs
+ org.eclipse.core.jobs,
+ org.eclipse.compare
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

@@ -24,12 +24,12 @@ import org.eclipse.swt.widgets.Shell;
 /**
  * @author Andy Wu
  */
-public class LiferayServiceProjectSelectionDialog extends JavaProjectSelectionDialog
+public class CustomProjectSelectionDialog extends JavaProjectSelectionDialog
 {
 
     private List<IProject> projects;
 
-    public LiferayServiceProjectSelectionDialog( Shell shell )
+    public CustomProjectSelectionDialog( Shell shell )
     {
         super( shell );
     }
