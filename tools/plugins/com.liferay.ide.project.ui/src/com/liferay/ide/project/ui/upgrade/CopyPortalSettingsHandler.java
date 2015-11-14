@@ -24,6 +24,7 @@ import org.eclipse.sapphire.modeling.Status;
 /**
  * @author Gregory Amerson
  * @author Lovett Li
+ * @author Terry Jia
  */
 public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 {
@@ -44,6 +45,8 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 
         final File sourceLiferayLocationDir = op.getSourceLiferayLocation().content().toFile();
         final File destLiferayLocationDir = op.getDestinationLiferayLocation().content().toFile();
+        final String sourceName = op.getSourceLiferayName().content();
+        final String destName = op.getDestinationLiferayName().content();
 
         final Map<String, File> parameters = new HashMap<>();
         parameters.put( "source", sourceLiferayLocationDir );
@@ -66,8 +69,14 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
                 if( portalSettings == null )
                 {
                     portalSettings = new PortalSettings();
-                    settings.setPortalSettings( portalSettings );
                 }
+
+                portalSettings.setPreviousName( sourceName );
+                portalSettings.setPreviousLiferayPortalLocation( sourceLiferayLocationDir.getPath() );
+                portalSettings.setNewName( destName );
+                portalSettings.setNewLiferayPortalLocation( destLiferayLocationDir.getPath() );
+
+                settings.setPortalSettings( portalSettings );
 
                 try
                 {
@@ -99,6 +108,25 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
     protected Object execute( ExecutionEvent event, Command command ) throws ExecutionException
     {
         final CopyPortalSettingsWizard wizard = new CopyPortalSettingsWizard();
+
+        try
+        {
+            Liferay7UpgradeAssistantSettings settings =
+                UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
+
+            if( settings != null )
+            {
+                PortalSettings portalSettings = settings.getPortalSettings();
+
+                wizard.element().setSourceLiferayName( portalSettings.getPreviousName() );
+                wizard.element().setSourceLiferayLocation( portalSettings.getPreviousLiferayPortalLocation() );
+                wizard.element().setDestinationLiferayName( portalSettings.getNewName() );
+                wizard.element().setDestinationLiferayLocation( portalSettings.getNewLiferayPortalLocation() );
+            }
+        }
+        catch( IOException e )
+        {
+        }
 
         int retval = new WizardDialog( UIUtil.getActiveShell(), wizard ).open();
 
