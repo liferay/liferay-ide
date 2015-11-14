@@ -646,12 +646,13 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         assertEquals( "This sdk location is not correct", op.validation().message() );
 
         // sdk has no build.USERNAME.properties file
+        sdkLocation.append( "build." + System.getenv().get( "USER" ) + ".properties" ).toFile().delete();
         sdkLocation.append( "build." + System.getenv().get( "USERNAME" ) + ".properties" ).toFile().delete();
         op.setSdkLocation( sdkLocation.toOSString() );
-        
+
         String expectedMessageRegx = ".*app.server.*";
         assertTrue( op.validation().message().matches( expectedMessageRegx ) );
-        
+
         assertEquals( false, op.validation().ok() );
     }
 
