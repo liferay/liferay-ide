@@ -14,8 +14,12 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Set;
+import java.util.jar.JarInputStream;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
@@ -62,11 +66,23 @@ public class BundleDeployer extends JMXBundleDeployer
             }
         }
 
+        boolean isFragment = false;
+
+        final File bundleFile = new File( new URL( bundleUrl ).toURI() );
+
+        try ( JarInputStream jarStream = new JarInputStream( new FileInputStream( bundleFile ) ) ) {
+            isFragment = jarStream.getManifest().getMainAttributes().getValue( "Fragment-Host" ) != null;
+        }
+        catch( Exception e ) {
+        }
+
         // TODO serve bundle url over http so it works for non file:// urls
 
         if (bundleId > -1) {
-            connection.invoke(framework, "stopBundle",
-                    new Object[] { bundleId }, new String[] { "long" });
+            if (!isFragment) {
+                connection.invoke(framework, "stopBundle",
+                        new Object[] { bundleId }, new String[] { "long" });
+            }
 
             connection.invoke(framework, "updateBundleFromURL",
                     new Object[] { bundleId,
@@ -86,8 +102,10 @@ public class BundleDeployer extends JMXBundleDeployer
             bundleId = Long.parseLong(installed.toString());
         }
 
-        connection.invoke(framework, "startBundle",
-            new Object[] { bundleId }, new String[] { "long" });
+        if( !isFragment ) {
+            connection.invoke(framework, "startBundle",
+                new Object[] { bundleId }, new String[] { "long" });
+        }
 
         return bundleId;
     }
