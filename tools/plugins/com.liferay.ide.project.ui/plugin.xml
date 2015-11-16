@@ -1127,6 +1127,11 @@
          description="Start a migration task for the selected project"
       />
       <command
+            description="Open Liferay 7 Upgrade Assistant"
+            id="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
+            name="Open Liferay 7 Upgrade Assistant">
+      </command>
+      <command
             description="Copy Portal Settings"
             id="com.liferay.ide.project.ui.upgrade.copyPortalSettings"
             name="Liferay 7 Upgrade Copy Portal Settings">
@@ -1140,7 +1145,11 @@
    <extension point="org.eclipse.ui.commandImages">
       <image
          commandId="com.liferay.ide.project.ui.migrateProject"
-         icon="icons/e16/liferay.png"
+         icon="icons/e16/liferay_logo_16.png"
+      />
+      <image
+         commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
+         icon="icons/e16/liferay_logo_16.png"
       />
    </extension>
    <extension point="org.eclipse.ui.handlers">
@@ -1155,6 +1164,10 @@
                </iterate>
             </with>
          </enabledWhen>
+       </handler>
+       <handler
+         commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
+         class="com.liferay.ide.project.ui.upgrade.OpenUpgradeAssistantHandler">
        </handler>
        <handler
          commandId="com.liferay.ide.project.ui.upgrade.copyPortalSettings"
@@ -1296,7 +1309,7 @@
 
    <extension
          point="org.eclipse.ui.menus">
-      <menuContribution
+      <!--menuContribution
             allPopups="false"
             locationURI="menu:project?after=additions">
          <command
@@ -1304,6 +1317,16 @@
                label="Migrate Liferay project to 7.0..."
                style="push"
                tooltip="Run a migration tool to help with migration Liferay plugin projects to latest version of Liferay Portal version">
+         </command>
+      </menuContribution-->
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:project?after=additions">
+         <command
+               commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
+               label="Open Liferay 7 Upgrade Assistant..."
+               style="push"
+               tooltip="Opens Liferay 7 Upgrade Assistant View">
          </command>
       </menuContribution>
    </extension>
