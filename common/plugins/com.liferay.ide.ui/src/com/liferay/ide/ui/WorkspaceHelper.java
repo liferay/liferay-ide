@@ -90,7 +90,6 @@ public class WorkspaceHelper implements WorkspaceHelperMBean
             {
                 final IRunnableWithProgress runnable = new IRunnableWithProgress()
                 {
-                    @SuppressWarnings( "restriction" )
                     @Override
                     public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                     {
@@ -98,6 +97,15 @@ public class WorkspaceHelper implements WorkspaceHelperMBean
                         {
                             project.create( description, monitor );
                             project.open( IResource.BACKGROUND_REFRESH, monitor );
+
+                            try
+                            {
+                                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                            }
+                            catch( CoreException e)
+                            {
+                               // ignore error this is just best effort
+                            }
 
                             final IWorkbench workbench = PlatformUI.getWorkbench();
                             final Shell shell = workbench.getActiveWorkbenchWindow().getShell();
