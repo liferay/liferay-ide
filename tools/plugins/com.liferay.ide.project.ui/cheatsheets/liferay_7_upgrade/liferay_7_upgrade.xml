@@ -31,20 +31,20 @@
             <onCompletion>
                <b>Conclusion</b>
             </onCompletion>
-            <param name="path" value="database.xml">
+            <param name="path" value="upgrade_database.xml">
             </param>
          </task>
-         <task kind="cheatsheet" name="Start Liferay 7 server" skip="false">
+         <task kind="cheatsheet" name="Run Liferay 7 server" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>
             <onCompletion>
                <b>Conclusion</b>
             </onCompletion>
-            <param name="path" value="start_liferay_7.xml">
+            <param name="path" value="run_liferay_7.xml">
             </param>
          </task>
-         <task kind="cheatsheet" name="Migrate Portal Templates" skip="false">
+         <task kind="cheatsheet" name="Migrate Portal Templates" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>
@@ -62,44 +62,44 @@
          <onCompletion>
             <b>Conclusion</b>
          </onCompletion>
-         <task kind="cheatsheet" name="Migrate back-end code" skip="false">
+         <task kind="cheatsheet" name="Migrate java code" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>
             <onCompletion>
                <b>Conclusion</b>
             </onCompletion>
-            <param name="path" value="back_end_migration.xml">
+            <param name="path" value="migrate_java.xml">
             </param>
          </task>
-         <task kind="cheatsheet" name="Migrate front-end code" skip="false">
+         <task kind="cheatsheet" name="Migrate front-end code" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>
             <onCompletion>
                <b>Conclusion</b>
             </onCompletion>
-            <param name="path" value="front_end_migration.xml">
+            <param name="path" value="migrate_front_end.xml">
             </param>
          </task>
-         <task kind="cheatsheet" name="Optional: Convert projects to OSGi modules" skip="true">
+         <task kind="cheatsheet" name="Convert projects to OSGi modules" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>
             <onCompletion>
                <b>Conclusion</b>
             </onCompletion>
-            <param name="path" value="osgi_module_conversion.xml">
+            <param name="path" value="convert_osgi_modules.xml">
             </param>
          </task>
-         <task kind="cheatsheet" name="Optional: Convert projects to use gradle" skip="true">
+         <task kind="cheatsheet" name="Convert projects to use gradle" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>
             <onCompletion>
                <b>Conclusion</b>
             </onCompletion>
-            <param name="path" value="gradle_build_conversion.xml">
+            <param name="path" value="convert_gradle_build.xml">
             </param>
          </task>
       </taskGroup>
