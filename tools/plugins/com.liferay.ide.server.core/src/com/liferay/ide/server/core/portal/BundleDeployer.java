@@ -68,12 +68,15 @@ public class BundleDeployer extends JMXBundleDeployer
 
         boolean isFragment = false;
 
-        final File bundleFile = new File( new URL( bundleUrl ).toURI() );
+        if( !bundleUrl.contains( "webbundle:" ) )
+        {
+            final File bundleFile = new File( new URL( bundleUrl ).toURI() );
 
-        try ( JarInputStream jarStream = new JarInputStream( new FileInputStream( bundleFile ) ) ) {
-            isFragment = jarStream.getManifest().getMainAttributes().getValue( "Fragment-Host" ) != null;
-        }
-        catch( Exception e ) {
+            try ( JarInputStream jarStream = new JarInputStream( new FileInputStream( bundleFile ) ) ) {
+                isFragment = jarStream.getManifest().getMainAttributes().getValue( "Fragment-Host" ) != null;
+            }
+            catch( Exception e ) {
+            }
         }
 
         // TODO serve bundle url over http so it works for non file:// urls
