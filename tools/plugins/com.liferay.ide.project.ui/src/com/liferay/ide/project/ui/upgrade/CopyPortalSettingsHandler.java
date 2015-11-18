@@ -43,6 +43,16 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 
         final Command command = new CopyPortalSettingsHandler().getCommand();
 
+        if( op.getSourceLiferayLocation() == null || op.getSourceLiferayLocation().empty() )
+        {
+            return Status.createErrorStatus( "Previous Liferay Location can not be empty" );
+        }
+
+        if( op.getDestinationLiferayLocation() == null || op.getDestinationLiferayLocation().empty() )
+        {
+            return Status.createErrorStatus( "New Liferay Location can not be empty" );
+        }
+
         final File sourceLiferayLocationDir = op.getSourceLiferayLocation().content().toFile();
         final File destLiferayLocationDir = op.getDestinationLiferayLocation().content().toFile();
         final String sourceName = op.getSourceLiferayName().content();

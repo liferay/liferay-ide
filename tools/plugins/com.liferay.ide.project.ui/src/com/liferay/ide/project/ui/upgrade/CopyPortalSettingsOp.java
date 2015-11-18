@@ -21,6 +21,7 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Gregory Amerson
+ * @author Lovett Li
  */
 public interface CopyPortalSettingsOp extends ExecutableElement
 {
@@ -41,6 +42,7 @@ public interface CopyPortalSettingsOp extends ExecutableElement
     @Label(standard = "Previous Liferay location")
     @Type( base = Path.class )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+    @Service( impl = PreviousLiferayLocationValidationService.class )
     // TODO Add liferay folder validation
     ValueProperty PROP_SOURCE_LIFERAY_LOCATION = new ValueProperty( TYPE, "SourceLiferayLocation" );
 
@@ -63,6 +65,7 @@ public interface CopyPortalSettingsOp extends ExecutableElement
     @Label(standard = "New Liferay location")
     @Type( base = Path.class )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+    @Service( impl = NewLiferayLocationValidationService.class )
     // TODO Add liferay folder validation
     ValueProperty PROP_DESTINATION_LIFERAY_LOCATION = new ValueProperty( TYPE, "DestinationLiferayLocation" );
 
