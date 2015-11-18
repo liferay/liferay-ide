@@ -41,12 +41,9 @@ public class RunVerifyPropertiesHandler extends AbstractOSGiCommandHandler
     }
 
     @Override
-    public Object execute( ExecutionEvent event ) throws ExecutionException
+    protected Object execute( ExecutionEvent event, Command command ) throws ExecutionException
     {
         Status retval = null;
-
-        final Command command = new RunVerifyPropertiesHandler().getCommand();
-
         final Map<String, File> parameters = new HashMap<>();
 
         try
@@ -76,12 +73,6 @@ public class RunVerifyPropertiesHandler extends AbstractOSGiCommandHandler
         }
 
         return retval;
-    }
-
-    @Override
-    protected Object execute( ExecutionEvent event, Command command ) throws ExecutionException
-    {
-        return null;
     }
 
 }
