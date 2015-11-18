@@ -880,32 +880,17 @@ public class PropertiesUtil
 
     public static Properties loadProperties( final File f )
     {
-        Properties p = new Properties();
-        FileInputStream stream = null;
-    
-        try
+        final Properties p = new Properties();
+
+        try( FileInputStream stream = new FileInputStream( f ) )
         {
-            stream = new FileInputStream( f );
             p.load( stream );
-    
+
             return p;
         }
         catch( IOException ioe )
         {
-            return p;
-        }
-        finally
-        {
-            if( stream != null )
-            {
-                try
-                {
-                    stream.close();
-                }
-                catch( IOException ioe )
-                {
-                }
-            }
+            return null;
         }
     }
 }

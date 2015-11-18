@@ -71,11 +71,15 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
         if( productConf.toFile().exists() )
         {
             Properties p = PropertiesUtil.loadProperties( productConf.toFile() );
-            String product = (String) p.get( "slot" );
 
-            if( slot.equals( product ) )
+            if( p != null )
             {
-                return getEAP6xVersionNoSlotCheck( location, metaInfPath, versionPrefix, releaseName );
+                String product = (String) p.get( "slot" );
+
+                if( slot.equals( product ) )
+                {
+                    return getEAP6xVersionNoSlotCheck( location, metaInfPath, versionPrefix, releaseName );
+                }
             }
         }
 
