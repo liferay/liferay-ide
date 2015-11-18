@@ -15,7 +15,7 @@
 
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.server.util.JavaUtil;
 
 import java.io.File;
@@ -70,7 +70,7 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
 
         if( productConf.toFile().exists() )
         {
-            Properties p = FileUtil.loadProperties( productConf.toFile() );
+            Properties p = PropertiesUtil.loadProperties( productConf.toFile() );
             String product = (String) p.get( "slot" );
 
             if( slot.equals( product ) )

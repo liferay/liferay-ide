@@ -32,7 +32,6 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -250,37 +249,6 @@ public class FileUtil
         }
 
         return null;
-    }
-
-    public static Properties loadProperties( final File f )
-    {
-        Properties p = new Properties();
-        FileInputStream stream = null;
-
-        try
-        {
-            stream = new FileInputStream( f );
-            p.load( stream );
-
-            return p;
-        }
-        catch( IOException ioe )
-        {
-            return p;
-        }
-        finally
-        {
-            if( stream != null )
-            {
-                try
-                {
-                    stream.close();
-                }
-                catch( IOException ioe )
-                {
-                }
-            }
-        }
     }
 
     public static void mkdirs( final File f ) throws CoreException
