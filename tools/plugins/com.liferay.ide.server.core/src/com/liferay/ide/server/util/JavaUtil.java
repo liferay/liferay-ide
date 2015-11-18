@@ -15,11 +15,12 @@
 
 package com.liferay.ide.server.util;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -49,39 +50,12 @@ public class JavaUtil
         return id;
     }
 
-    public static byte[] getBytesFromFile( final File file ) throws IOException
-    {
-        InputStream is = new FileInputStream( file );
-        byte[] bytes = new byte[(int) file.length()];
-
-        int offset = 0;
-        int numRead = 0;
-
-        while( offset < bytes.length && ( numRead = is.read( bytes, offset, bytes.length - offset ) ) >= 0 )
-        {
-            offset += numRead;
-        }
-
-        is.close();
-
-        return bytes;
-    }
-
-    public static String getContents( File aFile ) throws IOException
-    {
-        return new String( getBytesFromFile( aFile ) );
-    }
-
     public static String getJarProperty( final File systemJarFile, final String propertyName )
     {
         if( systemJarFile.canRead() )
         {
-            ZipFile jar = null;
-
-            try
+            try( ZipFile jar = new ZipFile( systemJarFile ) )
             {
-                jar = new ZipFile( systemJarFile );
-
                 ZipEntry manifest = jar.getEntry( "META-INF/MANIFEST.MF" );//$NON-NLS-1$
 
                 Properties props = new Properties();
@@ -94,20 +68,6 @@ public class JavaUtil
             {
                 return null;
             }
-            finally
-            {
-                if( jar != null )
-                {
-                    try
-                    {
-                        jar.close();
-                    }
-                    catch( IOException e )
-                    {
-                        return null;
-                    }
-                }
-            }
         }
 
         return null;
@@ -117,7 +77,7 @@ public class JavaUtil
     {
         try
         {
-            String contents = JavaUtil.getContents( manifestFile );
+            String contents = CoreUtil.readStreamToString( new FileInputStream( manifestFile) );
 
             if( contents != null )
             {
