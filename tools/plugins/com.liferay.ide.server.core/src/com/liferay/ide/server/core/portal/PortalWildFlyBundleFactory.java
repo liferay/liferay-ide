@@ -150,4 +150,5 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory
 
         return list.toArray( new IPath[list.size()] );
     }
+
 }

@@ -26,14 +26,15 @@ import org.eclipse.core.runtime.IPath;
  */
 public class PortalJBossEapBundle extends PortalJBossBundle
 {
+
     public PortalJBossEapBundle( IPath path )
     {
-       super(path);
+        super( path );
     }
 
     public PortalJBossEapBundle( Map<String, String> appServerProperties )
     {
-       super(appServerProperties);
+        super( appServerProperties );
     }
 
     @Override
@@ -57,16 +58,23 @@ public class PortalJBossEapBundle extends PortalJBossBundle
         args.add( "-server" );
         args.add( "-Djava.util.logging.manager=org.jboss.logmanager.LogManager" );
 
-        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-1.5.4.Final-redhat-1.jar"  +  "\"" );
-        args.add( "-Xbootclasspath/p:" +  "\""  +  this.bundlePath +  "/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.1.Final-redhat-1.jar"  +  "\"" );
-        args.add( "-Djboss.modules.system.pkgs=org.jboss.logmanager");
+        args.add( "-Xbootclasspath/p:" + "\"" + this.bundlePath +
+            "/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-1.5.4.Final-redhat-1.jar" + "\"" );
+        args.add( "-Xbootclasspath/p:" +
+            "\"" +
+            this.bundlePath +
+            "/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.1.Final-redhat-1.jar" +
+            "\"" );
+        args.add( "-Djboss.modules.system.pkgs=org.jboss.logmanager" );
 
-        args.add( "-Dorg.jboss.boot.log.file=" +  "\""  + this.bundlePath.append("/standalone/log/boot.log") + "\"" );
-        args.add( "-Dlogging.configuration=file:" + "\"" + this.bundlePath + "/standalone/configuration/logging.properties" + "\"" );
+        args.add( "-Dorg.jboss.boot.log.file=" + "\"" + this.bundlePath.append( "/standalone/log/boot.log" ) + "\"" );
+        args.add( "-Dlogging.configuration=file:" + "\"" + this.bundlePath +
+            "/standalone/configuration/logging.properties" + "\"" );
         args.add( "-Djboss.home.dir=" + "\"" + this.bundlePath + "\"" );
         args.add( "-Djboss.bind.address.management=localhost" );
         args.add( "-Duser.timezone=GMT" );
         args.add( "-Dorg.jboss.logmanager.nocolor=true" );
+
         return args.toArray( new String[0] );
     }
 

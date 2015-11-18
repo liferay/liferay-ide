@@ -30,6 +30,23 @@ public class PortalJBossBundleFactory extends AbstractPortalBundleFactory
 
     private static final String JBAS7_RELEASE_VERSION = "JBossAS-Release-Version";
 
+    protected String asPath( String... vals )
+    {
+        StringBuffer sb = new StringBuffer();
+
+        for( String v : vals )
+        {
+            sb.append( v );
+            sb.append( File.separatorChar );
+        }
+
+        String s = sb.toString();
+
+        s = s.substring( 0, s.length() - 1 );
+
+        return s;
+    }
+
     @Override
     public PortalBundle create( Map<String, String> appServerProperties )
     {
@@ -53,8 +70,9 @@ public class PortalJBossBundleFactory extends AbstractPortalBundleFactory
         if( path.append( "bundles" ).toFile().exists() && path.append( "modules" ).toFile().exists() &&
             path.append( "standalone" ).toFile().exists() && path.append( "bin" ).toFile().exists() )
         {
-            final String mainFolder = asPath( "modules","org","jboss","as","server","main");
-            final boolean isJbas7 = JavaUtil.scanFolderJarsForManifestProp(path.toFile(), mainFolder, JBAS7_RELEASE_VERSION, "7.");
+            final String mainFolder = asPath( "modules", "org", "jboss", "as", "server", "main" );
+            final boolean isJbas7 =
+                JavaUtil.scanFolderJarsForManifestProp( path.toFile(), mainFolder, JBAS7_RELEASE_VERSION, "7." );
 
             return isJbas7;
         }
@@ -62,15 +80,4 @@ public class PortalJBossBundleFactory extends AbstractPortalBundleFactory
         return false;
     }
 
-
-    protected String asPath(String... vals) {
-        StringBuffer sb = new StringBuffer();
-        for ( String v : vals ) {
-            sb.append(v);
-            sb.append(File.separatorChar);
-        }
-        String s = sb.toString();
-        s = s.substring(0, s.length() - 1);
-        return s;
-    }
 }

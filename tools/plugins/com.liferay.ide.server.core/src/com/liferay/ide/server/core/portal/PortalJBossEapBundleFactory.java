@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Path;
  */
 public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
 {
+
     private static final String EAP61_DIR_META_INF = "modules/system/layers/base/org/jboss/as/product/eap/dir/META-INF";
 
     @Override
@@ -55,7 +56,7 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
         if( path.append( "bundles" ).toFile().exists() && path.append( "modules" ).toFile().exists() &&
             path.append( "standalone" ).toFile().exists() && path.append( "bin" ).toFile().exists() )
         {
-            return getEAP6xVersion(path.toFile(), EAP61_DIR_META_INF, "6.", "eap", "EAP") != null;
+            return getEAP6xVersion( path.toFile(), EAP61_DIR_META_INF, "6.", "eap", "EAP" ) != null;
         }
 
         return false;
@@ -77,6 +78,7 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
                 return getEAP6xVersionNoSlotCheck( location, metaInfPath, versionPrefix, releaseName );
             }
         }
+
         return null;
     }
 
@@ -90,13 +92,14 @@ public class PortalJBossEapBundleFactory extends PortalJBossBundleFactory
         {
             IPath manifest = eapDir.append( "MANIFEST.MF" );
             String type = JavaUtil.getManifestProperty( manifest.toFile(), "JBoss-Product-Release-Name" );
-            String version = JavaUtil.getManifestProperty( manifest.toFile(),  "JBoss-Product-Release-Version"  );
+            String version = JavaUtil.getManifestProperty( manifest.toFile(), "JBoss-Product-Release-Version" );
             boolean matchesName = releaseName == null || releaseName.equals( type );
             boolean matchesVersion = versionPrefix == null || version.startsWith( versionPrefix );
 
             if( matchesName && matchesVersion )
                 return version;
         }
+
         return null;
     }
 }

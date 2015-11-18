@@ -30,6 +30,7 @@ import org.eclipse.jdt.launching.IVMInstallType;
 
 /**
  * @author Greg Amerson
+ * @author Simon Jiang
  */
 public class JavaUtil
 {
@@ -48,18 +49,45 @@ public class JavaUtil
         return id;
     }
 
-    public static String getJarProperty( File systemJarFile, String propertyName )
+    public static byte[] getBytesFromFile( final File file ) throws IOException
+    {
+        InputStream is = new FileInputStream( file );
+        byte[] bytes = new byte[(int) file.length()];
+
+        int offset = 0;
+        int numRead = 0;
+
+        while( offset < bytes.length && ( numRead = is.read( bytes, offset, bytes.length - offset ) ) >= 0 )
+        {
+            offset += numRead;
+        }
+
+        is.close();
+
+        return bytes;
+    }
+
+    public static String getContents( File aFile ) throws IOException
+    {
+        return new String( getBytesFromFile( aFile ) );
+    }
+
+    public static String getJarProperty( final File systemJarFile, final String propertyName )
     {
         if( systemJarFile.canRead() )
         {
             ZipFile jar = null;
+
             try
             {
                 jar = new ZipFile( systemJarFile );
+
                 ZipEntry manifest = jar.getEntry( "META-INF/MANIFEST.MF" );//$NON-NLS-1$
+
                 Properties props = new Properties();
                 props.load( jar.getInputStream( manifest ) );
                 String value = (String) props.get( propertyName );
+
                 return value;
             }
             catch( IOException e )
@@ -81,59 +109,8 @@ public class JavaUtil
                 }
             }
         }
+
         return null;
-    }
-
-    public static boolean scanFolderJarsForManifestProp(
-        File location, String mainFolder, String property, String propPrefix )
-    {
-        String value = getManifestPropFromFolderJars( location, mainFolder, property );
-
-        if( value != null && value.trim().startsWith( propPrefix ) )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static String getManifestPropFromFolderJars( File location, String mainFolder, String property )
-    {
-        File f = new File( location, mainFolder );
-
-        if( f.exists() )
-        {
-            File[] children = f.listFiles();
-
-            for( int i = 0; i < children.length; i++ )
-            {
-                if( children[i].getName().endsWith( EXT_JAR ) )
-                {
-                    return getJarProperty( children[i], property );
-                }
-            }
-        }
-        return null;
-    }
-
-    public static String getContents( File aFile ) throws IOException
-    {
-        return new String( getBytesFromFile( aFile ) );
-    }
-
-    public static byte[] getBytesFromFile( File file ) throws IOException
-    {
-        InputStream is = new FileInputStream( file );
-        byte[] bytes = new byte[(int) file.length()];
-        int offset = 0;
-        int numRead = 0;
-
-        while( offset < bytes.length && ( numRead = is.read( bytes, offset, bytes.length - offset ) ) >= 0 )
-        {
-            offset += numRead;
-        }
-        is.close();
-        return bytes;
     }
 
     public static String getManifestProperty( File manifestFile, String propertyName )
@@ -157,4 +134,39 @@ public class JavaUtil
 
         return null;
     }
+
+    public static String getManifestPropFromFolderJars(
+        final File location, final String mainFolder, final String property )
+    {
+        File f = new File( location, mainFolder );
+
+        if( f.exists() )
+        {
+            File[] children = f.listFiles();
+
+            for( int i = 0; i < children.length; i++ )
+            {
+                if( children[i].getName().endsWith( EXT_JAR ) )
+                {
+                    return getJarProperty( children[i], property );
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static boolean scanFolderJarsForManifestProp(
+        final File location, final String mainFolder, final String property, final String propPrefix )
+    {
+        String value = getManifestPropFromFolderJars( location, mainFolder, property );
+
+        if( value != null && value.trim().startsWith( propPrefix ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 }

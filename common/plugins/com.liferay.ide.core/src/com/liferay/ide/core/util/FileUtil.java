@@ -252,14 +252,16 @@ public class FileUtil
         return null;
     }
 
-    public static Properties loadProperties( File f )
+    public static Properties loadProperties( final File f )
     {
         Properties p = new Properties();
         FileInputStream stream = null;
+
         try
         {
             stream = new FileInputStream( f );
             p.load( stream );
+
             return p;
         }
         catch( IOException ioe )

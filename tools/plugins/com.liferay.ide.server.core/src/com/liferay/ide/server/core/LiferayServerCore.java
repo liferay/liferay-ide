@@ -283,13 +283,13 @@ public class LiferayServerCore extends Plugin
     {
         PortalBundleFactory[] factories = getPortalBundleFactories();
 
-        if ( factories != null )
+        if( factories != null )
         {
             for( PortalBundleFactory portalBundleFactory : factories )
             {
                 IPath path = portalBundleFactory.canCreateFromPath( bundlePath );
 
-                if ( path != null )
+                if( path != null )
                 {
                     return portalBundleFactory.create( path );
                 }
