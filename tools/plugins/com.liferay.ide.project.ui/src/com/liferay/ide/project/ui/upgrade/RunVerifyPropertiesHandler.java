@@ -18,7 +18,6 @@ package com.liferay.ide.project.ui.upgrade;
 import com.liferay.blade.api.Command;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.project.core.upgrade.Liferay7UpgradeAssistantSettings;
-import com.liferay.ide.project.core.upgrade.PortalSettingProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 
 import java.io.File;
@@ -59,23 +58,14 @@ public class RunVerifyPropertiesHandler extends AbstractOSGiCommandHandler
 
             final Object o = command.execute( parameters );
 
-            if( o != null && o instanceof List )
+            if( o != null && o instanceof List<?> )
             {
+                @SuppressWarnings( "unchecked" )
                 final List<Problem> problems = (List<Problem>) o;
 
-                final PortalSettingProblems portalSettingProblems = new PortalSettingProblems();
+                settings.getPortalSettings().setProblems( problems.toArray( new Problem[0] ) );
 
-                portalSettingProblems.setProblems( problems.toArray( new Problem[0] ) );
-
-                UpgradeAssistantSettingsUtil.setObjectToStore( PortalSettingProblems.class, portalSettingProblems );
-
-                final PortalSettingProblems p =
-                    UpgradeAssistantSettingsUtil.getObjectFromStore( PortalSettingProblems.class );
-
-                for( Problem problem : p.getProblems() )
-                {
-                    System.out.println( problem.getSummary() );
-                }
+                UpgradeAssistantSettingsUtil.setObjectToStore( Liferay7UpgradeAssistantSettings.class, settings );
             }
 
             retval = Status.createOkStatus();
