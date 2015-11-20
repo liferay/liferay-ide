@@ -1,5 +1,8 @@
 package com.liferay.ide.project.ui.upgrade;
 
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
+
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -17,6 +20,7 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
+import org.eclipse.sapphire.services.ValidationService;
 
 
 /**
@@ -65,7 +69,7 @@ public interface CopyPortalSettingsOp extends ExecutableElement
     @DelegateImplementation( CopyPortalSettingsHandler.class )
     Status execute( ProgressMonitor monitor );
 
-    public static class NewLiferayNameDVS extends NameDVS
+    static class NewLiferayNameDVS extends NameDVS
     {
         public NewLiferayNameDVS()
         {
@@ -73,7 +77,7 @@ public interface CopyPortalSettingsOp extends ExecutableElement
         }
     }
 
-    public static class NameDVS extends DefaultValueService
+    static class NameDVS extends DefaultValueService
     {
         private ValueProperty _prop;
 
@@ -107,6 +111,62 @@ public interface CopyPortalSettingsOp extends ExecutableElement
             {
                 return null;
             }
+        }
+    }
+
+    static class LiferayLocationValidationService extends ValidationService
+    {
+
+        private final ValueProperty _prop;
+        private final String _version;
+
+        public LiferayLocationValidationService( ValueProperty prop, String version )
+        {
+            _prop = prop;
+            _version = version;
+        }
+
+        @Override
+        protected Status compute()
+        {
+            Status retval = Status.createOkStatus();
+
+            final Path liferayLocation = (Path) op().property( _prop ).content();
+
+            if( liferayLocation != null && !liferayLocation.isEmpty() )
+            {
+                final String path = liferayLocation.toOSString();
+                final PortalBundle portalBundle =
+                    LiferayServerCore.getPortalBundle( new org.eclipse.core.runtime.Path( path ) );
+
+                if( portalBundle == null || !portalBundle.getVersion().startsWith( _version ) )
+                {
+                    retval = Status.createErrorStatus( "Invalid Liferay " + _version + " folder location." );
+                }
+            }
+
+            return retval;
+        }
+
+        private CopyPortalSettingsOp op()
+        {
+            return context( CopyPortalSettingsOp.class );
+        }
+    }
+
+    static class NewLiferayLocationValidationService extends LiferayLocationValidationService
+    {
+        public NewLiferayLocationValidationService()
+        {
+            super( PROP_NEW_LIFERAY_LOCATION, "7.0" );
+        }
+    }
+
+    static class PreviousLiferayLocationValidationService extends LiferayLocationValidationService
+    {
+        public PreviousLiferayLocationValidationService()
+        {
+            super( PROP_PREVIOUS_LIFERAY_LOCATION, "6.2" );
         }
     }
 
