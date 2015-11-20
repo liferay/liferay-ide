@@ -39,7 +39,7 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
     /**
      * This executes on a job/worker thread
      */
-    public static final Status execute( final CopyPortalSettingsOp op, final ProgressMonitor pm )
+    public static final Status execute( final GetPortalSettingsOp op, final ProgressMonitor pm )
     {
         Status retval = null;
 
@@ -120,7 +120,7 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
     @Override
     protected Object execute( ExecutionEvent event, Command command ) throws ExecutionException
     {
-        final CopyPortalSettingsWizard wizard = new CopyPortalSettingsWizard();
+        final GetPortalSettingsWizard wizard = new GetPortalSettingsWizard();
 
         try
         {

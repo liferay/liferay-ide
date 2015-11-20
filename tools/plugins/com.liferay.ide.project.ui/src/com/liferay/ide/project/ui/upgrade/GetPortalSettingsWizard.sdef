@@ -17,18 +17,17 @@
  -->
 <definition>
     <wizard>
-        <id>CopyPortalSettingsWizard</id>
-        <element-type>com.liferay.ide.project.ui.upgrade.CopyPortalSettingsOp</element-type>
-        <label>Copy Portal Settings</label>
+        <id>GetPortalSettingsWizard</id>
+        <element-type>com.liferay.ide.project.ui.upgrade.GetPortalSettingsOp</element-type>
+        <label>Get Portal Settings</label>
         <page>
-            <id>CopyPortalSettingsPage</id>
-            <label>Copy Portal Settings</label>
+            <id>GetPortalSettingsPage</id>
+            <label>Get Portal Settings</label>
             <content>
-                <property-editor>SourceLiferayLocation</property-editor>
-                <property-editor>SourceLiferayName</property-editor>
+                <property-editor>PreviousLiferayLocation</property-editor>
                 <separator></separator>
-                <property-editor>DestinationLiferayLocation</property-editor>
-                <property-editor>DestinationLiferayName</property-editor>
+                <property-editor>NewLiferayLocation</property-editor>
+                <property-editor>NewLiferayName</property-editor>
             </content>
             <description>Specify the location of previous and new Liferay Portal locations.</description>
         </page>

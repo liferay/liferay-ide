@@ -27,9 +27,9 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Gregory Amerson
  * @author Lovett Li
  */
-public interface CopyPortalSettingsOp extends ExecutableElement
+public interface GetPortalSettingsOp extends ExecutableElement
 {
-    ElementType TYPE = new ElementType( CopyPortalSettingsOp.class );
+    ElementType TYPE = new ElementType( GetPortalSettingsOp.class );
 
     // *** Previou Liferay Location ***
 
@@ -89,7 +89,7 @@ public interface CopyPortalSettingsOp extends ExecutableElement
         @Override
         protected void initDefaultValueService()
         {
-            context( CopyPortalSettingsOp.class ).property( _prop ).attach( new FilteredListener<PropertyContentEvent>()
+            context( GetPortalSettingsOp.class ).property( _prop ).attach( new FilteredListener<PropertyContentEvent>()
             {
                 protected void handleTypedEvent( PropertyContentEvent arg0 )
                 {
@@ -101,7 +101,7 @@ public interface CopyPortalSettingsOp extends ExecutableElement
         @Override
         protected String compute()
         {
-            Path path = (Path) context( CopyPortalSettingsOp.class ).property( _prop ).content();
+            Path path = (Path) context( GetPortalSettingsOp.class ).property( _prop ).content();
 
             if( path != null )
             {
@@ -148,9 +148,9 @@ public interface CopyPortalSettingsOp extends ExecutableElement
             return retval;
         }
 
-        private CopyPortalSettingsOp op()
+        private GetPortalSettingsOp op()
         {
-            return context( CopyPortalSettingsOp.class );
+            return context( GetPortalSettingsOp.class );
         }
     }
 
