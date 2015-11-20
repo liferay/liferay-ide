@@ -43,7 +43,6 @@ public interface CopyPortalSettingsOp extends ExecutableElement
     @Type( base = Path.class )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Service( impl = PreviousLiferayLocationValidationService.class )
-    // TODO Add liferay folder validation
     ValueProperty PROP_SOURCE_LIFERAY_LOCATION = new ValueProperty( TYPE, "SourceLiferayLocation" );
 
     Value<Path> getSourceLiferayLocation();
@@ -66,7 +65,6 @@ public interface CopyPortalSettingsOp extends ExecutableElement
     @Type( base = Path.class )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Service( impl = NewLiferayLocationValidationService.class )
-    // TODO Add liferay folder validation
     ValueProperty PROP_DESTINATION_LIFERAY_LOCATION = new ValueProperty( TYPE, "DestinationLiferayLocation" );
 
     Value<Path> getDestinationLiferayLocation();

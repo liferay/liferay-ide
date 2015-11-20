@@ -37,14 +37,13 @@ public class PreviousLiferayLocationValidationService extends ValidationService
         if( sourceLiferayLocation != null && !sourceLiferayLocation.isEmpty() )
         {
             final String sourcePath = sourceLiferayLocation.toOSString();
-            PortalBundle portalBundle =
+            final PortalBundle portalBundle =
                 LiferayServerCore.getPortalBundle( new org.eclipse.core.runtime.Path( sourcePath ) );
 
             if( portalBundle == null || !portalBundle.getVersion().startsWith( "6.2" ) )
             {
-                retval = Status.createErrorStatus( "This is not protal 6.2 project." );
+                retval = Status.createErrorStatus( "Invalid Liferay 6.2 folder location." );
             }
-
         }
 
         return retval;
