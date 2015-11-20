@@ -20,6 +20,7 @@ import com.liferay.blade.api.MigrationListener;
 import com.liferay.blade.api.Problem;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 import java.util.List;
@@ -133,6 +134,14 @@ public class WorkspaceMigrationImpl implements MigrationListener
                 }
             }
         }
+
+        UIUtil.async( new Runnable()
+        {
+            public void run()
+            {
+                UIUtil.showView( MigrationView.ID );
+            }
+        });
     }
 
     private boolean shouldAddMarker( IResource resource )

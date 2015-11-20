@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -95,81 +96,96 @@ public class MigrateProjectHandler extends AbstractHandler
 
                 final IPath location = project.getLocation();
 
-                Job job = new WorkspaceJob( "Finding migration problems..." )
+                findMigrationProblems( new IPath[] { location } );
+            }
+        }
+
+        return null;
+    }
+
+    public void findMigrationProblems( final IPath[] locations )
+    {
+        Job job = new WorkspaceJob( "Finding migration problems..." )
+        {
+            @Override
+            public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
+            {
+                IStatus retval = Status.OK_STATUS;
+
+                final BundleContext context =
+                    FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
+
+                ProgressMonitor override = new ProgressMonitor()
                 {
                     @Override
-                    public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
+                    public void worked( int work )
                     {
-                        IStatus retval = Status.OK_STATUS;
+                        monitor.worked( work );
+                    }
 
-                        final BundleContext context =
-                            FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
+                    @Override
+                    public void setTaskName( String taskName )
+                    {
+                        monitor.setTaskName( taskName );
+                    }
 
-                        ProgressMonitor override = new ProgressMonitor()
-                        {
-                            @Override
-                            public void worked( int work )
-                            {
-                                monitor.worked( work );
-                            }
+                    @Override
+                    public boolean isCanceled()
+                    {
+                        return monitor.isCanceled();
+                    }
 
-                            @Override
-                            public void setTaskName( String taskName )
-                            {
-                                monitor.setTaskName( taskName );
-                            }
+                    @Override
+                    public void done()
+                    {
+                        monitor.done();
+                    }
 
-                            @Override
-                            public boolean isCanceled()
-                            {
-                                return monitor.isCanceled();
-                            }
-
-                            @Override
-                            public void done()
-                            {
-                                monitor.done();
-                            }
-
-                            @Override
-                            public void beginTask( String taskName, int totalWork )
-                            {
-                                monitor.beginTask( taskName, totalWork );
-                            }
-                        };
-
-                        try
-                        {
-                            final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
-                            final Migration m = context.getService( sr );
-
-                            final List<Problem> problems = m.findProblems( location.toFile(), override );
-
-                            m.reportProblems( problems, Migration.DETAIL_LONG, "ide" );
-                        }
-                        catch( Exception e )
-                        {
-                            retval = ProjectUI.createErrorStatus( "Error in migrate command", e );
-                        }
-
-                        return retval;
+                    @Override
+                    public void beginTask( String taskName, int totalWork )
+                    {
+                        monitor.beginTask( taskName, totalWork );
                     }
                 };
 
                 try
                 {
-                    PlatformUI.getWorkbench().getProgressService().showInDialog(
-                        Display.getDefault().getActiveShell(), job );
+                    final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
+                    final Migration m = context.getService( sr );
+
+                    final List<Problem> allProblems = new ArrayList<>();
+
+                    for( IPath location : locations )
+                    {
+                        if( !override.isCanceled() )
+                        {
+                            final List<Problem> problems = m.findProblems( location.toFile(), override );
+
+                            problems.addAll( problems );
+                        }
+                    }
+
+                    m.reportProblems( allProblems, Migration.DETAIL_LONG, "ide" );
                 }
                 catch( Exception e )
                 {
+                    retval = ProjectUI.createErrorStatus( "Error in migrate command", e );
                 }
 
-                job.schedule();
+                return retval;
             }
+        };
+
+        try
+        {
+            PlatformUI.getWorkbench().getProgressService().showInDialog(
+                Display.getDefault().getActiveShell(), job );
+        }
+        catch( Exception e )
+        {
         }
 
-        return null;
+        job.schedule();
     }
 
     private boolean showMessageDialog( IProject project )

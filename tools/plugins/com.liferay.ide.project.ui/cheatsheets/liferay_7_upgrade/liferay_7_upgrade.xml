@@ -62,7 +62,7 @@
          <onCompletion>
             <b>Conclusion</b>
          </onCompletion>
-         <task kind="cheatsheet" name="Migrate java code" skip="true">
+         <task kind="cheatsheet" name="Migrate Java code" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>
@@ -92,7 +92,7 @@
             <param name="path" value="convert_osgi_modules.xml">
             </param>
          </task>
-         <task kind="cheatsheet" name="Convert projects to use gradle" skip="true">
+         <task kind="cheatsheet" name="Convert projects to gradle build" skip="true">
             <intro>
                <b>Introduction</b>
             </intro>

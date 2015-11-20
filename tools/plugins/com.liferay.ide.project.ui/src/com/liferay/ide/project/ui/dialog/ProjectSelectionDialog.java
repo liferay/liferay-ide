@@ -134,7 +134,7 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
 
         createMessageArea( composite );
 
-        fTableViewer = new TableViewer( composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
+        fTableViewer = new TableViewer( composite, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.MULTI );
         fTableViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
             public void selectionChanged( SelectionChangedEvent event )
@@ -179,16 +179,8 @@ public abstract class ProjectSelectionDialog extends SelectionStatusDialog
      */
     private void doSelectionChanged( Object[] objects )
     {
-        if( objects.length != 1 )
-        {
-            updateStatus( new Status( IStatus.ERROR, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY ) );
-            setSelectionResult( null );
-        }
-        else
-        {
-            updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY ) );
-            setSelectionResult( objects );
-        }
+        updateStatus( new Status( IStatus.OK, LiferayUIPlugin.PLUGIN_ID, StringPool.EMPTY ) );
+        setSelectionResult( objects );
     }
 
     protected IContentProvider getContentProvider()

@@ -7,6 +7,7 @@ public class Liferay7UpgradeAssistantSettings
 {
 
     private PortalSettings portalSettings;
+    private String[] javaProjectLocations;
 
     public Liferay7UpgradeAssistantSettings()
     {
@@ -20,6 +21,16 @@ public class Liferay7UpgradeAssistantSettings
     public void setPortalSettings( PortalSettings portalSettings )
     {
         this.portalSettings = portalSettings;
+    }
+
+    public String[] getJavaProjectLocations()
+    {
+        return javaProjectLocations;
+    }
+
+    public void setJavaProjectLocations( String[] locations )
+    {
+        javaProjectLocations = locations;
     }
 
 }

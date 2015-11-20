@@ -22,6 +22,6 @@
       </description>
       <command
             required="false"
-            serialization="com.liferay.ide.project.ui.upgrade.launchPortalServer"/>
+            serialization="com.liferay.ide.project.ui.upgrade.runPortalServer"/>
    </item>
 </cheatsheet>

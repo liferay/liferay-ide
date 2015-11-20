@@ -24,6 +24,8 @@ import com.liferay.ide.server.core.ILiferayServer;
 public interface PortalServer extends ILiferayServer
 {
 
+    String ID = "com.liferay.ide.server.portal";
+
     String START = "start";
 
     String STOP = "stop";

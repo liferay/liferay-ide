@@ -46,6 +46,7 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 {
     static final String PROP_VM_INSTALL_ID = "vm-install-id";
     static final String PROP_VM_INSTALL_TYPE_ID = "vm-install-type-id";
+    public static final String ID = "com.liferay.ide.server.portal.runtime";
 
     private PortalBundle portalBundle;
 
