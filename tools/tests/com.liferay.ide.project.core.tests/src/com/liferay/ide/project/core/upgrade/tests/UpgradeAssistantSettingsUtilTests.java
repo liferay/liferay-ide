@@ -62,7 +62,8 @@ public class UpgradeAssistantSettingsUtilTests
     {
         writeTest();
 
-        Liferay7UpgradeAssistantSettings settings = UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
+        Liferay7UpgradeAssistantSettings settings =
+            UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
 
         assertNotNull( settings );
 
@@ -71,15 +72,14 @@ public class UpgradeAssistantSettingsUtilTests
         assertNotNull( portalSettings );
 
         assertEquals( "Previous Location 6.2", portalSettings.getPreviousLiferayPortalLocation() );
-        assertEquals( "Previous Portal Name 6.2", portalSettings.getPreviousName() );
         assertEquals( "New Portal Location 7.0", portalSettings.getNewLiferayPortalLocation() );
         assertEquals( "New Portal Name 7.0", portalSettings.getNewName() );
     }
 
     protected Liferay7UpgradeAssistantSettings createLiferay7UpgradeAssistantSettingsObject()
     {
-        PortalSettings portalSettings = new PortalSettings(
-            "Previous Portal Name 6.2", "Previous Location 6.2", "New Portal Name 7.0", "New Portal Location 7.0" );
+        PortalSettings portalSettings =
+            new PortalSettings( "Previous Location 6.2", "New Portal Name 7.0", "New Portal Location 7.0" );
 
         Liferay7UpgradeAssistantSettings settings = new Liferay7UpgradeAssistantSettings();
 

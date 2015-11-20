@@ -8,7 +8,6 @@ import com.liferay.blade.api.Problem;
 public class PortalSettings
 {
 
-    private String _previousName;
     private String _previousLiferayPortalLocation;
     private String _newName;
     private String _newliferayPortalLocation;
@@ -19,24 +18,12 @@ public class PortalSettings
         super();
     }
 
-    public PortalSettings(
-        String previousName, String previousLiferayPortalLocation, String newName, String newliferayPortalLocation )
+    public PortalSettings( String previousLiferayPortalLocation, String newName, String newliferayPortalLocation )
     {
         super();
-        _previousName = previousName;
         _previousLiferayPortalLocation = previousLiferayPortalLocation;
         _newName = newName;
         _newliferayPortalLocation = newliferayPortalLocation;
-    }
-
-    public String getPreviousName()
-    {
-        return _previousName;
-    }
-
-    public void setPreviousName( String previousName )
-    {
-        _previousName = previousName;
     }
 
     public String getPreviousLiferayPortalLocation()

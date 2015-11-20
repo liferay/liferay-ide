@@ -27,66 +27,49 @@ public interface CopyPortalSettingsOp extends ExecutableElement
 {
     ElementType TYPE = new ElementType( CopyPortalSettingsOp.class );
 
-    // *** Source Portal Name ***
-
-    @Label(standard = "Previous Liferay name")
-    @Service(impl = SourceLiferayNameDVS.class )
-    ValueProperty PROP_SOURCE_LIFERAY_NAME = new ValueProperty( TYPE, "SourceLiferayName" );
-
-    Value<String> getSourceLiferayName();
-    void setSourceLiferayName( String value );
-
-    // *** Source Portal Location ***
+    // *** Previou Liferay Location ***
 
     @AbsolutePath
     @Label(standard = "Previous Liferay location")
     @Type( base = Path.class )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Service( impl = PreviousLiferayLocationValidationService.class )
-    ValueProperty PROP_SOURCE_LIFERAY_LOCATION = new ValueProperty( TYPE, "SourceLiferayLocation" );
+    ValueProperty PROP_PREVIOUS_LIFERAY_LOCATION = new ValueProperty( TYPE, "PreviousLiferayLocation" );
 
-    Value<Path> getSourceLiferayLocation();
-    void setSourceLiferayLocation( String value );
-    void setSourceLiferayLocation( Path value );
+    Value<Path> getPreviousLiferayLocation();
+    void setPreviousLiferayLocation( String value );
+    void setPreviousLiferayLocation( Path value );
 
-    // *** Desitnation Liferay Name ***
+    // *** New Liferay Name ***
 
-    @Service(impl = DestinationLiferayNameDVS.class )
+    @Service(impl = NewLiferayNameDVS.class )
     @Label(standard = "New Liferay name")
-    ValueProperty PROP_DESTINATION_LIFERAY_NAME = new ValueProperty( TYPE, "DestinationLiferayName" );
+    ValueProperty PROP_NEW_LIFERAY_NAME = new ValueProperty( TYPE, "NewLiferayName" );
 
-    Value<String> getDestinationLiferayName();
-    void setDestinationLiferayName( String value );
+    Value<String> getNewLiferayName();
+    void setNewLiferayName( String value );
 
-    // *** Destination Liferay Location ***
+    // *** New Liferay Location ***
 
     @AbsolutePath
     @Label(standard = "New Liferay location")
     @Type( base = Path.class )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Service( impl = NewLiferayLocationValidationService.class )
-    ValueProperty PROP_DESTINATION_LIFERAY_LOCATION = new ValueProperty( TYPE, "DestinationLiferayLocation" );
+    ValueProperty PROP_NEW_LIFERAY_LOCATION = new ValueProperty( TYPE, "NewLiferayLocation" );
 
-    Value<Path> getDestinationLiferayLocation();
-    void setDestinationLiferayLocation( String value );
-    void setDestinationLiferayLocation( Path value );
+    Value<Path> getNewLiferayLocation();
+    void setNewLiferayLocation( String value );
+    void setNewLiferayLocation( Path value );
 
     @DelegateImplementation( CopyPortalSettingsHandler.class )
     Status execute( ProgressMonitor monitor );
 
-    public static class DestinationLiferayNameDVS extends NameDVS
+    public static class NewLiferayNameDVS extends NameDVS
     {
-        public DestinationLiferayNameDVS()
+        public NewLiferayNameDVS()
         {
-            super( PROP_DESTINATION_LIFERAY_LOCATION );
-        }
-    }
-
-    public static class SourceLiferayNameDVS extends NameDVS
-    {
-        public SourceLiferayNameDVS()
-        {
-            super( PROP_SOURCE_LIFERAY_LOCATION );
+            super( PROP_NEW_LIFERAY_LOCATION );
         }
     }
 

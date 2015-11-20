@@ -17,6 +17,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 
@@ -43,24 +45,26 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 
         final Command command = new CopyPortalSettingsHandler().getCommand();
 
-        if( op.getSourceLiferayLocation() == null || op.getSourceLiferayLocation().empty() )
+        final Value<Path> previousLiferayLocation = op.getPreviousLiferayLocation();
+        final Value<Path> newLiferayLocation = op.getNewLiferayLocation();
+
+        if( previousLiferayLocation == null || previousLiferayLocation.empty() )
         {
             return Status.createErrorStatus( "Previous Liferay Location can not be null or empty." );
         }
 
-        if( op.getDestinationLiferayLocation() == null || op.getDestinationLiferayLocation().empty() )
+        if( newLiferayLocation == null || newLiferayLocation.empty() )
         {
             return Status.createErrorStatus( "New Liferay Location can not be null or empty." );
         }
 
-        final File sourceLiferayLocationDir = op.getSourceLiferayLocation().content().toFile();
-        final File destLiferayLocationDir = op.getDestinationLiferayLocation().content().toFile();
-        final String sourceName = op.getSourceLiferayName().content();
-        final String destName = op.getDestinationLiferayName().content();
+        final File previousLiferayLocationDir = previousLiferayLocation.content().toFile();
+        final File newLiferayLocationDir = newLiferayLocation.content().toFile();
+        final String newName = op.getNewLiferayName().content();
 
         final Map<String, File> parameters = new HashMap<>();
-        parameters.put( "source", sourceLiferayLocationDir );
-        parameters.put( "dest", destLiferayLocationDir );
+        parameters.put( "source", previousLiferayLocationDir );
+        parameters.put( "dest", newLiferayLocationDir );
 
         try
         {
@@ -81,10 +85,9 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
                     portalSettings = new PortalSettings();
                 }
 
-                portalSettings.setPreviousName( sourceName );
-                portalSettings.setPreviousLiferayPortalLocation( sourceLiferayLocationDir.getPath() );
-                portalSettings.setNewName( destName );
-                portalSettings.setNewLiferayPortalLocation( destLiferayLocationDir.getPath() );
+                portalSettings.setPreviousLiferayPortalLocation( previousLiferayLocationDir.getPath() );
+                portalSettings.setNewName( newName );
+                portalSettings.setNewLiferayPortalLocation( newLiferayLocationDir.getPath() );
 
                 settings.setPortalSettings( portalSettings );
 
@@ -128,10 +131,9 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
             {
                 PortalSettings portalSettings = settings.getPortalSettings();
 
-                wizard.element().setSourceLiferayName( portalSettings.getPreviousName() );
-                wizard.element().setSourceLiferayLocation( portalSettings.getPreviousLiferayPortalLocation() );
-                wizard.element().setDestinationLiferayName( portalSettings.getNewName() );
-                wizard.element().setDestinationLiferayLocation( portalSettings.getNewLiferayPortalLocation() );
+                wizard.element().setPreviousLiferayLocation( portalSettings.getPreviousLiferayPortalLocation() );
+                wizard.element().setNewLiferayName( portalSettings.getNewName() );
+                wizard.element().setNewLiferayLocation( portalSettings.getNewLiferayPortalLocation() );
             }
         }
         catch( IOException e )

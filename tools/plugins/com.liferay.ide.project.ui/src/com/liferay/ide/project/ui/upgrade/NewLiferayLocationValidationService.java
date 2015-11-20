@@ -32,7 +32,7 @@ public class NewLiferayLocationValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final Path destinationLiferayLocation = op().getDestinationLiferayLocation().content( true );
+        final Path destinationLiferayLocation = op().getNewLiferayLocation().content( true );
 
         if( destinationLiferayLocation != null && !destinationLiferayLocation.isEmpty() )
         {
