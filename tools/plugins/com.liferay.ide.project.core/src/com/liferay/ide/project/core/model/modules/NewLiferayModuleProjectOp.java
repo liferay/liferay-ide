@@ -26,7 +26,6 @@ import com.liferay.ide.project.core.model.modules.internal.ModuleProjectNameList
 import com.liferay.ide.project.core.model.modules.internal.ModuleProjectNameValidationService;
 import com.liferay.ide.project.core.model.modules.internal.ModuleProjectProviderDefaultValueService;
 import com.liferay.ide.project.core.model.modules.internal.ModuleProjectProviderPossibleValuesService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectTypeDefaultValueService;
 import com.liferay.ide.project.core.model.modules.internal.ModuleProjectTypePossibleValuesService;
 import com.liferay.ide.project.core.model.modules.internal.ModuleProjectUseDefaultLocationListener;
 
@@ -129,17 +128,11 @@ public interface NewLiferayModuleProjectOp extends ExecutableElement
 
     // *** Project Template ***
 
+    @DefaultValue( text = "portlet" )
     @Type( base = ProjectType.class )
     @Label( standard = "Project Template" )
     @Listeners( ModuleProjectNameListener.class )
-    @Services
-    (
-        value=
-        {
-            @Service( impl = ModuleProjectTypePossibleValuesService.class ),
-            @Service( impl = ModuleProjectTypeDefaultValueService.class )
-        }
-    )
+    @Service( impl = ModuleProjectTypePossibleValuesService.class )
     ValueProperty PROP_PROJECT_TEMPLATE = new ValueProperty( TYPE, "ProjectTemplate" );
 
     Value<ProjectType> getProjectTemplate();
