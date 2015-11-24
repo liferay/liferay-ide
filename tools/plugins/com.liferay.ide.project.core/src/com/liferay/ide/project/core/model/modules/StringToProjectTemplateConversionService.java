@@ -12,48 +12,38 @@
  * details.
  *
  *******************************************************************************/
-
-package com.liferay.ide.project.core.model.modules.internal;
+package com.liferay.ide.project.core.model.modules;
 
 import com.liferay.blade.api.ProjectTemplate;
-import com.liferay.ide.project.core.model.modules.ModulesUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.ConversionException;
+import org.eclipse.sapphire.ConversionService;
 
 
 /**
- * @author Simon Jiang
+ * @author Gregory Amerson
  */
-public class ModuleProjectTypePossibleValuesService extends PossibleValuesService
+public class StringToProjectTemplateConversionService extends ConversionService<String, ProjectTemplate>
 {
-    private List<String> possibleValues;
+
+    public StringToProjectTemplateConversionService()
+    {
+        super( String.class, ProjectTemplate.class );
+    }
 
     @Override
-    protected void initPossibleValuesService()
+    public ProjectTemplate convert( String object ) throws ConversionException
     {
-        possibleValues = new ArrayList<String>();
-
         final ProjectTemplate[] templates = ModulesUtil.getProjectTemplates();
 
         for( ProjectTemplate template : templates )
         {
-            possibleValues.add( template.name() );
+            if( template.name().equals( object ) )
+            {
+                return template;
+            }
         }
-    }
 
-    @Override
-    protected void compute( Set<String> values )
-    {
-        values.addAll( possibleValues );
-    }
-
-    @Override
-    public boolean ordered()
-    {
-        return true;
+        return null;
     }
 }

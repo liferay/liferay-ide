@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.modules;
 
-import com.liferay.blade.api.ProjectType;
+import com.liferay.blade.api.ProjectTemplate;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
@@ -129,15 +129,15 @@ public interface NewLiferayModuleProjectOp extends ExecutableElement
     // *** Project Template ***
 
     @DefaultValue( text = "portlet" )
-    @Type( base = ProjectType.class )
     @Label( standard = "Project Template" )
     @Listeners( ModuleProjectNameListener.class )
     @Service( impl = ModuleProjectTypePossibleValuesService.class )
+    @Type( base = ProjectTemplate.class )
     ValueProperty PROP_PROJECT_TEMPLATE = new ValueProperty( TYPE, "ProjectTemplate" );
 
-    Value<ProjectType> getProjectTemplate();
+    Value<ProjectTemplate> getProjectTemplate();
     void setProjectTemplate( String value );
-    void setProjectTemplate( ProjectType value );
+    void setProjectTemplate( ProjectTemplate value );
 
     // *** Maven settings ***
     // *** ArtifactVersion ***
