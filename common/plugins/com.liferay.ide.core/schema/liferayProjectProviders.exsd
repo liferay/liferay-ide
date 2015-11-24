@@ -6,6 +6,7 @@
          <meta.schema plugin="com.liferay.ide.core" id="liferayProjectProviders" name="Liferay Project Providers"/>
       </appinfo>
       <documentation>
+         
       </documentation>
    </annotation>
 
@@ -22,18 +23,21 @@
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="id" type="string">
             <annotation>
                <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string">
             <annotation>
                <documentation>
+                  
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
@@ -48,12 +52,14 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
+                  
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn="com.liferay.ide.core.AbstractLiferayProjectProvider:com.liferay.ide.core.ILiferayProjectProvider"/>
@@ -84,22 +90,37 @@
          <attribute name="shortName" type="string" use="required">
             <annotation>
                <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="displayName" type="string" use="required">
             <annotation>
                <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
          <attribute name="default" type="boolean">
             <annotation>
                <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="projectType" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
       </complexType>
    </element>
+
+
+
+
+
 
 </schema>

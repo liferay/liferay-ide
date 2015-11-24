@@ -7,7 +7,8 @@
             class="com.liferay.ide.gradle.core.GradleProjectProvider"
             displayName="Gradle Module Project Provider"
             id="com.liferay.ide.gradle.core.gradleModuleProjectProvider"
-            shortName="gradle-module">
+            shortName="gradle-module"
+            projectType="module">
       </liferayProjectProvider>
    </extension>
 </plugin>

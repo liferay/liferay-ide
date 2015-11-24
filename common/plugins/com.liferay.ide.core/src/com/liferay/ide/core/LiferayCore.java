@@ -189,6 +189,16 @@ public class LiferayCore extends Plugin
         return providerReader.getProviders();
     }
 
+    public static synchronized ILiferayProjectProvider[] getProviders( String projectType )
+    {
+        if( providerReader == null )
+        {
+            providerReader = new LiferayProjectProviderReader();
+        }
+
+        return providerReader.getProviders( projectType );
+    }
+
     public static synchronized ILiferayProjectProvider[] getProviders( Class<?> type )
     {
         if( providerReader == null )

@@ -29,6 +29,8 @@ public interface ILiferayProjectProvider
 
     String getShortName();
 
+    String getProjectType();
+
     ILiferayProject provide( Object adaptable );
 
     boolean provides( Class<?> type );

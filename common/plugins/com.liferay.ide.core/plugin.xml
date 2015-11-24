@@ -62,7 +62,8 @@
             displayName="Noop Provider"
             id="com.liferay.ide.core.noopProjectProvider"
             priority="lowest"
-            shortName="noop">
+            shortName="noop"
+            projectType="noop">
       </liferayProjectProvider>
    </extension>
    <extension

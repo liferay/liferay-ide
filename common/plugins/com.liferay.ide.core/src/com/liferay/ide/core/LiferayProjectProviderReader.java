@@ -29,6 +29,7 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
     private static final String ATTRIBUTE_DISPLAYNAME = "displayName"; //$NON-NLS-1$
     private static final String ATTRIBUTE_PRIORITY = "priority"; //$NON-NLS-1$
     private static final String ATTRIBUTE_SHORTNAME = "shortName"; //$NON-NLS-1$
+    private static final String ATTRIBUTE_TYPE = "type"; //$NON-NLS-1$
     private static final String EXTENSION = "liferayProjectProviders"; //$NON-NLS-1$
     private static final String PROVIDER_ELEMENT = "liferayProjectProvider"; //$NON-NLS-1$
 
@@ -63,12 +64,14 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
         final String shortName = configElement.getAttribute( ATTRIBUTE_SHORTNAME );
         final String displayName = configElement.getAttribute( ATTRIBUTE_DISPLAYNAME );
         final String priority = configElement.getAttribute( ATTRIBUTE_PRIORITY );
+        final String type = configElement.getAttribute( ATTRIBUTE_TYPE );
         final boolean isDefault = Boolean.parseBoolean( configElement.getAttribute( ATTRIBUTE_DEFAULT ) );
 
         final AbstractLiferayProjectProvider projectProvider = (AbstractLiferayProjectProvider) provider;
 
         projectProvider.setShortName( shortName );
         projectProvider.setDisplayName( displayName );
+        projectProvider.setType( type );
 
         int priorityValue = 10;
 
@@ -97,6 +100,23 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
         projectProvider.setDefault( isDefault );
 
         return provider;
+    }
+
+    public ILiferayProjectProvider[] getProviders( String projectType )
+    {
+        final List<ILiferayProjectProvider> retval = new ArrayList<>();
+
+        final ILiferayProjectProvider[] providers = getProviders();
+
+        for( ILiferayProjectProvider provider : providers )
+        {
+            if( provider.getProjectType().equals( projectType ) )
+            {
+                retval.add( provider );
+            }
+        }
+
+        return retval.toArray( new ILiferayProjectProvider[0] );
     }
 
 }

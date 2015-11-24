@@ -533,7 +533,8 @@
             displayName="Ant (liferay-plugins-sdk)"
             id="com.liferay.ide.project.core.runtimeProjectProvider"
             priority="normal"
-            shortName="ant">
+            shortName="ant"
+            projectType="plugin">
       </liferayProjectProvider>
    </extension>
    <extension

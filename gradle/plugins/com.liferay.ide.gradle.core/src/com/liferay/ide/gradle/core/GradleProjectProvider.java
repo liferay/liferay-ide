@@ -17,9 +17,10 @@ package com.liferay.ide.gradle.core;
 
 import com.gradleware.tooling.toolingclient.GradleDistribution;
 import com.liferay.blade.api.ProjectBuild;
+import com.liferay.blade.api.ProjectTemplate;
+import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.project.core.ILiferayModuleProjectProvider;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -46,7 +47,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Simon Jiang
  */
-public class GradleProjectProvider extends NewLiferayProjectProvider implements ILiferayModuleProjectProvider
+public class GradleProjectProvider extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
 {
 
     public GradleProjectProvider()
@@ -79,18 +80,10 @@ public class GradleProjectProvider extends NewLiferayProjectProvider implements 
         return retval;
     }
 
-
     @Override
-    public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
+    public IStatus createNewProject( NewLiferayModuleProjectOp op, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
-
-        if( ! (operation instanceof NewLiferayModuleProjectOp ) )
-        {
-            throw new IllegalArgumentException( "Operation must be of type NewLiferayModuleProjectOp" ); //$NON-NLS-1$
-        }
-
-        final NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.class.cast( operation );
 
         final String projectName = op.getProjectName().content();
 
@@ -103,12 +96,12 @@ public class GradleProjectProvider extends NewLiferayProjectProvider implements 
             location = location.removeLastSegments( 1 );
         }
 
-        final String projectType = op.getProjectTemplate().content().toString();
+        final ProjectTemplate projectTemplate = op.getProjectTemplate().content();
 
         retval =
             createOSGIBundleProject(
-                location.toFile(), location.toFile(), projectType, ProjectBuild.gradle.toString(), projectName,
-                projectName, projectName );
+                location.toFile(), location.toFile(), projectTemplate.name(), ProjectBuild.gradle.toString(),
+                projectName, projectName, projectName );
 
         if( retval.isOK() )
         {
@@ -133,7 +126,6 @@ public class GradleProjectProvider extends NewLiferayProjectProvider implements 
         return retval;
     }
 
-    @Override
     public IStatus createOSGIBundleProject(
         File baseLocation, File dir, String projectType, String buildType, String projectName, String className,
         String serviceName )

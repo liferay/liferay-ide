@@ -14,26 +14,21 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
-import com.liferay.ide.core.AbstractLiferayProjectProvider;
+import com.liferay.ide.core.ILiferayProjectProvider;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.sapphire.ExecutableElement;
 
 
 /**
  * @author Gregory Amerson
  */
-public abstract class NewLiferayProjectProvider extends AbstractLiferayProjectProvider
+public abstract interface NewLiferayProjectProvider<T extends ExecutableElement> extends ILiferayProjectProvider
 {
-
-    public NewLiferayProjectProvider( Class<?>[] types )
-    {
-        super( types );
-    }
-
-    public abstract IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException;
+    public abstract IStatus createNewProject( T op, IProgressMonitor monitor ) throws CoreException;
 
     public abstract IStatus validateProjectLocation( String projectName, IPath path );
 }

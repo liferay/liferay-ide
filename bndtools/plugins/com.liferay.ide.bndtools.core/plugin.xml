@@ -7,6 +7,7 @@
             class="com.liferay.ide.bndtools.core.BndtoolsProvider"
             displayName="Bndtools Project Provider"
             id="com.liferay.ide.bndtools.core.bndtoolsProjectProvider"
+            projectType="module"
             shortName="bndtools">
       </liferayProjectProvider>
    </extension>

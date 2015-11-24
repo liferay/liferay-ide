@@ -28,6 +28,7 @@ public abstract class AbstractLiferayProjectProvider
     private boolean isDefault;
     private int priority;
     private String shortName;
+    private String projectType;
 
     public AbstractLiferayProjectProvider( Class<?>[] types )
     {
@@ -62,6 +63,11 @@ public abstract class AbstractLiferayProjectProvider
     public String getShortName()
     {
         return this.shortName;
+    }
+
+    public String getProjectType()
+    {
+        return this.projectType;
     }
 
     public boolean isDefault()
@@ -103,5 +109,10 @@ public abstract class AbstractLiferayProjectProvider
     public void setShortName( String shortName )
     {
         this.shortName = shortName;
+    }
+
+    public void setType( String type )
+    {
+        this.projectType = type;
     }
 }

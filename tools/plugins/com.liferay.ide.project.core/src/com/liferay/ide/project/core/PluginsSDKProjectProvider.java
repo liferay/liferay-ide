@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
@@ -63,7 +64,7 @@ import org.osgi.framework.Version;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
+public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewLiferayPluginProjectOp>
 {
 
     public PluginsSDKProjectProvider()
@@ -232,17 +233,8 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
 
 
     @Override
-    public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
+    public IStatus createNewProject( NewLiferayPluginProjectOp op, IProgressMonitor monitor ) throws CoreException
     {
-
-        if( ! (operation instanceof NewLiferayPluginProjectOp ) )
-        {
-            throw new IllegalArgumentException( "Operation must be of type NewLiferayPluginProjectOp" ); //$NON-NLS-1$
-        }
-
-
-        final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.class.cast( operation );
-
         ElementList<ProjectName> projectNames = op.getProjectNames();
 
         final PluginType pluginType = op.getPluginType().content( true );

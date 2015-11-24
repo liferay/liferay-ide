@@ -121,9 +121,9 @@ public interface NewLiferayModuleProjectOp extends ExecutableElement
     )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
 
-    Value<NewLiferayProjectProvider> getProjectProvider();
+    Value<NewLiferayProjectProvider<NewLiferayModuleProjectOp>> getProjectProvider();
     void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider value );
+    void setProjectProvider( NewLiferayProjectProvider<NewLiferayModuleProjectOp> value );
 
 
     // *** Project Template ***

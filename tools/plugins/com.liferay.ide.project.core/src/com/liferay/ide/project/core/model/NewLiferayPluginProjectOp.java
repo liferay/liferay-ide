@@ -160,9 +160,9 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
     )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" ); //$NON-NLS-1$
 
-    Value<NewLiferayProjectProvider> getProjectProvider();
+    Value<NewLiferayProjectProvider<NewLiferayPluginProjectOp>> getProjectProvider();
     void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider value );
+    void setProjectProvider( NewLiferayProjectProvider<NewLiferayPluginProjectOp> value );
 
     // *** SDK Location ***
     @Type( base = Path.class )

@@ -25,7 +25,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 
@@ -61,7 +60,7 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
             // TODO update status
             final List<String> goals = Arrays.asList( "package" );
-            final IStatus status = mavenProjectBuilder.execGoals( goals, monitor );
+            mavenProjectBuilder.execGoals( goals, monitor );
         }
 
         // we are going to try to get the output jar even if the package failed.

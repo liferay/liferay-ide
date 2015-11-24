@@ -17,7 +17,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.blade.api.ProjectBuild;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ILiferayModuleProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -49,24 +49,12 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Simon Jiang
  */
-public class LiferayMavenModuleProjectProvider extends LiferayMavenProjectProvider implements ILiferayModuleProjectProvider
+public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
 {
-    public LiferayMavenModuleProjectProvider()
-    {
-        super( new Class<?>[] { IProject.class } );
-    }
-
     @Override
-    public IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException
+    public IStatus createNewProject( NewLiferayModuleProjectOp op, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
-
-        if( ! (operation instanceof NewLiferayModuleProjectOp ) )
-        {
-            throw new IllegalArgumentException( "Operation must be of type NewLiferayModuleProjectOp" ); //$NON-NLS-1$
-        }
-
-        final NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.class.cast( operation );
 
         ElementList<ProjectName> projectNames = op.getProjectNames();
 
@@ -163,7 +151,6 @@ public class LiferayMavenModuleProjectProvider extends LiferayMavenProjectProvid
         return retval;
     }
 
-    @Override
     public IStatus createOSGIBundleProject(
         File baseLocation, File dir, String projectType, String buildType, String projectName, String className,
         String serviceName )
@@ -173,6 +160,12 @@ public class LiferayMavenModuleProjectProvider extends LiferayMavenProjectProvid
         retVal = ProjectUtil.createOSGIBundleProject( baseLocation, dir, projectType, buildType, projectName, className, serviceName );
 
         return retVal;
+    }
+
+    @Override
+    public IStatus validateProjectLocation( String projectName, IPath path )
+    {
+        return new NewMavenPluginProjectProvider().validateProjectLocation( projectName, path );
     }
 
 }

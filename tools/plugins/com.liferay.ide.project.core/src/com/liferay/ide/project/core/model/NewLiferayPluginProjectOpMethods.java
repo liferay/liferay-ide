@@ -83,7 +83,8 @@ public class NewLiferayPluginProjectOpMethods
 
         try
         {
-            final NewLiferayProjectProvider projectProvider = op.getProjectProvider().content( true );
+            final NewLiferayProjectProvider<NewLiferayPluginProjectOp> projectProvider =
+                            op.getProjectProvider().content( true );
 
             //IDE-1306  If the user types too quickly all the model changes may not have propagated
             final Path projectLocation = op.getLocation().content();

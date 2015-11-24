@@ -35,21 +35,23 @@
    <extension
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
-            class="com.liferay.ide.maven.core.LiferayMavenProjectProvider"
+            class="com.liferay.ide.maven.core.NewMavenPluginProjectProvider"
             displayName="Maven (liferay-maven-plugin)"
             id="com.liferay.ide.maven.core.mavenProjectProvider"
             priority="high"
-            shortName="maven">
+            shortName="maven"
+            projectType="plugin">
       </liferayProjectProvider>
    </extension>
    <extension
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
-            class="com.liferay.ide.maven.core.LiferayMavenModuleProjectProvider"
+            class="com.liferay.ide.maven.core.NewMavenModuleProjectProvider"
             displayName="Maven (liferay-maven-module)"
             id="com.liferay.ide.maven.core.mavenModuleProjectProvider"
             priority="high"
-            shortName="maven-module">
+            shortName="maven-module"
+            projectType="module">
       </liferayProjectProvider>
    </extension>
    <extension
