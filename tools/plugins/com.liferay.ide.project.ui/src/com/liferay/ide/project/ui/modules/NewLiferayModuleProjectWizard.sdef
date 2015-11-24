@@ -24,7 +24,7 @@
     </import>
     <wizard>
         <id>NewLiferayModuleProjectWizard</id>
-        <element-type>com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOp</element-type>
+        <element-type>com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp</element-type>
         <label>New Liferay Module Project</label>
         <page>
             <id>LiferayModuleProjectWizardPage</id>

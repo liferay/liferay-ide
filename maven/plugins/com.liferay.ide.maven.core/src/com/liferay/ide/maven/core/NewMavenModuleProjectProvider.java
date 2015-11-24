@@ -19,8 +19,8 @@ import com.liferay.blade.api.ProjectBuild;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
+import com.liferay.ide.project.core.modules.ModulesUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,13 +69,10 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
             location = location.removeLastSegments( 1 );
         }
 
-        final String projectType = op.getProjectTemplate().content().toString();
-
         final List<IProject> newProjects = new ArrayList<IProject>();
 
-        retval = createOSGIBundleProject(
-                location.toFile(), location.toFile(), projectType, ProjectBuild.maven.toString(), projectName,
-                projectName, projectName );
+        retval = ModulesUtil.createModuleProject(
+            location.toFile(), op.getProjectTemplate().content(), ProjectBuild.maven, projectName, null, null, null );
 
         if ( retval.isOK() )
         {
@@ -151,20 +148,10 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
         return retval;
     }
 
-    public IStatus createOSGIBundleProject(
-        File baseLocation, File dir, String projectType, String buildType, String projectName, String className,
-        String serviceName )
-    {
-        IStatus retVal = Status.OK_STATUS;
-
-        retVal = ProjectUtil.createOSGIBundleProject( baseLocation, dir, projectType, buildType, projectName, className, serviceName );
-
-        return retVal;
-    }
-
     @Override
     public IStatus validateProjectLocation( String projectName, IPath path )
     {
+        // TODO improve this
         return new NewMavenPluginProjectProvider().validateProjectLocation( projectName, path );
     }
 

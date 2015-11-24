@@ -111,7 +111,7 @@ public abstract class AbstractLiferayProjectProvider
         this.shortName = shortName;
     }
 
-    public void setType( String type )
+    public void setProjectType( String type )
     {
         this.projectType = type;
     }

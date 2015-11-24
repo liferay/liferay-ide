@@ -22,10 +22,9 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.modules.ModulesUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
@@ -89,26 +88,17 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
 
         IPath location = PathBridge.create( op.getLocation().content() );
 
-        // for location we should use the parent location
-        if( location.lastSegment().equals( projectName ) )
-        {
-            // use parent dir since maven archetype will generate new dir under this location
-            location = location.removeLastSegments( 1 );
-        }
-
         final ProjectTemplate projectTemplate = op.getProjectTemplate().content();
 
-        retval =
-            createOSGIBundleProject(
-                location.toFile(), location.toFile(), projectTemplate.name(), ProjectBuild.gradle.toString(),
-                projectName, projectName, projectName );
+        retval = ModulesUtil.createModuleProject( location.toFile(), projectTemplate, ProjectBuild.gradle, projectName,
+            null, null, null );
 
         if( retval.isOK() )
         {
             ProjectImportConfiguration configuration = new ProjectImportConfiguration();
             GradleDistributionWrapper from = GradleDistributionWrapper.from( GradleDistribution.fromBuild() );
             configuration.setGradleDistribution( from );
-            configuration.setProjectDir( location.append( projectName ).toFile() );
+            configuration.setProjectDir( location.toFile() );
             configuration.setApplyWorkingSets( false );
             configuration.setWorkingSets( new ArrayList<String>() );
             new SynchronizeGradleProjectJob(
@@ -123,19 +113,10 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
     public IStatus validateProjectLocation( String projectName, IPath path )
     {
         IStatus retval = Status.OK_STATUS;
+
+        //TODO validation gradle project location
+
         return retval;
     }
-
-    public IStatus createOSGIBundleProject(
-        File baseLocation, File dir, String projectType, String buildType, String projectName, String className,
-        String serviceName )
-    {
-        IStatus retVal = Status.OK_STATUS;
-
-        retVal = ProjectUtil.createOSGIBundleProject( baseLocation, dir, projectType, buildType, projectName, className, serviceName );
-
-        return retVal;
-    }
-
 
 }

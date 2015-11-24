@@ -33,7 +33,7 @@ public class ModuleProjectProviderDefaultValueService extends ProjectProviderDef
     @Override
     protected String compute()
     {
-        String retval = "maven-module";
+        String retval = "gradle-module";
 
         final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
         final String defaultProjectBuildType =

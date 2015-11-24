@@ -29,7 +29,7 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
     private static final String ATTRIBUTE_DISPLAYNAME = "displayName"; //$NON-NLS-1$
     private static final String ATTRIBUTE_PRIORITY = "priority"; //$NON-NLS-1$
     private static final String ATTRIBUTE_SHORTNAME = "shortName"; //$NON-NLS-1$
-    private static final String ATTRIBUTE_TYPE = "type"; //$NON-NLS-1$
+    private static final String ATTRIBUTE_PROJECTTYPE = "projectType"; //$NON-NLS-1$
     private static final String EXTENSION = "liferayProjectProviders"; //$NON-NLS-1$
     private static final String PROVIDER_ELEMENT = "liferayProjectProvider"; //$NON-NLS-1$
 
@@ -64,14 +64,14 @@ public class LiferayProjectProviderReader extends ExtensionReader<ILiferayProjec
         final String shortName = configElement.getAttribute( ATTRIBUTE_SHORTNAME );
         final String displayName = configElement.getAttribute( ATTRIBUTE_DISPLAYNAME );
         final String priority = configElement.getAttribute( ATTRIBUTE_PRIORITY );
-        final String type = configElement.getAttribute( ATTRIBUTE_TYPE );
+        final String type = configElement.getAttribute( ATTRIBUTE_PROJECTTYPE );
         final boolean isDefault = Boolean.parseBoolean( configElement.getAttribute( ATTRIBUTE_DEFAULT ) );
 
         final AbstractLiferayProjectProvider projectProvider = (AbstractLiferayProjectProvider) provider;
 
         projectProvider.setShortName( shortName );
         projectProvider.setDisplayName( displayName );
-        projectProvider.setType( type );
+        projectProvider.setProjectType( type );
 
         int priorityValue = 10;
 

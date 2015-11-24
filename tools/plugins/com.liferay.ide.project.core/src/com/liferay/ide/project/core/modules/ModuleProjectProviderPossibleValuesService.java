@@ -16,26 +16,24 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.model.internal.ProjectProviderPossibleValuesService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.sapphire.PossibleValuesService;
+
 
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectProviderPossibleValuesService extends ProjectProviderPossibleValuesService
+public class ModuleProjectProviderPossibleValuesService extends PossibleValuesService
 {
     private List<String> possibleValues;
 
-    @Override
     protected void initPossibleValuesService()
     {
-        super.initPossibleValuesService();
-
         possibleValues = new ArrayList<String>();
 
         for( final ILiferayProjectProvider provider : LiferayCore.getProviders( "module") )
