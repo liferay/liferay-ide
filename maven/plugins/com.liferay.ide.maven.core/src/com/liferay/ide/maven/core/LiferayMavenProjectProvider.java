@@ -23,6 +23,7 @@ import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.UpdateDescriptorVersionOperation;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProfileLocation;
@@ -159,7 +160,7 @@ public class LiferayMavenProjectProvider extends NewLiferayProjectProvider
         final String javaPackage = op.getGroupId().content();
         final String activeProfilesValue = op.getActiveProfilesValue().content();
         final IPortletFramework portletFramework = op.getPortletFramework().content( true );
-        final String frameworkName = getFrameworkName( op );
+        final String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName( op );
 
         IPath location = PathBridge.create( op.getLocation().content() );
 

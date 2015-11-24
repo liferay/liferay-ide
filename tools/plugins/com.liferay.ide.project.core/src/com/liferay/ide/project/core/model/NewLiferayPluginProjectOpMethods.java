@@ -19,6 +19,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.RemoveSampleElementsOperation;
@@ -110,6 +111,20 @@ public class NewLiferayPluginProjectOpMethods
         return retval;
     }
 
+    public static String getFrameworkName( NewLiferayPluginProjectOp op )
+    {
+        final IPortletFramework portletFramework = op.getPortletFramework().content();
+
+        String frameworkName = portletFramework.getShortName();
+
+        if( portletFramework.isRequiresAdvanced() )
+        {
+            frameworkName = op.getPortletFrameworkAdvanced().content().getShortName();
+        }
+
+        return frameworkName;
+    }
+
     public static String getMavenParentPomGroupId( NewLiferayPluginProjectOp op, String projectName, IPath path )
     {
         String retval = null;
@@ -150,33 +165,6 @@ public class NewLiferayPluginProjectOpMethods
         }
 
         return retval;
-    }
-
-    public static String getProjectNameWithSuffix( final NewLiferayPluginProjectOp op )
-    {
-        final String projectName = op.getProjectName().content();
-
-        String suffix = null;
-
-        if( projectName != null )
-        {
-            if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
-            {
-                suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
-
-                if( suffix != null )
-                {
-                    // check if project name already contains suffix
-                    if( projectName.endsWith( suffix ) )
-                    {
-                        suffix = null;
-                    }
-                }
-            }
-        }
-
-        return ( projectName == null ? StringPool.EMPTY : projectName ) +
-                        ( suffix == null ? StringPool.EMPTY : suffix );
     }
 
     public static String getPluginTypeSuffix( final PluginType pluginType )
@@ -271,6 +259,33 @@ public class NewLiferayPluginProjectOpMethods
         }
 
         return possibleProfileIds;
+    }
+
+    public static String getProjectNameWithSuffix( final NewLiferayPluginProjectOp op )
+    {
+        final String projectName = op.getProjectName().content();
+
+        String suffix = null;
+
+        if( projectName != null )
+        {
+            if( "ant".equals( op.getProjectProvider().content( true ).getShortName() ) ) //$NON-NLS-1$
+            {
+                suffix = getPluginTypeSuffix( op.getPluginType().content( true ) );
+
+                if( suffix != null )
+                {
+                    // check if project name already contains suffix
+                    if( projectName.endsWith( suffix ) )
+                    {
+                        suffix = null;
+                    }
+                }
+            }
+        }
+
+        return ( projectName == null ? StringPool.EMPTY : projectName ) +
+                        ( suffix == null ? StringPool.EMPTY : suffix );
     }
 
     private static IStatus removeSampleCodeAndFiles( NewLiferayPluginProjectOp op )
@@ -397,30 +412,6 @@ public class NewLiferayPluginProjectOpMethods
         op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
     }
 
-    private static void updateProjectPrefs( final NewLiferayPluginProjectOp op )
-    {
-        try
-        {
-            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-            prefs.put( ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
-            prefs.putBoolean( ProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
-            prefs.putBoolean( ProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
-
-            if( "maven".equalsIgnoreCase( op.getProjectProvider().text() ) )
-            {
-                prefs.put( ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, op.getGroupId().content() );
-            }
-
-            prefs.flush();
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error updating default project build type."; //$NON-NLS-1$
-            ProjectCore.logError( msg, e );
-        }
-    }
-
     public static void updateLocation( final NewLiferayPluginProjectOp op, final Path baseLocation )
     {
         final String projectName = getProjectNameWithSuffix( op );
@@ -443,5 +434,29 @@ public class NewLiferayPluginProjectOpMethods
         final Path newLocation = baseLocation.append( projectName );
 
         op.setLocation( newLocation );
+    }
+
+    private static void updateProjectPrefs( final NewLiferayPluginProjectOp op )
+    {
+        try
+        {
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+            prefs.put( ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+            prefs.putBoolean( ProjectCore.PREF_INCLUDE_SAMPLE_CODE, op.getIncludeSampleCode().content() );
+            prefs.putBoolean( ProjectCore.PREF_CREATE_NEW_PORLET, op.getCreateNewPortlet().content() );
+
+            if( "maven".equalsIgnoreCase( op.getProjectProvider().text() ) )
+            {
+                prefs.put( ProjectCore.PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID, op.getGroupId().content() );
+            }
+
+            prefs.flush();
+        }
+        catch( Exception e )
+        {
+            final String msg = "Error updating default project build type."; //$NON-NLS-1$
+            ProjectCore.logError( msg, e );
+        }
     }
 }

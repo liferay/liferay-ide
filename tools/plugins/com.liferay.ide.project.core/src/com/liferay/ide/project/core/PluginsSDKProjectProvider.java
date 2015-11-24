@@ -76,7 +76,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
     {
         final IPortletFramework portletFramework = op.getPortletFramework().content();
         final String portletName = op.getPortletName().content( false );
-        final String frameworkName = getFrameworkName( op );
+        final String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName( op );
 
         final IStatus status = portletFramework.postProjectCreated( newProject, frameworkName, portletName, monitor );
 
@@ -296,7 +296,7 @@ public class PluginsSDKProjectProvider extends NewLiferayProjectProvider
             case servicebuilder:
                 op.setPortletFramework( "mvc" );
             case portlet:
-                final String frameworkName = getFrameworkName( op );
+                final String frameworkName = NewLiferayPluginProjectOpMethods.getFrameworkName( op );
 
                 workingDir = sdk.getLocation().append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER ).toOSString();
 

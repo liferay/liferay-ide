@@ -15,7 +15,6 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -37,18 +36,4 @@ public abstract class NewLiferayProjectProvider extends AbstractLiferayProjectPr
     public abstract IStatus createNewProject( Object operation, IProgressMonitor monitor ) throws CoreException;
 
     public abstract IStatus validateProjectLocation( String projectName, IPath path );
-
-    protected String getFrameworkName( NewLiferayPluginProjectOp op )
-    {
-        final IPortletFramework portletFramework = op.getPortletFramework().content();
-
-        String frameworkName = portletFramework.getShortName();
-
-        if( portletFramework.isRequiresAdvanced() )
-        {
-            frameworkName = op.getPortletFrameworkAdvanced().content().getShortName();
-        }
-
-        return frameworkName;
-    }
 }
