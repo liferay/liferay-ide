@@ -12,22 +12,12 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model.modules;
+package com.liferay.ide.project.core.modules;
 
 import com.liferay.blade.api.ProjectTemplate;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectArtifactVersionDefaultValueService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectGroupIdDefaultValueService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectGroupIdValidationService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectLocationValidationService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectNameListener;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectNameValidationService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectProviderDefaultValueService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectProviderPossibleValuesService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectTypePossibleValuesService;
-import com.liferay.ide.project.core.model.modules.internal.ModuleProjectUseDefaultLocationListener;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;

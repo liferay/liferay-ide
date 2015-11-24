@@ -12,13 +12,17 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model.modules.internal;
+package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOp;
-import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOpMethods;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.model.internal.GroupIdDefaultValueService;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -27,12 +31,12 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectArtifactVersionDefaultValueService extends DefaultValueService
+public class ModuleProjectGroupIdDefaultValueService extends GroupIdDefaultValueService
 {
     @Override
     protected String compute()
     {
-        String data = null;
+        String groupId = null;
 
         final Path location = op().getLocation().content();
 
@@ -43,15 +47,30 @@ public class ModuleProjectArtifactVersionDefaultValueService extends DefaultValu
             final IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString( parentProjectLocation );
             final String projectName = op().getProjectName().content();
 
-            data = NewLiferayModuleProjectOpMethods.getMavenParentPomVersion( op, projectName, parentProjectOsPath );
+            groupId = NewLiferayModuleProjectOpMethods.getMavenParentPomGroupId( op, projectName, parentProjectOsPath );
+
         }
 
-        if( data == null )
+        if( groupId == null )
         {
-            data = "1.0.0-SNAPSHOT";
+            groupId = getDefaultMavenGroupId();
+
+            if( CoreUtil.isNullOrEmpty( groupId ) )
+            {
+                groupId = "com.example.plugins";
+            }
         }
 
-        return data;
+        return groupId;
+    }
+
+    private String getDefaultMavenGroupId()
+    {
+        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+        final String defaultMavenGroupId =
+            Platform.getPreferencesService().getString(
+                ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID, null, prefContexts );
+        return defaultMavenGroupId;
     }
 
     @Override
@@ -76,4 +95,4 @@ public class ModuleProjectArtifactVersionDefaultValueService extends DefaultValu
     {
         return context( NewLiferayModuleProjectOp.class );
     }
-}
+ }

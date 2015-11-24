@@ -13,10 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.model.modules.internal;
+package com.liferay.ide.project.core.modules;
 
 import com.liferay.blade.api.ProjectTemplate;
-import com.liferay.ide.project.core.model.modules.ModulesUtil;
 
 import java.util.ArrayList;
 import java.util.List;

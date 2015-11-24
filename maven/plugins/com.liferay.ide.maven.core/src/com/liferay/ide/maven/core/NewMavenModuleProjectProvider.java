@@ -19,7 +19,7 @@ import com.liferay.blade.api.ProjectBuild;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
-import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.io.File;

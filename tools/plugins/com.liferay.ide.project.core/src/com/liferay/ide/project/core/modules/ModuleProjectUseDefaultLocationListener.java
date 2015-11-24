@@ -12,9 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model.modules.internal;
-
-import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOp;
+package com.liferay.ide.project.core.modules;
 
 import org.eclipse.sapphire.PropertyContentEvent;
 

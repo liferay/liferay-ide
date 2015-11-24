@@ -50,7 +50,7 @@
     </service>
     <service>
         <id>Sapphire.ConversionService.StringToProjectTemplate</id>
-        <implementation>com.liferay.ide.project.core.model.modules.StringToProjectTemplateConversionService</implementation>
+        <implementation>com.liferay.ide.project.core.modules.StringToProjectTemplateConversionService</implementation>
         <context>Sapphire</context>
         <description>ConversionService implementation for String to ProjectTemplate conversions.</description>
     </service>
@@ -58,7 +58,7 @@
         <context>Sapphire</context>
         <description>ConversionService implementation for ProjectTemplate to String conversions.</description>
         <id>Sapphire.ConversionService.ProjectTemplateToString</id>
-        <implementation>com.liferay.ide.project.core.model.modules.ProjectTemplateToStringConversionService</implementation>
+        <implementation>com.liferay.ide.project.core.modules.ProjectTemplateToStringConversionService</implementation>
         <overrides>Sapphire.ConversionService.ObjectToString</overrides>
     </service>
 </extension>

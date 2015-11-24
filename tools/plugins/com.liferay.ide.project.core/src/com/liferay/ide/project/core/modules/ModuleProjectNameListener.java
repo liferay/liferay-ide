@@ -12,11 +12,9 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model.modules.internal;
+package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOp;
-import com.liferay.ide.project.core.model.modules.NewLiferayModuleProjectOpMethods;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
