@@ -5,7 +5,7 @@
    <extension-point id="portalLaunchParticipants" name="Portal Launch Participants" schema="schema/portalLaunchParticipants.exsd"/>
    <extension-point id="runtimeDelegateValidators" name="%runtime.delegate.validators.extension.point.name" schema="schema/runtimeDelegateValidators.exsd"/>
    <extension-point id="runtimeStubs" name="%runtime.stubs.extension.point.name" schema="schema/runtimeStubs.exsd"/>
-   <extension-point id="portalBundleFactories" name="Liferay Portal Bundle Factories" schema="schema/portalBundleFactories.exsd"/>
+   <extension-point id="portalBundles" name="Liferay Portal Bundles" schema="schema/portalBundles.exsd"/>
 
    <extension
          point="org.eclipse.wst.xml.core.catalogContributions">
@@ -1258,21 +1258,21 @@
       </sourcePathComputer>
    </extension>
    <extension
-         point="com.liferay.ide.server.core.portalBundleFactories">
+         point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossBundleFactory"
             type="JBoss AS">
       </portalBundle>
    </extension>
    <extension
-         point="com.liferay.ide.server.core.portalBundleFactories">
+         point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalWildFlyBundleFactory"
             type="JBoss Wildfly">
       </portalBundle>
    </extension>
    <extension
-         point="com.liferay.ide.server.core.portalBundleFactories">
+         point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossEapBundleFactory"
             type="JBoss EAP">

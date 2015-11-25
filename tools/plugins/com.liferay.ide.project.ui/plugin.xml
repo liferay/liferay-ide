@@ -343,11 +343,11 @@
                definitionId="com.liferay.ide.project.ui.migrateProject"
                class="com.liferay.ide.project.ui.migration.MigrationAction"
                enablesFor="1"
-               icon="icons/e16/liferay.png"
+               icon="icons/e16/migration-tasks.png"
                id="com.liferay.ide.project.ui.migrate.project"
-               label="Find Liferay 7 breaking changes in code..."
+               label="Find Liferay 7 breaking API changes..."
                menubarPath="liferayPopupMenuCategory/slot1"
-               tooltip="Find Liferay 7 breaking changes in code.">
+               tooltip="Find Liferay 7 breaking API changes in code.">
          </action>
       </objectContribution>
    </extension>
@@ -1124,7 +1124,7 @@
              class="com.liferay.ide.project.ui.migration.MigrationView"
              icon="icons/e16/migration-tasks.png"
              id="com.liferay.ide.project.ui.migrationView"
-             name="Liferay 7 Migration"
+             name="Liferay 7 Migration Problems"
              restorable="true">
       </view>
       <view

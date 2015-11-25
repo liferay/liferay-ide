@@ -213,6 +213,12 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     }
 
     @Override
+    public void setDefaults( IProgressMonitor monitor )
+    {
+        setAttribute( Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime() );
+    }
+
+    @Override
     public void setDeveloperMode( boolean developerMode )
     {
         setAttribute( PROPERTY_DEVELOPER_MODE, developerMode );

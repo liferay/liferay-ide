@@ -501,7 +501,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         IAdaptable info = new IAdaptable()
         {
-
+            @SuppressWarnings( "unchecked" )
             public Object getAdapter( Class adapter )
             {
                 if( String.class.equals( adapter ) )
