@@ -38,7 +38,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -85,49 +84,59 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     @Override
     public IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
-        IPath retval = null;
+        IPath outputJar = GradleProjectMethods.getOutputJar( getProject() );
 
-        // need to rerun the jar task to make sure the jar is correct
-
-        ILaunchConfiguration launchConfiguration =
-            CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration( getRunConfigurationAttributes() );
-
-        final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
-
-        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
-        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", true );
-        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", true );
-
-        launchConfigurationWC.doSave();
-
-        final Job job = new Job( "Gradle building" )
+        if( outputJar != null && outputJar.toFile().exists() )
         {
+            return outputJar;
+        }
 
-            @Override
-            protected IStatus run( IProgressMonitor monitor )
+        if( buildIfNeeded )
+        {
+            ILaunchConfiguration launchConfiguration =
+                CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration( getRunConfigurationAttributes() );
+
+            final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
+
+            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
+            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", true );
+            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", true );
+
+            final Job job = new Job( "Building " + getProject().getName() + " output..." )
             {
-                try
+                protected IStatus run( IProgressMonitor monitor )
                 {
-                    launchConfigurationWC.launch( ILaunchManager.RUN_MODE, monitor );
-                }
-                catch( Exception e )
-                {
-                }
+                    try
+                    {
+                        launchConfigurationWC.launch( ILaunchManager.RUN_MODE, monitor );
+                    }
+                    catch( Exception e )
+                    {
+                    }
 
-                return Status.OK_STATUS;
+                    return Status.OK_STATUS;
+                }
+            };
+
+            job.schedule();
+
+            try
+            {
+                job.join();
             }
-        };
+            catch( InterruptedException e )
+            {
+            }
 
-        job.schedule();
-
-        final IPath outputJar = GradleProjectMethods.getOutputJar( getProject() );
+            outputJar = GradleProjectMethods.getOutputJar( getProject() );
+        }
 
         if( outputJar.toFile().exists() )
         {
-            retval = outputJar;
+            return outputJar;
         }
 
-        return retval;
+        return null;
     }
 
     @Override
@@ -141,9 +150,13 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     {
         String retval = null;
 
-        final IPath outputJar = getOutputJar( false, new NullProgressMonitor() );
+        final IPath outputJar = GradleProjectMethods.getOutputJar( getProject() );
 
-        if( outputJar != null && outputJar.toFile().exists() )
+        if( outputJar == null )
+        {
+            return getProject().getName();
+        }
+        else if( outputJar != null && outputJar.toFile().exists() )
         {
             try( final Jar jar = new Jar( outputJar.toFile() ) )
             {

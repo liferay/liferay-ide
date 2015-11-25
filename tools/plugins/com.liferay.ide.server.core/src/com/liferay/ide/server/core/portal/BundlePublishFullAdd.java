@@ -91,13 +91,18 @@ public class BundlePublishFullAdd extends BundlePublishOperation
 
             if( bundleProject != null )
             {
-                // TODO catch error in getOUtputJar and show a popup notification instead
+                // TODO catch error in getOutputJar and show a popup notification instead
+
+                monitor.subTask( "Building " + module.getName() + " output jar..." );
+
                 final IPath outputJar = bundleProject.getOutputJar( true, monitor );
 
                 if( outputJar!= null && outputJar.toFile().exists() )
                 {
                     if( this.server.getServerState() == IServer.STATE_STARTED )
                     {
+                        monitor.subTask( "Remotely deploying " + module.getName() + " to Liferay module framework..." );
+
                         retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar );
                     }
                     else

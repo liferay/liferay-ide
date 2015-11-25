@@ -17,10 +17,7 @@
  -->
 <definition>
     <import>
-        <package>org.eclipse.sapphire.ui.renderers.swt</package>
-        <package>com.liferay.ide.project.ui.action</package>
-        <package>com.liferay.ide.project.ui.wizard</package>
-        <package>org.eclipse.sapphire.ui.forms.swt</package>
+        <package>com.liferay.ide.project.ui.modules</package>
     </import>
     <wizard>
         <id>NewLiferayModuleProjectWizard</id>
@@ -62,8 +59,8 @@
             <margin-horizontal>0</margin-horizontal>
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
+            <image>NewLiferayModuleProjectWizard.png</image>
         </page>
         <description>Create a new project configured as a Liferay plugin</description>
-        <image>NewLiferayPluginProjectWizard.png</image>
     </wizard>
 </definition>

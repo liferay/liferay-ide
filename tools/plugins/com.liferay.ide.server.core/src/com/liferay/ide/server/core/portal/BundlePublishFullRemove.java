@@ -64,6 +64,8 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
                 if( this.server.getServerState() == IServer.STATE_STARTED )
                 {
+                    monitor.subTask( "Remotely undeploying " + module.getName() + " from Liferay module framework..." );
+
                     status = remoteUninstall( bundleProject, symbolicName );
                 }
 
