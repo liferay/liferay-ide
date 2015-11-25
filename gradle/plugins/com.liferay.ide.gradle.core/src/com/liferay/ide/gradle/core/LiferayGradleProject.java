@@ -82,27 +82,29 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     }
 
     @Override
-    public IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputJar( boolean build, IProgressMonitor monitor ) throws CoreException
     {
         IPath outputJar = GradleProjectMethods.getOutputJar( getProject() );
 
-        if( outputJar != null && outputJar.toFile().exists() )
+        if( !build && outputJar != null && outputJar.toFile().exists() )
         {
             return outputJar;
         }
-
-        if( buildIfNeeded )
+        else
         {
             ILaunchConfiguration launchConfiguration =
-                CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration( getRunConfigurationAttributes() );
+                CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration(
+                    getRunConfigurationAttributes() );
 
             final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
 
             launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
-            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", true );
+            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", false );
             launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", true );
 
-            final Job job = new Job( "Building " + getProject().getName() + " output..." )
+            final String jobTitle = "Building " + getProject().getName() + " output...";
+
+            final Job job = new Job( jobTitle )
             {
                 protected IStatus run( IProgressMonitor monitor )
                 {
@@ -117,6 +119,8 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
                     return Status.OK_STATUS;
                 }
             };
+
+            monitor.subTask( jobTitle );
 
             job.schedule();
 
