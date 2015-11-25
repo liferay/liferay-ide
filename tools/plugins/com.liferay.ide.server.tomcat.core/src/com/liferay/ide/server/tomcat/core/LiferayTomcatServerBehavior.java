@@ -274,7 +274,7 @@ public class LiferayTomcatServerBehavior extends TomcatServerBehaviour implement
 
         IAdaptable info = new IAdaptable()
         {
-
+            @SuppressWarnings( "unchecked" )
             public Object getAdapter( Class adapter )
             {
                 if( String.class.equals( adapter ) )

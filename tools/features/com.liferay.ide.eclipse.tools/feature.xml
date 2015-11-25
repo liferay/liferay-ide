@@ -59,6 +59,8 @@
       <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
       <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.xml.search.core-feature" version="1.0.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.tm.terminal.connector.telnet.feature" version="4.0.0" match="greaterOrEqual" />
+      <import feature="org.eclipse.tm.terminal.view.feature" version="4.0.0" match="greaterOrEqual" />
    </requires>
 
    <plugin

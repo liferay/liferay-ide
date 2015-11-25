@@ -197,11 +197,11 @@
                label="Create Portal Settings File">
          </action>
          <action
-               class="com.liferay.ide.server.ui.action.RefreshBundlesAction"
+               class="com.liferay.ide.server.ui.action.OpenGogoShellAction"
                enablesFor="1"
-               icon="icons/e16/refresh_bundles.png"
+               icon="icons/e16/osgi.png"
                id="com.liferay.ide.server.ui.action.refreshBundles"
-               label="Refresh bundles">
+               label="Open Gogo Shell">
          </action>
       </objectContribution>
       <objectContribution

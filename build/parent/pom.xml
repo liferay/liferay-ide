@@ -46,6 +46,7 @@
         <gradle-site>http://download.eclipse.org/buildship/updates/e45/releases/1.0/</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.0/N/LATEST/</tycho-m2e-site>
         <blade-site>https://liferay-test-01.ci.cloudbees.com/job/blade.tools/lastSuccessfulBuild/artifact/p2_build/generated/p2/</blade-site>
+        <tm-site>http://download.eclipse.org/tm/terminal/updates/4.0</tm-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
@@ -124,6 +125,11 @@
             <id>tycho-m2e</id>
             <layout>p2</layout>
             <url>${tycho-m2e-site}</url>
+        </repository>
+        <repository>
+            <id>tm</id>
+            <layout>p2</layout>
+            <url>${tm-site}</url>
         </repository>
     </repositories>
 
