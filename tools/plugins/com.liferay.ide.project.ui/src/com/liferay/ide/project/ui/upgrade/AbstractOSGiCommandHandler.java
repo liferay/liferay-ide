@@ -1,9 +1,8 @@
 package com.liferay.ide.project.ui.upgrade;
 
-import com.liferay.blade.api.Command;
-
 import java.util.Collection;
 
+import org.apache.felix.service.command.CommandProcessor;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -11,6 +10,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+
+import com.liferay.blade.api.Command;
 
 /**
  * @author Gregory Amerson
@@ -32,7 +33,7 @@ public abstract class AbstractOSGiCommandHandler extends AbstractHandler
             final BundleContext bundleContext = FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
 
             final Collection<ServiceReference<Command>> refs =
-                bundleContext.getServiceReferences( Command.class, "(osgi.command.function=" + _function + ")" );
+                bundleContext.getServiceReferences( Command.class, "(" +CommandProcessor.COMMAND_FUNCTION + "=" + _function + ")" );
 
             if( refs != null && refs.size() > 0 )
             {

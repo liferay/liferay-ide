@@ -44,7 +44,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.osgi.services,
  org.eclipse.equinox.ds,
  org.eclipse.equinox.util,
- com.liferay.blade.api;bundle-version="1.0.0"
+ com.liferay.blade.api;bundle-version="1.0.0",
+ org.apache.felix.gogo.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

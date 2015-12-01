@@ -1,16 +1,11 @@
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.blade.api.Command;
-import com.liferay.blade.api.CommandException;
-import com.liferay.blade.api.ProjectBuild;
-import com.liferay.blade.api.ProjectTemplate;
-import com.liferay.ide.project.core.ProjectCore;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.felix.service.command.CommandProcessor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
@@ -18,6 +13,12 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
+
+import com.liferay.blade.api.Command;
+import com.liferay.blade.api.CommandException;
+import com.liferay.blade.api.ProjectBuild;
+import com.liferay.blade.api.ProjectTemplate;
+import com.liferay.ide.project.core.ProjectCore;
 
 /**
  * @author Gregory Amerson
@@ -46,7 +47,7 @@ public class ModulesUtil
         final Collection<ServiceReference<Command>> refs;
         try
         {
-            refs = bundleContext.getServiceReferences( Command.class, "(osgi.command.function=createProject)" );
+            refs = bundleContext.getServiceReferences( Command.class, "(" + CommandProcessor.COMMAND_FUNCTION + "=createProject)" );
 
             if( refs != null && refs.size() > 0 )
             {
