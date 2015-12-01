@@ -6,6 +6,7 @@ import com.liferay.ide.project.core.upgrade.Liferay7UpgradeAssistantSettings;
 import com.liferay.ide.project.core.upgrade.PortalSettings;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,8 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 
 
 /**
@@ -46,7 +49,28 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
 
             if( settings == null || settings.getPortalSettings() == null )
             {
-                // TODO show GetPortalSettingsWizard
+                final GetPortalSettingsWizard wizard = new GetPortalSettingsWizard();
+                int retcode = new WizardDialog( UIUtil.getActiveShell(), wizard ).open();
+
+                if( retcode == Window.OK )
+                {
+                    final String previousLocation = wizard.element().getPreviousLiferayLocation().content().toOSString();
+                    final String newName = wizard.element().getNewLiferayName().content();
+                    final String newLocation = wizard.element().getNewLiferayLocation().content().toOSString();
+
+                    PortalSettings portalSettings = settings.getPortalSettings();
+
+                    if( portalSettings == null )
+                    {
+                        portalSettings = new PortalSettings();
+                    }
+
+                    portalSettings.setPreviousLiferayPortalLocation( previousLocation );
+                    portalSettings.setNewName( newName );
+                    portalSettings.setNewLiferayPortalLocation( newLocation );
+
+                    settings.setPortalSettings( portalSettings );
+                }
             }
 
             if( settings != null )
@@ -78,6 +102,8 @@ public class CopyPortalSettingsHandler extends AbstractOSGiCommandHandler
                     }
 
                 }.schedule();
+
+                UpgradeAssistantSettingsUtil.setObjectToStore( Liferay7UpgradeAssistantSettings.class, settings );
             }
         }
         catch( IOException e )

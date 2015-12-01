@@ -78,6 +78,8 @@ public class SetupPortalServerHandler extends AbstractHandler
 
                 portalSettings.setNewName( newName );
                 portalSettings.setNewLiferayPortalLocation( newLocation );
+
+                settings.setPortalSettings( portalSettings );
             }
         }
 
