@@ -94,11 +94,14 @@ public class ServerUtil
 
     public static boolean bsnExists( String bsn, BundleDTO[] bundles )
     {
-        for( BundleDTO bundle : bundles )
+        if( bsn != null )
         {
-            if( bundle.symbolicName.equals( bsn ) )
+            for( BundleDTO bundle : bundles )
             {
-                return true;
+                if( bsn.equals( bundle.symbolicName ) )
+                {
+                    return true;
+                }
             }
         }
 

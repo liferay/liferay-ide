@@ -30,7 +30,6 @@ import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.IVMRunner;
 import org.eclipse.jdt.launching.VMRunnerConfiguration;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.core.ServerUtil;
 
 
@@ -47,10 +46,10 @@ public class PortalServerLaunchConfigDelegate extends AbstractJavaLaunchConfigur
 
         if( server != null )
         {
-            if( server.shouldPublish() && ServerCore.isAutoPublishing() )
-            {
-                server.publish( IServer.PUBLISH_INCREMENTAL, monitor );
-            }
+//            if( server.shouldPublish() && ServerCore.isAutoPublishing() )
+//            {
+//                server.publish( IServer.PUBLISH_INCREMENTAL, monitor );
+//            }
 
             launchServer( server, config, mode, launch, monitor );
         }

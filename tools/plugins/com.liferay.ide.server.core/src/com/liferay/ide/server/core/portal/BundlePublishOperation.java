@@ -14,8 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
-import com.liferay.ide.server.core.LiferayServerCore;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.model.PublishOperation;
+import org.osgi.framework.dto.BundleDTO;
 
 
 /**
@@ -38,9 +37,10 @@ public class BundlePublishOperation extends PublishOperation
     protected final PortalRuntime portalRuntime;
     protected final PortalServerBehavior portalServerBehavior;
     protected final IServer server;
-    protected BundleDeployer deployer;
+    protected final BundleSupervisor _supervisor;
+    protected final BundleDTO[] _existingBundles;
 
-    public BundlePublishOperation( IServer s, IModule[] modules )
+    public BundlePublishOperation( IServer s, IModule[] modules, BundleSupervisor supervisor, BundleDTO[] existingBundles )
     {
         this.server = s;
         this.modules = new ArrayList<IModule>( Arrays.asList( modules ) );
@@ -57,6 +57,9 @@ public class BundlePublishOperation extends PublishOperation
         {
             throw new IllegalArgumentException( "Could not get portal server behavior from server " + s.getName() );
         }
+
+        _supervisor = supervisor;
+        _existingBundles = existingBundles;
     }
 
     public void addModule( IModule[] module )
@@ -81,16 +84,6 @@ public class BundlePublishOperation extends PublishOperation
     public int getOrder()
     {
         return 0;
-    }
-
-    protected BundleDeployer getBundleDeployer()
-    {
-        if( this.deployer == null )
-        {
-            this.deployer = LiferayServerCore.getBundleDeployer( this.server );
-        }
-
-        return this.deployer;
     }
 
 }

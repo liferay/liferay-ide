@@ -15,6 +15,8 @@
 
 package com.liferay.ide.server.core.portal;
 
+import aQute.remote.api.Agent;
+
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -38,6 +40,8 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 @SuppressWarnings( "restriction" )
 public class PortalServerDelegate extends ServerDelegate implements PortalServerWorkingCopy
 {
+
+    private int nextAgentPort = Agent.DEFAULT_PORT + 1;
 
     public PortalServerDelegate()
     {
@@ -67,7 +71,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
 
     public int getAutoPublishTime()
     {
-        return getAttribute(Server.PROP_AUTO_PUBLISH_TIME, 1);
+        return getAttribute(Server.PROP_AUTO_PUBLISH_TIME, 0);
     }
 
     @Override
@@ -216,6 +220,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     public void setDefaults( IProgressMonitor monitor )
     {
         setAttribute( Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime() );
+        setAttribute( "AGENT_PORT", nextAgentPort++ );
     }
 
     @Override

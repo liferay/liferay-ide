@@ -28,7 +28,8 @@ Require-Bundle: org.eclipse.wst.server.core;bundle-version="[1.1.102,2.0.0)";vis
  org.apache.commons.lang;bundle-version="2.6.0",
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.core.commands,
- org.eclipse.wst.validation
+ org.eclipse.wst.validation,
+ biz.aQute.remote.api;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core,

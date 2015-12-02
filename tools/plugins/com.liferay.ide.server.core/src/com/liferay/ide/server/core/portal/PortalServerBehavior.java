@@ -14,16 +14,22 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import aQute.remote.api.Agent;
+
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.PingThread;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -56,7 +62,7 @@ import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
 public class PortalServerBehavior extends ServerBehaviourDelegate
     implements ILiferayServerBehavior, IJavaLaunchConfigurationConstants
 {
-    private static final String ATTR_STOP = "stop-server";
+    public static final String ATTR_STOP = "stop-server";
 
     private static final String[] JMX_EXCLUDE_ARGS = new String []
     {
@@ -69,6 +75,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     private IAdaptable info;
     private transient PingThread ping = null;
     private transient IDebugEventSetListener processListener;
+    private BundleSupervisor _bundleSupervisor;
 
     public PortalServerBehavior()
     {
@@ -200,6 +207,10 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStartVMArgs() );
 
+        int agentPort = getServer().getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
+
+        retval.add( "-D" + Agent.AGENT_SERVER_PORT_KEY + "=" + agentPort );
+
         return retval.toArray( new String[0] );
     }
 
@@ -230,8 +241,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         if( status != null && status.getSeverity() == IStatus.ERROR ) throw new CoreException( status );
 
-        // TODO check that ports are free
-
         setServerRestartState( false );
         setServerState( IServer.STATE_STARTING );
         setMode( mode );
@@ -239,7 +248,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         try
         {
             String url = "http://" + getServer().getHost();
-            // TODO int port = configuration.getMainPort().getPort();
             final int port = 8080;
 
             if( port != 80 )
@@ -549,6 +557,15 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     public void setServerStarted()
     {
         setServerState( IServer.STATE_STARTED );
+
+        try
+        {
+            startBundleSupervisor();
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -559,13 +576,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         launch.setAttribute( ATTR_PROGRAM_ARGUMENTS, mergeArguments( existingProgArgs, getRuntimeStartProgArgs(), null, true ) );
 
         final String existingVMArgs = launch.getAttribute( ATTR_VM_ARGUMENTS, (String) null );
-
-//      String[] parsedVMArgs = null;
-//
-//      if( existingVMArgs != null )
-//      {
-//          parsedVMArgs = DebugPlugin.parseArguments( existingVMArgs );
-//      }
 
         final String[] configVMArgs = getRuntimeStartVMArguments();
         launch.setAttribute( ATTR_VM_ARGUMENTS, mergeArguments( existingVMArgs, configVMArgs, null, false ) );
@@ -659,11 +669,42 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         launch.setAttribute( ATTR_CLASSPATH, cp );
         launch.setAttribute( ATTR_DEFAULT_CLASSPATH, false );
+
+        setupAgent();
+    }
+
+    private void setupAgent()
+    {
+        // make sure that agent is either installed or will be installed
+        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
+        final IPath agentInstalledPath = modulesPath.append( "biz.aQute.remote.agent.jar" );
+
+        if( !agentInstalledPath.toFile().exists() )
+        {
+            try
+            {
+                final File file = new File ( FileLocator.toFileURL(
+                    LiferayServerCore.getDefault().getBundle().getEntry( "bundles/biz.aQute.remote.agent-3.1.0.jar" ) ).getFile() );
+
+                FileUtil.copyFile( file, modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
+            }
+            catch( IOException e )
+            {
+            }
+        }
     }
 
     @Override
     public void stop( boolean force )
     {
+        try
+        {
+            stopBundleSupervisor();
+        }
+        catch( IOException e1 )
+        {
+        }
+
         if( force )
         {
             terminate();
@@ -714,6 +755,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             wc.setAttribute( IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, args );
             wc.setAttribute( "org.eclipse.debug.ui.private", true );
             wc.setAttribute( ATTR_STOP, "true" );
+
             wc.launch( ILaunchManager.RUN_MODE, new NullProgressMonitor() );
         }
         catch( Exception e )
@@ -763,5 +805,23 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         }
 
         return buf.toString();
+    }
+
+    BundleSupervisor getBundleSupervisor()
+    {
+        return _bundleSupervisor;
+    }
+
+    void startBundleSupervisor() throws Exception
+    {
+        _bundleSupervisor = new BundleSupervisor();
+        int agentPort = getServer().getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
+
+        _bundleSupervisor.connect( getServer().getHost(), agentPort );
+    }
+
+    void stopBundleSupervisor() throws IOException
+    {
+        _bundleSupervisor.close();
     }
 }

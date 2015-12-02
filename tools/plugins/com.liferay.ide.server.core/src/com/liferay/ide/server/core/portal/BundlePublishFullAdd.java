@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Gregory Amerson
@@ -40,9 +41,9 @@ import org.eclipse.wst.server.core.IServer;
 public class BundlePublishFullAdd extends BundlePublishOperation
 {
 
-    public BundlePublishFullAdd( IServer s, IModule[] modules )
+    public BundlePublishFullAdd( IServer s, IModule[] modules, BundleSupervisor supervisor, BundleDTO[] existingBundles )
     {
-        super( s, modules );
+        super( s, modules, supervisor, existingBundles );
     }
 
     private IStatus autoDeploy( IPath output ) throws CoreException
@@ -154,15 +155,13 @@ public class BundlePublishFullAdd extends BundlePublishOperation
     {
         IStatus retval = null;
 
-        final BundleDeployer deployer = getBundleDeployer();
-
         if( output != null && output.toFile().exists() )
         {
             try
             {
-                long bundleId = deployer.deploy( bsn, getBundleUrl( output.toFile(), bsn ) );
+                BundleDTO deployed = _supervisor.deploy( bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ) );
 
-                retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) bundleId, null, null );
+                retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) deployed.id, null, null );
             }
             catch( Exception e )
             {

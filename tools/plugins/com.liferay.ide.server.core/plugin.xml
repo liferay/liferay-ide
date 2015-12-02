@@ -1119,6 +1119,7 @@
             name="Liferay 7.x"
             runtime="true"
             runtimeTypeId="com.liferay.ide.server.portal.runtime"
+            startBeforePublish="true"
             startTimeout="900000"
             stopTimeout="300000"
             supportsRemoteHosts="true">

@@ -46,7 +46,7 @@ public class PortalPublishTask extends PublishTaskDelegate
 
     private void addOperation(
         Class<? extends BundlePublishOperation> opClass, List<BundlePublishOperation> tasks, IServer server,
-        IModule[] module )
+        IModule[] module, BundleSupervisor supervisor, BundleDTO[] existingBundles )
     {
         for( BundlePublishOperation task : tasks )
         {
@@ -60,27 +60,15 @@ public class PortalPublishTask extends PublishTaskDelegate
         try
         {
             BundlePublishOperation op =
-                opClass.getConstructor( IServer.class, IModule[].class ).newInstance( server, module );
+                opClass.getConstructor(
+                    IServer.class, IModule[].class, BundleSupervisor.class, BundleDTO[].class ).newInstance(
+                        server, module, supervisor, existingBundles );
             tasks.add( op );
         }
         catch( Exception e )
         {
             LiferayServerCore.logError( "Unable to add bundle operation", e );
         }
-    }
-
-    private BundleDTO[] getExistingBundles( IServer server )
-    {
-        try
-        {
-            final BundleDeployer deployer = LiferayServerCore.getBundleDeployer( server );
-            return deployer.listBundles();
-        }
-        catch( IllegalArgumentException e )
-        {
-        }
-
-        return new BundleDTO[0];
     }
 
     @SuppressWarnings( "rawtypes" )
@@ -91,7 +79,21 @@ public class PortalPublishTask extends PublishTaskDelegate
         final PortalServerBehavior serverBehavior =
             (PortalServerBehavior) server.loadAdapter( PortalServerBehavior.class, null );
 
-        final BundleDTO[] existingBundles = getExistingBundles( server );
+        BundleDTO[] existingBundles = new BundleDTO[0];
+        BundleSupervisor supervisor = null;
+
+        if( server.getServerState() == IServer.STATE_STARTED )
+        {
+            supervisor = serverBehavior.getBundleSupervisor();
+
+            try
+            {
+                existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
+            }
+            catch( Exception e )
+            {
+            }
+        }
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {
@@ -113,11 +115,11 @@ public class PortalPublishTask extends PublishTaskDelegate
                         {
                             case ServerBehaviourDelegate.ADDED:
                             case ServerBehaviourDelegate.CHANGED:
-                                addOperation( BundlePublishFullAdd.class, tasks, server, module );
+                                addOperation( BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );
                                 break;
 
                             case ServerBehaviourDelegate.REMOVED:
-                                addOperation( BundlePublishFullRemove.class, tasks, server, module );
+                                addOperation( BundlePublishFullRemove.class, tasks, server, module, supervisor, existingBundles );
                                 break;
 
                             case ServerBehaviourDelegate.NO_CHANGE:
@@ -131,7 +133,8 @@ public class PortalPublishTask extends PublishTaskDelegate
                                         if( isUserRedeploy( serverBehavior, module[0] ) ||
                                             !ServerUtil.bsnExists( bundleProject.getSymbolicName(), existingBundles ) )
                                         {
-                                            addOperation( BundlePublishFullAdd.class, tasks, server, module );
+                                            addOperation(
+                                                BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );
                                         }
                                     }
                                     catch( CoreException e )
