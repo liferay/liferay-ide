@@ -41,6 +41,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.console.ConsolePlugin;
+import org.eclipse.ui.console.IConsole;
+import org.eclipse.ui.console.IConsoleManager;
+import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
@@ -56,6 +60,7 @@ import org.w3c.dom.Node;
  *
  * @author Kuo Zhang
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 @SuppressWarnings( "restriction" )
 public class UITestsUtils
@@ -64,9 +69,40 @@ public class UITestsUtils
     private static Map<IFile, IEditorPart> fileToEditorMap = new HashMap<IFile, IEditorPart>();
     private static Map<IFile, IDOMModel> fileToModelMap = new HashMap<IFile, IDOMModel>();
 
+    public static boolean checkConsoleMessage( CharSequence expectedMessage, String consoleName )
+    {
+        TextConsole serverConsole = (TextConsole) getConsole( consoleName );
+
+        long timeoutExpiredMs = System.currentTimeMillis() + 20000;
+
+        while( true )
+        {
+            try
+            {
+                Thread.sleep( 500 );
+            }
+            catch( InterruptedException e )
+            {
+                e.printStackTrace();
+            }
+
+            IDocument content = serverConsole.getDocument();
+
+            if( content.get().contains( expectedMessage ) )
+            {
+                return true;
+            }
+
+            if( System.currentTimeMillis() >= timeoutExpiredMs )
+            {
+                return false;
+            }
+        }
+    }
+
     // check if the excepted proposal is in the given proposals
-    public static boolean containsProposal( ICompletionProposal[] proposals,
-                                           String exceptedProposalString, boolean fullMatch )
+    public static boolean containsProposal(
+        ICompletionProposal[] proposals, String exceptedProposalString, boolean fullMatch )
     {
         for( ICompletionProposal proposal : proposals )
         {
@@ -76,13 +112,24 @@ public class UITestsUtils
             {
                 return true;
             }
-            else if( ! fullMatch && displayString.matches( exceptedProposalString ) )
+            else if( !fullMatch && displayString.matches( exceptedProposalString ) )
             {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public static void deleteAllWorkspaceProjects() throws Exception
+    {
+        for( IProject project : CoreUtil.getAllProjects() )
+        {
+            if( project != null && project.isAccessible() && project.exists() )
+            {
+                project.delete( true, true, new NullProgressMonitor() );
+            }
+        }
     }
 
     public static void deleteOtherProjects( IProject project ) throws Exception
@@ -92,8 +139,8 @@ public class UITestsUtils
         for( IProject proj : projects )
         {
             SDK sdk = SDKManager.getInstance().getDefaultSDK();
-            
-            if(  proj.getName().equals( sdk.getName() ) )
+
+            if( proj.getName().equals( sdk.getName() ) )
             {
                 return;
             }
@@ -102,6 +149,21 @@ public class UITestsUtils
                 proj.delete( true, true, new NullProgressMonitor() );
             }
         }
+    }
+
+    public static IConsole getConsole( String name )
+    {
+        ConsolePlugin plugin = ConsolePlugin.getDefault();
+
+        IConsoleManager conMan = plugin.getConsoleManager();
+
+        IConsole[] existing = conMan.getConsoles();
+
+        for( int i = 0; i < existing.length; i++ )
+            if( ( existing[i].getName() ).contains( name ) )
+                return existing[i];
+
+        return null;
     }
 
     public static IDOMModel getDOMModel( IFile file, boolean edit ) throws Exception
@@ -186,48 +248,48 @@ public class UITestsUtils
         {
             switch( node.getNodeType() )
             {
-                case Node.ELEMENT_NODE:
+            case Node.ELEMENT_NODE:
 
-                    IDOMElement element = (IDOMElement) node;
-                    int endOffset;
+                IDOMElement element = (IDOMElement) node;
+                int endOffset;
 
-                    if( element.hasEndTag() && element.isClosed() )
-                    {
-                        endOffset = element.getStartEndOffset();
-                    }
-                    else
-                    {
-                        endOffset = element.getEndOffset();
-                    }
+                if( element.hasEndTag() && element.isClosed() )
+                {
+                    endOffset = element.getStartEndOffset();
+                }
+                else
+                {
+                    endOffset = element.getEndOffset();
+                }
 
-                    if( element.getFirstChild() == null || element.getFirstChild().getTextContent().isEmpty() )
-                    {
-                        return new Region( endOffset, 0 );
-                    }
+                if( element.getFirstChild() == null || element.getFirstChild().getTextContent().isEmpty() )
+                {
+                    return new Region( endOffset, 0 );
+                }
 
-                    return new Region( endOffset, element.getTextContent().length() );
+                return new Region( endOffset, element.getTextContent().length() );
 
-                case Node.ATTRIBUTE_NODE:
+            case Node.ATTRIBUTE_NODE:
 
-                    IDOMAttr att = (IDOMAttr) node;
-                    int regOffset = att.getValueRegionStartOffset();
-                    int regLength = att.getValueRegionText().length();
-                    String attValue = att.getValueRegionText();
-                    if( StringUtil.isQuoted( attValue ) )
-                    {
-                        regOffset++;
-                        regLength -= 2;
-                    }
+                IDOMAttr att = (IDOMAttr) node;
+                int regOffset = att.getValueRegionStartOffset();
+                int regLength = att.getValueRegionText().length();
+                String attValue = att.getValueRegionText();
+                if( StringUtil.isQuoted( attValue ) )
+                {
+                    regOffset++;
+                    regLength -= 2;
+                }
 
-                    return new Region( regOffset, regLength );
+                return new Region( regOffset, regLength );
 
-                case Node.TEXT_NODE:
+            case Node.TEXT_NODE:
 
-                    IDOMText text = (IDOMText) node;
-                    int startOffset = text.getStartOffset();
-                    int length = text.getLength();
+                IDOMText text = (IDOMText) node;
+                int startOffset = text.getStartOffset();
+                int length = text.getLength();
 
-                    return new Region( startOffset, length );
+                return new Region( startOffset, length );
             }
         }
 

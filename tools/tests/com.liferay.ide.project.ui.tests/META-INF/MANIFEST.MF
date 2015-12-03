@@ -12,7 +12,8 @@ Require-Bundle: org.junit,
  org.eclipse.ui.console,
  org.eclipse.swtbot.go,
  org.apache.commons.lang;bundle-version="2.6.0",
- com.liferay.blade.api
+ com.liferay.blade.api,
+ com.liferay.ide.ui.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.liferay.ide.project.ui.tests
 Bundle-ActivationPolicy: lazy
