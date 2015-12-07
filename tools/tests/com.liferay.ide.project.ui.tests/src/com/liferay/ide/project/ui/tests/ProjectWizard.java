@@ -21,6 +21,7 @@ import com.liferay.ide.ui.tests.UIBase;
  * @author Terry Jia
  * @author Ashley Yuan
  * @author Ying Xu
+ * @author Vicky Wang
  */
 public interface ProjectWizard extends UIBase
 {
@@ -93,12 +94,12 @@ public interface ProjectWizard extends UIBase
     public final int INDEX_THEME_VALIDATION_MESSAGE = 0;
     public final String THEME_PARENT_TYPE = "Theme parent:";
     public final String THEME_FARMEWORK_TYPE = "Theme framework:";
-    public final String MANU_THEME_PARENT_STYLED = "_styled";
-    public final String MANU_THEME_PARENT_UNSTYLED = "_unstyled";
-    public final String MANU_THEME_PARENT_CLASSIC = "classic";
-    public final String MANU_THEME_FRAMEWORK_FREEMARKER = "Freemarker";
-    public final String MANU_THEME_FRAMEWORK_VELOCITY = "Velocity";
-    public final String MANU_THEME_FRAMEWORK_JSP = "JSP";
+    public final String MENU_THEME_PARENT_STYLED = "_styled";
+    public final String MENU_THEME_PARENT_UNSTYLED = "_unstyled";
+    public final String MENU_THEME_PARENT_CLASSIC = "classic";
+    public final String MENU_THEME_FRAMEWORK_FREEMARKER = "Freemarker";
+    public final String MENU_THEME_FRAMEWORK_VELOCITY = "Velocity";
+    public final String MENU_THEME_FRAMEWORK_JSP = "JSP";
 
     public final int INDEX_VALIDATION_MESSAGE_WEB_SDKVERSION = 1;
 

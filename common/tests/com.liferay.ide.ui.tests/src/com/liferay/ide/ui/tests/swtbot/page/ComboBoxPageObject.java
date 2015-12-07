@@ -27,6 +27,8 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
             bot.waitUntil( new WidgetEnabledCondition( swtBotCombo, true ) );
 
             swtBotCombo.setSelection( value );
+
+            bot.sleep( 1000 );
         }
     }
 
