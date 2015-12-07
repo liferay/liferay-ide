@@ -16,13 +16,11 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
 
     @Override
     public boolean stdout(String out) throws Exception {
-        System.out.print(out);
         return true;
     }
 
     @Override
     public boolean stderr(String out) throws Exception {
-        System.err.print(out);
         return true;
     }
 
@@ -32,10 +30,10 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
 
     @Override
     public void event(Event e) throws Exception {
-        System.out.println(e);
     }
 
-    public BundleDTO deploy( final String bsn, final File bundleFile, final String bundleUrl ) throws Exception
+    public BundleDTO deploy(
+        final String bsn, final File bundleFile, final String bundleUrl, BundleDTO[] existingBundles ) throws Exception
     {
         BundleDTO retval = null;
 
@@ -55,7 +53,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
         final String sha = addFile( bundleFile );
         long bundleId = -1;
 
-        for( BundleDTO bundle : agent.getBundles())
+        for( BundleDTO bundle : existingBundles )
         {
             if( bundle.symbolicName.equals( bsn ) )
             {

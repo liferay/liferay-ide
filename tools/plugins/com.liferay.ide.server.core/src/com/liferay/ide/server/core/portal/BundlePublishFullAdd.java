@@ -104,7 +104,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                     {
                         monitor.subTask( "Remotely deploying " + module.getName() + " to Liferay module framework..." );
 
-                        retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar );
+                        retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar, _existingBundles );
                     }
                     else
                     {
@@ -151,7 +151,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         return bundleUrl;
     }
 
-    private IStatus remoteDeploy( String bsn , IPath output )
+    private IStatus remoteDeploy( String bsn , IPath output, BundleDTO[] existingBundles )
     {
         IStatus retval = null;
 
@@ -159,7 +159,8 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         {
             try
             {
-                BundleDTO deployed = _supervisor.deploy( bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ) );
+                BundleDTO deployed = _supervisor.deploy(
+                    bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ), existingBundles );
 
                 retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) deployed.id, null, null );
             }
