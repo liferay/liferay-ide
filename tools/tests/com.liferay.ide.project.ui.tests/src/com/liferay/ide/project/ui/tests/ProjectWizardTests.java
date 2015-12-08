@@ -15,10 +15,7 @@
 
 package com.liferay.ide.project.ui.tests;
 
-import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.ui.tests.SWTBotBase;
 
@@ -61,13 +58,13 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
                 {
                     item.contextMenu( BUTTON_DELETE ).click();
 
-                    checkBoxUtil.click();
+                    checkBoxBot.click();
 
-                    buttonUtil.click( BUTTON_OK );
+                    buttonBot.click( BUTTON_OK );
 
-                    if( buttonUtil.isEnabled( "Continue" ) )
+                    if( buttonBot.isEnabled( "Continue" ) )
                     {
-                        buttonUtil.click( "Continue" );
+                        buttonBot.click( "Continue" );
                     }
 
                 }
@@ -93,7 +90,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         else
         {
             page1.next();
-            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
+            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<>( bot, "" );
             page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
             page2.finish();
         }
@@ -356,7 +353,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     {
         viewUtil.show( VIEW_PACKAGE_EXPLORER );
         treeUtil.getNode( projectName ).contextMenu( BUTTON_DELETE ).click();
-        buttonUtil.click( BUTTON_OK );
+        buttonBot.click( BUTTON_OK );
         sleep();
     }
 
@@ -364,7 +361,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     {
         treeUtil.expandNode( nodes ).getNode( projectName ).contextMenu( BUTTON_DELETE ).click();
 
-        buttonUtil.click( BUTTON_OK );
+        buttonBot.click( BUTTON_OK );
     }
 
     @Before

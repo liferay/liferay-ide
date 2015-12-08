@@ -29,4 +29,4 @@ Require-Bundle: com.liferay.ide.core,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui.tests,
- com.liferay.ide.ui.tests.swtbot.page.impl
+ com.liferay.ide.ui.tests.swtbot.page

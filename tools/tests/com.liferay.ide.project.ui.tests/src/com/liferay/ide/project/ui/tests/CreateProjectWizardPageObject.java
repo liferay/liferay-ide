@@ -1,10 +1,10 @@
 
 package com.liferay.ide.project.ui.tests;
 
-import com.liferay.ide.ui.tests.swtbot.page.impl.CheckBoxPageObject;
-import com.liferay.ide.ui.tests.swtbot.page.impl.ComboBoxPageObject;
-import com.liferay.ide.ui.tests.swtbot.page.impl.TextPageObject;
-import com.liferay.ide.ui.tests.swtbot.page.impl.WizardPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.CheckBoxPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
@@ -27,36 +27,36 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
     {
         super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT );
 
-        projectNameText = new TextPageObject<SWTBot>( bot, LABEL_PROJECT_NAME );
-        displayNameText = new TextPageObject<SWTBot>( bot, LABEL_DISPLAY_NAME );
-        buildTypeComboBox = new ComboBoxPageObject<SWTBot>( bot, LABEL_BUILD_TYPE );
+        projectNameText = new TextPageObject<>( bot, LABEL_PROJECT_NAME );
+        displayNameText = new TextPageObject<>( bot, LABEL_DISPLAY_NAME );
+        buildTypeComboBox = new ComboBoxPageObject<>( bot, LABEL_BUILD_TYPE );
         artifactVersionText = new TextPageObject<>( bot, LABEL_ACTIVE_PROFILES );
-        groupIdText = new TextPageObject<SWTBot>( bot, LABEL_GROUP_ID );
-        activeProfilesText = new TextPageObject<SWTBot>( bot, LABEL_ACTIVE_PROFILES );
-        useDefaultLoactionCheckBox = new CheckBoxPageObject<SWTBot>( bot, LABEL_USE_DEFAULT_LOCATION );
-        location = new TextPageObject<SWTBot>( bot, LABEL_LOCATION );
-        pluginTypeComboBox = new ComboBoxPageObject<SWTBot>( bot, LABEL_PLUGIN_TYPE );
+        groupIdText = new TextPageObject<>( bot, LABEL_GROUP_ID );
+        activeProfilesText = new TextPageObject<>( bot, LABEL_ACTIVE_PROFILES );
+        useDefaultLoactionCheckBox = new CheckBoxPageObject<>( bot, LABEL_USE_DEFAULT_LOCATION );
+        location = new TextPageObject<>( bot, LABEL_LOCATION );
+        pluginTypeComboBox = new ComboBoxPageObject<>( bot, LABEL_PLUGIN_TYPE );
         includeSimpleCodeCheckBox = new CheckBoxPageObject<>( bot, LABEL_INCLUDE_SAMPLE_CODE );
         launchNewPortletWizardCheckBox =
-            new CheckBoxPageObject<SWTBot>( bot, LABEL_LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT );
+            new CheckBoxPageObject<>( bot, LABEL_LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT );
     }
 
     public CreateProjectWizardPageObject( T bot, String title, int validationMessageIndex )
     {
         super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT, validationMessageIndex );
 
-        projectNameText = new TextPageObject<SWTBot>( bot, LABEL_PROJECT_NAME );
-        displayNameText = new TextPageObject<SWTBot>( bot, LABEL_DISPLAY_NAME );
-        buildTypeComboBox = new ComboBoxPageObject<SWTBot>( bot, LABEL_BUILD_TYPE );
+        projectNameText = new TextPageObject<>( bot, LABEL_PROJECT_NAME );
+        displayNameText = new TextPageObject<>( bot, LABEL_DISPLAY_NAME );
+        buildTypeComboBox = new ComboBoxPageObject<>( bot, LABEL_BUILD_TYPE );
         artifactVersionText = new TextPageObject<>( bot, LABEL_ACTIVE_PROFILES );
-        groupIdText = new TextPageObject<SWTBot>( bot, LABEL_GROUP_ID );
-        activeProfilesText = new TextPageObject<SWTBot>( bot, LABEL_ACTIVE_PROFILES );
-        useDefaultLoactionCheckBox = new CheckBoxPageObject<SWTBot>( bot, LABEL_USE_DEFAULT_LOCATION );
-        location = new TextPageObject<SWTBot>( bot, LABEL_LOCATION );
-        pluginTypeComboBox = new ComboBoxPageObject<SWTBot>( bot, LABEL_PLUGIN_TYPE );
+        groupIdText = new TextPageObject<>( bot, LABEL_GROUP_ID );
+        activeProfilesText = new TextPageObject<>( bot, LABEL_ACTIVE_PROFILES );
+        useDefaultLoactionCheckBox = new CheckBoxPageObject<>( bot, LABEL_USE_DEFAULT_LOCATION );
+        location = new TextPageObject<>( bot, LABEL_LOCATION );
+        pluginTypeComboBox = new ComboBoxPageObject<>( bot, LABEL_PLUGIN_TYPE );
         includeSimpleCodeCheckBox = new CheckBoxPageObject<>( bot, LABEL_INCLUDE_SAMPLE_CODE );
         launchNewPortletWizardCheckBox =
-            new CheckBoxPageObject<SWTBot>( bot, LABEL_LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT );
+            new CheckBoxPageObject<>( bot, LABEL_LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT );
     }
 
     public void createSDKProject( String projectName )

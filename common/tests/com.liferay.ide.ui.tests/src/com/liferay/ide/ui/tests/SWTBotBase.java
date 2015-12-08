@@ -46,35 +46,34 @@ public class SWTBotBase implements UIBase
 
     public static SWTWorkbenchBot bot;
 
-    public static ButtonUtil buttonUtil;
-    public static CheckBoxUtil checkBoxUtil;
-    public static ComboBoxUtil comboBoxUtil;
-    public static EditorUtil editorUtil;
-    public static LabelUtil labelUtil;
-    public static RadioUtil radioUtil;
-    public static ShellUtil shellUtil;
-    public static TextUtil textUtil;
-    public static ToolbarUtil toolbarUtil;
-    public static TreeUtil treeUtil;
-    public static ViewUtil viewUtil;
+    public static ButtonBot buttonBot;
+    public static CheckBoxBot checkBoxBot;
+    public static ComboBoxBot comboBoxUtil;
+    public static EditorBot editorUtil;
+    public static LabelBot labelUtil;
+    public static RadioBot radioUtil;
+    public static ShellBot shellUtil;
+    public static TextBot textUtil;
+    public static ToolbarBot toolbarUtil;
+    public static TreeBot treeUtil;
+    public static ViewBot viewUtil;
 
     @BeforeClass
     public static void beforeClass() throws Exception
     {
-
         bot = new SWTWorkbenchBot();
 
-        buttonUtil = new ButtonUtil( bot );
-        textUtil = new TextUtil( bot );
-        toolbarUtil = new ToolbarUtil( bot );
-        comboBoxUtil = new ComboBoxUtil( bot );
-        shellUtil = new ShellUtil( bot );
-        treeUtil = new TreeUtil( bot );
-        viewUtil = new ViewUtil( bot );
-        checkBoxUtil = new CheckBoxUtil( bot );
-        editorUtil = new EditorUtil( bot );
-        labelUtil = new LabelUtil( bot );
-        radioUtil = new RadioUtil( bot );
+        buttonBot = new ButtonBot( bot );
+        textUtil = new TextBot( bot );
+        toolbarUtil = new ToolbarBot( bot );
+        comboBoxUtil = new ComboBoxBot( bot );
+        shellUtil = new ShellBot( bot );
+        treeUtil = new TreeBot( bot );
+        viewUtil = new ViewBot( bot );
+        checkBoxBot = new CheckBoxBot( bot );
+        editorUtil = new EditorBot( bot );
+        labelUtil = new LabelBot( bot );
+        radioUtil = new RadioBot( bot );
 
         viewUtil.close( VIEW_WELCOME );
         bot.perspectiveByLabel( "Liferay" ).activate();
@@ -84,7 +83,6 @@ public class SWTBotBase implements UIBase
 
     private static void setupPluginsSDK() throws IOException
     {
-
         FileUtil.deleteDir( getLiferayPluginsSdkDir().toFile(), true );
         final File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
 
