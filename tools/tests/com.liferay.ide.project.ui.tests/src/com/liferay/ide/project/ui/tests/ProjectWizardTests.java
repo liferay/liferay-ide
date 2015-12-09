@@ -42,8 +42,8 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     public static String currentType = "";
 
     @After
-    public void waitt() {
-    	sleep(20000);
+    public void waitForCreate() {
+    	sleep(5000);
     }
 
     private boolean addedProjecs()
@@ -276,19 +276,24 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
             new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
         ThemeWizardPageObject<SWTWorkbenchBot> page2 =
             new ThemeWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_THEME_VALIDATION_MESSAGE );
+
         String defaultMessage = "Select options for creating new theme project.";
         String warningMessage = " For advanced theme developers only.";
-        page1.createSDKProject( "text", MENU_THEME );
-        String projectThemeName = "text";
+
+        String projectThemeName = "test";
+
+        page1.createSDKProject( projectThemeName, MENU_THEME );
 
         page1.next();
 
         assertEquals( defaultMessage, page2.getValidationMessage() );
+
         page2.setParentFramework( MENU_THEME_PARENT_UNSTYLED, MENU_THEME_FRAMEWORK_JSP );
         assertEquals( warningMessage, page2.getValidationMessage() );
 
         page2.setParentFramework( MENU_THEME_PARENT_CLASSIC, MENU_THEME_FRAMEWORK_VELOCITY );
         assertEquals( defaultMessage, page2.getValidationMessage() );
+
         page2.setParentFramework( MENU_THEME_PARENT_STYLED, MENU_THEME_FRAMEWORK_FREEMARKER );
 
         if( added )
@@ -304,7 +309,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
             page3.finish();
         }
 
-        sleep( 8000 );
+        sleep( 15000 );
 
         //Need to use view page object but waiting for LiLu finished.
         treeUtil.getTreeItem( projectThemeName + "-theme" ).click();
