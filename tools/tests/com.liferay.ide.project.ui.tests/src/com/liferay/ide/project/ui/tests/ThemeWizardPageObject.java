@@ -16,9 +16,9 @@
 package com.liferay.ide.project.ui.tests;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import com.liferay.ide.ui.tests.swtbot.page.impl.ComboBoxPageObject;
-import com.liferay.ide.ui.tests.swtbot.page.impl.TextPageObject;
-import com.liferay.ide.ui.tests.swtbot.page.impl.WizardPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 
 /**
  * @author Vicky Wang

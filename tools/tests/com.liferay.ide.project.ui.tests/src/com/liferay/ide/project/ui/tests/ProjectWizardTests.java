@@ -15,7 +15,9 @@
 
 package com.liferay.ide.project.ui.tests;
 
+import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.ui.tests.SWTBotBase;
 
