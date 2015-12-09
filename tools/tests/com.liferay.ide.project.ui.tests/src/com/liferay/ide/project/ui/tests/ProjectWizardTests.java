@@ -135,6 +135,10 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         if( added )
         {
             page1.finish();
+//            sleep(5000);
+//            assertTrue((treeUtil.expandNode( "textsb-portlet","docroot").getNode("view.jsp").isVisible()));
+//            assertTrue((treeUtil.expandNode( "textsb-portlet","docroot","css").getNode("main.css").isVisible()));
+//            assertTrue((treeUtil.expandNode( "textsb-portlet","docroot","js").getNode("main.js").isVisible()));
         }
         else
         {
@@ -142,6 +146,10 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
             SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
             page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
             page2.finish();
+//            sleep(5000);
+//            assertTrue((treeUtil.expandNode( "textsb-portlet","docroot").getNode("view.jsp").isVisible()));
+//            assertTrue((treeUtil.expandNode( "textsb-portlet","docroot","css").getNode("main.css").isVisible()));
+//            assertTrue((treeUtil.expandNode( "textsb-portlet","docroot","js").getNode("main.js").isVisible()));
         }
     }
 
@@ -323,17 +331,25 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     public void createWebProject()
     {
         CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" ,INDEX_VALIDATION_MESSAGE3);
 
         page1.createSDKProject( "text", MENU_WEB );
 
-        page1.next();
-
-        SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
-
-        page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
-
-        page2.cancel();
+        if( added )
+        {
+        	sleep( 1500 );
+        	assertEquals( TEXT_WEB_SDK_62_ERRORR_MESSAGE, page1.getValidationMessage() );
+        	page1.cancel();
+        }
+        else
+        {
+            page1.next();
+            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE2 );
+            page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
+            sleep( 1500 );
+        	assertEquals( TEXT_WEB_SDK_62_ERRORR_MESSAGE, page2.getValidationMessage() );
+            page2.cancel();
+        }
     }
 
     @Test
