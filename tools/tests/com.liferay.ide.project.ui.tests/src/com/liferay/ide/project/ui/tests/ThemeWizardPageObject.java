@@ -17,7 +17,6 @@ package com.liferay.ide.project.ui.tests;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
-import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 
 /**
@@ -26,7 +25,6 @@ import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 public class ThemeWizardPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {
 
-    TextPageObject<SWTBot> themeWizardText;
     ComboBoxPageObject<SWTBot> themeParentTypeComboBox;
     ComboBoxPageObject<SWTBot> themeFrameworkTypeComboBox;
 
