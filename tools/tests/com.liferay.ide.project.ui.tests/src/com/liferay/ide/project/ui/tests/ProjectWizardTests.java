@@ -15,12 +15,15 @@
 
 package com.liferay.ide.project.ui.tests;
 
+import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.ui.tests.SWTBotBase;
 
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -37,6 +40,11 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
 
     public static boolean added = false;
     public static String currentType = "";
+
+    @After
+    public void waitForCreate() {
+    	sleep(5000);
+    }
 
     private boolean addedProjecs()
     {
@@ -262,22 +270,53 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     }
 
     @Test
-    @Ignore
     public void createThemeProject()
     {
         CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
             new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+        ThemeWizardPageObject<SWTWorkbenchBot> page2 =
+            new ThemeWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_THEME_VALIDATION_MESSAGE );
 
-        page1.createSDKProject( "text", MENU_THEME );
+        String defaultMessage = "Select options for creating new theme project.";
+        String warningMessage = " For advanced theme developers only.";
+
+        String projectThemeName = "test";
+
+        page1.createSDKProject( projectThemeName, MENU_THEME );
+
+        page1.next();
+
+        assertEquals( defaultMessage, page2.getValidationMessage() );
+
+        page2.setParentFramework( MENU_THEME_PARENT_UNSTYLED, MENU_THEME_FRAMEWORK_JSP );
+        assertEquals( warningMessage, page2.getValidationMessage() );
+
+        page2.setParentFramework( MENU_THEME_PARENT_CLASSIC, MENU_THEME_FRAMEWORK_VELOCITY );
+        assertEquals( defaultMessage, page2.getValidationMessage() );
+
+        page2.setParentFramework( MENU_THEME_PARENT_STYLED, MENU_THEME_FRAMEWORK_FREEMARKER );
 
         if( added )
         {
-            page1.finish();
+            page2.finish();
         }
         else
         {
-            ////TODO need add new po for theme second page.
+            page2.next();
+
+            SetSDKLocationPageObject<SWTWorkbenchBot> page3 = getSetSDKLoactionPage();
+
+            page3.finish();
         }
+
+        sleep( 15000 );
+
+        //Need to use view page object but waiting for LiLu finished.
+        treeUtil.getTreeItem( projectThemeName + "-theme" ).click();
+        treeUtil.expandNode( projectThemeName + "-theme" ).getNode( "build.xml" ).doubleClick();
+        assertTrue( editorUtil.isActive( "build.xml" ) );
+        assertContains( "_styled", textUtil.getStyledText() );
+        assertContains( "ftl", textUtil.getStyledText() );
     }
 
     @Test
@@ -362,6 +401,14 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         treeUtil.expandNode( nodes ).getNode( projectName ).contextMenu( BUTTON_DELETE ).click();
 
         buttonBot.click( BUTTON_OK );
+    }
+
+    private SetSDKLocationPageObject<SWTWorkbenchBot> getSetSDKLoactionPage()
+    {
+        SetSDKLocationPageObject<SWTWorkbenchBot> page = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
+        page.setSdkLocation( getLiferayPluginsSdkDir().toString() );
+
+        return page;
     }
 
     @Before
