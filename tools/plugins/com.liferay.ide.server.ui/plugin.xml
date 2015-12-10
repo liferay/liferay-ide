@@ -537,26 +537,6 @@
             sequence="M1+M2+P">
        </key>
    </extension>
-   <extension
-         point="org.eclipse.ui.decorators">
-      <decorator
-            class="com.liferay.ide.server.ui.navigator.BundlesDecorator"
-            id="com.liferay.ide.server.ui.bundleDecorator"
-            label="Bundles Decorator"
-            lightweight="true"
-            state="true">
-          <enablement>
-            <or>
-               <objectClass
-                     name="com.liferay.ide.server.ui.navigator.BundlesFolder">
-               </objectClass>
-               <objectClass
-                     name="com.liferay.ide.server.core.portal.OsgiBundle">
-               </objectClass>
-            </or>
-         </enablement>
-      </decorator>
-   </extension>
 
    <extension
          point="org.eclipse.wst.server.core.moduleArtifactAdapters">
