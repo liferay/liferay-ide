@@ -20,15 +20,20 @@ public abstract class AbstractWidgetPageObject<T extends SWTBot> extends Abstrac
 
     protected String label;
 
-    public String getLabel()
+    public AbstractWidgetPageObject( T bot )
     {
-        return label;
+        super( bot );
     }
 
     public AbstractWidgetPageObject( T bot, String label )
     {
         super( bot );
         this.label = label;
+    }
+    
+    public String getLabel()
+    {
+        return label;
     }
 
     public String getText()
