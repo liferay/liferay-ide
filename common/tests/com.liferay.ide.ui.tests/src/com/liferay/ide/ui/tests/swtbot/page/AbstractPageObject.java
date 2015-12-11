@@ -29,10 +29,22 @@ public abstract class AbstractPageObject<T extends SWTBot>
 
     protected final T bot;
 
+    private final long DEFAULT_SLEEP_MILLIS = 1000;
+
     public AbstractPageObject( T bot )
     {
         this.bot = bot;
 
         log = Logger.getLogger( this.getClass() );
+    }
+
+    protected void sleep()
+    {
+        sleep( DEFAULT_SLEEP_MILLIS );
+    }
+
+    protected void sleep( long millis )
+    {
+        bot.sleep( millis );
     }
 }

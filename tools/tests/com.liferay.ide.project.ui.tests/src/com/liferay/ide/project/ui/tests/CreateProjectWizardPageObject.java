@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 
 package com.liferay.ide.project.ui.tests;
 
@@ -8,6 +22,10 @@ import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
+/**
+ * @author Terry Jia
+ * @author Ashley Yuan
+ */
 public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {
 
@@ -23,22 +41,14 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
     CheckBoxPageObject<SWTBot> includeSimpleCodeCheckBox;
     CheckBoxPageObject<SWTBot> launchNewPortletWizardCheckBox;
 
+    public CreateProjectWizardPageObject( T bot )
+    {
+        this( bot, TEXT_BLANK, INDEX_DEFAULT_VALIDATION_MESSAGE );
+    }
+
     public CreateProjectWizardPageObject( T bot, String title )
     {
-        super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT );
-
-        projectNameText = new TextPageObject<>( bot, LABEL_PROJECT_NAME );
-        displayNameText = new TextPageObject<>( bot, LABEL_DISPLAY_NAME );
-        buildTypeComboBox = new ComboBoxPageObject<>( bot, LABEL_BUILD_TYPE );
-        artifactVersionText = new TextPageObject<>( bot, LABEL_ACTIVE_PROFILES );
-        groupIdText = new TextPageObject<>( bot, LABEL_GROUP_ID );
-        activeProfilesText = new TextPageObject<>( bot, LABEL_ACTIVE_PROFILES );
-        useDefaultLoactionCheckBox = new CheckBoxPageObject<>( bot, LABEL_USE_DEFAULT_LOCATION );
-        location = new TextPageObject<>( bot, LABEL_LOCATION );
-        pluginTypeComboBox = new ComboBoxPageObject<>( bot, LABEL_PLUGIN_TYPE );
-        includeSimpleCodeCheckBox = new CheckBoxPageObject<>( bot, LABEL_INCLUDE_SAMPLE_CODE );
-        launchNewPortletWizardCheckBox =
-            new CheckBoxPageObject<>( bot, LABEL_LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT );
+        this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
     }
 
     public CreateProjectWizardPageObject( T bot, String title, int validationMessageIndex )
@@ -55,8 +65,7 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
         location = new TextPageObject<>( bot, LABEL_LOCATION );
         pluginTypeComboBox = new ComboBoxPageObject<>( bot, LABEL_PLUGIN_TYPE );
         includeSimpleCodeCheckBox = new CheckBoxPageObject<>( bot, LABEL_INCLUDE_SAMPLE_CODE );
-        launchNewPortletWizardCheckBox =
-            new CheckBoxPageObject<>( bot, LABEL_LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT );
+        launchNewPortletWizardCheckBox = new CheckBoxPageObject<>( bot, LABEL_LAUNCH_NEW_PORTLET_WIZARD_AFTER_PROJECT );
     }
 
     public void createSDKProject( String projectName )
@@ -123,6 +132,7 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
                 launchNewPortletWizardCheckBox.deselect();
             }
         }
+
     }
 
 }

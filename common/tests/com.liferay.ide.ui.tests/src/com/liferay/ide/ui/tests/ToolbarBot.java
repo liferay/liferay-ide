@@ -30,6 +30,8 @@ public class ToolbarBot extends Bot
 
     public void menuClick( String tooltip, String menuItem )
     {
+        sleep( 3000 );
+
         bot.toolbarDropDownButtonWithTooltip( tooltip ).menuItem( menuItem ).click();
 
         sleep();

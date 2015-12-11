@@ -24,6 +24,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
  */
 public class DialogPageObject<T extends SWTBot> extends CancelPageObject<T>
 {
+
     private final String text;
 
     public DialogPageObject( T bot, String title, String cancelButtonText, String confirmButtonText )

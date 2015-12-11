@@ -24,6 +24,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
  */
 public class ConfirmPageObject<T extends SWTBot> extends ClosingButtonPageObject<T>
 {
+
     protected final String text;
 
     public ConfirmPageObject( T bot, String title, String text )

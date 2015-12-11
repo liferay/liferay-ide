@@ -79,6 +79,7 @@ public interface ProjectWizard extends UIBase
     public final int INDEX_VALIDATION_MESSAGE3 = 2;
     public final int INDEX_VALIDATION_MESSAGE2 = 1;
     public final int INDEX_VALIDATION_MESSAGE1 = 0;
+    public final int INDEX_DEFAULT_VALIDATION_MESSAGE = -1;
 
     public final String MENU_PORTLET = "Portlet";
     public final String MENU_SERVICE_BUILDER_PORTLET = "Service Builder Portlet";
@@ -90,8 +91,6 @@ public interface ProjectWizard extends UIBase
     public final String MENU_BUILD_TYPE_ANT = "Ant (liferay-plugins-sdk)";
     public final String MENU_BUILD_TYPE_MAVEN = "Maven (liferay-maven-plugin)";
 
-    public final int INDEX_VALIDATION_MESSAGE = 2;
-    public final int INDEX_THEME_VALIDATION_MESSAGE = 0;
     public final String THEME_PARENT_TYPE = "Theme parent:";
     public final String THEME_FARMEWORK_TYPE = "Theme framework:";
     public final String MENU_THEME_PARENT_STYLED = "_styled";
@@ -100,7 +99,5 @@ public interface ProjectWizard extends UIBase
     public final String MENU_THEME_FRAMEWORK_FREEMARKER = "Freemarker";
     public final String MENU_THEME_FRAMEWORK_VELOCITY = "Velocity";
     public final String MENU_THEME_FRAMEWORK_JSP = "JSP";
-
-    public final int INDEX_VALIDATION_MESSAGE_WEB_SDKVERSION = 1;
 
 }

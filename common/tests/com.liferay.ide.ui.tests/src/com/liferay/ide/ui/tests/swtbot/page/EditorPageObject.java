@@ -24,6 +24,7 @@ import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotEditor;
  */
 public class EditorPageObject extends AbstractPageObject<SWTWorkbenchBot>
 {
+
     private final String name;
 
     public EditorPageObject( SWTWorkbenchBot bot, String name )
@@ -53,5 +54,10 @@ public class EditorPageObject extends AbstractPageObject<SWTWorkbenchBot>
     protected SWTBotEditor getEditor()
     {
         return bot.editorByTitle( name );
+    }
+
+    public boolean isActive()
+    {
+        return getEditor().isActive();
     }
 }

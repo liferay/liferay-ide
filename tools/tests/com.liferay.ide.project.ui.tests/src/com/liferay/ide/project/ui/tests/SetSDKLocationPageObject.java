@@ -23,15 +23,21 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 /**
  * @author Terry Jia
  * @author Ying Xu
+ * @author Ashley Yuan
  */
 public class SetSDKLocationPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {
 
     TextPageObject<SWTBot> sdkLocationText;
 
+    public SetSDKLocationPageObject( T bot )
+    {
+        this( bot, TEXT_BLANK );
+    }
+
     public SetSDKLocationPageObject( T bot, String title )
     {
-        this( bot, title, -1 );
+        this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
     }
 
     public SetSDKLocationPageObject( T bot, String title, int index )

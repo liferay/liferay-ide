@@ -24,6 +24,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
  */
 public class CancelPageObject<T extends SWTBot> extends ClosingButtonPageObject<T>
 {
+
     protected final String text;
 
     public CancelPageObject( T bot, String title, String cancelButtonText )

@@ -93,6 +93,8 @@ public class WizardPageObject<T extends SWTBot> extends CancelPageObject<T>
 
     public String getValidationMessage()
     {
+        sleep();
+
         if( validationMessageIndex < 0 )
         {
             log.error( "Validation Message Index error" );

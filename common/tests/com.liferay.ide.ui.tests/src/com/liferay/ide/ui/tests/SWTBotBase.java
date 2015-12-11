@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
+import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
@@ -48,15 +49,15 @@ public class SWTBotBase implements UIBase
 
     public static ButtonBot buttonBot;
     public static CheckBoxBot checkBoxBot;
-    public static ComboBoxBot comboBoxUtil;
-    public static EditorBot editorUtil;
-    public static LabelBot labelUtil;
-    public static RadioBot radioUtil;
-    public static ShellBot shellUtil;
-    public static TextBot textUtil;
-    public static ToolbarBot toolbarUtil;
-    public static TreeBot treeUtil;
-    public static ViewBot viewUtil;
+    public static ComboBoxBot comboBoxBot;
+    public static EditorBot editorBot;
+    public static LabelBot labelBot;
+    public static RadioBot radioBot;
+    public static ShellBot shellBot;
+    public static TextBot textBot;
+    public static ToolbarBot toolbarBot;
+    public static TreeBot treeBot;
+    public static ViewBot viewBot;
 
     @BeforeClass
     public static void beforeClass() throws Exception
@@ -64,19 +65,21 @@ public class SWTBotBase implements UIBase
         bot = new SWTWorkbenchBot();
 
         buttonBot = new ButtonBot( bot );
-        textUtil = new TextBot( bot );
-        toolbarUtil = new ToolbarBot( bot );
-        comboBoxUtil = new ComboBoxBot( bot );
-        shellUtil = new ShellBot( bot );
-        treeUtil = new TreeBot( bot );
-        viewUtil = new ViewBot( bot );
+        textBot = new TextBot( bot );
+        toolbarBot = new ToolbarBot( bot );
+        comboBoxBot = new ComboBoxBot( bot );
+        shellBot = new ShellBot( bot );
+        treeBot = new TreeBot( bot );
+        viewBot = new ViewBot( bot );
         checkBoxBot = new CheckBoxBot( bot );
-        editorUtil = new EditorBot( bot );
-        labelUtil = new LabelBot( bot );
-        radioUtil = new RadioBot( bot );
+        editorBot = new EditorBot( bot );
+        labelBot = new LabelBot( bot );
+        radioBot = new RadioBot( bot );
 
-        viewUtil.close( VIEW_WELCOME );
+        viewBot.close( VIEW_WELCOME );
         bot.perspectiveByLabel( "Liferay" ).activate();
+
+        SWTBotPreferences.TIMEOUT = 30000;
 
         setupPluginsSDK();
     }
