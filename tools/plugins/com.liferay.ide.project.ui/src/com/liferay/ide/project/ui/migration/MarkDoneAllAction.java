@@ -52,7 +52,9 @@ public class MarkDoneAllAction extends TaskProblemAction
         {
             retval = e.getStatus();
         }
+
         refreshTableViewer();
+
         return retval;
     }
 

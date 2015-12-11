@@ -49,7 +49,9 @@ public class IgnoreAllAction extends TaskProblemAction
         {
             retval = e.getStatus();
         }
+
         refreshTableViewer();
+
         return retval;
     }
 

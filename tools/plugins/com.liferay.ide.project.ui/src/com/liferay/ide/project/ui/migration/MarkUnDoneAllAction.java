@@ -51,7 +51,9 @@ public class MarkUnDoneAllAction extends TaskProblemAction
         {
             retval = e.getStatus();
         }
+
         refreshTableViewer();
+
         return retval;
     }
 

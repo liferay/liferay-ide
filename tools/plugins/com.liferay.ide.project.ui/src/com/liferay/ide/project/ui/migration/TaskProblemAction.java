@@ -128,9 +128,9 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
     protected void refreshTableViewer()
     {
         final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
+
         UIUtil.async( new Runnable()
         {
-
             @Override
             public void run()
             {
@@ -144,12 +144,12 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
 
                 if( problems != null && problems.size() > 0 )
                 {
-                    mv.get_problemsViewer().setInput( problems.toArray() );
-                    mv.get_problemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
+                    mv.getProblemsViewer().setInput( problems.toArray() );
+                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
                 }
                 else
                 {
-                    mv.get_problemsViewer().setInput( null );
+                    mv.getProblemsViewer().setInput( null );
                 }
             }
         } );
