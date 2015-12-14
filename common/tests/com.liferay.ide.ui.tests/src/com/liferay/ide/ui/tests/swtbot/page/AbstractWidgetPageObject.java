@@ -30,7 +30,7 @@ public abstract class AbstractWidgetPageObject<T extends SWTBot> extends Abstrac
         super( bot );
         this.label = label;
     }
-    
+
     public String getLabel()
     {
         return label;

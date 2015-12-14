@@ -25,16 +25,18 @@ import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
 public class ProjectTreePageObject<T extends SWTBot> extends TreeItemPageObject<T> implements ProjectBuildAction
 {
 
+    DeleteProjectDialogPageObject<SWTBot> deleteDialog;
+
     public ProjectTreePageObject( SWTBot bot, String nodeText )
     {
         super( bot, nodeText );
+
+        deleteDialog = new DeleteProjectDialogPageObject<SWTBot>( bot );
     }
 
     public void deleteProject()
     {
         doAction( BUTTON_DELETE );
-
-        DeleteProjectDialogPageObject<SWTBot> deleteDialog = new DeleteProjectDialogPageObject<SWTBot>( bot );
 
         deleteDialog.confirmDeleteFromDisk();
     }
