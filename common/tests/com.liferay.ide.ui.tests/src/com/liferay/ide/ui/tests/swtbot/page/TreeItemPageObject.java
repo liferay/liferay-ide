@@ -49,8 +49,9 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
         SWTBotMenu goalMenu = getWidget().contextMenu( action[0] ).click();
 
         for( int i = 1; i < action.length; i++ )
-
+        {
             goalMenu = goalMenu.menu( action[i] ).click();
+        }
     }
 
     public void doubleClick()
@@ -99,8 +100,8 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
         for( int i = 0; i < items.length; i++ )
         {
             subNodes[i] = items[i].getText();
-
         }
+
         return subNodes;
     }
 
@@ -116,6 +117,8 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
 
         for( int i = 1; i < nodeText.length; i++ )
         {
+            treeItem.expand();
+
             treeItem = treeItem.getNode( nodeText[i] );
         }
 
@@ -130,7 +133,6 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
     public boolean isExpanded()
     {
         return getWidget().isExpanded();
-
     }
 
     public boolean isSelected()
