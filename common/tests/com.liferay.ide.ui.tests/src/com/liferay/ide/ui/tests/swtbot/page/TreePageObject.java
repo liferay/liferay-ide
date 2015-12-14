@@ -42,7 +42,7 @@ public class TreePageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
 
         for( int i = 0; i < items.length; i++ )
         {
-            subNodes[i] = items[0].getText();
+            subNodes[i] = items[i].getText();
 
         }
 
