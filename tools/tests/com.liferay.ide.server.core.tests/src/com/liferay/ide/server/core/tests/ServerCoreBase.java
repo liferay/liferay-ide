@@ -77,7 +77,7 @@ public abstract class ServerCoreBase extends BaseTests
             {
                 try
                 {
-                    return serverType.createServer( id, null, runtime, null ); //$NON-NLS-1$
+                    return serverType.createServer( id, null, runtime, null );
                 }
                 catch( CoreException e )
                 {
@@ -89,36 +89,19 @@ public abstract class ServerCoreBase extends BaseTests
     }
 
     @AfterClass
-    public static void deleteServer()
+    public static void deleteServers()
     {
-        IServer[] servers = ServerCore.getServers();
-        IServer server;
-        if( servers.length != 0 )
-            server = servers[0];
-        else
-            return;
+        for( IServer server : ServerCore.getServers() )
+        {
+            server.stop( true );
 
-        server.stop( false );
-
-        long timeoutExpiredMs = System.currentTimeMillis() + 30000;
-        while( true )
-        {
-            if( server.getServerState() == IServer.STATE_STOPPED )
+            try
             {
-                break;
+                server.delete();
             }
-            if( System.currentTimeMillis() >= timeoutExpiredMs )
+            catch( CoreException e )
             {
-                break;
             }
-        }
-        try
-        {
-            server.getRuntime().delete();
-            server.delete();
-        }
-        catch( CoreException e )
-        {
         }
     }
 
