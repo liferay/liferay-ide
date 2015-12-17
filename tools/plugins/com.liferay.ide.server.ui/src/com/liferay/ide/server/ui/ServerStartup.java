@@ -30,9 +30,7 @@ import java.util.Date;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.mylyn.commons.notifications.core.AbstractNotification;
@@ -67,7 +65,7 @@ public class ServerStartup implements IStartup
         final Date date = new Date();
         return new  AbstractUiNotification( "com.liferay.ide.server.ui.importglobalsettings" )
         {
-            @SuppressWarnings( "rawtypes" )
+            @SuppressWarnings( { "rawtypes", "unchecked" } )
             public Object getAdapter( Class adapter )
             {
                 return null;
@@ -335,10 +333,11 @@ public class ServerStartup implements IStartup
 
     private boolean shouldCheckForGlobalSettings()
     {
-        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE };
-
-        return !( Platform.getPreferencesService().getBoolean(
-            LiferayServerUI.PLUGIN_ID, GLOBAL_SETTINGS_CHECKED, false, scopes ) );
+//        IScopeContext[] scopes = new IScopeContext[] { InstanceScope.INSTANCE };
+//
+//        return !( Platform.getPreferencesService().getBoolean(
+//            LiferayServerUI.PLUGIN_ID, GLOBAL_SETTINGS_CHECKED, false, scopes ) );
+        return false; // disabled
     }
 
     public void startup()
