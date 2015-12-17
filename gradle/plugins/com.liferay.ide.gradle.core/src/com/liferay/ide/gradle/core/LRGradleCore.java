@@ -206,7 +206,8 @@ public class LRGradleCore extends Plugin implements EventListener
                             final CustomModel customModel = getToolingModel( CustomModel.class, project );
 
                             if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
-                                customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) )
+                                customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
+                                customModel.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
                             {
                                 LiferayNature.addLiferayNature( project, monitor );
                             }
