@@ -16,13 +16,13 @@
 package com.liferay.ide.gradle.core;
 
 import com.gradleware.tooling.toolingclient.GradleDistribution;
-import com.liferay.blade.api.ProjectBuild;
-import com.liferay.blade.api.ProjectTemplate;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
-import com.liferay.ide.project.core.modules.ModulesUtil;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
 import java.util.ArrayList;
@@ -88,10 +88,22 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
 
         IPath location = PathBridge.create( op.getLocation().content() );
 
-        final ProjectTemplate projectTemplate = op.getProjectTemplate().content();
+        final String projectTemplateName = op.getProjectTemplateName().content();
 
-        retval = ModulesUtil.createModuleProject( location.toFile(), projectTemplate, ProjectBuild.gradle, projectName,
-            null, null, null );
+        StringBuilder sb = new StringBuilder();
+        sb.append( "create " );
+        sb.append( "-d \"" + location.toFile().getAbsolutePath() +  "\" " );
+        sb.append( "-t " + projectTemplateName + " " );
+        sb.append( "\"" + projectName + "\"");
+
+        try
+        {
+            BladeCLI.execute( sb.toString() );
+        }
+        catch( BladeCLIException e )
+        {
+            retval = ProjectCore.createErrorStatus( e );
+        }
 
         if( retval.isOK() )
         {

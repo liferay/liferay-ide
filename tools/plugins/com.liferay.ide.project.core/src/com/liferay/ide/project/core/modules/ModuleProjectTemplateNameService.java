@@ -15,19 +15,17 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.blade.api.ProjectTemplate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
-
 /**
  * @author Simon Jiang
+ * @author Gregory Amerson
  */
-public class ModuleProjectTypePossibleValuesService extends PossibleValuesService
+public class ModuleProjectTemplateNameService extends PossibleValuesService
 {
     private List<String> possibleValues;
 
@@ -36,11 +34,15 @@ public class ModuleProjectTypePossibleValuesService extends PossibleValuesServic
     {
         possibleValues = new ArrayList<String>();
 
-        final ProjectTemplate[] templates = ModulesUtil.getProjectTemplates();
-
-        for( ProjectTemplate template : templates )
+        try
         {
-            possibleValues.add( template.name() );
+            for( String projectTemplate : BladeCLI.getProjectTemplates() )
+            {
+                possibleValues.add( projectTemplate );
+            }
+        }
+        catch( Exception e )
+        {
         }
     }
 

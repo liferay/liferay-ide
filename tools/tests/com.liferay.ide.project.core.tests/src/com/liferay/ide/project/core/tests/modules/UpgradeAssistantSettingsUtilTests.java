@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.upgrade.tests;
+package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
