@@ -18,17 +18,18 @@ package com.liferay.ide.project.ui.tests;
 import static org.eclipse.swtbot.swt.finder.SWTBotAssert.assertContains;
 import static org.junit.Assert.*;
 
-import com.liferay.ide.ui.tests.SWTBotBase;
-import com.liferay.ide.ui.tests.UITestsUtils;
-import com.liferay.ide.ui.tests.swtbot.page.EditorPageObject;
-import com.liferay.ide.ui.tests.swtbot.page.TextEditorPageObject;
-
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.liferay.ide.ui.tests.SWTBotBase;
+import com.liferay.ide.ui.tests.UITestsUtils;
+import com.liferay.ide.ui.tests.swtbot.page.EditorPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TextEditorPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TreePageObject;
 
 /**
  * @author Terry Jia
@@ -42,8 +43,9 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     public static boolean added = false;
 
     @After
-    public void waitForCreate() {
-    	sleep(5000);
+    public void waitForCreate()
+    {
+        sleep( 5000 );
     }
 
     private boolean addedProjecs()
@@ -56,26 +58,16 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     @AfterClass
     public static void cleanAll()
     {
-        SWTBotTreeItem[] items = treeBot.getItems();
-
         try
         {
-            for( SWTBotTreeItem item : items )
+            TreePageObject<SWTWorkbenchBot> tree = new TreePageObject<SWTWorkbenchBot>( bot );
+            String[] projects = tree.getAllItems();
+
+            for( String project : projects )
             {
-                if( !item.getText().equals( getLiferayPluginsSdkName() ) )
-                {
-                    item.contextMenu( BUTTON_DELETE ).click();
-
-                    checkBoxBot.click();
-
-                    buttonBot.click( BUTTON_OK );
-
-                    if( buttonBot.isEnabled( "Continue" ) )
-                    {
-                        buttonBot.click( "Continue" );
-                    }
-
-                }
+                ProjectTreePageObject<SWTWorkbenchBot> projectItem =
+                    new ProjectTreePageObject<SWTWorkbenchBot>( bot, project );
+                projectItem.deleteProject();
             }
         }
         catch( Exception e )
@@ -252,8 +244,6 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
 
         page4.cancel();
 
-        deleteProject( projectName + "-portlet" );
-
         toolbarBot.menuClick( TOOLTIP_CREATE_LIFERAY_PROJECT, TOOLTIP_MENU_ITEM_NEW_LIFERAY_PROJECT );
 
         CreateProjectWizardPageObject<SWTWorkbenchBot> page5 =
@@ -351,33 +341,38 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
 
         sleep( 15000 );
 
-        //Need to use view page object but waiting for LiLu finished.
-        treeBot.getTreeItem( projectThemeName + "-theme" ).click();
-        treeBot.expandNode( projectThemeName + "-theme" ).getNode( "build.xml" ).doubleClick();
-        assertTrue( editorBot.isActive( "build.xml" ) );
-        assertContains( "_styled", textBot.getStyledText() );
-        assertContains( "ftl", textBot.getStyledText() );
+        TreeItemPageObject<SWTWorkbenchBot> buildXml =
+            new TreeItemPageObject<SWTWorkbenchBot>( bot, projectThemeName + "-theme", "build.xml" );
+        buildXml.doubleClick();
+
+        // assertTrue( editorUtil.isActive( "build.xml" ) );
+        // assertContains( "_styled", textUtil.getStyledText() );
+        // assertContains( "ftl", textUtil.getStyledText() );
+
+        ProjectTreePageObject<SWTWorkbenchBot> project =
+            new ProjectTreePageObject<SWTWorkbenchBot>( bot, projectThemeName + "-theme" );
+        project.deleteProject();
     }
 
     @Test
     public void createWebProject()
     {
         CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" ,INDEX_VALIDATION_MESSAGE3);
+            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE3 );
 
         page1.createSDKProject( "text", MENU_WEB );
 
         if( added )
         {
-        	sleep( 1500 );
-        	assertEquals( TEXT_WEB_SDK_62_ERRORR_MESSAGE, page1.getValidationMessage() );
-        	page1.cancel();
+            sleep( 1500 );
+            assertEquals( TEXT_WEB_SDK_62_ERRORR_MESSAGE, page1.getValidationMessage() );
+            page1.cancel();
         }
         else
         {
             page1.next();
-            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>(
-                bot, "", INDEX_VALIDATION_MESSAGE2 );
+            SetSDKLocationPageObject<SWTWorkbenchBot> page2 =
+                new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE2 );
 
             page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
 
@@ -414,7 +409,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         // assertEquals( MENU_PORTLET, comboBoxUtil.getText( TEXT_PLUGIN_TYPE ) );
 
         // assertTrue( buttonUtil.isTooltipEnabled( TOOLTIP_LEARN_MORE ) );
-         //assertTrue( checkBoxUtil.isChecked( TEXT_INCLUDE_SAMPLE_CODE ) );
+        // assertTrue( checkBoxUtil.isChecked( TEXT_INCLUDE_SAMPLE_CODE ) );
         // assertFalse( checkBoxUtil.isChecked( TEXT_ADD_PROJECT_TO_WORKING_SET ) );
         // assertFalse( comboBoxUtil.isEnabled( TEXT_WORKING_SET ) );
         // assertFalse( buttonUtil.isEnabled( BUTTON_BACK ) );
@@ -437,14 +432,6 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         // ) );
         //
         // buttonUtil.click( BUTTON_CANCEL );
-    }
-
-    private void deleteProject( String projectName )
-    {
-        viewBot.show( VIEW_PACKAGE_EXPLORER );
-        treeBot.getNode( projectName ).contextMenu( BUTTON_DELETE ).click();
-        buttonBot.click( BUTTON_OK );
-        sleep();
     }
 
     public static void deleteProjectInSdk( String projectName, String... nodes )
