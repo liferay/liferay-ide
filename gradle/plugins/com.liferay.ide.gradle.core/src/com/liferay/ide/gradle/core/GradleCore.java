@@ -49,11 +49,11 @@ import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class LRGradleCore extends Plugin implements EventListener
+public class GradleCore extends Plugin implements EventListener
 {
 
     // The shared instance
-    private static LRGradleCore plugin;
+    private static GradleCore plugin;
 
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
@@ -83,7 +83,7 @@ public class LRGradleCore extends Plugin implements EventListener
      *
      * @return the shared instance
      */
-    public static LRGradleCore getDefault()
+    public static GradleCore getDefault()
     {
         return plugin;
     }
@@ -157,7 +157,7 @@ public class LRGradleCore extends Plugin implements EventListener
     /**
      * The constructor
      */
-    public LRGradleCore()
+    public GradleCore()
     {
     }
 

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Liferay IDE Gradle Core
 Bundle-SymbolicName: com.liferay.ide.gradle.core;singleton:=true
 Bundle-Version: 3.0.0.qualifier
-Bundle-Activator: com.liferay.ide.gradle.core.LRGradleCore
+Bundle-Activator: com.liferay.ide.gradle.core.GradleCore
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
@@ -22,4 +22,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.gradle.core,
  com.liferay.ide.gradle.toolingapi.custom
 Bundle-ClassPath: .,
- repo/com/liferay/ide/gradle/toolingapi/model/1.0/model-1.0.jar
+ repo/com/liferay/ide/gradle/toolingapi/model/1.1.0/model-1.1.0.jar

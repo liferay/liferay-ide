@@ -32,7 +32,7 @@ public class GradleProjectMethods
 
     public static IPath getOutputJar( IProject gradleProject )
     {
-        final CustomModel model = LRGradleCore.getToolingModel( CustomModel.class, gradleProject );
+        final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
 
         Set<File> outputFiles = model.getOutputFiles();
 

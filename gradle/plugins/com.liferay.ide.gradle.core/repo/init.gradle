@@ -6,7 +6,7 @@ initscript {
     }
 
     dependencies {
-        classpath 'com.liferay.ide.gradle.toolingapi:plugin:1.0'
+        classpath 'com.liferay.ide.gradle.toolingapi:plugin:1.1.0'
     }
 }
 

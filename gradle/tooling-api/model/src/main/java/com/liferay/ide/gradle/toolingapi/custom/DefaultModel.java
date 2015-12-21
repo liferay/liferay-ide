@@ -10,19 +10,23 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class DefaultModel implements Serializable {
 
-    private final Set<String> pluginClassNames;
-    private final Set<File> outputFiles;
+    private final Set<String> _pluginClassNames;
+    private final Set<File> _outputFiles;
 
     public DefaultModel(Set<String> pluginClassNames, Set<File> outputFiles) {
-        this.pluginClassNames = pluginClassNames;
-        this.outputFiles = outputFiles;
+        _pluginClassNames = pluginClassNames;
+        _outputFiles = outputFiles;
     }
 
     public boolean hasPlugin(String pluginClassName) {
-        return pluginClassNames.contains(pluginClassName);
+        return _pluginClassNames.contains(pluginClassName);
     }
 
     public Set<File> getOutputFiles() {
-        return this.outputFiles;
+        return _outputFiles;
+    }
+
+    public Set<String> getPluginClassNames() {
+        return _pluginClassNames;
     }
 }

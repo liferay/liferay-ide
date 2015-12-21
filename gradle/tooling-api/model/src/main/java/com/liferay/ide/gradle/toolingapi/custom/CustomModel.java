@@ -10,4 +10,5 @@ public interface CustomModel {
 
     boolean hasPlugin(String className);
     Set<File> getOutputFiles();
+    Set<String> getPluginClassNames();
 }
