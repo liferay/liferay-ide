@@ -23,9 +23,12 @@ import com.gradleware.tooling.toolingclient.GradleDistribution;
 import com.gradleware.tooling.toolingmodel.repository.FixedRequestAttributes;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.ProjectConfiguration;
@@ -38,6 +41,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -82,19 +86,21 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     }
 
     @Override
-    public IPath getOutputJar( boolean build, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean build, IProgressMonitor monitor ) throws CoreException
     {
-        IPath outputJar = GradleProjectMethods.getOutputJar( getProject() );
+        IPath outputBundle = getOutputBundle( getProject() );
 
-        if( !build && outputJar != null && outputJar.toFile().exists() )
+        if( !build && outputBundle != null && outputBundle.toFile().exists() )
         {
-            return outputJar;
+            return outputBundle;
         }
         else
         {
+            final String task = isThemeProject( getProject() ) ? "build" : "jar";
+
             ILaunchConfiguration launchConfiguration =
                 CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration(
-                    getRunConfigurationAttributes() );
+                    getRunConfigurationAttributes( task ) );
 
             final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
 
@@ -132,15 +138,22 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
             {
             }
 
-            outputJar = GradleProjectMethods.getOutputJar( getProject() );
+            outputBundle = getOutputBundle( getProject() );
         }
 
-        if( outputJar.toFile().exists() )
+        if( outputBundle.toFile().exists() )
         {
-            return outputJar;
+            return outputBundle;
         }
 
         return null;
+    }
+
+    private boolean isThemeProject( IProject project )
+    {
+        return project.getFile( "gulpfile.js" ).exists() &&
+            project.getFile( "package.json" ).exists() &&
+            project.getFile( "src/WEB-INF/liferay-plugin-package.properties" ).exists();
     }
 
     @Override
@@ -154,15 +167,15 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     {
         String retval = null;
 
-        final IPath outputJar = GradleProjectMethods.getOutputJar( getProject() );
+        final IPath outputBundle = getOutputBundle( getProject() );
 
-        if( outputJar == null )
+        if( outputBundle == null || outputBundle.lastSegment().endsWith( ".war" ) )
         {
             return getProject().getName();
         }
-        else if( outputJar != null && outputJar.toFile().exists() )
+        else if( outputBundle != null && outputBundle.toFile().exists() )
         {
-            try( final Jar jar = new Jar( outputJar.toFile() ) )
+            try( final Jar jar = new Jar( outputBundle.toFile() ) )
             {
                 retval = jar.getBsn();
             }
@@ -174,7 +187,25 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         return retval;
     }
 
-    private GradleRunConfigurationAttributes getRunConfigurationAttributes()
+    public static IPath getOutputBundle( IProject gradleProject )
+    {
+        final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
+
+        Set<File> outputFiles = model.getOutputFiles();
+
+        if( outputFiles.size() > 0 )
+        {
+            return new Path( outputFiles.iterator().next().getAbsolutePath() );
+        }
+        else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
+        {
+            return gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
+        }
+
+        return null;
+    }
+
+    private GradleRunConfigurationAttributes getRunConfigurationAttributes( String task )
     {
         ProjectConfiguration projectConfiguration =
             CorePlugin.projectConfigurationManager().readProjectConfiguration( getProject() );
@@ -182,7 +213,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         Optional<FixedRequestAttributes> requestAttributes = Optional.of( projectConfiguration.getRequestAttributes() );
 
         List<String> tasks = new ArrayList<String>();
-        tasks.add( "jar" );
+        tasks.add( task );
 
         String projectDirectoryExpression = ExpressionUtils.encodeWorkspaceLocation( getProject() );
 

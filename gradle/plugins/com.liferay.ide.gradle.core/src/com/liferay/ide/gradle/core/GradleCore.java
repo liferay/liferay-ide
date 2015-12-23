@@ -15,32 +15,32 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Set;
 
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.event.Event;
 import org.eclipse.buildship.core.event.EventListener;
 import org.eclipse.buildship.core.workspace.ProjectCreatedEvent;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
 import org.osgi.framework.BundleContext;
-
-import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 
 /**
  * The activator class controls the plugin life cycle
@@ -90,12 +90,17 @@ public class GradleCore extends Plugin implements EventListener
 
     public static <T> T getToolingModel( Class<T> modelClass, IProject gradleProject )
     {
+        return getToolingModel( modelClass, gradleProject.getLocation().toFile() );
+    }
+
+    public static <T> T getToolingModel( Class<T> modelClass, File projectDir )
+    {
         T retval = null;
 
         try
         {
             GradleConnector connector = GradleConnector.newConnector();
-            connector.forProjectDirectory( gradleProject.getLocation().toFile() );
+            connector.forProjectDirectory( projectDir );
             ProjectConnection connection = null;
 
             try
@@ -134,6 +139,7 @@ public class GradleCore extends Plugin implements EventListener
         }
         catch( Exception e )
         {
+            logError( "Error getting tooling model", e );
         }
 
         return retval;
@@ -190,37 +196,38 @@ public class GradleCore extends Plugin implements EventListener
     {
         if( event instanceof ProjectCreatedEvent )
         {
+            final IProgressMonitor npm = new NullProgressMonitor();
             final ProjectCreatedEvent projectCreatedEvent = (ProjectCreatedEvent) event;
 
             final IProject project = projectCreatedEvent.getProject();
 
-            new WorkspaceJob("Checking new gradle project for liferay plugins...")
+            if( !LiferayNature.hasNature( project ) )
             {
-                @Override
-                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                try
                 {
-                    if( !LiferayNature.hasNature( project ) )
+                    final CustomModel customModel = getToolingModel( CustomModel.class, project );
+
+                    if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
+                        customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
+                        customModel.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
                     {
-                        try
-                        {
-                            final CustomModel customModel = getToolingModel( CustomModel.class, project );
-
-                            if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
-                                customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
-                                customModel.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
-                            {
-                                LiferayNature.addLiferayNature( project, monitor );
-                            }
-                        }
-                        catch( Exception e )
-                        {
-                            logError( "Unable to get tooling model", e );
-                        }
+                        LiferayNature.addLiferayNature( project, npm );
                     }
-
-                    return Status.OK_STATUS;
                 }
-            }.schedule();
+                catch( Exception e )
+                {
+                    logError( "Unable to get tooling model", e );
+                }
+            }
         }
+    }
+
+    public static Object getProjectInfoFromDir( File file )
+    {
+        CustomModel model = getToolingModel( CustomModel.class, file );
+
+        Set<File> files = model.getOutputFiles();
+
+        return files;
     }
 }

@@ -27,7 +27,7 @@ public interface IBundleProject extends ILiferayProject
 
     boolean filterResource( IPath resourcePath );
 
-    IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException;
+    IPath getOutputBundle( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException;
 
     String getSymbolicName() throws CoreException;
 

@@ -94,9 +94,9 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             {
                 // TODO catch error in getOutputJar and show a popup notification instead
 
-                monitor.subTask( "Building " + module.getName() + " output jar..." );
+                monitor.subTask( "Building " + module.getName() + " output bundle..." );
 
-                final IPath outputJar = bundleProject.getOutputJar( true, monitor );
+                final IPath outputJar = bundleProject.getOutputBundle( true, monitor );
 
                 if( outputJar!= null && outputJar.toFile().exists() )
                 {

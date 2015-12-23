@@ -135,7 +135,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         try
         {
-            IPath outputFile = bundleProject.getOutputJar( false, null );
+            IPath outputFile = bundleProject.getOutputBundle( false, null );
 
             findFilesInPath( modulesPath.toFile(), outputFile.lastSegment(), moduleFiles );
             findFilesInPath( deployPath.toFile(), outputFile.lastSegment(), moduleFiles );

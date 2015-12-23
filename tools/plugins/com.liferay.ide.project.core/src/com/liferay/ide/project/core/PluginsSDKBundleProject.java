@@ -212,7 +212,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
     }
 
     @Override
-    public IPath getOutputJar( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
         IPath retval = null;
 

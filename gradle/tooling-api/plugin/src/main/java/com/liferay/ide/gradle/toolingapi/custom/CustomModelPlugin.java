@@ -37,15 +37,22 @@ public class CustomModelPlugin implements Plugin<Project> {
         public Object buildAll(String modelName, Project project) {
             Set<String> pluginClassNames = new HashSet<String>();
 
-            for(Plugin plugin : project.getPlugins()) {
+            for (Plugin<?> plugin : project.getPlugins()) {
                 pluginClassNames.add(plugin.getClass().getName());
             }
 
-            Set<Task> jarTasks = project.getTasksByName( "jar", true );
+            Set<Task> jarTasks = project.getTasksByName("jar", true);
+
+            Set<Task> buildTasks = project.getTasksByName("build", true);
+
             Set<File> outputFiles = new HashSet<File>();
 
-            for(Task jarTask : jarTasks) {
-                outputFiles.addAll( jarTask.getOutputs().getFiles().getFiles() );
+            for (Task task : jarTasks) {
+                outputFiles.addAll(task.getOutputs().getFiles().getFiles());
+            }
+
+            for (Task task : buildTasks) {
+                outputFiles.addAll(task.getOutputs().getFiles().getFiles());
             }
 
             return new DefaultModel(pluginClassNames, outputFiles);
