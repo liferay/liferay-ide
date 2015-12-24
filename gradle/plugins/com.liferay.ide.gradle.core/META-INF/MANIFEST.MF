@@ -19,6 +19,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.blade.api
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.gradle.core
+Export-Package: com.liferay.ide.gradle.core,
+ com.liferay.ide.gradle.toolingapi.custom
 Bundle-ClassPath: .,
  repo/com/liferay/ide/gradle/toolingapi/model/1.1.1/model-1.1.1.jar

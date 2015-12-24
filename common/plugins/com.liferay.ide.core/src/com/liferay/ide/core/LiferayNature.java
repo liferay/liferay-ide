@@ -26,16 +26,15 @@ import org.eclipse.core.runtime.OperationCanceledException;
 
 /**
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class LiferayNature implements IProjectNature
 {
 
     public static final String NATURE_ID = LiferayCore.PLUGIN_ID + ".liferayNature";
-    private static final String NATURE_IDS[] = { LiferayNature.NATURE_ID };
 
     private IProject currentProject;
     private IProgressMonitor monitor;
-
 
     public LiferayNature()
     {
@@ -54,7 +53,6 @@ public class LiferayNature implements IProjectNature
         {
             monitor = new NullProgressMonitor();
         }
-
     }
 
     public static void addLiferayNature( IProject project, IProgressMonitor monitor ) throws CoreException
@@ -64,19 +62,16 @@ public class LiferayNature implements IProjectNature
             throw new OperationCanceledException();
         }
 
-        if( !LiferayNature.hasNature( project ) )
+        if( !hasNature( project ) )
         {
             IProjectDescription description = project.getDescription();
 
             String[] prevNatures = description.getNatureIds();
-            String[] newNatures = new String[prevNatures.length + LiferayNature.NATURE_IDS.length];
+            String[] newNatures = new String[prevNatures.length + 1];
 
             System.arraycopy( prevNatures, 0, newNatures, 0, prevNatures.length );
 
-            for( int i = 0; i < LiferayNature.NATURE_IDS.length; i++ )
-            {
-                newNatures[prevNatures.length + i] = LiferayNature.NATURE_IDS[i];
-            }
+            newNatures[prevNatures.length] = NATURE_ID;
 
             description.setNatureIds( newNatures );
             project.setDescription( description, monitor );
@@ -93,7 +88,7 @@ public class LiferayNature implements IProjectNature
     @Override
     public void configure() throws CoreException
     {
-        LiferayNature.addLiferayNature( currentProject, monitor );
+        addLiferayNature( currentProject, monitor );
 
         currentProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
     }
@@ -101,7 +96,7 @@ public class LiferayNature implements IProjectNature
     @Override
     public void deconfigure() throws CoreException
     {
-        LiferayNature.removeLiferayNature( currentProject, monitor );
+        removeLiferayNature( currentProject, monitor );
 
         currentProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
     }
@@ -115,12 +110,9 @@ public class LiferayNature implements IProjectNature
     {
         try
         {
-            for( int i = 0; i < LiferayNature.NATURE_IDS.length; i++ )
+            if( !project.hasNature( NATURE_ID ) )
             {
-                if( !project.hasNature( LiferayNature.NATURE_IDS[i] ) )
-                {
-                    return false;
-                }
+                return false;
             }
         }
         catch( CoreException e )
@@ -138,26 +130,21 @@ public class LiferayNature implements IProjectNature
             throw new OperationCanceledException();
         }
 
-        if( LiferayNature.hasNature( project ) )
+        if( hasNature( project ) )
         {
             IProjectDescription description = project.getDescription();
 
             String[] prevNatures = description.getNatureIds();
-            String[] newNatures = new String[prevNatures.length - LiferayNature.NATURE_IDS.length];
+            String[] newNatures = new String[prevNatures.length - 1];
 
             int k = 0;
 
-            head: for( int i = 0; i < prevNatures.length; i++ )
+            for( int i = 0; i < prevNatures.length; i++ )
             {
-                for( int j = 0; j < LiferayNature.NATURE_IDS.length; j++ )
+                if( !prevNatures[i].equals( NATURE_ID ) )
                 {
-                    if( prevNatures[i].equals( LiferayNature.NATURE_IDS[j] ) )
-                    {
-                        continue head;
-                    }
+                    newNatures[k++] = prevNatures[i];
                 }
-
-                newNatures[k++] = prevNatures[i];
             }
 
             description.setNatureIds( newNatures );

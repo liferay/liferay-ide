@@ -10,6 +10,7 @@ import org.eclipse.ui.progress.IProgressConstants;
  */
 public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFactory
 {
+    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferayworkspace"; //$NON-NLS-1$
 
     @Override
     public void createInitialLayout( IPageLayout layout )

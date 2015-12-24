@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -14,28 +12,27 @@
  * details.
  *
  *******************************************************************************/
- -->
+package com.liferay.ide.project.core.workspace;
 
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+import org.eclipse.sapphire.PropertyContentEvent;
 
-    <parent>
-        <groupId>com.liferay.ide.gradle</groupId>
-        <artifactId>gradle</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
-    </parent>
+/**
+ * @author Andy Wu
+ */
+public class WorkspaceUseDefaultLocationListener extends WorkspaceNameListener
+{
+    @Override
+    protected void handleTypedEvent( PropertyContentEvent event )
+    {
+        final NewLiferayWorkspaceOp op = op( event );
 
-    <groupId>com.liferay.ide.gradle.tests</groupId>
-    <artifactId>gradle-tests</artifactId>
-
-    <name>Liferay IDE Gradle Tests</name>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>com.liferay.ide.gradle.core.tests</module>
-    </modules>
-
-</project>
-
+        if( op.getUseDefaultLocation().content( true ) )
+        {
+            super.handleTypedEvent( event );
+        }
+        else
+        {
+            op.setLocation( (String) null );
+        }
+    }
+}
