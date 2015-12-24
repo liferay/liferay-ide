@@ -23,21 +23,21 @@ import org.osgi.framework.BundleContext;
 /**
  * @author Gregory Amerson
  */
-public class LRGradleUI extends Plugin
+public class GradleUI extends Plugin
 {
 
     // The plug-in ID
     public static final String PLUGIN_ID = "com.liferay.ide.gradle.ui"; //$NON-NLS-1$
 
     // The shared instance
-    private static LRGradleUI plugin;
+    private static GradleUI plugin;
 
     /**
      * Returns the shared instance
      *
      * @return the shared instance
      */
-    public static LRGradleUI getDefault()
+    public static GradleUI getDefault()
     {
         return plugin;
     }
@@ -55,7 +55,7 @@ public class LRGradleUI extends Plugin
     /**
      * The constructor
      */
-    public LRGradleUI()
+    public GradleUI()
     {
     }
 

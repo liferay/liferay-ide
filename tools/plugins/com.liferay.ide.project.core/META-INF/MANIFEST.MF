@@ -39,7 +39,8 @@ Require-Bundle: org.eclipse.wst.common.project.facet.core;bundle-version="[1.4.1
  org.apache.ant,
  biz.aQute.bndlib,
  biz.aQute.repository,
- biz.aQute.remote.api;bundle-version="3.1.0"
+ biz.aQute.remote.api,
+ org.eclipse.equinox.registry
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
@@ -49,7 +50,8 @@ Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.model,
  com.liferay.ide.project.core.modules,
  com.liferay.ide.project.core.upgrade,
- com.liferay.ide.project.core.util
+ com.liferay.ide.project.core.util,
+ com.liferay.ide.project.core.workspace
 Bundle-ClassPath: lib/jackson-core-asl-1.9.13.jar,
  lib/jackson-mapper-asl-1.9.13.jar,
  .

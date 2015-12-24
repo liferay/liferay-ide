@@ -25,6 +25,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -63,8 +64,6 @@ import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime
 @SuppressWarnings( "restriction" )
 public class ProjectImportUtil
 {
-
-
 
     /**
      * This method was added as part of the IDE-381 fix, this method will collect all the binaries based on the binaries
@@ -505,29 +504,69 @@ public class ProjectImportUtil
 
     public static IStatus validateSDKPath(final String currentPath)
     {
-        IStatus retVal = Status.OK_STATUS;
+        IStatus retVal = validatePath( currentPath );
 
-        if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
-        {
-            retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not a valid path." );
-        }
-        else
+        if( retVal.isOK() )
         {
             IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
 
-            if( !osPath.toFile().isAbsolute() )
+            SDK sdk = SDKUtil.createSDKFromLocation( osPath );
+
+            if( sdk != null )
             {
-                retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." );
+                try
+                {
+                    IProject workspaceSdkProject = SDKUtil.getWorkspaceSDKProject();
+
+                    if( workspaceSdkProject != null )
+                    {
+                        if( !workspaceSdkProject.getLocation().equals( sdk.getLocation() ) )
+                        {
+                            return ProjectCore.createErrorStatus(
+                                "This project has different sdk than current workspace sdk" );
+                        }
+                    }
+                }
+                catch( CoreException e )
+                {
+                    return ProjectCore.createErrorStatus("Can't find sdk in workspace");
+                }
+
+                retVal = sdk.validate();
             }
             else
             {
-                if( !osPath.toFile().exists() )
+                retVal = ProjectCore.createErrorStatus( "SDK does not exist." );
+            }
+        }
+
+        return retVal;
+    }
+
+    public static IStatus validateSDKProjectPath(final String currentPath)
+    {
+        IStatus retVal = validatePath( currentPath );
+
+        if( retVal.isOK() )
+        {
+            ProjectRecord record = ProjectUtil.getProjectRecordForDir( currentPath );
+
+            if( record != null )
+            {
+                String projectName = record.getProjectName();
+
+                IProject existingProject =
+                    ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
+
+                if( existingProject != null && existingProject.exists() )
                 {
-                    retVal = ProjectCore.createErrorStatus( "Directory doesn't exist." );
+                    retVal = ProjectCore.createErrorStatus( "Project name already exists." );
                 }
                 else
                 {
-                    SDK sdk = SDKUtil.createSDKFromLocation( osPath );
+                    File projectDir = record.getProjectLocation().toFile();
+
+                    SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
 
                     if( sdk != null )
                     {
@@ -539,8 +578,7 @@ public class ProjectImportUtil
                             {
                                 if( !workspaceSdkProject.getLocation().equals( sdk.getLocation() ) )
                                 {
-                                    return ProjectCore.createErrorStatus(
-                                        "This project has different sdk than current workspace sdk" );
+                                    return ProjectCore.createErrorStatus( "This project has different sdk than current workspace sdk" );
                                 }
                             }
                         }
@@ -549,99 +587,62 @@ public class ProjectImportUtil
                             return ProjectCore.createErrorStatus("Can't find sdk in workspace");
                         }
 
-                        retVal = sdk.validate();
+                        retVal = sdk.validate( true );
                     }
                     else
                     {
-                        retVal = ProjectCore.createErrorStatus( "SDK does not exist." );
+                        retVal = ProjectCore.createErrorStatus(
+                            "Could not determine SDK from project location " + currentPath );
                     }
                 }
+            }
+            else
+            {
+                retVal = ProjectCore.createErrorStatus( "Invalid project location" );
             }
         }
 
         return retVal;
     }
 
-    public static IStatus validateSDKProjectPath(final String currentPath)
+    public static IStatus validateWorkspacePath(final String currentPath)
     {
-        IStatus retVal = Status.OK_STATUS;
+        IStatus retVal = validatePath( currentPath );
 
-        if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
+        if( retVal.isOK() )
         {
-            retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not a valid path." );
-        }
-        else
-        {
-            IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
-
-            if( !osPath.toFile().isAbsolute() )
+            if( !LiferayWorkspaceUtil.isValidWorkspaceLocation( currentPath ) )
             {
-                retVal = ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." );
-            }
-            else
-            {
-                if( !osPath.toFile().exists() )
-                {
-                    retVal = ProjectCore.createErrorStatus( "Project isn't exist at \"" + currentPath + "\"" );
-                }
-                else
-                {
-                    ProjectRecord record = ProjectUtil.getProjectRecordForDir( currentPath );
-
-                    if( record != null )
-                    {
-                        String projectName = record.getProjectName();
-
-                        IProject existingProject =
-                            ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
-
-                        if( existingProject != null && existingProject.exists() )
-                        {
-                            retVal = ProjectCore.createErrorStatus( "Project name already exists." );
-                        }
-                        else
-                        {
-                            File projectDir = record.getProjectLocation().toFile();
-
-                            SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
-
-                            if( sdk != null )
-                            {
-                                try
-                                {
-                                    IProject workspaceSdkProject = SDKUtil.getWorkspaceSDKProject();
-
-                                    if( workspaceSdkProject != null )
-                                    {
-                                        if( !workspaceSdkProject.getLocation().equals( sdk.getLocation() ) )
-                                        {
-                                            return ProjectCore.createErrorStatus( "This project has different sdk than current workspace sdk" );
-                                        }
-                                    }
-                                }
-                                catch( CoreException e )
-                                {
-                                    return ProjectCore.createErrorStatus("Can't find sdk in workspace");
-                                }
-
-                                retVal = sdk.validate( true );
-                            }
-                            else
-                            {
-                                retVal = ProjectCore.createErrorStatus(
-                                    "Could not determine SDK from project location " + currentPath );
-                            }
-                        }
-                    }
-                    else
-                    {
-                        retVal = ProjectCore.createErrorStatus( "Invalid project location" );
-                    }
-                }
+                retVal = ProjectCore.createErrorStatus( "Invalid Liferay Workspace" );
             }
         }
 
         return retVal;
+    }
+
+
+
+    private static IStatus validatePath( final String currentPath )
+    {
+        if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
+        {
+            return ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not a valid path." );
+        }
+
+        IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+
+        if( !osPath.toFile().isAbsolute() )
+        {
+            return ProjectCore.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." );
+        }
+
+        if( !osPath.toFile().exists() )
+        {
+            return ProjectCore.createErrorStatus( "Directory doesn't exist." );
+        }
+
+        return Status.OK_STATUS;
+
     }
 
     private static class Msgs extends NLS

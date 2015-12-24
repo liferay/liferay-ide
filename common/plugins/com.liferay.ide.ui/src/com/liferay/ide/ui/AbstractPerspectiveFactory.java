@@ -17,8 +17,6 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ANT_VIEW_ID = "org.eclipse.ant.ui.views.AntView"; //$NON-NLS-1$
 
-    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay"; //$NON-NLS-1$
-
     public static final String ID_CONSOLE_VIEW = "org.eclipse.ui.console.ConsoleView"; //$NON-NLS-1$
 
     public static final String ID_DATA_VIEW = "org.eclipse.datatools.connectivity.DataSourceExplorerNavigator"; //$NON-NLS-1$

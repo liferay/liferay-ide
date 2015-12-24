@@ -10,5 +10,12 @@
             shortName="gradle-module"
             projectType="module">
       </liferayProjectProvider>
+      <liferayProjectProvider
+            class="com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider"
+            displayName="Liferay Workspace Project Provider"
+            id="com.liferay.ide.gradle.core.liferayWorkspaceProjectProvider"
+            shortName="liferay-workspace"
+            projectType="workspace">
+      </liferayProjectProvider>
    </extension>
 </plugin>

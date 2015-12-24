@@ -15,7 +15,21 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.gradleware.tooling.toolingclient.GradleDistribution;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.buildship.core.configuration.GradleProjectNature;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.platform.PathBridge;
+import org.gradle.jarjar.org.apache.commons.lang.WordUtils;
+
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
@@ -26,25 +40,6 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.modules.PropertyKey;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.buildship.core.projectimport.ProjectImportConfiguration;
-import org.eclipse.buildship.core.util.gradle.GradleDistributionWrapper;
-import org.eclipse.buildship.core.util.progress.AsyncHandler;
-import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectJob;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.sapphire.ElementList;
-import org.eclipse.sapphire.platform.PathBridge;
-import org.gradle.jarjar.org.apache.commons.lang.WordUtils;
 
 /**
  * @author Gregory Amerson
@@ -161,29 +156,18 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                     projecLocation = location.append( projectName );
                 }
             }
-
-            ProjectImportConfiguration configuration = new ProjectImportConfiguration();
-            GradleDistributionWrapper from = GradleDistributionWrapper.from( GradleDistribution.fromBuild() );
-            configuration.setGradleDistribution( from );
-            configuration.setProjectDir( projecLocation.toFile() );
-            configuration.setApplyWorkingSets( false );
-            configuration.setWorkingSets( new ArrayList<String>() );
-            SynchronizeGradleProjectJob synchronizeGradleProjectJob = new SynchronizeGradleProjectJob(
-                configuration.toFixedAttributes(), configuration.getWorkingSets().getValue(), AsyncHandler.NO_OP );
-
+            
             final IPath finalClassPath =
-                getClassFilePath( projectName, className, packageName, projectTemplateName, projecLocation );
+                            getClassFilePath( projectName, className, packageName, projectTemplateName, projecLocation );
 
             final File finalClassFile = finalClassPath.toFile();
-
+    
             if( finalClassFile.exists() )
             {
                 NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
             }
 
-            synchronizeGradleProjectJob.runInWorkspace( monitor );
-            synchronizeGradleProjectJob.setUser( true );
-            synchronizeGradleProjectJob.schedule();
+            GradleUtil.importGradleProject( projecLocation.toFile() , monitor);
         }
         catch( Exception e )
         {
