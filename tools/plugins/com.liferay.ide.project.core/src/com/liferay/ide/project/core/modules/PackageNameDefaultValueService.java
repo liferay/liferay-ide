@@ -12,23 +12,20 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.modules;
 
+import org.eclipse.sapphire.DefaultValueService;
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class BladeCLIException extends Exception
+public class PackageNameDefaultValueService extends DefaultValueService
 {
-    public BladeCLIException( String msg )
+    @Override
+    protected String compute()
     {
-        super( msg );
+        final String defaultPackageName = "com.example";
+        return defaultPackageName;
     }
-
-    public BladeCLIException( String msg, Exception e )
-    {
-        super( msg, e );
-    }
-
-    private static final long serialVersionUID = 1081950550390345603L;
 }

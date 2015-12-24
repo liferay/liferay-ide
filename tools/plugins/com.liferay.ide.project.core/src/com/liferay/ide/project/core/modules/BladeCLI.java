@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
 import aQute.bnd.deployer.repository.FixedIndexedRepo;
@@ -27,6 +41,10 @@ import org.apache.tools.ant.taskdefs.Java;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+/**
+ * @author Gregory Amerson
+ */
+
 public class BladeCLI
 {
     static IPath cachedBladeCLIPath;
@@ -34,6 +52,26 @@ public class BladeCLI
     static File settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
     static File repoCache = new File( settingsDir, "repoCache" );
     static String repoUrl = "https://liferay-test-01.ci.cloudbees.com/job/blade.tools/lastSuccessfulBuild/artifact/p2_build/generated/p2/index.xml.gz";
+
+    public static String checkForErrors( String[] lines )
+    {
+        boolean hasErrors = false;
+        final StringBuilder errors = new StringBuilder();
+
+        for( String line : lines )
+        {
+            if( line.startsWith( "Error" ) )
+            {
+                hasErrors = true;
+            }
+            else if( hasErrors )
+            {
+                errors.append( line );
+            }
+        }
+
+        return errors.toString();
+    }
 
     public static String[] execute( String args ) throws BladeCLIException
     {

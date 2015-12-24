@@ -42,7 +42,7 @@
                 </property-editor>
                 <spacer/>               
                 <property-editor>
-                    <property>ProjectTemplate</property>
+                    <property>ProjectTemplateName</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                 </property-editor>
                 <custom>
@@ -62,5 +62,49 @@
             <image>NewLiferayModuleProjectWizard.png</image>
         </page>
         <description>Create a new project configured as a Liferay plugin</description>
+        <page>
+            <id>LiferayServiceModuleSettingWizardPage</id>
+            <label>Liferay Service Or ServiceWrapper Module Project</label>
+            <description>Set Service or ServiceWrapper Advance setting.</description>
+            <visible-when>
+                ${ ProjectTemplateName == 'servicewrapper' || ProjectTemplateName == 'service' }
+            </visible-when>
+            <content>
+                <property-editor>ComponentName</property-editor>
+                <property-editor>PackageName</property-editor>
+                <property-editor>ServiceName</property-editor>
+                <property-editor>
+                    <span>false</span>
+                    <property>PropertyKeys</property>
+                    <show-label>true</show-label>
+                    <child-property>Name</child-property>
+                    <child-property>Value</child-property>
+                </property-editor>
+            </content>
+            <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
+        </page>
+        <page>
+            <id>LiferayPortletModuleSettingWizardPage</id>
+            <label>Liferay Portlet Module Project</label>
+            <description>Set Portlet Advance setting.</description>
+            <visible-when>
+                ${ ProjectTemplateName == 'portlet' || ProjectTemplateName == 'servicebuilder' || 
+                    ProjectTemplateName == 'mvcportlet' }
+            </visible-when>
+            <content>
+                 <property-editor>ComponentName</property-editor>
+                 <property-editor>PackageName</property-editor>
+                 <property-editor>
+                     <span>false</span>
+                     <property>PropertyKeys</property>
+                     <show-label>true</show-label>
+                     <child-property>Name</child-property>
+                     <child-property>Value</child-property>
+                 </property-editor>
+            </content>
+            <margin-right>10</margin-right>
+            <margin-left>0</margin-left>
+        </page>
     </wizard>
 </definition>

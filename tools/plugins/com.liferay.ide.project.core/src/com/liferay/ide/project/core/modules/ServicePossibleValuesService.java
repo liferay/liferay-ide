@@ -12,23 +12,31 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.modules;
 
+import java.util.Arrays;
+import java.util.Set;
+
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
- * @author Gregory Amerson
+ * @author Simon Jiang
  */
-public class BladeCLIException extends Exception
+
+public class ServicePossibleValuesService extends PossibleValuesService
 {
-    public BladeCLIException( String msg )
+    @Override
+    public Status problem( final Value<?> value )
     {
-        super( msg );
+        return Status.createOkStatus();
     }
-
-    public BladeCLIException( String msg, Exception e )
+   
+    @Override
+    protected void compute( final Set<String> values )
     {
-        super( msg, e );
+        values.addAll( Arrays.asList( NewLiferayModuleProjectOpMethods.getServices() ) );
     }
-
-    private static final long serialVersionUID = 1081950550390345603L;
 }

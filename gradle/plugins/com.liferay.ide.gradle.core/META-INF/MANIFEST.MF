@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.buildship.core;bundle-version="1.0.0",
  com.gradleware.tooling.model;bundle-version="0.5.0",
  com.liferay.ide.project.core,
- com.liferay.blade.api
+ com.liferay.blade.api,
+ org.eclipse.core.jobs
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.gradle.core

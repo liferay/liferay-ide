@@ -38,7 +38,10 @@ public class ModuleProjectTemplateNameService extends PossibleValuesService
         {
             for( String projectTemplate : BladeCLI.getProjectTemplates() )
             {
-                possibleValues.add( projectTemplate );
+                if ( !projectTemplate.contains( "hook" ))
+                {
+                    possibleValues.add( projectTemplate );    
+                }
             }
         }
         catch( Exception e )

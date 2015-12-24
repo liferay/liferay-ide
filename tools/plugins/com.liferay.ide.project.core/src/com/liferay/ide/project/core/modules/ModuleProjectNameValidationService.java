@@ -33,7 +33,7 @@ import org.eclipse.sapphire.services.ValidationService;
  */
 public class ModuleProjectNameValidationService extends ValidationService
 {
-    private static final String MAVEN_PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
+    private static final String PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
 
     private FilteredListener<PropertyContentEvent> listener;
 
@@ -79,9 +79,9 @@ public class ModuleProjectNameValidationService extends ValidationService
             {
                 retval = Status.createErrorStatus( "A project with that name already exists." );
             }
-            else if( isMavenProject( op ) && ! isValidMavenProjectName( currentProjectName ) )
+            else if( ! isValidProjectName( currentProjectName ) )
             {
-                retval = Status.createErrorStatus( "The project name is invalid for a maven project" );
+                retval = Status.createErrorStatus( "The project name is invalid for a gradle project" );
             }
             else
             {
@@ -127,16 +127,10 @@ public class ModuleProjectNameValidationService extends ValidationService
         return false;
     }
 
-    private boolean isMavenProject( NewLiferayModuleProjectOp op )
+    private boolean isValidProjectName( String currentProjectName )
     {
-        return "maven-module".equals( op.getProjectProvider().content().getShortName() );
-    }
-
-    private boolean isValidMavenProjectName( String currentProjectName )
-    {
-        // IDE-1349, use the same logic as maven uses to validate artifactId to validate maven project name.
-        // See org.apache.maven.model.validation.DefaultModelValidator.validateId();
-        return currentProjectName.matches( MAVEN_PROJECT_NAME_REGEX );
+    	
+        return currentProjectName.matches( PROJECT_NAME_REGEX );
     }
 
     private NewLiferayModuleProjectOp op()
