@@ -34,13 +34,13 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.liferay.ide.ui.LiferayPerspectiveFactory"
-            icon="icons/e16/liferay.png"
+            icon="icons/liferay_logo_16.png"
             id="com.liferay.ide.eclipse.ui.perspective.liferay"
             name="%liferay.perspective.name">
       </perspective>
       <perspective
             class="com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory"
-            icon="icons/wizban/liferay_wiz.png"
+            icon="icons/liferay_logo_16.png"
             id="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
             name="Liferay Workspace">
       </perspective>
