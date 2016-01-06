@@ -64,7 +64,7 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
             "com.liferay.maven.archetypes:liferay-portlet-richfaces-archetype:6.2.2" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_SPRING_MVC,
-            "com.liferay.maven.archetypes:liferay-portlet-spring-mvc-archetype:7.0.0-SNAPSHOT" );
+            "com.liferay.maven.archetypes:liferay-portlet-spring-mvc-archetype:7.0.0-m5" );
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_SERVICEBUILDER,
             "com.liferay.maven.archetypes:liferay-servicebuilder-archetype:6.2.2" );

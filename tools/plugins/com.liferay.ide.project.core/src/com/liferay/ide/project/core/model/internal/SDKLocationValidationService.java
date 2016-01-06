@@ -71,6 +71,14 @@ public class SDKLocationValidationService extends ValidationService
 
         if ( op().getProjectProvider().content().getShortName().equals( "ant" ))
         {
+
+            int countPossibleWorkspaceSDKProjects = SDKUtil.countPossibleWorkspaceSDKProjects();
+
+            if( countPossibleWorkspaceSDKProjects > 1 )
+            {
+                return StatusBridge.create( ProjectCore.createErrorStatus( "This workspace has more than one SDK. " ) );
+            }
+
             final Path sdkLocation = op().getSdkLocation().content( true );
 
             if( sdkLocation == null || sdkLocation.isEmpty() )

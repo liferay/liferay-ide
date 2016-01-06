@@ -55,7 +55,7 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
 
         Set<String> vals = profile.getLiferayVersion().service( PossibleValuesService.class ).values();
 
-        Version greatest = new Version( "6.2.1" );
+        Version greatest = new Version( "6.2.2" );
 
         for( final String val : vals )
         {
@@ -72,6 +72,7 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
                     if( CoreUtil.compareVersions( greatest, v ) < 0 )
                     {
                         greatest = v;
+                        break;
                     }
                 }
             }
@@ -100,7 +101,7 @@ public abstract class LiferayMavenProjectTestCase extends AbstractMavenProjectTe
     {
         super.setUp();
 
-        base.setupPluginsSDKAndRuntime();
+        base.setupRuntime();
     }
 
     protected boolean shouldSkipBundleTests() { return "true".equals( skipBundleTests ); }

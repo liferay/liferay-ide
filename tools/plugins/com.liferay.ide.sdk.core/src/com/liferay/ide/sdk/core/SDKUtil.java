@@ -23,6 +23,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
@@ -45,9 +47,26 @@ import org.osgi.service.prefs.BackingStoreException;
 /**
  * @author Greg Amerson
  * @author Lovett Li
+ * @author Simon Jiang
  */
 public class SDKUtil
 {
+
+    public static int countPossibleWorkspaceSDKProjects()
+    {
+        int sdkCount = 0;
+        final IProject[] projects = CoreUtil.getAllProjects();
+
+        for( IProject project : projects )
+        {
+            if( isValidSDKLocation( project.getLocation().toOSString() ) )
+            {
+                sdkCount++;
+            }
+        }
+
+        return sdkCount;
+    }
 
     public static SDK createSDKFromLocation( IPath path )
     {
@@ -331,5 +350,21 @@ public class SDKUtil
         }
 
         return sdk;
+    }
+
+    public static IProject[] getWorkspaceSDKs()
+    {
+        List<IProject> sdkProjects = new ArrayList<IProject>();
+        final IProject[] projects = CoreUtil.getAllProjects();
+
+        for( IProject project : projects )
+        {
+            if( isValidSDKLocation( project.getLocation().toOSString() ) )
+            {
+                sdkProjects.add( project );
+            }
+        }
+
+        return sdkProjects.toArray( new IProject[sdkProjects.size()] );
     }
 }

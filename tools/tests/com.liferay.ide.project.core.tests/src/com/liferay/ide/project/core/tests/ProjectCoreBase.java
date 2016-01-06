@@ -281,17 +281,17 @@ public class ProjectCoreBase extends ServerCoreBase
             projectName = op.getFinalProjectName().content();
         }
 
-        if( op.getProjectProvider().content().getShortName().equalsIgnoreCase( "maven" ) )
-        {
-            if( op.getPluginType().content().equals( PluginType.ext ) )
-            {
-                projectName = projectName + "-ext";
-            }
-            else if( op.getPluginType().content().equals( PluginType.servicebuilder ) )
-            {
-                projectName = projectName + "-portlet";
-            }
-        }
+//        if( op.getProjectProvider().content().getShortName().equalsIgnoreCase( "maven" ) )
+//        {
+//            if( op.getPluginType().content().equals( PluginType.ext ) )
+//            {
+//                projectName = projectName + "-ext";
+//            }
+//            else if( op.getPluginType().content().equals( PluginType.servicebuilder ) )
+//            {
+//                projectName = projectName + "-portlet";
+//            }
+//        }
 
         final IProject newLiferayPluginProject = project( projectName );
 
@@ -562,11 +562,13 @@ public class ProjectCoreBase extends ServerCoreBase
             assertEquals( "Unable to delete pre-existing customBaseDir", false, customBaseDir.exists() );
         }
 
-        persistAppServerProperties();
-
         SDK workspaceSdk = SDKUtil.getWorkspaceSDK();
         if ( workspaceSdk == null)
         {
+            persistAppServerProperties();
+
+            assertEquals( true, sdk.validate( true ).isOK() );
+
             SDKUtil.openAsProject( sdk );
         }
 
