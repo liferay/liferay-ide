@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.tests;
+package com.liferay.ide.project.ui.tests.page;
 
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
@@ -35,6 +35,11 @@ public class SetSDKLocationPageObject<T extends SWTBot> extends WizardPageObject
         this( bot, TEXT_BLANK );
     }
 
+    public SetSDKLocationPageObject( T bot, int index )
+    {
+        this( bot, TEXT_BLANK, index );
+    }
+
     public SetSDKLocationPageObject( T bot, String title )
     {
         this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
@@ -44,7 +49,7 @@ public class SetSDKLocationPageObject<T extends SWTBot> extends WizardPageObject
     {
         super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT, index );
 
-        sdkLocationText = new TextPageObject<SWTBot>( bot, "SDK Location:" );
+        sdkLocationText = new TextPageObject<SWTBot>( bot, LABEL_SDK_LOCATION );
     }
 
     public void setSdkLocation( String sdkLocation )

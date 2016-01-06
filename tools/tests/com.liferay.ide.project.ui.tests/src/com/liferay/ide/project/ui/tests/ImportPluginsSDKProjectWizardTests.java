@@ -36,7 +36,6 @@ import com.liferay.ide.sdk.core.SDKUtil;
 /**
  * @author Li Lu
  */
-
 public class ImportPluginsSDKProjectWizardTests extends ProjectUITestBase
 {
 
@@ -101,7 +100,7 @@ public class ImportPluginsSDKProjectWizardTests extends ProjectUITestBase
     public void testLocation() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         SDKProjectImportOp op = SDKProjectImportOp.TYPE.instantiate();
 
         op.setLocation( "AAA" );
@@ -153,7 +152,7 @@ public class ImportPluginsSDKProjectWizardTests extends ProjectUITestBase
     public void testPluginType() throws Exception
     {
         if( shouldSkipBundleTests() )return;
-        
+
         importSDKProjectTest( "hooks", "Import-223-hook" );
         importSDKProjectTest( "themes", "Import-223-theme" );
         importSDKProjectTest( "ext", "Import-223-ext" );

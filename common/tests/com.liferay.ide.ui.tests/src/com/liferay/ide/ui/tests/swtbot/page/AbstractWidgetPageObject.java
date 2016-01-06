@@ -15,6 +15,9 @@ package com.liferay.ide.ui.tests.swtbot.page;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 
+/**
+ * @author Terry Jia
+ */
 public abstract class AbstractWidgetPageObject<T extends SWTBot> extends AbstractPageObject<SWTBot>
 {
 
