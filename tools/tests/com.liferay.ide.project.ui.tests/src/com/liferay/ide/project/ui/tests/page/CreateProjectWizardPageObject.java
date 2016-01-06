@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.tests;
+package com.liferay.ide.project.ui.tests.page;
 
 import com.liferay.ide.ui.tests.swtbot.page.CheckBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
@@ -29,21 +29,26 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {
 
-    TextPageObject<SWTBot> projectNameText;
-    TextPageObject<SWTBot> displayNameText;
-    ComboBoxPageObject<SWTBot> buildTypeComboBox;
-    TextPageObject<SWTBot> artifactVersionText;
-    TextPageObject<SWTBot> groupIdText;
-    TextPageObject<SWTBot> activeProfilesText;
-    CheckBoxPageObject<SWTBot> useDefaultLoactionCheckBox;
-    TextPageObject<SWTBot> location;
-    ComboBoxPageObject<SWTBot> pluginTypeComboBox;
-    CheckBoxPageObject<SWTBot> includeSimpleCodeCheckBox;
-    CheckBoxPageObject<SWTBot> launchNewPortletWizardCheckBox;
+    private TextPageObject<SWTBot> activeProfilesText;
+    private TextPageObject<SWTBot> artifactVersionText;
+    private ComboBoxPageObject<SWTBot> buildTypeComboBox;
+    private TextPageObject<SWTBot> displayNameText;
+    private TextPageObject<SWTBot> groupIdText;
+    private CheckBoxPageObject<SWTBot> includeSimpleCodeCheckBox;
+    private CheckBoxPageObject<SWTBot> launchNewPortletWizardCheckBox;
+    private TextPageObject<SWTBot> location;
+    private ComboBoxPageObject<SWTBot> pluginTypeComboBox;
+    private TextPageObject<SWTBot> projectNameText;
+    private CheckBoxPageObject<SWTBot> useDefaultLoactionCheckBox;
 
     public CreateProjectWizardPageObject( T bot )
     {
         this( bot, TEXT_BLANK, INDEX_DEFAULT_VALIDATION_MESSAGE );
+    }
+
+    public CreateProjectWizardPageObject( T bot, int index )
+    {
+        this( bot, TEXT_BLANK, index );
     }
 
     public CreateProjectWizardPageObject( T bot, String title )
@@ -75,12 +80,7 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
 
     public void createSDKProject( String projectName, String pluginType )
     {
-        createSDKProject( projectName, "", pluginType );
-    }
-
-    public void createSDKProject( String projectName, String displayName, String pluginType )
-    {
-        createSDKProject( projectName, displayName, pluginType, false, false );
+        createSDKProject( projectName, TEXT_BLANK, pluginType );
     }
 
     public void createSDKProject( String projectName, String pluginType, boolean includeSimpleCode )
@@ -91,7 +91,12 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
     public void createSDKProject(
         String projectName, String pluginType, boolean includeSimpleCode, boolean launchNewPortletWizard )
     {
-        createSDKProject( projectName, "", pluginType, includeSimpleCode, launchNewPortletWizard );
+        createSDKProject( projectName, TEXT_BLANK, pluginType, includeSimpleCode, launchNewPortletWizard );
+    }
+
+    public void createSDKProject( String projectName, String displayName, String pluginType )
+    {
+        createSDKProject( projectName, displayName, pluginType, false, false );
     }
 
     public void createSDKProject(
@@ -100,7 +105,7 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
     {
         projectNameText.setText( projectName );
 
-        if( displayName != null && !displayName.equals( "" ) )
+        if( displayName != null && !displayName.equals( TEXT_BLANK ) )
         {
             displayNameText.setText( displayName );
         }
@@ -133,6 +138,16 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
             }
         }
 
+    }
+
+    public boolean IsIncludeSimpleCodeCheckBoxChecked()
+    {
+        return includeSimpleCodeCheckBox.isChecked();
+    }
+
+    public boolean IsLaunchNewPortletWizardCheckBoxChecked()
+    {
+        return launchNewPortletWizardCheckBox.isChecked();
     }
 
 }

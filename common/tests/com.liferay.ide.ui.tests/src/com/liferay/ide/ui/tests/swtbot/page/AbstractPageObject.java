@@ -47,4 +47,5 @@ public abstract class AbstractPageObject<T extends SWTBot>
     {
         bot.sleep( millis );
     }
+
 }

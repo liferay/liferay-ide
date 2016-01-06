@@ -34,21 +34,11 @@ public class EditorPageObject extends AbstractPageObject<SWTWorkbenchBot>
         this.name = name;
     }
 
-    public void save()
-    {
-        getEditor().save();
-    }
-
     public void close()
     {
         getEditor().close();
 
         bot.waitUntil( new EditorActiveCondition( name, false ) );
-    }
-
-    public void waitForPageToOpen()
-    {
-        bot.waitUntil( new EditorActiveCondition( name, true ) );
     }
 
     protected SWTBotEditor getEditor()
@@ -59,5 +49,15 @@ public class EditorPageObject extends AbstractPageObject<SWTWorkbenchBot>
     public boolean isActive()
     {
         return getEditor().isActive();
+    }
+
+    public void save()
+    {
+        getEditor().save();
+    }
+
+    public void waitForPageToOpen()
+    {
+        bot.waitUntil( new EditorActiveCondition( name, true ) );
     }
 }

@@ -13,9 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.tests;
+package com.liferay.ide.project.ui.tests.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
+
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 
@@ -25,8 +26,13 @@ import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 public class ThemeWizardPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {
 
-    ComboBoxPageObject<SWTBot> themeParentTypeComboBox;
     ComboBoxPageObject<SWTBot> themeFrameworkTypeComboBox;
+    ComboBoxPageObject<SWTBot> themeParentTypeComboBox;
+
+    public ThemeWizardPageObject( T bot, int indexThemeValidationMessage )
+    {
+        this( bot, TEXT_BLANK, indexThemeValidationMessage );
+    }
 
     public ThemeWizardPageObject( T bot, String title, int indexThemeValidationMessage )
     {

@@ -45,4 +45,5 @@ public abstract class ClosingButtonPageObject<T extends SWTBot> extends ShellPag
 
         button.click();
     }
+
 }

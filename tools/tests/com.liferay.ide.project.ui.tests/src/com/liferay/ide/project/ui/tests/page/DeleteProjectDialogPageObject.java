@@ -13,31 +13,39 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.tests;
+package com.liferay.ide.project.ui.tests.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
-import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.CheckBoxPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.DialogPageObject;
 
 /**
  * @author Li Lu
  */
-public class ProjectTreePageObject<T extends SWTBot> extends TreeItemPageObject<T> implements ProjectBuildAction
+public class DeleteProjectDialogPageObject<T extends SWTBot> extends DialogPageObject<SWTBot>
+    implements ProjectBuildAction
 {
 
-    DeleteProjectDialogPageObject<SWTBot> deleteDialog;
+    CheckBoxPageObject<SWTBot> deleteFromDisk;
 
-    public ProjectTreePageObject( SWTBot bot, String nodeText )
+    public DeleteProjectDialogPageObject( SWTBot bot )
     {
-        super( bot, nodeText );
-
-        deleteDialog = new DeleteProjectDialogPageObject<SWTBot>( bot );
+        this( bot, DELETE_RESOURCE, BUTTON_CANCEL, BUTTON_OK );
     }
 
-    public void deleteProject()
+    public DeleteProjectDialogPageObject( SWTBot bot, String title, String cancelButtonText, String confirmButtonText )
     {
-        doAction( BUTTON_DELETE );
+        super( bot, title, cancelButtonText, confirmButtonText );
 
-        deleteDialog.confirmDeleteFromDisk();
+        deleteFromDisk = new CheckBoxPageObject<SWTBot>( bot, DELETE_FROM_DISK );
     }
+
+    public void confirmDeleteFromDisk()
+    {
+        deleteFromDisk.select();
+
+        confirm();
+    }
+
 }
