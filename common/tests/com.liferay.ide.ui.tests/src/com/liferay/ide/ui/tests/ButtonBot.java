@@ -20,6 +20,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 /**
  * @author Terry Jia
  * @auther Ashley Yuan
+ * @author Li Lu
  */
 public class ButtonBot extends Bot
 {
@@ -32,6 +33,12 @@ public class ButtonBot extends Bot
     public void click( String buttonLabel )
     {
         bot.button( buttonLabel ).click();
+        sleep();
+    }
+
+    public void click( String buttonLabel, int index )
+    {
+        bot.button( buttonLabel, index ).click();
         sleep();
     }
 

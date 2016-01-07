@@ -83,4 +83,8 @@ public abstract class ShellPageObject<T extends SWTBot> extends AbstractPageObje
         return title;
     }
 
+    public void setFocus()
+    {
+        bot.shell( title ).setFocus();
+    }
 }
