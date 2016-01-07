@@ -556,15 +556,14 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     public void setServerStarted()
     {
-        setServerState( IServer.STATE_STARTED );
-
         try
         {
             startBundleSupervisor();
+            setServerState( IServer.STATE_STARTED );
         }
         catch( Exception e )
         {
-            e.printStackTrace();
+            LiferayServerCore.logError( "Error starting bundle supervisor", e );
         }
     }
 
@@ -822,6 +821,16 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     void stopBundleSupervisor() throws IOException
     {
-        _bundleSupervisor.close();
+        if( _bundleSupervisor != null )
+        {
+            try
+            {
+                _bundleSupervisor.close();
+            }
+            catch( Exception e )
+            {
+                LiferayServerCore.logError( "Unable to close bundle supervisor", e );
+            }
+        }
     }
 }

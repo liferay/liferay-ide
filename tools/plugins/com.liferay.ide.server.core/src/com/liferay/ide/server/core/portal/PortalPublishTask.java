@@ -95,6 +95,11 @@ public class PortalPublishTask extends PublishTaskDelegate
             }
         }
 
+        if( supervisor == null )
+        {
+            return tasks.toArray( new PublishOperation[0] );
+        }
+
         if( !CoreUtil.isNullOrEmpty( modules ) )
         {
             final int size = modules.size();

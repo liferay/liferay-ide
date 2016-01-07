@@ -131,6 +131,8 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             {
                 this.portalServerBehavior.setModulePublishState2(
                     new IModule[] { module }, IServer.PUBLISH_STATE_FULL );
+
+                throw new CoreException( retval );
             }
         }
     }
@@ -162,7 +164,16 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                 BundleDTO deployed = _supervisor.deploy(
                     bsn, output.toFile(), getBundleUrl( output.toFile(), bsn ), existingBundles );
 
-                retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) deployed.id, null, null );
+                if( deployed instanceof BundleDTOWithStatus )
+                {
+                    BundleDTOWithStatus withStatus = (BundleDTOWithStatus) deployed;
+
+                    retval = LiferayServerCore.error("Problem with deploying bundle: " + withStatus._status );
+                }
+                else
+                {
+                    retval = new Status( IStatus.OK, LiferayServerCore.PLUGIN_ID, (int) deployed.id, null, null );
+                }
             }
             catch( Exception e )
             {

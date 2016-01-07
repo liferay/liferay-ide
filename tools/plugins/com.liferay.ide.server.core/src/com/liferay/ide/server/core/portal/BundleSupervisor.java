@@ -97,7 +97,12 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
 
             if( !isFragment )
             {
-                agent.start( retval.id );
+                String startStatus = agent.start( retval.id );
+
+                if( startStatus != null)
+                {
+                    retval = new BundleDTOWithStatus( retval, startStatus );
+                }
             }
         }
 
