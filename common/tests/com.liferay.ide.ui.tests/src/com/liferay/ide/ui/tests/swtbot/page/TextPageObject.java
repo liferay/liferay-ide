@@ -25,28 +25,40 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 public class TextPageObject<T extends SWTBot> extends AbstractWidgetPageObject<SWTBot>
 {
 
+    public TextPageObject( SWTBot bot )
+    {
+        this( bot, 0 );
+    }
+
     public TextPageObject( SWTBot bot, String label )
     {
         super( bot, label );
+    }
+
+    public TextPageObject( SWTBot bot, int index )
+    {
+        super( bot, index );
     }
 
     public void setText( String text )
     {
         AbstractSWTBot<? extends Widget> widget = getWidget();
 
-        if( widget instanceof SWTBotText )
-        {
-            SWTBotText swtBotText = (SWTBotText) widget;
+        SWTBotText swtBotText = (SWTBotText) widget;
 
-            bot.waitUntil( new WidgetEnabledCondition( swtBotText, true ) );
+        bot.waitUntil( new WidgetEnabledCondition( swtBotText, true ) );
 
-            swtBotText.setText( text );
-        }
+        swtBotText.setText( text );
     }
 
     @Override
     protected AbstractSWTBot<?> getWidget()
     {
+        if( label == null )
+        {
+            return bot.text( index );
+        }
+
         return bot.textWithLabel( label );
     }
 

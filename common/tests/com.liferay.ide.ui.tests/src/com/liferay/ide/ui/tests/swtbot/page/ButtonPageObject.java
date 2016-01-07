@@ -12,38 +12,48 @@
 
 package com.liferay.ide.ui.tests.swtbot.page;
 
-import com.liferay.ide.ui.tests.swtbot.condition.WidgetEnabledCondition;
-
 import org.eclipse.swtbot.swt.finder.SWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 
 /**
- * base class for a page object representing a shell with a button which closes the shell
+ * ** base class for a page object representing a shell with a title and a cancel button (Dialog or Wizard)
  *
  * @author Kay-Uwe Graw &lt;kugraw [at] web [dot] de&gt;
  * @param <T>
  *            - the bot class
  */
-public abstract class ClosingButtonPageObject<T extends SWTBot> extends ShellPageObject<T>
+public class ButtonPageObject<T extends SWTBot> extends AbstractWidgetPageObject<T>
 {
 
-    public ClosingButtonPageObject( T bot, String title )
+    public ButtonPageObject( T bot, String label )
     {
-        super( bot, title );
+        super( bot, label );
     }
 
-    protected void clickClosingButton( SWTBotButton button )
+    public void click()
     {
-        clickButton( button );
-
-        waitForPageToClose();
+        ( (SWTBotButton) getWidget() ).click();
     }
 
-    protected void clickButton( SWTBotButton button )
+    public ButtonPageObject( T bot, int index )
     {
-        bot.waitUntil( new WidgetEnabledCondition( button, true ) );
-
-        button.click();
+        super( bot, index );
     }
 
+    public ButtonPageObject( T bot, String label, int index )
+    {
+        super( bot, label, index );
+    }
+
+    @Override
+    protected AbstractSWTBot<?> getWidget()
+    {
+        if( label == null )
+        {
+            return bot.button( index );
+        }
+
+        return bot.button( label, index );
+    }
 }

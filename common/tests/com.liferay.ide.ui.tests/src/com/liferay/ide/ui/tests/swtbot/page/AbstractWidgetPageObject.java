@@ -15,10 +15,14 @@ package com.liferay.ide.ui.tests.swtbot.page;
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 
+/**
+ * @author Terry Jia
+ */
 public abstract class AbstractWidgetPageObject<T extends SWTBot> extends AbstractPageObject<SWTBot>
 {
 
     protected String label;
+    protected int index = 0;
 
     public AbstractWidgetPageObject( T bot )
     {
@@ -29,6 +33,19 @@ public abstract class AbstractWidgetPageObject<T extends SWTBot> extends Abstrac
     {
         super( bot );
         this.label = label;
+    }
+
+    public AbstractWidgetPageObject( T bot, int index )
+    {
+        super( bot );
+        this.index = index;
+    }
+
+    public AbstractWidgetPageObject( T bot, String label, int index )
+    {
+        super( bot );
+        this.index = index;
+        this.label=label;
     }
 
     public String getLabel()

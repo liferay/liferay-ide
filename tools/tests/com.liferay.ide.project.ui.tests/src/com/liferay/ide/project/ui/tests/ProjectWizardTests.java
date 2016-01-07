@@ -24,6 +24,13 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.liferay.ide.project.ui.tests.page.CreateLiferayPortletWizardPageObject;
+import com.liferay.ide.project.ui.tests.page.CreateProjectWizardPageObject;
+import com.liferay.ide.project.ui.tests.page.ProjectTreePageObject;
+import com.liferay.ide.project.ui.tests.page.ProjectWizard;
+import com.liferay.ide.project.ui.tests.page.SelectPortletFrameworkPageObject;
+import com.liferay.ide.project.ui.tests.page.SetSDKLocationPageObject;
+import com.liferay.ide.project.ui.tests.page.ThemeWizardPageObject;
 import com.liferay.ide.ui.tests.SWTBotBase;
 import com.liferay.ide.ui.tests.UITestsUtils;
 import com.liferay.ide.ui.tests.swtbot.page.EditorPageObject;
@@ -79,8 +86,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     @Test
     public void createExtProject()
     {
-        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 = new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot );
         page1.createSDKProject( "text", MENU_EXT );
 
         if( added )
@@ -90,7 +96,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         else
         {
             page1.next();
-            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<>( bot, "" );
+            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<>( bot );
             page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
             page2.finish();
         }
@@ -99,8 +105,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     @Test
     public void createHookProject()
     {
-        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 = new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot );
         page1.createSDKProject( "text", MENU_HOOK );
 
         if( added )
@@ -110,7 +115,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         else
         {
             page1.next();
-            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
+            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot );
             page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
             page2.finish();
         }
@@ -119,8 +124,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     @Test
     public void createServiceBuilderPortletProject()
     {
-        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 = new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot );
 
         page1.createSDKProject( "textsb", MENU_SERVICE_BUILDER_PORTLET, true );
 
@@ -136,7 +140,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         else
         {
             page1.next();
-            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
+            SetSDKLocationPageObject<SWTWorkbenchBot> page2 = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot );
             page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
             page2.finish();
 
@@ -150,8 +154,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     @Test
     public void createServiceBuilderPortletProjectWithoutSampleCode()
     {
-        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 = new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot );
 
         page1.createSDKProject( "textsbwithoutcode", MENU_SERVICE_BUILDER_PORTLET, false );
 
@@ -171,8 +174,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     @Test
     public void createLayoutProject()
     {
-        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 = new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot );
 
         page1.createSDKProject( "text", MENU_LAYOUT_TEMPLATE );
 
@@ -199,15 +201,15 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
 
         page1.createSDKProject( projectName, MENU_PORTLET, true, false );
 
-        assertTrue( page1.includeSimpleCodeCheckBox.isChecked() );
-        assertFalse( page1.launchNewPortletWizardCheckBox.isChecked() );
+        assertTrue( page1.IsIncludeSimpleCodeCheckBoxChecked() );
+        assertFalse( page1.IsLaunchNewPortletWizardCheckBoxChecked() );
 
         page1.next();
 
         SelectPortletFrameworkPageObject<SWTWorkbenchBot> page2 =
             new SelectPortletFrameworkPageObject<SWTWorkbenchBot>( bot );
 
-        assertTrue( page2.liferayMVCRadio.isSelected() );
+        assertTrue( page2.IsLiferayMVCRadioSelected() );
         assertTrue( page2.isVisibleProjectNameAndDisplayName() );
 
         if( !added )
@@ -234,7 +236,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         toolbarBot.menuClick( TOOLTIP_CREATE_LIFERAY_PROJECT, TOOLTIP_MENU_ITEM_NEW_LIFERAY_PROJECT );
 
         CreateProjectWizardPageObject<SWTWorkbenchBot> page4 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE3 );
+            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, INDEX_VALIDATION_MESSAGE3 );
 
         page4.createSDKProject( projectName );
         assertEquals( TEXT_PROJECT_ALREADY_EXISTS, page4.getValidationMessage() );
@@ -247,7 +249,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         toolbarBot.menuClick( TOOLTIP_CREATE_LIFERAY_PROJECT, TOOLTIP_MENU_ITEM_NEW_LIFERAY_PROJECT );
 
         CreateProjectWizardPageObject<SWTWorkbenchBot> page5 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE3 );
+            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, INDEX_VALIDATION_MESSAGE3 );
 
         page5.createSDKProject( projectName );
         assertContains( projectName + "-portlet\"" + TEXT_PROJECT_EXISTS_IN_LOCATION, page5.getValidationMessage() );
@@ -267,15 +269,15 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
 
         page1.createSDKProject( "NoSampleTest", MENU_PORTLET, false, true );
 
-        assertFalse( page1.includeSimpleCodeCheckBox.isChecked() );
-        assertTrue( page1.launchNewPortletWizardCheckBox.isChecked() );
+        assertFalse( page1.IsIncludeSimpleCodeCheckBoxChecked() );
+        assertTrue( page1.IsLaunchNewPortletWizardCheckBoxChecked() );
 
         page1.next();
 
         SelectPortletFrameworkPageObject<SWTWorkbenchBot> page2 =
             new SelectPortletFrameworkPageObject<SWTWorkbenchBot>( bot );
 
-        assertTrue( page2.liferayMVCRadio.isSelected() );
+        assertTrue( page2.IsLiferayMVCRadioSelected() );
         assertFalse( page2.isVisibleProjectNameAndDisplayName() );
 
         if( !added )
@@ -302,10 +304,9 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     @Test
     public void createThemeProject()
     {
-        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "" );
+        CreateProjectWizardPageObject<SWTWorkbenchBot> page1 = new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot );
         ThemeWizardPageObject<SWTWorkbenchBot> page2 =
-            new ThemeWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE3 );
+            new ThemeWizardPageObject<SWTWorkbenchBot>( bot, INDEX_VALIDATION_MESSAGE3 );
 
         String defaultMessage = "Select options for creating new theme project.";
         String warningMessage = " For advanced theme developers only.";
@@ -358,7 +359,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
     public void createWebProject()
     {
         CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE3 );
+            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, INDEX_VALIDATION_MESSAGE3 );
 
         page1.createSDKProject( "text", MENU_WEB );
 
@@ -372,7 +373,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         {
             page1.next();
             SetSDKLocationPageObject<SWTWorkbenchBot> page2 =
-                new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE2 );
+                new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, INDEX_VALIDATION_MESSAGE2 );
 
             page2.setSdkLocation( getLiferayPluginsSdkDir().toString() );
 
@@ -391,7 +392,7 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
         // String invalidNameStar = "*";
 
         CreateProjectWizardPageObject<SWTWorkbenchBot> page1 =
-            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, "", INDEX_VALIDATION_MESSAGE3 );
+            new CreateProjectWizardPageObject<SWTWorkbenchBot>( bot, INDEX_VALIDATION_MESSAGE3 );
 
         page1.createSDKProject( invalidNameDoubleDash );
 

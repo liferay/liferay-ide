@@ -49,7 +49,7 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
         swtBotCombo.setSelection( value );
 
-        bot.sleep( 1000 );
+        sleep();
     }
 
 }

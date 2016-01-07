@@ -13,28 +13,23 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.ui.tests;
+package com.liferay.ide.project.ui.tests.page;
+
+import com.liferay.ide.ui.tests.UIBase;
 
 /**
- * @author Terry Jia
  * @author Ashley Yuan
- * @author Ying Xu
  */
-public interface UIBase
+public interface CreateLiferayPortletWizard extends UIBase
 {
 
-    public final String BUTTON_BACK = "< Back";
-    public final String BUTTON_BROWSE = "Browse...";
-    public final String BUTTON_CANCEL = "Cancel";
-    public final String BUTTON_DELETE = "Delete";
-    public final String BUTTON_FINISH = "Finish";
-    public final String BUTTON_HELP = "Help";
-    public final String BUTTON_NEXT = "Next >";
-    public final String BUTTON_OK = "OK";
+    String LABEL_JAVA_PACKAGE = "Java Package:";
+    String LABEL_PORTLET_CLASS = "Portlet class:";
+    String LABEL_PORTLET_PLUGIN_PROJECT = "Portlet plugin project:";
+    String LABEL_SOURCE_FOLDER = "Source folder:";
+    String LABEL_SUPERCLASS = "Superclass:";
 
-    public final String CHECKBOX_INCLUDE_SAMPLE_CODE = "Include sample code";
-
-    public final String VIEW_PACKAGE_EXPLORER = "Package Explorer";
-    public final String VIEW_WELCOME = "Welcome";
+    String RADIO_CREATE_NEW_PORTLET = "Create new portlet";
+    String RADIO_USE_DEFAULT_PORTLET = "Use default portlet (MVCPortlet)";
 
 }
