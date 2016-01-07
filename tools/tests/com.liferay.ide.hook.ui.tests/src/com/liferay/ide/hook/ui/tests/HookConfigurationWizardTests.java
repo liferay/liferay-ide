@@ -59,17 +59,6 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
 
     public static boolean added = false;
 
-    String projectHookName = "hook-configuration-wizard";
-
-    HookTypesToCreatePageObject<SWTWorkbenchBot> newHookTypesPage =
-        new HookTypesToCreatePageObject<SWTWorkbenchBot>( bot, "New Liferay Hook Configuration" );
-
-    @After
-    public void waitForCreate()
-    {
-        sleep( 5000 );
-    }
-
     @AfterClass
     public static void cleanAll()
     {
@@ -101,11 +90,100 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         }
     }
 
+    HookTypesToCreatePageObject<SWTWorkbenchBot> newHookTypesPage =
+        new HookTypesToCreatePageObject<SWTWorkbenchBot>( bot, "New Liferay Hook Configuration" );
+
+    String projectHookName = "hook-configuration-wizard";
+
     private boolean addedProjects()
     {
         viewBot.show( VIEW_PACKAGE_EXPLORER );
 
         return treeBot.hasItems();
+    }
+
+    private SetSDKLocationPageObject<SWTWorkbenchBot> getSetSDKLoactionPage()
+    {
+        SetSDKLocationPageObject<SWTWorkbenchBot> page = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
+        page.setSdkLocation( getLiferayPluginsSdkDir().toString() );
+
+        return page;
+    }
+
+    @Test
+    public void hookConfigurationAllHookTypes()
+    {
+        CreateCustomJSPsPageObject<SWTWorkbenchBot> customJSPpage =
+            new CreateCustomJSPsPageObject<SWTWorkbenchBot>( bot, "", INDEX_CUSTOM_JSPS_VALIDATION_MESSAGE );
+
+        toolbarBot.menuClick( TOOLTIP_CREATE_LIFERAY_PROJECT, TOOLTIP_MENU_ITEM_NEW_LIFERAY_HOOK_CONFIGURATION );
+
+        newHookTypesPage.getCustomJSPs().select();
+        newHookTypesPage.getPortalProperties().select();
+        newHookTypesPage.getServices().select();
+        newHookTypesPage.getLanguageProperties().select();
+
+        newHookTypesPage.next();
+        sleep( 1000 );
+
+        // Custom JSPs
+        AddJSPFilePathPageObject<SWTWorkbenchBot> jspFile = new AddJSPFilePathPageObject<SWTWorkbenchBot>( bot, "" );
+
+        customJSPpage.getAdd().click();
+        jspFile.setJSPFilePathText( "CustomJsps.jsp" );
+        jspFile.confirm();
+        customJSPpage.next();
+        sleep( 500 );
+
+        // Portal Properties
+        PortalPropertiesPageObject<SWTWorkbenchBot> portalPropertiesPage =
+            new PortalPropertiesPageObject<SWTWorkbenchBot>( bot, "", INDEX_PORTAL_PROPERTIES_VALIDATION_MESSAGE );
+
+        AddEventActionPageObject<SWTWorkbenchBot> eventActionPage =
+            new AddEventActionPageObject<SWTWorkbenchBot>( bot );
+
+        portalPropertiesPage.getEventAdd().click();
+        eventActionPage.setEvent( "portalProperties" );
+        eventActionPage.setEventActionclass( "portalPropertiesClass" );
+        eventActionPage.confirm();
+
+        portalPropertiesPage.next();
+        sleep( 500 );
+
+        // Service
+        ServicesPageObject<SWTWorkbenchBot> servicesPage =
+            new ServicesPageObject<SWTWorkbenchBot>( bot, "", INDEX_SERVICES_MESSAGE );
+
+        AddServiceWrapperPageObject<SWTWorkbenchBot> serviceWrapperPage =
+            new AddServiceWrapperPageObject<SWTWorkbenchBot>( bot );
+
+        servicesPage.getAdd().click();
+        serviceWrapperPage.setServiceTypeText( "com.liferay.portal.service.AddressService" );
+        serviceWrapperPage.setImplClassText( "com.liferay.portal.service.AddressServiceWrapper" );
+        serviceWrapperPage.confirm();
+
+        servicesPage.next();
+        sleep( 500 );
+
+        // Language Properties
+        LanguagePropertiesPageObject<SWTWorkbenchBot> languagePropertiesPage =
+            new LanguagePropertiesPageObject<SWTWorkbenchBot>( bot, INDEX_LANGUAGE_PROPERTIES_VALIDATION_MESSAGE );
+
+        AddLanguagePropertyPageObject<SWTWorkbenchBot> languageProperty =
+            new AddLanguagePropertyPageObject<SWTWorkbenchBot>( bot );
+
+        languagePropertiesPage.getAdd().click();
+        languageProperty.setLanguagePropertyFileText( "languageTest.properties" );
+        languageProperty.confirm();
+        languagePropertiesPage.finish();
+        sleep( 1000 );
+
+        // check files
+        treeBot.doubleClick( "CustomJsps.jsp", projectHookName + "-hook", "docroot", "META-INF", "custom_jsps" );
+        treeBot.doubleClick( "portal.properties", projectHookName + "-hook", "docroot/WEB-INF/src" );
+        TextEditorPageObject textEditorPage = new TextEditorPageObject( bot, "portal.properties" );
+        assertContains( "portalProperties=portalPropertiesClass", textEditorPage.getText() );
+        treeBot.doubleClick( "languageTest.properties", projectHookName + "-hook", "docroot/WEB-INF/src", "content" );
     }
 
     @Test
@@ -172,6 +250,78 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
 
         treeBot.doubleClick( "body_bottom.jsp", projectHookName + "-hook", "docroot", "META-INF", "custom_jsps", "html",
             "common", "themes" );
+    }
+
+    @Test
+    public void hookConfigurationLanguageProperties()
+    {
+        String defaultMessage = "Create new Language properties files.";
+        String errorMessage = " Content folder not configured.";
+
+        toolbarBot.menuClick( TOOLTIP_CREATE_LIFERAY_PROJECT, TOOLTIP_MENU_ITEM_NEW_LIFERAY_HOOK_CONFIGURATION );
+
+        newHookTypesPage.getLanguageProperties().select();
+
+        newHookTypesPage.next();
+
+        sleep( 1000 );
+
+        LanguagePropertiesPageObject<SWTWorkbenchBot> languagePropertiesPage =
+            new LanguagePropertiesPageObject<SWTWorkbenchBot>(
+                bot, "New Liferay Hook Configuration", INDEX_LANGUAGE_PROPERTIES_VALIDATION_MESSAGE );
+
+        assertEquals( defaultMessage, languagePropertiesPage.getValidationMessage() );
+        assertEquals(
+            "/hook-configuration-wizard-hook/docroot/WEB-INF/src/content",
+            languagePropertiesPage.getContentFolderText() );
+
+        languagePropertiesPage.setContentFolderText( "" );
+        sleep( 500 );
+
+        assertEquals( errorMessage, languagePropertiesPage.getValidationMessage() );
+
+        languagePropertiesPage.getBrowse().click();
+        sleep( 500 );
+        ContainerSelectionPageObject<SWTWorkbenchBot> chooseFolder =
+            new ContainerSelectionPageObject<SWTWorkbenchBot>( bot );
+
+        chooseFolder.select( "hook-configuration-wizard-hook", "docroot", "WEB-INF", "src" );
+
+        chooseFolder.confirm();
+
+        sleep( 500 );
+
+        // Language property files
+        languagePropertiesPage.getAdd().click();
+
+        AddLanguagePropertyPageObject<SWTWorkbenchBot> languageProperty =
+            new AddLanguagePropertyPageObject<SWTWorkbenchBot>( bot );
+        languageProperty.setLanguagePropertyFileText( "test.properties" );
+        languageProperty.confirm();
+
+        languagePropertiesPage.getAdd().click();
+
+        languageProperty.setLanguagePropertyFileText( "test-hook" );
+        languageProperty.confirm();
+
+        languagePropertiesPage.setFocus();
+        languagePropertiesPage.clickLanguagePropertyFiles( 1 );
+
+        languagePropertiesPage.getEdit().click();
+
+        languageProperty.setLanguagePropertyFileText( "hook" );
+        languageProperty.confirm();
+
+        languagePropertiesPage.setFocus();
+        languagePropertiesPage.clickLanguagePropertyFiles( 1 );
+
+        languagePropertiesPage.getRemove().click();
+
+        languagePropertiesPage.finish();
+
+        // check language properties file exist in the project
+        treeBot.doubleClick( "test.properties", projectHookName + "-hook", "docroot/WEB-INF/src", "content" );
+        sleep( 1000 );
     }
 
     @Test
@@ -315,78 +465,6 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
     }
 
     @Test
-    public void hookConfigurationLanguageProperties()
-    {
-        String defaultMessage = "Create new Language properties files.";
-        String errorMessage = " Content folder not configured.";
-
-        toolbarBot.menuClick( TOOLTIP_CREATE_LIFERAY_PROJECT, TOOLTIP_MENU_ITEM_NEW_LIFERAY_HOOK_CONFIGURATION );
-
-        newHookTypesPage.getLanguageProperties().select();
-
-        newHookTypesPage.next();
-
-        sleep( 1000 );
-
-        LanguagePropertiesPageObject<SWTWorkbenchBot> languagePropertiesPage =
-            new LanguagePropertiesPageObject<SWTWorkbenchBot>(
-                bot, "New Liferay Hook Configuration", INDEX_LANGUAGE_PROPERTIES_VALIDATION_MESSAGE );
-
-        assertEquals( defaultMessage, languagePropertiesPage.getValidationMessage() );
-        assertEquals(
-            "/hook-configuration-wizard-hook/docroot/WEB-INF/src/content",
-            languagePropertiesPage.getContentFolderText() );
-
-        languagePropertiesPage.setContentFolderText( "" );
-        sleep( 500 );
-
-        assertEquals( errorMessage, languagePropertiesPage.getValidationMessage() );
-
-        languagePropertiesPage.getBrowse().click();
-        sleep( 500 );
-        ContainerSelectionPageObject<SWTWorkbenchBot> chooseFolder =
-            new ContainerSelectionPageObject<SWTWorkbenchBot>( bot );
-
-        chooseFolder.select( "hook-configuration-wizard-hook", "docroot", "WEB-INF", "src" );
-
-        chooseFolder.confirm();
-
-        sleep( 500 );
-
-        // Language property files
-        languagePropertiesPage.getAdd().click();
-
-        AddLanguagePropertyPageObject<SWTWorkbenchBot> languageProperty =
-            new AddLanguagePropertyPageObject<SWTWorkbenchBot>( bot );
-        languageProperty.setLanguagePropertyFileText( "test.properties" );
-        languageProperty.confirm();
-
-        languagePropertiesPage.getAdd().click();
-
-        languageProperty.setLanguagePropertyFileText( "test-hook" );
-        languageProperty.confirm();
-
-        languagePropertiesPage.setFocus();
-        languagePropertiesPage.clickLanguagePropertyFiles( 1 );
-
-        languagePropertiesPage.getEdit().click();
-
-        languageProperty.setLanguagePropertyFileText( "hook" );
-        languageProperty.confirm();
-
-        languagePropertiesPage.setFocus();
-        languagePropertiesPage.clickLanguagePropertyFiles( 1 );
-
-        languagePropertiesPage.getRemove().click();
-
-        languagePropertiesPage.finish();
-
-        // check language properties file exist in the project
-        treeBot.doubleClick( "test.properties", projectHookName + "-hook", "docroot/WEB-INF/src", "content" );
-        sleep( 1000 );
-    }
-
-    @Test
     public void hookConfigurationServices()
     {
         String defaultMessage = "Specify which Liferay services to extend.";
@@ -469,90 +547,6 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         assertContains( "AccountServiceWrapper", textEditorPagejava.getText() );
     }
 
-    @Test
-    public void hookConfigurationAllHookTypes()
-    {
-        CreateCustomJSPsPageObject<SWTWorkbenchBot> customJSPpage =
-            new CreateCustomJSPsPageObject<SWTWorkbenchBot>( bot, "", INDEX_CUSTOM_JSPS_VALIDATION_MESSAGE );
-
-        toolbarBot.menuClick( TOOLTIP_CREATE_LIFERAY_PROJECT, TOOLTIP_MENU_ITEM_NEW_LIFERAY_HOOK_CONFIGURATION );
-
-        newHookTypesPage.getCustomJSPs().select();
-        newHookTypesPage.getPortalProperties().select();
-        newHookTypesPage.getServices().select();
-        newHookTypesPage.getLanguageProperties().select();
-
-        newHookTypesPage.next();
-        sleep( 1000 );
-
-        // Custom JSPs
-        AddJSPFilePathPageObject<SWTWorkbenchBot> jspFile = new AddJSPFilePathPageObject<SWTWorkbenchBot>( bot, "" );
-
-        customJSPpage.getAdd().click();
-        jspFile.setJSPFilePathText( "CustomJsps.jsp" );
-        jspFile.confirm();
-        customJSPpage.next();
-        sleep( 500 );
-
-        // Portal Properties
-        PortalPropertiesPageObject<SWTWorkbenchBot> portalPropertiesPage =
-            new PortalPropertiesPageObject<SWTWorkbenchBot>( bot, "", INDEX_PORTAL_PROPERTIES_VALIDATION_MESSAGE );
-
-        AddEventActionPageObject<SWTWorkbenchBot> eventActionPage =
-            new AddEventActionPageObject<SWTWorkbenchBot>( bot );
-
-        portalPropertiesPage.getEventAdd().click();
-        eventActionPage.setEvent( "portalProperties" );
-        eventActionPage.setEventActionclass( "portalPropertiesClass" );
-        eventActionPage.confirm();
-
-        portalPropertiesPage.next();
-        sleep( 500 );
-
-        // Service
-        ServicesPageObject<SWTWorkbenchBot> servicesPage =
-            new ServicesPageObject<SWTWorkbenchBot>( bot, "", INDEX_SERVICES_MESSAGE );
-
-        AddServiceWrapperPageObject<SWTWorkbenchBot> serviceWrapperPage =
-            new AddServiceWrapperPageObject<SWTWorkbenchBot>( bot );
-
-        servicesPage.getAdd().click();
-        serviceWrapperPage.setServiceTypeText( "com.liferay.portal.service.AddressService" );
-        serviceWrapperPage.setImplClassText( "com.liferay.portal.service.AddressServiceWrapper" );
-        serviceWrapperPage.confirm();
-
-        servicesPage.next();
-        sleep( 500 );
-
-        // Language Properties
-        LanguagePropertiesPageObject<SWTWorkbenchBot> languagePropertiesPage =
-            new LanguagePropertiesPageObject<SWTWorkbenchBot>( bot, INDEX_LANGUAGE_PROPERTIES_VALIDATION_MESSAGE );
-
-        AddLanguagePropertyPageObject<SWTWorkbenchBot> languageProperty =
-            new AddLanguagePropertyPageObject<SWTWorkbenchBot>( bot );
-
-        languagePropertiesPage.getAdd().click();
-        languageProperty.setLanguagePropertyFileText( "languageTest.properties" );
-        languageProperty.confirm();
-        languagePropertiesPage.finish();
-        sleep( 1000 );
-
-        // check files
-        treeBot.doubleClick( "CustomJsps.jsp", projectHookName + "-hook", "docroot", "META-INF", "custom_jsps" );
-        treeBot.doubleClick( "portal.properties", projectHookName + "-hook", "docroot/WEB-INF/src" );
-        TextEditorPageObject textEditorPage = new TextEditorPageObject( bot, "portal.properties" );
-        assertContains( "portalProperties=portalPropertiesClass", textEditorPage.getText() );
-        treeBot.doubleClick( "languageTest.properties", projectHookName + "-hook", "docroot/WEB-INF/src", "content" );
-    }
-
-    private SetSDKLocationPageObject<SWTWorkbenchBot> getSetSDKLoactionPage()
-    {
-        SetSDKLocationPageObject<SWTWorkbenchBot> page = new SetSDKLocationPageObject<SWTWorkbenchBot>( bot, "" );
-        page.setSdkLocation( getLiferayPluginsSdkDir().toString() );
-
-        return page;
-    }
-
     @Before
     public void openWizardCreateProject()
     {
@@ -586,6 +580,12 @@ public class HookConfigurationWizardTests extends SWTBotBase implements HookConf
         }
 
         sleep( 10000 );
+    }
+
+    @After
+    public void waitForCreate()
+    {
+        sleep( 5000 );
     }
 
 }
