@@ -13,7 +13,11 @@ Require-Bundle: com.liferay.ide.core.tests,
  org.junit,
  org.eclipse.wst.common.frameworks,
  org.eclipse.wst.common.frameworks.ui,
- org.eclipse.jface
+ org.eclipse.jface,
+ com.liferay.ide.project.ui.tests;bundle-version="3.0.0",
+ org.eclipse.swtbot.swt.finder,
+ com.liferay.ide.ui.tests,
+ org.eclipse.swtbot.go;bundle-version="2.3.0"
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.hook.ui.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -59,6 +59,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
 import org.eclipse.wst.common.project.facet.core.IProjectFacet;
 import org.eclipse.wst.server.core.IRuntime;
@@ -66,6 +67,7 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 import org.junit.Before;
+import org.junit.BeforeClass;
 
 /**
  * @author Gregory Amerson
@@ -76,7 +78,16 @@ import org.junit.Before;
 @SuppressWarnings( "restriction" )
 public class ProjectCoreBase extends ServerCoreBase
 {
+	@BeforeClass
+	public static void OpenEclipse() throws Exception {
 
+		SWTWorkbenchBot bot=new SWTWorkbenchBot();
+		bot.viewByTitle("Welcome").close();
+		bot.toolbarButtonWithTooltip("Open Perspective").click();
+		bot.table().select("Liferay");
+		bot.button("OK").click();
+
+	}
     private static final String BUNDLE_ID = "com.liferay.ide.project.core.tests";
 
     public static void deleteAllWorkspaceProjects() throws Exception

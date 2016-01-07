@@ -15,5 +15,6 @@ Require-Bundle: org.junit,
  com.liferay.blade.api,
  com.liferay.ide.ui.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: com.liferay.ide.project.ui.tests
+Export-Package: com.liferay.ide.project.ui.tests,
+ com.liferay.ide.project.ui.tests.page
 Bundle-ActivationPolicy: lazy

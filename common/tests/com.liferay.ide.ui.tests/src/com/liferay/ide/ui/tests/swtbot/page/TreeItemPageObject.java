@@ -151,8 +151,22 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
     }
 
     @Override
-    public void select( String... items )
+    public void selectMulty( String... items )
     {
         getWidget().select( items );
+    }
+
+    @Override
+    public void selectTreeItem( String... items )
+    {
+        SWTBotTreeItem treeItem = getWidget();
+
+        for( int i = 0; i < nodeText.length; i++ )
+        {
+            treeItem.expand();
+
+            treeItem = treeItem.getNode( nodeText[i] );
+        }
+        treeItem.select();
     }
 }
