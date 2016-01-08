@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
@@ -95,18 +96,18 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             {
                 if( value == Boolean.TRUE )
                 {
-                    new MarkDoneAction().run( (TaskProblem) element, _problemsViewer );
+                    new MarkDoneAction().run( (Problem) element, _problemsViewer );
                 }
                 else
                 {
-                    new MarkUndoneAction().run( (TaskProblem) element, _problemsViewer );
+                    new MarkUndoneAction().run( (Problem) element, _problemsViewer );
                 }
             }
 
             @Override
             protected Object getValue( Object element )
             {
-                return ( (TaskProblem) element ).isResolved();
+                return ( (Problem) element ).getStatus() == Problem.STATUS_RESOLVED;
             }
 
             @Override
@@ -127,9 +128,9 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             @Override
             public Image getImage( Object element )
             {
-                TaskProblem p = (TaskProblem) element;
+                Problem p = (Problem) element;
 
-                if( p.isResolved() )
+                if( p.getStatus() == Problem.STATUS_RESOLVED )
                 {
                     return IMAGE_CHECKED;
                 }
@@ -151,7 +152,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             @Override
             public String getText( Object element )
             {
-                TaskProblem p = (TaskProblem) element;
+                Problem p = (Problem) element;
 
                 return p.lineNumber > -1 ? ( p.lineNumber + "" ) : "";
             }
@@ -163,7 +164,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             @Override
             public String getText( Object element )
             {
-                TaskProblem p = (TaskProblem) element;
+                Problem p = (Problem) element;
 
                 return p.title;
             }
@@ -222,7 +223,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         contributeToActionBars();
 
         _problemsViewer.addDoubleClickListener( this );
-        CommonActionProvider ap = getCommonActionProvider( new StructuredSelection( new TaskProblem() ) );
+        CommonActionProvider ap = getCommonActionProvider( new StructuredSelection( new Problem() ) );
 
         if( ap instanceof MigrationActionProvider )
         {
@@ -287,7 +288,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             public void selectionChanged( SelectionChangedEvent event )
             {
-                List<TaskProblem> problems = MigrationUtil.getTaskProblemsFromTreeNode( event.getSelection(), getCommonViewer() );
+                List<Problem> problems = MigrationUtil.getProblemsFromTreeNode( event.getSelection() );
 
                 if( problems != null && problems.size() > 0 )
                 {
@@ -409,11 +410,11 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     @Override
     public void doubleClick( DoubleClickEvent event )
     {
-        TaskProblem taskProblem = MigrationUtil.getTaskProblemFromSelection( event.getSelection() );
+        Problem problem = MigrationUtil.getProblemFromSelection( event.getSelection() );
 
-        if( taskProblem != null )
+        if( problem != null )
         {
-            MigrationUtil.openEditor( taskProblem );
+            MigrationUtil.openEditor( problem );
         }
     }
 
@@ -425,30 +426,30 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         instance.fillContextMenu( manager );
     }
 
-    private String generateFormText( TaskProblem taskProblem )
+    private String generateFormText( Problem problem )
     {
         StringBuilder sb = new StringBuilder();
 
         sb.append( "<form><p>" );
 
-        sb.append( "<b>Problem:</b> " + taskProblem.title + "<br/><br/>" );
+        sb.append( "<b>Problem:</b> " + problem.title + "<br/><br/>" );
 
         sb.append( "<b>Description:</b><br/>" );
-        sb.append( "\t" + taskProblem.summary + "<br/><br/>" );
+        sb.append( "\t" + problem.summary + "<br/><br/>" );
 
-        if( taskProblem.getAutoCorrectContext() != null && taskProblem.autoCorrectContext.length() > 0 )
+        if( problem.getAutoCorrectContext() != null && problem.autoCorrectContext.length() > 0 )
         {
             sb.append( "<a href='autoCorrect'>Correct this problem automatically</a><br/><br/>" );
         }
 
-        if( taskProblem.html != null && taskProblem.html.length() > 0 )
+        if( problem.html != null && problem.html.length() > 0 )
         {
             sb.append( "<a href='html'>See documentation for how to correct this problem.</a><br/><br/>" );
         }
 
-        if( taskProblem.ticket != null && taskProblem.ticket.length() > 0 )
+        if( problem.ticket != null && problem.ticket.length() > 0 )
         {
-            sb.append( "<b>Tickets:</b> " + getLinkTags( taskProblem.ticket ) + "<br/><br/>" );
+            sb.append( "<b>Tickets:</b> " + getLinkTags( problem.ticket ) + "<br/><br/>" );
         }
 
         sb.append( "</p></form>" );
@@ -548,9 +549,9 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
     {
         final ISelection selection = event.getSelection();
 
-        final TaskProblem taskProblem = MigrationUtil.getTaskProblemFromSelection( selection );
+        final Problem problem = MigrationUtil.getProblemFromSelection( selection );
 
-        if( taskProblem != null )
+        if( problem != null )
         {
         /*if( Platform.getOS().equals( Platform.OS_LINUX ) )
             {
@@ -558,13 +559,13 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
             }
             else
             {*/
-                if( CoreUtil.isNullOrEmpty( taskProblem.html ) )
+                if( CoreUtil.isNullOrEmpty( problem.html ) )
                 {
-                    _browser.setText( generateFormText( taskProblem ) );
+                    _browser.setText( generateFormText( problem ) );
                 }
                 else
                 {
-                    _browser.setText( taskProblem.html );
+                    _browser.setText( problem.html );
                 }
             //}
         }

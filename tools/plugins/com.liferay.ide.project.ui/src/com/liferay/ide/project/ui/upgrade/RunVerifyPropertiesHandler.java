@@ -17,6 +17,8 @@ package com.liferay.ide.project.ui.upgrade;
 
 import com.liferay.blade.api.Command;
 import com.liferay.blade.api.Problem;
+import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.FileProblemsUtil;
 import com.liferay.ide.project.core.upgrade.Liferay7UpgradeAssistantSettings;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 
@@ -60,7 +62,10 @@ public class RunVerifyPropertiesHandler extends AbstractOSGiCommandHandler
                 @SuppressWarnings( "unchecked" )
                 final List<Problem> problems = (List<Problem>) o;
 
-                settings.getPortalSettings().setProblems( problems.toArray( new Problem[0] ) );
+                List<FileProblems> fileProblemsList =
+                    FileProblemsUtil.getFileProblemsArray( problems.toArray( new Problem[0] ) );
+
+                settings.getPortalSettings().setProblems( fileProblemsList.toArray( new FileProblems[0] ) );
 
                 UpgradeAssistantSettingsUtil.setObjectToStore( Liferay7UpgradeAssistantSettings.class, settings );
             }

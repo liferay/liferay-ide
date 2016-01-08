@@ -15,7 +15,6 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.ViewerSorter;
 
 /**
@@ -23,17 +22,11 @@ import org.eclipse.jface.viewers.ViewerSorter;
  */
 public class MigrationViewSorter extends ViewerSorter
 {
+
     @Override
     public int category( Object element )
     {
-        if( element instanceof MPNode )
-        {
-            return -1;
-        }
-        else
-        {
-            return super.category( element );
-        }
+        return super.category( element );
     }
 
 }

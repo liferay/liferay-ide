@@ -79,7 +79,7 @@ public class UpgradeAssistantSettingsUtilTests
     protected Liferay7UpgradeAssistantSettings createLiferay7UpgradeAssistantSettingsObject()
     {
         PortalSettings portalSettings =
-            new PortalSettings( "Previous Location 6.2", "New Portal Name 7.0", "New Portal Location 7.0" );
+            new PortalSettings( "Previous Location 6.2", "New Portal Name 7.0", "New Portal Location 7.0", "Portal Settings" );
 
         Liferay7UpgradeAssistantSettings settings = new Liferay7UpgradeAssistantSettings();
 

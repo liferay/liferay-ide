@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Problem;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -23,8 +25,9 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class IgnoreAction extends TaskProblemAction
+public class IgnoreAction extends ProblemAction
 {
 
     public IgnoreAction()
@@ -38,7 +41,7 @@ public class IgnoreAction extends TaskProblemAction
     }
 
     @Override
-    protected IStatus runWithMarker( TaskProblem taskProblem, IMarker marker )
+    protected IStatus runWithMarker( Problem problem, IMarker marker )
     {
         IStatus retval = Status.OK_STATUS;
 
@@ -48,6 +51,8 @@ public class IgnoreAction extends TaskProblemAction
             {
                 marker.delete();
             }
+
+            problem.setStatus( Problem.STATUS_IGNORE );
         }
         catch( CoreException e )
         {

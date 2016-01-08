@@ -15,8 +15,9 @@
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.MigrationConstants;
-
+import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.upgrade.FileProblems;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,12 +33,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 
@@ -48,34 +47,12 @@ import org.eclipse.ui.texteditor.ITextEditor;
 public class MigrationUtil
 {
 
-    private final static String CONTENT_PROVIDER_ID = "com.liferay.ide.project.ui.migration.content";
-
-    public static List<TaskProblem> getAllTaskProblems( CommonViewer commonViewer )
-    {
-        final List<TaskProblem> problems = new ArrayList<>();
-
-        final ITreeContentProvider contentProvider =
-            commonViewer.getNavigatorContentService().getContentExtensionById( CONTENT_PROVIDER_ID ).getContentProvider();
-
-        if( contentProvider != null && contentProvider instanceof MigrationContentProvider )
-        {
-            final MigrationContentProvider mcp = (MigrationContentProvider) contentProvider;
-
-            for( IResource resource : mcp._resources )
-            {
-                problems.addAll( getTaskProblemsFromResource( resource ) );
-            }
-        }
-
-        return problems;
-    }
-
-    public static IResource getIResourceFromTaskProblem( TaskProblem taskProblem )
+    public static IResource getIResourceFromProblem( Problem problem )
     {
         IResource retval = null;
 
         final IFile[] files =
-            ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( taskProblem.file.toURI() );
+            ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( problem.file.toURI() );
 
         for( IFile file : files )
         {
@@ -117,9 +94,9 @@ public class MigrationUtil
         return retval;
     }
 
-    public static List<TaskProblem> getResolvedTaskProblemsFromResource( IResource resource )
+    public static List<Problem> getResolvedTaskProblemsFromResource( IResource resource )
     {
-        final List<TaskProblem> problems = new ArrayList<>();
+        final List<Problem> problems = new ArrayList<>();
 
         try
         {
@@ -128,9 +105,9 @@ public class MigrationUtil
 
             for( IMarker marker : markers )
             {
-                TaskProblem taskProblem = markerToTaskProblem( marker );
+                Problem taskProblem = markerToTaskProblem( marker );
 
-                if( taskProblem != null && taskProblem.isResolved() )
+                if( taskProblem != null && taskProblem.getStatus() == Problem.STATUS_RESOLVED )
                 {
                     problems.add( taskProblem );
                 }
@@ -143,7 +120,7 @@ public class MigrationUtil
         return problems;
     }
 
-    public static TaskProblem getTaskProblemFromSelection( ISelection selection )
+    public static Problem getProblemFromSelection( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
         {
@@ -151,18 +128,18 @@ public class MigrationUtil
 
             Object element = ss.getFirstElement();
 
-            if( element instanceof TaskProblem )
+            if( element instanceof Problem )
             {
-                return (TaskProblem) element;
+                return (Problem) element;
             }
         }
 
         return null;
     }
 
-    public static List<TaskProblem> getTaskProblemsFromSelection( ISelection selection )
+    public static List<Problem> getTaskProblemsFromSelection( ISelection selection )
     {
-        final List<TaskProblem> problems = new ArrayList<>();
+        final List<Problem> problems = new ArrayList<>();
 
         if( selection instanceof IStructuredSelection )
         {
@@ -174,9 +151,9 @@ public class MigrationUtil
             {
                 Object element = elements.next();
 
-                if( element instanceof TaskProblem )
+                if( element instanceof Problem )
                 {
-                    problems.add( (TaskProblem) element );
+                    problems.add( (Problem) element );
                 }
             }
         }
@@ -184,9 +161,33 @@ public class MigrationUtil
         return problems;
     }
 
-    public static List<TaskProblem> getTaskProblemsFromResource( IResource resource )
+    public static List<Problem> getProblemsFromSelection( ISelection selection )
     {
-        final List<TaskProblem> problems = new ArrayList<>();
+        final List<Problem> problems = new ArrayList<>();
+
+        if( selection instanceof IStructuredSelection )
+        {
+            final IStructuredSelection ss = (IStructuredSelection) selection;
+
+            Iterator<?> elements = ss.iterator();
+
+            while( elements.hasNext() )
+            {
+                Object element = elements.next();
+
+                if( element instanceof Problem )
+                {
+                    problems.add( (Problem) element );
+                }
+            }
+        }
+
+        return problems;
+    }
+
+    public static List<Problem> getProblemsFromResource( IResource resource )
+    {
+        final List<Problem> problems = new ArrayList<>();
 
         try
         {
@@ -195,7 +196,7 @@ public class MigrationUtil
 
             for( IMarker marker : markers )
             {
-                TaskProblem taskProblem = markerToTaskProblem( marker );
+                Problem taskProblem = markerToTaskProblem( marker );
 
                 if( taskProblem != null )
                 {
@@ -210,46 +211,24 @@ public class MigrationUtil
         return problems;
     }
 
-    public static List<TaskProblem> getTaskProblemsFromTreeNode( ISelection selection, CommonViewer commonViewer )
+    public static List<Problem> getProblemsFromTreeNode( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
         {
             final IStructuredSelection ss = (IStructuredSelection) selection;
 
             final Object element = ss.getFirstElement();
-
-            IResource resource = null;
-
-            if( element instanceof IResource )
+            if( element instanceof FileProblems )
             {
-                resource = (IResource) element;
-            }
-            else if( element instanceof MPNode )
-            {
-                final MPNode node = (MPNode) element;
-
-                final IResource member = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
-
-                if( member != null && member.exists() )
-                {
-                    resource = member;
-                }
-            }
-
-            if( resource != null )
-            {
-                return getTaskProblemsFromResource( resource );
-            }
-            else if( element instanceof MPTree )
-            {
-                return getAllTaskProblems( commonViewer );
+                FileProblems fp = (FileProblems) element;
+                return fp.getProblems();
             }
         }
 
         return null;
     }
 
-    public static TaskProblem markerToTaskProblem( IMarker marker )
+    public static Problem markerToTaskProblem( IMarker marker )
     {
         final String title = marker.getAttribute( IMarker.MESSAGE, "" );
         final String summary = marker.getAttribute( "migrationProblem.summary", "" );
@@ -260,21 +239,21 @@ public class MigrationUtil
         final int endOffset = marker.getAttribute( IMarker.CHAR_END, 0 );
         final String html = marker.getAttribute( "migrationProblem.html", "" );
         final String autoCorrectContext = marker.getAttribute( "migrationProblem.autoCorrectContext", "" );
-        final boolean resolved = marker.getAttribute( "migrationProblem.resolved", false );
+        final int status = marker.getAttribute( "migrationProblem.status", 0 );
         final long markerId = marker.getId();
 
         final File file = new File( marker.getResource().getLocationURI() );
 
-        return new TaskProblem(
+        return new Problem(
             title, summary, type, ticket, file, lineNumber, startOffset, endOffset, html, autoCorrectContext,
-            resolved, markerId );
+            status, markerId );
     }
 
-    public static void openEditor( TaskProblem taskProblem )
+    public static void openEditor( Problem Problem )
     {
         try
         {
-            final IResource resource = getIResourceFromTaskProblem( taskProblem );
+            final IResource resource = getIResourceFromProblem( Problem );
 
             if( resource instanceof IFile )
             {
@@ -287,8 +266,8 @@ public class MigrationUtil
                 {
                     final ITextEditor textEditor = (ITextEditor) editor;
 
-                    textEditor.selectAndReveal( taskProblem.startOffset, taskProblem.endOffset -
-                        taskProblem.startOffset );
+                    textEditor.selectAndReveal( Problem.startOffset, Problem.endOffset -
+                        Problem.startOffset );
                 }
             }
         }
@@ -297,20 +276,20 @@ public class MigrationUtil
         }
     }
 
-    public static void taskProblemToMarker( TaskProblem taskProblem, IMarker marker ) throws CoreException
+    public static void problemToMarker( Problem problem, IMarker marker ) throws CoreException
     {
-        marker.setAttribute( IMarker.MESSAGE, taskProblem.title );
-        marker.setAttribute( "migrationProblem.summary", taskProblem.summary );
-        marker.setAttribute( "migrationProblem.type", taskProblem.type );
-        marker.setAttribute( "migrationProblem.ticket", taskProblem.ticket );
-        marker.setAttribute( IMarker.LINE_NUMBER, taskProblem.lineNumber );
-        marker.setAttribute( IMarker.CHAR_START, taskProblem.startOffset );
-        marker.setAttribute( IMarker.CHAR_END, taskProblem.endOffset );
-        marker.setAttribute( "migrationProblem.resolved", taskProblem.isResolved() );
-        marker.setAttribute( "migrationProblem.html", taskProblem.html );
-        marker.setAttribute( "migrationProblem.autoCorrectContext", taskProblem.getAutoCorrectContext() );
+        marker.setAttribute( IMarker.MESSAGE, problem.title );
+        marker.setAttribute( "migrationProblem.summary", problem.summary );
+        marker.setAttribute( "migrationProblem.type", problem.type );
+        marker.setAttribute( "migrationProblem.ticket", problem.ticket );
+        marker.setAttribute( IMarker.LINE_NUMBER, problem.lineNumber );
+        marker.setAttribute( IMarker.CHAR_START, problem.startOffset );
+        marker.setAttribute( IMarker.CHAR_END, problem.endOffset );
+        marker.setAttribute( "migrationProblem.status", problem.status );
+        marker.setAttribute( "migrationProblem.html", problem.html );
+        marker.setAttribute( "migrationProblem.autoCorrectContext", problem.getAutoCorrectContext() );
 
-        marker.setAttribute( IMarker.LOCATION, taskProblem.file.getName() );
+        marker.setAttribute( IMarker.LOCATION, problem.file.getName() );
         marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
     }
 
