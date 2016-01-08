@@ -34,7 +34,7 @@ import org.eclipse.jface.viewers.Viewer;
 public class MigrationContentProvider implements ITreeContentProvider
 {
 
-    List _problems;
+    List<Object> _problems;
 
     @Override
     public void dispose()
@@ -50,7 +50,7 @@ public class MigrationContentProvider implements ITreeContentProvider
         }
         else if( parentElement instanceof List )
         {
-            return ( (List) parentElement ).toArray();
+            return ( (List<?>) parentElement ).toArray();
         }
 
         return null;
@@ -88,7 +88,7 @@ public class MigrationContentProvider implements ITreeContentProvider
     {
         if( newInput instanceof IWorkspaceRoot )
         {
-            _problems = new ArrayList();
+            _problems = new ArrayList<>();
 
             try
             {
