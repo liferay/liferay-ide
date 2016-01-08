@@ -94,7 +94,7 @@ public class MigrationUtil
         return retval;
     }
 
-    public static List<Problem> getResolvedTaskProblemsFromResource( IResource resource )
+    public static List<Problem> getResolvedProblemsFromResource( IResource resource )
     {
         final List<Problem> problems = new ArrayList<>();
 
@@ -105,11 +105,11 @@ public class MigrationUtil
 
             for( IMarker marker : markers )
             {
-                Problem taskProblem = markerToTaskProblem( marker );
+                Problem problem = markerToProblem( marker );
 
-                if( taskProblem != null && taskProblem.getStatus() == Problem.STATUS_RESOLVED )
+                if( problem != null && problem.getStatus() == Problem.STATUS_RESOLVED )
                 {
-                    problems.add( taskProblem );
+                    problems.add( problem );
                 }
             }
         }
@@ -135,30 +135,6 @@ public class MigrationUtil
         }
 
         return null;
-    }
-
-    public static List<Problem> getTaskProblemsFromSelection( ISelection selection )
-    {
-        final List<Problem> problems = new ArrayList<>();
-
-        if( selection instanceof IStructuredSelection )
-        {
-            final IStructuredSelection ss = (IStructuredSelection) selection;
-
-            Iterator<?> elements = ss.iterator();
-
-            while( elements.hasNext() )
-            {
-                Object element = elements.next();
-
-                if( element instanceof Problem )
-                {
-                    problems.add( (Problem) element );
-                }
-            }
-        }
-
-        return problems;
     }
 
     public static List<Problem> getProblemsFromSelection( ISelection selection )
@@ -196,11 +172,11 @@ public class MigrationUtil
 
             for( IMarker marker : markers )
             {
-                Problem taskProblem = markerToTaskProblem( marker );
+                Problem problem = markerToProblem( marker );
 
-                if( taskProblem != null )
+                if( problem != null )
                 {
-                    problems.add( taskProblem );
+                    problems.add( problem );
                 }
             }
         }
@@ -228,7 +204,7 @@ public class MigrationUtil
         return null;
     }
 
-    public static Problem markerToTaskProblem( IMarker marker )
+    public static Problem markerToProblem( IMarker marker )
     {
         final String title = marker.getAttribute( IMarker.MESSAGE, "" );
         final String summary = marker.getAttribute( "migrationProblem.summary", "" );

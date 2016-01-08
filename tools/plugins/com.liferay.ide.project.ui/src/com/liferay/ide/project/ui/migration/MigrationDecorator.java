@@ -45,7 +45,7 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
             final IResource resource = (IResource) element;
 
             problems.addAll( MigrationUtil.getProblemsFromResource( resource ) );
-            resolvedProblems.addAll( MigrationUtil.getResolvedTaskProblemsFromResource( resource ) );
+            resolvedProblems.addAll( MigrationUtil.getResolvedProblemsFromResource( resource ) );
         }
 
         if( problems != null && problems.size() > 0 )
