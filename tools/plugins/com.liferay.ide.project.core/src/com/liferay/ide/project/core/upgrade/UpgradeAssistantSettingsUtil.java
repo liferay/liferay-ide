@@ -32,21 +32,7 @@ public class UpgradeAssistantSettingsUtil
 {
     private static final IPath storageLocation = ProjectCore.getDefault().getStateLocation();
 
-    public static <T> T getObjectFromStore( Class<T> clazz ) throws IOException
-    {
-        final ObjectMapper mapper = new ObjectMapper();
-
-        try
-        {
-            return mapper.readValue( storageLocation.append( clazz.getSimpleName() + ".json" ).toFile(), clazz );
-        }
-        catch( FileNotFoundException e )
-        {
-        }
-
-        return null;
-    }
-
+    @SuppressWarnings( { "rawtypes", "unchecked" } )
     public static Object[] getAllObjectFromStore( Class clazz ) throws IOException
     {
         final ObjectMapper mapper = new ObjectMapper();
@@ -84,13 +70,19 @@ public class UpgradeAssistantSettingsUtil
         return null;
     }
 
-    public static <T> void setObjectToStore( Class<T> clazz, T object ) throws IOException
+    public static <T> T getObjectFromStore( Class<T> clazz ) throws IOException
     {
         final ObjectMapper mapper = new ObjectMapper();
 
-        final File storageFile = storageLocation.append( clazz.getSimpleName() + ".json" ).toFile();
+        try
+        {
+            return mapper.readValue( storageLocation.append( clazz.getSimpleName() + ".json" ).toFile(), clazz );
+        }
+        catch( FileNotFoundException e )
+        {
+        }
 
-        mapper.writeValue( storageFile, object );
+        return null;
     }
 
     public static <T> void setObjectToStore( Class<T> clazz, String suffix, T object ) throws IOException
@@ -98,6 +90,15 @@ public class UpgradeAssistantSettingsUtil
         final ObjectMapper mapper = new ObjectMapper();
 
         final File storageFile = storageLocation.append( clazz.getSimpleName() + "-" + suffix + ".json" ).toFile();
+
+        mapper.writeValue( storageFile, object );
+    }
+
+    public static <T> void setObjectToStore( Class<T> clazz, T object ) throws IOException
+    {
+        final ObjectMapper mapper = new ObjectMapper();
+
+        final File storageFile = storageLocation.append( clazz.getSimpleName() + ".json" ).toFile();
 
         mapper.writeValue( storageFile, object );
     }

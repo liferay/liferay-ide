@@ -22,22 +22,17 @@ public class MigrationProblems implements UpgradeProblems
 {
 
     private FileProblems[] _problems;
-    private String _type;
     private String _suffix;
+    private String _type;
 
     public FileProblems[] getProblems()
     {
         return _problems;
     }
 
-    public void setProblems( FileProblems[] problems )
+    public String getSuffix()
     {
-        _problems = problems;
-    }
-
-    public void setType( String type )
-    {
-        _type = type;
+        return _suffix;
     }
 
     @Override
@@ -46,14 +41,19 @@ public class MigrationProblems implements UpgradeProblems
         return _type;
     }
 
+    public void setProblems( FileProblems[] problems )
+    {
+        _problems = problems;
+    }
+
     public void setSuffix( String suffix )
     {
         _suffix = suffix;
     }
 
-    public String getSuffix()
+    public void setType( String type )
     {
-        return _suffix;
+        _type = type;
     }
 
 }

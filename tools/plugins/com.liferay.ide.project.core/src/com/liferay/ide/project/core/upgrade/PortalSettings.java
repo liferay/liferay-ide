@@ -22,11 +22,11 @@ package com.liferay.ide.project.core.upgrade;
 public class PortalSettings implements UpgradeProblems
 {
 
-    private String _previousLiferayPortalLocation;
-    private String _newName;
     private String _newliferayPortalLocation;
-    private String _type;
+    private String _newName;
+    private String _previousLiferayPortalLocation;
     private FileProblems[] _problems;
+    private String _type;
 
     public PortalSettings()
     {
@@ -43,14 +43,9 @@ public class PortalSettings implements UpgradeProblems
         _type = type;
     }
 
-    public String getPreviousLiferayPortalLocation()
+    public String getNewLiferayPortalLocation()
     {
-        return _previousLiferayPortalLocation;
-    }
-
-    public void setPreviousLiferayPortalLocation( String liferayPortalLocation )
-    {
-        _previousLiferayPortalLocation = liferayPortalLocation;
+        return _newliferayPortalLocation;
     }
 
     public String getNewName()
@@ -58,19 +53,9 @@ public class PortalSettings implements UpgradeProblems
         return _newName;
     }
 
-    public void setNewName( String newName )
+    public String getPreviousLiferayPortalLocation()
     {
-        _newName = newName;
-    }
-
-    public String getNewLiferayPortalLocation()
-    {
-        return _newliferayPortalLocation;
-    }
-
-    public void setNewLiferayPortalLocation( String newliferayPortalLocation )
-    {
-        _newliferayPortalLocation = newliferayPortalLocation;
+        return _previousLiferayPortalLocation;
     }
 
     public FileProblems[] getProblems()
@@ -78,14 +63,29 @@ public class PortalSettings implements UpgradeProblems
         return _problems;
     }
 
-    public void setProblems( FileProblems[] problems )
-    {
-        _problems = problems;
-    }
-
     public String getType()
     {
         return _type;
+    }
+
+    public void setNewLiferayPortalLocation( String newliferayPortalLocation )
+    {
+        _newliferayPortalLocation = newliferayPortalLocation;
+    }
+
+    public void setNewName( String newName )
+    {
+        _newName = newName;
+    }
+
+    public void setPreviousLiferayPortalLocation( String liferayPortalLocation )
+    {
+        _previousLiferayPortalLocation = liferayPortalLocation;
+    }
+
+    public void setProblems( FileProblems[] problems )
+    {
+        _problems = problems;
     }
 
     public void setType( String type )
