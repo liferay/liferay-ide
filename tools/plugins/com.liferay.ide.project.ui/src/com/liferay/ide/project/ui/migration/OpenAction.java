@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Problem;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -26,6 +28,7 @@ import org.eclipse.ui.ide.IDE;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class OpenAction extends SelectionProviderAction implements IAction
 {
@@ -52,11 +55,11 @@ public class OpenAction extends SelectionProviderAction implements IAction
             {
             }
         }
-        else if( selection instanceof TaskProblem )
+        else if( selection instanceof Problem )
         {
-            TaskProblem taskProblem = (TaskProblem) selection;
+            Problem problem = (Problem) selection;
 
-            MigrationUtil.openEditor( taskProblem );
+            MigrationUtil.openEditor( problem );
         }
     }
 
@@ -65,6 +68,6 @@ public class OpenAction extends SelectionProviderAction implements IAction
     {
         final Object element = getStructuredSelection().getFirstElement();
 
-        setEnabled( element instanceof IFile || element instanceof TaskProblem );
+        setEnabled( element instanceof IFile || element instanceof Problem );
     }
 }

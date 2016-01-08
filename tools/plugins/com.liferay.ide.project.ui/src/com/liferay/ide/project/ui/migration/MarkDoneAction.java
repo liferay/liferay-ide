@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Problem;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -23,8 +25,9 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
-public class MarkDoneAction extends TaskProblemAction
+public class MarkDoneAction extends ProblemAction
 {
 
     public MarkDoneAction()
@@ -38,7 +41,7 @@ public class MarkDoneAction extends TaskProblemAction
     }
 
     @Override
-    protected IStatus runWithMarker( TaskProblem taskProblem, IMarker marker )
+    protected IStatus runWithMarker( Problem problem, IMarker marker )
     {
         IStatus retval = Status.OK_STATUS;
 
@@ -50,7 +53,7 @@ public class MarkDoneAction extends TaskProblemAction
                 marker.setAttribute( "migrationProblem.resolved", true );
             }
 
-            taskProblem.setResolved( true );
+            problem.setStatus( Problem.STATUS_RESOLVED );
         }
         catch( CoreException e )
         {

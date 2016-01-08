@@ -55,6 +55,7 @@ public class GetPortalSettingsWizard extends SapphireWizard<GetPortalSettingsOp>
             portalSettings.setPreviousLiferayPortalLocation( previousLiferayLocationDir.getPath() );
             portalSettings.setNewName( newName );
             portalSettings.setNewLiferayPortalLocation( newLiferayLocationDir.getPath() );
+            portalSettings.setType( "Portal Setting" );
 
             settings.setPortalSettings( portalSettings );
 
