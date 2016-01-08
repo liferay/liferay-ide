@@ -258,16 +258,16 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                     {
                         final String url = (String) e.data;
 
-                        final TaskProblem taskProblem =
-                            MigrationUtil.getTaskProblemFromSelection( _problemsViewer.getSelection() );
+                        final Problem problem =
+                            MigrationUtil.getProblemFromSelection( _problemsViewer.getSelection() );
 
                         if( "autoCorrect".equals( url ) )
                         {
-                            AutoCorrectAction.run( taskProblem, _problemsViewer );
+                            AutoCorrectAction.run( problem, _problemsViewer );
                         }
                         else if( "html".equals( url ) )
                         {
-                            displayPopupHtml( taskProblem.title, taskProblem.html );
+                            displayPopupHtml( problem.title, problem.html );
                         }
                         else if( url.startsWith( "http" ) )
                         {
@@ -555,7 +555,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
         /*if( Platform.getOS().equals( Platform.OS_LINUX ) )
             {
-                _form.setText( generateFormText( taskProblem ), true, false );
+                _form.setText( generateFormText( problem ), true, false );
             }
             else
             {*/
