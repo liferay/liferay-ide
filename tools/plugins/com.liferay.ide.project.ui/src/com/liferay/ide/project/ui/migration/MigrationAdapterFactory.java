@@ -31,7 +31,7 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-@SuppressWarnings( { "rawtypes" } )
+@SuppressWarnings( { "rawtypes", "unchecked" } )
 public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapter
 {
 

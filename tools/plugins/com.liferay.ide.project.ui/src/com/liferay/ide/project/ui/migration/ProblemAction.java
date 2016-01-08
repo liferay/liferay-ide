@@ -48,6 +48,36 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
         super( provider, text );
     }
 
+    protected void refreshTableViewer()
+    {
+        final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
+
+        UIUtil.async( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final Object selection = getStructuredSelection().getFirstElement();
+                List<Problem> problems = null;
+                if( selection instanceof IFile )
+                {
+                    IFile file = (IFile) selection;
+                    problems = MigrationUtil.getProblemsFromResource( file );
+                }
+
+                if( problems != null && problems.size() > 0 )
+                {
+                    mv.getProblemsViewer().setInput( problems.toArray() );
+                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
+                }
+                else
+                {
+                    mv.getProblemsViewer().setInput( null );
+                }
+            }
+        } );
+    }
+
     @Override
     public void run()
     {
@@ -115,35 +145,5 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
         Object element = selection.getFirstElement();
 
         setEnabled( element instanceof Problem );
-    }
-
-    protected void refreshTableViewer()
-    {
-        final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
-
-        UIUtil.async( new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final Object selection = getStructuredSelection().getFirstElement();
-                List<Problem> problems = null;
-                if( selection instanceof IFile )
-                {
-                    IFile file = (IFile) selection;
-                    problems = MigrationUtil.getProblemsFromResource( file );
-                }
-
-                if( problems != null && problems.size() > 0 )
-                {
-                    mv.getProblemsViewer().setInput( problems.toArray() );
-                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
-                }
-                else
-                {
-                    mv.getProblemsViewer().setInput( null );
-                }
-            }
-        } );
     }
 }

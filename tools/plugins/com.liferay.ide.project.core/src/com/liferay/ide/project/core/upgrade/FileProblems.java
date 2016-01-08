@@ -30,14 +30,9 @@ public class FileProblems
     private File _file;
     private List<Problem> _problems = new ArrayList<Problem>();
 
-    public void setFile( File file )
+    public void addProblem( Problem problem )
     {
-        _file = file;
-    }
-
-    public void setProblems( List<Problem> problems )
-    {
-        _problems = problems;
+        _problems.add( problem );
     }
 
     public File getFile()
@@ -50,8 +45,13 @@ public class FileProblems
         return _problems;
     }
 
-    public void addProblem( Problem problem )
+    public void setFile( File file )
     {
-        _problems.add( problem );
+        _file = file;
+    }
+
+    public void setProblems( List<Problem> problems )
+    {
+        _problems = problems;
     }
 }
