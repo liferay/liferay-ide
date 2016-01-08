@@ -434,13 +434,10 @@ public class CoreUtil
         return ResourcesPlugin.getWorkspace().getRoot();
     }
 
-
-
     public static Object invoke( String methodName, Object object, Class<?>[] argTypes, Object[] args )
         throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
         InvocationTargetException
     {
-
         Method method = object.getClass().getDeclaredMethod( methodName, argTypes );
         method.setAccessible( true );
 
@@ -549,7 +546,7 @@ public class CoreUtil
         }
     }
 
-    public static String readPropertyFileValue( File propertiesFile, String key )
+    public static String readPropertyFileValue( File propertiesFile, String key ) throws IOException
     {
         try(FileInputStream fis = new FileInputStream( propertiesFile ))
         {
@@ -557,10 +554,6 @@ public class CoreUtil
             props.load( fis );
 
             return props.getProperty( key );
-        }
-        catch( Exception s )
-        {
-            return null;
         }
     }
 

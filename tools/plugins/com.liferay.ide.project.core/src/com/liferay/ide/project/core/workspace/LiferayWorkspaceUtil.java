@@ -46,12 +46,8 @@ public class LiferayWorkspaceUtil
 
         try
         {
-            //TODO Waiting for new release about changing
-            //String modulesDir = CoreUtil.readPropertyFileValue( gradleProperties, "liferay.workspace.modules.dir" );
-            //String themesDir = CoreUtil.readPropertyFileValue( gradleProperties, "liferay.workspace.themes.dir" );
-
-            String modulesDir = CoreUtil.readPropertyFileValue( gradleProperties, "modules.dir" );
-            String themesDir = CoreUtil.readPropertyFileValue( gradleProperties, "themes.dir" );
+            String modulesDir = CoreUtil.readPropertyFileValue( gradleProperties, "liferay.workspace.modules.dir" );
+            String themesDir = CoreUtil.readPropertyFileValue( gradleProperties, "liferay.workspace.themes.dir" );
 
             if( CoreUtil.empty( modulesDir ) || CoreUtil.empty( themesDir ) )
             {
