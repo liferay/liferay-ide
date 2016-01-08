@@ -100,12 +100,12 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
                     }
                     else
                     {
-                        wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE ); //$NON-NLS-1$
+                        wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE );
                     }
                 }
                 catch( CoreException e )
                 {
-                    wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceError, SapphireWizardPage.ERROR ); //$NON-NLS-1$
+                    wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceError, SapphireWizardPage.ERROR );
                 }
 
                 firstErrorMessageRemoved = true;

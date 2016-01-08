@@ -32,7 +32,7 @@ public class WorkspaceNameValidationService extends ValidationService
 {
     private FilteredListener<PropertyContentEvent> listener;
 
-    public static String hasLiferayWorkspaceMsg = "Can't create, there is already a Liferay Workspace";
+    public static String hasLiferayWorkspaceMsg = "A Liferay Workspace project already exists in this Eclipse instance.";
 
     @Override
     protected void initValidationService()
