@@ -80,17 +80,19 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
                         MarkerUtil.setMarker(existProject, IMarker.PROBLEM, IMarker.SEVERITY_ERROR,
                             "Workspace has more than one SDK", existProject.getFullPath().toPortableString(),ID_WORKSPACE_SDK_INVALID);
                     }
+
                     hasMultipleSDK = true;
                 }
+
                 existProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
             }
         }
+
         return hasMultipleSDK;
     }
 
     protected void processPropertiesFileChanged( final IFile deltaFile ) throws CoreException
     {
-
         final IProject deltaProject = deltaFile.getProject();
 
         final SDK sdk = SDKUtil.createSDKFromLocation( deltaProject.getLocation() );
@@ -288,6 +290,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
                         return Status.OK_STATUS;
                     }
                 };
+
                 job.schedule();
             }
 

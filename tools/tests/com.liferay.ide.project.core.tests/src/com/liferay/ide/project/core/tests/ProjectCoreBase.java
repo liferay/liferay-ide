@@ -135,7 +135,7 @@ public class ProjectCoreBase extends ServerCoreBase
     protected IProject createAntProject( NewLiferayPluginProjectOp op ) throws Exception
     {
         op.setProjectProvider( "ant" );
-        
+
         final IProject project = createProject( op );
 
         assertEquals(
@@ -161,7 +161,7 @@ public class ProjectCoreBase extends ServerCoreBase
             default:
                 break;
         }
-        
+
         project.refreshLocal( IResource.DEPTH_INFINITE, null );
         return project;
     }
@@ -173,9 +173,9 @@ public class ProjectCoreBase extends ServerCoreBase
         profile.setLiferayVersion( "6.2.2" );
         profile.setRuntimeName( getRuntimeVersion() );
         profile.setProfileLocation( ProfileLocation.projectPom );
-        
+
         op.setActiveProfilesValue( "Liferay-v6.2-CE-(Tomcat-7)" );
-        
+
         return op;
     }
 
@@ -184,7 +184,7 @@ public class ProjectCoreBase extends ServerCoreBase
         op.setProjectProvider( "maven" );
 
         op = setMavenProfile( op );
-        
+
         IProject project = createProject( op );
 
         switch( op.getPluginType().content() )
@@ -200,9 +200,9 @@ public class ProjectCoreBase extends ServerCoreBase
             default:
                 break;
             }
-        
+
             Thread.sleep( 3000 );
-            
+
             return project;
     }
 
@@ -344,12 +344,12 @@ public class ProjectCoreBase extends ServerCoreBase
     {
         return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
     }
-    
+
     protected IPath getLiferayPluginsSdk61Dir()
     {
         return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.2" );
     }
-    
+
     protected IPath getLiferayPluginsSdk70Dir()
     {
         return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0" );
@@ -473,7 +473,7 @@ public class ProjectCoreBase extends ServerCoreBase
     public void setupPluginsSDK() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
-        
+
         final SDK existingSdk = SDKManager.getInstance().getSDK( getLiferayPluginsSdkDir() );
 
         if( existingSdk == null )
@@ -563,6 +563,7 @@ public class ProjectCoreBase extends ServerCoreBase
         }
 
         SDK workspaceSdk = SDKUtil.getWorkspaceSDK();
+
         if ( workspaceSdk == null)
         {
             persistAppServerProperties();
@@ -571,8 +572,6 @@ public class ProjectCoreBase extends ServerCoreBase
 
             SDKUtil.openAsProject( sdk );
         }
-
-
     }
 
     @Override
