@@ -1366,16 +1366,7 @@
          <enablement>
             <or>
                <objectClass
-                     name="com.liferay.ide.project.ui.migration.MPTree">
-               </objectClass>
-               <objectClass
-                     name="com.liferay.ide.project.ui.migration.MPNode">
-               </objectClass>
-               <objectClass
                      name="com.liferay.ide.project.core.upgrade.FileProblems">
-               </objectClass>
-               <objectClass
-                     name="com.liferay.ide.project.core.upgrade.LiferayProblems">
                </objectClass>
                <objectClass
                      name="org.eclipse.core.resources.IResource">
