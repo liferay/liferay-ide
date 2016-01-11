@@ -46,7 +46,7 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
     @Override
     public Class[] getAdapterList()
     {
-        return new Class[] { FileProblems.class, UpgradeProblems.class, List.class };
+        return new Class[] { FileProblems.class, UpgradeProblems.class, ProblemDisplay.class };
     }
 
     @Override
@@ -63,7 +63,7 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
             return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
                 ISharedImages.IMG_OBJ_FILE ) );
         }
-        else if( element instanceof UpgradeProblems || element instanceof List )
+        else if( element instanceof UpgradeProblems || element instanceof ProblemDisplay )
         {
             return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
                 ISharedImages.IMG_OBJ_FOLDER ) );
@@ -96,10 +96,9 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
                 return lp.getType();
             }
         }
-        else if( element instanceof List && ( ( (List) element ).size() > 0 ) &&
-            ( (List) element ).get( 0 ) instanceof UpgradeProblems )
+        else if( element instanceof ProblemDisplay )
         {
-            return ( (UpgradeProblems) ( (List) element ).get( 0 ) ).getType();
+            return ( (ProblemDisplay) element ).getType();
         }
 
         return null;
