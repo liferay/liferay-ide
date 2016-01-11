@@ -1297,7 +1297,7 @@
                      value="com.liferay.ide.project.core.upgrade.UpgradeProblems">
                </instanceof>
                <instanceof
-                     value="java.util.List">
+                     value="com.liferay.ide.project.ui.migration.ProblemDisplay">
                </instanceof>
                <instanceof
                      value="com.liferay.blade.api.Problem">
@@ -1319,7 +1319,7 @@
                      value="com.liferay.ide.project.core.upgrade.UpgradeProblems">
                </instanceof>
                <instanceof
-                     value="java.util.List">
+                     value="com.liferay.ide.project.ui.migration.ProblemDisplay">
                </instanceof>
                <instanceof
                      value="com.liferay.blade.api.Problem">
@@ -1385,7 +1385,7 @@
          </adapter>
       </factory>
       <factory
-            adaptableType="java.util.List"
+            adaptableType="com.liferay.ide.project.ui.migration.ProblemDisplay"
             class="com.liferay.ide.project.ui.migration.MigrationAdapterFactory">
          <adapter
                type="org.eclipse.ui.model.IWorkbenchAdapter">

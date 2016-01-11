@@ -34,7 +34,7 @@ import org.eclipse.jface.viewers.Viewer;
 public class MigrationContentProvider implements ITreeContentProvider
 {
 
-    List<Object> _problems;
+    List<ProblemDisplay> _problems;
 
     @Override
     public void dispose()
@@ -44,13 +44,22 @@ public class MigrationContentProvider implements ITreeContentProvider
     @Override
     public Object[] getChildren( Object parentElement )
     {
-        if( parentElement instanceof UpgradeProblems )
+        if( parentElement instanceof ProblemDisplay )
+        {
+            ProblemDisplay pd = (ProblemDisplay) parentElement;
+
+            if( pd.isSingle() )
+            {
+                return pd.getSingleUpgradeProblems().getProblems();
+            }
+            else
+            {
+                return pd.getListUpgradeProblems().toArray();
+            }
+        }
+        else if( parentElement instanceof UpgradeProblems )
         {
             return ( (UpgradeProblems) parentElement ).getProblems();
-        }
-        else if( parentElement instanceof List )
-        {
-            return ( (List<?>) parentElement ).toArray();
         }
 
         return null;
@@ -71,13 +80,22 @@ public class MigrationContentProvider implements ITreeContentProvider
     @Override
     public boolean hasChildren( Object element )
     {
-        if( element instanceof UpgradeProblems )
+        if( element instanceof ProblemDisplay )
+        {
+            ProblemDisplay pd = (ProblemDisplay) element;
+
+            if( pd.isSingle() )
+            {
+                return pd.getSingleUpgradeProblems().getProblems().length > 0;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        else if( element instanceof UpgradeProblems )
         {
             return ( (UpgradeProblems) element ).getProblems().length > 0;
-        }
-        else if( element instanceof List )
-        {
-            return true;
         }
 
         return false;
@@ -88,19 +106,22 @@ public class MigrationContentProvider implements ITreeContentProvider
     {
         if( newInput instanceof IWorkspaceRoot )
         {
-            _problems = new ArrayList<>();
+            _problems = new ArrayList<ProblemDisplay>();
 
             try
             {
                 Liferay7UpgradeAssistantSettings setting =
                     UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
 
-                Object[] o = UpgradeAssistantSettingsUtil.getAllObjectFromStore( MigrationProblems.class );
-
                 if( setting != null )
                 {
-                    _problems.add( setting.getPortalSettings() );
+                    ProblemDisplay pd = new ProblemDisplay();
+                    pd.setSingleUpgradeProblems( setting.getPortalSettings() );
+
+                    _problems.add( pd );
                 }
+
+                Object[] o = UpgradeAssistantSettingsUtil.getAllObjectFromStore( MigrationProblems.class );
 
                 List<UpgradeProblems> codeProblems = new ArrayList<UpgradeProblems>();
 
@@ -111,7 +132,10 @@ public class MigrationContentProvider implements ITreeContentProvider
                         codeProblems.add( (MigrationProblems) object );
                     }
 
-                    _problems.add( codeProblems );
+                    ProblemDisplay problemDsiplay = new ProblemDisplay();
+                    problemDsiplay.setListUpgradeProblems( codeProblems );
+
+                    _problems.add( problemDsiplay );
                 }
             }
             catch( Exception e )
