@@ -21,7 +21,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
@@ -80,15 +82,23 @@ public class WorkspaceNameValidationService extends ValidationService
 
         if( currentWorkspaceName != null )
         {
-            final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
-
-            if( ! nameStatus.isOK() )
+            if( isExistingFolder(op) )
             {
-                retval = StatusBridge.create( nameStatus );
+                retval = Status.createErrorStatus( "There is already a folder at the location \"" +
+                                op.getLocation().content().toString() + "\"" );
             }
-            else if( isInvalidProjectName( op ) )
+            else
             {
-                retval = Status.createErrorStatus( "A project with that name already exists." );
+                final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
+
+                if( ! nameStatus.isOK() )
+                {
+                    retval = StatusBridge.create( nameStatus );
+                }
+                else if( isInvalidProjectName( op ) )
+                {
+                    retval = Status.createErrorStatus( "A project with that name already exists." );
+                }
             }
         }
 
@@ -110,6 +120,30 @@ public class WorkspaceNameValidationService extends ValidationService
         if( CoreUtil.getProject( workspaceName ).exists() )
         {
             return true;
+        }
+
+        return false;
+    }
+
+    private boolean isExistingFolder( NewLiferayWorkspaceOp op )
+    {
+        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+
+        if( useDefaultLocation )
+        {
+            Path newLocationBase = null;
+
+            newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+
+            if( newLocationBase != null )
+            {
+                NewLiferayWorkspaceOpMethods.updateLocation( op, newLocationBase );
+            }
+
+            if ( op.getLocation().content().toFile().exists() )
+            {
+                return true ;
+            }
         }
 
         return false;

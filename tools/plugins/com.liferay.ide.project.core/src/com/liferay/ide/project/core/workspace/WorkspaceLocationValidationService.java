@@ -94,6 +94,11 @@ public class WorkspaceLocationValidationService extends ValidationService
                                         currentPath + "\"" ); //$NON-NLS-1$
                                 }
                             }
+                            else
+                            {
+                                retval = Status.createErrorStatus( "There is already a folder at the location \"" + //$NON-NLS-1$
+                                                currentPath + "\"" ); //$NON-NLS-1$
+                            }
                         }
                     }
                 }
