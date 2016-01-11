@@ -178,10 +178,10 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
 
         openLiferayPerspective( newProject );
 
-        setProjectExplorerLayoutToHierar();
+        setProjectExplorerLayoutNestedEnabled();
     }
 
-    private void setProjectExplorerLayoutToHierar() {
+    private void setProjectExplorerLayoutNestedEnabled() {
 
         try
         {
