@@ -23,6 +23,13 @@ import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.expressions.EvaluationContext;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -34,10 +41,16 @@ import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.ISources;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.internal.navigator.resources.nested.ProjectPresentationHandler;
+import org.eclipse.ui.internal.navigator.resources.plugin.WorkbenchNavigatorPlugin;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.web.internal.DelegateConfigurationElement;
@@ -164,9 +177,44 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
         }
 
         openLiferayPerspective( newProject );
+
+        setProjectExplorerLayoutToHierar();
     }
 
-    private static NewLiferayWorkspaceOp createDefaultOp()
+    private void setProjectExplorerLayoutToHierar() {
+
+        try
+        {
+            final ICommandService commandService =
+                (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
+
+            Command command = commandService.getCommand( ProjectPresentationHandler.COMMAND_ID );
+
+            Map<String, String> map = new HashMap<String, String>();
+
+            map.put( WorkbenchNavigatorPlugin.PLUGIN_ID + ".nested.enabled", "true" );
+
+            IViewPart projectExplorer = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+                IPageLayout.ID_PROJECT_EXPLORER );
+
+            EvaluationContext context = new EvaluationContext( null, new Object() );
+
+            context.addVariable( ISources.ACTIVE_PART_NAME, projectExplorer );
+
+            ExecutionEvent event = new ExecutionEvent( command, map, null, context );
+
+            //this class only exist in eclipse mar 4.5 org.eclipse.ui.navigator.resources plugin
+            ProjectPresentationHandler hanlder = new ProjectPresentationHandler();
+
+            hanlder.execute( event );
+        }
+        catch( ExecutionException e )
+        {
+            // ignore
+        }
+	}
+
+	private static NewLiferayWorkspaceOp createDefaultOp()
     {
         return NewLiferayWorkspaceOp.TYPE.instantiate();
     }
