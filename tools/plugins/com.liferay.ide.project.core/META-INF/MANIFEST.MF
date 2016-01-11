@@ -38,8 +38,7 @@ Require-Bundle: org.eclipse.wst.common.project.facet.core;bundle-version="[1.4.1
  org.apache.felix.gogo.runtime,
  org.apache.ant,
  biz.aQute.bndlib,
- biz.aQute.repository,
- org.eclipse.equinox.registry
+ biz.aQute.repository
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
