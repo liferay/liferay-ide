@@ -15,37 +15,43 @@
 
 package com.liferay.ide.project.core.upgrade;
 
+import com.liferay.blade.api.Problem;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * @author Lovett Li
+ * @author Terry Jia
  */
-public class Liferay7UpgradeAssistantSettings
+public class FileProblems
 {
 
-    private String[] javaProjectLocations;
-    private PortalSettings portalSettings;
+    private File _file;
+    private List<Problem> _problems = new ArrayList<Problem>();
 
-    public Liferay7UpgradeAssistantSettings()
+    public void addProblem( Problem problem )
     {
+        _problems.add( problem );
     }
 
-    public String[] getJavaProjectLocations()
+    public File getFile()
     {
-        return javaProjectLocations;
+        return _file;
     }
 
-    public PortalSettings getPortalSettings()
+    public List<Problem> getProblems()
     {
-        return portalSettings;
+        return _problems;
     }
 
-    public void setJavaProjectLocations( String[] locations )
+    public void setFile( File file )
     {
-        javaProjectLocations = locations;
+        _file = file;
     }
 
-    public void setPortalSettings( PortalSettings portalSettings )
+    public void setProblems( List<Problem> problems )
     {
-        this.portalSettings = portalSettings;
+        _problems = problems;
     }
-
 }

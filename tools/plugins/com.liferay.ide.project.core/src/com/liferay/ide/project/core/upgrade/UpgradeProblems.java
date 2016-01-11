@@ -16,36 +16,13 @@
 package com.liferay.ide.project.core.upgrade;
 
 /**
- * @author Lovett Li
+ * @author Terry Jia
  */
-public class Liferay7UpgradeAssistantSettings
+public interface UpgradeProblems
 {
 
-    private String[] javaProjectLocations;
-    private PortalSettings portalSettings;
+    public FileProblems[] getProblems();
 
-    public Liferay7UpgradeAssistantSettings()
-    {
-    }
-
-    public String[] getJavaProjectLocations()
-    {
-        return javaProjectLocations;
-    }
-
-    public PortalSettings getPortalSettings()
-    {
-        return portalSettings;
-    }
-
-    public void setJavaProjectLocations( String[] locations )
-    {
-        javaProjectLocations = locations;
-    }
-
-    public void setPortalSettings( PortalSettings portalSettings )
-    {
-        this.portalSettings = portalSettings;
-    }
+    public String getType();
 
 }

@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Problem;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -39,37 +40,58 @@ import org.eclipse.ui.actions.SelectionProviderAction;
  * @author Gregory Amerson
  * @author Lovett Li
  */
-public abstract class TaskProblemAction extends SelectionProviderAction implements IAction
+public abstract class ProblemAction extends SelectionProviderAction implements IAction
 {
 
-    public TaskProblemAction( ISelectionProvider provider, String text )
+    public ProblemAction( ISelectionProvider provider, String text )
     {
         super( provider, text );
+    }
+
+    protected void refreshTableViewer()
+    {
+        final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
+
+        UIUtil.async( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final Object selection = getStructuredSelection().getFirstElement();
+                List<Problem> problems = null;
+                if( selection instanceof IFile )
+                {
+                    IFile file = (IFile) selection;
+                    problems = MigrationUtil.getProblemsFromResource( file );
+                }
+
+                if( problems != null && problems.size() > 0 )
+                {
+                    mv.getProblemsViewer().setInput( problems.toArray() );
+                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
+                }
+                else
+                {
+                    mv.getProblemsViewer().setInput( null );
+                }
+            }
+        } );
     }
 
     @Override
     public void run()
     {
-        final Object selection = getStructuredSelection().getFirstElement();
-        final List<TaskProblem> taskProblems;
-        if( selection instanceof IFile )
-        {
-            IFile file = (IFile)selection;
-           taskProblems = MigrationUtil.getTaskProblemsFromResource( file );
-        }else{
-           taskProblems = MigrationUtil.getTaskProblemsFromSelection( getSelection() );
+        final List<Problem> Problems = MigrationUtil.getProblemsFromSelection( getSelection() );
 
-        }
-
-        for( TaskProblem taskProblem : taskProblems )
+        for( Problem problem : Problems )
         {
-            run( taskProblem, getSelectionProvider() );
+            run( problem, getSelectionProvider() );
         }
     }
 
-    public void run( final TaskProblem taskProblem, final ISelectionProvider provider )
+    public void run( final Problem problem, final ISelectionProvider provider )
     {
-        final IResource resource = MigrationUtil.getIResourceFromTaskProblem( taskProblem );
+        final IResource resource = MigrationUtil.getIResourceFromProblem( problem );
 
         new Job( "Marking migration problem as done" )
         {
@@ -79,11 +101,11 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
 
                 if( resource != null && resource.exists() )
                 {
-                    final IMarker marker = resource.getMarker( taskProblem.getMarkerId() );
+                    final IMarker marker = resource.getMarker( problem.getMarkerId() );
 
                     if( marker != null )
                     {
-                        retval = runWithMarker( taskProblem, marker );
+                        retval = runWithMarker( problem, marker );
 
                         if( provider instanceof Viewer )
                         {
@@ -115,43 +137,13 @@ public abstract class TaskProblemAction extends SelectionProviderAction implemen
 
     }
 
-    protected abstract IStatus runWithMarker( TaskProblem taskProblem, IMarker marker );
+    protected abstract IStatus runWithMarker( Problem problem, IMarker marker );
 
     @Override
     public void selectionChanged( IStructuredSelection selection )
     {
         Object element = selection.getFirstElement();
 
-        setEnabled( element instanceof TaskProblem );
-    }
-
-    protected void refreshTableViewer()
-    {
-        final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
-
-        UIUtil.async( new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final Object selection = getStructuredSelection().getFirstElement();
-                List<TaskProblem> problems = null;
-                if( selection instanceof IFile )
-                {
-                    IFile file = (IFile) selection;
-                    problems = MigrationUtil.getTaskProblemsFromResource( file );
-                }
-
-                if( problems != null && problems.size() > 0 )
-                {
-                    mv.getProblemsViewer().setInput( problems.toArray() );
-                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
-                }
-                else
-                {
-                    mv.getProblemsViewer().setInput( null );
-                }
-            }
-        } );
+        setEnabled( element instanceof Problem );
     }
 }

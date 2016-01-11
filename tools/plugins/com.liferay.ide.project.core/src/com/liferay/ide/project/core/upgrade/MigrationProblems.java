@@ -16,36 +16,44 @@
 package com.liferay.ide.project.core.upgrade;
 
 /**
- * @author Lovett Li
+ * @author Terry Jia
  */
-public class Liferay7UpgradeAssistantSettings
+public class MigrationProblems implements UpgradeProblems
 {
 
-    private String[] javaProjectLocations;
-    private PortalSettings portalSettings;
+    private FileProblems[] _problems;
+    private String _suffix;
+    private String _type;
 
-    public Liferay7UpgradeAssistantSettings()
+    public FileProblems[] getProblems()
     {
+        return _problems;
     }
 
-    public String[] getJavaProjectLocations()
+    public String getSuffix()
     {
-        return javaProjectLocations;
+        return _suffix;
     }
 
-    public PortalSettings getPortalSettings()
+    @Override
+    public String getType()
     {
-        return portalSettings;
+        return _type;
     }
 
-    public void setJavaProjectLocations( String[] locations )
+    public void setProblems( FileProblems[] problems )
     {
-        javaProjectLocations = locations;
+        _problems = problems;
     }
 
-    public void setPortalSettings( PortalSettings portalSettings )
+    public void setSuffix( String suffix )
     {
-        this.portalSettings = portalSettings;
+        _suffix = suffix;
+    }
+
+    public void setType( String type )
+    {
+        _type = type;
     }
 
 }

@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Problem;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
@@ -26,14 +28,14 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 /**
  * @author Lovett Li
  */
-public class MarkUnDoneAllAction extends TaskProblemAction
+public class MarkUnDoneAllAction extends ProblemAction
 {
     public MarkUnDoneAllAction( ISelectionProvider provider )
     {
         super( provider, "Mark UnDone All" );
     }
     @Override
-    protected IStatus runWithMarker( TaskProblem taskProblem, IMarker marker )
+    protected IStatus runWithMarker( Problem problem, IMarker marker )
     {
         IStatus retval = Status.OK_STATUS;
 
@@ -45,7 +47,7 @@ public class MarkUnDoneAllAction extends TaskProblemAction
                 marker.setAttribute( "migrationProblem.resolved", false );
             }
 
-            taskProblem.setResolved( false );
+            problem.setStatus( Problem.STATUS_NOT_RESOLVED );
         }
         catch( CoreException e )
         {
@@ -62,6 +64,6 @@ public class MarkUnDoneAllAction extends TaskProblemAction
     {
         final Object element = getStructuredSelection().getFirstElement();
 
-        setEnabled( element instanceof IFile || element instanceof TaskProblem );
+        setEnabled( element instanceof IFile );
     }
 }

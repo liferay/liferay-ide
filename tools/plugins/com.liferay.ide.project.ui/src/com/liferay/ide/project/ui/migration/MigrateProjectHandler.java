@@ -15,6 +15,17 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Migration;
+import com.liferay.blade.api.MigrationConstants;
+import com.liferay.blade.api.Problem;
+import com.liferay.blade.api.ProgressMonitor;
+import com.liferay.ide.core.util.MarkerUtil;
+import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.FileProblemsUtil;
+import com.liferay.ide.project.core.upgrade.MigrationProblems;
+import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,18 +53,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import com.liferay.blade.api.Migration;
-import com.liferay.blade.api.MigrationConstants;
-import com.liferay.blade.api.Problem;
-import com.liferay.blade.api.ProgressMonitor;
-
-import com.liferay.ide.core.util.MarkerUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-
 /**
  * @author Gregory Amerson
  * @author Andy Wu
  * @author Lovett Li
+ * @author Terry Jia
  */
 public class MigrateProjectHandler extends AbstractHandler
 {
@@ -96,7 +100,7 @@ public class MigrateProjectHandler extends AbstractHandler
 
                 final IPath location = project.getLocation();
 
-                findMigrationProblems( new IPath[] { location } );
+                findMigrationProblems( new IPath[] { location }, project.getName() );
             }
         }
 
@@ -105,18 +109,24 @@ public class MigrateProjectHandler extends AbstractHandler
 
     public void findMigrationProblems( final IPath[] locations )
     {
+        findMigrationProblems( locations, "" );
+    }
+
+    public void findMigrationProblems( final IPath[] locations, final String projectName )
+    {
         Job job = new WorkspaceJob( "Finding migration problems..." )
         {
+
             @Override
             public IStatus runInWorkspace( final IProgressMonitor monitor ) throws CoreException
             {
                 IStatus retval = Status.OK_STATUS;
 
-                final BundleContext context =
-                    FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
+                final BundleContext context = FrameworkUtil.getBundle( this.getClass() ).getBundleContext();
 
                 ProgressMonitor override = new ProgressMonitor()
                 {
+
                     @Override
                     public void worked( int work )
                     {
@@ -161,11 +171,34 @@ public class MigrateProjectHandler extends AbstractHandler
                         {
                             final List<Problem> problems = m.findProblems( location.toFile(), override );
 
-                            problems.addAll( problems );
+                            allProblems.addAll( problems );
                         }
                     }
 
-                    m.reportProblems( allProblems, Migration.DETAIL_LONG, "ide" );
+                    if( allProblems.size() > 0 )
+                    {
+                        MigrationProblems migrationProblems = new MigrationProblems();
+
+                        List<FileProblems> fileProblemsList =
+                            FileProblemsUtil.getFileProblemsArray( allProblems.toArray( new Problem[0] ) );
+
+                        migrationProblems.setProblems( fileProblemsList.toArray( new FileProblems[0] ) );
+
+                        migrationProblems.setType( "Code Problems" );
+                        migrationProblems.setSuffix( projectName );
+
+                        if( !projectName.equals( "" ) )
+                        {
+                            UpgradeAssistantSettingsUtil.setObjectToStore(
+                                MigrationProblems.class, projectName, migrationProblems );
+                        }
+                        else
+                        {
+                            UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblems.class, migrationProblems );
+                        }
+
+                        m.reportProblems( allProblems, Migration.DETAIL_LONG, "ide" );
+                    }
                 }
                 catch( Exception e )
                 {
@@ -178,8 +211,7 @@ public class MigrateProjectHandler extends AbstractHandler
 
         try
         {
-            PlatformUI.getWorkbench().getProgressService().showInDialog(
-                Display.getDefault().getActiveShell(), job );
+            PlatformUI.getWorkbench().getProgressService().showInDialog( Display.getDefault().getActiveShell(), job );
         }
         catch( Exception e )
         {
@@ -195,8 +227,8 @@ public class MigrateProjectHandler extends AbstractHandler
 
         return MessageDialog.openConfirm(
             shell, "Migrate Liferay Plugin",
-            "This project already contains migration problem markers.  All existing markers will be deleted.  " +
-            "Do you want to continue to run migration tool?" );
+            "This project already contains migration problem markers.  All existing markers will be deleted.  "
+                + "Do you want to continue to run migration tool?" );
     }
 
     private boolean shouldShowMessageDialog( IProject project )

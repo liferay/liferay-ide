@@ -12,27 +12,29 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.core.upgrade.MigrationProblems;
+import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
+import java.util.List;
+
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.ui.model.IWorkbenchAdapter;
-
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 @SuppressWarnings( { "rawtypes", "unchecked" } )
 public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapter
 {
+
     private static final Object instance = new MigrationAdapterFactory();
 
     @Override
@@ -44,7 +46,7 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
     @Override
     public Class[] getAdapterList()
     {
-        return new Class[] { MPNode.class, MPTree.class };
+        return new Class[] { FileProblems.class, UpgradeProblems.class, ProblemDisplay.class };
     }
 
     @Override
@@ -56,25 +58,15 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
     @Override
     public ImageDescriptor getImageDescriptor( Object element )
     {
-        if( element instanceof MPTree )
+        if( element instanceof FileProblems )
         {
-            return ProjectUI.getDefault().getImageRegistry().getDescriptor( ProjectUI.MIGRATION_TASKS_IMAGE_ID );
+            return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
+                ISharedImages.IMG_OBJ_FILE ) );
         }
-        else if( element instanceof MPNode )
+        else if( element instanceof UpgradeProblems || element instanceof ProblemDisplay )
         {
-            final MPNode node = (MPNode) element;
-            final IResource resource = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
-
-            if( resource != null && resource.exists() && resource instanceof IProject )
-            {
-                return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
-                    SharedImages.IMG_OBJ_PROJECT ) );
-            }
-            else
-            {
-                return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
-                    ISharedImages.IMG_OBJ_FOLDER ) );
-            }
+            return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
+                ISharedImages.IMG_OBJ_FOLDER ) );
         }
 
         return null;
@@ -83,22 +75,30 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
     @Override
     public String getLabel( Object element )
     {
-        if( element instanceof MPTree )
+        if( element instanceof FileProblems )
         {
-            return "Code Problems";
+            FileProblems fp = (FileProblems) element;
+
+            return fp.getFile().getName();
         }
-        else if( element instanceof MPNode )
+        else if( element instanceof UpgradeProblems )
         {
-            MPNode node = (MPNode) element;
-
-            String label = node.data;
-
-            if( label.startsWith( "/" ) )
+            if( element instanceof MigrationProblems )
             {
-                label = label.substring( 1 );
-            }
+                MigrationProblems cp = (MigrationProblems) element;
 
-            return label;
+                return cp.getSuffix();
+            }
+            else
+            {
+                UpgradeProblems lp = (UpgradeProblems) element;
+
+                return lp.getType();
+            }
+        }
+        else if( element instanceof ProblemDisplay )
+        {
+            return ( (ProblemDisplay) element ).getType();
         }
 
         return null;
@@ -109,6 +109,5 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
     {
         return null;
     }
-
 
 }

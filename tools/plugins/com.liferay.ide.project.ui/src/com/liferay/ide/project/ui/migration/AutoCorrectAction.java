@@ -41,6 +41,7 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class AutoCorrectAction extends SelectionProviderAction implements IAction
 {
@@ -50,9 +51,9 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
         super( provider, "Correct automatically" );
     }
 
-    public static void run( final TaskProblem problem, final ISelectionProvider provider )
+    public static void run( final Problem problem, final ISelectionProvider provider )
     {
-        final IResource file = MigrationUtil.getIResourceFromTaskProblem( problem );
+        final IResource file = MigrationUtil.getIResourceFromProblem( problem );
         final BundleContext context = FrameworkUtil.getBundle( AutoCorrectAction.class ).getBundleContext();
 
         new WorkspaceJob( "Auto correcting migration problem.")
@@ -97,7 +98,7 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
     @Override
     public void run()
     {
-        final TaskProblem problem = MigrationUtil.getTaskProblemFromSelection( getSelection() );
+        final Problem problem = MigrationUtil.getProblemFromSelection( getSelection() );
 
         run( problem, getSelectionProvider() );
     }

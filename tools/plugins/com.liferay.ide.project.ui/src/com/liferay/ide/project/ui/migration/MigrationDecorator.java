@@ -12,10 +12,10 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.blade.api.Problem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +24,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
-import org.eclipse.ui.IViewPart;
-
 
 /**
  * @author Gregory Amerson
@@ -34,61 +32,33 @@ import org.eclipse.ui.IViewPart;
 public class MigrationDecorator extends BaseLabelProvider implements ILightweightLabelDecorator
 {
 
-    private final String VIEW_ID = "com.liferay.ide.project.ui.migrationView";
-
     @Override
     public void decorate( Object element, IDecoration decoration )
     {
-        if( element instanceof MPNode )
-        {
-            final MPNode node = (MPNode) element;
 
-            final IResource member = CoreUtil.getWorkspaceRoot().findMember( node.incrementalPath );
+        final List<Problem> problems = new ArrayList<>();
 
-            if( member != null && member.exists() )
-            {
-                element = member;
-            }
-        }
-
-        final List<TaskProblem> problems = new ArrayList<>();
-
-        final List<TaskProblem> resolvedProblems = new ArrayList<>();
+        final List<Problem> resolvedProblems = new ArrayList<>();
 
         if( element instanceof IResource )
         {
             final IResource resource = (IResource) element;
 
-            problems.addAll( MigrationUtil.getTaskProblemsFromResource( resource ) );
-            resolvedProblems.addAll( MigrationUtil.getResolvedTaskProblemsFromResource( resource ) );
-        }
-        else if( element instanceof MPTree )
-        {
-            final IViewPart view = UIUtil.findView( VIEW_ID );
-
-            if( view instanceof MigrationView )
-            {
-                problems.addAll( MigrationUtil.getAllTaskProblems( ( (MigrationView) view ).getCommonViewer() ) );
-            }
+            problems.addAll( MigrationUtil.getProblemsFromResource( resource ) );
+            resolvedProblems.addAll( MigrationUtil.getResolvedProblemsFromResource( resource ) );
         }
 
         if( problems != null && problems.size() > 0 )
         {
-            for( TaskProblem problem : problems )
+            for( Problem problem : problems )
             {
-                if( problem.isResolved() && !resolvedProblems.contains( problem ))
+                if( problem.getStatus() == Problem.STATUS_RESOLVED && !resolvedProblems.contains( problem ) )
                 {
                     resolvedProblems.add( problem );
                 }
             }
 
             final StringBuilder sb = new StringBuilder();
-
-            sb.append( String.format(
-                " [%d%s problem%s",
-                problems.size(),
-                ( element instanceof MPTree ? " total" : ""),
-                ( problems.size() > 1 ? "s" : "") ) );
 
             if( resolvedProblems.size() > 0 )
             {

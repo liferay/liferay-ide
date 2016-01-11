@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.ui.migration;
 
+import com.liferay.blade.api.Problem;
+
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
@@ -56,8 +58,8 @@ public class MigratorComparator extends ViewerComparator
     @Override
     public int compare( Viewer viewer, Object e1, Object e2 )
     {
-        final TaskProblem t1 = (TaskProblem) e1;
-        final TaskProblem t2 = (TaskProblem) e2;
+        final Problem t1 = (Problem) e1;
+        final Problem t2 = (Problem) e2;
         int flag = 0;
 
         switch( columnIndex )
@@ -78,7 +80,7 @@ public class MigratorComparator extends ViewerComparator
                 break;
 
             case 2:
-                flag = t1.isResolved() == true ? 1 : -1;
+                flag = (t1.getStatus() == Problem.STATUS_RESOLVED) ? 1 : -1;
                 break;
 
             default:

@@ -12,7 +12,10 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.ui.migration;
+
+import com.liferay.blade.api.Problem;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -22,19 +25,19 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-
 /**
  * @author Lovett Li
  */
-public class IgnoreAllAction extends TaskProblemAction
+public class IgnoreAllAction extends ProblemAction
 {
+
     public IgnoreAllAction( ISelectionProvider provider )
     {
         super( provider, "Ingore All" );
     }
 
     @Override
-    protected IStatus runWithMarker( TaskProblem taskProblem, IMarker marker )
+    protected IStatus runWithMarker( Problem problem, IMarker marker )
     {
         IStatus retval = Status.OK_STATUS;
 
@@ -60,6 +63,6 @@ public class IgnoreAllAction extends TaskProblemAction
     {
         final Object element = getStructuredSelection().getFirstElement();
 
-        setEnabled( element instanceof IFile || element instanceof TaskProblem );
+        setEnabled( element instanceof IFile );
     }
 }
