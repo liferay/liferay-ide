@@ -27,6 +27,7 @@ import org.eclipse.ui.progress.IProgressConstants;
 @SuppressWarnings( "deprecation" )
 public class LiferayPerspectiveFactory extends AbstractPerspectiveFactory
 {
+    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferay"; //$NON-NLS-1$
 
     public void createInitialLayout( IPageLayout layout )
     {

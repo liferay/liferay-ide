@@ -23,7 +23,6 @@ import com.liferay.ide.core.adapter.NoopLiferayProject;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -435,13 +434,10 @@ public class CoreUtil
         return ResourcesPlugin.getWorkspace().getRoot();
     }
 
-
-
     public static Object invoke( String methodName, Object object, Class<?>[] argTypes, Object[] args )
         throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
         InvocationTargetException
     {
-
         Method method = object.getClass().getDeclaredMethod( methodName, argTypes );
         method.setAccessible( true );
 
@@ -550,12 +546,15 @@ public class CoreUtil
         }
     }
 
-    public static String readPropertyFileValue( File propertiesFile, String key ) throws FileNotFoundException,
-        IOException
+    public static String readPropertyFileValue( File propertiesFile, String key ) throws IOException
     {
-        Properties props = new Properties();
-        props.load( new FileInputStream( propertiesFile ) );
-        return props.getProperty( key );
+        try(FileInputStream fis = new FileInputStream( propertiesFile ))
+        {
+            Properties props = new Properties();
+            props.load( fis );
+
+            return props.getProperty( key );
+        }
     }
 
     public static String readStreamToString( InputStream contents ) throws IOException

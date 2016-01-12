@@ -17,14 +17,13 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -34,60 +33,29 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
- * @author Gregory Amerson
- * @author Terry Jia
  * @author Andy Wu
- * @author Simon Jiang
  */
-public class GradleProjectProvider extends AbstractLiferayProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
+public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvider
+    implements NewLiferayProjectProvider<NewLiferayWorkspaceOp>
 {
 
-    public GradleProjectProvider()
+    public LiferayWorkspaceProjectProvider()
     {
         super( new Class<?>[] { IProject.class } );
     }
 
     @Override
-    public synchronized ILiferayProject provide( Object adaptable )
+    public IStatus createNewProject( NewLiferayWorkspaceOp op, IProgressMonitor monitor ) throws CoreException
     {
-        ILiferayProject retval = null;
-
-        if( adaptable instanceof IProject )
-        {
-            final IProject project = (IProject) adaptable;
-
-            try
-            {
-                if( LiferayNature.hasNature( project ) && GradleProjectNature.INSTANCE.isPresentOn( project ) )
-                {
-                    return new LiferayGradleProject( project );
-                }
-            }
-            catch( Exception e )
-            {
-                // ignore errors
-            }
-        }
-
-        return retval;
-    }
-
-    @Override
-    public IStatus createNewProject( NewLiferayModuleProjectOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = null;
-
-        final String projectName = op.getProjectName().content();
+        IStatus retval = Status.OK_STATUS;
 
         IPath location = PathBridge.create( op.getLocation().content() );
 
-        final String projectTemplateName = op.getProjectTemplateName().content();
-
         StringBuilder sb = new StringBuilder();
-        sb.append( "create " );
-        sb.append( "-d \"" + location.toFile().getAbsolutePath() +  "\" " );
-        sb.append( "-t " + projectTemplateName + " " );
-        sb.append( "\"" + projectName + "\"");
+
+        sb.append( "-b " );
+        sb.append( "\"" + location.toFile().getAbsolutePath() + "\" " );
+        sb.append( "init" );
 
         try
         {
@@ -107,13 +75,30 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider implem
     }
 
     @Override
-    public IStatus validateProjectLocation( String projectName, IPath path )
+    public synchronized ILiferayProject provide( Object adaptable )
     {
-        IStatus retval = Status.OK_STATUS;
+        ILiferayProject retval = null;
 
-        //TODO validation gradle project location
+        if( adaptable instanceof IProject )
+        {
+            final IProject project = (IProject) adaptable;
+
+            if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
+            {
+                return new LiferayWorkspaceProject( project );
+            }
+        }
 
         return retval;
     }
 
+    @Override
+    public IStatus validateProjectLocation( String projectName, IPath path )
+    {
+        IStatus retval = Status.OK_STATUS;
+
+        // TODO validation gradle project location
+
+        return retval;
+    }
 }

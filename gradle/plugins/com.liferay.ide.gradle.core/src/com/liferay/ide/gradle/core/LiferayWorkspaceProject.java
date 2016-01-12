@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -14,28 +12,42 @@
  * details.
  *
  *******************************************************************************/
- -->
 
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
+package com.liferay.ide.gradle.core;
 
-    <parent>
-        <groupId>com.liferay.ide.gradle</groupId>
-        <artifactId>gradle</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
-    </parent>
+import com.liferay.ide.core.BaseLiferayProject;
 
-    <groupId>com.liferay.ide.gradle.tests</groupId>
-    <artifactId>gradle-tests</artifactId>
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 
-    <name>Liferay IDE Gradle Tests</name>
+/**
+ * @author Andy Wu
+ */
+public class LiferayWorkspaceProject extends BaseLiferayProject
+{
 
-    <packaging>pom</packaging>
+    public LiferayWorkspaceProject( IProject project )
+    {
+        super( project );
+    }
 
-    <modules>
-        <module>com.liferay.ide.gradle.core.tests</module>
-    </modules>
+    @Override
+    public IFile getDescriptorFile( String name )
+    {
+        return null;
+    }
 
-</project>
+    @Override
+    public IPath getLibraryPath( String filename )
+    {
+        return null;
+    }
 
+    @Override
+    public String getProperty( String key, String defaultValue )
+    {
+        return null;
+    }
+
+}
