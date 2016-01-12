@@ -13,7 +13,6 @@
 package com.liferay.ide.ui.tests.swtbot.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 
 /**
@@ -47,7 +46,7 @@ public class ButtonPageObject<T extends SWTBot> extends AbstractWidgetPageObject
     }
 
     @Override
-    protected AbstractSWTBot<?> getWidget()
+    protected SWTBotButton getWidget()
     {
         if( label == null )
         {

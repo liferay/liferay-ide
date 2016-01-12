@@ -17,9 +17,7 @@ package com.liferay.ide.ui.tests.swtbot.page;
 
 import com.liferay.ide.ui.tests.swtbot.condition.WidgetEnabledCondition;
 
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotText;
 
 public class TextPageObject<T extends SWTBot> extends AbstractWidgetPageObject<SWTBot>
@@ -62,13 +60,9 @@ public class TextPageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
 
     public void setText( String text )
     {
-        AbstractSWTBot<? extends Widget> widget = getWidget();
+        bot.waitUntil( new WidgetEnabledCondition( getWidget(), true ) );
 
-        SWTBotText swtBotText = (SWTBotText) widget;
-
-        bot.waitUntil( new WidgetEnabledCondition( swtBotText, true ) );
-
-        swtBotText.setText( text );
+        getWidget().setText( text );
     }
 
     public void setTextWithoutLabel( String text )

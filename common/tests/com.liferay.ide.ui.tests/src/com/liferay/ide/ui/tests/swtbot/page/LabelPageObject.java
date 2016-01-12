@@ -17,7 +17,7 @@ package com.liferay.ide.ui.tests.swtbot.page;
 
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
-import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
+import org.eclipse.swtbot.swt.finder.widgets.SWTBotLabel;
 
 /**
  * @author Ashley Yuan
@@ -31,7 +31,7 @@ public class LabelPageObject<T extends SWTBot> extends AbstractWidgetPageObject<
     }
 
     @Override
-    protected AbstractSWTBot<?> getWidget()
+    protected  SWTBotLabel getWidget()
     {
         return bot.label( label );
     }
