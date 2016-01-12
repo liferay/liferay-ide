@@ -25,7 +25,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.lang;bundle-version="2.6.0",
  com.liferay.ide.server.core.tests;bundle-version="2.1.1",
  com.liferay.ide.core,
- org.eclipse.swtbot.go;bundle-version="2.3.0",
  biz.aQute.remote.api;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
