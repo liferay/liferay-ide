@@ -46,6 +46,8 @@
                                 <artifact><id>org.json:json:20131018</id></artifact>
 				<artifact><id>com.googlecode.json-simple:json-simple:1.1.1</id></artifact>
 				<artifact><id>org.apache.maven:maven-aether-provider:3.3.9</id></artifact>
+				<artifact><id>org.apache.maven:maven-settings:3.3.9</id></artifact>
+				<artifact><id>org.apache.maven:maven-settings-builder:3.3.9</id></artifact>
                             </artifacts>
                         </configuration>
                     </execution>
