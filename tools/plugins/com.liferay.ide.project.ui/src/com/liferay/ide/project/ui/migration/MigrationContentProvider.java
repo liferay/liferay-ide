@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -34,7 +35,7 @@ import org.eclipse.jface.viewers.Viewer;
 public class MigrationContentProvider implements ITreeContentProvider
 {
 
-    List<ProblemDisplay> _problems;
+    List<ProblemsContainer> _problems;
 
     @Override
     public void dispose()
@@ -44,17 +45,19 @@ public class MigrationContentProvider implements ITreeContentProvider
     @Override
     public Object[] getChildren( Object parentElement )
     {
-        if( parentElement instanceof ProblemDisplay )
+        if( parentElement instanceof ProblemsContainer )
         {
-            ProblemDisplay pd = (ProblemDisplay) parentElement;
+            ProblemsContainer problemsContainer = (ProblemsContainer) parentElement;
 
-            if( pd.isSingle() )
+            List<UpgradeProblems> upgradeProblems = problemsContainer.getUpgradeProblemsList();
+
+            if (upgradeProblems.size() == 1)
             {
-                return pd.getSingleUpgradeProblems().getProblems();
+                return problemsContainer.getUpgradeProblemsList().get( 0 ).getProblems();
             }
             else
             {
-                return pd.getListUpgradeProblems().toArray();
+                return problemsContainer.getUpgradeProblemsList().toArray();
             }
         }
         else if( parentElement instanceof UpgradeProblems )
@@ -80,13 +83,14 @@ public class MigrationContentProvider implements ITreeContentProvider
     @Override
     public boolean hasChildren( Object element )
     {
-        if( element instanceof ProblemDisplay )
+        if( element instanceof ProblemsContainer )
         {
-            ProblemDisplay pd = (ProblemDisplay) element;
+            ProblemsContainer problemsContainer = (ProblemsContainer) element;
+            List<UpgradeProblems> upgradeProblems = problemsContainer.getUpgradeProblemsList();
 
-            if( pd.isSingle() )
+            if (upgradeProblems.size() == 1)
             {
-                return pd.getSingleUpgradeProblems().getProblems().length > 0;
+                return problemsContainer.getUpgradeProblemsList().get( 0 ).getProblems().length > 0;
             }
             else
             {
@@ -106,7 +110,7 @@ public class MigrationContentProvider implements ITreeContentProvider
     {
         if( newInput instanceof IWorkspaceRoot )
         {
-            _problems = new ArrayList<ProblemDisplay>();
+            _problems = new ArrayList<ProblemsContainer>();
 
             try
             {
@@ -115,10 +119,10 @@ public class MigrationContentProvider implements ITreeContentProvider
 
                 if( setting != null )
                 {
-                    ProblemDisplay pd = new ProblemDisplay();
-                    pd.setSingleUpgradeProblems( setting.getPortalSettings() );
+                    ProblemsContainer problemsContainer = new ProblemsContainer();
+                    problemsContainer.setUpgradeProblemsList( Collections.singletonList( (UpgradeProblems) setting.getPortalSettings() ) );
 
-                    _problems.add( pd );
+                    _problems.add( problemsContainer );
                 }
 
                 Object[] o = UpgradeAssistantSettingsUtil.getAllObjectFromStore( MigrationProblems.class );
@@ -132,8 +136,8 @@ public class MigrationContentProvider implements ITreeContentProvider
                         codeProblems.add( (MigrationProblems) object );
                     }
 
-                    ProblemDisplay problemDsiplay = new ProblemDisplay();
-                    problemDsiplay.setListUpgradeProblems( codeProblems );
+                    ProblemsContainer problemDsiplay = new ProblemsContainer();
+                    problemDsiplay.setUpgradeProblemsList( codeProblems );
 
                     _problems.add( problemDsiplay );
                 }

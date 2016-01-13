@@ -22,21 +22,15 @@ import java.util.List;
 /**
  * @author Terry Jia
  */
-public class ProblemDisplay
+public class ProblemsContainer
 {
 
-    private List<UpgradeProblems> listUpgradeProblems;
-    private UpgradeProblems singleUpgradeProblems;
+    private List<UpgradeProblems> upgradeProblemsList;
     private String type;
 
-    public List<UpgradeProblems> getListUpgradeProblems()
+    public List<UpgradeProblems> getUpgradeProblemsList()
     {
-        return listUpgradeProblems;
-    }
-
-    public UpgradeProblems getSingleUpgradeProblems()
-    {
-        return singleUpgradeProblems;
+        return upgradeProblemsList;
     }
 
     public String getType()
@@ -44,20 +38,10 @@ public class ProblemDisplay
         return type;
     }
 
-    public boolean isSingle()
+    public void setUpgradeProblemsList( List<UpgradeProblems> listUpgradeProblems )
     {
-        return singleUpgradeProblems != null;
-    }
-
-    public void setListUpgradeProblems( List<UpgradeProblems> listUpgradeProblems )
-    {
-        this.listUpgradeProblems = listUpgradeProblems;
+        this.upgradeProblemsList = listUpgradeProblems;
         type = listUpgradeProblems.get( 0 ).getType();
     }
 
-    public void setSingleUpgradeProblems( UpgradeProblems singleUpgradeProblems )
-    {
-        this.singleUpgradeProblems = singleUpgradeProblems;
-        type = singleUpgradeProblems.getType();
-    }
 }

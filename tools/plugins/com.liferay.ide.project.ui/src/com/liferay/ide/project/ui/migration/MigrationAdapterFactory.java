@@ -19,8 +19,6 @@ import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 
-import java.util.List;
-
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.ISharedImages;
@@ -46,7 +44,7 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
     @Override
     public Class[] getAdapterList()
     {
-        return new Class[] { FileProblems.class, UpgradeProblems.class, ProblemDisplay.class };
+        return new Class[] { FileProblems.class, UpgradeProblems.class, ProblemsContainer.class };
     }
 
     @Override
@@ -63,7 +61,7 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
             return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
                 ISharedImages.IMG_OBJ_FILE ) );
         }
-        else if( element instanceof UpgradeProblems || element instanceof ProblemDisplay )
+        else if( element instanceof UpgradeProblems || element instanceof ProblemsContainer )
         {
             return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
                 ISharedImages.IMG_OBJ_FOLDER ) );
@@ -96,9 +94,9 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
                 return lp.getType();
             }
         }
-        else if( element instanceof ProblemDisplay )
+        else if( element instanceof ProblemsContainer )
         {
-            return ( (ProblemDisplay) element ).getType();
+            return ( (ProblemsContainer) element ).getType();
         }
 
         return null;
