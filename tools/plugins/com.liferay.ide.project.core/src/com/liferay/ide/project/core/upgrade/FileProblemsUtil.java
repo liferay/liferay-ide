@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class FileProblemsUtil
 {
-    public static List<FileProblems> getFileProblemsArray( Problem[] problems )
+    public static List<FileProblems> newFileProblemsListFrom( Problem[] problems )
     {
         List<FileProblems> fileProblemsList = new ArrayList<FileProblems>();
 

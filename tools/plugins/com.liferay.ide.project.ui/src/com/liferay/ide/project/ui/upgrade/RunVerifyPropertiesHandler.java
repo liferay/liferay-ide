@@ -63,7 +63,7 @@ public class RunVerifyPropertiesHandler extends AbstractOSGiCommandHandler
                 final List<Problem> problems = (List<Problem>) o;
 
                 List<FileProblems> fileProblemsList =
-                    FileProblemsUtil.getFileProblemsArray( problems.toArray( new Problem[0] ) );
+                    FileProblemsUtil.newFileProblemsListFrom( problems.toArray( new Problem[0] ) );
 
                 settings.getPortalSettings().setProblems( fileProblemsList.toArray( new FileProblems[0] ) );
 

@@ -180,7 +180,7 @@ public class MigrateProjectHandler extends AbstractHandler
                         MigrationProblems migrationProblems = new MigrationProblems();
 
                         List<FileProblems> fileProblemsList =
-                            FileProblemsUtil.getFileProblemsArray( allProblems.toArray( new Problem[0] ) );
+                            FileProblemsUtil.newFileProblemsListFrom( allProblems.toArray( new Problem[0] ) );
 
                         migrationProblems.setProblems( fileProblemsList.toArray( new FileProblems[0] ) );
 
