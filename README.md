@@ -22,7 +22,7 @@ for instructions. Then use the Getting Started Tutorial for how to create and de
 
 ## Building from source
 
-If you would like to build from source, use one of the two following commands:
+If you would like to build from source, use this following command:
 
 ```
 $ mvn clean verify -DskipTests
@@ -31,7 +31,7 @@ $ mvn clean verify -DskipTests
 Once it finishes the locally built Eclipse updatesite will be located here:
 
 ```
-build/com.liferay.ide-respoitory/target/liferay-ide-updatesite-<version>-<timestamp>.zip
+build/com.liferay.ide-repository/target/liferay-ide-<version>-<timestamp>-updatesite.zip
 ```
 
 You can install this using _Help > Install New Software... > Add > Archive > Point to newly built zip file_
