@@ -15,6 +15,13 @@
 
 package com.liferay.ide.project.ui.workspace;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.workspace.LiferayWorkspaceImportOp;
+import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
+import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,27 +56,19 @@ import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.core.workspace.WorkspaceNameValidationService;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
-import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
-
 /**
  * @author Andy Wu
  */
 @SuppressWarnings( "restriction" )
-public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspaceOp>
+public class LiferayWorkspaceImportWizard extends SapphireWizard<LiferayWorkspaceImportOp>
     implements IWorkbenchWizard, INewWizard
 {
 
     private boolean firstErrorMessageRemoved = false;
 
-    public NewLiferayWorkspaceWizard()
+    public LiferayWorkspaceImportWizard()
     {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayWorkspaceWizard.class ).wizard() );
+        super( createDefaultOp(), DefinitionLoader.sdef( LiferayWorkspaceImportWizard.class ).wizard() );
     }
 
     private void addToWorkingSets( IProject newProject ) throws Exception
@@ -110,12 +109,11 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
                 {
                     if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
                     {
-                        wizardPage.setMessage(
-                            LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
+                        wizardPage.setMessage( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
                     }
                     else
                     {
-                        wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE );
+                        wizardPage.setMessage( "Please select the workspace location.", SapphireWizardPage.NONE );
                     }
                 }
                 catch( CoreException e )
@@ -130,16 +128,11 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
         return wizardPages;
     }
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
-
     private void openLiferayPerspective( IProject newProject )
     {
         final IWorkbench workbench = PlatformUI.getWorkbench();
-
-        final IConfigurationElement element = new DelegateConfigurationElement( null )
+        // open the "final" perspective
+        final IConfigurationElement element = new DelegateConfigurationElement( null)
         {
 
             @Override
@@ -165,9 +158,9 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
     {
         super.performPostFinish();
 
-        final NewLiferayWorkspaceOp op = element().nearest( NewLiferayWorkspaceOp.class );
+        final LiferayWorkspaceImportOp op = element().nearest( LiferayWorkspaceImportOp.class );
 
-        final IProject newProject = CoreUtil.getProject( op.getWorkspaceName().content() );
+        final IProject newProject = CoreUtil.getProject( op.getWorkspaceLocation().content().lastSegment() );
 
         try
         {
@@ -181,56 +174,67 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
         openLiferayPerspective( newProject );
 
         setProjectExplorerLayoutNestedEnabled();
+
+    }
+
+    @Override
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
     }
 
     private void setProjectExplorerLayoutNestedEnabled()
     {
-        final String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
+
+        String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
 
         try
         {
             final ICommandService commandService =
                 (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
 
-            final Command command = commandService.getCommand( commandId );
+            Command command = commandService.getCommand( commandId );
 
-            final IHandler hanlder = command.getHandler();
+            IHandler hanlder = command.getHandler();
 
             if( hanlder != null )
             {
-                final Map<String, String> map = new HashMap<String, String>();
+                Map<String, String> map = new HashMap<String, String>();
 
                 map.put( "org.eclipse.ui.navigator.resources.nested.enabled", "true" );
 
-                final IEclipseContext eclipseContext =
+                IEclipseContext eclipseContext =
                     (IEclipseContext) PlatformUI.getWorkbench().getService( IEclipseContext.class );
 
-                final IViewPart projectExplorer =
-                    PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
-                        IPageLayout.ID_PROJECT_EXPLORER );
+                IViewPart projectExplorer = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+                    IPageLayout.ID_PROJECT_EXPLORER );
 
                 if( projectExplorer != null )
                 {
                     eclipseContext.set( ISources.ACTIVE_PART_NAME, projectExplorer );
                     eclipseContext.set( HandlerServiceImpl.PARM_MAP, map );
 
-                    final ExpressionContext expressionContext = new ExpressionContext( eclipseContext );
-                    final EvaluationContext context = new EvaluationContext( expressionContext, new Object() );
-                    final ExecutionEvent event = new ExecutionEvent( command, map, null, context );
+                    ExpressionContext expressionContext = new ExpressionContext( eclipseContext );
+
+                    EvaluationContext context = new EvaluationContext( expressionContext, new Object() );
+
+                    ExecutionEvent event = new ExecutionEvent( command, map, null, context );
 
                     hanlder.execute( event );
                 }
             }
+            else
+            {
+                ProjectUI.logInfo( "didn't find " + commandId + " handler" );
+            }
         }
         catch( ExecutionException e )
         {
-            // ignore errors this is best effort.
+            ProjectUI.logError( "execute " + commandId + " handler error", e );
         }
     }
 
-	private static NewLiferayWorkspaceOp createDefaultOp()
+    private static LiferayWorkspaceImportOp createDefaultOp()
     {
-        return NewLiferayWorkspaceOp.TYPE.instantiate();
+        return LiferayWorkspaceImportOp.TYPE.instantiate();
     }
-
 }

@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
@@ -30,6 +31,31 @@ public class LiferayWorkspaceUtil
 {
 
     public static String multiWorkspaceError = "more than one Liferay Workspace in workspace";
+
+    public static String hasLiferayWorkspaceMsg =
+        "A Liferay Workspace project already exists in this Eclipse instance.";
+
+    public static void clearWorkspace( String location )
+    {
+        File projectFile = new File( location, ".project" );
+
+        if( projectFile.exists() )
+        {
+            projectFile.delete();
+        }
+
+        File classpathFile = new File( location, ".classpath" );
+
+        if( classpathFile.exists() )
+            classpathFile.delete();
+
+        File settings = new File( location, ".settings" );
+
+        if( settings.exists() && settings.isDirectory() )
+        {
+            FileUtil.deleteDir( settings, true );
+        }
+    }
 
     public static boolean isValidWorkspaceLocation( String location )
     {
@@ -75,6 +101,18 @@ public class LiferayWorkspaceUtil
         return project != null &&
             project.getLocation() != null &&
             isValidWorkspaceLocation( project.getLocation().toOSString() );
+    }
+
+    public static boolean hasBundlesDir( String location )
+    {
+        File bundles = new File( location, "bundles" );
+
+        if( bundles.exists() && bundles.isDirectory() )
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public static boolean hasLiferayWorkspace() throws CoreException

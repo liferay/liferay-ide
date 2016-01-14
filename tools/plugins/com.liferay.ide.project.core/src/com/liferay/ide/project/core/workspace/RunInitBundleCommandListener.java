@@ -12,31 +12,29 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
 
-import java.util.List;
+package com.liferay.ide.project.core.workspace;
 
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
- * @author Gregory Amerson
  * @author Andy Wu
  */
-public interface ILiferayProjectProvider
+public class RunInitBundleCommandListener extends FilteredListener<PropertyContentEvent>
 {
-    <T> List<T> getData( String key, Class<T> type, Object... params );
 
-    String getDisplayName();
+    @Override
+    protected void handleTypedEvent( PropertyContentEvent event )
+    {
+        if( !op( event ).getRunInitBundleCommand().content() )
+        {
+            op( event ).setAddServer( false );
+        }
+    }
 
-    int getPriority();
-
-    String getShortName();
-
-    String getProjectType();
-
-    void importProject(String location , IProgressMonitor monitor , String extraOperation );
-
-    ILiferayProject provide( Object adaptable );
-
-    boolean provides( Class<?> type );
+    protected LiferayWorkspaceImportOp op( PropertyContentEvent event )
+    {
+        return event.property().element().nearest( LiferayWorkspaceImportOp.class );
+    }
 }

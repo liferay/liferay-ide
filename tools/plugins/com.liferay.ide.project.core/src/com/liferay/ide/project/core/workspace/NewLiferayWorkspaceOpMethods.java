@@ -37,7 +37,7 @@ public class NewLiferayWorkspaceOpMethods
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay Workspace project (this process may take several minutes)", 100 ); //$NON-NLS-1$
+        monitor.beginTask( "Creating Liferay Workspace project...", 100 ); //$NON-NLS-1$
 
         Status retval = null;
 
@@ -60,7 +60,7 @@ public class NewLiferayWorkspaceOpMethods
 
             ProjectCore.logError( msg, e );
 
-            return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );
+            return Status.createErrorStatus( msg , e );
         }
 
         return retval;

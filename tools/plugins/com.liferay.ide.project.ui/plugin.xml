@@ -226,6 +226,16 @@
             %import.binary.plugins.wizard.description
          </description>
       </wizard>
+      <wizard
+            category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.workspace.LiferayWorkspaceImportWizard"
+            icon="icons/e16/liferay_logo_16.png"
+            id="com.liferay.ide.project.ui.workspace.workspaceImportWizard"
+            name="Liferay Workspace">
+         <description>
+            import an existing Liferay Workspace
+         </description>
+      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
