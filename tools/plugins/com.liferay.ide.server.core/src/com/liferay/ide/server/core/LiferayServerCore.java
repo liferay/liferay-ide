@@ -279,7 +279,7 @@ public class LiferayServerCore extends Plugin
         return pluginPublishers;
     }
 
-    public static PortalBundle getPortalBundle( final IPath bundlePath )
+    public static PortalBundle newPortalBundle( final IPath bundlePath )
     {
         PortalBundleFactory[] factories = getPortalBundleFactories();
 

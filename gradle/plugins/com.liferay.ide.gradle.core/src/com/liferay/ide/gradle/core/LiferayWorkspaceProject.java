@@ -16,8 +16,12 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
+import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
@@ -30,6 +34,28 @@ public class LiferayWorkspaceProject extends BaseLiferayProject
     public LiferayWorkspaceProject( IProject project )
     {
         super( project );
+    }
+
+    @Override
+    public <T> T adapt( Class<T> adapterType )
+    {
+        if( ILiferayPortal.class.equals( adapterType ) )
+        {
+            // check for bundles/ directory
+            final IFolder bundlesFolder = getProject().getFolder( "bundles" );
+
+            if( bundlesFolder.exists() )
+            {
+                final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( bundlesFolder.getLocation() );
+
+                if( portalBundle != null )
+                {
+                    return adapterType.cast( portalBundle );
+                }
+            }
+        }
+
+        return super.adapt( adapterType );
     }
 
     @Override
