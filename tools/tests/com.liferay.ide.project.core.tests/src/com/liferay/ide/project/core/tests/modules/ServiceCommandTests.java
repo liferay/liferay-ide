@@ -55,12 +55,12 @@ public class ServiceCommandTests
             String[] serviceBundle =
                 new ServiceCommand( "com.liferay.bookmarks.service.BookmarksEntryLocalService" ).execute();
             String[] serviceBundleNoExportPackage =
-                new ServiceCommand( "com.liferay.site.teams.web.upgrade.SiteTeamsWebUpgrade" ).execute();
+                new ServiceCommand( "com.liferay.announcements.web.messaging.CheckEntryMessageListener" ).execute();
 
             assertEquals( "com.liferay.bookmarks.api", serviceBundle[0] );
             assertEquals( "1.0.0", serviceBundle[1] );
 
-            assertEquals( "com.liferay.site.teams.web", serviceBundleNoExportPackage[0] );
+            assertEquals( "com.liferay.announcements.web", serviceBundleNoExportPackage[0] );
             assertEquals( "1.0.0", serviceBundleNoExportPackage[1] );
         }
     }

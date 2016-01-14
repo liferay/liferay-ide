@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.modules;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -184,11 +185,10 @@ public class ServiceCommand
 
         while( iterator.hasNext() )
         {
-            iterator.next();
+            String serviceName = iterator.next();
 
-            if( iterator.hasNext() )
+            if( serviceName.contains( "bundle.id=" ) || serviceName.contains( "service.id=" ) || serviceName.contains( "=" ) )
             {
-                iterator.next();
                 iterator.remove();
             }
         }
@@ -222,6 +222,8 @@ public class ServiceCommand
                 newList.add( element );
             }
         }
+
+        Collections.sort( newList );
 
         return newList.toArray( new String[0] );
     }
