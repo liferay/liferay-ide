@@ -12,7 +12,9 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.server.tomcat.core;bundle-version="2.1.0",
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.jst.server.tomcat.core,
- org.eclipse.m2e.maven.runtime
+ org.eclipse.m2e.maven.runtime,
+ org.eclipse.swtbot.go,
+ com.liferay.ide.ui.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.core.tests

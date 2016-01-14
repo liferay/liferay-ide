@@ -29,6 +29,21 @@ public class ThemeWizardPageObject<T extends SWTBot> extends WizardPageObject<T>
     ComboBoxPageObject<SWTBot> themeFrameworkTypeComboBox;
     ComboBoxPageObject<SWTBot> themeParentTypeComboBox;
 
+    public ComboBoxPageObject<SWTBot> getThemeFrameworkTypeComboBox()
+    {
+        return themeFrameworkTypeComboBox;
+    }
+
+    public ComboBoxPageObject<SWTBot> getThemeParentTypeComboBox()
+    {
+        return themeParentTypeComboBox;
+    }
+
+    public ThemeWizardPageObject( T bot )
+    {
+        this( bot, 0 );
+    }
+
     public ThemeWizardPageObject( T bot, int indexThemeValidationMessage )
     {
         this( bot, TEXT_BLANK, indexThemeValidationMessage );

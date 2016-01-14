@@ -15,8 +15,10 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
-import com.liferay.ide.ui.tests.swtbot.page.RadioPageObject;
+import com.liferay.ide.project.ui.tests.swtbot.CreateLiferayPortletWizard;
+import com.liferay.ide.project.ui.tests.swtbot.ProjectWizard;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.RadioPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 

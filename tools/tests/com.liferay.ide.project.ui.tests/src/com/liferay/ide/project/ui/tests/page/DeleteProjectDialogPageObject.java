@@ -15,10 +15,11 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
+import com.liferay.ide.project.ui.tests.swtbot.ProjectBuildAction;
 import com.liferay.ide.ui.tests.swtbot.page.CheckBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.DialogPageObject;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu
@@ -47,5 +48,4 @@ public class DeleteProjectDialogPageObject<T extends SWTBot> extends DialogPageO
 
         confirm();
     }
-
 }
