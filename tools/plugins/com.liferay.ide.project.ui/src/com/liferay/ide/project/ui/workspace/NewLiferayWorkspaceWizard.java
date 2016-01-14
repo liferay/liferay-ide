@@ -183,55 +183,50 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
         setProjectExplorerLayoutNestedEnabled();
     }
 
-    private void setProjectExplorerLayoutNestedEnabled() {
-
-        String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
+    private void setProjectExplorerLayoutNestedEnabled()
+    {
+        final String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
 
         try
         {
             final ICommandService commandService =
                 (ICommandService) PlatformUI.getWorkbench().getService( ICommandService.class );
 
-            Command command = commandService.getCommand( commandId );
+            final Command command = commandService.getCommand( commandId );
 
-            IHandler hanlder = command.getHandler();
+            final IHandler hanlder = command.getHandler();
 
             if( hanlder != null )
             {
-                Map<String, String> map = new HashMap<String, String>();
+                final Map<String, String> map = new HashMap<String, String>();
 
                 map.put( "org.eclipse.ui.navigator.resources.nested.enabled", "true" );
 
-                IEclipseContext eclipseContext =
+                final IEclipseContext eclipseContext =
                     (IEclipseContext) PlatformUI.getWorkbench().getService( IEclipseContext.class );
 
-                IViewPart projectExplorer = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().
-                                findView( IPageLayout.ID_PROJECT_EXPLORER );
+                final IViewPart projectExplorer =
+                    PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().findView(
+                        IPageLayout.ID_PROJECT_EXPLORER );
 
-                if(projectExplorer != null)
+                if( projectExplorer != null )
                 {
                     eclipseContext.set( ISources.ACTIVE_PART_NAME, projectExplorer );
                     eclipseContext.set( HandlerServiceImpl.PARM_MAP, map );
 
-                    ExpressionContext expressionContext = new ExpressionContext( eclipseContext );
-
-                    EvaluationContext context = new EvaluationContext( expressionContext, new Object() );
-
-                    ExecutionEvent event = new ExecutionEvent( command, map, null, context );
+                    final ExpressionContext expressionContext = new ExpressionContext( eclipseContext );
+                    final EvaluationContext context = new EvaluationContext( expressionContext, new Object() );
+                    final ExecutionEvent event = new ExecutionEvent( command, map, null, context );
 
                     hanlder.execute( event );
                 }
             }
-            else
-            {
-                ProjectUI.logInfo( "didn't find " + commandId + " handler" );
-            }
         }
         catch( ExecutionException e )
         {
-            ProjectUI.logError( "execute " + commandId + " handler error", e );
+            // ignore errors this is best effort.
         }
-	}
+    }
 
 	private static NewLiferayWorkspaceOp createDefaultOp()
     {

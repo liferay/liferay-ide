@@ -17,13 +17,12 @@ package com.liferay.ide.ui.tests.swtbot.page;
 
 import com.liferay.ide.ui.tests.swtbot.condition.WidgetEnabledCondition;
 
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
 
 /**
  * @author Terry Jia
+ * @author Li Lu
  */
 public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObject<SWTBot>
 {
@@ -34,20 +33,36 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
     }
 
     @Override
-    protected AbstractSWTBot<?> getWidget()
+    protected SWTBotCombo getWidget()
     {
         return bot.comboBoxWithLabel( label );
     }
 
+    public boolean hasItem( String itemName )
+    {
+        for( String item : items() )
+        {
+            if( itemName.equals( item ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public String[] items()
+    {
+        return getWidget().items();
+    }
+
     public void setSelection( String value )
     {
-        AbstractSWTBot<? extends Widget> widget = getWidget();
+        SWTBotCombo combo = getWidget();
 
-        SWTBotCombo swtBotCombo = (SWTBotCombo) widget;
+        bot.waitUntil( new WidgetEnabledCondition( combo, true ) );
 
-        bot.waitUntil( new WidgetEnabledCondition( swtBotCombo, true ) );
-
-        swtBotCombo.setSelection( value );
+        combo.setSelection( value );
 
         sleep();
     }
