@@ -137,7 +137,7 @@ public interface GetPortalSettingsOp extends ExecutableElement
             {
                 final String path = liferayLocation.toOSString();
                 final PortalBundle portalBundle =
-                    LiferayServerCore.getPortalBundle( new org.eclipse.core.runtime.Path( path ) );
+                    LiferayServerCore.newPortalBundle( new org.eclipse.core.runtime.Path( path ) );
 
                 if( portalBundle == null || !portalBundle.getVersion().startsWith( _version ) )
                 {
