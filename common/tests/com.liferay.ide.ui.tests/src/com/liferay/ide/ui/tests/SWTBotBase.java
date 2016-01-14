@@ -17,6 +17,14 @@ package com.liferay.ide.ui.tests;
 
 import static org.junit.Assert.assertEquals;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.tests.swtbot.page.ConfirmPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TreePageObject;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -29,29 +37,25 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.ui.LiferayUIPlugin;
-
 /**
  * @author Terry Jia
  * @author Ashley Yuan
+ * @author Li Lu
  */
 @RunWith( SWTBotJunit4ClassRunner.class )
-public class SWTBotBase implements UIBase
+public class SWTBotBase implements UIBase, WizardBase
 {
 
-    private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
-    private static IPath liferayBundlesPath;
-
     public static SWTWorkbenchBot bot;
-
     public static ButtonBot buttonBot;
+
     public static CheckBoxBot checkBoxBot;
+
     public static ComboBoxBot comboBoxBot;
     public static EditorBot editorBot;
     public static LabelBot labelBot;
+    private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
+    private static IPath liferayBundlesPath;
     public static RadioBot radioBot;
     public static ShellBot shellBot;
     public static TextBot textBot;
@@ -82,6 +86,79 @@ public class SWTBotBase implements UIBase
         SWTBotPreferences.TIMEOUT = 30000;
 
         setupPluginsSDK();
+    }
+
+    public static void deleteALLWSProjects()
+    {
+        TreePageObject<SWTWorkbenchBot> tree = new TreePageObject<SWTWorkbenchBot>( bot );
+        String[] projects = tree.getAllItems();
+
+        for( String project : projects )
+        {
+            if( project.equals( getLiferayPluginsSdkName() ) )
+            {
+                continue;
+            }
+
+            TreeItemPageObject<SWTWorkbenchBot> projectItem = new TreeItemPageObject<SWTWorkbenchBot>( bot, project );
+
+            projectItem.doAction( MENU_DELETE );
+
+            ConfirmPageObject<SWTWorkbenchBot> dialog =
+                new ConfirmPageObject<SWTWorkbenchBot>( bot, "Delete Resources", BUTTON_OK );
+            dialog.confirm();
+        }
+    }
+
+    public static void deleteProjectInSdk( String projectName )
+    {
+        TreeItemPageObject<SWTWorkbenchBot> projectItem = new TreeItemPageObject<SWTWorkbenchBot>( bot, projectName );
+
+        projectItem.doAction( MENU_DELETE );
+
+        ConfirmPageObject<SWTWorkbenchBot> dialog =
+            new ConfirmPageObject<SWTWorkbenchBot>( bot, "Delete Resources", BUTTON_OK );
+        dialog.confirm();
+    }
+
+    protected static IPath getIvyCacheZip()
+    {
+        return getLiferayBundlesPath().append( "ivy-cache.zip" );
+    }
+
+    protected static IPath getLiferayBundlesPath()
+    {
+        if( liferayBundlesPath == null )
+        {
+            liferayBundlesPath = new Path( liferayBundlesDir );
+        }
+
+        return liferayBundlesPath;
+    }
+
+    protected static IPath getLiferayPluginsSdkDir()
+    {
+        return LiferayUIPlugin.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
+    }
+
+    protected static String getLiferayPluginsSdkName()
+    {
+        return "liferay-plugins-sdk-6.2";
+    }
+
+    protected static IPath getLiferayPluginsSDKZip()
+    {
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.zip" );
+    }
+
+    protected static String getLiferayPluginsSdkZipFolder()
+    {
+        return "liferay-plugins-sdk-6.2/";
+    }
+
+    public static void openWizard( String wizardName )
+    {
+        bot.toolbarDropDownButtonWithTooltip( CREATE_MENU_NEW_LIFERAY_PLUGIN_PROJECT ).menuItem( wizardName ).click();
     }
 
     private static void setupPluginsSDK() throws IOException
@@ -138,41 +215,6 @@ public class SWTBotBase implements UIBase
     protected void sleep( long millis )
     {
         bot.sleep( millis );
-    }
-
-    protected static IPath getLiferayBundlesPath()
-    {
-        if( liferayBundlesPath == null )
-        {
-            liferayBundlesPath = new Path( liferayBundlesDir );
-        }
-
-        return liferayBundlesPath;
-    }
-
-    protected static IPath getIvyCacheZip()
-    {
-        return getLiferayBundlesPath().append( "ivy-cache.zip" );
-    }
-
-    protected static IPath getLiferayPluginsSDKZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.zip" );
-    }
-
-    protected static String getLiferayPluginsSdkZipFolder()
-    {
-        return "liferay-plugins-sdk-6.2/";
-    }
-
-    protected static String getLiferayPluginsSdkName()
-    {
-        return "liferay-plugins-sdk-6.2";
-    }
-
-    protected static IPath getLiferayPluginsSdkDir()
-    {
-        return LiferayUIPlugin.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
     }
 
 }
