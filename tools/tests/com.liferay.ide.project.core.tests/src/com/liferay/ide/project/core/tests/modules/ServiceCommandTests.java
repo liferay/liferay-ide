@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.core.runtime.IStatus;
@@ -56,12 +57,16 @@ public class ServiceCommandTests
                 new ServiceCommand( "com.liferay.bookmarks.service.BookmarksEntryLocalService" ).execute();
             String[] serviceBundleNoExportPackage =
                 new ServiceCommand( "com.liferay.announcements.web.messaging.CheckEntryMessageListener" ).execute();
+            String[] serviceBundleNotExit = 
+                new ServiceCommand( "com.liferay.test.TestServiceNotExit" ).execute();
 
             assertEquals( "com.liferay.bookmarks.api", serviceBundle[0] );
             assertEquals( "1.0.0", serviceBundle[1] );
 
             assertEquals( "com.liferay.announcements.web", serviceBundleNoExportPackage[0] );
             assertEquals( "1.0.0", serviceBundleNoExportPackage[1] );
+
+            assertNull( serviceBundleNotExit );
         }
     }
 

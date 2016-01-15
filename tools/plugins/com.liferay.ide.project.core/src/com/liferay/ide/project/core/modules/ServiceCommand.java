@@ -113,7 +113,7 @@ public class ServiceCommand
 
         supervisor.getAgent().stdin( "packages " + serviceName.substring( 0, serviceName.lastIndexOf( "." ) ) );
 
-        if( supervisor.getOutInfo().equals( "No exported packages\n" ) )
+        if( supervisor.getOutInfo().startsWith( "No exported packages" ) )
         {
             supervisor.getAgent().stdin(
                 "services " + "(objectClass=" + serviceName + ")" + " | grep \"Registered by bundle:\" " );
@@ -138,7 +138,7 @@ public class ServiceCommand
             {
                 out = out.replaceAll( ".*>.*$", "" );
 
-                if( !out.equals( "" ) && !out.equals( "true\n" ) && !out.equals( "false\n" ) )
+                if( !"".equals( out ) && !out.startsWith( "true" ) )
                 {
                     outinfo = out;
                 }
@@ -230,6 +230,11 @@ public class ServiceCommand
 
     private String[] parseRegisteredBundle( String serviceName )
     {
+        if( serviceName.startsWith( "false" ) )
+        {
+            return null;
+        }
+
         String str = serviceName.substring( 0, serviceName.indexOf( "[" ) );
         str = str.replaceAll( "\"Registered by bundle:\"", "" ).trim();
         String[] result = str.split( "_" );
