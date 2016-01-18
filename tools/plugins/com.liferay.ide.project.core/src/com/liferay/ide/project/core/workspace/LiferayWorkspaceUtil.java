@@ -72,9 +72,9 @@ public class LiferayWorkspaceUtil
 
     public static boolean isValidWorkspace( IProject project )
     {
-        String location = project.getLocation().toOSString();
-
-        return isValidWorkspaceLocation( location );
+        return project != null &&
+            project.getLocation() != null &&
+            isValidWorkspaceLocation( project.getLocation().toOSString() );
     }
 
     public static boolean hasLiferayWorkspace() throws CoreException
