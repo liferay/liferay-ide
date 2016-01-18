@@ -60,6 +60,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
  * @author Greg Amerson
  * @author Simon Jiang
  * @author Terry Jia
+ * @author Andy Wu
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class AddHookOperation extends AbstractDataModelOperation implements INewHookDataModelProperties
@@ -281,16 +282,20 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
             {
                 try
                 {
-                    IFile createdFile = ProjectUtil.createEmptyProjectFile( languagePropertyFile[0], contentFolder );
-
-                    if( createdFile != null )
+                    if( !languagePropertyFile[0].contains( "*" ) )
                     {
-                        Set<IFile> languageFilesCreated =
-                            (Set<IFile>) dm.getProperty( LANGUAGE_PROPERTIES_FILES_CREATED );
+                        IFile createdFile =
+                            ProjectUtil.createEmptyProjectFile( languagePropertyFile[0], contentFolder );
 
-                        languageFilesCreated.add( createdFile );
+                        if( createdFile != null )
+                        {
+                            Set<IFile> languageFilesCreated =
+                                (Set<IFile>) dm.getProperty( LANGUAGE_PROPERTIES_FILES_CREATED );
 
-                        dm.setProperty( LANGUAGE_PROPERTIES_FILES_CREATED, languageFilesCreated );
+                            languageFilesCreated.add( createdFile );
+
+                            dm.setProperty( LANGUAGE_PROPERTIES_FILES_CREATED, languageFilesCreated );
+                        }
                     }
                 }
                 catch( Exception e )
