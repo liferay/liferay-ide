@@ -16,11 +16,8 @@ package com.liferay.ide.core;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 /**
  * @author Gregory Amerson
- * @author Andy Wu
  */
 public interface ILiferayProjectProvider
 {
@@ -33,8 +30,6 @@ public interface ILiferayProjectProvider
     String getShortName();
 
     String getProjectType();
-
-    void importProject(String location , IProgressMonitor monitor , String extraOperation );
 
     ILiferayProject provide( Object adaptable );
 

@@ -17,11 +17,8 @@ package com.liferay.ide.core;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 /**
  * @author Gregory Amerson
- * @author Andy Wu
  */
 public abstract class AbstractLiferayProjectProvider
     implements ILiferayProjectProvider, Comparable<ILiferayProjectProvider>
@@ -76,10 +73,6 @@ public abstract class AbstractLiferayProjectProvider
     public boolean isDefault()
     {
         return this.isDefault;
-    }
-    @Override
-    public void importProject(String location , IProgressMonitor monitor , String extraOperation )
-    {
     }
 
     public boolean provides( Class<?> type )
