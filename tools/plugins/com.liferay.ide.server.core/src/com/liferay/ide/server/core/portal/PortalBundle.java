@@ -42,6 +42,8 @@ public interface PortalBundle extends ILiferayPortal
 
     IPath getModulesPath();
 
+    IPath getOSGiBundlesDir();
+
     IPath[] getRuntimeClasspath();
 
     String[] getRuntimeStartVMArgs();

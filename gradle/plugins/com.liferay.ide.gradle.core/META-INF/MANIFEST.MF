@@ -20,6 +20,7 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.gradle.core,
+ com.liferay.ide.gradle.core.modules,
  com.liferay.ide.gradle.core.workspace,
  com.liferay.ide.gradle.toolingapi.custom
 Bundle-ClassPath: .,

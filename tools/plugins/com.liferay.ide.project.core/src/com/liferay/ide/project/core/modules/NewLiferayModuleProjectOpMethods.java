@@ -27,18 +27,15 @@ import java.util.List;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
-
-
 /**
  * @author Simon Jiang
  */
-public class NewLiferayModuleProjectOpMethods
+public class NewLiferayModuleProjectOpMethods extends BaseOpMethods
 {
 
     protected static String[] services = new String[] {
@@ -601,11 +598,6 @@ public class NewLiferayModuleProjectOpMethods
         }
 
         return retval;
-    }
-
-    public static void updateLocation( final NewLiferayModuleProjectOp op, final Path baseLocation )
-    {
-        op.setLocation( baseLocation );
     }
 
     public static void addProperties( File dest, List<String> properties ) throws Exception

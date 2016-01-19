@@ -12,27 +12,37 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.modules;
 
-import org.eclipse.sapphire.PropertyContentEvent;
+package com.liferay.ide.gradle.core.modules;
+
+import com.liferay.ide.server.util.ServerUtil;
+
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.services.ValidationService;
+import org.eclipse.wst.server.core.IRuntime;
 
 /**
- * @author Simon Jiang
+ * @author Terry Jia
  */
-public class ModuleProjectUseDefaultLocationListener extends ModuleProjectNameListener
+public class NewLiferayBundleValidationService extends ValidationService
 {
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        final BaseModuleOp op = op( event );
 
-        if( op.getUseDefaultLocation().content( true ) )
+    @Override
+    protected Status compute()
+    {
+        Status retval = Status.createOkStatus();
+
+        final NewJSPHookModuleOp op = context( NewJSPHookModuleOp.class );
+
+        final String runtimeName = op.getBundleName().content( true );
+
+        IRuntime runtime = ServerUtil.getRuntime( runtimeName );
+
+        if( runtime == null )
         {
-            super.handleTypedEvent( event );
+            retval = Status.createErrorStatus( "Liferay runtime must be configured." );
         }
-        else
-        {
-            op.setLocation( (String) null );
-        }
+
+        return retval;
     }
 }

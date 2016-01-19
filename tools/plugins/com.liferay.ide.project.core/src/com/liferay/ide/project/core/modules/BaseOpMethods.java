@@ -12,27 +12,20 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.modules;
 
-import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.modeling.Path;
 
 /**
- * @author Simon Jiang
+ * @author Terry Jia
  */
-public class ModuleProjectUseDefaultLocationListener extends ModuleProjectNameListener
+public class BaseOpMethods
 {
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
-    {
-        final BaseModuleOp op = op( event );
 
-        if( op.getUseDefaultLocation().content( true ) )
-        {
-            super.handleTypedEvent( event );
-        }
-        else
-        {
-            op.setLocation( (String) null );
-        }
+    public static void updateLocation( final BaseModuleOp op, final Path baseLocation )
+    {
+        op.setLocation( baseLocation );
     }
+
 }

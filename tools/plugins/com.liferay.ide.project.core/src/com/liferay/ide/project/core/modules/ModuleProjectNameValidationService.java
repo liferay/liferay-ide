@@ -47,8 +47,8 @@ public class ModuleProjectNameValidationService extends ValidationService
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
-                if( ! event.property().definition().equals( NewLiferayModuleProjectOp.PROP_FINAL_PROJECT_NAME )
-                                && ! event.property().definition().equals( NewLiferayModuleProjectOp.PROP_PROJECT_NAMES )
+                if( ! event.property().definition().equals( BaseModuleOp.PROP_FINAL_PROJECT_NAME )
+                                && ! event.property().definition().equals( BaseModuleOp.PROP_PROJECT_NAMES )
                                 && ! event.property().definition().equals( ProjectName.PROP_PROJECT_NAME ) )
                 {
                     refresh();
@@ -64,8 +64,8 @@ public class ModuleProjectNameValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final NewLiferayModuleProjectOp op = op();
-        final String currentProjectName = op.getProjectName().content( true );
+        final BaseModuleOp op = op();
+        final String currentProjectName = op.getProjectName().content();
 
         if( currentProjectName != null )
         {
@@ -115,7 +115,7 @@ public class ModuleProjectNameValidationService extends ValidationService
         op().detach( listener, "*" );
     }
 
-    private boolean isInvalidProjectName( NewLiferayModuleProjectOp op )
+    private boolean isInvalidProjectName( BaseModuleOp op )
     {
         final String projectName = op.getProjectName().content( true );
 
@@ -129,13 +129,12 @@ public class ModuleProjectNameValidationService extends ValidationService
 
     private boolean isValidProjectName( String currentProjectName )
     {
-    	
         return currentProjectName.matches( PROJECT_NAME_REGEX );
     }
 
-    private NewLiferayModuleProjectOp op()
+    private BaseModuleOp op()
     {
-        return context( NewLiferayModuleProjectOp.class );
+        return context( BaseModuleOp.class );
     }
 
 }

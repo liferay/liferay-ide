@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.Platform;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBundle
 {
@@ -110,6 +111,19 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
         if( this.bundlePath != null )
         {
             retval = this.bundlePath.append( "webapps/ROOT" );
+        }
+
+        return retval;
+    }
+
+    @Override
+    public IPath getOSGiBundlesDir()
+    {
+        IPath retval = null;
+
+        if( this.liferayHome != null )
+        {
+            retval = this.liferayHome.append( "osgi" );
         }
 
         return retval;
@@ -239,4 +253,5 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
 
         return libs.toArray( new IPath[libs.size()] );
     }
+
 }

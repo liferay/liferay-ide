@@ -146,9 +146,9 @@ public class ModuleProjectLocationValidationService extends ValidationService
         op().getProjectProvider().attach( this.listener );
     }
 
-    private NewLiferayModuleProjectOp op()
+    private BaseModuleOp op()
     {
-        return context( NewLiferayModuleProjectOp.class );
+        return context( BaseModuleOp.class );
     }
 
 }
