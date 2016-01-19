@@ -25,7 +25,6 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -605,24 +604,7 @@ public class ProjectImportUtil
         return retVal;
     }
 
-    public static IStatus validateWorkspacePath(final String currentPath)
-    {
-        IStatus retVal = validatePath( currentPath );
-
-        if( retVal.isOK() )
-        {
-            if( !LiferayWorkspaceUtil.isValidWorkspaceLocation( currentPath ) )
-            {
-                retVal = ProjectCore.createErrorStatus( "Invalid Liferay Workspace" );
-            }
-        }
-
-        return retVal;
-    }
-
-
-
-    private static IStatus validatePath( final String currentPath )
+    public static IStatus validatePath( final String currentPath )
     {
         if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
         {

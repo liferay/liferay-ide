@@ -66,25 +66,6 @@
                class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
-      <wizard
-            category="com.liferay.ide.newWizards"
-            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
-            icon="icons/e16/liferay_logo_16.png"
-            id="com.liferay.ide.project.ui.workspace.newLiferayWorkspaceWizard"
-            name="Liferay Workspace"
-            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
-            project="true">
-         <class class="com.liferay.ide.project.ui.workspace.NewLiferayWorkspaceWizard">
-			<parameter name="liferay_project" value="true"/>
-			<parameter name="menuIndex" value="12" />
-         </class>
-         <description>
-            Create a new Liferay Workspace project for developing modules and themes for Liferay 7
-         </description>
-         <selection
-               class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
    </extension>
 
    <extension
@@ -224,16 +205,6 @@
             name="%import.binary.plugins.wizard.name">
          <description>
             %import.binary.plugins.wizard.description
-         </description>
-      </wizard>
-      <wizard
-            category="com.liferay.ide.projects.import"
-            class="com.liferay.ide.project.ui.workspace.LiferayWorkspaceImportWizard"
-            icon="icons/e16/liferay_logo_16.png"
-            id="com.liferay.ide.project.ui.workspace.workspaceImportWizard"
-            name="Liferay Workspace">
-         <description>
-            import an existing Liferay Workspace
          </description>
       </wizard>
    </extension>

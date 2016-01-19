@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.workspace;
+package com.liferay.ide.gradle.ui.workspace;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,9 +50,8 @@ import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.core.workspace.WorkspaceNameValidationService;
+import com.liferay.ide.gradle.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;

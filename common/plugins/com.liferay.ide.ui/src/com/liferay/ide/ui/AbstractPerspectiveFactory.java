@@ -38,7 +38,7 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ID_NEW_MODULE_PROJECT_WIZARD = "com.liferay.ide.project.ui.newModuleProjectWizard";
 
-    public static final String ID_NEW_WORKSPACE_PROJECT_WIZARD = "com.liferay.ide.project.ui.workspace.newLiferayWorkspaceWizard";
+    public static final String ID_NEW_WORKSPACE_PROJECT_WIZARD = "com.liferay.ide.gradle.ui.workspace.newLiferayWorkspaceWizard";
 
     public static final String ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE =
         "com.liferay.ide.eclipse.project.ui.newProjectWizardExistingSource"; //$NON-NLS-1$

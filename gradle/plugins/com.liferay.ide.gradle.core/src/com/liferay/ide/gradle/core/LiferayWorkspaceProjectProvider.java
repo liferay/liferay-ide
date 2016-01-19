@@ -18,12 +18,12 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.gradle.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
 
@@ -80,7 +80,6 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         return retval;
     }
 
-    @Override
     public void importProject(String location , IProgressMonitor monitor , String extraOperation )
     {
         try

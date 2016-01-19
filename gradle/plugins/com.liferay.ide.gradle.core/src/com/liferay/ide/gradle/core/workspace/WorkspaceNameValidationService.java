@@ -12,7 +12,7 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.workspace;
+package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 

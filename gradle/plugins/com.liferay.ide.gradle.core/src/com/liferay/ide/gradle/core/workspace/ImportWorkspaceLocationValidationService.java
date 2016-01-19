@@ -13,10 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.workspace;
+package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.ProjectImportUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.modeling.Path;
@@ -57,7 +56,7 @@ public class ImportWorkspaceLocationValidationService extends ValidationService
         {
             final String currentPath = currentProjectLocation.toOSString();
 
-            retval = StatusBridge.create( ProjectImportUtil.validateWorkspacePath( currentPath ) );
+            retval = StatusBridge.create( LiferayWorkspaceUtil.validateWorkspacePath( currentPath ) );
 
             if( !retval.ok() )
                 return retval;

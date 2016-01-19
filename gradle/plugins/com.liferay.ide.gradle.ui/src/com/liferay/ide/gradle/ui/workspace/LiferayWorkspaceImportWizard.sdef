@@ -24,7 +24,7 @@
     </import>
     <wizard>
         <id>LiferayWorkspaceImportWizard</id>
-        <element-type>com.liferay.ide.project.core.workspace.LiferayWorkspaceImportOp</element-type>
+        <element-type>com.liferay.ide.gradle.core.workspace.LiferayWorkspaceImportOp</element-type>
         <label>Import Liferay Workspace</label>
         <page>
             <id>ImportLiferayWorkspacePage</id>

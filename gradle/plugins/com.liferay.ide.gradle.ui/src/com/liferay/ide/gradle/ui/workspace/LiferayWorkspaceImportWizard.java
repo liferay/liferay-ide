@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.workspace;
+package com.liferay.ide.gradle.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.workspace.LiferayWorkspaceImportOp;
-import com.liferay.ide.project.core.workspace.LiferayWorkspaceUtil;
+import com.liferay.ide.gradle.core.workspace.LiferayWorkspaceImportOp;
+import com.liferay.ide.gradle.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;

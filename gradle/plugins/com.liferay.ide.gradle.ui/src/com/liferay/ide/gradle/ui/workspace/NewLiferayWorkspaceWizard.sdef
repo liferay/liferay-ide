@@ -21,7 +21,7 @@
     </import>
     <wizard>
         <id>NewLiferayWorkspaceWizard</id>
-        <element-type>com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp</element-type>
+        <element-type>com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp</element-type>
         <label>New Liferay Workspace</label>
         <page>
             <id>LiferayWorkspacePage</id>

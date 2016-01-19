@@ -12,38 +12,27 @@
  * details.
  *
  *******************************************************************************/
+package com.liferay.ide.gradle.core.workspace;
 
-package com.liferay.ide.project.core.workspace;
-
-import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.services.ValidationService;
-import org.eclipse.wst.server.core.internal.ServerPlugin;
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class ServerNameValidationService extends ValidationService
+public class WorkspaceUseDefaultLocationListener extends WorkspaceNameListener
 {
-
     @Override
-    protected Status compute()
+    protected void handleTypedEvent( PropertyContentEvent event )
     {
-        Status retval = Status.createOkStatus();
+        final NewLiferayWorkspaceOp op = op( event );
 
-        String serverName = op().getServerName().content();
-
-        if( ServerPlugin.isNameInUse( null, serverName ) )
+        if( op.getUseDefaultLocation().content( true ) )
         {
-            retval = Status.createErrorStatus( "The name is already in use. Specify a different name." );
+            super.handleTypedEvent( event );
         }
-
-        return retval;
+        else
+        {
+            op.setLocation( (String) null );
+        }
     }
-
-    private LiferayWorkspaceImportOp op()
-    {
-        return context( LiferayWorkspaceImportOp.class );
-    }
-
 }

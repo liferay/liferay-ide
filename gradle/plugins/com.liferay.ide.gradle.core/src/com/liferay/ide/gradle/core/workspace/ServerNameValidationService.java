@@ -13,28 +13,37 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.workspace;
+package com.liferay.ide.gradle.core.workspace;
 
-import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.services.ValidationService;
+import org.eclipse.wst.server.core.internal.ServerPlugin;
 
 /**
  * @author Andy Wu
  */
-public class RunInitBundleCommandListener extends FilteredListener<PropertyContentEvent>
+@SuppressWarnings( "restriction" )
+public class ServerNameValidationService extends ValidationService
 {
 
     @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
+    protected Status compute()
     {
-        if( !op( event ).getRunInitBundleCommand().content() )
+        Status retval = Status.createOkStatus();
+
+        String serverName = op().getServerName().content();
+
+        if( ServerPlugin.isNameInUse( null, serverName ) )
         {
-            op( event ).setAddServer( false );
+            retval = Status.createErrorStatus( "The name is already in use. Specify a different name." );
         }
+
+        return retval;
     }
 
-    protected LiferayWorkspaceImportOp op( PropertyContentEvent event )
+    private LiferayWorkspaceImportOp op()
     {
-        return event.property().element().nearest( LiferayWorkspaceImportOp.class );
+        return context( LiferayWorkspaceImportOp.class );
     }
+
 }

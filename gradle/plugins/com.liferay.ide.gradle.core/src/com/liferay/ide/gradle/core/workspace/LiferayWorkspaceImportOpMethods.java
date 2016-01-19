@@ -13,10 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.workspace;
+package com.liferay.ide.gradle.core.workspace;
 
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.CoreException;
@@ -46,9 +45,7 @@ public class LiferayWorkspaceImportOpMethods
 
         try
         {
-            @SuppressWarnings( "unchecked" )
-            NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider =
-                (NewLiferayProjectProvider<NewLiferayWorkspaceOp>) LiferayCore.getProvider( "liferay-workspace" );
+            LiferayWorkspaceProjectProvider provider = new LiferayWorkspaceProjectProvider();
 
             String location = op.getWorkspaceLocation().content().toOSString();
 

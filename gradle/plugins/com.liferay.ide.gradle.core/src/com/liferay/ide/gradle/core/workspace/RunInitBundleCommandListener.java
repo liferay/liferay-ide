@@ -12,27 +12,29 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.workspace;
 
+package com.liferay.ide.gradle.core.workspace;
+
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Andy Wu
  */
-public class WorkspaceUseDefaultLocationListener extends WorkspaceNameListener
+public class RunInitBundleCommandListener extends FilteredListener<PropertyContentEvent>
 {
+
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
-        final NewLiferayWorkspaceOp op = op( event );
+        if( !op( event ).getRunInitBundleCommand().content() )
+        {
+            op( event ).setAddServer( false );
+        }
+    }
 
-        if( op.getUseDefaultLocation().content( true ) )
-        {
-            super.handleTypedEvent( event );
-        }
-        else
-        {
-            op.setLocation( (String) null );
-        }
+    protected LiferayWorkspaceImportOp op( PropertyContentEvent event )
+    {
+        return event.property().element().nearest( LiferayWorkspaceImportOp.class );
     }
 }
