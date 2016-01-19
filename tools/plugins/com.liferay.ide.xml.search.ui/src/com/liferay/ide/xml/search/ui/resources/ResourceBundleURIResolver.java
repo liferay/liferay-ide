@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.xml.search.ui.resources;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,7 +54,7 @@ public class ResourceBundleURIResolver extends ResourceBaseURIResolver
     {
         final String extension = file.getFileExtension();
 
-        if( ! getExtensions().contains( extension.toLowerCase() ) )
+        if( CoreUtil.isNullOrEmpty( extension ) || !getExtensions().contains( extension.toLowerCase() ) )
         {
             return false;
         }
