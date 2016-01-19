@@ -53,6 +53,7 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Andy Wu
  */
 public class PortalRuntimeComposite extends Composite implements ModifyListener
 {
@@ -125,10 +126,11 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
         jreCombo = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
         jreCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        jreCombo.addSelectionListener( new SelectionAdapter()
+        jreCombo.addModifyListener( new ModifyListener()
         {
+
             @Override
-            public void widgetSelected( SelectionEvent e )
+            public void modifyText( ModifyEvent e )
             {
                 int sel = jreCombo.getSelectionIndex();
 
@@ -141,14 +143,14 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
 
                 PortalRuntime portalRuntime = getPortalRuntime();
 
-                if ( portalRuntime!=null)
+                if( portalRuntime != null )
                 {
                     portalRuntime.setVMInstall( vmInstall );
                 }
 
                 validate();
             }
-        });
+        } );
 
         jreButton = SWTUtil.createButton( this, Msgs.installedJREs );
         jreButton.addSelectionListener( new SelectionAdapter()

@@ -57,6 +57,7 @@ import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
 /**
  * @author Greg Amerson
+ * @author Andy Wu
  */
 @SuppressWarnings( { "restriction", "unchecked" } )
 public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implements ModifyListener
@@ -232,10 +233,11 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
         jreCombo = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
         jreCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        jreCombo.addSelectionListener( new SelectionAdapter()
+        jreCombo.addModifyListener( new ModifyListener()
         {
 
-            public void widgetSelected( SelectionEvent e )
+            @Override
+            public void modifyText( ModifyEvent e )
             {
                 int sel = jreCombo.getSelectionIndex();
 
@@ -361,7 +363,18 @@ public class LiferayTomcatRuntimeComposite extends TomcatRuntimeComposite implem
 
     protected void updateJREs()
     {
-        IVMInstall currentVM = getJavaRuntime().getVMInstall();
+        IJavaRuntime iJavaRuntime = getJavaRuntime();
+
+        IVMInstall currentVM =  null;
+
+        if ( iJavaRuntime!=null && iJavaRuntime.getVMInstall()!=null )
+        {
+            currentVM = iJavaRuntime.getVMInstall();
+        }
+        else
+        {
+            currentVM = JavaRuntime.getDefaultVMInstall();
+        }
 
         int currentJREIndex = -1;
 
