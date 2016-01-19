@@ -136,7 +136,7 @@ public class ServiceCommand
         {
             if( !"".equals( out ) && out != null )
             {
-                out = out.replaceAll( ".*>.*$", "" );
+                out = out.replaceAll( "^>.*$", "" );
 
                 if( !"".equals( out ) && !out.startsWith( "true" ) )
                 {
@@ -251,24 +251,32 @@ public class ServiceCommand
     {
         final int symbolicIndex = info.indexOf( "bundle-symbolic-name" );
         final int versionIndex = info.indexOf( "version:Version" );
-        String symbolicName = info.substring( symbolicIndex, info.indexOf( ";", symbolicIndex ) );
-        String version = info.substring( versionIndex, info.indexOf( ";", versionIndex ) );
+        String symbolicName;
+        String version;
 
-        final Pattern p = Pattern.compile( "\"([^\"]*)\"" );
-        Matcher m = p.matcher( symbolicName );
-
-        while( m.find() )
+        if( symbolicIndex != -1 && versionIndex != -1 )
         {
-            symbolicName = m.group( 1 );
+            symbolicName = info.substring( symbolicIndex, info.indexOf( ";", symbolicIndex ) );
+            version = info.substring( versionIndex, info.indexOf( ";", versionIndex ) );
+
+            final Pattern p = Pattern.compile( "\"([^\"]*)\"" );
+            Matcher m = p.matcher( symbolicName );
+
+            while( m.find() )
+            {
+                symbolicName = m.group( 1 );
+            }
+
+            m = p.matcher( version );
+
+            while( m.find() )
+            {
+                version = m.group( 1 );
+            }
+
+            return new String[] { symbolicName, version };
         }
 
-        m = p.matcher( version );
-
-        while( m.find() )
-        {
-            version = m.group( 1 );
-        }
-
-        return new String[] { symbolicName, version };
+        return null;
     }
 }
