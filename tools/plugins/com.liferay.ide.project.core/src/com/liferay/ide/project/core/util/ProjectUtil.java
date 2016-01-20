@@ -960,11 +960,11 @@ public class ProjectUtil
     {
         if( project != null && ProjectUtil.isLiferayFacetedProject( project ) )
         {
-            IWebProject iProject = LiferayCore.create( IWebProject.class, project );
+            IWebProject webProject = LiferayCore.create( IWebProject.class, project );
 
-            if( iProject != null )
+            if( webProject != null )
             {
-                IFolder defaultDocrootFolder = iProject.getDefaultDocrootFolder();
+                IFolder defaultDocrootFolder = webProject.getDefaultDocrootFolder();
 
                 if( defaultDocrootFolder != null )
                 {
