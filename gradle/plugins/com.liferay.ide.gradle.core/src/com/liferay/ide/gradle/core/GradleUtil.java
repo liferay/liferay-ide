@@ -36,7 +36,7 @@ import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectJob;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
@@ -47,7 +47,7 @@ import org.eclipse.debug.core.ILaunchManager;
 public class GradleUtil
 {
 
-    public static Job importGradleProject( File dir, IProgressMonitor monitor ) throws CoreException
+    public static IStatus importGradleProject( File dir, IProgressMonitor monitor ) throws CoreException
     {
         ProjectImportConfiguration configuration = new ProjectImportConfiguration();
         GradleDistributionWrapper from = GradleDistributionWrapper.from( GradleDistribution.fromBuild() );
@@ -60,12 +60,9 @@ public class GradleUtil
         SynchronizeGradleProjectJob synchronizeGradleProjectJob = new SynchronizeGradleProjectJob(
             configuration.toFixedAttributes(), configuration.getWorkingSets().getValue(), AsyncHandler.NO_OP );
 
-        synchronizeGradleProjectJob.runInWorkspace( monitor );
         synchronizeGradleProjectJob.setUser( true );
 
-        synchronizeGradleProjectJob.schedule();
-
-        return synchronizeGradleProjectJob;
+        return synchronizeGradleProjectJob.runInWorkspace( monitor );
     }
 
     public static void runGradleTask( IProject project, String task, IProgressMonitor monitor ) throws CoreException
