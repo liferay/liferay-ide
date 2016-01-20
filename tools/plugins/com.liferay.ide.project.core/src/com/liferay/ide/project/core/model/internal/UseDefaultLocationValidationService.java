@@ -75,8 +75,11 @@ public class UseDefaultLocationValidationService extends ValidationService
     {
         final NewLiferayPluginProjectOp op = op();
 
-        op.getProjectProvider().detach( this.listener );
-        op.getProjectName().detach( this.listener );
+        if ( op() != null && !op().disposed() )
+        {
+            op.getProjectProvider().detach( this.listener );
+            op.getProjectName().detach( this.listener );
+        }
     }
 
     private NewLiferayPluginProjectOp op()

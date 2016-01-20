@@ -132,7 +132,7 @@ public class LocationValidationService extends ValidationService
     {
         super.dispose();
 
-        if( this.listener != null )
+        if( this.listener != null && op() != null && !op().disposed() )
         {
             op().getProjectName().detach( this.listener );
 

@@ -960,15 +960,20 @@ public class ProjectUtil
     {
         if( project != null && ProjectUtil.isLiferayFacetedProject( project ) )
         {
-            IFolder defaultDocrootFolder = LiferayCore.create( IWebProject.class, project ).getDefaultDocrootFolder();
+            IWebProject iProject = LiferayCore.create( IWebProject.class, project );
 
-            if( defaultDocrootFolder != null )
+            if( iProject != null )
             {
-                IFile portletXml = defaultDocrootFolder.getFile( new Path( "WEB-INF/portlet.xml" ) );
+                IFolder defaultDocrootFolder = iProject.getDefaultDocrootFolder();
 
-                if( portletXml != null && portletXml.exists() )
+                if( defaultDocrootFolder != null )
                 {
-                    return portletXml;
+                    IFile portletXml = defaultDocrootFolder.getFile( new Path( "WEB-INF/portlet.xml" ) );
+
+                    if( portletXml != null && portletXml.exists() )
+                    {
+                        return portletXml;
+                    }
                 }
             }
         }

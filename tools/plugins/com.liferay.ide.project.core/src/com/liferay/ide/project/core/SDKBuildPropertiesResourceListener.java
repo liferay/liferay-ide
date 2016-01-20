@@ -199,7 +199,7 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
                 {
                     IResource resource = child.getResource();
 
-                    if ( resource != null )
+                    if( resource != null )
                     {
                         IProject[] sdkProjects = SDKUtil.getWorkspaceSDKs();
 
@@ -207,17 +207,16 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
                         {
                             IPath sdkProjectLocation = sdkProject.getLocation();
 
-                            if ( sdkProjectLocation != null )
+                            if( sdkProjectLocation != null )
                             {
-                                final IResourceDelta[] sdkChangedFiles =
-                                    child.getAffectedChildren( IResourceDelta.CHANGED | IResourceDelta.ADDED |
-                                        IResourceDelta.REMOVED );
+                                final IResourceDelta[] sdkChangedFiles = child.getAffectedChildren(
+                                    IResourceDelta.CHANGED | IResourceDelta.ADDED | IResourceDelta.REMOVED );
 
                                 for( IResourceDelta sdkDelta : sdkChangedFiles )
                                 {
                                     IResource sdkDeltaResource = sdkDelta.getResource();
 
-                                    if( sdkDeltaResource != null )
+                                    if( sdkDeltaResource != null && sdkDeltaResource.getLocation() != null )
                                     {
                                         if( sdkProjectLocation.isPrefixOf( sdkDeltaResource.getLocation() ) )
                                         {

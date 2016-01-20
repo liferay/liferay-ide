@@ -60,7 +60,10 @@ public class DisplayNameDefaultValueService extends DefaultValueService
     @Override
     public void dispose()
     {
-        op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
+        if( op() != null && !op().disposed() )
+        {
+            op().property( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ).detach( this.listener );
+        }
 
         super.dispose();
     }
