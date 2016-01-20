@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
@@ -75,13 +74,16 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         return retval;
     }
 
-    public void importProject(String location , IProgressMonitor monitor , String extraOperation )
+    public IStatus importProject(String location , IProgressMonitor monitor , String extraOperation )
     {
         try
         {
-            Job importJob =  GradleUtil.importGradleProject( new File(location) , monitor );
+            final IStatus importJob =  GradleUtil.importGradleProject( new File(location) , monitor );
 
-            importJob.join();
+            if( !importJob.isOK() )
+            {
+                return importJob;
+            }
 
             if( !CoreUtil.empty( extraOperation ) )
             {
@@ -99,11 +101,10 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         }
         catch( CoreException e )
         {
-            GradleCore.logError( "import Liferay Workspace project error" , e );
+            return GradleCore.createErrorStatus( "import Liferay workspace project error" , e );
         }
-        catch( InterruptedException e )
-        {
-        }
+
+        return Status.OK_STATUS;
     }
 
     @Override

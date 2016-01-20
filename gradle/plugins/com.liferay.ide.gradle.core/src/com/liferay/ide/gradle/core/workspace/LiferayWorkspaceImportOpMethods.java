@@ -21,10 +21,12 @@ import com.liferay.ide.project.core.ProjectCore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
@@ -54,14 +56,24 @@ public class LiferayWorkspaceImportOpMethods
             boolean isInitBundle = op.getRunInitBundleCommand().content();
             boolean isHasBundlesDir = op.getHasBundlesDir().content();
 
+            IStatus importStatus = null;
+
             if( isInitBundle && !isHasBundlesDir )
             {
-                provider.importProject( location, monitor, "initBundle" );
+                importStatus = provider.importProject( location, monitor, "initBundle" );
             }
             else
             {
-                provider.importProject( location, monitor, null );
+                importStatus = provider.importProject( location, monitor, null );
             }
+
+            retval = StatusBridge.create( importStatus );
+
+            if( !retval.ok() )
+            {
+                return retval;
+            }
+
             boolean isAddServer = op.getAddServer().content();
 
             String serverRuntimeName = op.getServerName().content();
@@ -83,7 +95,8 @@ public class LiferayWorkspaceImportOpMethods
         return retval;
     }
 
-    public static void addPortalRuntimeAndServer( String serverRuntimeName , String location, IProgressMonitor monitor ) throws CoreException
+    public static void addPortalRuntimeAndServer( String serverRuntimeName, String location, IProgressMonitor monitor )
+        throws CoreException
     {
         final IRuntimeWorkingCopy runtimeWC =
             ServerCore.findRuntimeType( "com.liferay.ide.server.portal.runtime" ).createRuntime(
