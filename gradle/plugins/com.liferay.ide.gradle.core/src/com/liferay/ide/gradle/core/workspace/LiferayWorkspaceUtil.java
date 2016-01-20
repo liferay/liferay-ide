@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -32,7 +33,7 @@ import org.eclipse.core.runtime.IStatus;
 public class LiferayWorkspaceUtil
 {
 
-    public static String multiWorkspaceError = "more than one Liferay Workspace in workspace";
+    public static String multiWorkspaceError = "More than one Liferay workspace build in current Eclipse workspace";
 
     public static String hasLiferayWorkspaceMsg =
         "A Liferay Workspace project already exists in this Eclipse instance.";
@@ -87,31 +88,12 @@ public class LiferayWorkspaceUtil
             return false;
         }
 
-        try
-        {
-            String modulesDir = CoreUtil.readPropertyFileValue( gradleProperties, "liferay.workspace.modules.dir" );
-            String themesDir = CoreUtil.readPropertyFileValue( gradleProperties, "liferay.workspace.themes.dir" );
+        final String settingsContent = FileUtil.readContents( settingsGradle, true );
 
-            if( CoreUtil.empty( modulesDir ) || CoreUtil.empty( themesDir ) )
-            {
-                return false;
-            }
-
-            File modules = new File( workspaceDir, modulesDir );
-            File themes = new File( workspaceDir, themesDir );
-
-            if( !( modules.exists() && themes.exists() ) )
-            {
-                return false;
-            }
-        }
-        catch( Exception e )
-        {
-            // ignore exception
-        }
-
-        return true;
+        return settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher( settingsContent ).matches();
     }
+
+    private final static Pattern PATTERN_WORKSPACE_PLUGIN = Pattern.compile( ".*apply\\s*plugin\\s*:\\s*[\'\"]com\\.liferay\\.workspace[\'\"]\\s*$", Pattern.MULTILINE | Pattern.DOTALL );
 
     public static boolean isValidWorkspace( IProject project )
     {
