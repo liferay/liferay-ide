@@ -30,6 +30,7 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
@@ -76,6 +77,50 @@ public interface NewLiferayWorkspaceOp extends ExecutableElement
     Value<Path> getLocation();
     void setLocation( String value );
     void setLocation( Path value );
+
+    // *** run ininBundle command ***
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    @Label( standard = "run initBundle command" )
+    @Listeners( RunInitBundleCommandListener2.class )
+    ValueProperty PROP_RUN_INITBUNDLE_COMMAND = new ValueProperty( TYPE, "runInitBundleCommand" );
+
+    Value<Boolean> getRunInitBundleCommand();
+
+    void setRunInitBundleCommand( String value );
+
+    void setRunInitBundleCommand( Boolean value );
+
+    // *** add Server ***
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
+    @Label( standard = "add server" )
+    ValueProperty PROP_ADD_SERVER = new ValueProperty( TYPE, "addServer" );
+
+    Value<Boolean> getAddServer();
+
+    void setAddServer( String value );
+
+    void setAddServer( Boolean value );
+
+    // *** serverName ***
+    @Type( base = String.class )
+    @Enablement( expr = "${ AddServer == 'true' }" )
+    @Services
+    (
+        value =
+            {
+                @Service( impl = ServerNameDefaultValueService2.class ),
+                @Service( impl = ServerNameValidationService2.class ),
+            }
+    )
+    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, "serverName" );
+
+    Value<String> getServerName();
+    void setServerName( String value );
 
     // *** Method: execute ***
 

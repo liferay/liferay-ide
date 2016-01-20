@@ -72,11 +72,6 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
             retval = ProjectCore.createErrorStatus( e );
         }
 
-        if( retval.isOK() )
-        {
-            GradleUtil.importGradleProject( location.toFile() , monitor);
-        }
-
         return retval;
     }
 

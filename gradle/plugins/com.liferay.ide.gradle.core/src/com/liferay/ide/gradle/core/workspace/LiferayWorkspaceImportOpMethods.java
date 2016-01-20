@@ -83,7 +83,7 @@ public class LiferayWorkspaceImportOpMethods
         return retval;
     }
 
-    private static void addPortalRuntimeAndServer( String serverRuntimeName , String location, IProgressMonitor monitor ) throws CoreException
+    public static void addPortalRuntimeAndServer( String serverRuntimeName , String location, IProgressMonitor monitor ) throws CoreException
     {
         final IRuntimeWorkingCopy runtimeWC =
             ServerCore.findRuntimeType( "com.liferay.ide.server.portal.runtime" ).createRuntime(

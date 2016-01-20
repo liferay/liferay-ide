@@ -16,7 +16,7 @@
 package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -46,13 +46,37 @@ public class NewLiferayWorkspaceOpMethods
             final Path projectLocation = op.getLocation().content();
             updateLocation( op, projectLocation );
 
-            @SuppressWarnings( "unchecked" )
-            NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider =
-                (NewLiferayProjectProvider<NewLiferayWorkspaceOp>) LiferayCore.getProvider( "liferay-workspace" );
+            LiferayWorkspaceProjectProvider provider =
+                (LiferayWorkspaceProjectProvider) LiferayCore.getProvider( "liferay-workspace" );
 
             final IStatus status = provider.createNewProject( op, monitor );
 
             retval = StatusBridge.create( status );
+
+            if( retval.ok() )
+            {
+                String location = projectLocation.toOSString();
+
+                boolean isInitBundle = op.getRunInitBundleCommand().content();
+
+                if( isInitBundle )
+                {
+                    provider.importProject( location, monitor, "initBundle" );
+                }
+                else
+                {
+                    provider.importProject( location, monitor, null );
+                }
+
+                boolean isAddServer = op.getAddServer().content();
+
+                String serverRuntimeName = op.getServerName().content();
+
+                if( isAddServer )
+                {
+                    LiferayWorkspaceImportOpMethods.addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
+                }
+            }
         }
         catch( Exception e )
         {
