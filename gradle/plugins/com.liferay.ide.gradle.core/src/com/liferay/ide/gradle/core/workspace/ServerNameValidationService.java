@@ -42,9 +42,9 @@ public class ServerNameValidationService extends ValidationService
         return retval;
     }
 
-    private LiferayWorkspaceImportOp op()
+    private BaseLiferayWorkspaceOp op()
     {
-        return context( LiferayWorkspaceImportOp.class );
+        return context( BaseLiferayWorkspaceOp.class );
     }
 
 }

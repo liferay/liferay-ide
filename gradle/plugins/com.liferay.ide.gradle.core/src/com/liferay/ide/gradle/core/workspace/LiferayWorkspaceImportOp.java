@@ -16,28 +16,26 @@
 package com.liferay.ide.gradle.core.workspace;
 
 import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
-import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Derived;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Andy Wu
  */
-public interface LiferayWorkspaceImportOp extends ExecutableElement
+public interface LiferayWorkspaceImportOp extends BaseLiferayWorkspaceOp
 {
 
     ElementType TYPE = new ElementType( LiferayWorkspaceImportOp.class );
@@ -56,17 +54,6 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     void setWorkspaceLocation( String value );
     void setWorkspaceLocation( Path value );
 
-    // *** provision liferay bundle ***
-
-    @DefaultValue( text = "false" )
-    @Label( standard = "provision liferay bundle" )
-    @Type( base = Boolean.class )
-    ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty( TYPE, "provisionLiferayBundle" );
-
-    Value<Boolean> getProvisionLiferayBundle();
-    void setProvisionLiferayBundle( String value );
-    void setProvisionLiferayBundle( Boolean value );
-
     // *** hasBundlesDir ***
 
     @Derived
@@ -80,17 +67,9 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
 
     // *** serverName ***
 
-    @Services
-    (
-        {
-            @Service( impl = ImportLiferayWorkspaceServerNameService.class ),
-            @Service( impl = ServerNameValidationService.class ),
-        }
-    )
-    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, "serverName" );
-
-    Value<String> getServerName();
-    void setServerName( String value );
+    @Enablement( expr = "${ hasBundlesDir == true || provisionLiferayBundle == 'true' }" )
+    @Service( impl = ImportLiferayWorkspaceServerNameService.class )
+    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME );
 
     // *** Method: execute ***
 

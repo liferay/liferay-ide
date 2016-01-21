@@ -60,7 +60,7 @@ public class NewLiferayWorkspaceOpMethods
 
             String location = projectLocation.toOSString();
 
-            boolean isInitBundle = op.getRunInitBundleCommand().content();
+            boolean isInitBundle = op.getProvisionLiferayBundle().content();
 
             IStatus importStatus = null;
 

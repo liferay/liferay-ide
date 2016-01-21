@@ -37,7 +37,10 @@
                 </property-editor>
                 <spacer/>
                 <property-editor>provisionLiferayBundle</property-editor>
-                <property-editor>serverName</property-editor>
+                <property-editor>
+                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
+                    <property>serverName</property>
+                </property-editor>
                 <spacer></spacer>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>

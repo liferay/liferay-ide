@@ -15,7 +15,6 @@
 package com.liferay.ide.gradle.core.workspace;
 
 import org.eclipse.sapphire.ElementType;
-import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
@@ -30,14 +29,13 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Andy Wu
  */
-public interface NewLiferayWorkspaceOp extends ExecutableElement
+public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
 {
     ElementType TYPE = new ElementType( NewLiferayWorkspaceOp.class );
 
@@ -78,35 +76,10 @@ public interface NewLiferayWorkspaceOp extends ExecutableElement
     void setLocation( String value );
     void setLocation( Path value );
 
-    // *** run ininBundle command ***
-
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    @Label( standard = "run initBundle command" )
-    ValueProperty PROP_RUN_INITBUNDLE_COMMAND = new ValueProperty( TYPE, "runInitBundleCommand" );
-
-    Value<Boolean> getRunInitBundleCommand();
-
-    void setRunInitBundleCommand( String value );
-
-    void setRunInitBundleCommand( Boolean value );
-
     // *** serverName ***
 
-    @Type( base = String.class )
-    @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
-    @Services
-    (
-        value =
-            {
-                @Service( impl = NewLiferayWorkspaceServerNameService.class ),
-                @Service( impl = ServerNameValidationService2.class ),
-            }
-    )
-    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, "serverName" );
-
-    Value<String> getServerName();
-    void setServerName( String value );
+    @Service( impl = NewLiferayWorkspaceServerNameService.class )
+    ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME );
 
     // *** Method: execute ***
 
