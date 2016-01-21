@@ -16,7 +16,7 @@
 package com.liferay.ide.gradle.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.workspace.LiferayWorkspaceImportOp;
+import com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.gradle.core.workspace.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
@@ -60,15 +60,15 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Andy Wu
  */
 @SuppressWarnings( "restriction" )
-public class LiferayWorkspaceImportWizard extends SapphireWizard<LiferayWorkspaceImportOp>
+public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWorkspaceOp>
     implements IWorkbenchWizard, INewWizard
 {
 
     private boolean firstErrorMessageRemoved = false;
 
-    public LiferayWorkspaceImportWizard()
+    public ImportLiferayWorkspaceWizard()
     {
-        super( createDefaultOp(), DefinitionLoader.sdef( LiferayWorkspaceImportWizard.class ).wizard() );
+        super( createDefaultOp(), DefinitionLoader.sdef( ImportLiferayWorkspaceWizard.class ).wizard() );
     }
 
     private void addToWorkingSets( IProject newProject ) throws Exception
@@ -158,7 +158,7 @@ public class LiferayWorkspaceImportWizard extends SapphireWizard<LiferayWorkspac
     {
         super.performPostFinish();
 
-        final LiferayWorkspaceImportOp op = element().nearest( LiferayWorkspaceImportOp.class );
+        final ImportLiferayWorkspaceOp op = element().nearest( ImportLiferayWorkspaceOp.class );
 
         final IProject newProject = CoreUtil.getProject( op.getWorkspaceLocation().content().lastSegment() );
 
@@ -233,8 +233,8 @@ public class LiferayWorkspaceImportWizard extends SapphireWizard<LiferayWorkspac
         }
     }
 
-    private static LiferayWorkspaceImportOp createDefaultOp()
+    private static ImportLiferayWorkspaceOp createDefaultOp()
     {
-        return LiferayWorkspaceImportOp.TYPE.instantiate();
+        return ImportLiferayWorkspaceOp.TYPE.instantiate();
     }
 }

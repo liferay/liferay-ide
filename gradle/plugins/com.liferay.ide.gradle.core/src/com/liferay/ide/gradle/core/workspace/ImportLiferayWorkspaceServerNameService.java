@@ -45,7 +45,7 @@ public class ImportLiferayWorkspaceServerNameService extends DefaultValueService
             }
         };
 
-        op().property( LiferayWorkspaceImportOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
+        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
     }
 
     @Override
@@ -63,15 +63,15 @@ public class ImportLiferayWorkspaceServerNameService extends DefaultValueService
         return serverName;
     }
 
-    private LiferayWorkspaceImportOp op()
+    private ImportLiferayWorkspaceOp op()
     {
-        return context( LiferayWorkspaceImportOp.class );
+        return context( ImportLiferayWorkspaceOp.class );
     }
 
     @Override
     public void dispose()
     {
-        op().property( LiferayWorkspaceImportOp.PROP_WORKSPACE_LOCATION ).detach( this.listener );
+        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).detach( this.listener );
 
         super.dispose();
     }

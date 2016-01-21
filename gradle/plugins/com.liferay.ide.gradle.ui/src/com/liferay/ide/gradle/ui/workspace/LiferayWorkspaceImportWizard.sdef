@@ -23,8 +23,8 @@
         <package>org.eclipse.sapphire.ui.forms.swt</package>
     </import>
     <wizard>
-        <id>LiferayWorkspaceImportWizard</id>
-        <element-type>com.liferay.ide.gradle.core.workspace.LiferayWorkspaceImportOp</element-type>
+        <id>ImportLiferayWorkspaceWizard</id>
+        <element-type>com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp</element-type>
         <label>Import Liferay Workspace</label>
         <page>
             <id>ImportLiferayWorkspacePage</id>

@@ -84,7 +84,7 @@ public class NewLiferayWorkspaceOpMethods
             {
                 String serverRuntimeName = op.getServerName().content();
 
-                LiferayWorkspaceImportOpMethods.addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
+                ImportLiferayWorkspaceOpMethods.addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
             }
         }
         catch( Exception e )

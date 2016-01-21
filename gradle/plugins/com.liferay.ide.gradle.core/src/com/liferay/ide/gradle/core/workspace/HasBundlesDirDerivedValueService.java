@@ -28,7 +28,7 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService
             }
         };
 
-        op().property( LiferayWorkspaceImportOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
+        op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
     }
 
     @Override
@@ -46,9 +46,9 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService
         return retval;
     }
 
-    private LiferayWorkspaceImportOp op()
+    private ImportLiferayWorkspaceOp op()
     {
-        return context( LiferayWorkspaceImportOp.class );
+        return context( ImportLiferayWorkspaceOp.class );
     }
 
 }

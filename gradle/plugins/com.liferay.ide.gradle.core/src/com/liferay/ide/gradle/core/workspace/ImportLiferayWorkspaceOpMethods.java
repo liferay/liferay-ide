@@ -34,10 +34,10 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Andy Wu
  */
-public class LiferayWorkspaceImportOpMethods
+public class ImportLiferayWorkspaceOpMethods
 {
 
-    public static final Status execute( final LiferayWorkspaceImportOp op, final ProgressMonitor pm )
+    public static final Status execute( final ImportLiferayWorkspaceOp op, final ProgressMonitor pm )
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 

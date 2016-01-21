@@ -74,9 +74,9 @@ public class ImportWorkspaceLocationValidationService extends ValidationService
         return retval;
     }
 
-    private LiferayWorkspaceImportOp op()
+    private ImportLiferayWorkspaceOp op()
     {
-        return context( LiferayWorkspaceImportOp.class );
+        return context( ImportLiferayWorkspaceOp.class );
     }
 
 }

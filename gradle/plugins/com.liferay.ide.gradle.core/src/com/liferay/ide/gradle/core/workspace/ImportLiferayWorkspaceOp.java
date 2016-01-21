@@ -35,10 +35,10 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 /**
  * @author Andy Wu
  */
-public interface LiferayWorkspaceImportOp extends BaseLiferayWorkspaceOp
+public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
 {
 
-    ElementType TYPE = new ElementType( LiferayWorkspaceImportOp.class );
+    ElementType TYPE = new ElementType( ImportLiferayWorkspaceOp.class );
 
     // *** WorkspaceLocation ***
 
@@ -74,6 +74,6 @@ public interface LiferayWorkspaceImportOp extends BaseLiferayWorkspaceOp
     // *** Method: execute ***
 
     @Override
-    @DelegateImplementation( LiferayWorkspaceImportOpMethods.class )
+    @DelegateImplementation( ImportLiferayWorkspaceOpMethods.class )
     Status execute( ProgressMonitor monitor );
 }
