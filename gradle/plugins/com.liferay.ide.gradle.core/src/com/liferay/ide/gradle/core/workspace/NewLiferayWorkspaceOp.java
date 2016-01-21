@@ -99,7 +99,7 @@ public interface NewLiferayWorkspaceOp extends ExecutableElement
     (
         value =
             {
-                @Service( impl = ServerNameDefaultValueService2.class ),
+                @Service( impl = NewLiferayWorkspaceServerNameService.class ),
                 @Service( impl = ServerNameValidationService2.class ),
             }
     )

@@ -25,7 +25,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 /**
  * @author Andy Wu
  */
-public class ServerNameDefaultValueService2 extends DefaultValueService
+public class NewLiferayWorkspaceServerNameService extends DefaultValueService
 {
 
     private FilteredListener<PropertyContentEvent> listener;

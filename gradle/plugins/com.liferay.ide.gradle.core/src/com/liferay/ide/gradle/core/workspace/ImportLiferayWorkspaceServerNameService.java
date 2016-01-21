@@ -25,7 +25,7 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Andy Wu
  */
-public class ServerNameDefaultValueService extends DefaultValueService
+public class ImportLiferayWorkspaceServerNameService extends DefaultValueService
 {
 
     private FilteredListener<PropertyContentEvent> listener;

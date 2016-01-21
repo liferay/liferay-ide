@@ -83,7 +83,7 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     @Services
     (
         {
-            @Service( impl = ServerNameDefaultValueService.class ),
+            @Service( impl = ImportLiferayWorkspaceServerNameService.class ),
             @Service( impl = ServerNameValidationService.class ),
         }
     )
