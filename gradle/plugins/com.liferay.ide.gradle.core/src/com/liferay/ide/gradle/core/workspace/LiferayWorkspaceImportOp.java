@@ -76,21 +76,19 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     ValueProperty PROP_HAS_BUNDLES_DIR = new ValueProperty( TYPE, "hasBundlesDir" );
 
     Value<Boolean> getHasBundlesDir();
-
     void setHasBundlesDir( String value );
-
     void setHasBundlesDir( Boolean value );
 
     // *** serverName ***
+
     @Type( base = String.class )
     @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
     @Services
     (
-        value =
-            {
-                @Service( impl = ServerNameDefaultValueService.class ),
-                @Service( impl = ServerNameValidationService.class ),
-            }
+        {
+            @Service( impl = ServerNameDefaultValueService.class ),
+            @Service( impl = ServerNameValidationService.class ),
+        }
     )
     ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, "serverName" );
 
