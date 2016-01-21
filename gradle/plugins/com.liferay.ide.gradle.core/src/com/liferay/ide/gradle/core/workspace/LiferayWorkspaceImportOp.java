@@ -25,10 +25,9 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
+import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
@@ -60,7 +59,6 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     // *** provision liferay bundle ***
 
     @DefaultValue( text = "false" )
-    @Enablement( expr = "${ hasBundlesDir == 'false' }" )
     @Label( standard = "provision liferay bundle" )
     @Type( base = Boolean.class )
     ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty( TYPE, "provisionLiferayBundle" );
@@ -71,8 +69,9 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
 
     // *** hasBundlesDir ***
 
+    @Derived
+    @Service( impl = HasBundlesDirDerivedValueService.class )
     @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
     ValueProperty PROP_HAS_BUNDLES_DIR = new ValueProperty( TYPE, "hasBundlesDir" );
 
     Value<Boolean> getHasBundlesDir();
@@ -81,8 +80,6 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
 
     // *** serverName ***
 
-    @Type( base = String.class )
-    @Enablement( expr = "${ hasBundlesDir == 'true' || provisionLiferayBundle == 'true' }" )
     @Services
     (
         {

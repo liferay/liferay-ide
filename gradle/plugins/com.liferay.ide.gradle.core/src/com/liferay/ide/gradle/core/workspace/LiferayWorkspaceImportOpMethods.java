@@ -53,7 +53,7 @@ public class LiferayWorkspaceImportOpMethods
 
             LiferayWorkspaceUtil.clearWorkspace( location );
 
-            boolean isInitBundle = op.getRunInitBundleCommand().content();
+            boolean isInitBundle = op.getProvisionLiferayBundle().content();
             boolean isHasBundlesDir = op.getHasBundlesDir().content();
 
             IStatus importStatus = null;

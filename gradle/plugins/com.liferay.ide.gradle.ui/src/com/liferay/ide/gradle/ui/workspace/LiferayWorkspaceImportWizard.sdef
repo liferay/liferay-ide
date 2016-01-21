@@ -33,10 +33,13 @@
                 <property-editor>WorkspaceLocation</property-editor>
                 <spacer></spacer>
                 <property-editor>
-                    <visible-when>${ HasBundlesDir == 'false' }</visible-when>
-                    <property>runInitBundleCommand</property>
+                    <visible-when>${ WorkspaceLocation != null &amp;&amp; hasBundlesDir == 'false' }</visible-when>
+                    <property>provisionLiferayBundle</property>
                 </property-editor>
-                <property-editor>serverName</property-editor>
+                <property-editor>
+                    <visible-when>${ hasBundlesDir == 'true' || provisionLiferayBundle == 'true' }</visible-when>
+                    <property>serverName</property>
+                </property-editor>
                 <spacer></spacer>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
@@ -51,6 +54,7 @@
             <margin-horizontal>0</margin-horizontal>
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
+            <description>Select location of Liferay workspace parent directory.</description>
         </page>
         <description>Import Liferay Workspace</description>
         <image>NewLiferayWorkspaceWizard.png</image>

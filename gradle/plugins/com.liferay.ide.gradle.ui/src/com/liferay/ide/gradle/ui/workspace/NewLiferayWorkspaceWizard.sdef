@@ -36,7 +36,7 @@
                     <property>Location</property>
                 </property-editor>
                 <spacer/>
-                <property-editor>runInitBundleCommand</property-editor>
+                <property-editor>provisionLiferayBundle</property-editor>
                 <property-editor>serverName</property-editor>
                 <spacer></spacer>
                 <custom>
