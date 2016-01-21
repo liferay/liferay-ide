@@ -57,18 +57,17 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     void setWorkspaceLocation( String value );
     void setWorkspaceLocation( Path value );
 
-    // *** run ininBundle command ***
+    // *** provision liferay bundle ***
 
-    @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
-    @Label( standard = "run initBundle command" )
-    ValueProperty PROP_RUN_INITBUNDLE_COMMAND = new ValueProperty( TYPE, "runInitBundleCommand" );
+    @Enablement( expr = "${ hasBundlesDir == 'false' }" )
+    @Label( standard = "provision liferay bundle" )
+    @Type( base = Boolean.class )
+    ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty( TYPE, "provisionLiferayBundle" );
 
-    Value<Boolean> getRunInitBundleCommand();
-
-    void setRunInitBundleCommand( String value );
-
-    void setRunInitBundleCommand( Boolean value );
+    Value<Boolean> getProvisionLiferayBundle();
+    void setProvisionLiferayBundle( String value );
+    void setProvisionLiferayBundle( Boolean value );
 
     // *** hasBundlesDir ***
 
