@@ -50,6 +50,7 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Service( impl = ImportWorkspaceLocationValidationService.class )
+    @Listeners( ImportWorkspaceLocationListener.class )
     @Required
     ValueProperty PROP_WORKSPACE_LOCATION = new ValueProperty( TYPE, "WorkspaceLocation" );
 
@@ -63,9 +64,7 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
 
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
-    @Enablement( expr = "${ HasBundlesDir == 'false' }" )
     @Label( standard = "run initBundle command" )
-    @Listeners( RunInitBundleCommandListener.class )
     ValueProperty PROP_RUN_INITBUNDLE_COMMAND = new ValueProperty( TYPE, "runInitBundleCommand" );
 
     Value<Boolean> getRunInitBundleCommand();
@@ -73,20 +72,6 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     void setRunInitBundleCommand( String value );
 
     void setRunInitBundleCommand( Boolean value );
-
-    // *** add Server ***
-
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
-    @Label( standard = "add server" )
-    ValueProperty PROP_ADD_SERVER = new ValueProperty( TYPE, "addServer" );
-
-    Value<Boolean> getAddServer();
-
-    void setAddServer( String value );
-
-    void setAddServer( Boolean value );
 
     // *** hasBundlesDir ***
 
@@ -102,7 +87,7 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
 
     // *** serverName ***
     @Type( base = String.class )
-    @Enablement( expr = "${ AddServer == 'true' }" )
+    @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
     @Services
     (
         value =

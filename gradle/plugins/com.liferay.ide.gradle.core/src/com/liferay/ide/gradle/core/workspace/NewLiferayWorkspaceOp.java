@@ -83,7 +83,6 @@ public interface NewLiferayWorkspaceOp extends ExecutableElement
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     @Label( standard = "run initBundle command" )
-    @Listeners( RunInitBundleCommandListener2.class )
     ValueProperty PROP_RUN_INITBUNDLE_COMMAND = new ValueProperty( TYPE, "runInitBundleCommand" );
 
     Value<Boolean> getRunInitBundleCommand();
@@ -92,23 +91,10 @@ public interface NewLiferayWorkspaceOp extends ExecutableElement
 
     void setRunInitBundleCommand( Boolean value );
 
-    // *** add Server ***
-
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "false" )
-    @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
-    @Label( standard = "add server" )
-    ValueProperty PROP_ADD_SERVER = new ValueProperty( TYPE, "addServer" );
-
-    Value<Boolean> getAddServer();
-
-    void setAddServer( String value );
-
-    void setAddServer( Boolean value );
-
     // *** serverName ***
+
     @Type( base = String.class )
-    @Enablement( expr = "${ AddServer == 'true' }" )
+    @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
     @Services
     (
         value =

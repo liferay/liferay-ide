@@ -37,8 +37,8 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.jobs.Job;
 import org.junit.Test;
 
 /**
@@ -60,19 +60,18 @@ public class GradleProjectTests
 
         IProgressMonitor monitor = new NullProgressMonitor();
 
-        Job job = GradleUtil.importGradleProject( dst, monitor );
+        IStatus status = GradleUtil.importGradleProject( dst, monitor );
 
-        try
+        if( status.isOK() )
         {
-            job.join();
+            IProject project = CoreUtil.getProject( dst.getName() );
+
+            return new LiferayGradleProject( project );
         }
-        catch( InterruptedException e )
+        else
         {
+            throw new Exception( status.getException() );
         }
-
-        IProject project = CoreUtil.getProject( dst.getName() );
-
-        return new LiferayGradleProject( project );
     }
 
     @Test

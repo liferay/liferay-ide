@@ -69,16 +69,6 @@ public class ImportWorkspaceLocationValidationService extends ValidationService
 
                 return retval;
             }
-
-            if( LiferayWorkspaceUtil.hasBundlesDir( currentPath ) )
-            {
-                op().setRunInitBundleCommand( true );
-                op().setHasBundlesDir( true );
-            }
-            else
-            {
-                op().setHasBundlesDir( false );
-            }
         }
 
         return retval;

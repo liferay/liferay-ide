@@ -32,8 +32,10 @@
             <content>
                 <property-editor>WorkspaceLocation</property-editor>
                 <spacer></spacer>
-                <property-editor>runInitBundleCommand</property-editor>
-                <property-editor>addServer</property-editor>
+                <property-editor>
+                    <visible-when>${ HasBundlesDir == 'false' }</visible-when>
+                    <property>runInitBundleCommand</property>
+                </property-editor>
                 <property-editor>serverName</property-editor>
                 <spacer></spacer>
                 <custom>

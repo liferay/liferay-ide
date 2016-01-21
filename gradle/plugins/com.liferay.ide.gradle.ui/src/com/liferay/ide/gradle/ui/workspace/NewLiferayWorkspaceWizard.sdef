@@ -37,7 +37,6 @@
                 </property-editor>
                 <spacer/>
                 <property-editor>runInitBundleCommand</property-editor>
-                <property-editor>addServer</property-editor>
                 <property-editor>serverName</property-editor>
                 <spacer></spacer>
                 <custom>

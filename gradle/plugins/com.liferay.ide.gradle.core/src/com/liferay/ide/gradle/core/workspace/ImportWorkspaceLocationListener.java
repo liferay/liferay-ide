@@ -17,19 +17,28 @@ package com.liferay.ide.gradle.core.workspace;
 
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.modeling.Path;
 
 /**
  * @author Andy Wu
  */
-public class RunInitBundleCommandListener extends FilteredListener<PropertyContentEvent>
+public class ImportWorkspaceLocationListener extends FilteredListener<PropertyContentEvent>
 {
 
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
-        if( !op( event ).getRunInitBundleCommand().content() )
+        Path path = op( event ).getWorkspaceLocation().content();
+
+        if( LiferayWorkspaceUtil.hasBundlesDir( path.toOSString() ) )
         {
-            op( event ).setAddServer( false );
+            op( event ).setHasBundlesDir( true );
+            op( event ).setRunInitBundleCommand( true );
+        }
+        else
+        {
+            op( event ).setHasBundlesDir( false );
+            op( event ).setRunInitBundleCommand( false );
         }
     }
 

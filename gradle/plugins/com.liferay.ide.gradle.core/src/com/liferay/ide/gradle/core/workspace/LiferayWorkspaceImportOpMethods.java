@@ -43,7 +43,7 @@ public class LiferayWorkspaceImportOpMethods
 
         monitor.beginTask( "Importing Liferay Workspace project...", 100 );
 
-        Status retval = Status.createOkStatus();
+        Status retval = null;
 
         try
         {
@@ -74,12 +74,10 @@ public class LiferayWorkspaceImportOpMethods
                 return retval;
             }
 
-            boolean isAddServer = op.getAddServer().content();
-
-            String serverRuntimeName = op.getServerName().content();
-
-            if( isAddServer )
+            if( isInitBundle )
             {
+                String serverRuntimeName = op.getServerName().content();
+
                 addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
             }
         }

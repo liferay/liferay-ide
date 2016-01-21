@@ -49,33 +49,42 @@ public class NewLiferayWorkspaceOpMethods
             LiferayWorkspaceProjectProvider provider =
                 (LiferayWorkspaceProjectProvider) LiferayCore.getProvider( "liferay-workspace" );
 
-            final IStatus status = provider.createNewProject( op, monitor );
+            IStatus createStatus = provider.createNewProject( op, monitor );
 
-            retval = StatusBridge.create( status );
+            retval = StatusBridge.create( createStatus );
 
-            if( retval.ok() )
+            if( !retval.ok() )
             {
-                String location = projectLocation.toOSString();
+                return retval;
+            }
 
-                boolean isInitBundle = op.getRunInitBundleCommand().content();
+            String location = projectLocation.toOSString();
 
-                if( isInitBundle )
-                {
-                    provider.importProject( location, monitor, "initBundle" );
-                }
-                else
-                {
-                    provider.importProject( location, monitor, null );
-                }
+            boolean isInitBundle = op.getRunInitBundleCommand().content();
 
-                boolean isAddServer = op.getAddServer().content();
+            IStatus importStatus = null;
 
+            if( isInitBundle )
+            {
+                importStatus = provider.importProject( location, monitor, "initBundle" );
+            }
+            else
+            {
+                importStatus = provider.importProject( location, monitor, null );
+            }
+
+            retval = StatusBridge.create( importStatus );
+
+            if( !retval.ok() )
+            {
+                return retval;
+            }
+
+            if( isInitBundle )
+            {
                 String serverRuntimeName = op.getServerName().content();
 
-                if( isAddServer )
-                {
-                    LiferayWorkspaceImportOpMethods.addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
-                }
+                LiferayWorkspaceImportOpMethods.addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
             }
         }
         catch( Exception e )
