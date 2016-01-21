@@ -82,7 +82,7 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     // *** serverName ***
 
     @Type( base = String.class )
-    @Enablement( expr = "${ RunInitBundleCommand == 'true' }" )
+    @Enablement( expr = "${ hasBundlesDir == 'true' || provisionLiferayBundle == 'true' }" )
     @Services
     (
         {
