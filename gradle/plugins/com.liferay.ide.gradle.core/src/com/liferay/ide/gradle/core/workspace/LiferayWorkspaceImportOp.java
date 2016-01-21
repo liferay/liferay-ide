@@ -50,7 +50,6 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Service( impl = ImportWorkspaceLocationValidationService.class )
-    @Listeners( ImportWorkspaceLocationListener.class )
     @Required
     ValueProperty PROP_WORKSPACE_LOCATION = new ValueProperty( TYPE, "WorkspaceLocation" );
 
