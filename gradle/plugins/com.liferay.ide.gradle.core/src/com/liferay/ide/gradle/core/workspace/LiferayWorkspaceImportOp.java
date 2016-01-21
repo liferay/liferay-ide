@@ -54,9 +54,7 @@ public interface LiferayWorkspaceImportOp extends ExecutableElement
     ValueProperty PROP_WORKSPACE_LOCATION = new ValueProperty( TYPE, "WorkspaceLocation" );
 
     Value<Path> getWorkspaceLocation();
-
     void setWorkspaceLocation( String value );
-
     void setWorkspaceLocation( Path value );
 
     // *** run ininBundle command ***
