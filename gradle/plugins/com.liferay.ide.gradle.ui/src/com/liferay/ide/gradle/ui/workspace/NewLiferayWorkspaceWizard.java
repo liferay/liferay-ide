@@ -15,6 +15,13 @@
 
 package com.liferay.ide.gradle.ui.workspace;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
+import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,13 +55,6 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
 import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
 import org.eclipse.wst.web.internal.DelegateConfigurationElement;
-
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.workspace.LiferayWorkspaceUtil;
-import com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
-import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 
 /**
  * @author Andy Wu

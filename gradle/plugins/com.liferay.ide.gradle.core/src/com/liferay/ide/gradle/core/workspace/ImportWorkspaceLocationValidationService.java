@@ -16,6 +16,7 @@
 package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.sapphire.modeling.Path;

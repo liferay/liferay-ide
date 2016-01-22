@@ -65,7 +65,7 @@ public class ModuleProjectNameValidationService extends ValidationService
         Status retval = Status.createOkStatus();
 
         final NewLiferayModuleProjectOp op = op();
-        final String currentProjectName = op.getProjectName().content();
+        final String currentProjectName = op.getProjectName().content( true );
 
         if( currentProjectName != null )
         {
@@ -117,7 +117,7 @@ public class ModuleProjectNameValidationService extends ValidationService
 
     private boolean isInvalidProjectName( NewLiferayModuleProjectOp op )
     {
-        final String projectName = op.getProjectName().content();
+        final String projectName = op.getProjectName().content( true );
 
         if( CoreUtil.getProject( projectName ).exists() )
         {

@@ -167,6 +167,7 @@ public interface NewLiferayModuleProjectOp extends ExecutableElement
 
     // *** ComponentName ***
     @Label( standard = "Component Name" )
+    @Required
     @Services
     (
         {

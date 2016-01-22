@@ -12,21 +12,26 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
-
 
 /**
  * @author Simon Jiang
  */
 public class ModuleProjectNameListener extends FilteredListener<PropertyContentEvent>
 {
+
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
@@ -40,7 +45,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 
     public static void updateLocation( final NewLiferayModuleProjectOp op )
     {
-        final String currentProjectName = op.getProjectName().content(true);
+        final String currentProjectName = op.getProjectName().content( true );
 
         if( currentProjectName == null || CoreUtil.isNullOrEmpty( currentProjectName.trim() ) )
         {
@@ -52,8 +57,53 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
         if( useDefaultLocation )
         {
             Path newLocationBase = null;
+            boolean hasLiferayWorkspace = false;
 
-            newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+            try
+            {
+                hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
+            }
+            catch( Exception e )
+            {
+                ProjectCore.logError( "Failed to check LiferayWorkspace project. " );
+            }
+
+            if( hasLiferayWorkspace )
+            {
+                IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+                if( liferayWorkspaceProject != null && liferayWorkspaceProject.exists() )
+                {
+                    String liferayWorkspaceProjectModulesDir =
+                        LiferayWorkspaceUtil.getLiferayWorkspaceProjectModulesDir( liferayWorkspaceProject );
+
+                    if( liferayWorkspaceProjectModulesDir != null )
+                    {
+                        IPath modulesPath =
+                            liferayWorkspaceProject.getLocation().append( liferayWorkspaceProjectModulesDir );
+
+                        if( modulesPath != null && modulesPath.toFile().exists() )
+                        {
+                            newLocationBase = PathBridge.create(
+                                liferayWorkspaceProject.getLocation().append(
+                                    liferayWorkspaceProjectModulesDir ).append( "apps" ) );
+                        }
+                        else
+                        {
+                            newLocationBase = PathBridge.create(
+                                liferayWorkspaceProject.getLocation().append( "modules" ).append( "apps" ) );
+                        }
+                    }
+                }
+                else
+                {
+                    newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+                }
+            }
+            else
+            {
+                newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+            }
 
             if( newLocationBase != null )
             {
@@ -61,4 +111,5 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
             }
         }
     }
+
 }

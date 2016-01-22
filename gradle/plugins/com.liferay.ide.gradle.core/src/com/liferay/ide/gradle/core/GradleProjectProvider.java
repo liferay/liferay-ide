@@ -15,21 +15,6 @@
 
 package com.liferay.ide.gradle.core;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.sapphire.ElementList;
-import org.eclipse.sapphire.platform.PathBridge;
-import org.gradle.jarjar.org.apache.commons.lang.WordUtils;
-
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
@@ -40,6 +25,24 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.modules.PropertyKey;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.buildship.core.configuration.GradleProjectNature;
+import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectsJob;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.platform.PathBridge;
+import org.gradle.jarjar.org.apache.commons.lang.WordUtils;
 
 /**
  * @author Gregory Amerson
@@ -156,18 +159,55 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                     projecLocation = location.append( projectName );
                 }
             }
-            
+
             final IPath finalClassPath =
-                            getClassFilePath( projectName, className, packageName, projectTemplateName, projecLocation );
+                getClassFilePath( projectName, className, packageName, projectTemplateName, projecLocation );
 
             final File finalClassFile = finalClassPath.toFile();
-    
+
             if( finalClassFile.exists() )
             {
                 NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
             }
 
-            GradleUtil.importGradleProject( projecLocation.toFile() , monitor);
+            boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
+            boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+            boolean inWorkspacePath = false;
+
+            IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+            if( liferayWorkspaceProject != null && !useDefaultLocation )
+            {
+                IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+
+                if( workspaceLocation != null )
+                {
+                    String liferayWorkspaceProjectModulesDir =
+                        LiferayWorkspaceUtil.getLiferayWorkspaceProjectModulesDir( liferayWorkspaceProject );
+
+                    if( liferayWorkspaceProjectModulesDir != null )
+                    {
+                        IPath modulesPath = workspaceLocation.append( liferayWorkspaceProjectModulesDir );
+
+                        if( modulesPath.isPrefixOf( projecLocation ) )
+                        {
+                            inWorkspacePath = true;
+                        }
+                    }
+                }
+            }
+
+            if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
+            {
+                IProject[] projects = new IProject[] { liferayWorkspaceProject };
+                SynchronizeGradleProjectsJob synchronizeJob =
+                    new SynchronizeGradleProjectsJob( Arrays.asList( projects ) );
+                synchronizeJob.schedule();
+            }
+            else
+            {
+                GradleUtil.importGradleProject( projecLocation.toFile(), monitor );
+            }
         }
         catch( Exception e )
         {
@@ -215,6 +255,15 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
     public IStatus validateProjectLocation( String projectName, IPath path )
     {
         IStatus retval = Status.OK_STATUS;
+
+        if( path != null )
+        {
+            if( LiferayWorkspaceUtil.isValidWorkspaceLocation( path.toOSString() ) )
+            {
+                retval =
+                    GradleCore.createErrorStatus( " Can't set WorkspaceProject root folder as project directory. " );
+            }
+        }
 
         File projectFodler = path.append( projectName ).toFile();
 
