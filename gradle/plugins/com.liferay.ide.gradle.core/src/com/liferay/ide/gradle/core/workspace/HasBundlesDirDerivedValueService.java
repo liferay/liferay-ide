@@ -36,14 +36,10 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService
     {
         String retval = "false";
 
-        op().setProvisionLiferayBundle( false );
-
         final Path path = op().getWorkspaceLocation().content();
 
         if( path != null && path.append( "bundles" ).toFile().exists() )
         {
-            op().setProvisionLiferayBundle( true );
-
             retval = "true";
         }
 
