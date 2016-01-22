@@ -34,6 +34,7 @@
         <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4/</eclipse-project-update-site>
         <liferay-ide-site>http://build-1:9090/userContent/liferay-ide/latest/repository</liferay-ide-site>
         <liferay-ide-testing-site>http://build-1:9090/userContent/liferay-ide/latest/testing-repository</liferay-ide-testing-site>
+        <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot-site>
     </properties>
 
     <repositories>
@@ -56,6 +57,11 @@
             <id>eclipse-project</id>
             <layout>p2</layout>
             <url>${eclipse-project-update-site}</url>
+        </repository>
+        <repository>
+            <id>swtbot</id>
+            <layout>p2</layout>
+            <url>${swtbot-site}</url>
         </repository>
     </repositories>
 
