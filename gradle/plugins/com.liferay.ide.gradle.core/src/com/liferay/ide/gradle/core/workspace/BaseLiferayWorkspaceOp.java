@@ -20,7 +20,6 @@ import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -36,7 +35,7 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
     // *** provision liferay bundle ***
 
     @DefaultValue( text = "false" )
-    @Label( standard = "provision liferay bundle" )
+    @Label( standard = "download liferay bundle" )
     @Type( base = Boolean.class )
     ValueProperty PROP_PROVISION_LIFERAY_BUNDLE = new ValueProperty( TYPE, "provisionLiferayBundle" );
 
@@ -46,7 +45,6 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
 
     // *** serverName ***
 
-    @Enablement( expr = "${ provisionLiferayBundle == 'true' }" )
     @Service( impl = ServerNameValidationService.class )
     ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, "serverName" );
 
