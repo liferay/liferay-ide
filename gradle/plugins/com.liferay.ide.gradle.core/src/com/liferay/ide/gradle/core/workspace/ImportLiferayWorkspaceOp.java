@@ -24,7 +24,6 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Derived;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
@@ -67,7 +66,6 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
 
     // *** serverName ***
 
-    @Enablement( expr = "${ hasBundlesDir == true || provisionLiferayBundle == 'true' }" )
     @Service( impl = ImportLiferayWorkspaceServerNameService.class )
     ValueProperty PROP_SERVER_NAME = new ValueProperty( TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME );
 
