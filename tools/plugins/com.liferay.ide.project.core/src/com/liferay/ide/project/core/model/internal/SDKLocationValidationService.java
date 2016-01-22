@@ -16,7 +16,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsWebTypePlugin;
+import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsExtOrWebTypePlugin;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -115,11 +115,20 @@ public class SDKLocationValidationService extends ValidationService
 
             if( op().getPluginType().content().equals( PluginType.web ) )
             {
-                if ( ! supportsWebTypePlugin( op() ) )
+                if ( ! supportsExtOrWebTypePlugin( op(), "web" ) )
                 {
                     retval =
                         Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  "
                             + "Please configure version 7.0.0 or greater." );
+                }
+            }
+            else if( op().getPluginType().content().equals( PluginType.ext ) )
+            {
+                if( !supportsExtOrWebTypePlugin( op(), "ext" ) )
+                {
+                    retval =
+                        Status.createErrorStatus( "The selected Plugins SDK does not support creating ext type plugins.  "
+                            + "Please configure version 6.2.0 or less." );
                 }
             }
             else if (op().getPluginType().content().equals( PluginType.portlet ))

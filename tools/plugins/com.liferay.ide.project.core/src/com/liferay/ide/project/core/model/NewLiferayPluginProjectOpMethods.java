@@ -343,13 +343,16 @@ public class NewLiferayPluginProjectOpMethods
         return status;
     }
 
-    public static boolean supportsWebTypePlugin( NewLiferayPluginProjectOp op )
+    public static boolean supportsExtOrWebTypePlugin( NewLiferayPluginProjectOp op, String type )
     {
         boolean retval = false;
 
         if( op.getProjectProvider().content( true ).getShortName().equals( "maven" ) )
         {
-            retval = true;
+            if( type.equals( "web" ) )
+            {
+                retval = true;
+            }
         }
         else
         {
@@ -381,7 +384,14 @@ public class NewLiferayPluginProjectOpMethods
 
                 if( greaterThan700 )
                 {
-                    retval = true;
+                    if( type.equals( "web" ) )
+                    {
+                        retval = true;
+                    }
+                    else if( type.equals( "ext" ) )
+                    {
+                        retval = false;
+                    }
                 }
             }
             else
