@@ -137,6 +137,8 @@ public class ServerManagerTests extends ServerCoreBase
 
         int i = 0;
 
+        int statusCode = 0;
+
         while( !stop )
         {
             try
@@ -149,7 +151,7 @@ public class ServerManagerTests extends ServerCoreBase
                 URL pingUrl = new URL( "http://localhost:" + liferayServerStartPort );
                 URLConnection conn = pingUrl.openConnection();
                 ( (HttpURLConnection) conn ).setInstanceFollowRedirects( false );
-                ( (HttpURLConnection) conn ).getResponseCode();
+                statusCode = ( (HttpURLConnection) conn ).getResponseCode();
 
                 if( !stop )
                 {
@@ -183,7 +185,7 @@ public class ServerManagerTests extends ServerCoreBase
         {
         }
 
-        assertEquals( "Expected the remote connection's status should be alive", true, service.isAlive() );
+        assertEquals( 200, statusCode );
     }
 
     @After
@@ -246,6 +248,8 @@ public class ServerManagerTests extends ServerCoreBase
         if( shouldSkipServerTests() ) return;
 
         final NullProgressMonitor npm = new NullProgressMonitor();
+
+        assertEquals( "Expected the remote connection's status should be alive", true, service.isAlive() );
 
         assertEquals( "Expected the server state is started", "STARTED", service.getServerState() );
 

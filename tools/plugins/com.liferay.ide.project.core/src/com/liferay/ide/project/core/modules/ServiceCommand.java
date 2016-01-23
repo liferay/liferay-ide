@@ -15,17 +15,25 @@
 
 package com.liferay.ide.project.core.modules;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.wst.server.core.IServer;
 
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.SocketUtil;
 
 import aQute.remote.api.Agent;
@@ -39,14 +47,17 @@ import aQute.remote.util.AgentSupervisor;
 public class ServiceCommand
 {
     private String _serviceName;
+    private IServer _server;
 
-    public ServiceCommand()
+    public ServiceCommand(IServer server)
     {
+        _server = server;
     }
 
-    public ServiceCommand( String serviceName )
+    public ServiceCommand( IServer server, String serviceName )
     {
         _serviceName = serviceName;
+        _server = server;
     }
 
     public String[] execute() throws Exception
@@ -56,7 +67,37 @@ public class ServiceCommand
 
         try
         {
+            if( _server == null )
+            {
+                if( _serviceName == null )
+                {
+                    result = getStaticServices();
+                }
+                else{
+                    result = getStaticServiceBundle(_serviceName);
+                }
+
+                return result;
+            }
+
             supervisor = connectRemote();
+
+            if( supervisor == null )
+            {
+                if( _server == null )
+                {
+                    if( _serviceName == null )
+                    {
+                        result = getStaticServices();
+                    }
+                    else
+                    {
+                        result = getStaticServiceBundle( _serviceName );
+                    }
+
+                    return result;
+                }
+            }
 
             if( _serviceName == null )
             {
@@ -80,7 +121,10 @@ public class ServiceCommand
 
     private ServicesSupervisor connectRemote() throws Exception
     {
-        IStatus status = SocketUtil.canConnect( "localhost", String.valueOf( Agent.DEFAULT_PORT ) );
+        String host = _server.getHost();
+        int agentPort = _server.getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
+
+        IStatus status = SocketUtil.canConnect( host, String.valueOf( agentPort ) );
 
         if( !( status != null && status.isOK() ) )
         {
@@ -88,7 +132,7 @@ public class ServiceCommand
         }
 
         ServicesSupervisor supervisor = new ServicesSupervisor();
-        supervisor.connect( "localhost", Agent.DEFAULT_PORT );
+        supervisor.connect( host, agentPort );
 
         if( !supervisor.getAgent().redirect( -1 ) )
         {
@@ -98,6 +142,47 @@ public class ServiceCommand
         }
 
         return supervisor;
+    }
+
+    private String[] getStaticServices() throws Exception
+    {
+        final File servicesFile = checkStaticServicesFile();
+        final ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, String[]> map = mapper.readValue( servicesFile, Map.class );
+        String[] services = map.keySet().toArray( new String[0] );
+
+        return services;
+    }
+
+    private String[] getStaticServiceBundle( String _serviceName ) throws Exception
+    {
+        final File servicesFile = checkStaticServicesFile();
+        final ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, List<String>> map = mapper.readValue( servicesFile, Map.class );
+        List<String> serviceBundle = map.get( _serviceName );
+
+        if( serviceBundle != null && serviceBundle.size() != 0 )
+        {
+            return (String[]) serviceBundle.toArray( new String[serviceBundle.size()] );
+        }
+
+        return null;
+    }
+
+    private File checkStaticServicesFile() throws Exception
+    {
+        URL url = FileLocator.toFileURL(
+            ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/services-static.json" ) );
+        File servicesFile = new File( url.getFile() );
+
+        if( servicesFile.exists() )
+        {
+            return servicesFile;
+        }
+
+        throw new FileNotFoundException( "can't find static services file services-static.json" );
     }
 
     private String[] getServices( ServicesSupervisor supervisor ) throws Exception
