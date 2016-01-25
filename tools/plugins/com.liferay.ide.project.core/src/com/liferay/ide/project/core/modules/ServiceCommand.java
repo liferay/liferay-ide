@@ -144,6 +144,7 @@ public class ServiceCommand
         return supervisor;
     }
 
+    @SuppressWarnings( "unchecked" )
     private String[] getStaticServices() throws Exception
     {
         final File servicesFile = checkStaticServicesFile();
@@ -155,6 +156,7 @@ public class ServiceCommand
         return services;
     }
 
+    @SuppressWarnings( "unchecked" )
     private String[] getStaticServiceBundle( String _serviceName ) throws Exception
     {
         final File servicesFile = checkStaticServicesFile();
@@ -272,7 +274,8 @@ public class ServiceCommand
         {
             String serviceName = iterator.next();
 
-            if( serviceName.contains( "bundle.id=" ) || serviceName.contains( "service.id=" ) || serviceName.contains( "=" ) )
+            if( serviceName.contains( "bundle.id=" ) || serviceName.contains( "service.id=" ) ||
+                serviceName.contains( "=" ) )
             {
                 iterator.remove();
             }

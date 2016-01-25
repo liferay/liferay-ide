@@ -170,8 +170,10 @@ public class ServiceCommandDynamicTests extends ServerCoreBase
         {
             try
             {
-                final File file = new File ( FileLocator.toFileURL(
-                    LiferayServerCore.getDefault().getBundle().getEntry( "bundles/biz.aQute.remote.agent-3.1.0.jar" ) ).getFile() );
+                final File file = new File(
+                    FileLocator.toFileURL(
+                        LiferayServerCore.getDefault().getBundle().getEntry(
+                            "bundles/biz.aQute.remote.agent-3.1.0.jar" ) ).getFile() );
 
                 FileUtil.copyFile( file, modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
             }
