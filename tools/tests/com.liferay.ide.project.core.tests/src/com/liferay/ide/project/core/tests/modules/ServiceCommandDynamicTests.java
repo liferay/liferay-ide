@@ -55,6 +55,24 @@ public class ServiceCommandDynamicTests extends ServerCoreBase
     {
 
         @Override
+        protected IPath getLiferayRuntimeDir()
+        {
+            return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-7.0-ce-b3/tomcat-7.0.62" );
+        }
+
+        @Override
+        protected IPath getLiferayRuntimeZip()
+        {
+            return getLiferayBundlesPath().append( "liferay-portal-tomcat-7.0-ce-b3-20160111121420368.zip" );
+        }
+
+        @Override
+        protected String getRuntimeId()
+        {
+            return "com.liferay.ide.server.portal.runtime";
+        }
+
+        @Override
         public void setupRuntime() throws Exception
         {
             if( shouldSkipServerTests() )
@@ -77,24 +95,6 @@ public class ServiceCommandDynamicTests extends ServerCoreBase
             portalRuntime = (PortalRuntime) ServerCore.findRuntime( name ).loadAdapter( PortalRuntime.class, npm );
         }
 
-        @Override
-        protected IPath getLiferayRuntimeDir()
-        {
-            return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-7.0-ce-b3/tomcat-7.0.62" );
-        }
-
-        @Override
-        protected IPath getLiferayRuntimeZip()
-        {
-            return getLiferayBundlesPath().append( "liferay-portal-tomcat-7.0-ce-b3-20160111121420368.zip" );
-        }
-
-        @Override
-        protected String getRuntimeId()
-        {
-            return "com.liferay.ide.server.portal.runtime";
-        }
-
         protected void setupServer() throws Exception
         {
             final NullProgressMonitor npm = new NullProgressMonitor();
@@ -110,6 +110,28 @@ public class ServiceCommandDynamicTests extends ServerCoreBase
         }
     };
 
+    private void setupAgent()
+    {
+        final IPath modulesPath = portalRuntime.getPortalBundle().getLiferayHome().append( "osgi/modules" );
+        final IPath agentInstalledPath = modulesPath.append( "biz.aQute.remote.agent.jar" );
+
+        if( !agentInstalledPath.toFile().exists() )
+        {
+            try
+            {
+                final File file = new File(
+                    FileLocator.toFileURL(
+                        LiferayServerCore.getDefault().getBundle().getEntry(
+                            "bundles/biz.aQute.remote.agent-3.1.0.jar" ) ).getFile() );
+
+                FileUtil.copyFile( file, modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
+            }
+            catch( IOException e )
+            {
+            }
+        }
+    }
+
     @Override
     public void setupRuntime() throws Exception
     {
@@ -121,6 +143,12 @@ public class ServiceCommandDynamicTests extends ServerCoreBase
     {
         setupAgent();
         serverManagerTests.startServer();
+    }
+
+    @After
+    public void stopServer() throws Exception
+    {
+        serverManagerTests.stopServer();
     }
 
     @Test
@@ -153,33 +181,5 @@ public class ServiceCommandDynamicTests extends ServerCoreBase
         assertEquals( "1.0.0", serviceBundleNoExportPackage[1] );
 
         assertNull( serviceBundleNotExit );
-    }
-
-    @After
-    public void stopServer() throws Exception
-    {
-        serverManagerTests.stopServer();
-    }
-
-    private void setupAgent()
-    {
-        final IPath modulesPath = portalRuntime.getPortalBundle().getLiferayHome().append( "osgi/modules" );
-        final IPath agentInstalledPath = modulesPath.append( "biz.aQute.remote.agent.jar" );
-
-        if( !agentInstalledPath.toFile().exists() )
-        {
-            try
-            {
-                final File file = new File(
-                    FileLocator.toFileURL(
-                        LiferayServerCore.getDefault().getBundle().getEntry(
-                            "bundles/biz.aQute.remote.agent-3.1.0.jar" ) ).getFile() );
-
-                FileUtil.copyFile( file, modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
-            }
-            catch( IOException e )
-            {
-            }
-        }
     }
 }

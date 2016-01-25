@@ -46,8 +46,9 @@ import aQute.remote.util.AgentSupervisor;
  */
 public class ServiceCommand
 {
-    private String _serviceName;
     private IServer _server;
+
+    private String _serviceName;
 
     public ServiceCommand(IServer server)
     {
@@ -58,6 +59,45 @@ public class ServiceCommand
     {
         _serviceName = serviceName;
         _server = server;
+    }
+
+    private File checkStaticServicesFile() throws Exception
+    {
+        URL url = FileLocator.toFileURL(
+            ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/services-static.json" ) );
+        File servicesFile = new File( url.getFile() );
+
+        if( servicesFile.exists() )
+        {
+            return servicesFile;
+        }
+
+        throw new FileNotFoundException( "can't find static services file services-static.json" );
+    }
+
+    private ServicesSupervisor connectRemote() throws Exception
+    {
+        String host = _server.getHost();
+        int agentPort = _server.getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
+
+        IStatus status = SocketUtil.canConnect( host, String.valueOf( agentPort ) );
+
+        if( !( status != null && status.isOK() ) )
+        {
+            return null;
+        }
+
+        ServicesSupervisor supervisor = new ServicesSupervisor();
+        supervisor.connect( host, agentPort );
+
+        if( !supervisor.getAgent().redirect( -1 ) )
+        {
+            supervisor.close();
+
+            return null;
+        }
+
+        return supervisor;
     }
 
     public String[] execute() throws Exception
@@ -119,81 +159,6 @@ public class ServiceCommand
         }
     }
 
-    private ServicesSupervisor connectRemote() throws Exception
-    {
-        String host = _server.getHost();
-        int agentPort = _server.getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
-
-        IStatus status = SocketUtil.canConnect( host, String.valueOf( agentPort ) );
-
-        if( !( status != null && status.isOK() ) )
-        {
-            return null;
-        }
-
-        ServicesSupervisor supervisor = new ServicesSupervisor();
-        supervisor.connect( host, agentPort );
-
-        if( !supervisor.getAgent().redirect( -1 ) )
-        {
-            supervisor.close();
-
-            return null;
-        }
-
-        return supervisor;
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private String[] getStaticServices() throws Exception
-    {
-        final File servicesFile = checkStaticServicesFile();
-        final ObjectMapper mapper = new ObjectMapper();
-
-        Map<String, String[]> map = mapper.readValue( servicesFile, Map.class );
-        String[] services = map.keySet().toArray( new String[0] );
-
-        return services;
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private String[] getStaticServiceBundle( String _serviceName ) throws Exception
-    {
-        final File servicesFile = checkStaticServicesFile();
-        final ObjectMapper mapper = new ObjectMapper();
-
-        Map<String, List<String>> map = mapper.readValue( servicesFile, Map.class );
-        List<String> serviceBundle = map.get( _serviceName );
-
-        if( serviceBundle != null && serviceBundle.size() != 0 )
-        {
-            return (String[]) serviceBundle.toArray( new String[serviceBundle.size()] );
-        }
-
-        return null;
-    }
-
-    private File checkStaticServicesFile() throws Exception
-    {
-        URL url = FileLocator.toFileURL(
-            ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/services-static.json" ) );
-        File servicesFile = new File( url.getFile() );
-
-        if( servicesFile.exists() )
-        {
-            return servicesFile;
-        }
-
-        throw new FileNotFoundException( "can't find static services file services-static.json" );
-    }
-
-    private String[] getServices( ServicesSupervisor supervisor ) throws Exception
-    {
-        supervisor.getAgent().stdin( "services" );
-
-        return parseService( supervisor.getOutInfo() );
-    }
-
     private String[] getServiceBundle( String serviceName, ServicesSupervisor supervisor ) throws Exception
     {
         String[] serviceBundleInfo;
@@ -214,47 +179,59 @@ public class ServiceCommand
         return serviceBundleInfo;
     }
 
-    public class ServicesSupervisor extends AgentSupervisor<Supervisor, Agent> implements Supervisor
+    private String[] getServices( ServicesSupervisor supervisor ) throws Exception
     {
-        private String outinfo;
+        supervisor.getAgent().stdin( "services" );
 
-        @Override
-        public boolean stdout( String out ) throws Exception
+        return parseService( supervisor.getOutInfo() );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    private String[] getStaticServiceBundle( String _serviceName ) throws Exception
+    {
+        final File servicesFile = checkStaticServicesFile();
+        final ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, List<String>> map = mapper.readValue( servicesFile, Map.class );
+        List<String> serviceBundle = map.get( _serviceName );
+
+        if( serviceBundle != null && serviceBundle.size() != 0 )
         {
-            if( !"".equals( out ) && out != null )
-            {
-                out = out.replaceAll( "^>.*$", "" );
-
-                if( !"".equals( out ) && !out.startsWith( "true" ) )
-                {
-                    outinfo = out;
-                }
-            }
-
-            return true;
+            return (String[]) serviceBundle.toArray( new String[serviceBundle.size()] );
         }
 
-        @Override
-        public boolean stderr( String out ) throws Exception
+        return null;
+    }
+
+    @SuppressWarnings( "unchecked" )
+    private String[] getStaticServices() throws Exception
+    {
+        final File servicesFile = checkStaticServicesFile();
+        final ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, String[]> map = mapper.readValue( servicesFile, Map.class );
+        String[] services = map.keySet().toArray( new String[0] );
+
+        return services;
+    }
+
+    private String[] parseRegisteredBundle( String serviceName )
+    {
+        if( serviceName.startsWith( "false" ) )
         {
-            return true;
+            return null;
         }
 
-        public void connect( String host, int port ) throws Exception
+        String str = serviceName.substring( 0, serviceName.indexOf( "[" ) );
+        str = str.replaceAll( "\"Registered by bundle:\"", "" ).trim();
+        String[] result = str.split( "_" );
+
+        if( result.length == 2 )
         {
-            super.connect( Agent.class, this, host, port );
+            return result;
         }
 
-        @Override
-        public void event( Event e ) throws Exception
-        {
-        }
-
-        public String getOutInfo()
-        {
-            return outinfo;
-        }
-
+        return null;
     }
 
     private String[] parseService( String outinfo )
@@ -316,25 +293,6 @@ public class ServiceCommand
         return newList.toArray( new String[0] );
     }
 
-    private String[] parseRegisteredBundle( String serviceName )
-    {
-        if( serviceName.startsWith( "false" ) )
-        {
-            return null;
-        }
-
-        String str = serviceName.substring( 0, serviceName.indexOf( "[" ) );
-        str = str.replaceAll( "\"Registered by bundle:\"", "" ).trim();
-        String[] result = str.split( "_" );
-
-        if( result.length == 2 )
-        {
-            return result;
-        }
-
-        return null;
-    }
-
     private String[] parseSymbolicName( String info )
     {
         final int symbolicIndex = info.indexOf( "bundle-symbolic-name" );
@@ -366,5 +324,47 @@ public class ServiceCommand
         }
 
         return null;
+    }
+
+    public class ServicesSupervisor extends AgentSupervisor<Supervisor, Agent> implements Supervisor
+    {
+        private String outinfo;
+
+        public void connect( String host, int port ) throws Exception
+        {
+            super.connect( Agent.class, this, host, port );
+        }
+
+        @Override
+        public void event( Event e ) throws Exception
+        {
+        }
+
+        public String getOutInfo()
+        {
+            return outinfo;
+        }
+
+        @Override
+        public boolean stderr( String out ) throws Exception
+        {
+            return true;
+        }
+
+        @Override
+        public boolean stdout( String out ) throws Exception
+        {
+            if( !"".equals( out ) && out != null )
+            {
+                out = out.replaceAll( "^>.*$", "" );
+
+                if( !"".equals( out ) && !out.startsWith( "true" ) )
+                {
+                    outinfo = out;
+                }
+            }
+
+            return true;
+        }
     }
 }
