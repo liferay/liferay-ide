@@ -83,6 +83,7 @@
             </content>
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
+            <initial-focus>PropertyKeys</initial-focus>
         </page>
         <page>
             <id>LiferayPortletModuleSettingWizardPage</id>
@@ -103,6 +104,7 @@
                      <child-property>Value</child-property>
                  </property-editor>
             </content>
+            <initial-focus>PropertyKeys</initial-focus>
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
         </page>
