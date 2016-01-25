@@ -33,6 +33,8 @@ import org.eclipse.sapphire.services.ValidationService;
  */
 public class WorkspaceNameValidationService extends ValidationService
 {
+    private static final String PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
+
     private FilteredListener<PropertyContentEvent> listener;
 
     @Override
@@ -69,7 +71,7 @@ public class WorkspaceNameValidationService extends ValidationService
                 return retval;
             }
         }
-        catch(CoreException e)
+        catch( CoreException e )
         {
             retval = StatusBridge.create( e.getStatus() );
 
@@ -79,26 +81,41 @@ public class WorkspaceNameValidationService extends ValidationService
         final NewLiferayWorkspaceOp op = op();
         final String currentWorkspaceName = op.getWorkspaceName().content();
 
-        if( currentWorkspaceName != null )
+        if( CoreUtil.isNullOrEmpty( currentWorkspaceName ) )
         {
-            if( isExistingFolder(op) )
-            {
-                retval = Status.createErrorStatus( "There is already a folder at the location \"" +
-                                op.getLocation().content().toString() + "\"" );
-            }
-            else
-            {
-                final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
+            retval = Status.createErrorStatus( "Liferay Workspace name could not be null" );
 
-                if( ! nameStatus.isOK() )
-                {
-                    retval = StatusBridge.create( nameStatus );
-                }
-                else if( isInvalidProjectName( op ) )
-                {
-                    retval = Status.createErrorStatus( "A project with that name already exists." );
-                }
-            }
+            return retval;
+        }
+
+        if( isExistingFolder( op ) )
+        {
+            retval = Status.createErrorStatus(
+                "There is already a folder at the location \"" + op.getLocation().content().toString() + "\"" );
+            return retval;
+        }
+
+        if( !isValidProjectName( currentWorkspaceName ) )
+        {
+            retval = Status.createErrorStatus( "The name is invalid for a project" );
+
+            return retval;
+        }
+
+        final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
+
+        if( !nameStatus.isOK() )
+        {
+            retval = StatusBridge.create( nameStatus );
+
+            return retval;
+        }
+
+        if( isInvalidProjectName( op ) )
+        {
+            retval = Status.createErrorStatus( "A project with that name already exists." );
+
+            return retval;
         }
 
         return retval;
@@ -146,6 +163,12 @@ public class WorkspaceNameValidationService extends ValidationService
         }
 
         return false;
+    }
+
+    private boolean isValidProjectName( String currentProjectName )
+    {
+
+        return currentProjectName.matches( PROJECT_NAME_REGEX );
     }
 
     private NewLiferayWorkspaceOp op()
