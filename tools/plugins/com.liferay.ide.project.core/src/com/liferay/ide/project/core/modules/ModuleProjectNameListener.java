@@ -84,14 +84,12 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
 
                         if( modulesPath != null && modulesPath.toFile().exists() )
                         {
-                            newLocationBase = PathBridge.create(
-                                liferayWorkspaceProject.getLocation().append(
-                                    liferayWorkspaceProjectModulesDir ).append( "apps" ) );
+                            newLocationBase = PathBridge.create( modulesPath );
                         }
                         else
                         {
                             newLocationBase = PathBridge.create(
-                                liferayWorkspaceProject.getLocation().append( "modules" ).append( "apps" ) );
+                                liferayWorkspaceProject.getLocation().append( "modules" ) );
                         }
                     }
                 }

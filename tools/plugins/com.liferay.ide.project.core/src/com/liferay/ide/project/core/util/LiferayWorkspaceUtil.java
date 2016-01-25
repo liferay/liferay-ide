@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
@@ -156,32 +157,38 @@ public class LiferayWorkspaceUtil
 
     public static String getLiferayWorkspaceProjectModulesDir( final IProject project )
     {
-        try
+        String retval = null;
+
+        if( project != null )
         {
-            if( project != null )
+            final IPath projectLocation = project.getLocation();
+
+            if( projectLocation != null )
             {
-                final IPath projectLocation = project.getLocation();
+                final IPath gradlePropertiesLocation = projectLocation.append( "gradle.properties" );
 
-                if( projectLocation != null )
+                if( gradlePropertiesLocation.toFile().exists() )
                 {
-                    final IPath gradlePropertiesLocation = projectLocation.append( "gradle.properties" );
-
-                    if( gradlePropertiesLocation.toFile().exists() )
+                    try
                     {
-                        String readPropertyFileValue = CoreUtil.readPropertyFileValue(
+                        String modulesDir = CoreUtil.readPropertyFileValue(
                             gradlePropertiesLocation.toFile(), "liferay.workspace.modules.dir" );
 
-                        return readPropertyFileValue;
+                        if( modulesDir == null )
+                        {
+                            modulesDir = "modules";
+                        }
+
+                        retval = modulesDir;
+                    }
+                    catch( IOException e )
+                    {
+                        ProjectCore.logError( "Can't read gradle properties from workspaceProject. ", e );
                     }
                 }
             }
-
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "Can't read gradle properties from workspaceProject. ", e );
         }
 
-        return null;
+        return retval;
     }
 }
