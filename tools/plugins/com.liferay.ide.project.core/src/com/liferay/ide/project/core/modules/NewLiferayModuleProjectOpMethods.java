@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
@@ -39,7 +40,7 @@ import org.eclipse.sapphire.platform.StatusBridge;
  */
 public class NewLiferayModuleProjectOpMethods
 {
-    
+
     protected static String[] services = new String[] {
         "com.liferay.amazon.rankings.web.upgrade.AmazonRankingsWebUpgrade",
         "com.liferay.application.list.PanelApp",
@@ -526,13 +527,13 @@ public class NewLiferayModuleProjectOpMethods
         "org.osgi.service.url.URLStreamHandlerService",
         "org.osgi.service.useradmin.UserAdmin",
         "org.springframework.context.ApplicationContext" };
-    
+
     public static String[] getServices()
     {
         //TODO IDE-2164
         return services;
     }
-    
+
     public static final Status execute( final NewLiferayModuleProjectOp op, final ProgressMonitor pm )
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
@@ -615,7 +616,11 @@ public class NewLiferayModuleProjectOpMethods
             return;
         }
 
-        String content = new String( FileUtil.readContents( dest, true ) );
+        FileInputStream fis = new FileInputStream( dest );
+
+        String content = new String( FileUtil.readContents( fis ) );
+
+        fis.close();
 
         String fontString = content.substring( 0, content.indexOf( "property" ) );
 
@@ -632,14 +637,14 @@ public class NewLiferayModuleProjectOpMethods
         if( !CoreUtil.isNullOrEmpty( property ) )
         {
             property = property.substring( 1 );
-            property = property.substring( 0, property.lastIndexOf( "\t" ) );
-            property += ",\t";
+            property = property.substring( 0, property.lastIndexOf( "\t" ) - 1 );
+            property += ",\n";
             sb.append( property );
         }
 
         for( String str : properties )
         {
-            sb.append( "\t\t\"" + str + "\",\t" );
+            sb.append( "\t\t\"" + str + "\",\n" );
         }
 
         sb.deleteCharAt( sb.toString().length() - 2 );
@@ -682,7 +687,7 @@ public class NewLiferayModuleProjectOpMethods
 
        String newContent = preNewContent.toString();
 
-       if (!content.equals(newContent)) 
+       if (!content.equals(newContent))
        {
            FileUtil.writeFileFromStream( file, new ByteArrayInputStream( newContent.getBytes() ) );
        }
