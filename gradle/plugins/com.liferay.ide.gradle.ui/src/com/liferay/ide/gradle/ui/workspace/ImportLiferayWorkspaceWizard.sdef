@@ -33,7 +33,7 @@
                 <property-editor>WorkspaceLocation</property-editor>
                 <spacer></spacer>
                 <property-editor>
-                    <visible-when>${ WorkspaceLocation != null &amp;&amp; hasBundlesDir == 'false' }</visible-when>
+                    <visible-when>${ Severity(Validation(workspaceLocation)) == 'OK' &amp;&amp; hasBundlesDir == 'false' }</visible-when>
                     <property>provisionLiferayBundle</property>
                 </property-editor>
                 <property-editor>
