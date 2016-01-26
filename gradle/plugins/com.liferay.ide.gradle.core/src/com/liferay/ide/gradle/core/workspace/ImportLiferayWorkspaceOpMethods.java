@@ -75,7 +75,7 @@ public class ImportLiferayWorkspaceOpMethods
                 return retval;
             }
 
-            if( isInitBundle )
+            if( isInitBundle || isHasBundlesDir )
             {
                 String serverRuntimeName = op.getServerName().content();
 
