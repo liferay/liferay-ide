@@ -18,9 +18,8 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.gradle.core,
  org.eclipse.ui.ide,
  org.eclipse.wst.web,
- org.eclipse.e4.core.contexts,
- org.eclipse.e4.core.commands,
- org.eclipse.core.expressions
+ org.eclipse.core.expressions,
+ org.eclipse.ui.navigator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
