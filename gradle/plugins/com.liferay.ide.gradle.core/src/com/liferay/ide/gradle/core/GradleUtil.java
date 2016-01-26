@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.buildship.core.CorePlugin;
+import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.buildship.core.configuration.ProjectConfiguration;
 import org.eclipse.buildship.core.launch.GradleRunConfigurationAttributes;
 import org.eclipse.buildship.core.projectimport.ProjectImportConfiguration;
@@ -33,6 +34,7 @@ import org.eclipse.buildship.core.util.gradle.GradleDistributionWrapper;
 import org.eclipse.buildship.core.util.progress.AsyncHandler;
 import org.eclipse.buildship.core.util.variable.ExpressionUtils;
 import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectJob;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -43,6 +45,7 @@ import org.eclipse.debug.core.ILaunchManager;
 
 /**
  * @author Andy Wu
+ * @author Lovett Li
  */
 public class GradleUtil
 {
@@ -114,5 +117,18 @@ public class GradleUtil
         return GradleRunConfigurationAttributes.with(
             tasks, projectDirectoryExpression, gradleDistribution, gradleUserHome, javaHome, jvmArguments, arguments,
             showExecutionView, showConsoleView );
+    }
+
+    public static boolean isGradleProject( IProject project ) throws CoreException
+    {
+        return project != null && project.exists() && project.isAccessible() &&
+            ( project.hasNature( GradleProjectNature.ID ) || project.getFile( "build.gradle" ).exists() );
+    }
+
+
+    public static boolean isBuildFile( IFile buildFile )
+    {
+        return buildFile != null && buildFile.exists() && "build.gradle".equals( buildFile.getName() ) &&
+            buildFile.getParent() instanceof IProject;
     }
 }

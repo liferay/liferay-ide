@@ -36,5 +36,80 @@
          </description>
       </wizard>
    </extension>
-   
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.ui.popupmenu"
+            objectClass="org.eclipse.core.resources.IResource">
+         <menu
+               icon="icons/e16/liferay.png"
+               id="liferayPopupMenuCategory"
+               label="Liferay">
+            <separator
+                  name="slot1">
+            </separator>
+            <groupMarker
+                  name="gradle">
+            </groupMarker>
+         </menu>
+         <menu
+               icon="icons/e16/liferay.png"
+               id="liferayPopupMenuGradleCategory"
+               label="Gradle"
+               path="liferayPopupMenuCategory/gradle">
+            <groupMarker
+                  name="build-lang">
+            </groupMarker>
+         </menu>
+      </objectContribution>
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.gradle.ui.gradle.popup"
+            objectClass="org.eclipse.core.resources.IResource">
+         <action
+               class="com.liferay.ide.gradle.action.BuildLangTaskAction"
+               enablesFor="1"
+               icon="icons/e16/liferay.png"
+               id="com.liferay.ide.gradle.popup.action.buildLang"
+               label="liferay:build-lang"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-lang">
+         </action>
+         <enablement>
+               <adapt type="org.eclipse.core.resources.IResource">
+                   <or>
+                       <adapt type="org.eclipse.core.resources.IFile">
+                           <test forcePluginActivation="true"
+                               property="com.liferay.ide.gradle.ui.isBuildFile"
+                               value="true" />
+                       </adapt>
+                       <and>
+                            <adapt type="org.eclipse.core.resources.IProject">
+                               <test forcePluginActivation="true"
+                                   property="com.liferay.ide.gradle.ui.isGradleProject"
+                                   value="true" />
+                           </adapt>
+                        </and>
+                   </or>
+               </adapt>
+         </enablement>
+      </objectContribution>
+  </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.liferay.ide.gradle.ui.GradleProjectPropertyTester"
+            id="com.liferay.ide.gradle.ui.isGradleProject"
+            namespace="com.liferay.ide.gradle.ui"
+            properties="isGradleProject"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.gradle.ui.BuildFilePropertyTester"
+            id="com.liferay.ide.gradle.ui.isBuildFile"
+            namespace="com.liferay.ide.gradle.ui"
+            properties="isBuildFile"
+            type="org.eclipse.core.resources.IFile">
+      </propertyTester>
+   </extension>
 </plugin>
