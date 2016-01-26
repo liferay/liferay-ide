@@ -16,5 +16,6 @@ Require-Bundle: org.junit,
  com.liferay.ide.ui.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.liferay.ide.project.ui.tests,
- com.liferay.ide.project.ui.tests.page
+ com.liferay.ide.project.ui.tests.page,
+ com.liferay.ide.project.ui.tests.swtbot
 Bundle-ActivationPolicy: lazy

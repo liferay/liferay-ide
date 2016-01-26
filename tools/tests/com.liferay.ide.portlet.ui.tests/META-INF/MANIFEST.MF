@@ -18,7 +18,9 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.portlet.vaadin.core,
  com.liferay.ide.portlet.vaadin.ui,
  org.eclipse.ui.workbench,
- org.junit
+ org.junit,
+ org.eclipse.swtbot.go,
+ com.liferay.ide.project.ui.tests
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.ui.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

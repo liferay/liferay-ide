@@ -22,6 +22,7 @@ import com.liferay.ide.ui.tests.UIBase;
  * @author Ashley Yuan
  * @author Ying Xu
  * @author Vicky Wang
+ * @author Li Lu
  */
 public interface ProjectWizard extends UIBase
 {
@@ -98,4 +99,10 @@ public interface ProjectWizard extends UIBase
     public final String TOOLTIP_MENU_ITEM_NEW_LIFERAY_PROJECT = "New Liferay Plugin Project";
     public final String TOOLTIP_NEW_LIFERAY_PORTLET = "New Liferay Portlet";
 
+    public final String LABEL_JSF_STANDARD = "JSF standard";
+    public final String LABLE_ICE_FACES = "ICEfaces";
+    public final String LABLE_LIFERAY_FACES_ALLOY = "Liferay Faces Alloy";
+    public final String LABLE_PRIME_FACES = "PrimeFaces";
+    public final String LABLE_RICH_FACES = "RichFaces";
+    public final String LABLE_ARCHETYPE = "Archetype:";
 }
