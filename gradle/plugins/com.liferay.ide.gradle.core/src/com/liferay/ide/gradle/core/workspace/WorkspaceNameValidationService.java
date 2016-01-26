@@ -88,10 +88,12 @@ public class WorkspaceNameValidationService extends ValidationService
             return retval;
         }
 
-        if( isExistingFolder( op ) )
+        final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
+
+        if( !nameStatus.isOK() )
         {
-            retval = Status.createErrorStatus(
-                "There is already a folder at the location \"" + op.getLocation().content().toString() + "\"" );
+            retval = StatusBridge.create( nameStatus );
+
             return retval;
         }
 
@@ -102,12 +104,10 @@ public class WorkspaceNameValidationService extends ValidationService
             return retval;
         }
 
-        final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
-
-        if( !nameStatus.isOK() )
+        if( isExistingFolder( op ) )
         {
-            retval = StatusBridge.create( nameStatus );
-
+            retval = Status.createErrorStatus(
+                "There is already a folder at the location \"" + op.getLocation().content().toString() + "\"" );
             return retval;
         }
 
