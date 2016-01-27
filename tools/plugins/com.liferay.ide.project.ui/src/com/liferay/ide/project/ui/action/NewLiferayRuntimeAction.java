@@ -39,7 +39,7 @@ public class NewLiferayRuntimeAction extends SapphireActionHandler
 
         boolean isOK =
             ServerUIUtil.showNewRuntimeWizard(
-                ( (SwtPresentation) context ).shell(), IModuleConstants.JST_WEB_MODULE, null, "com.liferay." );
+                ( (SwtPresentation) context ).shell(), null, null, "com.liferay." );
 
         if( isOK )
         {
