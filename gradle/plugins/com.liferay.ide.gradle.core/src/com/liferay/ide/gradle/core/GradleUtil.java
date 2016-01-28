@@ -111,7 +111,7 @@ public class GradleUtil
     public static boolean isGradleProject( IProject project ) throws CoreException
     {
         return project != null && project.exists() && project.isAccessible() &&
-            ( project.hasNature( GradleProjectNature.ID ) || project.getFile( "build.gradle" ).exists() );
+            ( project.hasNature( GradleProjectNature.ID ) );
     }
 
     public static void runGradleTask( IProject project, String task, IProgressMonitor monitor ) throws CoreException
