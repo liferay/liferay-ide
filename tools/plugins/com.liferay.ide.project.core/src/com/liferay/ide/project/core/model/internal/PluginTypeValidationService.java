@@ -64,19 +64,20 @@ public class PluginTypeValidationService extends ValidationService
 
             final NewLiferayPluginProjectOp op = op();
 
-            if ( sdk != null )
+            if( sdk != null )
             {
                 if( op.getPluginType().content().equals( PluginType.web ) && !supportsExtOrWebTypePlugin( op, "web" ) )
                 {
-                    retval =
-                        Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  "
-                            + "Please configure version 7.0.0 or greater." );
+                    retval = Status.createErrorStatus(
+                        "The selected Plugins SDK does not support creating new web type plugins.  " +
+                            "Please configure version 7.0 or greater." );
                 }
-                else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsExtOrWebTypePlugin( op, "ext" ) )
+                else if( op.getPluginType().content().equals( PluginType.ext ) &&
+                    !supportsExtOrWebTypePlugin( op, "ext" ) )
                 {
-                    retval =
-                        Status.createErrorStatus( "The selected Plugins SDK does not support creating ext type plugins.  "
-                            + "Please configure version 6.2.0 or less." );
+                    retval = Status.createErrorStatus(
+                        "The selected Plugins SDK does not support creating ext type plugins.  " +
+                            "Please configure version 6.2 or less." );
                 }
             }
             else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsExtOrWebTypePlugin( op, "ext" ) )

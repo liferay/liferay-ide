@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.model;
 
 import com.liferay.ide.core.ILiferayConstants;
@@ -50,7 +51,6 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.osgi.framework.Version;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
@@ -77,22 +77,22 @@ public class NewLiferayPluginProjectOpMethods
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 100 ); //$NON-NLS-1$
+        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 100 );
 
         Status retval = null;
 
         try
         {
             final NewLiferayProjectProvider<NewLiferayPluginProjectOp> projectProvider =
-                            op.getProjectProvider().content( true );
+                op.getProjectProvider().content( true );
 
-            //IDE-1306  If the user types too quickly all the model changes may not have propagated
+            // IDE-1306 If the user types too quickly all the model changes may not have propagated
             final Path projectLocation = op.getLocation().content();
             updateLocation( op, projectLocation );
 
             final IStatus status = projectProvider.createNewProject( op, monitor );
 
-            if ( status.isOK() )
+            if( status.isOK() )
             {
                 updateProjectPrefs( op );
 
@@ -138,7 +138,7 @@ public class NewLiferayPluginProjectOpMethods
             List<String> groupId =
                 op.getProjectProvider().content().getData( "parentGroupId", String.class, parentProjectDir );
 
-            if( ! groupId.isEmpty() )
+            if( !groupId.isEmpty() )
             {
                 retval = groupId.get( 0 );
             }
@@ -172,27 +172,27 @@ public class NewLiferayPluginProjectOpMethods
     {
         String suffix = null;
 
-        switch ( pluginType )
+        switch( pluginType )
         {
-            case portlet:
-            case servicebuilder:
-                suffix = "-portlet"; //$NON-NLS-1$
-                break;
-            case ext:
-                suffix = "-ext"; //$NON-NLS-1$
-                break;
-            case hook:
-                suffix = "-hook"; //$NON-NLS-1$
-                break;
-            case layouttpl:
-                suffix = "-layouttpl"; //$NON-NLS-1$
-                break;
-            case theme:
-                suffix = "-theme"; //$NON-NLS-1$
-                break;
-            case web:
-                suffix = "-web"; //$NON-NLS-1$
-                break;
+        case portlet:
+        case servicebuilder:
+            suffix = "-portlet"; //$NON-NLS-1$
+            break;
+        case ext:
+            suffix = "-ext"; //$NON-NLS-1$
+            break;
+        case hook:
+            suffix = "-hook"; //$NON-NLS-1$
+            break;
+        case layouttpl:
+            suffix = "-layouttpl"; //$NON-NLS-1$
+            break;
+        case theme:
+            suffix = "-theme"; //$NON-NLS-1$
+            break;
+        case web:
+            suffix = "-web"; //$NON-NLS-1$
+            break;
         }
 
         return suffix;
@@ -213,11 +213,11 @@ public class NewLiferayPluginProjectOpMethods
 
         final Set<String> possibleProfileIds = new HashSet<String>();
 
-        if( ! CoreUtil.isNullOrEmpty( activeProfilesValue ) )
+        if( !CoreUtil.isNullOrEmpty( activeProfilesValue ) )
         {
             final String[] vals = activeProfilesValue.split( "," );
 
-            if( ! CoreUtil.isNullOrEmpty( vals ) )
+            if( !CoreUtil.isNullOrEmpty( vals ) )
             {
                 for( String val : vals )
                 {
@@ -229,7 +229,7 @@ public class NewLiferayPluginProjectOpMethods
             }
         }
 
-        if( ! CoreUtil.isNullOrEmpty( systemProfileIds ) )
+        if( !CoreUtil.isNullOrEmpty( systemProfileIds ) )
         {
             for( Object systemProfileId : systemProfileIds )
             {
@@ -239,7 +239,7 @@ public class NewLiferayPluginProjectOpMethods
 
                     if( !possibleProfileIds.contains( val ) && !val.contains( StringPool.SPACE ) )
                     {
-                       possibleProfileIds.add( val );
+                        possibleProfileIds.add( val );
                     }
                 }
             }
@@ -286,7 +286,7 @@ public class NewLiferayPluginProjectOpMethods
         }
 
         return ( projectName == null ? StringPool.EMPTY : projectName ) +
-                        ( suffix == null ? StringPool.EMPTY : suffix );
+            ( suffix == null ? StringPool.EMPTY : suffix );
     }
 
     private static IStatus removeSampleCodeAndFiles( NewLiferayPluginProjectOp op )
@@ -295,7 +295,7 @@ public class NewLiferayPluginProjectOpMethods
 
         final boolean includeSampleCode = op.getIncludeSampleCode().content();
 
-        if( ! includeSampleCode )
+        if( !includeSampleCode )
         {
             final IProject project = CoreUtil.getLiferayProject( op.getFinalProjectName().content() );
 
@@ -312,12 +312,8 @@ public class NewLiferayPluginProjectOpMethods
                     {
                         final IFolder docroot = webproject.getDefaultDocrootFolder();
 
-                        final IFile[] sampleFiles =
-                        {
-                            docroot.getFile( "view.jsp" ),
-                            docroot.getFile( "css/main.css" ),
-                            docroot.getFile( "js/main.js" )
-                        };
+                        final IFile[] sampleFiles = { docroot.getFile( "view.jsp" ), docroot.getFile( "css/main.css" ),
+                            docroot.getFile( "js/main.js" ) };
 
                         for( IFile file : sampleFiles )
                         {
@@ -337,7 +333,7 @@ public class NewLiferayPluginProjectOpMethods
                 {
                     ProjectCore.logError( "Error deleting sample files.", e );
                 }
-           }
+            }
         }
 
         return status;
@@ -366,11 +362,11 @@ public class NewLiferayPluginProjectOpMethods
             {
             }
 
-            if ( sdk == null )
+            if( sdk == null )
             {
                 final Path sdkLocation = op.getSdkLocation().content();
 
-                if ( sdkLocation != null )
+                if( sdkLocation != null )
                 {
                     sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
                 }
@@ -403,7 +399,8 @@ public class NewLiferayPluginProjectOpMethods
         return retval;
     }
 
-    public static void updateActiveProfilesValue( final NewLiferayPluginProjectOp op, final ElementList<Profile> profiles )
+    public static void updateActiveProfilesValue(
+        final NewLiferayPluginProjectOp op, final ElementList<Profile> profiles )
     {
         final StringBuilder sb = new StringBuilder();
 
@@ -411,7 +408,7 @@ public class NewLiferayPluginProjectOpMethods
         {
             for( Profile profile : profiles )
             {
-                if( ! profile.getId().empty() )
+                if( !profile.getId().empty() )
                 {
                     sb.append( profile.getId().content() );
                     sb.append( ',' );
@@ -427,16 +424,16 @@ public class NewLiferayPluginProjectOpMethods
     {
         final String projectName = getProjectNameWithSuffix( op );
 
-        if ( baseLocation == null)
+        if( baseLocation == null )
         {
-            return ;
+            return;
         }
 
         final String lastSegment = baseLocation.lastSegment();
 
-        if ( baseLocation!= null && baseLocation.segmentCount()>0)
+        if( baseLocation != null && baseLocation.segmentCount() > 0 )
         {
-            if ( lastSegment.equals( projectName ))
+            if( lastSegment.equals( projectName ) )
             {
                 return;
             }

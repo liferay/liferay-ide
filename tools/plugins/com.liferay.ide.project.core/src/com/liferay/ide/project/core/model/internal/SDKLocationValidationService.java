@@ -108,27 +108,29 @@ public class SDKLocationValidationService extends ValidationService
 
             IPath projectPath = PathBridge.create( projectLocation );
 
-            if ( projectPath != null && projectPath.toFile().exists() )
+            if( projectPath != null && projectPath.toFile().exists() )
             {
-                return StatusBridge.create( ProjectCore.createErrorStatus( "Project(" + projectName + ") is existed in sdk folder, please set new project name" ) );
+                return StatusBridge.create(
+                    ProjectCore.createErrorStatus(
+                        "Project(" + projectName + ") is existed in sdk folder, please set new project name" ) );
             }
 
             if( op().getPluginType().content().equals( PluginType.web ) )
             {
-                if ( ! supportsExtOrWebTypePlugin( op(), "web" ) )
+                if( !supportsExtOrWebTypePlugin( op(), "web" ) )
                 {
-                    retval =
-                        Status.createErrorStatus( "The selected Plugins SDK does not support creating new web type plugins.  "
-                            + "Please configure version 7.0.0 or greater." );
+                    retval = Status.createErrorStatus(
+                        "The selected Plugins SDK does not support creating new web type plugins.  " +
+                            "Please configure version 7.0 or greater." );
                 }
             }
             else if( op().getPluginType().content().equals( PluginType.ext ) )
             {
                 if( !supportsExtOrWebTypePlugin( op(), "ext" ) )
                 {
-                    retval =
-                        Status.createErrorStatus( "The selected Plugins SDK does not support creating ext type plugins.  "
-                            + "Please configure version 6.2.0 or less." );
+                    retval = Status.createErrorStatus(
+                        "The selected Plugins SDK does not support creating ext type plugins.  " +
+                            "Please configure version 6.2 or less." );
                 }
             }
             else if (op().getPluginType().content().equals( PluginType.portlet ))
