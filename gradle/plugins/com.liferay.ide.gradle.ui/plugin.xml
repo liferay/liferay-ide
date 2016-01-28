@@ -54,7 +54,7 @@
             </groupMarker>
          </menu>
          <menu
-               icon="icons/e16/liferay.png"
+               icon="icons/e16/liferay_logo_16.png"
                id="liferayPopupMenuGradleCategory"
                label="Gradle"
                path="liferayPopupMenuCategory/gradle">
@@ -70,9 +70,9 @@
          <action
                class="com.liferay.ide.gradle.action.BuildLangTaskAction"
                enablesFor="1"
-               icon="icons/e16/liferay.png"
+               icon="icons/e16/liferay_logo_16.png"
                id="com.liferay.ide.gradle.popup.action.buildLang"
-               label="liferay:build-lang"
+               label="build-lang"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-lang">
          </action>
          <enablement>
