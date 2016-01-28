@@ -100,20 +100,24 @@ public class ProjectExplorerLayoutUtil
         if( part instanceof CommonNavigator )
         {
             CommonNavigator navigator = (CommonNavigator) part;
+
             boolean previousNest =
                 navigator.getNavigatorContentService().getActivationService().isNavigatorExtensionActive(
                     nestedProjectsContentProviderExtensionId );
             String newNestParam = event.getParameter( NEST_PARAMETER );
             boolean newNest = false;
+
             if( newNestParam != null )
             {
                 newNest = Boolean.parseBoolean( newNestParam );
             }
+
             if( newNest != previousNest )
             {
                 ISelection initialSelection = navigator.getCommonViewer().getSelection();
                 INavigatorFilterService filterService = navigator.getNavigatorContentService().getFilterService();
                 Set<String> filters = new HashSet<String>();
+
                 for( ICommonFilterDescriptor desc : filterService.getVisibleFilterDescriptors() )
                 {
                     if( filterService.isActive( desc.getId() ) )
@@ -121,6 +125,7 @@ public class ProjectExplorerLayoutUtil
                         filters.add( desc.getId() );
                     }
                 }
+
                 if( newNest )
                 {
                     navigator.getNavigatorContentService().getActivationService().activateExtensions(
@@ -135,6 +140,7 @@ public class ProjectExplorerLayoutUtil
                     filters.remove( hideTopLevelProjectIfNested );
                     filters.remove( hideFolderWhenProjectIsShownAsNested );
                 }
+
                 filterService.activateFilterIdsAndUpdateViewer( filters.toArray( new String[filters.size()] ) );
                 navigator.getNavigatorContentService().getActivationService().persistExtensionActivations();
                 navigator.getCommonViewer().refresh();
