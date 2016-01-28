@@ -182,8 +182,8 @@
             id="com.liferay.ide.ui.workspace.launchWorkspace"
             name="Launch Workspace">
             <commandParameter
-                  id="com.liferay.ide.ui.workspace.launchWorkspace.workspaceLocation"
-                  name="Workspace Location"
+                  id="workspaceLocation"
+                  name="workspaceLocation"
                   optional="false">
             </commandParameter>
       </command>
@@ -202,5 +202,13 @@
             class="com.liferay.ide.ui.workspace.LaunchWorkspaceMenu"
             locationURI="menu:file?before=org.eclipse.ui.file.restartWorkbench">
        </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferenceTransfer">
+      <settingsTransfer
+            class="com.liferay.ide.ui.workspace.WorkbenchPreferencesTransfer"
+            id="com.liferay.ide.ui.workspace.WorkbenchPreferencesTransfer"
+            name="Preferences">
+      </settingsTransfer>
    </extension>
 </plugin>
