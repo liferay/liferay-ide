@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
 import com.liferay.ide.hook.core.util.HookUtil;
@@ -208,6 +209,8 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         final IProject project = request.getProject();
         final IFile pomFile = project.getFile( IMavenConstants.POM_FILE_NAME );
         final IFacetedProject facetedProject = ProjectFacetsManager.create( project, false, monitor );
+
+        LiferayNature.addLiferayNature( project, monitor );
 
         removeLiferayMavenMarkers( project );
 
