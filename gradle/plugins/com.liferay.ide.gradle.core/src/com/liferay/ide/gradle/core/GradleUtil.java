@@ -50,41 +50,6 @@ import org.eclipse.debug.core.ILaunchManager;
 public class GradleUtil
 {
 
-    public static IStatus importGradleProject( File dir, IProgressMonitor monitor ) throws CoreException
-    {
-        ProjectImportConfiguration configuration = new ProjectImportConfiguration();
-        GradleDistributionWrapper from = GradleDistributionWrapper.from( GradleDistribution.fromBuild() );
-
-        configuration.setGradleDistribution( from );
-        configuration.setProjectDir( dir );
-        configuration.setApplyWorkingSets( false );
-        configuration.setWorkingSets( new ArrayList<String>() );
-
-        SynchronizeGradleProjectJob synchronizeGradleProjectJob = new SynchronizeGradleProjectJob(
-            configuration.toFixedAttributes(), configuration.getWorkingSets().getValue(), AsyncHandler.NO_OP );
-
-        synchronizeGradleProjectJob.setUser( true );
-
-        return synchronizeGradleProjectJob.runInWorkspace( monitor );
-    }
-
-    public static void runGradleTask( IProject project, String task, IProgressMonitor monitor ) throws CoreException
-    {
-        ILaunchConfiguration launchConfiguration =
-            CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration(
-                getRunConfigurationAttributes( project, task ) );
-
-        final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
-
-        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
-        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", true );
-        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", true );
-
-        launchConfigurationWC.doSave();
-
-        launchConfigurationWC.launch( ILaunchManager.RUN_MODE, monitor );
-    }
-
     private static GradleRunConfigurationAttributes getRunConfigurationAttributes( IProject project, String task )
     {
         ProjectConfiguration projectConfiguration =
@@ -119,16 +84,50 @@ public class GradleUtil
             showExecutionView, showConsoleView );
     }
 
+    public static IStatus importGradleProject( File dir, IProgressMonitor monitor ) throws CoreException
+    {
+        ProjectImportConfiguration configuration = new ProjectImportConfiguration();
+        GradleDistributionWrapper from = GradleDistributionWrapper.from( GradleDistribution.fromBuild() );
+
+        configuration.setGradleDistribution( from );
+        configuration.setProjectDir( dir );
+        configuration.setApplyWorkingSets( false );
+        configuration.setWorkingSets( new ArrayList<String>() );
+
+        SynchronizeGradleProjectJob synchronizeGradleProjectJob = new SynchronizeGradleProjectJob(
+            configuration.toFixedAttributes(), configuration.getWorkingSets().getValue(), AsyncHandler.NO_OP );
+
+        synchronizeGradleProjectJob.setUser( true );
+
+        return synchronizeGradleProjectJob.runInWorkspace( monitor );
+    }
+
+    public static boolean isBuildFile( IFile buildFile )
+    {
+        return buildFile != null && buildFile.exists() && "build.gradle".equals( buildFile.getName() ) &&
+            buildFile.getParent() instanceof IProject;
+    }
+
     public static boolean isGradleProject( IProject project ) throws CoreException
     {
         return project != null && project.exists() && project.isAccessible() &&
             ( project.hasNature( GradleProjectNature.ID ) || project.getFile( "build.gradle" ).exists() );
     }
 
-
-    public static boolean isBuildFile( IFile buildFile )
+    public static void runGradleTask( IProject project, String task, IProgressMonitor monitor ) throws CoreException
     {
-        return buildFile != null && buildFile.exists() && "build.gradle".equals( buildFile.getName() ) &&
-            buildFile.getParent() instanceof IProject;
+        ILaunchConfiguration launchConfiguration =
+            CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration(
+                getRunConfigurationAttributes( project, task ) );
+
+        final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
+
+        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
+        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", true );
+        launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", true );
+
+        launchConfigurationWC.doSave();
+
+        launchConfigurationWC.launch( ILaunchManager.RUN_MODE, monitor );
     }
 }
