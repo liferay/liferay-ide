@@ -581,4 +581,15 @@
       </classpathContainerPage>
    </extension>
   -->
+   <extension point="org.eclipse.ui.decorators">
+     <decorator
+        adaptable="true"
+        class="com.liferay.ide.server.ui.LiferayServerModuleLabelDecorator"
+        id="com.liferay.ide.server.ui.decorator"
+        label="Module Label"
+        lightweight="false"
+        state="true">
+        <description>%moduleProjectDecoratorDescription</description>
+     </decorator>
+   </extension>
 </plugin>

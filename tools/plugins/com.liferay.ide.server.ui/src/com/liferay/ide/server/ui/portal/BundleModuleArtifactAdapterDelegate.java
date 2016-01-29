@@ -16,6 +16,7 @@ package com.liferay.ide.server.ui.portal;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.LiferayNature;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -30,6 +31,7 @@ import org.eclipse.wst.server.core.util.WebResource;
 
 /**
  * @author Gregory Amerson
+ * @author Simon Jiang
  */
 @SuppressWarnings( "rawtypes" )
 public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDelegate implements IAdapterFactory
@@ -87,7 +89,9 @@ public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDe
 
     private boolean isBundle( IProject project )
     {
-        return LiferayCore.create( IBundleProject.class, project ) != null;
-    }
+        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+        boolean hasNature = LiferayNature.hasNature( project );
 
+        return ( ( bundleProject != null && hasNature == true) == true );
+    }
 }
