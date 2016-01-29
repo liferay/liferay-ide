@@ -263,7 +263,7 @@
                         <if>
                             <isset property="isMac" />
                             <then>
-                                <chmod file="${eclipse.dir}/Eclipse.app/Contents/MacOS/eclipse" perm="ugo+rx" />
+                                <chmod file="${work.dir}/Eclipse.app/Contents/MacOS/eclipse" perm="ugo+rx" />
                             </then>
                             <else>
                                 <chmod file="${eclipse.dir}/eclipse" perm="ugo+rx" />
@@ -425,7 +425,7 @@
         <if>
             <isset property="isMac" />
             <then>
-                <property name="eclipse.ini.dir" value="${work.dir}/eclipse/Eclipse.app/Contents/MacOS/eclipse.ini" />
+                <property name="eclipse.ini.dir" value="${work.dir}/Eclipse.app/Contents/MacOS/eclipse.ini" />
             </then>
             <else>
                 <property name="eclipse.ini.dir" value="${eclipse.dir}/eclipse.ini"/>
