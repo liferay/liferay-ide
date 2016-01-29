@@ -32,6 +32,19 @@
    </license>
 
    <requires>
+      <import feature="com.liferay.ide.bndtools" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="com.liferay.ide.common" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="com.liferay.ide.gradle" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
+      <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jsf.feature" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jst.common.fproj.enablement.jdt" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jst.enterprise_ui.feature" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jst.server_adapters.ext.feature" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.jst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.mylyn.commons.notifications" version="1.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.sapphire" version="8.2" match="compatible"/>
       <import feature="org.eclipse.sapphire.java" version="8.2" match="compatible"/>
       <import feature="org.eclipse.sapphire.java.jdt" version="8.2" match="compatible"/>
@@ -41,23 +54,12 @@
       <import feature="org.eclipse.sapphire.ui" version="8.2" match="compatible"/>
       <import feature="org.eclipse.sapphire.ui.swt.gef" version="8.2" match="compatible"/>
       <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.jsf.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.common.fproj.enablement.jdt" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.enterprise_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.server_adapters.ext.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.jst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.mylyn.commons.notifications" version="1.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.common.fproj" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.common_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.xml_ui.feature" version="3.2.0" match="greaterOrEqual"/>
-      <import feature="com.liferay.ide.common" version="2.0.0" match="greaterOrEqual"/>
-      <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
-      <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.xml.search.core-feature" version="1.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.tm.terminal.connector.telnet.feature" version="4.0.0" match="greaterOrEqual" />
       <import feature="org.eclipse.tm.terminal.view.feature" version="4.0.0" match="greaterOrEqual" />
