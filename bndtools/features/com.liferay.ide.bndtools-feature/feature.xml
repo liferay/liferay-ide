@@ -31,8 +31,7 @@
    </license>
 
    <requires>
-      <import feature="bndtools.main.feature" version="3.1.0" match="greaterOrEqual"/>
-      <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="bndtools.main.feature" version="3.1.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin

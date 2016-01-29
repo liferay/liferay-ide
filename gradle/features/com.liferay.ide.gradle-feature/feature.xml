@@ -31,8 +31,7 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.buildship" version="1.0.5" match="greaterOrEqual"/>
-      <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.buildship" version="1.0.7" match="greaterOrEqual"/>
    </requires>
 
    <plugin
