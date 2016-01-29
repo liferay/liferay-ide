@@ -43,8 +43,7 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 @SuppressWarnings( "restriction" )
 public class PortalServerDelegate extends ServerDelegate implements PortalServerWorkingCopy
 {
-    private final static List<String> SUPPORT_TYPES_LIST =
-                    Arrays.asList( new String[] { "liferay.bundle", "jst.web", "jst.utility" } );
+    private final static List<String> SUPPORT_TYPES_LIST = Arrays.asList( "liferay.bundle", "jst.web", "jst.utility" );
     private int nextAgentPort = Agent.DEFAULT_PORT + 1;
 
     public PortalServerDelegate()
@@ -69,6 +68,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
                 }
             }
         }
+
         return retval;
     }
 

@@ -28,7 +28,6 @@ import org.eclipse.wst.server.ui.internal.view.servers.ModuleServer;
 /**
  * @author Simon Jiang
  */
-
 @SuppressWarnings( { "restriction" } )
 public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator
 {
@@ -64,13 +63,18 @@ public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator
                     bundleImage = getBundleModuleImage();
                 }
             }
+
             if( module == null )
+            {
                 return null;
+            }
 
             IProject project = module.getProject();
 
             if( project == null )
+            {
                 return null;
+            }
 
             return PlatformUI.getWorkbench().getDecoratorManager().decorateImage( bundleImage, project );
         }
@@ -85,11 +89,13 @@ public class LiferayServerModuleLabelDecorator extends ModuleLabelDecorator
         String typeId = "liferay.bundle";
         Image image = ImageResource.getImage( typeId );
         int ind = typeId.indexOf( "." );
+
         while( image == null && ind >= 0 )
         {
             typeId = typeId.substring( 0, ind );
             image = ImageResource.getImage( typeId );
         }
+
         return image;
     }
 }

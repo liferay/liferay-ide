@@ -33,16 +33,17 @@ import org.eclipse.wst.server.core.util.WebResource;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
-@SuppressWarnings( "rawtypes" )
 public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDelegate implements IAdapterFactory
 {
 
-    public Object getAdapter( Object adaptableObject, Class adapterType )
+    @Override
+    public <T> T getAdapter( Object adaptableObject, Class<T> adapterType )
     {
         return null;
     }
 
-    public Class[] getAdapterList()
+   @Override
+    public Class<?>[] getAdapterList()
     {
         return new Class[] { ILaunchable.class };
     }
@@ -89,9 +90,9 @@ public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDe
 
     private boolean isBundle( IProject project )
     {
-        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
-        boolean hasNature = LiferayNature.hasNature( project );
+        final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+        final boolean hasNature = LiferayNature.hasNature( project );
 
-        return ( ( bundleProject != null && hasNature == true) == true );
+        return bundleProject != null && hasNature == true;
     }
 }
