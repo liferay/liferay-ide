@@ -33,17 +33,18 @@ import org.eclipse.wst.server.core.util.WebResource;
  * @author Gregory Amerson
  * @author Simon Jiang
  */
+@SuppressWarnings( { "rawtypes", "unchecked" } )
 public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDelegate implements IAdapterFactory
 {
 
     @Override
-    public <T> T getAdapter( Object adaptableObject, Class<T> adapterType )
+    public Object getAdapter( Object adaptableObject, Class adapterType )
     {
         return null;
     }
 
-   @Override
-    public Class<?>[] getAdapterList()
+    @Override
+    public Class[] getAdapterList()
     {
         return new Class[] { ILaunchable.class };
     }
