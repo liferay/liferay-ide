@@ -208,7 +208,7 @@ public class NewLiferayPluginProjectOp623Tests extends NewLiferayPluginProjectOp
         op.setSdkLocation( PathBridge.create( getLiferayPluginsSdkDir() ) );
 
         assertEquals(
-            "The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0.0 or greater.",
+            "The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0 or greater.",
             op.getSdkLocation().validation().message() );
     }
 
