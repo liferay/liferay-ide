@@ -66,7 +66,7 @@ public class LaunchWorkspaceHandler extends AbstractHandler
                         launcher = launchDir.getParentFile().getParentFile();
                         break;
                     default:
-                        launcher = new File( launchDir, System.getProperty( "eclipse.launcher" ) );
+                        launcher = new File( System.getProperty( "eclipse.launcher" ) );
                 }
             }
             else
