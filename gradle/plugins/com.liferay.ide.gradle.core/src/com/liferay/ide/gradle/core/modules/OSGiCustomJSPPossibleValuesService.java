@@ -20,7 +20,6 @@ import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
@@ -63,17 +62,15 @@ public class OSGiCustomJSPPossibleValuesService extends PossibleValuesService
 
             if( portalBundle != null )
             {
-                JarFile jar = null;
+                File module =
+                    portalBundle.getOSGiBundlesDir().append( "modules" ).append( currentOSGiBundle ).toFile();
 
-                try
+                if( module.exists() )
                 {
-                    File modules =
-                        portalBundle.getOSGiBundlesDir().append( "modules" ).append( currentOSGiBundle ).toFile();
-
-                    if( modules.exists() )
+                    try( JarFile jar = new JarFile( module ) )
                     {
-                        jar = new JarFile( modules );
                         Enumeration<JarEntry> enu = jar.entries();
+
                         while( enu.hasMoreElements() )
                         {
                             JarEntry entry = enu.nextElement();
@@ -86,17 +83,7 @@ public class OSGiCustomJSPPossibleValuesService extends PossibleValuesService
                             }
                         }
                     }
-                }
-                catch( Exception e )
-                {
-                }
-                finally
-                {
-                    try
-                    {
-                        jar.close();
-                    }
-                    catch( IOException e )
+                    catch( Exception e )
                     {
                     }
                 }
