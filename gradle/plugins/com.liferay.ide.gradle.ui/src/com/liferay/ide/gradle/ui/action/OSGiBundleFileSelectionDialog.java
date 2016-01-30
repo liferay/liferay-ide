@@ -64,15 +64,14 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
 
             if( element instanceof File )
             {
-                JarFile jar = null;
-
                 File file = (File) element;
+
                 if( file.exists() )
                 {
-                    try
+                    try( JarFile jar = new JarFile( file ) )
                     {
-                        jar = new JarFile( file );
                         Enumeration<JarEntry> enu = jar.entries();
+
                         while( enu.hasMoreElements() )
                         {
                             JarEntry entry = enu.nextElement();
@@ -87,7 +86,6 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
                     }
                     catch( IOException e )
                     {
-                        e.printStackTrace();
                     }
                 }
             }
@@ -115,12 +113,10 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
         public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
         {
         }
-
     }
 
     protected static class FileLabelProvider extends LabelProvider
     {
-
         private final Image IMG_FILE =
             PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FILE );
 
