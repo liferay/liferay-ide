@@ -17,7 +17,6 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
-import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp;
@@ -28,8 +27,6 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import java.io.File;
 import java.io.IOException;
 
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -47,32 +44,13 @@ public class JSPHookProjectProvider extends AbstractLiferayProjectProvider
 
     public JSPHookProjectProvider()
     {
-        super( new Class<?>[] { IProject.class } );
+        super( null );
     }
 
     @Override
     public synchronized ILiferayProject provide( Object adaptable )
     {
-        ILiferayProject retval = null;
-
-        if( adaptable instanceof IProject )
-        {
-            final IProject project = (IProject) adaptable;
-
-            try
-            {
-                if( LiferayNature.hasNature( project ) && GradleProjectNature.INSTANCE.isPresentOn( project ) )
-                {
-                    return new LiferayGradleProject( project );
-                }
-            }
-            catch( Exception e )
-            {
-                // ignore errors
-            }
-        }
-
-        return retval;
+        return null; // this only provides new projects
     }
 
     @Override

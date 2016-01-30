@@ -77,7 +77,7 @@ public abstract class AbstractLiferayProjectProvider
 
     public boolean provides( Class<?> type )
     {
-        if( type != null )
+        if( type != null && classTypes != null )
         {
             for( Class<?> classType : classTypes )
             {
