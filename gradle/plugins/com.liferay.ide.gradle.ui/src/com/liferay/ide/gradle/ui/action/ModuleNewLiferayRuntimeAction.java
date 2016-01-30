@@ -16,7 +16,6 @@
 package com.liferay.ide.gradle.ui.action;
 
 import com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp;
-import com.liferay.ide.project.core.model.HasLiferayRuntime;
 
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
@@ -47,8 +46,4 @@ public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler
         return Status.createOkStatus();
     }
 
-    public ModuleNewLiferayRuntimeAction()
-    {
-        super();
-    }
 }
