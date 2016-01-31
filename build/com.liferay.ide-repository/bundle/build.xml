@@ -209,6 +209,7 @@
             <param name="output.tar.name" value="${output.macosx64.tar.name}" />
             <param name="output.gz.name" value="${output.macosx64.gz.name}" />
             <param name="upload.output.file" value="${output.macosx64.gz.name}" />
+            <param name="eclipse.dir" value="${work.dir}/Eclipse.app" />
         </antcall>
     </target>
 
@@ -250,31 +251,41 @@
 
     <target name="setup-eclipse">
         <if>
-            <not>
-                <available file="${eclipse.dir}/eclipse.ini" />
-            </not>
+            <isset property="isMac" />
             <then>
-                <antcall target="download-eclipse" />
                 <if>
-                    <isset property="isUnix" />
+                    <not>
+                        <available file="${work.dir}/Eclipse.app/Contents/Eclipse/eclipse.ini" />
+                    </not>
                     <then>
+                        <antcall target="download-eclipse" />
                         <gunzip src="${downloads.dir}/${eclipse.zip.name}" dest="${downloads.dir}" />
                         <untar src="${downloads.dir}/${eclipse.tar.name}" dest="${eclipse.dir}/../" />
+                        <chmod file="${work.dir}/Eclipse.app/Contents/MacOS/eclipse" perm="ugo+rx" />
+                    </then>
+                </if>
+            </then>
+            <else>
+                <if>
+                    <not>
+                        <available file="${eclipse.dir}/eclipse.ini" />
+                    </not>
+                    <then>
+                        <antcall target="download-eclipse" />
                         <if>
-                            <isset property="isMac" />
+                            <isset property="isUnix" />
                             <then>
-                                <chmod file="${work.dir}/Eclipse.app/Contents/MacOS/eclipse" perm="ugo+rx" />
+                                <gunzip src="${downloads.dir}/${eclipse.zip.name}" dest="${downloads.dir}" />
+                                <untar src="${downloads.dir}/${eclipse.tar.name}" dest="${eclipse.dir}/../" />
+                                <chmod file="${eclipse.dir}/eclipse" perm="ugo+rx" />
                             </then>
                             <else>
-                                <chmod file="${eclipse.dir}/eclipse" perm="ugo+rx" />
+                                <unzip src="${downloads.dir}/${eclipse.zip.name}" dest="${eclipse.dir}/../" />
                             </else>
                         </if>
                     </then>
-                    <else>
-                        <unzip src="${downloads.dir}/${eclipse.zip.name}" dest="${eclipse.dir}/../" />
-                    </else>
                 </if>
-            </then>
+            </else>
         </if>
     </target>
 
@@ -425,7 +436,7 @@
         <if>
             <isset property="isMac" />
             <then>
-                <property name="eclipse.ini.dir" value="${work.dir}/Eclipse.app/Contents/MacOS/eclipse.ini" />
+                <property name="eclipse.ini.dir" value="${work.dir}/Eclipse.app/Contents/Eclipse/eclipse.ini" />
             </then>
             <else>
                 <property name="eclipse.ini.dir" value="${eclipse.dir}/eclipse.ini"/>
@@ -438,18 +449,35 @@
             <isset property="isUnix" />
             <then>
                 <if>
-                    <available file="${work.dir}/eclipse/eclipse" />
+                    <isset property="isMac" />
                     <then>
-                        <exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
-                            <arg value="cf" />
-                            <arg value="${output.dir}/${output.tar.name}" />
-                            <arg value="eclipse" />
-                        </exec>
-                        <gzip destfile="${output.dir}/${output.gz.name}" src="${output.dir}/${output.tar.name}" />
-                        <delete file="${output.dir}/${output.tar.name}" />
-                        <property name="final.name" value="${output.dir}/${output.gz.name}"/>
+                        <if>
+                            <available file="${work.dir}/Eclipse.app/Contents/MacOS/eclipse" />
+                            <then>
+                                <exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
+                                    <arg value="cf" />
+                                    <arg value="${output.dir}/${output.tar.name}" />
+                                    <arg value="Eclipse.app" />
+                                </exec>
+                            </then>
+                        </if>
                     </then>
+                    <else>
+                        <if>
+                            <available file="${work.dir}/eclipse/eclipse" />
+                            <then>
+                                <exec dir="${work.dir}" executable="tar" failifexecutionfails="false" failonerror="false">
+                                    <arg value="cf" />
+                                    <arg value="${output.dir}/${output.tar.name}" />
+                                    <arg value="eclipse" />
+                                 </exec>
+                            </then>
+                        </if>
+                    </else>
                 </if>
+                <gzip destfile="${output.dir}/${output.gz.name}" src="${output.dir}/${output.tar.name}" />
+                <delete file="${output.dir}/${output.tar.name}" />
+                <property name="final.name" value="${output.dir}/${output.gz.name}"/>
             </then>
             <else>
                 <zip destfile="${output.dir}/${output.zip.name}" basedir="${work.dir}" />
