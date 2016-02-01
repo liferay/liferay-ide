@@ -31,8 +31,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -336,10 +334,10 @@ public class ProjectCore extends Plugin
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
             sdkBuildPropertiesResourceListener, IResourceChangeEvent.POST_CHANGE );
 
-        final Job job = new WorkspaceJob( "Fetching the latest Blade CLI" )
+        final Job job = new Job( "Checking for the latest Blade CLI" )
         {
             @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            public IStatus run( IProgressMonitor monitor )
             {
                 try
                 {
@@ -347,7 +345,7 @@ public class ProjectCore extends Plugin
                 }
                 catch( BladeCLIException e )
                 {
-                    e.printStackTrace( );
+                    // ignore any errors
                 }
 
                 return Status.OK_STATUS;
