@@ -114,7 +114,7 @@ public class BladeCLI
         return lines.toArray( new String[0] );
     }
 
-    private static IPath getBladeCLIPath() throws BladeCLIException
+    public static synchronized IPath getBladeCLIPath() throws BladeCLIException
     {
         if( cachedBladeCLIPath == null )
         {
