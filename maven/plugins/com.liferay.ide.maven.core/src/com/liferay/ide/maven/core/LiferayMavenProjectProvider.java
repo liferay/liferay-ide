@@ -399,13 +399,20 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
             {
                 if( MavenUtil.isMavenProject( project ) )
                 {
-                    if( LiferayNature.hasNature( project ) )
+                    final boolean hasLiferayNature = LiferayNature.hasNature( project );
+                    final boolean hasLiferayFacet = ComponentUtil.hasLiferayFacet( project );
+
+                    if( hasLiferayNature && hasLiferayFacet )
                     {
-                        return new MavenBundlePluginProject( project );
+                        return new FacetedMavenBundleProject( project );
                     }
-                    else if( ComponentUtil.hasLiferayFacet( project ) )
+                    else if( hasLiferayFacet )
                     {
                         return new FacetedMavenProject( project );
+                    }
+                    else if( hasLiferayNature )
+                    {
+                        return new MavenBundlePluginProject( project );
                     }
                     else
                     {

@@ -16,6 +16,7 @@ package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 
 import java.util.HashMap;
@@ -55,7 +56,7 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate
 
         ILiferayProject liferayProject = LiferayCore.create( project );
 
-        if( liferayProject instanceof IBundleProject )
+        if( liferayProject instanceof IBundleProject && !( liferayProject instanceof IWebProject ) )
         {
             retval = new IModule[] { createSimpleModule( project ) };
         }
