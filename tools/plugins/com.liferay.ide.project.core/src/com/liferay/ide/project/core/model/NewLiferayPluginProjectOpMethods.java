@@ -378,27 +378,13 @@ public class NewLiferayPluginProjectOpMethods
 
                 final boolean greaterThan700 = CoreUtil.compareVersions( version, ILiferayConstants.V700 ) >= 0;
 
-                if( greaterThan700 )
+                if( greaterThan700 && "web".equals( type ) )
                 {
-                    if( type.equals( "web" ) )
-                    {
-                        retval = true;
-                    }
-                    else if( type.equals( "ext" ) )
-                    {
-                        retval = false;
-                    }
+                    retval = true;
                 }
-                else
+                else if( ( !greaterThan700 ) && "ext".equals( type ) )
                 {
-                    if( type.equals( "web" ) )
-                    {
-                        retval = false;
-                    }
-                    else if( type.equals( "ext" ) )
-                    {
-                        retval = true;
-                    }
+                    retval = true;
                 }
             }
             else
