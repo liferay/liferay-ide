@@ -14,22 +14,19 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
-import aQute.bnd.deployer.repository.FixedIndexedRepo;
-import aQute.bnd.osgi.Processor;
-
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.zip.ZipEntry;
@@ -38,6 +35,7 @@ import java.util.zip.ZipFile;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -118,6 +116,7 @@ public class BladeCLI
     {
         if( cachedBladeCLIPath == null )
         {
+            /*
             settingsDir.mkdirs();
             repoCache.mkdirs();
 
@@ -142,6 +141,17 @@ public class BladeCLI
             catch( Exception e )
             {
                 throw new BladeCLIException( "Could not get blade cli jar from repository.", e );
+            }
+            */
+
+            try
+            {
+                final URL url = ProjectCore.getDefault().getBundle().getEntry( "lib/com.liferay.blade.cli.jar" );
+                cachedBladeCLIPath = new Path( FileLocator.toFileURL( url ).getFile() );
+            }
+            catch( Exception e )
+            {
+                throw new BladeCLIException( "Could not get blade cli jar from installation", e );
             }
         }
 

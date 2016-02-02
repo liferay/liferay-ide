@@ -18,8 +18,6 @@ package com.liferay.ide.project.core;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.descriptor.IDescriptorOperation;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
-import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,12 +30,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -334,6 +330,7 @@ public class ProjectCore extends Plugin
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
             sdkBuildPropertiesResourceListener, IResourceChangeEvent.POST_CHANGE );
 
+        /*
         final Job job = new Job( "Checking for the latest Blade CLI" )
         {
             @Override
@@ -353,6 +350,7 @@ public class ProjectCore extends Plugin
         };
 
         job.schedule();
+        */
     }
 
     /*
