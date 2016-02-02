@@ -15,12 +15,16 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.project.core.ProjectCore;
+
 import java.util.Arrays;
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Simon Jiang
@@ -33,10 +37,34 @@ public class ServicePossibleValuesService extends PossibleValuesService
     {
         return Status.createOkStatus();
     }
-   
+
     @Override
     protected void compute( final Set<String> values )
     {
-        values.addAll( Arrays.asList( NewLiferayModuleProjectOpMethods.getServices() ) );
+        IServer runningServer = null;
+        final IServer[] servers = ServerCore.getServers();
+
+        for( IServer server : servers )
+        {
+            if( server.getServerState() == IServer.STATE_STARTED &&
+                server.getServerType().getId().equals( "com.liferay.ide.server.portal" ) )
+            {
+                runningServer = server;
+                break;
+            }
+        }
+
+        try
+        {
+            ServiceCommand serviceCommand = new ServiceCommand( runningServer );
+
+            String[] allServices = serviceCommand.execute();
+
+            values.addAll( Arrays.asList( allServices ) );
+        }
+        catch( Exception e )
+        {
+            ProjectCore.logError( "Get services list error. ", e );
+        }
     }
 }

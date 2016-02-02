@@ -14,22 +14,22 @@ import org.osgi.framework.dto.BundleDTO;
 public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implements Supervisor
 {
 
+    private String lastOutput;
+
     @Override
-    public boolean stdout(String out) throws Exception {
+    public boolean stderr( String out ) throws Exception
+    {
         return true;
     }
 
-    @Override
-    public boolean stderr(String out) throws Exception {
-        return true;
-    }
-
-    public void connect(String host, int port) throws Exception {
-        super.connect(Agent.class, this, host, port);
+    public void connect( String host, int port ) throws Exception
+    {
+        super.connect( Agent.class, this, host, port );
     }
 
     @Override
-    public void event(Event e) throws Exception {
+    public void event( Event e ) throws Exception
+    {
     }
 
     public BundleDTO deploy(
@@ -107,6 +107,27 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
         }
 
         return retval;
+    }
+
+    public String getOutInfo()
+    {
+        return lastOutput;
+    }
+
+    @Override
+    public boolean stdout( String out ) throws Exception
+    {
+        if( !"".equals( out ) && out != null )
+        {
+            out = out.replaceAll( "^>.*$", "" );
+
+            if( !"".equals( out ) && !out.startsWith( "true" ) )
+            {
+                lastOutput = out;
+            }
+        }
+
+        return true;
     }
 
 }

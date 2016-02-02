@@ -15,8 +15,15 @@
 
 package com.liferay.ide.project.core.modules;
 
+import aQute.remote.api.Agent;
+
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.portal.BundleSupervisor;
+import com.liferay.ide.server.core.portal.PortalServerBehavior;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,27 +37,19 @@ import java.util.regex.Pattern;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.wst.server.core.IServer;
-
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.util.SocketUtil;
-
-import aQute.remote.api.Agent;
-import aQute.remote.api.Event;
-import aQute.remote.api.Supervisor;
-import aQute.remote.util.AgentSupervisor;
 
 /**
  * @author Lovett Li
+ * @author Simon Jiang
  */
 public class ServiceCommand
 {
-    private IServer _server;
 
+    private final IServer _server;
     private String _serviceName;
 
-    public ServiceCommand(IServer server)
+    public ServiceCommand( IServer server )
     {
         _server = server;
     }
@@ -61,11 +60,11 @@ public class ServiceCommand
         _server = server;
     }
 
-    private File checkStaticServicesFile() throws Exception
+    private File checkStaticServicesFile() throws IOException
     {
-        URL url = FileLocator.toFileURL(
-            ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/services-static.json" ) );
-        File servicesFile = new File( url.getFile() );
+        final URL url =
+            FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/services-static.json" ) );
+        final File servicesFile = new File( url.getFile() );
 
         if( servicesFile.exists() )
         {
@@ -75,34 +74,9 @@ public class ServiceCommand
         throw new FileNotFoundException( "can't find static services file services-static.json" );
     }
 
-    private ServicesSupervisor connectRemote() throws Exception
-    {
-        String host = _server.getHost();
-        int agentPort = _server.getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
-
-        IStatus status = SocketUtil.canConnect( host, String.valueOf( agentPort ) );
-
-        if( !( status != null && status.isOK() ) )
-        {
-            return null;
-        }
-
-        ServicesSupervisor supervisor = new ServicesSupervisor();
-        supervisor.connect( host, agentPort );
-
-        if( !supervisor.getAgent().redirect( -1 ) )
-        {
-            supervisor.close();
-
-            return null;
-        }
-
-        return supervisor;
-    }
-
     public String[] execute() throws Exception
     {
-        ServicesSupervisor supervisor = null;
+        BundleSupervisor supervisor = null;
         String[] result = null;
 
         try
@@ -113,14 +87,17 @@ public class ServiceCommand
                 {
                     result = getStaticServices();
                 }
-                else{
-                    result = getStaticServiceBundle(_serviceName);
+                else
+                {
+                    result = getStaticServiceBundle( _serviceName );
                 }
 
                 return result;
             }
 
-            supervisor = connectRemote();
+            PortalServerBehavior serverBehavior =
+                (PortalServerBehavior) _server.loadAdapter( PortalServerBehavior.class, null );
+            supervisor = serverBehavior.getBundleSupervisor();
 
             if( supervisor == null )
             {
@@ -139,6 +116,11 @@ public class ServiceCommand
                 }
             }
 
+            if( !supervisor.getAgent().redirect( -1 ) )
+            {
+                return null;
+            }
+
             if( _serviceName == null )
             {
                 result = getServices( supervisor );
@@ -154,12 +136,12 @@ public class ServiceCommand
         {
             if( supervisor != null )
             {
-                supervisor.close();
+                supervisor.getAgent().redirect( Agent.NONE );
             }
         }
     }
 
-    private String[] getServiceBundle( String serviceName, ServicesSupervisor supervisor ) throws Exception
+    private String[] getServiceBundle( String serviceName, BundleSupervisor supervisor ) throws Exception
     {
         String[] serviceBundleInfo;
 
@@ -179,7 +161,7 @@ public class ServiceCommand
         return serviceBundleInfo;
     }
 
-    private String[] getServices( ServicesSupervisor supervisor ) throws Exception
+    private String[] getServices( BundleSupervisor supervisor ) throws Exception
     {
         supervisor.getAgent().stdin( "services" );
 
@@ -324,47 +306,5 @@ public class ServiceCommand
         }
 
         return null;
-    }
-
-    public class ServicesSupervisor extends AgentSupervisor<Supervisor, Agent> implements Supervisor
-    {
-        private String outinfo;
-
-        public void connect( String host, int port ) throws Exception
-        {
-            super.connect( Agent.class, this, host, port );
-        }
-
-        @Override
-        public void event( Event e ) throws Exception
-        {
-        }
-
-        public String getOutInfo()
-        {
-            return outinfo;
-        }
-
-        @Override
-        public boolean stderr( String out ) throws Exception
-        {
-            return true;
-        }
-
-        @Override
-        public boolean stdout( String out ) throws Exception
-        {
-            if( !"".equals( out ) && out != null )
-            {
-                out = out.replaceAll( "^>.*$", "" );
-
-                if( !"".equals( out ) && !out.startsWith( "true" ) )
-                {
-                    outinfo = out;
-                }
-            }
-
-            return true;
-        }
     }
 }

@@ -170,6 +170,13 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
             }
 
+            IPath buildGradlePath = projecLocation.append( "build.gradle" );
+
+            if( buildGradlePath.toFile().exists() && serviceName != null )
+            {
+                NewLiferayModuleProjectOpMethods.addDependencies( buildGradlePath.toFile(), serviceName );
+            }
+
             boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
             boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
             boolean inWorkspacePath = false;
