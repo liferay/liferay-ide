@@ -78,7 +78,7 @@ public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDe
 
        if( project != null )
        {
-            if( CoreUtil.isBundleOnlyProject( project ) );
+            if( CoreUtil.isBundleOnlyProject( project ) )
             {
                 return new WebResource( getModule( project ), project.getProjectRelativePath() );
             }
