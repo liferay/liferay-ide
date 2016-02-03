@@ -15,6 +15,7 @@
 
 package com.liferay.ide.core.util;
 
+import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
@@ -442,6 +443,13 @@ public class CoreUtil
         method.setAccessible( true );
 
         return method.invoke( object, args );
+    }
+
+    public static boolean isBundleOnlyProject( IProject project )
+    {
+        final ILiferayProject liferayProject = LiferayCore.create( project );
+
+       return liferayProject instanceof IBundleProject && !( liferayProject instanceof IWebProject );
     }
 
     public static boolean isEqual( Object object1, Object object2 )

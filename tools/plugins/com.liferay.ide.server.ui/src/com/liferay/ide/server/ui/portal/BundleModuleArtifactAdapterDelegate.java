@@ -14,9 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.ui.portal;
 
-import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.CoreUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -80,7 +78,7 @@ public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDe
 
        if( project != null )
        {
-            if( isBundle( project ) )
+            if( CoreUtil.isBundleOnlyProject( project ) );
             {
                 return new WebResource( getModule( project ), project.getProjectRelativePath() );
             }
@@ -89,11 +87,4 @@ public class BundleModuleArtifactAdapterDelegate extends ModuleArtifactAdapterDe
         return null;
     }
 
-    private boolean isBundle( IProject project )
-    {
-        final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
-        final boolean hasNature = LiferayNature.hasNature( project );
-
-        return bundleProject != null && hasNature == true;
-    }
 }
