@@ -57,6 +57,8 @@ If you want to help submit a bug fix or just step through the code to see what w
   3. Change name to "liferay ide test"
   4. Click "Debug"
 7. When new Eclipse opens it will be the base Eclipse + your new IDE plugins running from source, so test your change and send a pull request :)!
+8. Once your bugfix (or feature :) is ready, build it (read the section above on how to build it) and then try it out in a brand new Eclipse install
+9. Send a pull request!  https://github.com/gamerson/liferay-ide/pulls
 
 ## Bug Tracker
 
