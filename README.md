@@ -36,6 +36,28 @@ build/com.liferay.ide-repository/target/liferay-ide-<version>-<timestamp>-update
 
 You can install this using _Help > Install New Software... > Add > Archive > Point to newly built zip file_
 
+## Debug a fix? Send a pull request?
+
+If you want to help submit a bug fix or just step through the code to see what we are doing wrong :) you are going to need to import the source and launch a test eclipse with your fix and then step through the code.  Here is the process you ccan follow
+
+1. Download [Eclipse for Committers package](https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-451/mars1)
+2. Run this eclipse with 2048M memory setting
+3. Install the latest Liferay IDE CI build
+  1. Use [this updatesite url](http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/).
+  2. Install all features
+4. Clone this repo
+5. Import all projects into Eclipse
+  1. File > Import > Existing Maven projects...
+  2. Select all
+  3. Finish
+  4. Close all 3 projects that have .tests suffix (unless you want to submit some unit tests :)
+6. If everything compiles, make your changes, set your breakpoints and then launch a new Eclipse test workbench
+  1. Go to Run > Debug Configurations...
+  2. Right-click "Eclipse Application" and choose "New"
+  3. Change name to "liferay ide test"
+  4. Click "Debug"
+7. When new Eclipse opens it will be the base Eclipse + your new IDE plugins running from source, so test your change and send a pull request :)!
+
 ## Bug Tracker
 
 Have a bug? Please file an issue at Liferay's JIRA and use the [IDE project](http://issues.liferay.com/browse/IDE).
