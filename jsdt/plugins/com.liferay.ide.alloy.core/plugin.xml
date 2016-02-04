@@ -89,6 +89,7 @@
              class="com.liferay.ide.alloy.core.jsp.AlloyJSPFileConfiguration">
        </configuration>
     </extension>
+    <!--
     <extension
           point="org.eclipse.a.wst.html.webresources.core.webResourcesFinderTypeProviders">
        <provider
@@ -101,11 +102,9 @@
              class="com.liferay.ide.alloy.core.webresources.PortalResourcesProvider"
              types="css,scss">
        </provider>
-       <!--
        <provider
              class="com.liferay.ide.alloy.core.webresources.ProjectResourcesProvider"
              types="css,scss">
        </provider>
-       -->
-    </extension>
+    </extension>-->
 </plugin>
