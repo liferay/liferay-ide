@@ -60,7 +60,7 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
     @Override
     public boolean ordered()
     {
-        return true;
+        return false;
     }
 
     @Override

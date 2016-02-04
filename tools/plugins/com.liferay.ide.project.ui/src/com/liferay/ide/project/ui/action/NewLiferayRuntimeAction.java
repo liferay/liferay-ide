@@ -14,37 +14,23 @@
  *******************************************************************************/
 
 package com.liferay.ide.project.ui.action;
-import com.liferay.ide.project.core.model.HasLiferayRuntime;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
-
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
 import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
-import org.eclipse.wst.common.componentcore.internal.util.IModuleConstants;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 
 
 /**
  * @author Gregory Amerson
  */
-@SuppressWarnings( "restriction" )
 public class NewLiferayRuntimeAction extends SapphireActionHandler
 {
 
     @Override
     protected Object run( Presentation context )
     {
-        NewLiferayPluginProjectOp op = context.part().getModelElement().nearest( NewLiferayPluginProjectOp.class );
-
-        boolean isOK =
-            ServerUIUtil.showNewRuntimeWizard(
-                ( (SwtPresentation) context ).shell(), null, null, "com.liferay." );
-
-        if( isOK )
-        {
-            op.property( HasLiferayRuntime.PROP_RUNTIME_NAME ).refresh();
-        }
+        ServerUIUtil.showNewRuntimeWizard( ( (SwtPresentation) context ).shell(), null, null, "com.liferay." );
 
         return Status.createOkStatus();
     }
