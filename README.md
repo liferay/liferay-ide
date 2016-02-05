@@ -38,10 +38,10 @@ You can install this using _Help > Install New Software... > Add > Archive > Poi
 
 ## Debug a fix? Send a pull request?
 
-If you want to help submit a bug fix or just step through the code to see what we are doing wrong :) you are going to need to import the source and launch a test eclipse with your fix and then step through the code.  Here is the process you ccan follow
+If you want to help submit a bug fix or just step through the code to see what we are doing wrong :) you are going to need to import the source and launch a test eclipse with your fix and then step through the code.  Here is the process you can follow
 
 1. Download [Eclipse for Committers package](https://www.eclipse.org/downloads/packages/eclipse-ide-eclipse-committers-451/mars1)
-2. Run this eclipse with 2048M memory setting
+2. Run this eclipse with 2048M memory setting (set -Xmx2048m in eclipse.ini)
 3. Install the latest Liferay IDE CI build
   1. Use [this updatesite url](http://files.liferay.org.es/staged/public-files/liferay-ide/unstable/build/com.liferay.ide-repository/target/repository/).
   2. Install all features
@@ -50,12 +50,13 @@ If you want to help submit a bug fix or just step through the code to see what w
   1. File > Import > Existing Maven projects...
   2. Select all
   3. Finish
-  4. Close all 3 projects that have .tests suffix (unless you want to submit some unit tests :)
+  4. Close all projects that have .tests suffix (unless you want to submit some unit tests :)
 6. If everything compiles, make your changes, set your breakpoints and then launch a new Eclipse test workbench
   1. Go to Run > Debug Configurations...
   2. Right-click "Eclipse Application" and choose "New"
   3. Change name to "liferay ide test"
-  4. Click "Debug"
+  4. Switch to "Argements" tab and add "-XX:MaxPermSize=256m" to "VM arguments"
+  5. Click "Apply" and then click "Debug"
 7. When new Eclipse opens it will be the base Eclipse + your new IDE plugins running from source, so test your change and send a pull request :)!
 8. Once your bugfix (or feature :) is ready, build it (read the section above on how to build it) and then try it out in a brand new Eclipse install
 9. Send a pull request!  https://github.com/gamerson/liferay-ide/pulls
