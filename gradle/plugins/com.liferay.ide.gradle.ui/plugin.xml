@@ -79,6 +79,9 @@
             <groupMarker
                   name="build-lang">
             </groupMarker>
+            <groupMarker
+                  name="build-css">
+            </groupMarker>
          </menu>
       </objectContribution>
       <objectContribution
@@ -92,6 +95,14 @@
                id="com.liferay.ide.gradle.popup.action.buildLang"
                label="build-lang"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-lang">
+         </action>
+         <action
+               class="com.liferay.ide.gradle.action.BuildCssTaskAction"
+               enablesFor="1"
+               icon="icons/e16/liferay_logo_16.png"
+               id="com.liferay.ide.gradle.popup.action.buildcss"
+               label="build-css"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-css">
          </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
