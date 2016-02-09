@@ -3,6 +3,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.liferay.ide.gradle.toolingapi</groupId>
-  <artifactId>model</artifactId>
-  <version>1.1.1</version>
+  <artifactId>plugin</artifactId>
+  <version>1.1.2</version>
+  <dependencies>
+    <dependency>
+      <groupId>com.liferay.ide.gradle.toolingapi</groupId>
+      <artifactId>model</artifactId>
+      <version>1.1.2</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 </project>
