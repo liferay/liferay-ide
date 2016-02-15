@@ -21,9 +21,9 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.gradleware.tooling.toolingclient.GradleDistribution;
 import com.gradleware.tooling.toolingmodel.repository.FixedRequestAttributes;
+import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -15,14 +15,10 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.Set;
 
 import org.eclipse.buildship.core.CorePlugin;
@@ -30,16 +26,11 @@ import org.eclipse.buildship.core.event.Event;
 import org.eclipse.buildship.core.event.EventListener;
 import org.eclipse.buildship.core.workspace.ProjectCreatedEvent;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ModelBuilder;
-import org.gradle.tooling.ProjectConnection;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -99,43 +90,9 @@ public class GradleCore extends Plugin implements EventListener
 
         try
         {
-            GradleConnector connector = GradleConnector.newConnector();
-            connector.forProjectDirectory( projectDir );
-            ProjectConnection connection = null;
-
-            try
-            {
-                connection = connector.connect();
-                ModelBuilder<T> modelBuilder = (ModelBuilder<T>) connection.model( modelClass );
-
-                final File localRepo =
-                    new File( FileLocator.toFileURL( getDefault().getBundle().getEntry( "repo" ) ).getFile() );
-
-                final String initScriptTemplate =
-                    CoreUtil.readStreamToString( new FileInputStream( new File( localRepo, "init.gradle" ) ) );
-
-                String path = localRepo.getAbsolutePath();
-
-                path = path.replaceAll( "\\\\", "/" );
-                final String initScriptContents = initScriptTemplate.replaceFirst( "%repo%", path );
-
-                final IPath scriptPath = getDefault().getStateLocation().append( "init.gradle" );
-
-                final File scriptFile = scriptPath.toFile();
-
-                FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
-
-                modelBuilder.withArguments( "--init-script", scriptFile.getAbsolutePath() );
-
-                retval = modelBuilder.get();
-            }
-            finally
-            {
-                if( connection != null )
-                {
-                    connection.close();
-                }
-            }
+            retval =
+                GradleTooling.getModel(
+                    modelClass, GradleCore.getDefault().getStateLocation().append( "cache" ).toFile(), projectDir );
         }
         catch( Exception e )
         {

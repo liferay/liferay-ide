@@ -17,13 +17,12 @@ Require-Bundle: org.eclipse.core.runtime,
  com.gradleware.tooling.model;bundle-version="0.10.0",
  com.liferay.ide.project.core,
  com.liferay.blade.api,
+ com.liferay.blade.gradle.model,
  com.gradleware.tooling.client;bundle-version="0.10.0",
  com.gradleware.tooling.utils;bundle-version="0.10.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.gradle.core,
  com.liferay.ide.gradle.core.modules,
- com.liferay.ide.gradle.core.workspace,
- com.liferay.ide.gradle.toolingapi.custom
-Bundle-ClassPath: .,
- repo/com/liferay/ide/gradle/toolingapi/model/1.1.1/model-1.1.1.jar
+ com.liferay.ide.gradle.core.workspace
+Bundle-ClassPath: .
