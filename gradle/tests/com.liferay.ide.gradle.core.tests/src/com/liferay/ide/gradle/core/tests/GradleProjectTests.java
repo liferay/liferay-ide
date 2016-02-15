@@ -20,6 +20,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.tests.TestUtil;
@@ -27,7 +28,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
-import com.liferay.ide.gradle.toolingapi.custom.CustomModel;
 
 import java.io.File;
 
