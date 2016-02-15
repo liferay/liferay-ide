@@ -4,6 +4,7 @@
    <extension-point id="liferayProjectAdapters" name="%project.adapters.ext.point.name" schema="schema/liferayProjectAdapters.exsd"/>
    <extension-point id="liferayProjectProviders" name="%project.providers.ext.point.name" schema="schema/liferayProjectProviders.exsd"/>
    <extension-point id="templateDefinitions" name="Layout Template Definitions" schema="schema/templateDefinition.exsd"/>
+   <extension-point id="liferayProjectImporters" name="Liferay Project Importers" schema="schema/liferayProjectImporters.exsd"/>
 
    <extension
          point="org.eclipse.core.expressions.propertyTesters">

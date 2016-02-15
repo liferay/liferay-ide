@@ -14,12 +14,15 @@
  *******************************************************************************/
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.NodeUtil;
 import com.liferay.ide.project.core.model.NewLiferayProfile;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -28,6 +31,7 @@ import java.util.regex.Pattern;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.cli.MavenCli;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
+import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -48,9 +52,17 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.eclipse.m2e.core.embedder.IMavenExecutionContext;
+import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.m2e.core.project.AbstractProjectScanner;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectImportResult;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.m2e.core.project.IProjectConfigurationManager;
+import org.eclipse.m2e.core.project.LocalProjectScanner;
+import org.eclipse.m2e.core.project.MavenProjectInfo;
+import org.eclipse.m2e.core.project.MavenUpdateRequest;
+import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
 import org.eclipse.m2e.wtp.WarPluginConfiguration;
@@ -486,6 +498,29 @@ public class MavenUtil
             pomFile.getParent() instanceof IProject;
     }
 
+    public static void importProject( String location, IProgressMonitor monitor )
+        throws CoreException, InterruptedException
+    {
+        MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
+        File root = CoreUtil.getWorkspaceRoot().getLocation().toFile();
+        AbstractProjectScanner<MavenProjectInfo> scanner =
+            new LocalProjectScanner( root, location, false, mavenModelManager );
+
+        scanner.run( monitor );
+
+        List<MavenProjectInfo> sources = scanner.getProjects();
+        List<MavenProjectInfo> mavenProjects = new ArrayList<MavenProjectInfo>();
+
+        recursionMavenProjects( mavenProjects, sources );
+
+        ResolverConfiguration resolverConfig = new ResolverConfiguration();
+        ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration( resolverConfig );
+
+        IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+
+        projectConfigurationManager.importProjects( mavenProjects, importConfiguration, monitor );
+    }
+
     public static boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException
     {
         boolean loadedParent = false;
@@ -524,6 +559,25 @@ public class MavenUtil
         }
 
         return loadedParent;
+    }
+
+    private static void recursionMavenProjects( List<MavenProjectInfo> results, Collection<MavenProjectInfo> source )
+    {
+        for( MavenProjectInfo mavenProjectInfor : source )
+        {
+            results.add( mavenProjectInfor );
+
+            Collection<MavenProjectInfo> children = mavenProjectInfor.getProjects();
+
+            if( children.isEmpty() )
+            {
+                results.add( mavenProjectInfor );
+            }
+            else
+            {
+                recursionMavenProjects( results, children );
+            }
+        }
     }
 
     public static void setConfigValue( Xpp3Dom configuration, String childName, Object value )

@@ -18,4 +18,12 @@
             projectType="workspace">
       </liferayProjectProvider>
    </extension>
+   <extension
+         point="com.liferay.ide.core.liferayProjectImporters">
+      <liferayProjectImporter
+            buildType="gradle"
+            class="com.liferay.ide.gradle.core.GradleModuleProjectImporter"
+            id="com.liferay.ide.gradle.core.GradleModuleProjectImporter">
+      </liferayProjectImporter>
+   </extension>
 </plugin>

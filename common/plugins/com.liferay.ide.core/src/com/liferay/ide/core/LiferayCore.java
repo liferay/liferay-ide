@@ -48,6 +48,8 @@ public class LiferayCore extends Plugin
 
     private static LiferayProjectProviderReader providerReader;
 
+    private static LiferayProjectImporterReader importerReader;
+
     public static ILiferayProject create( Object adaptable )
     {
         ILiferayProject project = null;
@@ -159,6 +161,26 @@ public class LiferayCore extends Plugin
     public static LiferayCore getDefault()
     {
         return plugin;
+    }
+
+    public static synchronized ILiferayProjectImporter[] getImporters()
+    {
+        if( importerReader == null )
+        {
+            importerReader = new LiferayProjectImporterReader();
+        }
+
+        return importerReader.getImporters();
+    }
+
+    public static synchronized ILiferayProjectImporter getImporter( String buildType )
+    {
+        if( importerReader == null )
+        {
+            importerReader = new LiferayProjectImporterReader();
+        }
+
+        return importerReader.getImporter( buildType );
     }
 
     public static synchronized ILiferayProjectAdapter[] getProjectAdapters()

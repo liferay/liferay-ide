@@ -209,6 +209,16 @@
          </description>
       </wizard>
       -->
+      <wizard
+            category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.modules.ImportLiferayModuleProjectWizard"
+            icon="icons/n16/bundle_new.png"
+            id="com.liferay.ide.project.ui.modules.ImportLiferayModuleProjectWizard"
+            name="Liferay Module Project">
+         <description>
+            description body text
+         </description>
+      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">

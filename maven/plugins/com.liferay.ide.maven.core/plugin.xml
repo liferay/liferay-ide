@@ -69,5 +69,13 @@
       <initializer class="com.liferay.ide.maven.core.pref.ProjectMavenPreferenceInitializer" />
       <initializer class="com.liferay.ide.maven.core.pref.MavenArchetypePreferenceInitializer" />
    </extension>
+   <extension
+         point="com.liferay.ide.core.liferayProjectImporters">
+      <liferayProjectImporter
+            buildType="maven"
+            class="com.liferay.ide.maven.core.MavenModuleProjectImporter"
+            id="com.liferay.ide.maven.core.MavenModuleProjectImporter">
+      </liferayProjectImporter>
+   </extension>
 
 </plugin>
