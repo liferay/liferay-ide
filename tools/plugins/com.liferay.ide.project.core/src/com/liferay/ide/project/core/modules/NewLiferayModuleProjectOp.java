@@ -90,7 +90,6 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** ComponentName ***
     @Label( standard = "Component Name" )
-    @Required
     @Services
     (
         {
@@ -105,6 +104,7 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** ServiceName ***
     @Label( standard = "Service Name" )
+    @Required
     @Services
     (
         {
@@ -112,7 +112,6 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
             @Service( impl = ServiceNameValidataionService.class )
         }
     )
-    @Required
     ValueProperty PROP_SERVICE_NAME = new ValueProperty( TYPE, "ServiceName" );
 
     Value<String> getServiceName();
