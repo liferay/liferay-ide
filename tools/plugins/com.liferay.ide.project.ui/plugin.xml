@@ -182,11 +182,12 @@
             class="com.liferay.ide.project.ui.wizard.SDKProjectImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.importSDKProjectWizard.30"
-            name="Liferay Project From Existing Source">
+            name="Liferay Plugins SDK Project">
          <description>
             %import.projects.sdk.wizard.description
          </description>
       </wizard>
+      <!--
       <wizard
             category="com.liferay.ide.projects.import"
             class="com.liferay.ide.project.ui.wizard.BinaryProjectImportWizard"
@@ -207,6 +208,7 @@
             %import.binary.plugins.wizard.description
          </description>
       </wizard>
+      -->
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
