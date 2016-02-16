@@ -15,9 +15,12 @@
 package com.liferay.ide.project.core.model.internal;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
@@ -57,9 +60,27 @@ public class LocationValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        if ( op().getProjectProvider().content().equals( "ant" ) )
+        if( op().getProjectProvider().content().getShortName().equals( "ant" ) )
         {
-            return retval;
+            SDK sdk = null;
+            try
+            {
+                sdk = SDKUtil.getWorkspaceSDK();
+
+                if( sdk != null )
+                {
+                    IStatus sdkStatus = sdk.validate();
+
+                    if( !sdkStatus.isOK() )
+                    {
+                        retval = Status.createErrorStatus( sdkStatus.getChildren()[0].getMessage() );
+                    }
+                }
+            }
+            catch( CoreException e )
+            {
+                retval = Status.createErrorStatus( e );
+            }
         }
 
         final Path currentProjectLocation = op().getLocation().content( true );

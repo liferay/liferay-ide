@@ -417,6 +417,104 @@ public class NewLiferayPluginProjectOpMethods
         op.setActiveProfilesValue( sb.toString().replaceAll( "(.*),$", "$1" ) );
     }
 
+    public static void updateLocation( final NewLiferayPluginProjectOp op )
+    {
+        final String currentProjectName = op.getProjectName().content();
+
+        if( currentProjectName == null )
+        {
+            return;
+        }
+
+        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+        final String providerShortName = op.getProjectProvider().content( true ).getShortName();
+
+        if( useDefaultLocation )
+        {
+            Path newLocationBase = null;
+
+            if( providerShortName.equals( "ant" ) )
+            {
+                SDK sdk = null;
+
+                try
+                {
+                    sdk = SDKUtil.getWorkspaceSDK();
+
+                    if( sdk != null )
+                    {
+                        IStatus sdkStatus = sdk.validate();
+
+                        if( !sdkStatus.isOK() )
+                        {
+                            sdk = null;
+                        }
+                    }
+                }
+                catch( CoreException e )
+                {
+
+                }
+
+                if( sdk == null )
+                {
+                    if( op.getSdkLocation() != null )
+                    {
+                        final Path sdkPath = op.getSdkLocation().content();
+
+                        if( sdkPath != null )
+                        {
+                            final IPath sdkLocation = PathBridge.create( sdkPath );
+
+                            sdk = SDKUtil.createSDKFromLocation( sdkLocation );
+                        }
+                    }
+                }
+
+                if( sdk != null )
+                {
+                    final Path sdkLocation = PathBridge.create( sdk.getLocation() );
+
+                    switch ( op.getPluginType().content( true ) )
+                    {
+                        case portlet:
+                        case servicebuilder:
+                            newLocationBase = sdkLocation.append( "portlets" ); //$NON-NLS-1$
+                            break;
+                        case ext:
+                            newLocationBase = sdkLocation.append( "ext" ); //$NON-NLS-1$
+                            break;
+                        case hook:
+                            newLocationBase = sdkLocation.append( "hooks" ); //$NON-NLS-1$
+                            break;
+                        case layouttpl:
+                            newLocationBase = sdkLocation.append( "layouttpl" ); //$NON-NLS-1$
+                            break;
+                        case theme:
+                            newLocationBase = sdkLocation.append( "themes" ); //$NON-NLS-1$
+                            break;
+                        case web:
+                            newLocationBase = sdkLocation.append( "webs" ); //$NON-NLS-1$
+                            break;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+            }
+
+            if( newLocationBase != null )
+            {
+                NewLiferayPluginProjectOpMethods.updateLocation( op, newLocationBase );
+            }
+        }
+    }
+
     public static void updateLocation( final NewLiferayPluginProjectOp op, final Path baseLocation )
     {
         final String projectName = getProjectNameWithSuffix( op );

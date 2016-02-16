@@ -20,8 +20,11 @@ import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
@@ -72,6 +75,30 @@ public class ProjectNameValidationService extends ValidationService
         Status retval = Status.createOkStatus();
 
         final NewLiferayPluginProjectOp op = op();
+
+        if( op().getProjectProvider().content().getShortName().equals( "ant" ) )
+        {
+            SDK sdk = null;
+            try
+            {
+                sdk = SDKUtil.getWorkspaceSDK();
+
+                if( sdk != null )
+                {
+                    IStatus sdkStatus = sdk.validate();
+
+                    if( !sdkStatus.isOK() )
+                    {
+                        retval = Status.createErrorStatus( sdkStatus.getChildren()[0].getMessage() );
+                    }
+                }
+            }
+            catch( CoreException e )
+            {
+                retval = Status.createErrorStatus( e );
+            }
+        }
+
         final String currentProjectName = op.getProjectName().content();
 
         if( currentProjectName != null )
