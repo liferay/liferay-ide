@@ -1,7 +1,0 @@
-jar {
-	manifest {
-		attributes(
-			"Bundle-SymbolicName": project.name,
-			"Bundle-ManifestVersion": 2)
-	}
-}
