@@ -209,7 +209,7 @@
             <param name="output.tar.name" value="${output.macosx64.tar.name}" />
             <param name="output.gz.name" value="${output.macosx64.gz.name}" />
             <param name="upload.output.file" value="${output.macosx64.gz.name}" />
-            <param name="eclipse.dir" value="${work.dir}/Eclipse.app" />
+            <param name="eclipse.dir" value="${work.dir}/Eclipse.app/Contents/Eclipse" />
         </antcall>
     </target>
 
@@ -260,7 +260,7 @@
                     <then>
                         <antcall target="download-eclipse" />
                         <gunzip src="${downloads.dir}/${eclipse.zip.name}" dest="${downloads.dir}" />
-                        <untar src="${downloads.dir}/${eclipse.tar.name}" dest="${eclipse.dir}/../" />
+                        <untar src="${downloads.dir}/${eclipse.tar.name}" dest="${work.dir}/" />
                         <chmod file="${work.dir}/Eclipse.app/Contents/MacOS/eclipse" perm="ugo+rx" />
                     </then>
                 </if>
