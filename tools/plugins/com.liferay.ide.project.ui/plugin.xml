@@ -187,6 +187,16 @@
             %import.projects.sdk.wizard.description
          </description>
       </wizard>
+      <wizard
+            category="com.liferay.ide.projects.import"
+            class="com.liferay.ide.project.ui.wizard.ParentSDKProjectImportWizard"
+            icon="icons/e16/liferay.png"
+            id="com.liferay.ide.project.ui.parentSDKProjectImportWizard"
+            name="Liferay Plugins SDK Parent Project">
+         <description>
+            "Liferay Plugins SDK Parent Project"
+         </description>
+      </wizard>
       <!--
       <wizard
             category="com.liferay.ide.projects.import"
