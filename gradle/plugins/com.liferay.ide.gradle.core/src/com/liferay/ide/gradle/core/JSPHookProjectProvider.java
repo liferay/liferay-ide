@@ -103,7 +103,7 @@ public class JSPHookProjectProvider extends AbstractLiferayProjectProvider
         StringBuilder sb = new StringBuilder();
         sb.append( "create " );
         sb.append( "-d \"" + location.toFile().getAbsolutePath() + "\" " );
-        sb.append( "-t " + "jsphook" + " " );
+        sb.append( "-t " + "fragment" + " " );
 
         if( !bundleSymbolicName.equals( "" ) )
         {
