@@ -82,6 +82,9 @@
             <groupMarker
                   name="build-css">
             </groupMarker>
+            <groupMarker
+                  name="build-service">
+            </groupMarker>
          </menu>
       </objectContribution>
       <objectContribution
@@ -103,6 +106,14 @@
                id="com.liferay.ide.gradle.popup.action.buildcss"
                label="build-css"
                menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-css">
+         </action>
+         <action
+               class="com.liferay.ide.gradle.action.BuildServiceTaskAction"
+               enablesFor="1"
+               icon="icons/e16/liferay_logo_16.png"
+               id="com.liferay.ide.gradle.popup.action.buildservice"
+               label="build-service"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-service">
          </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
