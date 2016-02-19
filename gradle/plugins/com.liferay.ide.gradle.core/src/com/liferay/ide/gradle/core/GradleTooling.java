@@ -38,7 +38,6 @@ public class GradleTooling
 
     public static <T> T getModel( Class<T> modelClass, File cacheDir, File projectDir ) throws Exception
     {
-
         T retval = null;
 
         final GradleConnector connector = GradleConnector.newConnector();
@@ -50,15 +49,16 @@ public class GradleTooling
         {
             connection = connector.connect();
 
-            ModelBuilder<T> modelBuilder = (ModelBuilder<T>) connection.model( modelClass );
+            final ModelBuilder<T> modelBuilder = (ModelBuilder<T>) connection.model( modelClass );
 
-            String modelLocation = Platform.getBundle( "com.liferay.blade.gradle.model" ).getLocation();
+            final String modelLocation = Platform.getBundle( "com.liferay.blade.gradle.model" ).getLocation();
 
-            File modelBundle = new File( modelLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" ) );
+            final File modelBundle = new File( modelLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" ) );
 
-            String pluginLocation = Platform.getBundle( "com.liferay.blade.gradle.plugin" ).getLocation();
+            final String pluginLocation = Platform.getBundle( "com.liferay.blade.gradle.plugin" ).getLocation();
 
-            File pluginBundle = new File( pluginLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" ) );
+            final File pluginBundle =
+                            new File( pluginLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" ) );
 
             final String initScriptTemplate =
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
@@ -67,7 +67,7 @@ public class GradleTooling
                 "%model%", modelBundle.toString().replaceAll( "\\\\", "/" ) ).replaceFirst(
                     "%plugin%", pluginBundle.toString().replaceAll( "\\\\", "/" ) );
 
-            File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
+            final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
 
             FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
 
@@ -88,7 +88,6 @@ public class GradleTooling
 
     public static Set<File> getOutputFiles( File cacheDir, File buildDir ) throws Exception
     {
-
         final CustomModel model = getModel( CustomModel.class, cacheDir, buildDir );
 
         return model.getOutputFiles();
