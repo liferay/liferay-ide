@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
+import com.liferay.ide.project.ui.tests.swtbot.ProjectWizard;
 import com.liferay.ide.ui.tests.swtbot.page.CheckBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
@@ -25,6 +26,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 /**
  * @author Terry Jia
  * @author Ashley Yuan
+ * @author Li Lu
  */
 public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {
@@ -138,6 +140,61 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
             }
         }
 
+    }
+
+    public TextPageObject<SWTBot> getActiveProfilesText()
+    {
+        return activeProfilesText;
+    }
+
+    public TextPageObject<SWTBot> getArtifactVersionText()
+    {
+        return artifactVersionText;
+    }
+
+    public ComboBoxPageObject<SWTBot> getBuildTypeComboBox()
+    {
+        return buildTypeComboBox;
+    }
+
+    public TextPageObject<SWTBot> getDisplayNameText()
+    {
+        return displayNameText;
+    }
+
+    public TextPageObject<SWTBot> getGroupIdText()
+    {
+        return groupIdText;
+    }
+
+    public CheckBoxPageObject<SWTBot> getIncludeSimpleCodeCheckBox()
+    {
+        return includeSimpleCodeCheckBox;
+    }
+
+    public CheckBoxPageObject<SWTBot> getLaunchNewPortletWizardCheckBox()
+    {
+        return launchNewPortletWizardCheckBox;
+    }
+
+    public TextPageObject<SWTBot> getLocation()
+    {
+        return location;
+    }
+
+    public ComboBoxPageObject<SWTBot> getPluginTypeComboBox()
+    {
+        return pluginTypeComboBox;
+    }
+
+    public TextPageObject<SWTBot> getProjectNameText()
+    {
+        return projectNameText;
+    }
+
+    public CheckBoxPageObject<SWTBot> getUseDefaultLoactionCheckBox()
+    {
+        return useDefaultLoactionCheckBox;
     }
 
     public boolean IsIncludeSimpleCodeCheckBoxChecked()

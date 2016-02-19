@@ -15,9 +15,10 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
+import com.liferay.ide.project.ui.tests.swtbot.ProjectBuildAction;
 import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Li Lu

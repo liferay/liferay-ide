@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
+import com.liferay.ide.project.ui.tests.swtbot.ProjectWizard;
 import com.liferay.ide.ui.tests.swtbot.page.LabelPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.RadioPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
@@ -28,7 +29,6 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 public class SelectPortletFrameworkPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {
 
-
     private LabelPageObject<SWTBot> displayNameLabel;
 
     private TextPageObject<SWTBot> displayNameText;
@@ -39,6 +39,7 @@ public class SelectPortletFrameworkPageObject<T extends SWTBot> extends WizardPa
     private TextPageObject<SWTBot> portletNameText;
     private RadioPageObject<SWTBot> springMVCRadio;
     private RadioPageObject<SWTBot> vaadinRadio;
+
     public SelectPortletFrameworkPageObject( T bot )
     {
         this( bot, TEXT_BLANK, INDEX_DEFAULT_VALIDATION_MESSAGE );
@@ -68,6 +69,51 @@ public class SelectPortletFrameworkPageObject<T extends SWTBot> extends WizardPa
         this( bot, title );
 
         selectFramework( radio );
+    }
+
+    public LabelPageObject<SWTBot> getDisplayNameLabel()
+    {
+        return displayNameLabel;
+    }
+
+    public TextPageObject<SWTBot> getDisplayNameText()
+    {
+        return displayNameText;
+    }
+
+    public RadioPageObject<SWTBot> getJsfRadio()
+    {
+        return jsfRadio;
+    }
+
+    public RadioPageObject<SWTBot> getLiferayMVCRadio()
+    {
+        return liferayMVCRadio;
+    }
+
+    public RadioPageObject<SWTBot> getPortletFrameworkRadio()
+    {
+        return portletFrameworkRadio;
+    }
+
+    public LabelPageObject<SWTBot> getPortletNameLabel()
+    {
+        return portletNameLabel;
+    }
+
+    public TextPageObject<SWTBot> getPortletNameText()
+    {
+        return portletNameText;
+    }
+
+    public RadioPageObject<SWTBot> getSpringMVCRadio()
+    {
+        return springMVCRadio;
+    }
+
+    public RadioPageObject<SWTBot> getVaadinRadio()
+    {
+        return vaadinRadio;
     }
 
     public boolean IsLiferayMVCRadioSelected()
