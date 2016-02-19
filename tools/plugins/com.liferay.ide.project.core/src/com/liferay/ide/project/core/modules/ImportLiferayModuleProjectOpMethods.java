@@ -50,6 +50,8 @@ public class ImportLiferayModuleProjectOpMethods
         }
         catch( Exception e )
         {
+            // TODO need to show the user so they know what happened and perhaps how to fix it.
+
             final String msg = "import module project error";
 
             ProjectCore.logError( msg, e );
