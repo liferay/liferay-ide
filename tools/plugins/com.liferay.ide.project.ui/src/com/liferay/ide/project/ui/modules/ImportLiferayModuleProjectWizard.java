@@ -66,12 +66,6 @@ public class ImportLiferayModuleProjectWizard extends SapphireWizard<ImportLifer
     }
 
     @Override
-    protected void performPostFinish()
-    {
-        super.performPostFinish();
-    }
-
-    @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
     }

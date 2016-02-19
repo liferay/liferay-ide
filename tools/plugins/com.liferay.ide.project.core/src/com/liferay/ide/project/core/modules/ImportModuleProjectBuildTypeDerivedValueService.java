@@ -29,24 +29,6 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
     private FilteredListener<PropertyContentEvent> listener;
 
     @Override
-    protected void initDerivedValueService()
-    {
-        super.initDerivedValueService();
-
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
-
-        op().property( ImportLiferayModuleProjectOp.PROP_LOCATION ).attach( this.listener );
-    }
-
-    @Override
     protected String compute()
     {
         String retVal = null;
@@ -71,11 +53,6 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
         return retVal;
     }
 
-    private ImportLiferayModuleProjectOp op()
-    {
-        return context( ImportLiferayModuleProjectOp.class );
-    }
-
     @Override
     public void dispose()
     {
@@ -83,6 +60,29 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
         {
             op().property( ImportLiferayModuleProjectOp.PROP_LOCATION ).detach( this.listener );
         }
+
         super.dispose();
+    }
+
+    @Override
+    protected void initDerivedValueService()
+    {
+        super.initDerivedValueService();
+
+        this.listener = new FilteredListener<PropertyContentEvent>()
+        {
+            @Override
+            protected void handleTypedEvent( PropertyContentEvent event )
+            {
+                refresh();
+            }
+        };
+
+        op().property( ImportLiferayModuleProjectOp.PROP_LOCATION ).attach( this.listener );
+    }
+
+    private ImportLiferayModuleProjectOp op()
+    {
+        return context( ImportLiferayModuleProjectOp.class );
     }
 }
