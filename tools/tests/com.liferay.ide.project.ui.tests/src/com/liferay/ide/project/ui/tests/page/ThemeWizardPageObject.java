@@ -15,10 +15,11 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-
+import com.liferay.ide.project.ui.tests.swtbot.ProjectWizard;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
+
+import org.eclipse.swtbot.swt.finder.SWTBot;
 
 /**
  * @author Vicky Wang
