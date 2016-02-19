@@ -25,10 +25,10 @@
     <wizard>
         <id>ImportLiferayModuleProjectWizard</id>
         <element-type>com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOp</element-type>
-        <label>Import Liferay Module Project</label>
+        <label>Import Liferay Module Project(s)</label>
         <page>
             <id>ImportLiferayModuleProjectPage</id>
-            <label>Import Liferay Module Project</label>
+            <label>Import Liferay Module Project(s)</label>
             <content>
                 <property-editor>Location</property-editor>
                 <spacer></spacer>
@@ -43,9 +43,9 @@
             <margin-horizontal>0</margin-horizontal>
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
-            <description>Select location of Liferay module projects directory.</description>
+            <description>Select location of Liferay module project or parent project directory.</description>
         </page>
-        <description>Import Liferay Workspace</description>
+        <description>Import one or more Liferay module projects</description>
         <image>NewLiferayModuleProjectWizard.png</image>
     </wizard>
 </definition>

@@ -44,13 +44,15 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
 
             if( buildType == null )
             {
-                retval = Status.createErrorStatus( "the project is not maven or gradle project" );
+                retval = Status.createErrorStatus( "Project is not a recognized project type." );
             }
 
             retval = StatusBridge.create( ProjectImportUtil.validatePath( location ) );
 
             if( !retval.ok() )
+            {
                 return retval;
+            }
 
             String projectName = path.lastSegment();
 

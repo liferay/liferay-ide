@@ -214,7 +214,7 @@
             class="com.liferay.ide.project.ui.modules.ImportLiferayModuleProjectWizard"
             icon="icons/n16/bundle_new.png"
             id="com.liferay.ide.project.ui.modules.ImportLiferayModuleProjectWizard"
-            name="Liferay Module Project">
+            name="Liferay Module Project(s)">
          <description>
             description body text
          </description>
