@@ -26,19 +26,14 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 public class ButtonPageObject<T extends SWTBot> extends AbstractWidgetPageObject<T>
 {
 
-    public ButtonPageObject( T bot, String label )
-    {
-        super( bot, label );
-    }
-
-    public void click()
-    {
-        ( (SWTBotButton) getWidget() ).click();
-    }
-
     public ButtonPageObject( T bot, int index )
     {
         super( bot, index );
+    }
+
+    public ButtonPageObject( T bot, String label )
+    {
+        super( bot, label );
     }
 
     public ButtonPageObject( T bot, String label, int index )
@@ -46,12 +41,21 @@ public class ButtonPageObject<T extends SWTBot> extends AbstractWidgetPageObject
         super( bot, label, index );
     }
 
-    @Override
-    protected AbstractSWTBot<?> getWidget()
+    public void click()
     {
-        if( label == null )
+        getWidget().click();
+    }
+
+    @Override
+    protected SWTBotButton getWidget()
+    {
+        if( label == null && index > 0 )
         {
             return bot.button( index );
+        }
+        else if( label != null && index <= 0 )
+        {
+            return bot.button( label );
         }
 
         return bot.button( label, index );

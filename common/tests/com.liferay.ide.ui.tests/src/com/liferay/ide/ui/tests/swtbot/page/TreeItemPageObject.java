@@ -33,6 +33,13 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
         super( bot );
     }
 
+    public TreeItemPageObject( SWTBot bot, int treeIndex, String... nodeText )
+    {
+        super( bot );
+        this.index = treeIndex;
+        this.nodeText = nodeText;
+    }
+
     public TreeItemPageObject( SWTBot bot, String... nodeText )
     {
         super( bot );
@@ -105,6 +112,16 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
         return subNodes;
     }
 
+    public TreeItemPageObject<SWTBot> getTreeItem( String... items )
+    {
+        String[] fullNodeText = new String[nodeText.length + items.length];
+
+        System.arraycopy( nodeText, 0, fullNodeText, 0, nodeText.length );
+        System.arraycopy( items, 0, fullNodeText, nodeText.length, items.length );
+
+        return new TreeItemPageObject<SWTBot>( bot, fullNodeText );
+    }
+
     @Override
     protected SWTBotTreeItem getWidget()
     {
@@ -159,14 +176,6 @@ public class TreeItemPageObject<T extends SWTBot> extends TreePageObject<SWTBot>
     @Override
     public void selectTreeItem( String... items )
     {
-        SWTBotTreeItem treeItem = getWidget();
-
-        for( int i = 0; i < nodeText.length; i++ )
-        {
-            treeItem.expand();
-
-            treeItem = treeItem.getNode( nodeText[i] );
-        }
-        treeItem.select();
+        getTreeItem( items ).select();
     }
 }
