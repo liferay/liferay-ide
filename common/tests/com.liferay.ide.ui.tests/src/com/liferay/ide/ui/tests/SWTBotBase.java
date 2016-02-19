@@ -76,11 +76,17 @@ public class SWTBotBase implements UIBase
         labelBot = new LabelBot( bot );
         radioBot = new RadioBot( bot );
 
-        viewBot.close( VIEW_WELCOME );
-        bot.perspectiveByLabel( "Liferay" ).activate();
+        try
+        {
+            viewBot.close( VIEW_WELCOME );
+            bot.perspectiveByLabel( "Liferay" ).activate();
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
 
         SWTBotPreferences.TIMEOUT = 30000;
-
         setupPluginsSDK();
     }
 

@@ -15,9 +15,12 @@
 
 package com.liferay.ide.ui.tests.swtbot.page;
 
+<<<<<<< HEAD
 import com.liferay.ide.ui.tests.swtbot.condition.WidgetEnabledCondition;
 
 import org.eclipse.swt.widgets.Widget;
+=======
+>>>>>>> 901a919... JSF and Vaadin Test
 import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.AbstractSWTBot;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotCombo;
@@ -45,11 +48,27 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
         SWTBotCombo swtBotCombo = (SWTBotCombo) widget;
 
+<<<<<<< HEAD
         bot.waitUntil( new WidgetEnabledCondition( swtBotCombo, true ) );
 
         swtBotCombo.setSelection( value );
 
         sleep();
+=======
+    public String[] items()
+    {
+        return getWidget().items();
+    }
+
+    public void setSelection( String value )
+    {
+        getWidget().setSelection( value );
+    }
+
+    public void setText( String text )
+    {
+        getWidget().setText( text );
+>>>>>>> 901a919... JSF and Vaadin Test
     }
 
 }

@@ -15,6 +15,13 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
+<<<<<<< HEAD
+=======
+import com.liferay.ide.project.ui.tests.swtbot.CreateLiferayPortletWizard;
+import com.liferay.ide.project.ui.tests.swtbot.ProjectWizard;
+import com.liferay.ide.ui.tests.swtbot.page.CheckBoxPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
+>>>>>>> 901a919... JSF and Vaadin Test
 import com.liferay.ide.ui.tests.swtbot.page.RadioPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
@@ -25,17 +32,26 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 /**
  * @author Ashley Yuan
  * @author Terry Jia
+ * @author Li Lu
  */
 public class CreateLiferayPortletWizardPageObject<T extends SWTBot> extends WizardPageObject<T>
     implements CreateLiferayPortletWizard, ProjectWizard
 {
 
     RadioPageObject<SWTBot> createNewPortlet;
+
     TextPageObject<SWTBot> javaPackage;
+
     TextPageObject<SWTBot> portletClass;
+
     ComboBoxPageObject<SWTBot> portletPluginProject;
+
+    public CheckBoxPageObject<SWTBot> print;
+
     TextPageObject<SWTBot> sourceFolder;
-    TextPageObject<SWTBot> superClass;
+
+    ComboBoxPageObject<SWTBot> superClass;
+
     RadioPageObject<SWTBot> useDefaultPortlet;
 
     public CreateLiferayPortletWizardPageObject( T bot )
@@ -48,9 +64,9 @@ public class CreateLiferayPortletWizardPageObject<T extends SWTBot> extends Wiza
         this( bot, title, INDEX_DEFAULT_VALIDATION_MESSAGE );
     }
 
-    public CreateLiferayPortletWizardPageObject( T bot, String title, int validationMessageIndex )
+    public CreateLiferayPortletWizardPageObject( T bot, String wizardTitle, int validationMessageIndex )
     {
-        super( bot, title, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT, validationMessageIndex );
+        super( bot, wizardTitle, BUTTON_CANCEL, BUTTON_FINISH, BUTTON_BACK, BUTTON_NEXT, validationMessageIndex );
 
         portletPluginProject = new ComboBoxPageObject<SWTBot>( bot, LABEL_PORTLET_PLUGIN_PROJECT );
         sourceFolder = new TextPageObject<SWTBot>( bot, LABEL_SOURCE_FOLDER );
@@ -58,7 +74,47 @@ public class CreateLiferayPortletWizardPageObject<T extends SWTBot> extends Wiza
         useDefaultPortlet = new RadioPageObject<SWTBot>( bot, RADIO_USE_DEFAULT_PORTLET );
         portletClass = new TextPageObject<SWTBot>( bot, LABEL_PORTLET_CLASS );
         javaPackage = new TextPageObject<SWTBot>( bot, LABEL_JAVA_PACKAGE );
-        superClass = new TextPageObject<SWTBot>( bot, LABEL_SUPERCLASS );
+        superClass = new ComboBoxPageObject<SWTBot>( bot, LABEL_SUPERCLASS );
+    }
+
+    public RadioPageObject<SWTBot> getCreateNewPortlet()
+    {
+        return createNewPortlet;
+    }
+
+    public TextPageObject<SWTBot> getJavaPackage()
+    {
+        return javaPackage;
+    }
+
+    public TextPageObject<SWTBot> getPortletClass()
+    {
+        return portletClass;
+    }
+
+    public ComboBoxPageObject<SWTBot> getPortletPluginProject()
+    {
+        return portletPluginProject;
+    }
+
+    public CheckBoxPageObject<SWTBot> getPrint()
+    {
+        return print;
+    }
+
+    public TextPageObject<SWTBot> getSourceFolder()
+    {
+        return sourceFolder;
+    }
+
+    public ComboBoxPageObject<SWTBot> getSuperClass()
+    {
+        return superClass;
+    }
+
+    public RadioPageObject<SWTBot> getUseDefaultPortlet()
+    {
+        return useDefaultPortlet;
     }
 
 }
