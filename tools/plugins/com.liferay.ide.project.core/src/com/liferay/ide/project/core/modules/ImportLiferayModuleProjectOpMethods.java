@@ -73,6 +73,7 @@ public class ImportLiferayModuleProjectOpMethods
             if( importer.canImport( location ) )
             {
                 buildType = importer.getBuildType();
+                break;
             }
         }
 
