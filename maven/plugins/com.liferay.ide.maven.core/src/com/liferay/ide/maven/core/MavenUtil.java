@@ -31,7 +31,6 @@ import java.util.regex.Pattern;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.cli.MavenCli;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
-import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
@@ -56,12 +55,10 @@ import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.AbstractProjectScanner;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
-import org.eclipse.m2e.core.project.IMavenProjectImportResult;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.LocalProjectScanner;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
-import org.eclipse.m2e.core.project.MavenUpdateRequest;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.m2e.wtp.ProjectUtils;
@@ -259,54 +256,6 @@ public class MavenUtil
         return project.getFolder( m2eLiferayFolder ).getFolder( ILiferayMavenConstants.THEME_RESOURCES_FOLDER );
     }
 
-    public static Plugin getPlugin( IMavenProjectFacade facade, final String pluginKey, IProgressMonitor monitor ) throws CoreException
-    {
-        Plugin retval = null;
-        boolean loadedParent = false;
-        final MavenProject mavenProject = facade.getMavenProject( monitor );
-
-        if( mavenProject != null )
-        {
-            retval = mavenProject.getPlugin( pluginKey );
-        }
-
-        if( retval == null )
-        {
-            // look through all parents to find if the plugin has been declared
-
-            MavenProject parent = mavenProject.getParent();
-
-            if( parent == null )
-            {
-                try
-                {
-                    if( loadParentHierarchy( facade, monitor ) )
-                    {
-                        loadedParent = true;
-                    }
-                }
-                catch( CoreException e )
-                {
-                    LiferayMavenCore.logError( "Error loading parent hierarchy", e );
-                }
-            }
-
-            while( parent != null && retval == null )
-            {
-                retval = parent.getPlugin( pluginKey );
-
-                parent = parent.getParent();
-            }
-        }
-
-        if( loadedParent )
-        {
-            mavenProject.setParent( null );
-        }
-
-        return retval;
-    }
-
     public static Xpp3Dom getLiferayMavenPluginConfig( MavenProject mavenProject )
     {
         Xpp3Dom retval = null;
@@ -422,6 +371,54 @@ public class MavenUtil
         return retval;
     }
 
+    public static Plugin getPlugin( IMavenProjectFacade facade, final String pluginKey, IProgressMonitor monitor ) throws CoreException
+    {
+        Plugin retval = null;
+        boolean loadedParent = false;
+        final MavenProject mavenProject = facade.getMavenProject( monitor );
+
+        if( mavenProject != null )
+        {
+            retval = mavenProject.getPlugin( pluginKey );
+        }
+
+        if( retval == null )
+        {
+            // look through all parents to find if the plugin has been declared
+
+            MavenProject parent = mavenProject.getParent();
+
+            if( parent == null )
+            {
+                try
+                {
+                    if( loadParentHierarchy( facade, monitor ) )
+                    {
+                        loadedParent = true;
+                    }
+                }
+                catch( CoreException e )
+                {
+                    LiferayMavenCore.logError( "Error loading parent hierarchy", e );
+                }
+            }
+
+            while( parent != null && retval == null )
+            {
+                retval = parent.getPlugin( pluginKey );
+
+                parent = parent.getParent();
+            }
+        }
+
+        if( loadedParent )
+        {
+            mavenProject.setParent( null );
+        }
+
+        return retval;
+    }
+
     public static IMavenProjectFacade getProjectFacade( final IProject project )
     {
         return getProjectFacade( project, new NullProgressMonitor() );
@@ -485,19 +482,6 @@ public class MavenUtil
         return retval;
     }
 
-    public static boolean isMavenProject( IProject project ) throws CoreException
-    {
-        return project != null && project.exists() && project.isAccessible() &&
-            ( project.hasNature( IMavenConstants.NATURE_ID ) || project.getFile( IMavenConstants.POM_FILE_NAME ).exists() );
-    }
-
-
-    public static boolean isPomFile( IFile pomFile )
-    {
-        return pomFile != null && pomFile.exists() && IMavenConstants.POM_FILE_NAME.equals( pomFile.getName() ) &&
-            pomFile.getParent() instanceof IProject;
-    }
-
     public static void importProject( String location, IProgressMonitor monitor )
         throws CoreException, InterruptedException
     {
@@ -519,6 +503,19 @@ public class MavenUtil
         IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
         projectConfigurationManager.importProjects( mavenProjects, importConfiguration, monitor );
+    }
+
+
+    public static boolean isMavenProject( IProject project ) throws CoreException
+    {
+        return project != null && project.exists() && project.isAccessible() &&
+            ( project.hasNature( IMavenConstants.NATURE_ID ) || project.getFile( IMavenConstants.POM_FILE_NAME ).exists() );
+    }
+
+    public static boolean isPomFile( IFile pomFile )
+    {
+        return pomFile != null && pomFile.exists() && IMavenConstants.POM_FILE_NAME.equals( pomFile.getName() ) &&
+            pomFile.getParent() instanceof IProject;
     }
 
     public static boolean loadParentHierarchy( IMavenProjectFacade facade, IProgressMonitor monitor ) throws CoreException

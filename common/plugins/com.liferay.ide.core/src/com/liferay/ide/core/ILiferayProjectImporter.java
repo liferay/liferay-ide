@@ -22,10 +22,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface ILiferayProjectImporter
 {
-
     boolean canImport( String location );
 
-    void importProject( String location, IProgressMonitor monitor ) throws CoreException;
-
     String getBuildType();
+
+    void importProject( String location, IProgressMonitor monitor ) throws CoreException;
 }

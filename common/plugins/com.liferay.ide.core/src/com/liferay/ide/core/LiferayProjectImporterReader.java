@@ -14,11 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.runtime.IConfigurationElement;
-
 
 /**
  * @author Andy Wu

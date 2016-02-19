@@ -20,7 +20,6 @@ package com.liferay.ide.core;
  */
 public abstract class AbstractLiferayProjectImporter implements ILiferayProjectImporter
 {
-
     private String buildType;
 
     public AbstractLiferayProjectImporter()
