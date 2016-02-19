@@ -233,6 +233,25 @@ public class MavenUtil
         return retval == null ? Status.OK_STATUS : retval;
     }
 
+    private static void findChildMavenProjects( List<MavenProjectInfo> results, Collection<MavenProjectInfo> infos )
+    {
+        for( MavenProjectInfo info : infos )
+        {
+            results.add( info );
+
+            Collection<MavenProjectInfo> children = info.getProjects();
+
+            if( children.isEmpty() )
+            {
+                results.add( info );
+            }
+            else
+            {
+                findChildMavenProjects( results, children );
+            }
+        }
+    }
+
     public static MojoExecution getExecution( MavenExecutionPlan plan, String artifactId )
     {
         if( plan != null )
@@ -482,6 +501,7 @@ public class MavenUtil
         return retval;
     }
 
+
     public static void importProject( String location, IProgressMonitor monitor )
         throws CoreException, InterruptedException
     {
@@ -504,7 +524,6 @@ public class MavenUtil
 
         projectConfigurationManager.importProjects( mavenProjects, importConfiguration, monitor );
     }
-
 
     public static boolean isMavenProject( IProject project ) throws CoreException
     {
@@ -556,25 +575,6 @@ public class MavenUtil
         }
 
         return loadedParent;
-    }
-
-    private static void findChildMavenProjects( List<MavenProjectInfo> results, Collection<MavenProjectInfo> infos )
-    {
-        for( MavenProjectInfo info : infos )
-        {
-            results.add( info );
-
-            Collection<MavenProjectInfo> children = info.getProjects();
-
-            if( children.isEmpty() )
-            {
-                results.add( info );
-            }
-            else
-            {
-                findChildMavenProjects( results, children );
-            }
-        }
     }
 
     public static void setConfigValue( Xpp3Dom configuration, String childName, Object value )
