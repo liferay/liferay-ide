@@ -15,28 +15,12 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.google.common.collect.ImmutableList;
-import com.gradleware.tooling.toolingclient.GradleDistribution;
-import com.gradleware.tooling.toolingmodel.OmniGradleBuildStructure;
-import com.gradleware.tooling.toolingmodel.repository.FetchStrategy;
-import com.gradleware.tooling.toolingmodel.repository.ModelRepository;
-import com.gradleware.tooling.toolingmodel.repository.TransientRequestAttributes;
 import com.liferay.ide.core.AbstractLiferayProjectImporter;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.console.ProcessStreams;
-import org.eclipse.buildship.core.projectimport.ProjectImportConfiguration;
-import org.eclipse.buildship.core.util.gradle.GradleDistributionWrapper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.gradle.tooling.CancellationTokenSource;
-import org.gradle.tooling.GradleConnector;
-import org.gradle.tooling.ProgressEvent;
-import org.gradle.tooling.ProgressListener;
 
 /**
  * @author Andy Wu
@@ -64,6 +48,9 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
                 }
             }
         }
+
+
+        //TODO also check for all parent folders to see if anywhere in the parent hierachy has a build.gradle
 
         return retval;
 
