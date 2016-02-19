@@ -26,7 +26,6 @@ import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
-import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
@@ -42,20 +41,19 @@ public interface ImportLiferayModuleProjectOp extends ExecutableElement
 
     // *** Location ***
 
-    @Label( standard = "location" )
-    @Type( base = Path.class )
     @AbsolutePath
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Service( impl = ImportModuleProjectLocationValidationService.class )
     @Required
+    @Type( base = Path.class )
+    @Service( impl = ImportModuleProjectLocationValidationService.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();
     void setLocation( String value );
     void setLocation( Path value );
 
-    // *** Build Tpye ***
-    @Label( standard = "Build Type" )
+    // *** Build Type ***
+
     @Derived
     @Service( impl = ImportModuleProjectBuildTypeDerivedValueService.class )
     ValueProperty PROP_BUILD_TYPE = new ValueProperty( TYPE, "BuildType" ); //$NON-NLS-1$
