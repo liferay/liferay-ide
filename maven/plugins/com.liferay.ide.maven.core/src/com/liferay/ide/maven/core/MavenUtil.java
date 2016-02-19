@@ -492,10 +492,10 @@ public class MavenUtil
 
         scanner.run( monitor );
 
-        List<MavenProjectInfo> sources = scanner.getProjects();
+        List<MavenProjectInfo> projects = scanner.getProjects();
         List<MavenProjectInfo> mavenProjects = new ArrayList<MavenProjectInfo>();
 
-        recursionMavenProjects( mavenProjects, sources );
+        findChildMavenProjects( mavenProjects, projects );
 
         ResolverConfiguration resolverConfig = new ResolverConfiguration();
         ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration( resolverConfig );
@@ -558,21 +558,21 @@ public class MavenUtil
         return loadedParent;
     }
 
-    private static void recursionMavenProjects( List<MavenProjectInfo> results, Collection<MavenProjectInfo> source )
+    private static void findChildMavenProjects( List<MavenProjectInfo> results, Collection<MavenProjectInfo> infos )
     {
-        for( MavenProjectInfo mavenProjectInfor : source )
+        for( MavenProjectInfo info : infos )
         {
-            results.add( mavenProjectInfor );
+            results.add( info );
 
-            Collection<MavenProjectInfo> children = mavenProjectInfor.getProjects();
+            Collection<MavenProjectInfo> children = info.getProjects();
 
             if( children.isEmpty() )
             {
-                results.add( mavenProjectInfor );
+                results.add( info );
             }
             else
             {
-                recursionMavenProjects( results, children );
+                findChildMavenProjects( results, children );
             }
         }
     }
