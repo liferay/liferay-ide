@@ -56,7 +56,7 @@ public class ImportLiferayModuleProjectWizard extends SapphireWizard<ImportLifer
 
             if( messageType == IMessageProvider.ERROR && !CoreUtil.isNullOrEmpty( message ) )
             {
-                wizardPage.setMessage( "Please select the location.", SapphireWizardPage.NONE );
+                wizardPage.setMessage( null, SapphireWizardPage.NONE );
 
                 firstErrorMessageRemoved = true;
             }

@@ -25,24 +25,15 @@
     <wizard>
         <id>ImportLiferayModuleProjectWizard</id>
         <element-type>com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOp</element-type>
-        <label>Import Liferay Module Project(s)</label>
+        <label>Import Liferay Module Project or Multi-Module Projects</label>
         <page>
             <id>ImportLiferayModuleProjectPage</id>
-            <label>Import Liferay Module Project(s)</label>
+            <label>Import Liferay Module Project or Multi-Module Projects</label>
             <content>
                 <property-editor>Location</property-editor>
                 <spacer></spacer>
                 <property-editor>buildType</property-editor>
             </content>
-            <scale-vertically>true</scale-vertically>
-            <margin-right>10</margin-right>
-            <scroll-vertically>true</scroll-vertically>
-            <margin-left>0</margin-left>
-            <margin-bottom>0</margin-bottom>
-            <margin-top>0</margin-top>
-            <margin-horizontal>0</margin-horizontal>
-            <margin-vertical>0</margin-vertical>
-            <margin>0</margin>
             <description>Select location of Liferay module project or parent project directory.</description>
         </page>
         <description>Import one or more Liferay module projects</description>
