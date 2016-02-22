@@ -88,7 +88,7 @@ public class LaunchWorkspaceMenu extends ExtensionContributionFactory
                 }
             }
 
-            retval.add( newLaunchWorkspaceCommand( serviceLocator, "Other...", null ) );
+            retval.add( newLaunchWorkspaceCommand( serviceLocator, "New Workspace...", null ) );
         }
 
         return retval.toArray( new IContributionItem[0] );
