@@ -20,9 +20,12 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.Status.Severity;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.eclipse.sapphire.platform.StatusBridge;
 
 /**
  * @author Andy Wu
@@ -41,14 +44,14 @@ public class ImportLiferayModuleProjectOpMethods
         try
         {
             String location = op.getLocation().content().toOSString();
-            String buildType = getBuildType( location );
-            ILiferayProjectImporter importer = LiferayCore.getImporter( buildType );
+            IStatus status = getBuildType( location );
+            ILiferayProjectImporter importer = LiferayCore.getImporter( status.getMessage() );
 
-            importer.importProject( location , monitor );
+            importer.importProject( location, monitor );
 
             retval = Status.createOkStatus();
         }
-        catch( Exception e )
+        catch( IllegalStateException e )
         {
             // TODO need to show the user so they know what happened and perhaps how to fix it.
 
@@ -58,26 +61,41 @@ public class ImportLiferayModuleProjectOpMethods
 
             retval = Status.createErrorStatus( msg, e );
         }
+        catch( Exception e )
+        {
+
+        }
 
         return retval;
     }
 
-    public static String getBuildType( String location )
+    public static IStatus getBuildType( String location )
     {
-        String buildType = null;
+        IStatus retval = StatusBridge.create( Status.createStatus( Severity.ERROR, "no importers found" ) );
 
         ILiferayProjectImporter[] importers = LiferayCore.getImporters();
 
         for( ILiferayProjectImporter importer : importers )
         {
-            if( importer.canImport( location ) )
+            IStatus status = importer.canImport( location );
+
+            if( status.isOK() )
             {
-                buildType = importer.getBuildType();
+                retval = StatusBridge.create( Status.createStatus( Severity.OK, importer.getBuildType() ) );
                 break;
+            }
+            else if( status.getSeverity() == IStatus.WARNING )
+            {
+                retval = StatusBridge.create( Status.createStatus( Severity.ERROR, status.getMessage() ) );
+                break;
+            }
+            else
+            {
+                retval = status;
             }
         }
 
-        return buildType;
+        return retval;
     }
 
 }

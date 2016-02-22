@@ -40,11 +40,11 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
         {
             String location = path.toOSString();
 
-            String buildType = ImportLiferayModuleProjectOpMethods.getBuildType( location );
+            retval = StatusBridge.create( ImportLiferayModuleProjectOpMethods.getBuildType( location ) );
 
-            if( buildType == null )
+            if( !retval.ok() )
             {
-                retval = Status.createErrorStatus( "Project is not a recognized project type." );
+                return retval;
             }
 
             retval = StatusBridge.create( ProjectImportUtil.validatePath( location ) );

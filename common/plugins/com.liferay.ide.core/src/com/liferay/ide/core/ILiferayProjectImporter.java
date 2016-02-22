@@ -16,13 +16,14 @@ package com.liferay.ide.core;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Andy Wu
  */
 public interface ILiferayProjectImporter
 {
-    boolean canImport( String location );
+    IStatus canImport( String location );
 
     String getBuildType();
 

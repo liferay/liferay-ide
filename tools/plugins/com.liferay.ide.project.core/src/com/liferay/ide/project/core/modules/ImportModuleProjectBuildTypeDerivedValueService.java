@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.modules;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -41,9 +42,13 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
             {
                 String location = path.toOSString();
 
-                retVal = ImportLiferayModuleProjectOpMethods.getBuildType( location );
+                IStatus status = ImportLiferayModuleProjectOpMethods.getBuildType( location );
 
-                if( retVal == null )
+                if( status.isOK() )
+                {
+                    retVal = status.getMessage();
+                }
+                else
                 {
                     retVal = "";
                 }
@@ -71,6 +76,7 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
 
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
+
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {

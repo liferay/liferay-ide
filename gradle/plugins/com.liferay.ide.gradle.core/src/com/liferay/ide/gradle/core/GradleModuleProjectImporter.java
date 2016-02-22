@@ -21,6 +21,8 @@ import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 /**
  * @author Andy Wu
@@ -29,79 +31,51 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
 {
 
     @Override
-    public boolean canImport( String location )
+    public IStatus canImport( String location )
     {
-        boolean retval = false;
+        IStatus retval = new Status( IStatus.ERROR, GradleCore.PLUGIN_ID, "Project is not a recognized project type." );
 
         File file = new File( location );
 
         if( file.exists() )
         {
-            File[] childFiles = file.listFiles();
-
-            for( File child : childFiles )
+            if( findGradleFile( file ) )
             {
-                if( !child.isDirectory() )
+                retval = Status.OK_STATUS;
+            }
+
+            File parent = file.getParentFile();
+
+            while( parent != null )
+            {
+                if( findGradleFile( parent ) )
                 {
-                    child.getName().endsWith( ".gradle" );
-                    retval = true;
+                    retval =
+                        new Status( IStatus.WARNING, GradleCore.PLUGIN_ID, "gradle project is not the root project" );
+                    break;
                 }
+                parent = parent.getParentFile();
             }
         }
-
-
-        //TODO also check for all parent folders to see if anywhere in the parent hierachy has a build.gradle
 
         return retval;
 
-        //another way to detect the gradle project
+    }
 
-        /*try
+    private boolean findGradleFile( File file )
+    {
+        boolean retval = false;
+        File[] childFiles = file.listFiles();
+
+        for( File child : childFiles )
         {
-            ProjectImportConfiguration configuration = new ProjectImportConfiguration();
-            GradleDistributionWrapper from = GradleDistributionWrapper.from( GradleDistribution.fromBuild() );
-
-            configuration.setGradleDistribution( from );
-            configuration.setProjectDir( new File( location ) );
-            configuration.setApplyWorkingSets( false );
-            configuration.setWorkingSets( new ArrayList<String>() );
-
-            ProcessStreams stream = CorePlugin.processStreamsProvider().getBackgroundJobProcessStreams();
-
-            CancellationTokenSource tokenSource = GradleConnector.newCancellationTokenSource();
-
-            ProgressListener listener = new ProgressListener()
+            if( !child.isDirectory() && child.getName().endsWith( ".gradle" ) )
             {
-                public void statusChanged( ProgressEvent arg0 )
-                {
-                }
-            };
-
-            List<ProgressListener> listeners = new ArrayList<ProgressListener>();
-            listeners.add( listener );
-
-            TransientRequestAttributes transientAttributes = new TransientRequestAttributes(
-                false, stream.getOutput(), stream.getError(), null, listeners,
-                ImmutableList.<org.gradle.tooling.events.ProgressListener> of(), tokenSource.token() );
-
-            ModelRepository repository =
-                CorePlugin.modelRepositoryProvider().getModelRepository( configuration.toFixedAttributes() );
-
-            OmniGradleBuildStructure buildStructure =
-                repository.fetchGradleBuildStructure( transientAttributes, FetchStrategy.FORCE_RELOAD );
-
-            if( buildStructure.getRootProject() != null )
-            {
-                return true;
+                retval = true;
             }
-
-            return false;
         }
-        catch( Exception e )
-        {
-            return false;
-        }*/
 
+        return retval;
     }
 
     @Override

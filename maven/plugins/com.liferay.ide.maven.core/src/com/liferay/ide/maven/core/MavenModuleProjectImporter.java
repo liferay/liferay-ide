@@ -21,6 +21,8 @@ import java.io.File;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 /**
  * @author Andy Wu
@@ -29,14 +31,16 @@ public class MavenModuleProjectImporter extends AbstractLiferayProjectImporter
 {
 
     @Override
-    public boolean canImport( String location )
+    public IStatus canImport( String location )
     {
-        boolean retval = false;
+        IStatus retval =
+            new Status( IStatus.ERROR, LiferayMavenCore.PLUGIN_ID, "Project is not a recognized project type." );
+
         File pom = new File( location, "pom.xml" );
 
         if( pom.exists() )
         {
-            retval = true;
+            retval = Status.OK_STATUS;
         }
 
         return retval;
