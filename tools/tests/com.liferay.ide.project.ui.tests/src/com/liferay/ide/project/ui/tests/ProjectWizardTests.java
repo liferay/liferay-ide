@@ -147,15 +147,15 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard, Wiz
 
         page1.createSDKProject( projectName, MENU_PORTLET, true, false );
 
-        assertTrue( page1.getIncludeSimpleCodeCheckBox().isChecked() );
-        assertFalse( page1.getLaunchNewPortletWizardCheckBox().isChecked() );
+        assertTrue( page1.IsIncludeSimpleCodeCheckBoxChecked() );
+        assertFalse( page1.IsLaunchNewPortletWizardCheckBoxChecked() );
 
         page1.next();
 
         SelectPortletFrameworkPageObject<SWTWorkbenchBot> page2 =
             new SelectPortletFrameworkPageObject<SWTWorkbenchBot>( bot );
 
-        assertTrue( page2.getLiferayMVCRadio().isSelected() );
+        assertTrue( page2.IsLiferayMVCRadioSelected() );
         assertTrue( page2.isVisibleProjectNameAndDisplayName() );
 
         if( !added )

@@ -38,15 +38,16 @@ public interface UIBase
 
     public final String CHECKBOX_INCLUDE_SAMPLE_CODE = "Include sample code";
 
-    public final String MENU_DELETE = "Delete";
-
     public final String VIEW_PACKAGE_EXPLORER = "Package Explorer";
     public final String VIEW_WELCOME = "Welcome";
 
     public final String MENU_FILE = "File";
     public final String MENU_NEW = "New";
     public final String MENU_PROJECT = "Project...";
+    public final String MENU_DELETE = "Delete";
 
     public final String TEXT_BLANK = "";
+
+    public final int INDEX_DEFAULT_VALIDATION_MESSAGE = -1;
 
 }
