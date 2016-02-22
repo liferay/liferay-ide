@@ -33,8 +33,7 @@ public class MavenModuleProjectImporter extends AbstractLiferayProjectImporter
     @Override
     public IStatus canImport( String location )
     {
-        IStatus retval =
-            new Status( IStatus.ERROR, LiferayMavenCore.PLUGIN_ID, "Project is not a recognized project type." );
+        IStatus retval = null;
 
         File pom = new File( location, "pom.xml" );
 

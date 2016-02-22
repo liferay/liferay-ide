@@ -19,6 +19,7 @@ import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ProjectCore;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
@@ -39,31 +40,19 @@ public class ImportLiferayModuleProjectOpMethods
 
         monitor.beginTask( "Importing Module project...", 100 );
 
-        Status retval = null;
+        String location = op.getLocation().content().toOSString();
+
+        ILiferayProjectImporter importer = LiferayCore.getImporter( op.getBuildType().content() );
+
+        Status retval = Status.createOkStatus();
 
         try
         {
-            String location = op.getLocation().content().toOSString();
-            IStatus status = getBuildType( location );
-            ILiferayProjectImporter importer = LiferayCore.getImporter( status.getMessage() );
-
             importer.importProject( location, monitor );
-
-            retval = Status.createOkStatus();
         }
-        catch( IllegalStateException e )
+        catch( CoreException e )
         {
-            // TODO need to show the user so they know what happened and perhaps how to fix it.
-
-            final String msg = "import module project error";
-
-            ProjectCore.logError( msg, e );
-
-            retval = Status.createErrorStatus( msg, e );
-        }
-        catch( Exception e )
-        {
-
+            retval = Status.createErrorStatus( e );
         }
 
         return retval;
@@ -71,15 +60,19 @@ public class ImportLiferayModuleProjectOpMethods
 
     public static IStatus getBuildType( String location )
     {
-        IStatus retval = StatusBridge.create( Status.createStatus( Severity.ERROR, "no importers found" ) );
+        IStatus retval = null;
 
-        ILiferayProjectImporter[] importers = LiferayCore.getImporters();
+        final ILiferayProjectImporter[] importers = LiferayCore.getImporters();
 
         for( ILiferayProjectImporter importer : importers )
         {
-            IStatus status = importer.canImport( location );
+            final IStatus status = importer.canImport( location );
 
-            if( status.isOK() )
+            if( status == null )
+            {
+                retval = ProjectCore.createErrorStatus( "Location is not recognized as a valid project type." );
+            }
+            else if( status.isOK() )
             {
                 retval = StatusBridge.create( Status.createStatus( Severity.OK, importer.getBuildType() ) );
                 break;
@@ -89,10 +82,11 @@ public class ImportLiferayModuleProjectOpMethods
                 retval = StatusBridge.create( Status.createStatus( Severity.ERROR, status.getMessage() ) );
                 break;
             }
-            else
-            {
-                retval = status;
-            }
+        }
+
+        if( retval == null )
+        {
+            retval = StatusBridge.create( Status.createStatus( Severity.ERROR, "No project importers found." ) );
         }
 
         return retval;

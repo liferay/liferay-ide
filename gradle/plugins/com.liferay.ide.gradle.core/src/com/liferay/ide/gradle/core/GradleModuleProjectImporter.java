@@ -33,7 +33,7 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
     @Override
     public IStatus canImport( String location )
     {
-        IStatus retval = new Status( IStatus.ERROR, GradleCore.PLUGIN_ID, "Project is not a recognized project type." );
+        IStatus retval = null;
 
         File file = new File( location );
 
@@ -50,10 +50,12 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
             {
                 if( findGradleFile( parent ) )
                 {
-                    retval =
-                        new Status( IStatus.WARNING, GradleCore.PLUGIN_ID, "gradle project is not the root project" );
+                    retval = new Status(
+                        IStatus.WARNING, GradleCore.PLUGIN_ID,
+                        "Location is not the root location of a multi-module project." );
                     break;
                 }
+
                 parent = parent.getParentFile();
             }
         }
