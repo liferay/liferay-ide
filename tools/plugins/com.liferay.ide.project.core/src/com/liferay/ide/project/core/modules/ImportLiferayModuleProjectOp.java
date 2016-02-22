@@ -56,7 +56,7 @@ public interface ImportLiferayModuleProjectOp extends ExecutableElement
 
     @Derived
     @Service( impl = ImportModuleProjectBuildTypeDerivedValueService.class )
-    ValueProperty PROP_BUILD_TYPE = new ValueProperty( TYPE, "BuildType" ); //$NON-NLS-1$
+    ValueProperty PROP_BUILD_TYPE = new ValueProperty( TYPE, "BuildType" );
 
     Value<String> getBuildType();
     void setBuildType( String value );

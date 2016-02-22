@@ -76,7 +76,6 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
 
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
-
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
