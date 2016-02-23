@@ -34,12 +34,6 @@ import org.eclipse.wst.server.core.ServerCore;
 public class ServicePossibleValuesService extends PossibleValuesService
 {
     @Override
-    public Status problem( final Value<?> value )
-    {
-        return Status.createOkStatus();
-    }
-
-    @Override
     protected void compute( final Set<String> values )
     {
         final NewLiferayModuleProjectOp op = op();
@@ -99,5 +93,11 @@ public class ServicePossibleValuesService extends PossibleValuesService
     private NewLiferayModuleProjectOp op()
     {
         return context( NewLiferayModuleProjectOp.class );
+    }
+
+    @Override
+    public Status problem( final Value<?> value )
+    {
+        return Status.createOkStatus();
     }
 }

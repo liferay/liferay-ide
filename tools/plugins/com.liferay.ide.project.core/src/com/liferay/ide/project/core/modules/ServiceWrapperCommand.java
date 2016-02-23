@@ -36,24 +36,7 @@ public class ServiceWrapperCommand
         _server = server;
     }
 
-    public String[] getServiceWrapper() throws Exception
-    {
-
-        if( _server == null )
-        {
-            return getStaticServiceWrapper();
-        }
-        else
-        {
-            String[] wrappers = getDynamicServiceWrapper();
-            updateServiceWrapperStaticFile( wrappers );
-
-            return wrappers;
-        }
-    }
-
-    @SuppressWarnings( "unchecked" )
-    public String[] getStaticServiceWrapper() throws Exception
+    private File checkStaticWrapperFile() throws IOException
     {
         final URL url =
             FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/wrappers-static.json" ) );
@@ -61,15 +44,10 @@ public class ServiceWrapperCommand
 
         if( servicesFile.exists() )
         {
-            final ObjectMapper mapper = new ObjectMapper();
-
-            List<String> map = mapper.readValue( servicesFile, List.class );
-            String[] wrappers = map.toArray( new String[0] );
-
-            return wrappers;
+            return servicesFile;
         }
 
-        throw new FileNotFoundException( "can't find static services file wrapper-static.json" );
+        throw new FileNotFoundException( "can't find static services file wrappers-static.json" );
     }
 
     public String[] getDynamicServiceWrapper()
@@ -132,6 +110,42 @@ public class ServiceWrapperCommand
         return wrapperList.toArray( new String[0] );
     }
 
+    public String[] getServiceWrapper() throws Exception
+    {
+
+        if( _server == null )
+        {
+            return getStaticServiceWrapper();
+        }
+        else
+        {
+            String[] wrappers = getDynamicServiceWrapper();
+            updateServiceWrapperStaticFile( wrappers );
+
+            return wrappers;
+        }
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public String[] getStaticServiceWrapper() throws Exception
+    {
+        final URL url =
+            FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/wrappers-static.json" ) );
+        final File servicesFile = new File( url.getFile() );
+
+        if( servicesFile.exists() )
+        {
+            final ObjectMapper mapper = new ObjectMapper();
+
+            List<String> map = mapper.readValue( servicesFile, List.class );
+            String[] wrappers = map.toArray( new String[0] );
+
+            return wrappers;
+        }
+
+        throw new FileNotFoundException( "can't find static services file wrapper-static.json" );
+    }
+
     private void updateServiceWrapperStaticFile( final String[] wrapperList ) throws Exception
     {
         final File wrappersFile = checkStaticWrapperFile();
@@ -158,19 +172,5 @@ public class ServiceWrapperCommand
 
         job.schedule();
 
-    }
-
-    private File checkStaticWrapperFile() throws IOException
-    {
-        final URL url =
-            FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/wrappers-static.json" ) );
-        final File servicesFile = new File( url.getFile() );
-
-        if( servicesFile.exists() )
-        {
-            return servicesFile;
-        }
-
-        throw new FileNotFoundException( "can't find static services file wrappers-static.json" );
     }
 }
