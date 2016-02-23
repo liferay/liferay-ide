@@ -40,7 +40,6 @@ public class SDKImportDerivedValueService extends DerivedValueService
 
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
-
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {

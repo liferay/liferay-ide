@@ -43,6 +43,7 @@ public interface ParentSDKProjectImportOp extends ExecutableElement
     ElementType TYPE = new ElementType( ParentSDKProjectImportOp.class );
 
     // *** Location ***
+
     @Type( base = Path.class )
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
@@ -52,19 +53,17 @@ public interface ParentSDKProjectImportOp extends ExecutableElement
     ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" ); //$NON-NLS-1$
 
     Value<Path> getSdkLocation();
-
     void setSdkLocation( String value );
-
     void setSdkLocation( Path value );
 
     // *** SDK Version ***
+
     @Label( standard = "SDK Version" )
     @Derived
     @Service( impl = SDKImportDerivedValueService.class )
     ValueProperty PROP_SDK_VERSION = new ValueProperty( TYPE, "SdkVersion" ); //$NON-NLS-1$
 
     Value<String> getSdkVersion();
-
     void setSdkVersion( String value );
 
     @Override
