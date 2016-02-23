@@ -28,6 +28,7 @@ import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Simon Jiang
+ * @author Lovett Li
  */
 
 public class ServicePossibleValuesService extends PossibleValuesService
@@ -41,30 +42,63 @@ public class ServicePossibleValuesService extends PossibleValuesService
     @Override
     protected void compute( final Set<String> values )
     {
+        NewLiferayModuleProjectOp op = op();
+        String temple = op.getProjectTemplateName().toString();
         IServer runningServer = null;
         final IServer[] servers = ServerCore.getServers();
 
-        for( IServer server : servers )
+        if( temple.equals( "servicewrapper" ) )
         {
-            if( server.getServerState() == IServer.STATE_STARTED &&
-                server.getServerType().getId().equals( "com.liferay.ide.server.portal" ) )
+            for( IServer server : servers )
             {
-                runningServer = server;
-                break;
+                if( server.getServerType().getId().equals( "com.liferay.ide.server.portal" ) )
+                {
+                    runningServer = server;
+                    break;
+                }
+            }
+
+            try
+            {
+                String[] serviceWrapperList = new ServiceWrapperCommand( runningServer ).getServiceWrapper();
+                values.addAll( Arrays.asList( serviceWrapperList ) );
+            }
+            catch( Exception e )
+            {
+                ProjectCore.logError( "Get servicewrapper list error. ", e );
+            }
+
+        }
+        else
+        {
+            for( IServer server : servers )
+            {
+                if( server.getServerState() == IServer.STATE_STARTED &&
+                    server.getServerType().getId().equals( "com.liferay.ide.server.portal" ) )
+                {
+                    runningServer = server;
+                    break;
+                }
+            }
+
+            try
+            {
+                ServiceCommand serviceCommand = new ServiceCommand( runningServer );
+
+                String[] allServices = serviceCommand.execute();
+
+                values.addAll( Arrays.asList( allServices ) );
+            }
+            catch( Exception e )
+            {
+                ProjectCore.logError( "Get services list error. ", e );
             }
         }
 
-        try
-        {
-            ServiceCommand serviceCommand = new ServiceCommand( runningServer );
+    }
 
-            String[] allServices = serviceCommand.execute();
-
-            values.addAll( Arrays.asList( allServices ) );
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "Get services list error. ", e );
-        }
+    private NewLiferayModuleProjectOp op()
+    {
+        return context( NewLiferayModuleProjectOp.class );
     }
 }
