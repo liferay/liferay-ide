@@ -22,6 +22,7 @@ import com.liferay.ide.core.LiferayCore;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -893,4 +894,17 @@ public class PropertiesUtil
             return null;
         }
     }
+
+    public static void saveProperties( Properties props, File bladeSettings )
+    {
+        try(FileOutputStream fos = new FileOutputStream( bladeSettings );)
+        {
+            props.store( fos, "" );
+        }
+        catch( Exception e )
+        {
+            LiferayCore.logError( "Could not save file " + bladeSettings.getName() );
+        }
+    }
+
 }
