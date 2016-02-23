@@ -30,14 +30,34 @@ public class TextPageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
         this( bot, 0 );
     }
 
+    public TextPageObject( SWTBot bot, int index )
+    {
+        super( bot, index );
+    }
+
     public TextPageObject( SWTBot bot, String label )
     {
         super( bot, label );
     }
 
-    public TextPageObject( SWTBot bot, int index )
+    @Override
+    protected AbstractSWTBot<?> getWidget()
     {
-        super( bot, index );
+        if( label == null )
+        {
+            return bot.text( index );
+        }
+
+        return bot.textWithLabel( label );
+    }
+
+    public boolean isEnabled()
+    {
+        AbstractSWTBot<? extends Widget> widget = getWidget();
+
+        SWTBotText swtBotText = (SWTBotText) widget;
+
+        return swtBotText.isEnabled();
     }
 
     public void setText( String text )
@@ -51,15 +71,10 @@ public class TextPageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
         swtBotText.setText( text );
     }
 
-    @Override
-    protected AbstractSWTBot<?> getWidget()
+    public void setTextWithoutLabel( String text )
     {
-        if( label == null )
-        {
-            return bot.text( index );
-        }
+        bot.text().setText( text );
 
-        return bot.textWithLabel( label );
     }
 
 }

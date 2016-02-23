@@ -24,7 +24,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.liferay.ide.project.ui.tests.page.CreateLiferayPortletWizardPageObject;
 import com.liferay.ide.project.ui.tests.page.CreateProjectWizardPageObject;
 import com.liferay.ide.project.ui.tests.page.ProjectTreePageObject;
 import com.liferay.ide.project.ui.tests.page.ProjectWizard;
@@ -34,6 +33,7 @@ import com.liferay.ide.project.ui.tests.page.ThemeWizardPageObject;
 import com.liferay.ide.ui.tests.SWTBotBase;
 import com.liferay.ide.ui.tests.UITestsUtils;
 import com.liferay.ide.ui.tests.swtbot.page.EditorPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.ShellPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextEditorPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TreePageObject;
@@ -291,8 +291,13 @@ public class ProjectWizardTests extends SWTBotBase implements ProjectWizard
 
         page1.finish();
 
-        CreateLiferayPortletWizardPageObject<SWTWorkbenchBot> newPortletPage =
-            new CreateLiferayPortletWizardPageObject<SWTWorkbenchBot>( bot, "New Liferay Portlet" );
+        ShellPageObject<SWTWorkbenchBot> newPortletPage =
+            new ShellPageObject<SWTWorkbenchBot>( bot, "New Liferay Portlet" )
+            {
+            };
+
+        // CreateLiferayPortletWizardPageObject<SWTWorkbenchBot> newPortletPage = new
+        // CreateLiferayPortletWizardPageObject<SWTWorkbenchBot>( bot, "New Liferay Portlet" );
 
         newPortletPage.waitForPageToOpen();
 

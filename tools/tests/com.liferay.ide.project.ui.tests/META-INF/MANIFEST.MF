@@ -13,7 +13,8 @@ Require-Bundle: org.junit,
  org.eclipse.swtbot.go,
  org.apache.commons.lang;bundle-version="2.6.0",
  com.liferay.blade.api,
- com.liferay.ide.ui.tests
+ com.liferay.ide.ui.tests;bundle-version="3.0.0",
+ org.eclipse.swtbot.swt.finder
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.liferay.ide.project.ui.tests,
  com.liferay.ide.project.ui.tests.page

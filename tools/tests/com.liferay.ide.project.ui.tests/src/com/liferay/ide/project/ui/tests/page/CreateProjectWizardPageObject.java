@@ -80,6 +80,7 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
 
     public void createSDKProject( String projectName, String pluginType )
     {
+
         createSDKProject( projectName, TEXT_BLANK, pluginType );
     }
 
@@ -140,6 +141,21 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
 
     }
 
+    public String getBuildTypeComboBox()
+    {
+        return buildTypeComboBox.getText();
+    }
+
+    public String getPluginTypeComboBox()
+    {
+        return pluginTypeComboBox.getText();
+    }
+
+    public String getProjectNameText()
+    {
+        return projectNameText.getText();
+    }
+
     public boolean IsIncludeSimpleCodeCheckBoxChecked()
     {
         return includeSimpleCodeCheckBox.isChecked();
@@ -148,6 +164,21 @@ public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageO
     public boolean IsLaunchNewPortletWizardCheckBoxChecked()
     {
         return launchNewPortletWizardCheckBox.isChecked();
+    }
+
+    public void setBuildTypeComboBox( ComboBoxPageObject<SWTBot> buildTypeComboBox )
+    {
+        this.buildTypeComboBox = buildTypeComboBox;
+    }
+
+    public void setPluginTypeComboBox( ComboBoxPageObject<SWTBot> pluginTypeComboBox )
+    {
+        this.pluginTypeComboBox = pluginTypeComboBox;
+    }
+
+    public void setProjectNameText( TextPageObject<SWTBot> projectNameText )
+    {
+        this.projectNameText = projectNameText;
     }
 
 }

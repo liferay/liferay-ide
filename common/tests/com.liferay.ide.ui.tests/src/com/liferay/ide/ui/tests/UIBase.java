@@ -24,17 +24,27 @@ public interface UIBase
 {
 
     public final String BUTTON_BACK = "< Back";
-    public final String BUTTON_BROWSE = "Browse...";
+    public final String BUTTON_FINISH = "Finish";
     public final String BUTTON_CANCEL = "Cancel";
     public final String BUTTON_DELETE = "Delete";
-    public final String BUTTON_FINISH = "Finish";
-    public final String BUTTON_HELP = "Help";
     public final String BUTTON_NEXT = "Next >";
     public final String BUTTON_OK = "OK";
+    public final String BUTTON_HELP = "Help";
+    public final String BUTTON_BROWSE = "Browse...";
+    public final String BUTTON_YES = "Yes";
+    public final String BUTTON_NO = "No";
+    public final String BUTTON_ADD = "Add...";
+    public final String BUTTON_REMOVE = "Remove";
 
     public final String CHECKBOX_INCLUDE_SAMPLE_CODE = "Include sample code";
 
     public final String VIEW_PACKAGE_EXPLORER = "Package Explorer";
     public final String VIEW_WELCOME = "Welcome";
+
+    public final String MENU_FILE = "File";
+    public final String MENU_NEW = "New";
+    public final String MENU_PROJECT = "Project...";
+
+    public final String TEXT_BLANK = "";
 
 }

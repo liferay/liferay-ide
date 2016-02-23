@@ -39,6 +39,7 @@ public class WizardPageObject<T extends SWTBot> extends CancelPageObject<T>
         this.backButtonText = backButtonText;
 
         this.nextButtonText = nextButtonText;
+
     }
 
     public WizardPageObject(
@@ -56,16 +57,6 @@ public class WizardPageObject<T extends SWTBot> extends CancelPageObject<T>
         this.validationMessageIndex = validationMessageIndex;
     }
 
-    public void finish()
-    {
-        clickClosingButton( finishButton() );
-    }
-
-    protected SWTBotButton finishButton()
-    {
-        return bot.button( finishButtonText );
-    }
-
     public void back()
     {
         clickButton( backButton() );
@@ -74,6 +65,32 @@ public class WizardPageObject<T extends SWTBot> extends CancelPageObject<T>
     protected SWTBotButton backButton()
     {
         return bot.button( backButtonText );
+    }
+
+    public void finish()
+    {
+        clickClosingButton( finishButton() );
+        
+        sleep();
+    }
+
+    protected SWTBotButton finishButton()
+    {
+        return bot.button( finishButtonText );
+    }
+
+    public String getValidationMessage()
+    {
+        sleep();
+
+        if( validationMessageIndex < 0 )
+        {
+            log.error( "Validation Message Index error" );
+
+            return null;
+        }
+
+        return bot.text( validationMessageIndex ).getText();
     }
 
     public void next()
@@ -91,17 +108,4 @@ public class WizardPageObject<T extends SWTBot> extends CancelPageObject<T>
         this.title = title;
     }
 
-    public String getValidationMessage()
-    {
-        sleep();
-
-        if( validationMessageIndex < 0 )
-        {
-            log.error( "Validation Message Index error" );
-
-            return null;
-        }
-
-        return bot.text( validationMessageIndex ).getText();
-    }
 }

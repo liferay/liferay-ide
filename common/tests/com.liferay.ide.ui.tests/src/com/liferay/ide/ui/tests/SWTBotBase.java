@@ -23,6 +23,8 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.swt.SWT;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
@@ -44,6 +46,9 @@ public class SWTBotBase implements UIBase
 
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
     private static IPath liferayBundlesPath;
+
+    protected KeyStroke ctrl = KeyStroke.getInstance( SWT.CTRL, 0 );
+    protected KeyStroke N = KeyStroke.getInstance( 'N' );
 
     public static SWTWorkbenchBot bot;
 
@@ -76,15 +81,60 @@ public class SWTBotBase implements UIBase
         labelBot = new LabelBot( bot );
         radioBot = new RadioBot( bot );
 
-        viewBot.close( VIEW_WELCOME );
-        bot.perspectiveByLabel( "Liferay" ).activate();
+        try
+        {
+            viewBot.close( VIEW_WELCOME );
+            bot.perspectiveByLabel( "Liferay" ).activate();
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
 
         SWTBotPreferences.TIMEOUT = 30000;
 
-        setupPluginsSDK();
+        SWTBotPreferences.KEYBOARD_LAYOUT = "EN_US";
+
+        unzipPluginsSDK();
+
     }
 
-    private static void setupPluginsSDK() throws IOException
+    protected static IPath getIvyCacheZip()
+    {
+        return getLiferayBundlesPath().append( "ivy-cache.zip" );
+    }
+
+    protected static IPath getLiferayBundlesPath()
+    {
+        if( liferayBundlesPath == null )
+        {
+            liferayBundlesPath = new Path( liferayBundlesDir );
+        }
+
+        return liferayBundlesPath;
+    }
+
+    protected static IPath getLiferayPluginsSdkDir()
+    {
+        return LiferayUIPlugin.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
+    }
+
+    protected static String getLiferayPluginsSdkName()
+    {
+        return "liferay-plugins-sdk-6.2";
+    }
+
+    protected static IPath getLiferayPluginsSDKZip()
+    {
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.zip" );
+    }
+
+    protected static String getLiferayPluginsSdkZipFolder()
+    {
+        return "liferay-plugins-sdk-6.2/";
+    }
+
+    protected static void unzipPluginsSDK() throws IOException
     {
         FileUtil.deleteDir( getLiferayPluginsSdkDir().toFile(), true );
         final File liferayPluginsSdkZipFile = getLiferayPluginsSDKZip().toFile();
@@ -138,41 +188,6 @@ public class SWTBotBase implements UIBase
     protected void sleep( long millis )
     {
         bot.sleep( millis );
-    }
-
-    protected static IPath getLiferayBundlesPath()
-    {
-        if( liferayBundlesPath == null )
-        {
-            liferayBundlesPath = new Path( liferayBundlesDir );
-        }
-
-        return liferayBundlesPath;
-    }
-
-    protected static IPath getIvyCacheZip()
-    {
-        return getLiferayBundlesPath().append( "ivy-cache.zip" );
-    }
-
-    protected static IPath getLiferayPluginsSDKZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.zip" );
-    }
-
-    protected static String getLiferayPluginsSdkZipFolder()
-    {
-        return "liferay-plugins-sdk-6.2/";
-    }
-
-    protected static String getLiferayPluginsSdkName()
-    {
-        return "liferay-plugins-sdk-6.2";
-    }
-
-    protected static IPath getLiferayPluginsSdkDir()
-    {
-        return LiferayUIPlugin.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
     }
 
 }

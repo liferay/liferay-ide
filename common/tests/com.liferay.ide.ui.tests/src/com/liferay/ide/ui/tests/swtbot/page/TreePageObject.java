@@ -57,11 +57,6 @@ public class TreePageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
         return subNodes;
     }
 
-    public SWTBotTreeItem getItem( String nodeText )
-    {
-        return getTree().getTreeItem( nodeText );
-    }
-
     public String[] getSelection()
     {
         selection = getTree().selection();
@@ -74,17 +69,6 @@ public class TreePageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
         }
 
         return elements;
-    }
-
-    public void selectTreeItem( String... items )
-    {
-        SWTBotTreeItem treeItem = getTree().getTreeItem( items[0] ).expand();
-
-        for( int i = 1; i < items.length; i++ )
-        {
-            treeItem = treeItem.getNode( items[i] ).expand();
-        }
-        treeItem.select();
     }
 
     protected SWTBotTree getTree()
@@ -100,6 +84,18 @@ public class TreePageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
     public void selectMulty( final String... items )
     {
         getTree().select( items );
+    }
+
+    public void selectTreeItem( String... items )
+    {
+        SWTBotTreeItem treeItem = getTree().getTreeItem( items[0] );
+
+        for( int i = 1; i < items.length; i++ )
+        {
+            treeItem.expand();
+            treeItem = treeItem.getNode( items[i] ).expand();
+        }
+        treeItem.select();
     }
 
     public void unSelect()

@@ -25,7 +25,9 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.ui.console,
  org.eclipse.swtbot.swt.finder,
  com.liferay.ide.ui,
- org.apache.log4j
+ org.apache.log4j,
+ org.eclipse.ui.workbench,
+ org.eclipse.jface
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.ui.tests,

@@ -19,6 +19,7 @@ import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 
 /**
  * @author Terry Jia
+ * @author Ashley Yuan
  */
 public class ToolbarBot extends Bot
 {
@@ -28,11 +29,29 @@ public class ToolbarBot extends Bot
         super( bot );
     }
 
+    public void menuClick( String tooltip )
+    {
+        sleep();
+
+        bot.toolbarDropDownButtonWithTooltip( tooltip ).click();
+
+        sleep();
+    }
+
     public void menuClick( String tooltip, String menuItem )
     {
-        sleep( 3000 );
+        sleep();
 
         bot.toolbarDropDownButtonWithTooltip( tooltip ).menuItem( menuItem ).click();
+
+        sleep();
+    }
+
+    public void menuClick( String menu1, String menu2, String menu3 )
+    {
+        sleep();
+
+        bot.menu( menu1 ).menu( menu2 ).menu( menu3 ).click();
 
         sleep();
     }

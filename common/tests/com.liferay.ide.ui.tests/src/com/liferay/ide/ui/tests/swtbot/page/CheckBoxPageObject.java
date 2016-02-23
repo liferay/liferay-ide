@@ -59,6 +59,15 @@ public class CheckBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
         return checkBox.isChecked();
     }
 
+    public boolean isEnabled()
+    {
+        AbstractSWTBot<? extends Widget> widget = getWidget();
+
+        SWTBotCheckBox checkBox = (SWTBotCheckBox) widget;
+
+        return checkBox.isEnabled();
+    }
+
     public void select()
     {
         AbstractSWTBot<? extends Widget> widget = getWidget();
