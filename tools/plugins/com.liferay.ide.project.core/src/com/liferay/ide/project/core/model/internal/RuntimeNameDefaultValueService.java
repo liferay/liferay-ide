@@ -34,6 +34,8 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
     static final String NONE = "<None>";
 
+    private static IRuntime newRuntime = null;
+
     @Override
     protected void initDefaultValueService()
     {
@@ -69,7 +71,26 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
             Arrays.sort( vals );
 
-            value = vals[ vals.length - 1 ];
+            if( newRuntime != null )
+            {
+                for( String runtimeName : values )
+                {
+                    if (runtimeName.equals( newRuntime.getName() )) {
+                        value = newRuntime.getName();
+
+                        break;
+                    }
+                }
+
+                if( value == null )
+                {
+                    value = vals[vals.length - 1];
+                }
+            }
+            else
+            {
+                value = vals[vals.length - 1];
+            }
         }
         else
         {
@@ -81,7 +102,9 @@ public class RuntimeNameDefaultValueService extends DefaultValueService implemen
 
     public void runtimeAdded( IRuntime runtime )
     {
+        newRuntime = runtime;
         refresh();
+        newRuntime = null;
     }
 
     public void runtimeChanged( IRuntime runtime )

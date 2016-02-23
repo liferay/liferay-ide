@@ -55,10 +55,13 @@ public class PortalRuntimeWizard extends WizardFragment
     @Override
     public void enter()
     {
-        final IRuntimeWorkingCopy runtime =
-            (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
+        if( this.composite != null )
+        {
+            final IRuntimeWorkingCopy runtime =
+                (IRuntimeWorkingCopy) getTaskModel().getObject( TaskModel.TASK_RUNTIME );
 
-        this.composite.setRuntime( runtime );
+            this.composite.setRuntime( runtime );
+        }
     }
 
     public void exit()
