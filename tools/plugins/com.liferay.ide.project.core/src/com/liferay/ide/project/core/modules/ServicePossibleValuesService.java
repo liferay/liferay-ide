@@ -31,7 +31,6 @@ import org.eclipse.wst.server.core.ServerCore;
  * @author Simon Jiang
  * @author Lovett Li
  */
-
 public class ServicePossibleValuesService extends PossibleValuesService
 {
     @Override
@@ -43,12 +42,12 @@ public class ServicePossibleValuesService extends PossibleValuesService
     @Override
     protected void compute( final Set<String> values )
     {
-        NewLiferayModuleProjectOp op = op();
-        String temple = op.getProjectTemplateName().toString();
+        final NewLiferayModuleProjectOp op = op();
+        final String template = op.getProjectTemplateName().toString();
         IServer runningServer = null;
         final IServer[] servers = ServerCore.getServers();
 
-        if( temple.equals( "servicewrapper" ) )
+        if( template.equals( "servicewrapper" ) )
         {
             for( IServer server : servers )
             {
@@ -66,9 +65,8 @@ public class ServicePossibleValuesService extends PossibleValuesService
             }
             catch( Exception e )
             {
-                ProjectCore.logError( "Get servicewrapper list error. ", e );
+                //ignore
             }
-
         }
         else
         {
