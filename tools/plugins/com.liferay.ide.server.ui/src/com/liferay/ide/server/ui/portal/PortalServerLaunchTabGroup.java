@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.server.ui.portal;
 
+import com.liferay.ide.server.core.portal.PortalServer;
+
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTabGroup;
 import org.eclipse.debug.ui.CommonTab;
 import org.eclipse.debug.ui.EnvironmentTab;
@@ -40,7 +42,7 @@ public class PortalServerLaunchTabGroup extends AbstractLaunchConfigurationTabGr
     {
         final ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[]
         {
-            new ServerLaunchConfigurationTab( new String[] { "com.liferay.ide.server.portal" } ),
+            new ServerLaunchConfigurationTab( new String[] { PortalServer.ID } ),
             new JavaArgumentsTab(),
             new JavaClasspathTab(),
             new SourceLookupTab(),

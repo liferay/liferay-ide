@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.portal.PortalServer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -173,7 +174,7 @@ public class NewLiferayModuleProjectOpMethods extends BaseOpMethods
         for( IServer server : servers )
         {
             if( server.getServerState() == IServer.STATE_STARTED &&
-                server.getServerType().getId().equals( "com.liferay.ide.server.portal" ) )
+                server.getServerType().getId().equals( PortalServer.ID ) )
             {
                 runningServer = server;
                 break;

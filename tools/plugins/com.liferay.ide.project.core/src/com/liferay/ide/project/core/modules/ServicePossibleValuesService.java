@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.portal.PortalServer;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -51,7 +52,7 @@ public class ServicePossibleValuesService extends PossibleValuesService
         {
             for( IServer server : servers )
             {
-                if( server.getServerType().getId().equals( "com.liferay.ide.server.portal" ) )
+                if( server.getServerType().getId().equals( PortalServer.ID ) )
                 {
                     runningServer = server;
                     break;
@@ -74,7 +75,7 @@ public class ServicePossibleValuesService extends PossibleValuesService
             for( IServer server : servers )
             {
                 if( server.getServerState() == IServer.STATE_STARTED &&
-                    server.getServerType().getId().equals( "com.liferay.ide.server.portal" ) )
+                    server.getServerType().getId().equals( PortalServer.ID ) )
                 {
                     runningServer = server;
                     break;
