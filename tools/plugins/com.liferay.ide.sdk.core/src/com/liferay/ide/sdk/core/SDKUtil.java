@@ -272,7 +272,12 @@ public class SDKUtil
         return false;
     }
 
-    public static void openAsProject( SDK sdk )
+    public static void openAsProject( SDK sdk ) throws CoreException
+    {
+        openAsProject( sdk, new NullProgressMonitor() );
+    }
+
+    public static void openAsProject( SDK sdk, IProgressMonitor monitor ) throws CoreException
     {
         final IProject sdkProject = CoreUtil.getProject( sdk.getName() );
 
@@ -283,21 +288,19 @@ public class SDKUtil
             final IProjectDescription description = workspace.newProjectDescription( sdk.getLocation().lastSegment() );
             description.setLocationURI( sdk.getLocation().toFile().toURI() );
 
-            IProgressMonitor npm = new NullProgressMonitor();
+            sdkProject.create( description, monitor );
 
-            try
+            IPath settingFolderPath = sdkProject.getLocation().append( ".settings" );
+            File settingFolder = settingFolderPath.toFile();
+
+            if( !settingFolder.exists() )
             {
-                sdkProject.create( description, npm );
+                settingFolder.mkdir();
+            }
 
-                IPath settingFolderPath = sdkProject.getLocation().append( ".settings" );
-                File settingFolder = settingFolderPath.toFile();
-
-                if( !settingFolder.exists() )
-                {
-                    settingFolder.mkdir();
-                }
-
-                if( !settingFolderPath.append( "org.eclipse.wst.validation.prefs" ).toFile().exists() )
+            if( !settingFolderPath.append( "org.eclipse.wst.validation.prefs" ).toFile().exists() )
+            {
+                try
                 {
                     URL url =
                         FileLocator.toFileURL( SDKCorePlugin.getDefault().getBundle().getEntry(
@@ -307,13 +310,12 @@ public class SDKUtil
 
                     FileUtil.copyFileToDir( file, settingFolder );
                 }
+                catch( IOException e )
+                {
+                }
+            }
 
-                sdkProject.open( npm );
-            }
-            catch( Exception e )
-            {
-                SDKCorePlugin.logError( e );
-            }
+            sdkProject.open( monitor );
         }
     }
 

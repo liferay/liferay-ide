@@ -15,14 +15,12 @@
 
 package com.liferay.ide.project.core.model;
 
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -51,23 +49,16 @@ public class ParentSDKProjectImportOpMethods
             return Status.createErrorStatus( "SDK folder cannot be empty" );
         }
 
-        final Job job = new WorkspaceJob( "Importing Liferay Parent SDK Project...")
+        final SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
+
+        try
         {
-
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-            {
-                IStatus retval = StatusBridge.create( Status.createOkStatus() );
-
-                final SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
-
-                SDKUtil.openAsProject( sdk );
-
-                return retval;
-            }
-        };
-
-        job.schedule();
+            SDKUtil.openAsProject( sdk, monitor );
+        }
+        catch( CoreException e )
+        {
+            retval = StatusBridge.create( ProjectCore.createErrorStatus( e ) );
+        }
 
         return retval;
     }
