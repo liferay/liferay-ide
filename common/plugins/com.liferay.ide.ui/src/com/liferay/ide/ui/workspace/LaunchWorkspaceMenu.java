@@ -44,10 +44,6 @@ public class LaunchWorkspaceMenu extends ExtensionContributionFactory
     {
         final MenuManager menu = new MenuManager( "Launch Workspace" );
 
-        //menu.add( new LaunchLiferay7WorkspaceAction() );
-
-        //menu.add( new Separator() );
-
         final IContributionItem[] workspaceHistoryItems = buildWorkspaceHistory( serviceLocator );
 
         for( IContributionItem workspaceHistoryItem : workspaceHistoryItems )
