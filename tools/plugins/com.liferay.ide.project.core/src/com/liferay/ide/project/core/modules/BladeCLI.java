@@ -215,7 +215,7 @@ public class BladeCLI
 
         try
         {
-            File[] files = repo.get( "com.liferay.blade.cli", "latest" );
+            File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
 
             File agentJar = files[0];
 
