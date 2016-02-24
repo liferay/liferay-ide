@@ -34,7 +34,6 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
     public String[] getAvailableComboValues()
     {
-
         AbstractSWTBot<? extends Widget> widget = getWidget();
 
         SWTBotCombo swtBotCombo = (SWTBotCombo) widget;

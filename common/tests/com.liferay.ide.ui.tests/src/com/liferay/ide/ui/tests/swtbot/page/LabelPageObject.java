@@ -31,7 +31,7 @@ public class LabelPageObject<T extends SWTBot> extends AbstractWidgetPageObject<
     }
 
     @Override
-    protected  SWTBotLabel getWidget()
+    protected SWTBotLabel getWidget()
     {
         return bot.label( label );
     }
