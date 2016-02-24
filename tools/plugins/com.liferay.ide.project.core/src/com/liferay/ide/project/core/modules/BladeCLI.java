@@ -14,6 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
+import aQute.bnd.deployer.repository.FixedIndexedRepo;
+import aQute.bnd.osgi.Processor;
+
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
 import com.liferay.ide.core.util.FileUtil;
@@ -21,7 +24,6 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.ParseException;
@@ -45,9 +47,6 @@ import org.apache.tools.ant.taskdefs.Java;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import aQute.bnd.deployer.repository.FixedIndexedRepo;
-import aQute.bnd.osgi.Processor;
-
 /**
  * @author Gregory Amerson
  * @author Andy Wu
@@ -60,8 +59,8 @@ public class BladeCLI
     static File settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
     static File repoCache = new File( settingsDir, "repoCache" );
     static String repoUrl = "https://liferay-test-01.ci.cloudbees.com/job/blade.tools/lastSuccessfulBuild/artifact/p2_build/generated/p2/index.xml.gz";
-    static String keyTimeStamp = "timestamp";
-    static String keyLocalJar = "localjar";
+    static String localJarKey = "localjar";
+    static String timeStampKey = "up2date.check";
     static File repoUrlCacheDir = new File(repoCache,"https%3A%2F%2Fliferay-test-01.ci.cloudbees.com%2Fjob%2Fblade.tools%2FlastSuccessfulBuild%2Fartifact%2Fp2_build%2Fgenerated%2Fp2%2Fplugins");
 
     public static String checkForErrors( String[] lines )
@@ -127,44 +126,43 @@ public class BladeCLI
 
     public static synchronized IPath getBladeCLIPath() throws BladeCLIException
     {
-        IPath stateLocation = ProjectCore.getDefault().getStateLocation();
-        File bladeSettings = new File( stateLocation.toFile(), "BladeSettings.properties" );
-        SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmm" );
+        final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
+        final File bladeCacheSettings = new File( stateLocation.toFile(), "blade-cache.properties" );
+        final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmm" );
 
-        if( !bladeSettings.exists() )
+        if( !bladeCacheSettings.exists() )
         {
             Properties props = new Properties();
-            String localJar = getLatestJar();
+            String localJar = getLatestRemoteBladeCLIJar();
 
-            props.setProperty( keyTimeStamp, sdf.format( new Date() ) );
-            props.setProperty( keyLocalJar, localJar );
+            props.setProperty( timeStampKey, sdf.format( new Date() ) );
+            props.setProperty( localJarKey, localJar );
 
-            PropertiesUtil.saveProperties( props, bladeSettings );
+            PropertiesUtil.saveProperties( props, bladeCacheSettings );
         }
         else
         {
-            Properties props = PropertiesUtil.loadProperties( bladeSettings );
+            Properties props = PropertiesUtil.loadProperties( bladeCacheSettings );
 
             if( props == null )
             {
-                throw new BladeCLIException( "Could not load file BladeSettings.properties." );
+                throw new BladeCLIException( "Could not load file blade-cache.properties." );
             }
 
-            String timestamp = props.getProperty( "timestamp" );
+            String up2dateCheckTimestamp = props.getProperty( timeStampKey );
             Date lastTime = null;
 
             try
             {
-                lastTime = sdf.parse( timestamp );
+                lastTime = sdf.parse( up2dateCheckTimestamp );
             }
             catch( ParseException e )
             {
-                throw new BladeCLIException( "Could not get timestamp BladeSettings.properties." );
             }
 
             if( lastTime == null )
             {
-                throw new BladeCLIException( "Could not get timestamp BladeSettings.properties." );
+                throw new BladeCLIException( "Could not get up2date check timestamp from blade-cache.properties." );
             }
 
             Date currentTime = new Date();
@@ -175,24 +173,24 @@ public class BladeCLI
 
             if( hours >= 24 )
             {
-                String localJar = getLatestJar();
+                String localJar = getLatestRemoteBladeCLIJar();
 
-                props.setProperty( keyTimeStamp, sdf.format( currentTime ) );
-                props.setProperty( keyLocalJar, localJar );
+                props.setProperty( timeStampKey, sdf.format( currentTime ) );
+                props.setProperty( localJarKey, localJar );
 
-                PropertiesUtil.saveProperties( props, bladeSettings );
+                PropertiesUtil.saveProperties( props, bladeCacheSettings );
             }
             else
             {
                 try
                 {
-                    File locaJarFile = new File( repoUrlCacheDir, props.getProperty( keyLocalJar ) );
+                    File locaJarFile = new File( repoUrlCacheDir, props.getProperty( localJarKey ) );
 
                     cachedBladeCLIPath = new Path( locaJarFile.getCanonicalPath() );
                 }
                 catch( IOException e )
                 {
-                    throw new BladeCLIException( "Could not get blade cli jar from local cachce dir." );
+                    throw new BladeCLIException( "Could not get blade cli jar from local cache dir." );
                 }
             }
         }
@@ -200,7 +198,7 @@ public class BladeCLI
         return cachedBladeCLIPath;
     }
 
-    private static String getLatestJar() throws BladeCLIException
+    private static String getLatestRemoteBladeCLIJar() throws BladeCLIException
     {
         settingsDir.mkdirs();
         repoCache.mkdirs();
