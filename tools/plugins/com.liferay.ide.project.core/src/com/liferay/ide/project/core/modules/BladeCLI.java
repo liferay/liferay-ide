@@ -54,14 +54,15 @@ import org.eclipse.core.runtime.Path;
 
 public class BladeCLI
 {
-    static IPath cachedBladeCLIPath;
+    static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
+    static final String localJarKey = "localjar";
     static String[] projectTemplateNames;
-    static File settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
-    static File repoCache = new File( settingsDir, "repoCache" );
-    static String repoUrl = "https://liferay-test-01.ci.cloudbees.com/job/blade.tools/lastSuccessfulBuild/artifact/p2_build/generated/p2/index.xml.gz";
-    static String localJarKey = "localjar";
-    static String timeStampKey = "up2date.check";
-    static File repoUrlCacheDir = new File(repoCache,"https%3A%2F%2Fliferay-test-01.ci.cloudbees.com%2Fjob%2Fblade.tools%2FlastSuccessfulBuild%2Fartifact%2Fp2_build%2Fgenerated%2Fp2%2Fplugins");
+    static final File repoCache = new File( _settingsDir, "repoCache" );
+    static final String repoUrl = "https://liferay-test-01.ci.cloudbees.com/job/blade.tools/lastSuccessfulBuild/artifact/p2_build/generated/p2/index.xml.gz";
+    static final File repoUrlCacheDir = new File(repoCache,"https%3A%2F%2Fliferay-test-01.ci.cloudbees.com%2Fjob%2Fblade.tools%2FlastSuccessfulBuild%2Fartifact%2Fp2_build%2Fgenerated%2Fp2%2Fplugins");
+    static final String timeStampKey = "up2date.check";
+
+    static IPath cachedBladeCLIPath;
 
     public static String checkForErrors( String[] lines )
     {
@@ -200,7 +201,7 @@ public class BladeCLI
 
     private static String getLatestRemoteBladeCLIJar() throws BladeCLIException
     {
-        settingsDir.mkdirs();
+        _settingsDir.mkdirs();
         repoCache.mkdirs();
 
         Processor reporter = new Processor();
