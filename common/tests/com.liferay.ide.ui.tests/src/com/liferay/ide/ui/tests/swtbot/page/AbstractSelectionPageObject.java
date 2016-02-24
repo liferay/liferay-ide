@@ -48,7 +48,7 @@ public abstract class AbstractSelectionPageObject<T extends SWTBot> extends Dial
 
     public String getDialogLabel()
     {
-        return bot.label( labelIndex ).getText();
+        return getDialogLabel( labelIndex );
     }
 
     public String getDialogLabel( int labelIndex )
