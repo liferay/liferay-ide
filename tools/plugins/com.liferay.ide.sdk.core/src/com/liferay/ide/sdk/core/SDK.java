@@ -753,7 +753,7 @@ public class SDK
         return name;
     }
 
-    private String getPluginFolder( String type )
+    public String getPluginFolder( String type )
     {
         if( "ext".equals( type ) )
         {
