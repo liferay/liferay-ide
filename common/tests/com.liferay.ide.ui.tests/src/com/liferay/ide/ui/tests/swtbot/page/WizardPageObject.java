@@ -23,10 +23,10 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 public class WizardPageObject<T extends SWTBot> extends CancelPageObject<T>
 {
 
-    private final String finishButtonText;
-    private final String backButtonText;
-    private final String nextButtonText;
-    private int validationMessageIndex = -1;
+    final String finishButtonText;
+    final String backButtonText;
+    final String nextButtonText;
+    int validationMessageIndex = -1;
 
     public WizardPageObject(
         T bot, String title, String cancelButtonText, String finishButtonText, String backButtonText,

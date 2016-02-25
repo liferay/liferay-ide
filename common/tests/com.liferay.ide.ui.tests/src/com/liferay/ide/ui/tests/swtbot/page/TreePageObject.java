@@ -92,7 +92,6 @@ public class TreePageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
 
         for( int i = 1; i < items.length; i++ )
         {
-            treeItem.expand();
             treeItem = treeItem.getNode( items[i] ).expand();
         }
         treeItem.select();
