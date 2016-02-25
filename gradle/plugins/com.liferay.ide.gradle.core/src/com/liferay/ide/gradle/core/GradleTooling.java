@@ -64,8 +64,8 @@ public class GradleTooling
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
 
             String initScriptContents = initScriptTemplate.replaceFirst(
-                "%model%", modelBundle.toString().replaceAll( "\\\\", "/" ) ).replaceFirst(
-                    "%plugin%", pluginBundle.toString().replaceAll( "\\\\", "/" ) );
+                "%model%", modelBundle.getAbsolutePath().replaceAll( "\\\\", "/" ) ).replaceFirst(
+                    "%plugin%", pluginBundle.getAbsolutePath().replaceAll( "\\\\", "/" ) );
 
             final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
 
