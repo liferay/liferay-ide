@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +37,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -79,8 +85,6 @@ public class ServiceCommand
         BundleSupervisor supervisor = null;
         String[] result = null;
 
-        try
-        {
             if( _server == null )
             {
                 if( _serviceName == null )
@@ -124,6 +128,7 @@ public class ServiceCommand
             if( _serviceName == null )
             {
                 result = getServices( supervisor );
+                updateServicesStaticFile( result, supervisor );
             }
             else
             {
@@ -131,14 +136,6 @@ public class ServiceCommand
             }
 
             return result;
-        }
-        finally
-        {
-            if( supervisor != null )
-            {
-                supervisor.getAgent().redirect( Agent.NONE );
-            }
-        }
     }
 
     private String[] getServiceBundle( String serviceName, BundleSupervisor supervisor ) throws Exception
@@ -195,6 +192,62 @@ public class ServiceCommand
         String[] services = map.keySet().toArray( new String[0] );
 
         return services;
+    }
+
+    private void updateServicesStaticFile( final String[] servicesList, final BundleSupervisor supervisor ) throws Exception
+    {
+        final File servicesFile = checkStaticServicesFile();
+        final ObjectMapper mapper = new ObjectMapper();
+        final Map<String, String[]> map = new LinkedHashMap<>();
+
+        final Job job = new WorkspaceJob( "Update services static file...")
+        {
+
+            @Override
+            public IStatus runInWorkspace( IProgressMonitor monitor )
+            {
+                try
+                {
+                    for( String serviceName : servicesList )
+                    {
+                        if( monitor.isCanceled() )
+                        {
+                            return Status.CANCEL_STATUS;
+                        }
+                        String[] serviceBundle = getServiceBundle( serviceName, supervisor );
+
+                        if( serviceBundle != null )
+                        {
+                            map.put( serviceName, serviceBundle );
+                        }
+                    }
+
+                    mapper.writeValue( servicesFile, map );
+                }
+                catch( Exception e )
+                {
+                    return Status.CANCEL_STATUS;
+                }
+                finally
+                {
+                    if( supervisor != null )
+                    {
+                        try
+                        {
+                            supervisor.getAgent().redirect( Agent.NONE );
+                        }
+                        catch( Exception e )
+                        {
+                            // ignore error
+                        }
+                    }
+                }
+
+                return Status.OK_STATUS;
+            }
+        };
+
+        job.schedule();
     }
 
     private String[] parseRegisteredBundle( String serviceName )
