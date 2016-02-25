@@ -42,7 +42,7 @@ public class ButtonPageObject<T extends SWTBot> extends AbstractWidgetPageObject
 
     public void click()
     {
-        ( (SWTBotButton) getWidget() ).click();
+        getWidget().click();
     }
 
     @Override

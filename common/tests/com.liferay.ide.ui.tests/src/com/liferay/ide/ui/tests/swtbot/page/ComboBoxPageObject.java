@@ -34,11 +34,7 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
     public String[] getAvailableComboValues()
     {
-        AbstractSWTBot<? extends Widget> widget = getWidget();
-
-        SWTBotCombo swtBotCombo = (SWTBotCombo) widget;
-
-        return swtBotCombo.items();
+        return getWidget().items();
     }
 
     @Override
@@ -49,11 +45,7 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
     public boolean isEnabled()
     {
-        AbstractSWTBot<? extends Widget> widget = getWidget();
-
-        SWTBotCombo swtBotCombo = (SWTBotCombo) widget;
-
-        return swtBotCombo.isEnabled();
+        return getWidget().isEnabled();
     }
 
     public void setSelection( String value )
@@ -67,11 +59,7 @@ public class ComboBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
     public void setText( String text )
     {
-        AbstractSWTBot<? extends Widget> widget = getWidget();
-
-        SWTBotCombo swtBotCombo = (SWTBotCombo) widget;
-
-        swtBotCombo.setText( text );
+        getWidget().setText( text );
     }
 
 }

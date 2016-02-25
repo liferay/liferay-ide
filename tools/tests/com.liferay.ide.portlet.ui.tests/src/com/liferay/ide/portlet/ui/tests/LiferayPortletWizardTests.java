@@ -1040,7 +1040,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         newPortletPage3.finish();
 
-        ProjectWizardTests.deleteProjectInSdk( "test-portlet", getLiferayPluginsSdkName(), "portlets" );
+        ProjectWizardTests.deleteProjectInSdk( "test-portlet" );
     }
 
     @Test

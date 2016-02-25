@@ -39,7 +39,7 @@ public class CheckBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
         bot.waitUntil( new WidgetEnabledCondition( getWidget(), true ) );
 
-        getWidget().deselect();;
+        getWidget().deselect();
     }
 
     @Override
@@ -68,7 +68,6 @@ public class CheckBoxPageObject<T extends SWTBot> extends AbstractWidgetPageObje
 
     public void select()
     {
-
         bot.waitUntil( new WidgetEnabledCondition( getWidget(), true ) );
 
         getWidget().select();

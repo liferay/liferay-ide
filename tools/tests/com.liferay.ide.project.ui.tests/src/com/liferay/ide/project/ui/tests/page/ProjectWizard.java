@@ -26,7 +26,6 @@ import com.liferay.ide.ui.tests.UIBase;
 public interface ProjectWizard extends UIBase
 {
 
-    public final int INDEX_DEFAULT_VALIDATION_MESSAGE = -1;
     public final int INDEX_VALIDATION_MESSAGE2 = 1;
     public final int INDEX_VALIDATION_MESSAGE3 = 2;
 

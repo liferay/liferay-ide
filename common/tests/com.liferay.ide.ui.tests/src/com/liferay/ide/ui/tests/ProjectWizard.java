@@ -42,7 +42,8 @@ public interface ProjectWizard extends UIBase
     public final String LABEL_LOCATION = "Location:";
     public final String LABEL_JAVA_PROJECT = "Java Project";
     public final String LABEL_FOLDER_NAME = "Folder name:";
-    public final String LABEL_UPDATE_EXCLUSION_FILTERS = "Update exclusion filters in other source folders to solve nesting";
+    public final String LABEL_UPDATE_EXCLUSION_FILTERS =
+        "Update exclusion filters in other source folders to solve nesting";
     public final String LABEL_IGNORE_OPTIONAL_COMPILE_PROBLEMS = "Ignore optional compile problems";
 
     public final String TEXT_PROJECT_NAME_MUST_SPECIFIED = "Project name must be specified";
@@ -92,7 +93,6 @@ public interface ProjectWizard extends UIBase
     public final int INDEX_VALIDATION_MESSAGE3 = 2;
     public final int INDEX_VALIDATION_MESSAGE2 = 1;
     public final int INDEX_VALIDATION_MESSAGE1 = 0;
-    public final int INDEX_DEFAULT_VALIDATION_MESSAGE = -1;
 
     public final String MENU_PORTLET = "Portlet";
     public final String MENU_SERVICE_BUILDER_PORTLET = "Service Builder Portlet";

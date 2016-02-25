@@ -24,6 +24,8 @@ public abstract class AbstractWidgetPageObject<T extends SWTBot> extends Abstrac
     protected String label;
     protected int index = -1;
 
+    protected abstract AbstractSWTBot<?> getWidget();
+
     public AbstractWidgetPageObject( T bot )
     {
         super( bot );
@@ -58,6 +60,9 @@ public abstract class AbstractWidgetPageObject<T extends SWTBot> extends Abstrac
         return getWidget().getText();
     }
 
-    protected abstract AbstractSWTBot<?> getWidget();
+    public boolean isActive()
+    {
+        return getWidget().isActive();
+    }
 
 }
