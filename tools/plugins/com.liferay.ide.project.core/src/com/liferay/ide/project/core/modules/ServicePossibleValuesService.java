@@ -21,7 +21,10 @@ import com.liferay.ide.server.core.portal.PortalServer;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IServer;
@@ -33,6 +36,23 @@ import org.eclipse.wst.server.core.ServerCore;
  */
 public class ServicePossibleValuesService extends PossibleValuesService
 {
+    private Listener listener;
+
+    protected void initPossibleValuesService()
+    {
+        this.listener = new FilteredListener<PropertyContentEvent>()
+        {
+
+            @Override
+            protected void handleTypedEvent( final PropertyContentEvent event )
+            {
+                refresh();
+            }
+        };
+
+        op().property( NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME ).attach( this.listener );
+    }
+
     @Override
     protected void compute( final Set<String> values )
     {
@@ -62,7 +82,7 @@ public class ServicePossibleValuesService extends PossibleValuesService
                 //ignore
             }
         }
-        else
+        else if( template.equals( "service" ) )
         {
             for( IServer server : servers )
             {
@@ -88,6 +108,18 @@ public class ServicePossibleValuesService extends PossibleValuesService
             }
         }
 
+    }
+
+    @Override
+    public void dispose()
+    {
+        if( this.listener != null )
+        {
+            op().property( NewLiferayModuleProjectOp.PROP_PROJECT_TEMPLATE_NAME ).detach( this.listener );
+
+            this.listener = null;
+        }
+        super.dispose();
     }
 
     private NewLiferayModuleProjectOp op()
