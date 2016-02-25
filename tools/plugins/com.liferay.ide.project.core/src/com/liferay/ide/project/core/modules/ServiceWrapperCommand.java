@@ -94,7 +94,7 @@ public class ServiceWrapperCommand
                     JarEntry entry = enu.nextElement();
                     String name = entry.getName();
 
-                    if( name.endsWith( "Wrapper.class" ) && !( name.contains( "$" ) ) )
+                    if( name.endsWith( "ServiceWrapper.class" ) && !( name.contains( "$" ) ) )
                     {
                         name = name.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
                         name = name.substring( 0, name.lastIndexOf( "." ) );
