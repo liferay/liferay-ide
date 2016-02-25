@@ -56,6 +56,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.ui.wizard.IWizardHandle;
 
+
 /**
  * @author Greg Amerson
  */
@@ -464,7 +465,15 @@ public class LiferayTomcatRuntimeOptionalComposite extends TomcatRuntimeComposit
         }
 
         init();
-        validate();
+
+        try
+        {
+            validate();
+        }
+        catch( NullPointerException e )
+        {
+            // ignore exception because this composite haven't been created and there are no shell
+        }
     }
 
     private static class Msgs extends NLS
