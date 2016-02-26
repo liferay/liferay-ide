@@ -24,6 +24,9 @@ import com.liferay.ide.gradle.core.modules.OSGiCustomFragment;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +41,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
+import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
@@ -66,17 +70,23 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
         IPath location = PathBridge.create( op.getLocation().content() );
 
-        final String hostBundle = op.getCustomOSGiBundle().content();
+        final String hostBundleName = op.getCustomOSGiBundle().content();
 
-        IPath temp = GradleCore.getDefault().getStateLocation().append( hostBundle );
+        IPath temp = GradleCore.getDefault().getStateLocation().append( hostBundleName );
+
+        IRuntime runtime = ServerUtil.getRuntime( op.getBundleName().content() );
+
+        PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+
+        File hostBundle = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostBundleName ).toFile();
 
         try
         {
-            ZipUtil.unzip( new File( op.getRealOSGiBundleFile().content() ), temp.toFile() );
+            ZipUtil.unzip( hostBundle, temp.toFile() );
         }
-        catch( IOException e1 )
+        catch( IOException e )
         {
-            e1.printStackTrace();
+            throw new CoreException( GradleCore.createErrorStatus( e ) );
         }
 
         String bundleSymbolicName = "";

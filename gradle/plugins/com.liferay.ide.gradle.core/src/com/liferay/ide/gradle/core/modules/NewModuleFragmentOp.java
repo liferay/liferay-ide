@@ -25,7 +25,6 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
@@ -59,7 +58,6 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 
     @Label( standard = "Host Bundle" )
     @Service( impl = OSGiBundlePossibleValuesService.class )
-    @Listeners( OSGiBundleListener.class )
     @Required
     ValueProperty PROP_CUSTOM_OSGI_BUNDLE = new ValueProperty( TYPE, "CustomOSGiBundle" );
 
