@@ -122,6 +122,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
                     }
                     catch( Exception e )
                     {
+                        GradleCore.logError( "Unable to build project " + getProject().getName(), e );
                     }
 
                     return Status.OK_STATUS;
