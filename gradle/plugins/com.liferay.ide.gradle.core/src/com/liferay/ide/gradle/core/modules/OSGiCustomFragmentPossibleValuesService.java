@@ -38,19 +38,19 @@ import org.eclipse.wst.server.core.IRuntime;
 public class OSGiCustomFragmentPossibleValuesService extends PossibleValuesService
 {
 
-    private static String osgiBundleName;
     private static Set<String> possibleValues;
+    private String osgiBundleName;
 
     @Override
     protected void compute( final Set<String> values )
     {
         final NewModuleFragmentOp op = op();
 
-        String currentOSGiBundle = op.getCustomOSGiBundle().content();
+        String hostOSGiBundle = op.getHostOsgiBundle().content();
 
-        if( osgiBundleName == null || !osgiBundleName.equals( currentOSGiBundle ) || possibleValues == null )
+        if( osgiBundleName == null || !osgiBundleName.equals( hostOSGiBundle ) || possibleValues == null )
         {
-            osgiBundleName = currentOSGiBundle;
+            osgiBundleName = hostOSGiBundle;
 
             possibleValues = new HashSet<String>();
 
@@ -62,8 +62,7 @@ public class OSGiCustomFragmentPossibleValuesService extends PossibleValuesServi
 
             if( portalBundle != null )
             {
-                File module =
-                    portalBundle.getOSGiBundlesDir().append( "modules" ).append( currentOSGiBundle ).toFile();
+                File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostOSGiBundle ).toFile();
 
                 if( module.exists() )
                 {

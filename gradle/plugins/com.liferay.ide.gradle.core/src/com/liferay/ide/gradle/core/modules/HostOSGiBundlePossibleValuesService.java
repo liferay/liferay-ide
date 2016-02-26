@@ -34,7 +34,7 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class OSGiBundlePossibleValuesService extends PossibleValuesService
+public class HostOSGiBundlePossibleValuesService extends PossibleValuesService
 {
 
     private List<String> bundles = null;
@@ -64,18 +64,16 @@ public class OSGiBundlePossibleValuesService extends PossibleValuesService
                 {
                     try
                     {
-
                         File modules = portalBundle.getOSGiBundlesDir().append( "modules" ).toFile();
 
                         File[] files = modules.listFiles( new FilenameFilter()
                         {
-
                             @Override
                             public boolean accept( File dir, String name )
                             {
                                 return name.matches( ".*\\.web\\.jar" );
                             }
-                        } );
+                        });
 
                         for( File file : files )
                         {

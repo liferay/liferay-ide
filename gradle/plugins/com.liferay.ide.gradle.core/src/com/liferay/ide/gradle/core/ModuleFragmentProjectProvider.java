@@ -70,7 +70,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
         final IPath location = PathBridge.create( op.getLocation().content() );
 
-        final String hostBundleName = op.getCustomOSGiBundle().content();
+        final String hostBundleName = op.getHostOsgiBundle().content();
 
         final IPath temp = GradleCore.getDefault().getStateLocation().append( hostBundleName );
 

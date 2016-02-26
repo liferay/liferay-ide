@@ -54,15 +54,15 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     Value<String> getLiferayRuntimeName();
     void setLiferayRuntimeName( String value );
 
-    // *** CustomOSGiBundle ***
+    // *** HostOSGiBundle ***
 
-    @Label( standard = "Host Bundle" )
-    @Service( impl = OSGiBundlePossibleValuesService.class )
+    @Label( standard = "Host OSGi Bundle" )
+    @Service( impl = HostOSGiBundlePossibleValuesService.class )
     @Required
-    ValueProperty PROP_CUSTOM_OSGI_BUNDLE = new ValueProperty( TYPE, "CustomOSGiBundle" );
+    ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty( TYPE, "HostOsgiBundle" );
 
-    Value<String> getCustomOSGiBundle();
-    void setCustomOSGiBundle(String value);
+    Value<String> getHostOsgiBundle();
+    void setHostOsgiBundle(String value);
 
     // *** CustomFragments ***
 
@@ -71,13 +71,6 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     ListProperty PROP_CUSTOM_FILES = new ListProperty( TYPE, "CustomFiles" );
 
     ElementList<OSGiCustomFragment> getCustomFiles();
-
-    // *** RealOSGiBUndleFile ***
-
-    ValueProperty PROP_REAL_OSGI_BUNDLE_FILE = new ValueProperty( TYPE, "RealOSGiBundleFile" );
-
-    Value<String> getRealOSGiBundleFile();
-    void setRealOSGiBundleFile( String value );
 
     // *** Method: execute ***
 

@@ -75,7 +75,7 @@
             <label>Module Fragment Project</label>
             <content>
                 <property-editor>
-                    <property>CustomOSGiBundle</property>
+                    <property>HostOsgiBundle</property>
                 </property-editor>
                 <spacer/>
                 <property-editor>

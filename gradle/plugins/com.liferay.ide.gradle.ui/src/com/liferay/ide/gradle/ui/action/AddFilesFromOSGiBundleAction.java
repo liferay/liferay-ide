@@ -52,7 +52,7 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
         dialog.setTitle( "Add files from OSGi Bundle" );
 
         PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
-        String currentOSGiBundle = op.getCustomOSGiBundle().content();
+        String currentOSGiBundle = op.getHostOsgiBundle().content();
 
         if( portalBundle != null )
         {
