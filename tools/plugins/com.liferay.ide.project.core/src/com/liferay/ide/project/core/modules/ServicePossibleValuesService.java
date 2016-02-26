@@ -57,7 +57,7 @@ public class ServicePossibleValuesService extends PossibleValuesService
     protected void compute( final Set<String> values )
     {
         final NewLiferayModuleProjectOp op = op();
-        final String template = op.getProjectTemplateName().toString();
+        final String template = op.getProjectTemplateName().content(true);
         IServer runningServer = null;
         final IServer[] servers = ServerCore.getServers();
 
