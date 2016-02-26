@@ -20,8 +20,8 @@ import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.portlet.ui.tests.LiferayPortletWizard;
 import com.liferay.ide.ui.tests.ProjectWizard;
-import com.liferay.ide.ui.tests.swtbot.page.RadioPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.RadioPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.WizardPageObject;
 

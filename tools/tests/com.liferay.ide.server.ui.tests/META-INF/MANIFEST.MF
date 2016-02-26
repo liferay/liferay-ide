@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay Server UI Tests
+Bundle-SymbolicName: com.liferay.ide.server.ui.tests
+Bundle-Version: 3.0.0.qualifier
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.swtbot.go,
+ com.liferay.ide.ui.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy

@@ -53,7 +53,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.swt.finder.keyboard.Keyboard;
 import org.eclipse.swtbot.swt.finder.keyboard.KeyboardFactory;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
+import org.eclipse.swtbot.swt.finder.widgets.TimeoutException;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -100,40 +100,23 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
     @After
     public void cleanAll()
     {
-        SWTBotTreeItem[] items = treeBot.getItems();
-
         try
         {
-            for( SWTBotTreeItem item : items )
-            {
-                if( !item.getText().equals( getLiferayPluginsSdkName() ) )
-                {
-                    item.contextMenu( BUTTON_DELETE ).click();
-
-                    checkBoxBot.click();
-
-                    buttonBot.click( BUTTON_OK );
-
-                    try
-                    {
-                        if( buttonBot.isEnabled( "Continue" ) )
-                        {
-                            buttonBot.click( "Continue" );
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
+            shellBot.shell( TITLE_NEW_LIFERAY_PORTLET ).close();
         }
         catch( Exception e )
         {
-            e.printStackTrace();
         }
 
+        try
+        {
+            shellBot.shell( TITLE_NEW_LIFERAY_PLUGIN_PROJECT ).close();
+        }
+        catch( Exception e )
+        {
+        }
+
+        deleteALLWSProjects();
     }
 
     @Test
@@ -1040,7 +1023,7 @@ public class LiferayPortletWizardTests extends SWTBotBase implements LiferayPort
 
         newPortletPage3.finish();
 
-        ProjectWizardTests.deleteProjectInSdk( "test-portlet", getLiferayPluginsSdkName(), "portlets" );
+        ProjectWizardTests.deleteProjectInSdk( "test-portlet" );
     }
 
     @Test

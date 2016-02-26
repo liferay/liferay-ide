@@ -13,32 +13,23 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.tests.page;
+package com.liferay.ide.project.ui.tests.swtbot;
 
-import com.liferay.ide.project.ui.tests.swtbot.ProjectBuildAction;
-import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
-
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import com.liferay.ide.ui.tests.UIBase;
 
 /**
- * @author Li Lu
+ * @author Ashley Yuan
  */
-public class ProjectTreePageObject<T extends SWTBot> extends TreeItemPageObject<T> implements ProjectBuildAction
+public interface CreateLiferayPortletWizard extends UIBase
 {
 
-    DeleteProjectDialogPageObject<SWTBot> deleteDialog;
+    String LABEL_JAVA_PACKAGE = "Java Package:";
+    String LABEL_PORTLET_CLASS = "Portlet class:";
+    String LABEL_PORTLET_PLUGIN_PROJECT = "Portlet plugin project:";
+    String LABEL_SOURCE_FOLDER = "Source folder:";
+    String LABEL_SUPERCLASS = "Superclass:";
 
-    public ProjectTreePageObject( SWTBot bot, String nodeText )
-    {
-        super( bot, nodeText );
+    String RADIO_CREATE_NEW_PORTLET = "Create new portlet";
+    String RADIO_USE_DEFAULT_PORTLET = "Use default portlet (MVCPortlet)";
 
-        deleteDialog = new DeleteProjectDialogPageObject<SWTBot>( bot );
-    }
-
-    public void deleteProject()
-    {
-        doAction( BUTTON_DELETE );
-
-        deleteDialog.confirmDeleteFromDisk();
-    }
 }

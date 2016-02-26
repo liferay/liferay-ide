@@ -70,7 +70,7 @@ public interface ProjectWizard extends UIBase
     public final String TEXT_SPRING_MVC_FRAMEWORK = "Spring MVC";
     public final String TEXT_VAADIN_FRAMEWORK = "Vaadin";
     public final String TEXT_WEB_SDK_62_ERRORR_MESSAGE =
-        " The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0.0 or greater.";
+        " The selected Plugins SDK does not support creating new web type plugins.  Please configure version 7.0 or greater.";
     public final String TEXT_PROJECT_NAME_MUST_BE_SPECIFIED = " Project name must be specified";
     public final String TEXT_CREATE_A_JAVA_PROJECT = "Create a Java project";
     public final String TEXT_CREATE_A_JAVA_PROJECT_IN_WORKSPACE =
