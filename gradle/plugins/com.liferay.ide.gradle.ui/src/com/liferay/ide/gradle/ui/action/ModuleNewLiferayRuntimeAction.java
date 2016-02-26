@@ -40,7 +40,7 @@ public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler
 
         if( isOK )
         {
-            op.property( NewModuleFragmentOp.PROP_BUNDLE_NAME ).refresh();
+            op.property( NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME ).refresh();
         }
 
         return Status.createOkStatus();

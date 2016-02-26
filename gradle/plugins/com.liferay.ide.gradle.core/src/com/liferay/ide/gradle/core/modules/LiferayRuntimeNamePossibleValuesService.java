@@ -18,7 +18,11 @@ package com.liferay.ide.gradle.core.modules;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
-import org.eclipse.sapphire.DefaultValueService;
+import java.util.Set;
+
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
@@ -26,33 +30,21 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Terry Jia
  */
-public class PortalBundleNameDefaultValueService extends DefaultValueService implements IRuntimeLifecycleListener
+public class LiferayRuntimeNamePossibleValuesService extends PossibleValuesService implements IRuntimeLifecycleListener
 {
 
-    static final String NONE = "<None>";
-
     @Override
-    protected void initDefaultValueService()
+    protected void initPossibleValuesService()
     {
-        super.initDefaultValueService();
+        super.initPossibleValuesService();
 
         ServerCore.addRuntimeLifecycleListener( this );
     }
 
     @Override
-    public void dispose()
-    {
-        ServerCore.removeRuntimeLifecycleListener( this );
-
-        super.dispose();
-    }
-
-    @Override
-    protected String compute()
+    protected void compute( Set<String> values )
     {
         IRuntime[] runtimes = ServerCore.getRuntimes();
-
-        String value = NONE;
 
         if( !CoreUtil.isNullOrEmpty( runtimes ) )
         {
@@ -60,14 +52,27 @@ public class PortalBundleNameDefaultValueService extends DefaultValueService imp
             {
                 if( LiferayServerCore.newPortalBundle( runtime.getLocation() ) != null )
                 {
-                    value = runtime.getName();
-
-                    break;
+                    values.add( runtime.getName() );
                 }
             }
         }
+    }
 
-        return value;
+    @Override
+    public boolean ordered()
+    {
+        return true;
+    }
+
+    @Override
+    public Status problem( Value<?> value )
+    {
+        if(  value.content().equals( "<None>" ) )
+        {
+            return Status.createOkStatus();
+        }
+
+        return super.problem( value );
     }
 
     public void runtimeAdded( IRuntime runtime )

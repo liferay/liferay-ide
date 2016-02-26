@@ -54,7 +54,7 @@ public class OSGiBundlePossibleValuesService extends PossibleValuesService
 
             if( !op.disposed() )
             {
-                final String runtimeName = op.getBundleName().content();
+                final String runtimeName = op.getLiferayRuntimeName().content();
 
                 IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 

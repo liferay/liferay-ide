@@ -40,11 +40,10 @@
                     <property>Location</property>
                 </property-editor>
                 <property-editor>
-                    <label>Liferay runtime</label>
-                    <property>BundleName</property>
+                    <property>LiferayRuntimeName</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                     <action>
-                        <id>ModuleNewLiferayRuntime</id>
+                        <id>NewLiferayRuntime</id>
                         <label>New Liferay runtime...</label>
                         <image>server_new.png</image>
                     </action>

@@ -54,7 +54,7 @@ public class OSGiCustomFragmentPossibleValuesService extends PossibleValuesServi
 
             possibleValues = new HashSet<String>();
 
-            final String runtimeName = op.getBundleName().content();
+            final String runtimeName = op.getLiferayRuntimeName().content();
 
             IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 

@@ -45,7 +45,7 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
 
         OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog( null, currentFiles );
 
-        final String runtimeName = op.getBundleName().content();
+        final String runtimeName = op.getLiferayRuntimeName().content();
 
         IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 

@@ -68,15 +68,15 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
         final String projectName = op.getProjectName().content();
 
-        IPath location = PathBridge.create( op.getLocation().content() );
+        final IPath location = PathBridge.create( op.getLocation().content() );
 
         final String hostBundleName = op.getCustomOSGiBundle().content();
 
-        IPath temp = GradleCore.getDefault().getStateLocation().append( hostBundleName );
+        final IPath temp = GradleCore.getDefault().getStateLocation().append( hostBundleName );
 
-        IRuntime runtime = ServerUtil.getRuntime( op.getBundleName().content() );
+        final IRuntime runtime = ServerUtil.getRuntime( op.getLiferayRuntimeName().content() );
 
-        PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+        final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
 
         File hostBundle = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostBundleName ).toFile();
 
@@ -94,8 +94,8 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
         if( temp.toFile().exists() )
         {
-            File file = temp.append( "META-INF" ).append( "MANIFEST.MF" ).toFile();
-            String[] contents = FileUtil.readLinesFromFile( file );
+            final File file = temp.append( "META-INF/MANIFEST.MF" ).toFile();
+            final String[] contents = FileUtil.readLinesFromFile( file );
 
             for( String content : contents )
             {
@@ -112,9 +112,9 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
             }
         }
 
-        ElementList<OSGiCustomFragment> files = op.getCustomFiles();
+        final ElementList<OSGiCustomFragment> files = op.getCustomFiles();
 
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append( "create " );
         sb.append( "-d \"" + location.toFile().getAbsolutePath() + "\" " );
         sb.append( "-t " + "fragment" + " " );
@@ -165,22 +165,21 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
                     if( fragmentFile.getName().equals( "portlet.properties" ) )
                     {
-                        folder =
-                            location.append( projectName ).append( "src" ).append( "main" ).append( "java" ).toFile();
+                        folder = location.append( projectName ).append( "src/main/java" ).toFile();
 
                         FileUtil.copyFileToDir( fragmentFile, "portlet-ext.properties", folder );
                     }
                     else
                     {
-
                         String parent = fragmentFile.getParentFile().getPath();
                         parent = parent.replaceAll( "\\\\", "/" );
                         String metaInfResources = "META-INF/resources";
 
                         parent = parent.substring( parent.indexOf( metaInfResources ) + metaInfResources.length() );
 
-                        IPath resources = location.append( projectName ).append( "src" ).append( "main" ).append(
-                            "resources" ).append( "META-INF" ).append( "resources" );
+                        IPath resources =
+                            location.append( projectName ).append( "src/main/resources/META-INF/resources" );
+
                         folder = resources.toFile();
 
                         if( !parent.equals( "resources" ) && !parent.equals( "" ) )
@@ -194,11 +193,11 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
                 }
             }
 
-            boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
-            boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+            final boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
+            final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
             boolean inWorkspacePath = false;
 
-            IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+            final IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
 
             if( liferayWorkspaceProject != null && !useDefaultLocation )
             {
@@ -220,6 +219,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
                     }
                 }
             }
+
             if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
             {
                 IProject[] projects = new IProject[] { liferayWorkspaceProject };
@@ -234,7 +234,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
         }
         catch( Exception e )
         {
-            retval = GradleCore.createErrorStatus( "can't create module project.", e );
+            retval = GradleCore.createErrorStatus( "Could not create module fragment project.", e );
         }
 
         return retval;

@@ -37,22 +37,22 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 {
     ElementType TYPE = new ElementType( NewModuleFragmentOp.class );
 
-    // *** Liferay Bundle ***
+    // *** Liferay Runtime ***
 
-    @Label( standard = "Portal Bundle" )
     @Services
     (
         value =
         {
-            @Service( impl = PortalBundleNamePossibleValuesService.class ),
-            @Service( impl = PortalBundleNameDefaultValueService.class ),
-            @Service( impl = NewLiferayBundleValidationService.class )
+            @Service( impl = LiferayRuntimeNamePossibleValuesService.class ),
+            @Service( impl = LiferayRuntimeNameDefaultValueService.class ),
+            @Service( impl = LiferayRuntimeNameValidationService.class )
         }
     )
-    ValueProperty PROP_BUNDLE_NAME = new ValueProperty( TYPE, "BundleName" );
+    @Required
+    ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty( TYPE, "LiferayRuntimeName" );
 
-    Value<String> getBundleName();
-    void setBundleName( String value );
+    Value<String> getLiferayRuntimeName();
+    void setLiferayRuntimeName( String value );
 
     // *** CustomOSGiBundle ***
 
