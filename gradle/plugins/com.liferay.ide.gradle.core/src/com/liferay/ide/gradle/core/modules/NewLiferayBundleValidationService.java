@@ -32,7 +32,7 @@ public class NewLiferayBundleValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final NewJSPHookModuleOp op = context( NewJSPHookModuleOp.class );
+        final NewModuleFragmentOp op = context( NewModuleFragmentOp.class );
 
         final String runtimeName = op.getBundleName().content( true );
 

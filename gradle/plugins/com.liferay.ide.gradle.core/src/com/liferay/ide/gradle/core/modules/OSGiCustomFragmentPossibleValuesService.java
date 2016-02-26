@@ -35,7 +35,7 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class OSGiCustomJSPPossibleValuesService extends PossibleValuesService
+public class OSGiCustomFragmentPossibleValuesService extends PossibleValuesService
 {
 
     private static String osgiBundleName;
@@ -44,7 +44,7 @@ public class OSGiCustomJSPPossibleValuesService extends PossibleValuesService
     @Override
     protected void compute( final Set<String> values )
     {
-        final NewJSPHookModuleOp op = op();
+        final NewModuleFragmentOp op = op();
 
         String currentOSGiBundle = op.getCustomOSGiBundle().content();
 
@@ -96,11 +96,11 @@ public class OSGiCustomJSPPossibleValuesService extends PossibleValuesService
 
             possibleValuesSet.addAll( possibleValues );
 
-            ElementList<OSGiCustomJSP> currentJsps = op.getCustomJSPs();
+            ElementList<OSGiCustomFragment> currentFiles = op.getCustomFiles();
 
-            if( currentJsps != null )
+            if( currentFiles != null )
             {
-                for( OSGiCustomJSP cj : currentJsps )
+                for( OSGiCustomFragment cj : currentFiles )
                 {
                     String value = cj.getValue().content();
 
@@ -121,9 +121,9 @@ public class OSGiCustomJSPPossibleValuesService extends PossibleValuesService
         return Status.createOkStatus();
     }
 
-    private NewJSPHookModuleOp op()
+    private NewModuleFragmentOp op()
     {
-        return context( NewJSPHookModuleOp.class );
+        return context( NewModuleFragmentOp.class );
     }
 
 }

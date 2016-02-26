@@ -34,9 +34,9 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
-        NewJSPHookModuleOp op = op( event );
+        NewModuleFragmentOp op = op( event );
 
-        op.getCustomJSPs().clear();
+        op.getCustomFiles().clear();
 
         String osgiBundle = op.getCustomOSGiBundle().content();
 
@@ -57,9 +57,9 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
         }
     }
 
-    protected NewJSPHookModuleOp op( PropertyContentEvent event )
+    protected NewModuleFragmentOp op( PropertyContentEvent event )
     {
-        return event.property().element().nearest( NewJSPHookModuleOp.class );
+        return event.property().element().nearest( NewModuleFragmentOp.class );
     }
 
 }

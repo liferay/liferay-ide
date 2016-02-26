@@ -15,7 +15,7 @@
 
 package com.liferay.ide.gradle.ui.action;
 
-import com.liferay.ide.gradle.core.modules.OSGiCustomJSP;
+import com.liferay.ide.gradle.core.modules.OSGiCustomFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
 {
 
-    private static ElementList<OSGiCustomJSP> jsps;
+    private static ElementList<OSGiCustomFragment> files;
 
     protected static class FileContentProvider implements ITreeContentProvider
     {
@@ -77,8 +77,9 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
                             JarEntry entry = enu.nextElement();
                             String name = entry.getName();
 
-                            if( name.startsWith( "META-INF/resources/" ) &&
-                                ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) )
+                            if( ( name.startsWith( "META-INF/resources/" ) &&
+                                ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) ) ||
+                                name.equals( "portlet.properties" ) )
                             {
                                 possibleValues.add( name );
                             }
@@ -90,11 +91,11 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
                 }
             }
 
-            for( OSGiCustomJSP jsp : jsps )
+            for( OSGiCustomFragment file : files )
             {
-                String jspFile = jsp.getValue().content();
+                String currentFile = file.getValue().content();
 
-                possibleValues.remove( jspFile );
+                possibleValues.remove( currentFile );
             }
 
             return possibleValues.toArray();
@@ -131,11 +132,11 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
         }
     }
 
-    public OSGiBundleFileSelectionDialog( Shell parent, ElementList<OSGiCustomJSP> currentJSPs )
+    public OSGiBundleFileSelectionDialog( Shell parent, ElementList<OSGiCustomFragment> currentFiles )
     {
         super( parent, new FileLabelProvider(), new FileContentProvider() );
 
-        jsps = currentJSPs;
+        files = currentFiles;
 
         setComparator( new ViewerComparator() );
     }

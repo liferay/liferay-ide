@@ -15,7 +15,7 @@
 
 package com.liferay.ide.gradle.ui.action;
 
-import com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp;
+import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
 
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
@@ -32,7 +32,7 @@ public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        NewJSPHookModuleOp op = context.part().getModelElement().nearest( NewJSPHookModuleOp.class );
+        NewModuleFragmentOp op = context.part().getModelElement().nearest( NewModuleFragmentOp.class );
 
         boolean isOK =
             ServerUIUtil.showNewRuntimeWizard(
@@ -40,7 +40,7 @@ public class ModuleNewLiferayRuntimeAction extends SapphireActionHandler
 
         if( isOK )
         {
-            op.property( NewJSPHookModuleOp.PROP_BUNDLE_NAME ).refresh();
+            op.property( NewModuleFragmentOp.PROP_BUNDLE_NAME ).refresh();
         }
 
         return Status.createOkStatus();

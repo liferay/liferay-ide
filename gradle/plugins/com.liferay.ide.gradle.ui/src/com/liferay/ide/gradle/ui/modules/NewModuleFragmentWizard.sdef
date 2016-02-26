@@ -24,12 +24,12 @@
         <package>com.liferay.ide.gradle.ui.modules</package>
     </import>
     <wizard>
-        <id>NewJSPHookModuletWizard</id>
-        <element-type>com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp</element-type>
-        <label>New Liferay JSP Hook Project</label>
+        <id>NewModuleFragmentWizard</id>
+        <element-type>com.liferay.ide.gradle.core.modules.NewModuleFragmentOp</element-type>
+        <label>New Liferay Module Fragment Project</label>
         <page>
-            <id>JSPHookModuleWizardPage</id>
-            <label>JSP Hook Project</label>
+            <id>ModuleFragmentWizardPage</id>
+            <label>Module Fragment Project</label>
             <content>
                 <property-editor>ProjectName</property-editor>
                 <spacer/>
@@ -59,7 +59,7 @@
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
             </content>
-            <description>Create a new project configured as a Liferay JSP Hook Project</description>
+            <description>Create a new project configured as a Liferay Module Fragment Project</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -69,31 +69,31 @@
             <margin-horizontal>0</margin-horizontal>
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
-            <image>NewJSPHookModuleWizard.png</image>
+            <image>NewModuleFragmentWizard.png</image>
         </page>
         <page>
-            <id>JSPHookSelectHostPage</id>
-            <label>JSP Hook Project</label>
+            <id>ModuleFragmentSelectHostPage</id>
+            <label>Module Fragment Project</label>
             <content>
                 <property-editor>
                     <property>CustomOSGiBundle</property>
                 </property-editor>
                 <spacer/>
                 <property-editor>
-                    <property>CustomJSPs</property>
+                    <property>CustomFiles</property>
                     <action>
-                        <id>AddJSPsFromOSGiBundle</id>
-                        <label>Add jsps from OSGi Bundle...</label>
+                        <id>AddFilesFromOSGiBundle</id>
+                        <label>Add files from OSGi Bundle...</label>
                         <image>server_new.png</image>
                     </action>
                     <action-handler>
-                        <action>AddJSPsFromOSGiBundle</action>
-                        <id>AddJSPsFromOSGiBundleHandler</id>
-                        <impl>AddJSPsFromOSGiBundleAction</impl>
+                        <action>AddFilesFromOSGiBundle</action>
+                        <id>AddFilesFromOSGiBundleHandler</id>
+                        <impl>AddFilesFromOSGiBundleAction</impl>
                     </action-handler>
                 </property-editor>
             </content>
-            <description>Create a new project configured as a Liferay JSP Hook Project</description>
+            <description>Create a new project configured as a Liferay Module Fragment Hook Project</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -103,9 +103,9 @@
             <margin-horizontal>0</margin-horizontal>
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
-            <image>NewJSPHookModuleWizard.png</image>
+            <image>NewModuleFragmentWizard.png</image>
         </page>
-        <description>Create a new project configured as a Liferay JSP Fragment plugin</description>
+        <description>Create a new project configured as a Liferay Module Fragment Fragment plugin</description>
     </wizard>
 
 </definition>

@@ -15,7 +15,7 @@
 
 package com.liferay.ide.gradle.core.modules;
 
-import com.liferay.ide.gradle.core.JSPHookProjectProvider;
+import com.liferay.ide.gradle.core.ModuleFragmentProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BaseOpMethods;
 
@@ -29,10 +29,10 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Terry Jia
  */
-public class NewJSPHookModuleOpMethods extends BaseOpMethods
+public class NewModuleFragmentOpMethods extends BaseOpMethods
 {
 
-    public static final Status execute( final NewJSPHookModuleOp op, final ProgressMonitor pm )
+    public static final Status execute( final NewModuleFragmentOp op, final ProgressMonitor pm )
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
@@ -42,7 +42,7 @@ public class NewJSPHookModuleOpMethods extends BaseOpMethods
 
         try
         {
-            final JSPHookProjectProvider provider = new JSPHookProjectProvider();
+            final ModuleFragmentProjectProvider provider = new ModuleFragmentProjectProvider();
 
             final IStatus status = provider.createNewProject( op, monitor );
 
@@ -50,7 +50,7 @@ public class NewJSPHookModuleOpMethods extends BaseOpMethods
         }
         catch( Exception e )
         {
-            final String msg = "Error creating Liferay JSP Hook module project."; //$NON-NLS-1$
+            final String msg = "Error creating Liferay module fragment project."; //$NON-NLS-1$
             ProjectCore.logError( msg, e );
 
             return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );

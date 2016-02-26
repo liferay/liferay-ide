@@ -16,7 +16,7 @@
 package com.liferay.ide.gradle.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp;
+import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
@@ -43,14 +43,14 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
-public class NewJSPHookModuleWizard extends SapphireWizard<NewJSPHookModuleOp> implements IWorkbenchWizard, INewWizard
+public class NewModuleFragmentWizard extends SapphireWizard<NewModuleFragmentOp> implements IWorkbenchWizard, INewWizard
 {
 
     private boolean firstErrorMessageRemoved = false;
 
-    public NewJSPHookModuleWizard()
+    public NewModuleFragmentWizard()
     {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewJSPHookModuleWizard.class ).wizard() );
+        super( createDefaultOp(), DefinitionLoader.sdef( NewModuleFragmentWizard.class ).wizard() );
     }
 
     private void addToWorkingSets( IProject newProject ) throws Exception
@@ -130,7 +130,7 @@ public class NewJSPHookModuleWizard extends SapphireWizard<NewJSPHookModuleOp> i
     {
         super.performPostFinish();
 
-        final NewJSPHookModuleOp op = element().nearest( NewJSPHookModuleOp.class );
+        final NewModuleFragmentOp op = element().nearest( NewModuleFragmentOp.class );
 
         final IProject project = CoreUtil.getProject( op.getProjectName().content() );
 
@@ -147,9 +147,9 @@ public class NewJSPHookModuleWizard extends SapphireWizard<NewJSPHookModuleOp> i
         openLiferayPerspective( project );
     }
 
-    private static NewJSPHookModuleOp createDefaultOp()
+    private static NewModuleFragmentOp createDefaultOp()
     {
-        return NewJSPHookModuleOp.TYPE.instantiate();
+        return NewModuleFragmentOp.TYPE.instantiate();
     }
 
 }

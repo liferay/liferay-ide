@@ -19,14 +19,18 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp;
-import com.liferay.ide.gradle.core.modules.OSGiCustomJSP;
+import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
+import com.liferay.ide.gradle.core.modules.OSGiCustomFragment;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
+import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectsJob;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,11 +42,11 @@ import org.eclipse.sapphire.platform.PathBridge;
 /**
  * @author Terry Jia
  */
-public class JSPHookProjectProvider extends AbstractLiferayProjectProvider
-    implements NewLiferayProjectProvider<NewJSPHookModuleOp>
+public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvider
+    implements NewLiferayProjectProvider<NewModuleFragmentOp>
 {
 
-    public JSPHookProjectProvider()
+    public ModuleFragmentProjectProvider()
     {
         super( null );
     }
@@ -54,7 +58,7 @@ public class JSPHookProjectProvider extends AbstractLiferayProjectProvider
     }
 
     @Override
-    public IStatus createNewProject( NewJSPHookModuleOp op, IProgressMonitor monitor ) throws CoreException
+    public IStatus createNewProject( NewModuleFragmentOp op, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = Status.OK_STATUS;
 
@@ -98,7 +102,7 @@ public class JSPHookProjectProvider extends AbstractLiferayProjectProvider
             }
         }
 
-        ElementList<OSGiCustomJSP> jsps = op.getCustomJSPs();
+        ElementList<OSGiCustomFragment> files = op.getCustomFiles();
 
         StringBuilder sb = new StringBuilder();
         sb.append( "create " );
@@ -141,34 +145,82 @@ public class JSPHookProjectProvider extends AbstractLiferayProjectProvider
                 }
             }
 
-            for( OSGiCustomJSP jsp : jsps )
+            for( OSGiCustomFragment file : files )
             {
-                File jspFile = temp.append( jsp.getValue().content() ).toFile();
+                File fragmentFile = temp.append( file.getValue().content() ).toFile();
 
-                if( jspFile.exists() )
+                if( fragmentFile.exists() )
                 {
-                    String parent = jspFile.getParentFile().getPath();
-                    parent = parent.replaceAll( "\\\\", "/" );
-                    String metaInfResources = "META-INF/resources";
+                    File folder = null;
 
-                    parent = parent.substring( parent.indexOf( metaInfResources ) + metaInfResources.length() );
-
-                    IPath resources =
-                        location.append( projectName ).append( "src" ).append( "main" ).append( "resources" ).append(
-                            "META-INF" ).append( "resources" );
-                    File folder = resources.toFile();
-
-                    if( !parent.equals( "resources" ) && !parent.equals( "" ) )
+                    if( fragmentFile.getName().equals( "portlet.properties" ) )
                     {
-                        folder = resources.append( parent ).toFile();
-                        folder.mkdirs();
-                    }
+                        folder =
+                            location.append( projectName ).append( "src" ).append( "main" ).append( "java" ).toFile();
 
-                    FileUtil.copyFileToDir( jspFile, folder );
+                        FileUtil.copyFileToDir( fragmentFile, "portlet-ext.properties", folder );
+                    }
+                    else
+                    {
+
+                        String parent = fragmentFile.getParentFile().getPath();
+                        parent = parent.replaceAll( "\\\\", "/" );
+                        String metaInfResources = "META-INF/resources";
+
+                        parent = parent.substring( parent.indexOf( metaInfResources ) + metaInfResources.length() );
+
+                        IPath resources = location.append( projectName ).append( "src" ).append( "main" ).append(
+                            "resources" ).append( "META-INF" ).append( "resources" );
+                        folder = resources.toFile();
+
+                        if( !parent.equals( "resources" ) && !parent.equals( "" ) )
+                        {
+                            folder = resources.append( parent ).toFile();
+                            folder.mkdirs();
+                        }
+
+                        FileUtil.copyFileToDir( fragmentFile, folder );
+                    }
                 }
             }
 
-            GradleUtil.importGradleProject( projecLocation.toFile(), monitor );
+            boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
+            boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+            boolean inWorkspacePath = false;
+
+            IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+            if( liferayWorkspaceProject != null && !useDefaultLocation )
+            {
+                IPath workspaceLocation = liferayWorkspaceProject.getLocation();
+
+                if( workspaceLocation != null )
+                {
+                    String liferayWorkspaceProjectModulesDir =
+                        LiferayWorkspaceUtil.getLiferayWorkspaceProjectModulesDir( liferayWorkspaceProject );
+
+                    if( liferayWorkspaceProjectModulesDir != null )
+                    {
+                        IPath modulesPath = workspaceLocation.append( liferayWorkspaceProjectModulesDir );
+
+                        if( modulesPath.isPrefixOf( projecLocation ) )
+                        {
+                            inWorkspacePath = true;
+                        }
+                    }
+                }
+            }
+            if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
+            {
+                IProject[] projects = new IProject[] { liferayWorkspaceProject };
+                SynchronizeGradleProjectsJob synchronizeJob =
+                    new SynchronizeGradleProjectsJob( Arrays.asList( projects ) );
+                synchronizeJob.schedule();
+            }
+            else
+            {
+                GradleUtil.importGradleProject( projecLocation.toFile(), monitor );
+            }
         }
         catch( Exception e )
         {

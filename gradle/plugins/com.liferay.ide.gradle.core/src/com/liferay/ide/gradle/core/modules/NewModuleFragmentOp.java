@@ -34,9 +34,9 @@ import org.eclipse.sapphire.modeling.annotations.Type;
 /**
  * @author Terry Jia
  */
-public interface NewJSPHookModuleOp extends BaseModuleOp
+public interface NewModuleFragmentOp extends BaseModuleOp
 {
-    ElementType TYPE = new ElementType( NewJSPHookModuleOp.class );
+    ElementType TYPE = new ElementType( NewModuleFragmentOp.class );
 
     // *** Liferay Bundle ***
 
@@ -66,13 +66,13 @@ public interface NewJSPHookModuleOp extends BaseModuleOp
     Value<String> getCustomOSGiBundle();
     void setCustomOSGiBundle(String value);
 
-    // *** CustomJSPs ***
+    // *** CustomFragments ***
 
-    @Type( base = OSGiCustomJSP.class )
-    @Label( standard = "custom jsps" )
-    ListProperty PROP_CUSTOM_JSPS = new ListProperty( TYPE, "CustomJSPs" );
+    @Type( base = OSGiCustomFragment.class )
+    @Label( standard = "custom files" )
+    ListProperty PROP_CUSTOM_FILES = new ListProperty( TYPE, "CustomFiles" );
 
-    ElementList<OSGiCustomJSP> getCustomJSPs();
+    ElementList<OSGiCustomFragment> getCustomFiles();
 
     // *** RealOSGiBUndleFile ***
 
@@ -84,6 +84,6 @@ public interface NewJSPHookModuleOp extends BaseModuleOp
     // *** Method: execute ***
 
     @Override
-    @DelegateImplementation( NewJSPHookModuleOpMethods.class )
+    @DelegateImplementation( NewModuleFragmentOpMethods.class )
     Status execute( ProgressMonitor monitor );
 }

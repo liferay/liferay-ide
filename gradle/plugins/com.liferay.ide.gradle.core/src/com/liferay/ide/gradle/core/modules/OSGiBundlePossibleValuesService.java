@@ -16,7 +16,7 @@
 package com.liferay.ide.gradle.core.modules;
 
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp;
+import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -50,7 +50,7 @@ public class OSGiBundlePossibleValuesService extends PossibleValuesService
         {
             bundles = new ArrayList<String>();
 
-            final NewJSPHookModuleOp op = op();
+            final NewModuleFragmentOp op = op();
 
             if( !op.disposed() )
             {
@@ -93,9 +93,9 @@ public class OSGiBundlePossibleValuesService extends PossibleValuesService
         }
     }
 
-    private NewJSPHookModuleOp op()
+    private NewModuleFragmentOp op()
     {
-        return context( NewJSPHookModuleOp.class );
+        return context( NewModuleFragmentOp.class );
     }
 
     @Override

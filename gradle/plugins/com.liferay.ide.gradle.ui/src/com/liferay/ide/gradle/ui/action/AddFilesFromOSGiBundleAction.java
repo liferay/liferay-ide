@@ -15,8 +15,8 @@
 
 package com.liferay.ide.gradle.ui.action;
 
-import com.liferay.ide.gradle.core.modules.NewJSPHookModuleOp;
-import com.liferay.ide.gradle.core.modules.OSGiCustomJSP;
+import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
+import com.liferay.ide.gradle.core.modules.OSGiCustomFragment;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -33,23 +33,23 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class AddJSPsFromOSGiBundleAction extends SapphireActionHandler
+public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
 {
 
     @Override
     protected Object run( Presentation context )
     {
-        NewJSPHookModuleOp op = context.part().getModelElement().nearest( NewJSPHookModuleOp.class );
+        NewModuleFragmentOp op = context.part().getModelElement().nearest( NewModuleFragmentOp.class );
 
-        ElementList<OSGiCustomJSP> currentJSPs = op.getCustomJSPs();
+        ElementList<OSGiCustomFragment> currentFiles = op.getCustomFiles();
 
-        OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog( null, currentJSPs );
+        OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog( null, currentFiles );
 
         final String runtimeName = op.getBundleName().content();
 
         IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 
-        dialog.setTitle( "Add jsps from OSGi Bundle" );
+        dialog.setTitle( "Add files from OSGi Bundle" );
 
         PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
         String currentOSGiBundle = op.getCustomOSGiBundle().content();
@@ -74,15 +74,15 @@ public class AddJSPsFromOSGiBundleAction extends SapphireActionHandler
 
             for( int i = 0; i < selected.length; i++ )
             {
-                OSGiCustomJSP jsp = op.getCustomJSPs().insert();
-                jsp.setValue( selected[i].toString() );
+                OSGiCustomFragment file = op.getCustomFiles().insert();
+                file.setValue( selected[i].toString() );
             }
         }
 
         return Status.createOkStatus();
     }
 
-    public AddJSPsFromOSGiBundleAction()
+    public AddFilesFromOSGiBundleAction()
     {
         super();
     }

@@ -31,16 +31,16 @@ import org.eclipse.sapphire.modeling.annotations.Service;
  * @author Terry Jia
  */
 @Image( path = "images/jsp_type_16x16.gif" )
-public interface OSGiCustomJSP extends Element
+public interface OSGiCustomFragment extends Element
 {
 
-    ElementType TYPE = new ElementType( OSGiCustomJSP.class );
+    ElementType TYPE = new ElementType( OSGiCustomFragment.class );
 
     // *** Value ***
 
-    @Label( standard = "Custom JSP Path" )
+    @Label( standard = "Custom File Path" )
     @Unique
-    @Service( impl = OSGiCustomJSPPossibleValuesService.class )
+    @Service( impl = OSGiCustomFragmentPossibleValuesService.class )
     @Required
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 

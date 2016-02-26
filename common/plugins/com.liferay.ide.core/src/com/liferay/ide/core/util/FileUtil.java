@@ -157,7 +157,12 @@ public class FileUtil
 
     public static void copyFileToDir( File src, File dir )
     {
-        copyFile( src, new File( dir, src.getName() ) );
+        copyFileToDir( src, src.getName(), dir );
+    }
+
+    public static void copyFileToDir( File src, String newName, File dir )
+    {
+        copyFile( src, new File( dir, newName ) );
     }
 
     public static void deleteDir( File directory, boolean removeAll )
