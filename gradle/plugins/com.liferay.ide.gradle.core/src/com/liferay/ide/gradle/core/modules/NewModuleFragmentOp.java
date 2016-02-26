@@ -64,13 +64,13 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     Value<String> getHostOsgiBundle();
     void setHostOsgiBundle(String value);
 
-    // *** CustomFragments ***
+    // *** OverrideFiles ***
 
-    @Type( base = OSGiCustomFragment.class )
-    @Label( standard = "custom files" )
-    ListProperty PROP_CUSTOM_FILES = new ListProperty( TYPE, "CustomFiles" );
+    @Type( base = OverrideFilePath.class )
+    @Label( standard = "Overridden files" )
+    ListProperty PROP_OVERRIDE_FILES = new ListProperty( TYPE, "OverrideFiles" );
 
-    ElementList<OSGiCustomFragment> getCustomFiles();
+    ElementList<OverrideFilePath> getOverrideFiles();
 
     // *** Method: execute ***
 

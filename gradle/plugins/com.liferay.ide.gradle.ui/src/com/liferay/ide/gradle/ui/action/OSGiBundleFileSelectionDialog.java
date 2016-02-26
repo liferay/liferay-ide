@@ -15,7 +15,7 @@
 
 package com.liferay.ide.gradle.ui.action;
 
-import com.liferay.ide.gradle.core.modules.OSGiCustomFragment;
+import com.liferay.ide.gradle.core.modules.OverrideFilePath;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +42,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
 {
 
-    private static ElementList<OSGiCustomFragment> files;
+    private static ElementList<OverrideFilePath> files;
 
     protected static class FileContentProvider implements ITreeContentProvider
     {
@@ -91,7 +91,7 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
                 }
             }
 
-            for( OSGiCustomFragment file : files )
+            for( OverrideFilePath file : files )
             {
                 String currentFile = file.getValue().content();
 
@@ -132,7 +132,7 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
         }
     }
 
-    public OSGiBundleFileSelectionDialog( Shell parent, ElementList<OSGiCustomFragment> currentFiles )
+    public OSGiBundleFileSelectionDialog( Shell parent, ElementList<OverrideFilePath> currentFiles )
     {
         super( parent, new FileLabelProvider(), new FileContentProvider() );
 

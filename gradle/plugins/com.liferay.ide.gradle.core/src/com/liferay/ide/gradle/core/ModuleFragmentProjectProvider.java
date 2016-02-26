@@ -20,7 +20,7 @@ import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
-import com.liferay.ide.gradle.core.modules.OSGiCustomFragment;
+import com.liferay.ide.gradle.core.modules.OverrideFilePath;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
@@ -112,7 +112,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
             }
         }
 
-        final ElementList<OSGiCustomFragment> files = op.getCustomFiles();
+        final ElementList<OverrideFilePath> files = op.getOverrideFiles();
 
         final StringBuilder sb = new StringBuilder();
         sb.append( "create " );
@@ -155,7 +155,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
                 }
             }
 
-            for( OSGiCustomFragment file : files )
+            for( OverrideFilePath file : files )
             {
                 File fragmentFile = temp.append( file.getValue().content() ).toFile();
 

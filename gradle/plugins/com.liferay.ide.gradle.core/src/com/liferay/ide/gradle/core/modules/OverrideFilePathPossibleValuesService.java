@@ -35,7 +35,7 @@ import org.eclipse.wst.server.core.IRuntime;
 /**
  * @author Terry Jia
  */
-public class OSGiCustomFragmentPossibleValuesService extends PossibleValuesService
+public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 {
 
     private static Set<String> possibleValues;
@@ -95,11 +95,11 @@ public class OSGiCustomFragmentPossibleValuesService extends PossibleValuesServi
 
             possibleValuesSet.addAll( possibleValues );
 
-            ElementList<OSGiCustomFragment> currentFiles = op.getCustomFiles();
+            ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
 
             if( currentFiles != null )
             {
-                for( OSGiCustomFragment cj : currentFiles )
+                for( OverrideFilePath cj : currentFiles )
                 {
                     String value = cj.getValue().content();
 

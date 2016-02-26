@@ -31,20 +31,19 @@ import org.eclipse.sapphire.modeling.annotations.Service;
  * @author Terry Jia
  */
 @Image( path = "images/jsp_type_16x16.gif" )
-public interface OSGiCustomFragment extends Element
+public interface OverrideFilePath extends Element
 {
 
-    ElementType TYPE = new ElementType( OSGiCustomFragment.class );
+    ElementType TYPE = new ElementType( OverrideFilePath.class );
 
     // *** Value ***
 
-    @Label( standard = "Custom File Path" )
+    @Label( standard = "Override File Path" )
     @Unique
-    @Service( impl = OSGiCustomFragmentPossibleValuesService.class )
+    @Service( impl = OverrideFilePathPossibleValuesService.class )
     @Required
     ValueProperty PROP_VALUE = new ValueProperty( TYPE, "Value" );
 
     Value<String> getValue();
-
     void setValue( String value );
 }

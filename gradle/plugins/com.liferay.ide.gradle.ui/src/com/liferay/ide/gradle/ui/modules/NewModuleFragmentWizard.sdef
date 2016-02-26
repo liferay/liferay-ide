@@ -79,7 +79,7 @@
                 </property-editor>
                 <spacer/>
                 <property-editor>
-                    <property>CustomFiles</property>
+                    <property>OverrideFiles</property>
                     <action>
                         <id>AddFilesFromOSGiBundle</id>
                         <label>Add files from OSGi Bundle...</label>

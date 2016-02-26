@@ -16,7 +16,7 @@
 package com.liferay.ide.gradle.ui.action;
 
 import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
-import com.liferay.ide.gradle.core.modules.OSGiCustomFragment;
+import com.liferay.ide.gradle.core.modules.OverrideFilePath;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -41,7 +41,7 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
     {
         NewModuleFragmentOp op = context.part().getModelElement().nearest( NewModuleFragmentOp.class );
 
-        ElementList<OSGiCustomFragment> currentFiles = op.getCustomFiles();
+        ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
 
         OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog( null, currentFiles );
 
@@ -74,7 +74,7 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
 
             for( int i = 0; i < selected.length; i++ )
             {
-                OSGiCustomFragment file = op.getCustomFiles().insert();
+                OverrideFilePath file = op.getOverrideFiles().insert();
                 file.setValue( selected[i].toString() );
             }
         }
