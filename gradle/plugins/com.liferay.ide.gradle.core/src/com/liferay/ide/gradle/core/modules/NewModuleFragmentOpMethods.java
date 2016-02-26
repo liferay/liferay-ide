@@ -36,7 +36,7 @@ public class NewModuleFragmentOpMethods extends BaseOpMethods
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 100 ); //$NON-NLS-1$
+        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 100 );
 
         Status retval = null;
 
@@ -50,7 +50,7 @@ public class NewModuleFragmentOpMethods extends BaseOpMethods
         }
         catch( Exception e )
         {
-            final String msg = "Error creating Liferay module fragment project."; //$NON-NLS-1$
+            final String msg = "Error creating Liferay module fragment project.";
             ProjectCore.logError( msg, e );
 
             return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );

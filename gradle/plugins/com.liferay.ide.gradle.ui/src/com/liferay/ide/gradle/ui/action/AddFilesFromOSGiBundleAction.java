@@ -39,29 +39,28 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        NewModuleFragmentOp op = context.part().getModelElement().nearest( NewModuleFragmentOp.class );
+        final NewModuleFragmentOp op = context.part().getModelElement().nearest( NewModuleFragmentOp.class );
 
-        ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
+        final ElementList<OverrideFilePath> currentFiles = op.getOverrideFiles();
 
-        OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog( null, currentFiles );
+        final OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog( null, currentFiles );
 
         final String runtimeName = op.getLiferayRuntimeName().content();
 
-        IRuntime runtime = ServerUtil.getRuntime( runtimeName );
+        final IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 
-        dialog.setTitle( "Add files from OSGi Bundle" );
+        dialog.setTitle( "Add files from OSGi bundle to override" );
 
-        PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
-        String currentOSGiBundle = op.getHostOsgiBundle().content();
+        final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+        final String currentOSGiBundle = op.getHostOsgiBundle().content();
 
         if( portalBundle != null )
         {
             try
             {
-                File modules =
-                    portalBundle.getOSGiBundlesDir().append( "modules" ).append( currentOSGiBundle ).toFile();
+                File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( currentOSGiBundle ).toFile();
 
-                dialog.setInput( modules );
+                dialog.setInput( module );
             }
             catch( Exception e )
             {
