@@ -241,11 +241,7 @@ public class MavenUtil
 
             Collection<MavenProjectInfo> children = info.getProjects();
 
-            if( children.isEmpty() )
-            {
-                results.add( info );
-            }
-            else
+            if( !children.isEmpty() )
             {
                 findChildMavenProjects( results, children );
             }
@@ -517,8 +513,7 @@ public class MavenUtil
 
         findChildMavenProjects( mavenProjects, projects );
 
-        ResolverConfiguration resolverConfig = new ResolverConfiguration();
-        ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration( resolverConfig );
+        ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
 
         IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
