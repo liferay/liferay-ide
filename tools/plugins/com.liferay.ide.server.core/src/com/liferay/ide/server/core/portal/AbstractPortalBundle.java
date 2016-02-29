@@ -47,6 +47,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
     private static final String CONFIG_TYPE_SERVER = "server";
     private static final String CONFIG_TYPE_VERSION = "version";
     private static final Version MANIFEST_VERSION_REQUIRED = ILiferayConstants.V700;
+    private static boolean clearedConfigInfoCacheOnce = false;
 
     protected IPath autoDeployPath;
     protected IPath liferayHome;
@@ -174,7 +175,7 @@ public abstract class AbstractPortalBundle implements PortalBundle
         return ServerUtil.getEntryCategories( getAppServerPortalDir(), getVersion() );
     }
 
-    private String getConfigInfoFromCache( String configType, IPath portalDir )
+    private IPath getConfigInfoPath( String configType )
     {
         IPath configInfoPath = null;
 
@@ -182,18 +183,23 @@ public abstract class AbstractPortalBundle implements PortalBundle
         {
             configInfoPath = LiferayServerCore.getDefault().getStateLocation().append( "version.properties" );
         }
-
         else if( configType.equals( CONFIG_TYPE_SERVER ) )
         {
             configInfoPath = LiferayServerCore.getDefault().getStateLocation().append( "serverInfos.properties" );
         }
 
-        else
+        if( !clearedConfigInfoCacheOnce )
         {
-            return null;
+            configInfoPath.toFile().delete();
+            clearedConfigInfoCacheOnce = true;
         }
 
-        File configInfoFile = configInfoPath.toFile();
+        return configInfoPath;
+    }
+
+    private String getConfigInfoFromCache( String configType, IPath portalDir )
+    {
+        File configInfoFile = getConfigInfoPath( configType ).toFile();
 
         String portalDirKey = CoreUtil.createStringDigest( portalDir.toPortableString() );
 
