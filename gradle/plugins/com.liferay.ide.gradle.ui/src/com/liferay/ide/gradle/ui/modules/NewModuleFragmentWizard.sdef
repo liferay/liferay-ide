@@ -48,7 +48,7 @@
                         <image>server_new.png</image>
                     </action>
                     <action-handler>
-                        <action>ModuleNewLiferayRuntime</action>
+                        <action>NewLiferayRuntime</action>
                         <id>ModuleNewLiferayRuntimeHandler</id>
                         <impl>ModuleNewLiferayRuntimeAction</impl>
                     </action-handler>
