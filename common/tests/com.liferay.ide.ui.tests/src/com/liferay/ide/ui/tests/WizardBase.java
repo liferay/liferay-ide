@@ -46,4 +46,6 @@ public interface WizardBase extends UIBase
     
     public final String TITLE_NEW_LIFERAY_PLUGIN_PROJECT = "New Liferay Portlet";
     public final String TITLE_NEW_LIFERAY_PORTLET = "New Liferay Portlet";
+    public final String TITLE_NEW_LIFERAY_JSF_PORTLET = "New Liferay JSF Portlet";
+    public final String TITLE_NEW_LIFERAY_VAADIN_PORTLET = "New Liferay Vaadin Portlet";
 }

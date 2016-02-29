@@ -13,36 +13,26 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.ui.tests;
+package com.liferay.ide.portlet.ui.tests.swtbot;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import com.liferay.ide.ui.tests.UIBase;
 
 /**
- * @author Terry Jia
  * @author Ashley Yuan
+ * @author Li Lu
  */
-public class ShellBot extends Bot
+public interface PortletWizard extends UIBase
 {
 
-    public ShellBot( SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+    public final String LABEL_PORTLET_PLUGIN_PROJECT = "Portlet plugin project:";
+    public final String LABEL_SOURCE_FOLDER = "Source folder:";
+    public final String LABEL_PORTLET_CLASS = "Portlet class:";
+    public final String LABEL_JAVA_PACKAGE = "Java package:";
+    public final String LABEL_SUPERCLASS = "Superclass:";
 
-    public void close()
-    {
-        bot.activeShell().close();
-    }
+    public final String RADIO_CREATE_NEW_PORTLET = "Create new portlet";
+    public final String RADIO_USE_DEFAULT_PORTLET = "Use default portlet (MVCPortlet)";
 
-    public SWTBotShell shell( String shellName )
-    {
-        sleep();
-        return bot.shell( shellName );
-    }
+    public final String TEXT_CLASS_NAME_CANNOT_BE_EMPTY = " The class name cannot be empty.";
 
-    public void close( String shellName )
-    {
-        bot.shell( shellName ).close();
-    }
 }

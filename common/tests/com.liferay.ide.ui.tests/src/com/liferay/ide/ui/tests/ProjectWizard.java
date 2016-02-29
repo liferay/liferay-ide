@@ -112,5 +112,12 @@ public interface ProjectWizard extends UIBase
     public final String MENU_THEME_FRAMEWORK_FREEMARKER = "Freemarker";
     public final String MENU_THEME_FRAMEWORK_VELOCITY = "Velocity";
     public final String MENU_THEME_FRAMEWORK_JSP = "JSP";
+    
+    public final String LABEL_JSF_STANDARD = "JSF standard";
+    public final String LABLE_ICE_FACES = "ICEfaces";
+    public final String LABLE_LIFERAY_FACES_ALLOY = "Liferay Faces Alloy";
+    public final String LABLE_PRIME_FACES = "PrimeFaces";
+    public final String LABLE_RICH_FACES = "RichFaces";
+    public final String LABLE_ARCHETYPE = "Archetype:";
 
 }

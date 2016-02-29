@@ -13,36 +13,21 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.ui.tests;
+package com.liferay.ide.portlet.ui.tests.swtbot;
 
-import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
-import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
+import com.liferay.ide.ui.tests.UIBase;
 
 /**
- * @author Terry Jia
- * @author Ashley Yuan
+ * @author Li Lu
  */
-public class ShellBot extends Bot
+public interface VaadinPortletWizard extends UIBase
 {
 
-    public ShellBot( SWTWorkbenchBot bot )
-    {
-        super( bot );
-    }
+    public final String LABEL_APPLICATION_CLASS = "Application class:";
 
-    public void close()
-    {
-        bot.activeShell().close();
-    }
+    public final int INDEX__VAADIN_VALIDATION_MESSAGE1 = 3;
+    public final int INDEX_VAADIN_VALIDATION_MESSAGE2 = 4;
+    public final int INDEX_VAADIN_VALIDATION_MESSAGE3 = 6;
 
-    public SWTBotShell shell( String shellName )
-    {
-        sleep();
-        return bot.shell( shellName );
-    }
-
-    public void close( String shellName )
-    {
-        bot.shell( shellName ).close();
-    }
+    public final String TEXT_MUST_SPECIFY_VAADIN_PORTLET_CLASS = " Must specify a vaadin portlet class.";
 }
