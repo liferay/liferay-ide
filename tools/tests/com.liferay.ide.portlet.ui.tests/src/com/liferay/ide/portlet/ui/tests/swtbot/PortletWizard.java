@@ -13,32 +13,26 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.tests.page;
+package com.liferay.ide.portlet.ui.tests.swtbot;
 
-import com.liferay.ide.project.ui.tests.swtbot.ProjectBuildAction;
-import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
-
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import com.liferay.ide.ui.tests.UIBase;
 
 /**
+ * @author Ashley Yuan
  * @author Li Lu
  */
-public class ProjectTreePageObject<T extends SWTBot> extends TreeItemPageObject<T> implements ProjectBuildAction
+public interface PortletWizard extends UIBase
 {
 
-    DeleteProjectDialogPageObject<SWTBot> deleteDialog;
+    public final String LABEL_PORTLET_PLUGIN_PROJECT = "Portlet plugin project:";
+    public final String LABEL_SOURCE_FOLDER = "Source folder:";
+    public final String LABEL_PORTLET_CLASS = "Portlet class:";
+    public final String LABEL_JAVA_PACKAGE = "Java package:";
+    public final String LABEL_SUPERCLASS = "Superclass:";
 
-    public ProjectTreePageObject( SWTBot bot, String nodeText )
-    {
-        super( bot, nodeText );
+    public final String RADIO_CREATE_NEW_PORTLET = "Create new portlet";
+    public final String RADIO_USE_DEFAULT_PORTLET = "Use default portlet (MVCPortlet)";
 
-        deleteDialog = new DeleteProjectDialogPageObject<SWTBot>( bot );
-    }
+    public final String TEXT_CLASS_NAME_CANNOT_BE_EMPTY = " The class name cannot be empty.";
 
-    public void deleteProject()
-    {
-        doAction( BUTTON_DELETE );
-
-        deleteDialog.confirmDeleteFromDisk();
-    }
 }

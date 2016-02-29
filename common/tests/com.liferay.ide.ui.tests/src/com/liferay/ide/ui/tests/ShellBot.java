@@ -40,4 +40,9 @@ public class ShellBot extends Bot
         sleep();
         return bot.shell( shellName );
     }
+
+    public void close( String shellName )
+    {
+        bot.shell( shellName ).close();
+    }
 }

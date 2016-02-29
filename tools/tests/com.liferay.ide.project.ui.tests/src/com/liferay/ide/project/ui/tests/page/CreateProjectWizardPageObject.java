@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
+import com.liferay.ide.ui.tests.ProjectWizard;
 import com.liferay.ide.ui.tests.swtbot.page.CheckBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.ComboBoxPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
@@ -25,6 +26,7 @@ import org.eclipse.swtbot.swt.finder.SWTBot;
 /**
  * @author Terry Jia
  * @author Ashley Yuan
+ * @author Li Lu
  */
 public class CreateProjectWizardPageObject<T extends SWTBot> extends WizardPageObject<T> implements ProjectWizard
 {

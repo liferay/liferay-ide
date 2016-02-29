@@ -17,6 +17,14 @@ package com.liferay.ide.ui.tests;
 
 import static org.junit.Assert.assertEquals;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.ui.LiferayUIPlugin;
+import com.liferay.ide.ui.tests.swtbot.page.ConfirmPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
+import com.liferay.ide.ui.tests.swtbot.page.TreePageObject;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -31,17 +39,13 @@ import org.eclipse.swtbot.swt.finder.utils.SWTBotPreferences;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.ui.LiferayUIPlugin;
-
 /**
  * @author Terry Jia
  * @author Ashley Yuan
+ * @author Li Lu
  */
 @RunWith( SWTBotJunit4ClassRunner.class )
-public class SWTBotBase implements UIBase
+public class SWTBotBase implements UIBase, WizardBase
 {
 
     private final static String liferayBundlesDir = System.getProperty( "liferay.bundles.dir" );
@@ -81,6 +85,11 @@ public class SWTBotBase implements UIBase
         labelBot = new LabelBot( bot );
         radioBot = new RadioBot( bot );
 
+        toolbarBot.menuClick( MENU_WINDOW, MENU_PERSPECTIVE, MENU_RESET_PERSPECTIVE );
+        ConfirmPageObject<SWTWorkbenchBot> dialog =
+            new ConfirmPageObject<SWTWorkbenchBot>( bot, TITLE_RESET_PERSPECTIVE, BUTTON_YES );
+        dialog.confirm();
+
         try
         {
             viewBot.close( VIEW_WELCOME );
@@ -97,6 +106,40 @@ public class SWTBotBase implements UIBase
 
         unzipPluginsSDK();
 
+    }
+
+    public static void deleteALLWSProjects()
+    {
+        TreePageObject<SWTWorkbenchBot> tree = new TreePageObject<SWTWorkbenchBot>( bot );
+        String[] projects = tree.getAllItems();
+
+        for( String project : projects )
+        {
+            if( project.equals( getLiferayPluginsSdkName() ) )
+            {
+                continue;
+            }
+
+            TreeItemPageObject<SWTWorkbenchBot> projectItem = new TreeItemPageObject<SWTWorkbenchBot>( bot, project );
+
+            projectItem.doAction( MENU_DELETE );
+
+            ConfirmPageObject<SWTWorkbenchBot> dialog =
+                new ConfirmPageObject<SWTWorkbenchBot>( bot, "Delete Resources", BUTTON_OK );
+            checkBoxBot.click();
+            dialog.confirm();
+        }
+    }
+
+    public static void deleteProjectInSdk( String projectName )
+    {
+        TreeItemPageObject<SWTWorkbenchBot> projectItem = new TreeItemPageObject<SWTWorkbenchBot>( bot, projectName );
+
+        projectItem.doAction( MENU_DELETE );
+
+        ConfirmPageObject<SWTWorkbenchBot> dialog =
+            new ConfirmPageObject<SWTWorkbenchBot>( bot, "Delete Resources", BUTTON_OK );
+        dialog.confirm();
     }
 
     protected static IPath getIvyCacheZip()
@@ -134,6 +177,11 @@ public class SWTBotBase implements UIBase
         return "liferay-plugins-sdk-6.2/";
     }
 
+    public static void openWizard( String wizardName )
+    {
+        bot.toolbarDropDownButtonWithTooltip( CREATE_MENU_NEW_LIFERAY_PLUGIN_PROJECT ).menuItem( wizardName ).click();
+    }
+    
     protected static void unzipPluginsSDK() throws IOException
     {
         FileUtil.deleteDir( getLiferayPluginsSdkDir().toFile(), true );

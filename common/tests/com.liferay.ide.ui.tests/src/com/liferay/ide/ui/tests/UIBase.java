@@ -38,6 +38,8 @@ public interface UIBase
 
     public final String CHECKBOX_INCLUDE_SAMPLE_CODE = "Include sample code";
 
+    public final String MENU_DELETE = "Delete";
+
     public final String VIEW_PACKAGE_EXPLORER = "Package Explorer";
     public final String VIEW_WELCOME = "Welcome";
 
@@ -45,6 +47,11 @@ public interface UIBase
     public final String MENU_NEW = "New";
     public final String MENU_PROJECT = "Project...";
 
+    public final String MENU_WINDOW = "Window";
+    public final String MENU_PERSPECTIVE = "Perspective";
+    public final String MENU_RESET_PERSPECTIVE = "Reset Perspective...";
+
     public final String TEXT_BLANK = "";
+    public final String TITLE_RESET_PERSPECTIVE = "Reset Perspective";
 
 }

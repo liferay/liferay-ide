@@ -39,7 +39,7 @@ public class TextPageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
     }
 
     @Override
-    protected AbstractSWTBot<?> getWidget()
+    protected SWTBotText getWidget()
     {
         if( label == null )
         {
@@ -47,15 +47,6 @@ public class TextPageObject<T extends SWTBot> extends AbstractWidgetPageObject<S
         }
 
         return bot.textWithLabel( label );
-    }
-
-    public boolean isEnabled()
-    {
-        AbstractSWTBot<? extends Widget> widget = getWidget();
-
-        SWTBotText swtBotText = (SWTBotText) widget;
-
-        return swtBotText.isEnabled();
     }
 
     public void setText( String text )

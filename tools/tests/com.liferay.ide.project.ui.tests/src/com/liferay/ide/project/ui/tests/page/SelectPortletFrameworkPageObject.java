@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.tests.page;
 
+import com.liferay.ide.ui.tests.ProjectWizard;
 import com.liferay.ide.ui.tests.swtbot.page.LabelPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.RadioPageObject;
 import com.liferay.ide.ui.tests.swtbot.page.TextPageObject;
@@ -68,6 +69,51 @@ public class SelectPortletFrameworkPageObject<T extends SWTBot> extends WizardPa
         this( bot, title );
 
         selectFramework( radio );
+    }
+
+    public LabelPageObject<SWTBot> getDisplayNameLabel()
+    {
+        return displayNameLabel;
+    }
+
+    public TextPageObject<SWTBot> getDisplayNameText()
+    {
+        return displayNameText;
+    }
+
+    public RadioPageObject<SWTBot> getJsfRadio()
+    {
+        return jsfRadio;
+    }
+
+    public RadioPageObject<SWTBot> getLiferayMVCRadio()
+    {
+        return liferayMVCRadio;
+    }
+
+    public RadioPageObject<SWTBot> getPortletFrameworkRadio()
+    {
+        return portletFrameworkRadio;
+    }
+
+    public LabelPageObject<SWTBot> getPortletNameLabel()
+    {
+        return portletNameLabel;
+    }
+
+    public TextPageObject<SWTBot> getPortletNameText()
+    {
+        return portletNameText;
+    }
+
+    public RadioPageObject<SWTBot> getSpringMVCRadio()
+    {
+        return springMVCRadio;
+    }
+
+    public RadioPageObject<SWTBot> getVaadinRadio()
+    {
+        return vaadinRadio;
     }
 
     public boolean IsLiferayMVCRadioSelected()

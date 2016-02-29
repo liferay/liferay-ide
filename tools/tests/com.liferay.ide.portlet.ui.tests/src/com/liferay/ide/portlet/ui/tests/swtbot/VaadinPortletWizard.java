@@ -13,32 +13,21 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.ui.tests.page;
+package com.liferay.ide.portlet.ui.tests.swtbot;
 
-import com.liferay.ide.project.ui.tests.swtbot.ProjectBuildAction;
-import com.liferay.ide.ui.tests.swtbot.page.TreeItemPageObject;
-
-import org.eclipse.swtbot.swt.finder.SWTBot;
+import com.liferay.ide.ui.tests.UIBase;
 
 /**
  * @author Li Lu
  */
-public class ProjectTreePageObject<T extends SWTBot> extends TreeItemPageObject<T> implements ProjectBuildAction
+public interface VaadinPortletWizard extends UIBase
 {
 
-    DeleteProjectDialogPageObject<SWTBot> deleteDialog;
+    public final String LABEL_APPLICATION_CLASS = "Application class:";
 
-    public ProjectTreePageObject( SWTBot bot, String nodeText )
-    {
-        super( bot, nodeText );
+    public final int INDEX__VAADIN_VALIDATION_MESSAGE1 = 3;
+    public final int INDEX_VAADIN_VALIDATION_MESSAGE2 = 4;
+    public final int INDEX_VAADIN_VALIDATION_MESSAGE3 = 6;
 
-        deleteDialog = new DeleteProjectDialogPageObject<SWTBot>( bot );
-    }
-
-    public void deleteProject()
-    {
-        doAction( BUTTON_DELETE );
-
-        deleteDialog.confirmDeleteFromDisk();
-    }
+    public final String TEXT_MUST_SPECIFY_VAADIN_PORTLET_CLASS = " Must specify a vaadin portlet class.";
 }
