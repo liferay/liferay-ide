@@ -22,6 +22,8 @@ import org.eclipse.wst.server.core.IServer;
 
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.ILiferayRuntime;
+import com.liferay.ide.server.core.portal.PortalRuntime;
 
 /**
  * @author Lovett Li
@@ -50,10 +52,11 @@ public class ServiceWrapperCommand
         throw new FileNotFoundException( "can't find static services file wrappers-static.json" );
     }
 
-    public String[] getDynamicServiceWrapper()
+    private String[] getDynamicServiceWrapper()
     {
         final List<File> targetJarFile = new ArrayList<>();
-        final IPath bundleLibPath = _server.getRuntime().getLocation();
+        final IPath bundleLibPath =
+            ( (PortalRuntime) _server.getRuntime().loadAdapter( PortalRuntime.class, null ) ).getAppServerDir();
         final List<String> wrapperList = new ArrayList<>();
         List<File> libFiles;
 
@@ -127,7 +130,7 @@ public class ServiceWrapperCommand
     }
 
     @SuppressWarnings( "unchecked" )
-    public String[] getStaticServiceWrapper() throws Exception
+    private String[] getStaticServiceWrapper() throws Exception
     {
         final URL url =
             FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/wrappers-static.json" ) );
