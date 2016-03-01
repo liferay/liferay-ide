@@ -272,7 +272,15 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         }
 
         init();
-        validate();
+
+        try
+        {
+            validate();
+        }
+        catch( NullPointerException e )
+        {
+            // ignore exception because this composite haven't been created and there are no shell
+        }
     }
 
     private void updateFields()
