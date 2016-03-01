@@ -239,16 +239,13 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog
      */
     private IStatus transferSettings( final IConfigurationElement element, final IPath path )
     {
-
         final IStatus[] exceptions = new IStatus[1];
 
         SafeRunner.run( new ISafeRunnable()
         {
-
             @Override
             public void run() throws Exception
             {
-
                 try
                 {
                     SettingsTransfer transfer =
@@ -262,7 +259,6 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog
                 {
                     exceptions[0] = exception.getStatus();
                 }
-
             }
 
             @Override
@@ -291,24 +287,6 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog
         return DIALOG_PERSISTLOCATION;
     }
 
-    private void patchWorkingSets( final IConfigurationElement element, final IPath path )
-    {
-
-        String name = element.getAttribute( ATT_NAME );
-
-        if( name.trim().equals( "Working Sets" ) )
-        {
-            IPath dataLocation = getNewWorkbenchStateLocation( path );
-
-            if( dataLocation == null )
-                return;
-
-            File dir = new File( dataLocation.toOSString() );
-
-            dir.mkdirs();
-        }
-    }
-
     private IPath getNewWorkbenchStateLocation( IPath newWorkspaceRoot )
     {
         IPath currentWorkspaceRoot = Platform.getLocation();
@@ -324,6 +302,23 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog
         // Now add in the
         dataLocation = newWorkspaceRoot.append( dataLocation );
         return dataLocation;
+    }
+
+    private void patchWorkingSets( final IConfigurationElement element, final IPath path )
+    {
+        String name = element.getAttribute( ATT_NAME );
+
+        if( name.trim().equals( "Working Sets" ) )
+        {
+            IPath dataLocation = getNewWorkbenchStateLocation( path );
+
+            if( dataLocation == null )
+                return;
+
+            File dir = new File( dataLocation.toOSString() );
+
+            dir.mkdirs();
+        }
     }
 
 }
