@@ -15,6 +15,7 @@
 
 package com.liferay.ide.ui.dialog;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
@@ -251,6 +253,9 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog
                 {
                     SettingsTransfer transfer =
                         (SettingsTransfer) WorkbenchPlugin.createExtension( element, ATT_CLASS );
+
+                    patchWorkingSets(element,path);
+
                     transfer.transferSettings( path );
                 }
                 catch( CoreException exception )
@@ -284,6 +289,41 @@ public class ChooseWorkspaceWithPreferenceDialog extends ChooseWorkspaceDialog
     protected int getDialogBoundsStrategy()
     {
         return DIALOG_PERSISTLOCATION;
+    }
+
+    private void patchWorkingSets( final IConfigurationElement element, final IPath path )
+    {
+
+        String name = element.getAttribute( ATT_NAME );
+
+        if( name.trim().equals( "Working Sets" ) )
+        {
+            IPath dataLocation = getNewWorkbenchStateLocation( path );
+
+            if( dataLocation == null )
+                return;
+
+            File dir = new File( dataLocation.toOSString() );
+
+            dir.mkdirs();
+        }
+    }
+
+    private IPath getNewWorkbenchStateLocation( IPath newWorkspaceRoot )
+    {
+        IPath currentWorkspaceRoot = Platform.getLocation();
+
+        IPath dataLocation = WorkbenchPlugin.getDefault().getDataLocation();
+
+        if( dataLocation == null )
+            return null;
+        int segmentsToRemove = dataLocation.matchingFirstSegments( currentWorkspaceRoot );
+
+        // Strip it down to the extension
+        dataLocation = dataLocation.removeFirstSegments( segmentsToRemove );
+        // Now add in the
+        dataLocation = newWorkspaceRoot.append( dataLocation );
+        return dataLocation;
     }
 
 }
