@@ -103,19 +103,9 @@ public class NewLiferayWorkspaceOpMethods
     {
         final String projectName = op.getWorkspaceName().content();
 
-        if( baseLocation == null )
+        if( baseLocation == null || projectName == null)
         {
             return;
-        }
-
-        final String lastSegment = baseLocation.lastSegment();
-
-        if( baseLocation != null && baseLocation.segmentCount() > 0 )
-        {
-            if( lastSegment.equals( projectName ) )
-            {
-                return;
-            }
         }
 
         final Path newLocation = baseLocation.append( projectName );
