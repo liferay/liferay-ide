@@ -45,7 +45,8 @@ public class SDKImportValidationService extends ValidationService
 
             if( sdk != null )
             {
-                retval = Status.createErrorStatus( " This workspace already has another sdk." );
+                retval = StatusBridge.create(
+                    ProjectCore.createErrorStatus( " This workspace already has another sdk." ) );
             }
             else
             {
@@ -57,7 +58,7 @@ public class SDKImportValidationService extends ValidationService
 
                     if( sdk != null )
                     {
-                        IStatus sdkStatus = sdk.validate();
+                        IStatus sdkStatus = sdk.validate(true);
 
                         if( !sdkStatus.isOK() )
                         {
@@ -67,7 +68,8 @@ public class SDKImportValidationService extends ValidationService
                     }
                     else
                     {
-                        retval = Status.createErrorStatus( "This parent sdk project path is invalid." );
+                        retval = StatusBridge.create(
+                            ProjectCore.createErrorStatus( "This parent sdk project path is invalid." ) );
                     }
                 }
             }

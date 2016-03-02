@@ -30,6 +30,7 @@ import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
@@ -46,6 +47,7 @@ public interface ParentSDKProjectImportOp extends ExecutableElement
 
     @Type( base = Path.class )
     @AbsolutePath
+    @Required
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "SDK Directory" )
     @Service( impl = SDKImportValidationService.class )
