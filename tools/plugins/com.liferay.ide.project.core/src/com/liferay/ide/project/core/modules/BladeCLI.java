@@ -253,7 +253,12 @@ public class BladeCLI
 
                         if( entryPath.segmentCount() > 1 )
                         {
-                            templateNames.add( entryPath.segment( 1 ) );
+                            String name = entryPath.segment( 1 );
+
+                            if( !name.equals( "fragment" ) )
+                            {
+                                templateNames.add( name );
+                            }
                         }
                     }
                 }
