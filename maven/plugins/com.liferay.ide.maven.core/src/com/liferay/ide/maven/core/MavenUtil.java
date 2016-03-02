@@ -21,6 +21,8 @@ import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,6 +41,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -231,6 +234,45 @@ public class MavenUtil
         }
 
         return retval == null ? Status.OK_STATUS : retval;
+    }
+
+    private static List<MavenProjectInfo> filterProjects( List<MavenProjectInfo> mavenProjects )
+    {
+        List<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>();
+
+        for( MavenProjectInfo info : mavenProjects )
+        {
+            if( info != null )
+            {
+                IWorkspace workspace = CoreUtil.getWorkspace();
+
+                for( IProject project : workspace.getRoot().getProjects() )
+                {
+                    URI mavenuri = info.getPomFile().getParentFile().toURI();
+
+                    if( mavenuri.toString().endsWith( "/" ) )
+                    {
+                        try
+                        {
+                            mavenuri = new URI( mavenuri.toString().substring( 0, mavenuri.toString().length() - 1 ) );
+                        }
+                        catch( URISyntaxException e )
+                        {
+                            LiferayMavenCore.logError( e );
+                        }
+                    }
+
+                    boolean ok = project.exists() && project.getLocationURI().equals( mavenuri );
+
+                    if( !ok )
+                    {
+                        result.add( info );
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     private static void findChildMavenProjects( List<MavenProjectInfo> results, Collection<MavenProjectInfo> infos )
@@ -497,7 +539,6 @@ public class MavenUtil
         return retval;
     }
 
-
     public static void importProject( String location, IProgressMonitor monitor )
         throws CoreException, InterruptedException
     {
@@ -512,6 +553,8 @@ public class MavenUtil
         List<MavenProjectInfo> mavenProjects = new ArrayList<MavenProjectInfo>();
 
         findChildMavenProjects( mavenProjects, projects );
+
+        mavenProjects = filterProjects(mavenProjects);
 
         ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
 
