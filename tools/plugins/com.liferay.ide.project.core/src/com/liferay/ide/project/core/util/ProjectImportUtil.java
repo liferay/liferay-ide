@@ -18,6 +18,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.BinaryProjectRecord;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -25,6 +26,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.facet.IPluginFacetConstants;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKManager;
@@ -42,7 +44,10 @@ import java.util.jar.JarFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.eclipse.core.resources.FileInfoMatcherDescription;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -369,6 +374,16 @@ public class ProjectImportUtil
                 throw new CoreException( ProjectCore.createErrorStatus( e ) );
             }
         }
+
+        String parentName = projectdir.removeLastSegments( 1 ).toFile().getName();
+        IProject sdkProject = CoreUtil.getProject( sdk.getName() );
+
+        IFolder folder = sdkProject.getFolder( parentName );
+
+        FileInfoMatcherDescription fmd = new FileInfoMatcherDescription(
+            "org.eclipse.ui.ide.multiFilter", "1.0-name-matches-true-false-" + project.getName() );
+
+        folder.createFilter( 10, fmd, IResource.BACKGROUND_REFRESH, monitor );
 
         return project;
     }

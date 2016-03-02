@@ -40,15 +40,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.core.resources.FileInfoMatcherDescription;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFilterMatcherDescriptor;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceFilterDescription;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -313,8 +308,6 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
 
         IPath newSDKProjectPath = null;
 
-        String type = null;
-
         switch( pluginType )
         {
             case servicebuilder:
@@ -324,13 +317,11 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
 
                 workingDir = sdk.getLocation().append( ISDKConstants.PORTLET_PLUGIN_PROJECT_FOLDER ).toOSString();
 
-                type = "portlet";
-
                 if( hasGradleTools )
                 {
                     arguments.add( frameworkName );
 
-                    sdk.createNewProject( projectName, arguments, type, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "portlet", workingDir, monitor );
                 }
                 else
                 {
@@ -345,11 +336,9 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
             case hook:
                 workingDir = sdk.getLocation().append( ISDKConstants.HOOK_PLUGIN_PROJECT_FOLDER ).toOSString();
 
-                type = "hook";
-
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, type, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "hook", workingDir, monitor );
                 }
                 else
                 {
@@ -363,11 +352,9 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
             case ext:
                 workingDir = sdk.getLocation().append( ISDKConstants.EXT_PLUGIN_PROJECT_FOLDER ).toOSString();
 
-                type = "ext";
-
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, type, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "ext", workingDir, monitor );
                 }
                 else
                 {
@@ -381,11 +368,9 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
             case layouttpl:
                 workingDir = sdk.getLocation().append( ISDKConstants.LAYOUTTPL_PLUGIN_PROJECT_FOLDER ).toOSString();
 
-                type = "layouttpl";
-
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, type, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "layouttpl", workingDir, monitor );
                 }
                 else
                 {
@@ -399,11 +384,9 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
             case theme:
                 workingDir = sdk.getLocation().append( ISDKConstants.THEME_PLUGIN_PROJECT_FOLDER ).toOSString();
 
-                type = "theme";
-
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, type, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "theme", workingDir, monitor );
                 }
                 else
                 {
@@ -416,11 +399,9 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
             case web:
                 workingDir = sdk.getLocation().append( ISDKConstants.WEB_PLUGIN_PROJECT_FOLDER ).toOSString();
 
-                type = "web";
-
                 if( hasGradleTools )
                 {
-                    sdk.createNewProject( projectName, arguments, type, workingDir, monitor );
+                    sdk.createNewProject( projectName, arguments, "web", workingDir, monitor );
                 }
                 else
                 {
@@ -464,15 +445,6 @@ public class PluginsSDKProjectProvider extends AbstractLiferayProjectProvider im
             ProjectImportUtil.importProject( projectRecord.getProjectLocation(), monitor, op );
 
         newProject.open( monitor );
-
-        IProject sdkProject = CoreUtil.getProject( sdk.getName() );
-
-        FileInfoMatcherDescription fmd = new FileInfoMatcherDescription(
-            "org.eclipse.ui.ide.multiFilter", "1.0-name-matches-true-false-" + newProject.getName() );
-
-        IFolder folder = sdkProject.getFolder( sdk.getPluginFolder( type ) );
-
-        folder.createFilter( 10, fmd, IResource.BACKGROUND_REFRESH, monitor );
 
         // need to update project name incase the suffix was not correct
         op.setFinalProjectName( newProject.getName() );
