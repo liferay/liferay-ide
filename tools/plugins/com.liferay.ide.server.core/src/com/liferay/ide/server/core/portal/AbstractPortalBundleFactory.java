@@ -117,11 +117,12 @@ public abstract class AbstractPortalBundleFactory implements PortalBundleFactory
             return true;
         }
 
-        if( path.append( "portal-ext.properties" ).toFile().exists() ||
-            path.append( "portal-setup-wizard.properties" ).toFile().exists() )
-        {
-            return true;
-        }
+        // can't detect is liferay 7 bundle or not
+        // if( path.append( "portal-ext.properties" ).toFile().exists() ||
+        // path.append( "portal-setup-wizard.properties" ).toFile().exists() )
+        // {
+        // return true;
+        // }
 
         return false;
     }
