@@ -16,6 +16,7 @@
 package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -24,6 +25,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
@@ -44,7 +46,10 @@ public class NewLiferayWorkspaceOpMethods
         try
         {
             final Path projectLocation = op.getLocation().content();
-            updateLocation( op, projectLocation );
+
+            Path workspaceLocation = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+
+            updateLocation( op, workspaceLocation );
 
             LiferayWorkspaceProjectProvider provider =
                 (LiferayWorkspaceProjectProvider) LiferayCore.getProvider( "liferay-workspace" );
