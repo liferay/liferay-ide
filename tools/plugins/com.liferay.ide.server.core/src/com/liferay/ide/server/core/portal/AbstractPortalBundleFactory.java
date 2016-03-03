@@ -112,17 +112,13 @@ public abstract class AbstractPortalBundleFactory implements PortalBundleFactory
             return false;
         }
 
-        if( path.append( "data" ).toFile().exists() && path.append( "osgi" ).toFile().exists() )
+        if( path.append( "osgi/configs" ).toFile().exists() &&
+            path.append( "osgi/core" ).toFile().exists() &&
+            path.append( "osgi/modules" ).toFile().exists() &&
+            path.append( "osgi/portal" ).toFile().exists() )
         {
             return true;
         }
-
-        // can't detect is liferay 7 bundle or not
-        // if( path.append( "portal-ext.properties" ).toFile().exists() ||
-        // path.append( "portal-setup-wizard.properties" ).toFile().exists() )
-        // {
-        // return true;
-        // }
 
         return false;
     }
