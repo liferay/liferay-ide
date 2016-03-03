@@ -31,6 +31,8 @@
             preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
             project="true">
          <class class="com.liferay.ide.gradle.ui.modules.NewModuleFragmentWizard">
+            <parameter name="liferay_project" value="true"/>
+            <parameter name="menuIndex" value="12" />
          </class>
 
          <description>

@@ -40,7 +40,7 @@
                     <property>ProjectProvider</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
                 </property-editor>
-                <spacer/>               
+                <spacer/>
                 <property-editor>
                     <property>ProjectTemplateName</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
