@@ -217,6 +217,10 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
             {
                 GradleUtil.importGradleProject( projecLocation.toFile(), monitor );
             }
+
+            IProject project = CoreUtil.getProject( projectName );
+
+            ModuleCoreUtil.addFacets( project, monitor );
         }
         catch( Exception e )
         {
