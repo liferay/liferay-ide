@@ -238,15 +238,13 @@ public class MavenUtil
 
     private static List<MavenProjectInfo> filterProjects( List<MavenProjectInfo> mavenProjects )
     {
-        List<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>();
+        final List<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>();
 
         for( MavenProjectInfo info : mavenProjects )
         {
             if( info != null )
             {
-                IWorkspace workspace = CoreUtil.getWorkspace();
-
-                for( IProject project : workspace.getRoot().getProjects() )
+                for( IProject project : CoreUtil.getAllProjects() )
                 {
                     URI mavenuri = info.getPomFile().getParentFile().toURI();
 
@@ -258,13 +256,12 @@ public class MavenUtil
                         }
                         catch( URISyntaxException e )
                         {
-                            LiferayMavenCore.logError( e );
                         }
                     }
 
-                    boolean ok = project.exists() && project.getLocationURI().equals( mavenuri );
+                    final boolean alreadyExists = project.exists() && project.getLocationURI().equals( mavenuri );
 
-                    if( !ok )
+                    if( !alreadyExists )
                     {
                         result.add( info );
                     }
