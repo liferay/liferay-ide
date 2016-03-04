@@ -24,7 +24,6 @@ import com.gradleware.tooling.toolingmodel.repository.FixedRequestAttributes;
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.util.LaunchHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,6 +33,7 @@ import java.util.Set;
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.ProjectConfiguration;
 import org.eclipse.buildship.core.launch.GradleRunConfigurationAttributes;
+import org.eclipse.buildship.core.launch.GradleRunConfigurationDelegate;
 import org.eclipse.buildship.core.util.file.FileUtils;
 import org.eclipse.buildship.core.util.variable.ExpressionUtils;
 import org.eclipse.core.resources.IFile;
@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.Launch;
 
 /**
  * @author Gregory Amerson
@@ -116,9 +117,8 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
                 {
                     try
                     {
-                        LaunchHelper helper = new LaunchHelper();
-
-                        helper.launch( launchConfigurationWC, "run", monitor );
+                        new GradleRunConfigurationDelegate().launch(
+                            launchConfigurationWC, "run", new Launch( launchConfigurationWC, "run", null ), monitor );
                     }
                     catch( Exception e )
                     {
