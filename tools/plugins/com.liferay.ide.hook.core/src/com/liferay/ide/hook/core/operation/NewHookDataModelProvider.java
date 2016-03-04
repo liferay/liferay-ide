@@ -49,6 +49,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
 /**
  * @author Greg Amerson
  * @author Terry Jia
+ * @author Simon Jiang
  */
 @SuppressWarnings( { "restriction", "unchecked", "rawtypes" } )
 public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProvider
@@ -261,13 +262,26 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
         else if( CUSTOM_JSPS_ITEMS.equals( propertyName ) && getBooleanProperty( CREATE_CUSTOM_JSPS ) )
         {
             Object jspItems = getProperty( CUSTOM_JSPS_ITEMS );
-
             if( jspItems instanceof List )
             {
-                List jsps = (List) jspItems;
-
-                if( jsps.size() > 0 )
+                if( ( (List) jspItems ).size() > 0 )
                 {
+                    String[][] jspArrays = ( (List<String[]>) jspItems ).toArray( new String[0][] );
+
+                    for( int i = 0; i < jspArrays.length; i++ )
+                    {
+                        String[] comp1 = jspArrays[i];
+
+                        for( int j = i + 1; j < jspArrays.length; j++ )
+                        {
+                            String[] comp2 = jspArrays[j];
+
+                            if( comp1[0].equals( comp2[0] ) )
+                            {
+                                return HookCore.createWarnStatus( "Shouldn't add same jsp file." );
+                            }
+                        }
+                    }
                     return Status.OK_STATUS;
                 }
             }

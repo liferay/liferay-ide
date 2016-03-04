@@ -156,22 +156,25 @@ public class AddHookOperation extends AbstractDataModelOperation implements INew
 
         CoreUtil.prepareFolder( (IFolder) newJspFile.getParent() );
 
-        if( originalPortalJspPath.toFile().exists() )
+        if ( !newJspFile.getLocation().toFile().exists() )
         {
-            final FileInputStream fis = new FileInputStream( originalPortalJspPath.toFile() );
-
-            if( newJspFile.exists() )
+            if( originalPortalJspPath.toFile().exists() )
             {
-                newJspFile.setContents( fis, IResource.FORCE, null );
+                final FileInputStream fis = new FileInputStream( originalPortalJspPath.toFile() );
+
+                if( newJspFile.exists() )
+                {
+                    newJspFile.setContents( fis, IResource.FORCE, null );
+                }
+                else
+                {
+                    newJspFile.create( fis, true, null );
+                }
             }
             else
             {
-                newJspFile.create( fis, true, null );
+                CoreUtil.createEmptyFile( newJspFile );
             }
-        }
-        else
-        {
-            CoreUtil.createEmptyFile( newJspFile );
         }
 
         return newJspFile;

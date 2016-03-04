@@ -48,6 +48,10 @@ public class HookCore extends Plugin
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, e );
     }
 
+    public static IStatus createWarnStatus( String msg )
+    {
+        return new Status( IStatus.WARNING, PLUGIN_ID,msg );
+    }
     /**
      * Returns the shared instance
      *
