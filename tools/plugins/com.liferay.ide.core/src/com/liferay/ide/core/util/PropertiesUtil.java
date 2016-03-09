@@ -17,6 +17,7 @@ package com.liferay.ide.core.util;
 
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.LiferayCore;
 
 import java.io.ByteArrayInputStream;
@@ -46,7 +47,15 @@ import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeHierarchy;
+import org.eclipse.jdt.core.JavaCore;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -417,11 +426,11 @@ public class PropertiesUtil
 
     public static List<IFile> getDefaultLanguagePropertiesFromProject( IProject project )
     {
-        final ILiferayProject lp = LiferayCore.create( project );
-
-        if( lp != null )
+        final IResourceBundleProject resourceBundleProject = LiferayCore.create( IResourceBundleProject.class,project );
+        
+        if( resourceBundleProject != null )
         {
-            return getDefaultLanguagePropertiesFromPortletXml( lp.getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
+            return resourceBundleProject.getDefaultLanguageProperties();
         }
         else
         {
@@ -905,6 +914,136 @@ public class PropertiesUtil
         {
             LiferayCore.logError( "Could not save file " + bladeSettings.getName() );
         }
+    }
+
+    public static List<IFile> getDefaultLanguagePropertiesFromModuleProject( IProject project )
+    {
+        IJavaProject javaProject = JavaCore.create( project );
+
+        IType portletType = null;
+
+        List<IFile> retvals = new ArrayList<IFile>();
+
+        try
+        {
+            portletType = javaProject.findType( "javax.portlet.Portlet" );
+
+            final ITypeHierarchy typeHierarchy = portletType.newTypeHierarchy( javaProject, new NullProgressMonitor() );
+
+            final IPackageFragmentRoot[] packageRoots = javaProject.getPackageFragmentRoots();
+
+            List<String> packages = new ArrayList<String>();
+
+            List<IType> srcJavaTypes = new ArrayList<IType>();
+
+            for( IPackageFragmentRoot packageRoot : packageRoots )
+            {
+                if( packageRoot.getKind() == IPackageFragmentRoot.K_SOURCE )
+                {
+                    IJavaElement[] javaElements = packageRoot.getChildren();
+
+                    for( IJavaElement javaElement : javaElements )
+                    {
+                        IPackageFragment packageFragment = (IPackageFragment) javaElement;
+
+                        packages.add( packageFragment.getElementName() );
+                    }
+                }
+            }
+
+            IType[] subTypes = typeHierarchy.getAllSubtypes( portletType );
+
+            for( IType type : subTypes )
+            {
+                if( isInPackage( packages, type.getFullyQualifiedName() ) )
+                {
+                    srcJavaTypes.add( type );
+                }
+            }
+
+            String resourceBundleValue = null;
+
+            for( IType type : srcJavaTypes )
+            {
+                File file = type.getResource().getLocation().toFile();
+                String content = FileUtil.readContents( file );
+
+                String key = "javax.portlet.resource-bundle=";
+
+                int i = content.indexOf( key );
+
+                if( i == -1 )
+                {
+                    continue;
+                }
+                else
+                {
+                    i += key.length();
+
+                    StringBuilder strBuilder = new StringBuilder();
+
+                    for( ; i < content.length(); i++ )
+                    {
+                        char ch = content.charAt( i );
+                        if( ch != '"' )
+                        {
+                            strBuilder.append( ch );
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    resourceBundleValue = strBuilder.toString();
+                    // find the first language config
+                    break;
+                }
+            }
+
+            String resourceBundle = resourceBundleValue.replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+
+            if( !resourceBundle.endsWith( PROPERTIES_FILE_SUFFIX ) &&
+                !resourceBundle.contains( IPath.SEPARATOR + "" ) &&
+                !( CoreUtil.isWindows() && resourceBundle.contains( "\\" ) ) )
+            {
+                resourceBundle = new Path( resourceBundle.replace( ".", IPath.SEPARATOR + "" ) ).toString();
+            }
+
+            final ILiferayProject lrproject = LiferayCore.create( project );
+            final IFolder[] srcFolders = lrproject.getSourceFolders();
+
+            for( IFolder srcFolder : srcFolders )
+            {
+                final IFile languageFile = CoreUtil.getWorkspaceRoot().getFile(
+                    srcFolder.getFullPath().append( resourceBundle + PROPERTIES_FILE_SUFFIX ) );
+
+                if( ( languageFile != null ) && languageFile.exists() )
+                {
+                    retvals.add( languageFile );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return retvals;
+    }
+
+    private static boolean isInPackage( List<String> packages, String className )
+    {
+        for( String element : packages )
+        {
+            if( !element.isEmpty() && className.startsWith( element ) &&
+                !className.startsWith( "com.liferay.portal.kernel.portlet" ) &&
+                !className.startsWith( "javax.portlet" ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

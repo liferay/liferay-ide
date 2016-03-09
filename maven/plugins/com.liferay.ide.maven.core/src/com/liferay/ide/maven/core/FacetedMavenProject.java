@@ -15,11 +15,13 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.ILiferayPortal;
+import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.project.core.FlexibleProject;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
@@ -40,7 +42,7 @@ import org.eclipse.m2e.core.project.IMavenProjectFacade;
  * @author Cindy Li
  * @author Simon Jiang
  */
-public class FacetedMavenProject extends LiferayMavenProject implements IWebProject
+public class FacetedMavenProject extends LiferayMavenProject implements IWebProject, IResourceBundleProject
 {
 
     private final FlexibleProject flexibleProject;
@@ -131,6 +133,12 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
         }
 
         return outputs;
+    }
+
+    @Override
+    public List<IFile> getDefaultLanguageProperties()
+    {
+        return flexibleProject.getDefaultLanguageProperties();
     }
 
 }

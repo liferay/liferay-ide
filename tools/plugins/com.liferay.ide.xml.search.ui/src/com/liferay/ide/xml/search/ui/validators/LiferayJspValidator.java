@@ -288,24 +288,24 @@ public class LiferayJspValidator extends LiferayBaseValidator
                         catch( Exception e )
                         {
                         }
+                    }
 
-                        if( addMessage )
+                    if( addMessage )
+                    {
+                        final ValidationType validationType = getValidationType( referenceTo, nbElements );
+                        final int severity = getServerity( validationType, file );
+
+                        if( severity != ValidationMessage.IGNORE )
                         {
-                            final ValidationType validationType = getValidationType( referenceTo, nbElements );
-                            final int severity = getServerity( validationType, file );
+                            final String liferayPluginValidationType =
+                                getLiferayPluginValidationType( validationType, file );
+                            final String querySpecificationId = referenceTo.getQuerySpecificationId();
+                            final String messageText =
+                                getMessageText( validationType, referenceTo, node, file );
 
-                            if( severity != ValidationMessage.IGNORE )
-                            {
-                                final String liferayPluginValidationType =
-                                    getLiferayPluginValidationType( validationType, file );
-                                final String querySpecificationId = referenceTo.getQuerySpecificationId();
-                                final String messageText =
-                                    getMessageText( validationType, referenceTo, node, file );
-
-                                addMessage(
-                                    node, file, validator, reporter, batchMode, messageText, severity,
-                                    liferayPluginValidationType, querySpecificationId );
-                            }
+                            addMessage(
+                                node, file, validator, reporter, batchMode, messageText, severity,
+                                liferayPluginValidationType, querySpecificationId );
                         }
                     }
                 }

@@ -17,6 +17,9 @@ package com.liferay.ide.xml.search.ui;
 
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +29,9 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Terry Jia
@@ -50,11 +56,31 @@ public class PortalLanguagePropertiesCacheUtil
 
         try
         {
-            final ILiferayPortal portal = project.adapt( ILiferayPortal.class );
+            ILiferayPortal portal = project.adapt( ILiferayPortal.class );
 
             if( portal == null )
             {
-                return retval;
+                IRuntime[] runtimes = ServerCore.getRuntimes();
+
+                if( !CoreUtil.isNullOrEmpty( runtimes ) )
+                {
+                    for( IRuntime runtime : runtimes )
+                    {
+                        PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+
+                        if( portalBundle != null )
+                        {
+                            portal = portalBundle;
+                            //find the first liferay 7 portal
+                            break;
+                        }
+                    }
+                }
+
+                if(portal == null)
+                {
+                    return retval;
+                }
             }
 
             final IPath appServerPortalDir = portal.getAppServerPortalDir();

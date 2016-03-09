@@ -15,7 +15,10 @@
 package com.liferay.ide.project.core;
 
 import com.liferay.ide.core.BaseLiferayProject;
+import com.liferay.ide.core.ILiferayConstants;
+import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.IWebProject;
+import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +42,7 @@ import org.eclipse.wst.common.componentcore.resources.IVirtualResource;
 /**
  * @author Gregory Amerson
  */
-public abstract class FlexibleProject extends BaseLiferayProject implements IWebProject
+public abstract class FlexibleProject extends BaseLiferayProject implements IWebProject, IResourceBundleProject
 {
 
     private static IFolder getDefaultDocroot( IProject project )
@@ -216,6 +219,13 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
         }
 
         return false;
+    }
+
+    @Override
+    public List<IFile> getDefaultLanguageProperties()
+    {
+        return PropertiesUtil.getDefaultLanguagePropertiesFromPortletXml(
+            getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
     }
 
 }

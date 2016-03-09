@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.alloy.core.jsp;
 
+import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -73,7 +74,8 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber
 
                 for( IFile file : files )
                 {
-                    if( ProjectUtil.isPortletProject( file.getProject() ) )
+                    if( ProjectUtil.isPortletProject( file.getProject() ) ||
+                        LiferayNature.hasNature( file.getProject() ) )
                     {
                         return VALID;
                     }
@@ -129,7 +131,8 @@ public class AlloyContentDescriberForJSP implements ITextContentDescriber
                     {
                         IFile file = (IFile) fFile;
 
-                        if( ProjectUtil.isPortletProject( file.getProject() ) )
+                        if( ProjectUtil.isPortletProject( file.getProject() ) ||
+                                        LiferayNature.hasNature( file.getProject() ) )
                         {
                             return VALID;
                         }
