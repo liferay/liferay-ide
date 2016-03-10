@@ -63,9 +63,18 @@ public class GradleTooling
             final String initScriptTemplate =
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
 
-            String initScriptContents = initScriptTemplate.replaceFirst(
-                "%model%", modelBundle.getAbsolutePath().replaceAll( "\\\\", "/" ) ).replaceFirst(
-                    "%plugin%", pluginBundle.getAbsolutePath().replaceAll( "\\\\", "/" ) );
+            String modelBundlePath = modelBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
+            String pludinBundlePath = pluginBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
+
+            // IDE-2296
+            if( CoreUtil.isMac() )
+            {
+                modelBundlePath = modelBundlePath.replace( "Contents/MacOS", "Contents/Eclipse" );
+                pludinBundlePath = pludinBundlePath.replace( "Contents/MacOS", "Contents/Eclipse" );
+            }
+
+            String initScriptContents = initScriptTemplate.replaceFirst( "%model%", modelBundlePath ).replaceFirst(
+                "%plugin%", pludinBundlePath );
 
             final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
 
