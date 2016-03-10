@@ -212,6 +212,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 SynchronizeGradleProjectsJob synchronizeJob =
                     new SynchronizeGradleProjectsJob( Arrays.asList( projects ) );
                 synchronizeJob.schedule();
+                synchronizeJob.join();
             }
             else
             {
