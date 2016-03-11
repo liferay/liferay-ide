@@ -45,7 +45,8 @@ public class CreateLiferay7WorkspaceTransfer extends WorkbenchSettingsTransfer
 
         sb.append( "-b " );
         sb.append( "\"" + newWorkspaceRoot.toFile().getAbsolutePath() + "\" " );
-        sb.append( "init" );
+        sb.append( "init " );
+        sb.append( "-f" );
 
         try
         {

@@ -103,23 +103,24 @@ public class LaunchWorkspaceHandler extends AbstractHandler
                     commands.add( "-n" );
                     commands.add( launcher.getAbsolutePath() );
                     commands.add( "--args" );
+                    commands.add("-data");
+                    commands.add( workspaceLocation );
                     break;
 
                 case Platform.OS_LINUX:
                     commands.add( "/bin/bash" );
                     commands.add( "-c" );
-                    commands.add( "./" + launcher.getName() );
+                    commands.add( "''./" + launcher.getName() + " -data "+"\""+workspaceLocation+"\""+"''");
                     break;
 
                 case Platform.OS_WIN32:
                     commands.add( "cmd" );
                     commands.add( "/c" );
                     commands.add( launcher.getName() );
+                    commands.add("-data");
+                    commands.add( workspaceLocation );
                     break;
             }
-
-            commands.add("-data");
-            commands.add( workspaceLocation );
 
             if( liferay7SDKDir != null )
             {
