@@ -243,27 +243,33 @@ public class MavenUtil
         {
             if( info != null )
             {
+                URI mavenuri = info.getPomFile().getParentFile().toURI();
+
+                if( mavenuri.toString().endsWith( "/" ) )
+                {
+                    try
+                    {
+                        mavenuri = new URI( mavenuri.toString().substring( 0, mavenuri.toString().length() - 1 ) );
+                    }
+                    catch( URISyntaxException e )
+                    {
+                    }
+                }
+
+                boolean alreadyExists = false;
+
                 for( IProject project : CoreUtil.getAllProjects() )
                 {
-                    URI mavenuri = info.getPomFile().getParentFile().toURI();
-
-                    if( mavenuri.toString().endsWith( "/" ) )
+                    if( project.exists() && project.getLocationURI().equals( mavenuri ) )
                     {
-                        try
-                        {
-                            mavenuri = new URI( mavenuri.toString().substring( 0, mavenuri.toString().length() - 1 ) );
-                        }
-                        catch( URISyntaxException e )
-                        {
-                        }
+                        alreadyExists = true;
+                        break;
                     }
+                }
 
-                    final boolean alreadyExists = project.exists() && project.getLocationURI().equals( mavenuri );
-
-                    if( !alreadyExists )
-                    {
-                        result.add( info );
-                    }
+                if( !alreadyExists )
+                {
+                    result.add( info );
                 }
             }
         }
