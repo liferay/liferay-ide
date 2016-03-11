@@ -57,13 +57,13 @@ public class ServiceCommandDynamicTests extends ServerCoreBase
         @Override
         protected IPath getLiferayRuntimeDir()
         {
-            return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-7.0-ce-b3/tomcat-7.0.62" );
+            return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-7.0-ce-b8/tomcat-8.0.30" );
         }
 
         @Override
         protected IPath getLiferayRuntimeZip()
         {
-            return getLiferayBundlesPath().append( "liferay-portal-tomcat-7.0-ce-b3-20160111121420368.zip" );
+            return getLiferayBundlesPath().append( "liferay-portal-tomcat-7.0-ce-b8-20160223094645600.zip" );
         }
 
         @Override

@@ -47,7 +47,7 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-m5-20150515112305685.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-b8-20160223094645600.zip" );
     }
 
     @Override
