@@ -36,6 +36,26 @@ import org.gradle.tooling.ProjectConnection;
 public class GradleTooling
 {
 
+    private static String getBundlePath( String bundleId )
+    {
+        String installPath = Platform.getInstallLocation().getURL().getPath();
+
+        final String modelLocation = Platform.getBundle( bundleId ).getLocation();
+
+        String modelLocationString = modelLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" );
+
+        File modelBundle = new File( modelLocationString );
+
+        if( !modelLocationString.contains( installPath ) )
+        {
+            modelBundle = new File( installPath, modelLocationString );
+        }
+
+        String modelBundlePath = modelBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
+
+        return modelBundlePath;
+    }
+
     public static <T> T getModel( Class<T> modelClass, File cacheDir, File projectDir ) throws Exception
     {
         T retval = null;
@@ -51,30 +71,14 @@ public class GradleTooling
 
             final ModelBuilder<T> modelBuilder = (ModelBuilder<T>) connection.model( modelClass );
 
-            final String modelLocation = Platform.getBundle( "com.liferay.blade.gradle.model" ).getLocation();
-
-            final File modelBundle = new File( modelLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" ) );
-
-            final String pluginLocation = Platform.getBundle( "com.liferay.blade.gradle.plugin" ).getLocation();
-
-            final File pluginBundle =
-                            new File( pluginLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" ) );
-
             final String initScriptTemplate =
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
 
-            String modelBundlePath = modelBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
-            String pludinBundlePath = pluginBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
-
-            // IDE-2296
-            if( CoreUtil.isMac() )
-            {
-                modelBundlePath = modelBundlePath.replace( "Contents/MacOS", "Contents/Eclipse" );
-                pludinBundlePath = pludinBundlePath.replace( "Contents/MacOS", "Contents/Eclipse" );
-            }
+            String modelBundlePath = getBundlePath( "com.liferay.blade.gradle.model" );
+            String pluginBundlePath = getBundlePath( "com.liferay.blade.gradle.plugin" );
 
             String initScriptContents = initScriptTemplate.replaceFirst( "%model%", modelBundlePath ).replaceFirst(
-                "%plugin%", pludinBundlePath );
+                "%plugin%", pluginBundlePath );
 
             final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
 
