@@ -15,27 +15,19 @@
  *
  *******************************************************************************/
  -->
-
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide.gradle</groupId>
-        <artifactId>gradle</artifactId>
+        <groupId>com.liferay.ide.tools.plugins</groupId>
+        <artifactId>tools-plugins</artifactId>
         <version>3.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.liferay.ide.gradle.tests</groupId>
-    <artifactId>gradle-tests</artifactId>
+    <artifactId>com.liferay.ide.gradle.core</artifactId>
+    <packaging>eclipse-plugin</packaging>
 
-    <name>Liferay IDE Gradle Tests</name>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>com.liferay.ide.gradle.core.tests</module>
-    </modules>
+    <name>Liferay IDE Gradle Core</name>
 
 </project>
-
