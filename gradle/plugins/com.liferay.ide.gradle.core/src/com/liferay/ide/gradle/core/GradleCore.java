@@ -17,18 +17,23 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
 import java.util.Set;
 
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.event.Event;
-import org.eclipse.buildship.core.event.EventListener;
-import org.eclipse.buildship.core.workspace.ProjectCreatedEvent;
+import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
@@ -40,7 +45,7 @@ import org.osgi.framework.BundleContext;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class GradleCore extends Plugin implements EventListener
+public class GradleCore extends Plugin
 {
 
     // The shared instance
@@ -79,9 +84,13 @@ public class GradleCore extends Plugin implements EventListener
         return plugin;
     }
 
-    public static <T> T getToolingModel( Class<T> modelClass, IProject gradleProject )
+    public static Object getProjectInfoFromDir( File file )
     {
-        return getToolingModel( modelClass, gradleProject.getLocation().toFile() );
+        CustomModel model = getToolingModel( CustomModel.class, file );
+
+        Set<File> files = model.getOutputFiles();
+
+        return files;
     }
 
     public static <T> T getToolingModel( Class<T> modelClass, File projectDir )
@@ -100,6 +109,11 @@ public class GradleCore extends Plugin implements EventListener
         }
 
         return retval;
+    }
+
+    public static <T> T getToolingModel( Class<T> modelClass, IProject gradleProject )
+    {
+        return getToolingModel( modelClass, gradleProject.getLocation().toFile() );
     }
 
     public static void logError( Exception ex )
@@ -124,6 +138,37 @@ public class GradleCore extends Plugin implements EventListener
     {
     }
 
+    private void configureIfLiferayProject( final IProject project ) throws CoreException
+    {
+        if( project.hasNature( GradleProjectNature.ID ) && !LiferayNature.hasNature( project ) )
+        {
+            new WorkspaceJob( "Checking for a Liferay project" )
+            {
+                @Override
+                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                {
+                    try
+                    {
+                        final CustomModel customModel = getToolingModel( CustomModel.class, project );
+
+                        if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
+                            customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
+                            customModel.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
+                        {
+                            LiferayNature.addLiferayNature( project, new NullProgressMonitor() );
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        logError( "Unable to get tooling model", e );
+                    }
+
+                    return Status.OK_STATUS;
+                }
+            }.schedule();
+        }
+    }
+
     /*
      * (non-Javadoc)
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
@@ -133,7 +178,38 @@ public class GradleCore extends Plugin implements EventListener
         super.start( context );
         plugin = this;
 
-        CorePlugin.listenerRegistry().addEventListener( this );
+        CoreUtil.getWorkspace().addResourceChangeListener( new IResourceChangeListener()
+        {
+            @Override
+            public void resourceChanged( IResourceChangeEvent event )
+            {
+                try
+                {
+                    event.getDelta().accept( new IResourceDeltaVisitor()
+                    {
+                        @Override
+                        public boolean visit( IResourceDelta delta ) throws CoreException
+                        {
+                            IResourceDelta dotProject = delta.findMember( new Path( ".project" ) );
+
+                            if( dotProject != null )
+                            {
+                                final IProject project = dotProject.getResource().getProject();
+
+                                configureIfLiferayProject( project );
+
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    });
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+        }, IResourceChangeEvent.POST_CHANGE );
     }
 
     /*
@@ -144,47 +220,5 @@ public class GradleCore extends Plugin implements EventListener
     {
         plugin = null;
         super.stop( context );
-
-        CorePlugin.listenerRegistry().removeEventListener( this );
-    }
-
-    @Override
-    public void onEvent( Event event )
-    {
-        if( event instanceof ProjectCreatedEvent )
-        {
-            final IProgressMonitor npm = new NullProgressMonitor();
-            final ProjectCreatedEvent projectCreatedEvent = (ProjectCreatedEvent) event;
-
-            final IProject project = projectCreatedEvent.getProject();
-
-            if( !LiferayNature.hasNature( project ) )
-            {
-                try
-                {
-                    final CustomModel customModel = getToolingModel( CustomModel.class, project );
-
-                    if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
-                        customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
-                        customModel.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
-                    {
-                        LiferayNature.addLiferayNature( project, npm );
-                    }
-                }
-                catch( Exception e )
-                {
-                    logError( "Unable to get tooling model", e );
-                }
-            }
-        }
-    }
-
-    public static Object getProjectInfoFromDir( File file )
-    {
-        CustomModel model = getToolingModel( CustomModel.class, file );
-
-        Set<File> files = model.getOutputFiles();
-
-        return files;
     }
 }
