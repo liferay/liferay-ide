@@ -31,7 +31,7 @@
    </license>
 
    <requires>
-      <import feature="org.eclipse.buildship" version="1.0.10" match="greaterOrEqual"/>
+      <import feature="org.eclipse.buildship" version="1.0.11" match="greaterOrEqual"/>
    </requires>
 
    <plugin
