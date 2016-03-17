@@ -210,8 +210,6 @@ public class GradleCore extends Plugin
                                 final IProject project = dotProject.getResource().getProject();
 
                                 configureIfLiferayProject( project, GradleCore.this );
-
-                                return false;
                             }
 
                             return true;
