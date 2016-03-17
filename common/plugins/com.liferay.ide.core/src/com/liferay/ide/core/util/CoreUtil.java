@@ -479,6 +479,11 @@ public class CoreUtil
         return Platform.OS_MACOSX.equals( Platform.getOS() );
     }
 
+    public static boolean isNotNullOrEmpty( Object[] array )
+    {
+        return !isNullOrEmpty( array );
+    }
+
     public static boolean isNullOrEmpty( List<?> list )
     {
         return list == null || list.size() == 0;

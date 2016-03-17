@@ -192,7 +192,8 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
     public static IPath getOutputBundle( IProject gradleProject )
     {
-        final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
+        final CustomModel model = GradleCore.getToolingModel(
+            GradleCore.getDefault(), CustomModel.class, gradleProject );
 
         Set<File> outputFiles = model.getOutputFiles();
 

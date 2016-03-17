@@ -35,10 +35,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.junit.Test;
 
 /**
@@ -81,22 +84,18 @@ public class GradleProjectTests
 
         assertNotNull( gradleProject );
 
-        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, gradleProject.getProject() );
-
-        assertNotNull( bundleProject );
-
         NullProgressMonitor monitor = new NullProgressMonitor();
 
-        IPath outputJar = bundleProject.getOutputBundle( false, monitor );
+        IPath outputJar = gradleProject.getOutputBundle( false, monitor );
 
         if( outputJar != null && outputJar.toFile().exists() )
         {
-            outputJar = bundleProject.getOutputBundle( true, monitor );
+            outputJar = gradleProject.getOutputBundle( true, monitor );
         }
 
         assertTrue( outputJar.toFile().exists() );
 
-        assertEquals( "com.liferay.test.bsn", bundleProject.getSymbolicName() );
+        assertEquals( "com.liferay.test.bsn", gradleProject.getSymbolicName() );
     }
 
     @Test
@@ -106,22 +105,20 @@ public class GradleProjectTests
 
         assertNotNull( gradleProject );
 
-        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, gradleProject.getProject() );
-
-        assertNotNull( bundleProject );
-
         NullProgressMonitor monitor = new NullProgressMonitor();
 
-        IPath outputJar = bundleProject.getOutputBundle( false, monitor );
+        IPath outputJar = gradleProject.getOutputBundle( false, monitor );
 
-        if( outputJar != null && outputJar.toFile().exists() )
+        assertNotNull( outputJar );
+
+        if( outputJar.toFile().exists() )
         {
             outputJar.toFile().delete();
         }
 
         assertTrue( !outputJar.toFile().exists() );
 
-        outputJar = bundleProject.getOutputBundle( true, monitor );
+        outputJar = gradleProject.getOutputBundle( true, monitor );
 
         assertNotNull( outputJar );
 
@@ -224,15 +221,28 @@ public class GradleProjectTests
     @Test
     public void hasGradleBundlePluginDetection() throws Exception
     {
-        LiferayGradleProject gradleProject = fullImportGradleProject( "projects/biz.aQute.bundle" );
+        final LiferayGradleProject gradleProject = fullImportGradleProject( "projects/biz.aQute.bundle" );
 
         assertNotNull( gradleProject );
 
-        final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, gradleProject.getProject() );
+        final IBundleProject[] bundleProject = new IBundleProject[1];
 
-        assertNotNull( bundleProject );
+        WorkspaceJob job = new WorkspaceJob("")
+        {
+            @Override
+            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            {
+                bundleProject[0] = LiferayCore.create( IBundleProject.class, gradleProject.getProject() );
+                return Status.OK_STATUS;
+            }
+        };
 
-        assertEquals( LiferayGradleProject.class, bundleProject.getClass() );
+        job.schedule( 5000 );
+        job.join();
+
+        assertNotNull( bundleProject[0] );
+
+        assertEquals( LiferayGradleProject.class, bundleProject[0].getClass() );
     }
 
     @Test
@@ -242,7 +252,8 @@ public class GradleProjectTests
 
         assertNotNull( gradleProject );
 
-        CustomModel customModel = GradleCore.getToolingModel( CustomModel.class, gradleProject.getProject() );
+        CustomModel customModel = GradleCore.getToolingModel(
+            GradleCore.getDefault(), CustomModel.class, gradleProject.getProject() );
 
         assertNotNull( customModel );
 

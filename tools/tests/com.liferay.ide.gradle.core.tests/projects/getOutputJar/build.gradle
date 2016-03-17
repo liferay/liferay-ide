@@ -6,7 +6,6 @@ buildscript {
                 artifact '[module]/[artifact]-[revision].[ext]' /* OSGi repo pattern */
             }
         }
-		mavenLocal()
 		maven {
 			url "https://repository.liferay.com/nexus/content/groups/liferay-ce/"
 		}

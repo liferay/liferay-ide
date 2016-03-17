@@ -30,6 +30,7 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -84,16 +85,16 @@ public class GradleCore extends Plugin
         return plugin;
     }
 
-    public static Object getProjectInfoFromDir( File file )
+    public static Object getProjectInfoFromDir( GradleCore gradleCore, File file )
     {
-        CustomModel model = getToolingModel( CustomModel.class, file );
+        CustomModel model = getToolingModel( gradleCore, CustomModel.class, file );
 
         Set<File> files = model.getOutputFiles();
 
         return files;
     }
 
-    public static <T> T getToolingModel( Class<T> modelClass, File projectDir )
+    public static <T> T getToolingModel( GradleCore gradleCore, Class<T> modelClass, File projectDir )
     {
         T retval = null;
 
@@ -101,7 +102,7 @@ public class GradleCore extends Plugin
         {
             retval =
                 GradleTooling.getModel(
-                    modelClass, GradleCore.getDefault().getStateLocation().append( "cache" ).toFile(), projectDir );
+                    modelClass, gradleCore.getStateLocation().append( "cache" ).toFile(), projectDir );
         }
         catch( Exception e )
         {
@@ -111,9 +112,9 @@ public class GradleCore extends Plugin
         return retval;
     }
 
-    public static <T> T getToolingModel( Class<T> modelClass, IProject gradleProject )
+    public static <T> T getToolingModel( GradleCore gradleCore, Class<T> modelClass, IProject gradleProject )
     {
-        return getToolingModel( modelClass, gradleProject.getLocation().toFile() );
+        return getToolingModel( gradleCore, modelClass, gradleProject.getLocation().toFile() );
     }
 
     public static void logError( Exception ex )
@@ -138,7 +139,7 @@ public class GradleCore extends Plugin
     {
     }
 
-    private void configureIfLiferayProject( final IProject project ) throws CoreException
+    private static void configureIfLiferayProject( final IProject project, final GradleCore gradleCore ) throws CoreException
     {
         if( project.hasNature( GradleProjectNature.ID ) && !LiferayNature.hasNature( project ) )
         {
@@ -149,7 +150,7 @@ public class GradleCore extends Plugin
                 {
                     try
                     {
-                        final CustomModel customModel = getToolingModel( CustomModel.class, project );
+                        final CustomModel customModel = getToolingModel( gradleCore, CustomModel.class, project );
 
                         if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
                             customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
@@ -192,11 +193,23 @@ public class GradleCore extends Plugin
                         {
                             IResourceDelta dotProject = delta.findMember( new Path( ".project" ) );
 
+                            if( dotProject == null )
+                            {
+                                final IResourceDelta[] children = delta.getAffectedChildren();
+
+                                if( CoreUtil.isNotNullOrEmpty( children) )
+                                {
+                                    final IPath projectPath = children[0].getFullPath();
+
+                                    dotProject = delta.findMember( projectPath.append( ".project" ) );
+                                }
+                            }
+
                             if( dotProject != null )
                             {
                                 final IProject project = dotProject.getResource().getProject();
 
-                                configureIfLiferayProject( project );
+                                configureIfLiferayProject( project, GradleCore.this );
 
                                 return false;
                             }
