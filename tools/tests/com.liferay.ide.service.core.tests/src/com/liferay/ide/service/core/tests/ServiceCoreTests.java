@@ -46,8 +46,6 @@ public class ServiceCoreTests extends BaseTests
     public void testCreateServiceXmlFiles() throws Exception
     {
         createServiceXmlFile( "6.2.0", true );
-        createServiceXmlFile( "6.1.0", true );
-        createServiceXmlFile( "6.0.0", true );
     }
 
     private void createServiceXmlFile( String version, boolean useSample ) throws Exception
