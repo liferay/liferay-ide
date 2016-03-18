@@ -143,7 +143,7 @@ public class GradleCore extends Plugin
     {
         if( project.hasNature( GradleProjectNature.ID ) && !LiferayNature.hasNature( project ) )
         {
-            new WorkspaceJob( "Checking for a Liferay project" )
+            new WorkspaceJob( "Checking gradle configuration" )
             {
                 @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
