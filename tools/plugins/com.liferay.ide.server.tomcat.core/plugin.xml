@@ -3,6 +3,7 @@
 <plugin>
    <extension
          point="org.eclipse.wst.server.core.runtimeTypes">
+         <!--
       <runtimeType
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatRuntime60"
             description="%liferay.v60.ce.tomcat60.runtime.type.description"
@@ -35,6 +36,7 @@
                versions="1.0">
          </moduleType>
       </runtimeType>
+      -->
       <runtimeType
             class="com.liferay.ide.server.tomcat.core.Liferay62TomcatRuntime70"
             description="%liferay.v62.ce.tomcat70.runtime.type.description"
@@ -63,6 +65,7 @@
    </extension>
    <extension
          point="org.eclipse.wst.server.core.serverTypes">
+         <!--
       <serverType
             behaviourClass="com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior"
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatServer"
@@ -93,6 +96,7 @@
             stopTimeout="300000"
             supportsRemoteHosts="false">
       </serverType>
+      -->
       <serverType
             behaviourClass="com.liferay.ide.server.tomcat.core.LiferayTomcatServerBehavior"
             class="com.liferay.ide.server.tomcat.core.LiferayTomcatServer"
@@ -303,6 +307,7 @@
    </extension>
  <extension
        point="com.liferay.ide.server.core.runtimeStubs">
+       <!--
     <liferayRuntimeStub
           name="Liferay v6.0 (Tomcat 6) Bundle"
           runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.60">
@@ -312,6 +317,7 @@
           name="Liferay v6.1 (Tomcat 7) Bundle"
           runtimeTypeId="com.liferay.ide.eclipse.server.tomcat.runtime.70">
     </liferayRuntimeStub>
+    -->
     <liferayRuntimeStub
           name="Liferay v6.2 (Tomcat 7) Bundle"
           runtimeTypeId="com.liferay.ide.server.62.tomcat.runtime.70">
