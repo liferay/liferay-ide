@@ -32,7 +32,6 @@
    </license>
 
    <requires>
-      <import feature="com.liferay.ide.common" version="3.0.0" match="greaterOrEqual"/>
       <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
       <import feature="tern-feature" version="0.9.0" match="greaterOrEqual"/>
       <import feature="tern-jsdt-feature" version="0.9.0" match="greaterOrEqual"/>

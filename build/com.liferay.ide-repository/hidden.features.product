@@ -31,7 +31,6 @@
 
    <features>
       <feature id="bndtools.main.feature" />
-      <feature id="com.liferay.ide.common" />
       <feature id="com.liferay.ide.hidden" />
       <feature id="org.apache.ivyde.feature" />
       <feature id="org.apache.ivy.feature" />

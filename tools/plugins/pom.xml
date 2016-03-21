@@ -35,6 +35,7 @@
 
     <modules>
         <module>com.liferay.ide.bndtools.core</module>
+        <module>com.liferay.ide.core</module>
         <module>com.liferay.ide.gradle.core</module>
         <module>com.liferay.ide.gradle.ui</module>
         <module>com.liferay.ide.hook.core</module>
@@ -55,6 +56,7 @@
         <module>com.liferay.ide.service.core</module>
         <module>com.liferay.ide.service.ui</module>
         <module>com.liferay.ide.theme.core</module>
+        <module>com.liferay.ide.ui</module>
         <module>com.liferay.ide.ui.snippets</module>
         <module>com.liferay.ide.xml.search.ui</module>
     </modules>

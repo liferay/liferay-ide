@@ -25,7 +25,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>../common</module>
                 <module>../tools</module>
                 <module>../jsdt</module>
                 <module>../maven</module>
@@ -36,8 +35,6 @@
         <profile>
             <id>skipTests</id>
             <modules>
-                <module>../common/plugins</module>
-                <module>../common/features</module>
                 <module>../tools/plugins</module>
                 <module>../tools/features</module>
                 <module>../jsdt/plugins</module>

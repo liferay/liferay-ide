@@ -33,7 +33,6 @@
 
    <requires>
       <import feature="bndtools.main.feature" version="3.1.1" match="greaterOrEqual"/>
-      <import feature="com.liferay.ide.common" version="3.0.0" match="greaterOrEqual"/>
       <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
       <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.buildship" version="1.0.11" match="greaterOrEqual"/>
@@ -64,6 +63,18 @@
       <import feature="org.eclipse.tm.terminal.connector.telnet.feature" version="4.0.0" match="greaterOrEqual" />
       <import feature="org.eclipse.tm.terminal.view.feature" version="4.0.0" match="greaterOrEqual" />
    </requires>
+
+   <plugin
+         id="com.liferay.ide.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.liferay.ide.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
    <plugin
          id="com.liferay.ide.portlet.core"
