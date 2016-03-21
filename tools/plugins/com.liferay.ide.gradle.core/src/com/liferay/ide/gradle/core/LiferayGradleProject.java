@@ -15,6 +15,8 @@
 
 package com.liferay.ide.gradle.core;
 
+import aQute.bnd.osgi.Jar;
+
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
@@ -29,10 +31,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.gradle.tooling.BuildLauncher;
+import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
-
-import aQute.bnd.osgi.Jar;
 
 /**
  * @author Gregory Amerson
@@ -94,7 +95,16 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
                 connection = connector.connect();
 
                 BuildLauncher launcher = connection.newBuild();
-                launcher.forTasks( task ).run();
+
+                BlockingResultHandler<Object> handler = new BlockingResultHandler<>( Object.class );
+
+                launcher.forTasks( task ).run( handler );
+
+                handler.getResult();
+            }
+            catch( GradleConnectionException e)
+            {
+                throw new CoreException( GradleCore.createErrorStatus( "Unable to build output", e ) );
             }
             finally
             {
