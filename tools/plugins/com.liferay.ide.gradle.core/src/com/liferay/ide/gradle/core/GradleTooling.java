@@ -32,34 +32,42 @@ import org.gradle.tooling.ProjectConnection;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class GradleTooling
 {
 
-    private static String getBundlePath( String bundleId )
+    private static String getBundlePath( String bundleId, File tempDir )
     {
         String installPath = Platform.getInstallLocation().getURL().getPath();
 
-        final String modelLocation = Platform.getBundle( bundleId ).getLocation();
+        final String bundleLocation = Platform.getBundle( bundleId ).getLocation();
 
-        String modelLocationString = modelLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" );
+        String bundleLocationString = bundleLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" );
 
-        File modelBundle = new File( modelLocationString );
+        File srcBundle = new File( bundleLocationString );
 
-        if( modelLocationString.contains( "@" ) )
+        if( bundleLocationString.contains( "@" ) )
         {
-            String p2Path =
-                modelLocationString.substring( modelLocationString.indexOf( "@" ) + 1, modelLocationString.length() );
-            modelBundle = new File( p2Path );
+            String p2Path = bundleLocationString.substring(
+                bundleLocationString.indexOf( "@" ) + 1, bundleLocationString.length() );
+            srcBundle = new File( p2Path );
         }
-        else if( !modelLocationString.contains( installPath ) )
+        else if( !bundleLocationString.contains( installPath ) )
         {
-            modelBundle = new File( installPath, modelLocationString );
+            srcBundle = new File( installPath, bundleLocationString );
         }
 
-        String modelBundlePath = modelBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
+        File desBundle = new File( tempDir, srcBundle.getName() );
 
-        return modelBundlePath;
+        if( !desBundle.exists() )
+        {
+            FileUtil.copyFile( srcBundle, desBundle );
+        }
+
+        String result = desBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
+
+        return result;
     }
 
     public static <T> T getModel( Class<T> modelClass, File cacheDir, File projectDir ) throws Exception
@@ -80,13 +88,14 @@ public class GradleTooling
             final String initScriptTemplate =
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
 
-            String modelBundlePath = getBundlePath( "com.liferay.blade.gradle.model" );
-            String pluginBundlePath = getBundlePath( "com.liferay.blade.gradle.plugin" );
+            final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
+            final File tempDir = scriptFile.getParentFile();
+
+            final String modelBundlePath = getBundlePath( "com.liferay.blade.gradle.model", tempDir );
+            final String pluginBundlePath = getBundlePath( "com.liferay.blade.gradle.plugin", tempDir );
 
             String initScriptContents = initScriptTemplate.replaceFirst( "%model%", modelBundlePath ).replaceFirst(
                 "%plugin%", pluginBundlePath );
-
-            final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
 
             FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
 
