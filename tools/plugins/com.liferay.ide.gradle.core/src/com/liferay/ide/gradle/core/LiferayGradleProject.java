@@ -15,43 +15,29 @@
 
 package com.liferay.ide.gradle.core;
 
-import aQute.bnd.osgi.Jar;
-
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.gradleware.tooling.toolingclient.GradleDistribution;
-import com.gradleware.tooling.toolingmodel.repository.FixedRequestAttributes;
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.configuration.ProjectConfiguration;
-import org.eclipse.buildship.core.launch.GradleRunConfigurationAttributes;
-import org.eclipse.buildship.core.launch.GradleRunConfigurationDelegate;
-import org.eclipse.buildship.core.util.file.FileUtils;
-import org.eclipse.buildship.core.util.variable.ExpressionUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.Launch;
+import org.gradle.tooling.BuildLauncher;
+import org.gradle.tooling.GradleConnector;
+import org.gradle.tooling.ProjectConnection;
+
+import aQute.bnd.osgi.Jar;
 
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class LiferayGradleProject extends BaseLiferayProject implements IBundleProject
 {
@@ -98,47 +84,21 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         else
         {
             final String task = isThemeProject( getProject() ) ? "build" : "jar";
-
-            ILaunchConfiguration launchConfiguration =
-                CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration(
-                    getRunConfigurationAttributes( task ) );
-
-            final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
-
-            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND", true );
-            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_CAPTURE_IN_CONSOLE", false );
-            launchConfigurationWC.setAttribute( "org.eclipse.debug.ui.ATTR_PRIVATE", true );
-
-            final String jobTitle = "Building " + getProject().getName() + " output...";
-
-            final Job job = new Job( jobTitle )
-            {
-                protected IStatus run( IProgressMonitor monitor )
-                {
-                    try
-                    {
-                        new GradleRunConfigurationDelegate().launch(
-                            launchConfigurationWC, "run", new Launch( launchConfigurationWC, "run", null ), monitor );
-                    }
-                    catch( Exception e )
-                    {
-                        GradleCore.logError( "Unable to build project " + getProject().getName(), e );
-                    }
-
-                    return Status.OK_STATUS;
-                }
-            };
-
-            monitor.subTask( jobTitle );
-
-            job.schedule();
+            ProjectConnection connection = null;
 
             try
             {
-                job.join();
+                GradleConnector connector =
+                    GradleConnector.newConnector().forProjectDirectory( getProject().getLocation().toFile() );
+
+                connection = connector.connect();
+
+                BuildLauncher launcher = connection.newBuild();
+                launcher.forTasks( task ).run();
             }
-            catch( InterruptedException e )
+            finally
             {
+                connection.close();
             }
 
             outputBundle = getOutputBundle( getProject() );
@@ -207,40 +167,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
 
         return null;
-    }
-
-    private GradleRunConfigurationAttributes getRunConfigurationAttributes( String task )
-    {
-        ProjectConfiguration projectConfiguration =
-            CorePlugin.projectConfigurationManager().readProjectConfiguration( getProject() );
-
-        Optional<FixedRequestAttributes> requestAttributes = Optional.of( projectConfiguration.getRequestAttributes() );
-
-        List<String> tasks = new ArrayList<String>();
-        tasks.add( task );
-
-        String projectDirectoryExpression = ExpressionUtils.encodeWorkspaceLocation( getProject() );
-
-        boolean isPresent = requestAttributes.isPresent();
-
-        GradleDistribution gradleDistribution =
-            isPresent ? requestAttributes.get().getGradleDistribution() : GradleDistribution.fromBuild();
-
-        String gradleUserHome =
-            isPresent ? FileUtils.getAbsolutePath( requestAttributes.get().getGradleUserHome() ).orNull() : null;
-
-        String javaHome =
-            isPresent ? FileUtils.getAbsolutePath( requestAttributes.get().getJavaHome() ).orNull() : null;
-
-        List<String> jvmArguments = isPresent ? requestAttributes.get().getJvmArguments() : ImmutableList.<String> of();
-        List<String> arguments = isPresent ? requestAttributes.get().getArguments() : ImmutableList.<String> of();
-
-        boolean showExecutionView = true;
-        boolean showConsoleView = true;
-
-        return GradleRunConfigurationAttributes.with(
-            tasks, projectDirectoryExpression, gradleDistribution, gradleUserHome, javaHome, jvmArguments, arguments,
-            showExecutionView, showConsoleView );
     }
 
 }

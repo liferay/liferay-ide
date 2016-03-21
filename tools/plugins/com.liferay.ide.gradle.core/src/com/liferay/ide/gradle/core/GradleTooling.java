@@ -46,7 +46,13 @@ public class GradleTooling
 
         File modelBundle = new File( modelLocationString );
 
-        if( !modelLocationString.contains( installPath ) )
+        if( modelLocationString.contains( "@" ) )
+        {
+            String p2Path =
+                modelLocationString.substring( modelLocationString.indexOf( "@" ) + 1, modelLocationString.length() );
+            modelBundle = new File( p2Path );
+        }
+        else if( !modelLocationString.contains( installPath ) )
         {
             modelBundle = new File( installPath, modelLocationString );
         }
