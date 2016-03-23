@@ -24,6 +24,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.Set;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
@@ -37,7 +38,7 @@ import org.gradle.tooling.ProjectConnection;
 public class GradleTooling
 {
 
-    private static String getBundlePath( String bundleId, File tempDir )
+    private static String getBundlePath( String bundleId, File tempDir ) throws CoreException
     {
         String installPath = Platform.getInstallLocation().getURL().getPath();
 
@@ -45,23 +46,37 @@ public class GradleTooling
 
         String bundleLocationString = bundleLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" );
 
-        File srcBundle = new File( bundleLocationString );
+        File srcBundle = null;
 
         if( bundleLocationString.contains( "@" ) )
         {
             String p2Path = bundleLocationString.substring(
                 bundleLocationString.indexOf( "@" ) + 1, bundleLocationString.length() );
             srcBundle = new File( p2Path );
+
+            if( !srcBundle.exists() )
+            {
+                srcBundle = new File(Platform.getLocation().removeLastSegments( 1 ).toOSString(), p2Path);
+            }
         }
         else if( !bundleLocationString.contains( installPath ) )
         {
             srcBundle = new File( installPath, bundleLocationString );
+        }
+        else
+        {
+            srcBundle = new File( bundleLocationString );
         }
 
         File desBundle = new File( tempDir, srcBundle.getName() );
 
         if( !desBundle.exists() )
         {
+            if( !srcBundle.exists() )
+            {
+                throw new CoreException( GradleCore.createErrorStatus( "Unable to find bundle path" ) );
+            }
+
             FileUtil.copyFile( srcBundle, desBundle );
         }
 
