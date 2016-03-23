@@ -19,13 +19,13 @@ import com.liferay.ide.portlet.core.lfportlet.model.internal.PortletStyleValidat
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 

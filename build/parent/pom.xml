@@ -30,9 +30,8 @@
         <tycho-packaging-format>yyyyMMddHHmm'-m3'</tycho-packaging-format>
         <tycho-version>0.23.0</tycho-version>
         <tycho-extras-version>0.23.0</tycho-extras-version>
-        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20140525021250/repository/</orbit-site>
+        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20160221192158/repository/</orbit-site>
         <osgi-bundles-site>http://106.187.96.36/gamerson/osgi-bundles-repository/</osgi-bundles-site>
-        <sapphire-site>http://download.eclipse.org/sapphire/8.2.4/repository/</sapphire-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
         <m2e-site>http://download.eclipse.org/technology/m2e/milestones/1.6/1.6.2.20150902-0001/</m2e-site>
@@ -61,11 +60,6 @@
             <id>lide-deps</id>
             <layout>p2</layout>
             <url>${osgi-bundles-site}</url>
-        </repository>
-        <repository>
-            <id>sapphire</id>
-            <layout>p2</layout>
-            <url>${sapphire-site}</url>
         </repository>
         <repository>
             <id>eclipse-xml-search</id>
@@ -323,16 +317,16 @@
 
     <profiles>
         <profile>
-            <id>luna</id>
+            <id>mars</id>
             <activation>
                 <property>
                     <name>!skipLuna</name>
                 </property>
             </activation>
             <properties>
-                <eclipse-site>http://download.eclipse.org/releases/luna/201502271000/</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.4</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.6.3/R-3.6.3-20150216091848/repository/</wtp-site>
+                <eclipse-site>http://download.eclipse.org/releases/mars/</eclipse-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.5</eclipse-project-update-site>
+                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.7.2/R-3.7.2-20160217020110/repository/</wtp-site>
             </properties>
             <repositories>
                 <repository>

@@ -83,7 +83,7 @@ public interface ILiferayPortlet extends Element {
 	@ValidFileSystemResourceType( FileSystemResourceType.FILE )
 	@FileExtensions( expr = "png,jpeg,jpg,gif,bmp" )
 	@MustExist
-	@CountConstraint( min = 0, max = 1 )
+	@Length( min = 0, max = 1 )
 	@WorkspaceRelativePath
 	@XmlBinding( path = "icon" )
 	ValueProperty PROP_ICON = new ValueProperty( TYPE, "Icon" );

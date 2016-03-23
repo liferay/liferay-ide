@@ -54,7 +54,7 @@ public interface ISchedulerEntry extends Element {
 	@Label( standard = "Description" )
 	@NoDuplicates
 	@XmlBinding( path = "scheduler-description" )
-	@CountConstraint( min = 0, max = 1 )
+	@Length( min = 0, max = 1 )
 	ValueProperty PROP_DESCRIPTION = new ValueProperty( TYPE, "Description" );
 
 	Value<String> getDescription();

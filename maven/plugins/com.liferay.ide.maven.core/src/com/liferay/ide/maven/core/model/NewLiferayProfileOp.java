@@ -19,10 +19,10 @@ import com.liferay.ide.project.core.model.HasLiferayRuntime;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Validation;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.Type;
 
 
 /**

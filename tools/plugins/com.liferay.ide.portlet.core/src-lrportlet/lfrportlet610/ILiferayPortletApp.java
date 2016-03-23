@@ -44,7 +44,7 @@ public interface ILiferayPortletApp extends ILiferayPortletAppBase {
 	// *** Portlets ***
 
 	@Type( base = ILiferayPortlet.class )
-	@CountConstraint( min = 0 )
+	@Length( min = 0 )
 	@XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "portlet", type = ILiferayPortlet.class ) } )
 	ListProperty PROP_PORTLETS = new ListProperty( TYPE, "Portlets" );
 

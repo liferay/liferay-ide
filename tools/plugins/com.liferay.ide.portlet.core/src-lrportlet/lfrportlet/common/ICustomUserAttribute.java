@@ -53,7 +53,7 @@ public interface ICustomUserAttribute extends Element {
 	@Required
 	@NoDuplicates
 	@XmlBinding( path = "name" )
-	@CountConstraint( min = 1 )
+	@Length( min = 1 )
 	ValueProperty PROP_NAME = new ValueProperty( TYPE, "Name" );
 
 	Value<String> getName();

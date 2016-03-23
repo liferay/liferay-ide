@@ -17,13 +17,13 @@ package com.liferay.ide.service.core.model;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Length;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.PossibleValues;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -52,7 +52,7 @@ public interface Order extends Element
     @Type( base = OrderColumn.class )
     @Label( standard = "order columns" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "order-column", type = OrderColumn.class ) )
-    @CountConstraint( min = 1 )
+    @Length( min = 1 )
     ListProperty PROP_ORDER_COLUMNS = new ListProperty( TYPE, "OrderColumns" ); //$NON-NLS-1$
 
     ElementList<OrderColumn> getOrderColumns();

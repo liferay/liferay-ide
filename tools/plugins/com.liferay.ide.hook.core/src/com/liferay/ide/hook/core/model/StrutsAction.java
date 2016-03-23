@@ -24,6 +24,7 @@ import com.liferay.ide.hook.core.model.internal.StrutsActionPathPossibleValuesSe
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
@@ -39,7 +40,6 @@ import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Service.Context;
 import org.eclipse.sapphire.modeling.annotations.Services;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**

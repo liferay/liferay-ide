@@ -19,12 +19,12 @@ import com.liferay.ide.service.core.model.internal.ServiceBuilderDefaultValueSer
 import com.liferay.ide.service.core.model.internal.ServiceBuilderRootElementController;
 
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.Version;
 import org.eclipse.sapphire.VersionCompatibilityTarget;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlRootBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 

@@ -19,8 +19,10 @@ package com.liferay.ide.portlet.core.model;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Length;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.ReferenceValue;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.java.JavaType;
@@ -28,13 +30,11 @@ import org.eclipse.sapphire.java.JavaTypeConstraint;
 import org.eclipse.sapphire.java.JavaTypeConstraintBehavior;
 import org.eclipse.sapphire.java.JavaTypeKind;
 import org.eclipse.sapphire.java.JavaTypeName;
-import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.MustExist;
 import org.eclipse.sapphire.modeling.annotations.Reference;
 import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -86,7 +86,7 @@ public interface Filter extends Describeable, Displayable
 
     @Type( base = LifeCycle.class )
     @Label( standard = "lifecycle" )
-    @CountConstraint( min = 1 )
+    @Length( min = 1 )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "lifecycle", type = LifeCycle.class ) )
     ListProperty PROP_LIFE_CYCLE = new ListProperty( TYPE, "LifeCycle" ); //$NON-NLS-1$
 

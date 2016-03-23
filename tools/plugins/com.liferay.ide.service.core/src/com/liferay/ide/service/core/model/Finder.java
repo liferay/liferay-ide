@@ -17,15 +17,15 @@ package com.liferay.ide.service.core.model;
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Length;
 import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -102,7 +102,7 @@ public interface Finder extends Element
     @Type( base = FinderColumn.class )
     @Label( standard = "finder columns" )
     @XmlListBinding( mappings = @XmlListBinding.Mapping( element = "finder-column", type = FinderColumn.class ) )
-    @CountConstraint( min = 1 )
+    @Length( min = 1 )
     ListProperty PROP_FINDER_COLUMNS = new ListProperty( TYPE, "FinderColumns" ); //$NON-NLS-1$
 
     ElementList<FinderColumn> getFinderColumns();

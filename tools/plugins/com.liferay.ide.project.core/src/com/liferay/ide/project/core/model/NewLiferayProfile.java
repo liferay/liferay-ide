@@ -7,6 +7,7 @@ import com.liferay.ide.project.core.model.internal.NewLiferayProfileIdValidation
 import com.liferay.ide.project.core.model.internal.NewLiferayProfileRuntimeValidationService;
 
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
@@ -14,7 +15,6 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
-import org.eclipse.sapphire.modeling.annotations.Type;
 
 
 /**
@@ -28,7 +28,7 @@ public interface NewLiferayProfile extends Profile, HasLiferayRuntime
     // *** RuntimeName ***
 
     @Service( impl = NewLiferayProfileRuntimeValidationService.class )
-    ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME ); //$NON-NLS-1$
+    ValueProperty PROP_RUNTIME_NAME = new ValueProperty( TYPE, HasLiferayRuntime.PROP_RUNTIME_NAME ); 
 
     // *** Id ***
 

@@ -44,15 +44,15 @@
       <import feature="org.eclipse.jst.server_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.web_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.mylyn.commons.notifications" version="1.0.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.sapphire" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.java" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.java.jdt" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.modeling.xml" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.osgi" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.platform" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.ui" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.ui.swt.gef" version="8.2" match="compatible"/>
-      <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="8.2" match="compatible"/>
+      <import feature="org.eclipse.sapphire" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.java" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.java.jdt" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.modeling.xml" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.osgi" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.platform" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.ui" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.ui.swt.gef" version="9" match="compatible"/>
+      <import feature="org.eclipse.sapphire.ui.swt.xml.editor" version="9" match="compatible"/>
       <import feature="org.eclipse.wst.common.fproj" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.common_ui.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.wst.server_adapters.feature" version="3.2.0" match="greaterOrEqual"/>

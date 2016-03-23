@@ -25,16 +25,16 @@ import com.liferay.ide.hook.core.model.internal.PortalFilterNamesPossibleValuesS
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
+import org.eclipse.sapphire.Length;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.PossibleValues;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.CustomXmlValueBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
@@ -85,7 +85,7 @@ public interface ServletFilterMapping extends Element
 
     @Type( base = URLPattern.class )
     @Label( standard = "url patterns" )
-    @CountConstraint( min = 1 )
+    @Length( min = 1 )
     @XmlListBinding( mappings = { @XmlListBinding.Mapping( element = "url-pattern", type = URLPattern.class ) } )
     ListProperty PROP_URL_PATTERNS = new ListProperty( TYPE, "URLPatterns" ); //$NON-NLS-1$
 

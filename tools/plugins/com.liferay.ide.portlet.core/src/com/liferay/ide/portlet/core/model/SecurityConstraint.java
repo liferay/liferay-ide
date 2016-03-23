@@ -21,13 +21,13 @@ import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ImpliedElementProperty;
+import org.eclipse.sapphire.Length;
 import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Unique;
-import org.eclipse.sapphire.modeling.annotations.CountConstraint;
 import org.eclipse.sapphire.modeling.annotations.Image;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Type;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlListBinding;
 
@@ -44,7 +44,7 @@ public interface SecurityConstraint extends Element, Identifiable, Displayable
     @Type( base = PortletName.class )
     @Label( standard = "Portlet name" )
     @Required
-    @CountConstraint( min = 1 )
+    @Length( min = 1 )
     @Unique
     @XmlListBinding
     (
