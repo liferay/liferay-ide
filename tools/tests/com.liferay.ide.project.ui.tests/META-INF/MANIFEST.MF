@@ -15,7 +15,7 @@ Require-Bundle: org.junit,
  com.liferay.blade.api,
  com.liferay.ide.ui.tests;bundle-version="3.0.0",
  org.eclipse.swtbot.swt.finder
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.liferay.ide.project.ui.tests,
  com.liferay.ide.project.ui.tests.page
 Bundle-ActivationPolicy: lazy

@@ -49,7 +49,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jem.workbench,
  org.eclipse.e4.core.commands,
  org.eclipse.e4.core.contexts
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,
  com.liferay.ide.project.ui.action,

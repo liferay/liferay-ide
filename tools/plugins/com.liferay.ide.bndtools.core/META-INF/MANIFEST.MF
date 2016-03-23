@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.server.core,
  bndtools.api;bundle-version="3.1.1",
  org.apache.commons.lang
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.bndtools.core
 Bundle-ClassPath: .

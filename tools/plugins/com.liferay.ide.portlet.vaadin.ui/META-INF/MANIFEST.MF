@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.project.core,
  com.liferay.ide.portlet.vaadin.core,
  com.liferay.ide.portlet.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.vaadin.ui,
  com.liferay.ide.portlet.vaadin.ui.wizard

@@ -8,6 +8,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  com.liferay.ide.core.tests;bundle-version="2.0.0",
  com.liferay.ide.layouttpl.core;bundle-version="2.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.layouttpl.core.tests

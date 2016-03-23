@@ -22,7 +22,7 @@ Require-Bundle: org.eclipse.ui,
  com.liferay.ide.project.core;visibility:=reexport,
  com.liferay.ide.project.ui;visibility:=reexport,
  org.eclipse.ui.forms
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.server.tomcat.ui,
  com.liferay.ide.server.tomcat.ui.command,

@@ -32,7 +32,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jst.jsp.ui,
  org.eclipse.wst.jsdt.web.support.jsp
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.liferay.ide.xml.search.ui,
  com.liferay.ide.xml.search.ui.editor,
  com.liferay.ide.xml.search.ui.markerResolutions,

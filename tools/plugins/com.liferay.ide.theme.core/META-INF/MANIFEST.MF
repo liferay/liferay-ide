@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jst.j2ee.web,
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.core.resources
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.theme.core,
  com.liferay.ide.theme.core.facet,

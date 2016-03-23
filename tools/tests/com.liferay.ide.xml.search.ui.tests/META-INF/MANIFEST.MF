@@ -28,6 +28,6 @@ Require-Bundle: com.ibm.icu,
  org.eclipse.wst.validation,
  org.eclipse.wst.xml.search.editor,
  org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.xml.search.ui.tests
