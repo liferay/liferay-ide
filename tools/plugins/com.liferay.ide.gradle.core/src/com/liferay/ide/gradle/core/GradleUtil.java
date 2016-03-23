@@ -56,7 +56,9 @@ public class GradleUtil
         ProjectConfiguration projectConfiguration =
             CorePlugin.projectConfigurationManager().readProjectConfiguration( project );
 
-        Optional<FixedRequestAttributes> requestAttributes = Optional.of( projectConfiguration.getRequestAttributes() );
+        FixedRequestAttributes attrs = projectConfiguration.getRequestAttributes();
+
+        Optional<FixedRequestAttributes> requestAttributes = Optional.of( attrs );
 
         List<String> tasks = new ArrayList<String>();
         tasks.add( task );

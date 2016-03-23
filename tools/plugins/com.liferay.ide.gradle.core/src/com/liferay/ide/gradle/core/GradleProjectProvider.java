@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.WordUtils;
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectsJob;
 import org.eclipse.core.resources.IProject;
@@ -42,7 +43,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
-import org.gradle.jarjar.org.apache.commons.lang.WordUtils;
 
 /**
  * @author Gregory Amerson
