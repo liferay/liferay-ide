@@ -70,48 +70,6 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
         createMavenProject( op );
     }
 
-    @Override
-    protected IPath getLiferayPluginsSdkDir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2.0" );
-    }
-
-    @Override
-    protected IPath getLiferayPluginsSDKZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2.0-ce-ga1-20131101192857659.zip" );
-    }
-
-    @Override
-    protected String getLiferayPluginsSdkZipFolder()
-    {
-        return "liferay-plugins-sdk-6.2.0/";
-    }
-
-    @Override
-    protected IPath getLiferayRuntimeDir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2.0-ce-ga1/tomcat-7.0.42" );
-    }
-
-    @Override
-    protected IPath getLiferayRuntimeZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2.0-ce-ga1-20131101192857659.zip" );
-    }
-
-    @Override
-    protected String getRuntimeId()
-    {
-        return "com.liferay.ide.eclipse.server.tomcat.runtime.70";
-    }
-
-    @Override
-    public String getRuntimeVersion()
-    {
-        return "6.2.0";
-    }
-
     @Test
     public void testCreateNewMavenProject() throws Exception
     {
