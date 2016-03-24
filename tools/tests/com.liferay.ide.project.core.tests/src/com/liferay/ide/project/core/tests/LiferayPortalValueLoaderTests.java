@@ -66,7 +66,7 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
 
         assertNotNull( props );
 
-        assertEquals( 141, props.length );
+        assertEquals( 142, props.length );
     }
 
     @Test
@@ -82,7 +82,7 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
 
         assertNotNull( info );
 
-        assertEquals( "Liferay Portal Community Edition / 6.2.3", info );
+        assertEquals( "Liferay Portal Community Edition / 6.2.5", info );
     }
 
     @Test
@@ -98,7 +98,7 @@ public class LiferayPortalValueLoaderTests extends ProjectCoreBase
 
         assertNotNull( version );
 
-        assertEquals( "6.2.3", version.toString() );
+        assertEquals( "6.2.5", version.toString() );
     }
 
 }

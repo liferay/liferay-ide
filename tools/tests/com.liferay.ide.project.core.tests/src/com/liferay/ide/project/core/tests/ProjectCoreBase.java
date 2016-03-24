@@ -30,6 +30,7 @@ import com.liferay.ide.project.core.model.ProfileLocation;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKCorePlugin;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.tests.ServerCoreBase;
@@ -50,6 +51,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -57,6 +59,11 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.internal.launching.StandardVMType;
+import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jdt.launching.IVMInstallType;
+import org.eclipse.jdt.launching.JavaRuntime;
+import org.eclipse.jdt.launching.VMStandin;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.wst.common.project.facet.core.IFacetedProject;
@@ -66,7 +73,6 @@ import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.validation.internal.operations.ValidatorManager;
 import org.junit.Before;
-import org.junit.BeforeClass;
 
 /**
  * @author Gregory Amerson
@@ -338,17 +344,12 @@ public class ProjectCoreBase extends ServerCoreBase
 
     protected IPath getIvyCacheZip()
     {
-        return getLiferayBundlesPath().append( "ivy-cache.zip" );
+        return getLiferayBundlesPath().append( "ivy-cache-7.0.zip" );
     }
 
     protected IPath getLiferayPluginsSdkDir()
     {
         return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
-    }
-
-    protected IPath getLiferayPluginsSdk61Dir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.1.2" );
     }
 
     protected IPath getLiferayPluginsSdk70Dir()
@@ -358,7 +359,7 @@ public class ProjectCoreBase extends ServerCoreBase
 
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2-ce-ga4-20150416163831865.zip" );
+        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2-ce-ga6-20160112152609836.zip" );
     }
 
     protected String getLiferayPluginsSdkZipFolder()
@@ -420,7 +421,41 @@ public class ProjectCoreBase extends ServerCoreBase
         final NewLiferayPluginProjectOp op = NewLiferayPluginProjectOp.TYPE.instantiate();
         op.setProjectName( projectName + "-" + getRuntimeVersion() );
 
+        IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
+
+        if( vmInstall == null )
+        {
+            throw new CoreException( SDKCorePlugin.createErrorStatus( "Could not get default VM install" ) );
+        }
+
         return op;
+    }
+
+    private void ensureDefaultVMInstallExists() throws CoreException
+    {
+        IVMInstall vmInstall = JavaRuntime.getDefaultVMInstall();
+
+        if( vmInstall != null )
+        {
+            return;
+        }
+
+        final IVMInstallType vmInstallType = JavaRuntime.getVMInstallType( StandardVMType.ID_STANDARD_VM_TYPE );
+        String id = null;
+
+        do
+        {
+            id = String.valueOf( System .currentTimeMillis() );
+        }
+        while( vmInstallType.findVMInstall( id ) != null );
+
+        VMStandin newVm = new VMStandin( vmInstallType, id );
+        newVm.setName( "Default-VM" );
+        String jrePath = System.getProperty( "java.home" );
+        File installLocation = new File( jrePath );
+        newVm.setInstallLocation( installLocation );
+        IVMInstall realVm = newVm.convertToRealVM();
+        JavaRuntime.setDefaultVMInstall( realVm, new NullProgressMonitor() );
     }
 
     private void persistAppServerProperties() throws FileNotFoundException, IOException, ConfigurationException
@@ -481,7 +516,6 @@ public class ProjectCoreBase extends ServerCoreBase
         {
             FileUtil.deleteDir( getLiferayPluginsSdkDir().toFile(), true );
             FileUtil.deleteDir( getLiferayPluginsSdk70Dir().toFile(), true );
-            FileUtil.deleteDir( getLiferayPluginsSdk61Dir().toFile(), true );
         }
 
         final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
@@ -573,6 +607,8 @@ public class ProjectCoreBase extends ServerCoreBase
 
             SDKUtil.openAsProject( sdk );
         }
+
+        ensureDefaultVMInstallExists();
     }
 
     @Override

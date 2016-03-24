@@ -17,11 +17,9 @@ package com.liferay.ide.project.core.tests;
 
 import static org.junit.Assert.assertEquals;
 
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.junit.AfterClass;
 import org.junit.Ignore;
@@ -30,55 +28,13 @@ import org.junit.Test;
 /**
  * @author Terry Jia
  */
-public class NewLiferayPluginProjectOp623Tests extends NewLiferayPluginProjectOpBase
+public class NewLiferayPluginProjectOp625Tests extends NewLiferayPluginProjectOpBase
 {
 
     @AfterClass
     public static void removePluginsSDK() throws Exception
     {
         deleteAllWorkspaceProjects();
-    }
-
-    @Override
-    protected IPath getLiferayPluginsSdkDir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
-    }
-
-    @Override
-    protected IPath getLiferayPluginsSDKZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2-ce-ga4-20150416163831865.zip" );
-    }
-
-    @Override
-    protected String getLiferayPluginsSdkZipFolder()
-    {
-        return "liferay-plugins-sdk-6.2/";
-    }
-
-    @Override
-    protected IPath getLiferayRuntimeDir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-6.2-ce-ga4/tomcat-7.0.42" );
-    }
-
-    @Override
-    protected IPath getLiferayRuntimeZip()
-    {
-        return getLiferayBundlesPath().append( "liferay-portal-tomcat-6.2-ce-ga4-20150416163831865.zip" );
-    }
-
-    @Override
-    protected String getRuntimeId()
-    {
-        return "com.liferay.ide.eclipse.server.tomcat.runtime.70";
-    }
-
-    @Override
-    public String getRuntimeVersion()
-    {
-        return "6.2.3";
     }
 
     @Override
@@ -99,6 +55,7 @@ public class NewLiferayPluginProjectOp623Tests extends NewLiferayPluginProjectOp
 
     @Override
     @Test
+    @Ignore
     public void testNewJsfRichfacesProjects() throws Exception
     {
         if( shouldSkipBundleTests() ) return;

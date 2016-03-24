@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.services.ValidationService;
 import org.eclipse.sapphire.services.ValueLabelService;
@@ -619,7 +620,12 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
 
         op.setProjectProvider( "ant" );
 
-        op.execute( new ProgressMonitor() );
+        Status status = op.execute( new ProgressMonitor() );
+
+        if( !status.ok() )
+        {
+            throw new Exception( status.exception() );
+        }
 
         SDK sdk = SDKUtil.getWorkspaceSDK();
 

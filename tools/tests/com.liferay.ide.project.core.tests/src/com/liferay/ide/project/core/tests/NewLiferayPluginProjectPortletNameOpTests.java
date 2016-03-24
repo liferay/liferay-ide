@@ -57,21 +57,15 @@ public class NewLiferayPluginProjectPortletNameOpTests extends ProjectCoreBase
     }
 
     @AfterClass
-    public static void removePluginsSDK()
+    public static void removePluginsSDK() throws CoreException
     {
         IProject[] projects = CoreUtil.getAllProjects();
-        for( IProject iProject : projects )
+
+        for( IProject project : projects )
         {
-            if ( iProject != null && iProject.isAccessible() && iProject.exists())
+            if ( project != null && project.isAccessible() && project.exists())
             {
-                try
-                {
-                    iProject.delete( true, true, new NullProgressMonitor() );
-                }
-                catch( CoreException e )
-                {
-                    e.printStackTrace();
-                }
+                project.delete( true, true, new NullProgressMonitor() );
             }
         }
     }

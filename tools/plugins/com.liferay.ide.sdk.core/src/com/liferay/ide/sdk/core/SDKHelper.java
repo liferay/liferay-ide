@@ -121,6 +121,7 @@ public class SDKHelper extends LaunchHelper
             launchConfig.setAttribute(
                 IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, IAntLaunchConstants.MAIN_TYPE_NAME );
             launchConfig.setAttribute( IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, getVMArgumentsAttr() );
+            launchConfig.setAttribute( IAntLaunchConstants.ATTR_DEFAULT_VM_INSTALL, true );
         }
 
         return launchConfig;
