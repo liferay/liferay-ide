@@ -120,7 +120,7 @@ public class ServiceCommand
                 }
             }
 
-            if( !supervisor.getAgent().redirect( -1 ) )
+            if( !supervisor.getAgent().redirect( Agent.COMMAND_SESSION ) )
             {
                 return null;
             }

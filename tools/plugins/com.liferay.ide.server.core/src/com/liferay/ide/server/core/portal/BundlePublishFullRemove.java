@@ -19,6 +19,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Gregory Amerson
+ * @author Andy Wu
  */
 public class BundlePublishFullRemove extends BundlePublishOperation
 {
@@ -67,7 +69,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                 {
                     monitor.subTask( "Remotely undeploying " + module.getName() + " from Liferay module framework..." );
 
-                    status = remoteUninstall( bundleProject, symbolicName );
+                    status = remoteUninstall( bundleProject, symbolicName , monitor);
                 }
 
                 if( status == null || status.isOK() ) // remote uninstall succeedded
@@ -182,9 +184,15 @@ public class BundlePublishFullRemove extends BundlePublishOperation
         return retval;
     }
 
-    private IStatus remoteUninstall( IBundleProject bundleProject , String symbolicName )
+    private IStatus remoteUninstall( IBundleProject bundleProject , String symbolicName, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = null;
+
+        IPath outputJar = bundleProject.getOutputBundle( false, monitor );
+
+        String fragmentHostName = ServerUtil.getFragemtHostName( outputJar.toFile() );
+
+        boolean isFragment = (fragmentHostName != null);
 
         if( symbolicName != null && _existingBundles != null && _supervisor != null )
         {
@@ -195,6 +203,11 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                     if( symbolicName.equals( bundle.symbolicName ) )
                     {
                         String error = _supervisor.getAgent().uninstall( bundle.id );
+
+                        if( isFragment )
+                        {
+                            _supervisor.updateHostBundle( fragmentHostName, _existingBundles );
+                        }
 
                         if( error == null )
                         {

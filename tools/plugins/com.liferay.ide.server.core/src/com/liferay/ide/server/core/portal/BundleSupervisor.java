@@ -1,17 +1,36 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+
 package com.liferay.ide.server.core.portal;
+
+import com.liferay.ide.server.util.ServerUtil;
+
+import java.io.File;
+
+import org.osgi.framework.dto.BundleDTO;
 
 import aQute.remote.api.Agent;
 import aQute.remote.api.Event;
 import aQute.remote.api.Supervisor;
 import aQute.remote.util.AgentSupervisor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.jar.JarInputStream;
-
-import org.osgi.framework.dto.BundleDTO;
-
-public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implements Supervisor
+/**
+ * @author Gregory Amerson
+ * @author Andy Wu
+ */
+public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> implements Supervisor
 {
 
     private String lastOutput;
@@ -38,14 +57,11 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
         BundleDTO retval = null;
 
         boolean isFragment = false;
-
+        String fragmentHostName = null;
         if( !bundleUrl.contains( "webbundle:" ) )
         {
-            try ( JarInputStream jarStream = new JarInputStream( new FileInputStream( bundleFile ) ) ) {
-                isFragment = jarStream.getManifest().getMainAttributes().getValue( "Fragment-Host" ) != null;
-            }
-            catch( Exception e ) {
-            }
+            fragmentHostName = ServerUtil.getFragemtHostName( bundleFile );
+            isFragment = ( fragmentHostName != null );
         }
 
         final Agent agent = getAgent();
@@ -99,10 +115,14 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
             {
                 String startStatus = agent.start( retval.id );
 
-                if( startStatus != null)
+                if( startStatus != null )
                 {
                     retval = new BundleDTOWithStatus( retval, startStatus );
                 }
+            }
+            else
+            {
+                updateHostBundle( fragmentHostName, existingBundles );
             }
         }
 
@@ -128,6 +148,28 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent>implemen
         }
 
         return true;
+    }
+
+    public void updateHostBundle( String fragmentHostName, BundleDTO[] existingBundles ) throws Exception
+    {
+        long fragmentHostId = -1;
+
+        for( BundleDTO bundle : existingBundles )
+        {
+            if( bundle.symbolicName.equals( fragmentHostName ) )
+            {
+                fragmentHostId = bundle.id;
+                break;
+            }
+        }
+
+        if( fragmentHostId > 0 )
+        {
+            Agent agent = getAgent();
+            agent.redirect( Agent.COMMAND_SESSION );
+            agent.stdin( "update " + fragmentHostId );
+            agent.redirect( Agent.NONE );
+        }
     }
 
 }

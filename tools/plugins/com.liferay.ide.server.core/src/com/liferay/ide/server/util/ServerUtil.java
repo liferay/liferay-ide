@@ -32,6 +32,7 @@ import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -312,6 +314,27 @@ public class ServerUtil
     public static org.eclipse.wst.common.project.facet.core.runtime.IRuntime getFacetRuntime( IRuntime runtime )
     {
         return RuntimeManager.getRuntime( runtime.getName() );
+    }
+
+    public static String getFragemtHostName( final File bundleFile )
+    {
+        String fragmentHostName = null;
+
+        try(JarInputStream jarStream = new JarInputStream( new FileInputStream( bundleFile ) ))
+        {
+            fragmentHostName = jarStream.getManifest().getMainAttributes().getValue( "Fragment-Host" );
+
+            if( fragmentHostName != null )
+            {
+                fragmentHostName =
+                    fragmentHostName.trim().substring( 0, fragmentHostName.indexOf( ";bundle-version" ) );
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return fragmentHostName;
     }
 
     public static IProjectFacet getLiferayFacet( IFacetedProject facetedProject )
