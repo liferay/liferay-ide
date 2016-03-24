@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import org.eclipse.core.resources.IProject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -39,6 +40,7 @@ public class SpringPortletProjectTests extends LiferayMavenProjectTestCase
     }
 
     @Test
+    @Ignore
     public void testNewSpringPortletProject() throws Exception
     {
         NewLiferayPluginProjectOp op = newMavenProjectOp( "spring-mvc", "spring_mvc" );
