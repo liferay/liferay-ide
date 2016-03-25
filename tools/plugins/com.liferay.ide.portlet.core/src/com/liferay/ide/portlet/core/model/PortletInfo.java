@@ -39,7 +39,6 @@ public interface PortletInfo extends Element, Identifiable
 
     @Label( standard = "Title" )
     @XmlBinding( path = "title" )
-    @Length( min = 0, max = 1 )
     ValueProperty PROP_TITLE = new ValueProperty( TYPE, "Title" ); //$NON-NLS-1$
 
     Value<String> getTitle();
@@ -50,7 +49,6 @@ public interface PortletInfo extends Element, Identifiable
 
     @Label( standard = "Short Title" )
     @XmlBinding( path = "short-title" )
-    @Length( min = 0, max = 1 )
     ValueProperty PROP_SHORT_TITLE = new ValueProperty( TYPE, "ShortTitle" ); //$NON-NLS-1$
 
     Value<String> getShortTitle();
@@ -61,7 +59,6 @@ public interface PortletInfo extends Element, Identifiable
 
     @Label( standard = "Keywords" )
     @XmlBinding( path = "keywords" )
-    @Length( min = 0, max = 1 )
     ValueProperty PROP_KEYWORDS = new ValueProperty( TYPE, "Keywords" ); //$NON-NLS-1$
 
     Value<String> getKeywords();
