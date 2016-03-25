@@ -30,7 +30,6 @@ import java.util.zip.ZipEntry;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**

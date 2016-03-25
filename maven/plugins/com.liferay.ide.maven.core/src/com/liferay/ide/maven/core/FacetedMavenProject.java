@@ -104,6 +104,12 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
     }
 
     @Override
+    public List<IFile> getDefaultLanguageProperties()
+    {
+        return flexibleProject.getDefaultLanguageProperties();
+    }
+
+    @Override
     public IFile getDescriptorFile( String name )
     {
         return this.flexibleProject.getDescriptorFile( name );
@@ -133,12 +139,6 @@ public class FacetedMavenProject extends LiferayMavenProject implements IWebProj
         }
 
         return outputs;
-    }
-
-    @Override
-    public List<IFile> getDefaultLanguageProperties()
-    {
-        return flexibleProject.getDefaultLanguageProperties();
     }
 
 }

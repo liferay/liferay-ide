@@ -48,6 +48,25 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
     private static final String[] ignorePaths = new String[] { ".gradle", "build" };
 
+    public static IPath getOutputBundle( IProject gradleProject )
+    {
+        final CustomModel model = GradleCore.getToolingModel(
+            GradleCore.getDefault(), CustomModel.class, gradleProject );
+
+        Set<File> outputFiles = model.getOutputFiles();
+
+        if( outputFiles.size() > 0 )
+        {
+            return new Path( outputFiles.iterator().next().getAbsolutePath() );
+        }
+        else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
+        {
+            return gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
+        }
+
+        return null;
+    }
+
     public LiferayGradleProject( IProject project )
     {
         super( project );
@@ -62,6 +81,12 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
 
         return false;
+    }
+
+    @Override
+    public List<IFile> getDefaultLanguageProperties()
+    {
+        return PropertiesUtil.getDefaultLanguagePropertiesFromModuleProject( getProject() );
     }
 
     @Override
@@ -125,13 +150,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         return null;
     }
 
-    private boolean isThemeProject( IProject project )
-    {
-        return project.getFile( "gulpfile.js" ).exists() &&
-            project.getFile( "package.json" ).exists() &&
-            project.getFile( "src/WEB-INF/liferay-plugin-package.properties" ).exists();
-    }
-
     @Override
     public String getProperty( String key, String defaultValue )
     {
@@ -163,29 +181,11 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         return retval;
     }
 
-    public static IPath getOutputBundle( IProject gradleProject )
+    private boolean isThemeProject( IProject project )
     {
-        final CustomModel model = GradleCore.getToolingModel(
-            GradleCore.getDefault(), CustomModel.class, gradleProject );
-
-        Set<File> outputFiles = model.getOutputFiles();
-
-        if( outputFiles.size() > 0 )
-        {
-            return new Path( outputFiles.iterator().next().getAbsolutePath() );
-        }
-        else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
-        {
-            return gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
-        }
-
-        return null;
-    }
-
-    @Override
-    public List<IFile> getDefaultLanguageProperties()
-    {
-        return PropertiesUtil.getDefaultLanguagePropertiesFromModuleProject( getProject() );
+        return project.getFile( "gulpfile.js" ).exists() &&
+            project.getFile( "package.json" ).exists() &&
+            project.getFile( "src/WEB-INF/liferay-plugin-package.properties" ).exists();
     }
 
 }

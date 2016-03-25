@@ -188,14 +188,14 @@ public class PropertiesUtil
             return portletXml;
         }
 
-        public Set<String> getResourceBundles()
-        {
-            return this.resourceBundles;
-        }
-
         public String[] getResourceBundlePatterns()
         {
             return this.resourceBundlesPatterns.toArray( new String[0] );
+        }
+
+        public Set<String> getResourceBundles()
+        {
+            return this.resourceBundles;
         }
 
         public String[] getSupportedLocalePatterns()
@@ -379,6 +379,121 @@ public class PropertiesUtil
         }
 
         return retval.toArray( new IFile[0] );
+    }
+
+    public static List<IFile> getDefaultLanguagePropertiesFromModuleProject( IProject project )
+    {
+        IJavaProject javaProject = JavaCore.create( project );
+
+        IType portletType = null;
+
+        List<IFile> retvals = new ArrayList<IFile>();
+
+        try
+        {
+            portletType = javaProject.findType( "javax.portlet.Portlet" );
+
+            final ITypeHierarchy typeHierarchy = portletType.newTypeHierarchy( javaProject, new NullProgressMonitor() );
+
+            final IPackageFragmentRoot[] packageRoots = javaProject.getPackageFragmentRoots();
+
+            List<String> packages = new ArrayList<String>();
+
+            List<IType> srcJavaTypes = new ArrayList<IType>();
+
+            for( IPackageFragmentRoot packageRoot : packageRoots )
+            {
+                if( packageRoot.getKind() == IPackageFragmentRoot.K_SOURCE )
+                {
+                    IJavaElement[] javaElements = packageRoot.getChildren();
+
+                    for( IJavaElement javaElement : javaElements )
+                    {
+                        IPackageFragment packageFragment = (IPackageFragment) javaElement;
+
+                        packages.add( packageFragment.getElementName() );
+                    }
+                }
+            }
+
+            IType[] subTypes = typeHierarchy.getAllSubtypes( portletType );
+
+            for( IType type : subTypes )
+            {
+                if( isInPackage( packages, type.getFullyQualifiedName() ) )
+                {
+                    srcJavaTypes.add( type );
+                }
+            }
+
+            String resourceBundleValue = null;
+
+            for( IType type : srcJavaTypes )
+            {
+                File file = type.getResource().getLocation().toFile();
+                String content = FileUtil.readContents( file );
+
+                String key = "javax.portlet.resource-bundle=";
+
+                int i = content.indexOf( key );
+
+                if( i == -1 )
+                {
+                    continue;
+                }
+                else
+                {
+                    i += key.length();
+
+                    StringBuilder strBuilder = new StringBuilder();
+
+                    for( ; i < content.length(); i++ )
+                    {
+                        char ch = content.charAt( i );
+                        if( ch != '"' )
+                        {
+                            strBuilder.append( ch );
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    resourceBundleValue = strBuilder.toString();
+                    // find the first language config
+                    break;
+                }
+            }
+
+            String resourceBundle = resourceBundleValue.replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
+
+            if( !resourceBundle.endsWith( PROPERTIES_FILE_SUFFIX ) &&
+                !resourceBundle.contains( IPath.SEPARATOR + "" ) &&
+                !( CoreUtil.isWindows() && resourceBundle.contains( "\\" ) ) )
+            {
+                resourceBundle = new Path( resourceBundle.replace( ".", IPath.SEPARATOR + "" ) ).toString();
+            }
+
+            final ILiferayProject lrproject = LiferayCore.create( project );
+            final IFolder[] srcFolders = lrproject.getSourceFolders();
+
+            for( IFolder srcFolder : srcFolders )
+            {
+                final IFile languageFile = CoreUtil.getWorkspaceRoot().getFile(
+                    srcFolder.getFullPath().append( resourceBundle + PROPERTIES_FILE_SUFFIX ) );
+
+                if( ( languageFile != null ) && languageFile.exists() )
+                {
+                    retvals.add( languageFile );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return retvals;
     }
 
     public static List<IFile> getDefaultLanguagePropertiesFromPortletXml( IFile portletXml )
@@ -782,6 +897,21 @@ public class PropertiesUtil
         return false;
     }
 
+    private static boolean isInPackage( List<String> packages, String className )
+    {
+        for( String element : packages )
+        {
+            if( !element.isEmpty() && className.startsWith( element ) &&
+                !className.startsWith( "com.liferay.portal.kernel.portlet" ) &&
+                !className.startsWith( "javax.portlet" ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     // Check if the file is a language properties file referenced from portlet.xml or liferay-hook.xml
     public static boolean isLanguagePropertiesFile( IFile targetFile )
     {
@@ -862,32 +992,6 @@ public class PropertiesUtil
         return false;
     }
 
-    public static IFile[] visitPropertiesFiles( IResource container, String relativePath )
-    {
-        try
-        {
-            if( relativePath.contains( "*" ) )
-            {
-                return new PropertiesVisitor().visitPropertiesFiles( container, relativePath );
-            }
-            else
-            {
-                final IPath path = container.getFullPath().append( relativePath + PROPERTIES_FILE_SUFFIX );
-                final IFile file = CoreUtil.getWorkspaceRoot().getFile( path );
-
-                if( file != null && file.exists() )
-                {
-                    return new IFile[] { file };
-                }
-            }
-        }
-        catch( Exception e )
-        {
-        }
-
-        return new IFile[0];
-    }
-
     public static Properties loadProperties( final File f )
     {
         final Properties p = new Properties();
@@ -916,111 +1020,22 @@ public class PropertiesUtil
         }
     }
 
-    public static List<IFile> getDefaultLanguagePropertiesFromModuleProject( IProject project )
+    public static IFile[] visitPropertiesFiles( IResource container, String relativePath )
     {
-        IJavaProject javaProject = JavaCore.create( project );
-
-        IType portletType = null;
-
-        List<IFile> retvals = new ArrayList<IFile>();
-
         try
         {
-            portletType = javaProject.findType( "javax.portlet.Portlet" );
-
-            final ITypeHierarchy typeHierarchy = portletType.newTypeHierarchy( javaProject, new NullProgressMonitor() );
-
-            final IPackageFragmentRoot[] packageRoots = javaProject.getPackageFragmentRoots();
-
-            List<String> packages = new ArrayList<String>();
-
-            List<IType> srcJavaTypes = new ArrayList<IType>();
-
-            for( IPackageFragmentRoot packageRoot : packageRoots )
+            if( relativePath.contains( "*" ) )
             {
-                if( packageRoot.getKind() == IPackageFragmentRoot.K_SOURCE )
-                {
-                    IJavaElement[] javaElements = packageRoot.getChildren();
-
-                    for( IJavaElement javaElement : javaElements )
-                    {
-                        IPackageFragment packageFragment = (IPackageFragment) javaElement;
-
-                        packages.add( packageFragment.getElementName() );
-                    }
-                }
+                return new PropertiesVisitor().visitPropertiesFiles( container, relativePath );
             }
-
-            IType[] subTypes = typeHierarchy.getAllSubtypes( portletType );
-
-            for( IType type : subTypes )
+            else
             {
-                if( isInPackage( packages, type.getFullyQualifiedName() ) )
+                final IPath path = container.getFullPath().append( relativePath + PROPERTIES_FILE_SUFFIX );
+                final IFile file = CoreUtil.getWorkspaceRoot().getFile( path );
+
+                if( file != null && file.exists() )
                 {
-                    srcJavaTypes.add( type );
-                }
-            }
-
-            String resourceBundleValue = null;
-
-            for( IType type : srcJavaTypes )
-            {
-                File file = type.getResource().getLocation().toFile();
-                String content = FileUtil.readContents( file );
-
-                String key = "javax.portlet.resource-bundle=";
-
-                int i = content.indexOf( key );
-
-                if( i == -1 )
-                {
-                    continue;
-                }
-                else
-                {
-                    i += key.length();
-
-                    StringBuilder strBuilder = new StringBuilder();
-
-                    for( ; i < content.length(); i++ )
-                    {
-                        char ch = content.charAt( i );
-                        if( ch != '"' )
-                        {
-                            strBuilder.append( ch );
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    resourceBundleValue = strBuilder.toString();
-                    // find the first language config
-                    break;
-                }
-            }
-
-            String resourceBundle = resourceBundleValue.replaceAll( "(^\\s*)|(\\s*$)", StringPool.BLANK );
-
-            if( !resourceBundle.endsWith( PROPERTIES_FILE_SUFFIX ) &&
-                !resourceBundle.contains( IPath.SEPARATOR + "" ) &&
-                !( CoreUtil.isWindows() && resourceBundle.contains( "\\" ) ) )
-            {
-                resourceBundle = new Path( resourceBundle.replace( ".", IPath.SEPARATOR + "" ) ).toString();
-            }
-
-            final ILiferayProject lrproject = LiferayCore.create( project );
-            final IFolder[] srcFolders = lrproject.getSourceFolders();
-
-            for( IFolder srcFolder : srcFolders )
-            {
-                final IFile languageFile = CoreUtil.getWorkspaceRoot().getFile(
-                    srcFolder.getFullPath().append( resourceBundle + PROPERTIES_FILE_SUFFIX ) );
-
-                if( ( languageFile != null ) && languageFile.exists() )
-                {
-                    retvals.add( languageFile );
+                    return new IFile[] { file };
                 }
             }
         }
@@ -1028,22 +1043,7 @@ public class PropertiesUtil
         {
         }
 
-        return retvals;
-    }
-
-    private static boolean isInPackage( List<String> packages, String className )
-    {
-        for( String element : packages )
-        {
-            if( !element.isEmpty() && className.startsWith( element ) &&
-                !className.startsWith( "com.liferay.portal.kernel.portlet" ) &&
-                !className.startsWith( "javax.portlet" ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return new IFile[0];
     }
 
 }

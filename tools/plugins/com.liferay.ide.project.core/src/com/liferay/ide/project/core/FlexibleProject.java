@@ -133,6 +133,13 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
     }
 
     @Override
+    public List<IFile> getDefaultLanguageProperties()
+    {
+        return PropertiesUtil.getDefaultLanguagePropertiesFromPortletXml(
+            getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
+    }
+
+    @Override
     public IFile getDescriptorFile( String name )
     {
         IFile retval = null;
@@ -219,13 +226,6 @@ public abstract class FlexibleProject extends BaseLiferayProject implements IWeb
         }
 
         return false;
-    }
-
-    @Override
-    public List<IFile> getDefaultLanguageProperties()
-    {
-        return PropertiesUtil.getDefaultLanguagePropertiesFromPortletXml(
-            getDescriptorFile( ILiferayConstants.PORTLET_XML_FILE ) );
     }
 
 }
