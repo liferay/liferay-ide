@@ -41,12 +41,6 @@ public class LiferayScriptPossibleValuesService extends PossibleValuesService
     private String type;
 
     @Override
-    protected void initPossibleValuesService()
-    {
-        super.initPossibleValuesService();
-    }
-
-    @Override
     protected void compute( Set<String> values )
     {
         Element modeElement = context( Element.class );
@@ -75,6 +69,12 @@ public class LiferayScriptPossibleValuesService extends PossibleValuesService
                 }
             }
         }
+    }
+
+    @Override
+    public boolean strict()
+    {
+        return false;
     }
 
     private static class PropertiesVisitor implements IResourceProxyVisitor
