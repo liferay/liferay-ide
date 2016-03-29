@@ -40,7 +40,6 @@ public class SpringPortletProjectTests extends LiferayMavenProjectTestCase
     }
 
     @Test
-    @Ignore
     public void testNewSpringPortletProject() throws Exception
     {
         NewLiferayPluginProjectOp op = newMavenProjectOp( "spring-mvc", "spring_mvc" );
