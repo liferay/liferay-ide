@@ -270,7 +270,17 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         final NewLiferayPluginProjectOp op = newProjectOp( "ext" );
         op.setPluginType( PluginType.ext );
 
-        IProject extProject = createAntProject( op );
+        IProject extProject = null;
+
+        try
+        {
+            extProject = createAntProject( op );
+        }
+        catch( Throwable e )
+        {
+        }
+
+        assertNotNull( extProject );
 
         final IFolder defaultDocroot =
             LiferayCore.create( IWebProject.class, extProject ).getDefaultDocrootFolder();
