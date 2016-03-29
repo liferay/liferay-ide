@@ -85,19 +85,13 @@
          <description>
             Preset for Liferay 6.0 theme plugin
          </description>
-         <!--
          <facet
                id="jst.java"
-               version="5.0">
-         </facet>
-         -->
-         <facet
-               id="jst.java"
-               version="5.0">
+               version="1.8">
          </facet>
          <facet
                id="jst.web"
-               version="2.5">
+               version="3.0">
          </facet>
          <facet
                id="liferay.theme"

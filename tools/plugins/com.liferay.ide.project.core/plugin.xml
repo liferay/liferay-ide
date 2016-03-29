@@ -302,11 +302,11 @@
          </description>
          <facet
                id="jst.java"
-               version="1.6">
+               version="1.8">
          </facet>
          <facet
                id="jst.web"
-               version="2.5">
+               version="3.0">
          </facet>
          <facet
                id="liferay.portlet"
@@ -324,11 +324,11 @@
          </description>
          <facet
                id="jst.java"
-               version="1.6">
+               version="1.8">
          </facet>
          <facet
                id="jst.web"
-               version="2.5">
+               version="3.0">
          </facet>
          <facet
                id="liferay.hook"
@@ -346,11 +346,11 @@
          </description>
          <facet
                id="jst.java"
-               version="1.6">
+               version="1.8">
          </facet>
          <facet
                id="jst.web"
-               version="2.5">
+               version="3.0">
          </facet>
          <facet
                id="liferay.ext"
@@ -368,11 +368,11 @@
          </description>
          <facet
                id="jst.java"
-               version="1.6">
+               version="1.8">
          </facet>
          <facet
                id="jst.web"
-               version="2.5">
+               version="3.0">
          </facet>
          <facet
                id="liferay.web"
