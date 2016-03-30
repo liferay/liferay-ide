@@ -48,7 +48,8 @@ Require-Bundle: org.eclipse.ui,
  org.apache.felix.gogo.runtime,
  org.eclipse.jem.workbench,
  org.eclipse.e4.core.commands,
- org.eclipse.e4.core.contexts
+ org.eclipse.e4.core.contexts,
+ org.eclipse.ui.navigator.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

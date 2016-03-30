@@ -20,7 +20,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.web,
  org.eclipse.core.expressions,
  org.eclipse.ui.navigator,
- org.eclipse.wst.server.ui
+ org.eclipse.wst.server.ui,
+ org.eclipse.ui.navigator.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
