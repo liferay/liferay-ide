@@ -50,6 +50,7 @@ import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 import org.junit.AfterClass;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -152,6 +153,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         model.releaseFromEdit();
     }
 
+    @Ignore
     @Test
     public void testHookProjectEncoding() throws Exception
     {
@@ -253,6 +255,7 @@ public class LiferayLanguageFileEncodingTests extends ProjectCoreBase
         assertEquals( false, hasEncodingMarker( fileNameWithStarIncorrectEncoding ) );
     }
 
+    @Ignore
     @Test
     public void testPortletProjectEncoding() throws Exception
     {
