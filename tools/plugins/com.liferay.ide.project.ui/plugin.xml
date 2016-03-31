@@ -1149,7 +1149,7 @@
              name="Liferay 7 Migration Problems"
              restorable="true">
       </view>
-      <view
+      <!--view
             allowMultiple="false"
             category="com.liferay.ide.project.ui.liferay"
             class="com.liferay.ide.project.ui.upgrade.UpgradeAssistantView"
@@ -1157,7 +1157,7 @@
             id="com.liferay.ide.project.ui.upgradeView"
             name="Liferay 7 Upgrade Assistant"
             restorable="true">
-      </view>
+      </view-->
 
    </extension>
 
