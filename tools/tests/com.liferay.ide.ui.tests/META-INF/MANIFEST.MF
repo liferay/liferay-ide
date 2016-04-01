@@ -17,18 +17,14 @@ Require-Bundle: com.liferay.ide.core,
  org.eclipse.wst.xml.core,
  org.eclipse.wst.xml.ui,
  org.junit,
- org.eclipse.swtbot.eclipse.finder,
- org.eclipse.swtbot.junit4_x,
  org.hamcrest.core,
  org.eclipse.swt,
  org.eclipse.debug.ui,
  org.eclipse.ui.console,
- org.eclipse.swtbot.swt.finder,
  com.liferay.ide.ui,
  org.apache.log4j,
  org.eclipse.ui.workbench,
  org.eclipse.jface
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: com.liferay.ide.ui.tests,
- com.liferay.ide.ui.tests.swtbot.page
+Export-Package: com.liferay.ide.ui.tests
