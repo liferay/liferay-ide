@@ -45,6 +45,7 @@ import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvider
     implements NewLiferayProjectProvider<NewModuleFragmentOp>
@@ -72,7 +73,8 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
         final String hostBundleName = op.getHostOsgiBundle().content();
 
-        final IPath temp = GradleCore.getDefault().getStateLocation().append( hostBundleName );
+        final IPath temp = GradleCore.getDefault().getStateLocation().append(
+            hostBundleName.substring( 0, hostBundleName.lastIndexOf( ".jar" ) ) );
 
         final IRuntime runtime = ServerUtil.getRuntime( op.getLiferayRuntimeName().content() );
 

@@ -231,4 +231,47 @@
          </includes>
       </viewerContentBinding>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+       <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               icon="icons/e16/liferay_logo_16.png"
+               label="Liferay">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                    <or>
+                      <adapt type="org.eclipse.core.resources.IResource">
+                        <test property="org.eclipse.core.resources.extension" value="jspf" />
+                       </adapt>
+                      <adapt type="org.eclipse.core.resources.IResource">
+                        <test property="org.eclipse.core.resources.extension" value="jsp" />
+                      </adapt>
+                     </or>
+                  </iterate>
+               </with>
+            </visibleWhen>
+            <command
+                  commandId="com.liferay.ide.gradle.ui.handler.CompareFileCommand"
+                  label="Compare With Original"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+     <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="com.liferay.ide.gradle.ui.handler.CompareFileHandler"
+            id="com.liferay.ide.gradle.ui.handler.CompareFileCommand"
+            name="CompareFileCommand">
+      </command>
+   </extension>
 </plugin>

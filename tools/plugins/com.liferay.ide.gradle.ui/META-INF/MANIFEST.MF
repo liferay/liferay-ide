@@ -21,7 +21,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  org.eclipse.ui.navigator,
  org.eclipse.wst.server.ui,
- org.eclipse.ui.navigator.resources
+ org.eclipse.ui.navigator.resources,
+ org.eclipse.compare,
+ org.eclipse.team.core,
+ org.eclipse.team.ui,
+ org.eclipse.ui.workbench,
+ org.eclipse.jface.text;bundle-version="3.10.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
