@@ -104,7 +104,7 @@ public class ImportLiferayWorkspaceOpMethods
         IPath runTimePath = new Path( location );
 
         runtimeWC.setName( serverRuntimeName );
-        runtimeWC.setLocation( runTimePath.append( "bundles" ) );
+        runtimeWC.setLocation( runTimePath.append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location ) ) );
 
         runtimeWC.save( true, monitor );
 

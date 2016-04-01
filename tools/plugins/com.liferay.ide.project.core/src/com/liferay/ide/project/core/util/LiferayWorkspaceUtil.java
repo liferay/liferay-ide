@@ -17,10 +17,12 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
@@ -105,7 +107,7 @@ public class LiferayWorkspaceUtil
 
     public static boolean hasBundlesDir( String location )
     {
-        File bundles = new File( location, "bundles" );
+        File bundles = new File( location, loadConfiguredHomeDir( location ) );
 
         if( bundles.exists() && bundles.isDirectory() )
         {
@@ -190,5 +192,21 @@ public class LiferayWorkspaceUtil
         }
 
         return retval;
+    }
+
+    public static String loadConfiguredHomeDir( String location )
+    {
+        File gradleProperties = new File( location, "gradle.properties" );
+
+        String retVal = "bundles";
+
+        if( gradleProperties.exists() )
+        {
+            Properties properties = PropertiesUtil.loadProperties( gradleProperties );
+
+            retVal = properties.getProperty( "liferay.workspace.home.dir", "bundles" );
+        }
+
+        return retVal;
     }
 }

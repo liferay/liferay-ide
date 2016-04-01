@@ -132,6 +132,43 @@ public class ServerUtil
         return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, msg );
     }
 
+    public static void deleteRuntimeAndServer( String runtimeType , File portalBundle ) throws Exception
+    {
+        IRuntime[] runtimes = ServerCore.getRuntimes();
+
+        IRuntime targetRuntime = null;
+
+        for( IRuntime runtime : runtimes )
+        {
+            if( runtime.getRuntimeType().getId().equals( runtimeType ) )
+            {
+                File runtimeFile = runtime.getLocation().toFile();
+
+                if( runtimeFile.getCanonicalFile().equals( portalBundle ) )
+                {
+                    targetRuntime = runtime;
+                }
+            }
+        }
+
+        if( targetRuntime != null )
+        {
+            IServer[] servers = ServerCore.getServers();
+
+            for( IServer server : servers )
+            {
+                IRuntime runtime = server.getRuntime();
+
+                if( runtime != null && runtime.equals( targetRuntime ) )
+                {
+                    server.delete();
+                }
+            }
+
+            targetRuntime.delete();
+        }
+    }
+
     public static IProject findProjectByContextName( String contextName )
     {
         IProject retval = null;

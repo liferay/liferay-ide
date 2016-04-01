@@ -1,5 +1,7 @@
 package com.liferay.ide.gradle.core.workspace;
 
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -8,6 +10,7 @@ import org.eclipse.sapphire.modeling.Path;
 
 /**
  * @author Gregory Amerson
+ * @author Andy Wu
  */
 public class HasBundlesDirDerivedValueService extends DerivedValueService
 {
@@ -38,7 +41,7 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService
 
         final Path path = op().getWorkspaceLocation().content();
 
-        if( path != null && path.append( "bundles" ).toFile().exists() )
+        if( path != null && LiferayWorkspaceUtil.hasBundlesDir( path.toOSString() ) )
         {
             retval = "true";
         }

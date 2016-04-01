@@ -18,12 +18,17 @@ package com.liferay.ide.gradle.core;
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.util.Set;
 
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -74,6 +79,8 @@ public class GradleCore extends Plugin
     {
         return new Status( IStatus.WARNING, PLUGIN_ID, msg );
     }
+
+
 
     /**
      * Returns the shared instance
@@ -221,6 +228,85 @@ public class GradleCore extends Plugin
                 }
             }
         }, IResourceChangeEvent.POST_CHANGE );
+
+        CoreUtil.getWorkspace().addResourceChangeListener( new IResourceChangeListener()
+        {
+
+            @Override
+            public void resourceChanged( IResourceChangeEvent event )
+            {
+                try
+                {
+                    if( event.getType() == IResourceChangeEvent.PRE_DELETE )
+                    {
+                        // for the event of delete project
+                        IProject project = (IProject) event.getResource();
+                        if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                        {
+                            IFolder bundlesFolder = project.getFolder(
+                                LiferayWorkspaceUtil.loadConfiguredHomeDir( project.getLocation().toOSString() ) );
+
+                            if( bundlesFolder.exists() )
+                            {
+                                File portalBundle = bundlesFolder.getLocation().toFile().getCanonicalFile();
+
+                                ServerUtil.deleteRuntimeAndServer( PortalRuntime.ID , portalBundle );
+                            }
+                        }
+
+                        return;
+                    }
+                    else
+                    {
+                        event.getDelta().accept( new IResourceDeltaVisitor()
+                        {
+
+                            @Override
+                            public boolean visit( IResourceDelta delta ) throws CoreException
+                            {
+                                // for only delete bundles dir
+                                if( delta.getKind() == IResourceDelta.REMOVED )
+                                {
+                                    IResource deletedRes = delta.getResource();
+
+                                    IProject project = deletedRes.getProject();
+
+                                    if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                                    {
+                                        IPath bundlesPath = project.getFullPath().append(
+                                            LiferayWorkspaceUtil.loadConfiguredHomeDir(
+                                                project.getLocation().toOSString() ) );
+
+                                        if( delta.getFullPath().equals( bundlesPath ) )
+                                        {
+                                            try
+                                            {
+                                                File portalBundle =
+                                                    deletedRes.getLocation().toFile().getCanonicalFile();
+
+                                                ServerUtil.deleteRuntimeAndServer( PortalRuntime.ID , portalBundle );
+                                            }
+                                            catch( Exception e )
+                                            {
+                                                GradleCore.logError( "delete related runtime and server error", e );
+                                            }
+                                        }
+                                    }
+                                }
+
+                                return true;
+                            }
+                        } );
+                    }
+                }
+                catch( Exception e )
+                {
+                    GradleCore.logError( "delete related runtime and server error", e );
+                }
+
+                return;
+            }
+        }, IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_DELETE );
     }
 
     /*
