@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -37,6 +38,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -77,6 +79,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         ProjectUI.getDefault().getImageRegistry().get( ProjectUI.CHECKED_IMAGE_ID );
     private static final Image IMAGE_UNCHECKED =
         ProjectUI.getDefault().getImageRegistry().get( ProjectUI.UNCHECKED_IMAGE_ID );
+    public static boolean showAll = false;
 
     private Browser _browser;
 //    private FormText _form;
@@ -288,7 +291,17 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
         {
             public void selectionChanged( SelectionChangedEvent event )
             {
-                List<Problem> problems = MigrationUtil.getProblemsFromTreeNode( event.getSelection() );
+                List<Problem> problems = null;
+
+                if( showAll )
+                {
+                    problems = MigrationUtil.getProblemsFromTreeNode( event.getSelection() );
+
+                }
+                else
+                {
+                    problems = MigrationUtil.getNotIgnoreProblemsFromTreeNode( event.getSelection() );
+                }
 
                 if( problems != null && problems.size() > 0 )
                 {
@@ -403,18 +416,29 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
 
         final IAction migrateAction = new RunMigrationToolAction( "Run Migration Tool" , getViewSite().getShell() );
         final IAction expandAllAction = new ExpandAllAction( "Expand All", this );
+        final IAction showAllAction = new ShowAllAction( "Show All", this );
         manager.add( migrateAction );
         manager.add( expandAllAction );
+        manager.add( showAllAction );
     }
 
     @Override
     public void doubleClick( DoubleClickEvent event )
     {
-        Problem problem = MigrationUtil.getProblemFromSelection( event.getSelection() );
-
-        if( problem != null )
+        if( event.getSelection() instanceof IStructuredSelection )
         {
-            MigrationUtil.openEditor( problem );
+            final IStructuredSelection ss = (IStructuredSelection) event.getSelection();
+
+            Object element = ss.getFirstElement();
+
+            if( element instanceof Problem )
+            {
+                MigrationUtil.openEditor( (Problem) element );
+            }
+            else if( element instanceof FileProblems )
+            {
+                MigrationUtil.openEditor( (FileProblems) element );
+            }
         }
     }
 

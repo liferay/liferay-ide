@@ -16,11 +16,12 @@
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
+import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -40,29 +41,48 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
 
         final List<Problem> resolvedProblems = new ArrayList<>();
 
-        if( element instanceof IResource )
-        {
-            final IResource resource = (IResource) element;
+        final List<Problem> ignoreProblems = new ArrayList<>();
 
-            problems.addAll( MigrationUtil.getProblemsFromResource( resource ) );
-            resolvedProblems.addAll( MigrationUtil.getResolvedProblemsFromResource( resource ) );
+        if( element instanceof FileProblems )
+        {
+            final FileProblems fileProblems = (FileProblems) element;
+
+            problems.addAll( fileProblems.getProblems() );
+
+            resolvedProblems.addAll( fileProblems.getProblems( Problem.STATUS_RESOLVED ) );
+
+            ignoreProblems.addAll( fileProblems.getProblems( Problem.STATUS_IGNORE ) );
+        }
+        else if( element instanceof UpgradeProblems )
+        {
+            final UpgradeProblems upgradeProblems = (UpgradeProblems) element;
+
+            for( FileProblems fileProblems : upgradeProblems.getProblems() )
+            {
+                problems.addAll( fileProblems.getProblems() );
+
+                resolvedProblems.addAll( fileProblems.getProblems( Problem.STATUS_RESOLVED ) );
+
+                ignoreProblems.addAll( fileProblems.getProblems( Problem.STATUS_IGNORE ) );
+            }
         }
 
         if( problems != null && problems.size() > 0 )
         {
-            for( Problem problem : problems )
-            {
-                if( problem.getStatus() == Problem.STATUS_RESOLVED && !resolvedProblems.contains( problem ) )
-                {
-                    resolvedProblems.add( problem );
-                }
-            }
-
             final StringBuilder sb = new StringBuilder();
+
+            sb.append( "[" );
+
+            sb.append( problems.size() + " total" );
 
             if( resolvedProblems.size() > 0 )
             {
                 sb.append( ", " + resolvedProblems.size() + " resolved" );
+            }
+
+            if( ignoreProblems.size() > 0 )
+            {
+                sb.append( ", " + ignoreProblems.size() + " ignored" );
             }
 
             sb.append( "]" );

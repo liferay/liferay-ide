@@ -15,13 +15,12 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.Liferay7UpgradeAssistantSettings;
+import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -49,15 +48,15 @@ public class MigrationContentProvider implements ITreeContentProvider
         {
             ProblemsContainer problemsContainer = (ProblemsContainer) parentElement;
 
-            List<UpgradeProblems> upgradeProblems = problemsContainer.getUpgradeProblemsList();
+            UpgradeProblems[] upgradeProblemsArray = problemsContainer.getProblemsArray();
 
-            if (upgradeProblems.size() == 1)
+            if (upgradeProblemsArray.length == 1)
             {
-                return problemsContainer.getUpgradeProblemsList().get( 0 ).getProblems();
+                return problemsContainer.getProblemsArray()[0].getProblems();
             }
             else
             {
-                return problemsContainer.getUpgradeProblemsList().toArray();
+                return problemsContainer.getProblemsArray();
             }
         }
         else if( parentElement instanceof UpgradeProblems )
@@ -86,11 +85,11 @@ public class MigrationContentProvider implements ITreeContentProvider
         if( element instanceof ProblemsContainer )
         {
             ProblemsContainer problemsContainer = (ProblemsContainer) element;
-            List<UpgradeProblems> upgradeProblems = problemsContainer.getUpgradeProblemsList();
+            UpgradeProblems[] upgradeProblemsArray = problemsContainer.getProblemsArray();
 
-            if (upgradeProblems.size() == 1)
+            if( upgradeProblemsArray.length == 1 )
             {
-                return problemsContainer.getUpgradeProblemsList().get( 0 ).getProblems().length > 0;
+                return problemsContainer.getProblemsArray()[0].getProblems().length > 0;
             }
             else
             {
@@ -114,33 +113,21 @@ public class MigrationContentProvider implements ITreeContentProvider
 
             try
             {
-                Liferay7UpgradeAssistantSettings setting =
-                    UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
+                // Liferay7UpgradeAssistantSettings setting =
+                // UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
+                //
+                // if( setting != null )
+                // {
+                // ProblemsContainer problemsContainer = new ProblemsContainer();
+                // problemsContainer.setUpgradeProblemsArray( new UpgradeProblems[] { setting.getPortalSettings() } );
+                //
+                // _problems.add( problemsContainer );
+                // }
 
-                if( setting != null )
-                {
-                    ProblemsContainer problemsContainer = new ProblemsContainer();
-                    problemsContainer.setUpgradeProblemsList( Collections.singletonList( (UpgradeProblems) setting.getPortalSettings() ) );
+                MigrationProblemsContainer container =
+                    UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
 
-                    _problems.add( problemsContainer );
-                }
-
-                Object[] o = UpgradeAssistantSettingsUtil.getAllObjectFromStore( MigrationProblems.class );
-
-                List<UpgradeProblems> codeProblems = new ArrayList<UpgradeProblems>();
-
-                if( o != null && o.length > 0 )
-                {
-                    for( Object object : o )
-                    {
-                        codeProblems.add( (MigrationProblems) object );
-                    }
-
-                    ProblemsContainer problemDsiplay = new ProblemsContainer();
-                    problemDsiplay.setUpgradeProblemsList( codeProblems );
-
-                    _problems.add( problemDsiplay );
-                }
+                _problems.add( container );
             }
             catch( Exception e )
             {

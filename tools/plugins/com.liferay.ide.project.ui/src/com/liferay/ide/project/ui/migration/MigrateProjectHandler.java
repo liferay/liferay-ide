@@ -24,9 +24,11 @@ import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.FileProblemsUtil;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
+import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -177,6 +179,33 @@ public class MigrateProjectHandler extends AbstractHandler
 
                     if( allProblems.size() > 0 )
                     {
+                        MigrationProblemsContainer container =
+                            UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
+
+                        MigrationProblems[] migrationProblemsArray = null;
+
+                        List<MigrationProblems> migrationProblemsList = new ArrayList<MigrationProblems>();
+
+                        if( container == null )
+                        {
+                            container = new MigrationProblemsContainer();
+                        }
+
+                        if( container.getProblemsArray() != null )
+                        {
+                            migrationProblemsArray = container.getProblemsArray();
+                        }
+
+                        if( migrationProblemsArray != null )
+                        {
+                            List<MigrationProblems> mpList = Arrays.asList( migrationProblemsArray );
+
+                            for( MigrationProblems mp : mpList )
+                            {
+                                migrationProblemsList.add( mp );
+                            }
+                        }
+
                         MigrationProblems migrationProblems = new MigrationProblems();
 
                         List<FileProblems> fileProblemsList =
@@ -187,15 +216,35 @@ public class MigrateProjectHandler extends AbstractHandler
                         migrationProblems.setType( "Code Problems" );
                         migrationProblems.setSuffix( projectName );
 
-                        if( !projectName.equals( "" ) )
+                        boolean existing = false;
+                        int index = -1;
+
+                        for( int i = 0; i < migrationProblemsList.size(); i++ )
                         {
-                            UpgradeAssistantSettingsUtil.setObjectToStore(
-                                MigrationProblems.class, projectName, migrationProblems );
+                            UpgradeProblems upgradeProblems = migrationProblemsList.get( i );
+
+                            if( ( (MigrationProblems) upgradeProblems ).getSuffix().equals( projectName ) )
+                            {
+                                existing = true;
+
+                                index = i;
+
+                                break;
+                            }
+                        }
+
+                        if( existing )
+                        {
+                            migrationProblemsList.set( index, migrationProblems );
                         }
                         else
                         {
-                            UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblems.class, migrationProblems );
+                            migrationProblemsList.add( migrationProblems );
                         }
+
+                        container.setProblemsArray( migrationProblemsList.toArray( new MigrationProblems[0] ) );
+
+                        UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, container );
 
                         m.reportProblems( allProblems, Migration.DETAIL_LONG, "ide" );
                     }

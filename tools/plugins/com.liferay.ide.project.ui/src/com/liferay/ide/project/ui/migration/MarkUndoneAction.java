@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
-
 /**
  * @author Gregory Amerson
  * @author Terry Jia
@@ -38,6 +37,14 @@ public class MarkUndoneAction extends ProblemAction
     public MarkUndoneAction( ISelectionProvider provider )
     {
         super( provider, "Mark undone" );
+    }
+
+    public void run( final Problem problem, final ISelectionProvider provider ) {
+        super.run( problem, provider );
+
+        problem.setStatus( Problem.STATUS_NOT_RESOLVED );
+
+        MigrationUtil.updateMigrationProblemToStore( problem );
     }
 
     @Override

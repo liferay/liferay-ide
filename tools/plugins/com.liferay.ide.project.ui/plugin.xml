@@ -1434,7 +1434,7 @@
                      name="com.liferay.ide.project.core.upgrade.FileProblems">
                </objectClass>
                <objectClass
-                     name="org.eclipse.core.resources.IResource">
+                     name="com.liferay.ide.project.core.upgrade.UpgradeProblems">
                </objectClass>
            </or>
         </enablement>

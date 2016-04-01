@@ -15,15 +15,35 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.project.core.upgrade.UpgradeProblems;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.ui.navigator.CommonNavigator;
+
+import com.liferay.ide.project.ui.ProjectUI;
 
 /**
  * @author Terry Jia
  */
-public interface ProblemsContainer
+public class ShowAllAction extends Action
 {
-    public String getType();
 
-    public UpgradeProblems[] getProblemsArray();
+    private CommonNavigator cn;
+
+    public ShowAllAction( String text, CommonNavigator cn )
+    {
+        super( text, IAction.AS_CHECK_BOX );
+        this.cn = cn;
+        setImageDescriptor( ProjectUI.getDefault().getImageRegistry().getDescriptor( ProjectUI.WAR_IMAGE_ID ) );
+    }
+
+    @Override
+    public void run()
+    {
+        if (cn instanceof MigrationView) {
+            MigrationView.showAll = !MigrationView.showAll;
+
+            cn.getCommonViewer().collapseAll();
+        }
+    }
 
 }

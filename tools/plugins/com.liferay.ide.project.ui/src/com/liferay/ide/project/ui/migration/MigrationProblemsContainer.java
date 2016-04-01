@@ -15,15 +15,32 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.project.core.upgrade.UpgradeProblems;
+import com.liferay.ide.project.core.upgrade.MigrationProblems;
 
 /**
  * @author Terry Jia
  */
-public interface ProblemsContainer
+public class MigrationProblemsContainer implements ProblemsContainer
 {
-    public String getType();
 
-    public UpgradeProblems[] getProblemsArray();
+    private MigrationProblems[] problemsArray;
+
+    private String type;
+
+    public MigrationProblems[] getProblemsArray()
+    {
+        return problemsArray;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setProblemsArray( MigrationProblems[] problemsArray )
+    {
+        this.problemsArray = problemsArray;
+        this.type = problemsArray[0].getType();
+    }
 
 }

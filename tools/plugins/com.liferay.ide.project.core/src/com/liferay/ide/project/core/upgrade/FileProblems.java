@@ -45,6 +45,21 @@ public class FileProblems
         return _problems;
     }
 
+    public List<Problem> getProblems( int status )
+    {
+        List<Problem> problems = new ArrayList<Problem>();
+
+        for( Problem problem : _problems )
+        {
+            if( problem.getStatus() == status )
+            {
+                problems.add( problem );
+            }
+        }
+
+        return problems;
+    }
+
     public void setFile( File file )
     {
         _file = file;
