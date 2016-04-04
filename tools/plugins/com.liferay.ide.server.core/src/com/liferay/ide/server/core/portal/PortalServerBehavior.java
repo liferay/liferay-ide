@@ -207,7 +207,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
         Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStartVMArgs() );
 
-        int agentPort = getServer().getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
+        int agentPort = getServer().getAttribute( AGENT_PORT, Agent.DEFAULT_PORT );
 
         retval.add( "-D" + Agent.AGENT_SERVER_PORT_KEY + "=" + agentPort );
 
@@ -814,7 +814,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     public void startBundleSupervisor() throws Exception
     {
         _bundleSupervisor = new BundleSupervisor();
-        int agentPort = getServer().getAttribute( "AGENT_PORT", Agent.DEFAULT_PORT );
+        int agentPort = getServer().getAttribute( AGENT_PORT, Agent.DEFAULT_PORT );
 
         _bundleSupervisor.connect( getServer().getHost(), agentPort );
     }

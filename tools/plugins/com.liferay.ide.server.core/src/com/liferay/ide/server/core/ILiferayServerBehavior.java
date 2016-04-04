@@ -25,6 +25,8 @@ import org.eclipse.wst.server.core.IModule;
 public interface ILiferayServerBehavior
 {
 
+    String AGENT_PORT = "AGENT_PORT";
+
     IPath getDeployedPath( IModule[] module );
 
     void redeployModule( IModule[] module ) throws CoreException;

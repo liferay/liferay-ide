@@ -19,6 +19,7 @@ import aQute.remote.api.Agent;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
+import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import java.net.MalformedURLException;
@@ -44,7 +45,6 @@ import org.eclipse.wst.server.core.model.ServerDelegate;
 public class PortalServerDelegate extends ServerDelegate implements PortalServerWorkingCopy
 {
     private final static List<String> SUPPORT_TYPES_LIST = Arrays.asList( "liferay.bundle", "jst.web", "jst.utility" );
-    private int nextAgentPort = Agent.DEFAULT_PORT + 1;
 
     public PortalServerDelegate()
     {
@@ -223,7 +223,7 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     public void setDefaults( IProgressMonitor monitor )
     {
         setAttribute( Server.PROP_AUTO_PUBLISH_TIME, getAutoPublishTime() );
-        setAttribute( "AGENT_PORT", nextAgentPort++ );
+        setAttribute( ILiferayServerBehavior.AGENT_PORT, Agent.DEFAULT_PORT );
     }
 
     @Override
