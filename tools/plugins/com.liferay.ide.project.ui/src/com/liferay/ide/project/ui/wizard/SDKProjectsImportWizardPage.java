@@ -629,7 +629,7 @@ public class SDKProjectsImportWizardPage extends DataModelFacetCreationWizardPag
 
                     if( dirSelected && directory.isDirectory() )
                     {
-                        if( !ProjectUtil.collectProjectsFromDirectory(
+                        if( !ProjectUtil.collectSDKProjectsFromDirectory(
                             eclipseProjectFiles, liferayProjectDirs, directory, null, true, monitor ) )
                         {
                             return;

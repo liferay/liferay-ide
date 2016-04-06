@@ -239,7 +239,7 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 
             if( dirSelected && directory.isDirectory() )
             {
-                if( !ProjectUtil.collectProjectsFromDirectory(
+                if( !ProjectUtil.collectSDKProjectsFromDirectory(
                     eclipseProjectFiles, liferayProjectDirs, directory, null, true, new NullProgressMonitor() ) )
                 {
                     return null;

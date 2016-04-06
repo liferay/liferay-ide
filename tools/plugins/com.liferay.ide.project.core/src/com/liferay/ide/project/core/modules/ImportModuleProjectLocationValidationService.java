@@ -40,14 +40,14 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
         {
             String location = path.toOSString();
 
-            retval = StatusBridge.create( ImportLiferayModuleProjectOpMethods.getBuildType( location ) );
+            retval = StatusBridge.create( ProjectImportUtil.validatePath( location ) );
 
             if( !retval.ok() )
             {
                 return retval;
             }
 
-            retval = StatusBridge.create( ProjectImportUtil.validatePath( location ) );
+            retval = StatusBridge.create( ImportLiferayModuleProjectOpMethods.getBuildType( location ) );
 
             if( !retval.ok() )
             {

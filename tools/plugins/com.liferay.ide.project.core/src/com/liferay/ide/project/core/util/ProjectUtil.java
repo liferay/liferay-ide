@@ -105,7 +105,7 @@ public class ProjectUtil
 {
     public static final String METADATA_FOLDER = ".metadata"; //$NON-NLS-1$
 
-    public static boolean collectProjectsFromDirectory(
+    public static boolean collectSDKProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
         Set<String> directoriesVisited, boolean recurse, IProgressMonitor monitor )
     {
@@ -150,7 +150,7 @@ public class ProjectUtil
                 // recurse to see if it has project file
                 int currentSize = eclipseProjectFiles.size();
 
-                collectProjectsFromDirectory(
+                collectSDKProjectsFromDirectory(
                     eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, false, monitor );
 
                 int newSize = eclipseProjectFiles.size();
@@ -201,7 +201,7 @@ public class ProjectUtil
                     // are Liferay projects
                     if( ! liferayProjectDirs.contains( contents[i] ) && recurse )
                     {
-                        collectProjectsFromDirectory(
+                        collectSDKProjectsFromDirectory(
                             eclipseProjectFiles, liferayProjectDirs, contents[i], directoriesVisited, recurse, monitor );
                     }
                 }
@@ -209,6 +209,42 @@ public class ProjectUtil
         }
 
         return true;
+    }
+
+    public static void collectProjectsFromDirectory( List<IProject> result, File location )
+    {
+        File[] children = location.listFiles();
+
+        if( children != null )
+        {
+            for( File child : children )
+            {
+                if( child.isFile() && child.getName().equals( IProjectDescription.DESCRIPTION_FILE_NAME ) )
+                {
+                    IWorkspace workspace = CoreUtil.getWorkspace();
+                    IProjectDescription projectDescription;
+
+                    try
+                    {
+                        projectDescription = workspace.loadProjectDescription( new Path( child.getAbsolutePath() ) );
+                        IProject project = workspace.getRoot().getProject( projectDescription.getName() );
+
+                        if( project != null && project.exists() )
+                        {
+                            result.add( project );
+                        }
+                    }
+                    catch( CoreException e )
+                    {
+                        ProjectCore.logError( "loadProjectDescription error", e );
+                    }
+                }
+                else
+                {
+                    collectProjectsFromDirectory( result, child );
+                }
+            }
+        }
     }
 
     public static String convertToDisplayName( String name )
