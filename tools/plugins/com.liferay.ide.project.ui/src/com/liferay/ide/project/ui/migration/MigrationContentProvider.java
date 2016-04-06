@@ -15,8 +15,6 @@
 
 package com.liferay.ide.project.ui.migration;
 
-import com.liferay.ide.project.core.upgrade.Liferay7UpgradeAssistantSettings;
-import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 
@@ -50,7 +48,7 @@ public class MigrationContentProvider implements ITreeContentProvider
 
             UpgradeProblems[] upgradeProblemsArray = problemsContainer.getProblemsArray();
 
-            if (upgradeProblemsArray.length == 1)
+            if( upgradeProblemsArray.length == 1 )
             {
                 return problemsContainer.getProblemsArray()[0].getProblems();
             }

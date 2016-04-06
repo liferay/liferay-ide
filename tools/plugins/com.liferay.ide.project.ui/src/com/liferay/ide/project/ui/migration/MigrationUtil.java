@@ -218,7 +218,7 @@ public class MigrationUtil
         return null;
     }
 
-    public static List<Problem> getNotIgnoreProblemsFromTreeNode( ISelection selection )
+    public static List<Problem> getCurrentProblemsFromTreeNode( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
         {

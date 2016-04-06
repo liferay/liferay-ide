@@ -39,7 +39,8 @@ public class MarkDoneAction extends ProblemAction
         super( provider, "Mark done" );
     }
 
-    public void run( final Problem problem, final ISelectionProvider provider ) {
+    public void run( final Problem problem, final ISelectionProvider provider )
+    {
         super.run( problem, provider );
 
         problem.setStatus( Problem.STATUS_RESOLVED );

@@ -300,7 +300,7 @@ public class MigrationView extends CommonNavigator implements IDoubleClickListen
                 }
                 else
                 {
-                    problems = MigrationUtil.getNotIgnoreProblemsFromTreeNode( event.getSelection() );
+                    problems = MigrationUtil.getCurrentProblemsFromTreeNode( event.getSelection() );
                 }
 
                 if( problems != null && problems.size() > 0 )

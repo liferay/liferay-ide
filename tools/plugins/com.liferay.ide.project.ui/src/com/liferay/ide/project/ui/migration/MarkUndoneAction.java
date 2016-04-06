@@ -39,7 +39,8 @@ public class MarkUndoneAction extends ProblemAction
         super( provider, "Mark undone" );
     }
 
-    public void run( final Problem problem, final ISelectionProvider provider ) {
+    public void run( final Problem problem, final ISelectionProvider provider )
+    {
         super.run( problem, provider );
 
         problem.setStatus( Problem.STATUS_NOT_RESOLVED );
