@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.Viewer;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class MigrationContentProvider implements ITreeContentProvider
 {
@@ -46,16 +47,7 @@ public class MigrationContentProvider implements ITreeContentProvider
         {
             ProblemsContainer problemsContainer = (ProblemsContainer) parentElement;
 
-            UpgradeProblems[] upgradeProblemsArray = problemsContainer.getProblemsArray();
-
-            if( upgradeProblemsArray.length == 1 )
-            {
-                return problemsContainer.getProblemsArray()[0].getProblems();
-            }
-            else
-            {
-                return problemsContainer.getProblemsArray();
-            }
+            return problemsContainer.getProblemsArray();
         }
         else if( parentElement instanceof UpgradeProblems )
         {
