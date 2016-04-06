@@ -80,8 +80,6 @@ public class GradleCore extends Plugin
         return new Status( IStatus.WARNING, PLUGIN_ID, msg );
     }
 
-
-
     /**
      * Returns the shared instance
      *
@@ -241,6 +239,7 @@ public class GradleCore extends Plugin
                     {
                         // for the event of delete project
                         IProject project = (IProject) event.getResource();
+
                         if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
                         {
                             IFolder bundlesFolder = project.getFolder(
