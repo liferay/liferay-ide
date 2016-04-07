@@ -90,6 +90,7 @@ public class CompareFileHandler extends AbstractHandler
         {
             retval = GradleCore.createErrorStatus( e );
         }
+
         return retval;
     }
 
@@ -101,7 +102,6 @@ public class CompareFileHandler extends AbstractHandler
 
         CompareUI.openCompareEditor( new CompareEditorInput( configuration)
         {
-
             @Override
             protected Object prepareInput( final IProgressMonitor monitor )
                 throws InvocationTargetException, InterruptedException
@@ -109,9 +109,7 @@ public class CompareFileHandler extends AbstractHandler
                 DiffNode diffNode = new DiffNode( left, right );
                 return diffNode;
             }
-
-        } );
-
+        });
     }
 
     private File getTemplateFile( IFile currentFile ) throws Exception
@@ -122,13 +120,13 @@ public class CompareFileHandler extends AbstractHandler
         File templateFile = null;
 
         final BufferedReader reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) );
-        String fragName;
+        String fragment;
 
-        while( ( fragName = reader.readLine() ) != null )
+        while( ( fragment = reader.readLine() ) != null )
         {
-            if( fragName.startsWith( "Fragment-Host:" ) )
+            if( fragment.startsWith( "Fragment-Host:" ) )
             {
-                fragName = fragName.substring( fragName.indexOf( ":" ) + 1, fragName.indexOf( ";" ) ).trim();
+                fragment = fragment.substring( fragment.indexOf( ":" ) + 1, fragment.indexOf( ";" ) ).trim();
                 break;
             }
         }
@@ -136,13 +134,13 @@ public class CompareFileHandler extends AbstractHandler
         final String hookfolder = currentFile.getFullPath().toOSString().substring(
             currentFile.getFullPath().toOSString().lastIndexOf( "META-INF" ) );
         final IPath templateLocation =
-            GradleCore.getDefault().getStateLocation().append( fragName ).append( hookfolder );
+            GradleCore.getDefault().getStateLocation().append( fragment ).append( hookfolder );
 
         templateFile = new File( templateLocation.toOSString() );
 
         if( !templateFile.exists() )
         {
-            throw new FileNotFoundException( "Template not find." );
+            throw new FileNotFoundException( "Template not found." );
         }
 
         return templateFile;
