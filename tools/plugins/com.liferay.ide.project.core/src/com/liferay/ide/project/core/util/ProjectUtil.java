@@ -35,9 +35,11 @@ import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -1399,6 +1401,42 @@ public class ProjectUtil
             name.endsWith( ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX ) )
         {
             return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isFragmentProject( Object resource ) throws Exception
+    {
+        IProject project = null;
+
+        if( resource instanceof IFile )
+        {
+            project = ( (IFile) resource ).getProject();
+
+        }
+        else if( resource instanceof IProject )
+        {
+            project = (IProject) resource;
+        }
+
+        final IFile bndfile = project.getFile( "bnd.bnd" );
+
+        if( bndfile.exists() )
+        {
+            BufferedReader reader;
+
+            reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) );
+
+            String fragName;
+
+            while( ( fragName = reader.readLine() ) != null )
+            {
+                if( fragName.contains( "Fragment-Host:" ) )
+                {
+                    return true;
+                }
+            }
         }
 
         return false;

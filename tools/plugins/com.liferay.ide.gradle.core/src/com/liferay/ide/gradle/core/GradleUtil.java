@@ -110,8 +110,19 @@ public class GradleUtil
             buildFile.getParent() instanceof IProject;
     }
 
-    public static boolean isGradleProject( IProject project ) throws CoreException
+    public static boolean isGradleProject( Object resource ) throws CoreException
     {
+        IProject project = null;
+
+        if( resource instanceof IFile )
+        {
+            project = ( (IFile) resource ).getProject();
+
+        }
+        else if( resource instanceof IProject )
+        {
+            project = (IProject) resource;
+        }
         return project != null && project.exists() && project.isAccessible() &&
             ( project.hasNature( GradleProjectNature.ID ) );
     }

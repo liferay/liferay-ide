@@ -155,7 +155,14 @@
             id="com.liferay.ide.gradle.ui.isGradleProject"
             namespace="com.liferay.ide.gradle.ui"
             properties="isGradleProject"
-            type="org.eclipse.core.resources.IProject">
+            type="org.eclipse.core.resources.IResource">
+      </propertyTester>
+       <propertyTester
+            class="com.liferay.ide.gradle.ui.FragmentPropertyTester"
+            id="com.liferay.ide.gradle.ui.isFragmentProject"
+            namespace="com.liferay.ide.gradle.ui"
+            properties="isFragmentProject"
+            type="org.eclipse.core.resources.IResource">
       </propertyTester>
       <propertyTester
             class="com.liferay.ide.gradle.ui.BuildFilePropertyTester"
@@ -247,14 +254,26 @@
                         value="1">
                   </count>
                   <iterate>
-                    <or>
-                      <adapt type="org.eclipse.core.resources.IResource">
-                        <test property="org.eclipse.core.resources.extension" value="jspf" />
+                   <and>
+                    <adapt type="org.eclipse.core.resources.IResource">
+                           <test forcePluginActivation="true"
+                                property="com.liferay.ide.gradle.ui.isGradleProject"
+                                value="true" />
+                     </adapt>
+                    <adapt type="org.eclipse.core.resources.IResource">
+                           <test forcePluginActivation="true"
+                                property="com.liferay.ide.gradle.ui.isFragmentProject"
+                                value="true" />
+                     </adapt>
+                     <or>
+                       <adapt type="org.eclipse.core.resources.IResource">
+                         <test property="org.eclipse.core.resources.extension" value="jspf" />
+                        </adapt>
+                       <adapt type="org.eclipse.core.resources.IResource">
+                         <test property="org.eclipse.core.resources.extension" value="jsp" />
                        </adapt>
-                      <adapt type="org.eclipse.core.resources.IResource">
-                        <test property="org.eclipse.core.resources.extension" value="jsp" />
-                      </adapt>
-                     </or>
+                      </or>
+                   </and>
                   </iterate>
                </with>
             </visibleWhen>

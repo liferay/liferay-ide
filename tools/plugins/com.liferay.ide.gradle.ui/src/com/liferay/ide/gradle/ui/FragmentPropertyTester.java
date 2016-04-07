@@ -14,27 +14,24 @@
  *******************************************************************************/
 package com.liferay.ide.gradle.ui;
 
-
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.runtime.CoreException;
 
-import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 /**
  * @author Lovett Li
  */
-public class GradleProjectPropertyTester extends PropertyTester
+public class FragmentPropertyTester extends PropertyTester
 {
 
     public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
     {
         try
         {
-            return GradleUtil.isGradleProject( receiver );
+            return ProjectUtil.isFragmentProject( receiver );
         }
-        catch( CoreException e )
+        catch( Exception e )
         {
-            // don't log error
         }
 
         return false;
