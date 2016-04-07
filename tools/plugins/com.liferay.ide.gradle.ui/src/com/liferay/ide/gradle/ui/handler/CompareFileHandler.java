@@ -24,6 +24,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.text.TextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeSelection;
@@ -47,6 +49,7 @@ public class CompareFileHandler extends AbstractHandler
         final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked( event );
         final ISelection selection = HandlerUtil.getActiveMenuSelection( event );
 
+        IStatus retval = Status.OK_STATUS;
         IFile currentFile = null;
 
         if( selection instanceof ITreeSelection )
@@ -64,22 +67,30 @@ public class CompareFileHandler extends AbstractHandler
             currentFile = editor.getEditorInput().getAdapter( IFile.class );
         }
 
-        openCompareEditor( window, currentFile );
+        retval = openCompareEditor( window, currentFile );
 
-        return null;
+        return retval;
     }
 
-    private void openCompareEditor( IWorkbenchWindow window, IFile currentFile )
+    private IStatus openCompareEditor( IWorkbenchWindow window, IFile currentFile )
     {
         final IWorkbenchPage workBenchPage = window.getActivePage();
 
         ITypedElement left = null;
         ITypedElement right = null;
+        IStatus retval = Status.OK_STATUS;
 
-        left = new CompareItem( getTemplateFile( currentFile ) );
-        right = new CompareItem( currentFile.getLocation().toFile() );
-
-        openInCompare( left, right, workBenchPage );
+        try
+        {
+            left = new CompareItem( getTemplateFile( currentFile ) );
+            right = new CompareItem( currentFile.getLocation().toFile() );
+            openInCompare( left, right, workBenchPage );
+        }
+        catch( Exception e )
+        {
+            retval = GradleCore.createErrorStatus( e );
+        }
+        return retval;
     }
 
     private void openInCompare( final ITypedElement left, final ITypedElement right, IWorkbenchPage workBenchPage )
@@ -103,38 +114,35 @@ public class CompareFileHandler extends AbstractHandler
 
     }
 
-    private File getTemplateFile( IFile currentFile )
+    private File getTemplateFile( IFile currentFile ) throws Exception
     {
         final IProject currentProject = currentFile.getProject();
         final IFile bndfile = currentProject.getFile( "bnd.bnd" );
 
         File templateFile = null;
 
-        try
-        {
-            final BufferedReader reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) );
-            String fragName;
+        final BufferedReader reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) );
+        String fragName;
 
-            while( ( fragName = reader.readLine() ) != null )
+        while( ( fragName = reader.readLine() ) != null )
+        {
+            if( fragName.startsWith( "Fragment-Host:" ) )
             {
-                if( fragName.startsWith( "Fragment-Host:" ) )
-                {
-                    fragName = fragName.substring( fragName.indexOf( ":" ) + 1, fragName.indexOf( ";" ) ).trim();
-                    break;
-                }
+                fragName = fragName.substring( fragName.indexOf( ":" ) + 1, fragName.indexOf( ";" ) ).trim();
+                break;
             }
-
-            final String hookfolder = currentFile.getFullPath().toOSString().substring(
-                currentFile.getFullPath().toOSString().lastIndexOf( "META-INF" ) );
-            final IPath templateLocation =
-                GradleCore.getDefault().getStateLocation().append( fragName ).append( hookfolder );
-
-            templateFile = new File(templateLocation.toOSString());
-
         }
-        catch( Exception e )
+
+        final String hookfolder = currentFile.getFullPath().toOSString().substring(
+            currentFile.getFullPath().toOSString().lastIndexOf( "META-INF" ) );
+        final IPath templateLocation =
+            GradleCore.getDefault().getStateLocation().append( fragName ).append( hookfolder );
+
+        templateFile = new File( templateLocation.toOSString() );
+
+        if( !templateFile.exists() )
         {
-            GradleCore.createErrorStatus( e );
+            throw new FileNotFoundException( "Template not find." );
         }
 
         return templateFile;
