@@ -125,8 +125,8 @@
                enablesFor="1"
                icon="icons/e16/liferay_logo_16.png"
                id="com.liferay.ide.gradle.popup.action.mergelang"
-               label="mergelang"
-               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/mergelang">
+               label="merge-lang"
+               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/merge-lang">
          </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
