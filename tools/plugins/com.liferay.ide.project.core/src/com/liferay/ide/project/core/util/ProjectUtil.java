@@ -1424,17 +1424,16 @@ public class ProjectUtil
 
         if( bndfile.exists() )
         {
-            BufferedReader reader;
-
-            reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) );
-
-            String fragName;
-
-            while( ( fragName = reader.readLine() ) != null )
+            try( BufferedReader reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) ) )
             {
-                if( fragName.contains( "Fragment-Host:" ) )
+                String fragName;
+
+                while( ( fragName = reader.readLine() ) != null )
                 {
-                    return true;
+                    if( fragName.contains( "Fragment-Host:" ) )
+                    {
+                        return true;
+                    }
                 }
             }
         }
