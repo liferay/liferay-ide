@@ -125,7 +125,7 @@ public class CompareFileHandler extends AbstractHandler
             }
 
             final String hookfolder = currentFile.getFullPath().toOSString().substring(
-                currentFile.getFullPath().toOSString().lastIndexOf( "META-INF/resources" ) );
+                currentFile.getFullPath().toOSString().lastIndexOf( "META-INF" ) );
             final IPath templateLocation =
                 GradleCore.getDefault().getStateLocation().append( fragName ).append( hookfolder );
 
