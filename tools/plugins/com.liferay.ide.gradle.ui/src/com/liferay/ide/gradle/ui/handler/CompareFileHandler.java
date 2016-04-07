@@ -119,28 +119,30 @@ public class CompareFileHandler extends AbstractHandler
 
         File templateFile = null;
 
-        final BufferedReader reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) );
-        String fragment;
-
-        while( ( fragment = reader.readLine() ) != null )
+        try( final BufferedReader reader = new BufferedReader( new InputStreamReader( bndfile.getContents() ) ) )
         {
-            if( fragment.startsWith( "Fragment-Host:" ) )
+            String fragment;
+
+            while( ( fragment = reader.readLine() ) != null )
             {
-                fragment = fragment.substring( fragment.indexOf( ":" ) + 1, fragment.indexOf( ";" ) ).trim();
-                break;
+                if( fragment.startsWith( "Fragment-Host:" ) )
+                {
+                    fragment = fragment.substring( fragment.indexOf( ":" ) + 1, fragment.indexOf( ";" ) ).trim();
+                    break;
+                }
             }
-        }
 
-        final String hookfolder = currentFile.getFullPath().toOSString().substring(
-            currentFile.getFullPath().toOSString().lastIndexOf( "META-INF" ) );
-        final IPath templateLocation =
-            GradleCore.getDefault().getStateLocation().append( fragment ).append( hookfolder );
+            final String hookfolder = currentFile.getFullPath().toOSString().substring(
+                currentFile.getFullPath().toOSString().lastIndexOf( "META-INF" ) );
+            final IPath templateLocation =
+                GradleCore.getDefault().getStateLocation().append( fragment ).append( hookfolder );
 
-        templateFile = new File( templateLocation.toOSString() );
+            templateFile = new File( templateLocation.toOSString() );
 
-        if( !templateFile.exists() )
-        {
-            throw new FileNotFoundException( "Template not found." );
+            if( !templateFile.exists() )
+            {
+                throw new FileNotFoundException( "Template not found." );
+            }
         }
 
         return templateFile;
