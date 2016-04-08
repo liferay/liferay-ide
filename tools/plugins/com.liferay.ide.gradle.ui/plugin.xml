@@ -251,7 +251,7 @@
                <with
                      variable="activeMenuSelection">
                   <count
-                        value="1">
+                        value="-2)">
                   </count>
                   <iterate>
                    <and>
