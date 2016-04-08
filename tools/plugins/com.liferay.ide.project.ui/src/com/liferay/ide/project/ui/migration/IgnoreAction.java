@@ -67,6 +67,8 @@ public class IgnoreAction extends ProblemAction
             retval = e.getStatus();
         }
 
+        refreshTableViewer();
+
         return retval;
     }
 }

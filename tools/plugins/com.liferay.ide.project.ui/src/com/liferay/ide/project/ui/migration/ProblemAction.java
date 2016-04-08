@@ -29,9 +29,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
@@ -63,6 +65,15 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
                 {
                     IFile file = (IFile) selection;
                     problems = MigrationUtil.getProblemsFromResource( file );
+                }
+                else if( selection instanceof Problem )
+                {
+                    ISelection se = mv.getCommonViewer().getSelection();
+
+                    if( se instanceof TreeSelection )
+                    {
+                        problems = MigrationUtil.getCurrentProblemsFromTreeNode( ( (TreeSelection) se ) );
+                    }
                 }
 
                 if( problems != null && problems.size() > 0 )
