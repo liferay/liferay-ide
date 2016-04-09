@@ -1,0 +1,7 @@
+<definition default="assertVisible">
+	<command name="assertVisible">
+		<execute selenium="waitForVisible" />
+
+		<execute selenium="assertVisible" />
+	</command>
+</definition>

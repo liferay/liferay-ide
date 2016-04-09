@@ -1,0 +1,6 @@
+dependencies {
+	compile 'com.liferay.portal:com.liferay.portal.kernel:2.0.0'
+	compile 'org.osgi:org.osgi.compendium:5.0.0'
+}
+
+version = '1.0.0'

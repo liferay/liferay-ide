@@ -1,0 +1,7 @@
+Bundle-Version: 1.0.0
+Liferay-Require-SchemaVersion: 1.0.0
+Liferay-Service: true
+Liferay-Spring-Context: META-INF/spring
+Require-Capability:\
+	liferay.extender;\
+		filter:="(&(liferay.extender=spring.extender)(version>=2.0)(!(version>=3.0)))"

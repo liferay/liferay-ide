@@ -1,0 +1,6 @@
+<definition default="click">
+	<command name="click">
+		<execute selenium="waitForVisible" />
+		<execute selenium="click" />
+	</command>
+</definition>
