@@ -33,7 +33,6 @@ import org.eclipse.buildship.core.util.file.FileUtils;
 import org.eclipse.buildship.core.util.gradle.GradleDistributionWrapper;
 import org.eclipse.buildship.core.util.progress.AsyncHandler;
 import org.eclipse.buildship.core.util.variable.ExpressionUtils;
-import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectJob;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -97,11 +96,11 @@ public class GradleUtil
         configuration.setApplyWorkingSets( false );
 
         SynchronizeGradleProjectJob synchronizeGradleProjectJob = new SynchronizeGradleProjectJob(
-            configuration.toFixedAttributes(), NewProjectHandler.IMPORT_AND_OVERWRITE, AsyncHandler.NO_OP );
+            configuration.toFixedAttributes(), null, AsyncHandler.NO_OP );
 
         synchronizeGradleProjectJob.setUser( true );
 
-        return synchronizeGradleProjectJob.runInWorkspace( monitor );
+        return synchronizeGradleProjectJob.run( monitor );
     }
 
     public static boolean isBuildFile( IFile buildFile )

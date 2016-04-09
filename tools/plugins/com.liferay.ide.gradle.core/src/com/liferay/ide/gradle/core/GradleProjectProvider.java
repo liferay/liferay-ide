@@ -29,12 +29,14 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.WordUtils;
+import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectsJob;
+import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -70,7 +72,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
             try
             {
-                if( LiferayNature.hasNature( project ) && GradleProjectNature.INSTANCE.isPresentOn( project ) )
+                if( LiferayNature.hasNature( project ) && GradleProjectNature.isPresentOn( project ) )
                 {
                     return new LiferayGradleProject( project );
                 }
@@ -208,11 +210,12 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
             if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
             {
-                IProject[] projects = new IProject[] { liferayWorkspaceProject };
-                SynchronizeGradleProjectsJob synchronizeJob =
-                    new SynchronizeGradleProjectsJob( Arrays.asList( projects ) );
-                synchronizeJob.schedule();
-                synchronizeJob.join();
+                Set<IProject> projects = new HashSet<>();
+
+                projects.add( liferayWorkspaceProject );
+
+                CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
+                        NewProjectHandler.IMPORT_AND_MERGE );
             }
             else
             {

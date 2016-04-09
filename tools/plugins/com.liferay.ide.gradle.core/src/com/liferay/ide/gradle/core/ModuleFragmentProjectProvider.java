@@ -30,9 +30,11 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectsJob;
+import org.eclipse.buildship.core.CorePlugin;
+import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -224,10 +226,12 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
             if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
             {
-                IProject[] projects = new IProject[] { liferayWorkspaceProject };
-                SynchronizeGradleProjectsJob synchronizeJob =
-                    new SynchronizeGradleProjectsJob( Arrays.asList( projects ) );
-                synchronizeJob.schedule();
+                Set<IProject> projects = new HashSet<>();
+
+                projects.add( liferayWorkspaceProject );
+
+                CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
+                        NewProjectHandler.IMPORT_AND_MERGE );
             }
             else
             {
