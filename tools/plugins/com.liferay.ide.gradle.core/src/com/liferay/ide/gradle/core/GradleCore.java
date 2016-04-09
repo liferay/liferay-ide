@@ -38,10 +38,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -148,7 +148,7 @@ public class GradleCore extends Plugin
     {
         if( project.hasNature( GradleProjectNature.ID ) && !LiferayNature.hasNature( project ) )
         {
-            new WorkspaceJob( "Checking gradle configuration" )
+            Job job = new WorkspaceJob( "Checking gradle configuration" )
             {
                 @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
@@ -157,11 +157,17 @@ public class GradleCore extends Plugin
                     {
                         final CustomModel customModel = getToolingModel( gradleCore, CustomModel.class, project );
 
+                        if( customModel == null )
+                        {
+                            throw new CoreException(
+                                GradleCore.createErrorStatus( "Unable to get read gradle configuration" ) );
+                        }
+
                         if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
                             customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
                             customModel.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
                         {
-                            LiferayNature.addLiferayNature( project, new NullProgressMonitor() );
+                            LiferayNature.addLiferayNature( project, monitor );
                         }
                     }
                     catch( Exception e )
@@ -171,7 +177,9 @@ public class GradleCore extends Plugin
 
                     return Status.OK_STATUS;
                 }
-            }.schedule();
+            };
+            job.setRule( CoreUtil.getWorkspaceRoot() );
+            job.schedule();
         }
     }
 
