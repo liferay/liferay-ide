@@ -117,7 +117,10 @@ public class MigrationContentProvider implements ITreeContentProvider
                 MigrationProblemsContainer container =
                     UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
 
-                _problems.add( container );
+                if( container != null )
+                {
+                    _problems.add( container );
+                }
             }
             catch( Exception e )
             {
