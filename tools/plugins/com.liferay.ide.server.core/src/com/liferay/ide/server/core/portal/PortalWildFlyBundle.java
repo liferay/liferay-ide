@@ -72,7 +72,7 @@ public class PortalWildFlyBundle extends PortalJBossBundle
         args.add( "-Djava.net.preferIPv4Stack=true" );
         args.add( "-Dsun.rmi.dgc.client.gcInterval=3600000" );
         args.add( "-Dsun.rmi.dgc.server.gcInterval=3600000" );
-        args.add( "-Djboss.modules.system.pkgs=org.jboss.byteman" );
+        args.add( "-Djboss.modules.system.pkgs=org.jboss.byteman,org.jboss.logmanager" );
         args.add( "-Djava.awt.headless=true" );
         args.add( "-Dfile.encoding=UTF8" );
 
@@ -80,10 +80,9 @@ public class PortalWildFlyBundle extends PortalJBossBundle
         args.add( "-Djava.util.logging.manager=org.jboss.logmanager.LogManager" );
 
         args.add( "-Xbootclasspath/p:" + "\"" + this.bundlePath +
-            "/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.0.Final.jar" + "\"" );
+            "/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.3.Final.jar" + "\"" );
         args.add( "-Xbootclasspath/p:" + "\"" + this.bundlePath +
             "/modules/system/layers/base/org/jboss/log4j/logmanager/main/log4j-jboss-logmanager-1.1.2.Final.jar" + "\"" );
-        args.add( "-Djboss.modules.system.pkgs=org.jboss.logmanager" );
 
         args.add( "-Dorg.jboss.boot.log.file=" + "\"" + this.bundlePath.append( "/standalone/log/boot.log" ) + "\"" );
         args.add( "-Dlogging.configuration=file:" + "\"" + this.bundlePath +

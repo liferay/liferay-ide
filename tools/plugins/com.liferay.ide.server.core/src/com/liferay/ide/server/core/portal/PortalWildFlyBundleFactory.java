@@ -31,7 +31,7 @@ import org.eclipse.core.runtime.Path;
  */
 public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory
 {
-    private static final String WF_90_RELEASE_MANIFEST_KEY = "JBoss-Product-Release-Version";
+    private static final String WF_100_RELEASE_MANIFEST_KEY = "JBoss-Product-Release-Version";
 
     @Override
     public PortalBundle create( Map<String, String> appServerProperties )
@@ -59,9 +59,9 @@ public class PortalWildFlyBundleFactory extends PortalJBossBundleFactory
             String vers =
                 getManifestPropFromJBossModulesFolder(
                     new File[] { new File( path.toPortableString(), "modules" ) }, "org.jboss.as.product",
-                    "wildfly-full/dir/META-INF", WF_90_RELEASE_MANIFEST_KEY );
+                    "wildfly-full/dir/META-INF", WF_100_RELEASE_MANIFEST_KEY );
 
-            if( vers != null && vers.startsWith( "9." ) )
+            if( vers != null && vers.startsWith( "10." ) )
             {
                 return true;
             }
