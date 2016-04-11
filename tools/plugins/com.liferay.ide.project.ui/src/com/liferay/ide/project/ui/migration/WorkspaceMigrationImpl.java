@@ -124,6 +124,7 @@ public class WorkspaceMigrationImpl implements MigrationListener
                         final IMarker marker =
                             workspaceResource.createMarker( MigrationConstants.MARKER_TYPE );
 
+                        problem.setMarkerId( marker.getId() );
                         MigrationUtil.problemToMarker( problem, marker );
                     }
                 }
