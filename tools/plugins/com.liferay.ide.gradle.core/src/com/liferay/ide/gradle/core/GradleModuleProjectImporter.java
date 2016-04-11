@@ -37,22 +37,19 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
 
         File file = new File( location );
 
-        if( file.exists() )
+        if( findGradleFile( file ) && findSettingsFile( file ) )
         {
-            if( findGradleFile( file ) )
-            {
-                retval = Status.OK_STATUS;
-            }
-
+            retval = Status.OK_STATUS;
+        }
+        else
+        {
             File parent = file.getParentFile();
 
             while( parent != null )
             {
-                if( findGradleFile( parent ) )
+                if( findGradleFile( parent ) && findSettingsFile( file ) )
                 {
-                    retval = new Status(
-                        IStatus.WARNING, GradleCore.PLUGIN_ID,
-                        "Location is not the root location of a multi-module project." );
+                    retval = Status.OK_STATUS;
                     break;
                 }
 
@@ -60,24 +57,45 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
             }
         }
 
+        if( retval == null )
+        {
+            retval = new Status(
+                IStatus.ERROR, GradleCore.PLUGIN_ID,
+                "Location is not the root location of a multi-module project." );
+        }
+
         return retval;
 
     }
 
-    private boolean findGradleFile( File file )
+    private boolean findFile( File dir, String name )
     {
         boolean retval = false;
-        File[] childFiles = file.listFiles();
 
-        for( File child : childFiles )
+        if( dir.exists() )
         {
-            if( !child.isDirectory() && child.getName().endsWith( ".gradle" ) )
+            File[] files = dir.listFiles();
+
+            for( File file : files )
             {
-                retval = true;
+                if( !file.isDirectory() && file.getName().equals( name ) )
+                {
+                    retval = true;
+                }
             }
         }
 
         return retval;
+    }
+
+    private boolean findGradleFile( File dir )
+    {
+        return findFile( dir, "build.gradle" );
+    }
+
+    private boolean findSettingsFile( File dir )
+    {
+        return findFile( dir, "settings.gradle" );
     }
 
     @Override
