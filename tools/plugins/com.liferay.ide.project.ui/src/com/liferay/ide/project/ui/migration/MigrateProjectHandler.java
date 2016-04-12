@@ -173,7 +173,13 @@ public class MigrateProjectHandler extends AbstractHandler
                         {
                             final List<Problem> problems = m.findProblems( location.toFile(), override );
 
-                            allProblems.addAll( problems );
+                            for( Problem problem : problems)
+                            {
+                                if( shouldAdd( problem ) )
+                                {
+                                    allProblems.add( problem );
+                                }
+                            }
                         }
                     }
 
@@ -286,4 +292,17 @@ public class MigrateProjectHandler extends AbstractHandler
 
         return markers != null && markers.length > 0;
     }
+
+    private boolean shouldAdd( Problem problem )
+    {
+        String path = problem.getFile().getAbsolutePath().replaceAll( "\\\\", "/" );
+
+        if( path.contains( "WEB-INF/classes" ) )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
 }

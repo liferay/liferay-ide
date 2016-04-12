@@ -137,13 +137,12 @@ public class WorkspaceMigrationImpl implements MigrationListener
     private boolean shouldAddMarker( IResource resource )
     {
         //remove problems in WEB-INF/classes folder
-        if( resource.getFullPath().toString().contains( "WEB-INF/classes" ) )
+        if( resource.getFullPath().toPortableString().contains( "WEB-INF/classes" ) )
         {
             return false;
         }
 
         return true;
-
     }
 
 }
