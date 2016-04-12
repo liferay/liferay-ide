@@ -18,6 +18,8 @@ package com.liferay.ide.gradle.core.workspace;
 import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.core.portal.PortalServer;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -98,8 +100,7 @@ public class ImportLiferayWorkspaceOpMethods
         throws CoreException
     {
         final IRuntimeWorkingCopy runtimeWC =
-            ServerCore.findRuntimeType( "com.liferay.ide.server.portal.runtime" ).createRuntime(
-                serverRuntimeName, monitor );
+            ServerCore.findRuntimeType( PortalRuntime.ID ).createRuntime( serverRuntimeName, monitor );
 
         IPath runTimePath = new Path( location );
 
@@ -108,8 +109,8 @@ public class ImportLiferayWorkspaceOpMethods
 
         runtimeWC.save( true, monitor );
 
-        final IServerWorkingCopy serverWC = ServerCore.findServerType( "com.liferay.ide.server.portal" ).createServer(
-            serverRuntimeName, null, runtimeWC, monitor );
+        final IServerWorkingCopy serverWC =
+            ServerCore.findServerType( PortalServer.ID ).createServer( serverRuntimeName, null, runtimeWC, monitor );
 
         serverWC.setName( serverRuntimeName );
         serverWC.save( true, monitor );
