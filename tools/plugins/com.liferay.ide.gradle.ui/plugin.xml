@@ -246,37 +246,20 @@
          <menu
                icon="icons/e16/liferay_logo_16.png"
                label="Liferay">
-            <visibleWhen
-                  checkEnabled="false">
-               <with
-                     variable="activeMenuSelection">
-                  <count
-                        value="-2)">
-                  </count>
-                  <iterate>
-                   <and>
-                    <adapt type="org.eclipse.core.resources.IResource">
-                           <test forcePluginActivation="true"
-                                property="com.liferay.ide.gradle.ui.isGradleProject"
-                                value="true" />
-                     </adapt>
-                    <adapt type="org.eclipse.core.resources.IResource">
-                           <test forcePluginActivation="true"
-                                property="com.liferay.ide.gradle.ui.isFragmentProject"
-                                value="true" />
-                     </adapt>
-                     <or>
-                       <adapt type="org.eclipse.core.resources.IResource">
-                         <test property="org.eclipse.core.resources.extension" value="jspf" />
-                        </adapt>
-                       <adapt type="org.eclipse.core.resources.IResource">
-                         <test property="org.eclipse.core.resources.extension" value="jsp" />
-                       </adapt>
+                <visibleWhen
+                   checkEnabled="false">
+                   <or>
+                     <with
+                       variable="activeMenuSelection">
+                       <count value="1"></count>
+                         <reference definitionId="com.liferay.comparehook.definition"/>
+                     </with>
+                     <with
+                          variable="activeMenuEditorInput">
+                             <reference definitionId="com.liferay.comparehook.definition"/>
+                      </with>
                       </or>
-                   </and>
-                  </iterate>
-               </with>
-            </visibleWhen>
+                 </visibleWhen>
             <command
                   commandId="com.liferay.ide.gradle.ui.handler.CompareFileCommand"
                   label="Compare With Original"
@@ -293,4 +276,30 @@
             name="CompareFileCommand">
       </command>
    </extension>
+   <extension point="org.eclipse.core.expressions.definitions">
+    <definition id="com.liferay.comparehook.definition">
+        <iterate>
+           <and>
+              <adapt type="org.eclipse.core.resources.IResource">
+                     <test forcePluginActivation="true"
+                           property="com.liferay.ide.gradle.ui.isGradleProject"
+                           value="true" />
+              </adapt>
+              <adapt type="org.eclipse.core.resources.IResource">
+                     <test forcePluginActivation="true"
+                           property="com.liferay.ide.gradle.ui.isFragmentProject"
+                           value="true" />
+              </adapt>
+               <or>
+                 <adapt type="org.eclipse.core.resources.IResource">
+                    <test property="org.eclipse.core.resources.extension" value="jspf" />
+                 </adapt>
+                 <adapt type="org.eclipse.core.resources.IResource">
+                   <test property="org.eclipse.core.resources.extension" value="jsp" />
+                 </adapt>
+              </or>
+            </and>
+        </iterate>
+    </definition>
+  </extension>
 </plugin>
