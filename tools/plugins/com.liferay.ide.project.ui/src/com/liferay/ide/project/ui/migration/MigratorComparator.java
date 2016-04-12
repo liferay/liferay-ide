@@ -69,18 +69,11 @@ public class MigratorComparator extends ViewerComparator
             break;
 
         case 1:
-            if( t1.getLineNumber() == t2.getLineNumber() )
-            {
-                flag = 0;
-            }
-            else
-            {
-                flag = t1.getLineNumber() > t2.getLineNumber() ? 1 : -1;
-            }
+            flag = t1.getLineNumber() >= t2.getLineNumber() ? 1 : -1;
             break;
 
         case 2:
-            flag = t1.getTitle().compareTo( t2.getTitle() );
+            flag = t1.getTitle().compareTo( t2.getTitle() ) >= 0 ? 1 : -1;
             break;
 
         default:
