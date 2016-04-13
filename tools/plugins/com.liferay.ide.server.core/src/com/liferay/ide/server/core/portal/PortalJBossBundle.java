@@ -87,12 +87,6 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     }
 
     @Override
-    public IPath getOSGiBundlesDir()
-    {
-        return null;
-    }
-
-    @Override
     public IPath[] getRuntimeClasspath()
     {
         final List<IPath> paths = new ArrayList<IPath>();

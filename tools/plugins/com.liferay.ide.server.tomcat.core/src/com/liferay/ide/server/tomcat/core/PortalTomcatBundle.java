@@ -117,19 +117,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     }
 
     @Override
-    public IPath getOSGiBundlesDir()
-    {
-        IPath retval = null;
-
-        if( this.liferayHome != null )
-        {
-            retval = this.liferayHome.append( "osgi" );
-        }
-
-        return retval;
-    }
-
-    @Override
     public IPath[] getRuntimeClasspath()
     {
         final List<IPath> paths = new ArrayList<IPath>();

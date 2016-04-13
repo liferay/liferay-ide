@@ -164,6 +164,19 @@ public abstract class AbstractPortalBundle implements PortalBundle
     }
 
     @Override
+    public IPath getOSGiBundlesDir()
+    {
+        IPath retval = null;
+
+        if( this.liferayHome != null )
+        {
+            retval = this.liferayHome.append( "osgi" );
+        }
+
+        return retval;
+    }
+
+    @Override
     public Properties getPortletCategories()
     {
         return ServerUtil.getPortletCategories( getAppServerPortalDir() );
