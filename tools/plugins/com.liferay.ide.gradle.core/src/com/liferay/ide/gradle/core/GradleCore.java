@@ -60,6 +60,8 @@ public class GradleCore extends Plugin
     // The plugin ID
     public static final String PLUGIN_ID = "com.liferay.ide.gradle.core";
 
+    public static final String JobFamilyId = "CheckingGradleConfiguration";
+
     public static IStatus createErrorStatus( Exception ex )
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, ex.getMessage(), ex );
@@ -176,6 +178,17 @@ public class GradleCore extends Plugin
                     }
 
                     return Status.OK_STATUS;
+                }
+
+                @Override
+                public boolean belongsTo( Object family )
+                {
+                    if( family != null && family.toString().equals( JobFamilyId ) )
+                    {
+                        return true;
+                    }
+
+                    return false;
                 }
             };
             job.setRule( CoreUtil.getWorkspaceRoot() );

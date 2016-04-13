@@ -21,6 +21,7 @@ import static org.junit.Assert.fail;
 
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
 
 import java.io.PrintWriter;
@@ -76,6 +77,7 @@ public class ImportWorkspaceProjectTests
             Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
             Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
             Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
+            Job.getJobManager().join( GradleCore.JobFamilyId, new NullProgressMonitor() );
             Thread.sleep( 200 );
             Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
         }
