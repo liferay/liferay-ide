@@ -148,7 +148,7 @@
          </enablement>
       </objectContribution>
       <objectContribution
-            adaptable="false"
+            adaptable="true"
             id="com.liferay.ide.gradle.ui.addJSPValidationSupport"
             objectClass="org.eclipse.core.resources.IProject">
          <action
@@ -158,17 +158,18 @@
                label="Add JSP Validation Support"
                menubarPath="org.eclipse.ui.projectConfigure/additions">
          </action>
-         <enablement>
-            <or>
+         <visibility>
+           <and>
+             <objectState name="open" value="true"/>
+             <objectState name="nature" value="com.liferay.ide.core.liferayNature"/>
+             <not>
                <and>
-	               <adapt type="org.eclipse.core.resources.IProject">
-	                   <test forcePluginActivation="true"
-	                       property="com.liferay.ide.gradle.ui.hasLiferayNature"
-	                       value="true" />
-	               </adapt>
+                 <objectState name="nature" value="org.eclipse.wst.common.modulecore.ModuleCoreNature"/>
+                 <objectState name="nature" value="org.eclipse.wst.common.project.facet.core.nature"/>
                </and>
-            </or>
-         </enablement>
+             </not>
+           </and>
+         </visibility>
       </objectContribution>
   </extension>
    <extension
@@ -193,13 +194,6 @@
             namespace="com.liferay.ide.gradle.ui"
             properties="isBuildFile"
             type="org.eclipse.core.resources.IFile">
-      </propertyTester>
-      <propertyTester
-            class="com.liferay.ide.gradle.ui.LiferayNaturePropertyTester"
-            id="com.liferay.ide.gradle.ui.hasLiferayNature"
-            namespace="com.liferay.ide.gradle.ui"
-            properties="hasLiferayNature"
-            type="org.eclipse.core.resources.IProject">
       </propertyTester>
    </extension>
    <extension
