@@ -215,16 +215,12 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 projects.add( liferayWorkspaceProject );
 
                 CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
-                        NewProjectHandler.IMPORT_AND_MERGE );
+                    NewProjectHandler.IMPORT_AND_MERGE );
             }
             else
             {
                 GradleUtil.importGradleProject( projecLocation.toFile(), monitor );
             }
-
-            IProject project = CoreUtil.getProject( projectName );
-
-            ModuleCoreUtil.addFacets( project, monitor );
         }
         catch( Exception e )
         {
