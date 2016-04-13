@@ -37,35 +37,38 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
 
         File file = new File( location );
 
-        if( findGradleFile( file ) && findSettingsFile( file ) )
+        if( findGradleFile( file ) )
         {
-            retval = Status.OK_STATUS;
-        }
-        else
-        {
-            File parent = file.getParentFile();
-
-            while( parent != null )
+            if( findSettingsFile( file ) )
             {
-                if( findGradleFile( parent ) && findSettingsFile( file ) )
+                return Status.OK_STATUS;
+            }
+            else
+            {
+                File parent = file.getParentFile();
+
+                while( parent != null )
                 {
-                    retval = Status.OK_STATUS;
-                    break;
+                    if( findGradleFile( parent ) )
+                    {
+                        retval = new Status(
+                            IStatus.ERROR, GradleCore.PLUGIN_ID,
+                            "Location is not the root location of a multi-module project." );
+
+                        return retval;
+                    }
+
+                    parent = parent.getParentFile();
                 }
 
-                parent = parent.getParentFile();
+                if( retval == null )
+                {
+                    return Status.OK_STATUS;
+                }
             }
         }
 
-        if( retval == null )
-        {
-            retval = new Status(
-                IStatus.ERROR, GradleCore.PLUGIN_ID,
-                "Location is not the root location of a multi-module project." );
-        }
-
         return retval;
-
     }
 
     private boolean findFile( File dir, String name )
