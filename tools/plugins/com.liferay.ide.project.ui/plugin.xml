@@ -1167,11 +1167,11 @@
          name="Migrate Project"
          description="Start a migration task for the selected project"
       />
-      <command
+      <!--command
             description="Open Liferay 7 Upgrade Assistant"
             id="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
             name="Open Liferay 7 Upgrade Assistant">
-      </command>
+      </command-->
       <command
             description="Copy Portal Settings"
             id="com.liferay.ide.project.ui.upgrade.copyPortalSettings"
@@ -1476,7 +1476,7 @@
                style="push"
                tooltip="Run a migration tool to help with migration Liferay plugin projects to latest version of Liferay Portal version">
          </command>
-      </menuContribution-->
+      </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="menu:project?after=additions">
@@ -1486,6 +1486,6 @@
                style="push"
                tooltip="Opens Liferay 7 Upgrade Assistant View">
          </command>
-      </menuContribution>
+      </menuContribution-->
    </extension>
 </plugin>
