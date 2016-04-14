@@ -8,7 +8,7 @@
             finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
             icon="icons/e16/liferay_logo_16.png"
             id="com.liferay.ide.gradle.ui.workspace.newLiferayWorkspaceWizard"
-            name="Liferay Workspace"
+            name="Liferay Workspace Project"
             preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
             project="true">
          <class class="com.liferay.ide.gradle.ui.workspace.NewLiferayWorkspaceWizard">
@@ -50,7 +50,7 @@
             class="com.liferay.ide.gradle.ui.workspace.ImportLiferayWorkspaceWizard"
             icon="icons/e16/liferay_logo_16.png"
             id="com.liferay.ide.gradle.ui.workspace.workspaceImportWizard"
-            name="Liferay Workspace">
+            name="Liferay Workspace Project">
          <description>
             import an existing Liferay Workspace
          </description>
