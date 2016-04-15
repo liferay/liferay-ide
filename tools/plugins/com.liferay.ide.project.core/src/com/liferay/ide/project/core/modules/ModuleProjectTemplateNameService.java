@@ -38,9 +38,9 @@ public class ModuleProjectTemplateNameService extends PossibleValuesService
         {
             for( String projectTemplate : BladeCLI.getProjectTemplates() )
             {
-                if ( !projectTemplate.contains( "hook" ))
+                if ( !projectTemplate.contains( "fragment" ))
                 {
-                    possibleValues.add( projectTemplate );    
+                    possibleValues.add( projectTemplate );
                 }
             }
         }
