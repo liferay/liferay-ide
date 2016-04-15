@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.actions.SelectionProviderAction;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -101,6 +102,21 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
         final Problem problem = MigrationUtil.getProblemFromSelection( getSelection() );
 
         run( problem, getSelectionProvider() );
+    }
+
+    @Override
+    public void selectionChanged( IStructuredSelection selection )
+    {
+        Object element = selection.getFirstElement();
+
+        if( element instanceof Problem && ( (Problem) element ).getAutoCorrectContext() != null )
+        {
+            setEnabled( true );
+
+            return;
+        }
+
+        setEnabled( false );
     }
 
 }
