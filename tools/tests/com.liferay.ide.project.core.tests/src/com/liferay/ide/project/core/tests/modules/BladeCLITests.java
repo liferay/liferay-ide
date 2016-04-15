@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.tests.modules;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -73,7 +74,11 @@ public class BladeCLITests
 
         assertNotNull( projectTemplates );
 
-        assertTrue( projectTemplates.length > 0 );
+        assertEquals( 7, projectTemplates.length );
+
+        assertEquals( "activator", projectTemplates[0] );
+
+        assertEquals( "servicewrapper", projectTemplates[6] );
     }
 
 }

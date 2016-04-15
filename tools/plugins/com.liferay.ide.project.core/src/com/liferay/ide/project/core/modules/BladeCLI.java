@@ -19,7 +19,6 @@ import aQute.bnd.osgi.Processor;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
@@ -29,17 +28,13 @@ import java.io.PrintStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
@@ -58,8 +53,8 @@ public class BladeCLI
     static final String localJarKey = "localjar";
     static String[] projectTemplateNames;
     static final File repoCache = new File( _settingsDir, "repoCache" );
-    static final String repoUrl = "https://liferay-test-01.ci.cloudbees.com/job/blade.tools/lastSuccessfulBuild/artifact/p2_build/generated/p2/index.xml.gz";
-    static final File repoUrlCacheDir = new File(repoCache,"https%3A%2F%2Fliferay-test-01.ci.cloudbees.com%2Fjob%2Fblade.tools%2FlastSuccessfulBuild%2Fartifact%2Fp2_build%2Fgenerated%2Fp2%2Fplugins");
+    static final String repoUrl = "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/6/artifact/build/generated/p2/index.xml.gz";
+    static final File repoUrlCacheDir = new File(repoCache,"https%3A%2F%2Fliferay-test-01.ci.cloudbees.com%2Fjob%2Fliferay-blade-cli%2F6%2Fartifact%2Fbuild%2Fgenerated%2Fp2%2Fplugins");
     static final String timeStampKey = "up2date.check";
 
     static IPath cachedBladeCLIPath;
@@ -234,39 +229,11 @@ public class BladeCLI
     {
         if( projectTemplateNames == null )
         {
-            Set<String> templateNames = new HashSet<>();
-            IPath bladeJarPath = getBladeCLIPath();
+            List<String> templateNames = new ArrayList<>();
 
-            try(ZipFile zip = new ZipFile( bladeJarPath.toFile() ) )
-            {
-                File temp = File.createTempFile( "templates", ".zip" );
-                FileUtil.writeFileFromStream( temp, zip.getInputStream( zip.getEntry( "templates.zip" ) ) );
+            String[] retval = execute( "create -l" );
 
-                try( ZipFile templatesZipFile = new ZipFile( temp ) )
-                {
-                    Enumeration<? extends ZipEntry> entries = templatesZipFile.entries();
-
-                    while( entries.hasMoreElements() )
-                    {
-                        ZipEntry entry = entries.nextElement();
-                        IPath entryPath = new Path(entry.getName());
-
-                        if( entryPath.segmentCount() > 1 )
-                        {
-                            String name = entryPath.segment( 1 );
-
-                            if( !name.equals( "fragment" ) )
-                            {
-                                templateNames.add( name );
-                            }
-                        }
-                    }
-                }
-            }
-            catch( IOException e )
-            {
-                throw new BladeCLIException( "Unable to open blade cli jar.", e );
-            }
+            Collections.addAll( templateNames, retval );
 
             projectTemplateNames = templateNames.toArray( new String[0] );
         }
