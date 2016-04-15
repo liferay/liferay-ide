@@ -269,9 +269,12 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
 
             ILiferayProject liferayProject = LiferayCore.create( project );
 
-            IPath serviceJarPath = liferayProject.getLibraryPath( "portal-service" );
+            IPath serviceJarPathService = liferayProject.getLibraryPath( "portal-service" );
 
-            scope.setEnclosingJarPaths( new IPath[] { serviceJarPath } );
+            IPath serviceJarPathKernel = liferayProject.getLibraryPath( "portal-kernel" );
+
+            scope.setEnclosingJarPaths(
+                new IPath[] { serviceJarPathService != null ? serviceJarPathService : serviceJarPathKernel } );
 
             FilteredTypesSelectionDialog dialog =
                 new FilteredTypesSelectionDialogEx( getShell(), false, null, scope, IJavaSearchConstants.INTERFACE );
