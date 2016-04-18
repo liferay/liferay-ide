@@ -16,6 +16,7 @@ package com.liferay.ide.server.core.portal;
 
 import aQute.remote.api.Agent;
 
+import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
@@ -44,6 +45,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -658,6 +660,10 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         {
             try
             {
+                if ( entry.getClasspathEntry().getEntryKind() !=  IClasspathEntry.CPE_CONTAINER)
+                {
+                    entry = new LiferayRuntimeClasspathEntry(entry.getClasspathEntry());
+                }
                 cp.add( entry.getMemento() );
             }
             catch( Exception e )
