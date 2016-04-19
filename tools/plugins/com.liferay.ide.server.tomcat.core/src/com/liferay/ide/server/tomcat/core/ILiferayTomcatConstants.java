@@ -36,7 +36,7 @@ public interface ILiferayTomcatConstants
 
     String DEFAULT_DEPLOYDIR = "webapps"; //$NON-NLS-1$
 
-    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m" ); //$NON-NLS-1$ //$NON-NLS-2$
+    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m" ); //$NON-NLS-1$ //$NON-NLS-2$
 
     boolean DEFAULT_USE_DEFAULT_PORTAL_SERVER_SETTING = false;
 

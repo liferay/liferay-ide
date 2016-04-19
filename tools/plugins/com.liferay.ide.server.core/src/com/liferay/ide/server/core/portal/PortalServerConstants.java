@@ -32,7 +32,7 @@ public interface PortalServerConstants
 
     boolean DEFAULT_LAUNCH_SETTING = true;
 
-    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m -XX:MaxPermSize=256m" );
+    String DEFAULT_MEMORY_ARGS = _defaultPrefs.get( "default.memory.args", "-Xmx1024m" );
 
     String DEFAULT_USERNAME = "test@liferay.com";
 
