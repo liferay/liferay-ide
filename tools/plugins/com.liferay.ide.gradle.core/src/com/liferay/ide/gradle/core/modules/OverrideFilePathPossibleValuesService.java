@@ -48,6 +48,11 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
         String hostOSGiBundle = op.getHostOsgiBundle().content();
 
+        if( hostOSGiBundle == null )
+        {
+            return;
+        }
+
         if( osgiBundleName == null || !osgiBundleName.equals( hostOSGiBundle ) || possibleValues == null )
         {
             osgiBundleName = hostOSGiBundle;
@@ -75,8 +80,9 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
                             JarEntry entry = enu.nextElement();
                             String name = entry.getName();
 
-                            if( name.startsWith( "META-INF/resources/" ) &&
-                                ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) )
+                            if( ( name.startsWith( "META-INF/resources/" ) &&
+                                ( name.endsWith( ".jsp" ) || name.endsWith( ".jspf" ) ) ) ||
+                                name.equals( "portlet.properties" ) )
                             {
                                 possibleValues.add( name );
                             }
