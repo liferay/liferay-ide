@@ -84,6 +84,7 @@
                         <id>AddFilesFromOSGiBundle</id>
                         <label>Add files from OSGi Bundle to override...</label>
                         <image>server_new.png</image>
+                        <location>before:Sapphire.Add</location>
                     </action>
                     <action-handler>
                         <action>AddFilesFromOSGiBundle</action>
