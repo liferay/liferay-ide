@@ -15,8 +15,16 @@
 
 package com.liferay.ide.project.ui;
 
+import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.ui.migration.MigrationUtil;
+import com.liferay.ide.project.ui.migration.MigrationView;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.net.URL;
 
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -33,6 +41,7 @@ import org.osgi.framework.BundleContext;
  * The activator class controls the plugin life cycle
  *
  * @author Greg Amerson
+ * @author Lovett Li
  */
 public class ProjectUI extends AbstractUIPlugin
 {
@@ -177,6 +186,7 @@ public class ProjectUI extends AbstractUIPlugin
         super.start( context );
 
         plugin = this;
+        addWorkspaceResourceListener();
     }
 
     /*
@@ -189,6 +199,33 @@ public class ProjectUI extends AbstractUIPlugin
         plugin = null;
 
         super.stop( context );
+    }
+
+    private void addWorkspaceResourceListener()
+    {
+        ResourcesPlugin.getWorkspace().addResourceChangeListener( new IResourceChangeListener()
+        {
+
+            @Override
+            public void resourceChanged( IResourceChangeEvent events )
+            {
+                final MigrationView mv = (MigrationView) UIUtil.findView( MigrationView.ID );
+                boolean isRemoved = MigrationUtil.removeMigrationProblemsFromResource( events.getResource() );
+
+                if( isRemoved && mv != null )
+                {
+                    UIUtil.async( new Runnable()
+                    {
+
+                        @Override
+                        public void run()
+                        {
+                            mv.getCommonViewer().setInput( CoreUtil.getWorkspaceRoot() );
+                        }
+                    });
+                }
+            }
+        }, IResourceChangeEvent.PRE_DELETE );
     }
 
 }

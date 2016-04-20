@@ -17,6 +17,7 @@ package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.MigrationProblems;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.action.IMenuManager;
@@ -36,6 +37,7 @@ import org.eclipse.ui.navigator.ICommonViewerWorkbenchSite;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class MigrationActionProvider extends CommonActionProvider
 {
@@ -46,6 +48,7 @@ public class MigrationActionProvider extends CommonActionProvider
     private SelectionProviderAction _markDoneAction;
     private SelectionProviderAction _markUndoneAction;
     private SelectionProviderAction _openAction;
+    private SelectionProviderAction _removeAction;
 
     public MigrationActionProvider()
     {
@@ -101,6 +104,10 @@ public class MigrationActionProvider extends CommonActionProvider
             menu.add( _ignoreAction );
             menu.add( new Separator() );
         }
+        else if( selection instanceof MigrationProblems )
+        {
+            menu.add( _removeAction );
+        }
     }
 
     private Object getFirstSelectedElement()
@@ -144,6 +151,7 @@ public class MigrationActionProvider extends CommonActionProvider
         _markUndoneAction = new MarkUndoneAction( provider );
         _ignoreAction = new IgnoreAction( provider );
         _autoCorrectAction = new AutoCorrectAction( provider );
+        _removeAction = new RemoveAction( provider );
 
         return this;
     }
@@ -155,5 +163,6 @@ public class MigrationActionProvider extends CommonActionProvider
         provider.addSelectionChangedListener( _markUndoneAction );
         provider.addSelectionChangedListener( _ignoreAction );
         provider.addSelectionChangedListener( _autoCorrectAction );
+        provider.addSelectionChangedListener( _removeAction );
     }
 }

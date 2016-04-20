@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -47,6 +48,7 @@ import org.eclipse.ui.texteditor.ITextEditor;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class MigrationUtil
 {
@@ -106,6 +108,19 @@ public class MigrationUtil
         }
 
         return retval;
+    }
+
+    public static IResource getResourceFromMigrationProblems( MigrationProblems problem )
+    {
+        String projectName = problem.getSuffix();
+        IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
+
+        if( project.exists() )
+        {
+            return project;
+        }
+
+        return null;
     }
 
     public static List<Problem> getResolvedProblemsFromResource( IResource resource )
@@ -372,6 +387,73 @@ public class MigrationUtil
 
         marker.setAttribute( IMarker.LOCATION, problem.file.getName() );
         marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
+    }
+
+    public static boolean removeMigrationProblem( MigrationProblems migrationProblem )
+    {
+        MigrationProblemsContainer container = getMigrationProblemsContainer();
+
+        return removeProblemFromMigrationContainer( migrationProblem.getSuffix(), container );
+    }
+
+    public static boolean removeMigrationProblemsFromResource( IResource resource )
+    {
+        MigrationProblemsContainer container = getMigrationProblemsContainer();
+
+        return removeProblemFromMigrationContainer( resource.getName(), container );
+    }
+
+    public static MigrationProblemsContainer getMigrationProblemsContainer()
+    {
+        try
+        {
+            return UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
+        }
+        catch( Exception e )
+        {
+            return null;
+        }
+    }
+
+    private static boolean removeProblemFromMigrationContainer(
+        String projectName, MigrationProblemsContainer container )
+    {
+        boolean isRemoved = false;
+
+        if( container != null )
+        {
+            List<MigrationProblems> problems =
+                new ArrayList<MigrationProblems>( Arrays.asList( container.getProblemsArray() ) );
+
+            for( MigrationProblems mp : problems )
+            {
+                if( mp.getSuffix().equals( projectName ) )
+                {
+                    problems.remove( mp );
+                    isRemoved = true;
+                    break;
+                }
+            }
+            try
+            {
+                if( problems.size() != 0 )
+                {
+                    container.setProblemsArray( problems.toArray( new MigrationProblems[0] ) );
+                    UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, container );
+                }
+                else
+                {
+                    UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, null );
+                }
+
+            }
+            catch( IOException e )
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return isRemoved;
     }
 
 }
