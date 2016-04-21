@@ -51,7 +51,7 @@ public class RemoveAction extends SelectionProviderAction implements IAction
         {
             MigrationProblems migrationProblem = (MigrationProblems) selection;
 
-            MigrationUtil.removeMigrationProblem( migrationProblem );
+            MigrationUtil.removeMigrationProblems( migrationProblem );
             IResource project = MigrationUtil.getResourceFromMigrationProblems( migrationProblem );
 
             if( project != null )

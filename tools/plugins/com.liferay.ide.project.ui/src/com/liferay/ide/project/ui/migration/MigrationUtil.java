@@ -110,10 +110,10 @@ public class MigrationUtil
         return retval;
     }
 
-    public static IResource getResourceFromMigrationProblems( MigrationProblems problem )
+    public static IResource getResourceFromMigrationProblems( final MigrationProblems problems )
     {
-        String projectName = problem.getSuffix();
-        IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
+        final String projectName = problems.getSuffix();
+        final IProject project = CoreUtil.getWorkspaceRoot().getProject( projectName );
 
         if( project.exists() )
         {
@@ -389,11 +389,11 @@ public class MigrationUtil
         marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
     }
 
-    public static boolean removeMigrationProblem( MigrationProblems migrationProblem )
+    public static boolean removeMigrationProblems( MigrationProblems migrationProblems )
     {
         MigrationProblemsContainer container = getMigrationProblemsContainer();
 
-        return removeProblemFromMigrationContainer( migrationProblem.getSuffix(), container );
+        return removeProblemFromMigrationContainer( migrationProblems.getSuffix(), container );
     }
 
     public static boolean removeMigrationProblemsFromResource( IResource resource )
