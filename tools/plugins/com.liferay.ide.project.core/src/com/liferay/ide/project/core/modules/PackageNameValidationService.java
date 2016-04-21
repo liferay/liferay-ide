@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -22,16 +23,13 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
-
-
-
-/** 
+/**
  * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
 public class PackageNameValidationService extends ValidationService
-{    
-  
+{
+
     @Override
     protected Status compute()
     {
@@ -39,12 +37,11 @@ public class PackageNameValidationService extends ValidationService
         Status retval = Status.createOkStatus();
 
         int packageNameStatus = IStatus.OK;
-        
+
         if( !CoreUtil.isNullOrEmpty( packageName ) )
         {
-            packageNameStatus =
-                JavaConventions.validatePackageName(
-                    packageName, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+            packageNameStatus = JavaConventions.validatePackageName(
+                packageName, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
 
             if( packageNameStatus == IStatus.ERROR )
             {
@@ -54,7 +51,7 @@ public class PackageNameValidationService extends ValidationService
 
         return retval;
     }
-    
+
     private NewLiferayModuleProjectOp op()
     {
         return context( NewLiferayModuleProjectOp.class );

@@ -15,6 +15,8 @@
 
 package com.liferay.ide.gradle.core;
 
+import aQute.bnd.osgi.Jar;
+
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
@@ -22,21 +24,28 @@ import com.liferay.ide.core.IResourceBundleProject;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IClasspathAttribute;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.gradle.tooling.BuildLauncher;
 import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
-
-import aQute.bnd.osgi.Jar;
 
 /**
  * @author Gregory Amerson
@@ -84,9 +93,92 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     }
 
     @Override
+    public String getBundleShape()
+    {
+        return "jar";
+    }
+
+    @Override
     public List<IFile> getDefaultLanguageProperties()
     {
         return PropertiesUtil.getDefaultLanguagePropertiesFromModuleProject( getProject() );
+    }
+
+    @Override
+    public IFolder getSourceFolder( String classification )
+    {
+        IFolder retval = null;
+        IFolder[] sourceFolders = getSourceFolders();
+
+        for( IFolder folder : sourceFolders )
+        {
+            if( folder.getName().equals( classification ) )
+            {
+                retval = folder;
+
+                break;
+            }
+        }
+
+        if( classification.equals( "resources" ) )
+        {
+            if( retval == null )
+            {
+                retval = createResorcesFolder( getProject() );
+            }
+        }
+
+        return retval;
+    }
+
+    private IFolder createResorcesFolder( IProject project )
+    {
+        try
+        {
+            IJavaProject javaProject = JavaCore.create( project );
+
+            List<IClasspathEntry> existingRawClasspath;
+
+            existingRawClasspath = Arrays.asList( javaProject.getRawClasspath() );
+
+            List<IClasspathEntry> newRawClasspath = new ArrayList<IClasspathEntry>();
+
+            IClasspathAttribute[] attributes =
+                new IClasspathAttribute[] { JavaCore.newClasspathAttribute( "FROM_GRADLE_MODEL", "true" ) }; //$NON-NLS-1$ //$NON-NLS-2$
+
+            IClasspathEntry resourcesEntry = JavaCore.newSourceEntry(
+                project.getFullPath().append( "src/main/resources" ), new IPath[0], new IPath[0], null, attributes );
+
+            for( IClasspathEntry entry : existingRawClasspath )
+            {
+                newRawClasspath.add( entry );
+            }
+
+            if( !existingRawClasspath.contains( resourcesEntry ) )
+            {
+                newRawClasspath.add( resourcesEntry );
+            }
+
+            javaProject.setRawClasspath( newRawClasspath.toArray( new IClasspathEntry[0] ), new NullProgressMonitor() );
+
+            project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
+
+            IFolder[] sourceFolders = getSourceFolders();
+
+            for( IFolder folder : sourceFolders )
+            {
+                if( folder.getName().equals( "resources" ) )
+                {
+                    return folder;
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+            GradleCore.logError( e );
+        }
+
+        return null;
     }
 
     @Override

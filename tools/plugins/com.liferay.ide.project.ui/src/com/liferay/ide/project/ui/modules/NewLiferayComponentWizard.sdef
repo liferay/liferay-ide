@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+/******************************************************************************* 
+	* Copyright (c) 2000-2014 Liferay, Inc. All rights reserved. * * This library 
+	is free software; you can redistribute it and/or modify it under * the terms 
+	of the GNU Lesser General Public License as published by the Free * Software 
+	Foundation; either version 2.1 of the License, or (at your option) * any 
+	later version. * * This library is distributed in the hope that it will be 
+	useful, but WITHOUT * ANY WARRANTY; without even the implied warranty of 
+	MERCHANTABILITY or FITNESS * FOR A PARTICULAR PURPOSE. See the GNU Lesser 
+	General Public License for more * details. 
+********************************************************************************/ 
+-->
+<definition>
+	<import>
+		<package>org.eclipse.sapphire.ui.renderers.swt</package>
+		<package>com.liferay.ide.project.ui.action</package>
+		<package>com.liferay.ide.project.ui.modules</package>
+		<package>org.eclipse.sapphire.ui.forms.swt</package>
+	</import>
+	<wizard>
+		<id>NewLiferayComponentWizard</id>
+		<element-type>com.liferay.ide.project.core.modules.NewLiferayComponentOp
+		</element-type>
+		<label>New Liferay Component</label>
+		<page>
+			<id>LiferayModuletWizardPage</id>
+			<label>New Liferay Component</label>
+			<content>
+				<property-editor>
+					<property>ProjectName</property>
+					<style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+				</property-editor>
+				<property-editor>PackageName</property-editor>
+				<property-editor>ComponentClassName</property-editor>
+				<property-editor>
+					<property>ComponentClassTemplateName</property>
+					<style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+				</property-editor>
+				<property-editor>
+					<visible-when>${ ComponentClassTemplateName == 'ServiceHook' }
+					</visible-when>
+					<property>ServiceName</property>
+				</property-editor>
+				<property-editor>
+					<visible-when>${ ComponentClassTemplateName == 'ModelListener' }
+					</visible-when>
+					<property>ModelClass</property>
+				</property-editor>
+			</content>
+			<description>Create a new Liferay Component Class</description>
+			<image>NewLiferayComponentWizard.png</image>
+		</page>
+		<description>Create a new Liferay Component Class</description>
+		<image>NewLiferayComponentWizard.png</image>
+	</wizard>
+</definition>

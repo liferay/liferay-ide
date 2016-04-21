@@ -62,6 +62,9 @@
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
          </newWizardShortcut>
          <newWizardShortcut
+               id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
@@ -81,6 +84,9 @@
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.hook">

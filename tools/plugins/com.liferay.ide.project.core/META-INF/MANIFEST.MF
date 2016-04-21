@@ -39,7 +39,8 @@ Require-Bundle: org.eclipse.wst.common.project.facet.core;bundle-version="[1.4.1
  org.apache.ant,
  biz.aQute.bndlib,
  biz.aQute.repository,
- biz.aQute.remote.api
+ biz.aQute.remote.api,
+ org.eclipse.sapphire.java;bundle-version="[9,10)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.core,
