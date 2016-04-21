@@ -45,6 +45,12 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     }
 
     @Override
+    public String getBundleShape()
+    {
+        return "jar";
+    }
+
+    @Override
     public IFile getDescriptorFile( String name )
     {
         // TODO Auto-generated method stub
