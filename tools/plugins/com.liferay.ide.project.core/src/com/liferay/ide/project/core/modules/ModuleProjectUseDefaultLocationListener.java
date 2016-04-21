@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.modeling.Path;
 
 /**
  * @author Simon Jiang
@@ -32,7 +33,7 @@ public class ModuleProjectUseDefaultLocationListener extends ModuleProjectNameLi
         }
         else
         {
-            op.setLocation( (String) null );
+            op.setLocation( (Path) null );
         }
     }
 }

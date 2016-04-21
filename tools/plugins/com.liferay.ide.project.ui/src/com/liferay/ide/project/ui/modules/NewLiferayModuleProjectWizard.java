@@ -25,11 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
@@ -103,6 +106,22 @@ public class NewLiferayModuleProjectWizard extends SapphireWizard<NewLiferayModu
     @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
+        if( selection != null )
+        {
+            Object element = selection.getFirstElement();
+
+            if( element instanceof IResource )
+            {
+                IResource resource = (IResource) element;
+
+                final IPath location = resource.getProject().getLocation();
+
+                if( location != null )
+                {
+                    element().setInitialSelectionPath( PathBridge.create( location ) );
+                }
+            }
+        }
     }
 
     private void openLiferayPerspective( IProject newProject )

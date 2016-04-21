@@ -38,7 +38,7 @@ import org.eclipse.wst.server.core.ServerCore;
 /**
  * @author Simon Jiang
  */
-public class NewLiferayModuleProjectOpMethods extends BaseOpMethods
+public class NewLiferayModuleProjectOpMethods
 {
     public static final Status execute( final NewLiferayModuleProjectOp op, final ProgressMonitor pm )
     {

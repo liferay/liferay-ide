@@ -21,8 +21,10 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -100,12 +102,27 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
             }
             else
             {
-                newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+                Value<Path> initialSelectionPath = op.getInitialSelectionPath();
+
+                if( !initialSelectionPath.empty() )
+                {
+                    IStatus locationStatus = op.getProjectProvider().content().validateProjectLocation(
+                        op.getProjectName().content(), PathBridge.create( initialSelectionPath.content() ) );
+
+                    if( locationStatus.isOK() )
+                    {
+                        newLocationBase = initialSelectionPath.content();
+                    }
+                }
+                else
+                {
+                    newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
+                }
             }
 
             if( newLocationBase != null )
             {
-                BaseOpMethods.updateLocation( op, newLocationBase );
+                op.setLocation( newLocationBase );
             }
         }
     }

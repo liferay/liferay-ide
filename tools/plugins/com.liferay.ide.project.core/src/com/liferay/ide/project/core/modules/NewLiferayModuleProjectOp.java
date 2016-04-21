@@ -17,9 +17,9 @@ package com.liferay.ide.project.core.modules;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
@@ -28,7 +28,6 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 
 /**
@@ -72,14 +71,8 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
     // *** GroupId ***
 
     @Label( standard = "group id" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = ModuleProjectGroupIdValidationService.class ),
-            @Service( impl = ModuleProjectGroupIdDefaultValueService.class )
-        }
-    )
+    @Service( impl = ModuleProjectGroupIdValidationService.class )
+    @Service( impl = ModuleProjectGroupIdDefaultValueService.class )
     @Whitespace( trim = false )
     ValueProperty PROP_GROUP_ID = new ValueProperty( TYPE, "GroupId" );
 
@@ -90,13 +83,8 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** ComponentName ***
     @Label( standard = "Component Name" )
-    @Services
-    (
-        {
-            @Service( impl = ComponentNameValidationService.class ),
-            @Service( impl = ComponentNameDefaultValueService.class )
-        }
-    )
+    @Service( impl = ComponentNameValidationService.class )
+    @Service( impl = ComponentNameDefaultValueService.class )
     ValueProperty PROP_COMPONENT_NAME = new ValueProperty( TYPE, "ComponentName" );
 
     Value<String> getComponentName();
@@ -105,13 +93,8 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
     // *** ServiceName ***
     @Label( standard = "Service Name" )
     @Required
-    @Services
-    (
-        {
-            @Service( impl = ServicePossibleValuesService.class ),
-            @Service( impl = ServiceNameValidataionService.class )
-        }
-    )
+    @Service( impl = ServicePossibleValuesService.class )
+    @Service( impl = ServiceNameValidataionService.class )
     ValueProperty PROP_SERVICE_NAME = new ValueProperty( TYPE, "ServiceName" );
 
     Value<String> getServiceName();
@@ -120,13 +103,8 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
     // *** PackageeName ***
 
     @Label( standard = "Package Name" )
-    @Services
-    (
-        {
-            @Service( impl = PackageNameValidationService.class ),
-            @Service( impl = PackageNameDefaultValueService.class )
-        }
-    )
+    @Service( impl = PackageNameValidationService.class )
+    @Service( impl = PackageNameDefaultValueService.class )
     ValueProperty PROP_PACKAGE_NAME = new ValueProperty( TYPE, "PackageName" );
 
     Value<String> getPackageName();

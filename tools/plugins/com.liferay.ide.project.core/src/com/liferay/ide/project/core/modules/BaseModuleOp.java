@@ -23,9 +23,9 @@ import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
 import org.eclipse.sapphire.ListProperty;
+import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
@@ -35,7 +35,6 @@ import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
@@ -55,8 +54,18 @@ public interface BaseModuleOp extends ExecutableElement
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
 
     Value<String> getProjectName();
-
     void setProjectName( String value );
+
+    // *** InitialSelectionPath ***
+
+    @Type( base = Path.class )
+    @AbsolutePath
+    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+    ValueProperty PROP_INITIAL_SELECTION_PATH = new ValueProperty( TYPE, "InitialSelectionPath" );
+
+    Value<Path> getInitialSelectionPath();
+    void setInitialSelectionPath( String value );
+    void setInitialSelectionPath( Path value );
 
     // *** UseDefaultLocation ***
 
@@ -67,9 +76,7 @@ public interface BaseModuleOp extends ExecutableElement
     ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
 
     Value<Boolean> getUseDefaultLocation();
-
     void setUseDefaultLocation( String value );
-
     void setUseDefaultLocation( Boolean value );
 
     // *** ProjectLocation ***
@@ -83,9 +90,7 @@ public interface BaseModuleOp extends ExecutableElement
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();
-
     void setLocation( String value );
-
     void setLocation( Path value );
 
     // *** FinalProjectName ***
@@ -94,7 +99,6 @@ public interface BaseModuleOp extends ExecutableElement
     ValueProperty PROP_FINAL_PROJECT_NAME = new ValueProperty( TYPE, "FinalProjectName" );
 
     Value<String> getFinalProjectName();
-
     void setFinalProjectName( String value );
 
     // *** ProjectNames ***
@@ -110,20 +114,12 @@ public interface BaseModuleOp extends ExecutableElement
     @Label( standard = "build type" )
     @Listeners( ModuleProjectNameListener.class )
     @Enablement( expr = "false" )
-    @Services
-    (
-        value =
-        {
-            @Service( impl = ModuleProjectProviderPossibleValuesService.class ),
-            @Service( impl = ModuleProjectProviderDefaultValueService.class )
-        }
-    )
+    @Service( impl = ModuleProjectProviderPossibleValuesService.class )
+    @Service( impl = ModuleProjectProviderDefaultValueService.class )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
 
     Value<NewLiferayProjectProvider<NewLiferayModuleProjectOp>> getProjectProvider();
-
     void setProjectProvider( String value );
-
     void setProjectProvider( NewLiferayProjectProvider<NewLiferayModuleProjectOp> value );
 
 }
