@@ -1,4 +1,5 @@
-/*******************************************************************************
+<%--
+/**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -10,22 +11,11 @@
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
- *
- *******************************************************************************/
-
-package com.liferay.ide.project.core.modules;
-
-import org.eclipse.sapphire.DefaultValueService;
-
-/**
- * @author Simon Jiang
  */
-public class PackageNameDefaultValueService extends DefaultValueService
-{
-    @Override
-    protected String compute()
-    {
-        final String defaultPackageName = "com.example";
-        return defaultPackageName;
-    }
-}
+--%>
+
+<%@ include file="/html/init.jsp" %>
+
+<p>
+	<b>BLADE StrutsAction Demo</b>
+</p>

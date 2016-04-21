@@ -27,6 +27,8 @@ public interface IBundleProject extends ILiferayProject
 
     boolean filterResource( IPath resourcePath );
 
+    String getBundleShape();
+
     IPath getOutputBundle( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException;
 
     String getSymbolicName() throws CoreException;

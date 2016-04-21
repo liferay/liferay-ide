@@ -83,6 +83,12 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     }
 
     @Override
+    public String getBundleShape()
+    {
+        return "jar";
+    }
+
+    @Override
     public IFile getDescriptorFile( String name )
     {
         // TODO Auto-generated method stub

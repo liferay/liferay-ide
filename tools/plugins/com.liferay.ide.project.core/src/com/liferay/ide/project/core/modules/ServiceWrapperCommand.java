@@ -1,5 +1,9 @@
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,11 +23,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.server.core.IServer;
-
-import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.ILiferayRuntime;
-import com.liferay.ide.server.core.portal.PortalRuntime;
 
 /**
  * @author Lovett Li
