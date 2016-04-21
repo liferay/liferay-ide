@@ -17,7 +17,6 @@ package com.liferay.ide.gradle.core.modules;
 
 import com.liferay.ide.gradle.core.ModuleFragmentProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BaseOpMethods;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -29,7 +28,7 @@ import org.eclipse.sapphire.platform.StatusBridge;
 /**
  * @author Terry Jia
  */
-public class NewModuleFragmentOpMethods extends BaseOpMethods
+public class NewModuleFragmentOpMethods
 {
 
     public static final Status execute( final NewModuleFragmentOp op, final ProgressMonitor pm )

@@ -50,6 +50,7 @@ import org.eclipse.sapphire.services.ValueLabelService;
 import org.eclipse.wst.sse.core.StructuredModelManager;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -263,6 +264,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testNewExtAntProject() throws Exception
     {
         if( shouldSkipBundleTests() ) return;
