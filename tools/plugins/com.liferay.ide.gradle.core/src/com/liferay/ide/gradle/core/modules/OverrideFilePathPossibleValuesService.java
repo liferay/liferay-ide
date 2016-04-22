@@ -128,15 +128,15 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
         int count = 0;
 
-        for( OverrideFilePath cj : currentFiles )
+        for( OverrideFilePath currentFile : currentFiles )
         {
-            String content = cj.getValue().content();
+            String content = currentFile.getValue().content();
 
             if( content != null )
             {
                 if( value.content().toString().equals( content ) )
                 {
-                    ++count;
+                    count++;
                 }
             }
         }
