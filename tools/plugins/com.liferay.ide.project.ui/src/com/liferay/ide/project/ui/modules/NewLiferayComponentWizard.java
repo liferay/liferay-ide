@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.ui.modules;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -99,7 +101,12 @@ public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponen
 
             if( initialProject != null )
             {
-                element().setProjectName( initialProject.getName() );
+                final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, initialProject );
+
+                if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) )
+                {
+                    element().setProjectName( initialProject.getName() );
+                }
             }
         }
     }
