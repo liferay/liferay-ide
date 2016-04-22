@@ -53,8 +53,8 @@ public class BladeCLI
     static final String localJarKey = "localjar";
     static String[] projectTemplateNames;
     static final File repoCache = new File( _settingsDir, "repoCache" );
-    static final String repoUrl = "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/index.xml.gz";
-    static final File repoUrlCacheDir = new File(repoCache,"https%3A%2F%2Fliferay-test-01.ci.cloudbees.com%2Fjob%2Fliferay-blade-cli%2FlastSuccessfulBuild%2Fartifact%2Fbuild%2Fgenerated%2Fp2%2Fplugins");
+    static final String repoUrl = "http://releases.liferay.com/tools/blade-cli/1.0.0.201604152315/index.xml.gz";
+    static final File repoUrlCacheDir = new File(repoCache,"http%3A%2F%2Freleases.liferay.com%2Ftools%2Fblade-cli%2F1.0.0.201604152315%2Fplugins");
     static final String timeStampKey = "up2date.check";
 
     static IPath cachedBladeCLIPath;
