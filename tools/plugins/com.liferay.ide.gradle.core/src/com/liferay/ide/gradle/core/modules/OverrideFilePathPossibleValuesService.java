@@ -118,12 +118,38 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
             values.addAll( possibleValuesSet );
         }
+
     }
 
     @Override
     public Status problem( Value<?> value )
     {
-        return Status.createOkStatus();
+        ElementList<OverrideFilePath> currentFiles = op().getOverrideFiles();
+
+        int count = 0;
+
+        for( OverrideFilePath cj : currentFiles )
+        {
+            String content = cj.getValue().content();
+
+            if( content != null )
+            {
+                if( value.content().toString().equals( content ) )
+                {
+                    ++count;
+                }
+            }
+        }
+
+        if( count >= 0 && possibleValues.contains( value.content().toString() ) )
+        {
+            return Status.createOkStatus();
+        }
+        else
+        {
+            return super.problem( value );
+        }
+
     }
 
     private NewModuleFragmentOp op()

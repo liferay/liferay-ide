@@ -16,7 +16,6 @@
 package com.liferay.ide.gradle.core.modules;
 
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -28,7 +27,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
-import org.eclipse.sapphire.Value;
 import org.eclipse.wst.server.core.IRuntime;
 
 /**
@@ -100,12 +98,6 @@ public class HostOSGiBundlePossibleValuesService extends PossibleValuesService
     public boolean ordered()
     {
         return true;
-    }
-
-    @Override
-    public org.eclipse.sapphire.modeling.Status problem( Value<?> value )
-    {
-        return org.eclipse.sapphire.modeling.Status.createOkStatus();
     }
 
 }
