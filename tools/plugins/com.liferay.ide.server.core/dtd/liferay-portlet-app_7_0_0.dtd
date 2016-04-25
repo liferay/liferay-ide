@@ -1,0 +1,859 @@
+<!--
+<!DOCTYPE liferay-portlet-app PUBLIC
+	"-//Liferay//DTD Portlet Application 7.0.0//EN"
+	"http://www.liferay.com/dtd/liferay-portlet-app_7_0_0.dtd">
+-->
+
+<!--
+The liferay-portlet-app element is the root of the deployment descriptor for
+a Liferay portlet application.
+-->
+<!ELEMENT liferay-portlet-app (portlet*, role-mapper*, custom-user-attribute*)>
+
+<!--
+The portlet element contains the declarative data of a portlet.
+-->
+<!ELEMENT portlet (portlet-name, icon?, virtual-path?, struts-path?,
+parent-struts-path?, configuration-path?, configuration-action-class?,
+indexer-class*, open-search-class?, scheduler-entry*, portlet-url-class?,
+friendly-url-mapper-class?, friendly-url-mapping?, friendly-url-routes?,
+url-encoder-class?, portlet-data-handler-class?,
+staged-model-data-handler-class*, template-handler?,
+portlet-layout-listener-class?, poller-processor-class?,
+pop-message-listener-class?, social-activity-interpreter-class*,
+social-request-interpreter-class?, user-notification-definitions?,
+user-notification-handler-class*, webdav-storage-token?, webdav-storage-class?,
+xml-rpc-method-class?, application-type*, control-panel-entry-category?,
+control-panel-entry-weight?, control-panel-entry-class?,
+asset-renderer-factory*, atom-collection-adapter*, custom-attributes-display*,
+permission-propagator?, trash-handler*, workflow-handler*,
+preferences-company-wide?, preferences-unique-per-layout?,
+preferences-owned-by-group?, use-default-template?, show-portlet-access-denied?,
+show-portlet-inactive?, action-url-redirect?, restore-current-view?,
+maximize-edit?, maximize-help?, pop-up-print?, layout-cacheable?, instanceable?,
+remoteable?, scopeable?, single-page-application?, user-principal-strategy?,
+private-request-attributes?, private-session-attributes?,
+autopropagated-parameters?, requires-namespaced-parameters?, action-timeout?,
+render-timeout?, render-weight?, ajaxable?, header-portal-css*,
+header-portlet-css*, header-portal-javascript*, header-portlet-javascript*,
+footer-portal-css*, footer-portlet-css*, footer-portal-javascript*,
+footer-portlet-javascript*, css-class-wrapper?, facebook-integration?,
+add-default-resource?, system?, active?, include?)>
+
+<!--
+The portlet-name element contains the unique name of the portlet. This name must
+match the portlet-name specified in portlet.xml.
+-->
+<!ELEMENT portlet-name (#PCDATA)>
+
+<!--
+The icon element specifies an image that represents the portlet.
+-->
+<!ELEMENT icon (#PCDATA)>
+
+<!--
+The virtual-path value sets the virtual path used to override the default
+servlet context path.
+
+For example, suppose your portlet is deployed to the servlet path
+"/test-portlet". By default, the portal will return "/test-portlet" for the
+servlet context path. You can override it by setting virtual-path to "/virtual"
+and have the portal return "/virtual" for the servlet context path.
+
+The default value is "" which means this is not used.
+-->
+<!ELEMENT virtual-path (#PCDATA)>
+
+<!--
+Suppose the struts-path value is "mail". This tells the portal that all
+requests with the path mail/* are considered part of this portlet's scope. Users
+who request paths that match mail/* will only be granted access if they also
+have access to this portlet. This is true for both portlet requests and regular
+servlet requests.
+-->
+<!ELEMENT struts-path (#PCDATA)>
+
+<!--
+The parent-struts-path must be the struts-path of another portlet in the same
+web application. The current portlet will be able to use all the struts
+mappings of the parent without duplicating them in struts-config.xml.
+-->
+<!ELEMENT parent-struts-path (#PCDATA)>
+
+<!--
+The configuration-path value is no longer available. Use
+configuration-action-class instead.
+-->
+<!ELEMENT configuration-path (#PCDATA)>
+
+<!--
+The configuration-action-class value must be a class that implements
+com.liferay.portal.kernel.portlet.ConfigurationAction and is called to allow
+users to configure the portlet at runtime.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/message-boards/message-boards-web/src/main/java/com/liferay/message/boards/web/portlet/action/MBAdminConfigurationAction.java
+-->
+<!ELEMENT configuration-action-class (#PCDATA)>
+
+<!--
+The indexer-class value must be a class that implements
+com.liferay.portal.kernel.search.Indexer and is called to create or update a
+search index for the portlet.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-impl/com/liferay/portlet/messageboards/util/MBMessageIndexer.html
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/search/Indexer.html
+http://lucene.apache.org
+-->
+<!ELEMENT indexer-class (#PCDATA)>
+
+<!--
+The open-search-class value must be a class that implements
+com.liferay.portal.kernel.search.OpenSearch and is called to get search results
+in the OpenSearch 1.1 standard.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/search/HitsOpenSearchImpl.html
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/search/OpenSearch.html
+http://www.opensearch.org
+-->
+<!ELEMENT open-search-class (#PCDATA)>
+
+<!--
+The scheduler-entry element contains the declarative data of a scheduler.
+-->
+<!ELEMENT scheduler-entry (scheduler-description?,
+scheduler-event-listener-class, trigger)>
+
+<!--
+The scheduler-description value describes a scheduler.
+-->
+<!ELEMENT scheduler-description (#PCDATA)>
+
+<!--
+The scheduler-event-listener-class value must be a class that implements
+com.liferay.portal.kernel.messaging.MessageListener. This class will receive
+a message at a regular interval specified by the trigger element.
+-->
+<!ELEMENT scheduler-event-listener-class (#PCDATA)>
+
+<!--
+The trigger element contains configuration data to indicate when to trigger the
+class specified in scheduler-event-listener-class.
+-->
+<!ELEMENT trigger (cron | simple)>
+
+<!--
+The cron element specifies a cron style trigger for a scheduler.
+-->
+<!ELEMENT cron (property-key | cron-trigger-value)>
+
+<!--
+The property-key value specifies a property key that will be queried from
+portal.properties or portlet.properties to create a trigger. The property key
+will be queried from portal.properties for portlets that are part of the portal
+and from portlet.propeties for portlets that are plugins.
+
+For a cron trigger, the queried value should be a cron text.
+
+For a simple trigger, the queried value should be a number that represents a
+time interval. The unit of measure is based on the value of time-unit element.
+-->
+<!ELEMENT property-key (#PCDATA)>
+
+<!--
+The cron-trigger-value value should be a cron text.
+-->
+<!ELEMENT cron-trigger-value (#PCDATA)>
+
+<!--
+The simple element specifies an interval trigger for a scheduler.
+-->
+<!ELEMENT simple ((property-key | simple-trigger-value), time-unit)>
+
+<!--
+The simple-trigger-value value is a number that represents how often to trigger
+a scheduler.
+-->
+<!ELEMENT simple-trigger-value (#PCDATA)>
+
+<!--
+The time-unit value is the unit of measure for the time specified in
+property-key or simple-trigger-value. Valid values for this element are "day",
+"hour", "minute", "second", or "week". The default value is "second".
+-->
+<!ELEMENT time-unit (#PCDATA)>
+
+<!--
+The portlet-url-class value must be a class that extends
+com.liferay.portlet.PortletURLImplWrapper. Set this class to override the
+default portlet URL implementation.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-impl/com/liferay/portal/struts/StrutsActionPortletURL.html
+-->
+<!ELEMENT portlet-url-class (#PCDATA)>
+
+<!--
+The friendly-url-mapper-class value must be a class that implements
+com.liferay.portal.kernel.portlet.FriendlyURLMapper. Use this if content inside
+a portlet needs to have a friendly URL. See the Wiki portlet for an
+example of its uses.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/wiki/wiki-web/src/main/java/com/liferay/wiki/web/portlet/route/WikiFriendlyURLMapper.java
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/portlet/FriendlyURLMapper.html
+-->
+<!ELEMENT friendly-url-mapper-class (#PCDATA)>
+
+<!--
+The friendly-url-mapping specifies the mapping used to map a friendly URL prefix
+to a specific portlet. For example, the Message Boards portlet has the mapping
+"message_boards" and will map all friendly URL's that contains
+"/-/message_boards" to itself.
+-->
+<!ELEMENT friendly-url-mapping (#PCDATA)>
+
+<!--
+The friendly-url-routes points to the XML file that defines the friendly URL
+routes. This file is read by the class loader.
+-->
+<!ELEMENT friendly-url-routes (#PCDATA)>
+
+<!--
+The url-encoder-class value must be a class that implements
+com.liferay.portal.kernel.servlet.URLEncoder. Use this to set a custom
+URLEncoder that is used by the RenderResponse class to implement the encodeURL
+method. This is useful if you need to add custom logic to rewrite URLs.
+-->
+<!ELEMENT url-encoder-class (#PCDATA)>
+
+<!--
+The portlet-data-handler-class value must be a class that implements
+com.liferay.portlet.exportimport.lar.PortletDataHandler and is called when archiving
+tasks are run.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/journal/journal-service/src/main/java/com/liferay/journal/lar/JournalPortletDataHandler.java
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portlet/exportimport/lar/PortletDataHandler.html
+-->
+<!ELEMENT portlet-data-handler-class (#PCDATA)>
+
+<!--
+The staged-model-data-handler-class value must be a class that implements
+com.liferay.portal.kernel.lar.StagedModelDatahandler and is called to handle
+export and import logic for a staged model entity.
+-->
+<!ELEMENT staged-model-data-handler-class (#PCDATA)>
+
+<!--
+The portlet-layout-listener-class value must be a class that implements
+com.liferay.portal.kernel.portlet.PortletLayoutListener and is called when a portlet
+is added, moved, or removed from a layout.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/journal/journal-content-web/src/main/java/com/liferay/journal/content/web/JournalContentPortletLayoutListener.java
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/portlet/PortletLayoutListener.html
+-->
+<!ELEMENT portlet-layout-listener-class (#PCDATA)>
+
+<!--
+The poller-processor-class value must be a class that implements
+com.liferay.portal.kernel.poller.PollerProcessor and is triggered by the
+JavaScript class Liferay.Poller. It allows a portlet to use polling to be
+notified of data changes. See the Chat portlet for a real world implementation.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/poller/PollerProcessor.html
+-->
+<!ELEMENT poller-processor-class (#PCDATA)>
+
+<!--
+The pop-message-listener-class value must be a class that implements
+com.liferay.portal.kernel.pop.MessageListener and is called when processing
+emails.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/message-boards/message-boards-service/src/main/java/com/liferay/message/boards/pop/MessageListenerImpl.java
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/pop/MessageListener.html
+-->
+<!ELEMENT pop-message-listener-class (#PCDATA)>
+
+<!--
+The social-activity-interpreter-class value must be a class that implements
+com.liferay.social.kernel.model.SocialActivityInterpreter and is called to
+interpret activities into friendly messages that are easily understandable by a
+human being.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/message-boards/message-boards-web/src/main/java/com/liferay/message/boards/web/social/MBMessageActivityInterpreter.java
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portlet/social/model/SocialActivityInterpreter.html
+-->
+<!ELEMENT social-activity-interpreter-class (#PCDATA)>
+
+<!--
+The social-request-interpreter-class value must be a class that implements
+com.liferay.social.kernel.model.SocialRequestInterpreter and is called to
+interpret requests into friendly messages that are easily understandable by a
+human being.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portlet/social/model/SocialRequestInterpreter.html
+-->
+<!ELEMENT social-request-interpreter-class (#PCDATA)>
+
+<!--
+The user-notification-handler-class value must be a class that implements
+com.liferay.portal.kernel.notifications.UserNotificationHandler is
+called to interpret requests into friendly messages that are easily
+understandable by a human being.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portal/kernel/notifications/UserNotificationHandler.html
+-->
+<!ELEMENT user-notification-handler-class (#PCDATA)>
+
+<!--
+The user-notification-definitions points to the XML file that defines the user
+notifications for this portlet. This file is read by the class loader.
+-->
+<!ELEMENT user-notification-definitions (#PCDATA)>
+
+<!--
+The webdav-storage-token value is the WebDAV directory name for data managed by
+this portlet.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/document-library/document-library-web/src/main/java/com/liferay/document/library/web/webdav/DLWebDAVStorageImpl.java
+-->
+<!ELEMENT webdav-storage-token (#PCDATA)>
+
+<!--
+The webdav-storage-class value must be a class that implements
+com.liferay.portal.kernel.webdav.WebDAVStorage and allows data to be exposed via
+the WebDAV protocol.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/document-library/document-library-web/src/main/java/com/liferay/document/library/web/webdav/DLWebDAVStorageImpl.java
+-->
+<!ELEMENT webdav-storage-class (#PCDATA)>
+
+<!--
+The xml-rpc-method-class value must be a class that implements
+com.liferay.portal.kernel.xmlrpc.Method and allows data to be exposed via the
+XML-RPC protocol.
+
+See:
+
+http://github.com/liferay/liferay-portal/blob/7.0.x/modules/apps/blogs/blogs-service/src/main/java/com/liferay/blogs/util/PingbackMethodImpl.java
+-->
+<!ELEMENT xml-rpc-method-class (#PCDATA)>
+
+<!--
+The application-type value must be "full-page-application" or "widget".
+-->
+<!ELEMENT application-type (#PCDATA)>
+
+<!--
+Set the control-panel-entry-category value to "my" to make this portlet
+available within the My Account administration of the user. Set the value to
+"apps", "configuration", "sites", or "users" to make it available in the Control
+Panel under that category. Set the value to "site_administration.configuration",
+"site_administration.content", "site_administration.members" or
+"site_administration.navigation" to make it available in the Site Administration
+under that category. Legacy values from previous versions of Liferay will be
+automatically mapped to the new values: "content" to
+"site_administration.content", "portal" to "users", and "server" to "apps".
+-->
+<!ELEMENT control-panel-entry-category (#PCDATA)>
+
+<!--
+Set the control-panel-entry-weight value to a double number to control the
+position of the entry within its Control Panel category. Higher values mean
+that the entry will appear lower in the Control Panel menu.
+-->
+<!ELEMENT control-panel-entry-weight (#PCDATA)>
+
+<!--
+The control-panel-entry-class value must be a class that implements
+com.liferay.portal.kernel.portlet.ControlPanelEntry and is called by the Control Panel to
+decide whether the portlet should be shown to a specific user in a specific
+context. The default value is set in portal.properties.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portlet/ControlPanelEntry.html
+-->
+<!ELEMENT control-panel-entry-class (#PCDATA)>
+
+<!--
+The asset-renderer-factory value must be a class that implements
+com.liferay.portlet.asset.model.AssetRendererFactory and is called by the Asset
+Publisher.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portlet/asset/model/AssetRendererFactory.html
+-->
+<!ELEMENT asset-renderer-factory (#PCDATA)>
+
+<!--
+The atom-collection-adapter value must be a class that implements
+com.liferay.portal.kernel.atom.AtomCollectionAdapter.
+-->
+<!ELEMENT atom-collection-adapter (#PCDATA)>
+
+<!--
+The custom-attributes-display value must be a class that implements
+com.liferay.portlet.expando.model.CustomAttributesDisplay and is called by the
+custom fields administration UI.
+
+See:
+
+http://docs.liferay.com/portal/7.0/javadocs/portal-kernel/com/liferay/portlet/expando/model/CustomAttributesDisplay.html
+-->
+<!ELEMENT custom-attributes-display (#PCDATA)>
+
+<!--
+The permission-propagator value must be a class that implements
+com.liferay.portal.kernel.security.permission.PermissionPropagator and is called to
+propagate permissions.
+-->
+<!ELEMENT permission-propagator (#PCDATA)>
+
+<!--
+The template-handler value must be a class that implements
+com.liferay.portal.kernel.template.TemplateHandler and is called when displaying
+the portlet.
+-->
+<!ELEMENT template-handler (#PCDATA)>
+
+<!--
+The trash-handler value must be a class that implements
+com.liferay.portal.kernel.trash.TrashHandler and is called to manage trash
+entries.
+-->
+<!ELEMENT trash-handler (#PCDATA)>
+
+<!--
+-->
+<!ELEMENT workflow-handler (#PCDATA)>
+
+<!--
+Set the preferences-company-wide value to true if the preferences for the
+portlet are across the entire company. Setting this value to true means
+the value for preferences-unique-per-layout and preferences-owned-by-group are
+not used. The default value is false.
+
+For example, an administrator could set the preferences to an Announcements
+portlet that would save a message in the portlet's preferences. This message
+would then be used across all pages for that company. The portlet must not be
+instanceable because instanceable portlets have uniquely generated portlet ids.
+
+The default behavior of the bundled Announcements portlet sets the instanceable
+value to true so that normal users cannot create company wide messages. A future
+release would include permissions for the edit mode versus the view mode which
+would allow an administrator to set the message while users would just view the
+message.
+-->
+<!ELEMENT preferences-company-wide (#PCDATA)>
+
+<!--
+Set the preferences-unique-per-layout value to true if the preferences for the
+portlet are unique across all pages. If set to false, the preferences for the
+portlet are shared across all pages. The default value is true.
+
+The preferences-unique-per-layout element is used in combination with the
+preferences-owned-by-group element. See the comments for the
+preferences-owned-by-group element for more information.
+-->
+<!ELEMENT preferences-unique-per-layout (#PCDATA)>
+
+<!--
+Set the preferences-owned-by-group value to true if the preferences for the
+portlet are owned by the group when the portlet is shown in a group page. If
+set to false, the preferences are owned by the user at all times. The default
+value is true.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to true and
+preferences-owned-by-group set to false. Users can set a different list of
+stocks for every personal page. Users can set a different list of stocks for
+every community page.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to false and
+preferences-owned-by-group set to false. Users can set one list of stocks to be
+shared across all personal pages. Users can set one list of stocks to be shared
+across a community's set of pages.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to true and
+preferences-owned-by-group set to true. Users can set a different list of stocks
+for every personal page. Administrators set the portlet preferences for users in
+a community page. Administrators can set a different list of stocks for every
+community page that are then shared by all users within a community.
+
+Suppose the Stocks portlet has preferences-unique-per-layout set to false and
+preferences-owned-by-group set to true. Users can set one list of stocks to be
+shared across all personal pages. Administrators set the portlet preferences for
+users in a community page. Administrators can set one list of stocks to be
+shared by all users across a community's set of pages.
+-->
+<!ELEMENT preferences-owned-by-group (#PCDATA)>
+
+<!--
+Set the use-default-template value to true if the portlet uses the default
+template to decorate and wrap content. Setting this to false allows the
+developer to own and maintain the portlet's entire outputted content. The
+default value is true.
+
+The most common use of this is if you want the portlet to look different from
+the other portlets or if you want the portlet to not have borders around the
+outputted content.
+-->
+<!ELEMENT use-default-template (#PCDATA)>
+
+<!--
+Set the show-portlet-access-denied value to true if users are shown the portlet
+with an access denied message if they do not have access to the portlet. If set
+to false, users are never shown the portlet if they do not have access to the
+portlet. The default value is set in portal.properties.
+
+See:
+
+http://docs.liferay.com/portal/7.0/propertiesdoc/portal.properties.html
+-->
+<!ELEMENT show-portlet-access-denied (#PCDATA)>
+
+<!--
+Set the show-portlet-inactive value to true if users are shown the portlet
+with an inactive message if the portlet is inactive. If set to false, users are
+never shown the portlet if the portlet is inactive. The default value is set in
+portal.properties.
+
+http://docs.liferay.com/portal/7.0/propertiesdoc/portal.properties.html
+-->
+<!ELEMENT show-portlet-inactive (#PCDATA)>
+
+<!--
+Set the action-url-redirect value to true if an action URL for this portlet
+should cause an auto redirect. This helps prevent double submits. The default
+value is false.
+-->
+<!ELEMENT action-url-redirect (#PCDATA)>
+
+<!--
+Set the restore-current-view value to true if the portlet restores to the
+current view when toggling between maximized and normal states. If set to false,
+the portlet will reset the current view when toggling between maximized and
+normal states. The default value is true.
+-->
+<!ELEMENT restore-current-view (#PCDATA)>
+
+<!--
+Set the maximize-edit value to true if the portlet goes into the maximized state
+when the user goes into the edit mode. This only affects the default portal
+icons and not what may be programmatically set by the portlet developer.
+The default value is false.
+-->
+<!ELEMENT maximize-edit (#PCDATA)>
+
+<!--
+Set the maximize-help value to true if the portlet goes into the maximized state
+when the user goes into the help mode. This only affects the default portal
+icons and not what may be programmatically set by the portlet developer.
+The default value is false.
+-->
+<!ELEMENT maximize-help (#PCDATA)>
+
+<!--
+Set the pop-up-print value to true if the portlet goes into the pop up state
+when the user goes into the print mode. This only affects the default portal
+icons and not what may be programmatically set by the portlet developer.
+The default value is true.
+-->
+<!ELEMENT pop-up-print (#PCDATA)>
+
+<!--
+Set the layout-cacheable flag to true if the data contained in this portlet can
+will never change unless the layout or Journal portlet entry is changed.
+-->
+<!ELEMENT layout-cacheable (#PCDATA)>
+
+<!--
+Set the instanceable value to true if the portlet can appear multiple times on a
+page. If set to false, the portlet can only appear once on a page. The default
+value is false.
+-->
+<!ELEMENT instanceable (#PCDATA)>
+
+<!--
+Set the remoteable value to true if the portlet can be used remotely like in
+WSRP. If set to false, the portlet will not be available remotely. The default
+value is false.
+-->
+<!ELEMENT remoteable (#PCDATA)>
+
+<!--
+If the scopeable value is set to true, an administrator will be able to
+configure the scope of the data of the portlet to either the current community
+(default), the current layout, or the scope of any other layout of the community
+that already exists. Portlets that want to support this must be programmed to
+obtain the proper scope group id according to the configuration and scope their
+data accordingly. The default is false.
+-->
+<!ELEMENT scopeable (#PCDATA)>
+
+<!--
+If the single-page-application value is set to true, portlet links uses Single
+Page Application. The default is true.
+-->
+<!ELEMENT single-page-application (#PCDATA)>
+
+<!--
+Set the user-principal-strategy value to either "userId" or "screenName".
+Calling request.getRemoteUser() will normally return the user id. However, some
+portlets may need the user principal returned to be screen name instead.
+-->
+<!ELEMENT user-principal-strategy (#PCDATA)>
+
+<!--
+Set the private-request-attributes value to true if the portlet does not share
+request attributes with the portal or any other portlet. The default value is
+true. The property "request.shared.attributes" in portal.properties specifies
+which request attributes are shared even when the private-request-attributes
+value is true.
+-->
+<!ELEMENT private-request-attributes (#PCDATA)>
+
+<!--
+Set the private-session-attributes value to true if the portlet does not share
+session attributes with the portal. The default value is true. The property
+"session.shared.attributes" in portal.properties specifies which session
+attributes are shared even when the private-session-attributes value is true.
+-->
+<!ELEMENT private-session-attributes (#PCDATA)>
+
+<!--
+Set the autopropagated-parameters value to a comma delimited list of parameter
+names that will be automatically propagated through the portlet.
+-->
+<!ELEMENT autopropagated-parameters (#PCDATA)>
+
+<!--
+Set the requires-namespaced-parameters value to true if the portlet will only
+process namespaced parameters. The default value is true.
+-->
+<!ELEMENT requires-namespaced-parameters (#PCDATA)>
+
+<!--
+The default value of action-timeout is 0. If set to a value greater than 0,
+and monitoring-spring.xml is enabled via the property "spring.configs" in
+portal.properties, and the property "monitoring.portlet.action.request" in
+portal.properties is set to true, then the portlet's action phase processing
+will be timed. If the execution time is longer than action-timeout, it will be
+recorded as a timeout request processing. The time unit is millisecond.
+-->
+<!ELEMENT action-timeout (#PCDATA)>
+
+<!--
+The default value of render-timeout is 0. If set to a value greater than 0,
+and monitoring-spring.xml is enabled via the property "spring.configs" in
+portal.properties, and the property "monitoring.portlet.render.request" in
+portal.properties is set to true, then the portlet's render phase processing
+will be timed. If the execution time is longer than render-timeout, it will be
+recorded as a timeout request processing. The time unit is millisecond.
+-->
+<!ELEMENT render-timeout (#PCDATA)>
+
+<!--
+The default value of render-weight is 1. If set to a value less than 1, the
+portlet is rendered in parallel. If set to a value of 1 or greater, then the
+portlet is rendered serially. Portlets with a greater render weight have greater
+priority and will be rendered before portlets with a lower render weight.
+
+If the ajaxable value is set to false, then render-weight is always set to 1
+if it is set to a value less than 1. This means ajaxable can override
+render-weight if ajaxable is set to false.
+-->
+<!ELEMENT render-weight (#PCDATA)>
+
+<!--
+The default value of ajaxable is true. If set to false, then this portlet can
+never be displayed via Ajax.
+-->
+<!ELEMENT ajaxable (#PCDATA)>
+
+<!--
+Set the path of CSS that will be referenced in the page's header relative to the
+portal's context path.
+-->
+<!ELEMENT header-portal-css (#PCDATA)>
+
+<!--
+Set the path of CSS that will be referenced in the page's header relative to the
+portlet's context path.
+-->
+<!ELEMENT header-portlet-css (#PCDATA)>
+
+<!--
+Set the path of JavaScript that will be referenced in the page's header relative
+to the portal's context path.
+-->
+<!ELEMENT header-portal-javascript (#PCDATA)>
+
+<!--
+Set the path of JavaScript that will be referenced in the page's header relative
+to the portlet's context path.
+-->
+<!ELEMENT header-portlet-javascript (#PCDATA)>
+
+<!--
+Set the path of CSS that will be referenced in the page's footer relative to the
+portal's context path.
+-->
+<!ELEMENT footer-portal-css (#PCDATA)>
+
+<!--
+Set the path of CSS that will be referenced in the page's footer relative to the
+portlet's context path.
+-->
+<!ELEMENT footer-portlet-css (#PCDATA)>
+
+<!--
+Set the path of JavaScript that will be referenced in the page's footer relative
+to the portal's context path.
+-->
+<!ELEMENT footer-portal-javascript (#PCDATA)>
+
+<!--
+Set the path of JavaScript that will be referenced in the page's footer relative
+to the portlet's context path.
+-->
+<!ELEMENT footer-portlet-javascript (#PCDATA)>
+
+<!--
+Set name of the CSS class that will be injected in the DIV that wraps this
+portlet.
+-->
+<!ELEMENT css-class-wrapper (#PCDATA)>
+
+<!--
+Set the facebook-integration value to either "fbml" or "iframe". The default
+value is "iframe" because IFrame integration will work without requiring any
+changes to your code. See the Message Boards portlet for minor changes that were
+made to make it FBML compliant. Note that the Liferay tag libraries already
+output FBML automatically if a request is made by Facebook.
+-->
+<!ELEMENT facebook-integration (#PCDATA)>
+
+<!--
+If the add-default-resource value is set to false and the portlet does not
+belong to the page but has been dynamically added, then the user will not have
+permissions to view the portlet. If the add-default-resource value is set to
+true, the default portlet resources and permissions are added to the page, and
+the user can then view the portlet. This is useful (and necessary) for portlets
+that need to be dynamically added to a page. However, to prevent security loop
+holes, the default value is false.
+
+The properties "portlet.add.default.resource.check.enabled" and
+"portlet.add.default.resource.check.whitelist" in portal.properties allow
+security checks to be configured around this behavior.
+-->
+<!ELEMENT add-default-resource (#PCDATA)>
+
+<!--
+Set the system value to true if the portlet is a system portlet that a user
+cannot manually add to their page. The default value is false.
+-->
+<!ELEMENT system (#PCDATA)>
+
+<!--
+Set the active value to true if the portlet is active and available to users.
+If set to false, the portlet will not be active or available to users. The
+default value is true.
+
+This value can be changed at runtime via the Admin portlet.
+-->
+<!ELEMENT active (#PCDATA)>
+
+<!--
+Set the include value to true to if the portlet is available to the portal. If
+set to false, the portlet is not available to the portal. The default value is
+true.
+
+Portlets that are not included as part of the portal are never available to the
+user to be made active or inactive. As far the user knows, the portlets do not
+even exist in the system. This allows the Liferay developers to bundle a lot of
+portlets in one core package, and yet allow custom deployments to turn on or off
+individual portlets or sets of portlets. This follows the Siebel and Microsoft
+model of bundling everything in one core package, but using XML configuration or
+registry settings to turn on and off features or sets of features.
+
+We do not recommend that custom deployers modify the core source by removing
+specific portlets because this prevents an easy upgrade process in the future.
+The best way to turn on and off portlets is to set the include element. The
+advantage of this way of doing things is that it becomes very easy to deploy
+Liferay. All features are available in one package. The disadvantage is that by
+not utilizing all of the portlets, you are wasting disk space and may even take
+a small but static memory footprint. However, we feel that the extra disk space
+and memory usage is a cheap price to pay in order to provide an easy
+installation and upgrade path.
+-->
+<!ELEMENT include (#PCDATA)>
+
+<!--
+The role-mapper contains two names specified by role-name and role-link. The
+role-name value must be a role specified in portlet.xml. The role-link value
+must be the name of a Liferay role that exists in the database. The role-mapper
+element pairs up these two values to map roles from portlet.xml to roles in
+the Liferay database.
+
+This is needed because Liferay roles may contain spaces whereas roles in
+portlet.xml cannot contain spaces. This also adds extra flexibility where the
+portlet vendor does not need to have any knowledge about Liferay's roles.
+-->
+<!ELEMENT role-mapper (role-name, role-link)>
+
+<!--
+See the comments in role-mapper element.
+-->
+<!ELEMENT role-name (#PCDATA)>
+
+<!--
+See the comments in role-mapper element.
+-->
+<!ELEMENT role-link (#PCDATA)>
+
+<!--
+The custom-user-attribute contains a list of names that are retrieved using a
+custom class that extends com.liferay.portal.kernel.portlet.CustomUserAttributes.
+
+See:
+
+https://dev.liferay.com/develop/tutorials
+-->
+<!ELEMENT custom-user-attribute (name+, custom-class)>
+
+<!--
+See the comments in custom-user-attribute element.
+-->
+<!ELEMENT name (#PCDATA)>
+
+<!--
+See the comments in custom-user-attribute element.
+-->
+<!ELEMENT custom-class (#PCDATA)>

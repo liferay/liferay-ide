@@ -107,6 +107,15 @@
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-display_6_2_0.dtd">
 		    </system>
 		    <public
+		        publicId="-//Liferay//DTD Display 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-display_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-display_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-display_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-display_7_0_0.dtd">
+		    </system>
+		    <public
 		        publicId="-//Liferay//DTD Friendly URL Routes 6.0.0//EN"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-friendly-url-routes_6_0_0.dtd"
 		        webURL="http://www.liferay.com/dtd/liferay-friendly-url-routes_6_0_0.dtd">
@@ -132,6 +141,15 @@
 		    <system
 		        systemId="http://www.liferay.com/dtd/liferay-friendly-url-routes_6_2_0.dtd"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-friendly-url-routes_6_2_0.dtd">
+		    </system>
+		    <public
+		        publicId="-//Liferay//DTD Friendly URL Routes 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-friendly-url-routes_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-friendly-url-routes_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-friendly-url-routes_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-friendly-url-routes_7_0_0.dtd">
 		    </system>
 		    <public
 		        publicId="-//Liferay//DTD Hook 5.1.0//EN"
@@ -177,6 +195,15 @@
 		    <system
 		        systemId="http://www.liferay.com/dtd/liferay-hook_6_2_0.dtd"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-hook_6_2_0.dtd">
+		    </system>
+		    <public
+		        publicId="-//Liferay//DTD Hook 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-hook_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-hook_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-hook_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-hook_7_0_0.dtd">
 		    </system>
 		    <public
 		        publicId="-//Liferay//DTD Layout Templates 3.6.0//EN"
@@ -260,6 +287,15 @@
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-layout-templates_6_2_0.dtd">
 		    </system>
 		    <public
+		        publicId="-//Liferay//DTD Layout Templates 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-layout-templates_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-layout-templates_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-layout-templates_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-layout-templates_7_0_0.dtd">
+		    </system>
+		    <public
 		        publicId="-//Liferay//DTD Look and Feel 3.5.0//EN"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-look-and-feel_3_5_0.dtd"
 		        webURL="http://www.liferay.com/dtd/liferay-look-and-feel_3_5_0.dtd">
@@ -341,6 +377,15 @@
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-look-and-feel_6_2_0.dtd">
 		    </system>
 		    <public
+		        publicId="-//Liferay//DTD Look and Feel 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-look-and-feel_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-look-and-feel_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-look-and-feel_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-look-and-feel_7_0_0.dtd">
+		    </system>
+		    <public
 		        publicId="-//Liferay//DTD Plugin Package 4.3.0//EN"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-package_4_3_0.dtd"
 		        webURL="http://www.liferay.com/dtd/liferay-plugin-package_4_3_0.dtd">
@@ -404,6 +449,15 @@
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-package_6_2_0.dtd">
 		    </system>
 		    <public
+		        publicId="-//Liferay//DTD Plugin Package 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-package_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-plugin-package_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-plugin-package_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-package_7_0_0.dtd">
+		    </system>
+		    <public
 		        publicId="-//Liferay//DTD Plugin Repository 4.3.0//EN"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-repository_4_3_0.dtd"
 		        webURL="http://www.liferay.com/dtd/liferay-plugin-repository_4_3_0.dtd">
@@ -465,6 +519,15 @@
 		    <system
 		        systemId="http://www.liferay.com/dtd/liferay-plugin-repository_6_2_0.dtd"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-repository_6_2_0.dtd">
+		    </system>
+		    <public
+		        publicId="-//Liferay//DTD Plugin Repository 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-repository_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-plugin-repository_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-plugin-repository_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-plugin-repository_7_0_0.dtd">
 		    </system>
 		    <public
 		        publicId="-//Liferay//DTD PORTLET 2.0.0//EN"
@@ -629,6 +692,15 @@
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-portlet-app_6_2_0.dtd">
 		    </system>
 		    <public
+		        publicId="-//Liferay//DTD Portlet Application 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-portlet-app_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-portlet-app_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-portlet-app_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-portlet-app_7_0_0.dtd">
+		    </system>
+		    <public
 		        publicId="-//Liferay//DTD Resource Action Mapping 6.0.0//EN"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-resource-action-mapping_6_0_0.dtd"
 		        webURL="http://www.liferay.com/dtd/liferay-resource-action-mapping_6_0_0.dtd">
@@ -654,6 +726,15 @@
 		    <system
 		        systemId="http://www.liferay.com/dtd/liferay-resource-action-mapping_6_2_0.dtd"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-resource-action-mapping_6_2_0.dtd">
+		    </system>
+		    <public
+		        publicId="-//Liferay//DTD Resource Action Mapping 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-resource-action-mapping_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-resource-action-mapping_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-resource-action-mapping_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-resource-action-mapping_7_0_0.dtd">
 		    </system>
 		    <public
 		        publicId="-//Liferay//DTD Service Builder 3.5.0//EN"
@@ -773,6 +854,15 @@
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-service-builder_6_2_0.dtd">
 		    </system>
 		    <public
+		        publicId="-//Liferay//DTD Service Builder 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-service-builder_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-service-builder_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-service-builder_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-service-builder_7_0_0.dtd">
+		    </system>
+		    <public
 		        publicId="-//Liferay//DTD SKIN 2.0.0//EN"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-skin_2_0_0.dtd"
 		        webURL="http://www.liferay.com/dtd/liferay-skin_2_0_0.dtd">
@@ -798,6 +888,15 @@
 		    <system
 		        systemId="http://www.liferay.com/dtd/liferay-social_6_2_0.dtd"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-social_6_2_0.dtd">
+		    </system>
+		    <public
+		        publicId="-//Liferay//DTD Social 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-social_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-social_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-social_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-social_7_0_0.dtd">
 		    </system>
 		    <public
 		        publicId="-//Liferay//DTD Theme Loader 4.3.0//EN"
@@ -863,6 +962,15 @@
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-theme-loader_6_2_0.dtd">
 		    </system>
 		    <public
+		        publicId="-//Liferay//DTD Theme Loader 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-theme-loader_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-theme-loader_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-theme-loader_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-theme-loader_7_0_0.dtd">
+		    </system>
+		    <public
 		        publicId="-//Liferay//DTD User Notification Definition 6.2.0//EN"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-user-notification-definitions_6_2_0.dtd"
 		        webURL="http://www.liferay.com/dtd/liferay-user-notification-definitions_6_2_0.dtd">
@@ -870,6 +978,15 @@
 		    <system
 		        systemId="http://www.liferay.com/dtd/liferay-user-notification-definitions_6_2_0.dtd"
 		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-user-notification-definitions_6_2_0.dtd">
+		    </system>
+		    <public
+		        publicId="-//Liferay//DTD User Notification Definition 7.0.0//EN"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-user-notification-definitions_7_0_0.dtd"
+		        webURL="http://www.liferay.com/dtd/liferay-user-notification-definitions_7_0_0.dtd">
+		    </public>
+		    <system
+		        systemId="http://www.liferay.com/dtd/liferay-user-notification-definitions_7_0_0.dtd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/dtd/liferay-user-notification-definitions_7_0_0.dtd">
 		    </system>
 		    <public
 		        publicId="-//MuleSource //DTD mule-configuration XML V1.0//EN"
@@ -975,6 +1092,10 @@
 		    <uri
 		        name="http://www.liferay.com/dtd/liferay-workflow-definition_6_2_0.xsd"
 		        uri="platform:/plugin/com.liferay.ide.server.core/xsd/liferay-workflow-definition_6_2_0.xsd">
+		    </uri>
+		    <uri
+		        name="http://www.liferay.com/dtd/liferay-workflow-definition_7_0_0.xsd"
+		        uri="platform:/plugin/com.liferay.ide.server.core/xsd/liferay-workflow-definition_7_0_0.xsd">
 		    </uri>
 		    <uri
 		        name="http://maven.apache.org/xsd/maven-4.0.0.xsd"
