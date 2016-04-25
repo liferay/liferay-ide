@@ -20,6 +20,7 @@ import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
+import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -31,6 +32,7 @@ import org.eclipse.sapphire.ui.forms.FormComponentPart;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.eclipse.ui.IWorkingSet;
@@ -103,6 +105,14 @@ public class NewModuleFragmentWizard extends SapphireWizard<NewModuleFragmentOp>
     private void openLiferayPerspective( IProject newProject )
     {
         final IWorkbench workbench = PlatformUI.getWorkbench();
+
+        IPerspectiveDescriptor perspective = workbench.getActiveWorkbenchWindow().getActivePage().getPerspective();
+
+        if( perspective.getId().equals( LiferayWorkspacePerspectiveFactory.ID ) )
+        {
+            return;
+        }
+
         // open the "final" perspective
         final IConfigurationElement element = new DelegateConfigurationElement( null )
         {
