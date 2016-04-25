@@ -76,6 +76,10 @@
             <content>
                 <property-editor>
                     <property>HostOsgiBundle</property>
+                    <hint>
+                        <name>browse.only</name>
+                        <value>true</value>
+                    </hint>
                 </property-editor>
                 <spacer/>
                 <property-editor>
