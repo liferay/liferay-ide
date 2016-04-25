@@ -49,7 +49,7 @@
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
             </content>
-            <description>Create a new project configured as a Liferay module</description>
+            <description>Enter a name and choose a template to use for a new Liferay module.</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -64,8 +64,8 @@
         <description>Create a new project configured as a Liferay plugin</description>
         <page>
             <id>LiferayServiceModuleSettingWizardPage</id>
-            <label>Liferay Service Or ServiceWrapper Module Project</label>
-            <description>Set Service or ServiceWrapper Advance setting.</description>
+            <label>Liferay Module Project</label>
+            <description>Configure Liferay Service Component Class</description>
             <visible-when>
                 ${ ProjectTemplateName == 'servicewrapper' || ProjectTemplateName == 'service' }
             </visible-when>
@@ -87,14 +87,17 @@
         </page>
         <page>
             <id>LiferayPortletModuleSettingWizardPage</id>
-            <label>Liferay Portlet Module Project</label>
-            <description>Set Portlet Advance setting.</description>
+            <label>Liferay Module Project</label>
+            <description>Configure Portlet Component Class</description>
             <visible-when>
                 ${ ProjectTemplateName == 'portlet' || ProjectTemplateName == 'servicebuilder' || 
                     ProjectTemplateName == 'mvcportlet' }
             </visible-when>
             <content>
-                 <property-editor>ComponentName</property-editor>
+                <property-editor>
+                    <label>Component Class Name</label>
+                    <property>ComponentName</property>
+                </property-editor>
                  <property-editor>PackageName</property-editor>
                  <property-editor>
                      <span>false</span>
