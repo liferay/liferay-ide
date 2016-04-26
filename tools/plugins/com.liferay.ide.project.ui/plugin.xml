@@ -212,9 +212,9 @@
             class="com.liferay.ide.project.ui.wizard.ParentSDKProjectImportWizard"
             icon="icons/e16/liferay_logo_16.png"
             id="com.liferay.ide.project.ui.parentSDKProjectImportWizard"
-            name="Liferay Plugins SDK Parent Project">
+            name="Liferay Plugins SDK Directory">
          <description>
-            Liferay Plugins SDK Parent Project
+            Liferay Plugins SDK Directory
          </description>
       </wizard>
       <!--
