@@ -33,7 +33,7 @@ public class NewLiferayComponentGogoComandOperation extends AbstractLiferayCompo
     private final static String EXTENSION_CLASS = "Object.class";
 
     private final static String[] PROPERTIES_LIST =
-        new String[] { "osgi.command.scope=blade" };
+        new String[] { "osgi.command.scope=blade", "osgi.command.function=usercount" };
 
     public NewLiferayComponentGogoComandOperation()
     {
@@ -57,7 +57,6 @@ public class NewLiferayComponentGogoComandOperation extends AbstractLiferayCompo
     {
         List<String> mvcProperties = new ArrayList<String>();
         mvcProperties.addAll( Arrays.asList( PROPERTIES_LIST ) );
-        mvcProperties.add( "osgi.command.function=" + componentClassName.toLowerCase() );
 
         return mvcProperties;
     }
