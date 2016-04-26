@@ -17,15 +17,18 @@ package com.liferay.ide.project.core.modules.templates.pollerprocessor;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,6 +39,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -78,7 +82,7 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
     private List<String> getPollerPortletImports()
     {
         List<String> imports = new ArrayList<String>();
-        
+
         imports.add( "javax.portlet.Portlet" );
         imports.add( "com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet" );
         imports.addAll( super.getImports() );
@@ -93,7 +97,7 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
         imports.add( "com.liferay.portal.kernel.json.JSONFactoryUtil" );
         imports.add( "com.liferay.portal.kernel.json.JSONObject" );
         imports.add( "com.liferay.portal.kernel.log.Log" );
-        imports.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );   
+        imports.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );
         imports.add( "com.liferay.portal.kernel.poller.BasePollerProcessor" );
         imports.add( "com.liferay.portal.kernel.poller.DefaultPollerResponse" );
         imports.add( "com.liferay.portal.kernel.poller.PollerProcessor" );
@@ -127,14 +131,14 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
         {
             properties.add( property );
         }
-        properties.add( "javax.portlet.init-param.template-path=" + this.componentClassName.toLowerCase() );
+        properties.add( "javax.portlet.init-param.template-path=/");
         properties.add( "com.liferay.portlet.poller-processor-class=" + this.packageName + "." + this.componentClassName );
         properties.add( "javax.portlet.display-name=" + this.componentClassName );
         properties.add( "javax.portlet.portlet.info.short-title=" + this.componentClassName );
         properties.add( "javax.portlet.portlet.info.title=" + this.componentClassName );
-        properties.add( "com.liferay.portlet.header-portlet-javascript=" + componentClassName.toLowerCase() + "/js/main.js" );
-        properties.add( "javax.portlet.init-param.view-template=" + componentClassName.toLowerCase() + "/view.jsp" );
-        properties.add( "javax.portlet.resource-bundle=content." + componentClassName.toLowerCase() + ".Language" );
+        properties.add( "com.liferay.portlet.header-portlet-javascript=/" + componentClassName.toLowerCase() + "/js/main.js" );
+        properties.add( "javax.portlet.init-param.view-template=/" + componentClassName.toLowerCase() + "/view.jsp" );
+        properties.add( "javax.portlet.resource-bundle=content.Language" );
 
         return properties;
     }
@@ -255,9 +259,26 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
             IFolder resourceFolder = liferayProject.getSourceFolder( "resources" );
 
             IFolder contentFolder = resourceFolder.getFolder( "content" );
-            final IFile languageProperties = contentFolder.getFile( new Path( componentClassName.toLowerCase() + "/Language.properties" ) );
 
-            if( !languageProperties.getLocation().toFile().exists() )
+            final IFile languageProperties = contentFolder.getFile( new Path( "Language.properties" ) );
+
+            final File languagePropertiesFile = languageProperties.getLocation().toFile();
+
+            if( languagePropertiesFile.exists() )
+            {
+                String originContent = FileUtil.readContents( languagePropertiesFile, true );
+
+                URL sampleFileURL = getClass().getClassLoader().getResource(
+                    TEMPLATE_DIR + "/pollerprocessor/poller-language.properties" );
+
+                String addContent =
+                    FileUtil.readContents( new File( FileLocator.toFileURL( sampleFileURL ).getFile() ), true );
+
+                String totalContent = originContent + System.getProperty( "line.separator" ) + addContent;
+
+                FileUtil.writeFile( languagePropertiesFile, totalContent.getBytes(), projectName );
+            }
+            else
             {
                 createSampleFile( languageProperties, "pollerprocessor/poller-language.properties" );
             }
@@ -282,7 +303,7 @@ public class NewLiferayComponentPollerProcessorOperation extends AbstractLiferay
 
             if( !viewJsp.getLocation().toFile().exists() )
             {
-                createSampleFile( viewJsp, "pollerprocessor/poller-view.jsp", "/init.jsp", componentClassName.toLowerCase() + "/init.jsp" );
+                createSampleFile( viewJsp, "pollerprocessor/poller-view.jsp", "/init.jsp", "/" + componentClassName.toLowerCase() + "/init.jsp" );
             }
 
         }
