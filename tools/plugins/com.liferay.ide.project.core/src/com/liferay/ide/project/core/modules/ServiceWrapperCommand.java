@@ -55,23 +55,25 @@ public class ServiceWrapperCommand
     {
         final List<File> targetJarFile = new ArrayList<>();
         final IPath bundleLibPath =
+            ( (PortalRuntime) _server.getRuntime().loadAdapter( PortalRuntime.class, null ) ).getAppServerLibGlobalDir();
+        final IPath bundleServerPath =
             ( (PortalRuntime) _server.getRuntime().loadAdapter( PortalRuntime.class, null ) ).getAppServerDir();
         final List<String> wrapperList = new ArrayList<>();
         List<File> libFiles;
 
         try
         {
-            libFiles = FileListing.getFileListing( new File( bundleLibPath.append( "lib" ).toOSString() ) );
+            libFiles = FileListing.getFileListing( new File( bundleLibPath.toOSString() ) );
 
             for( File lib : libFiles )
             {
-                if( lib.exists() && lib.getName().endsWith( "portal-service.jar" ) )
+                if( lib.exists() && lib.getName().endsWith( "portal-kernel.jar" ) )
                 {
                     targetJarFile.add( lib );
                 }
             }
 
-            libFiles = FileListing.getFileListing( new File( bundleLibPath.append( "../osgi" ).toOSString() ) );
+            libFiles = FileListing.getFileListing( new File( bundleServerPath.append( "../osgi" ).toOSString() ) );
 
             for( File lib : libFiles )
             {
