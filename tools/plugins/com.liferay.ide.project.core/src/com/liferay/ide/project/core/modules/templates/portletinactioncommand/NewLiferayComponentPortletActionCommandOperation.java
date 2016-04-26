@@ -58,12 +58,12 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
     private final static String PORTLET_ACTION_COMMAND_EXTENSION_CLASSES = "MVCActionCommand.class";
 
     private final static String[] PORTLET_PROPERTIES_LIST =
-    	{
-    			"com.liferay.portlet.display-category=category.sample",
-    			"com.liferay.portlet.instanceable=true",
-    			"javax.portlet.init-param.template-path=/",
-    			"javax.portlet.security-role-ref=power-user,user"
-    	};
+        {
+            "com.liferay.portlet.display-category=category.sample",
+            "com.liferay.portlet.instanceable=true",
+            "javax.portlet.init-param.template-path=/",
+            "javax.portlet.security-role-ref=power-user,user"
+        };
 
     public NewLiferayComponentPortletActionCommandOperation()
     {
@@ -84,7 +84,7 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
     private List<String> getPortletActionCommandImports()
     {
         List<String> imports = new ArrayList<String>();
-        
+
         imports.add( "com.liferay.portal.kernel.log.Log" );
         imports.add( "com.liferay.portal.kernel.log.LogFactoryUtil" );
         imports.add( "com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand" );
@@ -95,6 +95,7 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
         imports.add( "javax.portlet.ActionResponse" );
         imports.add( "javax.portlet.PortletException" );
         imports.addAll( super.getImports() );
+
         return imports;
     }
 
@@ -263,4 +264,5 @@ public class NewLiferayComponentPortletActionCommandOperation extends AbstractLi
             throw new CoreException( ProjectCore.createErrorStatus( e ) );
         }
     }
+
 }
