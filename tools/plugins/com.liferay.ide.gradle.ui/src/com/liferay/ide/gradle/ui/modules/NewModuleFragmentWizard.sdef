@@ -95,6 +95,7 @@
                         <id>AddFilesFromOSGiBundleHandler</id>
                         <impl>AddFilesFromOSGiBundleAction</impl>
                     </action-handler>
+                    <scale-vertically>true</scale-vertically>
                 </property-editor>
             </content>
             <description>Create a new project configured as a Liferay Module Fragment Hook Project</description>
