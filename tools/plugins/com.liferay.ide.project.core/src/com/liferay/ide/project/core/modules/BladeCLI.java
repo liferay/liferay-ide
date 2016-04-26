@@ -41,6 +41,8 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Gregory Amerson
@@ -123,7 +125,34 @@ public class BladeCLI
     public static synchronized IPath getBladeCLIPath() throws BladeCLIException
     {
         final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
-        final File bladeCacheSettings = new File( stateLocation.toFile(), "blade-cache.properties" );
+
+        Bundle bundle = Platform.getBundle( ProjectCore.PLUGIN_ID );
+
+        File stateDir = stateLocation.toFile();
+
+        String filePrefix = "blade-cache";
+        String currentVersionFileName = filePrefix + "-" + bundle.getVersion().toString() + ".properties";
+
+        final File bladeCacheSettings = new File( stateDir, currentVersionFileName );
+
+        // clean old version blade-cache files
+        if( stateDir.exists() )
+        {
+            File[] children = stateDir.listFiles();
+
+            if( children.length > 0 )
+            {
+                for( File child : children )
+                {
+                    if( child.isFile() && child.getName().startsWith( filePrefix ) &&
+                        !child.getName().equals( currentVersionFileName ) )
+                    {
+                        child.delete();
+                    }
+                }
+            }
+        }
+
         final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmm" );
 
         if( !bladeCacheSettings.exists() )
