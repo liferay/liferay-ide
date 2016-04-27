@@ -6,11 +6,11 @@ Bundle-Version: 3.0.0.qualifier
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.server.core,
- com.liferay.ide.core.tests;bundle-version="2.1.0",
- com.liferay.ide.server.core;bundle-version="2.1.0",
- com.liferay.ide.project.core;bundle-version="2.1.0",
- com.liferay.ide.server.tomcat.core;bundle-version="2.1.0",
- org.apache.commons.io;bundle-version="2.0.1",
+ com.liferay.ide.core.tests,
+ com.liferay.ide.server.core,
+ com.liferay.ide.project.core,
+ com.liferay.ide.server.tomcat.core,
+ org.apache.commons.io,
  org.eclipse.jst.server.tomcat.core,
  org.eclipse.m2e.maven.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

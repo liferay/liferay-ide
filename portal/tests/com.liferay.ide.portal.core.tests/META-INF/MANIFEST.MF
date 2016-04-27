@@ -11,7 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.sapphire.modeling;bundle-version="0.7.0",
  org.eclipse.sapphire.modeling.xml;bundle-version="0.7.0",
  org.json
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portal.core.tests
 Bundle-ClassPath: .,

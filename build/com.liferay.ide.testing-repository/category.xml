@@ -13,6 +13,6 @@
     <!--bundle id="com.liferay.ide.project.ui.tests" version="0.0.0" /-->
     <bundle id="com.liferay.ide.server.core.tests" version="0.0.0" />
     <bundle id="com.liferay.ide.service.core.tests" version="0.0.0" />
-    <!--bundle id="com.liferay.ide.ui.tests" version="0.0.0" /-->
-    <!--bundle id="com.liferay.ide.xml.search.ui.tests" version="0.0.0" /-->
+    <bundle id="com.liferay.ide.ui.tests" version="0.0.0" />
+    <bundle id="com.liferay.ide.xml.search.ui.tests" version="0.0.0" />
 </site>

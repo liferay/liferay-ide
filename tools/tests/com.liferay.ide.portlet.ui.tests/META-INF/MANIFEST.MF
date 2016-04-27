@@ -10,7 +10,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.server.core.tests,
  com.liferay.ide.project.core.tests,
  com.liferay.ide.core.tests,
- com.liferay.ide.ui.tests,
  com.liferay.ide.portlet.core,
  com.liferay.ide.portlet.ui,
  com.liferay.ide.service.core,
@@ -19,7 +18,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.portlet.vaadin.ui,
  org.eclipse.ui.workbench,
  org.junit,
- com.liferay.ide.project.ui.tests
+ com.liferay.ide.ui.tests
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.portlet.ui.tests
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

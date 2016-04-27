@@ -17,7 +17,6 @@ package com.liferay.ide.project.core.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.ProjectCore;
@@ -34,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;

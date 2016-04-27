@@ -110,7 +110,7 @@ public class ImportPluginsSDKProjectWizardTests extends ProjectUITestBase
         assertEquals( "Invalid project location", op.validation().message() );
 
         op.setLocation( "C:/AAA" );
-        assertEquals( "Project isn't exist at \"" + "C:\\AAA" + "\"", op.validation().message() );
+        assertEquals( "Directory doesn't exist.", op.validation().message() );
 
         project = importSDKProjectTest( "portlets", "Import-223-portlet" );
 

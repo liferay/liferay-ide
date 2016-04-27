@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.debug,
  com.liferay.ide.server.core;bundle-version="3.0.0",
  org.eclipse.wst.common.modulecore
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Export-Package: com.liferay.ide.portal.core,
