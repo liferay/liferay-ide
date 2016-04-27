@@ -39,12 +39,11 @@ public class NewLiferayComponentServiceOperation extends AbstractLiferayComponen
     protected List<String> getImports()
     {
         List<String> imports = new ArrayList<String>();
-        imports.add( "com.liferay.portal.kernel.exception.PortalException" );
-        imports.add( "com.liferay.portal.kernel.model.User" );
+
         imports.add( "com.liferay.portal.kernel.service.ServiceWrapper" );
         imports.add( serviceName );
-        imports.add( "java.util.Map" );
         imports.addAll( super.getImports() );
+
         return imports;
     }
 
