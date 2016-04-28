@@ -102,22 +102,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
             }
             else
             {
-                Value<Path> initialSelectionPath = op.getInitialSelectionPath();
-
-                if( !initialSelectionPath.empty() )
-                {
-                    IStatus locationStatus = op.getProjectProvider().content().validateProjectLocation(
-                        op.getProjectName().content(), PathBridge.create( initialSelectionPath.content() ) );
-
-                    if( locationStatus.isOK() )
-                    {
-                        newLocationBase = initialSelectionPath.content();
-                    }
-                }
-                else
-                {
-                    newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
-                }
+                newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
             }
 
             if( newLocationBase != null )
