@@ -38,11 +38,12 @@ public class NewLiferayComponentProjectNameDefaultValueService extends DefaultVa
         {
             final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
-            if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) )
+            if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) && !bundleProject.isFragmentBundle() )
             {
                 return project.getName();
             }
         }
         return null;
     }
+
 }

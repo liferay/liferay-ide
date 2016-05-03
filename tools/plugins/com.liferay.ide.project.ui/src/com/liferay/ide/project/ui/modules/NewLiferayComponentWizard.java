@@ -19,6 +19,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
+import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import org.eclipse.core.resources.IFile;
@@ -100,7 +101,7 @@ public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponen
             {
                 initialPackage = ( (IPackageFragment) element );
                 initialProject = ( (IJavaElement) element ).getResource().getProject();
-            }            
+            }
             else if( element instanceof IJavaElement )
             {
                 initialProject = ( (IJavaElement) element ).getResource().getProject();
@@ -110,11 +111,12 @@ public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponen
             {
                 final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, initialProject );
 
-                if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) )
+                if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) &&
+                    !bundleProject.isFragmentBundle() )
                 {
                     element().setProjectName( initialProject.getName() );
-                    
-                    if ( initialPackage != null )
+
+                    if( initialPackage != null )
                     {
                         element().setPackageName( initialPackage.getElementName() );
                     }
@@ -164,6 +166,7 @@ public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponen
             {
                 Display.getCurrent().asyncExec( new Runnable()
                 {
+
                     public void run()
                     {
                         try

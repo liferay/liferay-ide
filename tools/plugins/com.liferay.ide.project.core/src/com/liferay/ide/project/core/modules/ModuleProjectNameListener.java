@@ -21,10 +21,8 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.platform.PathBridge;
 

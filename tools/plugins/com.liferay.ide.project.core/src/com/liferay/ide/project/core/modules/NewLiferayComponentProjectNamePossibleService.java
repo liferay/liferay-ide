@@ -52,7 +52,7 @@ public class NewLiferayComponentProjectNamePossibleService extends PossibleValue
             {
                 final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
-                if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) )
+                if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) && !bundleProject.isFragmentBundle() )
                 {
                     values.add( project.getName() );
                 }
