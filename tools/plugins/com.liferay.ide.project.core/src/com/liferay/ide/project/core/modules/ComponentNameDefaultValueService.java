@@ -14,6 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
+import org.apache.commons.lang.WordUtils;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -50,23 +51,32 @@ public class ComponentNameDefaultValueService extends DefaultValueService
         String retVal = "";
 
         final String projectName = op().getProjectName().content( true );
-        
-        if ( projectName == null )
+
+        if( projectName == null )
         {
             return retVal;
         }
-        
-        final String projectTemplate = op().getProjectTemplateName().content( true );
-        
-        final String pName = projectName.replaceAll( "-", "" );
-        
-        final String finalProjectName = pName.replaceAll( "\\.", "" );
-        
-        final StringBuffer componentNameBuffer = new StringBuffer(finalProjectName);
-        
-        componentNameBuffer.append( projectTemplate );
-        
-        return componentNameBuffer.toString();
+
+        String projectTemplate = op().getProjectTemplateName().content( true );
+
+        if( projectTemplate != null )
+        {
+            final char[] tokens = new char[] { '-', '.', '_' };
+
+            String finalProjectName = WordUtils.capitalizeFully( projectName, tokens );
+
+            for( char token : tokens )
+            {
+                finalProjectName = finalProjectName.replaceAll( "\\" + token, "" );
+            }
+
+            final StringBuffer componentNameBuffer = new StringBuffer( finalProjectName );
+
+            componentNameBuffer.append( projectTemplate );
+
+            return componentNameBuffer.toString();
+        }
+        return null;
     }
 
     private NewLiferayModuleProjectOp op()
