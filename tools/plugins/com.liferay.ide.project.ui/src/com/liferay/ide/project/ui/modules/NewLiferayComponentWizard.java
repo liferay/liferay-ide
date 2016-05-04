@@ -26,6 +26,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -51,6 +52,7 @@ public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponen
 
     private boolean firstErrorMessageRemoved = false;
     private IProject initialProject;
+    private IPackageFragment initialPackage;
 
     public NewLiferayComponentWizard()
     {
@@ -94,6 +96,11 @@ public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponen
             {
                 initialProject = ( (IJavaProject) element ).getProject();
             }
+            else if( element instanceof IPackageFragment )
+            {
+                initialPackage = ( (IPackageFragment) element );
+                initialProject = ( (IJavaElement) element ).getResource().getProject();
+            }            
             else if( element instanceof IJavaElement )
             {
                 initialProject = ( (IJavaElement) element ).getResource().getProject();
@@ -106,6 +113,11 @@ public class NewLiferayComponentWizard extends SapphireWizard<NewLiferayComponen
                 if( bundleProject != null && "jar".equals( bundleProject.getBundleShape() ) )
                 {
                     element().setProjectName( initialProject.getName() );
+                    
+                    if ( initialPackage != null )
+                    {
+                        element().setPackageName( initialPackage.getElementName() );
+                    }
                 }
             }
         }
