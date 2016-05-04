@@ -22,6 +22,7 @@ import com.liferay.ide.portlet.core.IPluginPackageModel;
 import com.liferay.ide.portlet.core.PluginPropertiesConfiguration;
 import com.liferay.ide.portlet.core.PortletCore;
 import com.liferay.ide.portlet.core.dd.PluginPackagesDescriptorHelper;
+import com.liferay.ide.project.core.descriptor.AddNewPortletOperation;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,6 +37,7 @@ import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
 
 /**
  * @author Kuo Zhang
+ * @author Andy Wu
  */
 public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescriptorHelper
 {
@@ -50,18 +52,25 @@ public class VaadinPluginPackageDescriptorHelper extends PluginPackagesDescripto
         super( project );
     }
 
-    // When a vaadin portlet is added, the liferay-plugin-package.properties won't add an element called "portlet",
-    // it needs add a line "portal-dependency-jars=vaadin.jar"
     @Override
-    public IStatus addNewPortlet( IDataModel dataModel )
+    protected void addDescriptorOperations()
     {
-        if( canAddNewPortlet( dataModel ) )
+        addDescriptorOperation( new AddNewPortletOperation()
         {
-            return addPortalDependency( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar" );
-        }
+            @Override
+            public IStatus addNewPortlet( final IDataModel model )
+            {
+                // When a vaadin portlet is added, the liferay-plugin-package.properties won't add an element called
+                // "portlet",
+                // it needs add a line "portal-dependency-jars=vaadin.jar"
+                if( canAddNewPortlet( model ) )
+                {
+                    return addPortalDependency( IPluginPackageModel.PROPERTY_PORTAL_DEPENDENCY_JARS, "vaadin.jar" );
+                }
 
-        return Status.OK_STATUS;
-
+                return Status.OK_STATUS;
+            }
+        } );
     }
 
     public IStatus addPortalDependency( String propertyName, String value )
