@@ -17,7 +17,6 @@ package com.liferay.ide.project.core.model.internal;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
-import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
@@ -31,6 +30,7 @@ import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
@@ -59,7 +59,7 @@ public class ProjectNameValidationService extends ValidationService
             {
                 if( ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_FINAL_PROJECT_NAME )
                                 && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PROJECT_NAMES )
-                                && ! event.property().definition().equals( ProjectName.PROP_PROJECT_NAME ) )
+                                && ! event.property().definition().equals( NewLiferayPluginProjectOp.PROP_PROJECT_NAME ) )
                 {
                     refresh();
                 }
@@ -143,6 +143,19 @@ public class ProjectNameValidationService extends ValidationService
                         retval = StatusBridge.create( projectStatus );
                     }
                 }
+            }
+        }
+
+        Path sdkPath = op.getSdkLocation().content();
+
+        if( sdkPath != null && !sdkPath.isEmpty() )
+        {
+            SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkPath ) );
+
+            if( sdk != null && sdk.validate().isOK() )
+            {
+                ValidationService sdkVs = op.getSdkLocation().service( ValidationService.class );
+                retval = sdkVs.validation();
             }
         }
 
