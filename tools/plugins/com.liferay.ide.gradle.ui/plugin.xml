@@ -292,7 +292,7 @@
          </menu>
       </menuContribution>
    </extension>
-     <extension
+   <extension
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="com.liferay.ide.gradle.ui.handler.CompareFileHandler"
@@ -326,4 +326,13 @@
         </iterate>
     </definition>
   </extension>
+  <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.buildship.ui.commands.refreshproject"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+F5">
+      </key>
+   </extension>
 </plugin>
