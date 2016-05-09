@@ -391,6 +391,11 @@
                menubarPath="liferayPopupMenuCategory/slot1"
                tooltip="Find Liferay 7 breaking API changes in code.">
          </action>
+         <enablement>
+            <adapt type="org.eclipse.core.resources.IProject">
+               <test property="com.liferay.ide.project.ui.isLiferayProject" />
+            </adapt>
+         </enablement>
       </objectContribution>
    </extension>
 
