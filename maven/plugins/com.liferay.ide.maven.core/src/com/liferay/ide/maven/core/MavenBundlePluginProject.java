@@ -34,7 +34,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
-
 /**
  * @author Gregory Amerson
  */
@@ -172,6 +171,13 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
             return true;
         }
 
+        return false;
+    }
+
+    @Override
+    public boolean isFragmentProject()
+    {
+        // TODO Auto-generated method stub
         return false;
     }
 

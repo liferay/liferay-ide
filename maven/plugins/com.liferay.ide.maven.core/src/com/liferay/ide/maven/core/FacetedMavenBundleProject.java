@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
-
 /**
  * @author Gregory Amerson
  */
@@ -96,6 +95,13 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
     public String getSymbolicName() throws CoreException
     {
         return this.bundleProject.getSymbolicName();
+    }
+
+    @Override
+    public boolean isFragmentProject()
+    {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

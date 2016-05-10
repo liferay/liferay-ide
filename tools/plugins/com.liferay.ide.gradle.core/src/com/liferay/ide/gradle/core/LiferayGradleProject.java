@@ -21,6 +21,7 @@ import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IResourceBundleProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 
 import java.io.File;
@@ -271,6 +272,29 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
 
         return retval;
+    }
+
+    public boolean isFragmentProject()
+    {
+        IFile bndFile = project.getFile( "bnd.bnd" );
+
+        if( bndFile.exists() )
+        {
+            try
+            {
+                String content = FileUtil.readContents( bndFile.getContents() );
+
+                if( content.contains( "Fragment-Host" ) )
+                {
+                    return true;
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        return false;
     }
 
     private boolean isThemeProject( IProject project )

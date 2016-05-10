@@ -18,9 +18,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public interface IBundleProject extends ILiferayProject
 {
@@ -33,4 +33,5 @@ public interface IBundleProject extends ILiferayProject
 
     String getSymbolicName() throws CoreException;
 
+    boolean isFragmentProject();
 }

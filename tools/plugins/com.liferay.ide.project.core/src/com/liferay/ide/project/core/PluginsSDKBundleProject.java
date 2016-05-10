@@ -271,4 +271,10 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
     {
         return this.getProject().getLocation().lastSegment();
     }
+
+    @Override
+    public boolean isFragmentProject()
+    {
+        return false;
+    }
 }

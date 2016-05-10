@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-
 /**
  * @author Gregory Amerson
  */
@@ -118,6 +117,13 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 
     @Override
     public boolean filterResource( IPath moduleRelativePath )
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public boolean isFragmentProject()
     {
         // TODO Auto-generated method stub
         return false;
