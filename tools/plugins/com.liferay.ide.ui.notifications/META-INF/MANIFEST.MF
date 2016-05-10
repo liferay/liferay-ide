@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE UI Notifications
+Bundle-SymbolicName: com.liferay.ide.ui.notifications;singleton:=true
+Bundle-Version: 3.0.1.qualifier
+Bundle-Vendor: Liferay Inc
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
+ org.eclipse.mylyn.commons.notifications.ui,
+ org.eclipse.mylyn.commons.notifications.core,
+ org.eclipse.mylyn.commons.workbench,
+ org.eclipse.mylyn.commons.ui,
+ org.eclipse.ui.forms
