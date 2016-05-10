@@ -39,18 +39,6 @@ public class NewLiferayModuleProjectOpTests
     }
 
     @Test
-    public void testNewLiferayModuleProjectDefaultValueServiceUnderscores() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "my_test_project" );
-
-        op.setProjectTemplateName( "Portlet" );
-
-        assertEquals( "MyTestProjectPortlet", op.getComponentName().content( true ) );
-    }
-
-    @Test
     public void testNewLiferayModuleProjectDefaultValueServiceDots() throws Exception
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
@@ -99,16 +87,26 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectTemplateName( "Service" );
 
-        assertEquals( "MyTestProjectService", op.getComponentName().content( true ) );        
+        assertEquals( "MyTestProjectService", op.getComponentName().content( true ) );
 
         op.setProjectTemplateName( "ServiceWrapper" );
 
         assertEquals( "MyTestProjectServiceWrapper", op.getComponentName().content( true ) );
-        
+
         op.setProjectTemplateName( "ServiceBuilder" );
 
         assertEquals( "MyTestProjectServiceBuilder", op.getComponentName().content( true ) );
-        
-        
+    }
+
+    @Test
+    public void testNewLiferayModuleProjectDefaultValueServiceUnderscores() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "my_test_project" );
+
+        op.setProjectTemplateName( "Portlet" );
+
+        assertEquals( "MyTestProjectPortlet", op.getComponentName().content( true ) );
     }
 }

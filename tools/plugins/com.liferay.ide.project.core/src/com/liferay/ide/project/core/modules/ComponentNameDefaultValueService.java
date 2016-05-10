@@ -52,31 +52,30 @@ public class ComponentNameDefaultValueService extends DefaultValueService
 
         final String projectName = op().getProjectName().content( true );
 
-        if( projectName == null )
+        if( projectName != null )
         {
-            return retVal;
-        }
+            String projectTemplate = op().getProjectTemplateName().content( true );
 
-        String projectTemplate = op().getProjectTemplateName().content( true );
-
-        if( projectTemplate != null )
-        {
-            final char[] tokens = new char[] { '-', '.', '_' };
-
-            String finalProjectName = WordUtils.capitalizeFully( projectName, tokens );
-
-            for( char token : tokens )
+            if( projectTemplate != null )
             {
-                finalProjectName = finalProjectName.replaceAll( "\\" + token, "" );
+                final char[] tokens = new char[] { '-', '.', '_' };
+
+                String finalProjectName = WordUtils.capitalizeFully( projectName, tokens );
+
+                for( char token : tokens )
+                {
+                    finalProjectName = finalProjectName.replaceAll( "\\" + token, "" );
+                }
+
+                final StringBuffer componentNameBuffer = new StringBuffer( finalProjectName );
+
+                componentNameBuffer.append( projectTemplate );
+
+                retVal = componentNameBuffer.toString();
             }
-
-            final StringBuffer componentNameBuffer = new StringBuffer( finalProjectName );
-
-            componentNameBuffer.append( projectTemplate );
-
-            return componentNameBuffer.toString();
         }
-        return null;
+
+        return retVal;
     }
 
     private NewLiferayModuleProjectOp op()
