@@ -653,7 +653,7 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
         project.delete( false, false, null );
         op.setSdkLocation( sdkLocation.toOSString() );
         assertTrue( op.validation().message().contains(
-            "is not valid because a project already exists at that location." ) );
+            "Project(" + op.getProjectName().content( true ) + ") is existed in sdk folder, please set new project name" ) );
 
         op = newProjectOp( "test2-sdk" );
 
