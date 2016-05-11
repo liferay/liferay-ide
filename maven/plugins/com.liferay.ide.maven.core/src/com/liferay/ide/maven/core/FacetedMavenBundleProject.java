@@ -100,7 +100,6 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
     @Override
     public boolean isFragmentProject()
     {
-        // TODO Auto-generated method stub
         return false;
     }
 

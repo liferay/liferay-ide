@@ -177,7 +177,6 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     @Override
     public boolean isFragmentProject()
     {
-        // TODO Auto-generated method stub
         return false;
     }
 

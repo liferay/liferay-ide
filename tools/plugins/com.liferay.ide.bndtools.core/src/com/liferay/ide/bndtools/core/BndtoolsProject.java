@@ -118,14 +118,12 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     @Override
     public boolean filterResource( IPath moduleRelativePath )
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean isFragmentProject()
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
