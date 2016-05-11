@@ -15,6 +15,7 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
@@ -177,6 +178,24 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     @Override
     public boolean isFragmentProject()
     {
+        final IFile bndFile = getProject().getFile( "bnd.bnd" );
+
+        if( bndFile.exists() )
+        {
+            try
+            {
+                String content = FileUtil.readContents( bndFile.getContents() );
+
+                if( content.contains( "Fragment-Host" ) )
+                {
+                    return true;
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
         return false;
     }
 
