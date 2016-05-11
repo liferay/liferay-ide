@@ -98,7 +98,7 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
     }
 
     @Override
-    public boolean isFragmentProject()
+    public boolean isFragmentBundle()
     {
         return false;
     }

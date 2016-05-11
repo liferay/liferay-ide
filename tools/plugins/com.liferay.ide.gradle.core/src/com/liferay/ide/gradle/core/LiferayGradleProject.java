@@ -274,7 +274,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         return retval;
     }
 
-    public boolean isFragmentProject()
+    public boolean isFragmentBundle()
     {
         final IFile bndFile = getProject().getFile( "bnd.bnd" );
 

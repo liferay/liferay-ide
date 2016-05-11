@@ -33,5 +33,5 @@ public interface IBundleProject extends ILiferayProject
 
     String getSymbolicName() throws CoreException;
 
-    boolean isFragmentProject();
+    boolean isFragmentBundle();
 }

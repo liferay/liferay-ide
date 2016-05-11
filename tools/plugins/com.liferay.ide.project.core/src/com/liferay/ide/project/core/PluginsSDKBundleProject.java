@@ -273,7 +273,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
     }
 
     @Override
-    public boolean isFragmentProject()
+    public boolean isFragmentBundle()
     {
         return false;
     }

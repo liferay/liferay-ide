@@ -122,7 +122,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     }
 
     @Override
-    public boolean isFragmentProject()
+    public boolean isFragmentBundle()
     {
         return false;
     }
