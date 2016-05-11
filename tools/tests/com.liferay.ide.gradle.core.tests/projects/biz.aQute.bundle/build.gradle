@@ -7,9 +7,6 @@ buildscript {
             }
         }
 		maven {
-			url "https://repository.liferay.com/nexus/content/groups/liferay-ce/"
-		}
-		maven {
 			url "https://repository.liferay.com/nexus/content/groups/public/"
 		}
     }
@@ -26,7 +23,7 @@ version = '1.0'
 repositories {
 	mavenCentral()
 	maven {
-		url "https://repository.liferay.com/nexus/content/groups/liferay-ce/"
+		url "https://repository.liferay.com/nexus/content/groups/public/"
 	}
 }
 
