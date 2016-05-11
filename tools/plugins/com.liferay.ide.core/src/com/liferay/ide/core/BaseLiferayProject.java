@@ -31,7 +31,7 @@ import org.eclipse.jdt.core.JavaCore;
 public abstract class BaseLiferayProject implements ILiferayProject
 {
 
-    protected IProject project;
+    private IProject project;
 
     public BaseLiferayProject( IProject project )
     {

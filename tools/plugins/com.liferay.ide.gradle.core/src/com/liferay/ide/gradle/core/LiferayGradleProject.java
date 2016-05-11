@@ -276,7 +276,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
     public boolean isFragmentProject()
     {
-        IFile bndFile = project.getFile( "bnd.bnd" );
+        final IFile bndFile = getProject().getFile( "bnd.bnd" );
 
         if( bndFile.exists() )
         {
