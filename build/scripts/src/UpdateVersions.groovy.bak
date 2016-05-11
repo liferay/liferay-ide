@@ -1,5 +1,5 @@
-def oldVersion = "2.1.1"
-def newVersion = "2.2.0"
+def oldVersion = "2.2.2"
+def newVersion = "3.0.1"
 
 def oldQualVersion = "${oldVersion}.qualifier"
 def newQualVersion = "${newVersion}.qualifier"
@@ -7,7 +7,7 @@ def newQualVersion = "${newVersion}.qualifier"
 def oldPomVersion = "${oldVersion}-SNAPSHOT"
 def newPomVersion = "${newVersion}-SNAPSHOT"
 
-new File("../..").eachDirRecurse
+new File("./").eachDirRecurse
 {
 	if( it.absolutePath.contains( "target" ) )
 	{
