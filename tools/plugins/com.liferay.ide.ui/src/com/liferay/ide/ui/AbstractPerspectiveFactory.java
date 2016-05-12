@@ -45,6 +45,9 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ID_NEW_COMPONENT_WIZARD = "com.liferay.ide.project.ui.modules.NewLiferayComponentWizard"; //$NON-NLS-1$
 
+    public static final String ID_NEW_MODULE_FRAGMENT_FILES_WIZARD =
+        "com.liferay.ide.project.ui.newModuleFragmentFilesWizard"; //$NON-NLS-1$
+
     public static final String ID_NEW_PORTLET_WIZARD = "com.liferay.ide.eclipse.portlet.ui.wizard.portlet"; //$NON-NLS-1$
 
     public static final String ID_NEW_SERVICE_BUILDER_WIZARD =
@@ -91,6 +94,7 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory
         layout.addNewWizardShortcut( ID_NEW_VAADIN_PORTLET_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_HOOK_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_SERVICE_BUILDER_WIZARD );
+        layout.addNewWizardShortcut( ID_NEW_MODULE_FRAGMENT_FILES_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_LAYOUT_TEMPLATE_WIZARD );
         layout.addNewWizardShortcut( "org.eclipse.jdt.ui.wizards.NewPackageCreationWizard" ); //$NON-NLS-1$
         layout.addNewWizardShortcut( "org.eclipse.jdt.ui.wizards.NewClassCreationWizard" ); //$NON-NLS-1$

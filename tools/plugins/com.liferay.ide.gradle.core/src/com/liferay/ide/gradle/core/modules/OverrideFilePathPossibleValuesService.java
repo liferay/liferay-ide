@@ -15,6 +15,7 @@
 
 package com.liferay.ide.gradle.core.modules;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -23,10 +24,13 @@ import com.liferay.ide.server.util.ServerUtil;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.PossibleValuesService;
@@ -69,6 +73,11 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
             if( portalBundle != null )
             {
+                if( !hostOSGiBundle.endsWith( "jar" ) )
+                {
+                    hostOSGiBundle = hostOSGiBundle + ".jar";
+                }
+
                 File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostOSGiBundle ).toFile();
 
                 if (!module.exists()) {
@@ -121,6 +130,32 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
                     {
                         possibleValuesSet.remove( value );
                     }
+                }
+            }
+
+            final String projectName = op().getProjectName().content();
+
+            if( projectName != null )
+            {
+                IProject project = CoreUtil.getProject( projectName );
+                IFolder javaFolder = project.getFolder( "src/main/java" );
+                IFolder resourceFolder = project.getFolder( "src/main/resources" );
+                Iterator<String> it = possibleValuesSet.iterator();
+
+                while( it.hasNext() )
+                {
+                    String v = it.next();
+
+                    if( resourceFolder.getFile( v ).exists() )
+                    {
+                        it.remove();
+                    }
+
+                    if( javaFolder.getFile( "portlet-ext.properties" ).exists() && v.equals( "portlet.properties" ) )
+                    {
+                        it.remove();
+                    }
+
                 }
             }
 

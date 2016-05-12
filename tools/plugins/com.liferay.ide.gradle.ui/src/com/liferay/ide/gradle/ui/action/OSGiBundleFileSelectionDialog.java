@@ -15,16 +15,20 @@
 
 package com.liferay.ide.gradle.ui.action;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.modules.OverrideFilePath;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -43,6 +47,8 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
 {
 
     private static ElementList<OverrideFilePath> files;
+
+    protected static String projectName = "";
 
     protected static class FileContentProvider implements ITreeContentProvider
     {
@@ -98,6 +104,30 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
                 possibleValues.remove( currentFile );
             }
 
+            if( projectName != null )
+            {
+                IProject project = CoreUtil.getProject( projectName );
+                IFolder javaFolder = project.getFolder( "src/main/java" );
+                IFolder resourceFolder = project.getFolder( "src/main/resources" );
+                Iterator<String> it = possibleValues.iterator();
+
+                while( it.hasNext() )
+                {
+                    String v = it.next();
+
+                    if( resourceFolder.getFile( v ).exists() )
+                    {
+                        it.remove();
+                    }
+
+                    if( javaFolder.getFile( "portlet-ext.properties" ).exists() && v.equals( "portlet.properties" ) )
+                    {
+                        it.remove();
+                    }
+
+                }
+            }
+
             return possibleValues.toArray();
         }
 
@@ -132,11 +162,12 @@ public class OSGiBundleFileSelectionDialog extends ElementTreeSelectionDialog
         }
     }
 
-    public OSGiBundleFileSelectionDialog( Shell parent, ElementList<OverrideFilePath> currentFiles )
+    public OSGiBundleFileSelectionDialog( Shell parent, ElementList<OverrideFilePath> currentFiles, String projectName )
     {
         super( parent, new FileLabelProvider(), new FileContentProvider() );
 
         files = currentFiles;
+        this.projectName = projectName;
 
         setComparator( new ViewerComparator() );
     }

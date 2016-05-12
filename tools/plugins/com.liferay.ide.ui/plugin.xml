@@ -70,6 +70,9 @@
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder">
          </newWizardShortcut>
+         <newWizardShortcut
+               id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard">
+         </newWizardShortcut>
       </perspectiveExtension>
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
@@ -93,6 +96,9 @@
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard">
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>
