@@ -36,7 +36,7 @@
             class="com.liferay.ide.ui.LiferayPerspectiveFactory"
             icon="icons/liferay_logo_16.png"
             id="com.liferay.ide.eclipse.ui.perspective.liferay"
-            name="%liferay.perspective.name">
+            name="Liferay Plugins">
       </perspective>
       <perspective
             class="com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory"
