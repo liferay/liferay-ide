@@ -150,6 +150,13 @@
          unpack="false"/>
 
    <plugin
+         id="org.bndtools.templating.gitrepo"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
          id="javax.xml"
          download-size="0"
          install-size="0"
@@ -305,6 +312,20 @@
 
    <plugin
          id="org.objectweb.asm"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="slf4j.api"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="slf4j.simple"
          download-size="0"
          install-size="0"
          version="0.0.0"
