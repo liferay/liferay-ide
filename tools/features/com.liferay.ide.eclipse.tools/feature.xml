@@ -35,7 +35,7 @@
       <import feature="bndtools.main.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.apache.ivy.feature" version="2.3.0" match="greaterOrEqual"/>
       <import feature="org.apache.ivyde.feature" version="2.2.0" match="greaterOrEqual"/>
-      <import feature="org.eclipse.buildship" version="1.0.11" match="greaterOrEqual"/>
+      <import feature="org.eclipse.buildship" version="1.0.15" match="greaterOrEqual"/>
       <import feature="org.eclipse.jsf.feature" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.common.fproj.enablement.jdt" version="3.2.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.jst.enterprise_ui.feature" version="3.2.0" match="greaterOrEqual"/>
