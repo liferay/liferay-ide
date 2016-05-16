@@ -625,9 +625,30 @@ public class SDK
         return getBuildProperties( false );
     }
 
-    public Map<String, Object> getBuildProperties( final boolean reload ) throws CoreException
+    private Project getSDKAntProject()
     {
         final Project project = new Project();
+
+        project.setBaseDir( new File( getLocation().toPortableString() ) );
+        project.setSystemProperties();
+
+        final Dirname dirname = new Dirname();
+        dirname.setProject( project );
+        dirname.setFile( new File( getLocation().append( "build-common.xml" ).toPortableString() ) );
+        dirname.setProperty( "sdk.dir" );
+        dirname.execute();
+
+        final Property envTask = new Property();
+        envTask.setProject( project );
+        envTask.setEnvironment( "env" );
+        envTask.execute();
+
+        return project;
+    }
+
+    public Map<String, Object> getBuildProperties( final boolean reload ) throws CoreException
+    {
+        Project project = getSDKAntProject();
 
         Map<String, Object> sdkProperties = buildPropertiesCache.get( getLocation().toPortableString() );
 
@@ -635,20 +656,6 @@ public class SDK
         {
             if ( sdkProperties == null || reload == true )
             {
-                project.setBaseDir( new File( getLocation().toPortableString() ) );
-                project.setSystemProperties();
-
-                final Dirname dirname = new Dirname();
-                dirname.setProject( project );
-                dirname.setFile( new File( getLocation().append( "build-common.xml" ).toPortableString() ) );
-                dirname.setProperty( "sdk.dir" );
-                dirname.execute();
-
-                final Property envTask = new Property();
-                envTask.setProject( project );
-                envTask.setEnvironment( "env" );
-                envTask.execute();
-
                 loadPropertiesFile( project, "build." + project.getProperty( "user.name" ) + ".properties" );
                 loadPropertiesFile( project, "build." + project.getProperty( "env.COMPUTERNAME" ) + ".properties" );
                 loadPropertiesFile( project, "build." + project.getProperty( "env.HOST" ) + ".properties" );
@@ -1082,6 +1089,8 @@ public class SDK
 
         boolean buildXmlExists = getLocation().append( "build.xml" ).toFile().exists(); //$NON-NLS-1$
 
+        final Project project = getSDKAntProject();
+
         if( !validLocation )
         {
             status.add( SDKCorePlugin.createErrorStatus( Msgs.SDKLocationInvalid ) );
@@ -1147,8 +1156,13 @@ public class SDK
 
                         if( !propertyPath.toFile().exists() )
                         {
-                            status.add( SDKCorePlugin.createErrorStatus( "The " + propertyKey + "(" +
-                                            propertyValue + ") is not valid." ) );
+                            final String customerPropertyFile =
+                                "build." + project.getProperty( "user.name" ) + ".properties";
+
+                            status.add(
+                                SDKCorePlugin.createErrorStatus(
+                                    "Invalid SDK settings. Configure app.server.parent.dir property in " +
+                                        customerPropertyFile + " to point to Liferay home" ) );
                         }
 
                         break;
