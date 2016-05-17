@@ -146,18 +146,7 @@ public class ProjectNameValidationService extends ValidationService
             }
         }
 
-        Path sdkPath = op.getSdkLocation().content();
-
-        if( sdkPath != null && !sdkPath.isEmpty() )
-        {
-            SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkPath ) );
-
-            if( sdk != null && sdk.validate().isOK() )
-            {
-                ValidationService sdkVs = op.getSdkLocation().service( ValidationService.class );
-                retval = sdkVs.validation();
-            }
-        }
+        op.getSdkLocation().refresh();
 
         return retval;
     }
