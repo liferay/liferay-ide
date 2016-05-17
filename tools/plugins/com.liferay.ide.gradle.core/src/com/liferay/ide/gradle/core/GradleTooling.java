@@ -89,8 +89,7 @@ public class GradleTooling
     {
         T retval = null;
 
-        final GradleConnector connector = GradleConnector.newConnector();
-        connector.forProjectDirectory( projectDir );
+        final GradleConnector connector = GradleConnector.newConnector().forProjectDirectory( projectDir );
 
         ProjectConnection connection = null;
 
@@ -114,9 +113,7 @@ public class GradleTooling
 
             FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
 
-            modelBuilder.withArguments( "--init-script", scriptFile.getAbsolutePath() );
-
-            retval = modelBuilder.get();
+            retval = modelBuilder.withArguments( "--init-script", scriptFile.getAbsolutePath() ).get();
         }
         finally
         {

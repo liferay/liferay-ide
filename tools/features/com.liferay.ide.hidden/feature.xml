@@ -35,6 +35,10 @@
          version="0.0.0"/>
 
    <includes
+         id="com.liferay.blade.tools"
+         version="0.0.0"/>
+
+   <includes
          id="org.eclipse.buildship"
          version="0.0.0"/>
 
@@ -152,20 +156,6 @@
 
    <plugin
          id="org.objectweb.asm"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="slf4j.api"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="slf4j.simple"
          download-size="0"
          install-size="0"
          version="0.0.0"

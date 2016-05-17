@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.gradleware.tooling.model;bundle-version="0.11.0",
  com.liferay.ide.project.core,
  com.liferay.blade.api,
- com.liferay.blade.gradle.model,
+ com.liferay.blade.gradle.model;bundle-version="1.1.0",
  com.gradleware.tooling.client;bundle-version="0.10.0",
  com.gradleware.tooling.utils;bundle-version="0.10.0",
  org.apache.commons.lang

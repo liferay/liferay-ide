@@ -165,9 +165,7 @@ public class GradleCore extends Plugin
                                 GradleCore.createErrorStatus( "Unable to get read gradle configuration" ) );
                         }
 
-                        if( customModel.hasPlugin( "aQute.bnd.gradle.BndBuilderPlugin" ) ||
-                            customModel.hasPlugin( "com.liferay.gradle.plugins.LiferayPlugin" ) ||
-                            customModel.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
+                        if( customModel.isLiferayModule() )
                         {
                             LiferayNature.addLiferayNature( project, monitor );
                         }
