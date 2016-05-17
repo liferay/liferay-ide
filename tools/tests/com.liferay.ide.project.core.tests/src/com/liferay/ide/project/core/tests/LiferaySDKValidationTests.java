@@ -72,9 +72,7 @@ public class LiferaySDKValidationTests extends ProjectCoreBase
 
         // set existed project name
         op.setSdkLocation( sdkLocation.toOSString() );
-        assertTrue(
-            op.validation().message().contains( "Project(" + op.getProjectName().content( true ) +
-                ") is existed in sdk folder, please set new project name" ) );
+        assertTrue( op.validation().message().contains( "A project with that name already exists." ) );
 
         op = newProjectOp( "test2-sdk" );
         op.setSdkLocation( "" );
