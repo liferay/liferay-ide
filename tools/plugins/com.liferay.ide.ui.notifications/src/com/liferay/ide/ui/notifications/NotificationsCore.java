@@ -68,14 +68,14 @@ public class NotificationsCore extends AbstractUIPlugin implements IStartup
             @Override
             public String getDescription()
             {
-                return "Your eclipse is running on java" + getCurrentJavaVersion() + "\n" +
-                    "Liferay IDE needs java1.8 to run, please switch to 1.8";
+                return "This Eclipse instance is running on java " + getCurrentJavaVersion() + "\n" +
+                    "Liferay IDE needs at least Java 1.8 to run, please launch Eclipse with 1.8 and try again.";
             }
 
             @Override
             public String getLabel()
             {
-                return "Java8 Required";
+                return "Java 8 Required";
             }
 
             @Override
