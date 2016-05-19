@@ -47,6 +47,7 @@
         <blade-site>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/14/artifact/build/generated/p2/</blade-site>
         <tm-site>http://download.eclipse.org/tm/terminal/updates/4.0</tm-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot-site>
+        <sapphire-site>http://download.eclipse.org/sapphire/9.0.5/repository/</sapphire-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 
@@ -130,6 +131,11 @@
             <id>swtbot</id>
             <layout>p2</layout>
             <url>${swtbot-site}</url>
+        </repository>
+        <repository>
+            <id>sapphire</id>
+            <layout>p2</layout>
+            <url>${sapphire-site}</url>
         </repository>
     </repositories>
 
