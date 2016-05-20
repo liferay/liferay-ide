@@ -55,11 +55,21 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         IStatus retval = Status.OK_STATUS;
 
         IPath location = PathBridge.create( op.getLocation().content() );
+        String wsName = op.getWorkspaceName().toString();
 
         StringBuilder sb = new StringBuilder();
 
         sb.append( "-b " );
-        sb.append( "\"" + location.toFile().getAbsolutePath() + "\" " );
+
+        if( op.getUseDefaultLocation().content() )
+        {
+            sb.append( "\"" + location.toFile().getAbsolutePath() + "\" " );
+        }
+        else
+        {
+            sb.append( "\"" + location.append( wsName ).toFile().getAbsolutePath() + "\" " );
+        }
+
         sb.append( "init" );
 
         try

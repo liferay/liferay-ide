@@ -49,7 +49,10 @@ public class NewLiferayWorkspaceOpMethods
 
             Path workspaceLocation = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
 
-            updateLocation( op, workspaceLocation );
+            if( op.getUseDefaultLocation().content() )
+            {
+                updateLocation( op, workspaceLocation );
+            }
 
             LiferayWorkspaceProjectProvider provider =
                 (LiferayWorkspaceProjectProvider) LiferayCore.getProvider( "liferay-workspace" );

@@ -69,15 +69,15 @@ public class WorkspaceLocationValidationService extends ValidationService
             {
                 if( currentProjectLocation != null )
                 {
-                    final String currentPath = currentProjectLocation.toOSString();
+                    final String currentPath = currentProjectLocation.append( currentWorkspaceName ).toOSString();
 
-                    if( !org.eclipse.core.runtime.Path.EMPTY.isValidPath( currentPath ) )
+                    if( !currentProjectLocation.toFile().exists() )
                     {
                         retval = Status.createErrorStatus( "\"" + currentPath + "\" is not a valid path." ); //$NON-NLS-1$ //$NON-NLS-2$
                     }
                     else
                     {
-                        IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+                         IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
 
                         if( !osPath.toFile().isAbsolute() )
                         {
