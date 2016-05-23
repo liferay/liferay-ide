@@ -21,11 +21,11 @@ import com.liferay.ide.core.util.FileUtil;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Platform;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
@@ -38,51 +38,13 @@ import org.gradle.tooling.ProjectConnection;
 public class GradleTooling
 {
 
-    private static String getBundlePath( String bundleId, File tempDir ) throws CoreException
+    private static void extractJar( File depsDir, String jarName ) throws IOException
     {
-        String installPath = Platform.getInstallLocation().getURL().getPath();
+        InputStream in = GradleTooling.class.getResourceAsStream( "/lib/" + jarName );
 
-        final String bundleLocation = Platform.getBundle( bundleId ).getLocation();
+        File modelJar = new File( depsDir, jarName );
 
-        String bundleLocationString = bundleLocation.replaceAll( "reference:", "" ).replaceAll( "file:", "" );
-
-        File srcBundle = null;
-
-        if( bundleLocationString.contains( "@" ) )
-        {
-            String p2Path = bundleLocationString.substring(
-                bundleLocationString.indexOf( "@" ) + 1, bundleLocationString.length() );
-            srcBundle = new File( p2Path );
-
-            if( !srcBundle.exists() )
-            {
-                srcBundle = new File(Platform.getLocation().removeLastSegments( 1 ).toOSString(), p2Path);
-            }
-        }
-        else if( !bundleLocationString.contains( installPath ) )
-        {
-            srcBundle = new File( installPath, bundleLocationString );
-        }
-        else
-        {
-            srcBundle = new File( bundleLocationString );
-        }
-
-        File desBundle = new File( tempDir, srcBundle.getName() );
-
-        if( !desBundle.exists() )
-        {
-            if( !srcBundle.exists() )
-            {
-                throw new CoreException( GradleCore.createErrorStatus( "Unable to find bundle path" ) );
-            }
-
-            FileUtil.copyFile( srcBundle, desBundle );
-        }
-
-        String result = desBundle.getAbsolutePath().replaceAll( "\\\\", "/" );
-
-        return result;
+        FileUtil.writeFileFromStream( modelJar, in );
     }
 
     public static <T> T getModel( Class<T> modelClass, File cacheDir, File projectDir ) throws Exception
@@ -99,17 +61,24 @@ public class GradleTooling
 
             final ModelBuilder<T> modelBuilder = (ModelBuilder<T>) connection.model( modelClass );
 
+            final File depsDir = new File(cacheDir, "deps");
+
+            depsDir.mkdirs();
+
+            String path = depsDir.getAbsolutePath();
+
+            path = path.replaceAll("\\\\", "/");
+
+            extractJar( depsDir, "com.liferay.blade.gradle.model.jar" );
+            extractJar( depsDir, "com.liferay.blade.gradle.plugin.jar" );
+
             final String initScriptTemplate =
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
 
+            final String initScriptContents = initScriptTemplate.replaceFirst(
+                "%deps%", path);
+
             final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
-            final File tempDir = scriptFile.getParentFile();
-
-            final String modelBundlePath = getBundlePath( "com.liferay.blade.gradle.model", tempDir );
-            final String pluginBundlePath = getBundlePath( "com.liferay.blade.gradle.plugin", tempDir );
-
-            String initScriptContents = initScriptTemplate.replaceFirst( "%model%", modelBundlePath ).replaceFirst(
-                "%plugin%", pluginBundlePath );
 
             FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
 
