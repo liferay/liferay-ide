@@ -26,9 +26,11 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Platform;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ModelBuilder;
 import org.gradle.tooling.ProjectConnection;
+import org.osgi.framework.Bundle;
 
 /**
  * @author Gregory Amerson
@@ -40,11 +42,18 @@ public class GradleTooling
 
     private static void extractJar( File depsDir, String jarName ) throws IOException
     {
-        InputStream in = GradleTooling.class.getResourceAsStream( "/lib/" + jarName );
+        InputStream in = GradleTooling.class.getResourceAsStream( "/lib/" + jarName+".jar" );
 
-        File modelJar = new File( depsDir, jarName );
+        Bundle bundle = Platform.getBundle( GradleCore.PLUGIN_ID );
 
-        FileUtil.writeFileFromStream( modelJar, in );
+        String bundleVersion = bundle.getVersion().toString();
+
+        File modelJar = new File( depsDir, jarName+"_"+bundleVersion+".jar" );
+
+        if( !modelJar.exists() )
+        {
+            FileUtil.writeFileFromStream( modelJar, in );
+        }
     }
 
     public static <T> T getModel( Class<T> modelClass, File cacheDir, File projectDir ) throws Exception
@@ -69,8 +78,8 @@ public class GradleTooling
 
             path = path.replaceAll("\\\\", "/");
 
-            extractJar( depsDir, "com.liferay.blade.gradle.model.jar" );
-            extractJar( depsDir, "com.liferay.blade.gradle.plugin.jar" );
+            extractJar( depsDir, "com.liferay.blade.gradle.model" );
+            extractJar( depsDir, "com.liferay.blade.gradle.plugin" );
 
             final String initScriptTemplate =
                 CoreUtil.readStreamToString( GradleTooling.class.getResourceAsStream( "init.gradle" ) );
