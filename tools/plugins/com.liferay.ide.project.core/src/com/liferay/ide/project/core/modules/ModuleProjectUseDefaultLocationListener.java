@@ -31,9 +31,5 @@ public class ModuleProjectUseDefaultLocationListener extends ModuleProjectNameLi
         {
             super.handleTypedEvent( event );
         }
-        else
-        {
-            op.setLocation( (Path) null );
-        }
     }
 }
