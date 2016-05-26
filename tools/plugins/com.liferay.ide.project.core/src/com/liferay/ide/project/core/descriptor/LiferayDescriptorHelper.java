@@ -188,8 +188,12 @@ public abstract class LiferayDescriptorHelper
             if( lProject != null )
             {
                 final ILiferayPortal portal = lProject.adapt( ILiferayPortal.class );
-                final String versionStr = portal.getVersion();
-                retval = getDescriptorVersionFromPortalVersion( versionStr );
+
+                if( portal != null )
+                {
+                    final String versionStr = portal.getVersion();
+                    retval = getDescriptorVersionFromPortalVersion( versionStr );
+                }
             }
         }
         catch( Exception e )
