@@ -238,10 +238,9 @@ public class SDKUtil
             File buildProperties = new File( sdkDir, ISDKConstants.BUILD_PROPERTIES );
             File portletsBuildXml = new File( sdkDir, ISDKConstants.PORTLET_PLUGIN_ANT_BUILD );
             File hooksBuildXml = new File( sdkDir, ISDKConstants.HOOK_PLUGIN_ANT_BUILD );
-            File extBuildXml = new File( sdkDir, ISDKConstants.EXT_PLUGIN_ANT_BUILD );
 
             retval =
-                buildProperties.exists() && portletsBuildXml.exists() && hooksBuildXml.exists() && extBuildXml.exists();
+                buildProperties.exists() && portletsBuildXml.exists() && hooksBuildXml.exists();
         }
         catch( Exception e )
         {
