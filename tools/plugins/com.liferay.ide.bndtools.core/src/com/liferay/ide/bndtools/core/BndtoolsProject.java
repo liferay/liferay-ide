@@ -19,6 +19,7 @@ import aQute.bnd.build.Project;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 
 import java.io.File;
 import java.util.Collection;
@@ -35,6 +36,8 @@ import org.eclipse.core.runtime.Path;
  */
 public class BndtoolsProject extends BaseLiferayProject implements IBundleProject
 {
+    private static final String[] ignorePaths = new String[] { "generated" };
+
     private final Project bndProject;
 
     public BndtoolsProject( IProject project, Project bndProject  )
@@ -52,28 +55,25 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     @Override
     public IFile getDescriptorFile( String name )
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public IPath getLibraryPath( String filename )
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public String getProperty( String key, String defaultValue )
     {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public IPath getOutputBundle( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
-        IFile retval = null;
+        IPath retval = null;
 
         try
         {
@@ -81,10 +81,12 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
 
             if( !CoreUtil.isNullOrEmpty( buildFiles ) )
             {
-                IPath projectLoc = this.getProject().getRawLocation();
-                IPath buildFile = new Path( buildFiles[0].getCanonicalPath() );
+                final File buildFile = buildFiles[0];
 
-                retval = this.getProject().getFile( buildFile.makeRelativeTo( projectLoc ) );
+                if( buildFile.exists() )
+                {
+                    retval = new Path( buildFile.getCanonicalPath() );
+                }
             }
         }
         catch( Exception e )
@@ -92,7 +94,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
             BndtoolsCore.logError( "Unable to get output jar for " + this.getProject().getName(), e );
         }
 
-        return retval.getRawLocation();
+        return retval;
     }
 
     @Override
@@ -116,14 +118,37 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     }
 
     @Override
-    public boolean filterResource( IPath moduleRelativePath )
+    public boolean filterResource( IPath resourcePath )
     {
+        if( filterResource( resourcePath, ignorePaths ) )
+        {
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean isFragmentBundle()
     {
+        final IFile bndFile = getProject().getFile( "bnd.bnd" );
+
+        if( bndFile.exists() )
+        {
+            try
+            {
+                String content = FileUtil.readContents( bndFile.getContents() );
+
+                if( content.contains( "Fragment-Host" ) )
+                {
+                    return true;
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
         return false;
     }
 
