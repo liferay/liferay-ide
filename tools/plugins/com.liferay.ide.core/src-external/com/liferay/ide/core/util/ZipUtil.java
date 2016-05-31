@@ -135,6 +135,11 @@ public final class ZipUtil {
 
             while (entries.hasMoreElements())
             {
+                if( monitor.isCanceled() )
+                {
+                    break;
+                }
+
                 final ZipEntry entry = entries.nextElement();
 
                 if( !foundStartEntry )
