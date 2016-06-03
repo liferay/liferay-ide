@@ -58,7 +58,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
     private static final String[] ignorePaths = new String[] { ".gradle", "build" };
 
-    public static IPath getOutputBundle( IProject gradleProject ) throws CoreException
+    public static IPath getOutputBundlePath( IProject gradleProject )
     {
         IPath retval = null;
 
@@ -74,7 +74,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
             for( File outputFile : outputFiles )
             {
-                if( outputFile.exists() && outputFile.getName().endsWith( ".war" ) )
+                if( outputFile.getName().endsWith( ".war" ) )
                 {
                     bundleFile = outputFile;
                     break;
@@ -85,7 +85,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
             {
                 for( File outputFile : outputFiles )
                 {
-                    if( outputFile.exists() && outputFile.getName().endsWith( ".jar" ) )
+                    if( outputFile.getName().endsWith( ".jar" ) )
                     {
                         bundleFile = outputFile;
                         break;
@@ -101,13 +101,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
         {
             retval = gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
-        }
-
-        if( retval == null || !retval.toFile().exists() )
-        {
-            throw new CoreException( GradleCore
-                .createErrorStatus( "Output bundle for project " + gradleProject.getName() +
-                    " does not exist: " + ( retval != null ? retval .toOSString() : "" ) ) );
         }
 
         return retval;
@@ -233,15 +226,15 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     @Override
     public IPath getOutputBundle( boolean build, IProgressMonitor monitor ) throws CoreException
     {
-        IPath outputBundle = getOutputBundle( getProject() );
+        IPath outputBundlePath = getOutputBundlePath( getProject() );
 
-        if( !build && outputBundle != null && outputBundle.toFile().exists() )
+        if( !build && outputBundlePath != null && outputBundlePath.toFile().exists() )
         {
-            return outputBundle;
+            return outputBundlePath;
         }
         else
         {
-            final String task = getTaskForCreatingOutputBundle( getProject(), outputBundle );
+            final String task = getTaskForCreatingOutputBundle( getProject(), outputBundlePath );
             ProjectConnection connection = null;
 
             try
@@ -268,12 +261,12 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
                 connection.close();
             }
 
-            outputBundle = getOutputBundle( getProject() );
+            outputBundlePath = getOutputBundlePath( getProject() );
         }
 
-        if( outputBundle.toFile().exists() )
+        if( outputBundlePath.toFile().exists() )
         {
-            return outputBundle;
+            return outputBundlePath;
         }
 
         return null;
@@ -310,7 +303,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     {
         String retval = null;
 
-        final IPath outputBundle = getOutputBundle( getProject() );
+        final IPath outputBundle = getOutputBundlePath( getProject() );
 
         if( outputBundle == null || outputBundle.lastSegment().endsWith( ".war" ) )
         {
