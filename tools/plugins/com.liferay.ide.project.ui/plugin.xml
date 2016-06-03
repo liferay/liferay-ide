@@ -252,6 +252,30 @@
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            id="com.liferay.ide.project.ui.addLiferayNature"
+            objectClass="org.eclipse.core.resources.IProject">
+         <action
+               class="com.liferay.ide.project.ui.action.AddLiferayNatureAction"
+               icon="icons/e16/liferay_logo_16.png"
+               id="com.liferay.ide.project.ui.action.AddLiferayNatureAction"
+               label="Add Liferay Project Nature"
+               menubarPath="org.eclipse.ui.projectConfigure/additions">
+         </action>
+         <visibility>
+           <and>
+             <objectState name="open" value="true"/>
+             <or>
+                <objectState name="nature" value="org.eclipse.m2e.core.maven2Nature"/>
+                <objectState name="nature" value="org.eclipse.buildship.core.gradleprojectnature"/>
+             </or>
+             <not>
+                <objectState name="nature" value="com.liferay.ide.core.liferayNature"/>
+             </not>
+           </and>
+         </visibility>
+      </objectContribution>
       <objectContribution objectClass="org.eclipse.core.resources.IResource" adaptable="true" id="com.liferay.ide.ui.popupmenu">
          <menu
                icon="icons/e16/liferay.png"
