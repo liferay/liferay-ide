@@ -43,7 +43,7 @@ public class BundleFactoryDelegate extends ProjectModuleFactoryDelegate
     @Override
     protected IPath[] getListenerPaths()
     {
-        return new IPath[] { new Path( "pom.xml" ), new Path( "bnd.bnd" ), new Path( "build.gradle" ) };
+        return new IPath[] { new Path( ".project" ), new Path( "pom.xml" ), new Path( "bnd.bnd" ), new Path( "build.gradle" ) };
     }
 
     @Override

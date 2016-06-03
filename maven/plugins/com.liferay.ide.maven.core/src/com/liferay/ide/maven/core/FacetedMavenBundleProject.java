@@ -63,8 +63,8 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
         {
             final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
 
-            // TODO update status
             final List<String> goals = Arrays.asList( "package" );
+
             mavenProjectBuilder.execGoals( goals, monitor );
         }
 
@@ -74,7 +74,6 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
         final String targetName = mavenProject.getBuild().getFinalName() + ".war";
 
-        // TODO find a better way to get the target folder
         final IFolder targetFolder = getProject().getFolder( "target" );
 
         if( targetFolder.exists() )
@@ -86,6 +85,13 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
             {
                 outputJar = targetFile;
             }
+        }
+
+        if( outputJar == null || !outputJar.toFile().exists() )
+        {
+            throw new CoreException(
+                LiferayMavenCore.createErrorStatus(
+                    "Unable to get output bundle for project " + getProject().getName() ) );
         }
 
         return outputJar;

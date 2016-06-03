@@ -58,8 +58,10 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
     private static final String[] ignorePaths = new String[] { ".gradle", "build" };
 
-    public static IPath getOutputBundle( IProject gradleProject )
+    public static IPath getOutputBundle( IProject gradleProject ) throws CoreException
     {
+        IPath retval = null;
+
         final CustomModel model = GradleCore.getToolingModel(
             GradleCore.getDefault(), CustomModel.class, gradleProject );
 
@@ -67,14 +69,48 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
         if( outputFiles.size() > 0 )
         {
-            return new Path( outputFiles.iterator().next().getAbsolutePath() );
+            // first check to see if there are any outputfiles that are wars, if so use that one.
+            File bundleFile = null;
+
+            for( File outputFile : outputFiles )
+            {
+                if( outputFile.exists() && outputFile.getName().endsWith( ".war" ) )
+                {
+                    bundleFile = outputFile;
+                    break;
+                }
+            }
+
+            if( bundleFile == null )
+            {
+                for( File outputFile : outputFiles )
+                {
+                    if( outputFile.exists() && outputFile.getName().endsWith( ".jar" ) )
+                    {
+                        bundleFile = outputFile;
+                        break;
+                    }
+                }
+            }
+
+            if( bundleFile != null )
+            {
+                retval = new Path( bundleFile.getAbsolutePath() );
+            }
         }
         else if( model.hasPlugin( "com.liferay.gradle.plugins.gulp.GulpPlugin" ) )
         {
-            return gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
+            retval = gradleProject.getLocation().append( "dist/" + gradleProject.getName() + ".war" );
         }
 
-        return null;
+        if( retval == null || !retval.toFile().exists() )
+        {
+            throw new CoreException( GradleCore
+                .createErrorStatus( "Output bundle for project " + gradleProject.getName() +
+                    " does not exist: " + ( retval != null ? retval .toOSString() : "" ) ) );
+        }
+
+        return retval;
     }
 
     public LiferayGradleProject( IProject project )
@@ -205,7 +241,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
         else
         {
-            final String task = isThemeProject( getProject() ) ? "build" : "jar";
+            final String task = getTaskForCreatingOutputBundle( getProject(), outputBundle );
             ProjectConnection connection = null;
 
             try
@@ -241,6 +277,26 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
 
         return null;
+    }
+
+    private String getTaskForCreatingOutputBundle( IProject project, IPath outputBundle )
+    {
+        String retval = null;
+
+        if( outputBundle.lastSegment().endsWith( ".war" ) )
+        {
+            retval = "war";
+        }
+        else if( outputBundle.lastSegment().endsWith( ".jar" ) )
+        {
+            retval = "jar";
+        }
+        else
+        {
+            retval = "build";
+        }
+
+        return retval;
     }
 
     @Override
@@ -295,13 +351,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
 
         return false;
-    }
-
-    private boolean isThemeProject( IProject project )
-    {
-        return project.getFile( "gulpfile.js" ).exists() &&
-            project.getFile( "package.json" ).exists() &&
-            project.getFile( "src/WEB-INF/liferay-plugin-package.properties" ).exists();
     }
 
 }
