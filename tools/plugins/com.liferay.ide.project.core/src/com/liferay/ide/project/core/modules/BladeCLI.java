@@ -23,8 +23,8 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +42,8 @@ import org.apache.tools.ant.taskdefs.Java;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.Bundle;
 
 /**
@@ -55,9 +57,10 @@ public class BladeCLI
     static final String localJarKey = "localjar";
     static String[] projectTemplateNames;
     static final File repoCache = new File( _settingsDir, "repoCache" );
-    static final String repoUrl = "http://releases.liferay.com/tools/blade-cli/1.0.0.201604152315/index.xml.gz";
-    static final File repoUrlCacheDir = new File(repoCache,"http%3A%2F%2Freleases.liferay.com%2Ftools%2Fblade-cli%2F1.0.0.201604152315%2Fplugins");
+    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/1.0.0.201604152315/";
     static final String timeStampKey = "up2date.check";
+    static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
+    static final String BLADE_CLI_REPO_UP2DATE_CHECK = "BLADE_CLI_REPO_UP2DATE_CHECK";
 
     static IPath cachedBladeCLIPath;
 
@@ -153,17 +156,13 @@ public class BladeCLI
             }
         }
 
-        final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmm" );
+        final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmmss" );
 
         if( !bladeCacheSettings.exists() )
         {
             Properties props = new Properties();
-            String localJar = getLatestRemoteBladeCLIJar();
 
-            props.setProperty( timeStampKey, sdf.format( new Date() ) );
-            props.setProperty( localJarKey, localJar );
-
-            PropertiesUtil.saveProperties( props, bladeCacheSettings );
+            updateLocalJar( props, sdf, bladeCacheSettings );
         }
         else
         {
@@ -192,28 +191,61 @@ public class BladeCLI
 
             Date currentTime = new Date();
 
+            String validTime = getValidTime();
+            String scope = validTime.substring( validTime.length()-1, validTime.length() );
+            String countStr = validTime.substring( 0 ,validTime.length()-1 );
+            int count = Integer.parseInt( countStr );
+
             long distance = currentTime.getTime() - lastTime.getTime();
 
-            long hours = distance / 1000 / 3600;
+            boolean shouldUpdate = false;
 
-            if( hours >= 24 )
+            if( scope.equals( "h" ) )
             {
-                String localJar = getLatestRemoteBladeCLIJar();
+                long hours = distance / 1000 / 3600;
+                if( hours > count )
+                {
+                    shouldUpdate = true;
+                }
+            }
+            else if( scope.equals( "m" ) )
+            {
+                long minutes = distance / 1000 / 60;
+                if( minutes > count )
+                {
+                    shouldUpdate = true;
+                }
+            }
+            else if( scope.equals( "s" ) )
+            {
+                long seconds = distance / 1000;
+                if( seconds > count )
+                {
+                    shouldUpdate = true;
+                }
+            }
 
-                props.setProperty( timeStampKey, sdf.format( currentTime ) );
-                props.setProperty( localJarKey, localJar );
-
-                PropertiesUtil.saveProperties( props, bladeCacheSettings );
+            if( shouldUpdate )
+            {
+                updateLocalJar( props, sdf, bladeCacheSettings );
             }
             else
             {
                 try
                 {
-                    File locaJarFile = new File( repoUrlCacheDir, props.getProperty( localJarKey ) );
+                    File locaJarFile = new File( getRepoCacheDir(), props.getProperty( localJarKey ) );
+
+                    if ( !locaJarFile.exists() )
+                    {
+                        //user change the repoURL but timeout is valid
+                        updateLocalJar( props, sdf, bladeCacheSettings );
+
+                        locaJarFile = new File( getRepoCacheDir(), props.getProperty( localJarKey ) );
+                    }
 
                     cachedBladeCLIPath = new Path( locaJarFile.getCanonicalPath() );
                 }
-                catch( IOException e )
+                catch( Exception e )
                 {
                     throw new BladeCLIException( "Could not get blade cli jar from local cache dir." );
                 }
@@ -232,7 +264,7 @@ public class BladeCLI
         FixedIndexedRepo repo = new FixedIndexedRepo();
         Map<String, String> props = new HashMap<String, String>();
         props.put( "name", "index1" );
-        props.put( "locations", repoUrl );
+        props.put( "locations", getRepoURL()+"index.xml.gz" );
         props.put( FixedIndexedRepo.PROP_CACHE, repoCache.getAbsolutePath() );
 
         repo.setProperties( props );
@@ -270,6 +302,36 @@ public class BladeCLI
         return projectTemplateNames;
     }
 
+    public static File getRepoCacheDir() throws Exception
+    {
+        String repoURL = getRepoURL();
+
+        String retVal = URLEncoder.encode( repoURL, "UTF-8" );
+
+        return new File( repoCache, retVal + "plugins" );
+    }
+
+    public static String getRepoURL()
+    {
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        String repoURL = prefs.get( BLADE_CLI_REPO_URL, defaultRepoUrl );
+
+        if( !repoURL.endsWith( "/" ) )
+        {
+            repoURL = repoURL + "/";
+        }
+
+        return repoURL;
+    }
+
+    public static String getValidTime()
+    {
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        return prefs.get( BLADE_CLI_REPO_UP2DATE_CHECK, "24h" );
+    }
+
     public static void main(String[] args) throws Exception
     {
         String[] output = execute( "help" );
@@ -278,6 +340,17 @@ public class BladeCLI
         {
             System.out.println( s );
         }
+    }
+
+    private static void updateLocalJar( Properties props, SimpleDateFormat sdf, File bladeCacheSettings )
+        throws BladeCLIException
+    {
+        String localJar = getLatestRemoteBladeCLIJar();
+
+        props.setProperty( timeStampKey, sdf.format( new Date() ) );
+        props.setProperty( localJarKey, localJar );
+
+        PropertiesUtil.saveProperties( props, bladeCacheSettings );
     }
 
 }
