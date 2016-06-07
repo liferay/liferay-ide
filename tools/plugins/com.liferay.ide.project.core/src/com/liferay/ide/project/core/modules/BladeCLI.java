@@ -289,7 +289,7 @@ public class BladeCLI
         }
     }
 
-    public static String[] getProjectTemplates() throws BladeCLIException
+    public static synchronized String[] getProjectTemplates() throws BladeCLIException
     {
         if( projectTemplateNames == null )
         {

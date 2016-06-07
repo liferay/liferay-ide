@@ -15,17 +15,24 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.LiferayCore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
 
 /**
  * @author Simon Jiang
  * @author Gregory Amerson
  */
-public class ModuleProjectTemplateNameService extends PossibleValuesService
+public class ProjectTemplateNamePossibleValuesService extends PossibleValuesService
 {
     private List<String> possibleValues;
 
@@ -34,25 +41,43 @@ public class ModuleProjectTemplateNameService extends PossibleValuesService
     {
         possibleValues = new ArrayList<String>();
 
-        try
-        {
-            for( String projectTemplate : BladeCLI.getProjectTemplates() )
+        new Job("Getting project templates") {
+
+            @Override
+            protected IStatus run( IProgressMonitor monitor )
             {
-                if ( !projectTemplate.contains( "fragment" ))
+                try
                 {
-                    possibleValues.add( projectTemplate );
+                    for( String projectTemplate : BladeCLI.getProjectTemplates() )
+                    {
+                        if ( !projectTemplate.contains( "fragment" ))
+                        {
+                            possibleValues.add( projectTemplate );
+                        }
+                    }
                 }
+                catch( Exception e )
+                {
+                    return LiferayCore.createErrorStatus( e );
+                }
+
+                refresh();
+
+                return Status.OK_STATUS;
             }
-        }
-        catch( Exception e )
-        {
-        }
+        }.schedule();
     }
 
     @Override
     protected void compute( Set<String> values )
     {
         values.addAll( possibleValues );
+    }
+
+    @Override
+    public org.eclipse.sapphire.modeling.Status problem( Value<?> value )
+    {
+        return org.eclipse.sapphire.modeling.Status.createOkStatus();
     }
 
     @Override
