@@ -158,7 +158,7 @@ public class BladeCLI
 
         final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmmss" );
 
-        if( !bladeCacheSettingsFile.exists() )
+        if( bladeCacheSettingsFile.exists() )
         {
             Properties props = PropertiesUtil.loadProperties( bladeCacheSettingsFile );
 
