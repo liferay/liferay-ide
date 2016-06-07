@@ -136,7 +136,7 @@ public class BladeCLI
         String filePrefix = "blade-cache";
         String currentVersionFileName = filePrefix + "-" + bundle.getVersion().toString() + ".properties";
 
-        final File bladeCacheSettings = new File( stateDir, currentVersionFileName );
+        final File bladeCacheSettingsFile = new File( stateDir, currentVersionFileName );
 
         // clean old version blade-cache files
         if( stateDir.exists() )
@@ -158,15 +158,9 @@ public class BladeCLI
 
         final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmmss" );
 
-        if( !bladeCacheSettings.exists() )
+        if( !bladeCacheSettingsFile.exists() )
         {
-            Properties props = new Properties();
-
-            updateLocalJar( props, sdf, bladeCacheSettings );
-        }
-        else
-        {
-            Properties props = PropertiesUtil.loadProperties( bladeCacheSettings );
+            Properties props = PropertiesUtil.loadProperties( bladeCacheSettingsFile );
 
             if( props == null )
             {
@@ -203,6 +197,7 @@ public class BladeCLI
             if( scope.equals( "h" ) )
             {
                 long hours = distance / 1000 / 3600;
+
                 if( hours > count )
                 {
                     shouldUpdate = true;
@@ -211,6 +206,7 @@ public class BladeCLI
             else if( scope.equals( "m" ) )
             {
                 long minutes = distance / 1000 / 60;
+
                 if( minutes > count )
                 {
                     shouldUpdate = true;
@@ -219,6 +215,7 @@ public class BladeCLI
             else if( scope.equals( "s" ) )
             {
                 long seconds = distance / 1000;
+
                 if( seconds > count )
                 {
                     shouldUpdate = true;
@@ -227,7 +224,7 @@ public class BladeCLI
 
             if( shouldUpdate )
             {
-                updateLocalJar( props, sdf, bladeCacheSettings );
+                updateLocalJar( props, sdf, bladeCacheSettingsFile );
             }
             else
             {
@@ -238,7 +235,7 @@ public class BladeCLI
                     if ( !locaJarFile.exists() )
                     {
                         //user change the repoURL but timeout is valid
-                        updateLocalJar( props, sdf, bladeCacheSettings );
+                        updateLocalJar( props, sdf, bladeCacheSettingsFile );
 
                         locaJarFile = new File( getRepoCacheDir(), props.getProperty( localJarKey ) );
                     }
@@ -250,6 +247,12 @@ public class BladeCLI
                     throw new BladeCLIException( "Could not get blade cli jar from local cache dir." );
                 }
             }
+        }
+        else
+        {
+            Properties props = new Properties();
+
+            updateLocalJar( props, sdf, bladeCacheSettingsFile );
         }
 
         return cachedBladeCLIPath;
@@ -302,7 +305,7 @@ public class BladeCLI
         return projectTemplateNames;
     }
 
-    public static File getRepoCacheDir() throws Exception
+    private static File getRepoCacheDir() throws Exception
     {
         String repoURL = getRepoURL();
 
@@ -311,7 +314,7 @@ public class BladeCLI
         return new File( repoCache, retVal + "plugins" );
     }
 
-    public static String getRepoURL()
+    private static String getRepoURL()
     {
         IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
@@ -325,21 +328,11 @@ public class BladeCLI
         return repoURL;
     }
 
-    public static String getValidTime()
+    private static String getValidTime()
     {
         IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
         return prefs.get( BLADE_CLI_REPO_UP2DATE_CHECK, "24h" );
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        String[] output = execute( "help" );
-
-        for( String s : output )
-        {
-            System.out.println( s );
-        }
     }
 
     private static void updateLocalJar( Properties props, SimpleDateFormat sdf, File bladeCacheSettings )
