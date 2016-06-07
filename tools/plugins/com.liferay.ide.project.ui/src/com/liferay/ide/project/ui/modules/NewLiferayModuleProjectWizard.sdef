@@ -63,48 +63,27 @@
         </page>
         <description>Create a new project configured as a Liferay plugin</description>
         <page>
-            <id>LiferayServiceModuleSettingWizardPage</id>
-            <label>Liferay Module Project</label>
-            <description>Configure Liferay Service Component Class</description>
-            <visible-when>
-                ${ ProjectTemplateName == 'servicewrapper' || ProjectTemplateName == 'service' }
-            </visible-when>
-            <content>
-                <property-editor>ComponentName</property-editor>
-                <property-editor>PackageName</property-editor>
-                <property-editor>ServiceName</property-editor>
-                <property-editor>
-                    <span>false</span>
-                    <property>PropertyKeys</property>
-                    <show-label>true</show-label>
-                    <child-property>Name</child-property>
-                    <child-property>Value</child-property>
-                </property-editor>
-            </content>
-            <margin-right>10</margin-right>
-            <margin-left>0</margin-left>
-            <initial-focus>PropertyKeys</initial-focus>
-        </page>
-        <page>
             <id>LiferayPortletModuleSettingWizardPage</id>
             <label>Liferay Module Project</label>
-            <description>Configure Portlet Component Class</description>
-            <visible-when>
-                ${ ProjectTemplateName == 'portlet' || ProjectTemplateName == 'servicebuilder' || 
-                    ProjectTemplateName == 'mvcportlet' }
-            </visible-when>
+            <description>Configure Component Class</description>
             <content>
                 <property-editor>
                     <label>Component Class Name</label>
                     <property>ComponentName</property>
+                    <visible-when>ProjectTemplateName != 'servicebuilder'</visible-when>
                 </property-editor>
                  <property-editor>PackageName</property-editor>
+                <property-editor>
+                    <visible-when>${ ProjectTemplateName == 'servicewrapper' || ProjectTemplateName == 'service' }</visible-when>
+                    <property>ServiceName</property>
+                </property-editor>
                  <property-editor>
                      <span>false</span>
                      <property>PropertyKeys</property>
                      <show-label>true</show-label>
                      <child-property>Name</child-property>
                      <child-property>Value</child-property>
+                    <visible-when>ProjectTemplateName != 'servicebuilder'</visible-when>
                  </property-editor>
             </content>
             <initial-focus>PropertyKeys</initial-focus>
