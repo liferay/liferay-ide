@@ -70,7 +70,7 @@
                 <property-editor>
                     <label>Component Class Name</label>
                     <property>ComponentName</property>
-                    <visible-when>ProjectTemplateName != 'servicebuilder'</visible-when>
+                    <visible-when>${ProjectTemplateName != 'servicebuilder'}</visible-when>
                 </property-editor>
                  <property-editor>PackageName</property-editor>
                 <property-editor>
@@ -83,7 +83,7 @@
                      <show-label>true</show-label>
                      <child-property>Name</child-property>
                      <child-property>Value</child-property>
-                    <visible-when>ProjectTemplateName != 'servicebuilder'</visible-when>
+                    <visible-when>${ProjectTemplateName != 'servicebuilder'}</visible-when>
                  </property-editor>
             </content>
             <initial-focus>PropertyKeys</initial-focus>
