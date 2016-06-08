@@ -68,7 +68,6 @@
             <description>Configure Component Class</description>
             <content>
                 <property-editor>
-                    <label>Component Class Name</label>
                     <property>ComponentName</property>
                     <visible-when>${ProjectTemplateName != 'servicebuilder'}</visible-when>
                 </property-editor>

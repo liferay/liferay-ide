@@ -83,7 +83,7 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
     // *** FinalProjectName ***
 
     // *** ComponentName ***
-    @Label( standard = "Component Name" )
+    @Label( standard = "Component Class Name" )
     @Service( impl = ComponentNameValidationService.class )
     @Service( impl = ComponentNameDefaultValueService.class )
     ValueProperty PROP_COMPONENT_NAME = new ValueProperty( TYPE, "ComponentName" );
