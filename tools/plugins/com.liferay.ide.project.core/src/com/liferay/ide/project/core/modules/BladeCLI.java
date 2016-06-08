@@ -57,7 +57,7 @@ public class BladeCLI
     static final String localJarKey = "localjar";
     static String[] projectTemplateNames;
     static final File repoCache = new File( _settingsDir, "repoCache" );
-    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/1.0.0.201604152315/";
+    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/1.x/";
     static final String timeStampKey = "up2date.check";
     static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
     static final String BLADE_CLI_REPO_UP2DATE_CHECK = "BLADE_CLI_REPO_UP2DATE_CHECK";
