@@ -145,7 +145,7 @@ public class NewLiferayModuleProjectWizard extends SapphireWizard<NewLiferayModu
             {
                 if( aName.equals( "finalPerspective" ) )
                 {
-                    return LiferayPerspectiveFactory.ID;
+                    return LiferayWorkspacePerspectiveFactory.ID;
                 }
 
                 return super.getAttribute( aName );
