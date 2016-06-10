@@ -19,7 +19,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
-import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 
 import org.eclipse.core.resources.IProject;
@@ -122,7 +121,7 @@ public class NewModuleFragmentWizard extends SapphireWizard<NewModuleFragmentOp>
             {
                 if( aName.equals( "finalPerspective" ) )
                 {
-                    return LiferayPerspectiveFactory.ID;
+                    return LiferayWorkspacePerspectiveFactory.ID;
                 }
 
                 return super.getAttribute( aName );
