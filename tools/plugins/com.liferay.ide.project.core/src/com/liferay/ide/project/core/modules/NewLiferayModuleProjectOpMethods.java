@@ -111,58 +111,64 @@ public class NewLiferayModuleProjectOpMethods
 
     public static void addProperties( File dest, List<String> properties ) throws Exception
     {
-
-        if( properties == null || properties.size() < 1 )
+        try
         {
-            return;
+            if( properties == null || properties.size() < 1 )
+            {
+                return;
+            }
+
+            FileInputStream fis = new FileInputStream( dest );
+
+            String content = new String( FileUtil.readContents( fis ) );
+
+            fis.close();
+
+            String fontString = content.substring( 0, content.indexOf( "property" ) );
+
+            String endString = content.substring( content.indexOf( "}," ) + 2 );
+
+            String property = content.substring( content.indexOf( "property" ), content.indexOf( "}," ) );
+
+            property = property.substring( property.indexOf( "{" ) + 1 );
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append( "property = {\n" );
+
+            if( !CoreUtil.isNullOrEmpty( property ) )
+            {
+                property = property.substring( 1 );
+                property = property.substring( 0, property.lastIndexOf( "\t" ) - 1 );
+                property += ",\n";
+                sb.append( property );
+            }
+
+            for( String str : properties )
+            {
+                sb.append( "\t\t\"" + str + "\",\n" );
+            }
+
+            sb.deleteCharAt( sb.toString().length() - 2 );
+
+            sb.append( "\t}," );
+
+            StringBuilder all = new StringBuilder();
+
+            all.append( fontString );
+            all.append( sb.toString() );
+            all.append( endString );
+
+            String newContent = all.toString();
+
+            if( !content.equals( newContent ) )
+            {
+                FileUtil.writeFileFromStream( dest, new ByteArrayInputStream( newContent.getBytes() ) );
+            }
         }
-
-        FileInputStream fis = new FileInputStream( dest );
-
-        String content = new String( FileUtil.readContents( fis ) );
-
-        fis.close();
-
-        String fontString = content.substring( 0, content.indexOf( "property" ) );
-
-        String endString = content.substring( content.indexOf( "}," ) + 2 );
-
-        String property = content.substring( content.indexOf( "property" ), content.indexOf( "}," ) );
-
-        property = property.substring( property.indexOf( "{" ) + 1 );
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append( "property = {\n" );
-
-        if( !CoreUtil.isNullOrEmpty( property ) )
+        catch(Exception e)
         {
-            property = property.substring( 1 );
-            property = property.substring( 0, property.lastIndexOf( "\t" ) - 1 );
-            property += ",\n";
-            sb.append( property );
-        }
-
-        for( String str : properties )
-        {
-            sb.append( "\t\t\"" + str + "\",\n" );
-        }
-
-        sb.deleteCharAt( sb.toString().length() - 2 );
-
-        sb.append( "\t}," );
-
-        StringBuilder all = new StringBuilder();
-
-        all.append( fontString );
-        all.append( sb.toString() );
-        all.append( endString );
-
-        String newContent = all.toString();
-
-        if( !content.equals( newContent ) )
-        {
-            FileUtil.writeFileFromStream( dest, new ByteArrayInputStream( newContent.getBytes() ) );
+            ProjectCore.logError( "error when adding properties to "+dest.getAbsolutePath(), e );
         }
     }
 

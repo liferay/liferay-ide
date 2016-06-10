@@ -19,7 +19,6 @@ import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
-import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 
 import java.util.ArrayList;

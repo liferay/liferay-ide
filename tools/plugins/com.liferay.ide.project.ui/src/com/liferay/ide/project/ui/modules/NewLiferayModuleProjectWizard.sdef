@@ -82,7 +82,7 @@
                      <show-label>true</show-label>
                      <child-property>Name</child-property>
                      <child-property>Value</child-property>
-                    <visible-when>${ProjectTemplateName != 'servicebuilder'}</visible-when>
+                    <visible-when>${ProjectTemplateName != 'activator' &amp;&amp; ProjectTemplateName != 'servicebuilder'}</visible-when>
                  </property-editor>
             </content>
             <initial-focus>PropertyKeys</initial-focus>

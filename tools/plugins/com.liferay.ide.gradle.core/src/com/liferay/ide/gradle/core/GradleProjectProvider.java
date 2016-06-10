@@ -18,7 +18,6 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -33,7 +32,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang.WordUtils;
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.buildship.core.workspace.NewProjectHandler;
@@ -42,6 +40,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -165,11 +164,14 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
             final IPath finalClassPath =
                 getClassFilePath( projectName, className, packageName, projectTemplateName, projecLocation );
 
-            final File finalClassFile = finalClassPath.toFile();
-
-            if( finalClassFile.exists() )
+            if( finalClassPath != null )
             {
-                NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
+                final File finalClassFile = finalClassPath.toFile();
+
+                if( finalClassFile.exists() )
+                {
+                    NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
+                }
             }
 
             /*
@@ -234,34 +236,32 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
         final String projectName, String className, final String packageName, final String projectTemplateName,
         IPath projecLocation )
     {
-        if( CoreUtil.isNullOrEmpty( className ) )
-        {
-            className = WordUtils.capitalize( projectName );
-        }
-
-        if( projectTemplateName.equals( "servicebuilder" ) || projectTemplateName.equals( "portlet" ) ||
-            projectTemplateName.equals( "mvcportlet" ) )
-        {
-            if( !className.contains( "Portlet" ) )
-            {
-                className += "Portlet";
-            }
-        }
-
-        final String finalClassName = className + ".java";
-
-        String[] finalPakcage = packageName.split( "\\." );
-
         IPath packageNamePath = projecLocation.append( "src" ).append( "main" ).append( "java" );
 
-        for( String pack : finalPakcage )
+        File packageRoot = packageNamePath.toFile();
+
+        while( true )
         {
-            packageNamePath = packageNamePath.append( pack );
+            File[] children = packageRoot.listFiles();
+
+            if( children!=null && children.length == 1 )
+            {
+                File child = children[0];
+
+                if( child.isDirectory() )
+                {
+                    packageRoot = child;
+                }
+                else
+                {
+                    return new Path( child.getAbsolutePath() );
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
-
-        final IPath finalClassPath = packageNamePath.append( finalClassName );
-
-        return finalClassPath;
     }
 
     @Override
