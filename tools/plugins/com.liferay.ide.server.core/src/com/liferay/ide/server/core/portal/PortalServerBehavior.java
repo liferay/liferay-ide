@@ -684,6 +684,13 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
         final IPath agentInstalledPath = modulesPath.append( "biz.aQute.remote.agent.jar" );
 
+        File modulesDir = modulesPath.toFile();
+
+        if( !modulesDir.exists() )
+        {
+            modulesDir.mkdirs();
+        }
+
         if( !agentInstalledPath.toFile().exists() )
         {
             try
