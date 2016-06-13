@@ -38,13 +38,13 @@ public class PortalBundleTests extends ServerCoreBase
     @Override
     protected IPath getLiferayRuntimeDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-portal-7.0-ce-b8/tomcat-8.0.30" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga2/tomcat-8.0.32" );
     }
 
     @Override
     protected IPath getLiferayRuntimeZip()
     {
-        return getLiferayBundlesPath().append( "liferay-portal-tomcat-7.0-ce-b8-20160223094645600.zip" );
+        return getLiferayBundlesPath().append( "liferay-ce-portal-tomcat-7.0-ga2-20160610113014153.zip" );
     }
 
     @Override

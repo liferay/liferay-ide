@@ -40,7 +40,7 @@ public class LiferaySDKValidationTests extends ProjectCoreBase
     {
         deleteAllWorkspaceProjects();
 
-        IPath sdkPath = ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0" );
+        IPath sdkPath = ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-7.0" );
 
         if ( sdkPath != null && sdkPath.toFile() != null )
         {
@@ -91,19 +91,19 @@ public class LiferaySDKValidationTests extends ProjectCoreBase
     @Override
     protected IPath getLiferayPluginsSdkDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0" );
+        return ProjectCore.getDefault().getStateLocation().append( "com.liferay.portal.plugins.sdk-7.0" );
     }
 
     @Override
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "liferay-plugins-sdk-7.0-ce-b8-20160223094645600.zip" );
+        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-7.0-ga2-20160610113014153.zip" );
     }
 
     @Override
     protected String getLiferayPluginsSdkZipFolder()
     {
-        return "liferay-plugins-sdk-7.0/";
+        return "com.liferay.portal.plugins.sdk-7.0/";
     }
 
 }
