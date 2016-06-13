@@ -49,7 +49,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jem.workbench,
  org.eclipse.e4.core.commands,
  org.eclipse.e4.core.contexts,
- org.eclipse.ui.navigator.resources
+ org.eclipse.ui.navigator.resources,
+ org.eclipse.sapphire.ui.swt.xml.editor,
+ org.eclipse.sapphire.osgi,
+ org.eclipse.sapphire.modeling.xml,
+ org.eclipse.core.filesystem
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

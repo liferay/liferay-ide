@@ -423,7 +423,6 @@
       </objectContribution>
    </extension>
 
-
    <extension
          point="org.eclipse.wst.common.project.facet.ui.images">
       <image
@@ -1216,6 +1215,11 @@
          name="Migrate Project"
          description="Start a migration task for the selected project"
       />
+      <command
+         id="com.liferay.ide.project.ui.codeUpgrade"
+         name="Liferay Code Upgrade Tool"
+         description="Liferay Code Upgrade Tool"
+      />
       <!--command
             description="Open Liferay 7 Upgrade Assistant"
             id="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
@@ -1263,6 +1267,10 @@
          icon="icons/e16/liferay_logo_16.png"
       />
       <image
+         commandId="com.liferay.ide.project.ui.codeUpgrade"
+         icon="icons/e16/liferay_logo_16.png"
+      />
+      <image
          commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
          icon="icons/e16/liferay_logo_16.png"
       />
@@ -1271,14 +1279,10 @@
       <handler
          commandId="com.liferay.ide.project.ui.migrateProject"
          class="com.liferay.ide.project.ui.migration.MigrateProjectHandler">
-         <enabledWhen>
-            <with variable="selection">
-               <count value="+" />
-               <iterate operator="and">
-                  <adapt type="org.eclipse.core.resources.IProject" />
-               </iterate>
-            </with>
-         </enabledWhen>
+       </handler>
+       <handler
+         commandId="com.liferay.ide.project.ui.codeUpgrade"
+         class="com.liferay.ide.project.ui.upgrade.CodeUpgradeHandler">
        </handler>
        <handler
          commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
@@ -1522,25 +1526,29 @@
 
    <extension
          point="org.eclipse.ui.menus">
-      <!--menuContribution
-            allPopups="false"
-            locationURI="menu:project?after=additions">
-         <command
-               commandId="com.liferay.ide.project.ui.migrateProject"
-               label="Migrate Liferay project to 7.0..."
-               style="push"
-               tooltip="Run a migration tool to help with migration Liferay plugin projects to latest version of Liferay Portal version">
-         </command>
-      </menuContribution>
       <menuContribution
             allPopups="false"
             locationURI="menu:project?after=additions">
          <command
-               commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
-               label="Open Liferay 7 Upgrade Assistant..."
+               commandId="com.liferay.ide.project.ui.codeUpgrade"
+               label="Liferay Code Upgrade Tool"
                style="push"
-               tooltip="Opens Liferay 7 Upgrade Assistant View">
+               tooltip="Liferay Code Upgrade Tool">
          </command>
-      </menuContribution-->
+      </menuContribution>
    </extension>
+   <extension
+        point="org.eclipse.ui.editors">
+        <editor
+            id="com.liferay.ide.upgrade.ui.CodeUpgradeTool"
+            name="CodeUpgradeTool"
+            filenames="liferay-code-upgrade.xml"
+            default="true">
+            <class
+                class="com.liferay.ide.project.ui.upgrade.CodeUpgradeToolEditor">
+                <parameter name="sdef" value="com.liferay.ide.project.ui.upgrade.CodeUpgradeTool"/>
+                <parameter name="pageName" value="Overview"/>
+            </class>
+        </editor>
+    </extension>
 </plugin>
