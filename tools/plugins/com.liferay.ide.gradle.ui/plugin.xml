@@ -22,6 +22,7 @@
                class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
+      <!--
       <wizard
             category="com.liferay.ide.newWizards"
             finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
@@ -42,6 +43,7 @@
                class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
+      -->
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">
