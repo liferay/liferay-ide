@@ -7,12 +7,14 @@ import com.liferay.ide.server.core.portal.PortalRuntime;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.core.resources.WorkspaceJob;
@@ -53,13 +55,13 @@ public class ServiceWrapperCommand
 
     private String[] getDynamicServiceWrapper()
     {
-        final List<File> targetJarFile = new ArrayList<>();
         final IPath bundleLibPath =
             ( (PortalRuntime) _server.getRuntime().loadAdapter( PortalRuntime.class, null ) ).getAppServerLibGlobalDir();
         final IPath bundleServerPath =
             ( (PortalRuntime) _server.getRuntime().loadAdapter( PortalRuntime.class, null ) ).getAppServerDir();
         final List<String> wrapperList = new ArrayList<>();
         List<File> libFiles;
+        File portalkernelJar = null;
 
         try
         {
@@ -69,46 +71,88 @@ public class ServiceWrapperCommand
             {
                 if( lib.exists() && lib.getName().endsWith( "portal-kernel.jar" ) )
                 {
-                    targetJarFile.add( lib );
+                    portalkernelJar = lib;
+                    break;
                 }
             }
 
             libFiles = FileListing.getFileListing( new File( bundleServerPath.append( "../osgi" ).toOSString() ) );
+            libFiles.add( portalkernelJar );
 
-            for( File lib : libFiles )
+            if( !libFiles.isEmpty() )
             {
-                if( lib.exists() && lib.getName().endsWith( "api.jar" ) )
+                for( File lib : libFiles )
                 {
-                    targetJarFile.add( lib );
+                    if( lib.getName().endsWith( ".lpkg" ) )
+                    {
+                        try(JarFile jar = new JarFile( lib ))
+                        {
+                            Enumeration<JarEntry> enu = jar.entries();
+
+                            while( enu.hasMoreElements() )
+                            {
+                                JarEntry entry = enu.nextElement();
+
+                                String name = entry.getName();
+
+                                if( name.contains( ".api" ) )
+                                {
+                                    JarEntry jarentry = jar.getJarEntry( name );
+                                    InputStream inputStream = jar.getInputStream( jarentry );
+
+                                    JarInputStream jarInputStream = new JarInputStream( inputStream );
+                                    JarEntry nextJarEntry;
+
+                                    while( ( nextJarEntry = jarInputStream.getNextJarEntry() ) != null )
+                                    {
+                                        String entryName = nextJarEntry.getName();
+
+                                        if( entryName.endsWith( "ServiceWrapper.class" ) &&
+                                            !( entryName.contains( "$" ) ) )
+                                        {
+                                            entryName = entryName.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
+                                            entryName = entryName.substring( 0, entryName.lastIndexOf( "." ) );
+                                            wrapperList.add( entryName );
+                                        }
+                                    }
+
+                                    jarInputStream.close();
+                                }
+
+                            }
+                        }
+                        catch( IOException e )
+                        {
+                        }
+                    }
+                    else if( lib.getName().endsWith( ".api.jar" ) || lib.getName().equals( "portal-kernel.jar" ) )
+                    {
+                        try(JarFile jar = new JarFile( lib ))
+                        {
+                            Enumeration<JarEntry> enu = jar.entries();
+
+                            while( enu.hasMoreElements() )
+                            {
+                                JarEntry entry = enu.nextElement();
+                                String name = entry.getName();
+
+                                if( name.endsWith( "ServiceWrapper.class" ) && !( name.contains( "$" ) ) )
+                                {
+                                    name = name.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
+                                    name = name.substring( 0, name.lastIndexOf( "." ) );
+                                    wrapperList.add( name );
+                                }
+                            }
+                        }
+                        catch( IOException e )
+                        {
+                        }
+                    }
                 }
             }
         }
         catch( FileNotFoundException e )
         {
-        }
-
-        for( File jarFile : targetJarFile )
-        {
-            try(JarFile jar = new JarFile( jarFile ))
-            {
-                Enumeration<JarEntry> enu = jar.entries();
-
-                while( enu.hasMoreElements() )
-                {
-                    JarEntry entry = enu.nextElement();
-                    String name = entry.getName();
-
-                    if( name.endsWith( "ServiceWrapper.class" ) && !( name.contains( "$" ) ) )
-                    {
-                        name = name.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
-                        name = name.substring( 0, name.lastIndexOf( "." ) );
-                        wrapperList.add( name );
-                    }
-                }
-            }
-            catch( IOException e )
-            {
-            }
         }
 
         return wrapperList.toArray( new String[0] );
