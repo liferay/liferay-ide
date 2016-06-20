@@ -352,11 +352,6 @@ public class ProjectCoreBase extends ServerCoreBase
         return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-6.2" );
     }
 
-    protected IPath getLiferayPluginsSdk70Dir()
-    {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-plugins-sdk-7.0" );
-    }
-
     protected IPath getLiferayPluginsSDKZip()
     {
         return getLiferayBundlesPath().append( "liferay-plugins-sdk-6.2-ce-ga6-20160112152609836.zip" );
@@ -515,7 +510,6 @@ public class ProjectCoreBase extends ServerCoreBase
         if( existingSdk == null )
         {
             FileUtil.deleteDir( getLiferayPluginsSdkDir().toFile(), true );
-            FileUtil.deleteDir( getLiferayPluginsSdk70Dir().toFile(), true );
         }
 
         final File liferayPluginsSdkDirFile = getLiferayPluginsSdkDir().toFile();
