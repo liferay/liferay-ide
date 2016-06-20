@@ -252,36 +252,29 @@ public class ThemePluginFacetInstall extends PluginFacetInstall
         String themeParent = this.masterModel.getStringProperty( THEME_PARENT );
         String tplFramework = this.masterModel.getStringProperty( THEME_TEMPLATE_FRAMEWORK );
 
-        if( ( themeParent != null && !themeParent.equals( this.masterModel.getDefaultProperty( THEME_PARENT ) ) ) ||
-            ( tplFramework != null && !tplFramework.equals( this.masterModel.getDefaultProperty( THEME_TEMPLATE_FRAMEWORK ) ) ) )
+        IFile buildXml = project.getFile( "build.xml" ); //$NON-NLS-1$
+        InputStream inputStream = buildXml.getContents();
+
+        try
         {
-            IFile buildXml = project.getFile( "build.xml" ); //$NON-NLS-1$
-            InputStream inputStream = buildXml.getContents();
+            String strCon = CoreUtil.readStreamToString( inputStream );
+            inputStream.close();
 
-            try
+            if( !themeParent.equals( this.masterModel.getDefaultProperty( THEME_PARENT ) ) )
             {
-                String strCon = CoreUtil.readStreamToString( inputStream );
-                inputStream.close();
-
-                if( !themeParent.equals( this.masterModel.getDefaultProperty( THEME_PARENT ) ) )
-                {
-                    strCon = strCon.replace(
-                            "<property name=\"theme.parent\" value=\"_styled\" />", "<property name=\"theme.parent\" value=\"" + themeParent + "\" />" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                }
-
-                if( !tplFramework.equals( this.masterModel.getDefaultProperty( THEME_TEMPLATE_FRAMEWORK ) ) )
-                {
-                    String tplExtension = ThemeUtil.getTemplateExtension( tplFramework );
-                    strCon = strCon.replace(
-                            "</project>", "\t<property name=\"theme.type\" value=\"" + tplExtension + "\" />\n</project>" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                }
-
-                buildXml.setContents( new ByteArrayInputStream( strCon.getBytes() ), IResource.FORCE, null );
+                strCon = strCon.replace( "<property name=\"theme.parent\" value=\"_styled\" />", //$NON-NLS-1$
+                    "<property name=\"theme.parent\" value=\"" + themeParent + "\" />" ); //$NON-NLS-1$ //$NON-NLS-2$
             }
-            catch( IOException e )
-            {
-                ThemeCore.logError( e );
-            }
+
+            String tplExtension = ThemeUtil.getTemplateExtension( tplFramework );
+            strCon = strCon.replace(
+                "</project>", "\t<property name=\"theme.type\" value=\"" + tplExtension + "\" />\n</project>" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+            buildXml.setContents( new ByteArrayInputStream( strCon.getBytes() ), IResource.FORCE, null );
+        }
+        catch( IOException e )
+        {
+            ThemeCore.logError( e );
         }
     }
 
