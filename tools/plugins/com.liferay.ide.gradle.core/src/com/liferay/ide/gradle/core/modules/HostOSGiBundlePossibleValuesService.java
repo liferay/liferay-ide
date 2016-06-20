@@ -22,9 +22,13 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.wst.server.core.IRuntime;
@@ -81,6 +85,34 @@ public class HostOSGiBundlePossibleValuesService extends PossibleValuesService
                     catch( Exception e )
                     {
                         ProjectCore.logError( "Could not determine possible files.", e );
+                    }
+
+                    if( bundles.size() == 0 )
+                    {
+                        File[] files = ServerUtil.getMarketplaceLpkgFiles( portalBundle );
+
+                        for( File file : files )
+                        {
+                            try(JarFile jar = new JarFile( file ))
+                            {
+                                Enumeration<JarEntry> enu = jar.entries();
+
+                                while( enu.hasMoreElements() )
+                                {
+                                    JarEntry entry = enu.nextElement();
+
+                                    String name = entry.getName();
+
+                                    if( name.contains( ".web" ) )
+                                    {
+                                        bundles.add( name );
+                                    }
+                                }
+                            }
+                            catch( IOException e )
+                            {
+                            }
+                        }
                     }
                 }
             }

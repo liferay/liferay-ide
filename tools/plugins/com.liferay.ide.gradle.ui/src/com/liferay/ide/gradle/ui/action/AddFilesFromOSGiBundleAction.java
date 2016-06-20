@@ -15,6 +15,7 @@
 
 package com.liferay.ide.gradle.ui.action;
 
+import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
 import com.liferay.ide.gradle.core.modules.OverrideFilePath;
 import com.liferay.ide.server.core.LiferayServerCore;
@@ -59,6 +60,11 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
             try
             {
                 File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( currentOSGiBundle ).toFile();
+
+                if( !module.exists() )
+                {
+                    module = GradleCore.getDefault().getStateLocation().append( currentOSGiBundle ).toFile();
+                }
 
                 dialog.setInput( module );
             }

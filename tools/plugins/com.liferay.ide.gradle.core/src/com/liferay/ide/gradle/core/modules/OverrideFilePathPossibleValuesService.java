@@ -15,6 +15,7 @@
 
 package com.liferay.ide.gradle.core.modules;
 
+import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -26,6 +27,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
@@ -68,6 +70,12 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
             if( portalBundle != null )
             {
                 File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostOSGiBundle ).toFile();
+
+                if (!module.exists()) {
+                    final IPath temp = GradleCore.getDefault().getStateLocation();
+
+                    module = new File( temp.toFile(), hostOSGiBundle );
+                }
 
                 if( module.exists() )
                 {

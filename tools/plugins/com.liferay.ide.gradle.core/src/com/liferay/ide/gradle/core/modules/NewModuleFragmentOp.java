@@ -24,6 +24,7 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
@@ -57,6 +58,7 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 
     // *** HostOSGiBundle ***
 
+    @DefaultValue( text = "" )
     @Label( standard = "Host OSGi Bundle" )
     @Service( impl = HostOSGiBundlePossibleValuesService.class )
     @Listeners( OSGiBundleListener.class )
@@ -65,6 +67,13 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 
     Value<String> getHostOsgiBundle();
     void setHostOsgiBundle(String value);
+
+    // *** HostOSGiBundle ***
+
+    ValueProperty PROP_LPKG_NAME = new ValueProperty( TYPE, "LpkgName" );
+
+    Value<String> getLpkgName();
+    void setLpkgName(String value);
 
     // *** OverrideFiles ***
 

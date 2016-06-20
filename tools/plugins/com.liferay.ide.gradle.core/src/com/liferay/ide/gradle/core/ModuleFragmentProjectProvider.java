@@ -78,19 +78,27 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
         final IPath temp = GradleCore.getDefault().getStateLocation().append(
             hostBundleName.substring( 0, hostBundleName.lastIndexOf( ".jar" ) ) );
 
-        final IRuntime runtime = ServerUtil.getRuntime( op.getLiferayRuntimeName().content() );
-
-        final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
-
-        File hostBundle = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostBundleName ).toFile();
-
-        try
+        if( !temp.toFile().exists() )
         {
-            ZipUtil.unzip( hostBundle, temp.toFile() );
-        }
-        catch( IOException e )
-        {
-            throw new CoreException( GradleCore.createErrorStatus( e ) );
+            final IRuntime runtime = ServerUtil.getRuntime( op.getLiferayRuntimeName().content() );
+
+            final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
+
+            File hostBundle = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostBundleName ).toFile();
+
+            if( !hostBundle.exists() )
+            {
+                hostBundle = GradleCore.getDefault().getStateLocation().append( hostBundleName ).toFile();
+            }
+
+            try
+            {
+                ZipUtil.unzip( hostBundle, temp.toFile() );
+            }
+            catch( IOException e )
+            {
+                throw new CoreException( GradleCore.createErrorStatus( e ) );
+            }
         }
 
         String bundleSymbolicName = "";

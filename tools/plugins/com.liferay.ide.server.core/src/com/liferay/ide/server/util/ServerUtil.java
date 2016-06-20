@@ -33,6 +33,7 @@ import com.liferay.ide.server.remote.IServerManagerConnection;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -471,6 +472,22 @@ public class ServerUtil
         }
 
         return retval;
+    }
+
+    public static File[] getMarketplaceLpkgFiles( PortalBundle portalBundle )
+    {
+        File marketplace = portalBundle.getOSGiBundlesDir().append( "marketplace" ).toFile();
+
+        File[] files = marketplace.listFiles( new FilenameFilter()
+        {
+            @Override
+            public boolean accept( File dir, String name )
+            {
+                return name.matches( ".*\\.lpkg" );
+            }
+        });
+
+        return files;
     }
 
     public static IPath getPortalDir( IJavaProject project )
