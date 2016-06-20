@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -164,7 +165,7 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
 
         openLiferayPerspective( newProject );
 
-        ProjectExplorerLayoutUtil.setNestedEnabled();
+        ProjectExplorerLayoutUtil.setNested(ProjectExplorerLayoutUtil.ENABLED);
     }
 
     private static NewLiferayWorkspaceOp createDefaultOp()

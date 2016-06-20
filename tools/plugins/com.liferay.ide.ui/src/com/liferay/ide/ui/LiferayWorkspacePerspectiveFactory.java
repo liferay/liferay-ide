@@ -1,5 +1,7 @@
 package com.liferay.ide.ui;
 
+import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
+
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
@@ -55,6 +57,8 @@ public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFacto
         bottom.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
         bottom.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
         bottom.addPlaceholder( ID_SEARCH_VIEW );
+
+        ProjectExplorerLayoutUtil.setNested(ProjectExplorerLayoutUtil.ENABLED);
 
     }
 }

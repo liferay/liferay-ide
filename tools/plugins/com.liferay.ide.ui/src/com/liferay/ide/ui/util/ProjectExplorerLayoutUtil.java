@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.workspace;
+package com.liferay.ide.ui.util;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,10 +43,13 @@ import org.eclipse.ui.navigator.INavigatorFilterService;
  */
 public class ProjectExplorerLayoutUtil
 {
+    public static boolean DISABLED = false;
+
+    public static boolean ENABLED = true;
 
     private static String NEST_PARAMETER = "org.eclipse.ui.navigator.resources.nested.enabled";
 
-    public static void setNestedEnabled()
+    public static void setNested(boolean ifEnable)
     {
         final String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
 
@@ -67,7 +70,9 @@ public class ProjectExplorerLayoutUtil
             {
                 final Map<String, String> map = new HashMap<String, String>();
 
-                map.put( NEST_PARAMETER, "true" );
+                Boolean ifEnableObj =  new Boolean(ifEnable);
+
+                map.put( NEST_PARAMETER, ifEnableObj.toString() );
 
                 IEvaluationContext applicationContext = new EvaluationContext( null, new Object() );
 

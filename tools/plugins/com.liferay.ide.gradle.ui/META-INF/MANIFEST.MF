@@ -7,7 +7,6 @@ Bundle-Activator: com.liferay.ide.gradle.ui.GradleUI
 Bundle-Vendor: Liferay, Inc.
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
- org.eclipse.ui,
  com.liferay.ide.project.ui;bundle-version="3.0.0",
  com.liferay.ide.ui;bundle-version="3.0.0",
  org.eclipse.debug.core,
@@ -17,13 +16,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.ide,
  org.eclipse.wst.web,
  org.eclipse.core.expressions,
- org.eclipse.ui.navigator,
  org.eclipse.wst.server.ui,
  org.eclipse.ui.navigator.resources,
  org.eclipse.compare,
  org.eclipse.team.core,
  org.eclipse.team.ui,
- org.eclipse.ui.workbench,
  org.eclipse.jface.text
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
