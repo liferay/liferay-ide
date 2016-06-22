@@ -43,10 +43,6 @@ import org.eclipse.ui.navigator.INavigatorFilterService;
  */
 public class ProjectExplorerLayoutUtil
 {
-    public static boolean DISABLED = false;
-
-    public static boolean ENABLED = true;
-
     private static String NEST_PARAMETER = "org.eclipse.ui.navigator.resources.nested.enabled";
 
     public static void setNested( boolean nested )

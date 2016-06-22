@@ -159,7 +159,7 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
 
         openLiferayPerspective( newProject );
 
-        ProjectExplorerLayoutUtil.setNested(ProjectExplorerLayoutUtil.ENABLED);
+        ProjectExplorerLayoutUtil.setNested( true );
 
     }
 

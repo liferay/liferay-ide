@@ -58,7 +58,7 @@ public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFacto
         bottom.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
         bottom.addPlaceholder( ID_SEARCH_VIEW );
 
-        ProjectExplorerLayoutUtil.setNested(ProjectExplorerLayoutUtil.ENABLED);
+        ProjectExplorerLayoutUtil.setNested( true );
 
     }
 }

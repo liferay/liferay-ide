@@ -165,7 +165,7 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
 
         openLiferayPerspective( newProject );
 
-        ProjectExplorerLayoutUtil.setNested(ProjectExplorerLayoutUtil.ENABLED);
+        ProjectExplorerLayoutUtil.setNested( true );
     }
 
     private static NewLiferayWorkspaceOp createDefaultOp()
