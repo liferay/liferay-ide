@@ -49,7 +49,7 @@ public class ProjectExplorerLayoutUtil
 
     private static String NEST_PARAMETER = "org.eclipse.ui.navigator.resources.nested.enabled";
 
-    public static void setNested(boolean ifEnable)
+    public static void setNested( boolean nested )
     {
         final String commandId = "org.eclipse.ui.navigator.resources.nested.changeProjectPresentation";
 
@@ -70,9 +70,7 @@ public class ProjectExplorerLayoutUtil
             {
                 final Map<String, String> map = new HashMap<String, String>();
 
-                Boolean ifEnableObj =  new Boolean(ifEnable);
-
-                map.put( NEST_PARAMETER, ifEnableObj.toString() );
+                map.put( NEST_PARAMETER, Boolean.toString( nested ) );
 
                 IEvaluationContext applicationContext = new EvaluationContext( null, new Object() );
 
