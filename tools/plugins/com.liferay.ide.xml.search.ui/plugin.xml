@@ -91,6 +91,31 @@
              class="com.liferay.ide.xml.search.ui.jsp.AuiClassQuerySpecification"
              id="aui.class.querySpecification">
        </querySpecification>
+
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.service.BooleanQuerySpecification"
+             id="service.boolean.querySpecification">
+       </querySpecification>
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.service.ColumnTypeQuerySpecification"
+             id="service.column.type.querySpecification">
+       </querySpecification>
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.service.OrderByQuerySpecification"
+             id="service.order.by.querySpecification">
+       </querySpecification>
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.service.FinderReturnTypeQuerySpecification"
+             id="service.finder.return.type.querySpecification">
+       </querySpecification>
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.service.FinderColumnComparatorQuerySpecification"
+             id="service.finder.column.comparator.querySpecification">
+       </querySpecification>
+       <querySpecification
+             class="com.liferay.ide.xml.search.ui.service.FinderColumnArrayableOperatorQuerySpecification"
+             id="service.finder.arrayable.operator.querySpecification">
+       </querySpecification>
     </extension>
 
     <!--==================== portlet.xml ====================-->
@@ -557,7 +582,266 @@
                     targetNodes="@package-path"
                     querySpecificationId="liferay.servicexml.querySpecification" />
             </reference>
-
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@local-service"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@remote-service"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="column"
+                    targetNodes="@type"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.column.type.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="column"
+                    targetNodes="@primary"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="column"
+                    targetNodes="@convert-null"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="column"
+                    targetNodes="@lazy"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="column"
+                    targetNodes="@localized"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="column"
+                    targetNodes="@json-enabled"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="order"
+                    targetNodes="@by"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.order.by.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="order-column"
+                    targetNodes="@order-by"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.order.by.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="order-column"
+                    targetNodes="@case-sensitive"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="finder"
+                    targetNodes="@return-type"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.finder.return.type.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="finder"
+                    targetNodes="@unique"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="finder"
+                    targetNodes="@db-index"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="finder-column"
+                    targetNodes="@case-sensitive"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="finder-column"
+                    targetNodes="@comparator"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.finder.column.comparator.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="finder-column"
+                    targetNodes="@arrayable-operator"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.finder.arrayable.operator.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@cache-enabled"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@json-enabled"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@mvcc-enabled"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@trash-enabled"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@uuid"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="entity"
+                    targetNodes="@uuid-accessor"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="service-builder"
+                    targetNodes="@auto-namespace-tables"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="service-builder"
+                    targetNodes="@mvcc-enabled"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="service-builder"
+                    targetNodes="@auto-import-default-references"
+                    querySpecificationId="liferay.servicexml.querySpecification">
+                </from>
+                <toStatic
+                    querySpecificationId="service.boolean.querySpecification" >
+                </toStatic>
+            </reference>
         </references>
     </extension>
 
