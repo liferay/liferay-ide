@@ -23,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.eclipse.ui.views.markers.WorkbenchMarkerResolution;
 
 
@@ -38,11 +39,13 @@ public abstract class CommonWorkbenchMarkerResolution extends WorkbenchMarkerRes
         this.marker = marker;
     }
 
-    protected void openEditor( IFile file ) throws PartInitException
+    protected void openEditor( IFile file , int offset , int length) throws PartInitException
     {
         final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-        IDE.openEditor( page, file );
+        ITextEditor editor = (ITextEditor)IDE.openEditor( page, file );
+
+        editor.selectAndReveal( offset, length );
     }
 
     protected abstract void resolve( IMarker marker );

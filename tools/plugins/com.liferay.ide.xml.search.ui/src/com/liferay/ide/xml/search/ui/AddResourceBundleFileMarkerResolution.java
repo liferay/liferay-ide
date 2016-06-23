@@ -152,6 +152,9 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
             String resourceValue = getDefaultResourceValue( resourceKey );
             String resourcePropertyLine = resourceKey + "=" + resourceValue + "\n";
 
+            int contentOffset = 0;
+            int resourcePropertyLineOffset = resourcePropertyLine.getBytes().length;
+
             if( !resourceBundle.exists() )
             {
                 IFolder parent = (IFolder) resourceBundle.getParent();
@@ -160,6 +163,8 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
 
                 resourceBundle.create(
                     new ByteArrayInputStream( resourcePropertyLine.getBytes( "UTF-8" ) ), IResource.FORCE, null );
+
+                contentOffset = resourcePropertyLineOffset;
             }
             else
             {
@@ -168,17 +173,17 @@ public class AddResourceBundleFileMarkerResolution extends AbstractResourceBundl
                 StringBuffer sb = new StringBuffer();
 
                 sb.append( contents );
-                sb.append( resourceKey );
-                sb.append( "=" );
-                sb.append( resourceValue );
-                sb.append( "\n" );
+                sb.append( resourcePropertyLine );
+
+                byte[] bytes = sb.toString().trim().getBytes( "UTF-8" );
+                contentOffset = bytes.length;
 
                 resourceBundle.setContents(
-                    new ByteArrayInputStream( sb.toString().getBytes( "UTF-8" ) ), IResource.FORCE,
+                    new ByteArrayInputStream( bytes ), IResource.FORCE,
                     new NullProgressMonitor() );
             }
 
-            openEditor( resourceBundle );
+            openEditor( resourceBundle, contentOffset - resourcePropertyLineOffset, contentOffset - 1 );
         }
         catch( Exception e )
         {

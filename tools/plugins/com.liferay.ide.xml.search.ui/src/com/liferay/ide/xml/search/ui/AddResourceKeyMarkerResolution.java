@@ -110,11 +110,15 @@ public class AddResourceKeyMarkerResolution extends AbstractResourceBundleMarker
 
             contentSb.append( resourcePropertyLine );
 
-            resourceBundle.setContents(
-                new ByteArrayInputStream( contentSb.toString().trim().getBytes( "UTF-8" ) ), IResource.FORCE,
-                new NullProgressMonitor() );
+            byte[] bytes = contentSb.toString().trim().getBytes( "UTF-8" );
 
-            openEditor( resourceBundle );
+            int contentOffset = bytes.length;
+            int resourcePropertyLineOffset = resourcePropertyLine.getBytes().length;
+
+            resourceBundle.setContents(
+                new ByteArrayInputStream( bytes ), IResource.FORCE, new NullProgressMonitor() );
+
+            openEditor( resourceBundle, contentOffset - resourcePropertyLineOffset, contentOffset - 1 );
         }
         catch( Exception e )
         {
