@@ -74,11 +74,11 @@ public class BladeCLITests
 
         assertNotNull( projectTemplates );
 
-        assertEquals( 7, projectTemplates.length );
+        assertEquals( 8, projectTemplates.length );
 
         assertEquals( "activator", projectTemplates[0] );
 
-        assertEquals( "servicewrapper", projectTemplates[6] );
+        assertEquals( "servicewrapper", projectTemplates[7] );
     }
 
 }
