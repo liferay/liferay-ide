@@ -39,6 +39,22 @@ public class ServiceWrapperCommand
         _server = server;
     }
 
+    public String[] getServiceWrapper() throws Exception
+    {
+
+        if( _server == null )
+        {
+            return getStaticServiceWrapper();
+        }
+        else
+        {
+            String[] wrappers = getDynamicServiceWrapper();
+            updateServiceWrapperStaticFile( wrappers );
+
+            return wrappers;
+        }
+    }
+
     private File checkStaticWrapperFile() throws IOException
     {
         final URL url =
@@ -91,41 +107,48 @@ public class ServiceWrapperCommand
 
                             while( enu.hasMoreElements() )
                             {
-                                JarEntry entry = enu.nextElement();
+                                JarInputStream jarInputStream = null;
 
-                                String name = entry.getName();
-
-                                if( name.contains( ".api" ) )
+                                try
                                 {
-                                    JarEntry jarentry = jar.getJarEntry( name );
-                                    InputStream inputStream = jar.getInputStream( jarentry );
+                                    JarEntry entry = enu.nextElement();
 
-                                    JarInputStream jarInputStream = new JarInputStream( inputStream );
-                                    JarEntry nextJarEntry;
+                                    String name = entry.getName();
 
-                                    while( ( nextJarEntry = jarInputStream.getNextJarEntry() ) != null )
+                                    if( name.contains( ".api-" ) )
                                     {
-                                        String entryName = nextJarEntry.getName();
+                                        JarEntry jarentry = jar.getJarEntry( name );
+                                        InputStream inputStream = jar.getInputStream( jarentry );
 
-                                        if( entryName.endsWith( "ServiceWrapper.class" ) &&
-                                            !( entryName.contains( "$" ) ) )
+                                        jarInputStream = new JarInputStream( inputStream );
+                                        JarEntry nextJarEntry;
+
+                                        while( ( nextJarEntry = jarInputStream.getNextJarEntry() ) != null )
                                         {
-                                            entryName = entryName.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
-                                            entryName = entryName.substring( 0, entryName.lastIndexOf( "." ) );
-                                            wrapperList.add( entryName );
+                                            String entryName = nextJarEntry.getName();
+
+                                            getServiceWrapperList( wrapperList, entryName );
                                         }
+
                                     }
-
-                                    jarInputStream.close();
                                 }
-
+                                catch( Exception e )
+                                {
+                                }
+                                finally
+                                {
+                                    if( jarInputStream != null )
+                                    {
+                                        jarInputStream.close();
+                                    }
+                                }
                             }
                         }
                         catch( IOException e )
                         {
                         }
                     }
-                    else if( lib.getName().endsWith( ".api.jar" ) || lib.getName().equals( "portal-kernel.jar" ) )
+                    else if( lib.getName().endsWith( "api.jar" ) || lib.getName().equals( "portal-kernel.jar" ) )
                     {
                         try(JarFile jar = new JarFile( lib ))
                         {
@@ -136,12 +159,7 @@ public class ServiceWrapperCommand
                                 JarEntry entry = enu.nextElement();
                                 String name = entry.getName();
 
-                                if( name.endsWith( "ServiceWrapper.class" ) && !( name.contains( "$" ) ) )
-                                {
-                                    name = name.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
-                                    name = name.substring( 0, name.lastIndexOf( "." ) );
-                                    wrapperList.add( name );
-                                }
+                                getServiceWrapperList( wrapperList, name );
                             }
                         }
                         catch( IOException e )
@@ -158,19 +176,13 @@ public class ServiceWrapperCommand
         return wrapperList.toArray( new String[0] );
     }
 
-    public String[] getServiceWrapper() throws Exception
+    private void getServiceWrapperList( final List<String> wrapperList, String name )
     {
-
-        if( _server == null )
+        if( name.endsWith( "ServiceWrapper.class" ) && !( name.contains( "$" ) ) )
         {
-            return getStaticServiceWrapper();
-        }
-        else
-        {
-            String[] wrappers = getDynamicServiceWrapper();
-            updateServiceWrapperStaticFile( wrappers );
-
-            return wrappers;
+            name = name.replaceAll( "\\\\", "." ).replaceAll( "/", "." );
+            name = name.substring( 0, name.lastIndexOf( "." ) );
+            wrapperList.add( name );
         }
     }
 
