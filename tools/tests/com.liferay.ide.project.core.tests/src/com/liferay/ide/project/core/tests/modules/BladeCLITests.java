@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
@@ -40,7 +41,7 @@ public class BladeCLITests
 
         StringBuilder sb = new StringBuilder();
         sb.append( "create " );
-        sb.append(  "-d \"" + temp.toAbsolutePath().toString() +  "\" " );
+        sb.append( "-d \"" + temp.toAbsolutePath().toString() + "\" " );
         sb.append( "-t mvcportlet " );
         sb.append( "foo" );
 
@@ -74,11 +75,11 @@ public class BladeCLITests
 
         assertNotNull( projectTemplates );
 
-        assertEquals( 8, projectTemplates.length );
+        assertEquals( 9, projectTemplates.length );
 
         assertEquals( "activator", projectTemplates[0] );
 
-        assertEquals( "servicewrapper", projectTemplates[7] );
+        assertEquals( "servicewrapper", projectTemplates[projectTemplates.length - 1] );
     }
 
 }
