@@ -701,6 +701,10 @@
                 <toStatic
                     querySpecificationId="service.finder.return.type.querySpecification" >
                 </toStatic>
+                <to
+                    path="/service-builder/entity"
+                    targetNodes="@name"
+                    querySpecificationId="liferay.servicexml.querySpecification"/>
             </reference>
             <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
                 <from
@@ -841,6 +845,26 @@
                 <toStatic
                     querySpecificationId="service.boolean.querySpecification" >
                 </toStatic>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="order-column"
+                    targetNodes="@name"
+                    querySpecificationId="liferay.servicexml.querySpecification" />
+                <to
+                    path="/service-builder/entity/column"
+                    targetNodes="@name"
+                    querySpecificationId="liferay.servicexml.querySpecification"/>
+            </reference>
+            <reference validatorId="com.liferay.ide.xml.search.ui.serviceBuilderDescriptorValidator">
+                <from
+                    path="finder-column"
+                    targetNodes="@name"
+                    querySpecificationId="liferay.servicexml.querySpecification" />
+                <to
+                    path="/service-builder/entity/column"
+                    targetNodes="@name"
+                    querySpecificationId="liferay.servicexml.querySpecification"/>
             </reference>
         </references>
     </extension>
