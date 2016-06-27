@@ -37,11 +37,19 @@ public abstract class AbstractWebInfQuerySpecification implements IResourceProvi
             return folder;
         }
 
-        final IFolder webInf = CoreUtil.getDefaultDocrootFolder( resource.getProject() ).getFolder( "WEB-INF" );
+        IFolder docrootfolder = CoreUtil.getDefaultDocrootFolder( resource.getProject() );
 
-        if( webInf.exists() )
+        if( docrootfolder != null )
         {
-            return webInf;
+            final IFolder webInf = docrootfolder.getFolder( "WEB-INF" );
+            if( webInf.exists() )
+            {
+                return webInf;
+            }
+        }
+        else
+        {
+            return folder;
         }
 
         return null;
