@@ -277,11 +277,11 @@ public class BladeCLI
         {
             File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
 
-            File agentJar = files[0];
+            File cliJar = files[0];
 
-            cachedBladeCLIPath = new Path( agentJar.getCanonicalPath() );
+            cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
 
-            return agentJar.getName();
+            return cliJar.getName();
         }
         catch( Exception e )
         {
