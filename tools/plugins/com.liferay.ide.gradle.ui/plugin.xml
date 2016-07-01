@@ -72,15 +72,6 @@
                   name="slot1">
             </separator>
             <groupMarker
-                  name="gradle">
-            </groupMarker>
-         </menu>
-         <menu
-               icon="icons/e16/liferay_logo_16.png"
-               id="liferayPopupMenuGradleCategory"
-               label="Gradle"
-               path="liferayPopupMenuCategory/gradle">
-            <groupMarker
                   name="build-lang">
             </groupMarker>
             <groupMarker
@@ -104,7 +95,7 @@
                icon="icons/e16/liferay_logo_16.png"
                id="com.liferay.ide.gradle.popup.action.buildLang"
                label="build-lang"
-               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-lang">
+               menubarPath="liferayPopupMenuCategory/build-lang">
          </action>
          <action
                class="com.liferay.ide.gradle.action.BuildCssTaskAction"
@@ -112,7 +103,7 @@
                icon="icons/e16/liferay_logo_16.png"
                id="com.liferay.ide.gradle.popup.action.buildcss"
                label="build-css"
-               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-css">
+               menubarPath="liferayPopupMenuCategory/build-css">
          </action>
          <action
                class="com.liferay.ide.gradle.action.BuildServiceTaskAction"
@@ -120,7 +111,7 @@
                icon="icons/e16/liferay_logo_16.png"
                id="com.liferay.ide.gradle.popup.action.buildservice"
                label="build-service"
-               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/build-service">
+               menubarPath="liferayPopupMenuCategory/build-service">
          </action>
          <action
                class="com.liferay.ide.gradle.action.MergeLangTaskAction"
@@ -128,7 +119,7 @@
                icon="icons/e16/liferay_logo_16.png"
                id="com.liferay.ide.gradle.popup.action.mergelang"
                label="merge-lang"
-               menubarPath="liferayPopupMenuCategory/liferayPopupMenuGradleCategory/merge-lang">
+               menubarPath="liferayPopupMenuCategory/merge-lang">
          </action>
          <enablement>
                <adapt type="org.eclipse.core.resources.IResource">
