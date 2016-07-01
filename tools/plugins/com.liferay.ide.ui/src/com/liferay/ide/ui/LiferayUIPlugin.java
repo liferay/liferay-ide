@@ -18,11 +18,13 @@ package com.liferay.ide.ui;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.ui.templates.ServiceClassNameResolver;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +45,7 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.formatter.DefaultCodeFormatterOptions;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.preferences.PreferencesAccess;
 import org.eclipse.jdt.internal.ui.preferences.formatter.FormatterProfileStore;
 import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileManager.CustomProfile;
@@ -51,6 +54,8 @@ import org.eclipse.jdt.internal.ui.preferences.formatter.ProfileVersioner;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.text.templates.ContextTypeRegistry;
+import org.eclipse.jface.text.templates.TemplateContextType;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -195,6 +200,8 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         lookupLiferay7SDKDir();
 
         applyWorkspaceBadge();
+
+        registerResolvers();
     }
 
     private void lookupLiferay7SDKDir()
@@ -266,6 +273,23 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
         catch( Exception e )
         {
             logError( "Unable to start workspaceHelper MBean", e );
+        }
+    }
+    
+    private void registerResolvers()
+    {
+        final ContextTypeRegistry templateContextRegistry = JavaPlugin.getDefault().getTemplateContextRegistry();
+
+        final Iterator<TemplateContextType> ctIter = templateContextRegistry.contextTypes();
+
+        while( ctIter.hasNext() )
+        {
+            final TemplateContextType contextType = ctIter.next();
+
+            if( contextType.getId().equals( "java" ) )
+            {
+                contextType.addResolver( new ServiceClassNameResolver() );
+            }
         }
     }
 
