@@ -96,7 +96,7 @@ public class LiferayWorkspaceUtil
         return settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher( settingsContent ).matches();
     }
 
-    private final static Pattern PATTERN_WORKSPACE_PLUGIN = Pattern.compile( ".*apply\\s*plugin\\s*:\\s*[\'\"]com\\.liferay\\.workspace[\'\"]\\s*$", Pattern.MULTILINE | Pattern.DOTALL );
+    private final static Pattern PATTERN_WORKSPACE_PLUGIN = Pattern.compile(".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL );
 
     public static boolean isValidWorkspace( IProject project )
     {
