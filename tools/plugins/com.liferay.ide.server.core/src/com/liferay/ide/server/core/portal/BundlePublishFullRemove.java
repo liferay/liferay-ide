@@ -206,7 +206,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
                         if( isFragment )
                         {
-                            _supervisor.updateHostBundle( fragmentHostName, _existingBundles );
+                            _supervisor.refreshHostBundle( fragmentHostName, _existingBundles );
                         }
 
                         if( error == null )

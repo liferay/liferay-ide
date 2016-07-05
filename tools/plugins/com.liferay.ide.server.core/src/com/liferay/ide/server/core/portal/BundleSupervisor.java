@@ -122,7 +122,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
             }
             else
             {
-                updateHostBundle( fragmentHostName, existingBundles );
+                refreshHostBundle( fragmentHostName, existingBundles );
             }
         }
 
@@ -150,7 +150,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         return true;
     }
 
-    public void updateHostBundle( String fragmentHostName, BundleDTO[] existingBundles ) throws Exception
+    public void refreshHostBundle( String fragmentHostName, BundleDTO[] existingBundles ) throws Exception
     {
         long fragmentHostId = -1;
 
@@ -167,7 +167,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         {
             Agent agent = getAgent();
             agent.redirect( Agent.COMMAND_SESSION );
-            agent.stdin( "update " + fragmentHostId );
+            agent.stdin( "refresh " + fragmentHostId );
             agent.redirect( Agent.NONE );
         }
     }
