@@ -581,6 +581,11 @@ public class FileUtil
         writeFile( f, new ByteArrayInputStream( contents ), expectedProjectName );
     }
 
+    public static void writeFile( final File f, final InputStream contents ) throws CoreException
+    {
+        writeFile( f, contents, null );
+    }
+
     public static void writeFile( final File f, final InputStream contents, final String expectedProjectName ) throws CoreException
     {
         if( f.exists() )

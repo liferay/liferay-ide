@@ -28,6 +28,7 @@ import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.wst.server.core.IRuntime;
 
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -75,21 +76,22 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
 
                 for( File file : files )
                 {
-                    JarFile jar = new JarFile( file );
-                    Enumeration<JarEntry> enu = jar.entries();
+                    try( JarFile jar = new JarFile( file ) ) {
+                        Enumeration<JarEntry> enu = jar.entries();
 
-                    while( enu.hasMoreElements() )
-                    {
-                        JarEntry entry = enu.nextElement();
-
-                        String name = entry.getName();
-
-                        if( name.contains( hostOsgiBundle ) )
+                        while( enu.hasMoreElements() )
                         {
-                            in = jar.getInputStream( entry );
-                            found = true;
+                            JarEntry entry = enu.nextElement();
 
-                            break;
+                            String name = entry.getName();
+
+                            if( name.contains( hostOsgiBundle ) )
+                            {
+                                in = jar.getInputStream( entry );
+                                found = true;
+
+                                break;
+                            }
                         }
                     }
 
@@ -101,18 +103,7 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
 
                 if( in != null )
                 {
-                    out = new FileOutputStream( f );
-
-                    final byte[] bytes = new byte[1024];
-                    int count = in.read( bytes );
-
-                    while( count != -1 )
-                    {
-                        out.write( bytes, 0, count );
-                        count = in.read( bytes );
-                    }
-
-                    out.flush();
+                    FileUtil.writeFile( f, in );
                 }
             }
             catch( Exception e )
