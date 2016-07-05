@@ -1218,7 +1218,7 @@
       <command
          id="com.liferay.ide.project.ui.codeUpgrade"
          name="Liferay Code Upgrade Tool"
-         description="Liferay Code Upgrade Tool"
+         description="Liferay Code Upgrade Tool..."
       />
       <!--command
             description="Open Liferay 7 Upgrade Assistant"
@@ -1531,9 +1531,9 @@
             locationURI="menu:project?after=additions">
          <command
                commandId="com.liferay.ide.project.ui.codeUpgrade"
-               label="Liferay Code Upgrade Tool"
+               label="Liferay Code Upgrade Tool..."
                style="push"
-               tooltip="Liferay Code Upgrade Tool">
+               tooltip="Liferay Code Upgrade Tool...">
          </command>
       </menuContribution>
    </extension>
