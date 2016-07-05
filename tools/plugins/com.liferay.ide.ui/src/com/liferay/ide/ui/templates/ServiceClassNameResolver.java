@@ -32,7 +32,7 @@ public class ServiceClassNameResolver extends TemplateVariableResolver
 
     public ServiceClassNameResolver()
     {
-        super( "service_class_name", "get service class name in liferay module project" );
+        super( "service_class_name", "Get the Service class name for the current component class" );
     }
 
     @Override
@@ -42,17 +42,17 @@ public class ServiceClassNameResolver extends TemplateVariableResolver
 
         if( context instanceof CompilationUnitContext )
         {
-            CompilationUnitContext compilationUnitContext = (CompilationUnitContext) context;
+            final CompilationUnitContext compilationUnitContext = (CompilationUnitContext) context;
 
-            ICompilationUnit unit = compilationUnitContext.getCompilationUnit();
+            final ICompilationUnit unit = compilationUnitContext.getCompilationUnit();
 
-            String typeName = JavaCore.removeJavaLikeExtension( unit.getElementName() );
+            final String typeName = JavaCore.removeJavaLikeExtension( unit.getElementName() );
 
-            IType type = unit.getType( typeName );
+            final IType type = unit.getType( typeName );
 
             try
             {
-                String[] names = type.getSuperInterfaceNames();
+                final String[] names = type.getSuperInterfaceNames();
 
                 if( names.length != 0 )
                 {
