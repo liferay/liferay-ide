@@ -27,7 +27,6 @@ import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
-import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
@@ -47,13 +46,7 @@ public interface CodeUpgradeOp extends Element
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Required
-    @Services
-    (
-        value =
-        {
-            @Service( impl = LocationDefaultValueService.class ),
-        }
-    )
+    @Service( impl = LocationDefaultValueService.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();
@@ -73,15 +66,9 @@ public interface CodeUpgradeOp extends Element
     Value<String> getLayout();
     void setLayout( String Layout );
 
-    @Services
-    (
-        value =
-        {
-            @Service( impl = LiferayRuntimeNamePossibleValuesService.class ),
-            @Service( impl = LiferayRuntimeNameDefaultValueService.class ),
-            @Service( impl = LiferayRuntimeNameValidationService.class )
-        }
-    )
+    @Service( impl = LiferayRuntimeNamePossibleValuesService.class )
+    @Service( impl = LiferayRuntimeNameDefaultValueService.class )
+    @Service( impl = LiferayRuntimeNameValidationService.class )
     @Required
     @XmlBinding( path = "RuntimeName" )
     ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty( TYPE, "LiferayRuntimeName" );
