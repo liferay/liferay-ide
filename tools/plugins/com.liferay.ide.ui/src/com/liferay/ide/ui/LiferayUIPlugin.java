@@ -275,20 +275,25 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
             logError( "Unable to start workspaceHelper MBean", e );
         }
     }
-    
+
     private void registerResolvers()
     {
         final ContextTypeRegistry templateContextRegistry = JavaPlugin.getDefault().getTemplateContextRegistry();
 
-        final Iterator<TemplateContextType> ctIter = templateContextRegistry.contextTypes();
+        final Iterator<?> ctIter = templateContextRegistry.contextTypes();
 
         while( ctIter.hasNext() )
         {
-            final TemplateContextType contextType = ctIter.next();
+            final Object next = ctIter.next();
 
-            if( contextType.getId().equals( "java" ) )
+            if( next instanceof TemplateContextType )
             {
-                contextType.addResolver( new ServiceClassNameResolver() );
+                final TemplateContextType contextType = (TemplateContextType) next;
+
+                if( contextType.getId().equals( "java" ) )
+                {
+                    contextType.addResolver( new ServiceClassNameResolver() );
+                }
             }
         }
     }
