@@ -1387,25 +1387,30 @@
             id="com.liferay.ide.server.core.portal.sourcePathComputer">
       </sourcePathComputer>
    </extension>
+   <!--
    <extension
          point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossBundleFactory"
-            type="JBoss AS">
+            display="JBoss AS"
+            type="jboss">
       </portalBundle>
    </extension>
+   -->
    <extension
          point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalWildFlyBundleFactory"
-            type="JBoss Wildfly">
+            display="JBoss Wildfly"
+            type="wildfly">
       </portalBundle>
    </extension>
    <extension
          point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossEapBundleFactory"
-            type="JBoss EAP">
+            display="JBoss EAP"
+            type="jboss">
       </portalBundle>
    </extension>
 </plugin>

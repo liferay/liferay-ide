@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.Path;
 public abstract class AbstractPortalBundleFactory implements PortalBundleFactory
 {
     private String bundleFactoryType;
+    private String displayName;
 
     @Override
     public IPath canCreateFromPath( Map<String, Object> appServerProperties )
@@ -131,5 +132,16 @@ public abstract class AbstractPortalBundleFactory implements PortalBundleFactory
     public void setBundleFactoryType( String type )
     {
         this.bundleFactoryType = type;
+    }
+
+    public void setDisplayName( String displayName )
+    {
+        this.displayName = displayName;
+    }
+
+    @Override
+    public String getDisplayName()
+    {
+        return this.displayName;
     }
 }

@@ -335,6 +335,7 @@
          point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.tomcat.core.PortalTomcatBundleFactory"
+            display="Apache Tomcat"
             type="tomcat">
       </portalBundle>
    </extension>

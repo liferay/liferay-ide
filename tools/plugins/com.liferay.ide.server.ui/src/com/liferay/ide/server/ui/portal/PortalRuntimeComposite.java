@@ -245,19 +245,19 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         if( e.getSource().equals( dirField ) )
         {
             getRuntime().setLocation( new Path( dirField.getText() ) );
+
+            updateFields();
+
+            validate();
+
+            enableJREControls( true );
+
+            updateJREs();
         }
         else if( e.getSource().equals( nameField ) )
         {
             getRuntime().setName( nameField.getText() );
         }
-
-        updateFields();
-
-        validate();
-
-        enableJREControls( true );
-
-        updateJREs();
     }
 
     public void setRuntime( IRuntimeWorkingCopy newRuntime )
@@ -291,7 +291,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         {
             final PortalBundle portalBundle = portalRuntime.getPortalBundle();
 
-            setFieldValue( this.typeField, portalBundle != null ? portalBundle.getType() : StringPool.BLANK );
+            setFieldValue( this.typeField, portalBundle != null ? portalBundle.getDispalyName() : StringPool.BLANK );
         }
     }
 

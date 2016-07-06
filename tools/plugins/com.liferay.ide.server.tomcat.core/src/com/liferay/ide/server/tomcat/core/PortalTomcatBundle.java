@@ -202,6 +202,12 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     }
 
     @Override
+    public String getDispalyName()
+    {
+        return "Apache Tomcat";
+    }
+
+    @Override
     public IPath[] getUserLibs()
     {
         List<IPath> libs = new ArrayList<IPath>();

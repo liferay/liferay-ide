@@ -77,7 +77,8 @@ public class SDK
             "tomcat",
             "jboss",
             "glassfish",
-            "jetty"
+            "jetty",
+            "wildfly"
     }));
 
     protected boolean contributed;

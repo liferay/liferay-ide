@@ -176,6 +176,12 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     @Override
     public String getType()
     {
+        return "jboss";
+    }
+
+    @Override
+    public String getDispalyName()
+    {
         return "JBoss AS";
     }
 

@@ -81,6 +81,12 @@ public class PortalJBossEapBundle extends PortalJBossBundle
     @Override
     public String getType()
     {
+        return "jboss";
+    }
+
+    @Override
+    public String getDispalyName()
+    {
         return "JBoss EAP";
     }
 }

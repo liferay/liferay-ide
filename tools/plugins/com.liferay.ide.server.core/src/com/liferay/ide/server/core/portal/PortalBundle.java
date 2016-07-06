@@ -55,6 +55,8 @@ public interface PortalBundle extends ILiferayPortal
     String[] getRuntimeStopProgArgs();
 
     String getType();
+    
+    String getDispalyName();
 
     IPath[] getBundleDependencyJars();
 

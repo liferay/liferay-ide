@@ -40,6 +40,12 @@ public class PortalWildFlyBundle extends PortalJBossBundle
     @Override
     public String getType()
     {
+        return "wildfly";
+    }
+
+    @Override
+    public String getDispalyName()
+    {
         return "JBoss WildFly";
     }
 
