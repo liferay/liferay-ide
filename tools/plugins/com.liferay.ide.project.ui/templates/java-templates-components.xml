@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+<template name="component_contenttargetingreport" description="Get component block for contenttargetingreport class" id="component.contenttargetingreport" context="java" enabled="true" autoinsert="false">
+@Component( immediate = true, service = ${service_class_name}.class )
+</template>
+
+<template name="component_contenttargetingrule" description="Get component block for contenttargetingrule class" id="component.contenttargetingrule" context="java" enabled="true" autoinsert="false">
+@Component( immediate = true, service = ${service_class_name}.class )
+</template>
+
+<template name="component_contenttargetingtrackingaction" description="Get component block for contenttargetingtrackingaction class" id="component.contenttargetingtrackingaction" context="java" enabled="true" autoinsert="false">
+@Component( immediate = true, service = ${service_class_name}.class )
+</template>
+
+<template name="component_controlmenuentry" description="Get component block for controlmenuentry class" id="component.controlmenuentry" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "product.navigation.control.menu.category.key=" + ProductNavigationControlMenuCategoryKeys.USER,
+        "product.navigation.control.menu.entry.order:Integer=1"
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_mvcportlet" description="Get component block for mvcportlet class" id="component.mvcportlet" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "com.liferay.portlet.display-category=category.sample",
+        "com.liferay.portlet.instanceable=true",
+        "javax.portlet.display-name=${enclosing_project} Portlet",
+        "javax.portlet.init-param.template-path=/",
+        "javax.portlet.init-param.view-template=/view.jsp",
+        "javax.portlet.resource-bundle=content.Language",
+        "javax.portlet.security-role-ref=power-user,user"
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_panelapp_app" description="Get component block for panelapp class" id="component.panelapp.app" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "panel.app.order:Integer=100",
+        "panel.category.key=${primary_type_name}"
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_panelapp_category" description="Get component block for panelapp category class" id="component.panelapp.portlet" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "panel.category.key=" + PanelCategoryKeys.SITE_ADMINISTRATION,
+        "panel.category.order:Integer=100"
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_panelapp_portlet" description="Get component block for panelapp portlet class" id="component.penalapp.portlet" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "com.liferay.portlet.add-default-resource=true",
+        "com.liferay.portlet.display-category=category.hidden",
+        "com.liferay.portlet.layout-cacheable=true",
+        "com.liferay.portlet.private-request-attributes=false",
+        "com.liferay.portlet.private-session-attributes=false",
+        "com.liferay.portlet.render-weight=50",
+        "com.liferay.portlet.use-default-template=true",
+        "javax.portlet.display-name=${enclosing_project} Portlet",
+        "javax.portlet.expiration-cache=0",
+        "javax.portlet.init-param.template-path=/",
+        "javax.portlet.init-param.view-template=/view.jsp",
+        "javax.portlet.name=${primary_type_name}",
+        "javax.portlet.resource-bundle=content.Language",
+        "javax.portlet.security-role-ref=power-user,user",
+        "javax.portlet.supports.mime-type=text/html"
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_portlet" description="Get component block for portlet class" id="component.portlet" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "com.liferay.portlet.display-category=category.sample",
+        "com.liferay.portlet.instanceable=true",
+        "javax.portlet.display-name=${enclosing_project} Portlet",
+        "javax.portlet.security-role-ref=power-user,user"
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_portletprovider_addportletprovider" description="Get component block for addportletprovider class" id="component.portletprovider.addportletprovider" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "model.class.name=com.liferay.asset.kernel.model.AssetEntry",
+        "service.ranking:Integer=" + Integer.MAX_VALUE
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_portletprovider_portlet" description="Get component block for portletprovider portlet class" id="component.portletprovider.portlet" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+        "com.liferay.portlet.display-category=category.hidden",
+        "com.liferay.portlet.instanceable=true",
+        "javax.portlet.display-name=${enclosing_project} Portlet",
+        "javax.portlet.init-param.template-path=/",
+        "javax.portlet.init-param.view-template=/view.jsp",
+        "javax.portlet.name=${primary_type_name}",
+        "javax.portlet.security-role-ref=power-user,user"
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_service" description="Get component block for service class" id="component.service" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+    },
+    service = ${service_class_name}.class
+)
+</template>
+
+<template name="component_servicewrapper" description="Get component block for servicewrapper class" id="component.servicewrapper" context="java" enabled="true" autoinsert="false">
+@Component(
+    immediate = true,
+    property = {
+    },
+    service = ServiceWrapper.class
+)
+</template>
+
+</templates>
