@@ -16,7 +16,6 @@
 package com.liferay.ide.gradle.core.modules;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -68,7 +67,6 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
             File[] files = ServerUtil.getMarketplaceLpkgFiles( portalBundle );
 
             InputStream in = null;
-            FileOutputStream out = null;
 
             try
             {
@@ -76,7 +74,8 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
 
                 for( File file : files )
                 {
-                    try( JarFile jar = new JarFile( file ) ) {
+                    try(JarFile jar = new JarFile( file ))
+                    {
                         Enumeration<JarEntry> enu = jar.entries();
 
                         while( enu.hasMoreElements() )
@@ -90,20 +89,17 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
                                 in = jar.getInputStream( entry );
                                 found = true;
 
+                                FileUtil.writeFile( f, in );
+
                                 break;
                             }
                         }
-                    }
 
-                    if( found )
-                    {
-                        break;
+                        if( found )
+                        {
+                            break;
+                        }
                     }
-                }
-
-                if( in != null )
-                {
-                    FileUtil.writeFile( f, in );
                 }
             }
             catch( Exception e )
@@ -116,17 +112,6 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
                     try
                     {
                         in.close();
-                    }
-                    catch( IOException e )
-                    {
-                    }
-                }
-
-                if( out != null )
-                {
-                    try
-                    {
-                        out.close();
                     }
                     catch( IOException e )
                     {
