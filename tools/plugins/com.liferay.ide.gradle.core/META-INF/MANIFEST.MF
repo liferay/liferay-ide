@@ -18,12 +18,15 @@ Require-Bundle: org.eclipse.core.runtime,
  com.liferay.ide.project.core,
  com.liferay.blade.api,
  com.gradleware.tooling.client;bundle-version="0.10.0",
- com.gradleware.tooling.utils;bundle-version="0.10.0"
+ com.gradleware.tooling.utils;bundle-version="0.10.0",
+ org.apache.commons.io
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.blade.gradle.model,
  com.liferay.ide.gradle.core,
  com.liferay.ide.gradle.core.modules,
+ com.liferay.ide.gradle.core.parser,
  com.liferay.ide.gradle.core.workspace
 Bundle-ClassPath: .,
- lib/com.liferay.blade.gradle.model.jar
+ lib/com.liferay.blade.gradle.model.jar,
+ lib/groovy-2.4.3.jar
