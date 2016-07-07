@@ -44,7 +44,7 @@ public class PortalWildFlyBundle extends PortalJBossBundle
     }
 
     @Override
-    public String getDispalyName()
+    public String getDisplayName()
     {
         return "JBoss WildFly";
     }

@@ -180,7 +180,7 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     }
 
     @Override
-    public String getDispalyName()
+    public String getDisplayName()
     {
         return "JBoss AS";
     }

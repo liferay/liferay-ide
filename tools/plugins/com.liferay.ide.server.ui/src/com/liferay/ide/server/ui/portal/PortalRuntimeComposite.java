@@ -291,7 +291,7 @@ public class PortalRuntimeComposite extends Composite implements ModifyListener
         {
             final PortalBundle portalBundle = portalRuntime.getPortalBundle();
 
-            setFieldValue( this.typeField, portalBundle != null ? portalBundle.getDispalyName() : StringPool.BLANK );
+            setFieldValue( this.typeField, portalBundle != null ? portalBundle.getDisplayName() : StringPool.BLANK );
         }
     }
 

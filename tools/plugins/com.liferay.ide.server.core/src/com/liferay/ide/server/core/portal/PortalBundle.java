@@ -56,7 +56,7 @@ public interface PortalBundle extends ILiferayPortal
 
     String getType();
     
-    String getDispalyName();
+    String getDisplayName();
 
     IPath[] getBundleDependencyJars();
 

@@ -85,7 +85,7 @@ public class PortalJBossEapBundle extends PortalJBossBundle
     }
 
     @Override
-    public String getDispalyName()
+    public String getDisplayName()
     {
         return "JBoss EAP";
     }
