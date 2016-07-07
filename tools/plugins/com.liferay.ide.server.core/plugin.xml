@@ -1392,7 +1392,6 @@
          point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossBundleFactory"
-            display="JBoss AS"
             type="jboss">
       </portalBundle>
    </extension>
@@ -1401,7 +1400,6 @@
          point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalWildFlyBundleFactory"
-            display="JBoss Wildfly"
             type="wildfly">
       </portalBundle>
    </extension>
@@ -1409,7 +1407,6 @@
          point="com.liferay.ide.server.core.portalBundles">
       <portalBundle
             class="com.liferay.ide.server.core.portal.PortalJBossEapBundleFactory"
-            display="JBoss EAP"
             type="jboss">
       </portalBundle>
    </extension>

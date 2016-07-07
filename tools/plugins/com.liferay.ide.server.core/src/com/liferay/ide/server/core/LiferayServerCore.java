@@ -318,7 +318,6 @@ public class LiferayServerCore extends Plugin
                     {
                         AbstractPortalBundleFactory portalBundleFactory = (AbstractPortalBundleFactory) o;
                         portalBundleFactory.setBundleFactoryType( element.getAttribute( "type" ) );
-                        portalBundleFactory.setDisplayName( element.getAttribute( "display" ) );
                         bundleFactories.add( portalBundleFactory );
                     }
                 }

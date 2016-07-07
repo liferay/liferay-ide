@@ -36,5 +36,4 @@ public interface PortalBundleFactory
 
     String getType();
 
-    String getDisplayName();
 }
