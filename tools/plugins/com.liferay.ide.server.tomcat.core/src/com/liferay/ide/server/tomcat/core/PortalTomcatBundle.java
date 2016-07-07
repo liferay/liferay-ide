@@ -204,7 +204,7 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     @Override
     public String getDisplayName()
     {
-        return "Apache Tomcat";
+        return "Tomcat";
     }
 
     @Override
