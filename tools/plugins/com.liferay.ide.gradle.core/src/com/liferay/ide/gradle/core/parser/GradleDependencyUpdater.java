@@ -19,28 +19,28 @@ import com.liferay.ide.core.util.CoreUtil;
 /**
  * @author Lovett Li
  */
-public class GradleDependenceParser
+public class GradleDependencyUpdater
 {
 
     private List<ASTNode> nodes;
     private File file;
     private List<String> scripts;
 
-    public GradleDependenceParser( File inputfile ) throws MultipleCompilationErrorsException, IOException
+    public GradleDependencyUpdater( File inputfile ) throws MultipleCompilationErrorsException, IOException
     {
         this( IOUtils.toString( new FileInputStream( inputfile ), "UTF-8" ) );
         this.file = inputfile;
     }
 
-    public GradleDependenceParser( String script ) throws MultipleCompilationErrorsException
+    public GradleDependencyUpdater( String script ) throws MultipleCompilationErrorsException
     {
         AstBuilder builder = new AstBuilder();
         nodes = builder.buildFromString( script );
     }
 
-    public FindDependenceVisitor updateDependence( String dependence ) throws IOException
+    public FindDependenciesVisitor updateDependence( String dependence ) throws IOException
     {
-        FindDependenceVisitor visitor = new FindDependenceVisitor();
+        FindDependenciesVisitor visitor = new FindDependenciesVisitor();
         walkScript( visitor );
         scripts = Files.readAllLines( Paths.get( file.toURI() ) );
 
@@ -81,17 +81,17 @@ public class GradleDependenceParser
             {
                 scripts.add( visitor.getDependenceLineNum() - 1, dependence );
             }
-
         }
 
         return visitor;
     }
 
-    public List<GradleDependence> getAllDependence()
+    public List<GradleDependency> getAllDependencies()
     {
-        FindDependenceVisitor visitor = new FindDependenceVisitor();
+        FindDependenciesVisitor visitor = new FindDependenciesVisitor();
         walkScript( visitor );
-        return visitor.getDependences();
+
+        return visitor.getDependencies();
     }
 
     public void walkScript( GroovyCodeVisitor visitor )

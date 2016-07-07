@@ -15,12 +15,12 @@ import org.codehaus.groovy.ast.expr.MethodCallExpression;
 /**
  * @author Lovett Li
  */
-public class FindDependenceVisitor extends CodeVisitorSupport
+public class FindDependenciesVisitor extends CodeVisitorSupport
 {
 
     private int dependenceLineNum = -1;
     private int columnNum = -1;
-    private List<GradleDependence> dependences = new ArrayList<>();
+    private List<GradleDependency> dependencies = new ArrayList<>();
 
     @Override
     public void visitMethodCallExpression( MethodCallExpression call )
@@ -34,9 +34,9 @@ public class FindDependenceVisitor extends CodeVisitorSupport
                     dependenceLineNum = call.getLastLineNumber();
                 }
             }
+
             super.visitMethodCallExpression( call );
         }
-
     }
 
     @Override
@@ -46,6 +46,7 @@ public class FindDependenceVisitor extends CodeVisitorSupport
         {
             columnNum = expression.getLastColumnNumber();
         }
+
         super.visitClosureExpression( expression );
     }
 
@@ -61,7 +62,8 @@ public class FindDependenceVisitor extends CodeVisitorSupport
             String value = mapEntryExpression.getValueExpression().getText();
             dependenceMap.put( key, value );
         }
-        dependences.add( new GradleDependence( dependenceMap ) );
+
+        dependencies.add( new GradleDependency( dependenceMap ) );
 
         super.visitMapExpression( expression );
     }
@@ -76,9 +78,9 @@ public class FindDependenceVisitor extends CodeVisitorSupport
         return columnNum;
     }
 
-    public List<GradleDependence> getDependences()
+    public List<GradleDependency> getDependencies()
     {
-        return dependences;
+        return dependencies;
     }
 
 }

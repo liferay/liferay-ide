@@ -3,14 +3,14 @@ package com.liferay.ide.gradle.core.parser;
 
 import java.util.Map;
 
-public class GradleDependence
+public class GradleDependency
 {
 
     private String group;
     private String name;
     private String version;
 
-    public GradleDependence( Map<String, String> dep )
+    public GradleDependency( Map<String, String> dep )
     {
         setGroup( dep.get( "group" ) );
         setName( dep.get( "name" ) );
