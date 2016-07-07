@@ -59,8 +59,8 @@ public class BladeCLI
     static final File repoCache = new File( _settingsDir, "repoCache" );
     static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/1.x/";
     static final String timeStampKey = "up2date.check";
-    static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
-    static final String BLADE_CLI_REPO_UP2DATE_CHECK = "BLADE_CLI_REPO_UP2DATE_CHECK";
+    public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
+    public static final String BLADE_CLI_REPO_UP2DATE_CHECK = "BLADE_CLI_REPO_UP2DATE_CHECK";
 
     static IPath cachedBladeCLIPath;
 
@@ -158,101 +158,9 @@ public class BladeCLI
 
         final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmmss" );
 
-        if( bladeCacheSettingsFile.exists() )
+        if( shouldUpdate( sdf ,bladeCacheSettingsFile) )
         {
-            Properties props = PropertiesUtil.loadProperties( bladeCacheSettingsFile );
-
-            if( props == null )
-            {
-                throw new BladeCLIException( "Could not load file blade-cache.properties." );
-            }
-
-            String up2dateCheckTimestamp = props.getProperty( timeStampKey );
-            Date lastTime = null;
-
-            try
-            {
-                lastTime = sdf.parse( up2dateCheckTimestamp );
-            }
-            catch( ParseException e )
-            {
-            }
-
-            if( lastTime == null )
-            {
-                throw new BladeCLIException( "Could not get up2date check timestamp from blade-cache.properties." );
-            }
-
-            Date currentTime = new Date();
-
-            String validTime = getValidTime();
-            String scope = validTime.substring( validTime.length()-1, validTime.length() );
-            String countStr = validTime.substring( 0 ,validTime.length()-1 );
-            int count = Integer.parseInt( countStr );
-
-            long distance = currentTime.getTime() - lastTime.getTime();
-
-            boolean shouldUpdate = false;
-
-            if( scope.equals( "h" ) )
-            {
-                long hours = distance / 1000 / 3600;
-
-                if( hours > count )
-                {
-                    shouldUpdate = true;
-                }
-            }
-            else if( scope.equals( "m" ) )
-            {
-                long minutes = distance / 1000 / 60;
-
-                if( minutes > count )
-                {
-                    shouldUpdate = true;
-                }
-            }
-            else if( scope.equals( "s" ) )
-            {
-                long seconds = distance / 1000;
-
-                if( seconds > count )
-                {
-                    shouldUpdate = true;
-                }
-            }
-
-            if( shouldUpdate )
-            {
-                updateLocalJar( props, sdf, bladeCacheSettingsFile );
-            }
-            else
-            {
-                try
-                {
-                    File locaJarFile = new File( getRepoCacheDir(), props.getProperty( localJarKey ) );
-
-                    if ( !locaJarFile.exists() )
-                    {
-                        //user change the repoURL but timeout is valid
-                        updateLocalJar( props, sdf, bladeCacheSettingsFile );
-
-                        locaJarFile = new File( getRepoCacheDir(), props.getProperty( localJarKey ) );
-                    }
-
-                    cachedBladeCLIPath = new Path( locaJarFile.getCanonicalPath() );
-                }
-                catch( Exception e )
-                {
-                    throw new BladeCLIException( "Could not get blade cli jar from local cache dir." );
-                }
-            }
-        }
-        else
-        {
-            Properties props = new Properties();
-
-            updateLocalJar( props, sdf, bladeCacheSettingsFile );
+            updateLocalJar( sdf, bladeCacheSettingsFile );
         }
 
         return cachedBladeCLIPath;
@@ -335,11 +243,136 @@ public class BladeCLI
         return prefs.get( BLADE_CLI_REPO_UP2DATE_CHECK, "24h" );
     }
 
-    private static void updateLocalJar( Properties props, SimpleDateFormat sdf, File bladeCacheSettings )
+    private static boolean shouldUpdate( SimpleDateFormat sdf, File bladeCacheSettingsFile )
+                    throws BladeCLIException
+    {
+        boolean shouldUpdate = false;
+
+        // file doesn't exist
+        if( !bladeCacheSettingsFile.exists() )
+        {
+            return true;
+        }
+
+        Properties props = PropertiesUtil.loadProperties( bladeCacheSettingsFile );
+
+        // can't load properties
+        if( props == null )
+        {
+            return true;
+        }
+
+        String up2dateCheckTimestamp = props.getProperty( timeStampKey );
+        Date lastTime = null;
+
+        try
+        {
+            lastTime = sdf.parse( up2dateCheckTimestamp );
+        }
+        catch( ParseException e )
+        {
+        }
+
+        // can't parse time
+        if( lastTime == null )
+        {
+            return true;
+        }
+
+        String validTime = getValidTime();
+
+        if( validTime.equals( "-1" ) )
+        {
+            // do nothing
+        }
+        else if( validTime.equals( "0" ) )
+        {
+            shouldUpdate = true;
+        }
+        else
+        {
+            String scope;
+            int count;
+
+            try
+            {
+                scope = validTime.substring( validTime.length() - 1, validTime.length() );
+                String countStr = validTime.substring( 0, validTime.length() - 1 );
+                count = Integer.parseInt( countStr );
+            }
+            catch( Exception e )
+            {
+                scope = "h";
+                count = 24;
+            }
+
+            Date currentTime = new Date();
+
+            long distance = currentTime.getTime() - lastTime.getTime();
+
+            if( scope.equals( "h" ) )
+            {
+                long hours = distance / 1000 / 3600;
+
+                if( hours > count )
+                {
+                    shouldUpdate = true;
+                }
+            }
+            else if( scope.equals( "m" ) )
+            {
+                long minutes = distance / 1000 / 60;
+
+                if( minutes > count )
+                {
+                    shouldUpdate = true;
+                }
+            }
+            else if( scope.equals( "s" ) )
+            {
+                long seconds = distance / 1000;
+
+                if( seconds > count )
+                {
+                    shouldUpdate = true;
+                }
+            }
+            else
+            {
+                shouldUpdate = true;
+            }
+        }
+
+        if( !shouldUpdate )
+        {
+            try
+            {
+                File localJarFile = new File( getRepoCacheDir(), props.getProperty( localJarKey ) );
+
+                if( !localJarFile.exists() )
+                {
+                    return true;
+                }
+                else
+                {
+                    cachedBladeCLIPath = new Path( localJarFile.getCanonicalPath() );
+                }
+            }
+            catch( Exception e )
+            {
+                throw new BladeCLIException( e.getMessage() );
+            }
+        }
+
+        return shouldUpdate;
+    }
+
+    private static void updateLocalJar(SimpleDateFormat sdf, File bladeCacheSettings )
         throws BladeCLIException
     {
         String localJar = getLatestRemoteBladeCLIJar();
 
+        Properties props = new Properties();
         props.setProperty( timeStampKey, sdf.format( new Date() ) );
         props.setProperty( localJarKey, localJar );
 

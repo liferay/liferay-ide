@@ -1004,6 +1004,12 @@
             id="com.liferay.ide.project.ui.pluginValidationSettingsPage"
             name="%plugin.validation.page.name">
       </page>
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.project.ui.pref.BladeCLIPreferencePage"
+            id="com.liferay.ide.project.ui.pref.bladeCLIPreferencePage"
+            name="Blade">
+      </page>
    </extension>
 
    <extension
