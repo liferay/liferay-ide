@@ -154,6 +154,17 @@ public class GradleParseTests
             CoreUtil.readStreamToString( new FileInputStream( outputFile ) ),
             CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) );
     }
+
+    @Test
+    public void getAllDependencies() throws IOException
+    {
+        final File inputFile = new File( "projects/testParseInput/testDependencies.gradle" );
+
+        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+
+        List<GradleDependency> allDependence = gradleScriptASTParser.getAllDependencies();
+
+        assertEquals( 3, allDependence.size() );
     }
 
     @Test
