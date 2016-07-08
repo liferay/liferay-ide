@@ -36,23 +36,24 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
  */
 public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
-
-    private ScopedPreferenceStore prefStore;
+    private final ScopedPreferenceStore prefStore;
 
     public BladeCLIPreferencePage()
     {
         super( GRID );
+
+        prefStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, ProjectCore.PLUGIN_ID );
     }
 
     @Override
     protected void createFieldEditors()
     {
-        Group group = SWTUtil.createGroup( getFieldEditorParent(), "Blade settings", 1 );
+        Group group = SWTUtil.createGroup( getFieldEditorParent(), "", 1 );
         GridData gd = new GridData( GridData.FILL_HORIZONTAL );
         group.setLayoutData( gd );
         Composite composite = SWTUtil.createComposite( group, 2, 2, GridData.FILL_HORIZONTAL );
 
-        addField( new StringFieldEditor( BladeCLI.BLADE_CLI_REPO_URL, "Blade CLI Repo URL:", composite ) );
+        addField( new StringFieldEditor( BladeCLI.BLADE_CLI_REPO_URL, "Blade CLI Repo URL", composite ) );
 
         String[][] lableAndValues = new String[3][2];
         lableAndValues[0][0] = "never";
@@ -63,25 +64,19 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
         lableAndValues[2][1] = "24h";
 
         addField(
-            new RadioGroupFieldEditor( BladeCLI.BLADE_CLI_REPO_UP2DATE_CHECK, "Timeout for Checking Update:", 3,
+            new RadioGroupFieldEditor( BladeCLI.BLADE_CLI_REPO_UP2DATE_CHECK, "Blade CLI Update Timeout", 3,
                 lableAndValues, composite, true ) );
     }
 
     @Override
     public IPreferenceStore getPreferenceStore()
     {
-        if( prefStore == null )
-        {
-            prefStore = new ScopedPreferenceStore( InstanceScope.INSTANCE, ProjectCore.PLUGIN_ID );
-        }
-
         return prefStore;
     }
 
     @Override
     public void init( IWorkbench workbench )
     {
-
     }
 
 }
