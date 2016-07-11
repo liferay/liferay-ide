@@ -246,7 +246,7 @@
             id="com.liferay.ide.project.ui.modules.ImportLiferayModuleProjectWizard"
             name="Liferay Module Project(s)">
          <description>
-            description body text
+            Import existing liferay module project(s)
          </description>
       </wizard>
    </extension>

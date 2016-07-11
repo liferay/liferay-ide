@@ -54,7 +54,7 @@
             id="com.liferay.ide.gradle.ui.workspace.workspaceImportWizard"
             name="Liferay Workspace Project">
          <description>
-            import an existing Liferay Workspace
+            Import an existing Liferay Workspace
          </description>
       </wizard>
    </extension>
