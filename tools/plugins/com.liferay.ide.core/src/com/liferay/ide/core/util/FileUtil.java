@@ -30,7 +30,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.CopyOption;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitOption;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -57,9 +66,78 @@ import org.xml.sax.ErrorHandler;
  * @author Greg Amerson
  * @author Cindy Li
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class FileUtil
 {
+
+    static class TreeCopier implements FileVisitor<java.nio.file.Path>
+    {
+
+        private final java.nio.file.Path source;
+        private final java.nio.file.Path target;
+
+        TreeCopier( java.nio.file.Path source, java.nio.file.Path target )
+        {
+            this.source = source;
+            this.target = target;
+        }
+
+        @Override
+        public FileVisitResult preVisitDirectory( java.nio.file.Path dir, BasicFileAttributes attrs )
+        {
+            CopyOption[] options = new CopyOption[0];
+
+            java.nio.file.Path newdir = target.resolve( source.relativize( dir ) );
+
+            try
+            {
+                Files.copy( dir, newdir, options );
+            }
+            catch( FileAlreadyExistsException x )
+            {
+            }
+            catch( IOException x )
+            {
+                return java.nio.file.FileVisitResult.SKIP_SUBTREE;
+            }
+
+            return java.nio.file.FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFile( java.nio.file.Path file, BasicFileAttributes attrs )
+        {
+            copyFile( file, target.resolve( source.relativize( file ) ) );
+
+            return java.nio.file.FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory( java.nio.file.Path dir, IOException exc )
+        {
+            return java.nio.file.FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed( java.nio.file.Path file, IOException exc )
+        {
+            return java.nio.file.FileVisitResult.CONTINUE;
+        }
+
+        private void copyFile( java.nio.file.Path source, java.nio.file.Path target )
+        {
+            CopyOption[] options = new CopyOption[] { java.nio.file.StandardCopyOption.REPLACE_EXISTING };
+
+            try
+            {
+                Files.copy( source, target, options );
+            }
+            catch( IOException x )
+            {
+            }
+        }
+    }
 
     public static void clearContents( File versionFile )
     {
@@ -163,6 +241,23 @@ public class FileUtil
     public static void copyFileToDir( File src, String newName, File dir )
     {
         copyFile( src, new File( dir, newName ) );
+    }
+
+    public static void copyDirToDir( File src, File dest )
+    {
+        java.nio.file.Path targetPath = Paths.get( dest.getPath().toString() );
+        java.nio.file.Path sourcePath = Paths.get( src.getPath().toString() );
+
+        EnumSet<FileVisitOption> opts = EnumSet.of( FileVisitOption.FOLLOW_LINKS );
+        TreeCopier tc = new TreeCopier( sourcePath, targetPath );
+
+        try
+        {
+            Files.walkFileTree( sourcePath, opts, Integer.MAX_VALUE, tc );
+        }
+        catch( IOException e )
+        {
+        }
     }
 
     public static void deleteDir( File directory, boolean removeAll )
