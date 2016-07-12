@@ -55,6 +55,81 @@ public class ServiceCommand
     private final IServer _server;
     private String _serviceName;
 
+    private static final String[] _portalImplExpPackage = new String[] {
+        "com.liferay.portal.bean",
+        "com.liferay.portal.cache.thread.local",
+        "com.liferay.portal.cluster",
+        "com.liferay.portal.convert.database",
+        "com.liferay.portal.convert.util",
+        "com.liferay.portal.dao.jdbc.aop",
+        "com.liferay.portal.dao.orm.hibernate",
+        "com.liferay.portal.deploy.hot",
+        "com.liferay.portal.events",
+        "com.liferay.portal.freemarker",
+        "com.liferay.portal.increment",
+        "com.liferay.portal.messaging.async",
+        "com.liferay.portal.monitoring.statistics.service",
+        "com.liferay.portal.plugin",
+        "com.liferay.portal.resiliency.service",
+        "com.liferay.portal.search",
+        "com.liferay.portal.security.access.control",
+        "com.liferay.portal.security.auth",
+        "com.liferay.portal.security.lang",
+        "com.liferay.portal.service.http",
+        "com.liferay.portal.service.permission",
+        "com.liferay.portal.servlet",
+        "com.liferay.portal.servlet.filters.authverifier",
+        "com.liferay.portal.spring.aop",
+        "com.liferay.portal.spring.bean",
+        "com.liferay.portal.spring.context",
+        "com.liferay.portal.spring.hibernate",
+        "com.liferay.portal.spring.transaction",
+        "com.liferay.portal.systemevent",
+        "com.liferay.portal.template",
+        "com.liferay.portal.tools",
+        "com.liferay.portal.upgrade.util",
+        "com.liferay.portal.upgrade.util.classname",
+        "com.liferay.portal.upgrade.util.classname.dependency",
+        "com.liferay.portal.upgrade.v7_0_0",
+        "com.liferay.portal.upload",
+        "com.liferay.portal.util",
+        "com.liferay.portal.xml",
+        "com.liferay.portlet.asset",
+        "com.liferay.portlet.asset.model",
+        "com.liferay.portlet.asset.model.impl",
+        "com.liferay.portlet.asset.service",
+        "com.liferay.portlet.asset.service.permission",
+        "com.liferay.portlet.asset.service.persistence",
+        "com.liferay.portlet.asset.util",
+        "com.liferay.portlet.documentlibrary",
+        "com.liferay.portlet.documentlibrary.action",
+        "com.liferay.portlet.documentlibrary.antivirus",
+        "com.liferay.portlet.documentlibrary.convert",
+        "com.liferay.portlet.documentlibrary.lar",
+        "com.liferay.portlet.documentlibrary.model",
+        "com.liferay.portlet.documentlibrary.service",
+        "com.liferay.portlet.documentlibrary.service.permission",
+        "com.liferay.portlet.documentlibrary.store",
+        "com.liferay.portlet.documentlibrary.util",
+        "com.liferay.portlet.expando.model",
+        "com.liferay.portlet.expando.service",
+        "com.liferay.portlet.expando.service.persistence",
+        "com.liferay.portlet.expando.util",
+        "com.liferay.portlet.layoutsadmin.display.context",
+        "com.liferay.portlet.messageboards.model",
+        "com.liferay.portlet.messageboards.service",
+        "com.liferay.portlet.messageboards.service.persistence",
+        "com.liferay.portlet.social.model",
+        "com.liferay.portlet.social.service",
+        "com.liferay.portlet.social.service.persistence",
+        "com.liferay.portlet.trash",
+        "com.liferay.portlet.trash.model",
+        "com.liferay.portlet.trash.service",
+        "com.liferay.portlet.trash.service.persistence",
+        "com.liferay.portlet.trash.util",
+        "com.liferay.portlet.usersadmin.search"
+    };
+
     public ServiceCommand( IServer server )
     {
         _server = server;
@@ -85,57 +160,52 @@ public class ServiceCommand
         BundleSupervisor supervisor = null;
         String[] result = null;
 
-            if( _server == null )
-            {
-                if( _serviceName == null )
-                {
-                    result = getStaticServices();
-                }
-                else
-                {
-                    result = getStaticServiceBundle( _serviceName );
-                }
+        if( _server == null )
+        {
+            return getServiceFromTargetPlatform();
+        }
 
-                return result;
-            }
+        PortalServerBehavior serverBehavior =
+            (PortalServerBehavior) _server.loadAdapter( PortalServerBehavior.class, null );
+        supervisor = serverBehavior.getBundleSupervisor();
 
-            PortalServerBehavior serverBehavior =
-                (PortalServerBehavior) _server.loadAdapter( PortalServerBehavior.class, null );
-            supervisor = serverBehavior.getBundleSupervisor();
+        if( supervisor == null )
+        {
+            return getServiceFromTargetPlatform();
+        }
 
-            if( supervisor == null )
-            {
-                if( _server == null )
-                {
-                    if( _serviceName == null )
-                    {
-                        result = getStaticServices();
-                    }
-                    else
-                    {
-                        result = getStaticServiceBundle( _serviceName );
-                    }
+        if( !supervisor.getAgent().redirect( Agent.COMMAND_SESSION ) )
+        {
+            return null;
+        }
 
-                    return result;
-                }
-            }
+        if( _serviceName == null )
+        {
+            result = getServices( supervisor );
+            updateServicesStaticFile( result, supervisor );
+        }
+        else
+        {
+            result = getServiceBundle( _serviceName, supervisor );
+        }
 
-            if( !supervisor.getAgent().redirect( Agent.COMMAND_SESSION ) )
-            {
-                return null;
-            }
+        return result;
+    }
 
-            if( _serviceName == null )
-            {
-                result = getServices( supervisor );
-                updateServicesStaticFile( result, supervisor );
-            }
-            else
-            {
-                result = getServiceBundle( _serviceName, supervisor );
-            }
+    private String[] getServiceFromTargetPlatform() throws Exception
+    {
+        String[] result;
 
-            return result;
+        if( _serviceName == null )
+        {
+            result = getStaticServices();
+        }
+        else
+        {
+            result = getStaticServiceBundle( _serviceName );
+        }
+
+        return result;
     }
 
     private String[] getServiceBundle( String serviceName, BundleSupervisor supervisor ) throws Exception
@@ -324,6 +394,23 @@ public class ServiceCommand
         }
 
         Collections.sort( newList );
+
+        Iterator<String> newListIterator = newList.iterator();
+
+        while( newListIterator.hasNext() )
+        {
+            String serviceName = newListIterator.next();
+
+            for( String packageName : _portalImplExpPackage )
+            {
+                if( serviceName.startsWith( packageName ) )
+                {
+                    newListIterator.remove();
+                    break;
+                }
+            }
+
+        }
 
         return newList.toArray( new String[0] );
     }
