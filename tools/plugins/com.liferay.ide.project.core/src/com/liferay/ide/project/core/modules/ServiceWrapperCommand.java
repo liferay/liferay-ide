@@ -49,7 +49,6 @@ public class ServiceWrapperCommand
         else
         {
             String[] wrappers = getDynamicServiceWrapper();
-            updateServiceWrapperStaticFile( wrappers );
 
             return wrappers;
         }
