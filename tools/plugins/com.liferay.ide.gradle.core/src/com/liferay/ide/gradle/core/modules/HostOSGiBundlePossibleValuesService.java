@@ -30,16 +30,40 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class HostOSGiBundlePossibleValuesService extends PossibleValuesService
 {
 
     private List<String> bundles = null;
+
+    private FilteredListener<PropertyContentEvent> listener;
+
+    @Override
+    protected void initPossibleValuesService()
+    {
+        super.initPossibleValuesService();
+
+        this.listener = new FilteredListener<PropertyContentEvent>()
+        {
+
+            @Override
+            protected void handleTypedEvent( PropertyContentEvent event )
+            {
+                bundles = null;
+                refresh();
+            }
+        };
+
+        op().property( NewModuleFragmentOp.PROP_LIFERAY_RUNTIME_NAME ).attach( this.listener );
+    }
 
     @Override
     protected void compute( Set<String> values )
