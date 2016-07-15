@@ -90,7 +90,7 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         {
             final IStatus importJob =  GradleUtil.importGradleProject( new File(location) , monitor );
 
-            if( !importJob.isOK() )
+            if( !importJob.isOK() || importJob.getException() != null )
             {
                 return importJob;
             }

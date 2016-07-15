@@ -72,7 +72,7 @@ public class ImportLiferayWorkspaceOpMethods
 
             retval = StatusBridge.create( importStatus );
 
-            if( !retval.ok() )
+            if( !retval.ok() || retval.exception() != null )
             {
                 return retval;
             }
