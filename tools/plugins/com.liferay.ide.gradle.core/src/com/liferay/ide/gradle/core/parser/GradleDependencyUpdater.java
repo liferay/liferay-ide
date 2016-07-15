@@ -23,7 +23,7 @@ public class GradleDependencyUpdater
 
     private List<ASTNode> nodes;
     private File file;
-    private List<String> scripts;
+    private List<String> gradleFileContents;
 
     public GradleDependencyUpdater( File inputfile ) throws MultipleCompilationErrorsException, IOException
     {
@@ -31,17 +31,17 @@ public class GradleDependencyUpdater
         this.file = inputfile;
     }
 
-    public GradleDependencyUpdater( String script ) throws MultipleCompilationErrorsException
+    public GradleDependencyUpdater( String scriptContents ) throws MultipleCompilationErrorsException
     {
         AstBuilder builder = new AstBuilder();
-        nodes = builder.buildFromString( script );
+        nodes = builder.buildFromString( scriptContents );
     }
 
-    public FindDependenciesVisitor updateDependency( String dependency ) throws IOException
+    public FindDependenciesVisitor insertDependency( String dependency ) throws IOException
     {
         FindDependenciesVisitor visitor = new FindDependenciesVisitor();
         walkScript( visitor );
-        scripts = Files.readAllLines( Paths.get( file.toURI() ) );
+        gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ) );
 
         if( visitor.getDependenceLineNum() == -1 )
         {
@@ -50,17 +50,17 @@ public class GradleDependencyUpdater
                 dependency = "\t" + dependency;;
             }
 
-            scripts.add( "" );
-            scripts.add( "dependencies {" );
-            scripts.add( dependency );
-            scripts.add( "}" );
+            gradleFileContents.add( "" );
+            gradleFileContents.add( "dependencies {" );
+            gradleFileContents.add( dependency );
+            gradleFileContents.add( "}" );
         }
         else
         {
             if( visitor.getColumnNum() != -1 )
             {
-                scripts = Files.readAllLines( Paths.get( file.toURI() ) );
-                StringBuilder builder = new StringBuilder( scripts.get( visitor.getDependenceLineNum() - 1 ) );
+                gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ) );
+                StringBuilder builder = new StringBuilder( gradleFileContents.get( visitor.getDependenceLineNum() - 1 ) );
                 builder.insert( visitor.getColumnNum() - 2, "\n" + dependency + "\n" );
                 String dep = builder.toString();
 
@@ -73,12 +73,12 @@ public class GradleDependencyUpdater
                     dep.replace( "\n", "\r" );
                 }
 
-                scripts.remove( visitor.getDependenceLineNum() - 1 );
-                scripts.add( visitor.getDependenceLineNum() - 1, dep );
+                gradleFileContents.remove( visitor.getDependenceLineNum() - 1 );
+                gradleFileContents.add( visitor.getDependenceLineNum() - 1, dep );
             }
             else
             {
-                scripts.add( visitor.getDependenceLineNum() - 1, dependency );
+                gradleFileContents.add( visitor.getDependenceLineNum() - 1, dependency );
             }
         }
 
@@ -101,9 +101,9 @@ public class GradleDependencyUpdater
         }
     }
 
-    public List<String> getScripts()
+    public List<String> getGradleFileContents()
     {
-        return scripts;
+        return gradleFileContents;
     }
 
 }

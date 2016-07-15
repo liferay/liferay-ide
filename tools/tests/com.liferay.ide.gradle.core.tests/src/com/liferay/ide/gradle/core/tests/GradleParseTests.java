@@ -47,14 +47,14 @@ public class GradleParseTests
 
         GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = updater.updateDependency(
+        FindDependenciesVisitor visitor = updater.insertDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
 
         assertEquals( 27, dependenceLineNum );
 
-        Files.write( outputfile.toPath(), updater.getScripts(), StandardCharsets.UTF_8 );
+        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
 
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse.gradle" );
 
@@ -68,16 +68,16 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testParse2.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
+        FindDependenciesVisitor visitor = updater.insertDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
 
         assertEquals( 24, dependenceLineNum );
 
-        Files.write( outputfile.toPath(), gradleScriptASTParser.getScripts(), StandardCharsets.UTF_8 );
+        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
 
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse2.gradle" );
 
@@ -91,16 +91,16 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testParse3.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
+        FindDependenciesVisitor visitor = updater.insertDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
 
         assertEquals( -1, dependenceLineNum );
 
-        Files.write( outputfile.toPath(), gradleScriptASTParser.getScripts(), StandardCharsets.UTF_8 );
+        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
 
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse3.gradle" );
 
@@ -114,16 +114,16 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testParse4.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
+        FindDependenciesVisitor visitor = updater.insertDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
 
         assertEquals( 23, dependenceLineNum );
 
-        Files.write( outputfile.toPath(), gradleScriptASTParser.getScripts(), StandardCharsets.UTF_8 );
+        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
 
         final File outputFile = new File( "projects/testParseOutput/testParse4.gradle" );
 
@@ -137,16 +137,16 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testParse5.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
+        FindDependenciesVisitor visitor = updater.insertDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
 
         assertEquals( 24, dependenceLineNum );
 
-        Files.write( outputfile.toPath(), gradleScriptASTParser.getScripts(), StandardCharsets.UTF_8 );
+        Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
 
         final File outputFile = new File( "projects/testParseOutput/testParse5.gradle" );
 
@@ -160,9 +160,9 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testDependencies.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        List<GradleDependency> allDependence = gradleScriptASTParser.getAllDependencies();
+        List<GradleDependency> allDependence = updater.getAllDependencies();
 
         assertEquals( 3, allDependence.size() );
     }
@@ -172,11 +172,11 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testDependenciesShortFormat.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        List<GradleDependency> allDependence = gradleScriptASTParser.getAllDependencies();
+        List<GradleDependency> allDependencies = updater.getAllDependencies();
 
-        assertEquals( 3, allDependence.size() );
+        assertEquals( 3, allDependencies.size() );
     }
 
     @Test
@@ -184,11 +184,11 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testDependenciesShortFormatAndLongFormat.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        List<GradleDependency> allDependence = gradleScriptASTParser.getAllDependencies();
+        List<GradleDependency> allDependencies = updater.getAllDependencies();
 
-        assertEquals( 3, allDependence.size() );
+        assertEquals( 3, allDependencies.size() );
     }
 
 }
