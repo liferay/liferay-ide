@@ -52,6 +52,7 @@ public abstract class LayoutTplCoreTests extends BaseTests
         LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
         layoutTpl.setClassName( convertToTplClassName( "0_columns.tpl" ) );
         layoutTpl.setBootstrapStyle( isBootstrapStyle() );
+        layoutTpl.setIs62( is62() );
 
         evalModelWithFile( refTplFile, layoutTpl );
     }
@@ -98,10 +99,10 @@ public abstract class LayoutTplCoreTests extends BaseTests
         IFile refTplFile = getFileFromTplName( "1_3_2_nest_columns.tpl" );
         final String className = convertToTplClassName( "1_3_2_nest_columns.tpl" );
 
-        evalModelWithFile( refTplFile, createModel_132_nest( isBootstrapStyle(), className ) );
+        evalModelWithFile( refTplFile, createModel_132_nest( isBootstrapStyle(), className, is62() ) );
     }
 
-    protected abstract LayoutTplElement createModel_132_nest( boolean isBootstrapStyle, String className );
+    protected abstract LayoutTplElement createModel_132_nest( boolean isBootstrapStyle, String className, boolean is62 );
 
     protected void evalModelWithFile( IFile refTplFile, LayoutTplElement layoutTpl )
     {
@@ -122,7 +123,7 @@ public abstract class LayoutTplCoreTests extends BaseTests
     protected void evalTemplateFromFile( String tplName ) throws Exception
     {
         IFile tplFile = getFileFromTplName( tplName );
-        LayoutTplElement layoutTpl = LayoutTplElementsFactory.INSTANCE.newLayoutTplFromFile( tplFile, isBootstrapStyle() );
+        LayoutTplElement layoutTpl = LayoutTplElementsFactory.INSTANCE.newLayoutTplFromFile( tplFile, isBootstrapStyle(), is62() );
 
         evalModelWithFile( tplFile, layoutTpl );
     }
@@ -140,6 +141,8 @@ public abstract class LayoutTplCoreTests extends BaseTests
     }
 
     protected abstract boolean isBootstrapStyle();
+
+    protected abstract boolean is62();
 
     protected abstract String getFilesPrefix();
 

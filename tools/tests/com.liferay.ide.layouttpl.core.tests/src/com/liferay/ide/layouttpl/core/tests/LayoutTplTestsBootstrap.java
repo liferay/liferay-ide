@@ -19,11 +19,12 @@ import org.junit.Test;
 public class LayoutTplTestsBootstrap extends LayoutTplCoreTests
 {
 
-    protected LayoutTplElement createModel_132_nest( boolean isBootstrapStyle, String className )
+    protected LayoutTplElement createModel_132_nest( boolean isBootstrapStyle, String className, boolean is62)
     {
         final LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
         layoutTpl.setBootstrapStyle( isBootstrapStyle );
         layoutTpl.setClassName( className );
+        layoutTpl.setIs62( is62 );
 
         final PortletLayoutElement row1 = layoutTpl.getPortletLayouts().insert();
 
@@ -76,7 +77,7 @@ public class LayoutTplTestsBootstrap extends LayoutTplCoreTests
         IFile refTplFile = getFileFromTplName( "1_3_2_nest_changed_columns.tpl" );
 
         final String className = convertToTplClassName( "1_3_2_nest_changed_columns.tpl" );
-        final LayoutTplElement layoutTpl = createModel_132_nest( isBootstrapStyle(), className );
+        final LayoutTplElement layoutTpl = createModel_132_nest( isBootstrapStyle(), className, is62());
 
         final PortletLayoutElement row1 = (PortletLayoutElement) layoutTpl.getPortletLayouts().get( 0 );
         final PortletLayoutElement row2 = (PortletLayoutElement) layoutTpl.getPortletLayouts().get( 1 );
@@ -113,6 +114,12 @@ public class LayoutTplTestsBootstrap extends LayoutTplCoreTests
 
     @Override
     protected boolean isBootstrapStyle()
+    {
+        return true;
+    }
+
+    @Override
+    protected boolean is62()
     {
         return true;
     }
@@ -218,6 +225,7 @@ public class LayoutTplTestsBootstrap extends LayoutTplCoreTests
         final LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
 
         layoutTpl.setBootstrapStyle( true );
+        layoutTpl.setIs62( true );
 
         final PortletLayoutElement row = layoutTpl.getPortletLayouts().insert();
 

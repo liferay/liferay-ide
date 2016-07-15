@@ -94,7 +94,7 @@ public class LayoutTplElementsFactory
         }
     }
 
-    public LayoutTplElement newLayoutTplFromFile( IFile file, Boolean isBootstrapStyle )
+    public LayoutTplElement newLayoutTplFromFile( IFile file, Boolean isBootstrapStyle, Boolean is62 )
     {
         if( file == null || !( file.exists() ) )
         {
@@ -106,7 +106,7 @@ public class LayoutTplElementsFactory
         try
         {
             domModel= (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( file );
-            layoutTpl = newLayoutTplFromModel( domModel, isBootstrapStyle );
+            layoutTpl = newLayoutTplFromModel( domModel, isBootstrapStyle, is62 );
         }
         catch( Exception e )
         {
@@ -123,7 +123,7 @@ public class LayoutTplElementsFactory
         return layoutTpl;
     }
 
-    public LayoutTplElement newLayoutTplFromModel( IDOMModel model, Boolean isBootstrapStyle )
+    public LayoutTplElement newLayoutTplFromModel( IDOMModel model, Boolean isBootstrapStyle, Boolean is62 )
     {
         if( model == null )
         {
@@ -140,6 +140,7 @@ public class LayoutTplElementsFactory
             layoutTpl = LayoutTplElement.TYPE.instantiate();
             layoutTpl.setBootstrapStyle( isBootstrapStyle );
             layoutTpl.setClassName( mainContentElement.getAttribute( "class" ) );
+            layoutTpl.setIs62( is62 );
 
             IDOMElement[] portletLayoutElements =
                 LayoutTplUtil.findChildElementsByClassName( mainContentElement, "div", "portlet-layout" );

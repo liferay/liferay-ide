@@ -41,6 +41,7 @@ import org.w3c.dom.NodeList;
  * @author Gregory Amerson
  * @author Cindy Li
  * @author Kuo Zhang
+ * @author Joye Luo
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplUtil
@@ -179,14 +180,14 @@ public class LayoutTplUtil
             return weightValue;
         }
 
-        // resolve column weight of bootstrap style, portal version greater than or equal to 62
+        // resolve column weight of bootstrap style, portal version equal to 62
         Matcher matcher = Pattern.compile( "(.*span)(\\d+)" ).matcher( classAttr );
 
         if( matcher.matches() )
         {
             String weightString = matcher.group( 2 );
 
-            if( !CoreUtil.isNullOrEmpty( weightString ))
+            if( !CoreUtil.isNullOrEmpty( weightString ) )
             {
                 try
                 {
@@ -200,12 +201,11 @@ public class LayoutTplUtil
         }
         else
         {
-            // old style, portal version less than 62
-            matcher = Pattern.compile( ".*aui-w([-\\d]+).*" ).matcher( classAttr );
+            matcher = Pattern.compile( ".*col-(xs|sm|md|lg)-(\\d+).*" ).matcher( classAttr );
 
             if( matcher.matches() )
             {
-                String weightString = matcher.group( 1 );
+                String weightString = matcher.group( 2 );
 
                 if( !CoreUtil.isNullOrEmpty( weightString ) )
                 {
@@ -213,45 +213,11 @@ public class LayoutTplUtil
                     {
                         weightValue = Integer.parseInt( weightString );
                     }
-                    catch( NumberFormatException e )
+                    catch( NumberFormatException ex )
                     {
-                        // if we have a 1-2 then we have a fraction
-//                        int index = weightString.indexOf( '-' );
-//
-//                        if( index > 0 )
-//                        {
-//                            try
-//                            {
-//                                int numerator = Integer.parseInt( weightString.substring( 0, index ) );
-//                                int denominator =
-//                                    Integer.parseInt( weightString.substring( index + 1, weightString.length() ) );
-//                                weightValue = (int) ( (float) numerator / denominator * 100 );
-//                            }
-//                            catch( NumberFormatException ex )
-//                            {
-//                                // best effort
-//                            }
-//                        }
                         weightValue = 0;
                     }
                 }
-
-//                int remainder = weightValue % 5;
-//
-//                if( remainder != 0 )
-//                {
-//                    if( weightValue != 33 && weightValue != 66 )
-//                    {
-//                        if( remainder < 3 )
-//                        {
-//                            weightValue -= remainder;
-//                        }
-//                        else
-//                        {
-//                            weightValue += remainder;
-//                        }
-//                    }
-//                }
             }
         }
 
