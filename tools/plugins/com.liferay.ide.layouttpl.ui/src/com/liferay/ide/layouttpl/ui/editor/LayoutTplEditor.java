@@ -22,10 +22,14 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElement;
 import com.liferay.ide.layouttpl.core.model.LayoutTplElementsFactory;
 import com.liferay.ide.layouttpl.core.util.LayoutTplUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.lang.reflect.Method;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
@@ -50,7 +54,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Kuo Zhang
- *
+ * @author Joye Luo
  */
 @SuppressWarnings( "restriction" )
 public class LayoutTplEditor extends SapphireEditor implements IExecutableExtension
@@ -137,6 +141,7 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
     {
         LayoutTplElement layoutTpl = LayoutTplElement.TYPE.instantiate();
         layoutTpl.setBootstrapStyle( isBootstrapStyle() );
+        layoutTpl.setIs62( is62() );
         layoutTpl.setClassName( getEditorInput().getName().replaceAll( "\\..*$", "" ) );
 
         return layoutTpl;
@@ -287,6 +292,36 @@ public class LayoutTplEditor extends SapphireEditor implements IExecutableExtens
         }
 
         return retval;
+    }
+
+    private boolean is62()
+    {
+        try
+        {
+            final IProject project = getFile().getProject();
+            final SDK sdk = SDKUtil.getWorkspaceSDK();
+
+            if( ProjectUtil.isMavenProject( project ) )
+            {
+                return true;
+            }
+
+            if( sdk != null )
+            {
+                final Version workSpaceSDKVersion = new Version( sdk.getVersion() );
+                final Version sdk62 = ILiferayConstants.V620;
+
+                if( CoreUtil.compareVersions( workSpaceSDKVersion, sdk62 ) == 0 )
+                {
+                    return true;
+                }
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return false;
     }
 
     @Override

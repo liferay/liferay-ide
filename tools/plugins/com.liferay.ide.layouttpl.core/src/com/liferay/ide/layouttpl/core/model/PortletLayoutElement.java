@@ -53,7 +53,7 @@ public interface PortletLayoutElement extends Element
 
     // *** Class Name ***
 
-    @DefaultValue( text = "${ Concat( \"portlet-layout\", Root.BootstrapStyle ? \" row-fluid\" : \"\" ) }" )
+    @DefaultValue( text = "${ Concat( \"portlet-layout\", Root.BootstrapStyle ? (Root.Is62 ? \" row-fluid\" : \" row\") : \"\" ) }" )
     @Required
     ValueProperty PROP_ClASS_NAME = new ValueProperty( TYPE, "ClassName" );
 
