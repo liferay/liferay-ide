@@ -20,7 +20,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -125,19 +124,15 @@ public class SDK
 
         if( buildFile == null )
         {
-            buildFile = new File( getLocation().append( "build." + project.getProperty( "user.name" ) + ".properties" ).toString() );
+            buildFile = new File(
+                getLocation().append( "build." + project.getProperty( "user.name" ) + ".properties" ).toString() );
             buildFile.createNewFile();
         }
 
         Properties p = new Properties();
 
-        InputStream in = null;
-        OutputStream out = null;
-
-        try
+        try( InputStream in = new FileInputStream( buildFile ); OutputStream out = new FileOutputStream( buildFile ) )
         {
-            in = new FileInputStream( buildFile );
-
             p.load( in );
 
             if( p.containsKey( "app.server.parent.dir" ) )
@@ -149,32 +144,7 @@ public class SDK
                 p.put( "app.server.parent.dir", newServerPath.toPortableString() );
             }
 
-            out = new FileOutputStream( buildFile );
-
             p.store( out, "" );
-        }
-        finally
-        {
-            if( in != null )
-            {
-                try
-                {
-                    in.close();
-                }
-                catch( Exception e2 )
-                {
-                }
-            }
-            if( out != null )
-            {
-                try
-                {
-                    out.close();
-                }
-                catch( Exception e2 )
-                {
-                }
-            }
         }
     }
 
