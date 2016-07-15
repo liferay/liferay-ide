@@ -3,7 +3,6 @@ package com.liferay.ide.gradle.core.parser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -100,11 +99,6 @@ public class GradleDependencyUpdater
         {
             node.visit( visitor );
         }
-    }
-
-    public void insertDependence() throws IOException
-    {
-        Files.write( file.toPath(), scripts, StandardCharsets.UTF_8 );
     }
 
     public List<String> getScripts()
