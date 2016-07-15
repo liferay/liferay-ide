@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.codehaus.groovy.ast.CodeVisitorSupport;
+import org.codehaus.groovy.ast.expr.ArgumentListExpression;
 import org.codehaus.groovy.ast.expr.ClosureExpression;
+import org.codehaus.groovy.ast.expr.ConstantExpression;
+import org.codehaus.groovy.ast.expr.Expression;
 import org.codehaus.groovy.ast.expr.MapEntryExpression;
 import org.codehaus.groovy.ast.expr.MapExpression;
 import org.codehaus.groovy.ast.expr.MethodCallExpression;
@@ -37,6 +40,25 @@ public class FindDependenciesVisitor extends CodeVisitorSupport
 
             super.visitMethodCallExpression( call );
         }
+    }
+
+    @Override
+    public void visitArgumentlistExpression( ArgumentListExpression ale )
+    {
+        List<Expression> expressions = ale.getExpressions();
+
+        if( expressions.size() == 1 && expressions.get( 0 ) instanceof ConstantExpression )
+        {
+            String depStr = expressions.get( 0 ).getText();
+            String[] deps = depStr.split( ":" );
+
+            if( deps.length == 3 )
+            {
+                dependencies.add( new GradleDependency( deps[0], deps[1], deps[2] ) );
+            }
+        }
+
+        super.visitArgumentlistExpression( ale );
     }
 
     @Override

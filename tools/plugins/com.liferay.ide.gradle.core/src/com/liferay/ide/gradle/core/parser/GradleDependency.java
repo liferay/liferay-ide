@@ -3,6 +3,9 @@ package com.liferay.ide.gradle.core.parser;
 
 import java.util.Map;
 
+/**
+ * @author Lovett Li
+ */
 public class GradleDependency
 {
 
@@ -15,6 +18,13 @@ public class GradleDependency
         setGroup( dep.get( "group" ) );
         setName( dep.get( "name" ) );
         setVersion( dep.get( "version" ) );
+    }
+
+    public GradleDependency( String group, String name, String version )
+    {
+        this.group = group;
+        this.name = name;
+        this.version = version;
     }
 
     public String getGroup()

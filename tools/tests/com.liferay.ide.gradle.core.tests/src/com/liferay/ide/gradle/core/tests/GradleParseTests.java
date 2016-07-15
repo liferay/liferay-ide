@@ -179,4 +179,16 @@ public class GradleParseTests
         assertEquals( 3, allDependence.size() );
     }
 
+    @Test
+    public void getAllDependenciesShortFormatAndLongFormat() throws IOException
+    {
+        final File inputFile = new File( "projects/testParseInput/testDependenciesShortFormatAndLongFormat.gradle" );
+
+        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+
+        List<GradleDependency> allDependence = gradleScriptASTParser.getAllDependencies();
+
+        assertEquals( 3, allDependence.size() );
+    }
+
 }
