@@ -45,16 +45,16 @@ public class GradleParseTests
     {
         final File inputFile = new File( "projects/testParseInput/testParse.gradle" );
 
-        GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependence(
+        FindDependenciesVisitor visitor = updater.updateDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
 
         assertEquals( 27, dependenceLineNum );
 
-        Files.write( outputfile.toPath(), gradleScriptASTParser.getScripts(), StandardCharsets.UTF_8 );
+        Files.write( outputfile.toPath(), updater.getScripts(), StandardCharsets.UTF_8 );
 
         final File expectedOutputFile = new File( "projects/testParseOutput/testParse.gradle" );
 
@@ -70,7 +70,7 @@ public class GradleParseTests
 
         GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependence(
+        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
@@ -93,7 +93,7 @@ public class GradleParseTests
 
         GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependence(
+        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
@@ -116,7 +116,7 @@ public class GradleParseTests
 
         GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependence(
+        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();
@@ -139,7 +139,7 @@ public class GradleParseTests
 
         GradleDependencyUpdater gradleScriptASTParser = new GradleDependencyUpdater( inputFile );
 
-        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependence(
+        FindDependenciesVisitor visitor = gradleScriptASTParser.updateDependency(
             "\tcompile group: \"com.liferay\", name:\"com.liferay.bookmarks.api\", version:\"1.0.0\"" );
 
         int dependenceLineNum = visitor.getDependenceLineNum();

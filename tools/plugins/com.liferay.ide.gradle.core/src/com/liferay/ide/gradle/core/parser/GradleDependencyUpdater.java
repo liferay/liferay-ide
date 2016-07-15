@@ -38,7 +38,7 @@ public class GradleDependencyUpdater
         nodes = builder.buildFromString( script );
     }
 
-    public FindDependenciesVisitor updateDependence( String dependence ) throws IOException
+    public FindDependenciesVisitor updateDependency( String dependency ) throws IOException
     {
         FindDependenciesVisitor visitor = new FindDependenciesVisitor();
         walkScript( visitor );
@@ -46,14 +46,14 @@ public class GradleDependencyUpdater
 
         if( visitor.getDependenceLineNum() == -1 )
         {
-            if( !dependence.startsWith( "\t" ) )
+            if( !dependency.startsWith( "\t" ) )
             {
-                dependence = "\t" + dependence;;
+                dependency = "\t" + dependency;;
             }
 
             scripts.add( "" );
             scripts.add( "dependencies {" );
-            scripts.add( dependence );
+            scripts.add( dependency );
             scripts.add( "}" );
         }
         else
@@ -62,7 +62,7 @@ public class GradleDependencyUpdater
             {
                 scripts = Files.readAllLines( Paths.get( file.toURI() ) );
                 StringBuilder builder = new StringBuilder( scripts.get( visitor.getDependenceLineNum() - 1 ) );
-                builder.insert( visitor.getColumnNum() - 2, "\n" + dependence + "\n" );
+                builder.insert( visitor.getColumnNum() - 2, "\n" + dependency + "\n" );
                 String dep = builder.toString();
 
                 if( CoreUtil.isWindows() )
@@ -79,7 +79,7 @@ public class GradleDependencyUpdater
             }
             else
             {
-                scripts.add( visitor.getDependenceLineNum() - 1, dependence );
+                scripts.add( visitor.getDependenceLineNum() - 1, dependency );
             }
         }
 
