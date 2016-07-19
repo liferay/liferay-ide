@@ -26,7 +26,7 @@ public class ConfigSourceNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_IMPORT_PROJECT );
+        setOutlineSelection( context, STEP_CONFIG_SOURCE);
 
         return null;
     }

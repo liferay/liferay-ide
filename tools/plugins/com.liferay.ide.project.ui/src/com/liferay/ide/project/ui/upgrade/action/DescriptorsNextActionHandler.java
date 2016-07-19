@@ -26,7 +26,7 @@ public class DescriptorsNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_BUILD_SERVICE );
+        setOutlineSelection( context, STEP_DESCRIPTORS );
 
         return null;
     }

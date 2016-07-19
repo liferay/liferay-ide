@@ -71,6 +71,8 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
 
                 String wsPath = renameProjectFolder( location, projectName, npm );
 
+                op(context).setNewLocation( wsPath );
+
                 ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
 
                 importer.importProject( wsPath, npm );
@@ -85,6 +87,8 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
 
                 String newPath = renameProjectFolder( location, projectName, npm );
 
+                op(context).setNewLocation( newPath );
+
                 sdk = SDKUtil.createSDKFromLocation( new Path( newPath ) );
 
                 SDKUtil.openAsProject( sdk, npm );
@@ -95,7 +99,7 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
             ProjectUI.createErrorStatus( "Convent failed", e );
         }
 
-        setOutlineSelection( context, STEP_DESCRIPTORS );
+        setOutlineSelection( context, STEP_IMPORT_PROJECT );
 
         return null;
     }

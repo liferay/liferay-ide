@@ -25,6 +25,7 @@ import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
@@ -35,6 +36,7 @@ import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameDefaultVal
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNamePossibleValuesService;
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameValidationService;
 import com.liferay.ide.project.core.upgrade.service.LocationDefaultValueService;
+import com.liferay.ide.project.core.upgrade.service.LocationListener;
 
 @XmlBinding( path = "CodeUpgrade" )
 public interface CodeUpgradeOp extends Element
@@ -47,11 +49,23 @@ public interface CodeUpgradeOp extends Element
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Required
     @Service( impl = LocationDefaultValueService.class )
+    @Listeners( LocationListener.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();
     void setLocation( String location );
     void setLocation( Path location );
+
+    @XmlBinding( path = "NewLocation" )
+    @Type( base = Path.class )
+    @AbsolutePath
+    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+    @Required
+    ValueProperty PROP_NewLOCATION = new ValueProperty( TYPE, "NewLocation" );
+
+    Value<Path> getNewLocation();
+    void setNewLocation( String newLocation );
+    void setNewLocation( Path newLocation );
 
     @XmlBinding( path = "ProjectName" )
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
@@ -85,6 +99,7 @@ public interface CodeUpgradeOp extends Element
     void setConfirm( String confirm );
     void setConfirm( Boolean confirm );
 
+    @XmlBinding( path = "HasHook" )
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     ValueProperty PROP_HAS_HOOK = new ValueProperty( TYPE, "HasHook" );
@@ -93,6 +108,16 @@ public interface CodeUpgradeOp extends Element
     void setHasHook( String hasHook );
     void setHasHook( Boolean hasHook );
 
+    @XmlBinding( path = "HasPortlet" )
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    ValueProperty PROP_HAS_PORTLET = new ValueProperty( TYPE, "HasPortlet" );
+
+    Value<Boolean> getHasPortlet();
+    void setHasPortlet( String hasPortlet );
+    void setHasPortlet( Boolean hasPortlet );
+
+    @XmlBinding( path = "HasTheme" )
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     ValueProperty PROP_HAS_THEME = new ValueProperty( TYPE, "HasTheme" );
@@ -101,6 +126,7 @@ public interface CodeUpgradeOp extends Element
     void setHasTheme( String hasTheme );
     void setHasTheme( Boolean hasTheme );
 
+    @XmlBinding( path = "HasExt" )
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     ValueProperty PROP_HAS_EXT = new ValueProperty( TYPE, "HasExt" );
@@ -109,6 +135,7 @@ public interface CodeUpgradeOp extends Element
     void setHasExt( String hasExt );
     void setHasExt( Boolean hasExt );
 
+    @XmlBinding( path = "HasServiceBuilder" )
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     ValueProperty PROP_HAS_SERVICE_BUILDER = new ValueProperty( TYPE, "HasServiceBuilder" );
@@ -116,5 +143,23 @@ public interface CodeUpgradeOp extends Element
     Value<Boolean> getHasServiceBuilder();
     void setHasServiceBuilder( String hasServiceBuilder );
     void setHasServiceBuilder( Boolean hasServiceBuilder );
+
+    @XmlBinding( path = "HasLayout" )
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    ValueProperty PROP_HAS_LAYOUT = new ValueProperty( TYPE, "HasLayout" );
+
+    Value<Boolean> getHasLayout();
+    void setHasLayout( String hasLayout );
+    void setHasLayout( Boolean hasLayout );
+
+    @XmlBinding( path = "HasWeb" )
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    ValueProperty PROP_HAS_WEB = new ValueProperty( TYPE, "HasWeb" );
+
+    Value<Boolean> getHasWeb();
+    void setHasWeb( String hasWeb );
+    void setHasWeb( Boolean hasWeb );
 
 }
