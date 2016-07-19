@@ -1010,6 +1010,12 @@
             id="com.liferay.ide.project.ui.pref.bladeCLIPreferencePage"
             name="Blade">
       </page>
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.project.ui.pref.TargetPlatformSettingsPage"
+            id="com.liferay.ide.project.ui.targetPlatformSettingsPage"
+            name="Target Platform">
+      </page>
    </extension>
 
    <extension
