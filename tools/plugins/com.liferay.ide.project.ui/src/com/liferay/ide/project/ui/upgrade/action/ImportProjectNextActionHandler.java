@@ -18,6 +18,8 @@ package com.liferay.ide.project.ui.upgrade.action;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -37,6 +39,7 @@ import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.SDK;
@@ -76,6 +79,8 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
                 ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
 
                 importer.importProject( wsPath, npm );
+
+                importSDKProject( new Path( wsPath ).append( "plugins-sdk" ), npm );
             }
             else
             {
@@ -92,6 +97,8 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
                 sdk = SDKUtil.createSDKFromLocation( new Path( newPath ) );
 
                 SDKUtil.openAsProject( sdk, npm );
+
+                importSDKProject( sdk.getLocation(), npm );
             }
         }
         catch( Exception e )
@@ -119,6 +126,7 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
 
             sdkProject.delete( false, true, monitor );
         }
+        
     }
 
     private void copyNewSDK( IPath targetSDKLocation, IProgressMonitor monitor ) throws IOException
@@ -157,6 +165,28 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
         File newFolder = targetSDKLocation.removeLastSegments( 1 ).append( newName ).toFile();
         targetSDKLocation.toFile().renameTo( newFolder );
         return newFolder.toPath().toString();
+    }
+
+    private void importSDKProject( IPath targetSDKLocation, IProgressMonitor monitor )
+    {
+        Collection<File> eclipseProjectFiles = new ArrayList<File>();
+
+        Collection<File> liferayProjectDirs = new ArrayList<File>();
+
+        if( ProjectUtil.collectSDKProjectsFromDirectory(
+            eclipseProjectFiles, liferayProjectDirs, targetSDKLocation.toFile(), null, true, monitor ) )
+        {
+            for( File project : liferayProjectDirs )
+            {
+                try
+                {
+                    ProjectImportUtil.importProject( new Path( project.getPath() ), monitor, null );
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+        }
     }
 
 }
