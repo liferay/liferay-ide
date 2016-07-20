@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.util.Util;
+import org.eclipse.ui.internal.ide.IDEInternalPreferences;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 /**
@@ -35,7 +36,8 @@ public class ServerUIUtil
     {
         String retval = null;
 
-        String command = IDEWorkbenchPlugin.getDefault().getPreferenceStore().getString( "SYSTEM_EXPLORER" );
+        String command = IDEWorkbenchPlugin.getDefault().getPreferenceStore().getString( IDEInternalPreferences
+            .WORKBENCH_SYSTEM_EXPLORER );
 
         if( !CoreUtil.isNullOrEmpty( command ) )
         {

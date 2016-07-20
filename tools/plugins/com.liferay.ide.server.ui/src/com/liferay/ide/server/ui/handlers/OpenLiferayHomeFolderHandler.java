@@ -15,8 +15,10 @@
 
 package com.liferay.ide.server.ui.handlers;
 
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.util.ServerUIUtil;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -47,9 +50,10 @@ public class OpenLiferayHomeFolderHandler extends AbstractHandler
 
             if( ( selectedObj.size() == 1 ) && ( selectedObj.get( 0 ) instanceof IServer ) )
             {
-                IServer server = (IServer) selectedObj.get( 0 );
-
-                final IPath path = server.getRuntime().getLocation();
+                final IServer server = (IServer) selectedObj.get( 0 );
+                final IRuntime runtime = server.getRuntime();
+                final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
+                final IPath path = liferayRuntime.getAppServerDir();
 
                 try
                 {
