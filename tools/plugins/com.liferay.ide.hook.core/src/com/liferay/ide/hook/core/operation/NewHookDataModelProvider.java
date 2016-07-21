@@ -20,11 +20,14 @@ import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataM
 import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.PROJECT;
 import static org.eclipse.jst.j2ee.internal.common.operations.INewJavaClassDataModelProperties.SOURCE_FOLDER;
 
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.hook.core.HookCore;
 import com.liferay.ide.hook.core.dd.HookDescriptorHelper;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +37,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
@@ -45,6 +49,7 @@ import org.eclipse.jst.j2ee.internal.project.J2EEProjectUtilities;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.wst.common.componentcore.internal.operation.ArtifactEditOperationDataModelProvider;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModelOperation;
+import org.osgi.framework.Version;
 
 /**
  * @author Greg Amerson
@@ -234,6 +239,26 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
     @Override
     public IStatus validate( String propertyName )
     {
+        boolean is70 = false;
+
+        try
+        {
+            SDK sdk = SDKUtil.getWorkspaceSDK();
+
+            if( sdk != null )
+            {
+                final Version version = new Version( sdk.getVersion() );
+                final Version sdk70 = ILiferayConstants.V700;
+                if( CoreUtil.compareVersions( version, sdk70 ) >= 0 )
+                {
+                    is70 = true;
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+        }
+
         if( CUSTOM_JSPS_FOLDER.equals( propertyName ) && getBooleanProperty( CREATE_CUSTOM_JSPS ) )
         {
             String jspFolder = getStringProperty( CUSTOM_JSPS_FOLDER );
@@ -350,6 +375,10 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
                 }
             }
             return HookCore.createErrorStatus( Msgs.specifyOneLanguagePropertyFile );
+        }
+        else if( is70 && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
+        {
+            return HookCore.createErrorStatus( Msgs.wouldntSupportInSDK70 );
         }
 
         return super.validate( propertyName );
@@ -473,6 +502,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
         public static String specifyOneJSP;
         public static String specifyOneLanguagePropertyFile;
         public static String specifyOneService;
+        public static String wouldntSupportInSDK70;
 
         static
         {
