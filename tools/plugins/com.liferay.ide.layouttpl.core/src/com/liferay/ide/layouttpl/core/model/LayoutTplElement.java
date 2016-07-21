@@ -24,6 +24,7 @@ import org.eclipse.sapphire.modeling.annotations.Required;
 
 /**
  * @author Kuo Zhang
+ * @author Joye Luo
  */
 public interface LayoutTplElement extends CanAddPortletLayouts
 {
@@ -65,5 +66,15 @@ public interface LayoutTplElement extends CanAddPortletLayouts
     Value<Boolean> getBootstrapStyle();
     void setBootstrapStyle( String value );
     void setBootstrapStyle( Boolean value );
+
+ // *** Version ***
+
+    @Required
+    @Type( base = Boolean.class )
+    ValueProperty PROP_IS_62 = new ValueProperty( TYPE, "Is62" );
+
+    Value<Boolean> getIs62();
+    void setIs62( String value );
+    void setIs62( Boolean value );
 
 }
