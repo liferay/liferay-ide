@@ -69,8 +69,8 @@ public class GradleUtil
         GradleDistribution gradleDistribution =
             isPresent ? requestAttributes.get().getGradleDistribution() : GradleDistribution.fromBuild();
 
-        String gradleUserHome =
-            isPresent ? FileUtils.getAbsolutePath( requestAttributes.get().getGradleUserHome() ).orNull() : null;
+        //String gradleUserHome =
+        //    isPresent ? FileUtils.getAbsolutePath( requestAttributes.get().getGradleUserHome() ).orNull() : null;
 
         String javaHome =
             isPresent ? FileUtils.getAbsolutePath( requestAttributes.get().getJavaHome() ).orNull() : null;
@@ -82,7 +82,7 @@ public class GradleUtil
         boolean showConsoleView = true;
 
         return GradleRunConfigurationAttributes.with(
-            tasks, projectDirectoryExpression, gradleDistribution, gradleUserHome, javaHome, jvmArguments, arguments,
+            tasks, projectDirectoryExpression, gradleDistribution, javaHome, jvmArguments, arguments,
             showExecutionView, showConsoleView );
     }
 
