@@ -2,7 +2,7 @@
 <feature
       id="com.liferay.ide.alloy"
       label="Liferay IDE AlloyUI"
-      version="3.0.1.qualifier"
+      version="3.1.0.qualifier"
       provider-name="Liferay, Inc."
       plugin="com.liferay.ide.alloy.ui">
 
