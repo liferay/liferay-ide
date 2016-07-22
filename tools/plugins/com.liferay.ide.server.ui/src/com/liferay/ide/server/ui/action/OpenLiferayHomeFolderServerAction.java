@@ -16,7 +16,6 @@
 package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.ui.LiferayServerUI;
 import com.liferay.ide.server.ui.util.ServerUIUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -27,7 +26,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -51,9 +49,7 @@ public class OpenLiferayHomeFolderServerAction extends AbstractServerRunningActi
     {
         if( selectedServer != null )
         {
-            final IRuntime runtime = selectedServer.getRuntime();
-            final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
-            final IPath path = liferayRuntime.getAppServerDir();
+            final IPath path = ServerUtil.getLiferayRuntime( selectedServer.getRuntime() ).getAppServerDir();
 
             try
             {

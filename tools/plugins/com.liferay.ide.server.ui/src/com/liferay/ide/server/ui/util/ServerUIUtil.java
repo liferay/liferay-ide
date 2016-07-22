@@ -36,8 +36,8 @@ public class ServerUIUtil
     {
         String retval = null;
 
-        String command = IDEWorkbenchPlugin.getDefault().getPreferenceStore().getString( IDEInternalPreferences
-            .WORKBENCH_SYSTEM_EXPLORER );
+        String command = IDEWorkbenchPlugin.getDefault().getPreferenceStore().getString(
+            IDEInternalPreferences.WORKBENCH_SYSTEM_EXPLORER );
 
         if( !CoreUtil.isNullOrEmpty( command ) )
         {

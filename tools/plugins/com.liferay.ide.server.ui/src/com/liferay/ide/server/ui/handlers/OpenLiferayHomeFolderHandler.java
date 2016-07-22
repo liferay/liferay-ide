@@ -51,9 +51,8 @@ public class OpenLiferayHomeFolderHandler extends AbstractHandler
             if( ( selectedObj.size() == 1 ) && ( selectedObj.get( 0 ) instanceof IServer ) )
             {
                 final IServer server = (IServer) selectedObj.get( 0 );
-                final IRuntime runtime = server.getRuntime();
-                final ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( runtime );
-                final IPath path = liferayRuntime.getAppServerDir();
+
+                final IPath path = ServerUtil.getLiferayRuntime( server.getRuntime() ).getAppServerDir();
 
                 try
                 {
