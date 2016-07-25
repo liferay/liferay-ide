@@ -137,7 +137,7 @@ public class SDK
 
             if( p.containsKey( "app.server.parent.dir" ) )
             {
-                p.replace( "app.server.parent.dir", newServerPath.toPortableString() );
+                p.put( "app.server.parent.dir", newServerPath.toPortableString() );
             }
             else
             {
