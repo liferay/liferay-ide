@@ -24,6 +24,8 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
+import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
+
 /**
  * @author Gregory Amerso
  */
@@ -50,5 +52,14 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
 
     Value<String> getServerName();
     void setServerName( String value );
+
+    // *** bundleUrl ***
+
+    @DefaultValue( text = LiferayWorkspaceProjectProvider.defaultBundleUrl )
+    @Service( impl = BundleUrlValidationService.class )
+    ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, "bundleUrl" );
+
+    Value<String> getBundleUrl();
+    void setBundleUrl( String value );
 
 }

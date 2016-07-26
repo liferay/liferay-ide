@@ -26,6 +26,12 @@ import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -39,10 +45,14 @@ import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Andy Wu
+ * @author Terry Jia
  */
 public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvider
     implements NewLiferayProjectProvider<NewLiferayWorkspaceOp>
 {
+
+    public static final String defaultBundleUrl =
+                    "https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.1%20GA2/liferay-ce-portal-tomcat-7.0-ga2-20160610113014153.zip";
 
     public LiferayWorkspaceProjectProvider()
     {
@@ -84,7 +94,7 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         return retval;
     }
 
-    public IStatus importProject(String location , IProgressMonitor monitor , String extraOperation )
+    public IStatus importProject( String location, IProgressMonitor monitor, String extraOperation, String bundleUrl )
     {
         try
         {
@@ -102,6 +112,25 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
                 path.lastSegment();
 
                 IProject project = CoreUtil.getProject( path.lastSegment() );
+
+                if( !bundleUrl.equals( defaultBundleUrl ) )
+                {
+                    final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
+
+                    try(InputStream in = new FileInputStream( gradlePropertiesFile );
+                                    OutputStream out = new FileOutputStream( gradlePropertiesFile ))
+                    {
+                        final Properties properties = new Properties();
+                        properties.load( in );
+
+                        properties.put( "liferay.workspace.bundle.url", bundleUrl );
+
+                        properties.store( out, "" );
+                    }
+                    catch( IOException e )
+                    {
+                    }
+                }
 
                 GradleUtil.runGradleTask( project, extraOperation, monitor );
 

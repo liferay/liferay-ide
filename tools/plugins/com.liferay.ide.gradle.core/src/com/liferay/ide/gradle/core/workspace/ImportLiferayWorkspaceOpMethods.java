@@ -58,16 +58,17 @@ public class ImportLiferayWorkspaceOpMethods
 
             boolean isInitBundle = op.getProvisionLiferayBundle().content();
             boolean isHasBundlesDir = op.getHasBundlesDir().content();
+            String bundleUrl = op.getBundleUrl().content();
 
             IStatus importStatus = null;
 
             if( isInitBundle && !isHasBundlesDir )
             {
-                importStatus = provider.importProject( location, monitor, "initBundle" );
+                importStatus = provider.importProject( location, monitor, "initBundle", bundleUrl );
             }
             else
             {
-                importStatus = provider.importProject( location, monitor, null );
+                importStatus = provider.importProject( location, monitor, null, null );
             }
 
             retval = StatusBridge.create( importStatus );

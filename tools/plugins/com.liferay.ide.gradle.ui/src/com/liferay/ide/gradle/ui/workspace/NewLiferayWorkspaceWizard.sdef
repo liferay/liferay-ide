@@ -41,6 +41,10 @@
                     <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
                     <property>serverName</property>
                 </property-editor>
+                <property-editor>
+                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
+                    <property>bundleUrl</property>
+                </property-editor>
                 <spacer></spacer>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>

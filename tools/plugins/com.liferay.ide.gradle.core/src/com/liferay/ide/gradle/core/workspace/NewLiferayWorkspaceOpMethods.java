@@ -69,16 +69,17 @@ public class NewLiferayWorkspaceOpMethods
             String location = projectLocation.toOSString();
 
             boolean isInitBundle = op.getProvisionLiferayBundle().content();
+            final String bundleUrl = op.getBundleUrl().content();
 
             IStatus importStatus = null;
 
             if( isInitBundle )
             {
-                importStatus = provider.importProject( location, monitor, "initBundle" );
+                importStatus = provider.importProject( location, monitor, "initBundle", bundleUrl );
             }
             else
             {
-                importStatus = provider.importProject( location, monitor, null );
+                importStatus = provider.importProject( location, monitor, null, null );
             }
 
             retval = StatusBridge.create( importStatus );
