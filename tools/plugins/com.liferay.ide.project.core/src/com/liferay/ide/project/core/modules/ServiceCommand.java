@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.modules;
 import aQute.remote.api.Agent;
 
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.BundleSupervisor;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
 
@@ -197,11 +198,11 @@ public class ServiceCommand
 
         if( _serviceName == null )
         {
-            result = getStaticServices();
+            result = TargetPlatformUtil.getServicesList();
         }
         else
         {
-            result = getStaticServiceBundle( _serviceName );
+            result = TargetPlatformUtil.getServiceBundle( _serviceName );
         }
 
         return result;
@@ -232,35 +233,6 @@ public class ServiceCommand
         supervisor.getAgent().stdin( "services" );
 
         return parseService( supervisor.getOutInfo() );
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private String[] getStaticServiceBundle( String _serviceName ) throws Exception
-    {
-        final File servicesFile = checkStaticServicesFile();
-        final ObjectMapper mapper = new ObjectMapper();
-
-        Map<String, List<String>> map = mapper.readValue( servicesFile, Map.class );
-        List<String> serviceBundle = map.get( _serviceName );
-
-        if( serviceBundle != null && serviceBundle.size() != 0 )
-        {
-            return (String[]) serviceBundle.toArray( new String[serviceBundle.size()] );
-        }
-
-        return null;
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private String[] getStaticServices() throws Exception
-    {
-        final File servicesFile = checkStaticServicesFile();
-        final ObjectMapper mapper = new ObjectMapper();
-
-        Map<String, String[]> map = mapper.readValue( servicesFile, Map.class );
-        String[] services = map.keySet().toArray( new String[0] );
-
-        return services;
     }
 
     private void updateServicesStaticFile( final String[] servicesList, final BundleSupervisor supervisor ) throws Exception

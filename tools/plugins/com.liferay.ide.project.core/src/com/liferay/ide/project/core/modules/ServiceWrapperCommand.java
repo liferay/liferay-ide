@@ -1,7 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 
 import java.io.File;
@@ -33,10 +48,17 @@ public class ServiceWrapperCommand
 {
 
     private final IServer _server;
+    private String _serviceWrapperName;
 
     public ServiceWrapperCommand( IServer server )
     {
         _server = server;
+    }
+
+    public ServiceWrapperCommand( IServer _server, String _serviceWrapperName )
+    {
+        this._server = _server;
+        this._serviceWrapperName = _serviceWrapperName;
     }
 
     public String[] getServiceWrapper() throws Exception
@@ -44,7 +66,7 @@ public class ServiceWrapperCommand
 
         if( _server == null )
         {
-            return getStaticServiceWrapper();
+            return getServiceWrapperFromTargetPlatform();
         }
         else
         {
@@ -185,24 +207,20 @@ public class ServiceWrapperCommand
         }
     }
 
-    @SuppressWarnings( "unchecked" )
-    private String[] getStaticServiceWrapper() throws Exception
+    private String[] getServiceWrapperFromTargetPlatform() throws Exception
     {
-        final URL url =
-            FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/wrappers-static.json" ) );
-        final File servicesFile = new File( url.getFile() );
+        String[] result;
 
-        if( servicesFile.exists() )
+        if( _serviceWrapperName == null )
         {
-            final ObjectMapper mapper = new ObjectMapper();
-
-            List<String> map = mapper.readValue( servicesFile, List.class );
-            String[] wrappers = map.toArray( new String[0] );
-
-            return wrappers;
+            result = TargetPlatformUtil.getServiceWrapperList();
+        }
+        else
+        {
+            result = TargetPlatformUtil.getServiceWrapperBundle( _serviceWrapperName );
         }
 
-        throw new FileNotFoundException( "can't find static services file wrapper-static.json" );
+        return result;
     }
 
     private void updateServiceWrapperStaticFile( final String[] wrapperList ) throws Exception

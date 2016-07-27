@@ -61,8 +61,6 @@ public class TargetPlatformSettingsPage extends PreferencePage implements IWorkb
 
     private void initvaules()
     {
-        preferenceStore.getString( ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION );
-
         IPreferenceStore store = getPreStore();
         String version;
 
@@ -110,7 +108,7 @@ public class TargetPlatformSettingsPage extends PreferencePage implements IWorkb
 
         try
         {
-            targetPlatFormVersion.setInput( TargetPlatformUtil.getAllTargetPlatfromVersion() );
+            targetPlatFormVersion.setInput( TargetPlatformUtil.getAllTargetPlatfromVersions() );
         }
         catch( IOException e )
         {
