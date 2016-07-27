@@ -18,10 +18,14 @@ import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
@@ -31,6 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Andy Wu
+ * @author Lovett Li
  */
 public class RunMigrationToolAction extends Action
 {
@@ -56,8 +61,18 @@ public class RunMigrationToolAction extends Action
 
             if( selectedProjects != null )
             {
-                final IJavaProject javaProject = (IJavaProject) selectedProjects[0];
-                final ISelection selection = new StructuredSelection( javaProject.getProject() );
+                List<IProject> projects = new ArrayList<>();
+
+                for( Object project : selectedProjects )
+                {
+                    if( project instanceof IJavaProject )
+                    {
+                        IJavaProject p = (IJavaProject) project;
+                        projects.add( p.getProject() );
+                    }
+                }
+
+                final ISelection selection = new StructuredSelection( projects.toArray( new IProject[0] ) );
 
                 try
                 {

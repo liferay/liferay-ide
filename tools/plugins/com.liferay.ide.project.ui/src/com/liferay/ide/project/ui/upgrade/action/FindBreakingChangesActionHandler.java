@@ -17,8 +17,13 @@ package com.liferay.ide.project.ui.upgrade.action;
 
 import org.eclipse.sapphire.ui.Presentation;
 
+import com.liferay.ide.project.ui.migration.MigrationView;
+import com.liferay.ide.project.ui.migration.RunMigrationToolAction;
+import com.liferay.ide.ui.util.UIUtil;
+
 /**
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class FindBreakingChangesActionHandler extends BaseActionHandler
 {
@@ -26,6 +31,8 @@ public class FindBreakingChangesActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
+        MigrationView view = (MigrationView) UIUtil.showView( MigrationView.ID );
+        new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();;
         return null;
     }
 

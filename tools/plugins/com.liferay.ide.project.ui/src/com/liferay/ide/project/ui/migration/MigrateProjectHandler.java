@@ -71,9 +71,19 @@ public class MigrateProjectHandler extends AbstractHandler
 
         if( selection instanceof IStructuredSelection )
         {
-            Object element = ( (IStructuredSelection) selection ).getFirstElement();
+            Object element = null;
+
+            if( ( (IStructuredSelection) selection ).size() > 1 )
+            {
+                element = ( (IStructuredSelection) selection ).toArray();
+            }
+            else
+            {
+                element = ( (IStructuredSelection) selection ).getFirstElement();
+            }
 
             IProject project = null;
+            IProject[] projects = null;
 
             if( element instanceof IProject )
             {
@@ -84,6 +94,10 @@ public class MigrateProjectHandler extends AbstractHandler
                 IAdaptable adaptable = (IAdaptable) element;
 
                 project = (IProject) adaptable.getAdapter( IProject.class );
+            }
+            else if( element instanceof Object[] )
+            {
+                projects = Arrays.copyOf( (Object[]) element, ( (Object[]) element ).length, IProject[].class );
             }
 
             if( project != null )
@@ -102,7 +116,36 @@ public class MigrateProjectHandler extends AbstractHandler
 
                 final IPath location = project.getLocation();
 
-                findMigrationProblems( new IPath[] { location }, project.getName() );
+                findMigrationProblems( new IPath[] { location }, new String[] { project.getName() } );
+            }
+            else if( projects != null )
+            {
+                final List<IPath> locations = new ArrayList<>();
+                final List<String> projectNames = new ArrayList<>();
+                boolean shouldContinue = false;
+
+                for( IProject iProject : projects )
+                {
+                    if( shouldContinue == false && shouldShowMessageDialog( iProject ) )
+                    {
+                        shouldContinue = showMessageDialog( project );
+
+                        if( !shouldContinue )
+                        {
+                            return null;
+                        }
+
+                    }
+                    if( shouldContinue && shouldShowMessageDialog( iProject ) )
+                    {
+                        MarkerUtil.clearMarkers( iProject, MigrationConstants.MARKER_TYPE, null );
+                    }
+
+                    locations.add( iProject.getLocation() );
+                    projectNames.add( iProject.getName() );
+                }
+
+                findMigrationProblems( locations.toArray( new IPath[0] ), projectNames.toArray( new String[0] ) );
             }
         }
 
@@ -111,10 +154,10 @@ public class MigrateProjectHandler extends AbstractHandler
 
     public void findMigrationProblems( final IPath[] locations )
     {
-        findMigrationProblems( locations, "" );
+        findMigrationProblems( locations, new String[]{""} );
     }
 
-    public void findMigrationProblems( final IPath[] locations, final String projectName )
+    public void findMigrationProblems( final IPath[] locations, final String[] projectName )
     {
         Job job = new WorkspaceJob( "Finding migration problems..." )
         {
@@ -165,15 +208,15 @@ public class MigrateProjectHandler extends AbstractHandler
                     final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
                     final Migration m = context.getService( sr );
 
-                    final List<Problem> allProblems = new ArrayList<>();
-
-                    for( IPath location : locations )
+                    for( int j = 0; j < locations.length; j++ )
                     {
+                        List<Problem> allProblems = new ArrayList<>();
+
                         if( !override.isCanceled() )
                         {
-                            final List<Problem> problems = m.findProblems( location.toFile(), override );
+                            final List<Problem> problems = m.findProblems( locations[j].toFile(), override );
 
-                            for( Problem problem : problems)
+                            for( Problem problem : problems )
                             {
                                 if( shouldAdd( problem ) )
                                 {
@@ -181,71 +224,72 @@ public class MigrateProjectHandler extends AbstractHandler
                                 }
                             }
                         }
-                    }
 
-                    if( allProblems.size() > 0 )
-                    {
-                        MigrationProblemsContainer container =
-                            UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
-
-                        MigrationProblems[] migrationProblemsArray = null;
-
+                        MigrationProblemsContainer container = null;
                         List<MigrationProblems> migrationProblemsList = new ArrayList<MigrationProblems>();
 
-                        if( container == null )
+                        if( allProblems.size() > 0 )
                         {
-                            container = new MigrationProblemsContainer();
-                        }
+                            container =
+                                UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
 
-                        if( container.getProblemsArray() != null )
-                        {
-                            migrationProblemsArray = container.getProblemsArray();
-                        }
+                            MigrationProblems[] migrationProblemsArray = null;
 
-                        if( migrationProblemsArray != null )
-                        {
-                            List<MigrationProblems> mpList = Arrays.asList( migrationProblemsArray );
-
-                            for( MigrationProblems mp : mpList )
+                            if( container == null )
                             {
-                                migrationProblemsList.add( mp );
+                                container = new MigrationProblemsContainer();
                             }
-                        }
 
-                        MigrationProblems migrationProblems = new MigrationProblems();
-
-                        List<FileProblems> fileProblemsList =
-                            FileProblemsUtil.newFileProblemsListFrom( allProblems.toArray( new Problem[0] ) );
-
-                        migrationProblems.setProblems( fileProblemsList.toArray( new FileProblems[0] ) );
-
-                        migrationProblems.setType( "Code Problems" );
-                        migrationProblems.setSuffix( projectName );
-
-                        boolean existing = false;
-                        int index = -1;
-
-                        for( int i = 0; i < migrationProblemsList.size(); i++ )
-                        {
-                            UpgradeProblems upgradeProblems = migrationProblemsList.get( i );
-
-                            if( ( (MigrationProblems) upgradeProblems ).getSuffix().equals( projectName ) )
+                            if( container.getProblemsArray() != null )
                             {
-                                existing = true;
-
-                                index = i;
-
-                                break;
+                                migrationProblemsArray = container.getProblemsArray();
                             }
-                        }
 
-                        if( existing )
-                        {
-                            migrationProblemsList.set( index, migrationProblems );
-                        }
-                        else
-                        {
-                            migrationProblemsList.add( migrationProblems );
+                            if( migrationProblemsArray != null )
+                            {
+                                List<MigrationProblems> mpList = Arrays.asList( migrationProblemsArray );
+
+                                for( MigrationProblems mp : mpList )
+                                {
+                                    migrationProblemsList.add( mp );
+                                }
+                            }
+
+                            MigrationProblems migrationProblems = new MigrationProblems();
+
+                            List<FileProblems> fileProblemsList =
+                                FileProblemsUtil.newFileProblemsListFrom( allProblems.toArray( new Problem[0] ) );
+
+                            migrationProblems.setProblems( fileProblemsList.toArray( new FileProblems[0] ) );
+
+                            migrationProblems.setType( "Code Problems" );
+                            migrationProblems.setSuffix( projectName[j] );
+
+                            boolean existing = false;
+                            int index = -1;
+
+                            for( int i = 0; i < migrationProblemsList.size(); i++ )
+                            {
+                                UpgradeProblems upgradeProblems = migrationProblemsList.get( i );
+
+                                if( ( (MigrationProblems) upgradeProblems ).getSuffix().equals( projectName[j] ) )
+                                {
+                                    existing = true;
+
+                                    index = i;
+
+                                    break;
+                                }
+                            }
+
+                            if( existing )
+                            {
+                                migrationProblemsList.set( index, migrationProblems );
+                            }
+                            else
+                            {
+                                migrationProblemsList.add( migrationProblems );
+                            }
                         }
 
                         container.setProblemsArray( migrationProblemsList.toArray( new MigrationProblems[0] ) );
