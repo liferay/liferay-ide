@@ -38,7 +38,7 @@ public class BundleUrlValidationService extends ValidationService
         }
         catch( Exception e )
         {
-            retval = Status.createErrorStatus( "The bundle Url should be a vaild URL." );
+            retval = Status.createErrorStatus( "The bundle URL should be a vaild URL." );
         }
 
         return retval;
