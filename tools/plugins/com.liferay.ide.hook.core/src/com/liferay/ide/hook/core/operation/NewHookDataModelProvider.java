@@ -378,7 +378,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
         }
         else if( is70 && getBooleanProperty( CREATE_LANGUAGE_PROPERTIES ) )
         {
-            return HookCore.createErrorStatus( Msgs.wouldntSupportInSDK70 );
+            return HookCore.createErrorStatus( Msgs.noSupportInSDK70 );
         }
 
         return super.validate( propertyName );
@@ -502,7 +502,7 @@ public class NewHookDataModelProvider extends ArtifactEditOperationDataModelProv
         public static String specifyOneJSP;
         public static String specifyOneLanguagePropertyFile;
         public static String specifyOneService;
-        public static String wouldntSupportInSDK70;
+        public static String noSupportInSDK70;
 
         static
         {
