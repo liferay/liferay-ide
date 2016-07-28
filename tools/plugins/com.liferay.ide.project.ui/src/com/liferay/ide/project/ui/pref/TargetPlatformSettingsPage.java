@@ -132,6 +132,14 @@ public class TargetPlatformSettingsPage extends PreferencePage implements IWorkb
     {
         preferenceStore.setValue(
             ITargetPlatformConstant.CURRENT_TARGETFORM_VERSION, targetPlatFormVersion.getSelection().toString() );
+        try
+        {
+            preferenceStore.save();
+        }
+        catch( IOException e )
+        {
+            ProjectCore.logError( "Can not save target platform preference", e );
+        }
     }
 
     private IPreferenceStore getPreStore()
