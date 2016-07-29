@@ -113,7 +113,6 @@ public interface BaseModuleOp extends ExecutableElement
     @Type( base = ILiferayProjectProvider.class )
     @Label( standard = "build type" )
     @Listeners( ModuleProjectNameListener.class )
-    @Enablement( expr = "false" )
     @Service( impl = ModuleProjectProviderPossibleValuesService.class )
     @Service( impl = ModuleProjectProviderDefaultValueService.class )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );

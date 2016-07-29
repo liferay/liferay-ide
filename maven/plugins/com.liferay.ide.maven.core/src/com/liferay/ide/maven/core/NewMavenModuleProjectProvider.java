@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
 
@@ -135,8 +136,7 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
     @Override
     public IStatus validateProjectLocation( String projectName, IPath path )
     {
-        // TODO improve this
-        return new NewMavenPluginProjectProvider().validateProjectLocation( projectName, path );
+        return Status.OK_STATUS;
     }
 
 }
