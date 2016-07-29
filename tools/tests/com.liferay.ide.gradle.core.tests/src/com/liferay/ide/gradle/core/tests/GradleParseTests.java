@@ -60,7 +60,7 @@ public class GradleParseTests
 
         assertEquals(
             CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ),
-            CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) );
+            convertToLinuxEncoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
     }
 
     @Test
@@ -83,7 +83,7 @@ public class GradleParseTests
 
         assertEquals(
             CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ),
-            CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) );
+            convertToLinuxEncoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
     }
 
     @Test
@@ -106,7 +106,7 @@ public class GradleParseTests
 
         assertEquals(
             CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ),
-            CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) );
+            convertToLinuxEncoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
     }
 
     @Test
@@ -125,11 +125,11 @@ public class GradleParseTests
 
         Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
 
-        final File outputFile = new File( "projects/testParseOutput/testParse4.gradle" );
+        final File expectedOutputFile = new File( "projects/testParseOutput/testParse4.gradle" );
 
         assertEquals(
-            CoreUtil.readStreamToString( new FileInputStream( outputFile ) ),
-            CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) );
+            CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ),
+            convertToLinuxEncoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
     }
 
     @Test
@@ -148,11 +148,11 @@ public class GradleParseTests
 
         Files.write( outputfile.toPath(), updater.getGradleFileContents(), StandardCharsets.UTF_8 );
 
-        final File outputFile = new File( "projects/testParseOutput/testParse5.gradle" );
+        final File expectedOutputFile = new File( "projects/testParseOutput/testParse5.gradle" );
 
         assertEquals(
-            CoreUtil.readStreamToString( new FileInputStream( outputFile ) ),
-            CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) );
+            CoreUtil.readStreamToString( new FileInputStream( expectedOutputFile ) ),
+            convertToLinuxEncoding( CoreUtil.readStreamToString( new FileInputStream( outputfile ) ) ) );
     }
 
     @Test
@@ -189,6 +189,27 @@ public class GradleParseTests
         List<GradleDependency> allDependencies = updater.getAllDependencies();
 
         assertEquals( 3, allDependencies.size() );
+    }
+
+    private String convertToLinuxEncoding( String contents )
+    {
+
+        if( CoreUtil.isWindows() )
+        {
+            contents = contents.replace( "\r\n", "\n" );
+
+            return contents;
+        }
+        else if( CoreUtil.isMac() )
+        {
+            contents = contents.replace( "\r", "\n" );
+
+            return contents;
+        }
+        else
+        {
+            return contents;
+        }
     }
 
 }
