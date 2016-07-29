@@ -201,6 +201,8 @@ public class BladeCLI
     {
         if( projectTemplateNames == null )
         {
+            getLatestRemoteBladeCLIJar(); // make sure that blade.cli.jar is actually downloaded
+
             List<String> templateNames = new ArrayList<>();
 
             String[] retval = execute( "create -l" );
