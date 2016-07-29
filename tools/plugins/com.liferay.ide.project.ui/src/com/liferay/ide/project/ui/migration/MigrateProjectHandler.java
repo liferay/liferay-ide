@@ -290,11 +290,11 @@ public class MigrateProjectHandler extends AbstractHandler
                             {
                                 migrationProblemsList.add( migrationProblems );
                             }
+
+                            container.setProblemsArray( migrationProblemsList.toArray( new MigrationProblems[0] ) );
+
+                            UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, container );
                         }
-
-                        container.setProblemsArray( migrationProblemsList.toArray( new MigrationProblems[0] ) );
-
-                        UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, container );
 
                         m.reportProblems( allProblems, Migration.DETAIL_LONG, "ide" );
                     }
