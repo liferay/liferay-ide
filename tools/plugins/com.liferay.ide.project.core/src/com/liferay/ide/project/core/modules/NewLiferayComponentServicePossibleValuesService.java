@@ -18,7 +18,6 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.core.portal.PortalServer;
 
-import java.util.Arrays;
 import java.util.Set;
 
 import org.eclipse.sapphire.FilteredListener;
@@ -75,12 +74,12 @@ public class NewLiferayComponentServicePossibleValuesService extends PossibleVal
 
             try
             {
-                String[] serviceWrapperList = new ServiceWrapperCommand( runningServer ).getServiceWrapper();
-                values.addAll( Arrays.asList( serviceWrapperList ) );
+                ServiceContainer serviceWrapperList = new ServiceWrapperCommand( runningServer ).execute();
+                values.addAll( serviceWrapperList.getServiceList() );
             }
             catch( Exception e )
             {
-                // ignore
+                ProjectCore.logError( "Get service wrapper list error.",e );
             }
         }
         else if( template.equals( "service" ) )
@@ -99,9 +98,9 @@ public class NewLiferayComponentServicePossibleValuesService extends PossibleVal
             {
                 ServiceCommand serviceCommand = new ServiceCommand( runningServer );
 
-                String[] allServices = serviceCommand.execute();
+                ServiceContainer allServices = serviceCommand.execute();
 
-                values.addAll( Arrays.asList( allServices ) );
+                values.addAll( allServices.getServiceList() );
             }
             catch( Exception e )
             {

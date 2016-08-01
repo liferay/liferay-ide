@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -156,45 +157,53 @@ public class ServiceCommand
         throw new FileNotFoundException( "can't find static services file services-static.json" );
     }
 
-    public String[] execute() throws Exception
+    public ServiceContainer execute() throws Exception
     {
         BundleSupervisor supervisor = null;
-        String[] result = null;
+        ServiceContainer result;
 
         if( _server == null )
         {
             return getServiceFromTargetPlatform();
         }
-
-        PortalServerBehavior serverBehavior =
-            (PortalServerBehavior) _server.loadAdapter( PortalServerBehavior.class, null );
-        supervisor = serverBehavior.getBundleSupervisor();
-
-        if( supervisor == null )
+        try
         {
-            return getServiceFromTargetPlatform();
+            PortalServerBehavior serverBehavior =
+                (PortalServerBehavior) _server.loadAdapter( PortalServerBehavior.class, null );
+            supervisor = serverBehavior.getBundleSupervisor();
+
+            if( supervisor == null )
+            {
+                return getServiceFromTargetPlatform();
+            }
+
+            if( !supervisor.getAgent().redirect( Agent.COMMAND_SESSION ) )
+            {
+                return null;
+            }
+
+            if( _serviceName == null )
+            {
+                String[] services = getServices( supervisor );
+                result = new ServiceContainer( Arrays.asList( services ) );
+            }
+            else
+            {
+                String[] serviceBundle = getServiceBundle( _serviceName, supervisor );
+                result = new ServiceContainer( serviceBundle[0], serviceBundle[1] );
+            }
         }
-
-        if( !supervisor.getAgent().redirect( Agent.COMMAND_SESSION ) )
+        finally
         {
-            return null;
-        }
-
-        if( _serviceName == null )
-        {
-            result = getServices( supervisor );
-        }
-        else
-        {
-            result = getServiceBundle( _serviceName, supervisor );
+            supervisor.getAgent().redirect( Agent.DEFAULT_PORT );
         }
 
         return result;
     }
 
-    private String[] getServiceFromTargetPlatform() throws Exception
+    private ServiceContainer getServiceFromTargetPlatform() throws Exception
     {
-        String[] result;
+        ServiceContainer result;
 
         if( _serviceName == null )
         {

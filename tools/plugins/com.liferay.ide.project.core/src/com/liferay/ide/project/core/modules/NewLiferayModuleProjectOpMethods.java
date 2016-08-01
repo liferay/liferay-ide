@@ -191,11 +191,11 @@ public class NewLiferayModuleProjectOpMethods
 
         try
         {
-            final String[] osgiService = serviceCommand.execute();
+            final ServiceContainer osgiService = serviceCommand.execute();
 
             if( osgiService != null )
             {
-                setDenpendencies( file, osgiService[0], osgiService[1] );
+                setDenpendencies( file, osgiService.getBundleName(), osgiService.getBundleVersion() );
             }
         }
         catch( Exception e )

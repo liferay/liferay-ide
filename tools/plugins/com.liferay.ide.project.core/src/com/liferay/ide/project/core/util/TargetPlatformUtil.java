@@ -19,6 +19,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import org.eclipse.core.runtime.Platform;
 
 import com.liferay.ide.project.core.ITargetPlatformConstant;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.ServiceContainer;
 
 /**
  * @author Lovett Li
@@ -35,28 +37,28 @@ import com.liferay.ide.project.core.ProjectCore;
 public class TargetPlatformUtil
 {
 
-    public static String[] getServicesList() throws Exception
+    public static ServiceContainer getServicesList() throws Exception
     {
         File tpIndexFile = checkCurrentTargetPlatform( "service" );
 
         return getServicesNameList( tpIndexFile );
     }
 
-    public static String[] getServiceBundle( String serviceName ) throws Exception
+    public static ServiceContainer getServiceBundle( String serviceName ) throws Exception
     {
         File tpIndexFile = checkCurrentTargetPlatform( "service" );
 
         return getBundleAndVersion( tpIndexFile , serviceName);
     }
 
-    public static String[] getServiceWrapperList() throws Exception
+    public static ServiceContainer getServiceWrapperList() throws Exception
     {
         File tpIndexFile = checkCurrentTargetPlatform( "servicewrapper" );
 
         return getServicesNameList( tpIndexFile );
     }
 
-    public static String[] getServiceWrapperBundle( String servicewrapperName ) throws Exception
+    public static ServiceContainer getServiceWrapperBundle( String servicewrapperName ) throws Exception
     {
         File tpIndexFile = checkCurrentTargetPlatform( "servicewrapper" );
 
@@ -128,18 +130,18 @@ public class TargetPlatformUtil
     }
 
     @SuppressWarnings( "unchecked" )
-    private static String[] getServicesNameList( File tpFile ) throws Exception
+    private static ServiceContainer getServicesNameList( File tpFile ) throws Exception
     {
         final ObjectMapper mapper = new ObjectMapper();
 
         Map<String, String[]> map = mapper.readValue( tpFile, Map.class );
         String[] services = map.keySet().toArray( new String[0] );
 
-        return services;
+        return new ServiceContainer( Arrays.asList( services ) );
     }
 
     @SuppressWarnings( "unchecked" )
-    private static String[] getBundleAndVersion( File tpFile, String _serviceName ) throws Exception
+    private static ServiceContainer getBundleAndVersion( File tpFile, String _serviceName ) throws Exception
     {
         final ObjectMapper mapper = new ObjectMapper();
 
@@ -148,7 +150,7 @@ public class TargetPlatformUtil
 
         if( serviceBundle != null && serviceBundle.size() != 0 )
         {
-            return (String[]) serviceBundle.toArray( new String[serviceBundle.size()] );
+            return new ServiceContainer( serviceBundle.get( 0 ), serviceBundle.get( 1 ) );
         }
 
         return null;
