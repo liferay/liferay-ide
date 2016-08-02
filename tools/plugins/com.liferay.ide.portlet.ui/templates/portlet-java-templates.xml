@@ -54,6 +54,11 @@ boolean ${param} = ParamUtil.getBoolean(${request:var('javax.portlet.PortletRequ
 ${:import(com.liferay.portal.kernel.util.ParamUtil)}
 </template>
 
+<template name="getcompanyid" autoinsert="true" context="java-statements" id="param.getCompanyId" deleted="false" description="ParamUtil get date" enabled="true">
+long ${companyId} = PortalUtil.getCompanyId(${request:var('javax.servlet.HttpServletRequest')});
+${:import(com.liferay.portal.kernel.util.PortalUtil)}
+</template>
+
 <template name="getdate" autoinsert="true" context="java-statements" id="param.getDate" deleted="false" description="ParamUtil get date" enabled="true">
 Date ${param} = ParamUtil.getDate(${request:var('javax.portlet.PortletRequest')}, "${param}", new SimpleDateFormat());
 ${:import(java.util.Date,com.liferay.portal.kernel.util.ParamUtil,java.text.SimpleDateFormat)}
