@@ -12,76 +12,46 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.ui.migration;
-
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
-import com.liferay.ide.ui.util.UIUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
+
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Andy Wu
  * @author Lovett Li
+ * @author Terry Jia
  */
-public class RunMigrationToolAction extends Action
+public class RunMigrationToolAction extends OpenJavaProjectSelectionDialogAction
 {
-    private Shell shell ;
 
     public RunMigrationToolAction( String text, Shell shell )
     {
-        super( text );
-        this.shell = shell;
-
-        setImageDescriptor(
-            ProjectUI.getDefault().getImageRegistry().getDescriptor( ProjectUI.MIGRATION_TASKS_IMAGE_ID ) );
+        super( text, shell );
     }
 
     @Override
     public void run()
     {
-        final JavaProjectSelectionDialog dialog = new JavaProjectSelectionDialog( shell );
+        final ISelection selection = getSelectionProjects();
 
-        if( dialog.open() == Window.OK )
+        if( selection != null )
         {
-            final Object[] selectedProjects = dialog.getResult();
-
-            if( selectedProjects != null )
+            try
             {
-                List<IProject> projects = new ArrayList<>();
-
-                for( Object project : selectedProjects )
-                {
-                    if( project instanceof IJavaProject )
-                    {
-                        IJavaProject p = (IJavaProject) project;
-                        projects.add( p.getProject() );
-                    }
-                }
-
-                final ISelection selection = new StructuredSelection( projects.toArray( new IProject[0] ) );
-
-                try
-                {
-                    UIUtil.executeCommand( "com.liferay.ide.project.ui.migrateProject", selection );
-                }
-                catch( ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e )
-                {
-                    ProjectUI.createErrorStatus( "Error in migrate command", e );
-                }
+                UIUtil.executeCommand( "com.liferay.ide.project.ui.migrateProject", selection );
+            }
+            catch( ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e )
+            {
+                ProjectUI.createErrorStatus( "Error in migrate command", e );
             }
         }
     }

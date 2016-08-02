@@ -17,6 +17,8 @@ package com.liferay.ide.project.ui.upgrade.action;
 
 import org.eclipse.sapphire.ui.Presentation;
 
+import com.liferay.ide.ui.util.UIUtil;
+
 /**
  * @author Terry Jia
  */
@@ -26,6 +28,8 @@ public class AntWarActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
+        new CompileAction("Compile", UIUtil.getActiveShell()).run();
+
         return null;
     }
 
