@@ -20,7 +20,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
-import org.eclipse.wst.server.core.IRuntime;
+
 
 /**
  * @author Terry Jia
@@ -31,19 +31,11 @@ public class LiferayRuntimeNameValidationService extends ValidationService
     @Override
     protected Status compute()
     {
-        Status retval = Status.createOkStatus();
-
         final CodeUpgradeOp op = context( CodeUpgradeOp.class );
 
-        final String runtimeName = op.getLiferayRuntimeName().content( true );
+        final String serverName = op.getLiferayServerName().content( true );
 
-        IRuntime runtime = ServerUtil.getRuntime( runtimeName );
-
-        if( runtime == null )
-        {
-            retval = Status.createErrorStatus( "Liferay runtime must be configured." );
-        }
-
-        return retval;
+        return ( ServerUtil.getServer( serverName ) != null )
+            ? Status.createOkStatus() : Status.createErrorStatus( "Liferay runtime must be configured." );
     }
 }

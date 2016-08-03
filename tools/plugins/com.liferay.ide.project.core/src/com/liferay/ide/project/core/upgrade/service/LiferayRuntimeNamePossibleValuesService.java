@@ -25,6 +25,7 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**
@@ -44,15 +45,15 @@ public class LiferayRuntimeNamePossibleValuesService extends PossibleValuesServi
     @Override
     protected void compute( Set<String> values )
     {
-        IRuntime[] runtimes = ServerCore.getRuntimes();
+        IServer[] servers = ServerCore.getServers();
 
-        if( !CoreUtil.isNullOrEmpty( runtimes ) )
+        if( !CoreUtil.isNullOrEmpty( servers ) )
         {
-            for( IRuntime runtime : runtimes )
+            for( IServer server : servers )
             {
-                if( LiferayServerCore.newPortalBundle( runtime.getLocation() ) != null )
+                if( LiferayServerCore.newPortalBundle( server.getRuntime().getLocation() ) != null )
                 {
-                    values.add( runtime.getName() );
+                    values.add( server.getName() );
                 }
             }
         }

@@ -34,7 +34,7 @@ public class CodeUpgradeNewLiferayRuntimeAction extends NewLiferayRuntimeAction
 
         CodeUpgradeOp op = context.part().getModelElement().nearest( CodeUpgradeOp.class );
 
-        op.property( CodeUpgradeOp.PROP_LIFERAY_RUNTIME_NAME ).refresh();
+        op.property( CodeUpgradeOp.PROP_LIFERAY_SERVER_NAME ).refresh();
 
         return status;
     }

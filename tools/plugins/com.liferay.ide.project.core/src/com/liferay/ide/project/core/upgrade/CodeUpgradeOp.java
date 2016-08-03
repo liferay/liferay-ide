@@ -84,11 +84,11 @@ public interface CodeUpgradeOp extends Element
     @Service( impl = LiferayRuntimeNameDefaultValueService.class )
     @Service( impl = LiferayRuntimeNameValidationService.class )
     @Required
-    @XmlBinding( path = "RuntimeName" )
-    ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty( TYPE, "LiferayRuntimeName" );
+    @XmlBinding( path = "ServerName" )
+    ValueProperty PROP_LIFERAY_SERVER_NAME = new ValueProperty( TYPE, "LiferayServerName" );
 
-    Value<String> getLiferayRuntimeName();
-    void setLiferayRuntimeName( String value );
+    Value<String> getLiferayServerName();
+    void setLiferayServerName( String value );
 
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )

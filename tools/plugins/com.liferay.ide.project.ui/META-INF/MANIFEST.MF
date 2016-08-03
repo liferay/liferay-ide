@@ -55,7 +55,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.sapphire.modeling.xml,
  org.eclipse.core.filesystem,
  org.eclipse.ui.console,
- org.eclipse.debug.ui
+ org.eclipse.debug.ui,
+ com.liferay.ide.server.core,
+ org.eclipse.wst.server.core,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

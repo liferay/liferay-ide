@@ -804,6 +804,22 @@ public class ServerUtil
 
         return retval.toArray( new String[0] );
     }
+
+    public static IServer getServer( String name )
+    {
+        IServer[] servers = ServerCore.getServers();
+
+        for( IServer server : servers )
+        {
+            if( server.getName().equals( name ) )
+            {
+                return server;
+            }
+        }
+
+        return null;
+    }
+
     public static boolean hasFacet( IProject project, IProjectFacet checkProjectFacet )
     {
         boolean retval = false;

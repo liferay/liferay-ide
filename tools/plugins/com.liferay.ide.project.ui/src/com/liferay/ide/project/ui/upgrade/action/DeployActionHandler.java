@@ -15,17 +15,34 @@
 
 package com.liferay.ide.project.ui.upgrade.action;
 
+import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.ui.internal.wizard.ModifyModulesWizard;
 
 /**
  * @author Terry Jia
  */
+@SuppressWarnings( "restriction" )
 public class DeployActionHandler extends BaseActionHandler
 {
 
     @Override
     protected Object run( Presentation context )
     {
+        final String serverName = op( context ).getLiferayServerName().content();
+
+        final IServer server = ServerUtil.getServer( serverName );
+
+        final ModifyModulesWizard wizard = new ModifyModulesWizard( server );
+
+        final WizardDialog dialog = new WizardDialog( UIUtil.getActiveShell(), wizard );
+
+        dialog.open();
+
         return null;
     }
 

@@ -48,7 +48,7 @@
 							<property>Layout</property>
 						</property-editor>
 						<property-editor>
-							<property>LiferayRuntimeName</property>
+							<property>LiferayServerName</property>
 							<style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
 							<action>
 								<id>NewLiferayRuntime</id>

@@ -21,6 +21,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
+import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**
@@ -51,17 +52,17 @@ public class LiferayRuntimeNameDefaultValueService extends DefaultValueService i
     @Override
     protected String compute()
     {
-        IRuntime[] runtimes = ServerCore.getRuntimes();
+        IServer[] servers = ServerCore.getServers();
 
         String value = NONE;
 
-        if( !CoreUtil.isNullOrEmpty( runtimes ) )
+        if( !CoreUtil.isNullOrEmpty( servers ) )
         {
-            for( IRuntime runtime : runtimes )
+            for( IServer server : servers )
             {
-                if( LiferayServerCore.newPortalBundle( runtime.getLocation() ) != null )
+                if( LiferayServerCore.newPortalBundle( server.getRuntime().getLocation() ) != null )
                 {
-                    value = runtime.getName();
+                    value = server.getName();
 
                     break;
                 }

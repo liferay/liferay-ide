@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.wst.server.core.IServer;
 
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
@@ -84,8 +85,11 @@ public class ImportProjectNextActionHandler extends BaseActionHandler
             }
             else
             {
-                String serverName = op( context ).getLiferayRuntimeName().content();
-                IPath serverPath = ServerUtil.getRuntime( serverName ).getLocation();
+                String serverName = op( context ).getLiferayServerName().content();
+
+                IServer server = ServerUtil.getServer( serverName );
+
+                IPath serverPath = server.getRuntime().getLocation();
 
                 SDK sdk = new SDK( location );
                 sdk.addOrUpdateServerProperties( serverPath );
