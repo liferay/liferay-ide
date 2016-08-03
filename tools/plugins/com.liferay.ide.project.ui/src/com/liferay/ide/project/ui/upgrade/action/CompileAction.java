@@ -88,7 +88,7 @@ public class CompileAction extends OpenJavaProjectSelectionDialogAction
         }
     }
 
-    public IConsole getConsole( String name )
+    public static IConsole getConsole( String name )
     {
         ConsolePlugin plugin = ConsolePlugin.getDefault();
 

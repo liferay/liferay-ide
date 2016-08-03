@@ -200,7 +200,7 @@
 				<label>Build Service</label>
 				<section>
 					<content>
-						<label>We will do:</label>
+						<label>We will do: delete shard-data-source-spring.xml and portlet-spring.xml under docroot/WEB-INF/src/META-INF of each selected project. Then run build-service</label>
 						<split-form>
 							<block>
 								<content>
