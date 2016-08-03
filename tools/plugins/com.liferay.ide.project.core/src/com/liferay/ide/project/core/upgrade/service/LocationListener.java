@@ -28,9 +28,24 @@ import com.liferay.ide.sdk.core.SDK;
 
 /**
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class LocationListener extends FilteredListener<PropertyContentEvent>
 {
+
+    private File[] getFiles( IPath location, SDK sdk, String projectType )
+    {
+        IPath folderPath = location.append( sdk.getPluginFolder( projectType ) );
+
+        File folder = folderPath.toFile();
+
+        if( !folder.exists() )
+        {
+            return null;
+        }
+
+        return folder.listFiles();
+    }
 
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
@@ -43,85 +58,99 @@ public class LocationListener extends FilteredListener<PropertyContentEvent>
         {
             SDK sdk = new SDK( location );
 
-            IPath portletFolder = location.append( sdk.getPluginFolder( "portlet" ) );
-            IPath hookFolder = location.append( sdk.getPluginFolder( "hook" ) );
-            IPath extFolder = location.append( sdk.getPluginFolder( "ext" ) );
-            IPath layouttplFolder = location.append( sdk.getPluginFolder( "layouttpl" ) );
-            IPath themeFolder = location.append( sdk.getPluginFolder( "theme" ) );
-            IPath webFolder = location.append( sdk.getPluginFolder( "web" ) );
+            File[] portlets = getFiles( location, sdk, "portlet" );
 
-            for( File file : portletFolder.toFile().listFiles() )
+            if( portlets != null )
             {
-                if( file.isDirectory() )
+                for( File file : portlets )
                 {
-                    op.setHasPortlet( "true" );
-
-                    File serviceXml = new Path( file.getPath() ).append( "docroot/WEB-INF/service.xml" ).toFile();
-
-                    if( serviceXml.exists() )
+                    if( file.isDirectory() )
                     {
-                        op.setHasServiceBuilder( "true" );
+                        op.setHasPortlet( "true" );
+
+                        File serviceXml = new Path( file.getPath() ).append( "docroot/WEB-INF/service.xml" ).toFile();
+
+                        if( serviceXml.exists() )
+                        {
+                            op.setHasServiceBuilder( "true" );
+                        }
                     }
                 }
             }
 
-            for( File file : hookFolder.toFile().listFiles() )
+            File[] hooks = getFiles( location, sdk, "hook" );
+
+            if( hooks != null )
             {
-                if( file.isDirectory() )
+                for( File file : hooks )
                 {
-                    op.setHasHook( "true" );
-
-                    File serviceXml = new Path( file.getPath() ).append( "docroot/WEB-INF/service.xml" ).toFile();
-
-                    if( serviceXml.exists() )
+                    if( file.isDirectory() )
                     {
-                        op.setHasServiceBuilder( "true" );
+                        op.setHasHook( "true" );
+
+                        File serviceXml = new Path( file.getPath() ).append( "docroot/WEB-INF/service.xml" ).toFile();
+
+                        if( serviceXml.exists() )
+                        {
+                            op.setHasServiceBuilder( "true" );
+                        }
                     }
                 }
             }
 
-            for( File file : extFolder.toFile().listFiles() )
+            File[] exts = getFiles( location, sdk, "ext" );
+
+            if( exts != null )
             {
-                if( file.isDirectory() )
+                for( File file : exts )
                 {
-                    op.setHasExt( "true" );
-                    break;
+                    if( file.isDirectory() )
+                    {
+                        op.setHasExt( "true" );
+                        break;
+                    }
                 }
             }
 
-            for( File file : layouttplFolder.toFile().listFiles() )
+            File[] layouttpls = getFiles( location, sdk, "layouttpl" );
+
+            if( layouttpls != null )
             {
-                if( file.isDirectory() )
+                for( File file : layouttpls )
                 {
-                    op.setHasLayout( "true" );
-                    break;
+                    if( file.isDirectory() )
+                    {
+                        op.setHasLayout( "true" );
+                        break;
+                    }
                 }
             }
 
-            for( File file : themeFolder.toFile().listFiles() )
+            File[] themes = getFiles( location, sdk, "theme" );
+
+            if( themes != null )
             {
-                if( file.isDirectory() )
+                for( File file : themes )
                 {
-                    op.setHasTheme( "true" );
-                    break;
+                    if( file.isDirectory() )
+                    {
+                        op.setHasTheme( "true" );
+                        break;
+                    }
                 }
             }
 
-            for( File file : webFolder.toFile().listFiles() )
-            {
-                if( file.isDirectory() )
-                {
-                    op.setHasWeb( "true" );
-                    break;
-                }
-            }
+            File[] webs = getFiles( location, sdk, "web" );
 
-            for( File file : themeFolder.toFile().listFiles() )
+            if( webs != null )
             {
-                if( file.isDirectory() )
+                for( File file : webs )
                 {
-                    op.setHasTheme( "true" );
-                    break;
+                    if( file.isDirectory() )
+                    {
+                        op.setHasWeb( "true" );
+                        break;
+                    }
                 }
             }
         }
