@@ -165,7 +165,11 @@
 				<label>Descriptors</label>
 				<section>
 					<content>
-						<label>We will do:</label>
+						<label>We will do: Upgrade All Liferay Plugin project DTD files version to 7.0.</label>
+		                <custom>
+                            <scale-vertically>true</scale-vertically>
+		                    <class>com.liferay.ide.project.ui.upgrade.LiferayUpgradeDescriptorTableViewCustomPart</class>
+		                </custom>
 						<split-form>
 							<block>
 								<content>
