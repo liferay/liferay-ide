@@ -312,22 +312,46 @@
                 <label>Layout Template</label>
                 <section>
                     <content>
-                        <label>We will do:</label>
-                        <actuator>
-                            <action-id>LayoutNextAction</action-id>
-                            <action>
-                                <id>LayoutNextAction</id>
-                                <label>Next</label>
-                            </action>
-                            <action-handler>
-                                <id>LayoutNextAction</id>
-                                <action>LayoutNextAction</action>
-                                <impl>com.liferay.ide.project.ui.upgrade.action.LayoutNextActionHandler
-                                </impl>
-                            </action-handler>
-                            <horizontal-align>right</horizontal-align>
-                            <style>Sapphire.Actuator.Button</style>
-                        </actuator>
+                        <label>We will do: upgrade layout template</label>
+                        <split-form>
+                            <block></block>
+                            <block>
+                                <content>
+                                    <actuator>
+                                        <action-handler>
+                                            <action>LayouttplUpgradeAction</action>
+                                            <id>LayouttplUpgradeAction</id>
+                                            <impl>com.liferay.ide.project.ui.upgrade.action.LayouttplUpgradeActionHandler</impl>
+                                        </action-handler>
+                                        <action-id>LayouttplUpgradeAction</action-id>
+                                        <action>
+                                            <id>LayouttplUpgradeAction</id>
+                                            <label>Upgrade Layouttpl</label>
+                                        </action>
+                                        <horizontal-align>right</horizontal-align>
+                                        <style>Sapphire.Actuator.Button</style>
+                                    </actuator>
+                                </content>
+                            </block>
+                            <block>
+                                <content>
+                                    <actuator>
+                                        <action-handler>
+                                            <action>LayoutNextAction</action>
+                                            <id>LayoutNextAction</id>
+                                            <impl>com.liferay.ide.project.ui.upgrade.action.LayoutNextActionHandler</impl>
+                                        </action-handler>
+                                        <action-id>LayoutNextAction</action-id>
+                                        <action>
+                                            <id>LayoutNextAction</id>
+                                            <label>Next</label>
+                                        </action>
+                                        <horizontal-align>right</horizontal-align>
+                                        <style>Sapphire.Actuator.Button</style>
+                                    </actuator>
+                                </content>
+                            </block>
+                        </split-form>
                     </content>
                 </section>
                 <visible-when>${Confirm == 'true' &amp;&amp; HasLayout == 'true'}</visible-when>
