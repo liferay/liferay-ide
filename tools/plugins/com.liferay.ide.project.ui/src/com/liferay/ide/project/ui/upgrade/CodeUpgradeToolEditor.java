@@ -25,6 +25,7 @@ import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.LocalizableText;
 import org.eclipse.sapphire.Text;
 import org.eclipse.sapphire.java.JavaType;
+import org.eclipse.sapphire.modeling.ResourceStoreException;
 import org.eclipse.sapphire.modeling.xml.RootXmlResource;
 import org.eclipse.sapphire.osgi.BundleBasedContext;
 import org.eclipse.sapphire.ui.SapphireEditor;
@@ -42,8 +43,11 @@ import org.eclipse.ui.forms.editor.IFormPage;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
+import com.liferay.ide.project.ui.ProjectUI;
+
 /**
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class CodeUpgradeToolEditor extends SapphireEditor implements IExecutableExtension
 {
@@ -182,7 +186,8 @@ public class CodeUpgradeToolEditor extends SapphireEditor implements IExecutable
 
         item.dispose();
 
-        if (pageControl != null) {
+        if( pageControl != null )
+        {
             pageControl.dispose();
         }
     }
@@ -210,6 +215,12 @@ public class CodeUpgradeToolEditor extends SapphireEditor implements IExecutable
     }
 
     @Override
+    public boolean isDirty()
+    {
+        return false;
+    }
+
+    @Override
     public IContentOutlinePage getContentOutline( final Object page )
     {
         if( page == this.sourcePage )
@@ -223,6 +234,15 @@ public class CodeUpgradeToolEditor extends SapphireEditor implements IExecutable
     @Override
     public void dispose()
     {
+        try
+        {
+            super.getModelElement().resource().save();
+        }
+        catch( ResourceStoreException e )
+        {
+            ProjectUI.logError( e );
+        }
+
         super.dispose();
 
         this.type = null;
