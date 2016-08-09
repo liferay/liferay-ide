@@ -47,7 +47,8 @@ public class ProjectUI extends AbstractUIPlugin
 {
 
     // Shared images
-    public static final String WAR_IMAGE_ID = "war.image"; //$NON-NLS-1$
+    public static final String PROPERTIES_IMAGE_ID = "properties";
+    public static final String WAR_IMAGE_ID = "war.image";
     public static final String CHECKED_IMAGE_ID = "checked.image"; //$NON-NLS-1$
     public static final String MIGRATION_TASKS_IMAGE_ID = "migration.tasks.image"; //$NON-NLS-1$
     public static final String UNCHECKED_IMAGE_ID = "unchecked.image"; //$NON-NLS-1$
@@ -150,10 +151,6 @@ public class ProjectUI extends AbstractUIPlugin
     protected void initializeImageRegistry( ImageRegistry registry )
     {
         Bundle bundle = Platform.getBundle( PLUGIN_ID );
-        IPath path = new Path( "icons/e16/war.gif" ); //$NON-NLS-1$
-        URL url = FileLocator.find( bundle, path, null );
-        ImageDescriptor desc = ImageDescriptor.createFromURL( url );
-        registry.put( WAR_IMAGE_ID, desc );
 
         IPath checked = new Path( "icons/e16/checked.png" ); //$NON-NLS-1$
         URL checkedurl = FileLocator.find( bundle, checked, null );
@@ -174,6 +171,13 @@ public class ProjectUI extends AbstractUIPlugin
         URL expandallurl = FileLocator.find( bundle, expandall, null );
         ImageDescriptor expandalldesc = ImageDescriptor.createFromURL( expandallurl );
         registry.put( EXPANDALL_IMAGE_ID, expandalldesc );
+
+        registry.put(
+            WAR_IMAGE_ID,
+            ImageDescriptor.createFromURL( FileLocator.find( bundle, new Path( "icons/e16/war.gif" ), null ) ) );
+        registry.put(
+            PROPERTIES_IMAGE_ID,
+            ImageDescriptor.createFromURL( FileLocator.find( bundle, new Path( "icons/e16/properties.png" ), null ) ) );
     }
 
     /*
