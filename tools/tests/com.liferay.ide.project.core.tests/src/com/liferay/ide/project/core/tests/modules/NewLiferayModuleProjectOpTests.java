@@ -35,7 +35,7 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectTemplateName( "Portlet" );
 
-        assertEquals( "MyTestProjectPortlet", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }
 
     @Test
@@ -47,7 +47,7 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectTemplateName( "Portlet" );
 
-        assertEquals( "MyTestProjectPortlet", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }
 
     @Test
@@ -59,11 +59,11 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectTemplateName( "Portlet" );
 
-        assertEquals( "MyTestProjectPortlet", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
         op.setProjectName( "my_abc-test" );
 
-        assertEquals( "MyAbcTestPortlet", op.getComponentName().content( true ) );
+        assertEquals( "MyAbcTest", op.getComponentName().content( true ) );
     }
 
     @Test
@@ -75,27 +75,27 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectTemplateName( "Activator" );
 
-        assertEquals( "MyTestProjectActivator", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
         op.setProjectTemplateName( "Portlet" );
 
-        assertEquals( "MyTestProjectPortlet", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
         op.setProjectTemplateName( "MvcPortlet" );
 
-        assertEquals( "MyTestProjectMvcPortlet", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
         op.setProjectTemplateName( "Service" );
 
-        assertEquals( "MyTestProjectService", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
         op.setProjectTemplateName( "ServiceWrapper" );
 
-        assertEquals( "MyTestProjectServiceWrapper", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
         op.setProjectTemplateName( "ServiceBuilder" );
 
-        assertEquals( "MyTestProjectServiceBuilder", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }
 
     @Test
@@ -107,6 +107,6 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectTemplateName( "Portlet" );
 
-        assertEquals( "MyTestProjectPortlet", op.getComponentName().content( true ) );
+        assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }
 }
