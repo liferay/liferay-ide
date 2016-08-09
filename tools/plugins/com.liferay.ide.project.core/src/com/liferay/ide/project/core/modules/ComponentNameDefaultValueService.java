@@ -67,11 +67,7 @@ public class ComponentNameDefaultValueService extends DefaultValueService
                     finalProjectName = finalProjectName.replaceAll( "\\" + token, "" );
                 }
 
-                final StringBuffer componentNameBuffer = new StringBuffer( finalProjectName );
-
-                componentNameBuffer.append( projectTemplate );
-
-                retVal = componentNameBuffer.toString();
+                retVal = finalProjectName;
             }
         }
 
