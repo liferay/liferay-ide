@@ -105,6 +105,15 @@ public final class ZipUtil {
 		}
 	}
 
+    private static void mkdir( File dir ) throws IOException
+    {
+        if( !dir.exists() && !dir.mkdirs() )
+        {
+            final String msg = "Could not create dir: " + dir.getPath();
+            throw new IOException( msg );
+        }
+    }
+
 	public static void unzip(final File file, final File destdir)
 
 		throws IOException
@@ -154,9 +163,6 @@ public final class ZipUtil {
                     NLS.bind( Resources.progressUnzipped, new Object[] { file.getName(), c++, totalWork } );
                 monitor.subTask( taskMsg );
 
-                if (entry.isDirectory())
-                    continue;
-
                 String entryName = null;
 
                 if( entryToStart == null )
@@ -168,13 +174,19 @@ public final class ZipUtil {
                     entryName = entry.getName().replaceFirst( entryToStart, "" ); //$NON-NLS-1$
                 }
 
+                if (entry.isDirectory())
+                {
+                    File emptyDir = new File( destdir, entryName );
+
+                    mkdir( emptyDir );
+
+                    continue;
+                }
+
                 final File f = new File( destdir, entryName );
                 final File dir = f.getParentFile();
 
-                if (!dir.exists() && !dir.mkdirs()) {
-                    final String msg = "Could not create dir: " + dir.getPath(); //$NON-NLS-1$
-                    throw new IOException(msg);
-                }
+                mkdir( dir );
 
                 InputStream in = null;
                 FileOutputStream out = null;
