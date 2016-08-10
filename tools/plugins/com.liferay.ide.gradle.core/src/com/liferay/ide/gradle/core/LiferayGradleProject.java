@@ -254,7 +254,9 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
             }
             catch( GradleConnectionException e)
             {
-                throw new CoreException( GradleCore.createErrorStatus( "Unable to build output", e ) );
+                GradleCore.logError( "Unable to build output", e );
+
+                return null;
             }
             finally
             {

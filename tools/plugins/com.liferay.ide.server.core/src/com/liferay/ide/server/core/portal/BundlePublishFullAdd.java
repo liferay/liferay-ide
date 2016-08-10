@@ -132,7 +132,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                 this.portalServerBehavior.setModulePublishState2(
                     new IModule[] { module }, IServer.PUBLISH_STATE_FULL );
 
-                throw new CoreException( retval );
+                LiferayServerCore.logError( retval );
             }
         }
     }
