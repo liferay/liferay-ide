@@ -21,19 +21,28 @@ import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.maven.archetype.catalog.Archetype;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.IMavenConfiguration;
+import org.eclipse.m2e.core.project.IMavenProjectRegistry;
+import org.eclipse.m2e.core.project.IProjectConfigurationManager;
+import org.eclipse.m2e.core.project.ProjectImportConfiguration;
+import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
  * @author Simon Jiang
  */
+@SuppressWarnings( "restriction" )
 public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
 {
     @Override
@@ -41,7 +50,11 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
     {
         IStatus retval = null;
 
-        ElementList<ProjectName> projectNames = op.getProjectNames();
+        final IMavenConfiguration mavenConfiguration = MavenPlugin.getMavenConfiguration();
+        final IMavenProjectRegistry mavenProjectRegistry = MavenPlugin.getMavenProjectRegistry();
+        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+
+        final ElementList<ProjectName> projectNames = op.getProjectNames();
 
         final String projectName = op.getProjectName().content();
 
@@ -54,7 +67,23 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
             location = location.removeLastSegments( 1 );
         }
 
-        final List<IProject> newProjects = new ArrayList<IProject>();
+        final Archetype archetype = new Archetype();
+        archetype.setGroupId( "" );
+        archetype.setArtifactId( "" );
+        archetype.setVersion( "" );
+
+        String groupId = "";
+        String artifactId = "";
+        String version = "";
+        String javaPackage = "";
+        Properties properties = new Properties();
+        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
+        ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
+
+        final List<IProject> newProjects =
+            projectConfigurationManager.createArchetypeProjects(
+                location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
+
 
 //        retval = ModulesUtil.createModuleProject(
 //            location.toFile(), op.getProjectTemplate().content(), projectName, null, null, null );

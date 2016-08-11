@@ -35,12 +35,12 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
+        op.setProjectName( "foo" );
         op.setProjectProvider( "maven-module" );
-        op.setProjectName( "maven-mvcportlet-project" );
-        op.setProjectTemplateName( "mvcportlet" );
 
         Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertTrue( status.ok() );
+        assertNotNull( status );
+        assertEquals( status.message(), Status.createOkStatus(), status );
     }
 }
