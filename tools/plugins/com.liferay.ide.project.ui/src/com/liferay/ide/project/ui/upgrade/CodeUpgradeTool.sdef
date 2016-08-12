@@ -200,7 +200,7 @@
 						<label>We will do: Upgrade All Liferay Plugin project DTD files version to 7.0.</label>
 		                <custom>
                             <scale-vertically>true</scale-vertically>
-		                    <class>com.liferay.ide.project.ui.upgrade.LiferayUpgradeDescriptorTableViewCustomPart</class>
+		                    <class>com.liferay.ide.project.ui.upgrade.LiferayDescriptorUpgradeTableViewCustomPart</class>
 		                </custom>
 						<split-form>
 							<block>
@@ -376,22 +376,39 @@
 				<label>Layout Template</label>
 				<section>
 					<content>
-						<label>We will do:</label>
-						<actuator>
-							<action-id>LayoutNextAction</action-id>
-							<action>
-								<id>LayoutNextAction</id>
-								<label>Next</label>
-							</action>
-							<action-handler>
-								<id>LayoutNextAction</id>
-								<action>LayoutNextAction</action>
-								<impl>com.liferay.ide.project.ui.upgrade.action.LayoutNextActionHandler
-								</impl>
-							</action-handler>
-							<horizontal-align>right</horizontal-align>
-							<style>Sapphire.Actuator.Button</style>
-						</actuator>
+						<label>We will do: upgrade layout template</label>
+                        <custom>
+                            <class>com.liferay.ide.project.ui.upgrade.LiferayLayouttplUpgradeTableViewCustomPart</class>
+                            <scale-vertically>true</scale-vertically>
+                        </custom>
+						<split-form>
+							<block>
+								<weight>6</weight>
+							</block>
+							<block>
+								<weight>3</weight>
+							</block>
+							<block>
+								<content>
+									<actuator>
+										<action-handler>
+											<action>LayoutNextAction</action>
+											<id>LayoutNextAction</id>
+											<impl>com.liferay.ide.project.ui.upgrade.action.LayoutNextActionHandler
+											</impl>
+										</action-handler>
+										<action-id>LayoutNextAction</action-id>
+										<action>
+											<id>LayoutNextAction</id>
+											<label>Next</label>
+										</action>
+										<horizontal-align>right</horizontal-align>
+										<style>Sapphire.Actuator.Button</style>
+									</actuator>
+								</content>
+								<weight>1</weight>
+							</block>
+						</split-form>
 					</content>
 				</section>
 				<visible-when>${Confirm == 'true' &amp;&amp; HasLayout == 'true'}

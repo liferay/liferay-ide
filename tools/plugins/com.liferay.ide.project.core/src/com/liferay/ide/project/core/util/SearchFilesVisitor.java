@@ -32,8 +32,8 @@ import org.eclipse.core.runtime.CoreException;
 public class SearchFilesVisitor implements IResourceProxyVisitor
 {
 
-    String searchFileName = null;
-    List<IFile> resources = new ArrayList<IFile>();
+    protected String searchFileName = null;
+    protected List<IFile> resources = new ArrayList<IFile>();
 
     public boolean visit( IResourceProxy resourceProxy )
     {

@@ -42,7 +42,7 @@ import org.eclipse.ui.PlatformUI;
 /**
  * @author Simon Jiang
  */
-public class LiferayDescriptorUpgradeCompre
+public class LiferayUpgradeCompre
 {
     
     private final IPath soruceFile;
@@ -50,7 +50,7 @@ public class LiferayDescriptorUpgradeCompre
     private IWorkbenchWindow window;
     private String fileName;
     
-    public LiferayDescriptorUpgradeCompre( final IPath soruceFile, final IPath targetFile, String fileName )
+    public LiferayUpgradeCompre( final IPath soruceFile, final IPath targetFile, String fileName )
     {
         this.fileName = fileName;
         this.window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();

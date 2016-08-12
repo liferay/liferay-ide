@@ -23,7 +23,7 @@ ${appendIndent}<${layoutElement} class="${row.getClassName().content()}">
 <#if root.getIs62().content()>
 ${appendIndent}<${columnElement} class="portlet-column<#if (col.getColumnDescriptor().content()?exists)> ${col.getColumnDescriptor().content()}</#if> span${col.getWeight().content()}"<#if !(col.getNumId().content()=="N/A")> id="column-${col.getNumId().content()}"</#if>>
 <#else>
-${appendIndent}<${columnElement} class="col-md-${col.getWeight().content()} portlet-column<#if (col.getColumnDescriptor().content()?exists)> ${col.getColumnDescriptor().content()}</#if>"<#if !(col.getNumId().content()=="N/A")> id="column-${col.getNumId().content()}"</#if>>
+${appendIndent}<${columnElement} class="portlet-column<#if (col.getColumnDescriptor().content()?exists)> ${col.getColumnDescriptor().content()}</#if> col-md-${col.getWeight().content()}"<#if !(col.getNumId().content()=="N/A")> id="column-${col.getNumId().content()}"</#if>>
 </#if>
 <#if (col.getPortletLayouts().size()>0)>
 <@printLayout this=col/>
