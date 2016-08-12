@@ -47,12 +47,10 @@ public class CodeUpgradeHandler extends AbstractHandler
 
         try
         {
-            if( codeUpgradeFile.exists() )
+            if( !codeUpgradeFile.exists() )
             {
-                codeUpgradeFile.delete();
+                codeUpgradeFile.createNewFile();
             }
-
-            codeUpgradeFile.createNewFile();
 
             IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
