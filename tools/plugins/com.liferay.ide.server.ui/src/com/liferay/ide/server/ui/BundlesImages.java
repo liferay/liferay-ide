@@ -23,6 +23,7 @@ public class BundlesImages
 {
     public static final Image IMG_LOADING = createImage( "e16/waiting_16x16.gif" );
     public static final Image IMG_BUNDLE = createImage( "e16/bundle.png" );
+    public static final Image IMG_BUNDLE_ERROR = createImage( "e16/bundle_error.png" );
     public static final Image IMG_BUNDLES_FOLDER = createImage( "e16/bundlefolder.png" );
 
     private static ImageDescriptor create( String key )

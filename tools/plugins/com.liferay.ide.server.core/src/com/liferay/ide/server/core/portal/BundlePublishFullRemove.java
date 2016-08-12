@@ -25,6 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
@@ -52,14 +53,16 @@ public class BundlePublishFullRemove extends BundlePublishOperation
     {
         for( IModule module : modules )
         {
-            if( module.getProject() == null )
+            IProject project = module.getProject();
+
+            if( project == null )
             {
                 continue;
             }
 
             IStatus status = null;
 
-            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, module.getProject() );
+            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
             if( bundleProject != null )
             {
@@ -81,6 +84,8 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                 {
                     this.portalServerBehavior.setModulePublishState2(
                         new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
+
+                    project.deleteMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
                 }
             }
             else

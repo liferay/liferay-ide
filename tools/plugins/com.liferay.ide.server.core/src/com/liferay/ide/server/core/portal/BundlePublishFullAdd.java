@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
@@ -83,12 +84,14 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         {
             IStatus retval = Status.OK_STATUS;
 
-            if( module.getProject() == null )
+            IProject project = module.getProject();
+
+            if( project == null )
             {
                 continue;
             }
 
-            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, module.getProject() );
+            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
             if( bundleProject != null )
             {
@@ -126,11 +129,15 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             {
                 this.portalServerBehavior.setModulePublishState2(
                     new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
+
+                project.deleteMarkers( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE, false, 0 );
             }
             else
             {
                 this.portalServerBehavior.setModulePublishState2(
                     new IModule[] { module }, IServer.PUBLISH_STATE_FULL );
+
+                project.createMarker( LiferayServerCore.BUNDLE_OUTPUT_ERROR_MARKER_TYPE );
 
                 LiferayServerCore.logError( retval );
             }
