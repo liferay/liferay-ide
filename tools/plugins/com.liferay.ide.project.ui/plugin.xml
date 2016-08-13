@@ -1031,6 +1031,12 @@
          point="org.eclipse.ui.commands">
         <command
             categoryId="com.liferay.ide.project.ui.handlers"
+            description="Compare File"
+            id="com.liferay.ide.project.ui.sdk.command.CompareFile"
+            name="Compare File">
+        </command>
+        <command
+            categoryId="com.liferay.ide.project.ui.handlers"
             description="All SDK command"
             id="com.liferay.ide.project.ui.sdk.command.all"
             name="All SDK Command">
@@ -1129,6 +1135,10 @@
 
    <extension
          point="org.eclipse.ui.handlers">
+       <handler
+            class="com.liferay.ide.project.ui.handlers.CompareFileHandler"
+            commandId="com.liferay.ide.project.ui.sdk.command.CompareFile">
+      </handler>
       <handler
             class="com.liferay.ide.project.ui.handlers.AllSDKHandler"
             commandId="com.liferay.ide.project.ui.sdk.command.all">
@@ -1540,6 +1550,56 @@
          </command>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+       <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <menu
+               icon="icons/e16/liferay_logo_16.png"
+               label="Liferay">
+                <visibleWhen
+                   checkEnabled="false">
+                   <or>
+                     <with
+                       variable="activeMenuSelection">
+                       <count value="1"></count>
+                         <reference definitionId="com.liferay.comparetheme.definition"/>
+                     </with>
+                     <with
+                          variable="activeMenuEditorInput">
+                             <reference definitionId="com.liferay.comparetheme.definition"/>
+                      </with>
+                      </or>
+                 </visibleWhen>
+            <command
+                  commandId="com.liferay.ide.project.ui.sdk.command.CompareFile"
+                  label="Compare With Original"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension point="org.eclipse.core.expressions.definitions">
+    <definition id="com.liferay.comparetheme.definition">
+        <iterate>
+               <or>
+                 <adapt type="org.eclipse.core.resources.IResource">
+                   <test property="org.eclipse.core.resources.extension" value="ftl" />
+                 </adapt>
+                 <adapt type="org.eclipse.core.resources.IResource">
+                   <test property="org.eclipse.core.resources.extension" value="vm" />
+                 </adapt>
+                 <adapt type="org.eclipse.core.resources.IResource">
+                   <test property="org.eclipse.core.resources.extension" value="css" />
+                 </adapt>
+                 <adapt type="org.eclipse.core.resources.IResource">
+                   <test property="org.eclipse.core.resources.extension" value="scss" />
+                 </adapt>
+              </or>
+        </iterate>
+    </definition>
+  </extension>
    <extension
         point="org.eclipse.ui.editors">
         <editor
