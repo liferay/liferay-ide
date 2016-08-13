@@ -45,8 +45,10 @@ import org.eclipse.swt.widgets.Display;
  */
 public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayTableViewCustomPart
 {
+
     private class LayoutSearchFilesVistor extends SearchFilesVisitor
     {
+
         @Override
         public boolean visit( IResourceProxy resourceProxy )
         {
@@ -63,7 +65,7 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
             return true;
         }
     }
-    
+
     @Override
     protected IFile[] getAvaiableUpgradeFiles( IProject project )
     {
@@ -74,20 +76,19 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
 
         return files.toArray( new IFile[files.size()] );
     }
-    
+
     @Override
     protected IStyledLabelProvider getLableProvider()
     {
         return new LiferayUpgradeTabeViewLabelProvider( "Upgrade Layouttpl" )
         {
+
             @Override
             public Image getImage( Object element )
             {
-                
                 return this.getImageRegistry().get( "layout" );
-
             }
-            
+
             @Override
             protected void initalizeImageRegistry( ImageRegistry imageRegistry )
             {
@@ -96,9 +97,10 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
             }
         };
     }
-    
+
     private class LayoutProjectViewerFilter extends ViewerFilter
     {
+
         @Override
         public boolean select( Viewer viewer, Object parentElement, Object element )
         {
@@ -110,7 +112,7 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
                 {
                     return false;
                 }
-                
+
                 if( ProjectUtil.isLayoutTplProject( project ) )
                 {
                     return true;
@@ -121,7 +123,7 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
 
             return false;
         }
-        
+
     }
 
     @Override
@@ -130,7 +132,7 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
         List<IProject> projects = new ArrayList<>();
 
         final JavaProjectSelectionDialog dialog =
-            new JavaProjectSelectionDialog( Display.getCurrent().getActiveShell(), new LayoutProjectViewerFilter());
+            new JavaProjectSelectionDialog( Display.getCurrent().getActiveShell(), new LayoutProjectViewerFilter() );
 
         if( dialog.open() == Window.OK )
         {
@@ -148,15 +150,16 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
                 }
             }
         }
+
         return projects;
     }
-    
+
     @Override
-    protected void createTempFile(  final File srcFile, final File templateFile, final String projectName )
+    protected void createTempFile( final File srcFile, final File templateFile, final String projectName )
     {
         try
         {
-            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile,true ) );
+            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile, true ) );
 
             if( templateFile.exists() )
             {
@@ -176,7 +179,7 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
     protected boolean isNeedUpgrade( File srcFile )
     {
         final String content = FileUtil.readContents( srcFile );
-        
+
         if( content != null && !content.equals( "" ) )
         {
             if( content.contains( "row-fluid" ) || content.contains( "span" ) )
@@ -184,6 +187,7 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
                 return true;
             }
         }
+
         return false;
     }
 
@@ -201,6 +205,7 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
                 content = content.replaceAll( "span", "col-md-" );
             }
         }
+
         return content;
     }
 
@@ -209,8 +214,8 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
     {
         try
         {
-            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile,true ) );
-            FileUtils.writeStringToFile( srcFile, content,"UTF-8");
+            String content = upgradeLayouttplContent( FileUtil.readContents( srcFile, true ) );
+            FileUtils.writeStringToFile( srcFile, content, "UTF-8" );
         }
         catch( Exception e )
         {

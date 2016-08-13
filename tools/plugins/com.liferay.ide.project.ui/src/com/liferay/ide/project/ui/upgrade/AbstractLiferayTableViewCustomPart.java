@@ -77,12 +77,13 @@ import org.eclipse.swt.widgets.Table;
  */
 public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPart
 {
+
     protected Status retval = Status.createOkStatus();
 
     protected TableViewer tableViewer;
 
     private LiferayUpgradeElement[] tableViewElements;
-    
+
     public class LiferayUpgradeElement
     {
 
@@ -154,6 +155,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
 
     protected class TableViewContentProvider implements IStructuredContentProvider
     {
+
         @Override
         public void dispose()
         {
@@ -177,7 +179,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
     }
 
     protected abstract boolean isNeedUpgrade( File srcFile );
-    
+
     public static IPath getTempLocation( String prefix, String fileName )
     {
         return ProjectUI.getDefault().getStateLocation().append( "tmp" ).append(
@@ -185,12 +187,14 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
                 ( CoreUtil.isNullOrEmpty( fileName ) ? StringPool.EMPTY : "/" + fileName ) );
     }
 
-    
-    protected abstract void createTempFile( final File srcFile, final File templateFile, final String projectName  );
+    protected abstract void createTempFile( final File srcFile, final File templateFile, final String projectName );
+
     protected abstract void doUpgrade( File srcFile, IProject project );
+
     protected abstract IFile[] getAvaiableUpgradeFiles( IProject project );
+
     protected abstract IStyledLabelProvider getLableProvider();
-    
+
     @Override
     protected Status computeValidation()
     {
@@ -200,7 +204,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
     @Override
     public FormComponentPresentation createPresentation( SwtPresentation parent, Composite composite )
     {
-        return new FormComponentPresentation( this, parent, composite)
+        return new FormComponentPresentation( this, parent, composite )
         {
 
             @Override
@@ -261,9 +265,8 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
             }
         };
     }
-    
-    private IPath createPreviewerFile(
-        final String projectName, final IPath srcFilePath, final String location )
+
+    private IPath createPreviewerFile( final String projectName, final IPath srcFilePath, final String location )
     {
         final IPath templateLocation = getTempLocation( projectName, srcFilePath.lastSegment() );
         templateLocation.toFile().getParentFile().mkdirs();
@@ -284,7 +287,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
         final List<LiferayUpgradeElement> tableViewElementList = new ArrayList<>();
 
         final Path sdkLocation = op().getNewLocation().content();
-        
+
         String context = null;
 
         int count = projects.size();
@@ -316,7 +319,8 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
                 IPath filePath = upgradeFilePath.getLocation();
                 if( isNeedUpgrade( filePath.toFile() ) )
                 {
-                    final String projectLocation = filePath.makeRelativeTo( PathBridge.create( sdkLocation ) ).toPortableString();
+                    final String projectLocation =
+                        filePath.makeRelativeTo( PathBridge.create( sdkLocation ) ).toPortableString();
 
                     context =
                         filePath.lastSegment() + " (" + project.getName() + " - Location: " + projectLocation + ")";
@@ -331,8 +335,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
 
         return tableViewElementList;
     }
-    
-    
+
     protected List<IProject> getSelectedProjects()
     {
         List<IProject> projects = new ArrayList<>();
@@ -358,31 +361,29 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
         }
         return projects;
     }
-    
+
     private void handleCompare( IStructuredSelection selection )
     {
-        final LiferayUpgradeElement descriptorElement =
-            (LiferayUpgradeElement) selection.getFirstElement();
+        final LiferayUpgradeElement descriptorElement = (LiferayUpgradeElement) selection.getFirstElement();
 
         final String projectName = descriptorElement.name;
         final String itemName = descriptorElement.itemName;
         final String srcFileLocation = descriptorElement.location;
         final IPath srcFileIPath = PathBridge.create( new Path( srcFileLocation ) );
-        final IPath createPreviewerFile =
-            createPreviewerFile( projectName, srcFileIPath, srcFileLocation);
+        final IPath createPreviewerFile = createPreviewerFile( projectName, srcFileIPath, srcFileLocation );
 
         final LiferayUpgradeCompre lifeayDescriptorUpgradeCompre =
             new LiferayUpgradeCompre( srcFileIPath, createPreviewerFile, itemName );
 
         lifeayDescriptorUpgradeCompre.openCompareEditor();
     }
-    
+
     private void handleFindEvent()
     {
         List<IProject> projects = getSelectedProjects();
         try
         {
-            final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......")
+            final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......" )
             {
 
                 @Override
@@ -390,8 +391,8 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
                 {
                     final List<LiferayUpgradeElement> tableViewElementList = getInitItemsList( projects, monitor );
 
-                    tableViewElements = tableViewElementList.toArray(
-                        new LiferayUpgradeElement[tableViewElementList.size()] );
+                    tableViewElements =
+                        tableViewElementList.toArray( new LiferayUpgradeElement[tableViewElementList.size()] );
 
                     UIUtil.async( new Runnable()
                     {
@@ -406,6 +407,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
                     return StatusBridge.create( Status.createOkStatus() );
                 }
             };
+
             workspaceJob.setUser( true );
             workspaceJob.schedule();
         }
@@ -415,12 +417,12 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
         }
 
     }
-    
+
     private void handleUpgradeEvent()
     {
         try
         {
-            final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......")
+            final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......" )
             {
 
                 @Override
@@ -479,7 +481,6 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
                                     tableViewer.setInput( tableViewElements );
 
                                     tableViewer.refresh();
-
                                 }
                             } );
                         }
@@ -488,9 +489,9 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
                             ProjectCore.logError( "Error upgrade files...... ", e );
                         }
                     }
+
                     return StatusBridge.create( Status.createOkStatus() );
                 }
-
             };
 
             workspaceJob.setUser( true );

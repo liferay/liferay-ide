@@ -240,7 +240,6 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
             removeLayoutWapNode( srcFile, doc );
 
             saveXML( srcFile, doc );
-
         }
         catch( Exception e )
         {
