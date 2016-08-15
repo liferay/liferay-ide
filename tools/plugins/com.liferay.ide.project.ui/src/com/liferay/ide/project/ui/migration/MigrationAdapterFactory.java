@@ -61,10 +61,16 @@ public class MigrationAdapterFactory implements IAdapterFactory, IWorkbenchAdapt
             return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
                 ISharedImages.IMG_OBJ_FILE ) );
         }
-        else if( element instanceof UpgradeProblems || element instanceof ProblemsContainer )
+        else if( element instanceof ProblemsContainer )
         {
-            return ImageDescriptor.createFromImage( PlatformUI.getWorkbench().getSharedImages().getImage(
-                ISharedImages.IMG_OBJ_FOLDER ) );
+            return ImageDescriptor.createFromImage(
+                PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FOLDER ) );
+        }
+        else if( element instanceof UpgradeProblems )
+        {
+            return ImageDescriptor.createFromImage(
+                PlatformUI.getWorkbench().getSharedImages().getImage(
+                    org.eclipse.ui.ide.IDE.SharedImages.IMG_OBJ_PROJECT ) );
         }
 
         return null;
