@@ -22,6 +22,7 @@ import org.junit.Test;
 
 /**
  * @author Simon Jiang
+ * @author Andy Wu
  */
 public class NewLiferayModuleProjectOpTests
 {
@@ -108,5 +109,27 @@ public class NewLiferayModuleProjectOpTests
         op.setProjectTemplateName( "Portlet" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
+    }
+
+    @Test
+    public void testNewLiferayModuleProjectPackageDefaultValueService() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "my-test-project" );
+
+        op.setProjectTemplateName( "Portlet" );
+
+        assertEquals( "my.test.project", op.getPackageName().content( true ) );
+
+        op.setProjectName( "my.test.foo" );
+
+        assertEquals( "my.test.foo", op.getPackageName().content( true ) );
+
+        op.setProjectName( "my_test_foo1" );
+
+        op.setProjectTemplateName( "ServiceWrapper" );
+
+        assertEquals( "my.test.foo1", op.getPackageName().content( true ) );
     }
 }
