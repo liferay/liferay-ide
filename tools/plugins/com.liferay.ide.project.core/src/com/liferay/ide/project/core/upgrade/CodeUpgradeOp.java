@@ -17,9 +17,9 @@ package com.liferay.ide.project.core.upgrade;
 
 import com.liferay.ide.project.core.upgrade.service.CheckSDKLocationDerivedValueService;
 import com.liferay.ide.project.core.upgrade.service.LayoutPossibleValuesService;
-import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameDefaultValueService;
-import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNamePossibleValuesService;
-import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameValidationService;
+import com.liferay.ide.project.core.upgrade.service.LiferayServerNameDefaultValueService;
+import com.liferay.ide.project.core.upgrade.service.LiferayServerNamePossibleValuesService;
+import com.liferay.ide.project.core.upgrade.service.LiferayServerNameValidationService;
 import com.liferay.ide.project.core.upgrade.service.SdkLocationDefaultValueService;
 import com.liferay.ide.project.core.upgrade.service.SdkLocationValidationService;
 
@@ -83,9 +83,9 @@ public interface CodeUpgradeOp extends Element
     Value<String> getLayout();
     void setLayout( String Layout );
 
-    @Service( impl = LiferayRuntimeNamePossibleValuesService.class )
-    @Service( impl = LiferayRuntimeNameDefaultValueService.class )
-    @Service( impl = LiferayRuntimeNameValidationService.class )
+    @Service( impl = LiferayServerNamePossibleValuesService.class )
+    @Service( impl = LiferayServerNameDefaultValueService.class )
+    @Service( impl = LiferayServerNameValidationService.class )
     @Required
     @XmlBinding( path = "ServerName" )
     ValueProperty PROP_LIFERAY_SERVER_NAME = new ValueProperty( TYPE, "LiferayServerName" );

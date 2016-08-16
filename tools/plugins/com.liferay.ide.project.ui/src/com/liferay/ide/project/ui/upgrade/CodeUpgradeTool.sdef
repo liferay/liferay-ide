@@ -90,8 +90,7 @@
 							<action-handler>
 								<action>NewLiferayRuntime</action>
 								<id>NewLiferayRuntimeHandler</id>
-								<impl>com.liferay.ide.project.ui.upgrade.action.CodeUpgradeNewLiferayRuntimeAction
-								</impl>
+								<impl>com.liferay.ide.project.ui.upgrade.action.CodeUpgradeNewLiferayServerAction</impl>
 							</action-handler>
 							<visible-when>${Layout=='Upgrade to liferay plugin sdk 7'}
 							</visible-when>

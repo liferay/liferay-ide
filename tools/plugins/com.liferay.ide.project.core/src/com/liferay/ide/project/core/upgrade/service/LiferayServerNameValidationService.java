@@ -25,7 +25,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Terry Jia
  */
-public class LiferayRuntimeNameValidationService extends ValidationService
+public class LiferayServerNameValidationService extends ValidationService
 {
 
     @Override

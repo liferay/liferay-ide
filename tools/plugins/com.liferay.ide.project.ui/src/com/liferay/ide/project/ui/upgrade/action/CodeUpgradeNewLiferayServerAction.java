@@ -1,5 +1,4 @@
 /*******************************************************************************
-/*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
@@ -16,27 +15,31 @@
 
 package com.liferay.ide.project.ui.upgrade.action;
 
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
+import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
+import org.eclipse.wst.server.ui.ServerUIUtil;
 
 import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
-import com.liferay.ide.project.ui.action.NewLiferayRuntimeAction;
 
 /**
  * @author Terry Jia
+ * @author Joye Luo
  */
-public class CodeUpgradeNewLiferayRuntimeAction extends NewLiferayRuntimeAction
+public class CodeUpgradeNewLiferayServerAction extends SapphireActionHandler
 {
 
     @Override
     protected Object run( Presentation context )
     {
-        Object status = super.run( context );
+        ServerUIUtil.showNewServerWizard(( (SwtPresentation) context ).shell(), "liferay.bundle", null, "com.liferay." );
 
         CodeUpgradeOp op = context.part().getModelElement().nearest( CodeUpgradeOp.class );
 
         op.property( CodeUpgradeOp.PROP_LIFERAY_SERVER_NAME ).refresh();
 
-        return status;
+        return Status.createOkStatus();
     }
 
 }

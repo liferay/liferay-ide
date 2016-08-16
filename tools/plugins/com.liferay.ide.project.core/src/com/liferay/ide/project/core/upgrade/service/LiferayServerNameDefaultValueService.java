@@ -19,16 +19,15 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 
 import org.eclipse.sapphire.DefaultValueService;
-import org.eclipse.wst.server.core.IRuntime;
-import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Terry Jia
  */
 
-public class LiferayRuntimeNameDefaultValueService extends DefaultValueService implements IRuntimeLifecycleListener
+public class LiferayServerNameDefaultValueService extends DefaultValueService implements IServerLifecycleListener
 {
 
     static final String NONE = "<None>";
@@ -38,13 +37,13 @@ public class LiferayRuntimeNameDefaultValueService extends DefaultValueService i
     {
         super.initDefaultValueService();
 
-        ServerCore.addRuntimeLifecycleListener( this );
+        ServerCore.addServerLifecycleListener( this );
     }
 
     @Override
     public void dispose()
     {
-        ServerCore.removeRuntimeLifecycleListener( this );
+        ServerCore.removeServerLifecycleListener( this );
 
         super.dispose();
     }
@@ -72,17 +71,20 @@ public class LiferayRuntimeNameDefaultValueService extends DefaultValueService i
         return value;
     }
 
-    public void runtimeAdded( IRuntime runtime )
+    @Override
+    public void serverAdded( IServer server )
     {
         refresh();
     }
 
-    public void runtimeChanged( IRuntime runtime )
+    @Override
+    public void serverChanged( IServer server )
     {
         refresh();
     }
 
-    public void runtimeRemoved( IRuntime runtime )
+    @Override
+    public void serverRemoved( IServer server )
     {
         refresh();
     }
