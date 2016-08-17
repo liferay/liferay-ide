@@ -256,65 +256,6 @@
 					'true')}</visible-when>
 			</node>
 			<node>
-				<label>Build Service</label>
-				<section>
-					<content>
-						<label>We will do: delete shard-data-source-spring.xml and
-							portlet-spring.xml under docroot/WEB-INF/src/META-INF of each
-							selected project. Then run build-service</label>
-						<split-form>
-							<block>
-								<content>
-								</content>
-								<weight>7</weight>
-							</block>
-							<block>
-								<content>
-									<actuator>
-										<action-id>BuildServiceAction</action-id>
-										<action>
-											<id>BuildServiceAction</id>
-											<label>Build Service</label>
-										</action>
-										<action-handler>
-											<id>BuildServiceAction</id>
-											<action>BuildServiceAction</action>
-											<impl>com.liferay.ide.project.ui.upgrade.action.BuildServiceActionHandler
-											</impl>
-										</action-handler>
-										<horizontal-align>right</horizontal-align>
-										<style>Sapphire.Actuator.Button</style>
-									</actuator>
-								</content>
-								<weight>2</weight>
-							</block>
-							<block>
-								<content>
-									<actuator>
-										<action-id>BuildServiceNextAction</action-id>
-										<action>
-											<id>BuildServiceNextAction</id>
-											<label>Next</label>
-										</action>
-										<action-handler>
-											<id>BuildServiceNextAction</id>
-											<action>BuildServiceNextAction</action>
-											<impl>com.liferay.ide.project.ui.upgrade.action.BuildServiceNextActionHandler
-											</impl>
-										</action-handler>
-										<horizontal-align>right</horizontal-align>
-										<style>Sapphire.Actuator.Button</style>
-									</actuator>
-								</content>
-								<weight>1</weight>
-							</block>
-						</split-form>
-					</content>
-				</section>
-				<visible-when>${Confirm == 'true' &amp;&amp; HasServiceBuilder ==
-					'true'}</visible-when>
-			</node>
-			<node>
 				<label>Find Breaking Changes</label>
 				<section>
 					<content>
@@ -372,6 +313,65 @@
 					|| HasHook == 'true' || HasServiceBuilder == 'true')}
 				</visible-when>
 			</node>
+			<node>
+                <label>Build Service</label>
+                <section>
+                    <content>
+                        <label>We will do: delete shard-data-source-spring.xml and
+                            portlet-spring.xml under docroot/WEB-INF/src/META-INF of each
+                            selected project. Then run build-service</label>
+                        <split-form>
+                            <block>
+                                <content>
+                                </content>
+                                <weight>7</weight>
+                            </block>
+                            <block>
+                                <content>
+                                    <actuator>
+                                        <action-id>BuildServiceAction</action-id>
+                                        <action>
+                                            <id>BuildServiceAction</id>
+                                            <label>Build Service</label>
+                                        </action>
+                                        <action-handler>
+                                            <id>BuildServiceAction</id>
+                                            <action>BuildServiceAction</action>
+                                            <impl>com.liferay.ide.project.ui.upgrade.action.BuildServiceActionHandler
+                                            </impl>
+                                        </action-handler>
+                                        <horizontal-align>right</horizontal-align>
+                                        <style>Sapphire.Actuator.Button</style>
+                                    </actuator>
+                                </content>
+                                <weight>2</weight>
+                            </block>
+                            <block>
+                                <content>
+                                    <actuator>
+                                        <action-id>BuildServiceNextAction</action-id>
+                                        <action>
+                                            <id>BuildServiceNextAction</id>
+                                            <label>Next</label>
+                                        </action>
+                                        <action-handler>
+                                            <id>BuildServiceNextAction</id>
+                                            <action>BuildServiceNextAction</action>
+                                            <impl>com.liferay.ide.project.ui.upgrade.action.BuildServiceNextActionHandler
+                                            </impl>
+                                        </action-handler>
+                                        <horizontal-align>right</horizontal-align>
+                                        <style>Sapphire.Actuator.Button</style>
+                                    </actuator>
+                                </content>
+                                <weight>1</weight>
+                            </block>
+                        </split-form>
+                    </content>
+                </section>
+                <visible-when>${Confirm == 'true' &amp;&amp; HasServiceBuilder ==
+                    'true'}</visible-when>
+            </node>
 			<node>
 				<label>Layout Template</label>
 				<section>

@@ -41,7 +41,7 @@ public abstract class BaseActionHandler extends SapphireActionHandler
     public static final String STEP_WELCOME = "Welcome";
 
     public static final String[] STEPS = { STEP_WELCOME, STEP_CONFIG_SOURCE, STEP_IMPORT_PROJECT, STEP_DESCRIPTORS,
-        STEP_BUILD_SERVICE, STEP_FIND_BREAKING_CHANGES, STEP_LAYOUT_TEMPLATE, STEP_CUSTOME_JSP, STEP_EXT, STEP_THEME,
+        STEP_FIND_BREAKING_CHANGES, STEP_BUILD_SERVICE, STEP_LAYOUT_TEMPLATE, STEP_CUSTOME_JSP, STEP_EXT, STEP_THEME,
         STEP_COMPILE, STEP_DEPLOY };
 
     protected CodeUpgradeOp op( Presentation context )
@@ -85,15 +85,15 @@ public abstract class BaseActionHandler extends SapphireActionHandler
             {
                 break;
             }
-            else if( nextStep.equals( STEP_BUILD_SERVICE ) &&
-                ( op.getHasServiceBuilder() != null && op.getHasServiceBuilder().content().booleanValue() ) )
-            {
-                break;
-            }
             else if( nextStep.equals( STEP_FIND_BREAKING_CHANGES ) &&
                 ( ( op.getHasHook() != null && op.getHasHook().content().booleanValue() ) ||
                     ( op.getHasPortlet() != null && op.getHasPortlet().content().booleanValue() ) ||
                     ( op.getHasServiceBuilder() != null && op.getHasServiceBuilder().content().booleanValue() ) ) )
+            {
+                break;
+            }
+            else if( nextStep.equals( STEP_BUILD_SERVICE ) &&
+                ( op.getHasServiceBuilder() != null && op.getHasServiceBuilder().content().booleanValue() ) )
             {
                 break;
             }
