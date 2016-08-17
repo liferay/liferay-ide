@@ -674,7 +674,7 @@ public class CustomJspConverter
         }
     }
 
-    private File[] getPortletDirs( String sourcePath, String customJspPath ) throws Exception
+    private File[] getPortletDirs( String sourcePath, String customJspPath )
     {
         sourcePortletDir = sourcePath + "/docroot/" + customJspPath + "/html/portlet/";
 
@@ -682,7 +682,7 @@ public class CustomJspConverter
 
         if( !portletDir.exists() || !portletDir.isDirectory() )
         {
-            throw new Exception( "portlet directory doesn't exist" );
+            return null;
         }
 
         File[] portlets = portletDir.listFiles( new FileFilter()
