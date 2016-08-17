@@ -205,27 +205,7 @@
 							<block>
 								<content>
 								</content>
-								<weight>8</weight>
-							</block>
-							<block>
-								<content>
-									<actuator>
-										<action-id>DescriptorsSkipAction</action-id>
-										<action>
-											<id>DescriptorsSkipAction</id>
-											<label>Skip</label>
-										</action>
-										<action-handler>
-											<id>DescriptorsSkipAction</id>
-											<action>DescriptorsSkipAction</action>
-											<impl>com.liferay.ide.project.ui.upgrade.action.DescriptorsSkipActionHandler
-											</impl>
-										</action-handler>
-										<style>Sapphire.Actuator.Button</style>
-										<horizontal-align>right</horizontal-align>
-									</actuator>
-								</content>
-								<weight>1</weight>
+								<weight>10</weight>
 							</block>
 							<block>
 								<content>
