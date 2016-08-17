@@ -21,7 +21,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.compare,
  org.eclipse.team.core,
  org.eclipse.team.ui,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.eclipse.jdt.ui,
+ org.eclipse.ltk.core.refactoring
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

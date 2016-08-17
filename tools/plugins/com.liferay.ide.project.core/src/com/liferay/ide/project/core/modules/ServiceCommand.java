@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.FileLocator;
@@ -179,7 +180,7 @@ public class ServiceCommand
 
             if( !supervisor.getAgent().redirect( Agent.COMMAND_SESSION ) )
             {
-                return null;
+                return getServiceFromTargetPlatform();
             }
 
             if( _serviceName == null )
@@ -190,12 +191,12 @@ public class ServiceCommand
             else
             {
                 String[] serviceBundle = getServiceBundle( _serviceName, supervisor );
-                result = new ServiceContainer( serviceBundle[0], serviceBundle[1] );
+                result = new ServiceContainer( serviceBundle[0], serviceBundle[1], serviceBundle[2] );
             }
         }
         finally
         {
-            supervisor.getAgent().redirect( Agent.DEFAULT_PORT );
+            supervisor.getAgent().redirect( Agent.NONE );
         }
 
         return result;
@@ -220,6 +221,9 @@ public class ServiceCommand
     private String[] getServiceBundle( String serviceName, BundleSupervisor supervisor ) throws Exception
     {
         String[] serviceBundleInfo;
+        String bundleGroup = "";
+        String bundleName;
+        String bundleVersion;
 
         supervisor.getAgent().stdin( "packages " + serviceName.substring( 0, serviceName.lastIndexOf( "." ) ) );
 
@@ -234,7 +238,34 @@ public class ServiceCommand
             serviceBundleInfo = parseSymbolicName( supervisor.getOutInfo() );
         }
 
-        return serviceBundleInfo;
+        bundleName = serviceBundleInfo[0];
+        bundleVersion = serviceBundleInfo[1];
+
+        if( bundleName.equals( "org.eclipse.osgi,system.bundle" ) )
+        {
+            bundleGroup = "com.liferay.portal";
+        }
+        else if( bundleName.startsWith( "com.liferay" ) )
+        {
+            bundleGroup = "com.liferay";
+        }
+        else
+        {
+            int ordinalIndexOf = StringUtils.ordinalIndexOf( bundleName, ".", 3 );
+
+            if(ordinalIndexOf != -1)
+            {
+                bundleGroup = bundleName.substring( 0, ordinalIndexOf );
+            }else{
+                ordinalIndexOf = StringUtils.ordinalIndexOf( bundleName, ".", 2 );
+
+                if(ordinalIndexOf != -1){
+                    bundleGroup = bundleName.substring( 0, ordinalIndexOf );
+                }
+            }
+        }
+
+        return new String[] { bundleGroup, bundleName, bundleVersion };
     }
 
     private String[] getServices( BundleSupervisor supervisor ) throws Exception
@@ -389,7 +420,6 @@ public class ServiceCommand
                     break;
                 }
             }
-
         }
 
         return newList.toArray( new String[0] );

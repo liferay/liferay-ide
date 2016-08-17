@@ -150,7 +150,27 @@ public class TargetPlatformUtil
 
         if( serviceBundle != null && serviceBundle.size() != 0 )
         {
-            return new ServiceContainer( serviceBundle.get( 0 ), serviceBundle.get( 1 ) );
+            return new ServiceContainer( serviceBundle.get( 0 ), serviceBundle.get( 1 ) ,serviceBundle.get( 2 ));
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public static ServiceContainer getThirdPartyBundleList( String _serviceName ) throws Exception
+    {
+        final URL url = FileLocator.toFileURL(
+            ProjectCore.getDefault().getBundle().getEntry(
+                "OSGI-INF/target-platform/liferay-thirdparty-bundles.json" ) );
+        final File tpFile = new File( url.getFile() );
+        final ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, List<String>> map = mapper.readValue( tpFile, Map.class );
+        List<String> serviceBundle = map.get( _serviceName );
+
+        if( serviceBundle != null && serviceBundle.size() != 0 )
+        {
+            return new ServiceContainer( serviceBundle.get( 0 ), serviceBundle.get( 1 ), serviceBundle.get( 2 ) );
         }
 
         return null;

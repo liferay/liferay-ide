@@ -328,4 +328,12 @@
             sequence="M1+F5">
       </key>
    </extension>
+   <extension
+         point="org.eclipse.jdt.ui.quickFixProcessors">
+      <quickFixProcessor
+            name="QuickFixGradleDep"
+            class="com.liferay.ide.gradle.ui.quickfix.QuickFixGradleDep"
+            id="com.liferay.ide.gradle.ui.quickfix.quickfixgradledep">
+      </quickFixProcessor>
+   </extension>
 </plugin>

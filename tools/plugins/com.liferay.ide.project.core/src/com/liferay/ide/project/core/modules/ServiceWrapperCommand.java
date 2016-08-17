@@ -35,6 +35,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.FileLocator;
@@ -85,7 +86,7 @@ public class ServiceWrapperCommand
             else
             {
                 String[] wrapperBundle = dynamicServiceWrappers.get( _serviceWrapperName );
-                result = new ServiceContainer( wrapperBundle[0], wrapperBundle[1] );
+                result = new ServiceContainer( wrapperBundle[0], wrapperBundle[1] ,wrapperBundle[2] );
             }
 
             return result;
@@ -231,8 +232,23 @@ public class ServiceWrapperCommand
             Attributes mainAttributes = jarInputStream.getManifest().getMainAttributes();
             String bundleName = mainAttributes.getValue( "Bundle-SymbolicName" );
             String version = mainAttributes.getValue( "Bundle-Version" );
+            String group = "";
 
-            wrapperMap.put( name, new String[] { bundleName, version } );
+            if( bundleName.equals( "com.liferay.portal.kernel" ) )
+            {
+                group = "com.liferay.portal";
+            }
+            else
+            {
+                int ordinalIndexOf = StringUtils.ordinalIndexOf( bundleName, ".", 2 );
+
+                if( ordinalIndexOf != -1 )
+                {
+                    group = bundleName.substring( 0, ordinalIndexOf );
+                }
+            }
+
+            wrapperMap.put( name, new String[] { group, bundleName, version } );
         }
     }
 

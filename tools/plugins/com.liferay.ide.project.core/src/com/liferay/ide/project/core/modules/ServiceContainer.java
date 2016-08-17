@@ -23,6 +23,7 @@ public class ServiceContainer
 {
 
     private List<String> serviceList;
+    private String bundleGroup;
     private String bundleName;
     private String bundleVersion;
 
@@ -31,8 +32,9 @@ public class ServiceContainer
         this.serviceList = serviceList;
     }
 
-    public ServiceContainer( String bundleName, String bundleVersion )
+    public ServiceContainer( String bundleGroup, String bundleName, String bundleVersion )
     {
+        this.bundleGroup = bundleGroup;
         this.bundleName = bundleName;
         this.bundleVersion = bundleVersion;
     }
@@ -65,6 +67,16 @@ public class ServiceContainer
     public void setBundleVersion( String bundleVersion )
     {
         this.bundleVersion = bundleVersion;
+    }
+
+    public String getBundleGroup()
+    {
+        return bundleGroup;
+    }
+
+    public void setBundleGroup( String bundleGroup )
+    {
+        this.bundleGroup = bundleGroup;
     }
 
 }

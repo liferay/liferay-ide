@@ -1,3 +1,4 @@
+
 package com.liferay.ide.gradle.core.parser;
 
 import java.io.File;
@@ -37,19 +38,27 @@ public class GradleDependencyUpdater
         nodes = builder.buildFromString( scriptContents );
     }
 
+    public FindDependenciesVisitor insertDependency( GradleDependency gradleDependency ) throws IOException
+    {
+        String dependency = "compile group: \"" + gradleDependency.getGroup() + "\", name:\"" +
+            gradleDependency.getName() + "\", version:\"" + gradleDependency.getVersion() + "\"";
+
+        return insertDependency( dependency );
+    }
+
     public FindDependenciesVisitor insertDependency( String dependency ) throws IOException
     {
         FindDependenciesVisitor visitor = new FindDependenciesVisitor();
         walkScript( visitor );
         gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ) );
 
+        if( !dependency.startsWith( "\t" ) )
+        {
+            dependency = "\t" + dependency;;
+        }
+
         if( visitor.getDependenceLineNum() == -1 )
         {
-            if( !dependency.startsWith( "\t" ) )
-            {
-                dependency = "\t" + dependency;;
-            }
-
             gradleFileContents.add( "" );
             gradleFileContents.add( "dependencies {" );
             gradleFileContents.add( dependency );
@@ -60,7 +69,8 @@ public class GradleDependencyUpdater
             if( visitor.getColumnNum() != -1 )
             {
                 gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ) );
-                StringBuilder builder = new StringBuilder( gradleFileContents.get( visitor.getDependenceLineNum() - 1 ) );
+                StringBuilder builder =
+                    new StringBuilder( gradleFileContents.get( visitor.getDependenceLineNum() - 1 ) );
                 builder.insert( visitor.getColumnNum() - 2, "\n" + dependency + "\n" );
                 String dep = builder.toString();
 
