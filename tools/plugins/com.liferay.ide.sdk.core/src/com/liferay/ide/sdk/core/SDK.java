@@ -40,6 +40,8 @@ import java.util.Properties;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Dirname;
 import org.apache.tools.ant.taskdefs.Property;
+import org.eclipse.ant.core.AntCorePlugin;
+import org.eclipse.ant.core.AntCorePreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -652,6 +654,20 @@ public class SDK
 
     }
 
+    private String[] getAntHomeVMArg()
+    {
+        AntCorePreferences prefs = AntCorePlugin.getPlugin().getPreferences();
+
+        String antHome = prefs.getAntHome();
+
+        if( !CoreUtil.isNullOrEmpty( antHome ) )
+        {
+            return new String[] { "-Dant.home=\"" + antHome + "\"" };
+        }
+
+        return null;
+    }
+
     public IPath[] getAntLibraries()
     {
         List<IPath> antLibs = new ArrayList<IPath>();
@@ -1040,6 +1056,8 @@ public class SDK
 
             final IPath buildFile = buildXmlFile.getRawLocation();
             final String workingDir = getDefaultWorkingDir( buildFile );
+
+            antHelper.setVMArgs( getAntHomeVMArg() );
 
             antHelper.runTarget( buildFile, command, properties, true, workingDir );
         }
