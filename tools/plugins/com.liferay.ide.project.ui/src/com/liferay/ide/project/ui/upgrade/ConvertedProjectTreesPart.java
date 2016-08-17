@@ -266,8 +266,15 @@ public class ConvertedProjectTreesPart extends FormComponentPart
                     cell.setImage( imageFile );
 
                     text.append( getFileName( file ) );
-                    text.append( "(" + ( is62FileFound( file ) ? "found" : "unfound" ) + ")",
-                        StyledString.COUNTER_STYLER );
+
+                    if( is62FileFound( file ) )
+                    {
+                        text.append( "(found)", StyledString.COUNTER_STYLER );
+                    }
+                    else
+                    {
+                        text.append( "(unfound)", StyledString.DECORATIONS_STYLER );
+                    }
                 }
 
                 cell.setText( text.toString() );
@@ -345,8 +352,15 @@ public class ConvertedProjectTreesPart extends FormComponentPart
                     cell.setImage( imageFile );
 
                     text.append( getFileName( file ) );
-                    text.append( "(" + ( is70FileFound( file ) ? "found" : "unfound" ) + ")",
-                        StyledString.COUNTER_STYLER );
+
+                    if( is70FileFound( file ) )
+                    {
+                        text.append( "(found)", StyledString.COUNTER_STYLER );
+                    }
+                    else
+                    {
+                        text.append( "(unfound)", StyledString.DECORATIONS_STYLER );
+                    }
                 }
 
                 cell.setText( text.toString() );
@@ -816,17 +830,11 @@ public class ConvertedProjectTreesPart extends FormComponentPart
         {
             File[] leftInputs = getLeftTreeInputs();
 
-            if( leftInputs != null )
-            {
-                leftTreeViewer.setInput( leftInputs );
-            }
+            leftTreeViewer.setInput( leftInputs );
 
             File[] rightInputs = getRightTreeInputs();
 
-            if( rightInputs != null )
-            {
-                rightTreeViewer.setInput( rightInputs );
-            }
+            rightTreeViewer.setInput( rightInputs );
         }
 
         @Override
@@ -844,21 +852,42 @@ public class ConvertedProjectTreesPart extends FormComponentPart
 
             container.setLayoutData( layoutData );
 
-            Button button = SWTUtil.createButton( container, "select projects" );
+            Composite buttonContainer = new Composite( container, SWT.NONE );
+
+            buttonContainer.setLayout( new GridLayout( 2, true ) );
+
+            Button selectButton = SWTUtil.createButton( buttonContainer, "select projects" );
 
             GridData buttonGridData = new GridData( SWT.LEFT, SWT.LEFT, false, false );
+
             buttonGridData.widthHint = 130;
             buttonGridData.heightHint = 40;
 
-            button.setLayoutData( buttonGridData );
+            selectButton.setLayoutData( buttonGridData );
 
-            button.addSelectionListener( new SelectionAdapter()
+            Button clearButton = SWTUtil.createButton( buttonContainer, "clear results" );
+
+            clearButton.setLayoutData( buttonGridData );
+
+            selectButton.addSelectionListener( new SelectionAdapter()
             {
 
                 @Override
                 public void widgetSelected( SelectionEvent e )
                 {
                     runConvertAction();
+                }
+            } );
+
+            clearButton.addSelectionListener( new SelectionAdapter()
+            {
+
+                @Override
+                public void widgetSelected( SelectionEvent e )
+                {
+                    CustomJspConverter.clearConvertResults();
+
+                    refreshTreeViews();
                 }
             } );
 

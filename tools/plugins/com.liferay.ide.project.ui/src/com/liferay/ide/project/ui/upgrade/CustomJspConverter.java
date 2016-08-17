@@ -26,6 +26,8 @@ import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.ConvertedProjectTreesPart.ConvertedProjectTreesPresentation;
+import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -36,6 +38,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -73,6 +80,54 @@ import org.xml.sax.SAXException;
  */
 public class CustomJspConverter
 {
+    class FileVisitorImpl implements FileVisitor<Path>
+    {
+        private List<String> filePaths;
+
+        private Path source;
+
+        public FileVisitorImpl( Path source )
+        {
+            filePaths = new ArrayList<String>();
+
+            this.source = source;
+        }
+
+        public List<String> getResults()
+        {
+            return filePaths;
+        }
+
+        @Override
+        public FileVisitResult preVisitDirectory( Path dir, BasicFileAttributes attrs ) throws IOException
+        {
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory( Path dir, IOException exc ) throws IOException
+        {
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFile( Path file, BasicFileAttributes attrs ) throws IOException
+        {
+            String relativizePath = source.relativize( file ).toString().replaceAll( "\\\\", "/" );
+
+            filePaths.add( relativizePath );
+
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed( Path file, IOException exc ) throws IOException
+        {
+            return FileVisitResult.CONTINUE;
+        }
+    }
+
+    private String coreJspHookResourcesPath= "codeupgrade.corejsphook/src/main/resources/META-INF/resources/";
 
     private static List<String> jspPathMap;
     private static Map<String, String> portlet2ModuleMap;
@@ -82,10 +137,12 @@ public class CustomJspConverter
 
     private IRuntime liferay70Runtime;
 
-    private String resultFileName = "convertJspHookResult.properties";
+    private static String resultFileName = "convertJspHookResult.properties";
     private Properties resultProp;
 
     private String sourcePortletDir = null;
+
+
 
     private ConvertedProjectTreesPresentation ui;
 
@@ -192,11 +249,23 @@ public class CustomJspConverter
         // jspPathMap.add("document_library_display");
     }
 
+    public static void clearConvertResults()
+    {
+        IPath path = ProjectUI.getDefault().getStateLocation().append( resultFileName );
+
+        File resultFile = path.toFile();
+
+        if( resultFile.exists() )
+        {
+            resultFile.delete();
+        }
+    }
+
     public static String[] getConvertResult( String filter )
     {
         List<String> results = new ArrayList<String>();
 
-        IPath path = ProjectUI.getDefault().getStateLocation().append( "convertJspHookResult.properties" );
+        IPath path = ProjectUI.getDefault().getStateLocation().append( resultFileName );
 
         File resultFile = path.toFile();
 
@@ -344,15 +413,41 @@ public class CustomJspConverter
             ZipUtil.unzip( projectZipFile, location.toFile() );
 
             File jspDir =
-                new File( location.toFile(), "codeupgrade.corejsphook/src/main/resources/META-INF/resources/html" );
+                new File( location.toFile(), coreJspHookResourcesPath+"html" );
+
+            File ignoreFolder =
+                new File( location.toFile(), coreJspHookResourcesPath+".ignore/" );
+
+            PortalBundle portalBundle = LiferayServerCore.newPortalBundle( getLiferay70Runtime().getLocation() );
 
             for( File dir : dirs )
             {
                 if( dir != null )
                 {
                     File dest = new File( jspDir, dir.getName() );
+
                     dest.mkdirs();
+
                     IOUtil.copyDirToDir( dir, dest );
+
+                    //copy 70 original jsp file to converted project ignore folder
+                    List<String> fileRelativizePaths = getAllRelativizeFilePaths( dir );
+
+                    for( String fileRelativizePath : fileRelativizePaths )
+                    {
+                        File original70File = portalBundle.getAppServerDir().append(
+                            "webapps/ROOT/html/" + dir.getName() + "/" + fileRelativizePath ).toFile();
+
+                        if( original70File.exists() )
+                        {
+                            File targetFile =
+                                new File( ignoreFolder, "html/" + dir.getName() + "/" + fileRelativizePath );
+
+                            makeParentDir( targetFile );
+
+                            FileUtil.copyFile( original70File, targetFile );
+                        }
+                    }
                 }
             }
 
@@ -404,7 +499,7 @@ public class CustomJspConverter
 
         File targetFile = new File( targetJspDir + "/.ignore/", mappedJsp );
 
-        mkdir( targetFile );
+        makeParentDir( targetFile );
 
         FileUtil.writeFile( targetFile, ins );
 
@@ -427,7 +522,7 @@ public class CustomJspConverter
             targetJsp = new File( targetJspDir, mappedJsp );
         }
 
-        mkdir( targetJsp );
+        makeParentDir( targetJsp );
 
         FileUtil.copyFile( srcJsp, targetJsp );
     }
@@ -476,11 +571,7 @@ public class CustomJspConverter
 
         File targetJspDir = new File( targetPath + "/" + projectName + "/src/main/resources/META-INF/resources/" );
 
-        int size = portlet.length() + 1;
-
-        List<String> jspList = new ArrayList<String>();
-
-        getAllFilesFromSourcePortletDir( portlet, jspList, size );
+        List<String> jspList =  getAllFilesFromSourcePortletDir( portlet );
 
         List<String> moduleJsps = getAllFilesFromModuleJar( portlet );
 
@@ -586,22 +677,32 @@ public class CustomJspConverter
         return result;
     }
 
-    private void getAllFilesFromSourcePortletDir( String path, List<String> files, int size )
+    private List<String> getAllFilesFromSourcePortletDir( String portlet )
     {
-        File folder = new File( sourcePortletDir + "/" + path );
+        File portletDir = new File( sourcePortletDir + "/" + portlet );
 
-        for( File file : folder.listFiles() )
+        return getAllRelativizeFilePaths( portletDir );
+    }
+
+    private List<String> getAllRelativizeFilePaths( File file )
+    {
+        List<String> retVal = new ArrayList<String>();
+
+        Path source = file.toPath();
+
+        FileVisitorImpl visitor = new FileVisitorImpl( source );
+
+        try
         {
-            if( !file.isDirectory() )
-            {
-                String name = ( path + "/" + file.getName() ).substring( size );
-                files.add( name );
-            }
-            else
-            {
-                getAllFilesFromSourcePortletDir( path + "/" + file.getName(), files, size );
-            }
+            Files.walkFileTree( source, visitor );
+
+            retVal = visitor.getResults();
         }
+        catch( IOException e )
+        {
+        }
+
+        return retVal;
     }
 
     public IRuntime getLiferay70Runtime()
@@ -718,7 +819,7 @@ public class CustomJspConverter
         return result;
     }
 
-    private void mkdir( File target ) throws Exception
+    private void makeParentDir( File target ) throws Exception
     {
         File parent = target.getParentFile();
 
