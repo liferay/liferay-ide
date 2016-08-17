@@ -73,7 +73,7 @@
 				<label>Config Source</label>
 				<section>
 					<content>
-						<property-editor>Location</property-editor>
+						<property-editor>SdkLocation</property-editor>
 						<property-editor>ProjectName</property-editor>
 						<property-editor>
 							<style>Sapphire.PropertyEditor.PopUpListField.Strict</style>

@@ -30,7 +30,7 @@ import com.liferay.ide.sdk.core.SDK;
  * @author Terry Jia
  * @author Andy Wu
  */
-public class LocationListener extends FilteredListener<PropertyContentEvent>
+public class SdkLocationListener extends FilteredListener<PropertyContentEvent>
 {
 
     private File[] getFiles( IPath location, SDK sdk, String projectType )
@@ -52,7 +52,7 @@ public class LocationListener extends FilteredListener<PropertyContentEvent>
     {
         CodeUpgradeOp op = op( event );
 
-        IPath location = PathBridge.create( op.getLocation().content() );
+        IPath location = PathBridge.create( op.getSdkLocation().content() );
 
         if( location.toFile().exists() )
         {

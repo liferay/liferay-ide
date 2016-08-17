@@ -61,7 +61,7 @@ public class ImportProjectActionHandler extends BaseActionHandler
     {
         String layout = op( context ).getLayout().content();
 
-        IPath location = PathBridge.create( op( context ).getLocation().content() );
+        IPath location = PathBridge.create( op( context ).getSdkLocation().content() );
         String projectName = op( context ).getProjectName().content();
 
         try

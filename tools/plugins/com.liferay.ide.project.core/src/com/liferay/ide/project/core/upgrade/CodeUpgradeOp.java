@@ -20,8 +20,9 @@ import com.liferay.ide.project.core.upgrade.service.Liferay62ServerLocationDeriv
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameDefaultValueService;
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNamePossibleValuesService;
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameValidationService;
-import com.liferay.ide.project.core.upgrade.service.LocationDefaultValueService;
-import com.liferay.ide.project.core.upgrade.service.LocationListener;
+import com.liferay.ide.project.core.upgrade.service.SdkLocationDefaultValueService;
+import com.liferay.ide.project.core.upgrade.service.SdkLocationListener;
+import com.liferay.ide.project.core.upgrade.service.SdkLocationValidationService;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;
@@ -45,18 +46,20 @@ public interface CodeUpgradeOp extends Element
 {
     ElementType TYPE = new ElementType( CodeUpgradeOp.class );
 
-    @XmlBinding( path = "Location" )
+    @XmlBinding( path = "SdkLocation" )
     @Type( base = Path.class )
     @AbsolutePath
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Required
-    @Service( impl = LocationDefaultValueService.class )
-    @Listeners( LocationListener.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
+    @Label( standard = "SDK Location" )
+    @Service( impl = SdkLocationDefaultValueService.class )
+    @Service( impl = SdkLocationValidationService.class )
+    @Listeners( SdkLocationListener.class )
+    ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" );
 
-    Value<Path> getLocation();
-    void setLocation( String location );
-    void setLocation( Path location );
+    Value<Path> getSdkLocation();
+    void setSdkLocation( String sdkLocation );
+    void setSdkLocation( Path sdkLocation );
 
     @XmlBinding( path = "NewLocation" )
     @Type( base = Path.class )
@@ -70,6 +73,7 @@ public interface CodeUpgradeOp extends Element
     void setNewLocation( Path newLocation );
 
     @XmlBinding( path = "ProjectName" )
+    @Required
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
 
     Value<String> getProjectName();

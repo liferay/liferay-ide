@@ -31,7 +31,6 @@ import org.eclipse.sapphire.platform.PathBridge;
  */
 public class Liferay62ServerLocationDerivedValueService extends DerivedValueService
 {
-
     private FilteredListener<PropertyContentEvent> listener;
 
     @Override
@@ -48,13 +47,13 @@ public class Liferay62ServerLocationDerivedValueService extends DerivedValueServ
             }
         };
 
-        op().property( CodeUpgradeOp.PROP_LOCATION ).attach( this.listener );
+        op().property( CodeUpgradeOp.PROP_SDK_LOCATION ).attach( this.listener );
     }
 
     @Override
     protected String compute()
     {
-        final Path path = op().getLocation().content();
+        final Path path = op().getSdkLocation().content();
 
         SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( path ) );
 
@@ -62,7 +61,11 @@ public class Liferay62ServerLocationDerivedValueService extends DerivedValueServ
 
         try
         {
-            liferay62ServerLocation = (String)(sdk.getBuildProperties( true ).get( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR ));
+            if( sdk != null )
+            {
+                liferay62ServerLocation =
+                    (String) ( sdk.getBuildProperties( true ).get( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR ) );
+            }
         }
         catch( CoreException e )
         {

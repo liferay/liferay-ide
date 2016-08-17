@@ -24,7 +24,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 /**
  * @author Terry Jia
  */
-public class LocationDefaultValueService extends DefaultValueService
+public class SdkLocationDefaultValueService extends DefaultValueService
 {
 
     @Override
