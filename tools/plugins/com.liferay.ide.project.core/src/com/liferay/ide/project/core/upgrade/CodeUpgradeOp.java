@@ -15,13 +15,12 @@
 
 package com.liferay.ide.project.core.upgrade;
 
+import com.liferay.ide.project.core.upgrade.service.CheckSDKLocationDerivedValueService;
 import com.liferay.ide.project.core.upgrade.service.LayoutPossibleValuesService;
-import com.liferay.ide.project.core.upgrade.service.Liferay62ServerLocationDerivedValueService;
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameDefaultValueService;
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNamePossibleValuesService;
 import com.liferay.ide.project.core.upgrade.service.LiferayRuntimeNameValidationService;
 import com.liferay.ide.project.core.upgrade.service.SdkLocationDefaultValueService;
-import com.liferay.ide.project.core.upgrade.service.SdkLocationListener;
 import com.liferay.ide.project.core.upgrade.service.SdkLocationValidationService;
 
 import org.eclipse.sapphire.Element;
@@ -35,7 +34,6 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Derived;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
@@ -54,7 +52,6 @@ public interface CodeUpgradeOp extends Element
     @Label( standard = "SDK Location" )
     @Service( impl = SdkLocationDefaultValueService.class )
     @Service( impl = SdkLocationValidationService.class )
-    @Listeners( SdkLocationListener.class )
     ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" );
 
     Value<Path> getSdkLocation();
@@ -97,7 +94,7 @@ public interface CodeUpgradeOp extends Element
     void setLiferayServerName( String value );
 
     @Derived
-    @Service( impl = Liferay62ServerLocationDerivedValueService.class )
+    @Service( impl = CheckSDKLocationDerivedValueService.class )
     ValueProperty PROP_LIFERAY_62SERVER_LOCATION = new ValueProperty( TYPE, "Liferay62ServerLocation" );
 
     Value<String> getLiferay62ServerLocation();
