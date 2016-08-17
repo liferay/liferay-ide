@@ -26,7 +26,7 @@ public class FindBreakingChangesNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_FIND_BREAKING_CHANGES );
+        setNextOutlineSelection( context, STEP_FIND_BREAKING_CHANGES );
 
         return null;
     }

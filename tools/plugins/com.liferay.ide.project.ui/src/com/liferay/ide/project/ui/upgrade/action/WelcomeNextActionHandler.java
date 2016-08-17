@@ -26,7 +26,7 @@ public final class WelcomeNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( final Presentation context )
     {
-        setOutlineSelection( context, STEP_WELCOME );
+        setNextOutlineSelection( context, STEP_WELCOME );
 
         return null;
     }

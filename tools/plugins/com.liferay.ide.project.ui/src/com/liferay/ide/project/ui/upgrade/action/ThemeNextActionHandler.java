@@ -26,7 +26,7 @@ public class ThemeNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_THEME );
+        setNextOutlineSelection( context, STEP_THEME );
 
         return null;
     }

@@ -26,7 +26,7 @@ public class CompileNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_COMPILE );
+        setNextOutlineSelection( context, STEP_COMPILE );
 
         return null;
     }

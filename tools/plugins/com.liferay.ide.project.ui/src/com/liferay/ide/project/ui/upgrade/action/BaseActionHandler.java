@@ -49,7 +49,7 @@ public abstract class BaseActionHandler extends SapphireActionHandler
         return context.part().getModelElement().nearest( CodeUpgradeOp.class );
     }
 
-    protected void setOutlineSelection( Presentation context, String selection )
+    protected void setNextOutlineSelection( Presentation context, String selection )
     {
         CodeUpgradeOp op = op( context );
 

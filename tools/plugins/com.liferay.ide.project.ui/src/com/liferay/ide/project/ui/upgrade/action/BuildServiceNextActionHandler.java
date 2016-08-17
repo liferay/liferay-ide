@@ -26,7 +26,7 @@ public class BuildServiceNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_BUILD_SERVICE );
+        setNextOutlineSelection( context, STEP_BUILD_SERVICE );
 
         return null;
     }

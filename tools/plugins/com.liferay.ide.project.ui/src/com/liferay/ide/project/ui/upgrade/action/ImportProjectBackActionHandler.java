@@ -26,7 +26,7 @@ public class ImportProjectBackActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_CONFIG_SOURCE );
+        setNextOutlineSelection( context, STEP_WELCOME );
 
         return null;
     }

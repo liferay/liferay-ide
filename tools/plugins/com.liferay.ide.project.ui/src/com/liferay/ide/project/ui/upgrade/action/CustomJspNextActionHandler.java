@@ -26,7 +26,7 @@ public class CustomJspNextActionHandler extends BaseActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        setOutlineSelection( context, STEP_CUSTOME_JSP );
+        setNextOutlineSelection( context, STEP_CUSTOME_JSP );
 
         return null;
     }
