@@ -21,11 +21,10 @@ import org.eclipse.sapphire.ui.SapphireActionHandler;
 import org.eclipse.sapphire.ui.forms.swt.SwtPresentation;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 
-import com.liferay.ide.project.core.upgrade.CodeUpgradeOp;
-
 /**
  * @author Terry Jia
  * @author Joye Luo
+ * @author Andy Wu
  */
 public class CodeUpgradeNewLiferayServerAction extends SapphireActionHandler
 {
@@ -33,11 +32,8 @@ public class CodeUpgradeNewLiferayServerAction extends SapphireActionHandler
     @Override
     protected Object run( Presentation context )
     {
-        ServerUIUtil.showNewServerWizard(( (SwtPresentation) context ).shell(), "liferay.bundle", null, "com.liferay." );
-
-        CodeUpgradeOp op = context.part().getModelElement().nearest( CodeUpgradeOp.class );
-
-        op.property( CodeUpgradeOp.PROP_LIFERAY_SERVER_NAME ).refresh();
+        ServerUIUtil.showNewServerWizard( ( (SwtPresentation) context ).shell(), "liferay.bundle", null,
+            "com.liferay." );
 
         return Status.createOkStatus();
     }
