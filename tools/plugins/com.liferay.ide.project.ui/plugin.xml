@@ -1636,5 +1636,8 @@
       <include
             file="templates/java-templates-components.xml">
       </include>
+      <include
+            file="templates/java-templates-refrence.xml">
+      </include>
    </extension>
 </plugin>
