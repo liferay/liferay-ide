@@ -36,7 +36,7 @@ public class UpgradeView extends ViewPart
         
         GridData grData = new GridData(GridData.FILL_BOTH);
         grData.heightHint = 600;
-        grData.widthHint = 700;
+        grData.widthHint = 300;
         composite.setLayoutData( grData );
 
         final GearControl gear = new GearControl( composite, SWT.BORDER );
@@ -44,11 +44,12 @@ public class UpgradeView extends ViewPart
         GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
         gridData.grabExcessHorizontalSpace = true;
         gridData.widthHint = 400;
-        gridData.heightHint = 600;
+        gridData.heightHint = 210;
         
         gear.setLayoutData( gridData );
         
         gear.setGearsNumber( 7 );          
+        
         
         final StackLayout stackLayout = new StackLayout();
         
@@ -63,11 +64,7 @@ public class UpgradeView extends ViewPart
         containerData.heightHint = 300;
         container.setLayoutData( containerData );
         
-        Button backButton = new Button(composite, SWT.PUSH);
-        backButton.setText( "back" );
-        
-        Button nextButton = new Button(composite, SWT.PUSH);
-        nextButton.setText( "next" );
+
 
         Composite composite1 = new Composite( container, SWT.NONE );
         composite1.setBackground(Display.getDefault().getSystemColor( SWT.COLOR_WHITE));
@@ -83,6 +80,21 @@ public class UpgradeView extends ViewPart
         composites[1] = composite2;
         composites[2] = composite3;
         
+        final NavigatorControl nav = new NavigatorControl( composite, SWT.BORDER );
+
+        GridData navData = new GridData( GridData.FILL_HORIZONTAL );
+        navData.grabExcessHorizontalSpace = true;
+        navData.widthHint = 400;
+        navData.heightHint = 250;
+
+        nav.setLayoutData( navData );
+        
+        
+        Button backButton = new Button(composite, SWT.PUSH);
+        backButton.setText( "back" );
+        
+        Button nextButton = new Button(composite, SWT.PUSH);
+        nextButton.setText( "next" );
         nextButton.addSelectionListener( new SelectionListener()
         {
             @Override

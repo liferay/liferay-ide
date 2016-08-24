@@ -17,6 +17,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * @author Eike Stepper
@@ -124,9 +125,12 @@ public class NavigatorControl extends AbstractCanvas
             scheduleRun();
         }
     } 
+    
     public NavigatorControl( Composite parent, int style )
     {
         super( parent, style | SWT.DOUBLE_BUFFERED );
+        
+        Display display = getDisplay();
         
         setBackground( display.getSystemColor( SWT.COLOR_WHITE ) );
         
@@ -233,8 +237,8 @@ public class NavigatorControl extends AbstractCanvas
         gc.setLineWidth( 3 );
         gc.setAntialias( SWT.ON );
 
-        backBox = Animator.drawImage( gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY );
-        nextBox = Animator.drawImage( gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - buttonR, answerY );
+        backBox = drawImage( gc, backImages[hover == BACK ? 1 : 0], BORDER + buttonR, answerY );
+        nextBox = drawImage( gc, nextImages[hover == NEXT ? 1 : 0], PAGE_WIDTH + BORDER - buttonR, answerY );
 
         oldHover = hover;
     }

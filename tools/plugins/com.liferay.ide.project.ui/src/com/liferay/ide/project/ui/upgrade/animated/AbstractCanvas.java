@@ -1,5 +1,6 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.util.UIUtil;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -25,15 +27,14 @@ public class AbstractCanvas extends Canvas
 {
     protected Font baseFont;
     protected Font bigFont;
-    protected Display display;
-    
+
     private final List<Resource> resources = new ArrayList<Resource>();
     
     public AbstractCanvas( Composite parent, int style )
     {
         super( parent, style );
     }
-
+   
     protected void init()
     {
       Display display = getDisplay();
@@ -131,12 +132,10 @@ public class AbstractCanvas extends Canvas
     {
         URL url = null;
         
-        File imageFile = new File("images/"+name);
-
         try
         {
             //TODO need to be changed to get image from bundle
-            url  = imageFile.toURI().toURL();
+            url  = ProjectUI.getDefault().getBundle().getEntry( "images/" + name );
         }
         catch( Exception e )
         {
@@ -144,10 +143,19 @@ public class AbstractCanvas extends Canvas
 
         ImageDescriptor imagedesc = ImageDescriptor.createFromURL( url );
 
-        Image image = imagedesc.createImage();
+         Image image = imagedesc.createImage();
 
         resources.add( image );
 
         return image;
+    }
+    
+    public Rectangle drawImage(GC gc, Image image, int cX, int cY)
+    {
+      Rectangle bounds = image.getBounds();
+      cX -= bounds.width / 2;
+      cY -= bounds.height / 2;
+      gc.drawImage(image, cX, cY);
+      return new Rectangle(cX, cY, bounds.width, bounds.height);
     }
 }
