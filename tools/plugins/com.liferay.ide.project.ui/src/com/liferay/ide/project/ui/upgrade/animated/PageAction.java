@@ -7,10 +7,19 @@ import org.eclipse.swt.graphics.Rectangle;
 
 public abstract class PageAction
 {
-
     protected Image[] images;
+    
+    private boolean selected = false;
 
-    protected abstract boolean done();
+    public boolean isSelected()
+    {
+        return selected;
+    }
+
+    public void setSelected( boolean selected )
+    {
+        this.selected = selected;
+    }
 
     public PageAction()
     {
@@ -22,7 +31,6 @@ public abstract class PageAction
       Rectangle bounds = images[2].getBounds();
       return new Point(bounds.width, bounds.height);
     }
-    
     
     public Image[] getImages()
     {

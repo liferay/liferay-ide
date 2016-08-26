@@ -30,6 +30,11 @@ public class UpgradeView extends ViewPart
         pageControler.layout();
     }
     
+    public static Page getPage(int i)
+    {
+        return pages[i];
+    }
+    
     @Override
     public void createPartControl( Composite parent )
     {
@@ -51,7 +56,7 @@ public class UpgradeView extends ViewPart
 
         gear.setLayoutData( gridData );
 
-        gear.setGearsNumber( 7 );
+        gear.setGearsNumber( 3 );
 
 
         final StackLayout stackLayout = new StackLayout();
@@ -68,12 +73,15 @@ public class UpgradeView extends ViewPart
 
         Page page1 = new DescriptionUpgradePage(pageControler,SWT.BORDER);
         page1.setIndex( 0 );
+        page1.setTitle( "this is first page" );
         
         Page page2 = new DescriptionUpgradePage2(pageControler,SWT.BORDER);
         page2.setIndex( 1 );
+        page2.setTitle( "this is second page" );
         
         Page page3 = new DescriptionUpgradePage3(pageControler,SWT.BORDER);
         page3.setIndex( 2 );
+        page3.setTitle( "this is third page" );
 
         pages = new Page[3];
         
@@ -85,6 +93,8 @@ public class UpgradeView extends ViewPart
 
         navigator.addPageNavigateListener( gear );
         navigator.addPageActionListener( gear );
+        
+        gear.addSelectionChangedListener( navigator );
 
         GridData navData = new GridData( GridData.FILL_HORIZONTAL );
         navData.grabExcessHorizontalSpace = true;
@@ -92,6 +102,8 @@ public class UpgradeView extends ViewPart
         navData.heightHint = 55;
 
         navigator.setLayoutData( navData );
+        
+        setSelectPage( 0 );
 
     }
 
@@ -109,6 +121,11 @@ public class UpgradeView extends ViewPart
     public interface PageNavigatorListener
     {
         public void onPageNavigate( PageNavigateEvent event );
+    }
+    
+    public interface SelectionChangedListener
+    {
+        public void onSelectionChanged( int targetSelection);
     }
 
     private final List<PageActionListener> actionListeners = new ArrayList<PageActionListener>();

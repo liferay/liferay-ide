@@ -15,11 +15,13 @@ public class Page extends Composite
     
     private int index;
 
-    private String title;
-    
+    private String title = "title";
+
     private int choice = NONE;
     
     protected PageAction[] actions;
+    
+    private PageAction selectedAction;
 
     public final int getIndex()
     {
@@ -29,6 +31,11 @@ public class Page extends Composite
     public void setIndex( int index )
     {
         this.index = index;
+    }
+    
+    public void setTitle( String title )
+    {
+        this.title = title;
     }
     
     public String getTitle()
@@ -60,6 +67,17 @@ public class Page extends Composite
     {
         Page comp = (Page)obj;
         return this.pageId == comp.pageId;
+    }
+    
+    public PageAction getSelectedAction()
+    {
+        return selectedAction;
+    }
+
+    
+    public void setSelectedAction( PageAction selectedAction )
+    {
+        this.selectedAction = selectedAction;
     }
     
 }

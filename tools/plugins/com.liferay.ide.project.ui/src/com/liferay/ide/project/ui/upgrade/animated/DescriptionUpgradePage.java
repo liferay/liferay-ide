@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 public class DescriptionUpgradePage extends Page
 {
     
-    PageAction[] actions = { new PageFinishAction(true), new PageSkipAction(true) };
+    PageAction[] actions = { new PageFinishAction(), new PageSkipAction() };
     
     public DescriptionUpgradePage( Composite parent, int style )
     {
@@ -22,6 +22,7 @@ public class DescriptionUpgradePage extends Page
         this.setLayout( new FillLayout() );
         
         Button button = new Button(this, SWT.PUSH);
+
         button.setText( "page1" );
         
         button.addSelectionListener( new SelectionListener()

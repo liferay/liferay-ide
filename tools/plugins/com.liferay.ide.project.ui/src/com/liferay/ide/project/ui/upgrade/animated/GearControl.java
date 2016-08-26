@@ -5,10 +5,12 @@ import com.liferay.ide.project.ui.upgrade.animated.GearAnimator.Listener;
 import com.liferay.ide.project.ui.upgrade.animated.GearAnimator.AnimatorPage;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageActionListener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.SelectionChangedListener;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -95,6 +97,14 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
     public static final int PAGE_HEIGHT = 420;
 
     public static final int BORDER = 20;
+    
+    private final List<SelectionChangedListener> selectionChangedListeners =
+                    Collections.synchronizedList( new ArrayList<SelectionChangedListener>() );
+    
+    public void addSelectionChangedListener( SelectionChangedListener listener )
+    {
+        selectionChangedListeners.add( listener );
+    }
 
     public int gearsNumber = 7;
 
@@ -170,13 +180,13 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
 
     private final Image[] summaryImages = new Image[2];
 
-    private final Image[] backImages = new Image[2];
+    //private final Image[] backImages = new Image[2];
 
     private final Image[] nextImages = new Image[2];
 
     private final Image[] yesImages = new Image[5];
     
-    private Image badgeImage ;
+    //private Image badgeImage ;
 
     private final Image[] noImages = new Image[5];
 
@@ -490,8 +500,6 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
         oldPageGC = new GC(oldPageBuffer);
         oldPageGC.setAdvanced(true);
         
-        backImages[0] = loadImage("back.png");
-        backImages[1] = loadImage("back_hover.png");
 
         nextImages[0] = loadImage("next.png");
         nextImages[1] = loadImage("next_hover.png");
@@ -559,6 +567,11 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
       this.selection = selection;
 
       UpgradeView.setSelectPage( selection );
+      
+      for( SelectionChangedListener listener : selectionChangedListeners )
+      {
+          listener.onSelectionChanged( selection );
+      }
 
       restart();
     }
@@ -585,7 +598,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
         {
             Point point = tooltipPoints[hover];
 
-            String title = TITLES[hover];
+            String title = UpgradeView.getPage( hover ).getTitle();
 
             gc.setFont( tooltipFont );
             gc.setForeground( DARK_GRAY );
@@ -693,14 +706,16 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
         gc.setAlpha(alpha);
       }
 
-     /* Page page = pages[i];
-      Answer answer = page.getChoiceAnswer();
-      if (answer instanceof ImageAnswer)
+      Image badgeImage = null;
+      
+      Page page = UpgradeView.getPage( i );
+      
+      PageAction pageAction = page.getSelectedAction();
+      
+      if( pageAction != null )
       {
-        ImageAnswer imageAnswer = (ImageAnswer)answer;
-        Image image = imageAnswer.getImages()[4];
-        gc.drawImage(image, (int)(x - image.getBounds().width / 2), (int)(y - outerR - 12));
-      }*/
+          badgeImage = pageAction.getImages()[4];
+      }
 
       if ( badgeImage != null )
       {
@@ -995,7 +1010,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
     {
         Page targetPage = event.getTargetPage();
 
-        setSelection(targetPage.getIndex());
+        setSelection( targetPage.getIndex() );
 
     }
 
@@ -1003,8 +1018,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
     public void onPageAction( PageActionEvent event )
     {
         Page targetPage = event.getTargetPage();
-        PageAction action = event.getAction();
-        badgeImage = action.getBageImage();
+        
         setSelection(targetPage.getIndex());
         
     }

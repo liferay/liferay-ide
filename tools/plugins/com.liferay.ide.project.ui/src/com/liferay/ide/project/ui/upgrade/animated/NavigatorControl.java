@@ -1,16 +1,15 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.project.ui.upgrade.animated.GearAnimator.Listener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageActionListener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.SelectionChangedListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -30,7 +29,7 @@ import org.eclipse.swt.widgets.Display;
 /**
  * @author Eike Stepper
  */
-public class NavigatorControl extends AbstractCanvas
+public class NavigatorControl extends AbstractCanvas implements SelectionChangedListener
 {
 
     private static Color WHITE;
@@ -169,12 +168,6 @@ public class NavigatorControl extends AbstractCanvas
             scheduleRun();
         }
     }
-    
-    
-    private void setSelectPage(int i)
-    {
-        UpgradeView.setSelectPage( i );
-    }
 
     public NavigatorControl( Composite parent, int style, Composite control , Page[] pages )
     {
@@ -185,8 +178,6 @@ public class NavigatorControl extends AbstractCanvas
         this.control = control;
 
         Display display = getDisplay();
-        
-        setSelectPage( select );
 
         setBackground( display.getSystemColor( SWT.COLOR_WHITE ) );
 
@@ -295,19 +286,18 @@ public class NavigatorControl extends AbstractCanvas
 
             if( page != null )
             {
-
                 PageNavigateEvent event = new PageNavigateEvent();
 
                 if( page.showBackPage() && backBox != null && backBox.contains( x, y ) )
                 {
-                    event.setTargetPage( pages[ --select ] );
+                    event.setTargetPage( pages[ select - 1 ] );
 
                     retVal = true;
                 }
 
                 if( page.showNextPage() && nextBox != null && nextBox.contains( x, y ) )
                 {
-                    event.setTargetPage( pages[ ++ select ] );
+                    event.setTargetPage( pages[ select + 1  ] );
                     
                     retVal = true;
                 }
@@ -373,9 +363,6 @@ public class NavigatorControl extends AbstractCanvas
         {
             Rectangle box = actionBoxes[i];
             
-            
-            //System.out.println( i+":" + box.x  +"\t"+box.y+"\t"+ box.width  +"\t"+box.height);
-            
             if( box != null && box.contains( x, y ) )
             {
                 return i;
@@ -405,16 +392,45 @@ public class NavigatorControl extends AbstractCanvas
 
     private void doAction( int i )
     {
-        Page selectedPage = getSelectedPage();
-        PageAction pageAction = selectedPage.getActions()[i];
+        Page page = getSelectedPage();
 
-        PageActionEvent event = new PageActionEvent();
-        event.setAction( pageAction );
-        event.setTargetPage( pages[ ++ select ] );
-
-        for( PageActionListener listener : actionListeners )
+        PageAction[] pageActions = page.getActions();
+        
+        PageAction targetAction = pageActions[i];
+        
+        boolean originState = targetAction.isSelected();
+        
+        targetAction.setSelected( !originState );
+        
+        if( originState )
         {
-            listener.onPageAction( event );
+            page.setSelectedAction( null );
+        }
+        else
+        {
+            page.setSelectedAction( targetAction );
+            
+            for(int j = 0 ; j < pageActions.length ; j++)
+            {
+                if(j != i)
+                {
+                    pageActions[j].setSelected( false );
+                }
+            }
+            
+            if( page.showNextPage() )
+            {
+                PageActionEvent event = new PageActionEvent();
+
+                event.setAction( targetAction );
+                
+                event.setTargetPage( pages[ select + 1 ] );
+
+                for( PageActionListener listener : actionListeners )
+                {
+                    listener.onPageAction( event );
+                }
+            }
         }
     }
 
@@ -425,6 +441,7 @@ public class NavigatorControl extends AbstractCanvas
         if( i != NONE )
         {
             doAction( i );
+
             return true;
         }
 
@@ -444,17 +461,17 @@ public class NavigatorControl extends AbstractCanvas
         
         if( page.showBackPage() )
         {
-            backBox = drawImage( gc, backImages[hover == BACK ? 1 : 0], getBounds().width / 2 -200, answerY );
+            backBox = drawImage( gc, backImages[hover == BACK ? 1 : 0], getBounds().width / 2 - 200, answerY );
         }
-        
-        if(page.showNextPage())
+
+        if( page.showNextPage() )
         {
             nextBox = drawImage( gc, nextImages[hover == NEXT ? 1 : 0], getBounds().width / 2 + 200, answerY );
         }
 
         oldHover = hover;
 
-        paintActions( gc, getSelectedPage() );
+        paintActions( gc, page );
     }
 
     private void paintActions( GC gc, Page page )
@@ -463,6 +480,7 @@ public class NavigatorControl extends AbstractCanvas
 
         boolean selecteds[] = new boolean[actions.length];
         boolean hovereds[] = new boolean[actions.length];
+
         Point sizes[] = new Point[actions.length];
 
         int width = ( actions.length - 1 ) * BORDER;
@@ -470,7 +488,7 @@ public class NavigatorControl extends AbstractCanvas
 
         for( int i = 0; i < actions.length; i++ )
         {
-            selecteds[i] = i == choice;
+            selecteds[i] = actions[i].isSelected();
 
             if( CHOICES - i == hover )
             {
@@ -513,5 +531,11 @@ public class NavigatorControl extends AbstractCanvas
         }
 
         return drawImage( gc, image, x ,y );
+    }
+
+    @Override
+    public void onSelectionChanged( int targetSelection )
+    {
+        select = targetSelection;
     }
 }

@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class DescriptionUpgradePage2 extends Page
 {
-    PageAction[] actions = { new PageFinishAction(true), new PageSkipAction(true) };
+    PageAction[] actions = { new PageFinishAction(), new PageSkipAction() };
     
     public DescriptionUpgradePage2( Composite parent, int style )
     {
