@@ -15,7 +15,7 @@ import org.eclipse.ui.part.ViewPart;
 
 public class UpgradeView extends ViewPart
 {
-    public static int selection = 0;
+    //public static int selection = 0;
     
     private static Composite pageControler = null ;
     
@@ -66,20 +66,6 @@ public class UpgradeView extends ViewPart
         containerData.heightHint = 300;
         pageControler.setLayoutData( containerData );
 
-       /* Composite composite1 = new Composite( container, SWT.NONE );
-        composite1.setBackground(Display.getDefault().getSystemColor( SWT.COLOR_YELLOW));
-
-        Composite composite2 = new Composite( container, SWT.NONE );
-        composite2.setBackground(Display.getDefault().getSystemColor( SWT.COLOR_BLUE));
-
-        Composite composite3 = new Composite( container, SWT.NONE );
-        composite3.setBackground(Display.getDefault().getSystemColor( SWT.COLOR_GREEN));
-
-        final Composite[] composites = new Composite[3];
-        composites[0] = composite1;
-        composites[1] = composite2;
-        composites[2] = composite3;*/
-        
         Page page1 = new DescriptionUpgradePage(pageControler,SWT.BORDER);
         page1.setIndex( 0 );
         
@@ -106,46 +92,6 @@ public class UpgradeView extends ViewPart
         navData.heightHint = 55;
 
         navigator.setLayoutData( navData );
-
-        /*Button backButton = new Button(composite, SWT.PUSH);
-        backButton.setText( "back" );
-
-        Button nextButton = new Button(composite, SWT.PUSH);
-        nextButton.setText( "next" );
-        nextButton.addSelectionListener( new SelectionListener()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                int i = gear.getSelection();
-                stackLayout.topControl = pages[i+1];
-
-                gear.setSelection( i+ 1 );
-                container.layout();
-            }
-
-            @Override
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-            }
-        } );
-
-        backButton.addSelectionListener( new SelectionListener()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                int i = gear.getSelection();
-                stackLayout.topControl = pages[i-1];
-                gear.setSelection( i-1 );
-                container.layout();
-            }
-
-            @Override
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-            }
-        } );*/
 
     }
 

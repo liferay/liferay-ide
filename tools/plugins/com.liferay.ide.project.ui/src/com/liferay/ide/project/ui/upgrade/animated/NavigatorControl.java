@@ -64,7 +64,7 @@ public class NavigatorControl extends AbstractCanvas
     private Rectangle[] actionBoxes;
     private boolean pageBufferUpdated;
     
-    //private int select = 0;
+    private int select = 0;
     
     private Composite control;
 
@@ -186,7 +186,7 @@ public class NavigatorControl extends AbstractCanvas
 
         Display display = getDisplay();
         
-        setSelectPage( UpgradeView.selection );
+        setSelectPage( select );
 
         setBackground( display.getSystemColor( SWT.COLOR_WHITE ) );
 
@@ -282,7 +282,7 @@ public class NavigatorControl extends AbstractCanvas
 
     private Page getSelectedPage()
     {
-        return pages[UpgradeView.selection];
+        return pages[select];
     }
 
     protected boolean onMouseDown( int x, int y )
@@ -300,14 +300,14 @@ public class NavigatorControl extends AbstractCanvas
 
                 if( page.showBackPage() && backBox != null && backBox.contains( x, y ) )
                 {
-                    event.setTargetPage( pages[ --UpgradeView.selection ] );
+                    event.setTargetPage( pages[ --select ] );
 
                     retVal = true;
                 }
 
                 if( page.showNextPage() && nextBox != null && nextBox.contains( x, y ) )
                 {
-                    event.setTargetPage( pages[ ++ UpgradeView.selection ] );
+                    event.setTargetPage( pages[ ++ select ] );
                     
                     retVal = true;
                 }
@@ -410,7 +410,7 @@ public class NavigatorControl extends AbstractCanvas
 
         PageActionEvent event = new PageActionEvent();
         event.setAction( pageAction );
-        event.setTargetPage( pages[ ++ UpgradeView.selection] );
+        event.setTargetPage( pages[ ++ select ] );
 
         for( PageActionListener listener : actionListeners )
         {

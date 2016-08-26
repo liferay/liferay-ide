@@ -206,7 +206,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
 
     private boolean overflow;
 
-    //private int selection;
+    private int selection;
 
     private int oldSelection = NONE;
 
@@ -379,7 +379,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
     
     public final int getSelection()
     {
-      return UpgradeView.selection;
+      return selection;
     }
     
     protected boolean onMouseDown(int x, int y)
@@ -554,10 +554,10 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
         return;
       }
 
-      oldSelection = UpgradeView.selection;
+      oldSelection = this.selection;
 
-      UpgradeView.selection = selection;
-      
+      this.selection = selection;
+
       UpgradeView.setSelectPage( selection );
 
       restart();
@@ -619,7 +619,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
           selected = 1;
         }
       }
-      else if (i == UpgradeView.selection)
+      else if (i == selection)
       {
         if (speed >= ANGLE / 2)
         {
@@ -684,7 +684,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
 
     private Point paintBadge(GC gc, double x, double y, double outerR, int i, int alpha)
     {
-      if ( UpgradeView.selection >= gearsNumber)
+      if ( selection >= gearsNumber)
       {
         gc.setAlpha(255 - alpha);
       }
