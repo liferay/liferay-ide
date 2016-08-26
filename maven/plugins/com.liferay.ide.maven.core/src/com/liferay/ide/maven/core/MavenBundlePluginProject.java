@@ -91,8 +91,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     @Override
     public IFile getDescriptorFile( String name )
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getProject().getFile( name );
     }
 
     @Override

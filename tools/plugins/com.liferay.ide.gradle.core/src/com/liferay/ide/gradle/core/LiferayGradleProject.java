@@ -20,16 +20,10 @@ import aQute.bnd.osgi.Jar;
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
-import com.liferay.ide.core.ILiferayProjectAdapter;
 import com.liferay.ide.core.IResourceBundleProject;
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
-import com.liferay.ide.project.core.SDKProjectBuilder;
-import com.liferay.ide.sdk.core.SDK;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -239,7 +233,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     @Override
     public IFile getDescriptorFile( String name )
     {
-        return null;
+        return getProject().getFile( name );
     }
 
     @Override
