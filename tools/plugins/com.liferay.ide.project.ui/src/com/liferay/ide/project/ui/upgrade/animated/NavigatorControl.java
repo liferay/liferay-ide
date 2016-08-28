@@ -1,10 +1,6 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageActionListener;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.SelectionChangedListener;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +21,9 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageActionListener;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 
 /**
  * @author Eike Stepper
@@ -64,8 +63,6 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
     private boolean pageBufferUpdated;
     
     private int select = 0;
-    
-    private Composite control;
 
     private Page[] pages;
 
@@ -169,13 +166,11 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
         }
     }
 
-    public NavigatorControl( Composite parent, int style, Composite control , Page[] pages )
+    public NavigatorControl( Composite parent, int style, Page[] pages )
     {
         super( parent, style | SWT.DOUBLE_BUFFERED );
 
         this.pages = pages;
-        
-        this.control = control;
 
         Display display = getDisplay();
 

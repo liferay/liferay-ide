@@ -1,14 +1,30 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import org.eclipse.swt.widgets.Composite;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class Page extends Composite
+import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationListener;
+
+public abstract class Page extends Composite
 {
-    public Page( Composite parent, int style )
+    private LiferayUpgradeDataModel dataModel;
+    
+    public Page( Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
         super( parent, style );
+        this.dataModel = dataModel;
     }
+    
     public static final int NONE = -1;
 
     private int pageId;
@@ -80,4 +96,38 @@ public class Page extends Composite
         this.selectedAction = selectedAction;
     }
     
+    
+    protected Text createTextField( String labelText, int style )
+    {
+        createLabel( labelText );
+
+        Text text = new Text( this, SWT.BORDER | style );
+        text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+
+        return text;
+    }
+    
+    protected Label createLabel( String text )
+    {
+        Label label = new Label( this, SWT.NONE );
+        label.setText( text );
+
+        GridDataFactory.generate( label, 2, 1 );
+
+        return label;
+    }
+    
+    protected Text createTextField( String labelText )
+    {
+        return createTextField( labelText, SWT.NONE );
+    }
+    
+    
+    protected final List<PageValidationListener> pageValidationListeners =
+                    Collections.synchronizedList( new ArrayList<PageValidationListener>() );
+
+    public void addPageValidationListener( PageValidationListener listener )
+    {
+        this.pageValidationListeners.add( listener );
+    }
 }

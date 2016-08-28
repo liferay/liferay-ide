@@ -1,12 +1,6 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.project.ui.upgrade.animated.GearAnimator.Listener;
-import com.liferay.ide.project.ui.upgrade.animated.GearAnimator.AnimatorPage;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageActionListener;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.SelectionChangedListener;
-
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,7 +38,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class GearControl extends Canvas implements PageNavigatorListener, PageActionListener
+import com.liferay.ide.project.ui.upgrade.animated.GearAnimator.AnimatorPage;
+import com.liferay.ide.project.ui.upgrade.animated.GearAnimator.Listener;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageActionListener;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationListener;
+
+public class GearControl extends Canvas implements PageNavigatorListener, PageActionListener, PageValidationListener
 {
     private static final int DEFAULT_TIMER_INTERVAL = 10;
     
@@ -566,7 +566,7 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
 
       this.selection = selection;
 
-      UpgradeView.setSelectPage( selection );
+//      UpgradeView.setSelectPage( selection );
       
       for( SelectionChangedListener listener : selectionChangedListeners )
       {
@@ -1020,6 +1020,13 @@ public class GearControl extends Canvas implements PageNavigatorListener, PageAc
         Page targetPage = event.getTargetPage();
         
         setSelection(targetPage.getIndex());
+        
+    }
+
+    @Override
+    public void onValidation( PageValidateEvent event )
+    {
+        // TODO Auto-generated method stub
         
     }
 

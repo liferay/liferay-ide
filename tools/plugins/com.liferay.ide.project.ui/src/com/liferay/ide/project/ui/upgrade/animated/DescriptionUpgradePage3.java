@@ -9,9 +9,9 @@ public class DescriptionUpgradePage3 extends Page
 {
     PageAction[] actions = { new PageFinishAction(), new PageSkipAction() };
     
-    public DescriptionUpgradePage3( Composite parent, int style )
+    public DescriptionUpgradePage3( Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
-        super( parent, style );
+        super( parent, style,dataModel );
         
         this.setLayout( new FillLayout() );
         
