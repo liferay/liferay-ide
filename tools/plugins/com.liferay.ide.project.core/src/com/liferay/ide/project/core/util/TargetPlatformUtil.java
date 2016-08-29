@@ -161,7 +161,7 @@ public class TargetPlatformUtil
     {
         final URL url = FileLocator.toFileURL(
             ProjectCore.getDefault().getBundle().getEntry(
-                "OSGI-INF/target-platform/liferay-thirdparty-bundles.json" ) );
+                "OSGI-INF/liferay-thirdparty-bundles.json" ) );
         final File tpFile = new File( url.getFile() );
         final ObjectMapper mapper = new ObjectMapper();
 
