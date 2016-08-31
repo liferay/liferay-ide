@@ -44,7 +44,7 @@ public class GroupIdValidationService extends ValidationService
             final String groupId = op().getGroupId().content( true );
 
             final IStatus javaStatus =
-                JavaConventions.validatePackageName( groupId, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+                JavaConventions.validatePackageName( groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
 
             return StatusBridge.create( javaStatus );
         }

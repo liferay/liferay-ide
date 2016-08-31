@@ -45,7 +45,7 @@ public class PackagePathValidationService extends ValidationService
 
         // Use standard java conventions to validate the package name
         IStatus javaStatus =
-            JavaConventions.validatePackageName( packPathVal, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+            JavaConventions.validatePackageName( packPathVal, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
 
         if( javaStatus.getSeverity() == IStatus.ERROR )
         {

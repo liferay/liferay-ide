@@ -306,11 +306,11 @@ public class NewEventActionClassDialog extends Dialog
     {
         int packageNameStatus =
             JavaConventions.validatePackageName(
-                packageText.getText(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                packageText.getText(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
 
         int classNameStatus =
             JavaConventions.validateJavaTypeName(
-                classText.getText(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();;
+                classText.getText(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();;
 
         if( !CoreUtil.isNullOrEmpty( packageText.getText() ) )
         {

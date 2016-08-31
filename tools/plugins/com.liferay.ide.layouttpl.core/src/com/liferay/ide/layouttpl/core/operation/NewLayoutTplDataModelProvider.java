@@ -212,7 +212,7 @@ public class NewLayoutTplDataModelProvider extends ArtifactEditOperationDataMode
             }
 
             IStatus status =
-                JavaConventions.validateFieldName( idValue, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+                JavaConventions.validateFieldName( idValue, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
 
             if( !status.isOK() )
             {

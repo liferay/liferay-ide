@@ -71,7 +71,7 @@ public class ServiceBuilderDescriptorValidator extends LiferayBaseValidator
                         // Use standard java conventions to validate the package name
                         IStatus javaStatus =
                             JavaConventions.validatePackageName(
-                                nodeValue, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+                                nodeValue, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
 
                         if( javaStatus.getSeverity() == IStatus.ERROR ||
                             javaStatus.getSeverity() == IStatus.WARNING )

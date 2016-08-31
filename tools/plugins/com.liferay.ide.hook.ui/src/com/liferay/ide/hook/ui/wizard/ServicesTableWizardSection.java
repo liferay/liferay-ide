@@ -306,7 +306,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             {
                 int serviceTypeStatus =
                                 JavaConventions.validateJavaTypeName(
-                                    texts[0].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                                    texts[0].getText().trim(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
                 serviceTypeValid = ( serviceTypeStatus != IStatus.ERROR )?true:false;
             }
 
@@ -314,7 +314,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             {
                 int implClasseStatus =
                                 JavaConventions.validateJavaTypeName(
-                                    texts[1].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                                    texts[1].getText().trim(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
                 implClassValid = ( implClasseStatus != IStatus.ERROR )?true:false;
             }
 
@@ -371,7 +371,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             {
                 int serviceTypeStatus =
                                 JavaConventions.validateJavaTypeName(
-                                    texts[0].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                                    texts[0].getText().trim(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
                 serviceTypeValid = ( serviceTypeStatus != IStatus.ERROR )?true:false;
             }
 
@@ -379,7 +379,7 @@ public class ServicesTableWizardSection extends StringArrayTableWizardSection
             {
                 int implClasseStatus =
                                 JavaConventions.validateJavaTypeName(
-                                    texts[1].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                                    texts[1].getText().trim(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
                 implClassValid = ( implClasseStatus != IStatus.ERROR )?true:false;
             }
 

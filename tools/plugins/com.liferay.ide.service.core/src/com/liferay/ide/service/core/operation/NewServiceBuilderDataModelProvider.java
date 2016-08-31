@@ -315,7 +315,7 @@ public class NewServiceBuilderDataModelProvider extends ArtifactEditOperationDat
         {
             // Use standard java conventions to validate the package name
             IStatus javaStatus =
-                JavaConventions.validatePackageName( packName, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+                JavaConventions.validatePackageName( packName, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
 
             if( javaStatus.getSeverity() == IStatus.ERROR )
             {

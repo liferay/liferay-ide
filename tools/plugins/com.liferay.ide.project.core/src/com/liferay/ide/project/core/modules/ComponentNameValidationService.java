@@ -24,7 +24,7 @@ import org.eclipse.sapphire.services.ValidationService;
 
 
 
-/** 
+/**
  * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
@@ -34,14 +34,14 @@ public class ComponentNameValidationService extends ValidationService
     protected Status compute()
     {
         final String className = op().getComponentName().content( true );
-        
+
         Status retval = Status.createOkStatus();
 
         if( !CoreUtil.isNullOrEmpty( className ) )
         {
             int classNameStatus =
                 JavaConventions.validateJavaTypeName(
-                    className, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();;
+                    className, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();;
 
             if( className.indexOf( '.' ) != -1 )
             {
@@ -53,7 +53,7 @@ public class ComponentNameValidationService extends ValidationService
                 retval = Status.createErrorStatus( "Invalid class name" );
             }
         }
-        
+
         return retval;
     }
 
