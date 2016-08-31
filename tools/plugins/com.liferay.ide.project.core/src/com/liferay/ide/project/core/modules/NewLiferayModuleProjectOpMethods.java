@@ -82,7 +82,7 @@ public class NewLiferayModuleProjectOpMethods
             List<String> groupId =
                 op.getProjectProvider().content().getData( "parentGroupId", String.class, parentProjectDir );
 
-            if( ! groupId.isEmpty() )
+            if( !CoreUtil.isNullOrEmpty( groupId ) )
             {
                 retval = groupId.get( 0 );
             }
@@ -103,7 +103,7 @@ public class NewLiferayModuleProjectOpMethods
             List<String> version =
                 op.getProjectProvider().content().getData( "parentVersion", String.class, parentProjectDir );
 
-            if( !version.isEmpty() )
+            if( !CoreUtil.isNullOrEmpty( version ) )
             {
                 retval = version.get( 0 );
             }

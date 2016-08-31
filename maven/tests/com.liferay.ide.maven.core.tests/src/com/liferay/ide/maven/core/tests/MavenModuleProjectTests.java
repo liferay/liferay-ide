@@ -15,8 +15,11 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.modeling.Status;
@@ -41,6 +44,95 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         assertNotNull( status );
-        assertEquals( status.message(), Status.createOkStatus(), status );
+        assertTrue( status.message(), status.ok() );
+
+        waitForJobsToComplete();
+
+        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+
+        verifyProject(project);
+
+        assertTrue(project.getFile( "src/main/java/com/example/portlet/FooPortlet.java" ).exists());
+    }
+
+    @Test
+    public void testNewLiferayMavenModuleMVCPortletProjectWithDashes() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "foo-bar" );
+        op.setProjectProvider( "maven-module" );
+
+        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertNotNull( status );
+        assertTrue( status.message(), status.ok() );
+
+        waitForJobsToComplete();
+
+        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+
+        verifyProject(project);
+
+        assertTrue(project.getFile( "src/main/java/com/example/portlet/FooBarPortlet.java" ).exists());
+    }
+
+    @Test
+    public void testNewLiferayMavenModuleMVCPortletProjectWithDots() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "foo.bar" );
+        op.setProjectProvider( "maven-module" );
+
+        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertNotNull( status );
+        assertTrue( status.message(), status.ok() );
+
+        waitForJobsToComplete();
+
+        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+
+        verifyProject(project);
+    }
+
+    private void verifyProject(IProject project ) throws Exception
+    {
+        assertNotNull( project );
+        assertTrue( project.exists() );
+
+        assertFalse(project.getFile( "build.gradle" ).exists());
+
+        project.build( IncrementalProjectBuilder.CLEAN_BUILD, monitor );
+
+        waitForJobsToComplete();
+
+        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+
+        waitForJobsToComplete();
+
+        assertNoErrors( project );
+    }
+
+    @Test
+    public void testNewLiferayMavenModuleApiProject() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "foo-api" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "api" );
+
+        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertNotNull( status );
+        assertTrue( status.message(), status.ok() );
+
+        waitForJobsToComplete();
+
+        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+
+        verifyProject(project);
     }
 }

@@ -39,7 +39,7 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** Archetype ***
 
-    //@Service( impl = ArchetypeDefaultValueService.class )
+    @Service( impl = ModuleArchetypeDefaultValueService.class )
     ValueProperty PROP_ARCHETYPE = new ValueProperty( TYPE, "Archetype" );
 
     Value<String> getArchetype();
