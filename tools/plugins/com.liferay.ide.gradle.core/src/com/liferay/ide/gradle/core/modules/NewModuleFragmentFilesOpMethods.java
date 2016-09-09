@@ -71,6 +71,11 @@ public class NewModuleFragmentFilesOpMethods
                 File hostBundle =
                     portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostBundleName + ".jar" ).toFile();
 
+                if( !hostBundle.exists() )
+                {
+                    hostBundle = GradleCore.getDefault().getStateLocation().append( hostBundleName + ".jar" ).toFile();
+                }
+
                 try
                 {
                     ZipUtil.unzip( hostBundle, temp.toFile() );

@@ -24,6 +24,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.window.Window;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.Status;
@@ -52,6 +53,8 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
 
         final IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 
+        final IPath temp = GradleCore.getDefault().getStateLocation();
+
         dialog.setTitle( "Add files from OSGi bundle to override" );
 
         final PortalBundle portalBundle = LiferayServerCore.newPortalBundle( runtime.getLocation() );
@@ -61,6 +64,8 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
         {
             currentOSGiBundle = currentOSGiBundle + ".jar";
         }
+
+        ServerUtil.getModuleFileFrom70Server( runtime, currentOSGiBundle, temp );
 
         if( portalBundle != null )
         {
