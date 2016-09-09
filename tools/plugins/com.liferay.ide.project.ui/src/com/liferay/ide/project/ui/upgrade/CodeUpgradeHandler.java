@@ -15,20 +15,12 @@
 
 package com.liferay.ide.project.ui.upgrade;
 
-import java.io.File;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
-
-import com.liferay.ide.project.core.ProjectCore;
 
 /**
  * @author Terry Jia
@@ -39,28 +31,7 @@ public class CodeUpgradeHandler extends AbstractHandler
     @Override
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
-        final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
-
-        File stateDir = stateLocation.toFile();
-
-        final File codeUpgradeFile = new File( stateDir, "liferay-code-upgrade.xml" );
-
-        try
-        {
-            if( !codeUpgradeFile.exists() )
-            {
-                codeUpgradeFile.createNewFile();
-            }
-
-            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
-            IFileStore fileStore = EFS.getLocalFileSystem().getStore( new Path( codeUpgradeFile.getPath() ) );
-
-            IDE.openEditorOnFileStore( page, fileStore );
-        }
-        catch( Exception e )
-        {
-        }
+        UIUtil.showView( UpgradeView.ID );
 
         return null;
     }

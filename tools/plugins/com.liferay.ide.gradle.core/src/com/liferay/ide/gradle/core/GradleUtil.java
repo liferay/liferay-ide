@@ -22,7 +22,9 @@ import com.gradleware.tooling.toolingmodel.repository.FixedRequestAttributes;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
@@ -33,6 +35,7 @@ import org.eclipse.buildship.core.util.file.FileUtils;
 import org.eclipse.buildship.core.util.gradle.GradleDistributionWrapper;
 import org.eclipse.buildship.core.util.progress.AsyncHandler;
 import org.eclipse.buildship.core.util.variable.ExpressionUtils;
+import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectJob;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -124,6 +127,16 @@ public class GradleUtil
         }
         return project != null && project.exists() && project.isAccessible() &&
             ( project.hasNature( GradleProjectNature.ID ) );
+    }
+
+    public static void refreshGradleProject( IProject project )
+    {
+        Set<IProject> projects = new HashSet<>();
+
+        projects.add( project );
+
+        CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
+            NewProjectHandler.IMPORT_AND_MERGE );
     }
 
     public static void runGradleTask( IProject project, String task, IProgressMonitor monitor ) throws CoreException

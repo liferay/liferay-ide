@@ -17,6 +17,9 @@ package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
+import com.liferay.ide.project.ui.upgrade.animated.Page;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.List;
@@ -33,7 +36,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.actions.SelectionProviderAction;
 
@@ -50,9 +55,49 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
         super( provider, text );
     }
 
+//    protected void refreshTableViewer()
+//    {
+//        final MigrationView mv = (MigrationView) UIUtil.findView( MigrationView.ID );
+//
+//        UIUtil.async( new Runnable()
+//        {
+//            @Override
+//            public void run()
+//            {
+//                final Object selection = getStructuredSelection().getFirstElement();
+//                List<Problem> problems = null;
+//                if( selection instanceof IFile )
+//                {
+//                    IFile file = (IFile) selection;
+//                    problems = MigrationUtil.getProblemsFromResource( file );
+//                }
+//                else if( selection instanceof Problem )
+//                {
+//                    ISelection se = mv.getCommonViewer().getSelection();
+//
+//                    if( se instanceof TreeSelection )
+//                    {
+//                        problems = MigrationUtil.getCurrentProblemsFromTreeNode( ( (TreeSelection) se ) );
+//                    }
+//                }
+//
+//                if( problems != null && problems.size() > 0 )
+//                {
+//                    mv.getProblemsViewer().setInput( problems.toArray() );
+//                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
+//                }
+//                else
+//                {
+//                    mv.getProblemsViewer().setInput( null );
+//                }
+//            }
+//        } );
+//    }
+
     protected void refreshTableViewer()
     {
-        final MigrationView mv = (MigrationView) UIUtil.showView( MigrationView.ID );
+        FindBreakingChangesPage page = UpgradeView.getPage(Page.FINDBREACKINGCHANGES_PAGE_ID,FindBreakingChangesPage.class);
+        TableViewer problemsViewer = page.get_problemsViewer();
 
         UIUtil.async( new Runnable()
         {
@@ -68,7 +113,7 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
                 }
                 else if( selection instanceof Problem )
                 {
-                    ISelection se = mv.getCommonViewer().getSelection();
+                    ISelection se = page.getTreeViewer().getSelection();
 
                     if( se instanceof TreeSelection )
                     {
@@ -78,12 +123,12 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
 
                 if( problems != null && problems.size() > 0 )
                 {
-                    mv.getProblemsViewer().setInput( problems.toArray() );
-                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
+                    problemsViewer.setInput( problems.toArray() );
+                    problemsViewer.setSelection( new StructuredSelection( problems.get( 0 ) ) );
                 }
                 else
                 {
-                    mv.getProblemsViewer().setInput( null );
+                    problemsViewer.setInput( null );
                 }
             }
         } );
@@ -121,12 +166,16 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
                         if( provider instanceof Viewer )
                         {
                             final Viewer viewer = (Viewer) provider;
+                            FindBreakingChangesPage page =
+                                UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
+                            TreeViewer treeViewer = page.getTreeViewer();
 
                             UIUtil.async( new Runnable()
                             {
                                 public void run()
                                 {
                                     viewer.refresh();
+                                    treeViewer.refresh();
                                 }
                             });
                         }

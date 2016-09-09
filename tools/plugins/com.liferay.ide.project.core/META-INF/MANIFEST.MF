@@ -50,6 +50,7 @@ Export-Package: com.liferay.ide.project.core,
  com.liferay.ide.project.core.model,
  com.liferay.ide.project.core.modules,
  com.liferay.ide.project.core.upgrade,
+ com.liferay.ide.project.core.upgrade.service,
  com.liferay.ide.project.core.util
 Bundle-ClassPath: lib/jackson-core-asl-1.9.13.jar,
  lib/jackson-mapper-asl-1.9.13.jar,

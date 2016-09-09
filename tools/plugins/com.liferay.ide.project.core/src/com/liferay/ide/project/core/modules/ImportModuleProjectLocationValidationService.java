@@ -49,7 +49,7 @@ public class ImportModuleProjectLocationValidationService extends ValidationServ
 
             retval = StatusBridge.create( ImportLiferayModuleProjectOpMethods.getBuildType( location ) );
 
-            if( !retval.ok() )
+            if( retval.severity() == Status.Severity.ERROR )
             {
                 return retval;
             }

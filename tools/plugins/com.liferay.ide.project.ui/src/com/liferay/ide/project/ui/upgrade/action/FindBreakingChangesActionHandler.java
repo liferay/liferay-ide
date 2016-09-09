@@ -32,7 +32,7 @@ public class FindBreakingChangesActionHandler extends BaseActionHandler
     protected Object run( Presentation context )
     {
         MigrationView view = (MigrationView) UIUtil.showView( MigrationView.ID );
-        new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();;
+        new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
         return null;
     }
 

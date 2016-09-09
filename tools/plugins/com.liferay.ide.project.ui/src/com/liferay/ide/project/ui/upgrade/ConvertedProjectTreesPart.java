@@ -960,9 +960,10 @@ public class ConvertedProjectTreesPart extends FormComponentPart
             }
 
             converter.setLiferay70Runtime( liferay70Runtime );
-            converter.setUi( this );
+            //TODO 
+            //converter.setUi( this );
 
-            converter.doExecute( sourcePaths );
+            //converter.doExecute( sourcePaths );
         }
     }
 

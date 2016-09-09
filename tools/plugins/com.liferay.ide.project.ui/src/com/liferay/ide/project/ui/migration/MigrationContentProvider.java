@@ -128,4 +128,9 @@ public class MigrationContentProvider implements ITreeContentProvider
         }
     }
 
+    public void set_problems( List<ProblemsContainer> _problems )
+    {
+        this._problems = _problems;
+    }
+
 }

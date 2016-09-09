@@ -28,13 +28,9 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -212,12 +208,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
             if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
             {
-                Set<IProject> projects = new HashSet<>();
-
-                projects.add( liferayWorkspaceProject );
-
-                CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
-                    NewProjectHandler.IMPORT_AND_MERGE );
+                GradleUtil.refreshGradleProject( liferayWorkspaceProject );
             }
             else
             {

@@ -1226,6 +1226,15 @@
              name="Liferay 7 Migration Problems"
              restorable="true">
       </view>
+      <view
+             allowMultiple="false"
+             category="com.liferay.ide.project.ui.liferay"
+             class="com.liferay.ide.project.ui.upgrade.animated.UpgradeView"
+             icon="icons/e16/migration-tasks.png"
+             id="com.liferay.ide.project.ui.upgradeView"
+             name="Liferay 7 Upgrade View"
+             restorable="true">
+      </view>
       <!--view
             allowMultiple="false"
             category="com.liferay.ide.project.ui.liferay"

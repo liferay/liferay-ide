@@ -111,9 +111,13 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
 
         if( element instanceof Problem && ( (Problem) element ).getAutoCorrectContext() != null )
         {
-            setEnabled( true );
-
-            return;
+            //Temporarily code avoid auto correct action
+            //Should update blade
+            if( !( (Problem) element ).getTicket().equals( "LPS-61952" ) )
+            {
+                setEnabled( true );
+                return;
+            }
         }
 
         setEnabled( false );

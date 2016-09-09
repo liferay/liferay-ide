@@ -331,7 +331,7 @@ public class SDKUtil
         {
         }
 
-        return properties.getProperty( "lp.version" ); //$NON-NLS-1$
+        return properties.getProperty( "lp.version" );
     }
 
     public static void saveSDKNameSetting( IProject project, String sdkName)

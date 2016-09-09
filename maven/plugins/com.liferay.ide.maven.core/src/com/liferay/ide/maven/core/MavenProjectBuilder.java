@@ -364,4 +364,11 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
             initializeMessages( MavenProjectBuilder.class.getName(), Msgs.class );
         }
     }
+
+    @Override
+    public IStatus creatInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
+        throws CoreException
+    {
+        return Status.OK_STATUS;
+    }
 }

@@ -15,7 +15,6 @@
 package com.liferay.ide.project.core.modules;
 
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.modeling.Path;
 
 /**
  * @author Simon Jiang

@@ -216,4 +216,11 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
             initializeMessages( SDKProjectBuilder.class.getName(), Msgs.class );
         }
     }
+
+    @Override
+    public IStatus creatInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
+        throws CoreException
+    {
+        return Status.OK_STATUS;
+    }
 }

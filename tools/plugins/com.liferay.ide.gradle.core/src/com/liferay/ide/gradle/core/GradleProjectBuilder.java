@@ -17,6 +17,14 @@ package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -90,4 +98,28 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
         return status;
     }
 
+    @Override
+    public IStatus creatInitBundle( IProject project, String taskName,  String bundleUrl, IProgressMonitor monitor ) throws CoreException
+    {
+        final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
+
+        try(InputStream in = new FileInputStream( gradlePropertiesFile );
+                        OutputStream out = new FileOutputStream( gradlePropertiesFile ))
+        {
+            final Properties properties = new Properties();
+            properties.load( in );
+
+            properties.put( "liferay.workspace.bundle.url", bundleUrl );
+
+            properties.store( out, "" );
+
+            runGradleTask( taskName, monitor );
+
+            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
+        catch( IOException e )
+        {
+        }
+        return Status.OK_STATUS;
+    }
 }

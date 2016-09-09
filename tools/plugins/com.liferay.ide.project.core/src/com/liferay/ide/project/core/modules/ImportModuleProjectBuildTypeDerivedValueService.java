@@ -48,6 +48,10 @@ public class ImportModuleProjectBuildTypeDerivedValueService extends DerivedValu
                 {
                     retVal = status.getMessage();
                 }
+                else if( status.getSeverity() == IStatus.WARNING )
+                {
+                    retVal = "gradle";
+                }
                 else
                 {
                     retVal = "";

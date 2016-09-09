@@ -82,6 +82,11 @@ public class ImportLiferayModuleProjectOpMethods
                 retval = StatusBridge.create( Status.createStatus( Severity.ERROR, status.getMessage() ) );
                 break;
             }
+            else if( status.getSeverity() == IStatus.WARNING )
+            {
+                retval = StatusBridge.create( Status.createStatus( Severity.WARNING, status.getMessage() ) );
+                break;
+            }
         }
 
         if( retval == null )

@@ -16,12 +16,17 @@
 package com.liferay.ide.gradle.core;
 
 import com.liferay.ide.core.AbstractLiferayProjectImporter;
+import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
 /**
@@ -29,6 +34,7 @@ import org.eclipse.core.runtime.Status;
  */
 public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
 {
+    private IProject refreshProject = null;
 
     @Override
     public IStatus canImport( String location )
@@ -51,9 +57,24 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
                 {
                     if( findGradleFile( parent ) )
                     {
-                        retval = new Status(
-                            IStatus.ERROR, GradleCore.PLUGIN_ID,
-                            "Location is not the root location of a multi-module project." );
+                        File gradleFile = new File( file, "build.gradle" );
+                        IPath gradleFilelocation = Path.fromOSString( gradleFile.getAbsolutePath() );
+                        IFile ifile = CoreUtil.getWorkspaceRoot().getFileForLocation( gradleFilelocation );
+
+                        if( ifile != null && ifile.getProject() != null )
+                        {
+                            refreshProject = ifile.getProject();
+
+                            retval = new Status(
+                                IStatus.WARNING, GradleCore.PLUGIN_ID,
+                                "Project is inside \"" + refreshProject.getName() + "\" project. we will just refresh to import" );
+                        }
+                        else
+                        {
+                            retval = new Status(
+                                IStatus.ERROR, GradleCore.PLUGIN_ID,
+                                "Location is not the root location of a multi-module project." );
+                        }
 
                         return retval;
                     }
@@ -104,7 +125,15 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
     @Override
     public void importProject( String location, IProgressMonitor monitor ) throws CoreException
     {
-        GradleUtil.importGradleProject( new File( location ), monitor );
+        if( refreshProject != null )
+        {
+            GradleUtil.refreshGradleProject( refreshProject );
+        }
+        else
+        {
+            GradleUtil.importGradleProject( new File( location ), monitor );
+        }
+        
     }
 
 }
