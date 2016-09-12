@@ -74,7 +74,7 @@ public class SdkLocationValidationService extends ValidationService
                 if( result < 0 )
                 {
                     return StatusBridge.create(
-                        ProjectCore.createErrorStatus( "This SDK version should be greater than 6.1.0." ) );
+                        ProjectCore.createErrorStatus( "This tool doesn't support 6.1.x." ) );
                 }
             }
         }
