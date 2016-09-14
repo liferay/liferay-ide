@@ -42,7 +42,7 @@
         <bndtools-site>https://dl.bintray.com/bndtools/bndtools/3.2.0/</bndtools-site>
         <gradle-site>http://download.eclipse.org/buildship/updates/e46/releases/1.0/1.0.20.v20160901-0734</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
-        <blade-site>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/</blade-site>
+        <blade-site>http://releases.liferay.com/tools/blade-cli/1.0.5.201609070324/</blade-site>
         <tm-site>http://download.eclipse.org/tm/terminal/updates/4.0</tm-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot-site>
         <sapphire-site>http://download.eclipse.org/sapphire/9.0.5/repository/</sapphire-site>
