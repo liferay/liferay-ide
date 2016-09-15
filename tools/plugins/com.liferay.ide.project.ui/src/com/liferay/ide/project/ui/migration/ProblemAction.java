@@ -27,10 +27,10 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -106,6 +106,7 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
             {
                 final Object selection = getStructuredSelection().getFirstElement();
                 List<Problem> problems = null;
+
                 if( selection instanceof IFile )
                 {
                     IFile file = (IFile) selection;
@@ -149,9 +150,9 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
     {
         final IResource resource = MigrationUtil.getIResourceFromProblem( problem );
 
-        new Job( "Marking migration problem as done" )
+        new WorkspaceJob( "Marking migration problem as done" )
         {
-            protected IStatus run( IProgressMonitor monitor )
+            public IStatus runInWorkspace( IProgressMonitor monitor )
             {
                 IStatus retval = Status.OK_STATUS;
 

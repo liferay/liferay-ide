@@ -22,18 +22,18 @@ import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.actions.SelectionProviderAction;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -44,15 +44,17 @@ import org.osgi.framework.ServiceReference;
  * @author Gregory Amerson
  * @author Terry Jia
  */
-public class AutoCorrectAction extends SelectionProviderAction implements IAction
+public class AutoCorrectAction extends ProblemAction
 {
+    private ISelectionProvider _provider;
 
     public AutoCorrectAction( ISelectionProvider provider )
     {
         super( provider, "Correct automatically" );
+        _provider = provider;
     }
 
-    public static void run( final Problem problem, final ISelectionProvider provider )
+    public IStatus runWithMarker( final Problem problem, IMarker marker)
     {
         final IResource file = MigrationUtil.getIResourceFromProblem( problem );
         final BundleContext context = FrameworkUtil.getBundle( AutoCorrectAction.class ).getBundleContext();
@@ -81,7 +83,7 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
 
                     file.refreshLocal( IResource.DEPTH_ONE, monitor );
 
-                    new MarkDoneAction().run( problem, provider );
+                    new MarkDoneAction().run( problem, _provider );
                 }
                 catch( InvalidSyntaxException e )
                 {
@@ -94,33 +96,44 @@ public class AutoCorrectAction extends SelectionProviderAction implements IActio
                 return Status.OK_STATUS;
             }
         }.schedule();
-    }
 
-    @Override
-    public void run()
-    {
-        final Problem problem = MigrationUtil.getProblemFromSelection( getSelection() );
-
-        run( problem, getSelectionProvider() );
+        return Status.OK_STATUS;
     }
 
     @Override
     public void selectionChanged( IStructuredSelection selection )
     {
-        Object element = selection.getFirstElement();
-
-        if( element instanceof Problem && ( (Problem) element ).getAutoCorrectContext() != null )
+        if (selection.isEmpty())
         {
-            //Temporarily code avoid auto correct action
-            //Should update blade
-            if( !( (Problem) element ).getTicket().equals( "LPS-61952" ) )
-            {
-                setEnabled( true );
-                return;
-            }
+            setEnabled( false );
         }
+        else
+        {
+            boolean selectionCompatible = true;
 
-        setEnabled( false );
+            Iterator<?> items = selection.iterator();
+
+            while( items.hasNext() )
+            {
+                Object item = items.next();
+
+                if( ! ( item instanceof Problem ) )
+                {
+                    selectionCompatible = false;
+                    break;
+                }
+
+                Problem problem = (Problem) item;
+
+                if( problem.autoCorrectContext == null )
+                {
+                    selectionCompatible = false;
+                    break;
+                }
+            }
+
+            setEnabled( selectionCompatible );
+        }
     }
 
 }
