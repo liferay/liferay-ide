@@ -32,7 +32,6 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationListener;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -44,12 +43,11 @@ import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -77,7 +75,6 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -86,18 +83,14 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
@@ -105,6 +98,11 @@ import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.osgi.framework.Version;
 
 /**
@@ -152,38 +150,46 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                                         @Override
                                         public void run()
                                         {
-                                            layoutComb.select( 1 );
-                                            layoutComb.setEnabled( false );
-                                            dataModel.setLayout( layoutComb.getText() );
-                                            createBundleControl();
+                                            if ( layoutComb.getSelectionIndex() != 1 )
+                                            {
+                                                layoutComb.select( 1 );
+                                                layoutComb.setEnabled( false );
+                                                dataModel.setLayout( layoutComb.getText() );
+                                                createBundleControl();
+                                            }
+                                            else
+                                            {
+                                                layoutComb.setEnabled( false );
+                                                dataModel.setLayout( layoutComb.getText() );
+                                            }
                                         }
                                     } );
                                 }
                                 else
                                 {
-                                    createDefaultControl();
+                                    layoutComb.setEnabled( true );
                                 }
                             }
                             else
                             {
-                                createDefaultControl();
+                                layoutComb.setEnabled( true );
                             }
                         }
                         else
                         {
-                            createDefaultControl();
+                            layoutComb.setEnabled( true );
                         }
                     }
                     else
                     {
-                        createDefaultControl();
+                        layoutComb.setEnabled( true );
                     }
                 }
             }
-
             startCheckThread();
         }
     }
+
 
     public static final String defaultBundleUrl =
         "https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.1%20GA2/liferay-ce-portal-tomcat-7.0-ga2-20160610113014153.zip";
@@ -578,7 +584,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 disposeBundleElement();
 
-                disposeLayoutElement();
 
                 disposeImportElement();
 
@@ -685,7 +690,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         SubMonitor progress = SubMonitor.convert( monitor, 100 );
         try
         {
-            progress.beginTask( "Execute Blade CLI Command...", 100 );
+            progress.beginTask( "Execute Liferay Worksapce Bundle Init Command...", 100 );
             String layout = dataModel.getLayout().content();
 
             if( layout.equals( layoutNames[1] ) )
@@ -732,7 +737,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         {
             ProjectUI.logError( e );
             throw new CoreException(
-                StatusBridge.create( Status.createErrorStatus( "Faild execute create init bundle command.", e ) ) );
+                StatusBridge.create( Status.createErrorStatus( "Faild execute Liferay Workspace Bundle Init Command...", e ) ) );
         }
         finally
         {
@@ -746,7 +751,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         try
         {
 
-            progress.beginTask( "Execute Blade CLI Command...", 100 );
+            progress.beginTask( "Execute Liferay Workspace Init Command...", 100 );
 
             StringBuilder sb = new StringBuilder();
 
@@ -761,7 +766,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         {
             ProjectUI.logError( e );
             throw new CoreException(
-                StatusBridge.create( Status.createErrorStatus( "Faild execute Balde CLI Command", e ) ) );
+                StatusBridge.create( Status.createErrorStatus( "Faild execute Liferay Workspace Init Command...", e ) ) );
         }
         finally
         {
@@ -999,6 +1004,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         {
                             createLiferayWorkspace( location, monitor );
 
+                            removeIvyPrivateSetting( location );
+
                             newPath = renameProjectFolder( location, monitor );
 
                             ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
@@ -1010,10 +1017,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                             importSDKProject( new Path( newPath ).append( "plugins-sdk" ), monitor );
 
                             dataModel.setConvertLiferayWorkspace( true );
+
                         }
                         else
                         {
                             copyNewSDK( location, monitor );
+
+                            removeIvyPrivateSetting( location );
 
                             String serverName = dataModel.getLiferayServerName().content();
 
@@ -1032,7 +1042,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                             importSDKProject( sdk.getLocation(), monitor );
 
                         }
-
                     }
                     catch( Exception e )
                     {
@@ -1111,6 +1120,81 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
+    @SuppressWarnings( "unchecked" )
+    private void removeIvyPrivateSetting( IPath sdkLocation ) throws CoreException
+    {
+
+        IPath ivySettingPath = sdkLocation.append( "ivy-settings.xml" );
+        File ivySettingFile = ivySettingPath.toFile();
+
+        SAXBuilder builder = new SAXBuilder( false );
+        builder.setValidation( false );
+        builder.setFeature( "http://xml.org/sax/features/validation", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false ); 
+
+        try(FileInputStream ivyInput = new FileInputStream( ivySettingFile ))
+        {
+            if( ivySettingFile.exists() )
+            {
+                Document doc = builder.build( ivyInput );
+
+                Element itemRem = null;
+                Element elementRoot = doc.getRootElement();
+                List<Element> resolversElements = elementRoot.getChildren( "resolvers" );
+
+                for( Iterator<Element> resolversIterator = resolversElements.iterator(); resolversIterator.hasNext(); )
+                {
+                    Element resolversElement = (Element) resolversIterator.next();
+
+                    List<Element> chainElements = resolversElement.getChildren( "chain" );
+
+                    for( Iterator<Element> chainIterator = chainElements.iterator(); chainIterator.hasNext(); )
+                    {
+                        Element chainElement = (Element) chainIterator.next();
+                        List<Element> resolverElements = chainElement.getChildren( "resolver" );
+
+                        for( Iterator<Element> resolverIterator = resolverElements.iterator(); resolverIterator.hasNext(); )
+                        {
+                            Element resolverItem = (Element) resolverIterator.next();
+                            String resolverRefItem = resolverItem.getAttributeValue( "ref" );
+
+                            if (resolverRefItem.equals( "liferay-private" ))
+                            {
+                                resolverIterator.remove();
+                                itemRem = resolverItem;
+                            }
+                        }
+                    }
+                    elementRoot.removeContent( itemRem );
+
+                    List<Element> ibiblioElements = resolversElement.getChildren( "ibiblio" );
+
+                    for( Iterator<Element> ibiblioIterator = ibiblioElements.iterator(); ibiblioIterator.hasNext(); )
+                    {
+                        Element ibiblioElement = (Element) ibiblioIterator.next();
+                        String liferayPrivateName = ibiblioElement.getAttributeValue( "name" );
+
+                        if (liferayPrivateName.equals( "liferay-private" ))
+                        {
+                            ibiblioIterator.remove();
+                            itemRem = ibiblioElement;
+                        }
+                    }
+                    elementRoot.removeContent( itemRem );
+                }
+
+                saveXML( ivySettingFile, doc );
+            }
+        }
+        catch( IOException|JDOMException|CoreException e)
+        {
+            ProjectUI.logError( e );
+            throw new CoreException(
+                StatusBridge.create( Status.createErrorStatus( "Failed to remove Liferay private url configuration of ivy-settings.xml.", e ) ) );
+        }
+    }
+
     private String renameProjectFolder( IPath targetSDKLocation, IProgressMonitor monitor ) throws CoreException
     {
         // if( newName == null || newName.equals( "" ) )
@@ -1173,6 +1257,22 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         UpgradeView.resetPages();
     }
 
+    private void saveXML( File templateFile, Document doc ) throws CoreException
+    {
+        XMLOutputter out = new XMLOutputter();
+
+        try(FileOutputStream fos = new FileOutputStream( templateFile );)
+        {
+            out.output( doc, fos );
+        }
+        catch( Exception e )
+        {
+            ProjectUI.logError( e );
+            throw new CoreException(
+                StatusBridge.create( Status.createErrorStatus( "Failed to save change for ivy-settings.xml.", e ) ) );
+        }
+    }
+
     @Override
     public void serverAdded( IServer server )
     {
@@ -1202,7 +1302,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         serverComb.setItems( serverList.toArray( new String[serverList.size()] ) );
                         serverComb.select( serverList.size() - 1 );
                     }
+
+                    dataModel.setLiferayServerName( serverComb.getText() );
                     startCheckThread();
+
                 }
             }
         } );
@@ -1238,6 +1341,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     }
                     serverComb.setItems( serverList.toArray( new String[serverList.size()] ) );
                     serverComb.select( 0 );
+                    dataModel.setLiferayServerName( serverComb.getText() );
+
                     startCheckThread();
                 }
             }
@@ -1345,5 +1450,4 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         } );
     }
-
 }

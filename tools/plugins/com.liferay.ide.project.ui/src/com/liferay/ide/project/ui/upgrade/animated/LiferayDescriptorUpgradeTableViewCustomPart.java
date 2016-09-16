@@ -74,11 +74,15 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
     @Override
     protected void createTempFile( File srcFile, File templateFile, String projectName )
     {
-        try
+        SAXBuilder builder = new SAXBuilder( false );
+        builder.setValidation( false );
+        builder.setFeature( "http://xml.org/sax/features/validation", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false ); 
+
+        try( FileInputStream ivyInput = new FileInputStream( srcFile ) )
         {
-            SAXBuilder builder = new SAXBuilder( false );
-            builder.setValidation( false );
-            Document doc = builder.build( new FileInputStream( srcFile ) );
+            Document doc = builder.build( ivyInput );
             DocType docType = doc.getDocType();
 
             if( docType != null )
@@ -112,14 +116,16 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
     @Override
     protected void doUpgrade( File srcFile, IProject project )
     {
-        try
+        SAXBuilder builder = new SAXBuilder( false );
+        builder.setValidation( false );
+        builder.setFeature( "http://xml.org/sax/features/validation", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
+
+        try(FileInputStream ivyInput = new FileInputStream( srcFile ) )
         {
-            SAXBuilder builder = new SAXBuilder( false );
-            builder.setValidation( false );
-            builder.setFeature( "http://xml.org/sax/features/validation", false );
-            builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
-            builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
-            Document doc = builder.build( new FileInputStream( srcFile ) );
+
+            Document doc = builder.build( ivyInput );
             DocType docType = doc.getDocType();
 
             if( docType != null )
@@ -231,15 +237,16 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
     @Override
     protected boolean isNeedUpgrade( File srcFile )
     {
-        try
-        {
-            SAXBuilder builder = new SAXBuilder( false );
-            builder.setValidation( false );
-            builder.setFeature( "http://xml.org/sax/features/validation", false );
-            builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
-            builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
-            Document doc = builder.build( new FileInputStream( srcFile ) );
+        SAXBuilder builder = new SAXBuilder( false );
+        builder.setValidation( false );
+        builder.setFeature( "http://xml.org/sax/features/validation", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
 
+
+        try( FileInputStream ivyInput = new FileInputStream( srcFile ))
+        {
+            Document doc = builder.build( ivyInput );
             DocType docType = doc.getDocType();
 
             if( docType != null )
