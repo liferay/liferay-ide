@@ -48,7 +48,7 @@ public abstract class Page extends Composite
     public static String CUSTOMJSP_PAGE_ID = "customjsp";
     public static String EXTANDTHEME_PAGE_ID = "extandtheme";
     public static String COMPILE_PAGE_ID = "compile";
-    public static String DEPLOY_PAGE_ID = "deploy";
+    public static String BUILD_PAGE_ID = "build";
 
     public static Control createHorizontalSpacer( Composite comp, int hSpan )
     {
