@@ -236,7 +236,7 @@ public class GearControl extends AbstractCanvas
             return retVal;
         }
 
-        long now = System.currentTimeMillis();
+        long now = currentTime;
 
         if( startAnimation == 0 )
         {

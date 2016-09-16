@@ -56,6 +56,8 @@ public abstract class AbstractCanvas extends Canvas
 
     public static final int NONE = -1;
 
+    protected long currentTime = 0L;
+
     public static Rectangle drawText( GC gc, double cX, double cY, String text )
     {
         return drawText( gc, cX, cY, text, 0 );
@@ -301,6 +303,8 @@ public abstract class AbstractCanvas extends Canvas
         {
             return;
         }
+
+        currentTime += 20;
 
         boolean needsRedraw = needRedraw();
 
