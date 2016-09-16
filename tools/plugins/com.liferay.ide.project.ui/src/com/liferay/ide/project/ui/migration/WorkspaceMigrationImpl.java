@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Gregory Amerson
+ * @author Lovett Li
  */
 public class WorkspaceMigrationImpl implements MigrationListener
 {
@@ -83,15 +84,24 @@ public class WorkspaceMigrationImpl implements MigrationListener
                     {
                         if( ifile.exists() )
                         {
-                            if( CoreUtil.isLiferayProject( ifile.getProject() ) )
+                            if( workspaceResource == null )
                             {
-                                workspaceResource = ifile;
-                                break;
+                                if( CoreUtil.isLiferayProject( ifile.getProject() ) )
+                                {
+                                    workspaceResource = ifile;
+                                }
+                            }
+                            else
+                            {
+                                // prefer the path that is shortest (to avoid a nested version)
+                                if( ifile.getFullPath().segmentCount() < workspaceResource.getFullPath().segmentCount() )
+                                {
+                                    workspaceResource = ifile;
+                                }
                             }
                         }
                     }
                 }
-
 
                 if( workspaceResource == null )
                 {

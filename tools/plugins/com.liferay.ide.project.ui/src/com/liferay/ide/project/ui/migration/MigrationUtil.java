@@ -74,27 +74,25 @@ public class MigrationUtil
         {
             if( file.exists() )
             {
-                // always prefer the file in a liferay project
-                if( CoreUtil.isLiferayProject( file.getProject() ) )
-                {
-                    retval = file;
-                    break;
-                }
-
-                // if not lets pick the one that is shortest path
                 if( retval == null )
                 {
-                    retval = file;
+                    // always prefer the file in a liferay project
+                    if( CoreUtil.isLiferayProject( file.getProject() ) )
+                    {
+                        retval = file;
+                    }
                 }
                 else
                 {
+                    // if not lets pick the one that is shortest path
                     if( file.getFullPath().segmentCount() < retval.getFullPath().segmentCount() )
                     {
                         retval = file;
                     }
                 }
             }
-            else {
+            else
+            {
                 IPath path = file.getFullPath();
 
                 IProject project =
