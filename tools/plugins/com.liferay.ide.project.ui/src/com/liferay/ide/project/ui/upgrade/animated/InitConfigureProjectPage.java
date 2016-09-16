@@ -192,7 +192,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
 
     public static final String defaultBundleUrl =
-        "https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.1%20GA2/liferay-ce-portal-tomcat-7.0-ga2-20160610113014153.zip";
+        "https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.2%20GA3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
     private static Color GRAY;
     private Label dirLabel;
     private Text dirField;
