@@ -72,6 +72,8 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ID_GRADLE_EXECUTIONS_VIEW = "org.eclipse.buildship.ui.views.executionview"; //$NON-NLS-1$
 
+    public static final String ID_LIFERAY_UPGRADE_VIEW = "com.liferay.ide.project.ui.upgradeView"; //$NON-NLS-1$
+
     public void addViewIfExist( IPageLayout page, IFolderLayout bottomRight, String viewId)
     {
         IViewDescriptor dbView = PlatformUI.getWorkbench().getViewRegistry().find( viewId );

@@ -15,15 +15,19 @@
 
 package com.liferay.ide.project.ui.upgrade;
 
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
-import com.liferay.ide.ui.util.UIUtil;
+import com.liferay.ide.ui.LiferayUpgradePerspectiveFactory;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class CodeUpgradeHandler extends AbstractHandler
 {
@@ -31,7 +35,14 @@ public class CodeUpgradeHandler extends AbstractHandler
     @Override
     public Object execute( ExecutionEvent event ) throws ExecutionException
     {
-        UIUtil.showView( UpgradeView.ID );
+        IWorkbench workbench = PlatformUI.getWorkbench();
+        IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+
+        if( window != null )
+        {
+            IPerspectiveRegistry reg = workbench.getPerspectiveRegistry();
+            window.getActivePage().setPerspective( reg.findPerspectiveWithId( LiferayUpgradePerspectiveFactory.ID ) );
+        }
 
         return null;
     }
