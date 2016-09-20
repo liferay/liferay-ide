@@ -1076,15 +1076,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     IProject importProject =
                         ProjectImportUtil.importProject( new Path( project.getPath() ), monitor, null );
 
+                    if( importProject != null && importProject.isAccessible() && importProject.isOpen() )
+                    {
+                        checkProjectType( importProject );
+                    }
+
                     if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) ||
                         importProject.getName().startsWith( "resources-importer-web" ) )
                     {
                         importProject.delete( false, true, monitor );
-                    }
-
-                    if( importProject != null && importProject.isAccessible() && importProject.isOpen() )
-                    {
-                        checkProjectType( importProject );
                     }
                 }
                 catch( CoreException e )
@@ -1102,15 +1102,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     IProject importProject =
                         ProjectImportUtil.importProject( new Path( project.getParent() ), monitor, null );
 
+                    if( importProject != null && importProject.isAccessible() && importProject.isOpen() )
+                    {
+                        checkProjectType( importProject );
+                    }
+
                     if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) ||
                         importProject.getName().startsWith( "resources-importer-web" ) )
                     {
                         importProject.delete( false, true, monitor );
-                    }
-
-                    if( importProject != null && importProject.isAccessible() && importProject.isOpen() )
-                    {
-                        checkProjectType( importProject );
                     }
                 }
                 catch( CoreException e )

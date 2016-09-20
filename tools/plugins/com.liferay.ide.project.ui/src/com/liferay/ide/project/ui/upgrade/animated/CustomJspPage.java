@@ -48,6 +48,8 @@ import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -214,10 +216,29 @@ public class CustomJspPage extends Page
 
             if( html.exists() && html.isDirectory() )
             {
-                IPath location = Path.fromOSString( file.getAbsolutePath() );
-                IFile ifile = CoreUtil.getWorkspaceRoot().getFileForLocation( location );
+                IWorkspaceRoot ws = CoreUtil.getWorkspaceRoot();
 
-                return ifile.getProject().getName();
+                final IResource[] containers = ws.findContainersForLocationURI( file.toURI() );
+
+                IResource resource = null;
+
+                for( IResource container : containers )
+                {
+                    if( resource == null )
+                    {
+                        resource = container;
+                    }
+                    else
+                    {
+                        if( container.getProjectRelativePath().segmentCount() <
+                                        resource.getProjectRelativePath().segmentCount() )
+                        {
+                            resource = container;
+                        }
+                    }
+                }
+
+                return resource.getProject().getName();
             }
             else
             {
@@ -935,7 +956,7 @@ public class CustomJspPage extends Page
 
         int size = results.length;
 
-        File[] files = new File[size];
+        List<File> list = new ArrayList<File>();
 
         for( int i = 0; i < size; i++ )
         {
@@ -947,15 +968,20 @@ public class CustomJspPage extends Page
 
             IPath location = project.getFolder( "docroot/" + customJspPath ).getLocation();
 
-            if( location == null )
+            if( location != null )
             {
-                return null;
+                list.add( location.toFile() );
             }
-
-            files[i] = location.toFile();
         }
 
-        return files;
+        if( !list.isEmpty() )
+        {
+            return list.toArray( new File[0] );
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private String getLiferay62ServerLocation()
@@ -1015,21 +1041,26 @@ public class CustomJspPage extends Page
 
         int size = results.length;
 
-        File[] files = new File[size];
+        List<File> list = new ArrayList<File>();
 
         for( int i = 0; i < size; i++ )
         {
             File file = new File( results[i], staticPath );
 
-            if( !file.exists() )
+            if( file.exists() )
             {
-                return null;
+                list.add( file );
             }
-
-            files[i] = file;
         }
 
-        return files;
+        if( !list.isEmpty() )
+        {
+            return list.toArray( new File[0] );
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private boolean is62FileFound( File file )
@@ -1110,7 +1141,7 @@ public class CustomJspPage extends Page
         dialog.setProjects( getHookProjects() );
         URL imageUrl = ProjectUI.getDefault().getBundle().getEntry( "/icons/e16/hook.png");
         Image hookImage = ImageDescriptor.createFromURL( imageUrl ).createImage();
-        
+
         dialog.setImage( hookImage );
         dialog.setTitle( "Custom JSP Hook Project" );
         dialog.setMessage( "Select Custom JSP Hook Project" );
