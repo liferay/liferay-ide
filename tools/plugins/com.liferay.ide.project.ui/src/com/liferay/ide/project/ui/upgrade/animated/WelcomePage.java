@@ -64,8 +64,8 @@ public class WelcomePage extends Page
             public void widgetSelected( SelectionEvent e )
             {
                 Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-                    UIUtil.getActiveShell(), "re-run code upgradle tool?",
-                    "The configuration files will be deleted. Do you want to re-run the code upgradle tool?" );
+                    UIUtil.getActiveShell(), "re-run code upgrade tool?",
+                    "The configuration files will be deleted. Do you want to re-run the code upgrade tool?" );
 
                 if( openNewLiferayProjectWizard )
                 {

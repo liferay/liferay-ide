@@ -23,7 +23,8 @@ import org.eclipse.ui.IPageLayout;
  */
 public class LiferayUpgradePerspectiveFactory extends AbstractPerspectiveFactory
 {
-    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferayupgrade";
+    public static final String ID = "com.liferay.ide.eclipse.ui.perspective.liferaycodeupgrade";
+
     @Override
     public void createInitialLayout( IPageLayout layout )
     {
@@ -34,7 +35,6 @@ public class LiferayUpgradePerspectiveFactory extends AbstractPerspectiveFactory
     private void createLayout( IPageLayout layout )
     {
         String editorArea = layout.getEditorArea();
-        layout.setEditorAreaVisible( false );
 
         IFolderLayout topLeft = layout.createFolder( "topLeft", IPageLayout.LEFT, 0.20f, editorArea );//$NON-NLS-1$
         topLeft.addView( ID_PROJECT_EXPLORER_VIEW );
