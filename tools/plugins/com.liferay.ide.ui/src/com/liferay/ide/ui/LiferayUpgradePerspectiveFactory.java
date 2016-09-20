@@ -17,6 +17,7 @@ package com.liferay.ide.ui;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.progress.IProgressConstants;
 
 /**
  * @author Lovett Li
@@ -35,15 +36,24 @@ public class LiferayUpgradePerspectiveFactory extends AbstractPerspectiveFactory
     private void createLayout( IPageLayout layout )
     {
         String editorArea = layout.getEditorArea();
+        layout.setEditorAreaVisible( false );
 
-        IFolderLayout topLeft = layout.createFolder( "topLeft", IPageLayout.LEFT, 0.20f, editorArea );//$NON-NLS-1$
+        IFolderLayout topLeft = layout.createFolder( "topLeft", IPageLayout.LEFT, 0.20f, editorArea );
         topLeft.addView( ID_PROJECT_EXPLORER_VIEW );
         topLeft.addPlaceholder( ID_PACKAGE_EXPLORER_VIEW );
         topLeft.addPlaceholder( ID_J2EE_HIERARCHY_VIEW );
         topLeft.addPlaceholder( JavaUI.ID_TYPE_HIERARCHY );
         topLeft.addPlaceholder( JavaUI.ID_PACKAGES_VIEW );
 
-        layout.addStandaloneView( ID_LIFERAY_UPGRADE_VIEW, false, IPageLayout.TOP, 0.60f, editorArea );
+        layout.addStandaloneView( ID_LIFERAY_UPGRADE_VIEW, false, IPageLayout.TOP, 0.75f, editorArea );
+
+        IFolderLayout bottom = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.05f, editorArea );
+
+        bottom.addPlaceholder( ID_MARKERS_VIEW );
+        bottom.addPlaceholder( ID_CONSOLE_VIEW );
+        bottom.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
+        bottom.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
+        bottom.addPlaceholder( ID_SEARCH_VIEW );
     }
 
 }

@@ -250,7 +250,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         this.form.setImage( getImage() );
         this.toolkit.paintBordersFor( this.form );
         this.toolkit.decorateFormHeading( this.form );
-        this.form.setText( "Liferay Upgrade Tools" );
+        this.form.setText( "Liferay Code Upgrade" );
 
         GridLayout gridLayout = new GridLayout( 1, false );
         gridLayout.marginWidth = 0;
@@ -483,7 +483,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
     private ImageDescriptor getImageDescriptor()
     {
-        final URL url = ProjectUI.getDefault().getBundle().getEntry( "/icons/liferay_logo_32.png" );
+        final URL url = ProjectUI.getDefault().getBundle().getEntry( "/icons/upgrade_back_32.gif" );
         return ImageDescriptor.createFromURL( url );
     }
 
