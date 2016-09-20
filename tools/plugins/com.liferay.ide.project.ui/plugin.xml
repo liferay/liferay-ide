@@ -171,6 +171,13 @@
             properties="hasNonDefaultEncodingLanguagePropertiesFile"
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
+      <propertyTester
+            class="com.liferay.ide.project.ui.NotLiferayProjectInSDKPropertyTester"
+            id="com.liferay.ide.project.ui.notLiferayProjectInSDK"
+            namespace="com.liferay.ide.project.ui"
+            properties="notLiferayProjectInSDK"
+            type="org.eclipse.core.resources.IProject">
+      </propertyTester>
    </extension>
 
 
@@ -355,7 +362,7 @@
           <and>
             <adapt type="org.eclipse.core.resources.IProject">
               <test forcePluginActivation="true"
-                property="com.liferay.ide.project.ui.isSDKFolderProject"
+                property="com.liferay.ide.project.ui.notLiferayProjectInSDK"
                 value="true" />
             </adapt>
           </and>
