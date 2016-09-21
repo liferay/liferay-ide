@@ -55,6 +55,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -847,6 +848,28 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
+    private void deleteServiceBuilderJarFile( IProject project, IProgressMonitor monitor )
+    {
+        try
+        {
+            IFolder docrootFolder = CoreUtil.getDefaultDocrootFolder( project );
+
+            if( docrootFolder != null )
+            {
+                IFile serviceJarFile = docrootFolder.getFile( "WEB-INF/lib/" + project.getName() + "-service.jar" );
+
+                if( serviceJarFile.exists() )
+                {
+                    serviceJarFile.delete( true, monitor );
+                }
+            }
+        }
+        catch( CoreException e )
+        {
+            ProjectUI.logError( e );
+        }
+    }
+
     private void disposeBundleElement()
     {
         if( bundleNameField != null && bundleUrlField != null )
@@ -965,7 +988,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         final String descriptor =
             "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to  Liferay Workspace. \n" +
                 "We will backup your project to a zip file in your eclipse workspace directory.\n" +
-                "Click the \"import\" button to import your project into Eclipse workspace" + 
+                "Click the \"import\" button to import your project into Eclipse workspace" +
                 "(this process maybe need 5-10mins for bundle init).\n" + "Note:\n" +
                 "       In order to save time, downloading  7.0 ivy cache  locally could be a good choice to upgrade to liferay plugin sdk 7. \n" +
                 "       Theme and ext projects will be ignored for that we do not support to upgrade them  at this tool currently. \n" +
@@ -1079,6 +1102,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     if( importProject != null && importProject.isAccessible() && importProject.isOpen() )
                     {
                         checkProjectType( importProject );
+
+                        deleteServiceBuilderJarFile( importProject, monitor );
                     }
 
                     if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) ||
@@ -1105,6 +1130,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     if( importProject != null && importProject.isAccessible() && importProject.isOpen() )
                     {
                         checkProjectType( importProject );
+
+                        deleteServiceBuilderJarFile( importProject, monitor );
                     }
 
                     if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) ||
@@ -1131,7 +1158,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         builder.setValidation( false );
         builder.setFeature( "http://xml.org/sax/features/validation", false );
         builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false );
-        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false ); 
+        builder.setFeature( "http://apache.org/xml/features/nonvalidating/load-external-dtd", false );
 
         try(FileInputStream ivyInput = new FileInputStream( ivySettingFile ))
         {
