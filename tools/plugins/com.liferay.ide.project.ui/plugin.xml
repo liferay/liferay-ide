@@ -1255,14 +1255,9 @@
       />
       <command
          id="com.liferay.ide.project.ui.codeUpgrade"
-         name="Liferay Code Upgrade Tool"
-         description="Liferay Code Upgrade Tool..."
+         name="Liferay Code Upgrade"
+         description="Start Liferay Code Upgrade..."
       />
-      <!--command
-            description="Open Liferay 7 Upgrade Assistant"
-            id="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
-            name="Open Liferay 7 Upgrade Assistant">
-      </command-->
       <command
             description="Copy Portal Settings"
             id="com.liferay.ide.project.ui.upgrade.copyPortalSettings"

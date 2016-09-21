@@ -46,6 +46,7 @@
       </perspective>
       <perspective
             class="com.liferay.ide.ui.LiferayUpgradePerspectiveFactory"
+            fixed="true"
             icon="icons/liferay_logo_16.png"
             id="com.liferay.ide.eclipse.ui.perspective.liferaycodeupgrade"
             name="Liferay Code Upgrade">

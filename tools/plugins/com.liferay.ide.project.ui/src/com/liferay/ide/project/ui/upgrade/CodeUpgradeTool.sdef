@@ -9,7 +9,7 @@
 	<editor-page>
 		<id>CodeUpgradeToolPage</id>
 		<page-name>Overview</page-name>
-		<page-header-text>Liferay Code Upgrade Tool</page-header-text>
+		<page-header-text>Liferay Code Upgrade</page-header-text>
 		<initial-selection>Welcome</initial-selection>
 		<element-type>com.liferay.ide.project.core.upgrade.CodeUpgradeOp
 		</element-type>
@@ -18,7 +18,7 @@
 				<label>Welcome</label>
 				<section>
 					<content>
-						<label>Welcome to Liferay Code Upgrade Tool</label>
+						<label>Welcome to Liferay Code Upgrade</label>
 						<split-form>
                             <block>
                                 <content>

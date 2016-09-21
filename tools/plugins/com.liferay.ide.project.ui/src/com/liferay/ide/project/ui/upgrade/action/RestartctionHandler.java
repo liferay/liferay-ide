@@ -35,14 +35,14 @@ import org.eclipse.ui.ide.IDE;
 /**
  * @author Terry Jia
  */
-public class RerunActionHandler extends SapphireActionHandler
+public class RestartctionHandler extends SapphireActionHandler
 {
 
     @Override
     protected Object run( Presentation context )
     {
         Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-            UIUtil.getActiveShell(), "re-run code upgrade tool?", "Do you want to re-run the code upgrade tool?" );
+            UIUtil.getActiveShell(), "Restart code upgrade tool?", "Do you want to restart the code upgrade tool?" );
 
         if( openNewLiferayProjectWizard )
         {

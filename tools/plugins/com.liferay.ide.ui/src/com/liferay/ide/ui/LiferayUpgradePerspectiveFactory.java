@@ -36,7 +36,6 @@ public class LiferayUpgradePerspectiveFactory extends AbstractPerspectiveFactory
     private void createLayout( IPageLayout layout )
     {
         String editorArea = layout.getEditorArea();
-        layout.setEditorAreaVisible( false );
 
         IFolderLayout topLeft = layout.createFolder( "topLeft", IPageLayout.LEFT, 0.20f, editorArea );
         topLeft.addView( ID_PROJECT_EXPLORER_VIEW );
