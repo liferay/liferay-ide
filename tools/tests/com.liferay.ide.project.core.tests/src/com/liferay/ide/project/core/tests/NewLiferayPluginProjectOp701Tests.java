@@ -35,7 +35,7 @@ public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOp
 
     protected IPath getLiferayPluginsSDKZip()
     {
-        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-7.0-ga2-20160610113014153.zip" );
+        return getLiferayBundlesPath().append( "com.liferay.portal.plugins.sdk-7.0-ga3-20160804222206210.zip" );
     }
 
     protected String getLiferayPluginsSdkZipFolder()
@@ -51,17 +51,17 @@ public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOp
 
     protected IPath getLiferayRuntimeDir()
     {
-        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga2/tomcat-8.0.32" );
+        return ProjectCore.getDefault().getStateLocation().append( "liferay-ce-portal-7.0-ga3/tomcat-8.0.32" );
     }
 
     protected IPath getLiferayRuntimeZip()
     {
-        return getLiferayBundlesPath().append( "liferay-ce-portal-tomcat-7.0-ga2-20160610113014153.zip" );
+        return getLiferayBundlesPath().append( "liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip" );
     }
 
     public String getRuntimeVersion()
     {
-        return "7.0.1";
+        return "7.0.2";
     }
 
     @Override
