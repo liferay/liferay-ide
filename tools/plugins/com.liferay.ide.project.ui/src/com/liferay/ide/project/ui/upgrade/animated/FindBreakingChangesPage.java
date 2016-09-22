@@ -111,10 +111,22 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
         findBreakingchangesContainer.setLayoutData( grData );
 
-        GridData treeData = new GridData( GridData.FILL_BOTH );
-        treeData.minimumWidth = 300;
+        Composite left = new Composite( findBreakingchangesContainer, SWT.NONE );
+        GridData leftData = new GridData( GridData.FILL_BOTH );
+        leftData.grabExcessVerticalSpace = true;
+        leftData.grabExcessHorizontalSpace = true;
+        left.setLayout( new GridLayout( 1, false ) );
+        left.setLayoutData( leftData );
 
-        _treeViewer = new TreeViewer( findBreakingchangesContainer );
+        GridData treeData = new GridData( GridData.FILL_BOTH );
+        treeData.minimumWidth = 200;
+        treeData.heightHint = 150;
+
+        Composite treeCom = new Composite( left, SWT.NONE );
+        treeCom.setLayout( new GridLayout( 1, false ) );
+        treeCom.setLayoutData( leftData );
+
+        _treeViewer = new TreeViewer( treeCom );
         _treeViewer.getTree().setLayoutData( treeData );
 
         migrationContentProvider = new MigrationContentProvider();
@@ -133,7 +145,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         _treeViewer.getTree().setMenu( menu );
         _treeViewer.expandAll();
 
-        createTableView( findBreakingchangesContainer );
+        createTableView( left );
+
+        GridData middleData = new GridData( GridData.FILL_BOTH );
+        middleData.minimumWidth = 300;
+
+        _browser = new Browser( findBreakingchangesContainer, SWT.BORDER );
+        _browser.setLayout( new GridLayout( 1, false ) );
+        _browser.setLayoutData( middleData );
 
         _treeViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
@@ -351,6 +370,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         viewParent.setLayoutData( gridData );
 
         SashForm detailParent = new SashForm( viewParent, SWT.VERTICAL );
+        detailParent.setLayoutData( gridData );
 
         _problemsViewer =
             new TableViewer( detailParent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER );
@@ -364,8 +384,6 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         _problemsViewer.setComparer( null );
         _comparator = new MigratorComparator();
         _problemsViewer.setComparator( _comparator );
-
-        _browser = new Browser( detailParent, SWT.BORDER );
 
         MenuManager menuMgr = new MenuManager();
         IAction markDoneAction = new MarkDoneAction( _problemsViewer );
@@ -557,9 +575,9 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     @Override
     public String getDescriptor()
     {
-        return "This step will help you to find  breaking changes for type of java , jsp , xml and properties file.\n" +
-            "It  will not support to find the front-end codes( e.g., javascript, css). For service builder, you\n" +
-            "just need to modify the changes on xxxServiceImp.class, xxxFinder.class, xxxModel.class.\n" +
+        return "This step will help you to find  breaking changes for type of java , jsp , xml and properties file." +
+            "It  will not support to find the front-end codes( e.g., javascript, css).\n For service builder, you" +
+            "just need to modify the changes on xxxServiceImp.class, xxxFinder.class, xxxModel.class." +
             "Others will be solved at step \"Build Service\".";
     }
 
