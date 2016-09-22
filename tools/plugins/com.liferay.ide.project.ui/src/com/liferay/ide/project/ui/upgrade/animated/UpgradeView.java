@@ -343,7 +343,11 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         Page buildPage = new BuildPage( pagesSwitchControler, SWT.NONE, dataModel );
         buildPage.setIndex( 9 );
         buildPage.setTitle( "Build" );
-        buildPage.setNextPage( false );
+
+        Page summaryPage = new SummaryPage( pagesSwitchControler, SWT.NONE, dataModel );
+        summaryPage.setIndex( 10 );
+        summaryPage.setTitle( "Summary" );
+        summaryPage.setNextPage( false );
 
         staticPageList.clear();
 
@@ -356,6 +360,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         staticPageList.add( customJspPage );
         staticPageList.add( extAndThemePage );
         staticPageList.add( buildPage );
+        staticPageList.add( summaryPage );
 
         currentPageList.clear();
 
@@ -410,6 +415,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
         {
             currentPageList.add( buildPage );
+            currentPageList.add( summaryPage );
         }
 
         resetPages();
@@ -421,6 +427,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
         gear.addSelectionChangedListener( navigator );
         gear.addSelectionChangedListener( this );
+        gear.addSelectionChangedListener( (SelectionChangedListener) summaryPage );
 
         GridData navData = new GridData( GridData.FILL_HORIZONTAL );
 
