@@ -1004,7 +1004,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         {
                             createLiferayWorkspace( location, monitor );
 
-                            removeIvyPrivateSetting( location );
+                            removeIvyPrivateSetting( location.append( "plugins-sdk" ) );
 
                             newPath = renameProjectFolder( location, monitor );
 
