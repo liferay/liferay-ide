@@ -197,23 +197,19 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private static Color GRAY;
     private Label dirLabel;
     private Text dirField;
-    // private Label newProjectLabel;
-    // private Text newProjectField;
     private Combo layoutComb;
     private Label layoutLabel;
     private String[] layoutNames = { "Upgrade to Liferay SDK 7", "Use Plugin SDK In Liferay Workspace" };
     private Label serverLabel;
     private Combo serverComb;
     private Button serverButton;
-    protected Label blankLabel;
-    protected Label blankLabel2;
-    private Button importButton;
     private Button showAllPagesButton;
     private Label bundleNameLabel;
     private Label bundleUrlLabel;
     private Text bundleNameField;
-
     private Text bundleUrlField;
+    private Button backupSDK;
+    private boolean validationResult;
 
     private Composite composite;
 
@@ -381,6 +377,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void backupSDK( IProgressMonitor monitor )
     {
+        Boolean backupSdk = dataModel.getBackupSdk().content();
+
+        if ( backupSdk == false )
+        {
+            return;
+        }
+
         SubMonitor progress = SubMonitor.convert( monitor, 100 );
         try
         {
@@ -603,87 +606,23 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         createHorizontalSpacer = createHorizontalSpacer( this, 3 );
         createSeparator = createSeparator( this, 3 );
-
-        blankLabel = new Label( this, SWT.LEFT_TO_RIGHT );
-
-        importButton = SWTUtil.createButton( this, "Import Project..." );
-        importButton.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                try
-                {
-                    importButton.setEnabled( false );
-
-                    importProject();
-
-                    resetPages();
-
-                    PageNavigateEvent event = new PageNavigateEvent();
-
-                    event.setTargetPage( 2 );
-
-                    for( PageNavigatorListener listener : naviListeners )
-                    {
-                        listener.onPageNavigate( event );
-                    }
-
-                    setNextPage( true );
-                    importButton.setEnabled( true );
-                }
-                catch( CoreException ex )
-                {
-                    ProjectUI.logError( ex );
-
-                    triggerValidationEvent( ex.getMessage() );
-                }
-            }
-        } );
-
-        importButton.setEnabled( false );
     }
 
     private void createShowAllPagesElement()
     {
-        blankLabel2 = new Label( this, SWT.LEFT_TO_RIGHT );
-
-        showAllPagesButton = SWTUtil.createButton( this, "Show All Pages..." );
-        showAllPagesButton.addSelectionListener( new SelectionAdapter()
+        String backupFolderName = "Backup SDK into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
+        backupSDK = SWTUtil.createCheckButton( composite, backupFolderName, null, true, 1 );
+        backupSDK.addSelectionListener( new SelectionAdapter()
         {
 
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-                    UIUtil.getActiveShell(), "Show All Pages",
-                    "If you fail to import projects, you can click this button to finish the upgrade prossess, "+
-                    "as shown in the following steps:\n" +
-                    "   1.upgrade SDK 6.2 to SDK 7.0 manually\n" +
-                    "   or use blade cli to create a Liferay workspace for your SDK\n" +
-                    "   2.import projects you want to upgrade into Eclipse workspace\n" +
-                    "   3.choose \"yes\" to finish the following steps");
-
-                if( openNewLiferayProjectWizard )
-                {
-                    UpgradeView.resumePages();
-
-                    UpgradeView.resetPages();
-
-                    PageNavigateEvent event = new PageNavigateEvent();
-
-                    event.setTargetPage( 2 );
-
-                    for( PageNavigatorListener listener : naviListeners )
-                    {
-                        listener.onPageNavigate( event );
-                    }
-
-                    setNextPage( true );
-                }
+                    dataModel.setBackupSdk( backupSDK.getSelection() );
             }
         } );
+
+        dataModel.setBackupSdk( backupSDK.getSelection() );
     }
 
     private void createInitBundle( IProgressMonitor monitor ) throws CoreException
@@ -883,17 +822,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void disposeImportElement()
     {
-        blankLabel.dispose();
-        blankLabel2.dispose();
-        importButton.dispose();
-        showAllPagesButton.dispose();
+        backupSDK.dispose();
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
     }
 
     private void disposeLayoutElement()
     {
-        if( blankLabel != null && importButton != null && createSeparator != null && createHorizontalSpacer != null &&
+        if( backupSDK != null && createSeparator != null && createHorizontalSpacer != null &&
             serverLabel != null && serverComb != null && serverButton != null )
         {
             disposeImportElement();
@@ -911,6 +847,40 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             serverComb.dispose();
             serverButton.dispose();
         }
+    }
+
+    @Override
+    protected boolean doNextOperation()
+    {
+        boolean retVal = false;
+        try
+        {
+            Boolean importFinished = dataModel.getImportFinished().content();
+
+            if ( !importFinished )
+            {
+                if ( isPageValidate() )
+                {
+                    importProject();
+
+                    resetPages();
+
+                    retVal = true;
+                }
+            }
+            else
+            {
+                retVal = true;
+            }
+        }
+        catch( CoreException ex )
+        {
+            ProjectUI.logError( ex );
+
+            triggerValidationEvent( ex.getMessage() );
+        }
+
+        return retVal;
     }
 
     @Override
@@ -1065,6 +1035,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                             importSDKProject( sdk.getLocation(), monitor );
 
                         }
+
+                        dataModel.setImportFinished( true );
                     }
                     catch( Exception e )
                     {
@@ -1257,7 +1229,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     }
 
-    private void resetPages()
+    public void resetPages()
     {
         UpgradeView.resumePages();
 
@@ -1473,8 +1445,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 triggerValidationEvent( message );
 
-                importButton.setEnabled( layoutValidation && inputValidation );
+                validationResult = layoutValidation && inputValidation;
             }
         } );
     }
+
+    private boolean isPageValidate()
+    {
+        return validationResult;
+    }
+
 }

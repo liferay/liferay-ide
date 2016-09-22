@@ -97,9 +97,9 @@ public class LiferayLayouttplUpgradeTableViewCustomPart extends AbstractLiferayT
         }
     }
 
-    public LiferayLayouttplUpgradeTableViewCustomPart( Composite parent, int style )
+    public LiferayLayouttplUpgradeTableViewCustomPart( Composite parent, int style,  LiferayUpgradeDataModel dataModel )
     {
-        super( parent, style );
+        super( parent, style, dataModel );
 
     }
 

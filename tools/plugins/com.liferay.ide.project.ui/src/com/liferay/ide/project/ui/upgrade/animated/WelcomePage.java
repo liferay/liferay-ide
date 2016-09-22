@@ -19,6 +19,7 @@ import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.migration.MigrationProblemsContainer;
 import com.liferay.ide.project.ui.upgrade.CustomJspConverter;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -108,6 +109,42 @@ public class WelcomePage extends Page
             }
         } );
 
+        Label blankLabel2 = new Label( this, SWT.LEFT_TO_RIGHT );
+        Button showAllPagesButton = SWTUtil.createButton( this, "Show All Pages..." );
+        showAllPagesButton.addSelectionListener( new SelectionAdapter()
+        {
+
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
+                    UIUtil.getActiveShell(), "Show All Pages",
+                    "If you fail to import projects, you can click this button to finish the upgrade prossess, "+
+                    "as shown in the following steps:\n" +
+                    "   1.upgrade SDK 6.2 to SDK 7.0 manually\n" +
+                    "   or use blade cli to create a Liferay workspace for your SDK\n" +
+                    "   2.import projects you want to upgrade into Eclipse workspace\n" +
+                    "   3.choose \"yes\" to finish the following steps");
+
+                if( openNewLiferayProjectWizard )
+                {
+                    UpgradeView.resumePages();
+
+                    UpgradeView.resetPages();
+
+                    PageNavigateEvent event = new PageNavigateEvent();
+
+                    event.setTargetPage( 2 );
+
+                    for( PageNavigatorListener listener : naviListeners )
+                    {
+                        listener.onPageNavigate( event );
+                    }
+
+                    setNextPage( true );
+                }
+            }
+        } );
     }
 
     @Override
@@ -154,5 +191,4 @@ public class WelcomePage extends Page
 
         link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 1, 1 ) );
     }
-
 }

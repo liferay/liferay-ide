@@ -66,9 +66,9 @@ public class LiferayDescriptorUpgradeTableViewCustomPart extends AbstractLiferay
     private final static String SYSTEMID_REGREX =
         "^http://www.liferay.com/dtd/[-A-Za-z0-9+&@#/%?=~_()]*(\\d_\\d_\\d).dtd";
 
-    public LiferayDescriptorUpgradeTableViewCustomPart( Composite parent, int style)
+    public LiferayDescriptorUpgradeTableViewCustomPart( Composite parent, int style, LiferayUpgradeDataModel dataModel)
     {
-        super( parent, style );
+        super( parent, style, dataModel );
     }
 
     @Override

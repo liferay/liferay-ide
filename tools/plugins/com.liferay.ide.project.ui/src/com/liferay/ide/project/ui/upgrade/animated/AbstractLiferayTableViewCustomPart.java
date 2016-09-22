@@ -54,6 +54,8 @@ import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.sapphire.Property;
+import org.eclipse.sapphire.ValuePropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -77,7 +79,71 @@ import org.eclipse.swt.widgets.Table;
 public abstract class AbstractLiferayTableViewCustomPart extends Composite
 {
 
-    public AbstractLiferayTableViewCustomPart( Composite parent, int style )
+    private class LiferayUpgradeValidationListener extends org.eclipse.sapphire.Listener
+    {
+
+        @Override
+        public void handle( org.eclipse.sapphire.Event event )
+        {
+            if( event instanceof ValuePropertyContentEvent )
+            {
+                ValuePropertyContentEvent propertyEvetn = (ValuePropertyContentEvent) event;
+                final Property property = propertyEvetn.property();
+
+                if( property.name().equals( "ImportFinished" ) )
+                {
+                    IProject[] projectArrys = CoreUtil.getAllProjects();
+
+                    List<IProject> projectList = new ArrayList<IProject>();
+
+                    for( IProject project : projectArrys )
+                    {
+                        if( SDKUtil.isSDKProject( project ) )
+                        {
+                            projectList.add(project);
+                        }
+                    }
+
+                    try
+                    {
+                        final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......")
+                        {
+
+                            @Override
+                            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                            {
+                                final List<LiferayUpgradeElement> tableViewElementList = getInitItemsList( projectList, monitor );
+
+                                tableViewElements =
+                                    tableViewElementList.toArray( new LiferayUpgradeElement[tableViewElementList.size()] );
+
+                                UIUtil.async( new Runnable()
+                                {
+
+                                    @Override
+                                    public void run()
+                                    {
+                                        tableViewer.setInput( tableViewElements );
+                                    }
+                                } );
+
+                                return StatusBridge.create( Status.createOkStatus() );
+                            }
+                        };
+
+                        workspaceJob.setUser( true );
+                        workspaceJob.schedule();
+                    }
+                    catch( Exception e )
+                    {
+                        ProjectUI.logError( e );
+                    }
+                }
+            }
+        }
+    }
+
+    public AbstractLiferayTableViewCustomPart( Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
         super( parent, style );
 
@@ -139,6 +205,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
             }
         } );
 
+        dataModel.getImportFinished().attach( new LiferayUpgradeValidationListener() );
     }
 
     protected Status retval = Status.createOkStatus();
@@ -303,7 +370,6 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
             IProject project = projects.get( i );
             monitor.setTaskName( "Finding needed upgrade file for " + project.getName() );
             IFile[] upgradeFiles = getAvaiableUpgradeFiles( project );
-            /* final IPath sdkLocation1 = SDKUtil.getSDK( project ).getLocation(); */
 
             for( IFile upgradeFilePath : upgradeFiles )
             {
@@ -371,7 +437,18 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
 
     private void handleFindEvent()
     {
-        List<IProject> projects = getSelectedProjects();
+        IProject[] projectArrys = CoreUtil.getAllProjects();
+
+        List<IProject> projectList = new ArrayList<IProject>();
+
+        for( IProject project : projectArrys )
+        {
+            if( SDKUtil.isSDKProject( project ) )
+            {
+                projectList.add(project);
+            }
+        }
+
         try
         {
             final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......")
@@ -380,7 +457,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
                 @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                 {
-                    final List<LiferayUpgradeElement> tableViewElementList = getInitItemsList( projects, monitor );
+                    final List<LiferayUpgradeElement> tableViewElementList = getInitItemsList( projectList, monitor );
 
                     tableViewElements =
                         tableViewElementList.toArray( new LiferayUpgradeElement[tableViewElementList.size()] );

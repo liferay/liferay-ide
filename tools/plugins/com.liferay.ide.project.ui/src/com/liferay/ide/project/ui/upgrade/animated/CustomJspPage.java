@@ -102,6 +102,7 @@ import org.eclipse.wst.server.core.IRuntime;
  * @author Andy Wu
  * @author Simon Jiang
  */
+@SuppressWarnings( "deprecation" )
 public class CustomJspPage extends Page
 {
 

@@ -26,7 +26,6 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
-import org.eclipse.sapphire.modeling.xml.annotations.XmlBinding;
 
 /**
  * @author Simon Jiang
@@ -83,7 +82,6 @@ public interface LiferayUpgradeDataModel extends Element
 
     void setNewLocation( Path newLocation );
 
-    @XmlBinding( path = "HasHook" )
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     ValueProperty PROP_HAS_HOOK = new ValueProperty( TYPE, "HasHook" );
@@ -94,7 +92,6 @@ public interface LiferayUpgradeDataModel extends Element
 
     void setHasHook( Boolean hasHook );
 
-    @XmlBinding( path = "HasPortlet" )
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     ValueProperty PROP_HAS_PORTLET = new ValueProperty( TYPE, "HasPortlet" );
@@ -185,4 +182,22 @@ public interface LiferayUpgradeDataModel extends Element
     Value<Boolean> getConvertLiferayWorkspace();
 
     void setConvertLiferayWorkspace(Boolean convertLiferayWorkspace);
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
+    ValueProperty PROP_BACKUP_SDK = new ValueProperty( TYPE, "BackupSdk" );
+    Value<Boolean> getBackupSdk();
+
+    void setBackupSdk( String backupSdk );
+
+    void setBackupSdk( Boolean backupSdk );
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    ValueProperty PROP_IMPORT_FINISHED = new ValueProperty( TYPE, "ImportFinished" );
+    Value<Boolean> getImportFinished();
+
+    void setImportFinished( String ImportFinished );
+
+    void setImportFinished( Boolean ImportFinished );
 }

@@ -183,6 +183,12 @@ public abstract class Page extends Composite
 
     public abstract String getPageTitle();
 
+    protected boolean doNextOperation()
+    {
+        return true;
+    }
+
+
     public PageAction getSelectedAction()
     {
         return selectedAction;

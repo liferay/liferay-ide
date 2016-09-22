@@ -25,12 +25,11 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class DescriptorsPage extends Page
 {
-
     public DescriptorsPage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
         super( parent, style, dataModel, DESCRIPTORS_PAGE_ID, true );
 
-        new LiferayDescriptorUpgradeTableViewCustomPart( this, SWT.NONE );
+        new LiferayDescriptorUpgradeTableViewCustomPart( this, SWT.NONE, dataModel );
     }
 
     @Override

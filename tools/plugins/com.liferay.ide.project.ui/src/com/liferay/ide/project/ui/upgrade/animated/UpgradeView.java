@@ -177,7 +177,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         pages = currentPageList.toArray( new Page[0] );
     }
 
-    public static void resetStoreProperties()
+    public void resetStoreProperties()
     {
         codeUpgradeProperties = new Properties();
         codeUpgradeFile = null;
@@ -298,13 +298,13 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         welcomePage.setIndex( 0 );
         welcomePage.setTitle( "Welcome" );
         welcomePage.setBackPage( false );
+        welcomePage.addPageNavigateListener( gear );
 
         Page initConfigureProjectPage = new InitConfigureProjectPage( pagesSwitchControler, SWT.NONE, dataModel );
         initConfigureProjectPage.setIndex( 1 );
         initConfigureProjectPage.setTitle( "Cofigure Projects" );
         initConfigureProjectPage.addPageNavigateListener( gear );
         initConfigureProjectPage.addPageValidationListener( gear );
-        initConfigureProjectPage.setNextPage( false );
 
         Page descriptorsPage = new DescriptorsPage( pagesSwitchControler, SWT.NONE, dataModel );
         descriptorsPage.setIndex( 2 );
@@ -503,5 +503,5 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
             }
         }
     }
-
 }
+

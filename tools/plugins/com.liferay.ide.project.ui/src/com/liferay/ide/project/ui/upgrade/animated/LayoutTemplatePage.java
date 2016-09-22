@@ -34,7 +34,7 @@ public class LayoutTemplatePage extends Page
     {
         super( parent, style, dataModel, LAYOUTTEMPLATE_PAGE_ID, true );
 
-        new LiferayLayouttplUpgradeTableViewCustomPart( this, SWT.NONE );
+        new LiferayLayouttplUpgradeTableViewCustomPart( this, SWT.NONE, dataModel );
     }
 
     @Override

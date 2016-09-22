@@ -242,7 +242,11 @@ public class NavigatorControl extends AbstractCanvas implements SelectionChanged
                 {
                     event.setTargetPage( select + 1 );
 
-                    isNavigate = true;
+                    boolean doNextOperation = page.doNextOperation();
+                    if ( doNextOperation == true )
+                    {
+                        isNavigate = true;
+                    }
                 }
 
                 if( isNavigate )
