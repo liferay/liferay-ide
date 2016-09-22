@@ -219,10 +219,11 @@ public class MigrateProjectHandler extends AbstractHandler
                 {
                     final ServiceReference<Migration> sr = context.getServiceReference( Migration.class );
                     final Migration m = context.getService( sr );
+                    List<Problem> allProblems = null;
 
                     for( int j = 0; j < locations.length; j++ )
                     {
-                        List<Problem> allProblems = new ArrayList<>();
+                        allProblems = new ArrayList<>();
 
                         if( !override.isCanceled() )
                         {
@@ -240,33 +241,32 @@ public class MigrateProjectHandler extends AbstractHandler
                         MigrationProblemsContainer container = null;
                         List<MigrationProblems> migrationProblemsList = new ArrayList<MigrationProblems>();
 
+                        container = UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
+
+                        MigrationProblems[] migrationProblemsArray = null;
+
+                        if( container == null )
+                        {
+                            container = new MigrationProblemsContainer();
+                        }
+
+                        if( container.getProblemsArray() != null )
+                        {
+                            migrationProblemsArray = container.getProblemsArray();
+                        }
+
+                        if( migrationProblemsArray != null )
+                        {
+                            List<MigrationProblems> mpList = Arrays.asList( migrationProblemsArray );
+
+                            for( MigrationProblems mp : mpList )
+                            {
+                                migrationProblemsList.add( mp );
+                            }
+                        }
+
                         if( allProblems.size() > 0 )
                         {
-                            container =
-                                UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
-
-                            MigrationProblems[] migrationProblemsArray = null;
-
-                            if( container == null )
-                            {
-                                container = new MigrationProblemsContainer();
-                            }
-
-                            if( container.getProblemsArray() != null )
-                            {
-                                migrationProblemsArray = container.getProblemsArray();
-                            }
-
-                            if( migrationProblemsArray != null )
-                            {
-                                List<MigrationProblems> mpList = Arrays.asList( migrationProblemsArray );
-
-                                for( MigrationProblems mp : mpList )
-                                {
-                                    migrationProblemsList.add( mp );
-                                }
-                            }
-
                             MigrationProblems migrationProblems = new MigrationProblems();
 
                             List<FileProblems> fileProblemsList =
@@ -277,24 +277,9 @@ public class MigrateProjectHandler extends AbstractHandler
                             migrationProblems.setType( "Code Problems" );
                             migrationProblems.setSuffix( projectName[j] );
 
-                            boolean existing = false;
-                            int index = -1;
+                            int index = isAlreadyExist( migrationProblemsList, projectName, j );
 
-                            for( int i = 0; i < migrationProblemsList.size(); i++ )
-                            {
-                                UpgradeProblems upgradeProblems = migrationProblemsList.get( i );
-
-                                if( ( (MigrationProblems) upgradeProblems ).getSuffix().equals( projectName[j] ) )
-                                {
-                                    existing = true;
-
-                                    index = i;
-
-                                    break;
-                                }
-                            }
-
-                            if( existing )
+                            if( index != -1 )
                             {
                                 migrationProblemsList.set( index, migrationProblems );
                             }
@@ -303,14 +288,32 @@ public class MigrateProjectHandler extends AbstractHandler
                                 migrationProblemsList.add( migrationProblems );
                             }
 
-                            container.setProblemsArray( migrationProblemsList.toArray( new MigrationProblems[0] ) );
+                        }
+                        else
+                        {
+                            int index = isAlreadyExist( migrationProblemsList, projectName, j );
 
-                            UpgradeAssistantSettingsUtil.setObjectToStore(
-                                MigrationProblemsContainer.class, container );
+                            if( index != -1 )
+                            {
+                                migrationProblemsList.remove( index );
+                            }
                         }
 
-                        m.reportProblems( allProblems, Migration.DETAIL_LONG, "ide" );
+                        if( migrationProblemsList.size() > 0 )
+                        {
+                            container.setProblemsArray( migrationProblemsList.toArray( new MigrationProblems[0] ) );
+                            UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, container );
+                        }
+                        else
+                        {
+                            UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, null );
+                        }
+
                     }
+
+                    allProblems.add( new Problem() );
+                    m.reportProblems( allProblems, Migration.DETAIL_LONG, "ide" );
+
                 }
                 catch( Exception e )
                 {
@@ -424,6 +427,26 @@ public class MigrateProjectHandler extends AbstractHandler
         }
 
         return false;
+    }
+
+    private int isAlreadyExist(
+        List<MigrationProblems> migrationProblemsList, String[] projectName, int projectIndex )
+    {
+        int index = -1;
+
+        for( int i = 0; i < migrationProblemsList.size(); i++ )
+        {
+            UpgradeProblems upgradeProblems = migrationProblemsList.get( i );
+
+            if( ( (MigrationProblems) upgradeProblems ).getSuffix().equals( projectName[projectIndex] ) )
+            {
+                index = i;
+
+                break;
+            }
+        }
+
+        return index;
     }
 
 }
