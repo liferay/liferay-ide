@@ -64,6 +64,7 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -151,7 +152,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         middleData.minimumWidth = 300;
 
         _browser = new Browser( findBreakingchangesContainer, SWT.BORDER );
-        _browser.setLayout( new GridLayout( 1, false ) );
+        _browser.setLayout( new FillLayout() );
         _browser.setLayoutData( middleData );
 
         _treeViewer.addSelectionChangedListener( new ISelectionChangedListener()
