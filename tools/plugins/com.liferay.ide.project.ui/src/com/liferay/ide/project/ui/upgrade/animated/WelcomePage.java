@@ -65,7 +65,7 @@ public class WelcomePage extends Page
             {
                 boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
                     UIUtil.getActiveShell(), "Restart code upgrade?",
-                    "All previous The configuration files will be deleted. Do you want to restart the code upgrade tool?" );
+                    "All previous configuration files will be deleted. Do you want to restart the code upgrade tool?" );
 
                 if( openNewLiferayProjectWizard )
                 {

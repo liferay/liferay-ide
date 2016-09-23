@@ -87,14 +87,61 @@ public class BuildPage extends Page
                 final TableViewElement tableViewElement = (TableViewElement) selection.getFirstElement();
                 final String projectName = tableViewElement.projectName;
                 final IProject project = ProjectUtil.getProject( projectName );
-                final IProject[] selectProjects = new IProject[] { project };
 
                 Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
                     UIUtil.getActiveShell(), "Build Project", "Do you want to build this project again?" );
 
                 if( openNewLiferayProjectWizard )
                 {
-                    buildProjects( selectProjects );
+                    final WorkspaceJob workspaceJob = new WorkspaceJob( "Build Project......" )
+                    {
+
+                        @Override
+                        public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                        {
+                            monitor.beginTask( "Start to build project......", 100 );
+                            monitor.setTaskName( "Build " + projectName + " Project..." );
+                            monitor.worked( 100 );
+
+                            if( monitor.isCanceled() )
+                            {
+                                return StatusBridge.create( Status.createOkStatus() );
+                            }
+
+                            boolean buildFlag = getBuildStatus( monitor, project );
+
+                            for( int i = 0; i < tableViewElements.length; i++ )
+                            {
+                                if( tableViewElements[i].projectName == projectName )
+                                {
+                                    if( buildFlag )
+                                    {
+                                        tableViewElements[i].buildStatus = "Build Successful";
+                                    }
+                                    else
+                                    {
+                                        tableViewElements[i].buildStatus = "Build Failed";
+                                    }
+                                }
+                            }
+
+                            UIUtil.async( new Runnable()
+                            {
+
+                                @Override
+                                public void run()
+                                {
+                                    tableViewer.setInput( tableViewElements );
+                                    tableViewer.refresh();
+                                }
+                            } );
+                            return StatusBridge.create( Status.createOkStatus() );
+                        }
+                    };
+
+                    workspaceJob.setUser( true );
+                    workspaceJob.schedule();
+
                 }
             }
         } );
@@ -129,28 +176,22 @@ public class BuildPage extends Page
             public Image getImage( Object element )
             {
                 TableViewElement tableViewElement = (TableViewElement) element;
-                if( tableViewElement.buildStatus )
+                if( tableViewElement.buildStatus.equals( "Build Successful" ) )
                 {
                     return imageSuccess;
                 }
-                else
+                else if( tableViewElement.buildStatus.equals( "Build Failed" ) )
                 {
                     return imageFail;
                 }
+                return null;
             }
 
             @Override
             public String getText( Object element )
             {
                 TableViewElement tableViewElement = (TableViewElement) element;
-                if( tableViewElement.buildStatus )
-                {
-                    return "build successful";
-                }
-                else
-                {
-                    return "build failed";
-                }
+                return tableViewElement.buildStatus;
             }
         } );
 
@@ -169,9 +210,7 @@ public class BuildPage extends Page
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                final List<IProject> selectProjectList = getSelectedProjects();
-                final IProject[] selectProjects = selectProjectList.toArray( new IProject[selectProjectList.size()] );
-                buildProjects( selectProjects );
+                buildProjects();
             }
         } );
     }
@@ -184,10 +223,11 @@ public class BuildPage extends Page
 
     class TableViewElement
     {
-        public String projectName;
-        public boolean buildStatus;
 
-        public TableViewElement( String projectName, boolean buildStatus )
+        public String projectName;
+        public String buildStatus;
+
+        public TableViewElement( String projectName, String buildStatus )
         {
             this.projectName = projectName;
             this.buildStatus = buildStatus;
@@ -219,8 +259,10 @@ public class BuildPage extends Page
         }
     }
 
-    private void buildProjects( IProject[] selectProjects )
+    private void buildProjects()
     {
+        final List<IProject> selectProjectList = getSelectedProjects();
+        final IProject[] selectProjects = selectProjectList.toArray( new IProject[selectProjectList.size()] );
         createImages();
 
         try
@@ -245,41 +287,9 @@ public class BuildPage extends Page
 
                     for( int i = 0; i < count; i++ )
                     {
-                        monitor.worked( i + 1 * unit );
-
-                        if( monitor.isCanceled() )
-                        {
-                            break;
-                        }
-                        if( i == count - 1 )
-                        {
-                            monitor.worked( 100 );
-                        }
-
                         final IProject project = selectProjects[i];
                         final String projectName = project.getName();
-
-                        monitor.setTaskName( "Build " + projectName + " Project..." );
-
-                        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
-                        IPath outputBundlepath = null;
-
-                        try
-                        {
-                            outputBundlepath = bundleProject.getOutputBundle( true, monitor );
-                        }
-                        catch( Exception e )
-                        {
-                        }
-
-                        boolean buildStatus = false;
-
-                        if( outputBundlepath != null && !outputBundlepath.isEmpty() )
-                        {
-                            buildStatus = true;
-                        }
-
-                        TableViewElement tableViewElement = new TableViewElement( projectName, buildStatus );
+                        TableViewElement tableViewElement = new TableViewElement( projectName, "Not Build" );
                         tableViewElementList.add( tableViewElement );
                     }
 
@@ -296,6 +306,50 @@ public class BuildPage extends Page
                         }
                     } );
 
+                    for( int i = 0; i < count; i++ )
+                    {
+                        monitor.worked( i + 1 * unit );
+
+                        if( monitor.isCanceled() )
+                        {
+                            break;
+                        }
+                        if( i == count - 1 )
+                        {
+                            monitor.worked( 100 );
+                        }
+
+                        TableViewElement viewElement = tableViewElementList.get( i );
+                        final String projectName = viewElement.projectName;
+
+                        final IProject project = ProjectUtil.getProject( projectName );
+
+                        monitor.setTaskName( "Build " + projectName + " Project..." );
+
+                        boolean buildFlag = getBuildStatus( monitor, project );
+
+                        if( buildFlag )
+                        {
+                            viewElement.buildStatus = "Build Successful";
+                        }
+                        else
+                        {
+                            viewElement.buildStatus = "Build Failed";
+                        }
+
+                        UIUtil.async( new Runnable()
+                        {
+
+                            @Override
+                            public void run()
+                            {
+                                tableViewElements =
+                                    tableViewElementList.toArray( new TableViewElement[tableViewElementList.size()] );
+                                tableViewer.setInput( tableViewElements );
+                                tableViewer.refresh();
+                            }
+                        } );
+                    }
                     return StatusBridge.create( Status.createOkStatus() );
                 }
             };
@@ -325,6 +379,25 @@ public class BuildPage extends Page
 
         imageFail = JFaceResources.getImage( Dialog.DLG_IMG_MESSAGE_ERROR );
 
+    }
+
+    private boolean getBuildStatus( IProgressMonitor monitor, IProject project )
+    {
+        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+        IPath outputBundlepath = null;
+        try
+        {
+            outputBundlepath = bundleProject.getOutputBundle( true, monitor );
+        }
+        catch( Exception e )
+        {
+        }
+        if( outputBundlepath != null && !outputBundlepath.isEmpty() )
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private List<IProject> getSelectedProjects()
