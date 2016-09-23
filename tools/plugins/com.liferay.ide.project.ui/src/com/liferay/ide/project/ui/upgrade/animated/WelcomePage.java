@@ -178,12 +178,11 @@ public class WelcomePage extends Page
                 "Note:\n" +
                 "       It is highly recommended that you make back-up copies of your important files.\n" +
                 "       Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
-                "       For more details, please see <a>From Liferay 6 to Liferay 7</a>.\n\n" +
+                "       For more details, please see <a>From Liferay 6 to Liferay 7</a>.\n" +
                 "Instructions:\n" +
                 "       In order to move through various upgarde steps,\n" +
                 "       use left, right, ✓, X and clicking on each gear to move between the upgrade steps.\n" +
-                "       What's more, you can mark with ✓ when one step is well done and\n" +
-                "       mark with X when you are not yet complete or it failed.";
+                "       What's more, you can mark with ✓ when one step is well done and mark with X when you are not yet complete or it failed.";
 
         String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
 

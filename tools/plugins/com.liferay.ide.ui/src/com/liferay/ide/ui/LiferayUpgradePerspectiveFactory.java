@@ -44,15 +44,17 @@ public class LiferayUpgradePerspectiveFactory extends AbstractPerspectiveFactory
         topLeft.addPlaceholder( JavaUI.ID_TYPE_HIERARCHY );
         topLeft.addPlaceholder( JavaUI.ID_PACKAGES_VIEW );
 
-        layout.addStandaloneView( ID_LIFERAY_UPGRADE_VIEW, false, IPageLayout.TOP, 0.75f, editorArea );
+        IFolderLayout center = layout.createFolder( "center", IPageLayout.TOP, 0.80f, editorArea );
+        center.addView( ID_LIFERAY_UPGRADE_VIEW );
 
-        IFolderLayout bottom = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.05f, editorArea );
+        IFolderLayout bottom = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.20f, editorArea );
 
         bottom.addPlaceholder( ID_MARKERS_VIEW );
         bottom.addPlaceholder( ID_CONSOLE_VIEW );
         bottom.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
         bottom.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
         bottom.addPlaceholder( ID_SEARCH_VIEW );
+
     }
 
 }

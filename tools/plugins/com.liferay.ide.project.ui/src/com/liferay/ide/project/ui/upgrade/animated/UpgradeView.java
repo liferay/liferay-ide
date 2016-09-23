@@ -39,6 +39,7 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.Property;
 import org.eclipse.sapphire.ValuePropertyContentEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -242,7 +243,11 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
     {
         createActions();
 
-        Composite container = this.toolkit.createComposite( parent, 0 );
+        ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+        scrolledComposite.setExpandHorizontal(true);
+        scrolledComposite.setExpandVertical(true);
+
+        Composite container = this.toolkit.createComposite( scrolledComposite, 0 );
         this.toolkit.paintBordersFor( container );
         container.setLayout( new FillLayout() );
 
@@ -425,6 +430,9 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
         navigator.setLayoutData( navData );
         navigator.setBackground( backgroundColor );
+
+        scrolledComposite.setContent(container);
+        scrolledComposite.setMinSize(container.computeSize(SWT.DEFAULT, 670));
 
         setSelectPage( 0 );
     }
