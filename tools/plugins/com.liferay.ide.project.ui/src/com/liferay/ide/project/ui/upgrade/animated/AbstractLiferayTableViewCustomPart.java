@@ -147,7 +147,12 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
     {
         super( parent, style );
 
-        this.setLayout( new GridLayout( 2, false ) );
+        GridLayout layout = new GridLayout( 2, false );
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+
+        this.setLayout( layout );
+
         final GridData descData = new GridData( GridData.FILL_BOTH );
         descData.grabExcessVerticalSpace = true;
         descData.grabExcessHorizontalSpace = true;

@@ -32,6 +32,7 @@ import com.liferay.ide.project.ui.migration.MigratorComparator;
 import com.liferay.ide.project.ui.migration.ProblemsContainer;
 import com.liferay.ide.project.ui.migration.RemoveAction;
 import com.liferay.ide.project.ui.migration.RunMigrationToolAction;
+import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.IOException;
@@ -60,7 +61,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -103,31 +103,16 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     {
         super( parent, style, dataModel, FINDBREACKINGCHANGES_PAGE_ID, true );
 
-        final Composite findBreakingchangesContainer = new Composite( this, SWT.NONE );
-        findBreakingchangesContainer.setLayout( new GridLayout( 3, false ) );
+        final Composite findBreakingchangesContainer = SWTUtil.createComposite( this, 3, 1, GridData.FILL_BOTH, 0, 0 );
 
-        GridData grData = new GridData( GridData.FILL_BOTH );
-        grData.grabExcessVerticalSpace = true;
-        grData.grabExcessHorizontalSpace = true;
-
-        findBreakingchangesContainer.setLayoutData( grData );
-
-        Composite left = new Composite( findBreakingchangesContainer, SWT.NONE );
-        GridData leftData = new GridData( GridData.FILL_BOTH );
-        leftData.grabExcessVerticalSpace = true;
-        leftData.grabExcessHorizontalSpace = true;
-        left.setLayout( new GridLayout( 1, false ) );
-        left.setLayoutData( leftData );
+        Composite left = SWTUtil.createComposite( findBreakingchangesContainer, 1, 1, GridData.FILL_BOTH, 0, 0 );
 
         GridData treeData = new GridData( GridData.FILL_BOTH );
         treeData.minimumWidth = 200;
         treeData.heightHint = 150;
 
-        Composite treeCom = new Composite( left, SWT.NONE );
-        treeCom.setLayout( new GridLayout( 1, false ) );
-        treeCom.setLayoutData( leftData );
+        _treeViewer = new TreeViewer( left );
 
-        _treeViewer = new TreeViewer( treeCom );
         _treeViewer.getTree().setLayoutData( treeData );
 
         migrationContentProvider = new MigrationContentProvider();
@@ -353,28 +338,13 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
     public void createTableView( Composite container )
     {
-        final Composite parent = new Composite( container, SWT.NONE );
-        GridData parentData = new GridData( GridData.FILL_BOTH );
-        parentData.grabExcessVerticalSpace = true;
-        parentData.grabExcessHorizontalSpace = true;
-
-        parent.setLayout( new GridLayout( 1, false ) );
-        parent.setLayoutData( parentData );
-
-        SashForm viewParent = new SashForm( parent, SWT.HORIZONTAL );
-
-        viewParent.setLayout( new GridLayout( 1, false ) );
-
         GridData gridData = new GridData( GridData.FILL_BOTH );
         gridData.minimumWidth = 300;
 
-        viewParent.setLayoutData( gridData );
-
-        SashForm detailParent = new SashForm( viewParent, SWT.VERTICAL );
-        detailParent.setLayoutData( gridData );
-
         _problemsViewer =
-            new TableViewer( detailParent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER );
+            new TableViewer( container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER );
+
+        _problemsViewer.getTable().setLayoutData( gridData );
 
         createColumns( _problemsViewer );
 

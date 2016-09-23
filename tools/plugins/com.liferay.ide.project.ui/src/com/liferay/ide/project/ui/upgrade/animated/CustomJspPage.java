@@ -648,7 +648,11 @@ public class CustomJspPage extends Page
 
         SashForm sashForm = new SashForm( this, SWT.HORIZONTAL | SWT.H_SCROLL );
 
-        sashForm.setLayout( new GridLayout( 1, false ) );
+        GridLayout sashLayout = new GridLayout( 1, false );
+        sashLayout.marginHeight = 0;
+        sashLayout.marginWidth = 0;
+
+        sashForm.setLayout( sashLayout );
 
         GridData sashFormLayoutData = new GridData( GridData.FILL_BOTH );
 
@@ -729,9 +733,13 @@ public class CustomJspPage extends Page
     {
         ScrolledComposite leftContainer = new ScrolledComposite( parent, SWT.H_SCROLL | SWT.V_SCROLL );
 
-        Composite leftPart = SWTUtil.createComposite( leftContainer, 1, 0, GridData.FILL_BOTH );
+        Composite leftPart = SWTUtil.createComposite( leftContainer, 1, 1, GridData.FILL_BOTH, 0, 0 );
 
-        leftContainer.setLayout( new FillLayout() );
+        FillLayout layout = new FillLayout();
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+
+        leftContainer.setLayout( layout );
         leftContainer.setMinSize( 410, 200 );
         leftContainer.setExpandHorizontal( true );
         leftContainer.setExpandVertical( true );
@@ -802,9 +810,13 @@ public class CustomJspPage extends Page
     {
         ScrolledComposite rightContainer = new ScrolledComposite( parent, SWT.H_SCROLL | SWT.V_SCROLL );
 
-        Composite rightPart = SWTUtil.createComposite( rightContainer, 1, 0, GridData.FILL_BOTH );
+        Composite rightPart = SWTUtil.createComposite( rightContainer, 1, 1, GridData.FILL_BOTH, 0, 0 );
 
-        rightContainer.setLayout( new FillLayout() );
+        FillLayout layout = new FillLayout();
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+
+        rightContainer.setLayout( layout );
         rightContainer.setMinSize( 410, 200 );
         rightContainer.setExpandHorizontal( true );
         rightContainer.setExpandVertical( true );
