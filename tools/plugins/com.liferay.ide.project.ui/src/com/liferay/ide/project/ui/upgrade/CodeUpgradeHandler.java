@@ -23,6 +23,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IPerspectiveRegistry;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
@@ -44,7 +45,12 @@ public class CodeUpgradeHandler extends AbstractHandler
         {
             IPerspectiveRegistry reg = workbench.getPerspectiveRegistry();
             window.getActivePage().setPerspective( reg.findPerspectiveWithId( LiferayUpgradePerspectiveFactory.ID ) );
-            UIUtil.showView( UpgradeView.ID );
+            IViewPart showView = UIUtil.showView( UpgradeView.ID );
+
+            if( showView != null )
+            {
+                showView.setFocus();
+            }
         }
 
         return null;
