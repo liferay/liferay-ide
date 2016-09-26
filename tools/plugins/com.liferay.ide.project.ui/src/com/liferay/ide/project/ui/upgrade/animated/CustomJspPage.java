@@ -217,29 +217,7 @@ public class CustomJspPage extends Page
 
             if( html.exists() && html.isDirectory() )
             {
-                IWorkspaceRoot ws = CoreUtil.getWorkspaceRoot();
-
-                final IResource[] containers = ws.findContainersForLocationURI( file.toURI() );
-
-                IResource resource = null;
-
-                for( IResource container : containers )
-                {
-                    if( resource == null )
-                    {
-                        resource = container;
-                    }
-                    else
-                    {
-                        if( container.getProjectRelativePath().segmentCount() <
-                                        resource.getProjectRelativePath().segmentCount() )
-                        {
-                            resource = container;
-                        }
-                    }
-                }
-
-                return resource.getProject().getName();
+                return getProject( html ).getName();
             }
             else
             {
@@ -885,9 +863,8 @@ public class CustomJspPage extends Page
     private String[] get62FilePaths( File file )
     {
         String filePath = file.getAbsolutePath();
-        IFile iFile = CoreUtil.getWorkspaceRoot().getFileForLocation( Path.fromOSString( filePath ) );
 
-        IProject project = iFile.getProject();
+        IProject project = getProject( file );
 
         String projectPath = project.getLocation().toOSString();
 
@@ -915,11 +892,7 @@ public class CustomJspPage extends Page
 
     private String[] get70FilePaths( File file )
     {
-        String filePath = file.getAbsolutePath();
-
-        IFile iFile = CoreUtil.getWorkspaceRoot().getFileForLocation( Path.fromOSString( filePath ) );
-
-        IFolder resourceFolder = iFile.getProject().getFolder( staticPath );
+        IFolder resourceFolder = getProject(file).getFolder( staticPath );
 
         java.nio.file.Path resourcePath = resourceFolder.getLocation().toFile().toPath();
 
@@ -1232,6 +1205,32 @@ public class CustomJspPage extends Page
     public String getPageTitle()
     {
         return "Convert Custom JSP Hooks";
+    }
+
+    private IProject getProject( File file )
+    {
+        IWorkspaceRoot ws = CoreUtil.getWorkspaceRoot();
+
+        final IResource[] containers = ws.findContainersForLocationURI( file.toURI() );
+
+        IResource resource = null;
+
+        for( IResource container : containers )
+        {
+            if( resource == null )
+            {
+                resource = container;
+            }
+            else
+            {
+                if( container.getProjectRelativePath().segmentCount() < resource.getProjectRelativePath().segmentCount() )
+                {
+                    resource = container;
+                }
+            }
+        }
+
+        return resource.getProject();
     }
 
 }
