@@ -15,7 +15,9 @@
 
 package com.liferay.ide.project.ui.upgrade;
 
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
 import com.liferay.ide.ui.LiferayUpgradePerspectiveFactory;
+import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -42,6 +44,7 @@ public class CodeUpgradeHandler extends AbstractHandler
         {
             IPerspectiveRegistry reg = workbench.getPerspectiveRegistry();
             window.getActivePage().setPerspective( reg.findPerspectiveWithId( LiferayUpgradePerspectiveFactory.ID ) );
+            UIUtil.showView( UpgradeView.ID );
         }
 
         return null;
