@@ -592,19 +592,25 @@ public class ServerUtil
                 {
                     File dirFile = portalBundle.getOSGiBundlesDir().append( dir ).toFile();
 
-                    File[] files = dirFile.listFiles( new FilenameFilter()
+                    if(dirFile.exists())
                     {
-
-                        @Override
-                        public boolean accept( File dir, String name )
+                        File[] files = dirFile.listFiles( new FilenameFilter()
                         {
-                            return name.matches( ".*\\.web\\.jar" );
-                        }
-                    } );
 
-                    for( File file : files )
-                    {
-                        bundles.add( file.getName() );
+                            @Override
+                            public boolean accept( File dir, String name )
+                            {
+                                return name.matches( ".*\\.web\\.jar" );
+                            }
+                        } );
+
+                        if( files != null && files.length > 0 )
+                        {
+                            for( File file : files )
+                            {
+                                bundles.add( file.getName() );
+                            }
+                        }
                     }
                 }
             }

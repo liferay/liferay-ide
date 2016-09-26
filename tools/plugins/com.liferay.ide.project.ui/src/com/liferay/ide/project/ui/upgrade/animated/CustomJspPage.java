@@ -97,6 +97,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.wst.server.core.IServer;
 
 /**
  * @author Andy Wu
@@ -1013,7 +1014,16 @@ public class CustomJspPage extends Page
     {
         String serverName = dataModel.getLiferayServerName().content();
 
-        return ServerUtil.getServer( serverName ).getRuntime();
+        IServer server = ServerUtil.getServer( serverName );
+
+        if( server != null )
+        {
+            return server.getRuntime();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     private File[] getRightTreeInputs()
