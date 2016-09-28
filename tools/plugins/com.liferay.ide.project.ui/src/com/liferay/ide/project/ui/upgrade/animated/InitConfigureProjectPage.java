@@ -248,21 +248,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setSdkLocation( dirField.getText() );
-                SDK sdk = SDKUtil.createSDKFromLocation( new Path( dirField.getText() ) );
-
-                try
-                {
-                    if( sdk != null )
-                    {
-                        final String liferay62ServerLocation = (String) ( sdk.getBuildProperties( true ).get(
-                            ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR ) );
-                        dataModel.setLiferay62ServerLocation( liferay62ServerLocation );
-                    }
-                }
-                catch( Exception xe )
-                {
-                    ProjectUI.logError( xe );
-                }
             }
         } );
 
@@ -522,18 +507,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         bundleNameLabel = createLabel( composite, "Bundle Name:" );
         bundleNameField = createTextField( composite, SWT.NONE );
+
         bundleNameField.addModifyListener( new ModifyListener()
         {
 
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setBundleName( bundleNameField.getText() );
-                dataModel.setLiferayServerName( bundleNameField.getText() );
             }
         } );
 
         dataModel.setBundleName( bundleNameField.getText() );
-        dataModel.setLiferayServerName( bundleNameField.getText() );
 
         bundleUrlLabel = createLabel( composite, "Bundle URL:" );
         bundleUrlField = createTextField( composite, SWT.NONE );
@@ -723,25 +707,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         serverComb = new Combo( composite, SWT.DROP_DOWN | SWT.READ_ONLY );
         serverComb.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
 
-        serverComb.addSelectionListener( new SelectionListener()
-        {
-
-            @Override
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-            }
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                if( e.getSource().equals( serverComb ) )
-                {
-                    dataModel.setLiferayServerName( serverComb.getText() );
-                }
-
-            }
-        } );
-
         serverButton = SWTUtil.createButton( composite, "Add Server..." );
         serverButton.addSelectionListener( new SelectionAdapter()
         {
@@ -771,7 +736,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         serverComb.setItems( serverNames.toArray( new String[serverNames.size()] ) );
         serverComb.select( 0 );
-        dataModel.setLiferayServerName( serverComb.getText() );
     }
 
     private void deleteEclipseConfigFiles( File project )
@@ -856,6 +820,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     protected boolean doNextOperation()
     {
         boolean retVal = false;
+
         try
         {
             Boolean importFinished = dataModel.getImportFinished().content();
@@ -864,6 +829,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             {
                 if ( isPageValidate() )
                 {
+                    saveSettings();
+
                     importProject();
 
                     resetPages();
@@ -1021,7 +988,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                             removeIvyPrivateSetting( location );
 
-                            String serverName = dataModel.getLiferayServerName().content();
+                            String serverName = dataModel.getLiferay70ServerName().content();
 
                             IServer server = ServerUtil.getServer( serverName );
 
@@ -1259,6 +1226,35 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         UpgradeView.resetPages();
     }
 
+    private void saveSettings()
+    {
+        if( bundleNameField != null && !bundleNameField.isDisposed() )
+        {
+            dataModel.setLiferay70ServerName( bundleNameField.getText() );
+        }
+
+        if( serverComb != null && !serverComb.isDisposed() )
+        {
+            dataModel.setLiferay70ServerName( serverComb.getText() );
+        }
+
+        SDK sdk = SDKUtil.createSDKFromLocation( new Path( dirField.getText() ) );
+
+        try
+        {
+            if( sdk != null )
+            {
+                final String liferay62ServerLocation =
+                    (String) ( sdk.getBuildProperties( true ).get( ISDKConstants.PROPERTY_APP_SERVER_PARENT_DIR ) );
+                dataModel.setLiferay62ServerLocation( liferay62ServerLocation );
+            }
+        }
+        catch( Exception xe )
+        {
+            ProjectUI.logError( xe );
+        }
+    }
+
     private void saveXML( File templateFile, Document doc ) throws CoreException
     {
         XMLOutputter out = new XMLOutputter();
@@ -1305,7 +1301,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         serverComb.select( serverList.size() - 1 );
                     }
 
-                    dataModel.setLiferayServerName( serverComb.getText() );
                     startCheckThread();
 
                 }
@@ -1343,7 +1338,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     }
                     serverComb.setItems( serverList.toArray( new String[serverList.size()] ) );
                     serverComb.select( 0 );
-                    dataModel.setLiferayServerName( serverComb.getText() );
 
                     startCheckThread();
                 }

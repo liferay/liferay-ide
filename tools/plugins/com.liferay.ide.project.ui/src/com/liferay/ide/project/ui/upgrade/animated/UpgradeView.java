@@ -16,22 +16,13 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.LiferayUpgradePerspectiveFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.sapphire.Event;
@@ -77,9 +68,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
     private static Page[] pages = null;
 
-    private static Properties codeUpgradeProperties;
-    private static File codeUpgradeFile;
-
     private Action closeAction;
 
     private final FormToolkit toolkit = new FormToolkit( Display.getCurrent() );
@@ -101,7 +89,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
                 ValuePropertyContentEvent propertyEvetn = (ValuePropertyContentEvent) event;
                 final Property property = propertyEvetn.property();
 
-                storeProperty( property.name(), property.toString() );
+                UpgradeSettingsUtil.storeProperty( property.name(), property.toString() );
             }
         }
     }
@@ -119,39 +107,11 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         dataModel.getHasServiceBuilder().attach( new LiferayUpgradeStoreListener() );
         dataModel.getHasTheme().attach( new LiferayUpgradeStoreListener() );
         dataModel.getHasWeb().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getBundleName().attach( new LiferayUpgradeStoreListener() );
         dataModel.getBundleUrl().attach( new LiferayUpgradeStoreListener() );
+        dataModel.getLiferay70ServerName().attach( new LiferayUpgradeStoreListener() );
         dataModel.getLiferay62ServerLocation().attach( new LiferayUpgradeStoreListener() );
 
-        final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
-
-        File stateDir = stateLocation.toFile();
-
-        codeUpgradeFile = new File( stateDir, "liferay-code-upgrade.properties" );
-
-        if( !codeUpgradeFile.exists() )
-        {
-            try
-            {
-                codeUpgradeFile.createNewFile();
-            }
-            catch( IOException e1 )
-            {
-            }
-        }
-
-        if( codeUpgradeProperties == null )
-        {
-            codeUpgradeProperties = new Properties();
-
-            try(InputStream in = new FileInputStream( codeUpgradeFile ))
-            {
-                codeUpgradeProperties.load( in );
-            }
-            catch( Exception e )
-            {
-            }
-        }
+        UpgradeSettingsUtil.init();
     }
 
     public static void resumePages()
@@ -178,12 +138,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         pages = currentPageList.toArray( new Page[0] );
     }
 
-    public void resetStoreProperties()
-    {
-        codeUpgradeProperties = new Properties();
-        codeUpgradeFile = null;
-    }
-
     public static int getPageNumber()
     {
         return pages.length;
@@ -196,20 +150,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         stackLayout.topControl = pages[i];
 
         pagesSwitchControler.layout();
-    }
-
-
-    public void storeProperty( Object key, Object value )
-    {
-        codeUpgradeProperties.setProperty( String.valueOf( key ), String.valueOf( value ) );
-
-        try(OutputStream out = new FileOutputStream( codeUpgradeFile ))
-        {
-            codeUpgradeProperties.store( out, "" );
-        }
-        catch( Exception e )
-        {
-        }
     }
 
     public static Page getPage( int i )
@@ -366,21 +306,27 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
         currentPageList.add( welcomePage );
         currentPageList.add( initConfigureProjectPage );
-        //currentPageList.addAll( staticPageList );
 
-        String liferay62ServerLocation = codeUpgradeProperties.getProperty( "Liferay62ServerLocation" );
+        // restore settings
+        String liferay70ServerName = UpgradeSettingsUtil.getProperty( "Liferay70ServerName" );
+        String liferay62ServerLocation = UpgradeSettingsUtil.getProperty( "Liferay62ServerLocation" );
 
         if( !CoreUtil.isNullOrEmpty( liferay62ServerLocation ) )
         {
             dataModel.setLiferay62ServerLocation( liferay62ServerLocation );
         }
 
-        boolean hasPortlet = Boolean.parseBoolean( codeUpgradeProperties.getProperty( "HasPortlet", "false" ) );
-        boolean hasServiceBuilder = Boolean.parseBoolean( codeUpgradeProperties.getProperty( "HasServiceBuilder", "false" ) );
-        boolean hasHook = Boolean.parseBoolean( codeUpgradeProperties.getProperty( "HasHook", "false" ) );
-        boolean hasLayout = Boolean.parseBoolean( codeUpgradeProperties.getProperty( "HasLayout", "false" ) );
-        boolean hasTheme = Boolean.parseBoolean( codeUpgradeProperties.getProperty( "HasTheme", "false" ) );
-        boolean hasExt = Boolean.parseBoolean( codeUpgradeProperties.getProperty( "HasExt", "false" ) );
+        if( !CoreUtil.isNullOrEmpty( liferay70ServerName ) )
+        {
+            dataModel.setLiferay70ServerName( liferay70ServerName );
+        }
+
+        boolean hasPortlet = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasPortlet", "false" ) );
+        boolean hasServiceBuilder = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasServiceBuilder", "false" ) );
+        boolean hasHook = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasHook", "false" ) );
+        boolean hasLayout = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasLayout", "false" ) );
+        boolean hasTheme = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasTheme", "false" ) );
+        boolean hasExt = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasExt", "false" ) );
 
         if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
         {

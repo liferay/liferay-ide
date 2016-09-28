@@ -53,7 +53,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -103,7 +102,6 @@ import org.eclipse.wst.server.core.IServer;
  * @author Andy Wu
  * @author Simon Jiang
  */
-@SuppressWarnings( "deprecation" )
 public class CustomJspPage extends Page
 {
 
@@ -1012,7 +1010,7 @@ public class CustomJspPage extends Page
 
     private IRuntime getLiferay70Runtime()
     {
-        String serverName = dataModel.getLiferayServerName().content();
+        String serverName = dataModel.getLiferay70ServerName().content();
 
         IServer server = ServerUtil.getServer( serverName );
 

@@ -59,11 +59,11 @@ public interface LiferayUpgradeDataModel extends Element
 
     void setLayout( String Layout );
 
-    ValueProperty PROP_LIFERAY_SERVER_NAME = new ValueProperty( TYPE, "LiferayServerName" );
+    ValueProperty PROP_LIFERAY_70_SERVER_NAME = new ValueProperty( TYPE, "Liferay70ServerName" );
 
-    Value<String> getLiferayServerName();
+    Value<String> getLiferay70ServerName();
 
-    void setLiferayServerName( String value );
+    void setLiferay70ServerName( String value );
 
     ValueProperty PROP_LIFERAY_62_SERVER_LOCATION = new ValueProperty( TYPE, "Liferay62ServerLocation" );
 

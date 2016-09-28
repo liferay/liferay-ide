@@ -144,6 +144,11 @@ public abstract class Page extends Composite
         return text;
     }
 
+    protected boolean doNextOperation()
+    {
+        return true;
+    }
+
     @Override
     public boolean equals( Object obj )
     {
@@ -183,12 +188,6 @@ public abstract class Page extends Composite
     }
 
     public abstract String getPageTitle();
-
-    protected boolean doNextOperation()
-    {
-        return true;
-    }
-
 
     public PageAction getSelectedAction()
     {
