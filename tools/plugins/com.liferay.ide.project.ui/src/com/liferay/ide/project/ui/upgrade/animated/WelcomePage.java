@@ -49,7 +49,7 @@ public class WelcomePage extends Page
 {
 
     @SuppressWarnings( "unused" )
-    public WelcomePage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
+    public WelcomePage( final Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
         super( parent, style, dataModel, WELCOME_PAGE_ID, false );
 
@@ -132,14 +132,18 @@ public class WelcomePage extends Page
 
                     PageNavigateEvent event = new PageNavigateEvent();
 
-                    event.setTargetPage( 2 );
+                    event.setTargetPage( 1 );
 
                     for( PageNavigatorListener listener : naviListeners )
                     {
                         listener.onPageNavigate( event );
                     }
 
-                    setNextPage( true );
+                    InitConfigureProjectPage importPage = UpgradeView.getPage( INIT_CONFIGURE_PROJECT_PAGE_ID,  InitConfigureProjectPage.class );
+                    importPage.setNextPage( true );
+
+                    dataModel.setImportFinished( true );
+
                 }
             }
         } );
@@ -163,7 +167,7 @@ public class WelcomePage extends Page
         return "Welcome to Liferay Code Upgrade";
     }
 
-    public void getSpecialDescriptor( Composite parent, int style )
+    public void createSpecialDescriptor( Composite parent, int style )
     {
         final String desriptor =
             "Liferay Code Upgrade will help you to convert Liferay 6.2 projects into Liferay 7.0 projects.\n" +
@@ -172,7 +176,7 @@ public class WelcomePage extends Page
                 "       2. Find Breaking Changes in all projects\n" +
                 "       3. Update Descriptor files from 6.2 to 7.0\n" +
                 "       4. Update Layout Template files from 6.2 to 7.0\n" +
-                "       5. Convert Custom Jsp Hooks to OSGi modules\n" +
+                "       5. Convert custom jsp hooks to OSGi modules\n" +
                 "Note:\n" +
                 "       It is highly recommended that you make back-up copies of your important files.\n" +
                 "       Theme and Ext projects are not supported to upgrade in this tool currently.\n" +

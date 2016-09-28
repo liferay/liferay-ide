@@ -30,7 +30,9 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
+import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -58,13 +60,16 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
@@ -82,12 +87,15 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
@@ -96,7 +104,6 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
-import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -208,6 +215,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Text bundleUrlField;
     private Button backupSDK;
     private boolean validationResult;
+    private Button importButton;
 
     private Composite composite;
 
@@ -299,8 +307,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     createServerElement();
 
                     createImportElement();
-
-                    createShowAllPagesElement();
                 }
                 else
                 {
@@ -316,7 +322,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                     createImportElement();
 
-                    createShowAllPagesElement();
                 }
 
                 composite.layout();
@@ -331,8 +336,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createServerElement();
 
         createImportElement();
-
-        createShowAllPagesElement();
 
         startCheckThread();
     }
@@ -388,6 +391,31 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         finally
         {
             progress.done();
+        }
+    }
+
+    public void checkAndConfigureIvy( final IProject project )
+    {
+        if( project != null && project.getFile( ISDKConstants.IVY_XML_FILE ).exists() )
+        {
+            new WorkspaceJob( "Configuring project with Ivy dependencies" ) //$NON-NLS-1$
+            {
+                @Override
+                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                {
+                    try
+                    {
+                        IvyUtil.configureIvyProject( project, monitor );
+                    }
+                    catch( CoreException e )
+                    {
+                        return ProjectCore.createErrorStatus(
+                            ProjectCore.PLUGIN_ID, "Failed to configured ivy project.", e ); //$NON-NLS-1$
+                    }
+
+                    return StatusBridge.create( Status.createOkStatus() );
+                }
+            }.schedule();
         }
     }
 
@@ -482,6 +510,89 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     }
 
+    @Override
+    protected void createPageDescriptor( Composite parent, int style )
+    {
+    }
+
+    @Override
+    public void createSpecialDescriptor( Composite parent, int style )
+    {
+        Composite fillLayoutComposite = SWTUtil.createComposite( parent, 2, 2, GridData.FILL_HORIZONTAL );
+
+        final String descriptor =
+            "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to  Liferay Workspace. " +
+            "For more details, please see <a>dev.liferay.com</a>.";
+
+        String url = "https://dev.liferay.com/develop/tutorials";
+
+        SWTUtil.createHyperLink( fillLayoutComposite, SWT.NONE, descriptor, 1, url );
+
+        final String extensionDec =
+            "Liferay Code Upgrade will help you to convert Liferay 6.2 projects into Liferay 7.0 projects.\n" +
+                "The key functions are described below:\n" +
+                "       1. Convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace\n" +
+                "       2. Find  breaking changes in all projects\n" +
+                "       3. Update Descriptor files from 6.2 to 7.0\n" +
+                "       4. Update Layout Template files from 6.2 to 7.0\n" +
+                "       5. Convert custom jsp hooks to OSGi modules\n" +
+                "Note:\n" +
+                "       It is highly recommended that you make back-up copies of your important files.\n" +
+                "       Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
+                "Instructions:\n" +
+                "       In order to move through various upgarde steps,\n" +
+                "       use left, right, ✓, X and clicking on each gear to move between the upgrade steps.\n" +
+                "       What's more, you can mark with ✓ when one step is well done and mark with X when you are not yet complete or it failed.";
+
+        Label image = new Label( fillLayoutComposite, SWT.NONE);
+        image.setImage( loadImage("question.png")  );
+
+        PopupDialog popupDialog = new PopupDialog( fillLayoutComposite.getShell(), 
+            PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false, null, null )
+        {
+            private static final int CURSOR_SIZE = 15;
+
+            protected Point getInitialLocation( Point initialSize )
+            {
+                Display display = getShell().getDisplay();
+                Point location = display.getCursorLocation();
+                location.x += CURSOR_SIZE;
+                location.y += CURSOR_SIZE;
+                return location;
+            }
+
+            protected Control createDialogArea( Composite parent )
+            {
+                Label label = new Label( parent, SWT.WRAP );
+                label.setText( extensionDec );
+                label.setFont( new Font( null, "Times New Roman", 11, SWT.NORMAL ) );
+                GridData gd = new GridData( GridData.BEGINNING | GridData.FILL_BOTH );
+                gd.horizontalIndent = PopupDialog.POPUP_HORIZONTALSPACING;
+                gd.verticalIndent = PopupDialog.POPUP_VERTICALSPACING;
+                label.setLayoutData( gd );
+                return label;
+            }
+        };
+
+        image.addListener(SWT.MouseHover, new org.eclipse.swt.widgets.Listener()
+        {
+            @Override
+            public void handleEvent( org.eclipse.swt.widgets.Event event )
+            {
+                popupDialog.open();
+            }
+        });
+
+        image.addListener(SWT.MouseExit, new org.eclipse.swt.widgets.Listener()
+        {
+            @Override
+            public void handleEvent( org.eclipse.swt.widgets.Event event )
+            {
+                popupDialog.close();
+            }
+        });
+    }
+
     private void createBundleControl()
     {
         disposeServerEelment();
@@ -495,8 +606,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createBundleElement();
 
         createImportElement();
-
-        createShowAllPagesElement();
 
         composite.layout();
     }
@@ -573,14 +682,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 disposeBundleElement();
 
-
                 disposeImportElement();
 
                 createServerElement();
 
                 createImportElement();
-
-                createShowAllPagesElement();
 
                 composite.layout();
             }
@@ -591,10 +697,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         createHorizontalSpacer = createHorizontalSpacer( this, 3 );
         createSeparator = createSeparator( this, 3 );
-    }
 
-    private void createShowAllPagesElement()
-    {
         String backupFolderName = "Backup SDK into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
         backupSDK = SWTUtil.createCheckButton( composite, backupFolderName, null, true, 1 );
         backupSDK.addSelectionListener( new SelectionAdapter()
@@ -607,6 +710,48 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         } );
 
+        importButton = SWTUtil.createButton( composite, "Import Projects" );
+        importButton.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                try
+                {
+                    Boolean importFinished = dataModel.getImportFinished().content();
+
+                    if ( isPageValidate() && !importFinished )
+                    {
+                        saveSettings();
+
+                        importButton.setEnabled( false );
+
+                        importProject();
+
+                        UpgradeView.resetPages();
+
+                        PageNavigateEvent event = new PageNavigateEvent();
+
+                        event.setTargetPage( 2 );
+
+                        for( PageNavigatorListener listener : naviListeners )
+                        {
+                            listener.onPageNavigate( event );
+                        }
+
+                        setNextPage( true );
+
+                        importButton.setEnabled( true );
+                    }
+                }
+                catch( CoreException ex )
+                {
+                    ProjectUI.logError( ex );
+
+                    triggerValidationEvent( ex.getMessage() );
+                }
+            }
+        } );
         dataModel.setBackupSdk( backupSDK.getSelection() );
     }
 
@@ -712,7 +857,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                ServerUIUtil.showNewServerWizard( composite.getShell(), "liferay.bundle", null, "com.liferay." );
+               
             }
         } );
 
@@ -790,6 +935,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         backupSDK.dispose();
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
+        importButton.dispose();
     }
 
     private void disposeLayoutElement()
@@ -814,44 +960,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
-    @Override
-    protected boolean doNextOperation()
-    {
-        boolean retVal = false;
-
-        try
-        {
-            Boolean importFinished = dataModel.getImportFinished().content();
-
-            if ( !importFinished )
-            {
-                if ( isPageValidate() )
-                {
-                    saveSettings();
-
-                    importProject();
-
-                    UpgradeView.resetPages();
-
-                    retVal = true;
-                }
-            }
-            else
-            {
-                retVal = true;
-            }
-        }
-        catch( CoreException ex )
-        {
-            ProjectUI.logError( ex );
-
-            triggerValidationEvent( ex.getMessage() );
-        }
-
-        return retVal;
-    }
-
-    @Override
     public int getGridLayoutCount()
     {
         return 2;
@@ -918,23 +1026,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
 
         return retVal;
-    }
-
-    @Override
-    public void getSpecialDescriptor( Composite parent, int style )
-    {
-        final String descriptor =
-            "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n" +
-                "We will backup your project to a zip file in your eclipse workspace directory.\n" +
-                "Click the \"import\" button to import your project into Eclipse workspace" +
-                "(this process maybe need 5-10 mins for bundle init).\n" + "Note:\n" +
-                "       In order to save time, downloading 7.0 ivy cache locally could be a good choice to upgrade to liferay plugins sdk 7. \n" +
-                "       Theme and ext projects will be ignored for that we do not support to upgrade them in this tool currently. \n" +
-                "       For more details, please see <a>dev.liferay.com</a>.\n";
-
-        String url = "https://dev.liferay.com/develop/tutorials";
-
-        SWTUtil.createHyperLink( this, style, descriptor, 1, url );
     }
 
     protected void importProject() throws CoreException
@@ -1051,6 +1142,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     {
                         importProject.delete( false, true, monitor );
                     }
+
+                    checkAndConfigureIvy( importProject );
                 }
                 catch( CoreException e )
                 {
@@ -1079,6 +1172,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     {
                         importProject.delete( false, true, monitor );
                     }
+
+                    checkAndConfigureIvy( importProject );
                 }
                 catch( CoreException e )
                 {
@@ -1420,6 +1515,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 }
 
                 triggerValidationEvent( message );
+
+                importButton.setEnabled( layoutValidation && inputValidation );
 
                 validationResult = layoutValidation && inputValidation;
             }

@@ -129,7 +129,7 @@ public class SummaryPage extends Page implements SelectionChangedListener
             ProjectUI.getDefault().getBundle().getEntry( "/images/question.png" ) ).createImage();
     }
 
-    public void getSpecialDescriptor( Composite parent, int style )
+    public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor = "Upgrade results are summarised in the following table.\n" +
             "If there are still some steps failed or incompleted, you can go back to finish them.\n" +

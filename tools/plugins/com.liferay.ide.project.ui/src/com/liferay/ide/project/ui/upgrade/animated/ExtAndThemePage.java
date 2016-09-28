@@ -41,7 +41,7 @@ public class ExtAndThemePage extends Page
         return "Ext and Theme Project";
     }
 
-    public void getSpecialDescriptor( Composite parent, int style )
+    public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor = "Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
             "For Theme Projects, you can upgrade them manually.\n" +

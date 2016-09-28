@@ -43,7 +43,7 @@ public class LayoutTemplatePage extends Page
         return "Upgrade Layout Template";
     }
 
-    public void getSpecialDescriptor( Composite parent, int style )
+    public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor = "This step will upgrade layout template files from 6.2 to 7.0.\n" +
             "The layout template's rows and columns are affected by the new grid system syntax of Bootsrap.\n" +

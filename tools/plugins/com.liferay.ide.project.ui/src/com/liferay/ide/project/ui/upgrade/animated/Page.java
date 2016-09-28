@@ -15,16 +15,21 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationListener;
+import com.liferay.ide.ui.util.SWTUtil;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -97,16 +102,12 @@ public abstract class Page extends Composite
 
         setLayout( new GridLayout( getGridLayoutCount(), getGridLayoutEqualWidth() ) );
 
-        Label title = new Label( this, SWT.LEFT );
-        title.setText( getPageTitle() );
+        Label title = SWTUtil.createLabel( this, getPageTitle(), getGridLayoutCount() );
         title.setFont( new Font( null, "Times New Roman", 14, SWT.NORMAL ) );
 
-        Text content = new Text( this, SWT.MULTI );
-        content.setText( getDescriptor() );
-        content.setEditable( false );
-        content.setBackground( getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
+        createPageDescriptor( this, style );
 
-        getSpecialDescriptor( this, style );
+        createSpecialDescriptor( this, style );
 
         setPageId( pageId );
 
@@ -134,6 +135,18 @@ public abstract class Page extends Composite
         GridDataFactory.generate( label, 2, 1 );
 
         return label;
+    }
+
+    protected void createPageDescriptor( Composite parent, int style )
+    {
+        Text content = SWTUtil.createText(parent, SWT.MULTI, getGridLayoutCount());
+        content.setText( getDescriptor() );
+        content.setEditable( false );
+        content.setBackground( getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
+    }
+
+    public void createSpecialDescriptor( Composite parent, int style )
+    {
     }
 
     protected Text createTextField( Composite composite, int style )
@@ -194,8 +207,23 @@ public abstract class Page extends Composite
         return selectedAction;
     }
 
-    public void getSpecialDescriptor( Composite parent, int style )
+    protected final Image loadImage( String name )
     {
+        URL url = null;
+
+        try
+        {
+            url = ProjectUI.getDefault().getBundle().getEntry( "images/" + name );
+        }
+        catch( Exception e )
+        {
+        }
+
+        ImageDescriptor imagedesc = ImageDescriptor.createFromURL( url );
+
+        Image image = imagedesc.createImage();
+
+        return image;
     }
 
     public String getTitle()
