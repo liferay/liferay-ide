@@ -431,7 +431,7 @@ public class BuildPage extends Page
     public String getDescriptor()
     {
         return "This step will help you to build all your projects.\n" +
-            "You can rebuild the project by double click it.";
+            "You can rebuild the project by double-clicking it.";
     }
 
     @Override

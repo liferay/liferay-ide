@@ -926,12 +926,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     public void getSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor =
-            "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to  Liferay Workspace. \n" +
+            "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n" +
                 "We will backup your project to a zip file in your eclipse workspace directory.\n" +
                 "Click the \"import\" button to import your project into Eclipse workspace" +
-                "(this process maybe need 5-10mins for bundle init).\n" + "Note:\n" +
-                "       In order to save time, downloading  7.0 ivy cache  locally could be a good choice to upgrade to liferay plugin sdk 7. \n" +
-                "       Theme and ext projects will be ignored for that we do not support to upgrade them  at this tool currently. \n" +
+                "(this process maybe need 5-10 mins for bundle init).\n" + "Note:\n" +
+                "       In order to save time, downloading 7.0 ivy cache locally could be a good choice to upgrade to liferay plugins sdk 7. \n" +
+                "       Theme and ext projects will be ignored for that we do not support to upgrade them in this tool currently. \n" +
                 "       For more details, please see <a>dev.liferay.com</a>.\n";
 
         String url = "https://dev.liferay.com/develop/tutorials";

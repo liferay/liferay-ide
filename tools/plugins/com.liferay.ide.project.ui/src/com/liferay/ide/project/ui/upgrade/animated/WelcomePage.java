@@ -171,7 +171,7 @@ public class WelcomePage extends Page
             "Liferay Code Upgrade will help you to convert Liferay 6.2 projects into Liferay 7.0 projects.\n" +
                 "The key functions are described below:\n" +
                 "       1. Convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace\n" +
-                "       2. Find  breaking changes in all projects\n" +
+                "       2. Find Breaking Changes in all projects\n" +
                 "       3. Update Descriptor files from 6.2 to 7.0\n" +
                 "       4. Update Layout Template files from 6.2 to 7.0\n" +
                 "       5. Convert custom jsp hooks to OSGi modules\n" +
@@ -180,9 +180,9 @@ public class WelcomePage extends Page
                 "       Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
                 "       For more details, please see <a>From Liferay 6 to Liferay 7</a>.\n" +
                 "Instructions:\n" +
-                "       In order to move through various upgarde steps,\n" +
+                "       In order to move through various upgrade steps,\n" +
                 "       use left, right, ✓, X and clicking on each gear to move between the upgrade steps.\n" +
-                "       What's more, you can mark with ✓ when one step is well done and mark with X when you are not yet complete or it failed.";
+                "       What's more, you can mark with ✓ when one step is well done and mark with X when it is not completed or failed.";
 
         String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
 

@@ -43,9 +43,9 @@ public class ExtAndThemePage extends Page
 
     public void getSpecialDescriptor( Composite parent, int style )
     {
-        final String descriptor = "Theme and Ext projects are not supported to upgrade in this tool currenttly.\n" +
+        final String descriptor = "Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
             "For Theme Projects, you can upgrade them manually.\n" +
-            "For Ext Projects, we didn't provide support for them at Liferay 7.0.\n" +
+            "For Ext Projects, we don't provide support for them in Liferay 7.0.\n" +
             "If you have ext projects, you can change them into modules.\n" +
             "For more details, please see <a>Liferay Blade Samples</a>.\n";
         String url = "https://github.com/liferay/liferay-blade-samples";
