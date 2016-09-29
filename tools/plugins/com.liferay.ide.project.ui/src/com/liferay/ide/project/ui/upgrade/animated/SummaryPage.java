@@ -56,7 +56,7 @@ public class SummaryPage extends Page implements SelectionChangedListener
 
         final Table table = tableViewer.getTable();
         final GridData tableData = new GridData( SWT.FILL, SWT.FILL, true, false, 1, 1 );
-        tableData.heightHint = 150;
+        tableData.heightHint = 125;
         table.setLayoutData( tableData );
         table.setLinesVisible( false );
 
@@ -134,7 +134,7 @@ public class SummaryPage extends Page implements SelectionChangedListener
         final String descriptor = "Upgrade results are summarised in the following table.\n" +
             "If there are still some steps failed or incompleted, you can go back to finish them.\n" +
             "If all the steps are well-done, congratulations! You have finished the whole upgrade process.\n" +
-            "Now you can try to deploy your projects to Liferay portal." +
+            "Now you can try to deploy your projects to Liferay portal. " +
             "For more upgrade information, please see <a>From Liferay 6 to Liferay 7</a>.";
         String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
 
@@ -160,7 +160,6 @@ public class SummaryPage extends Page implements SelectionChangedListener
         return false;
     }
 
-
     @Override
     public void onSelectionChanged( int targetSelection )
     {
@@ -179,6 +178,11 @@ public class SummaryPage extends Page implements SelectionChangedListener
             String pageTitle = page.getPageTitle();
             PageAction pageAction = page.getSelectedAction();
             Image statusImage;
+
+            if( pageTitle.equals( "Ext and Theme Project" ) )
+            {
+                continue;
+            }
 
             if( pageAction == null )
             {

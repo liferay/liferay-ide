@@ -546,9 +546,9 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     @Override
     public String getDescriptor()
     {
-        return "This step will help you to find breaking changes for type of java, jsp, xml and properties files." +
+        return "This step will help you to find breaking changes for type of java, jsp, xml and properties files. " +
             "It will not support to find the front-end codes( e.g., javascript, css).\n For service builder, you " +
-            "just need to modify the changes on xxxServiceImp.class, xxxFinder.class, xxxModel.class." +
+            "just need to modify the changes on xxxServiceImp.java, xxxFinder.java, xxxModel.java. " +
             "Others will be solved in step \"Build Service\".";
     }
 

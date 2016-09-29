@@ -176,7 +176,7 @@ public class WelcomePage extends Page
                 "       2. Find Breaking Changes in all projects\n" +
                 "       3. Update Descriptor files from 6.2 to 7.0\n" +
                 "       4. Update Layout Template files from 6.2 to 7.0\n" +
-                "       5. Convert custom jsp hooks to OSGi modules\n" +
+                "       5. Convert Custom JSP Hooks to OSGi modules\n" +
                 "Note:\n" +
                 "       It is highly recommended that you make back-up copies of your important files.\n" +
                 "       Theme and Ext projects are not supported to upgrade in this tool currently.\n" +

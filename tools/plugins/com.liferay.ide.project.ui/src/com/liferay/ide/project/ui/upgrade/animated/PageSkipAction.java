@@ -20,10 +20,11 @@ package com.liferay.ide.project.ui.upgrade.animated;
  */
 public class PageSkipAction extends PageAction
 {
+    private static String pageActionName = "PageSkipAction";
 
     protected PageSkipAction()
     {
-        super();
+        super( pageActionName );
 
         images[0] = loadImage( "no.png" );
         images[1] = loadImage( "no_select.png" );

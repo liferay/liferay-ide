@@ -90,6 +90,10 @@ public abstract class Page extends Composite
 
     private PageAction selectedAction;
 
+    private PageAction pageFinishAction = new PageFinishAction();
+
+    private PageAction pageSkipAction = new PageSkipAction();
+
     protected final List<PageValidationListener> pageValidationListeners =
         Collections.synchronizedList( new ArrayList<PageValidationListener>() );
 
@@ -102,7 +106,7 @@ public abstract class Page extends Composite
 
         setLayout( new GridLayout( getGridLayoutCount(), getGridLayoutEqualWidth() ) );
 
-        Label title = SWTUtil.createLabel( this, getPageTitle(), getGridLayoutCount() );
+        Label title = SWTUtil.createLabel( this, getPageTitle(), 1 );
         title.setFont( new Font( null, "Times New Roman", 14, SWT.NORMAL ) );
 
         createPageDescriptor( this, style );
@@ -113,7 +117,7 @@ public abstract class Page extends Composite
 
         if( hasFinishAndSkipAction )
         {
-            setActions( new PageAction[] { new PageFinishAction(), new PageSkipAction() } );
+            setActions( new PageAction[] { pageFinishAction, pageSkipAction } );
         }
     }
 
@@ -139,7 +143,7 @@ public abstract class Page extends Composite
 
     protected void createPageDescriptor( Composite parent, int style )
     {
-        Text content = SWTUtil.createText(parent, SWT.MULTI, getGridLayoutCount());
+        Text content = SWTUtil.createText( parent, SWT.MULTI, 1 );
         content.setText( getDescriptor() );
         content.setEditable( false );
         content.setBackground( getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
@@ -204,6 +208,19 @@ public abstract class Page extends Composite
 
     public PageAction getSelectedAction()
     {
+        return selectedAction;
+    }
+
+    public PageAction getSelectedAction( String actionName )
+    {
+        if( actionName.equals( "PageFinishAction" ) )
+        {
+            return pageFinishAction;
+        }
+        if( actionName.equals( "PageSkipAction" ) )
+        {
+            return pageSkipAction;
+        }
         return selectedAction;
     }
 

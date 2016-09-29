@@ -32,10 +32,12 @@ public abstract class PageAction
 {
 
     protected Image[] images;
+    protected String pageActionName;
 
-    public PageAction()
+    public PageAction( String pageActionName )
     {
         images = new Image[5];
+        this.pageActionName = pageActionName;
     }
 
     public Rectangle drawImage( GC gc, Image image, int cX, int cY )
@@ -80,5 +82,10 @@ public abstract class PageAction
         Image image = imagedesc.createImage();
 
         return image;
+    }
+
+    public final String getPageActionName()
+    {
+        return pageActionName;
     }
 }

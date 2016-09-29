@@ -31,6 +31,8 @@ import org.eclipse.sapphire.ValuePropertyContentEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StackLayout;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
@@ -196,6 +198,17 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         }
 
         pages = currentPageList.toArray( new Page[0] );
+
+        for( Page page : pages )
+        {
+            String pageActionName = UpgradeSettingsUtil.getProperty( page.getPageId() );
+
+            if( pageActionName != null )
+            {
+                PageAction pageAction = page.getSelectedAction( pageActionName );
+                page.setSelectedAction( pageAction );
+            }
+        }
     }
 
     public static int getPageNumber()
@@ -387,6 +400,31 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         scrolledComposite.setMinSize(container.computeSize(SWT.DEFAULT, 670));
 
         setSelectPage( 0 );
+
+        parent.addDisposeListener( new DisposeListener()
+        {
+
+            @Override
+            public void widgetDisposed( DisposeEvent e )
+            {
+
+                int pageNum = getPageNumber();
+
+                for( int i = 0; i < pageNum; i++ )
+                {
+                    Page page = UpgradeView.getPage( i );
+
+                    String pageId = page.getPageId();
+                    PageAction pageAction = page.getSelectedAction();
+
+                    if( pageAction != null )
+                    {
+                        UpgradeSettingsUtil.storeProperty( pageId, pageAction.getPageActionName() );
+                    }
+                }
+            }
+        } );
+
     }
 
     @Override

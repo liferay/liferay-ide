@@ -21,9 +21,11 @@ package com.liferay.ide.project.ui.upgrade.animated;
 public class PageFinishAction extends PageAction
 {
 
+    private static String pageActionName = "PageFinishAction";
+
     public PageFinishAction()
     {
-        super();
+        super( pageActionName );
 
         images[0] = loadImage( "yes.png" );
         images[1] = loadImage( "yes_select.png" );

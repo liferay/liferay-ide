@@ -529,20 +529,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         SWTUtil.createHyperLink( fillLayoutComposite, SWT.NONE, descriptor, 1, url );
 
         final String extensionDec =
-            "Liferay Code Upgrade will help you to convert Liferay 6.2 projects into Liferay 7.0 projects.\n" +
-                "The key functions are described below:\n" +
-                "       1. Convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace\n" +
-                "       2. Find  breaking changes in all projects\n" +
-                "       3. Update Descriptor files from 6.2 to 7.0\n" +
-                "       4. Update Layout Template files from 6.2 to 7.0\n" +
-                "       5. Convert custom jsp hooks to OSGi modules\n" +
-                "Note:\n" +
-                "       It is highly recommended that you make back-up copies of your important files.\n" +
-                "       Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
-                "Instructions:\n" +
-                "       In order to move through various upgarde steps,\n" +
-                "       use left, right, ✓, X and clicking on each gear to move between the upgrade steps.\n" +
-                "       What's more, you can mark with ✓ when one step is well done and mark with X when you are not yet complete or it failed.";
+            "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n" +
+                "We will backup your project to a zip file in your eclipse workspace directory.\n" +
+                "Click the \"import\" button to import your project into Eclipse workspace" +
+                "(this process maybe need 5-10 mins for bundle init).\n" + "Note:\n" +
+                "       In order to save time, downloading 7.0 ivy cache locally could be a good choice to upgrade to liferay plugins sdk 7. \n" +
+                "       Theme and ext projects will be ignored for that we do not support to upgrade them in this tool currently. \n";
 
         Label image = new Label( fillLayoutComposite, SWT.NONE);
         image.setImage( loadImage("question.png")  );

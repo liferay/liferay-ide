@@ -193,7 +193,7 @@ public class BuildServicePage extends Page
     {
         return "In this step, we will delete some legacy servicebuilder related files" +
             " and re-run build-service on servicebuilder projects.\n" +
-            "Note: Please make sure the default installed jre is JDK 8 (Preferences-Java-Installed JREs).\n";
+            "Note: Please make sure the default installed jre is JDK 8 (Preferences-Java-Installed JREs).";
     }
 
     @Override
