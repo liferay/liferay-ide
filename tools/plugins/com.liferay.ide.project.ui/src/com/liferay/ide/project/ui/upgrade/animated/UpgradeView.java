@@ -15,7 +15,6 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.LiferayUpgradePerspectiveFactory;
 
@@ -58,7 +57,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
     public static final String ID = "com.liferay.ide.project.ui.upgradeView";
 
-    private LiferayUpgradeDataModel dataModel;
+    private static LiferayUpgradeDataModel dataModel;
 
     private static List<Page> currentPageList = new ArrayList<Page>();
 
@@ -111,30 +110,91 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         dataModel.getLiferay70ServerName().attach( new LiferayUpgradeStoreListener() );
         dataModel.getLiferay62ServerLocation().attach( new LiferayUpgradeStoreListener() );
 
-        UpgradeSettingsUtil.init();
+        UpgradeSettingsUtil.init( dataModel );
+    }
+
+    public static void addPage( String pageid )
+    {
+        Page targetPage = null;
+
+        for( Page page : staticPageList )
+        {
+            if( page.getPageId().equals( pageid ) )
+            {
+                targetPage = page;
+
+                break;
+            }
+        }
+
+        currentPageList.add( targetPage );
     }
 
     public static void resumePages()
     {
+        dataModel.setHasExt( true );
+        dataModel.setHasHook( true );
+        dataModel.setHasLayout( true );
+        dataModel.setHasPortlet( true );
+        dataModel.setHasServiceBuilder( true );
+        dataModel.setHasTheme( true );
+        dataModel.setHasWeb( true );
+
         currentPageList.clear();
         currentPageList.addAll( staticPageList );
-    }
-
-    public static void removePage( String pageid )
-    {
-        for( Page page : currentPageList )
-        {
-            if( page.getPageId().equals( pageid ) )
-            {
-                currentPageList.remove( page );
-
-                return;
-            }
-        }
+        pages = currentPageList.toArray( new Page[0] );
     }
 
     public static void resetPages()
     {
+        currentPageList.clear();
+
+        addPage( Page.WELCOME_PAGE_ID );
+        addPage( Page.INIT_CONFIGURE_PROJECT_PAGE_ID );
+
+        boolean hasPortlet = dataModel.getHasPortlet().content();
+        boolean hasServiceBuilder = dataModel.getHasServiceBuilder().content();
+        boolean hasHook = dataModel.getHasHook().content();
+        boolean hasLayout = dataModel.getHasLayout().content();
+        boolean hasTheme = dataModel.getHasTheme().content();
+        boolean hasExt = dataModel.getHasExt().content();
+
+        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
+        {
+            addPage( Page.DESCRIPTORS_PAGE_ID );
+        }
+
+        if( hasPortlet || hasHook || hasServiceBuilder )
+        {
+            addPage( Page.FINDBREACKINGCHANGES_PAGE_ID );
+        }
+
+        if( hasServiceBuilder )
+        {
+            addPage( Page.BUILDSERVICE_PAGE_ID );
+        }
+
+        if( hasLayout )
+        {
+            addPage( Page.LAYOUTTEMPLATE_PAGE_ID );
+        }
+
+        if( hasHook )
+        {
+            addPage( Page.CUSTOMJSP_PAGE_ID );
+        }
+
+        if( hasExt || hasTheme )
+        {
+            addPage( Page.EXTANDTHEME_PAGE_ID );
+        }
+
+        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
+        {
+            addPage( Page.BUILD_PAGE_ID );
+            addPage( Page.SUMMARY_PAGE_ID );
+        }
+
         pages = currentPageList.toArray( new Page[0] );
     }
 
@@ -301,68 +361,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         staticPageList.add( extAndThemePage );
         staticPageList.add( buildPage );
         staticPageList.add( summaryPage );
-
-        currentPageList.clear();
-
-        currentPageList.add( welcomePage );
-        currentPageList.add( initConfigureProjectPage );
-
-        // restore settings
-        String liferay70ServerName = UpgradeSettingsUtil.getProperty( "Liferay70ServerName" );
-        String liferay62ServerLocation = UpgradeSettingsUtil.getProperty( "Liferay62ServerLocation" );
-
-        if( !CoreUtil.isNullOrEmpty( liferay62ServerLocation ) )
-        {
-            dataModel.setLiferay62ServerLocation( liferay62ServerLocation );
-        }
-
-        if( !CoreUtil.isNullOrEmpty( liferay70ServerName ) )
-        {
-            dataModel.setLiferay70ServerName( liferay70ServerName );
-        }
-
-        boolean hasPortlet = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasPortlet", "false" ) );
-        boolean hasServiceBuilder = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasServiceBuilder", "false" ) );
-        boolean hasHook = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasHook", "false" ) );
-        boolean hasLayout = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasLayout", "false" ) );
-        boolean hasTheme = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasTheme", "false" ) );
-        boolean hasExt = Boolean.parseBoolean( UpgradeSettingsUtil.getProperty( "HasExt", "false" ) );
-
-        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
-        {
-            currentPageList.add( descriptorsPage );
-        }
-
-        if( hasPortlet || hasHook || hasServiceBuilder )
-        {
-            currentPageList.add( findBreakingChangesPage );
-        }
-
-        if( hasServiceBuilder )
-        {
-            currentPageList.add( buildServicePage );
-        }
-
-        if( hasLayout )
-        {
-            currentPageList.add( layoutTemplatePage );
-        }
-
-        if( hasHook )
-        {
-            currentPageList.add( customJspPage );
-        }
-
-        if( hasExt || hasTheme )
-        {
-            currentPageList.add( extAndThemePage );
-        }
-
-        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
-        {
-            currentPageList.add( buildPage );
-            currentPageList.add( summaryPage );
-        }
 
         resetPages();
 

@@ -130,8 +130,6 @@ public class WelcomePage extends Page
                 {
                     UpgradeView.resumePages();
 
-                    UpgradeView.resetPages();
-
                     PageNavigateEvent event = new PageNavigateEvent();
 
                     event.setTargetPage( 2 );

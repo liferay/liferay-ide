@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class UpgradeSettingsUtil
         return codeUpgradeProperties.getProperty( key, defaultValue );
     }
 
-    public static void init()
+    public static void init( LiferayUpgradeDataModel dataModel )
     {
         final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
 
@@ -77,6 +78,8 @@ public class UpgradeSettingsUtil
             {
             }
         }
+
+        retrieveProperties( dataModel );
     }
 
     public static void resetStoreProperties()
@@ -87,6 +90,30 @@ public class UpgradeSettingsUtil
 
             storeProperty( null, null );
         }
+    }
+
+    public static void retrieveProperties( LiferayUpgradeDataModel dataModel )
+    {
+        String liferay70ServerName = UpgradeSettingsUtil.getProperty( "Liferay70ServerName" );
+        String liferay62ServerLocation = UpgradeSettingsUtil.getProperty( "Liferay62ServerLocation" );
+
+        if( !CoreUtil.isNullOrEmpty( liferay62ServerLocation ) )
+        {
+            dataModel.setLiferay62ServerLocation( liferay62ServerLocation );
+        }
+
+        if( !CoreUtil.isNullOrEmpty( liferay70ServerName ) )
+        {
+            dataModel.setLiferay70ServerName( liferay70ServerName );
+        }
+
+        dataModel.setHasPortlet( Boolean.parseBoolean( getProperty( "HasPortlet", "false" ) ) );
+        dataModel.setHasServiceBuilder( Boolean.parseBoolean( getProperty( "HasServiceBuilder", "false" ) ) );
+        dataModel.setHasHook( Boolean.parseBoolean( getProperty( "HasHook", "false" ) ) );
+        dataModel.setHasLayout( Boolean.parseBoolean( getProperty( "HasLayout", "false" ) ) );
+        dataModel.setHasTheme( Boolean.parseBoolean( getProperty( "HasTheme", "false" ) ) );
+        dataModel.setHasExt( Boolean.parseBoolean( getProperty( "HasExt", "false" ) ) );
+        dataModel.setHasWeb( Boolean.parseBoolean( getProperty( "HasWeb", "false" ) ) );
     }
 
     public static void storeProperty( Object key, Object value )

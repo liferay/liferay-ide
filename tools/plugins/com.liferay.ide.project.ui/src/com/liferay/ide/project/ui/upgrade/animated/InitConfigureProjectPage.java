@@ -31,7 +31,6 @@ import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
@@ -66,7 +65,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
@@ -230,7 +228,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     public InitConfigureProjectPage( final Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
-        super( parent, style, dataModel, IMPORT_PAGE_ID, false );
+        super( parent, style, dataModel, INIT_CONFIGURE_PROJECT_PAGE_ID, false );
 
         dataModel.getSdkLocation().attach( new LiferayUpgradeValidationListener() );
         dataModel.getBundleName().attach( new LiferayUpgradeValidationListener() );
@@ -833,7 +831,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                     importProject();
 
-                    resetPages();
+                    UpgradeView.resetPages();
 
                     retVal = true;
                 }
@@ -1199,35 +1197,16 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     }
 
-    public void resetPages()
-    {
-        UpgradeView.resumePages();
-
-        if( !dataModel.getHasServiceBuilder().content() )
-        {
-            UpgradeView.removePage( BUILDSERVICE_PAGE_ID );
-        }
-
-        if( !dataModel.getHasLayout().content() )
-        {
-            UpgradeView.removePage( LAYOUTTEMPLATE_PAGE_ID );
-        }
-
-        if( !dataModel.getHasHook().content() )
-        {
-            UpgradeView.removePage( CUSTOMJSP_PAGE_ID );
-        }
-
-        if( !dataModel.getHasExt().content() && !dataModel.getHasTheme().content() )
-        {
-            UpgradeView.removePage( EXTANDTHEME_PAGE_ID );
-        }
-
-        UpgradeView.resetPages();
-    }
-
     private void saveSettings()
     {
+        dataModel.setHasExt( false );
+        dataModel.setHasHook( false );
+        dataModel.setHasLayout( false );
+        dataModel.setHasPortlet( false );
+        dataModel.setHasServiceBuilder( false );
+        dataModel.setHasTheme( false );
+        dataModel.setHasWeb( false );
+
         if( bundleNameField != null && !bundleNameField.isDisposed() )
         {
             dataModel.setLiferay70ServerName( bundleNameField.getText() );
