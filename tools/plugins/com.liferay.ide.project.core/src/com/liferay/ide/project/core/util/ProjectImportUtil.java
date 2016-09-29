@@ -43,10 +43,8 @@ import java.util.jar.JarFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.eclipse.core.resources.FileInfoMatcherDescription;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -379,10 +377,7 @@ public class ProjectImportUtil
 
         IFolder folder = sdkProject.getFolder( parentName );
 
-        FileInfoMatcherDescription fmd = new FileInfoMatcherDescription(
-            "org.eclipse.ui.ide.multiFilter", "1.0-name-matches-true-false-" + project.getName() );
-
-        folder.createFilter( 10, fmd, IResource.BACKGROUND_REFRESH, monitor );
+        ResourceFilterUtil.addResourceFilter( folder, project.getName(), monitor );
 
         return project;
     }

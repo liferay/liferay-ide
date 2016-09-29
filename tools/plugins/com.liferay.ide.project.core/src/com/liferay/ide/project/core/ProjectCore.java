@@ -30,7 +30,6 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -60,6 +59,8 @@ public class ProjectCore extends Plugin
     private static PluginPackageResourceListener pluginPackageResourceListener;
 
     private static SDKBuildPropertiesResourceListener sdkBuildPropertiesResourceListener;
+
+    private static SDKProjectDeleteListener sdkProjectDeleteListener;
 
     private static IPortletFramework[] portletFrameworks;
 
@@ -315,6 +316,7 @@ public class ProjectCore extends Plugin
     {
         pluginPackageResourceListener = new PluginPackageResourceListener();
         sdkBuildPropertiesResourceListener = new SDKBuildPropertiesResourceListener();
+        sdkProjectDeleteListener = new SDKProjectDeleteListener();
     }
 
     /*
@@ -328,11 +330,14 @@ public class ProjectCore extends Plugin
 
         plugin = this;
 
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+        CoreUtil.getWorkspace().addResourceChangeListener(
             pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );
 
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+        CoreUtil.getWorkspace().addResourceChangeListener(
             sdkBuildPropertiesResourceListener, IResourceChangeEvent.POST_CHANGE );
+
+        CoreUtil.getWorkspace().addResourceChangeListener(
+            sdkProjectDeleteListener , IResourceChangeEvent.PRE_DELETE );
 
         /*
         final Job job = new Job( "Checking for the latest Blade CLI" )
@@ -370,12 +375,17 @@ public class ProjectCore extends Plugin
 
         if( pluginPackageResourceListener != null )
         {
-            ResourcesPlugin.getWorkspace().removeResourceChangeListener( pluginPackageResourceListener );
+            CoreUtil.getWorkspace().removeResourceChangeListener( pluginPackageResourceListener );
         }
 
         if( sdkBuildPropertiesResourceListener != null )
         {
-            ResourcesPlugin.getWorkspace().removeResourceChangeListener( sdkBuildPropertiesResourceListener );
+            CoreUtil.getWorkspace().removeResourceChangeListener( sdkBuildPropertiesResourceListener );
+        }
+
+        if( sdkProjectDeleteListener != null )
+        {
+            CoreUtil.getWorkspace().removeResourceChangeListener( sdkProjectDeleteListener );
         }
     }
 
