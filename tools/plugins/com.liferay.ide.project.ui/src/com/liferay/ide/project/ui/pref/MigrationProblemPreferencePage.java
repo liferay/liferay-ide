@@ -206,8 +206,12 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
         {
             IgnoredProblemsContainer mpContainer =
                 UpgradeAssistantSettingsUtil.getObjectFromStore( IgnoredProblemsContainer.class );
-            Problem[] problems = mpContainer.getProblemMap().values().toArray( new Problem[0] );
-            _ignoredProblemTable.setInput( problems );
+
+            if( mpContainer != null )
+            {
+                Problem[] problems = mpContainer.getProblemMap().values().toArray( new Problem[0] );
+                _ignoredProblemTable.setInput( problems );
+            }
         }
         catch( IOException e )
         {
