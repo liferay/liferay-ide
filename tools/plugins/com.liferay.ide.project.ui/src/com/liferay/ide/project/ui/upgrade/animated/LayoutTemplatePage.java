@@ -34,11 +34,7 @@ public class LayoutTemplatePage extends Page
     {
         super( parent, style, dataModel, LAYOUTTEMPLATE_PAGE_ID, true );
 
-        LiferayLayouttplUpgradeTableViewCustomPart liferayLayouttplUpgradeTableViewCustomPart =
-            new LiferayLayouttplUpgradeTableViewCustomPart( this, SWT.NONE, dataModel );
-        liferayLayouttplUpgradeTableViewCustomPart.setLayoutData(
-            new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-        
+        new LiferayLayouttplUpgradeTableViewCustomPart( this, SWT.NONE, dataModel );
     }
 
     @Override

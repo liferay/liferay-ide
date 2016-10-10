@@ -104,6 +104,7 @@ import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
 import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -849,7 +850,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-               
+                ServerUIUtil.showNewServerWizard( composite.getShell(), "liferay.bundle", null, "com.liferay." );
             }
         } );
 

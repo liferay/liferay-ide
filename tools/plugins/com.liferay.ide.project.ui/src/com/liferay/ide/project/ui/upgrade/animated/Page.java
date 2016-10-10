@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationListener;
@@ -106,7 +107,7 @@ public abstract class Page extends Composite
 
         setLayout( new GridLayout( getGridLayoutCount(), getGridLayoutEqualWidth() ) );
 
-        Label title = SWTUtil.createLabel( this, getPageTitle(), 1 );
+        Label title = SWTUtil.createLabel( this, getPageTitle(), getGridLayoutCount() );
         title.setFont( new Font( null, "Times New Roman", 14, SWT.NORMAL ) );
 
         createPageDescriptor( this, style );
@@ -143,10 +144,15 @@ public abstract class Page extends Composite
 
     protected void createPageDescriptor( Composite parent, int style )
     {
-        Text content = SWTUtil.createText( parent, SWT.MULTI, 1 );
-        content.setText( getDescriptor() );
-        content.setEditable( false );
-        content.setBackground( getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
+        String descriptor = getDescriptor();
+
+        if( !CoreUtil.empty( descriptor ) )
+        {
+            Text content = SWTUtil.createText( parent, SWT.MULTI, getGridLayoutCount() );
+            content.setText( descriptor );
+            content.setEditable( false );
+            content.setBackground( getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
+        }
     }
 
     public void createSpecialDescriptor( Composite parent, int style )
