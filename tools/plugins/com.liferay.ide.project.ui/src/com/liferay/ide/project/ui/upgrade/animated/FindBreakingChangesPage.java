@@ -22,6 +22,7 @@ import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.migration.AutoCorrectAction;
 import com.liferay.ide.project.ui.migration.IgnoreAction;
+import com.liferay.ide.project.ui.migration.IgnoreAlwaysAction;
 import com.liferay.ide.project.ui.migration.MarkDoneAction;
 import com.liferay.ide.project.ui.migration.MarkUndoneAction;
 import com.liferay.ide.project.ui.migration.MigrationContentProvider;
@@ -360,11 +361,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         IAction markDoneAction = new MarkDoneAction( _problemsViewer );
         IAction markUndoneAction = new MarkUndoneAction( _problemsViewer );
         IAction ignoreAction = new IgnoreAction( _problemsViewer );
+        IAction ignoreAlways = new IgnoreAlwaysAction( _problemsViewer );
         IAction autoCorrectAction = new AutoCorrectAction( _problemsViewer );
+
         menuMgr.add( markDoneAction );
         menuMgr.add( markUndoneAction );
         menuMgr.add( ignoreAction );
         menuMgr.add( autoCorrectAction );
+        menuMgr.add( ignoreAlways );
         Menu menu = menuMgr.createContextMenu( table );
         table.setMenu( menu );
 

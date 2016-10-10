@@ -18,6 +18,7 @@ import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
+import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 
@@ -406,6 +407,18 @@ public class MigrationUtil
         try
         {
             return UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
+        }
+        catch( Exception e )
+        {
+            return null;
+        }
+    }
+
+    public static IgnoredProblemsContainer getIgnoredProblemsContainer()
+    {
+        try
+        {
+            return UpgradeAssistantSettingsUtil.getObjectFromStore( IgnoredProblemsContainer.class );
         }
         catch( Exception e )
         {

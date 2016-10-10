@@ -55,45 +55,6 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
         super( provider, text );
     }
 
-//    protected void refreshTableViewer()
-//    {
-//        final MigrationView mv = (MigrationView) UIUtil.findView( MigrationView.ID );
-//
-//        UIUtil.async( new Runnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//                final Object selection = getStructuredSelection().getFirstElement();
-//                List<Problem> problems = null;
-//                if( selection instanceof IFile )
-//                {
-//                    IFile file = (IFile) selection;
-//                    problems = MigrationUtil.getProblemsFromResource( file );
-//                }
-//                else if( selection instanceof Problem )
-//                {
-//                    ISelection se = mv.getCommonViewer().getSelection();
-//
-//                    if( se instanceof TreeSelection )
-//                    {
-//                        problems = MigrationUtil.getCurrentProblemsFromTreeNode( ( (TreeSelection) se ) );
-//                    }
-//                }
-//
-//                if( problems != null && problems.size() > 0 )
-//                {
-//                    mv.getProblemsViewer().setInput( problems.toArray() );
-//                    mv.getProblemsViewer().setSelection( new StructuredSelection( problems.get( 0 ) ) );
-//                }
-//                else
-//                {
-//                    mv.getProblemsViewer().setInput( null );
-//                }
-//            }
-//        } );
-//    }
-
     protected void refreshTableViewer()
     {
         FindBreakingChangesPage page = UpgradeView.getPage(Page.FINDBREACKINGCHANGES_PAGE_ID,FindBreakingChangesPage.class);
@@ -104,7 +65,7 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
             @Override
             public void run()
             {
-                final Object selection = getStructuredSelection().getFirstElement();
+                final Object selection = problemsViewer.getStructuredSelection().getFirstElement();
                 List<Problem> problems = null;
 
                 if( selection instanceof IFile )

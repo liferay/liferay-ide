@@ -1023,6 +1023,12 @@
             id="com.liferay.ide.project.ui.targetPlatformSettingsPage"
             name="Target Platform">
       </page>
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.project.ui.pref.MigrationProblemPreferencePage"
+            id="com.liferay.ide.project.ui.migrationProblemPreferencePage"
+            name="Migration Problem">
+      </page>
    </extension>
 
    <extension

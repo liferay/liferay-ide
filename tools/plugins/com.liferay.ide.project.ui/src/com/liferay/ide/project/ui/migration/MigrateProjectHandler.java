@@ -23,6 +23,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.FileProblemsUtil;
+import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
@@ -31,12 +32,14 @@ import com.liferay.ide.project.ui.ProjectUI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -387,6 +390,32 @@ public class MigrateProjectHandler extends AbstractHandler
                         return false;
                     }
                 }
+            }
+        }
+
+        IgnoredProblemsContainer ignoredProblemsContainer = MigrationUtil.getIgnoredProblemsContainer();
+
+        if( ignoredProblemsContainer != null )
+        {
+            Set<String> ticketSet = ignoredProblemsContainer.getProblemMap().keySet();
+
+            if( ticketSet != null && ticketSet.contains( problem.getTicket() ) )
+            {
+                final IResource resource = MigrationUtil.getIResourceFromProblem( problem );
+                final IMarker marker = resource.getMarker( problem.getMarkerId() );
+
+                if( marker.exists() )
+                {
+                    try
+                    {
+                        marker.delete();
+                    }
+                    catch( CoreException e )
+                    {
+                        ProjectUI.logError( e );
+                    }
+                }
+                return false;
             }
         }
 
