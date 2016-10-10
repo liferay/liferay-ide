@@ -55,6 +55,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class MigrationProblemPreferencePage extends PreferencePage implements IWorkbenchPreferencePage
 {
 
+    public final static String ID = "com.liferay.ide.project.ui.migrationProblemPreferencePage";
     private TableViewer _ignoredProblemTable;
 
     private Button _removeButton;

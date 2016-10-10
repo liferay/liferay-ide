@@ -33,6 +33,7 @@ import com.liferay.ide.project.ui.migration.MigratorComparator;
 import com.liferay.ide.project.ui.migration.ProblemsContainer;
 import com.liferay.ide.project.ui.migration.RemoveAction;
 import com.liferay.ide.project.ui.migration.RunMigrationToolAction;
+import com.liferay.ide.project.ui.pref.MigrationProblemPreferencePage;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -42,6 +43,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -77,6 +79,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 /**
  * @author Andy Wu
@@ -231,6 +234,21 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             public void handleEvent( Event event )
             {
                 _treeViewer.collapseAll();
+            }
+        } );
+
+        Button openIgnoredList = new Button( buttonContainer, SWT.NONE );
+        openIgnoredList.setText( "Open Ignored List" );
+        openIgnoredList.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+        openIgnoredList.addListener( SWT.Selection, new Listener()
+        {
+
+            @Override
+            public void handleEvent( Event event )
+            {
+                PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
+                    parent.getShell(), MigrationProblemPreferencePage.ID, null, null );
+                dialog.open();
             }
         } );
     }
