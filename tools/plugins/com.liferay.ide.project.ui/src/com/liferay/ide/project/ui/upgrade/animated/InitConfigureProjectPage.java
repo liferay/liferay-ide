@@ -1111,6 +1111,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         Collection<File> liferayProjectDirs = new ArrayList<File>();
 
+        String[] needDeletedPaths = new String[] { "shared/portal-http-service", "webs/resources-importer-web" };
+        for( String path : needDeletedPaths )
+        {
+            File file = targetSDKLocation.append( path ).toFile();
+
+            if( file.exists() )
+            {
+                FileUtil.deleteDir( file, true );
+            }
+        }
+
         if( ProjectUtil.collectSDKProjectsFromDirectory(
             eclipseProjectFiles, liferayProjectDirs, targetSDKLocation.toFile(), null, true, monitor ) )
         {
@@ -1130,8 +1141,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         deleteServiceBuilderJarFile( importProject, monitor );
                     }
 
-                    if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) ||
-                        importProject.getName().startsWith( "resources-importer-web" ) )
+                    if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) )
                     {
                         importProject.delete( false, true, monitor );
                     }
@@ -1160,8 +1170,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         deleteServiceBuilderJarFile( importProject, monitor );
                     }
 
-                    if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) ||
-                        importProject.getName().startsWith( "resources-importer-web" ) )
+                    if( ProjectUtil.isExtProject( importProject ) || ProjectUtil.isThemeProject( importProject ) )
                     {
                         importProject.delete( false, true, monitor );
                     }

@@ -92,9 +92,9 @@ public class WelcomePage extends Page
 
                     CustomJspConverter.clearConvertResults();
 
-                    UpgradeSettingsUtil.resetStoreProperties();
-
                     page.hideView( view );
+
+                    UpgradeSettingsUtil.resetStoreProperties();
 
                     try
                     {
