@@ -30,6 +30,10 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -55,43 +59,55 @@ public class IgnoreAlwaysAction extends SelectionProviderAction implements IActi
         final Problem problem = MigrationUtil.getProblemFromSelection( getSelection() );
         storeIgnoredProblem( problem );
 
-        try
+        new WorkspaceJob( "Ignore all problems of this type" )
         {
 
-            FindBreakingChangesPage page =
-                UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
-            TreeViewer treeViewer = page.getTreeViewer();
-            MigrationContentProvider contentProvider = (MigrationContentProvider) treeViewer.getContentProvider();
-
-            final MigrationProblemsContainer mpContainer =
-                (MigrationProblemsContainer) contentProvider._problems.get( 0 );
-            final MigrationProblems[] projectProblem = mpContainer.getProblemsArray();
-
-            for( MigrationProblems pProblem : projectProblem )
+            public IStatus runInWorkspace( IProgressMonitor monitor )
             {
-                FileProblems[] fProblems = pProblem.getProblems();
+                IStatus retval = Status.OK_STATUS;
 
-                for( FileProblems fp : fProblems )
+                try
                 {
-                    List<Problem> problems = fp.getProblems();
-                    Iterator<Problem> iterator = problems.iterator();
+                    FindBreakingChangesPage page =
+                        UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
+                    TreeViewer treeViewer = page.getTreeViewer();
+                    MigrationContentProvider contentProvider =
+                        (MigrationContentProvider) treeViewer.getContentProvider();
 
-                    while( iterator.hasNext() )
+                    final MigrationProblemsContainer mpContainer =
+                        (MigrationProblemsContainer) contentProvider._problems.get( 0 );
+                    final MigrationProblems[] projectProblem = mpContainer.getProblemsArray();
+
+                    for( MigrationProblems pProblem : projectProblem )
                     {
-                        Problem p = iterator.next();
+                        FileProblems[] fProblems = pProblem.getProblems();
 
-                        if( p.getTicket().equals( problem.getTicket() ) )
+                        for( FileProblems fp : fProblems )
                         {
-                            new IgnoreAction().run( p, _provider );
+                            List<Problem> problems = fp.getProblems();
+                            Iterator<Problem> iterator = problems.iterator();
+
+                            while( iterator.hasNext() )
+                            {
+                                Problem p = iterator.next();
+
+                                if( p.getTicket().equals( problem.getTicket() ) )
+                                {
+                                    new IgnoreAction().run( p, _provider );
+                                }
+                            }
                         }
                     }
                 }
+                catch( Exception e )
+                {
+                    retval = ProjectUI.createErrorStatus( "Unable to get file from problem" );
+                }
+
+                return retval;
             }
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
+
+        }.schedule();
 
     }
 

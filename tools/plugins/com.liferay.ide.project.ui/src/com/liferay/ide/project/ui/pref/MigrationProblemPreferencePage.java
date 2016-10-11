@@ -64,6 +64,8 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
 
     private Browser _browser;
 
+    private IgnoredProblemsContainer mpContainer;
+
     @Override
     public Control createContents( Composite parent )
     {
@@ -126,12 +128,10 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
                     try
                     {
                         Problem problem = (Problem) selection.getFirstElement();
-                        IgnoredProblemsContainer mpContainer = MigrationUtil.getIgnoredProblemsContainer();
                         mpContainer.remove( problem );
-                        UpgradeAssistantSettingsUtil.setObjectToStore( IgnoredProblemsContainer.class, mpContainer );
                         _ignoredProblemTable.setInput( mpContainer.getProblemMap().values().toArray( new Problem[0] ) );
                     }
-                    catch( IOException e )
+                    catch( Exception e )
                     {
                         ProjectUI.logError( e );
                     }
@@ -198,6 +198,22 @@ public class MigrationProblemPreferencePage extends PreferencePage implements IW
     @Override
     public void init( IWorkbench arg0 )
     {
+        mpContainer = MigrationUtil.getIgnoredProblemsContainer();
+    }
+
+    @Override
+    public boolean performOk()
+    {
+        try
+        {
+            UpgradeAssistantSettingsUtil.setObjectToStore( IgnoredProblemsContainer.class, mpContainer );
+        }
+        catch( IOException e )
+        {
+           ProjectUI.logError( e );
+        }
+
+        return super.performOk();
     }
 
     private void fillIgnoredProblemTable()
