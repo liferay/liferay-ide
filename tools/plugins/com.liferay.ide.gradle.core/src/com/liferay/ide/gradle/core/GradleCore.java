@@ -24,22 +24,27 @@ import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Set;
 
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
@@ -154,9 +159,48 @@ public class GradleCore extends Plugin
         {
             Job job = new WorkspaceJob( "Checking gradle configuration" )
             {
+
                 @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                 {
+                    IFile bndFile = project.getFile( "bnd.bnd" );
+
+                    //case 1: has bnd file
+                    if( bndFile != null && bndFile.exists() )
+                    {
+                        LiferayNature.addLiferayNature( project, monitor );
+
+                        return Status.OK_STATUS;
+                    }
+                    else
+                    {
+                        IFile gulpFile = project.getFile( "gulpfile.js" );
+
+                        if( gulpFile != null && gulpFile.exists() )
+                        {
+                            String gulpFileContent;
+
+                            try
+                            {
+                                gulpFileContent = new String(
+                                    Files.readAllBytes(
+                                        gulpFile.getLocation().toFile().toPath() ), StandardCharsets.UTF_8 );
+
+                                //case 2: has gulpfile.js with some content
+                                if( gulpFileContent.contains( "require('liferay-theme-tasks')" ) )
+                                {
+                                    LiferayNature.addLiferayNature( project, monitor );
+
+                                    return Status.OK_STATUS;
+                                }
+                            }
+                            catch( IOException e )
+                            {
+                                logError( "read gulpfile.js file fail", e );
+                            }
+                        }
+                    }
+
                     try
                     {
                         final CustomModel customModel = getToolingModel( gradleCore, CustomModel.class, project );
@@ -191,6 +235,7 @@ public class GradleCore extends Plugin
                     return false;
                 }
             };
+
             job.setRule( CoreUtil.getWorkspaceRoot() );
             job.schedule();
         }
@@ -214,28 +259,21 @@ public class GradleCore extends Plugin
                 {
                     event.getDelta().accept( new IResourceDeltaVisitor()
                     {
+
                         @Override
                         public boolean visit( IResourceDelta delta ) throws CoreException
                         {
-                            IResourceDelta dotProject = delta.findMember( new Path( ".project" ) );
+                            IResource resource = delta.getResource();
 
-                            if( dotProject == null )
+                            if( delta.getKind() == IResourceDelta.ADDED &&
+                                resource.getName().equals( IProjectDescription.DESCRIPTION_FILE_NAME ) )
                             {
-                                final IResourceDelta[] children = delta.getAffectedChildren();
+                                IProjectDescription projectDescription =
+                                    ResourcesPlugin.getWorkspace().loadProjectDescription( resource.getLocation() );
 
-                                if( CoreUtil.isNotNullOrEmpty( children) )
-                                {
-                                    final IPath projectPath = children[0].getFullPath();
+                                String projectName = projectDescription.getName();
 
-                                    dotProject = delta.findMember( projectPath.append( ".project" ) );
-                                }
-                            }
-
-                            if( dotProject != null )
-                            {
-                                final IProject project = dotProject.getResource().getProject();
-
-                                configureIfLiferayProject( project, GradleCore.this );
+                                configureIfLiferayProject( CoreUtil.getProject( projectName ), GradleCore.this );
                             }
 
                             return true;

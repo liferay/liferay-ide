@@ -75,6 +75,7 @@ public class LiferayNature implements IProjectNature
 
             description.setNatureIds( newNatures );
             project.setDescription( description, monitor );
+            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
         }
         else
         {
