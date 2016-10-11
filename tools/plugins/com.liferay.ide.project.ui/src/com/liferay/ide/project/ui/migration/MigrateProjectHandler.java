@@ -365,6 +365,33 @@ public class MigrateProjectHandler extends AbstractHandler
             return false;
         }
 
+        IgnoredProblemsContainer ignoredProblemsContainer = MigrationUtil.getIgnoredProblemsContainer();
+
+        if( ignoredProblemsContainer != null )
+        {
+            Set<String> ticketSet = ignoredProblemsContainer.getProblemMap().keySet();
+
+            if( ticketSet != null && ticketSet.contains( problem.getTicket() ) )
+            {
+                final IResource resource = MigrationUtil.getIResourceFromProblem( problem );
+                final IMarker marker = resource.getMarker( problem.getMarkerId() );
+
+                if( marker.exists() )
+                {
+                    try
+                    {
+                        marker.delete();
+                    }
+                    catch( CoreException e )
+                    {
+                        ProjectUI.logError( e );
+                    }
+                }
+
+                return false;
+            }
+        }
+
         if( path.endsWith( "java" ) )
         {
             CompilationUnit ast =
@@ -390,32 +417,6 @@ public class MigrateProjectHandler extends AbstractHandler
                         return false;
                     }
                 }
-            }
-        }
-
-        IgnoredProblemsContainer ignoredProblemsContainer = MigrationUtil.getIgnoredProblemsContainer();
-
-        if( ignoredProblemsContainer != null )
-        {
-            Set<String> ticketSet = ignoredProblemsContainer.getProblemMap().keySet();
-
-            if( ticketSet != null && ticketSet.contains( problem.getTicket() ) )
-            {
-                final IResource resource = MigrationUtil.getIResourceFromProblem( problem );
-                final IMarker marker = resource.getMarker( problem.getMarkerId() );
-
-                if( marker.exists() )
-                {
-                    try
-                    {
-                        marker.delete();
-                    }
-                    catch( CoreException e )
-                    {
-                        ProjectUI.logError( e );
-                    }
-                }
-                return false;
             }
         }
 
