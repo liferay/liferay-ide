@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.project.core;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -34,4 +36,6 @@ public interface IProjectBuilder
     IStatus buildWSDD( IProgressMonitor monitor ) throws CoreException;
 
     IStatus creatInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor ) throws CoreException;
+
+    public void updateProjectDependency( IProject project, List<String[]> dependecies ) throws CoreException;
 }

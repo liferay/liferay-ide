@@ -22,8 +22,10 @@ import java.util.List;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * @author Gregory Amerson
@@ -97,8 +99,19 @@ public abstract class BaseLiferayProject implements ILiferayProject
     public IFolder[] getSourceFolders()
     {
         IFolder[] retval = null;
-
         final IJavaProject javaproject = JavaCore.create( getProject() );
+
+        try
+        {
+            if ( !javaproject.isOpen() )
+            {
+                javaproject.open( new NullProgressMonitor() );
+            }
+        }
+        catch( JavaModelException e )
+        {
+            LiferayCore.logWarning( e );
+        }
 
         if( javaproject != null && javaproject.isOpen() )
         {

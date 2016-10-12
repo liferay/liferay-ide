@@ -698,5 +698,11 @@
             shortName="ModelListener"
             id="newLiferayComponentModelListenerOperation">
       </liferayComponentTemplate>
+	  <liferayComponentTemplate
+            class="com.liferay.ide.project.core.modules.templates.mvcportlet.NewLiferayComponentMVCPortletOperation"
+            displayName="MVC Portlet"
+            shortName="MVCPortlet"
+            id="newLiferayComponentMVCPortletOperation">
+      </liferayComponentTemplate>       
    </extension>
 </plugin>

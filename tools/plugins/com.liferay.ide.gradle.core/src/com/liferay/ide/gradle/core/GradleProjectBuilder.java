@@ -15,6 +15,8 @@
 
 package com.liferay.ide.gradle.core;
 
+import com.liferay.ide.gradle.core.parser.GradleDependency;
+import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 
 import java.io.File;
@@ -23,8 +25,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
+import org.eclipse.buildship.core.CorePlugin;
+import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -121,5 +129,39 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
         {
         }
         return Status.OK_STATUS;
+    }
+
+    @Override
+    public void updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
+    {
+        try
+        {
+            if( gradleBuildFile.exists() )
+            {
+                GradleDependencyUpdater updater = new GradleDependencyUpdater( gradleBuildFile.getLocation().toFile() );
+                List<GradleDependency> existDependencies = updater.getAllDependencies();
+
+                for( String[] dependency : dependencies )
+                {
+                    GradleDependency gd = new GradleDependency( dependency[0], dependency[1], dependency[2] );
+
+                    if( !existDependencies.contains( gd ) )
+                    {
+                        updater.insertDependency( gd );
+
+                        FileUtils.writeLines( gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents() );
+
+                        Set<IProject> set = new HashSet<>();
+                        set.add( project );
+                        CorePlugin.gradleWorkspaceManager().getCompositeBuild( set ).synchronize(
+                            NewProjectHandler.IMPORT_AND_MERGE );
+                    }
+                }
+            }
+        }
+        catch( IOException ie )
+        {
+            GradleCore.logError( "failed update dependency for project " + project.getName(), ie );
+        }
     }
 }

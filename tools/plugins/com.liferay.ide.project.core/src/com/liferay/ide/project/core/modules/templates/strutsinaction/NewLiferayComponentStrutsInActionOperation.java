@@ -17,6 +17,8 @@ package com.liferay.ide.project.core.modules.templates.strutsinaction;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
+import com.liferay.ide.project.core.modules.templates.BndProperties;
+import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,5 +128,22 @@ public class NewLiferayComponentStrutsInActionOperation extends AbstractLiferayC
         {
             throw new CoreException( ProjectCore.createErrorStatus( e ) );
         }
+    }
+
+    @Override
+    protected List<String[]> getComponentDependency() throws CoreException
+    {
+        List<String[]> componentDependency = super.getComponentDependency();
+        componentDependency.add( new String[]{ "javax.servlet", "javax.servlet-api", "3.0.1"} );
+        return componentDependency;
+    }
+
+    @Override
+    protected void setBndProperties( BndProperties bndProperty )
+    {
+        bndProperty.addValue( "Web-ContextPath", new BndPropertiesValue( "/" + componentClassName ) );
+        bndProperty.addValue( "-jsp", new BndPropertiesValue( "*.jsp,*.jspf" ) );
+        bndProperty.addValue( "-plugin.jsp", new BndPropertiesValue( "com.liferay.ant.bnd.jsp.JspAnalyzerPlugin" ) );
+        bndProperty.addValue( "-sources", new BndPropertiesValue( "true" ) );
     }
 }

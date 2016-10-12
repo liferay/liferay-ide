@@ -18,7 +18,10 @@ package com.liferay.ide.maven.core.tests;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
+import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.modules.PropertyKey;
@@ -27,6 +30,8 @@ import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -34,6 +39,9 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.IMaven;
+import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -522,4 +530,116 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         assertTrue( outputBundle.toFile().exists() );
     }
 
+    @Test
+    public void testNewLiferayComponentBndAndMavenForPortleActionCommandAndRest() throws Exception
+    {
+        NewLiferayModuleProjectOp pop = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        pop.setProjectName( "testMavenModuleComponentBnd" );
+        pop.setProjectTemplateName( "portlet" );
+        pop.setProjectProvider( "maven-module" );
+
+        Status modulePorjectStatus = NewLiferayModuleProjectOpMethods.execute( pop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+        assertTrue( modulePorjectStatus.ok() );
+
+        IProject modPorject = CoreUtil.getProject( pop.getProjectName().content() );
+        modPorject.open( new NullProgressMonitor() );
+
+        NewLiferayComponentOp cop = NewLiferayComponentOp.TYPE.instantiate();
+        cop.setProjectName( pop.getProjectName().content() );
+        cop.setComponentClassTemplateName( "PortletActionCommand" );
+
+        NewLiferayComponentOpMethods.execute( cop, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        IFile bgd = modPorject.getFile( "bnd.bnd" );
+        String bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
+
+        String bndConfig = "-includeresource: \\" + System.getProperty( "line.separator" ) +
+                        "\t" + "@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class,\\" + System.getProperty( "line.separator" ) +
+                        "\t" + "@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld" + System.getProperty( "line.separator" );
+
+        assertTrue( bndcontent.contains( bndConfig ) );
+
+        IFile pomFile = modPorject.getFile( IMavenConstants.POM_FILE_NAME );
+        final IMaven maven = MavenPlugin.getMaven();
+        Model model = maven.readModel( pomFile.getLocation().toFile() );
+        List<Dependency> dependencies = model.getDependencies();
+
+        boolean hasDependency = false;
+        for ( Dependency de : dependencies )
+        {
+            String managementKey = de.getManagementKey();
+
+            if ( managementKey.equals( "com.liferay.portal:com.liferay.util.bridges:jar" ))
+            {
+                hasDependency = true;
+                break;
+            }
+        }
+
+        assertTrue( hasDependency );
+
+        NewLiferayComponentOp copRest = NewLiferayComponentOp.TYPE.instantiate();
+        copRest.setProjectName( pop.getProjectName().content() );
+        copRest.setComponentClassTemplateName( "RestService" );
+
+        NewLiferayComponentOpMethods.execute( copRest, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        bgd = modPorject.getFile( "bnd.bnd" );
+        bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
+        assertTrue( bndcontent.contains( bndConfig ) );
+
+        final String restConfig = "Require-Capability: osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"";
+        assertTrue( bndcontent.contains( restConfig ) );
+
+        model = maven.readModel( pomFile.getLocation().toFile() );
+        dependencies = model.getDependencies();
+
+        hasDependency = false;
+        for ( Dependency de : dependencies )
+        {
+            String managementKey = de.getManagementKey();
+
+            if ( managementKey.equals( "javax.ws.rs:javax.ws.rs-api:jar" ))
+            {
+                hasDependency = true;
+                break;
+            }
+        }
+
+        assertTrue( hasDependency );
+
+        NewLiferayComponentOp copAuth = NewLiferayComponentOp.TYPE.instantiate();
+        copAuth.setProjectName( pop.getProjectName().content() );
+        copAuth.setComponentClassTemplateName( "Authenticator" );
+
+        NewLiferayComponentOpMethods.execute( copAuth, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        bgd = modPorject.getFile( "bnd.bnd" );
+        bndcontent = FileUtil.readContents( bgd.getLocation().toFile(), true );
+
+        bndConfig = "-includeresource: \\" + System.getProperty( "line.separator" ) +
+                        "\t" + "@com.liferay.util.bridges-2.0.0.jar!/com/liferay/util/bridges/freemarker/FreeMarkerPortlet.class,\\" + System.getProperty( "line.separator" ) +
+                        "\t" + "@com.liferay.util.taglib-2.0.0.jar!/META-INF/*.tld,\\" + System.getProperty( "line.separator" ) +
+                        "\t" + "@shiro-core-1.1.0.jar";
+
+        assertTrue( bndcontent.contains( bndConfig ) );
+
+        model = maven.readModel( pomFile.getLocation().toFile() );
+        dependencies = model.getDependencies();
+
+        hasDependency = false;
+        for ( Dependency de : dependencies )
+        {
+            String managementKey = de.getManagementKey();
+
+            if ( managementKey.equals( "org.apache.shiro:shiro-core:jar" ))
+            {
+                hasDependency = true;
+                break;
+            }
+        }
+
+        assertTrue( hasDependency );
+    }
 }

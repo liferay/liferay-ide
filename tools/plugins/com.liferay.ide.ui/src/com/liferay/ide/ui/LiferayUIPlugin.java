@@ -334,7 +334,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
 
                         String content = FileUtil.readContents( file, true );
 
-                        if( content.indexOf( "label=\"Liferay\"" ) != -1 )
+                        if( content != null && content.indexOf( "label=\"Liferay\"" ) != -1 )
                         {
                             content = content.replaceFirst( "label=\"Liferay\"", "label=\"Liferay Plugins\"" );
 

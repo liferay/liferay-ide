@@ -15,10 +15,14 @@
 
 package com.liferay.ide.project.core.modules.templates.servicewrapper;
 
+import com.liferay.ide.project.core.modules.ServiceContainer;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Simon Jiang
@@ -70,5 +74,25 @@ public class NewLiferayComponentServiceOperation extends AbstractLiferayComponen
     protected String getTemplateFile()
     {
         return TEMPLATE_FILE;
+    }
+
+    @Override
+    protected List<String[]> getComponentDependency() throws CoreException
+    {
+        List<String[]> componentDependency = super.getComponentDependency();
+        try
+        {
+            ServiceContainer serviceBundle = TargetPlatformUtil.getServiceWrapperBundle( serviceName );
+
+            if ( serviceBundle != null )
+            {
+                componentDependency.add( new String[]{ serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), serviceBundle.getBundleVersion() } );
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return componentDependency;
     }
 }

@@ -1,20 +1,22 @@
 
 package com.liferay.ide.gradle.core.parser;
 
+import com.liferay.ide.core.util.CoreUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.groovy.ast.ASTNode;
 import org.codehaus.groovy.ast.GroovyCodeVisitor;
 import org.codehaus.groovy.ast.builder.AstBuilder;
 import org.codehaus.groovy.control.MultipleCompilationErrorsException;
-
-import com.liferay.ide.core.util.CoreUtil;
 
 /**
  * @author Lovett Li
@@ -50,7 +52,7 @@ public class GradleDependencyUpdater
     {
         FindDependenciesVisitor visitor = new FindDependenciesVisitor();
         walkScript( visitor );
-        gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ) );
+        gradleFileContents = FileUtils.readLines( file );
 
         if( !dependency.startsWith( "\t" ) )
         {

@@ -16,10 +16,14 @@
 package com.liferay.ide.project.core.modules.templates.rest;
 
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
+import com.liferay.ide.project.core.modules.templates.BndProperties;
+import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * @author Simon Jiang
@@ -51,6 +55,7 @@ public class NewLiferayComponentRestOperation extends AbstractLiferayComponentTe
         imports.add( "java.util.Set" );
         imports.add( "javax.ws.rs.GET" );
         imports.add( "javax.ws.rs.Path" );
+        imports.add( "javax.ws.rs.Produces" );
         imports.add( "javax.ws.rs.core.Application" );
         imports.add( "org.osgi.service.component.annotations.Reference" );
         imports.addAll( super.getImports() );
@@ -87,5 +92,20 @@ public class NewLiferayComponentRestOperation extends AbstractLiferayComponentTe
     protected String getTemplateFile()
     {
         return TEMPLATE_FILE;
+    }
+
+    @Override
+    protected List<String[]> getComponentDependency() throws CoreException
+    {
+        List<String[]> componentDependency = super.getComponentDependency();
+        componentDependency.add( new String[]{ "javax.ws.rs", "javax.ws.rs-api", "2.0.1"} );
+        return componentDependency;
+    }
+
+    @Override
+    protected void setBndProperties( BndProperties bndProperty )
+    {
+        bndProperty.addValue( "Require-Capability", new BndPropertiesValue( "osgi.contract; filter:=\"(&(osgi.contract=JavaJAXRS)(version=2))\"" ) );
+        bndProperty.addValue( "-sources", new BndPropertiesValue( "true" ) );
     }
 }

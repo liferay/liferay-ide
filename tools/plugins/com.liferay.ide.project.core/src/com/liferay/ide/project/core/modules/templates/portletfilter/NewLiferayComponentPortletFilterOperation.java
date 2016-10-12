@@ -237,4 +237,12 @@ public class NewLiferayComponentPortletFilterOperation extends AbstractLiferayCo
             throw new CoreException( ProjectCore.createErrorStatus( e ) );
         }
     }
+
+    @Override
+    protected List<String[]> getComponentDependency() throws CoreException
+    {
+        List<String[]> componentDependency = super.getComponentDependency();
+        componentDependency.add( new String[]{ "javax.portlet", "portlet-api", "2.0"} );
+        return componentDependency;
+    }
 }

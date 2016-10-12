@@ -17,9 +17,12 @@ package com.liferay.ide.project.core.modules.templates.authenticator;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.templates.AbstractLiferayComponentTemplate;
+import com.liferay.ide.project.core.modules.templates.BndProperties;
+import com.liferay.ide.project.core.modules.templates.BndPropertiesValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -119,4 +122,20 @@ public class NewLiferayComponentAuthenticatorOperation extends AbstractLiferayCo
             throw new CoreException( ProjectCore.createErrorStatus( e ) );
         }
     }
+
+    @Override
+    protected List<String[]> getComponentDependency() throws CoreException
+    {
+        List<String[]> specialList = new LinkedList<>(super.getComponentDependency());
+        specialList.add(  new String[]{ "org.apache.shiro", "shiro-core", "1.1.0"} );
+        return specialList;
+    }
+
+    @Override
+    protected void setBndProperties( BndProperties bndProperty )
+    {
+        bndProperty.addValue( "-includeresource", new BndPropertiesValue( "@shiro-core-1.1.0.jar" ) );
+        bndProperty.addValue( "-sources", new BndPropertiesValue("true"));
+    }
+    
 }

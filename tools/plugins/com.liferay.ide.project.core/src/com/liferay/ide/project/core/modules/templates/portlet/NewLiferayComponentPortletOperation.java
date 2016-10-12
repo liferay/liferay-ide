@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+
 /**
  * @author Simon Jiang
  */
@@ -92,5 +94,13 @@ public class NewLiferayComponentPortletOperation extends AbstractLiferayComponen
     protected String getSuperClass()
     {
         return SUPER_CLASS;
+    }
+
+    @Override
+    protected List<String[]> getComponentDependency() throws CoreException
+    {
+        List<String[]> componentDependency = super.getComponentDependency();
+        componentDependency.add( new String[]{ "javax.portlet", "portlet-api", "2.0"} );
+        return componentDependency;
     }
 }
