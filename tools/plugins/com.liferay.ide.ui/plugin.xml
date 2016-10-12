@@ -63,22 +63,19 @@
                id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.project.ui.newPluginProjectWizard">
+               id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
-         </newWizardShortcut>
-         <newWizardShortcut
-               id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder">
-         </newWizardShortcut>
-         <newWizardShortcut
-               id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard">
          </newWizardShortcut>
       </perspectiveExtension>
       <perspectiveExtension
@@ -90,22 +87,19 @@
                id="com.liferay.ide.eclipse.ui.perspective.liferay">
          </perspectiveShortcut>
          <newWizardShortcut
-               id="com.liferay.ide.eclipse.project.ui.newPluginProjectWizard">
+               id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
+         </newWizardShortcut>
+         <newWizardShortcut
+               id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.portlet">
-         </newWizardShortcut>
-         <newWizardShortcut
-               id="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.hook">
          </newWizardShortcut>
          <newWizardShortcut
                id="com.liferay.ide.eclipse.portlet.ui.wizard.servicebuilder">
-         </newWizardShortcut>
-         <newWizardShortcut
-               id="com.liferay.ide.project.ui.newModuleFragmentFilesWizard">
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>

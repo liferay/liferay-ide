@@ -24,6 +24,7 @@ import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Terry Jia
+ * @author Andy Wu
  */
 public class HostOSGiBundleDefaultValueService extends DefaultValueService
 {
@@ -33,7 +34,7 @@ public class HostOSGiBundleDefaultValueService extends DefaultValueService
     {
         String projectName = op().getProjectName().content();
 
-        if( projectName != null )
+        if( !CoreUtil.empty( projectName ) )
         {
             IProject project = CoreUtil.getProject( projectName );
             IFile bndFile = project.getFile( "bnd.bnd" );

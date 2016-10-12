@@ -45,6 +45,8 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory
 
     public static final String ID_NEW_COMPONENT_WIZARD = "com.liferay.ide.project.ui.modules.NewLiferayComponentWizard"; //$NON-NLS-1$
 
+    public static final String ID_NEW_MODULE_FRAGMENT_PROJECT_WIZARD = "com.liferay.ide.project.ui.newModuleFragmentWizard"; //$NON-NLS-1$
+
     public static final String ID_NEW_MODULE_FRAGMENT_FILES_WIZARD =
         "com.liferay.ide.project.ui.newModuleFragmentFilesWizard"; //$NON-NLS-1$
 
@@ -86,17 +88,18 @@ public abstract class AbstractPerspectiveFactory implements IPerspectiveFactory
 
     protected void addShortcuts( IPageLayout layout )
     {
-        layout.addNewWizardShortcut( ID_NEW_PLUGIN_PROJECT_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_MODULE_PROJECT_WIZARD );
+        layout.addNewWizardShortcut( ID_NEW_MODULE_FRAGMENT_PROJECT_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_WORKSPACE_PROJECT_WIZARD );
+        layout.addNewWizardShortcut( ID_NEW_PLUGIN_PROJECT_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_PLUGIN_PROJECT_WIZARD_EXISTING_SOURCE );
         layout.addNewWizardShortcut( ID_NEW_COMPONENT_WIZARD );
+        layout.addNewWizardShortcut( ID_NEW_MODULE_FRAGMENT_FILES_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_PORTLET_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_JSF_PORTLET_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_VAADIN_PORTLET_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_HOOK_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_SERVICE_BUILDER_WIZARD );
-        layout.addNewWizardShortcut( ID_NEW_MODULE_FRAGMENT_FILES_WIZARD );
         layout.addNewWizardShortcut( ID_NEW_LAYOUT_TEMPLATE_WIZARD );
         layout.addNewWizardShortcut( "org.eclipse.jdt.ui.wizards.NewPackageCreationWizard" ); //$NON-NLS-1$
         layout.addNewWizardShortcut( "org.eclipse.jdt.ui.wizards.NewClassCreationWizard" ); //$NON-NLS-1$

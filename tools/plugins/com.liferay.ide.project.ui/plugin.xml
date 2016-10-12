@@ -15,7 +15,7 @@
             name="Liferay Component Class">
          <class class="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
             <parameter name="liferay_artifact" value="true"/>
-            <parameter name="menuIndex" value="10" />
+            <parameter name="menuIndex" value="1" />
          </class>
          <description>
             Create a new Liferay Component Class.
@@ -38,7 +38,7 @@
             project="true">
          <class class="com.liferay.ide.project.ui.wizard.NewLiferayPluginProjectWizard">
             <parameter name="liferay_project" value="true"/>
-            <parameter name="menuIndex" value="12" />
+            <parameter name="menuIndex" value="4" />
          </class>
 
          <description>
@@ -58,7 +58,7 @@
             project="true">
          <class class="com.liferay.ide.project.ui.modules.NewLiferayModuleProjectWizard">
             <parameter name="liferay_project" value="true"/>
-            <parameter name="menuIndex" value="12" />
+            <parameter name="menuIndex" value="1" />
          </class>
 
          <description>
@@ -1452,6 +1452,25 @@
          <commonWizard
                type="new"
                wizardId="com.liferay.ide.project.ui.newModuleProjectWizard">
+            <enablement>
+               <or>
+                  <instanceof
+                        value="org.eclipse.core.resources.IResource">
+                  </instanceof>
+                  <and>
+                     <instanceof
+                           value="java.util.Collection">
+                     </instanceof>
+                     <count
+                           value="0">
+                     </count>
+                  </and>
+               </or>
+            </enablement>
+         </commonWizard>
+         <commonWizard
+               type="new"
+               wizardId="com.liferay.ide.project.ui.modules.NewLiferayComponentWizard">
             <enablement>
                <or>
                   <instanceof
