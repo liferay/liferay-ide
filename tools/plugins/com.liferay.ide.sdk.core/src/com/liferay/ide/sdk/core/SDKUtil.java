@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -321,7 +322,14 @@ public class SDKUtil
     static String readSDKVersion( String path ) throws FileNotFoundException, IOException
     {
         Properties properties = new Properties();
-        properties.load( new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ) ); //$NON-NLS-1$
+
+        try(InputStream in = new FileInputStream( new Path( path ).append( "build.properties" ).toFile() ))
+        {
+            properties.load( in );
+        }
+        catch( Exception e )
+        {
+        }
 
         return properties.getProperty( "lp.version" ); //$NON-NLS-1$
     }
