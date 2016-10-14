@@ -48,7 +48,7 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** Project Template ***
 
-    @DefaultValue( text = "mvcportlet" )
+    @DefaultValue( text = "mvc-portlet" )
     @Label( standard = "Project Template Name" )
     @Listeners( ModuleProjectNameListener.class )
     @Service( impl = ProjectTemplateNamePossibleValuesService.class )
