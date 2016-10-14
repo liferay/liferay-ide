@@ -73,7 +73,7 @@
                 </property-editor>
                  <property-editor>PackageName</property-editor>
                 <property-editor>
-                    <visible-when>${ ProjectTemplateName == 'servicewrapper' || ProjectTemplateName == 'service' }</visible-when>
+                    <visible-when>${ ProjectTemplateName == 'service-wrapper' || ProjectTemplateName == 'service' }</visible-when>
                     <property>ServiceName</property>
                 </property-editor>
                  <property-editor>

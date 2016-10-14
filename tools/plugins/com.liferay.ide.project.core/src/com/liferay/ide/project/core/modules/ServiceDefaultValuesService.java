@@ -38,7 +38,7 @@ public class ServiceDefaultValuesService extends DefaultValueService
 
         String retVal = "";
         
-        if( template.equals( "servicewrapper" ) )
+        if( template.equals( "service-wrapper" ) )
         {
             for( IServer server : servers )
             {

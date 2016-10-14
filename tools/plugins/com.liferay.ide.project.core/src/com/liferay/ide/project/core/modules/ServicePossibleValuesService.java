@@ -60,7 +60,7 @@ public class ServicePossibleValuesService extends PossibleValuesService
         IServer runningServer = null;
         final IServer[] servers = ServerCore.getServers();
 
-        if( template.equals( "servicewrapper" ) )
+        if( template.equals( "service-wrapper" ) )
         {
             for( IServer server : servers )
             {
