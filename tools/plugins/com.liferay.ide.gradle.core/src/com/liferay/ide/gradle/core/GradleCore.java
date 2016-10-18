@@ -157,52 +157,59 @@ public class GradleCore extends Plugin
     {
         if( project.hasNature( GradleProjectNature.ID ) && !LiferayNature.hasNature( project ) )
         {
+            final boolean[] needAddNature = new boolean[1];
+
+            needAddNature[0] = false;
+
+            IFile bndFile = project.getFile( "bnd.bnd" );
+
+            // case 1: has bnd file
+            if( bndFile != null && bndFile.exists() )
+            {
+                needAddNature[0] = true;
+            }
+            else
+            {
+                IFile gulpFile = project.getFile( "gulpfile.js" );
+
+                if( gulpFile != null && gulpFile.exists() )
+                {
+                    String gulpFileContent;
+
+                    try
+                    {
+                        gulpFileContent = new String(
+                            Files.readAllBytes( gulpFile.getLocation().toFile().toPath() ), StandardCharsets.UTF_8 );
+
+                        // case 2: has gulpfile.js with some content
+                        if( gulpFileContent.contains( "require('liferay-theme-tasks')" ) )
+                        {
+                            needAddNature[0] = true;
+                        }
+                    }
+                    catch( IOException e )
+                    {
+                        logError( "read gulpfile.js file fail", e );
+                    }
+                }
+            }
+
             Job job = new WorkspaceJob( "Checking gradle configuration" )
             {
 
                 @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                 {
-                    IFile bndFile = project.getFile( "bnd.bnd" );
-
-                    //case 1: has bnd file
-                    if( bndFile != null && bndFile.exists() )
-                    {
-                        LiferayNature.addLiferayNature( project, monitor );
-
-                        return Status.OK_STATUS;
-                    }
-                    else
-                    {
-                        IFile gulpFile = project.getFile( "gulpfile.js" );
-
-                        if( gulpFile != null && gulpFile.exists() )
-                        {
-                            String gulpFileContent;
-
-                            try
-                            {
-                                gulpFileContent = new String(
-                                    Files.readAllBytes(
-                                        gulpFile.getLocation().toFile().toPath() ), StandardCharsets.UTF_8 );
-
-                                //case 2: has gulpfile.js with some content
-                                if( gulpFileContent.contains( "require('liferay-theme-tasks')" ) )
-                                {
-                                    LiferayNature.addLiferayNature( project, monitor );
-
-                                    return Status.OK_STATUS;
-                                }
-                            }
-                            catch( IOException e )
-                            {
-                                logError( "read gulpfile.js file fail", e );
-                            }
-                        }
-                    }
 
                     try
                     {
+                        if( needAddNature[0] )
+                        {
+                            LiferayNature.addLiferayNature( project, monitor );
+
+                            return Status.OK_STATUS;
+                        }
+
                         final CustomModel customModel = getToolingModel( gradleCore, CustomModel.class, project );
 
                         if( customModel == null )
