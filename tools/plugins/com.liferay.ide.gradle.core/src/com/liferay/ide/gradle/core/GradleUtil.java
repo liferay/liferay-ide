@@ -86,7 +86,7 @@ public class GradleUtil
 
         return GradleRunConfigurationAttributes.with(
             tasks, projectDirectoryExpression, gradleDistribution, javaHome, jvmArguments, arguments,
-            showExecutionView, showConsoleView );
+            showExecutionView, showConsoleView, true );
     }
 
     public static IStatus importGradleProject( File dir, IProgressMonitor monitor ) throws CoreException
