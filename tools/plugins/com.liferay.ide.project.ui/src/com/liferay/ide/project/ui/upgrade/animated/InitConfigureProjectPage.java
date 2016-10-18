@@ -258,9 +258,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         } );
 
-        dirField.setText( getSDKDefaultValue() );
-        dataModel.setSdkLocation( getSDKDefaultValue() );
-
         SWTUtil.createButton( this, "Browse..." ).addSelectionListener( new SelectionAdapter()
         {
 
@@ -333,6 +330,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         } );
         dataModel.setLayout( layoutComb.getText() );
+
+        dirField.setText( getSDKDefaultValue() );
 
         createServerElement();
 
