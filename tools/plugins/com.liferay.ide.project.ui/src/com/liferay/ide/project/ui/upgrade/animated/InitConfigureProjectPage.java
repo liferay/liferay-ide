@@ -117,7 +117,7 @@ import org.osgi.framework.Version;
  * @author Terry Jia
  */
 @SuppressWarnings( "unused" )
-public class InitConfigureProjectPage extends Page implements IServerLifecycleListener
+public class InitConfigureProjectPage extends Page implements IServerLifecycleListener, SelectionChangedListener
 {
 
     private class LiferayUpgradeValidationListener extends Listener
@@ -540,7 +540,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         Label image = new Label( fillLayoutComposite, SWT.NONE);
         image.setImage( loadImage("question.png")  );
 
-        PopupDialog popupDialog = new PopupDialog( fillLayoutComposite.getShell(), 
+        PopupDialog popupDialog = new PopupDialog( fillLayoutComposite.getShell(),
             PopupDialog.INFOPOPUPRESIZE_SHELLSTYLE, true, false, false, false, false, null, null )
         {
             private static final int CURSOR_SIZE = 15;
@@ -1184,6 +1184,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
+    @Override
+    public void onSelectionChanged( int targetSelection )
+    {
+        if( targetSelection == 1 )
+        {
+            startCheckThread();
+        }
+    }
+
     @SuppressWarnings( "unchecked" )
     private void removeIvyPrivateSetting( IPath sdkLocation ) throws CoreException
     {
@@ -1516,11 +1525,18 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     }
                 }
 
+                if( dataModel.getImportFinished().content() )
+                {
+                    message = "import finished, please go to first page and click \"Restart...\"";
+
+                    inputValidation = false;
+                }
+
                 triggerValidationEvent( message );
 
-                importButton.setEnabled( layoutValidation && inputValidation );
-
                 validationResult = layoutValidation && inputValidation;
+
+                importButton.setEnabled( validationResult );
             }
         } );
     }
@@ -1529,5 +1545,4 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         return validationResult;
     }
-
 }

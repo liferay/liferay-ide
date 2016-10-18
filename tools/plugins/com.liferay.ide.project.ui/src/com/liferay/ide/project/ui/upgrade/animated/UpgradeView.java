@@ -56,7 +56,6 @@ import org.eclipse.ui.part.ViewPart;
  */
 public class UpgradeView extends ViewPart implements SelectionChangedListener
 {
-
     public static final String ID = "com.liferay.ide.project.ui.upgradeView";
 
     private static LiferayUpgradeDataModel dataModel;
@@ -385,6 +384,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
         gear.addSelectionChangedListener( navigator );
         gear.addSelectionChangedListener( this );
+        gear.addSelectionChangedListener( (SelectionChangedListener) initConfigureProjectPage );
         gear.addSelectionChangedListener( (SelectionChangedListener) summaryPage );
 
         GridData navData = new GridData( GridData.FILL_HORIZONTAL );
@@ -430,24 +430,20 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
     @Override
     public void setFocus()
     {
-
     }
 
     public interface PageActionListener
     {
-
         public void onPageAction( PageActionEvent event );
     }
 
     public interface PageNavigatorListener
     {
-
         public void onPageNavigate( PageNavigateEvent event );
     }
 
     public interface PageValidationListener
     {
-
         public void onValidation( PageValidateEvent event );
     }
 
@@ -502,4 +498,3 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         }
     }
 }
-
