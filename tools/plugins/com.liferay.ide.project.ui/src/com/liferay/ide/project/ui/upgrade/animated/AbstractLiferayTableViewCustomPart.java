@@ -76,9 +76,8 @@ import org.eclipse.swt.widgets.Table;
  * @author Simon Jiang
  * @author Joye Luo
  */
-public abstract class AbstractLiferayTableViewCustomPart extends Composite
+public abstract class AbstractLiferayTableViewCustomPart extends Page
 {
-
     private class LiferayUpgradeValidationListener extends org.eclipse.sapphire.Listener
     {
 
@@ -123,7 +122,15 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
                                     @Override
                                     public void run()
                                     {
-                                        tableViewer.setInput( tableViewElements );
+                                        if ( tableViewElements.length > 0 )
+                                        {
+                                            tableViewer.setInput( tableViewElements );
+                                        }
+                                        else
+                                        {
+                                            final String message = "No any file need to upgrade.";
+                                            triggerValidationEvent( message );
+                                        }
                                     }
                                 } );
 
@@ -143,9 +150,9 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
         }
     }
 
-    public AbstractLiferayTableViewCustomPart( Composite parent, int style, LiferayUpgradeDataModel dataModel )
+    public AbstractLiferayTableViewCustomPart( Composite parent, int style, LiferayUpgradeDataModel dataModel, String pageId, boolean hasFinishAndSkipAction  )
     {
-        super( parent, style );
+        super( parent, style, dataModel, pageId, hasFinishAndSkipAction );
 
         GridLayout layout = new GridLayout( 2, false );
         layout.marginHeight = 0;
@@ -473,7 +480,15 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
                         @Override
                         public void run()
                         {
-                            tableViewer.setInput( tableViewElements );
+                            if ( tableViewElements.length > 0 )
+                            {
+                                tableViewer.setInput( tableViewElements );
+                            }
+                            else
+                            {
+                                final String message = "No any file need to upgrade.";
+                                triggerValidationEvent( message );
+                            }
                         }
                     } );
 

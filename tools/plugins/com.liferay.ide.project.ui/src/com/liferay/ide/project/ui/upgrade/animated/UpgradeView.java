@@ -327,6 +327,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         Page descriptorsPage = new DescriptorsPage( pagesSwitchControler, SWT.NONE, dataModel );
         descriptorsPage.setIndex( 2 );
         descriptorsPage.setTitle( "Update Descriptor Files" );
+        descriptorsPage.addPageValidationListener( gear );
 
         Page findBreakingChangesPage = new FindBreakingChangesPage( pagesSwitchControler, SWT.NONE, dataModel );
         findBreakingChangesPage.setIndex( 3 );
@@ -339,6 +340,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         Page layoutTemplatePage = new LayoutTemplatePage( pagesSwitchControler, SWT.NONE, dataModel );
         layoutTemplatePage.setIndex( 5 );
         layoutTemplatePage.setTitle( "Layout Template" );
+        layoutTemplatePage.addPageValidationListener( gear );
 
         Page customJspPage = new CustomJspPage( pagesSwitchControler, SWT.NONE, dataModel );
         customJspPage.setIndex( 6 );
