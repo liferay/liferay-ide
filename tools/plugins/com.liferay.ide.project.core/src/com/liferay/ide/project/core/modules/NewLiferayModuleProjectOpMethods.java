@@ -24,6 +24,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -37,6 +39,7 @@ import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Simon Jiang
+ * @author Lovett Li
  */
 public class NewLiferayModuleProjectOpMethods
 {
@@ -140,7 +143,21 @@ public class NewLiferayModuleProjectOpMethods
             {
                 property = property.substring( 1 );
                 property = property.substring( 0, property.lastIndexOf( "\t" ) - 1 );
-                property += ",\n";
+                String[] pros = property.split( "," );
+                String pro = pros[pros.length - 1];
+
+                final Pattern p = Pattern.compile( "(^\".*\"$)|\"$" );
+                Matcher m = p.matcher( pro );
+
+                if( m.find() )
+                {
+                    property += ",\n";
+                }
+                else
+                {
+                    property += "\n";
+                }
+
                 sb.append( property );
             }
 
