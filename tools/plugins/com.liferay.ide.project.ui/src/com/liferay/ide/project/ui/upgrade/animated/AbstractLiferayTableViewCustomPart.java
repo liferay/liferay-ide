@@ -525,8 +525,14 @@ public abstract class AbstractLiferayTableViewCustomPart extends Composite
 
                         final String srcFileLocation = tableViewElement.location;
                         final String projectName = tableViewElement.name;
+                        final String context = tableViewElement.context;
 
                         monitor.setTaskName( "Upgrading files for " + projectName );
+
+                        if ( context.contains( "Finished" ) )
+                        {
+                            continue;
+                        }
 
                         try
                         {
