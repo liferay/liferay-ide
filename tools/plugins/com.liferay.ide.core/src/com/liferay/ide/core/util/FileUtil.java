@@ -130,7 +130,7 @@ public class FileUtil
         }
         catch( Exception e )
         {
-            LiferayCore.logError( "Unable to copy file " + src.getName() + " to " + dest.getAbsolutePath() ); //$NON-NLS-1$ //$NON-NLS-2$
+            LiferayCore.logError( "Unable to copy file " + src.getName() + " to " + dest.getAbsolutePath(), e );
         }
         finally
         {

@@ -193,6 +193,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
                             location.append( projectName ).append( "src/main/resources/META-INF/resources" );
 
                         folder = resources.toFile();
+                        folder.mkdirs();
 
                         if( !parent.equals( "resources" ) && !parent.equals( "" ) )
                         {
