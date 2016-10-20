@@ -16,11 +16,15 @@
 package com.liferay.ide.ui;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.templates.ServiceClassNameResolver;
 import com.liferay.ide.ui.util.UIUtil;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +72,8 @@ import org.eclipse.ui.editors.text.TextFileDocumentProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
@@ -88,6 +94,8 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
 
     // The shared instance
     private static LiferayUIPlugin plugin;
+
+    private ServiceListener serviceListener;
 
     public static void clearAllPersistentSettings() throws BackingStoreException
     {
@@ -304,10 +312,46 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
      */
     public void start( BundleContext context ) throws Exception
     {
-
         super.start( context );
 
         plugin = this;
+
+        serviceListener = new ServiceListener()
+        {
+
+            @Override
+            public void serviceChanged( ServiceEvent event )
+            {
+                String[] objectClass = (String[]) event.getServiceReference().getProperty( "objectClass" );
+
+                if( event.getType() == ServiceEvent.UNREGISTERING )
+                {
+                    if( objectClass[0].equals( "org.eclipse.e4.ui.workbench.IWorkbench" ) )
+                    {
+                        File file = new File(
+                            Platform.getLocation().append( ".metadata/.plugins/org.eclipse.e4.workbench" ).toOSString(),
+                            "workbench.xmi" );
+
+                        String content = FileUtil.readContents( file, true );
+
+                        if( content.indexOf( "label=\"Liferay\"" ) != -1 )
+                        {
+                            content = content.replaceFirst( "label=\"Liferay\"", "label=\"Liferay Plugins\"" );
+
+                            try(InputStream ins = new ByteArrayInputStream( content.getBytes() );)
+                            {
+                                FileUtil.writeFile( file, ins );
+                            }
+                            catch( Exception e )
+                            {
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        context.addServiceListener( serviceListener );
     }
 
     /*
@@ -316,8 +360,12 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
      */
     public void stop( BundleContext context ) throws Exception
     {
-
         plugin = null;
+
+        if( serviceListener != null )
+        {
+            context.removeServiceListener( serviceListener );
+        }
 
         super.stop( context );
     }
