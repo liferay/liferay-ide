@@ -532,14 +532,20 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             }
             catch( Exception e )
             {
-                final SourceLocation location =
-                    SourceLocationHelper.findLocation( liferayMavenPlugin, SourceLocationHelper.CONFIGURATION );
-                final String problemMsg = NLS.bind( Msgs.facetInstallError,
-                                                    pluginType,
-                                                    e.getCause() != null ? e.getCause().getMessage() : e.getMessage() );
+                try
+                {
+                    final SourceLocation location =
+                        SourceLocationHelper.findLocation( liferayMavenPlugin, SourceLocationHelper.CONFIGURATION );
+                    final String problemMsg = NLS.bind( Msgs.facetInstallError,
+                                                        pluginType,
+                                                        e.getCause() != null ? e.getCause().getMessage() : e.getMessage() );
 
-                retval = new MavenProblemInfo( location, e );
-                retval.setMessage( problemMsg );
+                    retval = new MavenProblemInfo( location, e );
+                    retval.setMessage( problemMsg );
+                }
+                catch( Exception e1 )
+                {
+                }
 
                 LiferayMavenCore.logError(
                     "Unable to install liferay facet " + action.getProjectFacetVersion(), e.getCause() ); //$NON-NLS-1$
