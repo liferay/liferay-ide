@@ -479,7 +479,11 @@ public class CustomJspPage extends Page
                         message = validationStatus.message();
                     }
 
-                    triggerValidationEvent( message );
+                    PageValidateEvent pe = new PageValidateEvent();
+                    pe.setMessage( message );
+                    pe.setType( PageValidateEvent.ERROR );
+
+                    triggerValidationEvent( pe );
                 }
                 else if( property.name().equals( "ConvertLiferayWorkspace" ) )
                 {

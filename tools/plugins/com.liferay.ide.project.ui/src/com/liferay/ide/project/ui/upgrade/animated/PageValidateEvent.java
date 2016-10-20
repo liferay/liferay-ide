@@ -21,9 +21,12 @@ package com.liferay.ide.project.ui.upgrade.animated;
  */
 public class PageValidateEvent
 {
+    public static String ERROR = "error";
+    public static String WARNING = "warning";
 
     private String pageId;
     private String message;
+    private String type = ERROR;
 
     public String getPageId()
     {
@@ -43,5 +46,15 @@ public class PageValidateEvent
     public void setMessage( String message )
     {
         this.message = message;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType( String type )
+    {
+        this.type = type;
     }
 }

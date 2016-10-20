@@ -132,7 +132,7 @@ public class WelcomePage extends Page
 
                     PageNavigateEvent event = new PageNavigateEvent();
 
-                    event.setTargetPage( 1 );
+                    event.setTargetPage( 2 );
 
                     for( PageNavigatorListener listener : naviListeners )
                     {

@@ -54,7 +54,8 @@ public class GearControl extends AbstractCanvas
     private Display display;
 
     private Image errorImage;
-    private Map<String, String> errorMessageMap = new HashMap<String, String>();
+    private Image warningImage;
+    private Map<String, PageValidateEvent> validationMessageMap = new HashMap<String, PageValidateEvent>();
 
     private final Color[] gearBackground = new Color[2];
     private final Color[] gearForeground = new Color[2];
@@ -174,6 +175,7 @@ public class GearControl extends AbstractCanvas
         display = getDisplay();
 
         errorImage = JFaceResources.getImage( Dialog.DLG_IMG_MESSAGE_ERROR );
+        warningImage = JFaceResources.getImage( Dialog.DLG_IMG_MESSAGE_WARNING );
 
         WHITE = display.getSystemColor( SWT.COLOR_WHITE );
         GRAY = display.getSystemColor( SWT.COLOR_GRAY );
@@ -325,9 +327,8 @@ public class GearControl extends AbstractCanvas
     public void onValidation( PageValidateEvent event )
     {
         String pageId = event.getPageId();
-        String message = event.getMessage();
 
-        errorMessageMap.put( pageId, message );
+        validationMessageMap.put( pageId, event );
 
         Page page = UpgradeView.getPage( selection );
 
@@ -370,31 +371,43 @@ public class GearControl extends AbstractCanvas
             gc.drawRectangle( rectangle );
         }
 
-        paintErrorMessage( gc );
+        paintValidationMessage( gc );
 
         oldHover = hover;
 
     }
 
-    private void paintErrorMessage( GC gc )
+    private void paintValidationMessage( GC gc )
     {
         Page page = UpgradeView.getPage( selection );
 
         String pageId = page.getPageId();
 
-        String errorMessage = errorMessageMap.get( pageId );
+        PageValidateEvent event = validationMessageMap.get( pageId );
 
-        if( errorMessage != null && !errorMessage.equals( "ok" ) )
+        if( event != null )
         {
-            drawImage( gc, errorImage, 30, 130 );
+            String message = event.getMessage();
 
-            gc.setBackground( tooltipColor );
-            gc.setForeground( DARK_GRAY );
-            gc.setLineWidth( 1 );
+            if( message != null && !message.equals( "ok" ) )
+            {
+                if( event.getType().equals( PageValidateEvent.ERROR ) )
+                {
+                    drawImage( gc, errorImage, 30, 130 );
+                }
+                else
+                {
+                    drawImage( gc, warningImage, 30, 130 );
+                }
 
-            Rectangle rectangle = drawTextNotCenter( gc, 40, 120, errorMessage, 2 );
+                gc.setBackground( tooltipColor );
+                gc.setForeground( DARK_GRAY );
+                gc.setLineWidth( 1 );
 
-            gc.drawRectangle( rectangle );
+                Rectangle rectangle = drawTextNotCenter( gc, 40, 120, message, 2 );
+
+                gc.drawRectangle( rectangle );
+            }
         }
     }
 

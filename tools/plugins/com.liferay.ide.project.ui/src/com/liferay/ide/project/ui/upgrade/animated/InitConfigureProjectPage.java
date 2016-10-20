@@ -740,7 +740,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 {
                     ProjectUI.logError( ex );
 
-                    triggerValidationEvent( ex.getMessage() );
+                    PageValidateEvent pe = new PageValidateEvent();
+                    pe.setMessage( ex.getMessage()  );
+                    pe.setType( PageValidateEvent.ERROR );
+
+                    triggerValidationEvent( pe );
                 }
             }
         } );
@@ -1458,6 +1462,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 String message = "ok";
 
+                PageValidateEvent pe = new PageValidateEvent();
+                pe.setType( PageValidateEvent.ERROR );
+
                 if( !sdkValidation.compute().ok() )
                 {
                     message = sdkValidation.compute().message();
@@ -1526,12 +1533,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 if( dataModel.getImportFinished().content() )
                 {
-                    message = "import finished, please go to first page and click \"Restart...\"";
+                    message =
+                        "Import has finished. If you want to reimport, please go to the first page and click \"Restart...\"";
+
+                    pe.setType( PageValidateEvent.WARNING );
 
                     inputValidation = false;
                 }
 
-                triggerValidationEvent( message );
+                pe.setMessage( message );
+
+                triggerValidationEvent( pe );
 
                 validationResult = layoutValidation && inputValidation;
 

@@ -299,15 +299,13 @@ public abstract class Page extends Composite
         return canNext;
     }
 
-    protected void triggerValidationEvent( String validationMessage )
+    protected void triggerValidationEvent( PageValidateEvent pageValidationEvent )
     {
-        PageValidateEvent pe = new PageValidateEvent();
-        pe.setPageId( getPageId() );
-        pe.setMessage( validationMessage );
+        pageValidationEvent.setPageId( getPageId() );
 
         for( PageValidationListener listener : pageValidationListeners )
         {
-            listener.onValidation( pe );
+            listener.onValidation( pageValidationEvent );
         }
     }
 }
