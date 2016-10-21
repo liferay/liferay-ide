@@ -63,6 +63,7 @@
       <import feature="org.eclipse.wst.xml.search.core-feature" version="1.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.tm.terminal.connector.telnet.feature" version="4.0.0" match="greaterOrEqual"/>
       <import feature="org.eclipse.tm.terminal.view.feature" version="4.0.0" match="greaterOrEqual"/>
+	  <import feature="com.ianbrandt.tools.m2e.mdp.feature" version="0.0.4" match="greaterOrEqual"/>
    </requires>
 
    <plugin
