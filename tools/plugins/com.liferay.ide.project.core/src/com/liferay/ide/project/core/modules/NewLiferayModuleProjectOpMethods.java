@@ -146,7 +146,7 @@ public class NewLiferayModuleProjectOpMethods
                 String[] pros = property.split( "," );
                 String pro = pros[pros.length - 1];
 
-                final Pattern p = Pattern.compile( "(^\".*\"$)|\"$" );
+                final Pattern p = Pattern.compile( "(^\".*\"$)|(\".*\")|(\"$)" );
                 Matcher m = p.matcher( pro );
 
                 if( m.find() )
