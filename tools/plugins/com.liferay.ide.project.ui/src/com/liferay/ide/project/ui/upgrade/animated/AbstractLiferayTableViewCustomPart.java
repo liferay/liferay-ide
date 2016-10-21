@@ -122,15 +122,20 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                                     @Override
                                     public void run()
                                     {
-                                        if ( tableViewElements.length > 0 )
+                                        String message = "ok";
+
+                                        tableViewer.setInput( tableViewElements );
+
+                                        if( tableViewElements.length < 1 )
                                         {
-                                            tableViewer.setInput( tableViewElements );
+                                            message = "No file needs to be upgraded";
                                         }
-                                        else
-                                        {
-                                            final String message = "No any file need to upgrade.";
-                                            triggerValidationEvent( message );
-                                        }
+
+                                        PageValidateEvent pe = new PageValidateEvent();
+                                        pe.setMessage( message );
+                                        pe.setType( PageValidateEvent.WARNING );
+
+                                        triggerValidationEvent( pe );
                                     }
                                 } );
 
@@ -480,15 +485,20 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                         @Override
                         public void run()
                         {
-                            if ( tableViewElements.length > 0 )
+                            String message = "ok";
+
+                            tableViewer.setInput( tableViewElements );
+
+                            if( tableViewElements.length < 1 )
                             {
-                                tableViewer.setInput( tableViewElements );
+                                message = "No file needs to be upgraded";
                             }
-                            else
-                            {
-                                final String message = "No any file need to upgrade.";
-                                triggerValidationEvent( message );
-                            }
+
+                            PageValidateEvent pe = new PageValidateEvent();
+                            pe.setMessage( message );
+                            pe.setType( PageValidateEvent.WARNING );
+
+                            triggerValidationEvent( pe );
                         }
                     } );
 
