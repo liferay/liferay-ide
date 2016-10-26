@@ -696,7 +696,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             try
             {
                 final File file = new File ( FileLocator.toFileURL(
-                    LiferayServerCore.getDefault().getBundle().getEntry( "bundles/biz.aQute.remote.agent-3.2.0.jar" ) ).getFile() );
+                    LiferayServerCore.getDefault().getBundle().getEntry( "bundles/biz.aQute.remote.agent-3.3.0.jar" ) ).getFile() );
 
                 FileUtil.copyFile( file, modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
             }
