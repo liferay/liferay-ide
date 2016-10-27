@@ -183,7 +183,7 @@ public class BladeCLI
 
         try
         {
-            File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
+            File[] files = repo.get( "com.liferay.blade.cli", "[2,3)" );
 
             File cliJar = files[0];
 

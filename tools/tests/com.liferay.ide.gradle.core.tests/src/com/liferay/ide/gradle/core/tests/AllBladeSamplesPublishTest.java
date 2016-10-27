@@ -27,6 +27,7 @@ import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -44,6 +45,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
@@ -62,9 +66,27 @@ public class AllBladeSamplesPublishTest
 
     private static final String WORKSPACE_SERVER_NAME = "workspace-server";
 
+    @AfterClass
+    public static void restoreBladeCLIPrefsToDefault() throws Exception
+    {
+        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+    }
+
     @BeforeClass
     public static void importAllBladeSamples() throws Exception
     {
+        Util.deleteAllWorkspaceProjects();
+
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
+
         ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
         File projectDir = copyTestProjectToWorkspace( "projects/all-blade-samples" );
