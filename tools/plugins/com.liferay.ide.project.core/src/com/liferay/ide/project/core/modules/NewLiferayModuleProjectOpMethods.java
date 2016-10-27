@@ -22,18 +22,31 @@ import com.liferay.ide.server.core.portal.PortalServer;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.ArrayInitializer;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.MemberValuePair;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+import org.eclipse.jface.text.Document;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
+import org.eclipse.text.edits.TextEdit;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.ServerCore;
 
@@ -112,82 +125,106 @@ public class NewLiferayModuleProjectOpMethods
         return retval;
     }
 
-    public static void addProperties( File dest, List<String> properties ) throws Exception
-    {
-        try
-        {
-            if( properties == null || properties.size() < 1 )
-            {
-                return;
-            }
+    @SuppressWarnings("unchecked")
+	public static void addProperties(File dest, List<String> properties) throws Exception
+	{
+		try
+		{
+			if (properties == null || properties.size() < 1)
+			{
+				return;
+			}
 
-            FileInputStream fis = new FileInputStream( dest );
+			ASTParser parser = ASTParser.newParser(AST.JLS8);
+			String readContents = FileUtil.readContents( dest, true );
+			parser.setSource( readContents.toCharArray() );
+			parser.setKind( ASTParser.K_COMPILATION_UNIT );
+			parser.setResolveBindings( true );
+			final CompilationUnit cu = (CompilationUnit) parser.createAST(  new NullProgressMonitor() );
+			cu.recordModifications();
+			Document document = new Document( new String( readContents ) );
+			cu.accept( new ASTVisitor()
+			{
+				@Override
+				public boolean visit( NormalAnnotation node )
+				{
+					if (node.getTypeName().getFullyQualifiedName().equals( "Component" ))
+					{
+						ASTRewrite rewrite = ASTRewrite.create( cu.getAST() );
+						AST ast = cu.getAST();
+						List<ASTNode> values = node.values();
+						boolean hasProperty = false;
+						for( ASTNode astNode : values )
+						{
+							if( astNode instanceof MemberValuePair )
+							{
+								MemberValuePair pairNode = (MemberValuePair) astNode;
 
-            String content = new String( FileUtil.readContents( fis ) );
+								if (pairNode.getName().getFullyQualifiedName().equals( "property" ))
+								{
+									Expression express = pairNode.getValue();
 
-            fis.close();
+									if( express instanceof ArrayInitializer )
+									{
+										ListRewrite lrw = rewrite.getListRewrite( express,
+												ArrayInitializer.EXPRESSIONS_PROPERTY );
+										ArrayInitializer initializer = (ArrayInitializer) express;
+										List<ASTNode> expressions = (List<ASTNode>) initializer.expressions();
+										ASTNode propertyNode = expressions.get( expressions.size() - 1 );
 
-            String fontString = content.substring( 0, content.indexOf( "property" ) );
+										for( String property : properties )
+										{
+											StringLiteral stringLiteral = ast.newStringLiteral();
+											stringLiteral.setLiteralValue( property );
+											lrw.insertAfter( stringLiteral, propertyNode, null );
+										}
+									}
+									hasProperty = true;
+								}
+							}
+						}
 
-            String endString = content.substring( content.indexOf( "}," ) + 2 );
+						if (hasProperty == false)
+						{
+							ListRewrite clrw = rewrite.getListRewrite( node, NormalAnnotation.VALUES_PROPERTY );
+							ASTNode lastNode = values.get( values.size() - 1 );
 
-            String property = content.substring( content.indexOf( "property" ), content.indexOf( "}," ) );
+							ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
+							MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
 
-            property = property.substring( property.indexOf( "{" ) + 1 );
+							propertyMemberValuePair.setName( ast.newSimpleName( "property" ) );
+							propertyMemberValuePair.setValue( newArrayInitializer );
 
-            StringBuilder sb = new StringBuilder();
+							clrw.insertBefore( propertyMemberValuePair, lastNode, null );
+							ListRewrite newLrw = rewrite.getListRewrite( newArrayInitializer,
+									ArrayInitializer.EXPRESSIONS_PROPERTY );
 
-            sb.append( "property = {\n" );
-
-            if( !CoreUtil.isNullOrEmpty( property ) )
-            {
-                property = property.substring( 1 );
-                property = property.substring( 0, property.lastIndexOf( "\t" ) - 1 );
-                String[] pros = property.split( "," );
-                String pro = pros[pros.length - 1];
-
-                final Pattern p = Pattern.compile( "(^\".*\"$)|(\".*\")|(\"$)" );
-                Matcher m = p.matcher( pro );
-
-                if( m.find() )
-                {
-                    property += ",\n";
-                }
-                else
-                {
-                    property += "\n";
-                }
-
-                sb.append( property );
-            }
-
-            for( String str : properties )
-            {
-                sb.append( "\t\t\"" + str + "\",\n" );
-            }
-
-            sb.deleteCharAt( sb.toString().length() - 2 );
-
-            sb.append( "\t}," );
-
-            StringBuilder all = new StringBuilder();
-
-            all.append( fontString );
-            all.append( sb.toString() );
-            all.append( endString );
-
-            String newContent = all.toString();
-
-            if( !content.equals( newContent ) )
-            {
-                FileUtil.writeFileFromStream( dest, new ByteArrayInputStream( newContent.getBytes() ) );
-            }
-        }
-        catch(Exception e)
-        {
-            ProjectCore.logError( "error when adding properties to "+dest.getAbsolutePath(), e );
-        }
-    }
+							for ( String property : properties )
+							{
+								StringLiteral stringLiteral = ast.newStringLiteral();
+								stringLiteral.setLiteralValue( property );
+								newLrw.insertAt( stringLiteral, 0, null );
+							}
+						}
+						try ( FileOutputStream fos = new FileOutputStream( dest ) )
+						{
+							TextEdit edits = rewrite.rewriteAST( document,null );
+							edits.apply( document );
+							fos.write( document.get().getBytes() );
+							fos.flush();
+						} catch ( Exception e )
+						{
+							ProjectCore.logError( e );
+						}
+					}
+					return super.visit( node );
+				}
+			});
+		} catch (Exception e) 
+		{
+			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
+		}
+	}
 
     public static void addDependencies( File file, String bundleId )
     {
