@@ -125,12 +125,22 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
 
             List<T> retval = new ArrayList<>();
 
-            retval.add( type.cast( "com.liferay:com.liferay.project.templates." + templateName + ":1.0.0" ) );
+            String ga = "com.liferay:com.liferay.project.templates." + templateName.replaceAll( "-", "." );
+
+            String archetypeVersion = getArchetypeVersion( ga );
+
+            retval.add( type.cast( ga + ":" + archetypeVersion ) );
 
             return retval;
         }
 
         return super.getData( key, type, params );
+    }
+
+    private String getArchetypeVersion( String ga )
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override

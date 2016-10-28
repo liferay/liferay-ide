@@ -135,7 +135,7 @@ public class AllBladeSamplesPublishTest
             }
         }
 
-        Thread.sleep( 10000 );
+        assertEquals( wsServer.getServerState(), IServer.STATE_STARTED, wsServer.getServerState() );
     }
 
     @AfterClass
@@ -218,7 +218,8 @@ public class AllBladeSamplesPublishTest
 
         for( IModule serverModule : serverModules )
         {
-            assertEquals( IServer.PUBLISH_STATE_NONE, server.getModulePublishState( new IModule[] { serverModule } ) );
+            assertEquals( "bad state: " + serverModule.getProject().getName(), IServer.PUBLISH_STATE_NONE,
+                server.getModulePublishState( new IModule[] { serverModule } ) );
         }
 
         String[] retval = BladeCLI.execute( "sh lb -s blade" );
