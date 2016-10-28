@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.modules.PropertyKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,10 +64,11 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
         final String groupId = op.getGroupId().content();
         final String artifactId = op.getProjectName().content();
         final String version = op.getArtifactVersion().content();
-        final String javaPackage = op.getGroupId().content();
+        final String javaPackage = op.getPackageName().content();
         final String className = op.getComponentName().content();
+        final String serviceName = op.getServiceName().content();
 
-        final String archetypeArtifactId = op.getArchetype().content( true );
+        final String archetypeArtifactId = op.getArchetype().content();
 
         final Archetype archetype = new Archetype();
 
@@ -78,14 +80,27 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
         archetype.setArtifactId( gav[1] );
         archetype.setVersion( archetypeVersion );
 
-//        final ArchetypeManager archetypeManager = MavenPluginActivator.getDefault().getArchetypeManager();
-//        final ArtifactRepository archetypeRepository = archetypeManager.getArchetypeRepository( archetype );
-
         final Properties properties = new Properties();
 
+        properties.put( "buildType", "maven" );
         properties.put( "package", javaPackage );
-        properties.put( "className", className );
+        properties.put( "className", className == null ? "" : className );
         properties.put( "projectType", "standalone" );
+        properties.put( "serviceClass", serviceName == null ? "" : serviceName );
+        properties.put( "serviceWrapperClass", serviceName == null ? "" : serviceName );
+
+        for( PropertyKey propertyKey : op.getPropertyKeys() )
+        {
+            String key = propertyKey.getName().content();
+            String value = propertyKey.getValue().content();
+
+            properties.put( key, value );
+        }
+
+        if( serviceName != null )
+        {
+            properties.put( "service", serviceName );
+        }
 
         final ResolverConfiguration resolverConfig = new ResolverConfiguration();
         ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
@@ -121,26 +136,18 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
     {
         if( "archetypeGAV".equals( key ) && type.equals( String.class ) && params.length == 1 )
         {
-            String templateName = params[0].toString();
-
             List<T> retval = new ArrayList<>();
 
-            String ga = "com.liferay:com.liferay.project.templates." + templateName.replaceAll( "-", "." );
+            String templateName = params[0].toString();
 
-            String archetypeVersion = getArchetypeVersion( ga );
+            String gav = LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PREFIX + templateName, "");
 
-            retval.add( type.cast( ga + ":" + archetypeVersion ) );
+            retval.add( type.cast( gav ) );
 
             return retval;
         }
 
         return super.getData( key, type, params );
-    }
-
-    private String getArchetypeVersion( String ga )
-    {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

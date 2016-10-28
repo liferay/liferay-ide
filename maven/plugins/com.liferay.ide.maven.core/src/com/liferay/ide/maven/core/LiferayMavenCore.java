@@ -61,6 +61,27 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ARCHETYPE_GAV_VAADIN = "archetype-gav-vaadin";
     public static final String PREF_ARCHETYPE_GAV_WEB = "archetype-gav-web";
 
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PREFIX = "archetype-project-template-";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_ACTIVATOR = "archetype-project-template-activator";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_API = "archetype-project-template-api";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_REPORT = "archetype-project-template-content-targeting-report";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_RULE = "archetype-project-template-content-targeting-rule";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_TRACKING_ACTION = "archetype-project-template-content-targeting-tracking-action";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTROL_MENU_ENTRY = "archetype-project-template-control-menu-entry";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT = "archetype-project-template-fragment";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_MVC_PORTLET = "archetype-project-template-mvc-portlet";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PANEL_APP = "archetype-project-template-panel-app";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET = "archetype-project-template-portlet";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_CONFIGURATION_ICON = "archetype-project-template-portlet-configuration-icon";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_PROVIDER = "archetype-project-template-portlet-provider";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_TOOLBAR_CONTRIBUTOR = "archetype-project-template-portlet-toolbar-contributor";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE = "archetype-project-template-service";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_BUILDER = "archetype-project-template-service-builder";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_WRAPPER = "archetype-project-template-service-wrapper";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SIMULATION_PANEL_ENTRY = "archetype-project-template-simulation-panel-entry";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_TEMPLATE_CONTEXT_CONTRIBUTOR = "archetype-project-template-template-context-contributor";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME = "archetype-project-template-theme";
+
     // The key of disable customJspValidation checking
     public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
 

@@ -64,7 +64,7 @@ public class NewLiferayModuleProjectOpMethods
             final String msg = "Error creating Liferay module project."; //$NON-NLS-1$
             ProjectCore.logError( msg, e );
 
-            return Status.createErrorStatus( msg + " Please see Eclipse error log for more details.", e );
+            return Status.createErrorStatus( msg + " " + e.getMessage(), e );
         }
 
         return retval;
