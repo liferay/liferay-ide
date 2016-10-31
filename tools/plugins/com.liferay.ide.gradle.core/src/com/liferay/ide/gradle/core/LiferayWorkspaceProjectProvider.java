@@ -18,6 +18,7 @@ package com.liferay.ide.gradle.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
@@ -26,12 +27,6 @@ import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Properties;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -107,30 +102,23 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
 
             if( !CoreUtil.empty( extraOperation ) )
             {
-                IPath path = new Path(location);
+                IPath path = new Path( location );
 
                 path.lastSegment();
 
                 IProject project = CoreUtil.getProject( path.lastSegment() );
 
-                if( !bundleUrl.equals( defaultBundleUrl ) )
-                {
-                    final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
+                final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
 
-                    try(InputStream in = new FileInputStream( gradlePropertiesFile );
-                                    OutputStream out = new FileOutputStream( gradlePropertiesFile ))
-                    {
-                        final Properties properties = new Properties();
-                        properties.load( in );
+                String content = FileUtil.readContents( gradlePropertiesFile, true );
 
-                        properties.put( "liferay.workspace.bundle.url", bundleUrl );
+                String bundleUrlProp = "liferay.workspace.bundle.url=" + bundleUrl;
 
-                        properties.store( out, "" );
-                    }
-                    catch( IOException e )
-                    {
-                    }
-                }
+                String separator = System.getProperty( "line.separator", "\n" );
+
+                String newContent = content + separator + bundleUrlProp;
+
+                FileUtil.writeFile( gradlePropertiesFile, newContent, null );
 
                 GradleUtil.runGradleTask( project, extraOperation, monitor );
 
