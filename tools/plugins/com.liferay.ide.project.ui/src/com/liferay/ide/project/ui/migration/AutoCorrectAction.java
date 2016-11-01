@@ -34,11 +34,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-
 
 /**
  * @author Gregory Amerson
@@ -117,7 +117,7 @@ public class AutoCorrectAction extends ProblemAction
             {
                 Object item = items.next();
 
-                if( ! ( item instanceof Problem ) )
+                if( !( item instanceof Problem ) )
                 {
                     selectionCompatible = false;
                     break;
@@ -132,7 +132,70 @@ public class AutoCorrectAction extends ProblemAction
                 }
             }
 
+            Iterator<?> items2 = selection.iterator();
+
+            List<String> autoCorrectContexts = new ArrayList<>();
+
+            while( items2.hasNext() )
+            {
+                Object item = items2.next();
+
+                if( item instanceof Problem && ( (Problem) item ).autoCorrectContext != null )
+                {
+                    autoCorrectContexts.add( ( (Problem) item ).autoCorrectContext );
+                }
+            }
+
             setEnabled( selectionCompatible );
+
+            List<String> allAutoCorrectContexts = new ArrayList<>();
+
+            if( _provider instanceof TableViewer )
+            {
+                TableViewer viewer = (TableViewer) _provider;
+                Object[] problems = (Object[]) viewer.getInput();
+
+                for( Object o : problems )
+                {
+                    if( o instanceof Problem && ( (Problem) o ).autoCorrectContext != null )
+                    {
+                        allAutoCorrectContexts.add( ( (Problem) o ).autoCorrectContext );
+                    }
+                }
+            }
+
+            boolean mutiple = false;
+
+            if( allAutoCorrectContexts.size() > 0 && autoCorrectContexts.size() > 0 )
+            {
+                for( String autoCorrectContext : autoCorrectContexts )
+                {
+                    int i = 0;
+
+                    for( String allContext : allAutoCorrectContexts )
+                    {
+                        if( allContext.equals( autoCorrectContext ) )
+                        {
+                            i++;
+                        }
+                    }
+
+                    if( i >= 2 )
+                    {
+                        mutiple = true;
+                        break;
+                    }
+                }
+            }
+
+            if( mutiple )
+            {
+                setText( "Correct same type problems" );
+            }
+            else
+            {
+                setText( "Correct automatically" );
+            }
         }
     }
 
