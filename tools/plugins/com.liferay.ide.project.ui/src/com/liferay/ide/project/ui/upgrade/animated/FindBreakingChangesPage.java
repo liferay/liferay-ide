@@ -155,7 +155,6 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
                 if( showAll )
                 {
                     problems = MigrationUtil.getProblemsFromTreeNode( event.getSelection() );
-
                 }
                 else
                 {
@@ -187,6 +186,26 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
                         updateForm( event );
                     }
                 }, 50 );
+            }
+        } );
+
+        _treeViewer.addDoubleClickListener( new IDoubleClickListener()
+        {
+
+            @Override
+            public void doubleClick( DoubleClickEvent event )
+            {
+                if( event.getSelection() instanceof IStructuredSelection )
+                {
+                    final IStructuredSelection ss = (IStructuredSelection) event.getSelection();
+
+                    Object element = ss.getFirstElement();
+
+                    if( element instanceof FileProblems )
+                    {
+                        MigrationUtil.openEditor( (FileProblems) element );
+                    }
+                }
             }
         } );
 
@@ -457,7 +476,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return sb.toString();
     }
 
-    public TableViewer get_problemsViewer()
+    public TableViewer getProblemsViewer()
     {
         return _problemsViewer;
     }

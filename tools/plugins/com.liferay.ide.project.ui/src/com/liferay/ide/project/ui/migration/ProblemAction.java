@@ -58,7 +58,7 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
     protected void refreshTableViewer()
     {
         FindBreakingChangesPage page = UpgradeView.getPage(Page.FINDBREACKINGCHANGES_PAGE_ID,FindBreakingChangesPage.class);
-        TableViewer problemsViewer = page.get_problemsViewer();
+        TableViewer problemsViewer = page.getProblemsViewer();
 
         UIUtil.async( new Runnable()
         {
