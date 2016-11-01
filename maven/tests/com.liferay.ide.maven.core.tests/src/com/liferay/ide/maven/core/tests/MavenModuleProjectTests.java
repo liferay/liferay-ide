@@ -19,8 +19,13 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
 
+import java.io.ByteArrayInputStream;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.modeling.Status;
@@ -209,7 +214,26 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setServiceName( "com.liferay.portal.kernel.events.LifecycleAction" );
         op.setComponentName( "MyService" );
 
-        createAndBuild(op);
+        IProject project = create( op );
+
+        IFile serviceFile = project.getFile( "src/main/java/service/test/MyService.java" );
+
+        String contents =
+                        "package service.test;\n" +
+                        "import com.liferay.portal.kernel.events.ActionException;\n" +
+                        "import com.liferay.portal.kernel.events.LifecycleAction;\n" +
+                        "import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
+                        "import org.osgi.service.component.annotations.Component;\n" +
+                        "@Component(\n" +
+                            "immediate = true, property = {\"key=login.events.pre\"},\n" +
+                            "service = LifecycleAction.class\n" +
+                        ")\n" +
+                        "public class MyService implements LifecycleAction {\n" +
+                            "@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n" +
+                        "}" ;
+        serviceFile.setContents( new ByteArrayInputStream( contents.getBytes() ), IResource.FORCE, monitor );
+
+        verifyProject( project );
     }
 
     @Test
@@ -282,6 +306,13 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
     private void createAndBuild( NewLiferayModuleProjectOp op ) throws Exception
     {
+        IProject project = create( op );
+
+        verifyProject(project);
+    }
+
+    private IProject create( NewLiferayModuleProjectOp op ) throws InterruptedException, CoreException
+    {
         Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
         assertNotNull( status );
@@ -289,9 +320,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         waitForJobsToComplete();
 
-        IProject project = CoreUtil.getProject( op.getProjectName().content() );
-
-        verifyProject(project);
+        return CoreUtil.getProject( op.getProjectName().content() );
     }
 
     @Test
@@ -302,14 +331,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectName( "foo" );
         op.setProjectProvider( "maven-module" );
 
-        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-
-        assertNotNull( status );
-        assertTrue( status.message(), status.ok() );
-
-        waitForJobsToComplete();
-
-        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+        IProject project = create( op );
 
         verifyProject(project);
 
@@ -324,14 +346,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectName( "foo-bar" );
         op.setProjectProvider( "maven-module" );
 
-        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-
-        assertNotNull( status );
-        assertTrue( status.message(), status.ok() );
-
-        waitForJobsToComplete();
-
-        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+        IProject project = create( op );
 
         verifyProject(project);
 
@@ -346,14 +361,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectName( "foo.bar" );
         op.setProjectProvider( "maven-module" );
 
-        Status status = op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-
-        assertNotNull( status );
-        assertTrue( status.message(), status.ok() );
-
-        waitForJobsToComplete();
-
-        IProject project = CoreUtil.getProject( op.getProjectName().content() );
+        IProject project = create( op );
 
         verifyProject(project);
     }
