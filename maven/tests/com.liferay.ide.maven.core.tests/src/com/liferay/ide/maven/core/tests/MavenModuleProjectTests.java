@@ -15,6 +15,10 @@
 
 package com.liferay.ide.maven.core.tests;
 
+import static org.junit.Assert.assertNotNull;
+
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
@@ -364,6 +368,26 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         IProject project = create( op );
 
         verifyProject(project);
+    }
+
+    @Test
+    public void testThemeProjectPluginDetection() throws Exception
+    {
+       NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+       op.setProjectName( "maven-theme-test" );
+       op.setProjectProvider( "maven-module" );
+       op.setProjectTemplateName( "theme" );
+
+       op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+       IProject project = CoreUtil.getProject( "maven-theme-test" );
+
+       assertNotNull( project );
+
+       IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+
+       assertNotNull( bundleProject );
     }
 
     private void verifyProject(IProject project ) throws Exception

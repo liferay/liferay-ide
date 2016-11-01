@@ -159,4 +159,5 @@ public class NewLiferayModuleProjectOpTests
 
         assertEquals( "my.test.foo1", op.getPackageName().content( true ) );
     }
+
 }

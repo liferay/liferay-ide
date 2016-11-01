@@ -196,7 +196,6 @@ public class GradleCore extends Plugin
 
             Job job = new WorkspaceJob( "Checking gradle configuration" )
             {
-
                 @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                 {
@@ -218,7 +217,7 @@ public class GradleCore extends Plugin
                                 GradleCore.createErrorStatus( "Unable to get read gradle configuration" ) );
                         }
 
-                        if( customModel.isLiferayModule() )
+                        if( customModel.isLiferayModule() || customModel.hasPlugin( "com.liferay.gradle.plugins.theme.builder.ThemeBuilderPlugin" ) )
                         {
                             LiferayNature.addLiferayNature( project, monitor );
                         }

@@ -267,7 +267,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
                     final String pluginTypeSuffix = "-" + pluginType;
 
-                    final String deployedFileName = project.getName() + pluginTypeSuffix; //$NON-NLS-1$
+                    final String deployedFileName = project.getName() + pluginTypeSuffix;
 
                     if( deployedName == null || ( deployedName != null && ! deployedName.endsWith( pluginTypeSuffix ) ) )
                     {

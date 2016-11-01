@@ -25,7 +25,6 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -43,8 +42,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -101,7 +98,7 @@ public class AllBladeSamplesPublishTest
 
         op.execute( ProgressMonitorBridge.create( monitor ) );
 
-        waitForBuildAndValidation();
+        Util.waitForBuildAndValidation();
 
         IProject rootProject = CoreUtil.getWorkspaceRoot().getProject( "all-blade-samples" );
 
@@ -210,7 +207,7 @@ public class AllBladeSamplesPublishTest
 
         server.publish( IServer.PUBLISH_FULL, monitor );
 
-        waitForBuildAndValidation();
+        Util.waitForBuildAndValidation();
 
         IModule[] serverModules = server.getModules();
 
@@ -261,41 +258,6 @@ public class AllBladeSamplesPublishTest
 
         assertTrue( "Project " + projectName + " doesn't exist.", project.exists() );
         assertTrue( "Project " + projectName + " doesn't haven liferay nature", LiferayNature.hasNature( project ) );
-    }
-
-    public static void waitForBuildAndValidation() throws Exception
-    {
-        IWorkspaceRoot root = null;
-
-        try
-        {
-            ResourcesPlugin.getWorkspace().checkpoint( true );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
-            Job.getJobManager().join( GradleCore.JobFamilyId, new NullProgressMonitor() );
-            Thread.sleep( 200 );
-            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
-        }
-        catch( InterruptedException e )
-        {
-            failTest( e );
-        }
-        catch( IllegalArgumentException e )
-        {
-            failTest( e );
-        }
-        catch( OperationCanceledException e )
-        {
-            failTest( e );
-        }
-        finally
-        {
-            if( root != null )
-            {
-                Job.getJobManager().endRule( root );
-            }
-        }
     }
 
     public static void failTest( Exception e )

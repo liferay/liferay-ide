@@ -16,9 +16,14 @@
 package com.liferay.ide.gradle.core.tests;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.gradle.core.GradleCore;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * @author Gregory Amerson
@@ -31,6 +36,41 @@ public class Util
         for( IProject project : CoreUtil.getAllProjects())
         {
             project.delete( true, new NullProgressMonitor() );
+        }
+    }
+
+    public static void waitForBuildAndValidation() throws Exception
+    {
+        IWorkspaceRoot root = null;
+    
+        try
+        {
+            ResourcesPlugin.getWorkspace().checkpoint( true );
+            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
+            Job.getJobManager().join( ResourcesPlugin.FAMILY_MANUAL_BUILD, new NullProgressMonitor() );
+            Job.getJobManager().join( ResourcesPlugin.FAMILY_AUTO_BUILD, new NullProgressMonitor() );
+            Job.getJobManager().join( GradleCore.JobFamilyId, new NullProgressMonitor() );
+            Thread.sleep( 200 );
+            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
+        }
+        catch( InterruptedException e )
+        {
+            AllBladeSamplesPublishTest.failTest( e );
+        }
+        catch( IllegalArgumentException e )
+        {
+            AllBladeSamplesPublishTest.failTest( e );
+        }
+        catch( OperationCanceledException e )
+        {
+            AllBladeSamplesPublishTest.failTest( e );
+        }
+        finally
+        {
+            if( root != null )
+            {
+                Job.getJobManager().endRule( root );
+            }
         }
     }
 
