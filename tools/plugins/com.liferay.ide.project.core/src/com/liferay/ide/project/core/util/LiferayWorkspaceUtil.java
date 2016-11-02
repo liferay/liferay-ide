@@ -21,7 +21,6 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
@@ -143,6 +142,22 @@ public class LiferayWorkspaceUtil
         return false;
     }
 
+    public static String getLiferayWorkspaceGradleProperty( String projectLocation, String key, String defaultValue )
+    {
+        File gradleProperties = new File( projectLocation, "gradle.properties" );
+
+        String retVal = null;
+
+        if( gradleProperties.exists() )
+        {
+            Properties properties = PropertiesUtil.loadProperties( gradleProperties );
+
+            retVal = properties.getProperty( key, defaultValue );
+        }
+
+        return retVal;
+    }
+
     public static IProject getLiferayWorkspaceProject()
     {
         IProject[] projects = CoreUtil.getAllProjects();
@@ -167,27 +182,26 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                final IPath gradlePropertiesLocation = projectLocation.append( "gradle.properties" );
+                retval = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
+                    "liferay.workspace.modules.dir", "modules" );
+            }
+        }
 
-                if( gradlePropertiesLocation.toFile().exists() )
-                {
-                    try
-                    {
-                        String modulesDir = CoreUtil.readPropertyFileValue(
-                            gradlePropertiesLocation.toFile(), "liferay.workspace.modules.dir" );
+        return retval;
+    }
 
-                        if( modulesDir == null )
-                        {
-                            modulesDir = "modules";
-                        }
+    public static String getLiferayWorkspaceProjectThemesDir( final IProject project )
+    {
+        String retval = null;
 
-                        retval = modulesDir;
-                    }
-                    catch( IOException e )
-                    {
-                        ProjectCore.logError( "Can't read gradle properties from workspaceProject. ", e );
-                    }
-                }
+        if( project != null )
+        {
+            final IPath projectLocation = project.getLocation();
+
+            if( projectLocation != null )
+            {
+                retval = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
+                    "liferay.workspace.themes.dir", "themes" );
             }
         }
 
@@ -196,17 +210,6 @@ public class LiferayWorkspaceUtil
 
     public static String loadConfiguredHomeDir( String location )
     {
-        File gradleProperties = new File( location, "gradle.properties" );
-
-        String retVal = "bundles";
-
-        if( gradleProperties.exists() )
-        {
-            Properties properties = PropertiesUtil.loadProperties( gradleProperties );
-
-            retVal = properties.getProperty( "liferay.workspace.home.dir", "bundles" );
-        }
-
-        return retVal;
+        return getLiferayWorkspaceGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
     }
 }
