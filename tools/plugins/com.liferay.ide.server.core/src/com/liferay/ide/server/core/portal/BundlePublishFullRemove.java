@@ -146,15 +146,11 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
             findFilesInPath( modulesPath.toFile(), outputFile.lastSegment(), moduleFiles );
             findFilesInPath( deployPath.toFile(), outputFile.lastSegment(), moduleFiles );
-            findFilesInPath( appServerDeployPath.toFile(), symbolicName, moduleFiles );
+            findFilesInPath( appServerDeployPath.toFile(), outputFile.lastSegment(), moduleFiles );
         }
         catch( CoreException e )
         {
         }
-
-        // look for wabs that have been deployed
-        final IPath appServerDeployDir = runtime.getPortalBundle().getAppServerDeployDir();
-        findFilesInPath( appServerDeployDir.toFile(), symbolicName, moduleFiles );
 
         if( moduleFiles.size() > 0 )
         {

@@ -253,7 +253,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
         else
         {
-            final String task = getTaskForCreatingOutputBundle( getProject(), outputBundlePath );
             ProjectConnection connection = null;
 
             try
@@ -267,7 +266,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
                 BlockingResultHandler<Object> handler = new BlockingResultHandler<>( Object.class );
 
-                launcher.forTasks( task ).run( handler );
+                launcher.forTasks( "build" ).run( handler );
 
                 handler.getResult();
             }
@@ -291,26 +290,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         }
 
         return null;
-    }
-
-    private String getTaskForCreatingOutputBundle( IProject project, IPath outputBundle )
-    {
-        String retval = null;
-
-        if( outputBundle.lastSegment().endsWith( ".war" ) )
-        {
-            retval = "war";
-        }
-        else if( outputBundle.lastSegment().endsWith( ".jar" ) )
-        {
-            retval = "jar";
-        }
-        else
-        {
-            retval = "build";
-        }
-
-        return retval;
     }
 
     @Override
