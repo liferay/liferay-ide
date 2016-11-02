@@ -353,8 +353,7 @@ public class MavenUtil
 
     public static String getLiferayMavenPluginType( MavenProject mavenProject )
     {
-        String pluginType = getLiferayMavenPluginConfig( mavenProject,
-                                                                   ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
+        String pluginType = getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
 
         if( pluginType == null )
         {
