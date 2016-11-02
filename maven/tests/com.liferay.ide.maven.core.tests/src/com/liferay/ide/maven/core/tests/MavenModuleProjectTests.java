@@ -15,8 +15,6 @@
 
 package com.liferay.ide.maven.core.tests;
 
-import static org.junit.Assert.assertNotNull;
-
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -34,6 +32,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.eclipse.wst.common.componentcore.ComponentCore;
+import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.junit.Test;
 
 /**
@@ -388,6 +388,32 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
        assertNotNull( bundleProject );
+    }
+
+    @Test
+    public void testThemeProjectComponentConfiguration() throws Exception
+    {
+       NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+       op.setProjectName( "maven-theme-component-test" );
+       op.setProjectProvider( "maven-module" );
+       op.setProjectTemplateName( "theme" );
+
+       op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+       IProject project = CoreUtil.getProject( "maven-theme-component-test" );
+
+       assertNotNull( project );
+
+       IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+
+       assertNotNull( bundleProject );
+
+       final IVirtualComponent projectComponent = ComponentCore.createComponent( project );
+
+       final String deployedName = projectComponent.getDeployedName();
+
+       assertEquals( "maven-theme-component-test", deployedName );
     }
 
     private void verifyProject(IProject project ) throws Exception

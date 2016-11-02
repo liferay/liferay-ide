@@ -205,8 +205,6 @@ public class AllBladeSamplesPublishTest
 
         server = serverWC.save( true, monitor );
 
-        server.publish( IServer.PUBLISH_FULL, monitor );
-
         Util.waitForBuildAndValidation();
 
         IModule[] serverModules = server.getModules();

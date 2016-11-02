@@ -353,15 +353,7 @@ public class MavenUtil
 
     public static String getLiferayMavenPluginType( MavenProject mavenProject )
     {
-        String pluginType = getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
-
-        if( pluginType == null )
-        {
-            // check for EXT
-            pluginType = ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE;
-        }
-
-        return pluginType;
+        return getLiferayMavenPluginConfig( mavenProject, ILiferayMavenConstants.PLUGIN_CONFIG_PLUGIN_TYPE );
     }
 
     @SuppressWarnings( "deprecation" )

@@ -210,7 +210,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         final IFile pomFile = project.getFile( IMavenConstants.POM_FILE_NAME );
         final IFacetedProject facetedProject = ProjectFacetsManager.create( project, false, monitor );
 
-        LiferayNature.addLiferayNature( project, monitor );
 
         removeLiferayMavenMarkers( project );
 
@@ -242,6 +241,11 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
             installProblem = installNewLiferayFacet( facetedProject, request, monitor );
         }
 
+        if( shouldAddLiferayNature( mavenProject, facetedProject  ) )
+        {
+            LiferayNature.addLiferayNature( project, monitor );
+        }
+
         monitor.worked( 25 );
 
         if( installProblem != null )
@@ -254,14 +258,14 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         }
         else
         {
-            final String pluginType = MavenUtil.getLiferayMavenPluginType( mavenProject );
+            String pluginType = MavenUtil.getLiferayMavenPluginType( mavenProject );
 
             // IDE-817 we need to mak sure that on deployment it will have the correct suffix for project name
             final IVirtualComponent projectComponent = ComponentCore.createComponent( project );
 
             try
             {
-                if( projectComponent != null && shouldInstallNewLiferayFacet( mavenProject, facetedProject ) )
+                if( pluginType != null && projectComponent != null )
                 {
                     final String deployedName = projectComponent.getDeployedName();
 
@@ -345,6 +349,13 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         monitor.worked( 25 );
         monitor.done();
+    }
+
+    private boolean shouldAddLiferayNature( MavenProject mavenProject, IFacetedProject facetedProject )
+    {
+        return mavenProject.getPlugin( ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY ) != null ||
+                mavenProject.getPlugin( ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY ) != null ||
+                getLiferayProjectFacet( facetedProject ) != null;
     }
 
     public static IPath getThemeTargetFolder( MavenProject mavenProject, IProject project )
@@ -517,7 +528,13 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
     {
         MavenProblemInfo retval = null;
 
-        final String pluginType = MavenUtil.getLiferayMavenPluginType( request.getMavenProject() );
+        String pluginType = MavenUtil.getLiferayMavenPluginType( request.getMavenProject() );
+
+        if( pluginType == null )
+        {
+            pluginType = ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE;
+        }
+
         final Plugin liferayMavenPlugin =
             MavenUtil.getPlugin(
                 request.getMavenProjectFacade(), ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
@@ -592,12 +609,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private boolean shouldInstallNewLiferayFacet( MavenProject mavenProject, IFacetedProject facetedProject )
     {
-        return getLiferayMavenPlugin( mavenProject ) != null && getLiferayProjectFacet( facetedProject ) == null;
-    }
-
-    private Plugin getLiferayMavenPlugin( MavenProject mavenProject )
-    {
-        return mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
+        return getLiferayProjectFacet( facetedProject ) == null;
     }
 
     private IFolder warSourceDirectory( final IProject project, final MavenProject mavenProject )

@@ -223,7 +223,13 @@ public class MavenProjectRemoteServerPublisher extends AbstractRemoteServerPubli
         boolean retval = false;
 
         final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
-        final String pluginType = MavenUtil.getLiferayMavenPluginType( facade.getMavenProject( monitor ) );
+        String pluginType = MavenUtil.getLiferayMavenPluginType( facade.getMavenProject( monitor ) );
+
+        if( pluginType == null )
+        {
+            pluginType = ILiferayMavenConstants.DEFAULT_PLUGIN_TYPE;
+        }
+
         final MavenProject parentProject = facade.getMavenProject( monitor ).getParent();
         final String goal = getMavenDeployGoals();
 
