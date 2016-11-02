@@ -15,7 +15,7 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsExtOrWebTypePlugin;
+import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsTypePlugin;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IPortletFramework;
@@ -116,7 +116,7 @@ public class SDKLocationValidationService extends ValidationService
 
             if( op().getPluginType().content().equals( PluginType.web ) )
             {
-                if( !supportsExtOrWebTypePlugin( op(), "web" ) )
+                if( !supportsTypePlugin( op(), "web" ) )
                 {
                     retval = Status.createErrorStatus(
                         "The selected Plugins SDK does not support creating new web type plugins.  " +
@@ -125,11 +125,20 @@ public class SDKLocationValidationService extends ValidationService
             }
             else if( op().getPluginType().content().equals( PluginType.ext ) )
             {
-                if( !supportsExtOrWebTypePlugin( op(), "ext" ) )
+                if( !supportsTypePlugin( op(), "ext" ) )
                 {
                     retval = Status.createErrorStatus(
                         "The selected Plugins SDK does not support creating ext type plugins.  " +
                             "Please configure version 6.2 or less." );
+                }
+            }
+            else if( op().getPluginType().content().equals( PluginType.theme ) )
+            {
+                if( !supportsTypePlugin( op(), "theme" ) )
+                {
+                    retval = Status.createErrorStatus(
+                        "The selected Plugins SDK does not support creating theme type plugins.  " +
+                            "Please configure version 6.2 or less or using gulp way." );
                 }
             }
             else if (op().getPluginType().content().equals( PluginType.portlet ))

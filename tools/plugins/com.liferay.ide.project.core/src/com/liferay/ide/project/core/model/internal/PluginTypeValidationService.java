@@ -14,7 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.model.internal;
 
-import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsExtOrWebTypePlugin;
+import static com.liferay.ide.project.core.model.NewLiferayPluginProjectOpMethods.supportsTypePlugin;
 
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
@@ -28,10 +28,10 @@ import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
-
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class PluginTypeValidationService extends ValidationService
 {
@@ -66,21 +66,26 @@ public class PluginTypeValidationService extends ValidationService
 
             if( sdk != null )
             {
-                if( op.getPluginType().content().equals( PluginType.web ) && !supportsExtOrWebTypePlugin( op, "web" ) )
+                if( op.getPluginType().content().equals( PluginType.web ) && !supportsTypePlugin( op, "web" ) )
                 {
                     retval = Status.createErrorStatus(
                         "The selected Plugins SDK does not support creating new web type plugins.  " +
                             "Please configure version 7.0 or greater." );
                 }
-                else if( op.getPluginType().content().equals( PluginType.ext ) &&
-                    !supportsExtOrWebTypePlugin( op, "ext" ) )
+                else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsTypePlugin( op, "ext" ) )
                 {
                     retval = Status.createErrorStatus(
                         "The selected Plugins SDK does not support creating ext type plugins.  " +
                             "Please configure version 6.2 or less." );
                 }
+                else if( op.getPluginType().content().equals( PluginType.theme ) && !supportsTypePlugin( op, "theme" ) )
+                {
+                    retval = Status.createErrorStatus(
+                        "The selected Plugins SDK does not support creating theme type plugins.  " +
+                            "Please configure version 6.2 or less or using gulp way." );
+                }
             }
-            else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsExtOrWebTypePlugin( op, "ext" ) )
+            else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsTypePlugin( op, "ext" ) )
             {
                 retval = Status.createErrorStatus( "The Maven does not support creating ext type plugins." );
             }
