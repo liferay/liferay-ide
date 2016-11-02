@@ -175,7 +175,7 @@ public class BladeCLI
         FixedIndexedRepo repo = new FixedIndexedRepo();
         Map<String, String> props = new HashMap<String, String>();
         props.put( "name", "index1" );
-        props.put( "locations", getRepoURL()+"index.xml.gz" );
+        props.put( "locations", getRepoURL() + "index.xml.gz" );
         props.put( FixedIndexedRepo.PROP_CACHE, repoCache.getAbsolutePath() );
 
         repo.setProperties( props );
@@ -183,7 +183,7 @@ public class BladeCLI
 
         try
         {
-            File[] files = repo.get( "com.liferay.blade.cli", "[1,2)" );
+            File[] files = repo.get( "com.liferay.blade.cli", "[2,3)" );
 
             File cliJar = files[0];
 

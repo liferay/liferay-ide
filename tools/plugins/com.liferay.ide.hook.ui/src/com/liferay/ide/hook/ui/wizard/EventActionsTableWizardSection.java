@@ -284,7 +284,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
             {
                 int classNameStatus =
                     JavaConventions.validateJavaTypeName(
-                        texts[1].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                        texts[1].getText().trim(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
                 classNameValid = ( classNameStatus != IStatus.ERROR ) ? true : false;
             }
 
@@ -332,7 +332,7 @@ public class EventActionsTableWizardSection extends StringArrayTableWizardSectio
             {
                 int classNameStatus =
                     JavaConventions.validateJavaTypeName(
-                        texts[1].getText().trim(), CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 ).getSeverity();
+                        texts[1].getText().trim(), CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 ).getSeverity();
                 classNameValid = ( classNameStatus != IStatus.ERROR ) ? true : false;
             }
 

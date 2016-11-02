@@ -16,8 +16,15 @@ package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
 
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -26,6 +33,26 @@ import org.junit.Test;
  */
 public class NewLiferayModuleProjectOpTests
 {
+
+    @BeforeClass
+    public static void setupBladeCLIPrefs() throws Exception
+    {
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
+    }
+
+    @AfterClass
+    public static void restoreBladeCLIPrefsToDefault() throws Exception
+    {
+        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+    }
 
     @Test
     public void testNewLiferayModuleProjectDefaultValueServiceDashes() throws Exception
@@ -74,27 +101,27 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectName( "my.test.project" );
 
-        op.setProjectTemplateName( "Activator" );
+        op.setProjectTemplateName( "activator" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
-        op.setProjectTemplateName( "Portlet" );
+        op.setProjectTemplateName( "portlet" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
-        op.setProjectTemplateName( "MvcPortlet" );
+        op.setProjectTemplateName( "mvc-portlet" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
-        op.setProjectTemplateName( "Service" );
+        op.setProjectTemplateName( "service" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
-        op.setProjectTemplateName( "ServiceWrapper" );
+        op.setProjectTemplateName( "service-wrapper" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
-        op.setProjectTemplateName( "ServiceBuilder" );
+        op.setProjectTemplateName( "service-builder" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }
@@ -132,4 +159,5 @@ public class NewLiferayModuleProjectOpTests
 
         assertEquals( "my.test.foo1", op.getPackageName().content( true ) );
     }
+
 }

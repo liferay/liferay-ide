@@ -16,13 +16,13 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.model.internal.GroupIdDefaultValueService;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -31,7 +31,7 @@ import org.eclipse.sapphire.modeling.Path;
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectGroupIdDefaultValueService extends GroupIdDefaultValueService
+public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 {
     @Override
     protected String compute()
@@ -48,7 +48,6 @@ public class ModuleProjectGroupIdDefaultValueService extends GroupIdDefaultValue
             final String projectName = op().getProjectName().content();
 
             groupId = NewLiferayModuleProjectOpMethods.getMavenParentPomGroupId( op, projectName, parentProjectOsPath );
-
         }
 
         if( groupId == null )
@@ -57,7 +56,7 @@ public class ModuleProjectGroupIdDefaultValueService extends GroupIdDefaultValue
 
             if( CoreUtil.isNullOrEmpty( groupId ) )
             {
-                groupId = "com.example.plugins";
+                groupId = "com.example";
             }
         }
 

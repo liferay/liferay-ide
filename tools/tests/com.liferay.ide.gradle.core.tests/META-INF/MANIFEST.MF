@@ -10,7 +10,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.core,
  org.eclipse.ui.console,
  com.liferay.ide.gradle.core;bundle-version="3.0.1",
- org.apache.commons.io
+ org.apache.commons.io,
+ org.eclipse.sapphire.modeling,
+ org.eclipse.wst.server.core,
+ com.liferay.ide.server.core,
+ org.eclipse.sapphire.platform,
+ com.liferay.ide.project.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: com.liferay.blade.gradle.model

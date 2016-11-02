@@ -28,6 +28,9 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
 import java.io.File;
 
@@ -42,6 +45,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -50,6 +59,28 @@ import org.junit.Test;
  */
 public class GradleProjectTests
 {
+
+    @AfterClass
+    public static void restoreBladeCLIPrefsToDefault() throws Exception
+    {
+        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+    }
+
+    @BeforeClass
+    public static void setupBladeCLIPrefs() throws Exception
+    {
+        Util.deleteAllWorkspaceProjects();
+
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
+    }
 
     public static LiferayGradleProject fullImportGradleProject( String projectPath ) throws Exception
     {
@@ -243,6 +274,28 @@ public class GradleProjectTests
         assertNotNull( bundleProject[0] );
 
         assertEquals( LiferayGradleProject.class, bundleProject[0].getClass() );
+    }
+
+    @Test
+    public void testThemeProjectPluginDetection() throws Exception
+    {
+       NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+       op.setProjectName( "gradle-theme-test" );
+       op.setProjectProvider( "gradle-module" );
+       op.setProjectTemplateName( "theme" );
+
+       op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+       IProject project = CoreUtil.getProject( "gradle-theme-test" );
+
+       assertNotNull( project );
+
+       Util.waitForBuildAndValidation();
+
+       IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+
+       assertNotNull( bundleProject );
     }
 
     @Test

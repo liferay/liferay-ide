@@ -31,7 +31,6 @@ public class ArchetypeDefaultValueService extends DefaultValueService
 
     private FilteredListener<PropertyContentEvent> listener;
 
-
     @Override
     protected void initDefaultValueService()
     {

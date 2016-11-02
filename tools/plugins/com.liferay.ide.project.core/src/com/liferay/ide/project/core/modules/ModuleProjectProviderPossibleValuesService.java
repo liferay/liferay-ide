@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,7 +39,10 @@ public class ModuleProjectProviderPossibleValuesService extends PossibleValuesSe
 
         for( final ILiferayProjectProvider provider : LiferayCore.getProviders( "module") )
         {
-            possibleValues.add( provider.getShortName() );
+            if( provider instanceof NewLiferayProjectProvider<?>)
+            {
+                possibleValues.add( provider.getShortName() );
+            }
         }
 
         Collections.sort( possibleValues );

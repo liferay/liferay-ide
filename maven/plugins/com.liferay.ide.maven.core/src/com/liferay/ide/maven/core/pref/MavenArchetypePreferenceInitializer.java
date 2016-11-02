@@ -77,6 +77,65 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_GAV_WEB,
             "com.liferay.maven.archetypes:liferay-web-archetype:6.2.5" );
+
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_ACTIVATOR,
+            "com.liferay:com.liferay.project.templates.activator:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_API,
+            "com.liferay:com.liferay.project.templates.api:1.0.2" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_REPORT,
+            "com.liferay:com.liferay.project.templates.content.targeting.report:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_RULE,
+            "com.liferay:com.liferay.project.templates.content.targeting.rule:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_TRACKING_ACTION,
+            "com.liferay:com.liferay.project.templates.content.targeting.tracking.action:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTROL_MENU_ENTRY,
+            "com.liferay:com.liferay.project.templates.control.menu.entry:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT,
+            "com.liferay:com.liferay.project.templates.fragment:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_MVC_PORTLET,
+            "com.liferay:com.liferay.project.templates.mvc.portlet:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PANEL_APP,
+            "com.liferay:com.liferay.project.templates.panel.app:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET,
+            "com.liferay:com.liferay.project.templates.portlet:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_CONFIGURATION_ICON,
+            "com.liferay:com.liferay.project.templates.portlet.configuration.icon:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_PROVIDER,
+            "com.liferay:com.liferay.project.templates.portlet.provider:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_TOOLBAR_CONTRIBUTOR,
+            "com.liferay:com.liferay.project.templates.portlet.toolbar.contributor:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE,
+            "com.liferay:com.liferay.project.templates.service:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_BUILDER,
+            "com.liferay:com.liferay.project.templates.service.builder:1.0.2" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_WRAPPER,
+            "com.liferay:com.liferay.project.templates.service.wrapper:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_SIMULATION_PANEL_ENTRY,
+            "com.liferay:com.liferay.project.templates.simulation.panel.entry:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_TEMPLATE_CONTEXT_CONTRIBUTOR,
+            "com.liferay:com.liferay.project.templates.template.context.contributor:1.0.1" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME,
+            "com.liferay:com.liferay.project.templates.theme:1.0.1" );
+
     }
 
 }

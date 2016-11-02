@@ -34,10 +34,17 @@
         <plugins>
             <plugin>
                 <groupId>org.eclipse.tycho</groupId>
+                <artifactId>tycho-maven-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>org.eclipse.tycho</groupId>
                 <artifactId>tycho-surefire-plugin</artifactId>
                 <configuration>
                     <!--<argLine>-Xmx1024m -XX:MaxPermSize=512m -Xdebug -Xrunjdwp:transport=dt_socket,address=8100,server=y,suspend=y</argLine>-->
                     <argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
+                    <useUIHarness>false</useUIHarness>
+                    <useUIThread>false</useUIThread>
                     <systemProperties>
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <osgi.console>1234</osgi.console>
@@ -54,6 +61,16 @@
                             <requirement>
                                 <type>eclipse-feature</type>
                                 <id>com.liferay.ide.eclipse.tools</id>
+                                <versionRange>0.0.0</versionRange>
+                            </requirement>
+                            <requirement>
+                                <type>eclipse-feature</type>
+                                <id>org.eclipse.jdt</id>
+                                <versionRange>0.0.0</versionRange>
+                            </requirement>
+                            <requirement>
+                                <type>eclipse-feature</type>
+                                <id>org.eclipse.platform</id>
                                 <versionRange>0.0.0</versionRange>
                             </requirement>
                         </extraRequirements>

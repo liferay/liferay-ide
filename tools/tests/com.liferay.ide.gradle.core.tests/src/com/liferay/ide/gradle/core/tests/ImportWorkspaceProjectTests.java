@@ -33,6 +33,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -40,6 +41,11 @@ import org.junit.Test;
  */
 public class ImportWorkspaceProjectTests
 {
+    @BeforeClass
+    public static void clearWorkspace() throws Exception
+    {
+        Util.deleteAllWorkspaceProjects();
+    }
 
     @Test
     public void testImportLiferayWorkspace() throws Exception

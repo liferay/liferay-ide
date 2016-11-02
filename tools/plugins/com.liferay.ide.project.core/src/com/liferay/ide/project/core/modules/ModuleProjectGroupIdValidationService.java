@@ -42,7 +42,7 @@ public class ModuleProjectGroupIdValidationService extends GroupIdValidationServ
             final String groupId = op().getGroupId().content( true );
 
             final IStatus javaStatus =
-                JavaConventions.validatePackageName( groupId, CompilerOptions.VERSION_1_5, CompilerOptions.VERSION_1_5 );
+                JavaConventions.validatePackageName( groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
 
             return StatusBridge.create( javaStatus );
         }
@@ -57,7 +57,6 @@ public class ModuleProjectGroupIdValidationService extends GroupIdValidationServ
 
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
-
             @Override
             protected void handleTypedEvent( final PropertyContentEvent event )
             {

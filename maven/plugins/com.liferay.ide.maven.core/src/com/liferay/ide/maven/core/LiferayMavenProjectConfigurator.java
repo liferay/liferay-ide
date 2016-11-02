@@ -237,7 +237,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
         MavenProblemInfo installProblem = null;
 
-        if( shouldInstallNewLiferayFacet( facetedProject ) )
+        if( shouldInstallNewLiferayFacet( mavenProject, facetedProject ) )
         {
             installProblem = installNewLiferayFacet( facetedProject, request, monitor );
         }
@@ -261,13 +261,13 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             try
             {
-                if( projectComponent != null )
+                if( projectComponent != null && shouldInstallNewLiferayFacet( mavenProject, facetedProject ) )
                 {
                     final String deployedName = projectComponent.getDeployedName();
 
                     final String pluginTypeSuffix = "-" + pluginType;
 
-                    final String deployedFileName = project.getName() + pluginTypeSuffix; //$NON-NLS-1$
+                    final String deployedFileName = project.getName() + pluginTypeSuffix;
 
                     if( deployedName == null || ( deployedName != null && ! deployedName.endsWith( pluginTypeSuffix ) ) )
                     {
@@ -288,7 +288,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                         {
                             ComponentUtilities.setServerContextRoot( project, deployedFileName );
                         }
-
                     }
                 }
             }
@@ -591,9 +590,14 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         return configureAsLiferayPlugin;
     }
 
-    private boolean shouldInstallNewLiferayFacet( IFacetedProject facetedProject )
+    private boolean shouldInstallNewLiferayFacet( MavenProject mavenProject, IFacetedProject facetedProject )
     {
-        return getLiferayProjectFacet( facetedProject ) == null;
+        return getLiferayMavenPlugin( mavenProject ) != null && getLiferayProjectFacet( facetedProject ) == null;
+    }
+
+    private Plugin getLiferayMavenPlugin( MavenProject mavenProject )
+    {
+        return mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY );
     }
 
     private IFolder warSourceDirectory( final IProject project, final MavenProject mavenProject )

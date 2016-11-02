@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.wst.server.core.IServer;
 
 
@@ -70,25 +71,30 @@ public class PropertiesContentProvider extends AbstractNavigatorContentProvider
 
                 if( runtime != null )
                 {
-                    final File liferayHome = runtime.getLiferayHome().toFile();
+                    final IPath liferayHome = runtime.getLiferayHome();
 
-                    final File[] files = liferayHome.listFiles( new FilenameFilter()
+                    if( liferayHome != null )
                     {
-                        public boolean accept( File dir, String name )
+                        final File liferayHomeDir = liferayHome.toFile();
+
+                        final File[] files = liferayHomeDir.listFiles( new FilenameFilter()
                         {
-                            return dir.equals( liferayHome ) && name.endsWith( "-ext.properties" );
+                            public boolean accept( File dir, String name )
+                            {
+                                return dir.equals( liferayHomeDir ) && name.endsWith( "-ext.properties" );
+                            }
+                        });
+
+                        final List<PropertiesFile> newFiles = new ArrayList<PropertiesFile>();
+
+                        for( File file : files )
+                        {
+                            newFiles.add( new PropertiesFile( file ) );
                         }
-                    });
 
-                    final List<PropertiesFile> newFiles = new ArrayList<PropertiesFile>();
-
-                    for( File file : files )
-                    {
-                        newFiles.add( new PropertiesFile( file ) );
+                        propertiesFiles = newFiles.toArray( new PropertiesFile[0] );
+                        this.propertiesFilesMap.put( server.getId() , propertiesFiles );
                     }
-
-                    propertiesFiles = newFiles.toArray( new PropertiesFile[0] );
-                    this.propertiesFilesMap.put( server.getId() , propertiesFiles );
                 }
             }
 
