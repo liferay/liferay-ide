@@ -111,8 +111,9 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
     {
         final IResource resource = MigrationUtil.getIResourceFromProblem( problem );
 
-        new WorkspaceJob( "Marking migration problem as done" )
+        WorkspaceJob migrationJob = new WorkspaceJob( "Marking migration problem as done" )
         {
+
             public IStatus runInWorkspace( IProgressMonitor monitor )
             {
                 IStatus retval = Status.OK_STATUS;
@@ -155,7 +156,9 @@ public abstract class ProblemAction extends SelectionProviderAction implements I
                 return retval;
             }
 
-        }.schedule();
+        };
+
+        migrationJob.schedule();
 
     }
 

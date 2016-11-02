@@ -17,7 +17,7 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
-
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
@@ -26,11 +26,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -43,6 +45,7 @@ import org.osgi.framework.ServiceReference;
 /**
  * @author Gregory Amerson
  * @author Terry Jia
+ * @author Lovett Li
  */
 public class AutoCorrectAction extends ProblemAction
 {
@@ -54,18 +57,30 @@ public class AutoCorrectAction extends ProblemAction
         _provider = provider;
     }
 
-    public IStatus runWithMarker( final Problem problem, IMarker marker)
+    @Override
+    public void run()
     {
-        final IResource file = MigrationUtil.getIResourceFromProblem( problem );
+        final List<Problem> problems = MigrationUtil.getProblemsFromSelection( getSelection() );
+
+        runWithAutoCorrect( problems );
+    }
+
+    public IStatus runWithAutoCorrect( final List<Problem> problems)
+    {
+        final IResource file = MigrationUtil.getIResourceFromProblem( problems.get( 0 ) );
         final BundleContext context = FrameworkUtil.getBundle( AutoCorrectAction.class ).getBundleContext();
 
-        new WorkspaceJob( "Auto correcting migration problem.")
+        WorkspaceJob job = new WorkspaceJob( "Auto correcting migration problem." )
         {
+
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor )
             {
+                IStatus retval = Status.OK_STATUS;
+
                 try
                 {
+                    final Problem problem = problems.get( 0 );
                     final String autoCorrectKey =
                         problem.autoCorrectContext.substring( 0, problem.autoCorrectContext.indexOf( ":" ) );
 
@@ -74,28 +89,51 @@ public class AutoCorrectAction extends ProblemAction
 
                     for( ServiceReference<AutoMigrator> ref : refs )
                     {
-                        final List<Problem> problems = new ArrayList<>();
-                        problems.add( problem );
-
                         final AutoMigrator autoMigrator = context.getService( ref );
                         autoMigrator.correctProblems( problem.file, problems );
                     }
 
                     file.refreshLocal( IResource.DEPTH_ONE, monitor );
 
-                    new MarkDoneAction().run( problem, _provider );
+                    MigrateProjectHandler migrateHandler = new MigrateProjectHandler();
+
+                    Path path = new Path( problem.getFile().getPath() );
+                    IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
+                    String projectName = "";
+
+                    for( IProject project : projects )
+                    {
+                        if( problem.getFile().getPath().replaceAll( "\\\\", "/" ).startsWith(
+                            project.getLocation().toString() ) )
+                        {
+                            projectName = project.getName();
+                            break;
+                        }
+                    }
+
+                    for(Problem p : problems)
+                    {
+                        new MarkDoneAction().run( p, _provider );
+                    }
+
+                    if( !projectName.equals( "" ) )
+                    {
+                            migrateHandler.findMigrationProblems( new Path[] { path }, new String[] { projectName } );
+                    }
+
                 }
                 catch( InvalidSyntaxException e )
                 {
                 }
                 catch( AutoMigrateException | CoreException e )
                 {
-                    return ProjectUI.createErrorStatus( "Unable to auto correct problem", e );
+                    return retval = ProjectUI.createErrorStatus( "Unable to auto correct problem", e );
                 }
 
-                return Status.OK_STATUS;
+                return retval;
             }
-        }.schedule();
+        };
+        job.schedule();
 
         return Status.OK_STATUS;
     }
@@ -112,6 +150,7 @@ public class AutoCorrectAction extends ProblemAction
             boolean selectionCompatible = true;
 
             Iterator<?> items = selection.iterator();
+            Object lastItem = null;
 
             while( items.hasNext() )
             {
@@ -130,6 +169,19 @@ public class AutoCorrectAction extends ProblemAction
                     selectionCompatible = false;
                     break;
                 }
+                if( lastItem != null )
+                {
+                    String prCurrentKey = ((Problem) item).autoCorrectContext.substring( 0, problem.autoCorrectContext.indexOf( ":" ) );;
+                    String prLastKey = ((Problem) lastItem).autoCorrectContext.substring( 0, problem.autoCorrectContext.indexOf( ":" ) );
+
+                    if( !(prCurrentKey.equals( prLastKey)) )
+                    {
+                        selectionCompatible = false;
+                        break;
+                    }
+                }
+
+                lastItem = item;
             }
 
             Iterator<?> items2 = selection.iterator();
@@ -153,13 +205,28 @@ public class AutoCorrectAction extends ProblemAction
             if( _provider instanceof TableViewer )
             {
                 TableViewer viewer = (TableViewer) _provider;
-                Object[] problems = (Object[]) viewer.getInput();
-
-                for( Object o : problems )
+                Object obj = viewer.getInput();
+                if( obj instanceof Object[] )
                 {
-                    if( o instanceof Problem && ( (Problem) o ).autoCorrectContext != null )
+                    Object[] problems = (Object[]) obj;
+
+                    for( Object o : problems )
                     {
-                        allAutoCorrectContexts.add( ( (Problem) o ).autoCorrectContext );
+                        if( o instanceof Problem && ( (Problem) o ).autoCorrectContext != null )
+                        {
+                            allAutoCorrectContexts.add( ( (Problem) o ).autoCorrectContext );
+                        }
+                    }
+                }
+                else if( obj instanceof ArrayList<?> )
+                {
+                    ArrayList<Problem> list = (ArrayList<Problem>) obj;
+                    for( Problem p : list )
+                    {
+                        if( p.autoCorrectContext != null )
+                        {
+                            allAutoCorrectContexts.add( p.autoCorrectContext );
+                        }
                     }
                 }
             }
@@ -197,6 +264,12 @@ public class AutoCorrectAction extends ProblemAction
                 setText( "Correct automatically" );
             }
         }
+    }
+
+    @Override
+    protected IStatus runWithMarker( Problem problem, IMarker marker )
+    {
+        return null;
     }
 
 }

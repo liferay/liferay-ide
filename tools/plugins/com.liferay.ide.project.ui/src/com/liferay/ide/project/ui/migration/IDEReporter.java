@@ -46,9 +46,6 @@ public class IDEReporter implements Reporter
             @Override
             public void run()
             {
-//                MigrationView view = (MigrationView) UIUtil.showView( MigrationView.ID );
-//
-//                view.getCommonViewer().setInput( CoreUtil.getWorkspaceRoot() );
                 FindBreakingChangesPage page =
                     UpgradeView.getPage( Page.FINDBREACKINGCHANGES_PAGE_ID, FindBreakingChangesPage.class );
 

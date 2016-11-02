@@ -604,4 +604,9 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         return false;
     }
 
+    public TableViewer get_problemsViewer()
+    {
+        return _problemsViewer;
+    }
+
 }
