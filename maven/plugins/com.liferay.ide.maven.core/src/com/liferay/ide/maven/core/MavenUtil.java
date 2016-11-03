@@ -196,11 +196,25 @@ public class MavenUtil
         final MavenProject mavenProject = facade.getMavenProject( monitor );
         final MavenExecutionPlan plan = maven.calculateExecutionPlan( mavenProject, goals, true, monitor );
 
-//        context.getExecutionRequest().setOffline( true );
-//        context.getExecutionRequest().setRecursive( false );
+        Plugin plugin6x = MavenUtil.getPlugin( facade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
 
-        final MojoExecution liferayMojoExecution =
-            getExecution( plan, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID );
+        String executionArtifactId = null;
+
+        if( plugin6x != null )
+        {
+            executionArtifactId = ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_ARTIFACT_ID;
+        }
+        else
+        {
+            Plugin plugin7x = MavenUtil.getPlugin( facade, ILiferayMavenConstants.SERVICE_BUILDER_PLUGIN_KEY, monitor );
+
+            if( plugin7x != null )
+            {
+                executionArtifactId = ILiferayMavenConstants.SERVICE_BUILDER_PLUGIN_ARTIFACT_ID;
+            }
+        }
+
+        final MojoExecution liferayMojoExecution = getExecution( plan, executionArtifactId );
 
         if( liferayMojoExecution != null )
         {

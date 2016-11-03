@@ -18,6 +18,7 @@ package com.liferay.ide.maven.core.tests;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
 
@@ -28,6 +29,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.modeling.Status;
@@ -104,7 +106,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     }
 
     @Test
-    public void testProjectTemplateContrlMenuEntry() throws Exception
+    public void testProjectTemplateControlMenuEntry() throws Exception
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
 
@@ -250,12 +252,47 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectTemplateName( "service-builder" );
         op.setPackageName( "com.liferay.test" );
 
-        PropertyKey apiPath = op.getPropertyKeys().insert();
+        IProject parent = create( op );
 
-        apiPath.setName( "apiPath" );
-        apiPath.setValue( "foo" );
+        assertTrue( parent != null && parent.exists() );
 
-        createAndBuild(op);
+        IProject api = CoreUtil.getProject( "service-builder-test-api" );
+
+        assertTrue( api != null && api.exists() );
+
+        IProject service = CoreUtil.getProject( "service-builder-test-service" );
+
+        assertTrue( service != null && service.exists() );
+
+        IProjectBuilder builder = LiferayCore.create( IProjectBuilder.class, service );
+
+        builder.buildService( monitor );
+
+        api.build( IncrementalProjectBuilder.FULL_BUILD, monitor );
+
+        service.build( IncrementalProjectBuilder.FULL_BUILD, monitor );
+
+        IBundleProject apiBundle = LiferayCore.create( IBundleProject.class, api );
+
+        assertNotNull( apiBundle );
+
+        IPath apiOutput = apiBundle.getOutputBundle( true, monitor );
+
+        assertNotNull( apiOutput );
+
+        assertTrue( apiOutput.toFile().exists() );
+
+        assertEquals( "service-builder-test-api-1.0.0-SNAPSHOT.jar", apiOutput.lastSegment() );
+
+        IBundleProject serviceBundle = LiferayCore.create( IBundleProject.class, service );
+
+        IPath serviceOutput = serviceBundle.getOutputBundle( true, monitor );
+
+        assertNotNull( serviceOutput );
+
+        assertTrue( serviceOutput.toFile().exists() );
+
+        assertEquals( "service-builder-test-service-1.0.0-SNAPSHOT.jar", serviceOutput.lastSegment() );
     }
 
     @Test
@@ -312,7 +349,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     {
         IProject project = create( op );
 
-        verifyProject(project);
+        verifyProject( project );
     }
 
     private IProject create( NewLiferayModuleProjectOp op ) throws InterruptedException, CoreException
@@ -432,6 +469,16 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         waitForJobsToComplete();
 
         assertNoErrors( project );
+
+        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+
+        assertNotNull( bundleProject );
+
+        IPath outputBundle = bundleProject.getOutputBundle( true, monitor );
+
+        assertNotNull( outputBundle );
+
+        assertTrue( outputBundle.toFile().exists() );
     }
 
 }

@@ -317,6 +317,13 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
             }
         }
 
+        // add support for 7.0 service builder templates
+
+        if( retval == null )
+        {
+            retval = project.getFile( "service.xml" );
+        }
+
         return retval;
     }
 

@@ -82,6 +82,13 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
 
         final Properties properties = new Properties();
 
+        if( archetype.getArtifactId().endsWith( "service.builder") )
+        {
+            String apiPath = ":" + artifactId + "-api";
+
+            properties.put( "apiPath", apiPath );
+        }
+
         properties.put( "buildType", "maven" );
         properties.put( "package", javaPackage );
         properties.put( "className", className == null ? "" : className );

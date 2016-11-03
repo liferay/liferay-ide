@@ -98,6 +98,10 @@ public interface ILiferayMavenConstants
 
     String PORTLET_PLUGIN_TYPE = DEFAULT_PLUGIN_TYPE;
 
+    String SERVICE_BUILDER_PLUGIN_ARTIFACT_ID = "com.liferay.portal.tools.service.builder";
+
+    String SERVICE_BUILDER_PLUGIN_KEY = "com.liferay:" + SERVICE_BUILDER_PLUGIN_ARTIFACT_ID;
+
     String THEME_PLUGIN_TYPE = "theme"; //$NON-NLS-1$
 
     String THEME_RESOURCES_FOLDER = "theme-resources"; //$NON-NLS-1$
