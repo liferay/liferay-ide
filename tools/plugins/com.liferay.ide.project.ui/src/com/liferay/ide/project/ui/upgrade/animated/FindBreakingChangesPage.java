@@ -21,6 +21,7 @@ import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.migration.AutoCorrectAction;
+import com.liferay.ide.project.ui.migration.AutoCorrectAllAction;
 import com.liferay.ide.project.ui.migration.IgnoreAction;
 import com.liferay.ide.project.ui.migration.IgnoreAlwaysAction;
 import com.liferay.ide.project.ui.migration.MarkDoneAction;
@@ -85,6 +86,7 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
  * @author Andy Wu
  * @author Simon Jiang
  * @author Lovett Li
+ * @author Terry Jia
  */
 public class FindBreakingChangesPage extends Page implements IDoubleClickListener
 {
@@ -213,18 +215,35 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         buttonContainer.setLayout( new GridLayout( 1, false ) );
         buttonContainer.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
 
-        Button b_findbreakingchanges = new Button( buttonContainer, SWT.NONE );
-        b_findbreakingchanges.setText( "Find Breaking Changes" );
-        b_findbreakingchanges.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+        Button findbreakingchangesButton = new Button( buttonContainer, SWT.NONE );
+        findbreakingchangesButton.setText( "Find Breaking Changes" );
+        findbreakingchangesButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
 
-        b_findbreakingchanges.addListener( SWT.Selection, new Listener()
+        findbreakingchangesButton.addListener( SWT.Selection, new Listener()
         {
 
             @Override
             public void handleEvent( Event event )
             {
                 IViewPart view = UIUtil.findView( UpgradeView.ID );
-                new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();;
+                new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
+            }
+        } );
+
+        Button correctAllImportIssuesButton = new Button( buttonContainer, SWT.NONE );
+        correctAllImportIssuesButton.setText( "Correct All Import Issues And Refind" );
+        correctAllImportIssuesButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+
+        correctAllImportIssuesButton.addListener( SWT.Selection, new Listener()
+        {
+
+            @Override
+            public void handleEvent( Event event )
+            {
+                new AutoCorrectAllAction( getInitialInput() ).run();
+
+                IViewPart view = UIUtil.findView( UpgradeView.ID );
+                new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
             }
         } );
 
@@ -488,8 +507,8 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
         try
         {
-            MigrationProblemsContainer container;
-            container = UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
+            MigrationProblemsContainer container =
+                UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
 
             if( container != null )
             {
@@ -502,7 +521,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             e.printStackTrace();
         }
 
-        migrationContentProvider.set_problems( _problems );
+        migrationContentProvider.setProblems( _problems );
 
         return _problems;
     }

@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.ui.migration;
 
 import com.liferay.blade.api.AutoMigrateException;
@@ -233,6 +234,7 @@ public class AutoCorrectAction extends ProblemAction
 
             boolean mutiple = false;
 
+            int index = 0;
             if( allAutoCorrectContexts.size() > 0 && autoCorrectContexts.size() > 0 )
             {
                 for( String autoCorrectContext : autoCorrectContexts )
@@ -250,6 +252,7 @@ public class AutoCorrectAction extends ProblemAction
                     if( i >= 2 )
                     {
                         mutiple = true;
+                        index = i;
                         break;
                     }
                 }
@@ -257,7 +260,7 @@ public class AutoCorrectAction extends ProblemAction
 
             if( mutiple )
             {
-                setText( "Correct same type problems" );
+                setText( "Correct same type problems(" + index + ")" );
             }
             else
             {

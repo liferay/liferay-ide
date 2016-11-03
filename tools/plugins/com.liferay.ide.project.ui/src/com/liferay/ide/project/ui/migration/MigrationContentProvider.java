@@ -103,17 +103,6 @@ public class MigrationContentProvider implements ITreeContentProvider
 
             try
             {
-                // Liferay7UpgradeAssistantSettings setting =
-                // UpgradeAssistantSettingsUtil.getObjectFromStore( Liferay7UpgradeAssistantSettings.class );
-                //
-                // if( setting != null )
-                // {
-                // ProblemsContainer problemsContainer = new ProblemsContainer();
-                // problemsContainer.setUpgradeProblemsArray( new UpgradeProblems[] { setting.getPortalSettings() } );
-                //
-                // _problems.add( problemsContainer );
-                // }
-
                 MigrationProblemsContainer container =
                     UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
 
@@ -128,9 +117,9 @@ public class MigrationContentProvider implements ITreeContentProvider
         }
     }
 
-    public void set_problems( List<ProblemsContainer> _problems )
+    public void setProblems( List<ProblemsContainer> problems )
     {
-        this._problems = _problems;
+        this._problems = problems;
     }
 
 }
