@@ -56,6 +56,8 @@ public class PortalBundleTests extends ServerCoreBase
     @Override
     public void setupRuntime() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         extractRuntime( getLiferayRuntimeZip(), getLiferayRuntimeDir() );
     }
 
