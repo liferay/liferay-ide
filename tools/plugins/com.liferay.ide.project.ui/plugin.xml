@@ -209,7 +209,7 @@
             class="com.liferay.ide.project.ui.wizard.SDKProjectImportWizard"
             icon="icons/e16/import.png"
             id="com.liferay.ide.project.ui.importSDKProjectWizard.30"
-            name="Liferay Plugins SDK Project">
+            name="Liferay Plugins SDK Project (Liferay 6.x)">
          <description>
             %import.projects.sdk.wizard.description
          </description>
@@ -219,9 +219,9 @@
             class="com.liferay.ide.project.ui.wizard.ParentSDKProjectImportWizard"
             icon="icons/e16/liferay_logo_16.png"
             id="com.liferay.ide.project.ui.parentSDKProjectImportWizard"
-            name="Liferay Plugins SDK Directory">
+            name="Liferay Plugins SDK Directory (Liferay 6.x)">
          <description>
-            Liferay Plugins SDK Directory
+            Liferay Plugins SDK Directory (Liferay 6.x)
          </description>
       </wizard>
       <!--

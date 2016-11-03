@@ -35,7 +35,7 @@ public class NewModuleFragmentOpMethods
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay plugin project (this process may take several minutes)", 100 );
+        monitor.beginTask( "Creating Liferay module fragment project (this process may take several minutes)", 100 );
 
         Status retval = null;
 

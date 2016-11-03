@@ -26,10 +26,10 @@
     <wizard>
         <id>NewModuleFragmentWizard</id>
         <element-type>com.liferay.ide.gradle.core.modules.NewModuleFragmentOp</element-type>
-        <label>New Liferay Module Fragment Project</label>
+        <label>New Liferay Module Project Fragment</label>
         <page>
             <id>ModuleFragmentWizardPage</id>
-            <label>Liferay Module Fragment Project</label>
+            <label>Liferay Module Project Fragment</label>
             <content>
                 <property-editor>ProjectName</property-editor>
                 <spacer/>
@@ -58,7 +58,7 @@
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
             </content>
-            <description>Create a new project configured as a Liferay Module Fragment Project</description>
+            <description>Create a new project configured as a Liferay Module Project Fragment</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -72,7 +72,7 @@
         </page>
         <page>
             <id>ModuleFragmentSelectHostPage</id>
-            <label>Liferay Module Fragment Project</label>
+            <label>Liferay Module Project Fragment</label>
             <content>
                 <property-editor>
                     <property>HostOsgiBundle</property>

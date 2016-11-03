@@ -25,10 +25,10 @@
     <wizard>
         <id>ImportSDKProjectsWizard</id>
         <element-type>com.liferay.ide.project.core.model.SDKProjectsImportOp</element-type>
-        <label>Import Projects</label>
+        <label>Import Liferay Plugins SDK Projects (Liferay 6.x)</label>
         <page>
             <id>ImportLiferaySDKProjectsPage</id>
-            <label>Import Liferay Projects</label>
+            <label>Import Liferay Plugins SDK Projects (Liferay 6.x)</label>
             <content>
                 <property-editor>SdkLocation</property-editor>
                 <property-editor>SdkVersion</property-editor>
@@ -48,6 +48,6 @@
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
         </page>
-        <description>Import Liferay plugin Projects</description>
+        <description>Import Liferay Plugin SDK Projects (Liferay 6.x)</description>
     </wizard>
 </definition>

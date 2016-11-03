@@ -143,7 +143,7 @@ public class RemoteServer extends ServerDelegate implements IRemoteServerWorking
                 }
 
                 // if (!ProjectUtil.isLiferayProject(removeModuleProject)) {
-                // return WebsphereCore.createErrorStatus("Cannot remove non Liferay plugin project module.");
+                // return WebsphereCore.createErrorStatus("Cannot remove non Liferay plugin project.");
                 // }
 
                 IStatus facetStatus = FacetUtil.verifyFacets( removeModuleProject, getServer() );
