@@ -39,6 +39,8 @@
 
         <property file="${basedir}/bundle/bundle.properties" />
 
+	<echo message="${unqualifiedVersion}.${buildQualifier}" />
+
         <antcall target="bundle" />
     </target>
 
@@ -369,27 +371,12 @@
             </else>
         </if>
 
-        <echo>${repositoryURL}</echo>
         <antcallback target="install-feature" return="output">
             <param name="featureId" value="${all.features}" />
         </antcallback>
 
-        <echo>${output}</echo>
-        <propertyregex property="temp" input="${output}" regexp=".*feature.group (.*)\..*" replace="\1" />
-
-        <echo file="${target.dir}/temp.txt" append="true">${temp}</echo>
-
-        <loadfile property="qualifiedBuildVersion" srcfile="${target.dir}/temp.txt">
-            <filterchain>
-                <headfilter lines="3"/>
-                <tailfilter lines="1"/>
-                <striplinebreaks />
-            </filterchain>
-        </loadfile>
-
-        <propertyregex property="label" input="${qualifiedBuildVersion}" regexp=".*-(.*)" replace="\1" />
-        <propertyregex property="timestamp" input="${qualifiedBuildVersion}" regexp="\d+\.\d+\.\d+\.(\d+).*" replace="\1" />
-        <propertyregex property="unqualifiedVersion" input="${qualifiedBuildVersion}" regexp="(\d+\.)(\d+\.)(\d+).*" replace="\1\2\3" />
+        <propertyregex property="label" input="${unqualifiedVersion}.${buildQualifier}" regexp=".*-(.*)" replace="\1" />
+        <propertyregex property="timestamp" input="${unqualifiedVersion}.${buildQualifier}" regexp="\d+\.\d+\.\d+\.(\d+).*" replace="\1" />
         <if>
             <not>
                 <equals arg1="${label}" arg2="$${label}" />
@@ -401,8 +388,6 @@
                 <property name="version" value="${unqualifiedVersion}\.${timestamp}" />
             </else>
         </if>
-
-        <delete file="${target.dir}/temp.txt" />
     </target>
 
     <target name="clean-output-dir">
