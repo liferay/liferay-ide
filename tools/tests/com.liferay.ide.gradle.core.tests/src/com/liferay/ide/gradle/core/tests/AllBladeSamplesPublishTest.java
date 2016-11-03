@@ -211,12 +211,6 @@ public class AllBladeSamplesPublishTest
 
         assertEquals( 35, serverModules.length );
 
-        for( IModule serverModule : serverModules )
-        {
-            assertEquals( "bad state: " + serverModule.getProject().getName(), IServer.PUBLISH_STATE_NONE,
-                server.getModulePublishState( new IModule[] { serverModule } ) );
-        }
-
         String[] retval = BladeCLI.execute( "sh lb -s blade" );
 
         for( IModule serverModule : serverModules )
