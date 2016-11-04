@@ -464,7 +464,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         waitForJobsToComplete();
 
-        project.build( IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor );
+        project.build( IncrementalProjectBuilder.FULL_BUILD, monitor );
 
         waitForJobsToComplete();
 

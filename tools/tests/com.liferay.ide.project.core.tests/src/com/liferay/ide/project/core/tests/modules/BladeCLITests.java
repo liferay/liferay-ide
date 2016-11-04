@@ -107,7 +107,7 @@ public class BladeCLITests
 
         assertEquals( "activator", projectTemplates[0] );
 
-        assertEquals( "theme", projectTemplates[projectTemplates.length - 1] );
+        assertEquals( "theme-contributor", projectTemplates[projectTemplates.length - 1] );
     }
 
 }
