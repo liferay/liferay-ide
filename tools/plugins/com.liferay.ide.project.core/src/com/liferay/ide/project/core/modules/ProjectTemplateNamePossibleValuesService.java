@@ -15,16 +15,8 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.core.LiferayCore;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 
@@ -34,44 +26,25 @@ import org.eclipse.sapphire.Value;
  */
 public class ProjectTemplateNamePossibleValuesService extends PossibleValuesService
 {
-    private List<String> possibleValues;
-
-    @Override
-    protected void initPossibleValuesService()
-    {
-        possibleValues = new ArrayList<String>();
-
-        new Job("Getting project templates") {
-
-            @Override
-            protected IStatus run( IProgressMonitor monitor )
-            {
-                try
-                {
-                    for( String projectTemplate : BladeCLI.getProjectTemplates() )
-                    {
-                        if ( !projectTemplate.contains( "fragment" ))
-                        {
-                            possibleValues.add( projectTemplate );
-                        }
-                    }
-                }
-                catch( Exception e )
-                {
-                    return LiferayCore.createErrorStatus( e );
-                }
-
-                refresh();
-
-                return Status.OK_STATUS;
-            }
-        }.schedule();
-    }
 
     @Override
     protected void compute( Set<String> values )
     {
-        values.addAll( possibleValues );
+        try
+        {
+            String[] projectTemplates = BladeCLI.getProjectTemplates();
+
+            for( String projectTemplate : projectTemplates )
+            {
+                if ( !projectTemplate.contains( "fragment" ))
+                {
+                    values.add( projectTemplate );
+                }
+            }
+        }
+        catch( BladeCLIException e )
+        {
+        }
     }
 
     @Override

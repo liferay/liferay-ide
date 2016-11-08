@@ -86,10 +86,6 @@ public class AllBladeSamplesPublishTest
     {
         Util.deleteAllWorkspaceProjects();
 
-        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
-
         ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
 
         File projectDir = copyTestProjectToWorkspace( "projects/all-blade-samples" );

@@ -44,26 +44,6 @@ import org.junit.Test;
 public class NewLiferayModuleProjectOpTests
 {
 
-    @BeforeClass
-    public static void setupBladeCLIPrefs() throws Exception
-    {
-        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
-    }
-
-    @AfterClass
-    public static void restoreBladeCLIPrefsToDefault() throws Exception
-    {
-        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
-
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
-    }
-
     @Test
     public void testNewLiferayModuleProjectDefaultValueServiceDashes() throws Exception
     {

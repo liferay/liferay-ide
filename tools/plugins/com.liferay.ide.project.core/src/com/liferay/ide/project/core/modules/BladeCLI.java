@@ -57,7 +57,7 @@ public class BladeCLI
     static final String localJarKey = "localjar";
     static String[] projectTemplateNames;
     static final File repoCache = new File( _settingsDir, "repoCache" );
-    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/1.x/";
+    static final String defaultRepoUrl = "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/";
     static final String timeStampKey = "up2date.check";
     public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
     public static final String BLADE_CLI_REPO_UP2DATE_CHECK = "BLADE_CLI_REPO_UP2DATE_CHECK";
@@ -158,7 +158,7 @@ public class BladeCLI
 
         final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmmss" );
 
-        if( shouldUpdate( sdf ,bladeCacheSettingsFile) )
+        if( shouldUpdate( sdf, bladeCacheSettingsFile) )
         {
             updateLocalJar( sdf, bladeCacheSettingsFile );
         }
