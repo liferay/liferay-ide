@@ -52,12 +52,14 @@ import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.internal.Module;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * @author Gregory Amerson
  */
 @SuppressWarnings( "restriction" )
+@Ignore
 public class AllBladeSamplesPublishTest
 {
 
@@ -73,6 +75,10 @@ public class AllBladeSamplesPublishTest
         final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
 
         prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+
+        IServer wsServer = ServerUtil.getServer( WORKSPACE_SERVER_NAME );
+
+        wsServer.stop( true );
     }
 
     @BeforeClass
@@ -114,33 +120,23 @@ public class AllBladeSamplesPublishTest
 
         assertNotNull( wsServer );
 
-        long timeoutExpiredMs = System.currentTimeMillis() + 600000;
+        long timeoutExpiredMs = System.currentTimeMillis() + 300000;
 
         wsServer.start( "run", monitor );
 
         while( true )
         {
+            assertEquals( wsServer.getServerState(), IServer.STATE_STARTING, wsServer.getServerState() );
+
             Thread.sleep( 500 );
 
-            if( wsServer.getServerState() == IServer.STATE_STARTED )
-            {
-                break;
-            }
-            if( System.currentTimeMillis() >= timeoutExpiredMs )
+            if( wsServer.getServerState() == IServer.STATE_STARTED || System.currentTimeMillis() >= timeoutExpiredMs )
             {
                 break;
             }
         }
 
         assertEquals( wsServer.getServerState(), IServer.STATE_STARTED, wsServer.getServerState() );
-    }
-
-    @AfterClass
-    public static void stopServer() throws Exception
-    {
-        IServer wsServer = ServerUtil.getServer( WORKSPACE_SERVER_NAME );
-
-        wsServer.stop( true );
     }
 
     private static File copyTestProjectToWorkspace( String path ) throws Exception

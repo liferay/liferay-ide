@@ -25,6 +25,7 @@ import com.liferay.ide.project.core.ProjectCore;
 /**
  * @author Terry Jia
  */
+@Ignore
 public class NewLiferayPluginProjectOp701Tests extends NewLiferayPluginProjectOpBase
 {
 

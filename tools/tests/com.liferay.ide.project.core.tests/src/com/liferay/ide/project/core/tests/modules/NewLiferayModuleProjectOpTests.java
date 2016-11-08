@@ -71,7 +71,7 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectName( "my-test-project" );
 
-        op.setProjectTemplateName( "Portlet" );
+        op.setProjectTemplateName( "portlet" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }
@@ -83,7 +83,7 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectName( "my.test.project" );
 
-        op.setProjectTemplateName( "Portlet" );
+        op.setProjectTemplateName( "portlet" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }
@@ -95,7 +95,7 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectName( "my.test.project" );
 
-        op.setProjectTemplateName( "Portlet" );
+        op.setProjectTemplateName( "portlet" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
 
@@ -143,7 +143,7 @@ public class NewLiferayModuleProjectOpTests
 
         op.setProjectName( "my_test_project" );
 
-        op.setProjectTemplateName( "Portlet" );
+        op.setProjectTemplateName( "portlet" );
 
         assertEquals( "MyTestProject", op.getComponentName().content( true ) );
     }

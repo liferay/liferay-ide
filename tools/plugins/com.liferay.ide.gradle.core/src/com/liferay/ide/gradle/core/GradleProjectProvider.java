@@ -22,7 +22,6 @@ import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
-import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.modules.PropertyKey;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
@@ -36,7 +35,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -145,7 +143,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
             projectNames.insert().setName( projectName );
 
-            IPath projecLocation = location;
+            IPath projectLocation = location;
 
             final String lastSegment = location.lastSegment();
 
@@ -153,20 +151,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
             {
                 if( !lastSegment.equals( projectName ) )
                 {
-                    projecLocation = location.append( projectName );
-                }
-            }
-
-            final IPath finalClassPath =
-                getClassFilePath( projectName, className, packageName, projectTemplateName, projecLocation );
-
-            if( finalClassPath != null )
-            {
-                final File finalClassFile = finalClassPath.toFile();
-
-                if( finalClassFile.exists() )
-                {
-                    NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
+                    projectLocation = location.append( projectName );
                 }
             }
 
@@ -198,7 +183,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                     {
                         IPath modulesPath = workspaceLocation.append( liferayWorkspaceProjectModulesDir );
 
-                        if( modulesPath.isPrefixOf( projecLocation ) )
+                        if( modulesPath.isPrefixOf( projectLocation ) )
                         {
                             inWorkspacePath = true;
                         }
@@ -212,7 +197,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
             }
             else
             {
-                GradleUtil.importGradleProject( projecLocation.toFile(), monitor );
+                GradleUtil.importGradleProject( projectLocation.toFile(), monitor );
             }
         }
         catch( Exception e )
@@ -223,37 +208,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
         return retval;
     }
 
-    private IPath getClassFilePath(
-        final String projectName, String className, final String packageName, final String projectTemplateName,
-        IPath projecLocation )
-    {
-        IPath packageNamePath = projecLocation.append( "src" ).append( "main" ).append( "java" );
 
-        File packageRoot = packageNamePath.toFile();
-
-        while( true )
-        {
-            File[] children = packageRoot.listFiles();
-
-            if( children!=null && children.length == 1 )
-            {
-                File child = children[0];
-
-                if( child.isDirectory() )
-                {
-                    packageRoot = child;
-                }
-                else
-                {
-                    return new Path( child.getAbsolutePath() );
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
-    }
 
     @Override
     public IStatus validateProjectLocation( String projectName, IPath path )
