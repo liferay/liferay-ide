@@ -20,9 +20,12 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
+import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.modules.PropertyKey;
+import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -451,6 +454,44 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
        final String deployedName = projectComponent.getDeployedName();
 
        assertEquals( "maven-theme-component-test", deployedName );
+    }
+
+    @Test
+    public void testNewLiferayModuleProjectNewProperties() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "test-properties-in-portlet" );
+
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "portlet" );
+        op.setComponentName( "Test" );
+
+        PropertyKey pk = op.getPropertyKeys().insert();
+
+        pk.setName( "property-test-key" );
+        pk.setValue( "property-test-value" );
+
+        Status exStatus =
+            NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( monitor ) );
+
+        assertEquals( "OK", exStatus.message() );
+
+        IProject modProject = CoreUtil.getProject( op.getProjectName().content() );
+        modProject.open( new NullProgressMonitor() );
+
+        SearchFilesVisitor sv = new SearchFilesVisitor();
+        List<IFile> searchFiles = sv.searchFiles( modProject, "TestPortlet.java" );
+        IFile componentClassFile = searchFiles.get( 0 );
+
+        assertEquals( componentClassFile.exists(), true );
+
+        String actual = CoreUtil.readStreamToString( componentClassFile.getContents() );
+
+        String expected =
+            CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/TestPortlet.java.txt" ) );
+
+        assertEquals( expected, actual );
     }
 
     private void verifyProject(IProject project ) throws Exception
