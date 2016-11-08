@@ -23,12 +23,15 @@ import com.liferay.ide.server.core.portal.PortalServer;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -42,8 +45,10 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jface.text.Document;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.text.edits.TextEdit;
@@ -71,6 +76,48 @@ public class NewLiferayModuleProjectOpMethods
             final IStatus status = projectProvider.createNewProject( op, monitor );
 
             retval = StatusBridge.create( status );
+
+            final String projectName = op.getProjectName().content();
+            final String className = op.getComponentName().content();
+            final String packageName = op.getPackageName().content();
+            final String projectTemplateName = op.getProjectTemplateName().content();
+
+            IPath location = PathBridge.create( op.getLocation().content() );
+            IPath projectLocation = location;
+
+            final String lastSegment = location.lastSegment();
+
+            if( location != null && location.segmentCount() > 0 )
+            {
+                if( !lastSegment.equals( projectName ) )
+                {
+                    projectLocation = location.append( projectName );
+                }
+            }
+
+
+            final IPath finalClassPath = getClassFilePath( projectName, className, packageName, projectTemplateName, projectLocation );
+
+            if( finalClassPath != null )
+            {
+                final File finalClassFile = finalClassPath.toFile();
+
+                if( finalClassFile.exists() )
+                {
+                    ElementList<PropertyKey> propertyKeys = op.getPropertyKeys();
+
+                    final List<String> properties = new ArrayList<String>();
+
+                    for( PropertyKey propertyKey : propertyKeys )
+                    {
+                        properties.add( propertyKey.getName().content( true ) + "=" + propertyKey.getValue().content( true ) );
+                    }
+
+                    NewLiferayModuleProjectOpMethods.addProperties( finalClassFile, properties );
+
+                    CoreUtil.getProject( op.getProjectName().content() ).refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                }
+            }
         }
         catch( Exception e )
         {
@@ -81,6 +128,38 @@ public class NewLiferayModuleProjectOpMethods
         }
 
         return retval;
+    }
+
+    private static IPath getClassFilePath(
+        final String projectName, String className, final String packageName, final String projectTemplateName,
+        IPath projecLocation )
+    {
+        IPath packageNamePath = projecLocation.append( "src/main/java" );
+
+        File packageRoot = packageNamePath.toFile();
+
+        while( true )
+        {
+            File[] children = packageRoot.listFiles();
+
+            if( children!=null && children.length == 1 )
+            {
+                File child = children[0];
+
+                if( child.isDirectory() )
+                {
+                    packageRoot = child;
+                }
+                else
+                {
+                    return new Path( child.getAbsolutePath() );
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 
     public static String getMavenParentPomGroupId( NewLiferayModuleProjectOp op, String projectName, IPath path )
@@ -220,7 +299,7 @@ public class NewLiferayModuleProjectOpMethods
 					return super.visit( node );
 				}
 			});
-		} catch (Exception e) 
+		} catch (Exception e)
 		{
 			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
 		}
