@@ -20,7 +20,6 @@ import com.liferay.ide.ui.util.SWTUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Link;
 
 /**
@@ -32,13 +31,9 @@ import org.eclipse.swt.widgets.Link;
 public class WelcomePage extends Page
 {
 
-    @SuppressWarnings( "unused" )
     public WelcomePage( final Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
         super( parent, style, dataModel, WELCOME_PAGE_ID, false );
-
-        Control createHorizontalSpacer = createHorizontalSpacer( this, 3 );
-        Control createHorizontalSperator = createSeparator( this, 3 );
     }
 
     @Override
