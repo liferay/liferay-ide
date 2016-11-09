@@ -42,6 +42,8 @@ public class BladeCLIPrefsOverrideTests
         IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
         prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
+
+        prefs.flush();
     }
 
     @AfterClass
@@ -54,8 +56,9 @@ public class BladeCLIPrefsOverrideTests
         final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
 
         prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
-    }
 
+        prefs.flush();
+    }
 
     @Test
     public void testBladeCLIJar() throws Exception

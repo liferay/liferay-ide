@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -30,8 +31,6 @@ import java.nio.file.Path;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -39,6 +38,54 @@ import org.junit.Test;
  */
 public class BladeCLITests
 {
+
+    @Test
+    public void testLocalJarCopyIsGreaterThan1x() throws Exception
+    {
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "http://releases.liferay.com/tools/blade-cli/1.x/" );
+
+        prefs.flush();
+
+        assertEquals( "com.liferay.blade.cli.jar", BladeCLI.getBladeCLIPath().lastSegment() );
+
+        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+
+        prefs.flush();
+    }
+
+    @Test
+    public void testLocalJarCopyIsLessThanLatestOnCloudbees() throws Exception
+    {
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
+
+        prefs.flush();
+
+        final String cliName = BladeCLI.getBladeCLIPath().lastSegment();
+
+        assertNotEquals( "com.liferay.blade.cli.jar", cliName );
+
+        assertTrue( cliName.matches( "com.liferay.blade.cli_.*.jar" ) );
+
+        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+
+        prefs.flush();
+    }
 
     @Test
     public void bladeCLICreateProject() throws Exception

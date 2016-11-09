@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.modules;
 
 import aQute.bnd.deployer.repository.FixedIndexedRepo;
+import aQute.bnd.osgi.Jar;
 import aQute.bnd.osgi.Processor;
 
 import com.liferay.ide.core.LiferayCore;
@@ -23,7 +24,9 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,12 +42,14 @@ import java.util.Scanner;
 import org.apache.tools.ant.DefaultLogger;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Java;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -57,7 +62,7 @@ public class BladeCLI
     static final String localJarKey = "localjar";
     static String[] projectTemplateNames;
     static final File repoCache = new File( _settingsDir, "repoCache" );
-    static final String defaultRepoUrl = "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/";
+    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/2.x/";
     static final String timeStampKey = "up2date.check";
     public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
     public static final String BLADE_CLI_REPO_UP2DATE_CHECK = "BLADE_CLI_REPO_UP2DATE_CHECK";
@@ -160,13 +165,20 @@ public class BladeCLI
 
         if( shouldUpdate( sdf, bladeCacheSettingsFile) )
         {
-            updateLocalJar( sdf, bladeCacheSettingsFile );
+            try
+            {
+                updateLocalJar( sdf, bladeCacheSettingsFile );
+            }
+            catch( Exception e )
+            {
+                throw new BladeCLIException( "Unable to update local blade cli", e );
+            }
         }
 
         return cachedBladeCLIPath;
     }
 
-    private static String getLatestRemoteBladeCLIJar() throws BladeCLIException
+    private static String getLatestRemoteBladeCLIJar()
     {
         _settingsDir.mkdirs();
         repoCache.mkdirs();
@@ -187,13 +199,26 @@ public class BladeCLI
 
             File cliJar = files[0];
 
-            cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
+            try( Jar cliJarJar = new Jar( cliJar ); Jar localJar = new Jar( getLocalCopy() ) )
+            {
+                Version cliJarVersion = new Version( cliJarJar.getVersion() );
+                Version localCopyVersion = new Version( localJar.getVersion() );
+
+                if( cliJarVersion.compareTo( localCopyVersion ) > 0 )
+                {
+                    cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
+                }
+                else
+                {
+                    return null;
+                }
+            }
 
             return cliJar.getName();
         }
         catch( Exception e )
         {
-            throw new BladeCLIException( "Could not get blade cli jar from repository." );
+            return null;
         }
     }
 
@@ -201,8 +226,6 @@ public class BladeCLI
     {
         if( projectTemplateNames == null )
         {
-            getLatestRemoteBladeCLIJar(); // make sure that blade.cli.jar is actually downloaded
-
             List<String> templateNames = new ArrayList<>();
 
             String[] retval = execute( "create -l" );
@@ -370,15 +393,31 @@ public class BladeCLI
     }
 
     private static void updateLocalJar(SimpleDateFormat sdf, File bladeCacheSettings )
-        throws BladeCLIException
+        throws Exception
     {
-        String localJar = getLatestRemoteBladeCLIJar();
+        String latestJar = getLatestRemoteBladeCLIJar();
+
+        if( latestJar == null )
+        {
+            File bundledJar = getLocalCopy();
+
+            latestJar = bundledJar.getName();
+
+            cachedBladeCLIPath = new Path( bundledJar.getCanonicalPath() );
+        }
 
         Properties props = new Properties();
         props.setProperty( timeStampKey, sdf.format( new Date() ) );
-        props.setProperty( localJarKey, localJar );
+        props.setProperty( localJarKey, latestJar );
 
         PropertiesUtil.saveProperties( props, bladeCacheSettings );
     }
 
+    private static File getLocalCopy() throws IOException
+    {
+     // use plugin copy
+        URL url = FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "lib/com.liferay.blade.cli.jar" ) );
+
+        return new File( url.getFile() );
+    }
 }
