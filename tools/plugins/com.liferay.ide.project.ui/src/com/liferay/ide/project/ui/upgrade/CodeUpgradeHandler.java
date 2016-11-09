@@ -16,16 +16,16 @@
 package com.liferay.ide.project.ui.upgrade;
 
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
-import com.liferay.ide.ui.LiferayUpgradePerspectiveFactory;
+import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.IPerspectiveRegistry;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -43,13 +43,15 @@ public class CodeUpgradeHandler extends AbstractHandler
 
         if( window != null )
         {
-            IPerspectiveRegistry reg = workbench.getPerspectiveRegistry();
-            window.getActivePage().setPerspective( reg.findPerspectiveWithId( LiferayUpgradePerspectiveFactory.ID ) );
-            IViewPart showView = UIUtil.showView( UpgradeView.ID );
+            UIUtil.switchToLiferayPerspective( LiferayWorkspacePerspectiveFactory.ID, false );
+            IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-            if( showView != null )
+            try
             {
-                showView.setFocus();
+                activePage.showView( UpgradeView.ID );
+            }
+            catch( PartInitException e )
+            {
             }
         }
 
