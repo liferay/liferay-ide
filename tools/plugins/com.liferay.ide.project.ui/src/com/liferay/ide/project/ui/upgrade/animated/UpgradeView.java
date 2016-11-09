@@ -15,14 +15,21 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.ui.LiferayUpgradePerspectiveFactory;
+import com.liferay.ide.project.ui.migration.MigrationProblemsContainer;
+import com.liferay.ide.project.ui.upgrade.CustomJspConverter;
+import com.liferay.ide.ui.util.SWTUtil;
+import com.liferay.ide.ui.util.UIUtil;
 
-import java.net.URL;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
@@ -34,18 +41,12 @@ import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IPerspectiveDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.forms.widgets.Form;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -67,11 +68,6 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
     private static Composite pagesSwitchControler = null;
 
     private static Page[] pages = null;
-
-    private Action closeAction;
-
-    private final FormToolkit toolkit = new FormToolkit( Display.getCurrent() );
-    private Form form;
 
     private LiferayUpgradeDataModel createUpgradeModel()
     {
@@ -253,32 +249,19 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
     @Override
     public void createPartControl( Composite parent )
     {
-        createActions();
-
         ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
         scrolledComposite.setExpandHorizontal(true);
         scrolledComposite.setExpandVertical(true);
 
-        Composite container = this.toolkit.createComposite( scrolledComposite, 0 );
-        this.toolkit.paintBordersFor( container );
-        container.setLayout( new FillLayout() );
-
-        this.form = this.toolkit.createForm( container );
-        this.form.setImage( getImage() );
-        this.toolkit.paintBordersFor( this.form );
-        this.toolkit.decorateFormHeading( this.form );
-        this.form.setText( "Liferay Code Upgrade" );
+        Composite container = SWTUtil.createComposite( scrolledComposite, 1, 0, GridData.FILL_BOTH);
 
         GridLayout gridLayout = new GridLayout( 1, false );
         gridLayout.marginWidth = 0;
         gridLayout.marginTop = 0;
         gridLayout.marginHeight = 0;
-        this.form.getBody().setLayout( gridLayout );
+        container.setLayout( gridLayout );
 
-        this.form.getToolBarManager().add( this.closeAction );
-        this.form.getToolBarManager().update( true );
-
-        Composite composite = new Composite( form.getBody(), SWT.NONE );
+        Composite composite = new Composite( container, SWT.NONE );
 
         composite.setLayout( new GridLayout( 1, true ) );
 
@@ -392,14 +375,14 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         GridData navData = new GridData( GridData.FILL_HORIZONTAL );
 
         navData.grabExcessHorizontalSpace = true;
-        navData.widthHint = 400;
-        navData.heightHint = 55;
+//        navData.widthHint = 400;
+//        navData.heightHint = 55;
 
         navigator.setLayoutData( navData );
         navigator.setBackground( backgroundColor );
 
         scrolledComposite.setContent(container);
-        scrolledComposite.setMinSize(container.computeSize(SWT.DEFAULT, 670));
+//        scrolledComposite.setMinSize(container.computeSize(SWT.DEFAULT, 670));
 
         setSelectPage( 0 );
 
@@ -427,6 +410,113 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
             }
         } );
 
+        final IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+
+        final IAction restart = new Action(
+            "Restart Upgrade", ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry( "icons/e16/restart.gif" ) ))
+        {
+
+            @Override
+            public void run()
+            {
+                restartUpgradeTool();
+            }
+        };
+
+        final IAction showAllPages = new Action(
+            "Show All Pages", ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry( "icons/e16/showall.gif" ) ))
+        {
+            @Override
+            public void run()
+            {
+                showAllPages();
+            }
+        };
+
+        mgr.add( restart );
+        mgr.add( showAllPages );
+    }
+
+    private void showAllPages()
+    {
+        Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
+            UIUtil.getActiveShell(), "Show All Pages",
+            "If you fail to import projects, you can click this button to finish the upgrade prossess, "+
+            "as shown in the following steps:\n" +
+            "   1.upgrade SDK 6.2 to SDK 7.0 manually\n" +
+            "   or use blade cli to create a Liferay workspace for your SDK\n" +
+            "   2.import projects you want to upgrade into Eclipse workspace\n" +
+            "   3.choose \"yes\" to finish the following steps");
+
+        if( openNewLiferayProjectWizard )
+        {
+            UpgradeView.resumePages();
+
+            PageNavigateEvent event = new PageNavigateEvent();
+
+            event.setTargetPage( 2 );
+
+            StackLayout stackLayout = (StackLayout) pagesSwitchControler.getLayout();
+
+            Page currentPage = (Page) stackLayout.topControl;
+
+            for( PageNavigatorListener listener : currentPage.naviListeners )
+            {
+                listener.onPageNavigate( event );
+            }
+
+            InitConfigureProjectPage importPage = UpgradeView.getPage( Page.INIT_CONFIGURE_PROJECT_PAGE_ID,  InitConfigureProjectPage.class );
+            importPage.setNextPage( true );
+
+            dataModel.setImportFinished( true );
+
+        }
+    }
+
+    private void restartUpgradeTool()
+    {
+        boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
+            UIUtil.getActiveShell(), "Restart code upgrade?",
+            "All previous configuration files will be deleted. Do you want to restart the code upgrade tool?" );
+
+        if( openNewLiferayProjectWizard )
+        {
+            CustomJspConverter.clearConvertResults();
+
+            try
+            {
+                MigrationProblemsContainer container =
+                    UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
+
+                if( container != null )
+                {
+                    UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, null );
+                }
+            }
+            catch( IOException excepiton )
+            {
+                ProjectUI.logError( excepiton );
+            }
+
+            IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+            UpgradeView view = (UpgradeView) UIUtil.findView( UpgradeView.ID );
+
+            CustomJspConverter.clearConvertResults();
+
+            page.hideView( view );
+
+            UpgradeSettingsUtil.resetStoreProperties();
+
+            try
+            {
+                page.showView( UpgradeView.ID );
+            }
+            catch( PartInitException e1 )
+            {
+                e1.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -459,44 +549,4 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         pagesSwitchControler.layout();
     }
 
-    private void createActions()
-    {
-        this.closeAction = new Action( "Close Perspective", getImageDescriptor() )
-        {
-
-            public void run()
-            {
-                closeUpgradePerspective();
-            }
-        };
-    }
-
-    private Image getImage()
-    {
-        final URL url = ProjectUI.getDefault().getBundle().getEntry( "/icons/e16/liferay_logo_16.png" );
-        return ImageDescriptor.createFromURL( url ).createImage();
-    }
-
-    private ImageDescriptor getImageDescriptor()
-    {
-        final URL url = ProjectUI.getDefault().getBundle().getEntry( "/icons/upgrade_back_32.gif" );
-        return ImageDescriptor.createFromURL( url );
-    }
-
-    private void closeUpgradePerspective()
-    {
-        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-
-        if( window != null )
-        {
-            IWorkbenchPage page = window.getActivePage();
-            if( page != null )
-            {
-                IPerspectiveDescriptor perspective =
-                    PlatformUI.getWorkbench().getPerspectiveRegistry().findPerspectiveWithId(
-                        LiferayUpgradePerspectiveFactory.ID );
-                page.closePerspective( perspective, true, false );
-            }
-        }
-    }
 }

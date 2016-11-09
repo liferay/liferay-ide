@@ -15,29 +15,13 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.migration.MigrationProblemsContainer;
-import com.liferay.ide.project.ui.upgrade.CustomJspConverter;
-import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.ui.util.SWTUtil;
-import com.liferay.ide.ui.util.UIUtil;
 
-import java.io.IOException;
-
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Andy Wu
@@ -55,98 +39,6 @@ public class WelcomePage extends Page
 
         Control createHorizontalSpacer = createHorizontalSpacer( this, 3 );
         Control createHorizontalSperator = createSeparator( this, 3 );
-
-        Label blankLabel = new Label( this, SWT.LEFT_TO_RIGHT );
-        Button reRunButton = SWTUtil.createButton( this, "Restart..." );
-        reRunButton.addSelectionListener( new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-                    UIUtil.getActiveShell(), "Restart code upgrade?",
-                    "All previous configuration files will be deleted. Do you want to restart the code upgrade tool?" );
-
-                if( openNewLiferayProjectWizard )
-                {
-                    CustomJspConverter.clearConvertResults();
-
-                    try
-                    {
-                        MigrationProblemsContainer container =
-                            UpgradeAssistantSettingsUtil.getObjectFromStore( MigrationProblemsContainer.class );
-
-                        if( container != null )
-                        {
-                            UpgradeAssistantSettingsUtil.setObjectToStore( MigrationProblemsContainer.class, null );
-                        }
-                    }
-                    catch( IOException excepiton )
-                    {
-                        ProjectUI.logError( excepiton );
-                    }
-
-                    IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
-                    UpgradeView view = (UpgradeView) UIUtil.findView( UpgradeView.ID );
-
-                    CustomJspConverter.clearConvertResults();
-
-                    page.hideView( view );
-
-                    UpgradeSettingsUtil.resetStoreProperties();
-
-                    try
-                    {
-                        page.showView( UpgradeView.ID );
-                    }
-                    catch( PartInitException e1 )
-                    {
-                        e1.printStackTrace();
-                    }
-                }
-
-            }
-        } );
-
-        Label blankLabel2 = new Label( this, SWT.LEFT_TO_RIGHT );
-        Button showAllPagesButton = SWTUtil.createButton( this, "Show All Pages..." );
-        showAllPagesButton.addSelectionListener( new SelectionAdapter()
-        {
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-                    UIUtil.getActiveShell(), "Show All Pages",
-                    "If you fail to import projects, you can click this button to finish the upgrade prossess, "+
-                    "as shown in the following steps:\n" +
-                    "   1.upgrade SDK 6.2 to SDK 7.0 manually\n" +
-                    "   or use blade cli to create a Liferay workspace for your SDK\n" +
-                    "   2.import projects you want to upgrade into Eclipse workspace\n" +
-                    "   3.choose \"yes\" to finish the following steps");
-
-                if( openNewLiferayProjectWizard )
-                {
-                    UpgradeView.resumePages();
-
-                    PageNavigateEvent event = new PageNavigateEvent();
-
-                    event.setTargetPage( 2 );
-
-                    for( PageNavigatorListener listener : naviListeners )
-                    {
-                        listener.onPageNavigate( event );
-                    }
-
-                    InitConfigureProjectPage importPage = UpgradeView.getPage( INIT_CONFIGURE_PROJECT_PAGE_ID,  InitConfigureProjectPage.class );
-                    importPage.setNextPage( true );
-
-                    dataModel.setImportFinished( true );
-
-                }
-            }
-        } );
     }
 
     @Override
