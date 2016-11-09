@@ -65,10 +65,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -111,13 +111,22 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
         final Composite findBreakingchangesContainer = SWTUtil.createComposite( this, 3, 1, GridData.FILL_BOTH, 0, 0 );
 
-        Composite left = SWTUtil.createComposite( findBreakingchangesContainer, 1, 1, GridData.FILL_BOTH, 0, 0 );
+        Composite left = SWTUtil.createComposite( findBreakingchangesContainer, 2, 1, GridData.FILL_BOTH, 0, 0 );
+        SashForm sashForm = new SashForm( left, SWT.HORIZONTAL | SWT.H_SCROLL );
+        GridData sashFormLayoutData = new GridData( GridData.FILL_BOTH );
+
+        sashForm.setLayoutData( sashFormLayoutData );
+
+        SashForm nestedSashForm = new SashForm( sashForm, SWT.VERTICAL | SWT.H_SCROLL );
+        GridData nestedSashFormLayoutData = new GridData( GridData.FILL_BOTH );
+
+        nestedSashForm.setLayoutData( nestedSashFormLayoutData );
 
         GridData treeData = new GridData( GridData.FILL_BOTH );
         treeData.minimumWidth = 200;
-        treeData.heightHint = 150;
+        treeData.heightHint = 200;
 
-        _treeViewer = new TreeViewer( left );
+        _treeViewer = new TreeViewer( nestedSashForm );
 
         _treeViewer.getTree().setLayoutData( treeData );
 
@@ -137,14 +146,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         _treeViewer.getTree().setMenu( menu );
         _treeViewer.expandAll();
 
-        createTableView( left );
+        createTableView( nestedSashForm );
 
-        GridData middleData = new GridData( GridData.FILL_BOTH );
-        middleData.minimumWidth = 300;
+        GridData browserData = new GridData( GridData.FILL_BOTH );
+        browserData.minimumWidth = 100;
+        browserData.minimumHeight = 200;
 
-        _browser = new Browser( findBreakingchangesContainer, SWT.BORDER );
-        _browser.setLayout( new FillLayout() );
-        _browser.setLayoutData( middleData );
+        _browser = new Browser( sashForm, SWT.BORDER );
+        _browser.setLayoutData( browserData );
 
         _treeViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
@@ -396,7 +405,8 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     public void createTableView( Composite container )
     {
         GridData gridData = new GridData( GridData.FILL_BOTH );
-        gridData.minimumWidth = 300;
+        gridData.minimumWidth = 200;
+        gridData.minimumHeight = 200;
 
         _problemsViewer =
             new TableViewer( container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER );
