@@ -19,6 +19,7 @@ import com.liferay.ide.project.core.BinaryProjectImportDataModelProvider;
 import com.liferay.ide.project.core.SDKProjectsImportDataModelProvider;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -88,7 +89,7 @@ public class BinaryProjectImportWizard extends DataModelWizard implements IWorkb
     @Override
     protected void postPerformFinish() throws InvocationTargetException
     {
-        UIUtil.switchToLiferayPerspective();
+        UIUtil.switchToLiferayPerspective( LiferayPerspectiveFactory.ID, true );
 
         super.postPerformFinish();
     }

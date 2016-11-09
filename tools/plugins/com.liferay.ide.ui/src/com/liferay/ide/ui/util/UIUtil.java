@@ -15,7 +15,6 @@
 
 package com.liferay.ide.ui.util;
 
-import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.LiferayUIPlugin;
 
 import java.io.IOException;
@@ -370,8 +369,7 @@ public class UIUtil
     {
         try
         {
-            IViewPart view = PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().showView( viewId );
-            return view;
+            return PlatformUI.getWorkbench().getWorkbenchWindows()[0].getActivePage().showView( viewId );
         }
         catch( PartInitException e )
         {
@@ -381,7 +379,7 @@ public class UIUtil
         return null;
     }
 
-    public static void switchToLiferayPerspective()
+    public static void switchToLiferayPerspective( String perspectiveId, boolean confirm )
     {
         // Retrieve the new project open perspective preference setting
         String perspSetting = PrefUtil.getAPIPreferenceStore().getString( IDE.Preferences.PROJECT_OPEN_NEW_PERSPECTIVE );
@@ -400,7 +398,7 @@ public class UIUtil
         // Map perspective id to descriptor.
         IPerspectiveRegistry reg = PlatformUI.getWorkbench().getPerspectiveRegistry();
 
-        IPerspectiveDescriptor finalPersp = reg.findPerspectiveWithId( LiferayPerspectiveFactory.ID );
+        IPerspectiveDescriptor finalPersp = reg.findPerspectiveWithId( perspectiveId );
 
         IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
@@ -420,7 +418,7 @@ public class UIUtil
             }
 
             // prompt the user to switch
-            if( !confirmPerspectiveSwitch( window, finalPersp ) )
+            if( confirm && !confirmPerspectiveSwitch( window, finalPersp ) )
             {
                 return;
             }

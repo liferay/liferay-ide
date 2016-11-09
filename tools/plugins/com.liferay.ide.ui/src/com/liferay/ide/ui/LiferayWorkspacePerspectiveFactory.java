@@ -38,12 +38,16 @@ public class LiferayWorkspacePerspectiveFactory extends AbstractPerspectiveFacto
         // Top right.
         IFolderLayout topRight = layout.createFolder( "topRight", IPageLayout.RIGHT, 0.68f, editorArea );//$NON-NLS-1$
 
-        addViewIfExist(layout, topRight, ID_GRADLE_TASK_VIEW);
+        addViewIfExist( layout, topRight, ID_GRADLE_TASK_VIEW );
 
         topRight.addPlaceholder( IPageLayout.ID_BOOKMARKS );
 
+        // Upgrade folder
+        IFolderLayout upgradeFolder = layout.createFolder( "topRightRight", IPageLayout.RIGHT, 0.5f, "fast" );
+        upgradeFolder.addPlaceholder( "com.liferay.ide.project.ui.upgradeView" );
+
         IFolderLayout topRightBottom = layout.createFolder( "topRightBottom", IPageLayout.BOTTOM, 0.7f, "topRight" ); //$NON-NLS-1$ //$NON-NLS-2$
-        addViewIfExist(layout, topRightBottom, ID_GRADLE_EXECUTIONS_VIEW);
+        addViewIfExist( layout, topRightBottom, ID_GRADLE_EXECUTIONS_VIEW);
 
         IFolderLayout bottomTopLeft = layout.createFolder( "bottomTopLeft", IPageLayout.BOTTOM, 0.7f, "topLeft" ); //$NON-NLS-1$ //$NON-NLS-2$
 
