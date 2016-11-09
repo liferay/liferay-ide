@@ -60,7 +60,6 @@ public class BladeCLI
 {
     static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
     static final String localJarKey = "localjar";
-    static String[] projectTemplateNames;
     static final File repoCache = new File( _settingsDir, "repoCache" );
     static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/2.x/";
     static final String timeStampKey = "up2date.check";
@@ -224,18 +223,13 @@ public class BladeCLI
 
     public static synchronized String[] getProjectTemplates() throws BladeCLIException
     {
-        if( projectTemplateNames == null )
-        {
-            List<String> templateNames = new ArrayList<>();
+        List<String> templateNames = new ArrayList<>();
 
-            String[] retval = execute( "create -l" );
+        String[] retval = execute( "create -l" );
 
-            Collections.addAll( templateNames, retval );
+        Collections.addAll( templateNames, retval );
 
-            projectTemplateNames = templateNames.toArray( new String[0] );
-        }
-
-        return projectTemplateNames;
+        return templateNames.toArray( new String[0] );
     }
 
     private static File getRepoCacheDir() throws Exception
