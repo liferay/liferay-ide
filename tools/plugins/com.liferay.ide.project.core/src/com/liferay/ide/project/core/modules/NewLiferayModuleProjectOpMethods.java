@@ -18,9 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.server.core.portal.PortalServer;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -52,8 +50,6 @@ import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.text.edits.TextEdit;
-import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Simon Jiang
@@ -130,6 +126,45 @@ public class NewLiferayModuleProjectOpMethods
         return retval;
     }
 
+    private static IPath getClassFile( File packageRoot )
+    {
+        File[] children = packageRoot.listFiles();
+
+        if( children != null && children.length > 0 )
+        {
+            for( File child : children )
+            {
+                if( child.isDirectory() )
+                {
+                    IPath classFile = getClassFile( child );
+
+                    if( classFile != null && classFile.toFile().exists() )
+                    {
+                        return classFile;
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        boolean hasComponentAnnotation = checkComponentAnnotation( child.getAbsoluteFile() );
+
+                        if( hasComponentAnnotation )
+                        {
+                            return new Path( child.getAbsolutePath() );
+                        }
+                    }
+                    catch( Exception e )
+                    {
+                        ProjectCore.logError( e );;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
     private static IPath getClassFilePath(
         final String projectName, String className, final String packageName, final String projectTemplateName,
         IPath projecLocation )
@@ -138,28 +173,9 @@ public class NewLiferayModuleProjectOpMethods
 
         File packageRoot = packageNamePath.toFile();
 
-        while( true )
-        {
-            File[] children = packageRoot.listFiles();
+        IPath classFile = getClassFile( packageRoot );
 
-            if( children!=null && children.length == 1 )
-            {
-                File child = children[0];
-
-                if( child.isDirectory() )
-                {
-                    packageRoot = child;
-                }
-                else
-                {
-                    return new Path( child.getAbsolutePath() );
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
+        return classFile;
     }
 
     public static String getMavenParentPomGroupId( NewLiferayModuleProjectOp op, String projectName, IPath path )
@@ -202,6 +218,56 @@ public class NewLiferayModuleProjectOpMethods
         }
 
         return retval;
+    }
+
+    private static class CheckComponentAnnotationVistor extends ASTVisitor
+    {
+
+        public CheckComponentAnnotationVistor()
+        {
+            super();
+        }
+
+        private boolean hasComponentAnnotation = false;
+
+        @Override
+        public boolean visit( NormalAnnotation node )
+        {
+            if( node.getTypeName().getFullyQualifiedName().equals( "Component" ) )
+            {
+                hasComponentAnnotation = true;
+            }
+
+            return super.visit( node );
+        }
+
+        public boolean hasComponentAnnotation()
+        {
+            return this.hasComponentAnnotation;
+        }
+    }
+
+    public static boolean checkComponentAnnotation( File dest ) throws Exception
+    {
+        try
+        {
+            ASTParser parser = ASTParser.newParser( AST.JLS8 );
+            String readContents = FileUtil.readContents( dest, true );
+            parser.setSource( readContents.toCharArray() );
+            parser.setKind( ASTParser.K_COMPILATION_UNIT );
+            parser.setResolveBindings( true );
+            final CompilationUnit cu = (CompilationUnit) parser.createAST( new NullProgressMonitor() );
+            CheckComponentAnnotationVistor componentAnnotationVistor = new CheckComponentAnnotationVistor();
+            cu.accept( componentAnnotationVistor );
+
+            return componentAnnotationVistor.hasComponentAnnotation();
+        }
+        catch( Exception e )
+        {
+            ProjectCore.logError( "error when adding properties to " + dest.getAbsolutePath(), e );
+        }
+
+        return false;
     }
 
     @SuppressWarnings("unchecked")
@@ -304,64 +370,4 @@ public class NewLiferayModuleProjectOpMethods
 			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
 		}
 	}
-
-    public static void addDependencies( File file, String bundleId )
-    {
-        IServer runningServer = null;
-        final IServer[] servers = ServerCore.getServers();
-
-        for( IServer server : servers )
-        {
-            if( server.getServerState() == IServer.STATE_STARTED &&
-                server.getServerType().getId().equals( PortalServer.ID ) )
-            {
-                runningServer = server;
-                break;
-            }
-        }
-
-        final ServiceCommand serviceCommand = new ServiceCommand( runningServer, bundleId );
-
-        try
-        {
-            final ServiceContainer osgiService = serviceCommand.execute();
-
-            if( osgiService != null )
-            {
-                setDenpendencies( file, osgiService.getBundleName(), osgiService.getBundleVersion() );
-            }
-        }
-        catch( Exception e )
-        {
-            ProjectCore.logError( "Can't update project denpendencies. ", e );
-        }
-    }
-
-    private static void setDenpendencies(File file , String bundleId , String bundleVersion) throws Exception
-    {
-       String content = new String( FileUtil.readContents( file, true ) );
-
-       String head = content.substring( 0 , content.lastIndexOf( "dependencies" ) );
-
-       String end = content.substring( content.lastIndexOf( "}" )+1 , content.length() );
-
-       String dependencies = content.substring( content.lastIndexOf( "{" )+2 , content.lastIndexOf( "}" ) );
-
-       String appended = "\tcompile 'com.liferay:"+bundleId+":"+bundleVersion+"'\n";
-
-       StringBuilder preNewContent = new StringBuilder();
-
-       preNewContent.append(head);
-       preNewContent.append("dependencies {\n");
-       preNewContent.append(dependencies+appended);
-       preNewContent.append("}");
-       preNewContent.append(end);
-
-       String newContent = preNewContent.toString();
-
-       if (!content.equals(newContent))
-       {
-           FileUtil.writeFileFromStream( file, new ByteArrayInputStream( newContent.getBytes() ) );
-       }
-    }
 }

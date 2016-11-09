@@ -25,15 +25,14 @@ import com.liferay.ide.project.core.modules.PropertyKey;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -188,4 +187,39 @@ public class NewLiferayModuleProjectOpTests
         assertEquals( expected, actual );
     }
 
+    @Test
+    public void testNewLiferayPortletProviderNewProperties() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "test-properties-in-portlet-provider" );
+
+        op.setProjectTemplateName( "portlet-provider" );
+
+        PropertyKey pk = op.getPropertyKeys().insert();
+
+        pk.setName( "property-test-key" );
+        pk.setValue( "property-test-value" );
+
+        Status exStatus =
+            NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertEquals( "OK", exStatus.message() );
+
+        IProject modPorject = CoreUtil.getProject( op.getProjectName().content() );
+        modPorject.open( new NullProgressMonitor() );
+
+        SearchFilesVisitor sv = new SearchFilesVisitor();
+        List<IFile> searchFiles = sv.searchFiles( modPorject, "TestPropertiesInPortletProviderAddPortletProvider.java" );
+        IFile componentClassFile = searchFiles.get( 0 );
+
+        assertEquals( componentClassFile.exists(), true );
+
+        String actual = CoreUtil.readStreamToString( componentClassFile.getContents() );
+
+        String expected =
+            CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/TestPortletProvider.txt" ) );
+
+        assertEquals( expected, actual );
+    }
 }
