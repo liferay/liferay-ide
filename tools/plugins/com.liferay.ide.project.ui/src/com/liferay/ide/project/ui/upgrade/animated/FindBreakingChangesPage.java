@@ -75,6 +75,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
@@ -647,13 +648,17 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         }
     }
 
-    @Override
-    public String getDescriptor()
+    public void createSpecialDescriptor( Composite parent, int style )
     {
-        return "This step will help you to find breaking changes for type of java, jsp, xml and properties files. " +
-            "It will not support to find the front-end codes( e.g., javascript, css).\n For service builder, you " +
-            "just need to modify the changes on xxxServiceImp.java, xxxFinder.java, xxxModel.java. " +
-            "Others will be solved in step \"Build Service\".";
+        final String descriptor =
+            "This step will help you to find breaking changes for type of java, jsp, xml and properties files. " +
+                "It will not support to find the front-end codes( e.g., javascript, css).\n For service builder, you " +
+                "just need to modify the changes on xxxServiceImp.java, xxxFinder.java, xxxModel.java. " +
+                "Others will be solved in step \"Build Service\".";
+        String url = "";
+
+        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
+        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
     }
 
     @Override

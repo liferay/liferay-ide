@@ -20,6 +20,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
+import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.net.URL;
@@ -57,6 +58,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
@@ -427,11 +429,14 @@ public class BuildPage extends Page
         return projects;
     }
 
-    @Override
-    public String getDescriptor()
+    public void createSpecialDescriptor( Composite parent, int style )
     {
-        return "This step will help you to build all your projects.\n" +
+        final String descriptor = "This step will help you to build all your projects.\n" +
             "You can rebuild the project by double-clicking it.";
+        String url = "";
+
+        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
+        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
     }
 
     @Override

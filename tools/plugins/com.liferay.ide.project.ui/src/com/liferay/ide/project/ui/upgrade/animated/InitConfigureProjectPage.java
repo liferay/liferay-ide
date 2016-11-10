@@ -512,11 +512,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     }
 
     @Override
-    protected void createPageDescriptor( Composite parent, int style )
-    {
-    }
-
-    @Override
     public void createSpecialDescriptor( Composite parent, int style )
     {
         Composite fillLayoutComposite = SWTUtil.createComposite( parent, 2, 2, GridData.FILL_HORIZONTAL );

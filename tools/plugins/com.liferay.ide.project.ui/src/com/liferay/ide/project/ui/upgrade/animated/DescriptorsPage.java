@@ -18,6 +18,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.util.SWTUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,8 +34,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Link;
 import org.jdom.DocType;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -72,13 +76,16 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
         super( parent, style, dataModel, DESCRIPTORS_PAGE_ID, true );
     }
 
-    @Override
-    public String getDescriptor()
+    public void createSpecialDescriptor( Composite parent, int style )
     {
-        return "This step will upgrade descriptor xml dtd version from 6.2 to 7.0 and " +
+        final String descriptor = "This step will upgrade descriptor xml dtd version from 6.2 to 7.0 and " +
             "delete wap-template-path \ntag in liferay-layout-template.xml.\n" +
             "Double click the file in the list. It will popup a comparison page which shows the differences\n" +
             "between your original source file and the upgrade preview file.";
+        String url = "";
+
+        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
+        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
     }
 
     @Override

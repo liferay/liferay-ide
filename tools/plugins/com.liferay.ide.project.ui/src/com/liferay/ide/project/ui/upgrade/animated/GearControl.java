@@ -103,7 +103,7 @@ public class GearControl extends AbstractCanvas
 
     public GearControl( Composite parent, int style )
     {
-        super( parent, style );
+        super( parent, style | SWT.DOUBLE_BUFFERED );
 
         init();
 

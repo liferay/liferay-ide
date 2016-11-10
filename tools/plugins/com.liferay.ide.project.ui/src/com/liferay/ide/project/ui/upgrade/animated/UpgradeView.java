@@ -249,7 +249,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
     @Override
     public void createPartControl( Composite parent )
     {
-        ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+        ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.DOUBLE_BUFFERED | SWT.H_SCROLL | SWT.V_SCROLL);
         scrolledComposite.setExpandHorizontal(true);
         scrolledComposite.setExpandVertical(true);
 
@@ -334,16 +334,12 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         extAndThemePage.setIndex( 7 );
         extAndThemePage.setTitle( "Ext and Theme" );
 
-        Page compilePage = new CompilePage( pagesSwitchControler, SWT.NONE, dataModel );
-        compilePage.setIndex( 8 );
-        compilePage.setTitle( "Compile" );
-
         Page buildPage = new BuildPage( pagesSwitchControler, SWT.NONE, dataModel );
-        buildPage.setIndex( 9 );
+        buildPage.setIndex( 8 );
         buildPage.setTitle( "Build" );
 
         Page summaryPage = new SummaryPage( pagesSwitchControler, SWT.NONE, dataModel );
-        summaryPage.setIndex( 10 );
+        summaryPage.setIndex( 9 );
         summaryPage.setTitle( "Summary" );
         summaryPage.setNextPage( false );
 

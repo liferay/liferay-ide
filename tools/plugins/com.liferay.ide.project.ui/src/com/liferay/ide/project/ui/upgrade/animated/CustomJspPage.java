@@ -91,6 +91,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -1207,10 +1208,14 @@ public class CustomJspPage extends Page
         converter.doExecute( sourcePaths, targetPath, isLiferayWorkapce );
     }
 
-    @Override
-    public String getDescriptor()
+    public void createSpecialDescriptor( Composite parent, int style )
     {
-        return "This step will help you to convert projects with custom jsp hooks to modules or fragments.";
+        final String descriptor =
+            "This step will help you to convert projects with custom jsp hooks to modules or fragments.";
+        String url = "";
+
+        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
+        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
     }
 
     @Override

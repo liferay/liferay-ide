@@ -15,7 +15,6 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageValidationListener;
@@ -110,8 +109,6 @@ public abstract class Page extends Composite
         Label title = SWTUtil.createLabel( this, getPageTitle(), getGridLayoutCount() );
         title.setFont( new Font( null, "Times New Roman", 14, SWT.NORMAL ) );
 
-        createPageDescriptor( this, style );
-
         createSpecialDescriptor( this, style );
 
         setPageId( pageId );
@@ -142,19 +139,6 @@ public abstract class Page extends Composite
         return label;
     }
 
-    protected void createPageDescriptor( Composite parent, int style )
-    {
-        String descriptor = getDescriptor();
-
-        if( !CoreUtil.empty( descriptor ) )
-        {
-            Text content = SWTUtil.createText( parent, SWT.MULTI, getGridLayoutCount() );
-            content.setText( descriptor );
-            content.setEditable( false );
-            content.setBackground( getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
-        }
-    }
-
     public void createSpecialDescriptor( Composite parent, int style )
     {
     }
@@ -183,11 +167,6 @@ public abstract class Page extends Composite
     public PageAction[] getActions()
     {
         return this.actions;
-    }
-
-    public String getDescriptor()
-    {
-        return "";
     }
 
     public int getGridLayoutCount()

@@ -22,6 +22,7 @@ import com.liferay.ide.project.ui.upgrade.action.CompileAction;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -43,8 +44,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.IConsole;
 
@@ -188,12 +191,15 @@ public class BuildServicePage extends Page
         } );
     }
 
-    @Override
-    public String getDescriptor()
+    public void createSpecialDescriptor( Composite parent, int style )
     {
-        return "In this step, we will delete some legacy servicebuilder related files" +
+        final String descriptor = "In this step, we will delete some legacy servicebuilder related files" +
             " and re-run build-service on servicebuilder projects.\n" +
             "Note: Please make sure the default installed jre is JDK 8 (Preferences-Java-Installed JREs).";
+        String url = "";
+
+        Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
+        link.setLayoutData( new GridData( SWT.FILL, SWT.BEGINNING, true, false, 2, 1 ) );
     }
 
     @Override
