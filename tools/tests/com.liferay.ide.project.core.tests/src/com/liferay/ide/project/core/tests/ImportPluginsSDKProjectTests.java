@@ -119,6 +119,8 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     @Test
     public void testSDKSetting() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         SDK sdk = SDKUtil.getWorkspaceSDK();
         Map<String, Object> sdkProperties = sdk.getBuildProperties(true);
 
@@ -141,6 +143,8 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     @Test
     public void testImportBasicHookProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IPath projectPath = importProject( "hooks", "Import-IDE3.0-hook" );
         IProject hookProjectForIDE3 = ProjectImportUtil.importProject( projectPath, new NullProgressMonitor(), null );
 
@@ -158,6 +162,8 @@ public class ImportPluginsSDKProjectTests extends ProjectCoreBase
     @Test
     public void testImportConfiguredPortletProject() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final IPath projectPath = importProject( "portlets", "Import-Old-Configured-portlet" );
         IProject portletProjectForIDE3 = ProjectImportUtil.importProject( projectPath, new NullProgressMonitor(), null );
 

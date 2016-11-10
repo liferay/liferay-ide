@@ -609,6 +609,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testServiceBuilderProjectName() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-sb" );
 
         op.setPluginType( PluginType.servicebuilder );
@@ -765,6 +767,8 @@ public abstract class NewLiferayPluginProjectOpBase extends ProjectCoreBase
     @Test
     public void testHookProjectName() throws Exception
     {
+        if( shouldSkipBundleTests() ) return;
+
         final NewLiferayPluginProjectOp op = newProjectOp( "test-hook" );
 
         op.setPluginType( PluginType.hook );
