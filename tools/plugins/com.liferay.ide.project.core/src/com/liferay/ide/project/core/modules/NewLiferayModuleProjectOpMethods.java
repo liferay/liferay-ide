@@ -92,11 +92,11 @@ public class NewLiferayModuleProjectOpMethods
             }
 
 
-            final IPath finalClassPath = getClassFilePath( projectName, className, packageName, projectTemplateName, projectLocation );
+            final List<IPath> finalClassPaths = getClassFilePath( projectName, className, packageName, projectTemplateName, projectLocation );
 
-            if( finalClassPath != null )
+            for( IPath classFilePath : finalClassPaths )
             {
-                final File finalClassFile = finalClassPath.toFile();
+                final File finalClassFile = classFilePath.toFile();
 
                 if( finalClassFile.exists() )
                 {
@@ -126,7 +126,7 @@ public class NewLiferayModuleProjectOpMethods
         return retval;
     }
 
-    private static IPath getClassFile( File packageRoot )
+    private static void getClassFile( File packageRoot, List<IPath> classFiles )
     {
         File[] children = packageRoot.listFiles();
 
@@ -136,12 +136,7 @@ public class NewLiferayModuleProjectOpMethods
             {
                 if( child.isDirectory() )
                 {
-                    IPath classFile = getClassFile( child );
-
-                    if( classFile != null && classFile.toFile().exists() )
-                    {
-                        return classFile;
-                    }
+                    getClassFile( child, classFiles );
                 }
                 else
                 {
@@ -151,7 +146,7 @@ public class NewLiferayModuleProjectOpMethods
 
                         if( hasComponentAnnotation )
                         {
-                            return new Path( child.getAbsolutePath() );
+                            classFiles.add( new Path( child.getAbsolutePath() ) );
                         }
                     }
                     catch( Exception e )
@@ -161,11 +156,9 @@ public class NewLiferayModuleProjectOpMethods
                 }
             }
         }
-
-        return null;
     }
 
-    private static IPath getClassFilePath(
+    private static List<IPath> getClassFilePath(
         final String projectName, String className, final String packageName, final String projectTemplateName,
         IPath projecLocation )
     {
@@ -173,10 +166,12 @@ public class NewLiferayModuleProjectOpMethods
 
         File packageRoot = packageNamePath.toFile();
 
-        IPath classFile = getClassFile( packageRoot );
+        List<IPath> classFiles = new ArrayList<IPath>();
+        getClassFile( packageRoot, classFiles );
 
-        return classFile;
+        return classFiles;
     }
+
 
     public static String getMavenParentPomGroupId( NewLiferayModuleProjectOp op, String projectName, IPath path )
     {
