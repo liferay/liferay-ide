@@ -42,6 +42,7 @@
                         <liferay.bundles.dir>${liferay.bundles.dir}</liferay.bundles.dir>
                         <osgi.console>1234</osgi.console>
                         <skipBundleTests>${skipBundleTests}</skipBundleTests>
+                        <java.awt.headless>true</java.awt.headless>
                     </systemProperties>
                     <excludes>
                         <exclude>**/*ProfilePossibleValuesTests*</exclude>
