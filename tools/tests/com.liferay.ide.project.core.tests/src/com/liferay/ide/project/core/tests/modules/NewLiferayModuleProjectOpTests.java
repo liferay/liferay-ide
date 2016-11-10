@@ -17,8 +17,6 @@ package com.liferay.ide.project.core.tests.modules;
 import static org.junit.Assert.assertEquals;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.modules.PropertyKey;
@@ -29,11 +27,8 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -220,6 +215,6 @@ public class NewLiferayModuleProjectOpTests
         String expected =
             CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/TestPortletProvider.txt" ) );
 
-        assertEquals( expected, actual );
+        assertEquals( expected.replaceAll( "\r", "" ), actual.replaceAll( "\r", "" ) );
     }
 }
