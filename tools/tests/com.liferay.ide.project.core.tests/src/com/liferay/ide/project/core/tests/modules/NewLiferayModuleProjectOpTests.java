@@ -15,6 +15,7 @@
 package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
@@ -212,9 +213,6 @@ public class NewLiferayModuleProjectOpTests
 
         String actual = CoreUtil.readStreamToString( componentClassFile.getContents() );
 
-        String expected =
-            CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/TestPortletProvider.txt" ) );
-
-        assertEquals( expected.replaceAll( "\r", "" ), actual.replaceAll( "\r", "" ) );
+        assertTrue( actual.contains( "property-test-key=property-test-value" ) );
     }
 }
