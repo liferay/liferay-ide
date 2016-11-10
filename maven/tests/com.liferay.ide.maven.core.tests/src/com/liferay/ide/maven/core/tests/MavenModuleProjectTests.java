@@ -19,6 +19,7 @@ import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
@@ -28,17 +29,26 @@ import com.liferay.ide.project.core.modules.PropertyKey;
 import com.liferay.ide.project.core.util.SearchFilesVisitor;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.internal.IMavenConstants;
@@ -251,6 +261,58 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         serviceFile.setContents( new ByteArrayInputStream( contents.getBytes() ), IResource.FORCE, monitor );
 
         verifyProject( project );
+    }
+
+    @Test
+    public void testNewLiferayModuleProjectDefaultLocation() throws Exception
+    {
+        final URL wsZipUrl =
+            Platform.getBundle( "com.liferay.ide.maven.core.tests" ).getEntry( "projects/emptyLiferayWorkspace.zip" );
+
+        final File wsZipFile = new File( FileLocator.toFileURL( wsZipUrl ).getFile() );
+
+        File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRoot().getLocation().toFile();
+
+        ZipUtil.unzip( wsZipFile, eclipseWorkspaceLocation );
+
+        File wsFolder = new File( eclipseWorkspaceLocation, "emptyLiferayWorkspace" );
+
+        importExistingProject( wsFolder, new NullProgressMonitor() );
+
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "my-test-project" );
+
+        op.setProjectTemplateName( "mvc-portlet" );
+
+        op.setProjectProvider( "maven-module" );
+
+        // don't put maven type project inside liferay-workspace
+        assertTrue( op.getLocation().content().toFile().equals( eclipseWorkspaceLocation ) );
+
+        op.setProjectProvider( "gradle-module" );
+
+        op.setProjectTemplateName( "theme" );
+
+        // put gradle type theme project inside liferay-workspace/wars
+        assertTrue( op.getLocation().content().toPortableString().contains( "emptyLiferayWorkspace/wars" ) );
+
+        op.setProjectTemplateName( "mvc-portlet" );
+
+        // put gradle type project inside liferay-workspace/modules
+        assertTrue( op.getLocation().content().toPortableString().contains( "emptyLiferayWorkspace/modules" ) );
+
+        IProject project = CoreUtil.getProject( "emptyLiferayWorkspace" );
+
+        if( project != null && project.isAccessible() && project.exists() )
+        {
+            project.delete( true, true, new NullProgressMonitor() );
+        }
+
+        op.setProjectTemplateName( "service-builder" );
+
+        // no liferay-workspace
+        assertTrue( op.getLocation().content().toFile().equals( eclipseWorkspaceLocation ) );
     }
 
     @Test
@@ -641,5 +703,29 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         }
 
         assertTrue( hasDependency );
+    }
+
+    private static void importExistingProject( File dir, IProgressMonitor monitor ) throws CoreException
+    {
+        final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+
+        final IProjectDescription description =
+            workspace.loadProjectDescription( new Path( dir.getAbsolutePath() ).append( ".project" ) );
+
+        final String name = description.getName();
+
+        final IProject project = workspace.getRoot().getProject( name );
+
+        if( project.exists() )
+        {
+            return;
+        }
+        else
+        {
+            project.create( description, monitor );
+            project.open( IResource.BACKGROUND_REFRESH, monitor );
+
+            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        }
     }
 }
