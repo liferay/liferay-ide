@@ -45,6 +45,7 @@ import java.util.List;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -78,6 +79,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
@@ -109,18 +111,13 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     {
         super( parent, style, dataModel, FINDBREACKINGCHANGES_PAGE_ID, true );
 
-        final Composite findBreakingchangesContainer = SWTUtil.createComposite( this, 3, 1, GridData.FILL_BOTH, 0, 0 );
+        final Composite findBreakingchangesContainer = SWTUtil.createComposite( this, 2, 1, GridData.FILL_BOTH, 0, 0 );
 
-        Composite left = SWTUtil.createComposite( findBreakingchangesContainer, 2, 1, GridData.FILL_BOTH, 0, 0 );
-        SashForm sashForm = new SashForm( left, SWT.HORIZONTAL | SWT.H_SCROLL );
-        GridData sashFormLayoutData = new GridData( GridData.FILL_BOTH );
-
-        sashForm.setLayoutData( sashFormLayoutData );
+        SashForm sashForm = new SashForm( findBreakingchangesContainer, SWT.HORIZONTAL | SWT.H_SCROLL );
+        sashForm.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
         SashForm nestedSashForm = new SashForm( sashForm, SWT.VERTICAL | SWT.H_SCROLL );
-        GridData nestedSashFormLayoutData = new GridData( GridData.FILL_BOTH );
-
-        nestedSashForm.setLayoutData( nestedSashFormLayoutData );
+        nestedSashForm.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
         GridData treeData = new GridData( GridData.FILL_BOTH );
         treeData.minimumWidth = 200;
@@ -148,12 +145,8 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
         createTableView( nestedSashForm );
 
-        GridData browserData = new GridData( GridData.FILL_BOTH );
-        browserData.minimumWidth = 100;
-        browserData.minimumHeight = 200;
-
         _browser = new Browser( sashForm, SWT.BORDER );
-        _browser.setLayoutData( browserData );
+        _browser.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
         _treeViewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
@@ -225,8 +218,9 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         buttonContainer.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
 
         Button findbreakingchangesButton = new Button( buttonContainer, SWT.NONE );
-        findbreakingchangesButton.setText( "Find Breaking Changes" );
-        findbreakingchangesButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+
+        findbreakingchangesButton.setImage( getImage( "migration-tasks.png" ) );
+        findbreakingchangesButton.setToolTipText( "Find Breaking Changes" );
 
         findbreakingchangesButton.addListener( SWT.Selection, new Listener()
         {
@@ -240,8 +234,9 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         } );
 
         Button correctAllImportIssuesButton = new Button( buttonContainer, SWT.NONE );
-        correctAllImportIssuesButton.setText( "Correct All Import Issues And Refind" );
-        correctAllImportIssuesButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+
+        correctAllImportIssuesButton.setImage( getImage( "task-complete.gif" ) );
+        correctAllImportIssuesButton.setToolTipText( "Correct All Import Issues And Refind" );
 
         correctAllImportIssuesButton.addListener( SWT.Selection, new Listener()
         {
@@ -256,11 +251,12 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             }
         } );
 
-        Button openAll = new Button( buttonContainer, SWT.NONE );
-        openAll.setText( "Expand All" );
-        openAll.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+        Button expendAll = new Button( buttonContainer, SWT.NONE );
 
-        openAll.addListener( SWT.Selection, new Listener()
+        expendAll.setImage( getImage( "expandall.gif" ) );
+        expendAll.setToolTipText( "Expand All" );
+
+        expendAll.addListener( SWT.Selection, new Listener()
         {
 
             @Override
@@ -271,8 +267,12 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         } );
 
         Button collapseAll = new Button( buttonContainer, SWT.NONE );
-        collapseAll.setText( "Collapse All" );
-        collapseAll.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+
+        Image collapseAllImage =
+            PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_ELCL_COLLAPSEALL );
+
+        collapseAll.setImage( collapseAllImage );
+        collapseAll.setToolTipText( "Collapse All" );
 
         collapseAll.addListener( SWT.Selection, new Listener()
         {
@@ -285,19 +285,23 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         } );
 
         Button openIgnoredList = new Button( buttonContainer, SWT.NONE );
-        openIgnoredList.setText( "Open Ignored List" );
-        openIgnoredList.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
+
+        openIgnoredList.setImage( getImage( "properties.png" ) );
+        openIgnoredList.setToolTipText( "Open Ignored List" );
+
         openIgnoredList.addListener( SWT.Selection, new Listener()
         {
 
             @Override
             public void handleEvent( Event event )
             {
-                PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn(
-                    parent.getShell(), MigrationProblemPreferencePage.ID, null, null );
+                PreferenceDialog dialog = PreferencesUtil.createPreferenceDialogOn( parent.getShell(),
+                    MigrationProblemPreferencePage.ID, null, null );
                 dialog.open();
             }
         } );
+
+        sashForm.setWeights( new int[] { 2, 3 } );
     }
 
     private void createColumns( final TableViewer _problemsViewer )
@@ -503,6 +507,14 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         sb.append( "</p></form>" );
 
         return sb.toString();
+    }
+
+    private Image getImage( String imageName )
+    {
+        Image image = ImageDescriptor.createFromURL(
+            ProjectUI.getDefault().getBundle().getEntry( "icons/e16/" + imageName ) ).createImage();
+
+        return image;
     }
 
     public TableViewer getProblemsViewer()
