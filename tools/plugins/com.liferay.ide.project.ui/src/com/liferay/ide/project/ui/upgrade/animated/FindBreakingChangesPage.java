@@ -99,8 +99,13 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         ProjectUI.getDefault().getImageRegistry().get( ProjectUI.CHECKED_IMAGE_ID );
     private static final Image IMAGE_UNCHECKED =
         ProjectUI.getDefault().getImageRegistry().get( ProjectUI.UNCHECKED_IMAGE_ID );
+
     public static boolean showAll = false;
+    private boolean isBrowserMaximized = false;
+
     MigrationContentProvider migrationContentProvider;
+
+    private SashForm _sashForm;
     private Browser _browser;
 
     private TableViewer _problemsViewer;
@@ -113,10 +118,10 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
         final Composite findBreakingchangesContainer = SWTUtil.createComposite( this, 2, 1, GridData.FILL_BOTH, 0, 0 );
 
-        SashForm sashForm = new SashForm( findBreakingchangesContainer, SWT.HORIZONTAL | SWT.H_SCROLL );
-        sashForm.setLayoutData( new GridData( GridData.FILL_BOTH ) );
+        _sashForm = new SashForm( findBreakingchangesContainer, SWT.HORIZONTAL | SWT.H_SCROLL );
+        _sashForm.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
-        SashForm nestedSashForm = new SashForm( sashForm, SWT.VERTICAL | SWT.H_SCROLL );
+        SashForm nestedSashForm = new SashForm( _sashForm, SWT.VERTICAL | SWT.H_SCROLL );
         nestedSashForm.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
         GridData treeData = new GridData( GridData.FILL_BOTH );
@@ -145,7 +150,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
         createTableView( nestedSashForm );
 
-        _browser = new Browser( sashForm, SWT.BORDER );
+        _browser = new Browser( _sashForm, SWT.BORDER );
         _browser.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
         _treeViewer.addSelectionChangedListener( new ISelectionChangedListener()
@@ -301,7 +306,24 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             }
         } );
 
-        sashForm.setWeights( new int[] { 2, 3 } );
+        Button hideTree = new Button( buttonContainer, SWT.TOGGLE );
+
+        hideTree.setImage( getImage( "hide_tree.png" ) );
+        hideTree.setToolTipText( "Hide Tree" );
+
+        hideTree.addListener( SWT.Selection, new Listener()
+        {
+
+            @Override
+            public void handleEvent( Event event )
+            {
+                isBrowserMaximized = !isBrowserMaximized;
+
+                _sashForm.setMaximizedControl( isBrowserMaximized ? _browser : null );
+            }
+        } );
+
+        _sashForm.setWeights( new int[] { 2, 3 } );
     }
 
     private void createColumns( final TableViewer _problemsViewer )
