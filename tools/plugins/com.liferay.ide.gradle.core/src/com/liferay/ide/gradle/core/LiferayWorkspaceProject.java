@@ -85,4 +85,10 @@ public class LiferayWorkspaceProject extends BaseLiferayProject
         return null;
     }
 
+    @Override
+    public IFolder[] getSourceFolders()
+    {
+        return null;
+    }
+
 }
