@@ -874,7 +874,14 @@ public class CustomJspPage extends Page
 
         String customJsp = CustomJspConverter.getCustomJspPath( projectPath );
 
-        java.nio.file.Path customJspPath = project.getFolder( "docroot/" + customJsp ).getLocation().toFile().toPath();
+        IFolder folder = project.getFolder( "docroot/" + customJsp );
+
+        if( !folder.exists() )
+        {
+            folder = project.getFolder( "src/main/webapp/" + customJsp );
+        }
+
+        java.nio.file.Path customJspPath = folder.getLocation().toFile().toPath();
 
         java.nio.file.Path relativePath = customJspPath.relativize( file.toPath() );
 
@@ -956,7 +963,14 @@ public class CustomJspPage extends Page
 
             String customJspPath = contents[1];
 
-            IPath location = project.getFolder( "docroot/" + customJspPath ).getLocation();
+            IFolder folder = project.getFolder( "docroot/" + customJspPath );
+
+            if( !folder.exists() )
+            {
+                folder = project.getFolder( "src/main/webapp/" + customJspPath );
+            }
+
+            IPath location = folder.getLocation();
 
             if( location != null )
             {

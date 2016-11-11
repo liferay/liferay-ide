@@ -136,6 +136,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         dataModel.setHasServiceBuilder( true );
         dataModel.setHasTheme( true );
         dataModel.setHasWeb( true );
+        dataModel.setConvertLiferayWorkspace( false );
 
         currentPageList.clear();
         currentPageList.addAll( staticPageList );
@@ -155,28 +156,29 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         boolean hasLayout = dataModel.getHasLayout().content();
         boolean hasTheme = dataModel.getHasTheme().content();
         boolean hasExt = dataModel.getHasExt().content();
+        boolean hasWorkspace = dataModel.getConvertLiferayWorkspace().content();
 
-        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
+        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasWorkspace )
         {
             addPage( Page.DESCRIPTORS_PAGE_ID );
         }
 
-        if( hasPortlet || hasHook || hasServiceBuilder )
+        if( hasPortlet || hasHook || hasServiceBuilder || hasWorkspace )
         {
             addPage( Page.FINDBREACKINGCHANGES_PAGE_ID );
         }
 
-        if( hasServiceBuilder )
+        if( hasServiceBuilder || hasWorkspace )
         {
             addPage( Page.BUILDSERVICE_PAGE_ID );
         }
 
-        if( hasLayout )
+        if( hasLayout || hasWorkspace )
         {
             addPage( Page.LAYOUTTEMPLATE_PAGE_ID );
         }
 
-        if( hasHook )
+        if( hasHook || hasWorkspace )
         {
             addPage( Page.CUSTOMJSP_PAGE_ID );
         }

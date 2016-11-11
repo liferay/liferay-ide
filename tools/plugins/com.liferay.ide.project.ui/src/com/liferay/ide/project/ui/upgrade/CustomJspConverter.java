@@ -306,7 +306,11 @@ public class CustomJspConverter
 
         if( !hookFile.exists() )
         {
-            return null;
+            hookFile = new File( sourcePath + "/src/main/webapp/WEB-INF/liferay-hook.xml" );
+
+            if( !hookFile.exists()) {
+                return null;
+            }
         }
 
         String customJspPath = null;
@@ -354,7 +358,12 @@ public class CustomJspConverter
 
         if( !customJspDir.exists() || !customJspDir.isDirectory() )
         {
-            return null;
+            customJspDir = new File( sourcePath + "/src/main/webapp" + customJspPath );
+
+            if( !customJspDir.exists() || !customJspDir.isDirectory() )
+            {
+                return null;
+            }
         }
 
         return customJspPath;
@@ -846,6 +855,13 @@ public class CustomJspConverter
         }
         else
         {
+            dir = new File( sourcePath + "/src/main/webapp/" + customJspPath + path );
+
+            if( dir.exists() )
+            {
+                return dir;
+            }
+
             return null;
         }
     }
@@ -858,7 +874,14 @@ public class CustomJspConverter
 
         if( !portletDir.exists() || !portletDir.isDirectory() )
         {
-            return null;
+            portletDir = new File( sourcePath + "/src/main/webapp/" + customJspPath + "/html/portlet/" );
+
+            if( !portletDir.exists() || !portletDir.isDirectory() )
+            {
+                return null;
+            }
+
+            sourcePortletDir = portletDir.getAbsolutePath();
         }
 
         File[] portlets = portletDir.listFiles( new FileFilter()

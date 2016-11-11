@@ -114,6 +114,7 @@ public class UpgradeSettingsUtil
         dataModel.setHasTheme( Boolean.parseBoolean( getProperty( "HasTheme", "false" ) ) );
         dataModel.setHasExt( Boolean.parseBoolean( getProperty( "HasExt", "false" ) ) );
         dataModel.setHasWeb( Boolean.parseBoolean( getProperty( "HasWeb", "false" ) ) );
+        dataModel.setConvertLiferayWorkspace( Boolean.parseBoolean( getProperty( "ConvertLiferayWorkspace", "false" ) ) );
     }
 
     public static void storeProperty( Object key, Object value )

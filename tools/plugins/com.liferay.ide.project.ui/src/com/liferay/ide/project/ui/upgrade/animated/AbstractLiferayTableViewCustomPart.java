@@ -97,7 +97,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
                     for( IProject project : projectArrys )
                     {
-                        if( SDKUtil.isSDKProject( project ) )
+                        if( CoreUtil.isLiferayProject( project ) )
                         {
                             projectList.add(project);
                         }
@@ -394,7 +394,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                 if( isNeedUpgrade( filePath.toFile() ) )
                 {
                     final String projectLocation =
-                        filePath.makeRelativeTo( SDKUtil.getSDK( project ).getLocation() ).toPortableString();
+                        filePath.makeRelativeTo( project.getLocation() ).toPortableString();
 
                     context =
                         filePath.lastSegment() + " (" + project.getName() + " - Location: " + projectLocation + ")";
@@ -460,7 +460,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
         for( IProject project : projectArrys )
         {
-            if( SDKUtil.isSDKProject( project ) )
+            if( CoreUtil.isLiferayProject( project ) )
             {
                 projectList.add(project);
             }

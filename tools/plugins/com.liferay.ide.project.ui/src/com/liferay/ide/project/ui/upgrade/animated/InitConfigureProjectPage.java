@@ -612,7 +612,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         } );
 
-        dataModel.setBundleName( bundleNameField.getText() );
+        final String bundleName = dataModel.getBundleName().content();
+
+        bundleNameField.setText( bundleName != null ? bundleName : "" );
 
         bundleUrlLabel = createLabel( composite, "Bundle URL:" );
         bundleUrlField = createTextField( composite, SWT.NONE );

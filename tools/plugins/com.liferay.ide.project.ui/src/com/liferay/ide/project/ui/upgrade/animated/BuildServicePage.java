@@ -78,6 +78,16 @@ public class BuildServicePage extends Page
                 IFile portletSpringXML = project.getFile( relativePath + "/portlet-spring.xml" );
                 IFile shardDataSourceSpringXML = project.getFile( relativePath + "/shard-data-source-spring.xml" );
 
+                if( !portletSpringXML.exists() )
+                {
+                    portletSpringXML = project.getFile( "/src/main/java/META-INF/portlet-spring.xml" );
+                }
+
+                if( !shardDataSourceSpringXML.exists() )
+                {
+                    shardDataSourceSpringXML = project.getFile( "/src/main/java/META-INF/shard-data-source-spring.xml" );
+                }
+
                 if( portletSpringXML.exists() )
                 {
                     portletSpringXML.delete( true, monitor );
@@ -99,6 +109,11 @@ public class BuildServicePage extends Page
                 {
                     IFile serviceFile = project.getFile( "/docroot/WEB-INF/service.xml" );
 
+                    if( !serviceFile.exists() )
+                    {
+                        serviceFile = project.getFile( "src/main/webapp/WEB-INF/service.xml" );
+                    }
+
                     if( serviceFile.exists() )
                     {
                         results.add( project );
@@ -119,7 +134,7 @@ public class BuildServicePage extends Page
 
                 URL imageUrl = ProjectUI.getDefault().getBundle().getEntry( "/icons/e16/service.png");
                 Image serviceXmlImage = ImageDescriptor.createFromURL( imageUrl ).createImage();
-                
+
                 dialog.setImage( serviceXmlImage );
                 dialog.setTitle( "Liferay Service Project" );
                 dialog.setMessage( "Select Liferay Service Project" );

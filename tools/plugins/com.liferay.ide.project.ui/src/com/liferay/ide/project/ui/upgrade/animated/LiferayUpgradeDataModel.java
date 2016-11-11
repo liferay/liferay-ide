@@ -153,6 +153,7 @@ public interface LiferayUpgradeDataModel extends Element
     void setHasWeb( Boolean hasWeb );
 
     @Service( impl = BundleNameValidationService.class )
+    @DefaultValue( text = "Liferay 7.x")
     ValueProperty PROP_BUNDLE_NAME = new ValueProperty( TYPE, "BundleName" );
 
     Value<String> getBundleName();
@@ -177,10 +178,12 @@ public interface LiferayUpgradeDataModel extends Element
     void setConvertedProjectLocation( Path convertedProjectLocation );
 
     @Type(base = Boolean.class)
+    @DefaultValue(text = "false")
     ValueProperty PROP_CONVERT_LIFERAY_WORKSPACE = new ValueProperty( TYPE, "ConvertLiferayWorkspace" );
 
     Value<Boolean> getConvertLiferayWorkspace();
 
+    void setConvertLiferayWorkspace(String convertLiferayWorkspace);
     void setConvertLiferayWorkspace(Boolean convertLiferayWorkspace);
 
     @Type( base = Boolean.class )
