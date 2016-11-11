@@ -245,7 +245,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
         Button correctAllImportIssuesButton = new Button( buttonContainer, SWT.NONE );
 
         correctAllImportIssuesButton.setImage( getImage( "task-complete.gif" ) );
-        correctAllImportIssuesButton.setToolTipText( "Correct All Import Issues And Refind" );
+        correctAllImportIssuesButton.setToolTipText( "Correct All correctable Issues And Refind" );
 
         correctAllImportIssuesButton.addListener( SWT.Selection, new Listener()
         {
