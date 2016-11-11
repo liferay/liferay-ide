@@ -255,6 +255,18 @@ public class GradleCore extends Plugin
 
     private static boolean isWorkspaceWars( IProject project )
     {
+        File possibleWarFile = project.getLocation().toFile().getParentFile();
+
+        if( possibleWarFile != null && possibleWarFile.getName().equals( "wars" ) )
+        {
+            File possiblaLiferayWorkspaceFile = possibleWarFile.getParentFile();
+
+            if( possiblaLiferayWorkspaceFile != null &&
+                LiferayWorkspaceUtil.isValidWorkspaceLocation( possibleWarFile.getParentFile().getAbsolutePath() ) )
+            {
+                return true;
+            }
+        }
 
         return false;
     }
