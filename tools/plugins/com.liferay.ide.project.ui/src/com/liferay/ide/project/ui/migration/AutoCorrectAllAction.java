@@ -64,41 +64,43 @@ public class AutoCorrectAllAction extends Action
 
                 try
                 {
-                    for( ProblemsContainer problemsContainer : _problemsContainerList )
+                    if( _problemsContainerList != null )
                     {
-                        for( UpgradeProblems upgradeProblems : problemsContainer.getProblemsArray() )
+                        for( ProblemsContainer problemsContainer : _problemsContainerList )
                         {
-                            FileProblems[] FileProblemsArray = upgradeProblems.getProblems();
-
-                            for( FileProblems fileProblems : FileProblemsArray )
+                            for( UpgradeProblems upgradeProblems : problemsContainer.getProblemsArray() )
                             {
-                                List<Problem> problems = fileProblems.getProblems();
-                                for( Problem problem : problems )
+                                FileProblems[] FileProblemsArray = upgradeProblems.getProblems();
+
+                                for( FileProblems fileProblems : FileProblemsArray )
                                 {
-                                    if( problem.autoCorrectContext != null )
+                                    List<Problem> problems = fileProblems.getProblems();
+                                    for( Problem problem : problems )
                                     {
-                                        final String autoCorrectKey = problem.autoCorrectContext.substring(
-                                            0, problem.autoCorrectContext.indexOf( ":" ) );
-
-                                        final Collection<ServiceReference<AutoMigrator>> refs =
-                                            context.getServiceReferences(
-                                                AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
-
-                                        for( ServiceReference<AutoMigrator> ref : refs )
+                                        if( problem.autoCorrectContext != null )
                                         {
-                                            final AutoMigrator autoMigrator = context.getService( ref );
-                                            autoMigrator.correctProblems( problem.file, problems );
+                                            final String autoCorrectKey = problem.autoCorrectContext.substring(
+                                                0, problem.autoCorrectContext.indexOf( ":" ) );
+
+                                            final Collection<ServiceReference<AutoMigrator>> refs =
+                                                context.getServiceReferences(
+                                                    AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
+
+                                            for( ServiceReference<AutoMigrator> ref : refs )
+                                            {
+                                                final AutoMigrator autoMigrator = context.getService( ref );
+                                                autoMigrator.correctProblems( problem.file, problems );
+                                            }
+
+                                            final IResource file = MigrationUtil.getIResourceFromProblem( problem );
+
+                                            file.refreshLocal( IResource.DEPTH_ONE, monitor );
                                         }
-
-                                        final IResource file = MigrationUtil.getIResourceFromProblem( problem );
-
-                                        file.refreshLocal( IResource.DEPTH_ONE, monitor );
                                     }
                                 }
                             }
                         }
                     }
-
                 }
                 catch( InvalidSyntaxException e )
                 {
