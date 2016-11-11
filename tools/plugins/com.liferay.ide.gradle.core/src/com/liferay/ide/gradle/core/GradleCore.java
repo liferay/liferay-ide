@@ -168,6 +168,10 @@ public class GradleCore extends Plugin
             {
                 needAddNature[0] = true;
             }
+            else if( isWorkspaceWars( project ) )
+            {
+                needAddNature[0] = true;
+            }
             else
             {
                 IFile gulpFile = project.getFile( "gulpfile.js" );
@@ -217,7 +221,9 @@ public class GradleCore extends Plugin
                                 GradleCore.createErrorStatus( "Unable to get read gradle configuration" ) );
                         }
 
-                        if( customModel.isLiferayModule() || customModel.hasPlugin( "com.liferay.gradle.plugins.theme.builder.ThemeBuilderPlugin" ) )
+                        if( customModel.isLiferayModule() ||
+                                customModel.hasPlugin( "org.gradle.api.plugins.WarPlugin" ) ||
+                                customModel.hasPlugin( "com.liferay.gradle.plugins.theme.builder.ThemeBuilderPlugin" ) )
                         {
                             LiferayNature.addLiferayNature( project, monitor );
                         }
@@ -245,6 +251,12 @@ public class GradleCore extends Plugin
             job.setRule( CoreUtil.getWorkspaceRoot() );
             job.schedule();
         }
+    }
+
+    private static boolean isWorkspaceWars( IProject project )
+    {
+
+        return false;
     }
 
     /*

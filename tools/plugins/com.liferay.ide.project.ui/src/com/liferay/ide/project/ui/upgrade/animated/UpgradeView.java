@@ -302,7 +302,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
         Page initConfigureProjectPage = new InitConfigureProjectPage( pagesSwitchControler, SWT.NONE, dataModel );
         initConfigureProjectPage.setIndex( 1 );
-        initConfigureProjectPage.setTitle( "Cofigure Projects" );
+        initConfigureProjectPage.setTitle( "Configure Projects" );
         initConfigureProjectPage.addPageNavigateListener( gear );
         initConfigureProjectPage.addPageValidationListener( gear );
         initConfigureProjectPage.setNextPage( false );

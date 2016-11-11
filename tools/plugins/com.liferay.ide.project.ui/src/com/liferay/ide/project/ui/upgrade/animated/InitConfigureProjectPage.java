@@ -215,6 +215,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Text bundleNameField;
     private Text bundleUrlField;
     private Button backupSDK;
+    private Button optimize;
     private boolean validationResult;
     private Button importButton;
 
@@ -690,17 +691,27 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createHorizontalSpacer = createHorizontalSpacer( this, 3 );
         createSeparator = createSeparator( this, 3 );
 
-        String backupFolderName = "Backup SDK into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
-        backupSDK = SWTUtil.createCheckButton( composite, backupFolderName, null, true, 1 );
-        backupSDK.addSelectionListener( new SelectionAdapter()
+        String optimizeName = "Optimize plugins by moving them into workspace wars folder.";
+        optimize = SWTUtil.createCheckButton( composite, optimizeName, null, false, 2 );
+        optimize.addSelectionListener( new SelectionAdapter()
         {
-
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                    dataModel.setBackupSdk( backupSDK.getSelection() );
+                dataModel.setOptimize( optimize.getSelection() );
             }
-        } );
+        });
+
+        String backupFolderName = "Backup SDK into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
+        backupSDK = SWTUtil.createCheckButton( composite, backupFolderName, null, false, 1 );
+        backupSDK.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                dataModel.setBackupSdk( backupSDK.getSelection() );
+            }
+        });
 
         importButton = SWTUtil.createButton( composite, "Import Projects" );
         importButton.addSelectionListener( new SelectionAdapter()
@@ -811,19 +822,25 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
-    private void createLiferayWorkspace( IPath targetSDKLocation, IProgressMonitor monitor ) throws CoreException
+    private void createLiferayWorkspace( IPath targetSDKLocation, boolean optimize, IProgressMonitor monitor ) throws CoreException
     {
         SubMonitor progress = SubMonitor.convert( monitor, 100 );
+
         try
         {
-
-            progress.beginTask( "Execute Liferay Workspace Init Command...", 100 );
+            progress.beginTask( "Initializaing Liferway Workspace...", 100 );
 
             StringBuilder sb = new StringBuilder();
 
             sb.append( "-b " );
             sb.append( "\"" + targetSDKLocation.toFile().getAbsolutePath() + "\" " );
             sb.append( "init -u" );
+
+            if( optimize )
+            {
+                sb.append( " -o" );
+            }
+
             progress.worked( 30 );
             BladeCLI.execute( sb.toString() );
             progress.worked( 100 );
@@ -929,6 +946,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private void disposeImportElement()
     {
         backupSDK.dispose();
+        optimize.dispose();
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
         importButton.dispose();
@@ -1050,7 +1068,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         if( layout.equals( "Use Plugin SDK In Liferay Workspace" ) )
                         {
-                            createLiferayWorkspace( location, monitor );
+                            createLiferayWorkspace( location, dataModel.getOptimize().content(), monitor );
 
                             removeIvyPrivateSetting( location.append( "plugins-sdk" ) );
 
