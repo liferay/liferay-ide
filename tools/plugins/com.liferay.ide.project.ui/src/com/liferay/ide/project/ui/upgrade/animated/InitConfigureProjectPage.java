@@ -157,7 +157,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                                         @Override
                                         public void run()
                                         {
-                                            if ( layoutComb.getSelectionIndex() != 1 )
+                                            if ( layoutComb.getSelectionIndex() != 0 )
                                             {
                                                 layoutComb.select( 1 );
                                                 layoutComb.setEnabled( false );
@@ -205,7 +205,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Text dirField;
     private Combo layoutComb;
     private Label layoutLabel;
-    private String[] layoutNames = { "Upgrade to Liferay SDK 7", "Use Plugin SDK In Liferay Workspace" };
+    private String[] layoutNames = { "Upgrade to Liferay Workspace", "Upgrade to Liferay Plugins SDK 7" };
     private Label serverLabel;
     private Combo serverComb;
     private Button serverButton;
@@ -238,7 +238,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     public InitConfigureProjectPage( final Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
-        super( parent, style, dataModel, INIT_CONFIGURE_PROJECT_PAGE_ID, false );
+        super( parent, style, dataModel, INIT_CONFIGURE_PROJECT_PAGE_ID, true );
 
         dataModel.getSdkLocation().attach( new LiferayUpgradeValidationListener() );
         dataModel.getBundleName().attach( new LiferayUpgradeValidationListener() );
@@ -248,20 +248,18 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         createSeparator = createSeparator( this, 3 );
 
-        dirLabel = createLabel( composite, "Liferay SDK Location:" );
+        dirLabel = createLabel( composite, "Liferay Plugins SDK Location:" );
         dirField = createTextField( composite, SWT.NONE );
         dirField.addModifyListener( new ModifyListener()
         {
-
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setSdkLocation( dirField.getText() );
             }
-        } );
+        });
 
         SWTUtil.createButton( this, "Browse..." ).addSelectionListener( new SelectionAdapter()
         {
-
             @Override
             public void widgetSelected( SelectionEvent e )
             {
@@ -275,7 +273,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     dirField.setText( selectedDir );
                 }
             }
-        } );
+        });
 
         layoutLabel = createLabel( composite, "Select Migrate Layout:" );
         layoutComb = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
@@ -284,7 +282,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         layoutComb.select( 0 );
         layoutComb.addSelectionListener( new SelectionListener()
         {
-
             @Override
             public void widgetDefaultSelected( SelectionEvent e )
             {
@@ -295,7 +292,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             {
                 int sel = layoutComb.getSelectionIndex();
 
-                if( sel == 0 )
+                if( sel == 1 )
                 {
                     disposeBundleElement();
 
@@ -334,7 +331,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         dirField.setText( getSDKDefaultValue() );
 
-        createServerElement();
+        createBundleElement();
 
         createImportElement();
 
@@ -616,7 +613,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         bundleNameField.addModifyListener( new ModifyListener()
         {
-
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setBundleName( bundleNameField.getText() );
@@ -633,12 +629,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         bundleUrlField.setText( defaultBundleUrl );
         bundleUrlField.addModifyListener( new ModifyListener()
         {
-
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setBundleUrl( bundleUrlField.getText() );
             }
-        } );
+        });
+
         bundleUrlField.addFocusListener( new FocusListener()
         {
 
@@ -667,31 +663,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         } );
         dataModel.setBundleUrl( bundleUrlField.getText() );
-    }
-
-    private void createDefaultControl()
-    {
-        UIUtil.async( new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                layoutComb.select( 0 );
-                layoutComb.setEnabled( true );
-                dataModel.setLayout( layoutComb.getText() );
-
-                disposeBundleElement();
-
-                disposeImportElement();
-
-                createServerElement();
-
-                createImportElement();
-
-                composite.layout();
-            }
-        } );
     }
 
     private void createImportElement()
@@ -742,6 +713,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         setNextPage( true );
 
                         importButton.setEnabled( true );
+
+                        setSelectedAction( getSelectedAction( "PageFinishAction" ) );
                     }
                 }
                 catch( CoreException ex )
@@ -767,7 +740,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             progress.beginTask( "Execute Liferay Worksapce Bundle Init Command...", 100 );
             String layout = dataModel.getLayout().content();
 
-            if( layout.equals( layoutNames[1] ) )
+            if( layout.equals( layoutNames[0] ) )
             {
                 IPath sdkLocation = PathBridge.create( dataModel.getSdkLocation().content() );
 
@@ -863,7 +836,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         serverButton = SWTUtil.createButton( composite, "Add Server..." );
         serverButton.addSelectionListener( new SelectionAdapter()
         {
-
             @Override
             public void widgetSelected( SelectionEvent e )
             {
@@ -1049,7 +1021,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         try
         {
-
             PlatformUI.getWorkbench().getProgressService().run( true, true, new IRunnableWithProgress()
             {
 
@@ -1063,7 +1034,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         clearWorkspaceSDKAndProjects( location, monitor );
 
-                        if( layout.equals( "Use Plugin SDK In Liferay Workspace" ) )
+                        if( layout.equals( "Upgrade to Liferay Workspace" ) )
                         {
                             createLiferayWorkspace( location, dataModel.getOptimize().content(), monitor );
 
@@ -1452,7 +1423,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         final Thread t = new Thread()
         {
-
             @Override
             public void run()
             {
@@ -1467,7 +1437,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         UIUtil.async( new Runnable()
         {
-
             @Override
             public void run()
             {
@@ -1491,18 +1460,18 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     inputValidation = true;
                 }
 
-                if( layoutComb.getSelectionIndex() == 0 )
+                if( layoutComb.getSelectionIndex() == 1 )
                 {
                     final int itemCount = serverComb.getItemCount();
 
                     if( itemCount < 1 )
                     {
-                        message = "You shoulde add at least one Liferay 7 portal bundle.";
+                        message = "You should add at least one Liferay 7 portal bundle.";
 
                         layoutValidation = false;
                     }
                 }
-                else if( layoutComb.getSelectionIndex() == 1 )
+                else if( layoutComb.getSelectionIndex() == 0 )
                 {
                     boolean liferayWorksapceValidation = true;
                     String workspaceValidationMessage = "ok";

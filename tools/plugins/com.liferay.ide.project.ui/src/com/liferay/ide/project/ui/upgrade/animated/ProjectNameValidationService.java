@@ -51,7 +51,7 @@ public class ProjectNameValidationService extends ValidationService
         {
             if( projetct.getName().equals( projectName ) )
             {
-                return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk project was already existed" ) );
+                return StatusBridge.create( ProjectCore.createErrorStatus( "Plugins SDK project already exists" ) );
             }
         }
 
@@ -67,7 +67,7 @@ public class ProjectNameValidationService extends ValidationService
                 if( newSdkPath.toFile().exists() )
                 {
                     return StatusBridge.create(
-                        ProjectCore.createErrorStatus( "This sdk location was already existed in disk." ) );
+                        ProjectCore.createErrorStatus( "Plugins SDK location already exists." ) );
                 }
             }
         }

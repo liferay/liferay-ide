@@ -51,27 +51,28 @@ public class WelcomePage extends Page
     @Override
     public String getPageTitle()
     {
-        return "Welcome to Liferay Code Upgrade";
+        return "Welcome to the Liferay code upgrade tool";
     }
 
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String desriptor =
-            "Liferay Code Upgrade will help you to convert Liferay 6.2 projects into Liferay 7.0 projects.\n" +
+            "The Liferay code upgrade tool will help you to upgrade Liferay 6.2 plugin projects into Liferay 7.0 projects.\n\n" +
                 "The key functions are described below:\n" +
                 "       1. Convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace\n" +
-                "       2. Find Breaking Changes in all projects\n" +
-                "       3. Update Descriptor files from 6.2 to 7.0\n" +
-                "       4. Update Layout Template files from 6.2 to 7.0\n" +
-                "       5. Convert Custom JSP Hooks to OSGi modules\n" +
+                "       2. Update Descriptor files from 6.2 to 7.0\n" +
+                "       2. Find Breaking Changes in the APIs used in your Liferay 6.2 projects that need to be migrated to Liferay 7\n" +
+                "       4. Update Layout Template files from 6.2 to 7.0 format\n" +
+                "       5. Automatically Convert Custom JSP Hooks to OSGi modules\n\n" +
                 "Note:\n" +
-                "       It is highly recommended that you make back-up copies of your important files.\n" +
-                "       Theme and Ext projects are not supported to upgrade in this tool currently.\n" +
-                "       For more details, please see <a>From Liferay 6 to Liferay 7</a>.\n" +
-                "Instructions:\n" +
+                "       It is highly recommended that you back-up copies of your original plugin files before continuing.\n" +
+                "       Ext projects are not supported to upgrade in this tool currently.\n" +
+                "       For more details, please see <a>From Liferay 6 to Liferay 7</a>.\n\n" +
+                "How to use this tool:\n" +
                 "       In order to move through various upgrade steps,\n" +
                 "       use left, right, ✓, X and clicking on each gear to move between the upgrade steps.\n" +
-                "       What's more, you can mark with ✓ when one step is well done and mark with X when it is not completed or failed.";
+                "       When are you are finished with an upgrade step, mark it done by selecting the ✓ button,\n" +
+                "       or, if it is not complete or you want to come back to it later, mark it with an X.";
 
         String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
 

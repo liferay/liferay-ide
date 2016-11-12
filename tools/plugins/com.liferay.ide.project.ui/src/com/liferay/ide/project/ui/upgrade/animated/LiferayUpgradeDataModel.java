@@ -153,7 +153,7 @@ public interface LiferayUpgradeDataModel extends Element
     void setHasWeb( Boolean hasWeb );
 
     @Service( impl = BundleNameValidationService.class )
-    @DefaultValue( text = "Liferay 7.x")
+    @DefaultValue( text = "Liferay 7.x" )
     ValueProperty PROP_BUNDLE_NAME = new ValueProperty( TYPE, "BundleName" );
 
     Value<String> getBundleName();

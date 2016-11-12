@@ -43,14 +43,14 @@ public class SdkLocationValidationService extends ValidationService
 
         if( countPossibleWorkspaceSDKProjects > 1 )
         {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This workspace has more than one SDK. " ) );
+            return StatusBridge.create( ProjectCore.createErrorStatus( "This workspace has more than one SDK." ) );
         }
 
         final Path sdkLocation = op().getSdkLocation().content( true );
 
         if( sdkLocation == null || sdkLocation.isEmpty() )
         {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is empty " ) );
+            return StatusBridge.create( ProjectCore.createErrorStatus( "Liferay Plugins SDK location is empty." ) );
         }
 
         SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
@@ -80,7 +80,7 @@ public class SdkLocationValidationService extends ValidationService
         }
         else
         {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "This sdk location is not correct" ) );
+            return StatusBridge.create( ProjectCore.createErrorStatus( "Plugins SDK location is not valid." ) );
         }
 
         return retval;
