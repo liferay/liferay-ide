@@ -265,104 +265,117 @@ public class NewLiferayModuleProjectOpMethods
         return false;
     }
 
-    @SuppressWarnings("unchecked")
-	public static void addProperties(File dest, List<String> properties) throws Exception
-	{
-		try
-		{
-			if (properties == null || properties.size() < 1)
-			{
-				return;
-			}
+    @SuppressWarnings( "unchecked" )
+    public static void addProperties( File dest, List<String> properties ) throws Exception
+    {
+        try
+        {
+            if( properties == null || properties.size() < 1 )
+            {
+                return;
+            }
 
-			ASTParser parser = ASTParser.newParser(AST.JLS8);
-			String readContents = FileUtil.readContents( dest, true );
-			parser.setSource( readContents.toCharArray() );
-			parser.setKind( ASTParser.K_COMPILATION_UNIT );
-			parser.setResolveBindings( true );
-			final CompilationUnit cu = (CompilationUnit) parser.createAST(  new NullProgressMonitor() );
-			cu.recordModifications();
-			Document document = new Document( new String( readContents ) );
-			cu.accept( new ASTVisitor()
-			{
-				@Override
-				public boolean visit( NormalAnnotation node )
-				{
-					if (node.getTypeName().getFullyQualifiedName().equals( "Component" ))
-					{
-						ASTRewrite rewrite = ASTRewrite.create( cu.getAST() );
-						AST ast = cu.getAST();
-						List<ASTNode> values = node.values();
-						boolean hasProperty = false;
-						for( ASTNode astNode : values )
-						{
-							if( astNode instanceof MemberValuePair )
-							{
-								MemberValuePair pairNode = (MemberValuePair) astNode;
+            ASTParser parser = ASTParser.newParser( AST.JLS8 );
+            String readContents = FileUtil.readContents( dest, true );
+            parser.setSource( readContents.toCharArray() );
+            parser.setKind( ASTParser.K_COMPILATION_UNIT );
+            parser.setResolveBindings( true );
+            final CompilationUnit cu = (CompilationUnit) parser.createAST( new NullProgressMonitor() );
+            cu.recordModifications();
+            Document document = new Document( new String( readContents ) );
+            cu.accept( new ASTVisitor()
+            {
 
-								if (pairNode.getName().getFullyQualifiedName().equals( "property" ))
-								{
-									Expression express = pairNode.getValue();
+                @Override
+                public boolean visit( NormalAnnotation node )
+                {
+                    if( node.getTypeName().getFullyQualifiedName().equals( "Component" ) )
+                    {
+                        ASTRewrite rewrite = ASTRewrite.create( cu.getAST() );
+                        AST ast = cu.getAST();
+                        List<ASTNode> values = node.values();
+                        boolean hasProperty = false;
 
-									if( express instanceof ArrayInitializer )
-									{
-										ListRewrite lrw = rewrite.getListRewrite( express,
-												ArrayInitializer.EXPRESSIONS_PROPERTY );
-										ArrayInitializer initializer = (ArrayInitializer) express;
-										List<ASTNode> expressions = (List<ASTNode>) initializer.expressions();
-										ASTNode propertyNode = expressions.get( expressions.size() - 1 );
+                        for( ASTNode astNode : values )
+                        {
+                            if( astNode instanceof MemberValuePair )
+                            {
+                                MemberValuePair pairNode = (MemberValuePair) astNode;
 
-										for( String property : properties )
-										{
-											StringLiteral stringLiteral = ast.newStringLiteral();
-											stringLiteral.setLiteralValue( property );
-											lrw.insertAfter( stringLiteral, propertyNode, null );
-										}
-									}
-									hasProperty = true;
-								}
-							}
-						}
+                                if( pairNode.getName().getFullyQualifiedName().equals( "property" ) )
+                                {
+                                    Expression express = pairNode.getValue();
 
-						if (hasProperty == false)
-						{
-							ListRewrite clrw = rewrite.getListRewrite( node, NormalAnnotation.VALUES_PROPERTY );
-							ASTNode lastNode = values.get( values.size() - 1 );
+                                    if( express instanceof ArrayInitializer )
+                                    {
+                                        ListRewrite lrw =
+                                            rewrite.getListRewrite( express, ArrayInitializer.EXPRESSIONS_PROPERTY );
+                                        ArrayInitializer initializer = (ArrayInitializer) express;
+                                        List<ASTNode> expressions = (List<ASTNode>) initializer.expressions();
+                                        ASTNode propertyNode = null;
 
-							ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
-							MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
+                                        for( int i = properties.size() - 1; i >= 0; i-- )
+                                        {
+                                            StringLiteral stringLiteral = ast.newStringLiteral();
+                                            stringLiteral.setLiteralValue( properties.get( i ) );
 
-							propertyMemberValuePair.setName( ast.newSimpleName( "property" ) );
-							propertyMemberValuePair.setValue( newArrayInitializer );
+                                            if( expressions.size() > 0 )
+                                            {
+                                                propertyNode = expressions.get( expressions.size() - 1 );
+                                                lrw.insertAfter( stringLiteral, propertyNode, null );
+                                            }
+                                            else
+                                            {
+                                                lrw.insertFirst( stringLiteral, null );
+                                            }
+                                        }
+                                    }
+                                    hasProperty = true;
+                                }
+                            }
+                        }
 
-							clrw.insertBefore( propertyMemberValuePair, lastNode, null );
-							ListRewrite newLrw = rewrite.getListRewrite( newArrayInitializer,
-									ArrayInitializer.EXPRESSIONS_PROPERTY );
+                        if( hasProperty == false )
+                        {
+                            ListRewrite clrw = rewrite.getListRewrite( node, NormalAnnotation.VALUES_PROPERTY );
+                            ASTNode lastNode = values.get( values.size() - 1 );
 
-							for ( String property : properties )
-							{
-								StringLiteral stringLiteral = ast.newStringLiteral();
-								stringLiteral.setLiteralValue( property );
-								newLrw.insertAt( stringLiteral, 0, null );
-							}
-						}
-						try ( FileOutputStream fos = new FileOutputStream( dest ) )
-						{
-							TextEdit edits = rewrite.rewriteAST( document,null );
-							edits.apply( document );
-							fos.write( document.get().getBytes() );
-							fos.flush();
-						} catch ( Exception e )
-						{
-							ProjectCore.logError( e );
-						}
-					}
-					return super.visit( node );
-				}
-			});
-		} catch (Exception e)
-		{
-			ProjectCore.logError("error when adding properties to " + dest.getAbsolutePath(), e);
-		}
-	}
+                            ArrayInitializer newArrayInitializer = ast.newArrayInitializer();
+                            MemberValuePair propertyMemberValuePair = ast.newMemberValuePair();
+
+                            propertyMemberValuePair.setName( ast.newSimpleName( "property" ) );
+                            propertyMemberValuePair.setValue( newArrayInitializer );
+
+                            clrw.insertBefore( propertyMemberValuePair, lastNode, null );
+                            ListRewrite newLrw =
+                                rewrite.getListRewrite( newArrayInitializer, ArrayInitializer.EXPRESSIONS_PROPERTY );
+
+                            for( String property : properties )
+                            {
+                                StringLiteral stringLiteral = ast.newStringLiteral();
+                                stringLiteral.setLiteralValue( property );
+                                newLrw.insertAt( stringLiteral, 0, null );
+                            }
+                        }
+                        try(FileOutputStream fos = new FileOutputStream( dest ))
+                        {
+                            TextEdit edits = rewrite.rewriteAST( document, null );
+                            edits.apply( document );
+                            fos.write( document.get().getBytes() );
+                            fos.flush();
+                        }
+                        catch( Exception e )
+                        {
+                            ProjectCore.logError( e );
+                        }
+                    }
+                    return super.visit( node );
+                }
+            } );
+        }
+        catch( Exception e )
+        {
+            ProjectCore.logError( "error when adding properties to " + dest.getAbsolutePath(), e );
+        }
+    }
 }
