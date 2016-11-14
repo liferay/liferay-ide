@@ -187,6 +187,7 @@ public interface LiferayUpgradeDataModel extends Element
     void setConvertLiferayWorkspace(Boolean convertLiferayWorkspace);
 
     @Type( base = Boolean.class )
+    @DefaultValue(text = "false")
     ValueProperty PROP_OPTIMIZE = new ValueProperty( TYPE, "Optimize" );
     Value<Boolean> getOptimize();
 

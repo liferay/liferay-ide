@@ -183,12 +183,12 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
             addPage( Page.CUSTOMJSP_PAGE_ID );
         }
 
-        if( hasExt || hasTheme )
+        if( hasExt || hasTheme || hasWorkspace )
         {
             addPage( Page.EXTANDTHEME_PAGE_ID );
         }
 
-        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
+        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasWorkspace )
         {
             addPage( Page.BUILD_PAGE_ID );
             addPage( Page.SUMMARY_PAGE_ID );

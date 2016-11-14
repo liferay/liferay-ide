@@ -600,6 +600,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void createBundleElement()
     {
+        String optimizeName = "Optimize plugins by moving them into workspace wars folder.";
+        optimize = SWTUtil.createCheckButton( composite, optimizeName, null, false, 2 );
+        optimize.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                dataModel.setOptimize( optimize.getSelection() );
+            }
+        });
+
         bundleNameLabel = createLabel( composite, "Bundle Name:" );
         bundleNameField = createTextField( composite, SWT.NONE );
 
@@ -687,17 +698,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         createHorizontalSpacer = createHorizontalSpacer( this, 3 );
         createSeparator = createSeparator( this, 3 );
-
-        String optimizeName = "Optimize plugins by moving them into workspace wars folder.";
-        optimize = SWTUtil.createCheckButton( composite, optimizeName, null, false, 2 );
-        optimize.addSelectionListener( new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                dataModel.setOptimize( optimize.getSelection() );
-            }
-        });
 
         String backupFolderName = "Backup SDK into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
         backupSDK = SWTUtil.createCheckButton( composite, backupFolderName, null, false, 1 );
@@ -933,6 +933,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         if( bundleNameField != null && bundleUrlField != null )
         {
+            optimize.dispose();
             bundleNameField.dispose();
             bundleUrlField.dispose();
             bundleNameLabel.dispose();
@@ -943,7 +944,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private void disposeImportElement()
     {
         backupSDK.dispose();
-        optimize.dispose();
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
         importButton.dispose();
