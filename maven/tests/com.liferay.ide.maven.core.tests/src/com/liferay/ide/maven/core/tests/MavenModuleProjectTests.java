@@ -558,10 +558,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         String actual = CoreUtil.readStreamToString( componentClassFile.getContents() );
 
-        String expected =
-            CoreUtil.readStreamToString( this.getClass().getResourceAsStream( "files/TestPortlet.java.txt" ) );
-
-        assertEquals( expected, actual );
+        assertTrue( actual, actual.contains( "\"property-test-key=property-test-value\"" ) );
     }
 
     private void verifyProject(IProject project ) throws Exception
