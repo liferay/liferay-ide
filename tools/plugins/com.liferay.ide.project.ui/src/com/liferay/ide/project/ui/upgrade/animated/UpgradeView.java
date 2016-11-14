@@ -332,16 +332,16 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         customJspPage.setTitle( "Custom Jsp" );
         customJspPage.addPageValidationListener( gear );
 
-        Page extAndThemePage = new ExtAndThemePage( pagesSwitchControler, SWT.NONE, dataModel );
-        extAndThemePage.setIndex( 7 );
-        extAndThemePage.setTitle( "Ext and Theme" );
+//        Page extAndThemePage = new ExtAndThemePage( pagesSwitchControler, SWT.NONE, dataModel );
+//        extAndThemePage.setIndex( 7 );
+//        extAndThemePage.setTitle( "Ext and Theme" );
 
         Page buildPage = new BuildPage( pagesSwitchControler, SWT.NONE, dataModel );
-        buildPage.setIndex( 8 );
+        buildPage.setIndex( 7 );
         buildPage.setTitle( "Build" );
 
         Page summaryPage = new SummaryPage( pagesSwitchControler, SWT.NONE, dataModel );
-        summaryPage.setIndex( 9 );
+        summaryPage.setIndex( 8 );
         summaryPage.setTitle( "Summary" );
         summaryPage.setNextPage( false );
 
@@ -354,7 +354,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         staticPageList.add( buildServicePage );
         staticPageList.add( layoutTemplatePage );
         staticPageList.add( customJspPage );
-        staticPageList.add( extAndThemePage );
+//        staticPageList.add( extAndThemePage );
         staticPageList.add( buildPage );
         staticPageList.add( summaryPage );
 
