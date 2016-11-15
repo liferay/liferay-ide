@@ -232,40 +232,7 @@ public class AutoCorrectAction extends ProblemAction
                 }
             }
 
-            boolean mutiple = false;
-
-            int index = 0;
-            if( allAutoCorrectContexts.size() > 0 && autoCorrectContexts.size() > 0 )
-            {
-                for( String autoCorrectContext : autoCorrectContexts )
-                {
-                    int i = 0;
-
-                    for( String allContext : allAutoCorrectContexts )
-                    {
-                        if( allContext.equals( autoCorrectContext ) )
-                        {
-                            i++;
-                        }
-                    }
-
-                    if( i >= 2 )
-                    {
-                        mutiple = true;
-                        index = i;
-                        break;
-                    }
-                }
-            }
-
-            if( mutiple )
-            {
-                setText( "Correct same type problems(" + index + ")" );
-            }
-            else
-            {
-                setText( "Correct automatically" );
-            }
+            setText( "Correct automatically" );
         }
     }
 
