@@ -124,7 +124,10 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
             }
         }
 
-        currentPageList.add( targetPage );
+        if( targetPage != null )
+        {
+            currentPageList.add( targetPage );
+        }
     }
 
     public static void resumePages()
