@@ -15,8 +15,12 @@
 package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
 
+import java.io.File;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -27,9 +31,9 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
-
 /**
  * @author Simon Jiang
+ * @author Andy Wu
  */
 public class ModuleProjectNameValidationService extends ValidationService
 {
@@ -67,39 +71,47 @@ public class ModuleProjectNameValidationService extends ValidationService
         final BaseModuleOp op = op();
         final String currentProjectName = op.getProjectName().content();
 
-        if( currentProjectName != null )
+        if( !CoreUtil.empty( currentProjectName ) )
         {
             final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentProjectName, IResource.PROJECT );
 
-            if( ! nameStatus.isOK() )
+            if( !nameStatus.isOK() )
             {
-                retval = StatusBridge.create( nameStatus );
+                return StatusBridge.create( nameStatus );
             }
-            else if( isInvalidProjectName( op ) )
-            {
-                retval = Status.createErrorStatus( "A project with that name already exists." );
-            }
-            else if( ! isValidProjectName( currentProjectName ) )
-            {
-                retval = Status.createErrorStatus( "The project name is invalid for a gradle project" );
-            }
-            else
-            {
-                final Path currentProjectLocation = op.getLocation().content( true );
 
-                // double check to make sure this project wont overlap with existing dir
-                if( currentProjectName != null && currentProjectLocation != null )
+            if( isExistingProjectName( op ) )
+            {
+                return Status.createErrorStatus( "A project with that name(ignore case) already exists." );
+            }
+
+            if( !isValidProjectName( currentProjectName ) )
+            {
+                return Status.createErrorStatus( "The project name is invalid." );
+            }
+
+            final Path currentProjectLocation = op.getLocation().content( true );
+
+            // double check to make sure this project wont overlap with existing dir
+            if( currentProjectLocation != null )
+            {
+                final String currentPath = currentProjectLocation.toOSString();
+                final IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+
+                final IStatus projectStatus =
+                    op.getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
+
+                if( !projectStatus.isOK() )
                 {
-                    final String currentPath = currentProjectLocation.toOSString();
-                    final IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+                    return StatusBridge.create( projectStatus );
+                }
 
-                    final IStatus projectStatus =
-                        op.getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
+                File projectFodler = osPath.append( currentProjectName ).toFile();
 
-                    if( ! projectStatus.isOK() )
-                    {
-                        retval = StatusBridge.create( projectStatus );
-                    }
+                if( projectFodler.exists() && projectFodler.list().length > 0 )
+                {
+                    return StatusBridge.create(
+                        ProjectCore.createErrorStatus( "Target project folder is not empty." ) );
                 }
             }
         }
@@ -115,13 +127,18 @@ public class ModuleProjectNameValidationService extends ValidationService
         op().detach( listener, "*" );
     }
 
-    private boolean isInvalidProjectName( BaseModuleOp op )
+    private boolean isExistingProjectName( BaseModuleOp op )
     {
         final String projectName = op.getProjectName().content( true );
 
-        if( CoreUtil.getProject( projectName ).exists() )
+        IProject[] projects = CoreUtil.getAllProjects();
+
+        for( IProject project : projects )
         {
-            return true;
+            if( projectName.equalsIgnoreCase( project.getName() ) )
+            {
+                return true;
+            }
         }
 
         return false;

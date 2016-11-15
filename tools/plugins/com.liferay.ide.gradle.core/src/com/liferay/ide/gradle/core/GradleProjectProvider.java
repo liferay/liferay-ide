@@ -25,7 +25,6 @@ import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -222,13 +221,6 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 retval =
                     GradleCore.createErrorStatus( " Can't set WorkspaceProject root folder as project directory. " );
             }
-        }
-
-        File projectFodler = path.append( projectName ).toFile();
-
-        if( projectFodler.exists() )
-        {
-            retval = GradleCore.createErrorStatus( " Project folder is not empty. " );
         }
 
         return retval;
