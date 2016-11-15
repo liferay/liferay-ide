@@ -44,6 +44,7 @@ import org.eclipse.aether.resolution.VersionRangeResolutionException;
 import org.eclipse.aether.resolution.VersionRangeResult;
 import org.eclipse.aether.version.Version;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -421,6 +422,12 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
                         {
                             @Override
                             public IFile getDescriptorFile( String name )
+                            {
+                                return null;
+                            }
+
+                            @Override
+                            public IFolder[] getSourceFolders()
                             {
                                 return null;
                             }
