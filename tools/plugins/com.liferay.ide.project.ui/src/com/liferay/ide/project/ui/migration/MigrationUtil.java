@@ -37,6 +37,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.util.OpenStrategy;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
@@ -44,6 +45,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.ui.texteditor.MarkerUtilities;
 
 
 /**
@@ -278,25 +280,33 @@ public class MigrationUtil
             status, markerId );
     }
 
-    public static void openEditor( Problem Problem )
+    public static void openEditor( Problem problem )
     {
         try
         {
-            final IResource resource = getIResourceFromProblem( Problem );
+            final IResource resource = getIResourceFromProblem( problem );
 
             if( resource instanceof IFile )
             {
-                final IEditorPart editor =
-                    IDE.openEditor(
-                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(),
-                        (IFile) resource );
+                final IMarker marker = getMarker( problem );
 
-                if( editor instanceof ITextEditor )
+                if( marker != null )
                 {
-                    final ITextEditor textEditor = (ITextEditor) editor;
+                    IDE.openEditor(
+                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), marker,
+                        OpenStrategy.activateOnOpen() );
+                }
+                else
+                {
+                    final IEditorPart editor = IDE.openEditor(
+                        PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), (IFile) resource );
 
-                    textEditor.selectAndReveal( Problem.startOffset, Problem.endOffset -
-                        Problem.startOffset );
+                    if( editor instanceof ITextEditor )
+                    {
+                        final ITextEditor textEditor = (ITextEditor) editor;
+
+                        textEditor.selectAndReveal( problem.startOffset, problem.endOffset - problem.startOffset );
+                    }
                 }
             }
         }
@@ -400,6 +410,19 @@ public class MigrationUtil
         MigrationProblemsContainer container = getMigrationProblemsContainer();
 
         return removeProblemFromMigrationContainer( resource.getName(), container );
+    }
+
+    public static IMarker getMarker( Problem problem )
+    {
+        try
+        {
+            return getIResourceFromProblem( problem ).findMarker( problem.markerId );
+        }
+        catch( CoreException e )
+        {
+        }
+
+        return null;
     }
 
     public static MigrationProblemsContainer getMigrationProblemsContainer()
