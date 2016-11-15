@@ -106,7 +106,12 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
                 {
                     if( isThemeProject )
                     {
-                        newLocationBase = PathBridge.create( liferayWorkspaceProject.getLocation().append( "wars" ) );
+                        String[] warsNames =
+                            LiferayWorkspaceUtil.getLiferayWorkspaceProjectWarsDirs( liferayWorkspaceProject );
+
+                        // use the first configured wars fodle name
+                        newLocationBase =
+                            PathBridge.create( liferayWorkspaceProject.getLocation().append( warsNames[0] ) );
                     }
                     else
                     {

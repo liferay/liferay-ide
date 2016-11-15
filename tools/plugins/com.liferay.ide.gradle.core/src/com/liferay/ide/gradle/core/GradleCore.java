@@ -255,17 +255,54 @@ public class GradleCore extends Plugin
 
     private static boolean isWorkspaceWars( IProject project )
     {
-        File possibleWarFile = project.getLocation().toFile().getParentFile();
-
-        if( possibleWarFile != null && possibleWarFile.getName().equals( "wars" ) )
+        try
         {
-            File possiblaLiferayWorkspaceFile = possibleWarFile.getParentFile();
-
-            if( possiblaLiferayWorkspaceFile != null &&
-                LiferayWorkspaceUtil.isValidWorkspaceLocation( possibleWarFile.getParentFile().getAbsolutePath() ) )
+            if( LiferayWorkspaceUtil.hasLiferayWorkspace() && project.getFolder( "src" ).exists() )
             {
-                return true;
+                IProject wsProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+
+                File wsRootDir = wsProject.getLocation().toFile();
+
+                String[] warsNames = LiferayWorkspaceUtil.getLiferayWorkspaceProjectWarsDirs( wsProject );
+
+                File[] warsDirs = new File[warsNames.length];
+
+                for( int i = 0; i < warsNames.length; i++ )
+                {
+                    warsDirs[i] = new File( wsRootDir, warsNames[i] );
+                }
+
+                File projectDir = project.getLocation().toFile();
+
+                File parentDir = projectDir.getParentFile();
+
+                if( parentDir == null )
+                {
+                    return false;
+                }
+
+                while( true )
+                {
+                    for( File dir : warsDirs )
+                    {
+                        if( parentDir.equals( dir ) )
+                        {
+                            return true;
+                        }
+                    }
+
+                    parentDir = parentDir.getParentFile();
+
+                    if( parentDir == null )
+                    {
+                        return false;
+                    }
+                }
             }
+        }
+        catch( CoreException e )
+        {
+            GradleCore.logError( e );
         }
 
         return false;

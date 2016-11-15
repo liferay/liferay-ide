@@ -208,6 +208,26 @@ public class LiferayWorkspaceUtil
         return retval;
     }
 
+    public static String[] getLiferayWorkspaceProjectWarsDirs( final IProject project )
+    {
+        String[] retval = null;
+
+        if( project != null )
+        {
+            final IPath projectLocation = project.getLocation();
+
+            if( projectLocation != null )
+            {
+                String val = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
+                    "liferay.workspace.wars.dir", "wars" );
+
+                retval = val.split( "," );
+            }
+        }
+
+        return retval;
+    }
+
     public static String loadConfiguredHomeDir( String location )
     {
         return getLiferayWorkspaceGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
