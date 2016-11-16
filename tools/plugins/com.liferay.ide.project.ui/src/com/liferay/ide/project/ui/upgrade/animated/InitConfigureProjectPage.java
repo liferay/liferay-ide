@@ -608,7 +608,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         });
 
-        bundleNameLabel = createLabel( composite, "Bundle Name:" );
+        bundleNameLabel = createLabel( composite, "Server Name:" );
         bundleNameField = createTextField( composite, SWT.NONE );
 
         bundleNameField.addModifyListener( new ModifyListener()
@@ -772,7 +772,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                     IPath bundleLocation = bundleServer.getRuntime().getLocation();
 
-                    sdk.addOrUpdateServerProperties( bundleLocation );
+//                    sdk.addOrUpdateServerProperties( bundleLocation );
                 }
 
                 project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
@@ -954,7 +954,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         return false;
     }
 
-    private void getLiferayBudnle( IPath targetSDKLocation, IProgressMonitor monitor ) throws BladeCLIException
+    private void getLiferayBundle( IPath targetSDKLocation, IProgressMonitor monitor ) throws BladeCLIException
     {
         StringBuilder sb = new StringBuilder();
 
