@@ -95,17 +95,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         super();
         dataModel = createUpgradeModel();
 
-        dataModel.getSdkLocation().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getHasExt().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getHasHook().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getHasLayout().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getHasPortlet().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getHasServiceBuilder().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getHasTheme().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getHasWeb().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getBundleUrl().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getLiferay70ServerName().attach( new LiferayUpgradeStoreListener() );
-        dataModel.getLiferay62ServerLocation().attach( new LiferayUpgradeStoreListener() );
+        dataModel.attach( new LiferayUpgradeStoreListener(), "*" );
 
         UpgradeSettingsUtil.init( dataModel );
     }
