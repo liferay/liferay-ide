@@ -12,32 +12,30 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.gradle.core.workspace;
+
+package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 
-import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.platform.PathBridge;
+import org.eclipse.core.resources.IProject;
 
 /**
  * @author Andy Wu
  */
-public class WorkspaceUseDefaultLocationListener extends FilteredListener<PropertyContentEvent>
+public class ValidationUtil
 {
-    @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
+    public static boolean isExistingProjectName( String projectName )
     {
-        final NewLiferayWorkspaceOp op = op( event );
+        IProject[] projects = CoreUtil.getAllProjects();
 
-        if( op.getUseDefaultLocation().content( true ) )
+        for( IProject project : projects )
         {
-            op.setLocation( PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() ) );
+            if( projectName.equalsIgnoreCase( project.getName() ) )
+            {
+                return true;
+            }
         }
-    }
 
-    protected NewLiferayWorkspaceOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewLiferayWorkspaceOp.class );
+        return false;
     }
 }

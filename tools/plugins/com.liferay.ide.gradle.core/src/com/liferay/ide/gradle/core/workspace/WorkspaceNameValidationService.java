@@ -16,15 +16,18 @@ package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ValidationUtil;
+
+import java.io.File;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
@@ -35,27 +38,7 @@ public class WorkspaceNameValidationService extends ValidationService
 {
     private static final String PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
 
-    private FilteredListener<PropertyContentEvent> listener;
-
-    @Override
-    protected void initValidationService()
-    {
-        super.initValidationService();
-
-        listener = new FilteredListener<PropertyContentEvent>()
-        {
-            @Override
-            protected void handleTypedEvent( PropertyContentEvent event )
-            {
-                if( ! event.property().definition().equals( NewLiferayWorkspaceOp.PROP_WORKSPACE_NAME ) )
-                {
-                    refresh();
-                }
-            }
-        };
-
-        op().attach( listener, "*" );
-    }
+    private Listener listener;
 
     @Override
     protected Status compute()
@@ -73,9 +56,7 @@ public class WorkspaceNameValidationService extends ValidationService
         }
         catch( CoreException e )
         {
-            retval = StatusBridge.create( e.getStatus() );
-
-            return retval;
+            return StatusBridge.create( e.getStatus() );
         }
 
         final NewLiferayWorkspaceOp op = op();
@@ -83,39 +64,29 @@ public class WorkspaceNameValidationService extends ValidationService
 
         if( CoreUtil.isNullOrEmpty( currentWorkspaceName ) )
         {
-            retval = Status.createErrorStatus( "Liferay Workspace name could not be null" );
-
-            return retval;
+            return Status.createErrorStatus( "Liferay Workspace name could not be empty." );
         }
 
         final IStatus nameStatus = CoreUtil.getWorkspace().validateName( currentWorkspaceName, IResource.PROJECT );
 
         if( !nameStatus.isOK() )
         {
-            retval = StatusBridge.create( nameStatus );
-
-            return retval;
+            return StatusBridge.create( nameStatus );
         }
 
         if( !isValidProjectName( currentWorkspaceName ) )
         {
-            retval = Status.createErrorStatus( "The name is invalid for a project" );
-
-            return retval;
+            return Status.createErrorStatus( "The name is invalid for a project." );
         }
 
-        if( isExistingFolder( op ) )
+        if( ValidationUtil.isExistingProjectName( currentWorkspaceName ) )
         {
-            retval = Status.createErrorStatus(
-                "There is already a folder at the location \"" + op.getLocation().content().toString() + "\"" );
-            return retval;
+            return Status.createErrorStatus( "A project with that name(ignore case) already exists." );
         }
 
-        if( isInvalidProjectName( op ) )
+        if( isExistingFolder( op, currentWorkspaceName ) )
         {
-            retval = Status.createErrorStatus( "A project with that name already exists." );
-
-            return retval;
+            return Status.createErrorStatus( "Target project folder is not empty." );
         }
 
         return retval;
@@ -126,39 +97,43 @@ public class WorkspaceNameValidationService extends ValidationService
     {
         super.dispose();
 
-        op().detach( listener, "*" );
-    }
-
-    private boolean isInvalidProjectName( NewLiferayWorkspaceOp op )
-    {
-        final String workspaceName = op.getWorkspaceName().content();
-
-        if( CoreUtil.getProject( workspaceName ).exists() )
+        if( this.listener != null )
         {
-            return true;
+            op().getLocation().detach( this.listener );
+
+            this.listener = null;
         }
-
-        return false;
     }
 
-    private boolean isExistingFolder( NewLiferayWorkspaceOp op )
+    @Override
+    protected void initValidationService()
     {
-        final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
+        super.initValidationService();
 
-        if( useDefaultLocation )
+        this.listener = new FilteredListener<PropertyContentEvent>()
         {
-            Path newLocationBase = null;
 
-            newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
-
-            if( newLocationBase != null )
+            @Override
+            protected void handleTypedEvent( PropertyContentEvent event )
             {
-                NewLiferayWorkspaceOpMethods.updateLocation( op, newLocationBase );
+                refresh();
             }
+        };
 
-            if ( op.getLocation().content().toFile().exists() )
+        op().getLocation().attach( this.listener );
+    }
+
+    private boolean isExistingFolder( NewLiferayWorkspaceOp op, String projectName )
+    {
+        Path location = op.getLocation().content();
+
+        if( location != null )
+        {
+            File targetDir = location.append( projectName ).toFile();
+
+            if( targetDir.exists() && targetDir.list().length > 0 )
             {
-                return true ;
+                return true;
             }
         }
 
@@ -167,7 +142,6 @@ public class WorkspaceNameValidationService extends ValidationService
 
     private boolean isValidProjectName( String currentProjectName )
     {
-
         return currentProjectName.matches( PROJECT_NAME_REGEX );
     }
 
@@ -175,5 +149,4 @@ public class WorkspaceNameValidationService extends ValidationService
     {
         return context( NewLiferayWorkspaceOp.class );
     }
-
 }

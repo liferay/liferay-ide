@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        ivy {
+            url 'https://bndtools.ci.cloudbees.com/job/bnd.master/719/artifact/dist/bundles'
+            layout 'pattern', {
+                artifact '[module]/[artifact]-[revision].[ext]' /* OSGi repo pattern */
+            }
+        }
+		maven {
+			url "https://repository.liferay.com/nexus/content/groups/public/"
+		}
+    }
+    dependencies {
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:3.0.0'
+		classpath 'com.liferay:com.liferay.ant.bnd:2.0.0'
+    }
+}
+
+apply plugin: 'biz.aQute.bnd.builder'
+sourceCompatibility = 1.7
+version = '1.0'
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://repository.liferay.com/nexus/content/groups/public/"
+	}
+}
+
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test {
+    systemProperties 'property': 'value'
+}

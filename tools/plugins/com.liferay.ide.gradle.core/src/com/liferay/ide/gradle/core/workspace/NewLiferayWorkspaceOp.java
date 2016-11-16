@@ -41,10 +41,9 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
 
     // *** WorkspaceName ***
 
-    @Label( standard = "workspace name" )
-    @Listeners( WorkspaceNameListener.class )
-    @Service( impl = WorkspaceNameValidationService.class )
     @Required
+    @Label( standard = "workspace name" )
+    @Service( impl = WorkspaceNameValidationService.class )
     ValueProperty PROP_WORKSPACE_NAME = new ValueProperty( TYPE, "WorkspaceName" );
 
     Value<String> getWorkspaceName();
@@ -64,12 +63,14 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
 
     // *** ProjectLocation ***
 
+    @Required
     @Type( base = Path.class )
     @AbsolutePath
     @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "location" )
     @Service( impl = WorkspaceLocationValidationService.class )
+    @Service( impl = WorkspaceLocationInitialValueService.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();

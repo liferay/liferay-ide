@@ -18,9 +18,6 @@ package com.liferay.ide.gradle.core.workspace;
 import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.Listener;
-import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
@@ -30,9 +27,6 @@ import org.eclipse.sapphire.services.ValidationService;
  */
 public class WorkspaceLocationValidationService extends ValidationService
 {
-
-    private Listener listener;
-
     private boolean canCreate( File file )
     {
         while( !file.exists() )
@@ -71,40 +65,21 @@ public class WorkspaceLocationValidationService extends ValidationService
                 {
                     final String currentPath = currentProjectLocation.append( currentWorkspaceName ).toOSString();
 
-                    if( !currentProjectLocation.toFile().exists() )
-                    {
-                        retval = Status.createErrorStatus( "\"" + currentPath + "\" is not a valid path." ); //$NON-NLS-1$ //$NON-NLS-2$
-                    }
-                    else
-                    {
-                         IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
+                    IPath osPath = org.eclipse.core.runtime.Path.fromOSString( currentPath );
 
-                        if( !osPath.toFile().isAbsolute() )
-                        {
-                            retval = Status.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." ); //$NON-NLS-1$ //$NON-NLS-2$
-                        }
-                        else
-                        {
-                            if( !osPath.toFile().exists() )
-                            {
-                                // check non-existing external location
-                                if( !canCreate( osPath.toFile() ) )
-                                {
-                                    retval = Status.createErrorStatus( "Cannot create project content at \"" + //$NON-NLS-1$
-                                        currentPath + "\"" ); //$NON-NLS-1$
-                                }
-                            }
-                            else
-                            {
-                                retval = Status.createErrorStatus( "There is already a folder at the location \"" + //$NON-NLS-1$
-                                                currentPath + "\"" ); //$NON-NLS-1$
-                            }
-                        }
+                    if( !osPath.toFile().isAbsolute() )
+                    {
+                        return Status.createErrorStatus( "\"" + currentPath + "\" is not an absolute path." );
+                    }
+
+                    if( !canCreate( osPath.toFile() ) )
+                    {
+                        return Status.createErrorStatus( "Cannot create project content at \"" + currentPath + "\"." );
                     }
                 }
                 else
                 {
-                    retval = Status.createErrorStatus( "Location must be specified." ); //$NON-NLS-1$
+                    return Status.createErrorStatus( "Location must be specified." );
                 }
             }
         }
@@ -112,38 +87,8 @@ public class WorkspaceLocationValidationService extends ValidationService
         return retval;
     }
 
-    @Override
-    public void dispose()
-    {
-        super.dispose();
-
-        if( this.listener != null )
-        {
-            op().getWorkspaceName().detach( this.listener );
-
-            this.listener = null;
-        }
-    }
-
-    @Override
-    protected void initValidationService()
-    {
-        this.listener = new FilteredListener<PropertyContentEvent>()
-        {
-
-            @Override
-            protected void handleTypedEvent( final PropertyContentEvent event )
-            {
-                refresh();
-            }
-        };
-
-        op().getWorkspaceName().attach( this.listener );
-    }
-
     private NewLiferayWorkspaceOp op()
     {
         return context( NewLiferayWorkspaceOp.class );
     }
-
 }

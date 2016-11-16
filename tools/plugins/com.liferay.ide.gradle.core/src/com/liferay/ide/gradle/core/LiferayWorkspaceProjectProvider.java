@@ -65,16 +65,8 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         StringBuilder sb = new StringBuilder();
 
         sb.append( "-b " );
-
-        if( op.getUseDefaultLocation().content() )
-        {
-            sb.append( "\"" + location.toFile().getAbsolutePath() + "\" " );
-        }
-        else
-        {
-            sb.append( "\"" + location.append( wsName ).toFile().getAbsolutePath() + "\" " );
-        }
-
+        sb.append( "\"" + location.append( wsName ).toFile().getAbsolutePath() + "\"" );
+        sb.append( " " );
         sb.append( "init" );
 
         try

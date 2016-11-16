@@ -12,32 +12,21 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 
-import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.platform.PathBridge;
+import org.eclipse.sapphire.InitialValueService;
 
 /**
  * @author Andy Wu
  */
-public class WorkspaceUseDefaultLocationListener extends FilteredListener<PropertyContentEvent>
+public class WorkspaceLocationInitialValueService extends InitialValueService
 {
     @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
+    protected String compute()
     {
-        final NewLiferayWorkspaceOp op = op( event );
-
-        if( op.getUseDefaultLocation().content( true ) )
-        {
-            op.setLocation( PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() ) );
-        }
-    }
-
-    protected NewLiferayWorkspaceOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewLiferayWorkspaceOp.class );
+        return CoreUtil.getWorkspaceRoot().getLocation().toPortableString();
     }
 }

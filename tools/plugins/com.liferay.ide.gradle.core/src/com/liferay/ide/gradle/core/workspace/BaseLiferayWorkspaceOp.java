@@ -27,7 +27,7 @@ import org.eclipse.sapphire.modeling.annotations.Service;
 import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 
 /**
- * @author Gregory Amerso
+ * @author Gregory Amerson
  */
 public interface BaseLiferayWorkspaceOp extends ExecutableElement
 {

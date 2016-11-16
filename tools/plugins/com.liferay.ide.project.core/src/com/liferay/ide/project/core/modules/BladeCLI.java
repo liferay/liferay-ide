@@ -114,7 +114,12 @@ public class BladeCLI
         logger.setOutputPrintStream( new PrintStream( out ) );
         logger.setMessageOutputLevel(Project.MSG_INFO);
 
-        javaTask.executeJava();
+        int returnCode = javaTask.executeJava();
+
+        if( returnCode != 0 )
+        {
+            throw new BladeCLIException( "execute blade error, return code: " + returnCode );
+        }
 
         final List<String> lines = new ArrayList<>();
         final Scanner scanner = new Scanner( out.toString() );

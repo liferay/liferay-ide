@@ -16,16 +16,13 @@
 package com.liferay.ide.gradle.core.workspace;
 
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 
@@ -45,14 +42,7 @@ public class NewLiferayWorkspaceOpMethods
 
         try
         {
-            final Path projectLocation = op.getLocation().content();
-
-            Path workspaceLocation = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
-
-            if( op.getUseDefaultLocation().content() )
-            {
-                updateLocation( op, workspaceLocation );
-            }
+            final String wsName = op.getWorkspaceName().content();
 
             LiferayWorkspaceProjectProvider provider =
                 (LiferayWorkspaceProjectProvider) LiferayCore.getProvider( "liferay-workspace" );
@@ -66,7 +56,7 @@ public class NewLiferayWorkspaceOpMethods
                 return retval;
             }
 
-            String location = projectLocation.toOSString();
+            String location = op.getLocation().content().append( wsName ).toPortableString();
 
             boolean isInitBundle = op.getProvisionLiferayBundle().content();
             final String bundleUrl = op.getBundleUrl().content();
@@ -107,19 +97,4 @@ public class NewLiferayWorkspaceOpMethods
 
         return retval;
     }
-
-    public static void updateLocation( final NewLiferayWorkspaceOp op, final Path baseLocation )
-    {
-        final String projectName = op.getWorkspaceName().content();
-
-        if( baseLocation == null || projectName == null)
-        {
-            return;
-        }
-
-        final Path newLocation = baseLocation.append( projectName );
-
-        op.setLocation( newLocation );
-    }
-
 }

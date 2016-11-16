@@ -17,10 +17,10 @@ package com.liferay.ide.project.core.modules;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
+import com.liferay.ide.project.core.util.ValidationUtil;
 
 import java.io.File;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -80,7 +80,7 @@ public class ModuleProjectNameValidationService extends ValidationService
                 return StatusBridge.create( nameStatus );
             }
 
-            if( isExistingProjectName( op ) )
+            if( ValidationUtil.isExistingProjectName( currentProjectName ) )
             {
                 return Status.createErrorStatus( "A project with that name(ignore case) already exists." );
             }
@@ -125,23 +125,6 @@ public class ModuleProjectNameValidationService extends ValidationService
         super.dispose();
 
         op().detach( listener, "*" );
-    }
-
-    private boolean isExistingProjectName( BaseModuleOp op )
-    {
-        final String projectName = op.getProjectName().content( true );
-
-        IProject[] projects = CoreUtil.getAllProjects();
-
-        for( IProject project : projects )
-        {
-            if( projectName.equalsIgnoreCase( project.getName() ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private boolean isValidProjectName( String currentProjectName )
