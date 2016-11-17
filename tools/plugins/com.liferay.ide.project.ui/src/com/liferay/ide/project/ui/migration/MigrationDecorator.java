@@ -36,7 +36,6 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
     @Override
     public void decorate( Object element, IDecoration decoration )
     {
-
         final List<Problem> problems = new ArrayList<>();
 
         final List<Problem> resolvedProblems = new ArrayList<>();
@@ -64,6 +63,22 @@ public class MigrationDecorator extends BaseLabelProvider implements ILightweigh
                 resolvedProblems.addAll( fileProblems.getProblems( Problem.STATUS_RESOLVED ) );
 
                 ignoreProblems.addAll( fileProblems.getProblems( Problem.STATUS_IGNORE ) );
+            }
+        }
+        else if( element instanceof ProblemsContainer )
+        {
+            ProblemsContainer problemsContainer = (ProblemsContainer) element;
+
+            for( UpgradeProblems upgradeProblems : problemsContainer.getProblemsArray() )
+            {
+                for( FileProblems fileProblems : upgradeProblems.getProblems() )
+                {
+                    problems.addAll( fileProblems.getProblems() );
+
+                    resolvedProblems.addAll( fileProblems.getProblems( Problem.STATUS_RESOLVED ) );
+
+                    ignoreProblems.addAll( fileProblems.getProblems( Problem.STATUS_IGNORE ) );
+                }
             }
         }
 

@@ -61,7 +61,7 @@ public class WelcomePage extends Page
                 "The key functions are described below:\n" +
                 "       1. Convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace\n" +
                 "       2. Update Descriptor files from 6.2 to 7.0\n" +
-                "       2. Find Breaking Changes in the APIs used in your Liferay 6.2 projects that need to be migrated to Liferay 7\n" +
+                "       2. Find Breaking Changes in the API sages that need to be migrated to Liferay 7\n" +
                 "       4. Update Layout Template files from 6.2 to 7.0 format\n" +
                 "       5. Automatically Convert Custom JSP Hooks to OSGi modules\n\n" +
                 "Note:\n" +

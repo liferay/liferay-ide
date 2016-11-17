@@ -1535,6 +1535,9 @@
                <objectClass
                      name="com.liferay.ide.project.core.upgrade.UpgradeProblems">
                </objectClass>
+               <objectClass
+                     name="com.liferay.ide.project.ui.migration.MigrationProblemsContainer">
+               </objectClass>
            </or>
         </enablement>
       </decorator>

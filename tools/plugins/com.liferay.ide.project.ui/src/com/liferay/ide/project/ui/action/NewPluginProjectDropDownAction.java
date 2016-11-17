@@ -43,7 +43,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2
 {
-    protected final static String DEFAULT_WIZARD_ID= "com.liferay.ide.project.ui.newPluginProjectWizard";//$NON-NLS-1$
+    protected final static String DEFAULT_WIZARD_ID= "com.liferay.ide.project.ui.newModuleProjectWizard";//$NON-NLS-1$
     protected final static String PL_NEW = "newWizards"; //$NON-NLS-1$
     protected final static String TAG_CLASS = "class"; //$NON-NLS-1$
     protected final static String TAG_NAME = "name";//$NON-NLS-1$

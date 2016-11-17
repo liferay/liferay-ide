@@ -772,7 +772,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                     IPath bundleLocation = bundleServer.getRuntime().getLocation();
 
-//                    sdk.addOrUpdateServerProperties( bundleLocation );
+                    sdk.addOrUpdateServerProperties( bundleLocation );
                 }
 
                 project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
