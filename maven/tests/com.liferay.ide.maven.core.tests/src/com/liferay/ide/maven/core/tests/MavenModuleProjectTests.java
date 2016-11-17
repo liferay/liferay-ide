@@ -244,14 +244,13 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectProvider( "maven-module" );
         op.setProjectTemplateName( "service" );
         op.setServiceName( "com.liferay.portal.kernel.events.LifecycleAction" );
-        op.setComponentName( "MyService" );
 
         IProject project = create( op );
 
-        IFile serviceFile = project.getFile( "src/main/java/service/test/MyService.java" );
+        IFile serviceFile = project.getFile( "src/main/java/com/example/NewComponent.java" );
 
         String contents =
-                        "package service.test;\n" +
+                        "package com.example;\n" +
                         "import com.liferay.portal.kernel.events.ActionException;\n" +
                         "import com.liferay.portal.kernel.events.LifecycleAction;\n" +
                         "import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
@@ -260,7 +259,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
                             "immediate = true, property = {\"key=login.events.pre\"},\n" +
                             "service = LifecycleAction.class\n" +
                         ")\n" +
-                        "public class MyService implements LifecycleAction {\n" +
+                        "public class NewComponent implements LifecycleAction {\n" +
                             "@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n" +
                         "}" ;
         serviceFile.setContents( new ByteArrayInputStream( contents.getBytes() ), IResource.FORCE, monitor );
@@ -461,12 +460,12 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         op.setProjectName( "foo" );
         op.setProjectProvider( "maven-module" );
-
+        op.setComponentName( "Foo" );
         IProject project = create( op );
 
         verifyProject(project);
 
-        assertTrue(project.getFile( "src/main/java/foo/portlet/FooPortlet.java" ).exists());
+        assertTrue(project.getFile( "src/main/java/com/example/portlet/FooPortlet.java" ).exists());
     }
 
     @Test
@@ -476,7 +475,8 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         op.setProjectName( "foo-bar" );
         op.setProjectProvider( "maven-module" );
-
+        op.setComponentName( "FooBar" );
+        op.setPackageName( "foo.bar" );
         IProject project = create( op );
 
         verifyProject(project);

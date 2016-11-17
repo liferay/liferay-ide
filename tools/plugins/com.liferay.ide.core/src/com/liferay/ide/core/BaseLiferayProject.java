@@ -99,13 +99,24 @@ public abstract class BaseLiferayProject implements ILiferayProject
     public IFolder[] getSourceFolders()
     {
         IFolder[] retval = null;
-        final IJavaProject javaproject = JavaCore.create( getProject() );
 
         try
         {
-            if ( !javaproject.isOpen() )
+            final IProject project = getProject();
+
+            if( project != null )
             {
-                javaproject.open( new NullProgressMonitor() );
+                final IJavaProject javaproject = JavaCore.create( project );
+
+                if( javaproject != null  )
+                {
+                    if( !javaproject.isOpen() )
+                    {
+                        javaproject.open( new NullProgressMonitor() );
+                    }
+
+                    retval = CoreUtil.getSourceFolders( javaproject ).toArray( new IFolder[0] );
+                }
             }
         }
         catch( JavaModelException e )
@@ -113,12 +124,6 @@ public abstract class BaseLiferayProject implements ILiferayProject
             LiferayCore.logWarning( e );
         }
 
-        if( javaproject != null && javaproject.isOpen() )
-        {
-            retval = CoreUtil.getSourceFolders( javaproject ).toArray( new IFolder[0] );
-        }
-
         return retval;
     }
-
 }
