@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,6 +31,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -114,6 +117,11 @@ public class NewLiferayModuleProjectOpMethods
                     CoreUtil.getProject( op.getProjectName().content() ).refreshLocal( IResource.DEPTH_INFINITE, monitor );
                 }
             }
+
+            if( retval.ok() )
+            {
+                updateBuildPrefs( op );
+            }
         }
         catch( Exception e )
         {
@@ -126,6 +134,23 @@ public class NewLiferayModuleProjectOpMethods
         return retval;
     }
 
+    private static void updateBuildPrefs( final NewLiferayModuleProjectOp op )
+    {
+        try
+        {
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+            prefs.put( ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+
+            prefs.flush();
+        }
+        catch( Exception e )
+        {
+            final String msg = "Error updating default project build type."; //$NON-NLS-1$
+            ProjectCore.logError( msg, e );
+        }
+    }
+    
     private static void getClassFile( File packageRoot, List<IPath> classFiles )
     {
         File[] children = packageRoot.listFiles();
