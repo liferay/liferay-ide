@@ -880,6 +880,33 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
+    private void deleteSDKLegacyProjects( IPath sdkLocation, boolean isOptimized )
+    {
+        String[] needDeletedPaths = new String[] { "shared/portal-http-service", "webs/resources-importer-web" };
+
+        for( String path : needDeletedPaths )
+        {
+            File file = sdkLocation.append( path ).toFile();
+
+            if( file.exists() )
+            {
+                FileUtil.deleteDir( file, true );
+            }
+        }
+
+        if( isOptimized )
+        {
+            File wsDir = sdkLocation.toFile().getParentFile();
+
+            File resourceImporterWebDir = new File( wsDir, "wars/resources-importer-web" );
+
+            if( resourceImporterWebDir.exists() )
+            {
+                FileUtil.deleteDir( resourceImporterWebDir, true );
+            }
+        }
+    }
+
     private void deleteServiceBuilderJarFile( IProject project, IProgressMonitor monitor )
     {
         try
@@ -1037,11 +1064,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         if( layout.equals( "Upgrade to Liferay Workspace" ) )
                         {
-                            createLiferayWorkspace( location, dataModel.getOptimize().content(), monitor );
+                            boolean isOptimized = dataModel.getOptimize().content();
+
+                            createLiferayWorkspace( location, isOptimized, monitor );
 
                             removeIvyPrivateSetting( location.append( "plugins-sdk" ) );
 
                             newPath = renameProjectFolder( location, monitor );
+
+                            IPath sdkLocation = new Path( newPath ).append( "plugins-sdk" );
+
+                            deleteSDKLegacyProjects( sdkLocation, isOptimized );
 
                             ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
 
@@ -1049,7 +1082,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                             createInitBundle( monitor );
 
-                            importSDKProject( new Path( newPath ).append( "plugins-sdk" ), monitor );
+                            importSDKProject( sdkLocation, monitor );
 
                             dataModel.setConvertLiferayWorkspace( true );
 
@@ -1060,6 +1093,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                             copyNewSDK( location, monitor );
 
                             removeIvyPrivateSetting( location );
+
+                            deleteSDKLegacyProjects( location, false );
 
                             String serverName = dataModel.getLiferay70ServerName().content();
 
@@ -1101,17 +1136,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         Collection<File> eclipseProjectFiles = new ArrayList<File>();
 
         Collection<File> liferayProjectDirs = new ArrayList<File>();
-
-        String[] needDeletedPaths = new String[] { "shared/portal-http-service", "webs/resources-importer-web" };
-        for( String path : needDeletedPaths )
-        {
-            File file = targetSDKLocation.append( path ).toFile();
-
-            if( file.exists() )
-            {
-                FileUtil.deleteDir( file, true );
-            }
-        }
 
         if( ProjectUtil.collectSDKProjectsFromDirectory(
             eclipseProjectFiles, liferayProjectDirs, targetSDKLocation.toFile(), null, true, monitor ) )

@@ -253,7 +253,7 @@ public class GradleCore extends Plugin
         }
     }
 
-    private static boolean isWorkspaceWars( IProject project )
+    public static boolean isWorkspaceWars( IProject project )
     {
         try
         {
@@ -330,25 +330,39 @@ public class GradleCore extends Plugin
                         @Override
                         public boolean visit( IResourceDelta delta ) throws CoreException
                         {
-                            IResource resource = delta.getResource();
-
-                            if( delta.getKind() == IResourceDelta.ADDED &&
-                                resource.getName().equals( IProjectDescription.DESCRIPTION_FILE_NAME ) )
+                            try
                             {
-                                IProjectDescription projectDescription =
-                                    ResourcesPlugin.getWorkspace().loadProjectDescription( resource.getLocation() );
+                                IResource resource = delta.getResource();
 
-                                String projectName = projectDescription.getName();
+                                if( delta.getKind() == IResourceDelta.ADDED &&
+                                    resource.getName().equals( IProjectDescription.DESCRIPTION_FILE_NAME ) )
+                                {
+                                    IProjectDescription projectDescription =
+                                        ResourcesPlugin.getWorkspace().loadProjectDescription( resource.getLocation() );
 
-                                configureIfLiferayProject( CoreUtil.getProject( projectName ), GradleCore.this );
+                                    String projectName = projectDescription.getName();
+
+                                    IProject project = CoreUtil.getProject( projectName );
+
+                                    if( project != null && project.isAccessible() )
+                                    {
+                                        configureIfLiferayProject( CoreUtil.getProject( projectName ),
+                                            GradleCore.this );
+                                    }
+                                }
+                            }
+                            catch( Exception e )
+                            {
+                                GradleCore.logError( e );
                             }
 
                             return true;
                         }
-                    });
+                    } );
                 }
                 catch( CoreException e )
                 {
+                    GradleCore.logError( e );
                 }
             }
         }, IResourceChangeEvent.POST_CHANGE );
@@ -389,34 +403,41 @@ public class GradleCore extends Plugin
                             @Override
                             public boolean visit( IResourceDelta delta ) throws CoreException
                             {
-                                // for only delete bundles dir
-                                if( delta.getKind() == IResourceDelta.REMOVED )
+                                try
                                 {
-                                    IResource deletedRes = delta.getResource();
-
-                                    IProject project = deletedRes.getProject();
-
-                                    if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                                    // for only delete bundles dir
+                                    if( delta.getKind() == IResourceDelta.REMOVED )
                                     {
-                                        IPath bundlesPath = project.getFullPath().append(
-                                            LiferayWorkspaceUtil.loadConfiguredHomeDir(
-                                                project.getLocation().toOSString() ) );
+                                        IResource deletedRes = delta.getResource();
 
-                                        if( delta.getFullPath().equals( bundlesPath ) )
+                                        IProject project = deletedRes.getProject();
+
+                                        if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
                                         {
-                                            try
-                                            {
-                                                File portalBundle =
-                                                    deletedRes.getLocation().toFile().getCanonicalFile();
+                                            IPath bundlesPath = project.getFullPath().append(
+                                                LiferayWorkspaceUtil.loadConfiguredHomeDir(
+                                                    project.getLocation().toOSString() ) );
 
-                                                ServerUtil.deleteRuntimeAndServer( PortalRuntime.ID , portalBundle );
-                                            }
-                                            catch( Exception e )
+                                            if( delta.getFullPath().equals( bundlesPath ) )
                                             {
-                                                GradleCore.logError( "delete related runtime and server error", e );
+                                                try
+                                                {
+                                                    File portalBundle =
+                                                        deletedRes.getLocation().toFile().getCanonicalFile();
+
+                                                    ServerUtil.deleteRuntimeAndServer( PortalRuntime.ID, portalBundle );
+                                                }
+                                                catch( Exception e )
+                                                {
+                                                    GradleCore.logError( "delete related runtime and server error", e );
+                                                }
                                             }
                                         }
                                     }
+                                }
+                                catch( Exception e )
+                                {
+                                    GradleCore.logError( e );
                                 }
 
                                 return true;
