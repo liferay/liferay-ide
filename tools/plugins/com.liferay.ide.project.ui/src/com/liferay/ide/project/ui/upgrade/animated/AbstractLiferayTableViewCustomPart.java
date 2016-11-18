@@ -526,10 +526,25 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                 @Override
                 public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                 {
-                    int count = tableViewElements.length;
+                    int count = tableViewElements != null?tableViewElements.length:0;
 
                     if( count <= 0 )
                     {
+                        UIUtil.async( new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                String message = "ok";
+                                message = "Please try to find needed upgrade files..";
+                                PageValidateEvent pe = new PageValidateEvent();
+                                pe.setMessage( message );
+                                pe.setType( PageValidateEvent.WARNING );
+
+                                triggerValidationEvent( pe );
+                            }
+                        } );
+
                         return StatusBridge.create( Status.createOkStatus() );
                     }
 
