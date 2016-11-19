@@ -18,7 +18,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -150,7 +149,7 @@ public class NewLiferayModuleProjectOpMethods
             ProjectCore.logError( msg, e );
         }
     }
-    
+
     private static void getClassFile( File packageRoot, List<IPath> classFiles )
     {
         File[] children = packageRoot.listFiles();
