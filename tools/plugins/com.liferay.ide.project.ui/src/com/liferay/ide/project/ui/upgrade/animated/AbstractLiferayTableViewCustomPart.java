@@ -23,7 +23,6 @@ import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompre;
 import com.liferay.ide.project.ui.wizard.ElementLabelProvider;
-import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
@@ -518,108 +517,100 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
     private void handleUpgradeEvent()
     {
-        try
+        final WorkspaceJob workspaceJob = new WorkspaceJob( "Finding files that need upgrades..." )
         {
-            final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......")
+            @Override
+            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
             {
+                int count = tableViewElements != null ? tableViewElements.length : 0;
 
-                @Override
-                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+                if( count == 0 )
                 {
-                    int count = tableViewElements != null?tableViewElements.length:0;
-
-                    if( count <= 0 )
+                    UIUtil.async( new Runnable()
                     {
-                        UIUtil.async( new Runnable()
+                        @Override
+                        public void run()
                         {
-                            @Override
-                            public void run()
-                            {
-                                String message = "ok";
-                                message = "Please try to find needed upgrade files..";
-                                PageValidateEvent pe = new PageValidateEvent();
-                                pe.setMessage( message );
-                                pe.setType( PageValidateEvent.WARNING );
+                            String message = "No files needing upgrade where found.";
+                            PageValidateEvent pe = new PageValidateEvent();
+                            pe.setMessage( message );
+                            pe.setType( PageValidateEvent.WARNING );
 
-                                triggerValidationEvent( pe );
-                            }
-                        } );
-
-                        return StatusBridge.create( Status.createOkStatus() );
-                    }
-
-                    int unit = 100 / count;
-
-                    monitor.beginTask( "Start to upgrade files.....", 100 );
-
-                    for( int i = 0; i < count; i++ )
-                    {
-                        monitor.worked( i + 1 * unit );
-
-                        if( i == count - 1 )
-                        {
-                            monitor.worked( 100 );
+                            triggerValidationEvent( pe );
                         }
-
-                        LiferayUpgradeElement tableViewElement = tableViewElements[i];
-
-                        final String srcFileLocation = tableViewElement.location;
-                        final String projectName = tableViewElement.name;
-                        final String context = tableViewElement.context;
-
-                        monitor.setTaskName( "Upgrading files for " + projectName );
-
-                        if ( context.contains( "Finished" ) )
-                        {
-                            continue;
-                        }
-
-                        try
-                        {
-                            IProject project = ProjectUtil.getProject( projectName );
-
-                            doUpgrade( new File( srcFileLocation ), project );
-
-                            if( project != null )
-                            {
-                                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-                            }
-
-                            final int loopNum = i;
-
-                            UIUtil.async( new Runnable()
-                            {
-
-                                @Override
-                                public void run()
-                                {
-                                    tableViewElement.context = tableViewElement.context + "( Finished )";
-
-                                    tableViewElements[loopNum] = tableViewElement;
-
-                                    tableViewer.setInput( tableViewElements );
-
-                                    tableViewer.refresh();
-                                }
-                            } );
-                        }
-                        catch( Exception e )
-                        {
-                            ProjectCore.logError( "Error upgrade files...... ", e );
-                        }
-                    }
+                    } );
 
                     return StatusBridge.create( Status.createOkStatus() );
                 }
-            };
 
-            workspaceJob.setUser( true );
-            workspaceJob.schedule();
-        }
-        catch( Exception e )
-        {
-            ProjectUI.logError( e );
-        }
+                int unit = 100 / count;
+
+                monitor.beginTask( "Start to upgrade files.....", 100 );
+
+                for( int i = 0; i < count; i++ )
+                {
+                    monitor.worked( i + 1 * unit );
+
+                    if( i == count - 1 )
+                    {
+                        monitor.worked( 100 );
+                    }
+
+                    LiferayUpgradeElement tableViewElement = tableViewElements[i];
+
+                    final String srcFileLocation = tableViewElement.location;
+                    final String projectName = tableViewElement.name;
+                    final String context = tableViewElement.context;
+
+                    monitor.setTaskName( "Upgrading files for " + projectName );
+
+                    if ( context.contains( "Finished" ) )
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        IProject project = ProjectUtil.getProject( projectName );
+
+                        doUpgrade( new File( srcFileLocation ), project );
+
+                        if( project != null )
+                        {
+                            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                        }
+
+                        final int loopNum = i;
+
+                        UIUtil.async( new Runnable()
+                        {
+
+                            @Override
+                            public void run()
+                            {
+                                tableViewElement.context = tableViewElement.context + "( Finished )";
+
+                                tableViewElements[loopNum] = tableViewElement;
+
+                                tableViewer.setInput( tableViewElements );
+
+                                tableViewer.refresh();
+                            }
+                        } );
+                    }
+                    catch( Exception e )
+                    {
+                        ProjectCore.logError( "Error upgrade files...... ", e );
+                    }
+                }
+
+                return StatusBridge.create( Status.createOkStatus() );
+            }
+
+        };
+
+        workspaceJob.setUser( true );
+        workspaceJob.schedule();
     }
 
 }
