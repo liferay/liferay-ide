@@ -18,6 +18,7 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.IOUtil;
@@ -1017,8 +1018,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         IPath location = PathBridge.create( dataModel.getSdkLocation().content() );
 
-        deleteEclipseConfigFiles( location.toFile() );
-
         try
         {
             PlatformUI.getWorkbench().getProgressService().run( true, true, new IRunnableWithProgress()
@@ -1033,6 +1032,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         backupSDK( monitor );
 
                         clearWorkspaceSDKAndProjects( location, monitor );
+
+                        deleteEclipseConfigFiles( location.toFile() );
 
                         if( layout.equals( "Upgrade to Liferay Workspace" ) )
                         {
@@ -1055,6 +1056,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         }
                         else
                         {
+                            deleteEclipseConfigFiles( location.toFile() );
                             copyNewSDK( location, monitor );
 
                             removeIvyPrivateSetting( location );
