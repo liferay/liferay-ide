@@ -449,7 +449,7 @@ public class CoreUtil
     {
         final ILiferayProject liferayProject = LiferayCore.create( project );
 
-       return liferayProject instanceof IBundleProject && !( liferayProject instanceof IWebProject );
+       return liferayProject instanceof IBundleProject;
     }
 
     public static boolean isEqual( Object object1, Object object2 )
