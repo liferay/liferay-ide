@@ -115,6 +115,7 @@ public class UpgradeSettingsUtil
         dataModel.setHasExt( Boolean.parseBoolean( getProperty( "HasExt", "false" ) ) );
         dataModel.setHasWeb( Boolean.parseBoolean( getProperty( "HasWeb", "false" ) ) );
         dataModel.setConvertLiferayWorkspace( Boolean.parseBoolean( getProperty( "ConvertLiferayWorkspace", "false" ) ) );
+        dataModel.setImportFinished( Boolean.parseBoolean( getProperty( "ImportFinished", "false" ) ) );
     }
 
     public static void storeProperty( Object key, Object value )

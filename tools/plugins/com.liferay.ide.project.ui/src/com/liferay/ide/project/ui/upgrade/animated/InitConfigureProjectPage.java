@@ -216,7 +216,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Text bundleNameField;
     private Text bundleUrlField;
     private Button backupSDK;
-    private Button optimize;
     private boolean validationResult;
     private Button importButton;
 
@@ -598,17 +597,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void createBundleElement()
     {
-        String optimizeName = "Optimize plugins by moving them into workspace wars folder.";
-        optimize = SWTUtil.createCheckButton( composite, optimizeName, null, false, 2 );
-        optimize.addSelectionListener( new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                dataModel.setOptimize( optimize.getSelection() );
-            }
-        });
-
         bundleNameLabel = createLabel( composite, "Server Name:" );
         bundleNameField = createTextField( composite, SWT.NONE );
 
@@ -793,7 +781,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
-    private void createLiferayWorkspace( IPath targetSDKLocation, boolean optimize, IProgressMonitor monitor ) throws CoreException
+    private void createLiferayWorkspace( IPath targetSDKLocation, IProgressMonitor monitor ) throws CoreException
     {
         SubMonitor progress = SubMonitor.convert( monitor, 100 );
 
@@ -806,11 +794,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             sb.append( "-b " );
             sb.append( "\"" + targetSDKLocation.toFile().getAbsolutePath() + "\" " );
             sb.append( "init -u" );
-
-            if( optimize )
-            {
-                sb.append( " -o" );
-            }
 
             progress.worked( 30 );
             BladeCLI.execute( sb.toString() );
@@ -880,7 +863,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
-    private void deleteSDKLegacyProjects( IPath sdkLocation, boolean isOptimized )
+    private void deleteSDKLegacyProjects( IPath sdkLocation )
     {
         String[] needDeletedPaths = new String[] { "shared/portal-http-service", "webs/resources-importer-web" };
 
@@ -891,18 +874,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             if( file.exists() )
             {
                 FileUtil.deleteDir( file, true );
-            }
-        }
-
-        if( isOptimized )
-        {
-            File wsDir = sdkLocation.toFile().getParentFile();
-
-            File resourceImporterWebDir = new File( wsDir, "wars/resources-importer-web" );
-
-            if( resourceImporterWebDir.exists() )
-            {
-                FileUtil.deleteDir( resourceImporterWebDir, true );
             }
         }
     }
@@ -933,7 +904,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     {
         if( bundleNameField != null && bundleUrlField != null )
         {
-            optimize.dispose();
             bundleNameField.dispose();
             bundleUrlField.dispose();
             bundleNameLabel.dispose();
@@ -1064,9 +1034,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         if( layout.equals( "Upgrade to Liferay Workspace" ) )
                         {
-                            boolean isOptimized = dataModel.getOptimize().content();
-
-                            createLiferayWorkspace( location, isOptimized, monitor );
+                            createLiferayWorkspace( location, monitor );
 
                             removeIvyPrivateSetting( location.append( "plugins-sdk" ) );
 
@@ -1074,7 +1042,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                             IPath sdkLocation = new Path( newPath ).append( "plugins-sdk" );
 
-                            deleteSDKLegacyProjects( sdkLocation, isOptimized );
+                            deleteSDKLegacyProjects( sdkLocation );
 
                             ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
 
@@ -1094,7 +1062,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                             removeIvyPrivateSetting( location );
 
-                            deleteSDKLegacyProjects( location, false );
+                            deleteSDKLegacyProjects( location );
 
                             String serverName = dataModel.getLiferay70ServerName().content();
 
@@ -1544,7 +1512,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 if( dataModel.getImportFinished().content() )
                 {
                     message =
-                        "Import has finished. If you want to reimport, please go to the first page and click \"Restart...\"";
+                        "Import has finished. If you want to reimport, please click Restart Upgrade icon in the toolbar.";
 
                     pe.setType( PageValidateEvent.WARNING );
 
