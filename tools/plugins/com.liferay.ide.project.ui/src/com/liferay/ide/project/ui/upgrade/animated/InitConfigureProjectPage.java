@@ -745,7 +745,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 if( bundleUrl != null )
                 {
-                    projectBuilder.creatInitBundle( project, "initBundle", bundleUrl, monitor );
+                    projectBuilder.execInitBundle( project, "initBundle", bundleUrl, monitor );
                 }
 
                 progress.worked( 60 );

@@ -53,6 +53,7 @@ public class ProjectUI extends AbstractUIPlugin
     public static final String MIGRATION_TASKS_IMAGE_ID = "migration.tasks.image"; //$NON-NLS-1$
     public static final String UNCHECKED_IMAGE_ID = "unchecked.image"; //$NON-NLS-1$
     public static final String EXPANDALL_IMAGE_ID = "expandall.image"; //$NON-NLS-1$
+    public static final String MODULE_DEPENDENCY_IAMGE_ID = "module.dependency.image";
 
     public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location"; //$NON-NLS-1$
 
@@ -178,6 +179,11 @@ public class ProjectUI extends AbstractUIPlugin
         registry.put(
             PROPERTIES_IMAGE_ID,
             ImageDescriptor.createFromURL( FileLocator.find( bundle, new Path( "icons/e16/properties.png" ), null ) ) );
+
+        registry.put(
+            MODULE_DEPENDENCY_IAMGE_ID,
+            ImageDescriptor.createFromURL( FileLocator.find( bundle, new Path( "icons/e16/new_module_dependency.png" ), null ) ) );
+        
     }
 
     /*

@@ -194,7 +194,7 @@ public abstract class AbstractLiferayComponentTemplate implements IComponentTemp
 
         return pack;
     }
-    
+
     protected void createResorcesFolder( IProject project ) throws CoreException
     {
         IFolder resourceFolder = liferayProject.getSourceFolder( "resources" );
@@ -244,7 +244,7 @@ public abstract class AbstractLiferayComponentTemplate implements IComponentTemp
             throw new CoreException( ProjectCore.createErrorStatus( e ) );
         }
     }
-    
+
     public void createSampleFile( IFile newFile, final String srcFileName, final String oldReplaceConent, final String  newReplaceContent) throws CoreException
     {
         try
@@ -276,7 +276,7 @@ public abstract class AbstractLiferayComponentTemplate implements IComponentTemp
         this.modelClass = op.getModelClass().content( true );
 
         this.componentNameWithoutTemplateName = componentClassName.replace( templateName, "" );
-        
+
         if( modelClass != null )
         {
             int modeClassPos = modelClass.lastIndexOf( "." );
@@ -296,7 +296,7 @@ public abstract class AbstractLiferayComponentTemplate implements IComponentTemp
         }
 
     }
-    
+
     public void doExecute( NewLiferayComponentOp op, IProgressMonitor monitor ) throws CoreException
     {
         try
@@ -493,7 +493,7 @@ public abstract class AbstractLiferayComponentTemplate implements IComponentTemp
         root.put( "simplemodelclass", simpleModelClass );
         root.put( "componentNameWithoutTemplateName", componentNameWithoutTemplateName );
         root.put( "componentfolder", componentClassName.toLowerCase() );
-        
+
         return root;
     }
 

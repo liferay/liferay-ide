@@ -1,0 +1,4 @@
+Bundle-Activator: gradledependencytestproject.GradledependencytestprojectActivator
+Bundle-Name: GradleDependencyTestProject
+Bundle-SymbolicName: gradledependencytestproject
+Bundle-Version: 1.0.0

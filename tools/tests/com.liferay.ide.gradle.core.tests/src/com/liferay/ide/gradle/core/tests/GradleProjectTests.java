@@ -28,12 +28,16 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.gradle.core.parser.GradleDependency;
+import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -45,11 +49,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -297,6 +297,34 @@ public class GradleProjectTests
         assertFalse( customModel.hasPlugin( "not.a.plugin" ) );
 
         assertTrue( customModel.hasPlugin( "org.dm.gradle.plugins.bundle.BundlePlugin" ) );
+    }
+
+    @Test
+    public void testAddGradleDependency() throws Exception
+    {
+        LiferayGradleProject gradleProject = fullImportGradleProject( "projects/GradleDependencyTestProject" );
+        String[][] gradleDependencies =
+            new String[][] { { "com.liferay.portal", "com.liferay.portal.kernel", "2.6.0" } };
+
+        GradleDependency gd =
+            new GradleDependency( gradleDependencies[0][0], gradleDependencies[0][1], gradleDependencies[0][2] );
+
+        assertNotNull( gradleProject );
+
+        IProject project = gradleProject.getProject();
+        IFile gradileFile = project.getFile( "build.gradle" );
+        GradleDependencyUpdater updater = new GradleDependencyUpdater( gradileFile.getLocation().toFile() );
+        List<GradleDependency> existDependencies = updater.getAllDependencies();
+
+        assertFalse( existDependencies.contains( gd ) );
+
+        IProjectBuilder gradleProjectBuilder = gradleProject.adapt( IProjectBuilder.class );
+        gradleProjectBuilder.updateProjectDependency( project, Arrays.asList( gradleDependencies ) );
+
+        GradleDependencyUpdater dependencyUpdater = new GradleDependencyUpdater( gradileFile.getLocation().toFile() );
+        List<GradleDependency> updatedDependencies = dependencyUpdater.getAllDependencies();
+
+        assertTrue( updatedDependencies.contains( gd ) );
     }
 
 }

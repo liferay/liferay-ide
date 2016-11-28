@@ -65,7 +65,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.jobs,
  org.eclipse.compare,
  org.eclipse.swt,
- org.eclipse.sapphire.platform
+ org.eclipse.sapphire.platform,
+ org.eclipse.jdt.ui,
+ org.eclipse.ltk.core.refactoring 
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

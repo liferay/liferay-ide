@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
@@ -96,11 +97,12 @@ public class NewLiferayComponentModelListenerOperation extends AbstractLiferayCo
         List<String[]> componentDependency = super.getComponentDependency();
         try
         {
-            ServiceContainer serviceBundle = TargetPlatformUtil.getServiceBundle( modelClass );
+            ServiceContainer serviceBundle = TargetPlatformUtil.getServiceBundle( serviceName );
 
             if ( serviceBundle != null )
             {
-                componentDependency.add( new String[]{ serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), serviceBundle.getBundleVersion() } );    
+                Version retriveVersion = new Version( serviceBundle.getBundleVersion() );
+                componentDependency.add( new String[]{ serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0" } );
             }
         }
         catch( Exception e )

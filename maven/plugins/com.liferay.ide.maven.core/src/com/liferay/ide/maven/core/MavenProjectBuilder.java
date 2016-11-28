@@ -21,7 +21,6 @@ import com.liferay.ide.project.core.AbstractProjectBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -381,14 +380,14 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
     }
 
     @Override
-    public IStatus creatInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
+    public IStatus execInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
         throws CoreException
     {
         return Status.OK_STATUS;
     }
 
     @Override
-    public void updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
+    public IStatus updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
     {
         IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( project, new NullProgressMonitor() );
 
@@ -427,9 +426,11 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
                 }
             }
 
-            try(OutputStream out = new FileOutputStream( pomFile ))
+            try(FileOutputStream out = new FileOutputStream( pomFile ))
             {
                 maven.writeModel( model, out );
+                out.flush();
+                out.close();
 
                 final WorkspaceJob job = new WorkspaceJob( "Updating project " + project.getName())
                 {
@@ -438,6 +439,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
                     {
                         try
                         {
+                            project.refreshLocal( IResource.DEPTH_INFINITE, new NullProgressMonitor() );
                             MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration( project, monitor );
                         }
                         catch( CoreException ex )
@@ -452,8 +454,10 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
             }
             catch( Exception e )
             {
-                LiferayMavenCore.logError( e );
+                return LiferayMavenCore.createErrorStatus( "Error updating maven project dependency", e );
             }
         }
+
+        return Status.OK_STATUS;
     }
 }

@@ -1670,4 +1670,12 @@
             file="templates/java-templates-refrence.xml">
       </include>
    </extension>
+   <extension
+         point="org.eclipse.jdt.ui.quickFixProcessors">
+      <quickFixProcessor
+            name="LiferayModuleDependencyQuickFix"
+            class="com.liferay.ide.project.ui.quickfix.LiferayDependencyQuickFix"
+            id="com.liferay.ide.project.ui.quickfix.liferayQuickFix">
+      </quickFixProcessor>
+   </extension>    
 </plugin>

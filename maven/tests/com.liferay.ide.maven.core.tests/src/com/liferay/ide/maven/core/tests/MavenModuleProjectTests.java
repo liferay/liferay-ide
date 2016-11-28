@@ -16,10 +16,12 @@
 package com.liferay.ide.maven.core.tests;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
+import com.liferay.ide.maven.core.MavenUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOp;
 import com.liferay.ide.project.core.modules.NewLiferayComponentOpMethods;
@@ -31,10 +33,12 @@ import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -52,6 +56,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.internal.IMavenConstants;
+import org.eclipse.m2e.core.project.IMavenProjectFacade;
 import org.eclipse.m2e.tests.common.AbstractMavenProjectTestCase;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -748,5 +753,67 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
             project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
         }
+    }
+
+    @Test
+    public void testMavenDependencyUpdate() throws Exception
+    {
+
+        String[][] dependency = new String[][] { { "com.liferay.portal", "com.liferay.portal.kernel", "2.6.0" } };
+
+        Dependency mavenDependency = new Dependency();
+        mavenDependency.setGroupId( dependency[0][0] );
+        mavenDependency.setArtifactId( dependency[0][1] );
+        mavenDependency.setVersion( dependency[0][2] );
+
+        final URL wsZipUrl = Platform.getBundle( "com.liferay.ide.maven.core.tests" ).getEntry(
+            "projects/MavenDependencyTestProject.zip" );
+
+        final File wsZipFile = new File( FileLocator.toFileURL( wsZipUrl ).getFile() );
+
+        File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRoot().getLocation().toFile();
+
+        ZipUtil.unzip( wsZipFile, eclipseWorkspaceLocation );
+
+        File mavenDependencyTestProjectFolder = new File( eclipseWorkspaceLocation, "mavenDependencyTestProject" );
+
+        MavenUtil.importProject( mavenDependencyTestProjectFolder.getAbsolutePath(), monitor );
+
+        waitForJobsToComplete( monitor );
+
+        IProject mavenDependencyTestProject = CoreUtil.getProject( "MavenDependencyTestProject" );
+
+        IMavenProjectFacade projectFacade =
+            MavenUtil.getProjectFacade( mavenDependencyTestProject, new NullProgressMonitor() );
+
+        assertNotNull( projectFacade );
+
+        MavenProject mavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
+        List<Dependency> existedDependencies = mavenProject.getDependencies();
+
+        assertFalse( checkDependency( existedDependencies, mavenDependency ) );
+
+        ILiferayProject liferayMavenDependencyProject = LiferayCore.create( mavenDependencyTestProject );
+        IProjectBuilder projectBuilder = liferayMavenDependencyProject.adapt( IProjectBuilder.class );
+        projectBuilder.updateProjectDependency( mavenDependencyTestProject, Arrays.asList( dependency ) );
+
+        waitForJobsToComplete( monitor );
+        MavenProject updateMavenProject = projectFacade.getMavenProject( new NullProgressMonitor() );
+        List<Dependency> updateDependencies = updateMavenProject.getDependencies();
+        assertTrue( checkDependency( updateDependencies, mavenDependency ) );
+    }
+
+    private boolean checkDependency( List<Dependency> existedDependencies, Dependency mavenDependency )
+    {
+        for( Dependency existedDependency : existedDependencies )
+        {
+            String existedKey = existedDependency.getManagementKey();
+            if( existedKey.equals( mavenDependency.getManagementKey() ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

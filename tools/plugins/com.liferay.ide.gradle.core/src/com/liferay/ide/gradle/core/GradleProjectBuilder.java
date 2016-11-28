@@ -107,7 +107,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
     }
 
     @Override
-    public IStatus creatInitBundle( IProject project, String taskName,  String bundleUrl, IProgressMonitor monitor ) throws CoreException
+    public IStatus execInitBundle( IProject project, String taskName,  String bundleUrl, IProgressMonitor monitor ) throws CoreException
     {
         final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
 
@@ -132,7 +132,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
     }
 
     @Override
-    public void updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
+    public IStatus  updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
     {
         try
         {
@@ -159,9 +159,11 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
                 }
             }
         }
-        catch( IOException ie )
+        catch( IOException e )
         {
-            GradleCore.logError( "failed update dependency for project " + project.getName(), ie );
+            return GradleCore.createErrorStatus( "Error updating gradle project dependency", e );
         }
+
+        return Status.OK_STATUS;
     }
 }

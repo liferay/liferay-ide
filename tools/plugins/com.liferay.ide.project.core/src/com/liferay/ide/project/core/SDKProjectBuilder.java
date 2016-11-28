@@ -220,15 +220,16 @@ public class SDKProjectBuilder extends AbstractProjectBuilder
     }
 
     @Override
-    public IStatus creatInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
+    public IStatus execInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
         throws CoreException
     {
         return Status.OK_STATUS;
     }
 
     @Override
-    public void updateProjectDependency( IProject project, List<String[]> dependency )
+    public IStatus updateProjectDependency( IProject project, List<String[]> dependency )
         throws CoreException
     {
+        throw new CoreException(ProjectCore.createErrorStatus("Not implemented"));
     }
 }

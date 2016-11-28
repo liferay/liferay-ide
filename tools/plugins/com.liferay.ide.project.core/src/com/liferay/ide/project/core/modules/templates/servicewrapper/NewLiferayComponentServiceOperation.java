@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.osgi.framework.Version;
 
 /**
  * @author Simon Jiang
@@ -86,7 +87,8 @@ public class NewLiferayComponentServiceOperation extends AbstractLiferayComponen
 
             if ( serviceBundle != null )
             {
-                componentDependency.add( new String[]{ serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), serviceBundle.getBundleVersion() } );
+                Version retriveVersion = new Version( serviceBundle.getBundleVersion() );
+                componentDependency.add( new String[]{ serviceBundle.getBundleGroup(), serviceBundle.getBundleName(), retriveVersion.getMajor() + "." + retriveVersion.getMinor() + ".0" } );
             }
         }
         catch( Exception e )
