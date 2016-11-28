@@ -56,7 +56,7 @@ import org.gradle.tooling.ProjectConnection;
 public class LiferayGradleProject extends BaseLiferayProject implements IBundleProject, IResourceBundleProject
 {
 
-    private static final String[] ignorePaths = new String[] { ".gradle", "build" };
+    private static final String[] ignorePaths = new String[] { ".gradle", "build", "dist", "liferay-theme.json" };
 
     public <T> T adapt( Class<T> adapterType )
     {
