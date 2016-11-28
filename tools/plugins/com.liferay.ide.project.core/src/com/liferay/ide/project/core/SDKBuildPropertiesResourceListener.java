@@ -100,14 +100,14 @@ public class SDKBuildPropertiesResourceListener implements IResourceChangeListen
         if ( sdk != null )
         {
             final IMarker[] problemMarkers =
-                MarkerUtil.findMarkers( deltaFile, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
+                MarkerUtil.findMarkers( deltaFile.getProject(), IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
             final IStatus sdkStatus = sdk.validate( true );
 
             if( sdkStatus.isOK() )
             {
                 if ( problemMarkers != null && problemMarkers.length > 0)
                 {
-                    MarkerUtil.clearMarkers( deltaFile, IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
+                    MarkerUtil.clearMarkers( deltaFile.getProject(), IMarker.PROBLEM, MARKER_ID_SDK_PROPERTIES_INVALID );
                 }
 
                 for( final IProject project : CoreUtil.getAllProjects() )
