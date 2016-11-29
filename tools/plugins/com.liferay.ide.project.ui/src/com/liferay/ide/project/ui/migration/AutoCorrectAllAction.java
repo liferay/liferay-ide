@@ -18,6 +18,7 @@ package com.liferay.ide.project.ui.migration;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -79,20 +80,40 @@ public class AutoCorrectAllAction extends Action
                                     {
                                         if( problem.autoCorrectContext != null )
                                         {
-                                            final String autoCorrectKey = problem.autoCorrectContext.substring(
-                                                0, problem.autoCorrectContext.indexOf( ":" ) );
+                                            String autoCorrectKey = null;
+
+                                            final int filterKeyIndex = problem.autoCorrectContext.indexOf( ":" );
+
+                                            if( filterKeyIndex > -1 )
+                                            {
+                                                autoCorrectKey = problem.autoCorrectContext.substring( 0, filterKeyIndex );
+                                            }
+                                            else
+                                            {
+                                                autoCorrectKey = problem.autoCorrectContext;
+                                            }
 
                                             final Collection<ServiceReference<AutoMigrator>> refs =
                                                 context.getServiceReferences(
                                                     AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
 
+                                            final IResource file = MigrationUtil.getIResourceFromProblem( problem );
+
                                             for( ServiceReference<AutoMigrator> ref : refs )
                                             {
                                                 final AutoMigrator autoMigrator = context.getService( ref );
-                                                autoMigrator.correctProblems( problem.file, problems );
-                                            }
+                                                int problemsCorrected = autoMigrator.correctProblems( problem.file, problems );
 
-                                            final IResource file = MigrationUtil.getIResourceFromProblem( problem );
+                                                if( problemsCorrected > 0 && file != null )
+                                                {
+                                                    IMarker problemMarker = file.findMarker( problem.markerId );
+
+                                                    if( problemMarker != null && problemMarker.exists() )
+                                                    {
+                                                        problemMarker.delete();
+                                                    }
+                                                }
+                                            }
 
                                             file.refreshLocal( IResource.DEPTH_ONE, monitor );
                                         }

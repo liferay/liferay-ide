@@ -23,6 +23,7 @@ import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -73,7 +74,6 @@ public class AutoCorrectAction extends ProblemAction
 
         WorkspaceJob job = new WorkspaceJob( "Auto correcting migration problem." )
         {
-
             @Override
             public IStatus runInWorkspace( IProgressMonitor monitor )
             {
@@ -82,8 +82,19 @@ public class AutoCorrectAction extends ProblemAction
                 try
                 {
                     final Problem problem = problems.get( 0 );
-                    final String autoCorrectKey =
-                        problem.autoCorrectContext.substring( 0, problem.autoCorrectContext.indexOf( ":" ) );
+
+                    String autoCorrectKey = null;
+
+                    final int filterKeyIndex = problem.autoCorrectContext.indexOf( ":" );
+
+                    if( filterKeyIndex > -1 )
+                    {
+                        autoCorrectKey = problem.autoCorrectContext.substring( 0, filterKeyIndex );
+                    }
+                    else
+                    {
+                        autoCorrectKey = problem.autoCorrectContext;
+                    }
 
                     final Collection<ServiceReference<AutoMigrator>> refs =
                         context.getServiceReferences( AutoMigrator.class, "(auto.correct=" + autoCorrectKey + ")" );
@@ -91,7 +102,22 @@ public class AutoCorrectAction extends ProblemAction
                     for( ServiceReference<AutoMigrator> ref : refs )
                     {
                         final AutoMigrator autoMigrator = context.getService( ref );
-                        autoMigrator.correctProblems( problem.file, problems );
+                        int problemsCorrected = autoMigrator.correctProblems( problem.file, Collections.singletonList( problem ) );
+
+                        if( problemsCorrected > 0 )
+                        {
+                            IResource resource = MigrationUtil.getIResourceFromProblem( problem );
+
+                            if( resource != null )
+                            {
+                                IMarker problemMarker = resource.findMarker( problem.markerId );
+
+                                if( problemMarker != null && problemMarker.exists() )
+                                {
+                                    problemMarker.delete();
+                                }
+                            }
+                        }
                     }
 
                     file.refreshLocal( IResource.DEPTH_ONE, monitor );
@@ -119,7 +145,7 @@ public class AutoCorrectAction extends ProblemAction
 
                     if( !projectName.equals( "" ) )
                     {
-                            migrateHandler.findMigrationProblems( new Path[] { path }, new String[] { projectName } );
+                        migrateHandler.findMigrationProblems( new Path[] { path }, new String[] { projectName } );
                     }
 
                 }
@@ -219,14 +245,20 @@ public class AutoCorrectAction extends ProblemAction
                         }
                     }
                 }
-                else if( obj instanceof ArrayList<?> )
+                else if( obj instanceof List<?> )
                 {
-                    ArrayList<Problem> list = (ArrayList<Problem>) obj;
-                    for( Problem p : list )
+                    List<?> list = (List<?>) obj;
+
+                    for( Object p : list )
                     {
-                        if( p.autoCorrectContext != null )
+                        if( p instanceof Problem )
                         {
-                            allAutoCorrectContexts.add( p.autoCorrectContext );
+                            Problem problem = (Problem) p;
+
+                            if( problem.autoCorrectContext != null )
+                            {
+                                allAutoCorrectContexts.add( problem.autoCorrectContext );
+                            }
                         }
                     }
                 }
