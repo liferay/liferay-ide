@@ -1472,15 +1472,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                         if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
                         {
                             liferayWorksapceValidation = false;
-                            workspaceValidationMessage =
-                                "A Liferay Workspace project already exists in this Eclipse instance.. ";
+                            workspaceValidationMessage = LiferayWorkspaceUtil.hasLiferayWorkspaceMsg;
                         }
                     }
                     catch( CoreException e )
                     {
                         liferayWorksapceValidation = false;
-                        workspaceValidationMessage =
-                            "More than one Liferay workspace build in current Eclipse workspace.. ";
+                        workspaceValidationMessage = e.getMessage();
                     }
 
                     if( !liferayWorksapceValidation && inputValidation )

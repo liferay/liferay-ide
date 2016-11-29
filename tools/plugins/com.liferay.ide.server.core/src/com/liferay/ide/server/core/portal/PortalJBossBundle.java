@@ -16,6 +16,7 @@
 package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.util.FileListing;
+import com.liferay.ide.server.util.ServerConfigurationUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,6 +66,12 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     protected int getDefaultJMXRemotePort()
     {
         return DEFAULT_JMX_PORT;
+    }
+
+    @Override
+    public String getHttpPort()
+    {
+        return ServerConfigurationUtil.getJbossHttpPort( getAppServerDir().toPortableString() );
     }
 
     @Override

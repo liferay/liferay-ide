@@ -46,7 +46,7 @@ public class ImportWorkspaceLocationValidationService extends ValidationService
         }
         catch( CoreException e )
         {
-            retval = Status.createErrorStatus( LiferayWorkspaceUtil.multiWorkspaceError );
+            retval = Status.createErrorStatus( LiferayWorkspaceUtil.multiWorkspaceErrorMsg );
 
             return retval;
         }

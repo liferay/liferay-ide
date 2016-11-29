@@ -105,7 +105,7 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
                 }
                 catch( CoreException e )
                 {
-                    wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceError, SapphireWizardPage.ERROR );
+                    wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR );
                 }
 
                 firstErrorMessageRemoved = true;

@@ -115,7 +115,7 @@
    </extension>
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
-      <launchConfigurationType
+      <!--launchConfigurationType
             delegate="org.eclipse.jst.server.tomcat.core.internal.TomcatLaunchConfigurationDelegate"
             id="com.liferay.ide.eclipse.server.tomcat.60.launchConfigurationType"
             modes="run, debug, profile"
@@ -130,7 +130,7 @@
             name="%liferay.v61.ce.tomcat70.launch.config.type.name"
             sourceLocatorId="com.liferay.ide.server.core.portal.sourceLocator"
             sourcePathComputerId="com.liferay.ide.server.tomcat.sourcePathComputer">
-      </launchConfigurationType>
+      </launchConfigurationType-->
       <launchConfigurationType
             delegate="com.liferay.ide.server.tomcat.core.LiferayTomcatLaunchConfigDelegate"
             id="com.liferay.ide.server.62.tomcat.70.launchConfigurationType"

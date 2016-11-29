@@ -61,4 +61,6 @@ public interface PortalBundle extends ILiferayPortal
     IPath[] getBundleDependencyJars();
 
     IPath[] getUserLibs();
+
+    String getHttpPort();
 }

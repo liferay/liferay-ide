@@ -104,7 +104,7 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
                 }
                 catch( CoreException e )
                 {
-                    wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceError, SapphireWizardPage.ERROR );
+                    wizardPage.setMessage( LiferayWorkspaceUtil.multiWorkspaceErrorMsg, SapphireWizardPage.ERROR );
                 }
 
                 firstErrorMessageRemoved = true;

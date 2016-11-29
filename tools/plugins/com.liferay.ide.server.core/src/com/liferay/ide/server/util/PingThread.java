@@ -84,15 +84,17 @@ public class PingThread {
 
 				URL pingUrl = new URL(url);
 				URLConnection conn = pingUrl.openConnection();
+
 				((HttpURLConnection)conn).setInstanceFollowRedirects(false);
-				((HttpURLConnection)conn).getResponseCode();
+				int code = ((HttpURLConnection)conn).getResponseCode();
 
 				// ping worked - server is up
-				if (!stop) {
+				if (!stop && code == 200) {
 					Thread.sleep(200);
 					behaviour.setServerStarted();
+					stop = true;
 				}
-				stop = true;
+				Thread.sleep(1000);
 			} catch (FileNotFoundException fe) {
 				try {
 					Thread.sleep(200);
