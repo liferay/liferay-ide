@@ -19,8 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
@@ -32,6 +35,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Table;
 
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView.PageNavigatorListener;
 import com.liferay.ide.ui.util.SWTUtil;
 
 /**
@@ -54,9 +58,35 @@ public class SummaryPage extends Page implements SelectionChangedListener
         tableViewer.setLabelProvider( new TableViewLabelProvider() );
         tableViewer.getControl().setBackground( this.getDisplay().getSystemColor( SWT.COLOR_WIDGET_BACKGROUND ) );
 
+        tableViewer.addSelectionChangedListener( new ISelectionChangedListener()
+        {
+
+            @Override
+            public void selectionChanged( SelectionChangedEvent event )
+            {
+                final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+                if( !selection.isEmpty() )
+                {
+                    if( selection.getFirstElement() instanceof TableViewElement )
+                    {
+                        final TableViewElement tableViewElement = (TableViewElement) selection.getFirstElement();
+                        final int pageIndex = tableViewElement.pageIndex;
+
+                        PageNavigateEvent navEvent = new PageNavigateEvent();
+                        navEvent.setTargetPage( pageIndex );
+
+                        for( PageNavigatorListener listener : naviListeners )
+                        {
+                            listener.onPageNavigate( navEvent );
+                        }
+                    }
+                }
+            }
+        } );
+
         final Table table = tableViewer.getTable();
         final GridData tableData = new GridData( SWT.FILL, SWT.FILL, true, false, 1, 1 );
-        tableData.heightHint = 125;
+        tableData.heightHint = 148;
         table.setLayoutData( tableData );
         table.setLinesVisible( false );
 
@@ -69,13 +99,15 @@ public class SummaryPage extends Page implements SelectionChangedListener
     private class TableViewElement
     {
 
+        private int pageIndex;
         private String pageTitle;
         private Image image;
 
-        public TableViewElement( String pageTitle, Image image )
+        public TableViewElement( String pageTitle, Image image, int pageIndex )
         {
             this.pageTitle = pageTitle;
             this.image = image;
+            this.pageIndex = pageIndex;
         }
     }
 
@@ -172,10 +204,11 @@ public class SummaryPage extends Page implements SelectionChangedListener
         TableViewElement[] tableViewElements;
         int pageNum = UpgradeView.getPageNumber();
 
-        for( int i = 2; i < pageNum - 1; i++ )
+        for( int i = 1; i < pageNum - 1; i++ )
         {
             Page page = UpgradeView.getPage( i );
             String pageTitle = page.getPageTitle();
+            int pageIndex = page.getIndex();
             PageAction pageAction = page.getSelectedAction();
             Image statusImage;
 
@@ -193,7 +226,7 @@ public class SummaryPage extends Page implements SelectionChangedListener
                 statusImage = page.getSelectedAction().getBageImage();
             }
 
-            TableViewElement tableViewElement = new TableViewElement( pageTitle, statusImage );
+            TableViewElement tableViewElement = new TableViewElement( pageTitle, statusImage, pageIndex );
             TableViewElementList.add( tableViewElement );
         }
 
