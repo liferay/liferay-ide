@@ -55,7 +55,6 @@ import org.osgi.framework.Version;
  * @author Gregory Amerson
  * @author Andy Wu
  */
-
 public class BladeCLI
 {
     static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
