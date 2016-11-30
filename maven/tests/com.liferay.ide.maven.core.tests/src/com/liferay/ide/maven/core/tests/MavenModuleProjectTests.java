@@ -561,6 +561,18 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         assertTrue( actual, actual.contains( "\"property-test-key=property-test-value\"" ) );
     }
 
+    @Test
+    public void testProjectTemplateThemeContributor() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "theme-contributor-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "theme-contributor" );
+
+        createAndBuild(op);
+    }
+
     private void verifyProject(IProject project ) throws Exception
     {
         assertNotNull( project );
