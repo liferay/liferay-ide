@@ -270,7 +270,9 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     {
         String retval = null;
 
-        if( CoreUtil.isNullOrEmpty( newArgs ) && CoreUtil.isNullOrEmpty( excludeArgs ) )
+        //don't merge if orgArgsString is not null
+        if( !CoreUtil.isNullOrEmpty( orgArgsString ) ||
+            ( CoreUtil.isNullOrEmpty( newArgs ) && CoreUtil.isNullOrEmpty( excludeArgs ) ) )
         {
             retval = orgArgsString;
         }
