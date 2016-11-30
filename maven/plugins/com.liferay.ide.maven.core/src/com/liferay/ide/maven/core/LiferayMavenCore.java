@@ -75,12 +75,14 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_CONFIGURATION_ICON = "archetype-project-template-portlet-configuration-icon";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_PROVIDER = "archetype-project-template-portlet-provider";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_TOOLBAR_CONTRIBUTOR = "archetype-project-template-portlet-toolbar-contributor";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_REST = "archetype-project-template-rest";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE = "archetype-project-template-service";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_BUILDER = "archetype-project-template-service-builder";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE_WRAPPER = "archetype-project-template-service-wrapper";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_SIMULATION_PANEL_ENTRY = "archetype-project-template-simulation-panel-entry";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_TEMPLATE_CONTEXT_CONTRIBUTOR = "archetype-project-template-template-context-contributor";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME = "archetype-project-template-theme";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME_CONTRIBUTOR = "archetype-project-template-theme-contributor";
 
     // The key of disable customJspValidation checking
     public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";

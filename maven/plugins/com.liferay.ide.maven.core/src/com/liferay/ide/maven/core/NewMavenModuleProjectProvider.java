@@ -95,6 +95,7 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
         properties.put( "projectType", "standalone" );
         properties.put( "serviceClass", serviceName == null ? "" : serviceName );
         properties.put( "serviceWrapperClass", serviceName == null ? "" : serviceName );
+        properties.put( "contributorType", artifactId );
 
         for( PropertyKey propertyKey : op.getPropertyKeys() )
         {

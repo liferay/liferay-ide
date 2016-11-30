@@ -118,6 +118,9 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
             LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET_TOOLBAR_CONTRIBUTOR,
             "com.liferay:com.liferay.project.templates.portlet.toolbar.contributor:1.0.1" );
         defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_REST,
+            "com.liferay:com.liferay.project.templates.rest:1.0.0" );
+        defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_SERVICE,
             "com.liferay:com.liferay.project.templates.service:1.0.1" );
         defaultPrefs.put(
@@ -135,7 +138,9 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME,
             "com.liferay:com.liferay.project.templates.theme:1.0.1" );
-
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME_CONTRIBUTOR,
+            "com.liferay:com.liferay.project.templates.theme.contributor:1.0.0" );
     }
 
 }
