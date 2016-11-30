@@ -36,7 +36,10 @@
                     <property>Location</property>
                 </property-editor>
                 <spacer/>
-                <property-editor>provisionLiferayBundle</property-editor>
+                <property-editor>
+                    <label>Download Liferay bundle</label>
+                    <property>provisionLiferayBundle</property>
+                </property-editor>
                 <property-editor>
                     <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
                     <property>serverName</property>

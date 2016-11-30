@@ -15,6 +15,9 @@
 
 package com.liferay.ide.gradle.core.tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -23,8 +26,12 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -32,6 +39,19 @@ import org.junit.Test;
  */
 public class NewLiferayWorkspaceOpTests
 {
+
+    @BeforeClass
+    public static void removeAllProjects() throws Exception
+    {
+        IProgressMonitor monitor = new NullProgressMonitor();
+
+        for( IProject project : CoreUtil.getAllProjects() )
+        {
+            project.delete( true, monitor );
+
+            assertFalse( project.exists() );
+        }
+    }
 
     @Test
     public void testNewLiferayWorkspaceOp() throws Exception
@@ -42,11 +62,17 @@ public class NewLiferayWorkspaceOpTests
 
         op.setWorkspaceName( "existingProject" );
 
-        assertTrue( op.validation().message().equals( "A project with that name(ignore case) already exists." ) );
+        String message = op.validation().message();
+
+        assertNotNull( message );
+
+        assertEquals( "A project with that name(ignore case) already exists.", message );
 
         op.setWorkspaceName( "ExistingProject" );
 
-        assertTrue( op.validation().message().equals( "A project with that name(ignore case) already exists." ) );
+        message = op.validation().message();
+
+        assertTrue( message.equals( "A project with that name(ignore case) already exists." ) );
 
         String projectName = "test-liferay-workspace";
 
