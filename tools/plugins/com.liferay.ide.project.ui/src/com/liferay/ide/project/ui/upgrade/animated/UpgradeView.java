@@ -337,6 +337,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         summaryPage.setIndex( 8 );
         summaryPage.setTitle( "Summary" );
         summaryPage.setNextPage( false );
+        summaryPage.addPageNavigateListener( gear );
 
         staticPageList.clear();
 
