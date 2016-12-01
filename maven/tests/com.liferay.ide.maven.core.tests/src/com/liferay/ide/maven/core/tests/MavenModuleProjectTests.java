@@ -775,7 +775,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         ZipUtil.unzip( wsZipFile, eclipseWorkspaceLocation );
 
-        File mavenDependencyTestProjectFolder = new File( eclipseWorkspaceLocation, "mavenDependencyTestProject" );
+        File mavenDependencyTestProjectFolder = new File( eclipseWorkspaceLocation, "MavenDependencyTestProject" );
 
         MavenUtil.importProject( mavenDependencyTestProjectFolder.getAbsolutePath(), monitor );
 
