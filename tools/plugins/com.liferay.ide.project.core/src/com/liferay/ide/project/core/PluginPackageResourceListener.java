@@ -546,6 +546,11 @@ public class PluginPackageResourceListener implements IResourceChangeListener, I
         // need to regrab this to get newest container
         container = J2EEComponentClasspathContainerUtils.getInstalledWebAppLibrariesContainer( project );
 
+        if( container == null )
+        {
+            return;
+        }        
+
         IClasspathEntry[] webappEntries = container.getClasspathEntries();
 
         for( IClasspathEntry entry : webappEntries )
