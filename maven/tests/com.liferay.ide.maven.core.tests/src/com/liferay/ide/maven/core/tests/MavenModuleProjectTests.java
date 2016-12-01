@@ -783,6 +783,10 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         IProject mavenDependencyTestProject = CoreUtil.getProject( "MavenDependencyTestProject" );
 
+        assertNotNull( mavenDependencyTestProject );
+
+        assertTrue( mavenDependencyTestProject.exists() );
+
         IMavenProjectFacade projectFacade =
             MavenUtil.getProjectFacade( mavenDependencyTestProject, new NullProgressMonitor() );
 
