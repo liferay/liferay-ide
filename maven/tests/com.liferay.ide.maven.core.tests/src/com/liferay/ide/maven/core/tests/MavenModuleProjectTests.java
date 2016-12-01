@@ -395,6 +395,18 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     }
 
     @Test
+    public void testProjectTemplateRest() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "rest-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "rest" );
+
+        createAndBuild(op);
+    }
+
+    @Test
     public void testProjectTemplateTemplateContextContributor() throws Exception
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
