@@ -1068,18 +1068,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                             IServer server = ServerUtil.getServer( serverName );
 
-                            IPath serverPath = server.getRuntime().getLocation();
-
                             newPath = renameProjectFolder( location, monitor );
 
                             SDK sdk = SDKUtil.createSDKFromLocation( new Path( newPath ) );
 
-                            sdk.addOrUpdateServerProperties( serverPath );
+                            sdk.addOrUpdateServerProperties( ServerUtil.getLiferayRuntime( server ).getLiferayHome() );
 
                             SDKUtil.openAsProject( sdk, monitor );
 
                             importSDKProject( sdk.getLocation(), monitor );
-
                         }
 
                         dataModel.setImportFinished( true );
