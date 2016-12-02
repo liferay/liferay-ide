@@ -71,7 +71,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
         for( BundleDTO bundle : existingBundles )
         {
-            if( bundle.symbolicName.equals( bsn ) )
+            if( bsn != null && bsn.equals( bundle.symbolicName ) )
             {
                 bundleId = bundle.id;
                 retval = bundle;
