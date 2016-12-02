@@ -15,11 +15,11 @@
 
 package com.liferay.ide.server.tomcat.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.portal.AbstractPortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundle;
-import com.liferay.ide.server.util.ServerConfigurationUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,7 +49,6 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     {
        super(appServerProperties);
     }
-
 
     @Override
     protected IPath getAppServerLibDir()
@@ -101,7 +100,18 @@ public class PortalTomcatBundle extends AbstractPortalBundle implements PortalBu
     @Override
     public String getHttpPort()
     {
-        return ServerConfigurationUtil.getTomcatHttpPort( getAppServerDir().toPortableString() );
+        String retVal = "8080";
+
+        File serverXmlFile = new File( getAppServerDir().toPortableString(), "conf/server.xml" );
+
+        String portValue = getHttpPortValue( serverXmlFile, "Connector", "protocol", "HTTP/1.1", "port" );
+
+        if( !CoreUtil.empty( portValue ) )
+        {
+            return portValue;
+        }
+
+        return retVal;
     }
 
     @Override

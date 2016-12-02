@@ -15,8 +15,8 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileListing;
-import com.liferay.ide.server.util.ServerConfigurationUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -71,7 +71,25 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     @Override
     public String getHttpPort()
     {
-        return ServerConfigurationUtil.getJbossHttpPort( getAppServerDir().toPortableString() );
+        String retVal = "8080";
+
+        File standaloneXmlFile = new File( getAppServerDir().toPortableString(), "standalone/configuration/standalone.xml" );
+
+        String portValue = getHttpPortValue( standaloneXmlFile, "socket-binding", "name", "http", "port" );
+
+        if( !CoreUtil.empty( portValue ) )
+        {
+            if( portValue.lastIndexOf( ":" ) == -1 )
+            {
+                retVal = portValue;
+            }
+            else
+            {
+                retVal = portValue.substring( portValue.lastIndexOf( ":" ) + 1, portValue.length() - 1 );
+            }
+        }
+
+        return retVal;
     }
 
     @Override
@@ -196,9 +214,11 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     public IPath[] getUserLibs()
     {
         List<IPath> libs = new ArrayList<IPath>();
+
         try
         {
             List<File>  portallibFiles = FileListing.getFileListing( new File( getAppServerPortalDir().append( "WEB-INF/lib" ).toPortableString() ) );
+
             for( File lib : portallibFiles )
             {
                 if( lib.exists() && lib.getName().endsWith( ".jar" ) ) //$NON-NLS-1$
@@ -208,6 +228,7 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
             }
 
             List<File>  libFiles = FileListing.getFileListing( new File( getAppServerLibDir().toPortableString() ) );
+
             for( File lib : libFiles )
             {
                 if( lib.exists() && lib.getName().endsWith( ".jar" ) )
@@ -219,6 +240,7 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
         catch( FileNotFoundException e )
         {
         }
+
         return libs.toArray( new IPath[libs.size()] );
     }
 }
