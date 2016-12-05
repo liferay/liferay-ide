@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
+import org.eclipse.ui.IViewPart;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
@@ -37,6 +38,8 @@ import com.liferay.blade.api.Problem;
 import com.liferay.ide.project.core.upgrade.FileProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.upgrade.animated.UpgradeView;
+import com.liferay.ide.ui.util.UIUtil;
 
 /**
  * @author Terry Jia
@@ -122,6 +125,9 @@ public class AutoCorrectAllAction extends Action
                             }
                         }
                     }
+
+                    IViewPart view = UIUtil.findView( UpgradeView.ID );
+                    new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
                 }
                 catch( InvalidSyntaxException e )
                 {
