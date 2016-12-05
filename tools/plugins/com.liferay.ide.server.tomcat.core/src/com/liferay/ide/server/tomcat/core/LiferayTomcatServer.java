@@ -126,19 +126,6 @@ public class LiferayTomcatServer extends TomcatServer
     }
 
     @Override
-    public String getHttpPort()
-    {
-        try
-        {
-            return String.valueOf( getTomcatConfiguration().getMainPort().getPort() );
-        }
-        catch( CoreException e )
-        {
-            return null;
-        }
-    }
-
-    @Override
     public URL getPortalHomeUrl()
     {
         try

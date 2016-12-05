@@ -113,13 +113,6 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
         return getAttribute( PROPERTY_LAUNCH_SETTINGS, PortalServerConstants.DEFAULT_LAUNCH_SETTING );
     }
 
-    @Override
-    public String getHttpPort()
-    {
-        // TODO IDE-1955
-        return "8080";
-    }
-
     public String getHost()
     {
         return getServer().getHost();
