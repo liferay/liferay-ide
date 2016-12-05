@@ -41,7 +41,6 @@ import com.liferay.ide.ui.util.SWTUtil;
 /**
  * @author Joye Luo
  */
-
 public class SummaryPage extends Page implements SelectionChangedListener
 {
 
@@ -86,7 +85,7 @@ public class SummaryPage extends Page implements SelectionChangedListener
 
         final Table table = tableViewer.getTable();
         final GridData tableData = new GridData( SWT.FILL, SWT.FILL, true, false, 1, 1 );
-        tableData.heightHint = 148;
+        tableData.heightHint = 155;
         table.setLayoutData( tableData );
         table.setLinesVisible( false );
 

@@ -254,9 +254,6 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             public void handleEvent( Event event )
             {
                 new AutoCorrectAllAction( getInitialInput() ).run();
-
-                IViewPart view = UIUtil.findView( UpgradeView.ID );
-                new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
             }
         } );
 
