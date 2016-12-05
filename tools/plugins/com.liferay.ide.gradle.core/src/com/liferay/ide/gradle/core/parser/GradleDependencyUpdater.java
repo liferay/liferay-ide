@@ -70,7 +70,7 @@ public class GradleDependencyUpdater
         {
             if( visitor.getColumnNum() != -1 )
             {
-                gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ) );
+                gradleFileContents = Files.readAllLines( Paths.get( file.toURI() ), StandardCharsets.UTF_8 );
                 StringBuilder builder =
                     new StringBuilder( gradleFileContents.get( visitor.getDependenceLineNum() - 1 ) );
                 builder.insert( visitor.getColumnNum() - 2, "\n" + dependency + "\n" );
