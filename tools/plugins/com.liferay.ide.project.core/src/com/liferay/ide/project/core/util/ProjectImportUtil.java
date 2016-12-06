@@ -335,12 +335,12 @@ public class ProjectImportUtil
     public static IProject importProject(
         IPath projectdir,IProgressMonitor monitor, NewLiferayPluginProjectOp op ) throws CoreException
     {
-        IStatus retVal = ProjectImportUtil.validateSDKProjectPath(projectdir.toPortableString());
-
-        if ( !retVal.isOK() )
-        {
-            throw new CoreException( ProjectCore.createErrorStatus( retVal.getMessage() ) );
-        }
+//        IStatus retVal = ProjectImportUtil.validateSDKProjectPath(projectdir.toPortableString());
+//
+//        if ( !retVal.isOK() )
+//        {
+//            throw new CoreException( ProjectCore.createErrorStatus( retVal.getMessage() ) );
+//        }
 
         IProject project = null;
 
