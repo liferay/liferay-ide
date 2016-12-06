@@ -89,7 +89,8 @@ public class AutoCorrectAllAction extends Action
 
                                             if( filterKeyIndex > -1 )
                                             {
-                                                autoCorrectKey = problem.autoCorrectContext.substring( 0, filterKeyIndex );
+                                                autoCorrectKey =
+                                                    problem.autoCorrectContext.substring( 0, filterKeyIndex );
                                             }
                                             else
                                             {
@@ -105,7 +106,8 @@ public class AutoCorrectAllAction extends Action
                                             for( ServiceReference<AutoMigrator> ref : refs )
                                             {
                                                 final AutoMigrator autoMigrator = context.getService( ref );
-                                                int problemsCorrected = autoMigrator.correctProblems( problem.file, problems );
+                                                int problemsCorrected =
+                                                    autoMigrator.correctProblems( problem.file, problems );
 
                                                 if( problemsCorrected > 0 && file != null )
                                                 {
@@ -126,8 +128,15 @@ public class AutoCorrectAllAction extends Action
                         }
                     }
 
-                    IViewPart view = UIUtil.findView( UpgradeView.ID );
-                    new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
+                    UIUtil.sync( new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            IViewPart view = UIUtil.findView( UpgradeView.ID );
+                            new RunMigrationToolAction( "Run Migration Tool", view.getViewSite().getShell() ).run();
+                        }
+                    } );
                 }
                 catch( InvalidSyntaxException e )
                 {
