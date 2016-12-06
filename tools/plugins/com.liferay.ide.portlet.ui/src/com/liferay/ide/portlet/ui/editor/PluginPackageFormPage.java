@@ -16,9 +16,11 @@
 package com.liferay.ide.portlet.ui.editor;
 
 import com.liferay.ide.portlet.ui.PortletUIPlugin;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.form.FormLayoutFactory;
 import com.liferay.ide.ui.form.IDEFormPage;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -78,18 +80,23 @@ public class PluginPackageFormPage extends IDEFormPage
         PluginPackageGeneralSection generalSection = new PluginPackageGeneralSection( this, left );
         managedForm.addPart( generalSection );
 
-        PortalJarsSection jarsSection = new PortalJarsSection( this, right, getPortalSectionLabels() );
-        managedForm.addPart( jarsSection );
+        IProject project = getFormEditor().getCommonProject();
 
-        PortalDeployExcludesSection excludesSection = new PortalDeployExcludesSection( this, right, getPortalSectionLabels() );
-        managedForm.addPart( excludesSection );
+        if( SDKUtil.isSDKProject( project ) )
+        {
+            PortalJarsSection jarsSection = new PortalJarsSection( this, right, getPortalSectionLabels() );
+            managedForm.addPart( jarsSection );
 
-        PortalTldsSection tldsSection = new PortalTldsSection( this, right, getPortalSectionLabels() );
-        managedForm.addPart( tldsSection );
+            PortalDeployExcludesSection excludesSection = new PortalDeployExcludesSection( this, right, getPortalSectionLabels() );
+            managedForm.addPart( excludesSection );
 
-        RequiredDeploymentContextsSection contextsSection =
-            new RequiredDeploymentContextsSection( this, right, getContextsSectionLabels() );
-        managedForm.addPart( contextsSection );
+            PortalTldsSection tldsSection = new PortalTldsSection( this, right, getPortalSectionLabels() );
+            managedForm.addPart( tldsSection );
+
+            RequiredDeploymentContextsSection contextsSection =
+                new RequiredDeploymentContextsSection( this, right, getContextsSectionLabels() );
+            managedForm.addPart( contextsSection );
+        }
     }
 
     private String[] getContextsSectionLabels()
