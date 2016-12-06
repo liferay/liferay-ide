@@ -1247,6 +1247,24 @@ public class ProjectUtil
         return hasFacet( project, IPluginFacetConstants.LIFERAY_EXT_PROJECT_FACET );
     }
 
+    public static boolean isGradleProject( IProject project )
+    {
+        boolean retval = false;
+
+        try
+        {
+            if( project != null )
+            {
+                retval = project.hasNature( "org.eclipse.buildship.core.gradleprojectnature" );
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return retval;
+    }
+
     public static boolean isHookProject( IProject project )
     {
         return hasFacet( project, IPluginFacetConstants.LIFERAY_HOOK_PROJECT_FACET );

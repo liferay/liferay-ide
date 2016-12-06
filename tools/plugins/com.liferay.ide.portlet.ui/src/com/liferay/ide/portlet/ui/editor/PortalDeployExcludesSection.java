@@ -97,10 +97,11 @@ public class PortalDeployExcludesSection extends TableSection implements IModelC
 
         IFolder docroot = CoreUtil.getDefaultDocrootFolder( project );
 
-        if ( docroot == null || ProjectUtil.isMavenProject( project ) || ProjectUtil.isExtProject( project ) )
+        if( docroot == null || ProjectUtil.isMavenProject( project ) || ProjectUtil.isExtProject( project ) ||
+            ProjectUtil.isGradleProject( project ) )
         {
             TablePart tablePart = getTablePart();
-            tablePart.setButtonEnabled(ADD_INDEX, false);
+            tablePart.setButtonEnabled( ADD_INDEX, false );
 
             return;
         }
