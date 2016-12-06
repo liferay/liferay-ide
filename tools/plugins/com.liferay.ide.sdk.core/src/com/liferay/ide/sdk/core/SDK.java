@@ -1156,8 +1156,6 @@ public class SDK
 
         boolean buildXmlExists = getLocation().append( "build.xml" ).toFile().exists(); //$NON-NLS-1$
 
-        final Project project = getSDKAntProject();
-
         if( !validLocation )
         {
             status.add( SDKCorePlugin.createErrorStatus( Msgs.SDKLocationInvalid ) );
@@ -1192,6 +1190,11 @@ public class SDK
 
         for( String propertyKey : APP_SERVER_PROPERTIES_KEYS )
         {
+            if( ! status.isOK() )
+            {
+                break; // stop after finding the first invalid property key
+            }
+
             final String propertyValue = (String) sdkProperties.get( propertyKey );
 
             if ( propertyValue == null )
@@ -1223,13 +1226,14 @@ public class SDK
 
                         if( !propertyPath.toFile().exists() )
                         {
-                            final String customerPropertyFile =
-                                "build." + project.getProperty( "user.name" ) + ".properties";
+                            final IStatus logStatus = SDKCorePlugin.createErrorStatus(
+                                propertyKey + " is invalid. Please reconfigure Plugins SDK setting: " + propertyKey + "=" + propertyValue );
 
-                            status.add(
-                                SDKCorePlugin.createErrorStatus(
-                                    "Invalid SDK settings. Configure app.server.parent.dir property in " +
-                                        customerPropertyFile + " to point to Liferay home" ) );
+                            SDKCorePlugin.getDefault().getLog().log( logStatus );
+
+                            status.add( logStatus );
+
+
                         }
 
                         break;
