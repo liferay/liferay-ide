@@ -20,6 +20,7 @@ import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -168,7 +169,7 @@ public class GradleCore extends Plugin
             {
                 needAddNature[0] = true;
             }
-            else if( isWorkspaceWars( project ) )
+            else if( ProjectUtil.isWorkspaceWars( project ) )
             {
                 needAddNature[0] = true;
             }
@@ -251,61 +252,6 @@ public class GradleCore extends Plugin
             job.setRule( CoreUtil.getWorkspaceRoot() );
             job.schedule();
         }
-    }
-
-    public static boolean isWorkspaceWars( IProject project )
-    {
-        try
-        {
-            if( LiferayWorkspaceUtil.hasLiferayWorkspace() && project.getFolder( "src" ).exists() )
-            {
-                IProject wsProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
-
-                File wsRootDir = wsProject.getLocation().toFile();
-
-                String[] warsNames = LiferayWorkspaceUtil.getLiferayWorkspaceProjectWarsDirs( wsProject );
-
-                File[] warsDirs = new File[warsNames.length];
-
-                for( int i = 0; i < warsNames.length; i++ )
-                {
-                    warsDirs[i] = new File( wsRootDir, warsNames[i] );
-                }
-
-                File projectDir = project.getLocation().toFile();
-
-                File parentDir = projectDir.getParentFile();
-
-                if( parentDir == null )
-                {
-                    return false;
-                }
-
-                while( true )
-                {
-                    for( File dir : warsDirs )
-                    {
-                        if( parentDir.equals( dir ) )
-                        {
-                            return true;
-                        }
-                    }
-
-                    parentDir = parentDir.getParentFile();
-
-                    if( parentDir == null )
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-        catch( CoreException e )
-        {
-            GradleCore.logError( e );
-        }
-
-        return false;
     }
 
     /*

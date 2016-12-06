@@ -445,13 +445,6 @@ public class CoreUtil
         return method.invoke( object, args );
     }
 
-    public static boolean isBundleOnlyProject( IProject project )
-    {
-        final ILiferayProject liferayProject = LiferayCore.create( project );
-
-       return liferayProject instanceof IBundleProject;
-    }
-
     public static boolean isEqual( Object object1, Object object2 )
     {
         return object1 != null && object2 != null && object1.equals( object2 );

@@ -24,6 +24,7 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
             {
                 if( LiferayNature.hasNature( project ) && GradleProjectNature.isPresentOn( project ) )
                 {
-                    if( GradleCore.isWorkspaceWars( project ) )
+                    if( ProjectUtil.isFacetedGradleBundleProject( project ) )
                     {
                         return new FacetedGradleBundleProject( project );
                     }
