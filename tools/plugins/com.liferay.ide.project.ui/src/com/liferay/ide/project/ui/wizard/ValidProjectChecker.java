@@ -119,7 +119,7 @@ public class ValidProjectChecker
 
             if( openNewLiferayProjectWizard )
             {
-                final Action defaultAction = NewPluginProjectDropDownAction.getDefaultAction();
+                final Action defaultAction = NewPluginProjectDropDownAction.getPluginProjectAction();
 
                 if( defaultAction != null )
                 {

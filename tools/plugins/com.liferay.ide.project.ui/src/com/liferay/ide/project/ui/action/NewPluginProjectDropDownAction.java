@@ -44,6 +44,7 @@ import org.eclipse.ui.PlatformUI;
 public class NewPluginProjectDropDownAction extends Action implements IMenuCreator, IWorkbenchWindowPulldownDelegate2
 {
     protected final static String DEFAULT_WIZARD_ID= "com.liferay.ide.project.ui.newModuleProjectWizard";//$NON-NLS-1$
+    protected final static String DEFAULT_PLUGIN_WIZARD_ID= "com.liferay.ide.project.ui.newPluginProjectWizard";
     protected final static String PL_NEW = "newWizards"; //$NON-NLS-1$
     protected final static String TAG_CLASS = "class"; //$NON-NLS-1$
     protected final static String TAG_NAME = "name";//$NON-NLS-1$
@@ -92,7 +93,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
         return actions;
     }
 
-    public static Action getDefaultAction()
+    public static Action getWizardAction( final String wizardId )
     {
         Action[] actions = getNewProjectActions();
 
@@ -108,6 +109,16 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
         }
 
         return null;
+    }
+
+    public static Action getDefaultAction()
+    {
+        return getWizardAction( DEFAULT_WIZARD_ID );
+    }
+
+    public static Action getPluginProjectAction()
+    {
+        return getWizardAction( DEFAULT_PLUGIN_WIZARD_ID );
     }
 
     public NewWizardAction[] getExtraProjectActions()
