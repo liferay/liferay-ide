@@ -101,7 +101,7 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
         {
             for( Action action : actions )
             {
-                if( action instanceof NewWizardAction && action.getId().equals( DEFAULT_WIZARD_ID ) )
+                if( action instanceof NewWizardAction && action.getId().equals( wizardId ) )
                 {
                     return action;
                 }
