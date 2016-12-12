@@ -154,15 +154,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
         try
         {
-            final String[] ret = BladeCLI.execute( sb.toString() );
-
-            final String errors = BladeCLI.checkForErrors( ret );
-
-            if( errors.length() > 0 )
-            {
-                retval = GradleCore.createErrorStatus( "Project create error: " + errors );
-                return retval;
-            }
+            BladeCLI.execute( sb.toString() );
 
             ElementList<ProjectName> projectNames = op.getProjectNames();
 

@@ -67,26 +67,6 @@ public class BladeCLI
 
     static IPath cachedBladeCLIPath;
 
-    public static String checkForErrors( String[] lines )
-    {
-        boolean hasErrors = false;
-        final StringBuilder errors = new StringBuilder();
-
-        for( String line : lines )
-        {
-            if( line.startsWith( "Error" ) )
-            {
-                hasErrors = true;
-            }
-            else if( hasErrors )
-            {
-                errors.append( line );
-            }
-        }
-
-        return errors.toString();
-    }
-
     public static String[] execute( String args ) throws BladeCLIException
     {
         final IPath bladeCLIPath = getBladeCLIPath();
@@ -115,11 +95,6 @@ public class BladeCLI
 
         int returnCode = javaTask.executeJava();
 
-        if( returnCode != 0 )
-        {
-            throw new BladeCLIException( "execute blade error, return code: " + returnCode );
-        }
-
         final List<String> lines = new ArrayList<>();
         final Scanner scanner = new Scanner( out.toString() );
 
@@ -129,6 +104,27 @@ public class BladeCLI
         }
 
         scanner.close();
+
+        boolean hasErrors = false;
+
+        final StringBuilder errors = new StringBuilder();
+
+        for( String line : lines )
+        {
+            if( line.startsWith( "Error" ) )
+            {
+                hasErrors = true;
+            }
+            else if( hasErrors )
+            {
+                errors.append( line );
+            }
+        }
+
+        if( returnCode != 0 || hasErrors )
+        {
+            throw new BladeCLIException( errors.toString() );
+        }
 
         return lines.toArray( new String[0] );
     }
