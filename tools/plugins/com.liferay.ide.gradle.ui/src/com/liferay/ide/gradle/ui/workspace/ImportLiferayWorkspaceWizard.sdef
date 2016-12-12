@@ -40,6 +40,11 @@
                     <visible-when>${ hasBundlesDir == 'true' || provisionLiferayBundle == 'true' }</visible-when>
                     <property>serverName</property>
                 </property-editor>
+                <property-editor>
+                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
+                    <property>bundleUrl</property>
+                    <label>Bundle url</label>
+                </property-editor>
                 <spacer></spacer>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
