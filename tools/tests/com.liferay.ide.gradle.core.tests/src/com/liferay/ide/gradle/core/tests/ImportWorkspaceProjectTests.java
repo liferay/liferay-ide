@@ -15,10 +15,13 @@
 
 package com.liferay.ide.gradle.core.tests;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
@@ -27,6 +30,7 @@ import com.liferay.ide.gradle.core.LiferayGradleProject;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -63,6 +67,19 @@ public class ImportWorkspaceProjectTests
         assertLiferayProject( "sample-portlet" );
         assertLiferayProject( "sample-model-listener" );
         assertLiferayProject( "sample-theme" );
+        assertSourceFolders( "sample-theme", "src" );
+    }
+
+    private void assertSourceFolders( String projectName, String expectedSourceFolderName )
+    {
+        IProject project = CoreUtil.getProject( projectName );
+
+        assertTrue( "Project " + projectName + " doesn't exist.", project.exists() );
+
+        ILiferayProject liferayProject = LiferayCore.create( project );
+        IFolder[] srcFolders = liferayProject.getSourceFolders();
+
+        assertEquals( expectedSourceFolderName, srcFolders[0].getName() );
     }
 
     private void assertLiferayProject( String projectName )

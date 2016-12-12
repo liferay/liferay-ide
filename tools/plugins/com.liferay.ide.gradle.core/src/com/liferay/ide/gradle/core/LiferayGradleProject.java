@@ -180,6 +180,19 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
         return retval;
     }
 
+    @Override
+    public IFolder[] getSourceFolders()
+    {
+        final IFile gulpFile = getProject().getFile( "gulpfile.js" );
+
+        if( gulpFile != null && gulpFile.exists() )
+        {
+            return new IFolder[] { getProject().getFolder( "src" ) };
+        }
+
+        return super.getSourceFolders();
+    }
+
     private IFolder createResorcesFolder( IProject project )
     {
         try
