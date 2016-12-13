@@ -61,7 +61,7 @@
             </pluginExecutionFilter>
             <action>
                 <configurator>
-                    <id>com.liferay.ide.maven.core.bundle.configurator</id>
+                    <id>com.liferay.ide.maven.core.bnd.configurator</id>
                 </configurator>
             </action>
         </pluginExecution>

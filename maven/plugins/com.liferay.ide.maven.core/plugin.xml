@@ -22,14 +22,12 @@
       <configurator
             class="com.liferay.ide.maven.core.BundleProjectConfigurator"
             id="com.liferay.ide.maven.core.bundle.configurator"
-            name="Liferay Bundle Project Configurator"
-            secondaryTo="maven-bundle-plugin">
+            name="Liferay Bundle Project Configurator">
       </configurator>
       <configurator
             class="com.liferay.ide.maven.core.BundleProjectConfigurator"
             id="com.liferay.ide.maven.core.bnd.configurator"
-            name="Liferay BND Project Configurator"
-            secondaryTo="bnd-maven-plugin">
+            name="Liferay BND Project Configurator">
       </configurator>
    </extension>
    <extension
