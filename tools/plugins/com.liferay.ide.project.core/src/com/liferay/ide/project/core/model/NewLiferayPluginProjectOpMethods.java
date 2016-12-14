@@ -97,6 +97,8 @@ public class NewLiferayPluginProjectOpMethods
                 updateProjectPrefs( op );
 
                 removeSampleCodeAndFiles( op );
+
+                op.setImportProjectStatus( true );
             }
 
             retval = StatusBridge.create( status );

@@ -54,6 +54,8 @@ public class SDKLocationListener extends FilteredListener<PropertyContentEvent>
 
         SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
 
+        op.setImportProjectStatus( false );
+
         if( sdk != null )
         {
             switch ( op.getPluginType().content( true ) )

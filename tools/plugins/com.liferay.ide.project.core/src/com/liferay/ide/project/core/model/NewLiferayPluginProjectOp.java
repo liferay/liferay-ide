@@ -361,6 +361,16 @@ public interface NewLiferayPluginProjectOp extends ExecutableElement
 
     ElementList<ProjectName> getProjectNames();
 
+    // *** ImportProjectStatus ***
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    ValueProperty PROP_IMPORT_PROJECT_STATUS = new ValueProperty( TYPE, "ImportProjectStatus" );
+
+    Value<Boolean> getImportProjectStatus();
+    void setImportProjectStatus( String value );
+    void setImportProjectStatus( Boolean value );
+
     // *** Method: execute ***
 
     @Override

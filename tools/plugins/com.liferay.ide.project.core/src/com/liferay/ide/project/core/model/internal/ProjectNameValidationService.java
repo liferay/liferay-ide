@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -111,7 +112,12 @@ public class ProjectNameValidationService extends ValidationService
             }
             else if( isInvalidProjectName( op ) )
             {
-                retval = Status.createErrorStatus( "A project with that name already exists." );
+                Boolean projectImported = op.getImportProjectStatus().content();
+
+                if( projectImported == false )
+                {
+                    retval = Status.createErrorStatus( "A project with that name already exists." );
+                }
             }
             else if( isAntProject( op ) && isSuffixOnly( currentProjectName ) )
             {

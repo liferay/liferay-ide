@@ -33,7 +33,9 @@ public class ProjectNameListener extends FilteredListener<PropertyContentEvent>
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
-        NewLiferayPluginProjectOpMethods.updateLocation( op( event ) );
+        final NewLiferayPluginProjectOp op = op( event );
+        op.setImportProjectStatus( false );
+        NewLiferayPluginProjectOpMethods.updateLocation( op );
     }
 
     protected NewLiferayPluginProjectOp op( PropertyContentEvent event )

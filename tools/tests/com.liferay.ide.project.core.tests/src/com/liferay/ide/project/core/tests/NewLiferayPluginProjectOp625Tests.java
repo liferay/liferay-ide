@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
 import com.liferay.ide.project.core.model.PluginType;
 
+import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.junit.AfterClass;
 import org.junit.Ignore;
@@ -169,4 +170,25 @@ public class NewLiferayPluginProjectOp625Tests extends NewLiferayPluginProjectOp
             op.getSdkLocation().validation().message() );
     }
 
+    @Test
+    public void testProjectNameValidationServiceAfterProjectCreated() throws Exception
+    {
+        if( shouldSkipBundleTests() ) return;
+
+        // test service-builder project
+        NewLiferayPluginProjectOp opCreateProjectA = newProjectOp("test-project-name");
+
+        opCreateProjectA.setIncludeSampleCode( false );
+        opCreateProjectA.setPluginType( PluginType.portlet );
+
+        createAntProject( opCreateProjectA );
+
+        Status projectNameAValidationResult = opCreateProjectA.getProjectName().validation();
+
+        assertEquals(true, projectNameAValidationResult.ok());
+
+        NewLiferayPluginProjectOp opCreateProjectB = newProjectOp("test-project-name");
+        Status projectNameBValidationResult = opCreateProjectB.getProjectName().validation();
+        assertEquals(false, projectNameBValidationResult.ok());
+     }
 }
