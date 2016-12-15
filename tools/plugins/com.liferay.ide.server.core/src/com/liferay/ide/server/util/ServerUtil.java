@@ -723,9 +723,7 @@ public class ServerUtil
     {
         SDK sdk = SDKUtil.getSDKFromProjectDir( project.getLocation().toFile() );
 
-        IStatus status = sdk.validate();
-
-        if ( !status.isOK() )
+        if( sdk == null || !sdk.validate().isOK() )
         {
             return null;
         }
