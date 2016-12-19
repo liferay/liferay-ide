@@ -15,7 +15,6 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
@@ -84,24 +83,6 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
         }
 
         return retval;
-    }
-
-    private boolean checkGradleThemePlugin( final IProject project )
-    {
-        final CustomModel customModel =
-            GradleCore.getToolingModel( GradleCore.getDefault(), CustomModel.class, project );
-
-        if( customModel == null )
-        {
-            return false;
-        }
-
-        if( customModel.hasPlugin( "com.liferay.gradle.plugins.theme.builder.ThemeBuilderPlugin" ) )
-        {
-            return true;
-        }
-
-        return false;
     }
 
     @Override
