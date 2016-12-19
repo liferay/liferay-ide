@@ -279,11 +279,22 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         {
             retval = orgArgsString == null ? "" : orgArgsString;
 
+            String xbootClasspath = "";
+
             // replace and null out all newArgs that already exist
             final int size = newArgs.length;
 
             for( int i = 0; i < size; i++ )
             {
+                if( newArgs[i].startsWith( "-Xbootclasspath" ) )
+                {
+                    xbootClasspath = xbootClasspath + newArgs[i] + " ";
+
+                    newArgs[i] = null;
+
+                    continue;
+                }
+
                 final int ind = newArgs[i].indexOf( " " );
                 final int ind2 = newArgs[i].indexOf( "=" );
 
@@ -460,6 +471,24 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                     retval += newArgs[i];
                 }
             }
+
+            //delete xbootclasspath
+            int xbootIndex = retval.lastIndexOf( "-Xbootclasspath" );
+
+            while( xbootIndex != -1 )
+            {
+                String head = retval.substring( 0, xbootIndex );
+
+                int tailIndex = getNextToken( retval, xbootIndex );
+
+                String tail = retval.substring( tailIndex == retval.length() ? retval.length() : tailIndex + 1 );
+
+                retval = head+tail;
+
+                xbootIndex = retval.lastIndexOf( "-Xbootclasspath" );
+            }
+
+            retval = retval+ " " + xbootClasspath;
         }
 
         return retval;

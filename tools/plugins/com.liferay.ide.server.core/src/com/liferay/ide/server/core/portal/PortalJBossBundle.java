@@ -129,15 +129,14 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     {
         final List<String> args = new ArrayList<String>();
 
-        args.add( "-mp");
-        args.add( "\"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
-        args.add( "-jaxpmodule");
+        args.add( "-mp \"" + this.bundlePath.toPortableString() +  "/modules" + "\"");
+        args.add( "-jaxpmodule" );
         args.add( "javax.xml.jaxp-provider" );
         args.add( "org.jboss.as.standalone" );
-        args.add( "-b");
+        args.add( "-b" );
         args.add( "localhost" );
         args.add( "--server-config=standalone.xml" );
-        args.add( "-Djboss.server.base.dir=" + "\"" + this.bundlePath.toPortableString() + "/standalone/"+ "\"");
+        args.add( "-Djboss.server.base.dir=" + "\"" + this.bundlePath.toPortableString() + "/standalone/"+ "\"" );
 
         return args.toArray( new String[0] );
 
@@ -148,8 +147,7 @@ public class PortalJBossBundle extends AbstractPortalBundle implements PortalBun
     {
         final List<String> args = new ArrayList<String>();
 
-        args.add( "-mp" );
-        args.add( "\"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
+        args.add( "-mp \"" + this.bundlePath.toPortableString() +  "/modules" + "\"" );
         args.add( "org.jboss.as.cli" );
         args.add( "--controller=localhost:" + 9999 );
         args.add( "--connect" );

@@ -54,8 +54,7 @@ public class PortalWildFlyBundle extends PortalJBossBundle
     {
         final List<String> args = new ArrayList<String>();
 
-        args.add( "-mp" );
-        args.add( "\"" + this.bundlePath.toPortableString() + "/modules" + "\"" );
+        args.add( "-mp \"" + this.bundlePath.toPortableString() + "/modules" + "\"" );
         args.add( "org.jboss.as.cli" );
         args.add( "--connect" );
         args.add( "--controller=localhost:" + 9990 );
