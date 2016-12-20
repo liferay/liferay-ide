@@ -540,7 +540,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                             @Override
                             public void run()
                             {
-                                String message = "No files needing upgrade where found.";
+                                String message = "No files that need to be upgraded were found.";
                                 PageValidateEvent pe = new PageValidateEvent();
                                 pe.setMessage( message );
                                 pe.setType( PageValidateEvent.WARNING );

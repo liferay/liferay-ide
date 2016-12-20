@@ -37,14 +37,15 @@ public class BundleNameValidationService extends ValidationService
 
         if( CoreUtil.empty( serverName ) )
         {
-            retval = Status.createErrorStatus( "The bundle name is empty. Please input one." );
+            retval = Status.createErrorStatus( "The Server Name is empty. Please input one." );
 
             return retval;
         }
 
         if( ServerPlugin.isNameInUse( null, serverName ) )
         {
-            retval = Status.createErrorStatus( "The bundle name is already in use. Specify a different name." );
+            retval = Status.createErrorStatus(
+                "The Server Name \"" + serverName + "\"+ is already in use. Specify a different name." );
 
             return retval;
         }
