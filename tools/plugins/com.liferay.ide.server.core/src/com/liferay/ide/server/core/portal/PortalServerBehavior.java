@@ -472,23 +472,26 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                 }
             }
 
-            //delete xbootclasspath
-            int xbootIndex = retval.lastIndexOf( "-Xbootclasspath" );
-
-            while( xbootIndex != -1 )
+            if( !CoreUtil.isNullOrEmpty( xbootClasspath ) )
             {
-                String head = retval.substring( 0, xbootIndex );
+                // delete xbootclasspath
+                int xbootIndex = retval.lastIndexOf( "-Xbootclasspath" );
 
-                int tailIndex = getNextToken( retval, xbootIndex );
+                while( xbootIndex != -1 )
+                {
+                    String head = retval.substring( 0, xbootIndex );
 
-                String tail = retval.substring( tailIndex == retval.length() ? retval.length() : tailIndex + 1 );
+                    int tailIndex = getNextToken( retval, xbootIndex );
 
-                retval = head+tail;
+                    String tail = retval.substring( tailIndex == retval.length() ? retval.length() : tailIndex + 1 );
 
-                xbootIndex = retval.lastIndexOf( "-Xbootclasspath" );
+                    retval = head + tail;
+
+                    xbootIndex = retval.lastIndexOf( "-Xbootclasspath" );
+                }
+
+                retval = retval + " " + xbootClasspath;
             }
-
-            retval = retval+ " " + xbootClasspath;
         }
 
         return retval;

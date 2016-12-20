@@ -89,7 +89,7 @@ public class PingThread {
 				int code = ((HttpURLConnection)conn).getResponseCode();
 
 				// ping worked - server is up
-				if (!stop && code == 200) {
+				if (!stop && code != 404) {
 					Thread.sleep(200);
 					behaviour.setServerStarted();
 					stop = true;
