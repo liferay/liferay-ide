@@ -24,10 +24,14 @@ import com.liferay.ide.server.util.ServerUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.internal.Server;
+import org.eclipse.wst.server.core.model.IModuleResource;
+import org.eclipse.wst.server.core.model.IModuleResourceDelta;
 import org.eclipse.wst.server.core.model.PublishOperation;
 import org.eclipse.wst.server.core.model.PublishTaskDelegate;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
@@ -108,6 +112,20 @@ public class PortalPublishTask extends PublishTaskDelegate
             {
                 IModule[] module = (IModule[]) modules.get( i );
                 Integer deltaKind = (Integer) kindList.get( i );
+                boolean needClean = false;
+                IModuleResourceDelta[] deltas = ( (Server) server ).getPublishedResourceDelta( module );
+
+                for( IModuleResourceDelta delta : deltas )
+                {
+                    final IModuleResource resource = delta.getModuleResource();
+                    final IFile resourceFile = (IFile) resource.getAdapter( IFile.class );
+
+                    if( resourceFile != null && resourceFile.getName().equals( "bnd.bnd" ) )
+                    {
+                        needClean = true;
+                        break;
+                    }
+                }
 
                 switch( kind )
                 {
@@ -119,8 +137,18 @@ public class PortalPublishTask extends PublishTaskDelegate
                         switch( deltaKind )
                         {
                             case ServerBehaviourDelegate.ADDED:
-                            case ServerBehaviourDelegate.CHANGED:
                                 addOperation( BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );
+                                break;
+
+                            case ServerBehaviourDelegate.CHANGED:
+                                if (needClean) {
+                                    addOperation( BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );                                    
+                                }
+                                else
+                                {
+                                    addOperation( BundlePublishFullAddNoClean.class, tasks, server, module, supervisor, existingBundles );                                    
+                                }
+
                                 break;
 
                             case ServerBehaviourDelegate.REMOVED:

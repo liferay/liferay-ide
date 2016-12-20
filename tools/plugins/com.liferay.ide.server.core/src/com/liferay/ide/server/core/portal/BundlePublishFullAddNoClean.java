@@ -12,26 +12,28 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.core;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
+package com.liferay.ide.server.core.portal;
+
+import org.eclipse.wst.server.core.IModule;
+import org.eclipse.wst.server.core.IServer;
+import org.osgi.framework.dto.BundleDTO;
 
 /**
- * @author Gregory Amerson
  * @author Terry Jia
  */
-public interface IBundleProject extends ILiferayProject
+public class BundlePublishFullAddNoClean extends BundlePublishFullAdd
 {
 
-    boolean filterResource( IPath resourcePath );
+    public BundlePublishFullAddNoClean(
+        IServer s, IModule[] modules, BundleSupervisor supervisor, BundleDTO[] existingBundles )
+    {
+        super( s, modules, supervisor, existingBundles );
+    }
 
-    String getBundleShape();
+    protected boolean cleanIfNeeded()
+    {
+        return false;
+    }
 
-    IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException;
-
-    String getSymbolicName() throws CoreException;
-
-    boolean isFragmentBundle();
 }

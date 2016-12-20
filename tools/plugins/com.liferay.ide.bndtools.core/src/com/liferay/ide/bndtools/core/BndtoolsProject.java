@@ -71,7 +71,7 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     }
 
     @Override
-    public IPath getOutputBundle( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
         IPath retval = null;
 

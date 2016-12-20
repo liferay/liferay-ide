@@ -142,7 +142,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         try
         {
-            IPath outputFile = bundleProject.getOutputBundle( false, null );
+            IPath outputFile = bundleProject.getOutputBundle( false, false, null );
 
             findFilesInPath( modulesPath.toFile(), outputFile.lastSegment(), moduleFiles );
             findFilesInPath( deployPath.toFile(), outputFile.lastSegment(), moduleFiles );
@@ -189,7 +189,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
     {
         IStatus retval = null;
 
-        IPath outputJar = bundleProject.getOutputBundle( false, monitor );
+        IPath outputJar = bundleProject.getOutputBundle( false, false, monitor );
 
         String fragmentHostName = ServerUtil.getFragemtHostName( outputJar.toFile() );
 

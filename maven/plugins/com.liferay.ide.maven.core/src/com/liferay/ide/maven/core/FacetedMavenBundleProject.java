@@ -55,7 +55,7 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
     }
 
     @Override
-    public IPath getOutputBundle( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
         IPath outputJar = null;
 

@@ -38,6 +38,7 @@ import org.osgi.framework.dto.BundleDTO;
 
 /**
  * @author Gregory Amerson
+ * @author Terry Jia
  */
 public class BundlePublishFullAdd extends BundlePublishOperation
 {
@@ -77,6 +78,10 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         return retval;
     }
 
+    protected boolean cleanIfNeeded(){
+        return true;
+    }
+
     @Override
     public void execute( IProgressMonitor monitor, IAdaptable info ) throws CoreException
     {
@@ -99,7 +104,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
 
                 monitor.subTask( "Building " + module.getName() + " output bundle..." );
 
-                final IPath outputJar = bundleProject.getOutputBundle( true, monitor );
+                final IPath outputJar = bundleProject.getOutputBundle( true, cleanIfNeeded(), monitor );
 
                 if( outputJar!= null && outputJar.toFile().exists() )
                 {
@@ -197,4 +202,5 @@ public class BundlePublishFullAdd extends BundlePublishOperation
 
         return retval;
     }
+
 }

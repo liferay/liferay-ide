@@ -95,7 +95,7 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     }
 
     @Override
-    public IPath getOutputBundle( boolean buildIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException
     {
         IPath outputJar = null;
 
@@ -113,7 +113,12 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
             }
 
             // TODO update status
-            final List<String> goals = Arrays.asList( "package" );
+            List<String> goals = Arrays.asList( "package" );
+
+            if( cleanIfNeeded )
+            {
+                goals = Arrays.asList( "clean", "package" );
+            }
 
             try
             {
