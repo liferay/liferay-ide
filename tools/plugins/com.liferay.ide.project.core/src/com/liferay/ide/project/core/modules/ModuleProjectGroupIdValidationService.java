@@ -15,8 +15,6 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.project.core.model.internal.GroupIdValidationService;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
@@ -25,29 +23,33 @@ import org.eclipse.sapphire.Listener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.StatusBridge;
+import org.eclipse.sapphire.services.ValidationService;
 
 /**
  * @author Simon Jiang
  */
 @SuppressWarnings( "restriction" )
-public class ModuleProjectGroupIdValidationService extends GroupIdValidationService
+public class ModuleProjectGroupIdValidationService extends ValidationService
 {
     private Listener listener;
 
     @Override
     protected Status compute()
     {
-        if( "maven".equals( op().getProjectProvider().content( true ).getShortName() ) )
+        if( "maven-module".equals( op().getProjectProvider().content( true ).getShortName() ) )
         {
             final String groupId = op().getGroupId().content( true );
 
             final IStatus javaStatus =
                 JavaConventions.validatePackageName( groupId, CompilerOptions.VERSION_1_7, CompilerOptions.VERSION_1_7 );
 
-            return StatusBridge.create( javaStatus );
+            if( !javaStatus.isOK() )
+            {
+                return StatusBridge.create( javaStatus );
+            }
         }
 
-        return StatusBridge.create( org.eclipse.core.runtime.Status.OK_STATUS );
+        return Status.createOkStatus();
     }
 
     @Override
@@ -65,6 +67,8 @@ public class ModuleProjectGroupIdValidationService extends GroupIdValidationServ
         };
 
         op().getProjectProvider().attach( this.listener );
+        op().getPackageName().attach( this.listener );
+        op().getLocation().attach( this.listener );
     }
 
     private NewLiferayModuleProjectOp op()
