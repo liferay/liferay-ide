@@ -40,6 +40,7 @@
       <import feature="com.liferay.ide.eclipse.tools" version="3.0.0" match="greaterOrEqual"/>
       <import feature="org.sonatype.tycho.m2e.feature" version="0.8.0" match="greaterOrEqual"/>
       <import feature="com.ianbrandt.tools.m2e.mdp.feature" version="0.0.4" match="greaterOrEqual"/>
+      <import feature="bndtools.m2e.feature" version="3.4.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
