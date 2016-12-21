@@ -34,16 +34,22 @@ public class ServiceNameValidataionService extends ValidationService
     protected Status compute()
     {
         Status retVal = Status.createOkStatus();
-        final String serviceName = op().getServiceName().content( true );
-        
-        if ( CoreUtil.isNullOrEmpty( serviceName ))
+
+        final String projectTemplate = op().getProjectTemplateName().content();
+
+        if( "service".equals( projectTemplate ) || "service-wrapper".equals( projectTemplate.equals( "service-wrapper" ) ) )
         {
-            retVal = Status.createErrorStatus( "The service integration point can't be empty." );
+            final String serviceName = op().getServiceName().content( true );
+
+            if ( CoreUtil.isNullOrEmpty( serviceName ))
+            {
+                retVal = Status.createErrorStatus( "The service name must be specified." );
+            }
         }
-        
+
         return retVal;
     }
-    
+
     @Override
     public void dispose()
     {
