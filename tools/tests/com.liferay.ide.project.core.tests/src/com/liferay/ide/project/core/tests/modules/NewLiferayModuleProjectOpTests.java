@@ -204,13 +204,13 @@ public class NewLiferayModuleProjectOpTests
         Status exStatus =
             NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
 
-        assertEquals( "OK", exStatus.message() );
+        assertTrue( exStatus.message(), exStatus.ok() );
 
         IProject modPorject = CoreUtil.getProject( op.getProjectName().content() );
         modPorject.open( new NullProgressMonitor() );
 
         IFile testAddPortletProvider =
-            modPorject.getFile( "src/main/java/com/example/portlet/TestAddPortletProvider.java" );
+            modPorject.getFile( "src/main/java/test/properties/in/portlet/provider/portlet/TestAddPortletProvider.java" );
 
         assertTrue( testAddPortletProvider.exists() );
 

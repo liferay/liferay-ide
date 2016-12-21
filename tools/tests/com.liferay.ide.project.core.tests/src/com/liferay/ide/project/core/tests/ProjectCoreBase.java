@@ -92,7 +92,9 @@ public class ProjectCoreBase extends ServerCoreBase
         {
             if ( project != null && project.isAccessible() && project.exists())
             {
-                project.delete( true, true, new NullProgressMonitor() );
+                final NullProgressMonitor monitor = new NullProgressMonitor();
+                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                project.delete( true, true, monitor );
             }
         }
     }

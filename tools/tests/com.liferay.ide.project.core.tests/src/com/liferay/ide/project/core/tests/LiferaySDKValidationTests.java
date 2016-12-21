@@ -65,10 +65,10 @@ public class LiferaySDKValidationTests extends ProjectCoreBase
 
         if( sdk != null )
         {
-            CoreUtil.getWorkspaceRoot().getProject( sdk.getName() ).delete( false, false, null );
+            CoreUtil.getWorkspaceRoot().getProject( sdk.getName() ).delete( false, true, null );
         }
 
-        CoreUtil.getWorkspaceRoot().getProject( "test-sdk" ).delete( false, false, null );
+        CoreUtil.getWorkspaceRoot().getProject( "test-sdk" ).delete( false, true, null );
 
         // set existed project name
         op.setSdkLocation( sdkLocation.toOSString() );
