@@ -35,6 +35,10 @@
          version="0.0.0"/>
 
    <includes
+         id="bndtools.m2e.feature"
+         version="0.0.0"/>
+
+   <includes
          id="com.liferay.blade.tools"
          version="0.0.0"/>
 
