@@ -247,21 +247,24 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         IProject project = create( op );
 
-        IFile serviceFile = project.getFile( "src/main/java/com/example/NewComponent.java" );
+        IFile serviceFile = project.getFile( "src/main/java/service/test/ServiceTest.java" );
+
+        assertTrue( serviceFile.exists() );
 
         String contents =
-                        "package com.example;\n" +
-                        "import com.liferay.portal.kernel.events.ActionException;\n" +
-                        "import com.liferay.portal.kernel.events.LifecycleAction;\n" +
-                        "import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
-                        "import org.osgi.service.component.annotations.Component;\n" +
-                        "@Component(\n" +
-                            "immediate = true, property = {\"key=login.events.pre\"},\n" +
-                            "service = LifecycleAction.class\n" +
-                        ")\n" +
-                        "public class NewComponent implements LifecycleAction {\n" +
-                            "@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n" +
-                        "}" ;
+            "package service.test;\n" +
+            "import com.liferay.portal.kernel.events.ActionException;\n" +
+            "import com.liferay.portal.kernel.events.LifecycleAction;\n" +
+            "import com.liferay.portal.kernel.events.LifecycleEvent;\n" +
+            "import org.osgi.service.component.annotations.Component;\n" +
+            "@Component(\n" +
+                "immediate = true, property = {\"key=login.events.pre\"},\n" +
+                "service = LifecycleAction.class\n" +
+            ")\n" +
+            "public class ServiceTest implements LifecycleAction {\n" +
+                "@Override public void processLifecycleEvent(LifecycleEvent lifecycleEvent) throws ActionException { }\n" +
+            "}";
+
         serviceFile.setContents( new ByteArrayInputStream( contents.getBytes() ), IResource.FORCE, monitor );
 
         verifyProject( project );
@@ -463,9 +466,9 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setComponentName( "Foo" );
         IProject project = create( op );
 
-        verifyProject(project);
+        assertTrue( project.getFile( "src/main/java/foo/portlet/FooPortlet.java" ).exists() );
 
-        assertTrue(project.getFile( "src/main/java/com/example/portlet/FooPortlet.java" ).exists());
+        verifyProject( project );
     }
 
     @Test
@@ -479,9 +482,25 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setPackageName( "foo.bar" );
         IProject project = create( op );
 
-        verifyProject(project);
+        assertTrue( project.getFile( "src/main/java/foo/bar/portlet/FooBarPortlet.java" ).exists() );
 
-        assertTrue(project.getFile( "src/main/java/foo/bar/portlet/FooBarPortlet.java" ).exists());
+        verifyProject( project );
+    }
+
+    @Test
+    public void testNewLiferayMavenModuleMVCPortletProjectCustomPackage() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "foo-bar" );
+        op.setProjectProvider( "maven-module" );
+        op.setComponentName( "FooBar" );
+        op.setPackageName( "my.custom.pname" );
+        IProject project = create( op );
+
+        assertTrue( project.getFile( "src/main/java/my/custom/pname/portlet/FooBarPortlet.java" ).exists() );
+
+        verifyProject( project );
     }
 
     @Test
