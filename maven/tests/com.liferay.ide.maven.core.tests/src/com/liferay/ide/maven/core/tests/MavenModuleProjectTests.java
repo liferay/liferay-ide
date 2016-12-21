@@ -92,7 +92,27 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectProvider( "maven-module" );
         op.setProjectTemplateName( "api" );
 
-        createAndBuild(op);
+        createAndBuild( op );
+    }
+
+    @Test
+    public void testProjectTemplateApiWithInvalidPackageName() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "api-test-1" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "api" );
+
+        assertFalse( op.validation().ok() );
+
+        assertTrue( op.validation().message().contains( "not a valid Java identifier" ) );
+
+        op.setPackageName( "api.test.one" );
+
+        assertTrue( op.validation().message(), op.validation().ok() );
+
+        createAndBuild( op );
     }
 
     @Test
@@ -439,6 +459,8 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
     private void createAndBuild( NewLiferayModuleProjectOp op ) throws Exception
     {
+        assertTrue( op.validation().message(), op.validation().ok() );
+
         IProject project = create( op );
 
         verifyProject( project );
