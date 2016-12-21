@@ -26,7 +26,6 @@ import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
-import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 
@@ -92,7 +91,6 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** ServiceName ***
     @Label( standard = "Service Name" )
-    @Required
     @Service( impl = ServicePossibleValuesService.class )
     @Service( impl = ServiceDefaultValuesService.class )
     @Service( impl = ServiceNameValidataionService.class )
