@@ -82,10 +82,9 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
     // *** FinalProjectName ***
 
     // *** ComponentName ***
-    @DefaultValue ( text = "NewComponent" )
     @Label( standard = "Component Class Name" )
     @Service( impl = ComponentNameValidationService.class )
-    //@Service( impl = ComponentNameDefaultValueService.class )
+    @Service( impl = ComponentNameDefaultValueService.class )
     ValueProperty PROP_COMPONENT_NAME = new ValueProperty( TYPE, "ComponentName" );
 
     Value<String> getComponentName();
@@ -104,10 +103,9 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** PackageeName ***
 
-    @DefaultValue( text = "com.example" )
     @Label( standard = "Package Name" )
     @Service( impl = PackageNameValidationService.class )
-    //@Service( impl = PackageNameDefaultValueService.class )
+    @Service( impl = PackageNameDefaultValueService.class )
     ValueProperty PROP_PACKAGE_NAME = new ValueProperty( TYPE, "PackageName" );
 
     Value<String> getPackageName();

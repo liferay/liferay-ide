@@ -21,6 +21,7 @@ import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
  * @author Andy Wu
+ * @author Gregory Amerson
  */
 public class PackageNameDefaultValueService extends DefaultValueService
 {
@@ -34,7 +35,6 @@ public class PackageNameDefaultValueService extends DefaultValueService
 
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
-
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
@@ -54,12 +54,9 @@ public class PackageNameDefaultValueService extends DefaultValueService
 
         if( projectName != null )
         {
-            String projectTemplate = op().getProjectTemplateName().content( true );
+            String packageName = projectName.replace('-', '.');
+            retVal = packageName.replace(' ', '.');
 
-            if( projectTemplate != null )
-            {
-                retVal = projectName.replaceAll( "([-._])+", "." ).toLowerCase();
-            }
         }
 
         return retVal;

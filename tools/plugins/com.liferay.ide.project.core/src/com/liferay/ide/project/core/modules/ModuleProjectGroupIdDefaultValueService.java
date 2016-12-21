@@ -39,10 +39,10 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
         String groupId = null;
 
         final Path location = op().getLocation().content();
+        final NewLiferayModuleProjectOp op = op();
 
         if( location != null )
         {
-            final NewLiferayModuleProjectOp op = op();
             final String parentProjectLocation = location.toOSString();
             final IPath parentProjectOsPath = org.eclipse.core.runtime.Path.fromOSString( parentProjectLocation );
             final String projectName = op().getProjectName().content();
@@ -56,7 +56,7 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 
             if( CoreUtil.isNullOrEmpty( groupId ) )
             {
-                groupId = "com.example";
+                groupId = op.getPackageName().content();
             }
         }
 

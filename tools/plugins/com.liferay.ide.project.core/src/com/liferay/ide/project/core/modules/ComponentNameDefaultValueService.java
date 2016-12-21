@@ -14,7 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
-import org.apache.commons.lang.WordUtils;
 import org.eclipse.sapphire.DefaultValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
@@ -54,21 +53,21 @@ public class ComponentNameDefaultValueService extends DefaultValueService
 
         if( projectName != null )
         {
-            String projectTemplate = op().getProjectTemplateName().content( true );
+            final String projectTemplate = op().getProjectTemplateName().content();
 
-            if( projectTemplate != null )
-            {
-                final char[] tokens = new char[] { '-', '.', '_' };
+            String className = getClassName(projectName);
 
-                String finalProjectName = WordUtils.capitalizeFully( projectName, tokens );
-
-                for( char token : tokens )
-                {
-                    finalProjectName = finalProjectName.replaceAll( "\\" + token, "" );
-                }
-
-                retVal = finalProjectName;
+            if (projectTemplate.equals("activator") && !className.endsWith("Activator")) {
+                className += "Activator";
             }
+            else if ((projectTemplate.equals("mvc-portlet") ||
+                      projectTemplate.equals("portlet")) &&
+                     (className.length() > 7) && className.endsWith("Portlet")) {
+
+                className = className.substring(0, className.length() - 7);
+            }
+
+            retVal = className;
         }
 
         return retVal;
@@ -79,6 +78,60 @@ public class ComponentNameDefaultValueService extends DefaultValueService
         return context( NewLiferayModuleProjectOp.class );
     }
 
+    private String getClassName(String name) {
+        name = getCapitalizedName(name);
+
+        return removeChar(name, ' ');
+    }
+
+    private String getCapitalizedName(String name) {
+        name = name.replace('-', ' ');
+        name = name.replace('.', ' ');
+
+        return capitalize(name, ' ');
+    }
+
+    static String removeChar(String s, char c) {
+        int y = s.indexOf(c);
+
+        if (y == -1) {
+            return s;
+        }
+
+        StringBuilder sb = new StringBuilder(s.length());
+
+        int x = 0;
+
+        while (x <= y) {
+            sb.append(s.substring(x, y));
+
+            x = y + 1;
+
+            y = s.indexOf(c, x);
+        }
+
+        sb.append(s.substring(x));
+
+        return sb.toString();
+    }
+
+    private static String capitalize(String s, char separator) {
+        StringBuilder sb = new StringBuilder(s.length());
+
+        sb.append(s);
+
+        for (int i = 0; i < sb.length(); i++) {
+            char c = sb.charAt(i);
+
+            if ((i == 0) || (sb.charAt(i - 1) == separator)) {
+                c = Character.toUpperCase(c);
+            }
+
+            sb.setCharAt(i, c);
+        }
+
+        return sb.toString();
+    }
     @Override
     public void dispose()
     {
