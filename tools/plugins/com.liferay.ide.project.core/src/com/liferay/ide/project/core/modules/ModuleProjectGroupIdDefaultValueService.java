@@ -88,6 +88,7 @@ public class ModuleProjectGroupIdDefaultValueService extends DefaultValueService
 
         op().getLocation().attach( listener );
         op().getProjectName().attach( listener );
+        op().getPackageName().attach( listener );
     }
 
     private NewLiferayModuleProjectOp op()
