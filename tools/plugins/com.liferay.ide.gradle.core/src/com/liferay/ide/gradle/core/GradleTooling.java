@@ -15,7 +15,6 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 
@@ -24,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.Set;
 
 import org.eclipse.core.runtime.Platform;
 import org.gradle.tooling.GradleConnector;
@@ -102,13 +100,6 @@ public class GradleTooling
         }
 
         return retval;
-    }
-
-    public static Set<File> getOutputFiles( File cacheDir, File buildDir ) throws Exception
-    {
-        final CustomModel model = getModel( CustomModel.class, cacheDir, buildDir );
-
-        return model.getOutputFiles();
     }
 
 }

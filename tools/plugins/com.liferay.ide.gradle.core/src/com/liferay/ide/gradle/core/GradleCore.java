@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Set;
 
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
 import org.eclipse.core.resources.IFile;
@@ -99,15 +98,6 @@ public class GradleCore extends Plugin
     public static GradleCore getDefault()
     {
         return plugin;
-    }
-
-    public static Object getProjectInfoFromDir( GradleCore gradleCore, File file )
-    {
-        CustomModel model = getToolingModel( gradleCore, CustomModel.class, file );
-
-        Set<File> files = model.getOutputFiles();
-
-        return files;
     }
 
     public static <T> T getToolingModel( GradleCore gradleCore, Class<T> modelClass, File projectDir )
