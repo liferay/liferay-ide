@@ -15,9 +15,11 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.util.DefaultMaven2OsgiConverter;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.io.File;
@@ -177,6 +179,13 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
     @Override
     public String getSymbolicName() throws CoreException
     {
+        String bsn = ProjectUtil.getBundleSymbolicNameFromBND( getProject() );
+
+        if( !CoreUtil.empty( bsn ) )
+        {
+            return bsn;
+        }
+
         String retval = null;
 
         final IProgressMonitor monitor = new NullProgressMonitor();

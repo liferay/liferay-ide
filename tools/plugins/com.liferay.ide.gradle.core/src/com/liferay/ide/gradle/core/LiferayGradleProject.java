@@ -21,9 +21,12 @@ import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.BaseLiferayProject;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.IResourceBundleProject;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.IProjectBuilder;
+import com.liferay.ide.project.core.util.ProjectUtil;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -321,6 +324,13 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     @Override
     public String getSymbolicName() throws CoreException
     {
+        String bsn = ProjectUtil.getBundleSymbolicNameFromBND( getProject() );
+
+        if( !CoreUtil.empty( bsn ) )
+        {
+            return bsn;
+        }
+
         String retval = null;
 
         final IPath outputBundle = getOutputBundlePath( getProject() );

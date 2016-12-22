@@ -17,6 +17,7 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
@@ -104,7 +105,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
     private void findFilesInPath( final File dir, final String pattern, List<File> retval  )
     {
-        if( dir.exists() && dir.isDirectory() )
+        if( dir.exists() && dir.isDirectory() && !CoreUtil.empty( pattern ) )
         {
             final File[] files = dir.listFiles();
 

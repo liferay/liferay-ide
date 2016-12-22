@@ -21,6 +21,7 @@ import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
+import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
@@ -47,6 +48,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -97,6 +99,7 @@ import org.eclipse.wst.common.project.facet.core.ProjectFacetsManager;
 import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingCopy;
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
+import org.osgi.framework.Constants;
 
 /**
  * @author Gregory Amerson
@@ -1138,6 +1141,22 @@ public class ProjectUtil
         }
 
         return requiredSuffix;
+    }
+
+    public static String getBundleSymbolicNameFromBND(IProject project)
+    {
+        String retVal = null;
+
+        IFile bndFile = project.getFile( "bnd.bnd" );
+
+        if( bndFile.exists() )
+        {
+            Properties prop = PropertiesUtil.loadProperties(bndFile.getLocation().toFile());
+
+            retVal = prop.getProperty( Constants.BUNDLE_SYMBOLICNAME );
+        }
+
+        return retVal;
     }
 
     public static String guessPluginType( IFacetedProjectWorkingCopy fpwc )
