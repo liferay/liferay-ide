@@ -78,8 +78,9 @@ public class BundlePublishFullAdd extends BundlePublishOperation
         return retval;
     }
 
-    protected boolean cleanIfNeeded(){
-        return true;
+    protected boolean cleanBuildNeeded()
+    {
+        return false;
     }
 
     @Override
@@ -104,7 +105,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
 
                 monitor.subTask( "Building " + module.getName() + " output bundle..." );
 
-                final IPath outputJar = bundleProject.getOutputBundle( true, cleanIfNeeded(), monitor );
+                final IPath outputJar = bundleProject.getOutputBundle( cleanBuildNeeded(), monitor );
 
                 if( outputJar!= null && outputJar.toFile().exists() )
                 {

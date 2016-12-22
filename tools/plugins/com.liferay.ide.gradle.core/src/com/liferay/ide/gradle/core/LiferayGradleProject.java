@@ -256,11 +256,11 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     }
 
     @Override
-    public IPath getOutputBundle( boolean build, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
     {
         IPath outputBundlePath = getOutputBundlePath( getProject() );
 
-        if( !build && outputBundlePath != null && outputBundlePath.toFile().exists() )
+        if( !cleanBuild && outputBundlePath != null && outputBundlePath.toFile().exists() )
         {
             return outputBundlePath;
         }
@@ -279,7 +279,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
                 BlockingResultHandler<Object> handler = new BlockingResultHandler<>( Object.class );
 
-                if( cleanIfNeeded )
+                if( cleanBuild )
                 {
                     launcher.forTasks( "clean", "build" ).run( handler );
                 }

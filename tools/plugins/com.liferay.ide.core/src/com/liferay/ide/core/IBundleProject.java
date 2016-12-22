@@ -29,7 +29,7 @@ public interface IBundleProject extends ILiferayProject
 
     String getBundleShape();
 
-    IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException;
+    IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException;
 
     String getSymbolicName() throws CoreException;
 

@@ -71,13 +71,18 @@ public class BndtoolsProject extends BaseLiferayProject implements IBundleProjec
     }
 
     @Override
-    public IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
     {
         IPath retval = null;
 
         try
         {
-            final File[] buildFiles = this.bndProject.getBuildFiles( buildIfNeeded );
+            if( cleanBuild )
+            {
+                this.bndProject.clean();
+            }
+
+            final File[] buildFiles = this.bndProject.getBuildFiles( true );
 
             if( !CoreUtil.isNullOrEmpty( buildFiles ) )
             {

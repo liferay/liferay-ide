@@ -137,16 +137,17 @@ public class PortalPublishTask extends PublishTaskDelegate
                         switch( deltaKind )
                         {
                             case ServerBehaviourDelegate.ADDED:
-                                addOperation( BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );
+                                addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, supervisor, existingBundles );
                                 break;
 
                             case ServerBehaviourDelegate.CHANGED:
-                                if (needClean) {
-                                    addOperation( BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );                                    
+                                if (needClean)
+                                {
+                                    addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, supervisor, existingBundles );
                                 }
                                 else
                                 {
-                                    addOperation( BundlePublishFullAddNoClean.class, tasks, server, module, supervisor, existingBundles );                                    
+                                    addOperation( BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );
                                 }
 
                                 break;
@@ -167,7 +168,7 @@ public class PortalPublishTask extends PublishTaskDelegate
                                             !ServerUtil.bsnExists( bundleProject.getSymbolicName(), existingBundles ) )
                                         {
                                             addOperation(
-                                                BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );
+                                                BundlePublishFullAddCleanBuild.class, tasks, server, module, supervisor, existingBundles );
                                         }
                                     }
                                     catch( CoreException e )

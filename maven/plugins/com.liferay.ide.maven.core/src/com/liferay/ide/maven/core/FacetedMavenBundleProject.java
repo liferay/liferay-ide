@@ -16,7 +16,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.IBundleProject;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.project.MavenProject;
@@ -55,18 +55,22 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
     }
 
     @Override
-    public IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
     {
         IPath outputJar = null;
 
-        if( buildIfNeeded )
+        final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
+
+        final List<String> goals = new ArrayList<>();
+
+        if( cleanBuild )
         {
-            final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
-
-            final List<String> goals = Arrays.asList( "package" );
-
-            mavenProjectBuilder.execGoals( goals, monitor );
+            goals.add( "clean" );
         }
+
+        goals.add( "package" );
+
+        mavenProjectBuilder.execGoals( goals, monitor );
 
         // we are going to try to get the output jar even if the package failed.
         final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );

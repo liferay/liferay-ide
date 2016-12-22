@@ -218,7 +218,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
     }
 
     @Override
-    public IPath getOutputBundle( boolean buildIfNeeded, boolean cleanIfNeeded, IProgressMonitor monitor ) throws CoreException
+    public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
     {
         IPath retval = null;
 
@@ -230,13 +230,8 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
             throw new CoreException( status );
         }
 
-        IStatus warStatus = Status.OK_STATUS;
-
-        if( buildIfNeeded )
-        {
-            warStatus = sdk.war(
+        IStatus warStatus = sdk.war(
                 getProject(), null, true, new String[] { "-Duser.timezone=GMT" }, monitor );
-        }
 
         final IPath distPath = sdk.getLocation().append( "dist" );
 

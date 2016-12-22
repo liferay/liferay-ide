@@ -22,18 +22,18 @@ import org.osgi.framework.dto.BundleDTO;
 /**
  * @author Terry Jia
  */
-public class BundlePublishFullAddNoClean extends BundlePublishFullAdd
+public class BundlePublishFullAddCleanBuild extends BundlePublishFullAdd
 {
 
-    public BundlePublishFullAddNoClean(
+    public BundlePublishFullAddCleanBuild(
         IServer s, IModule[] modules, BundleSupervisor supervisor, BundleDTO[] existingBundles )
     {
         super( s, modules, supervisor, existingBundles );
     }
 
-    protected boolean cleanIfNeeded()
+    protected boolean cleanBuildNeeded()
     {
-        return false;
+        return true;
     }
 
 }

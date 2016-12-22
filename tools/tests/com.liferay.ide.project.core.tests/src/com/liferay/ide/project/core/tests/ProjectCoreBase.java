@@ -15,7 +15,9 @@
 package com.liferay.ide.project.core.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -54,6 +56,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
@@ -93,8 +96,19 @@ public class ProjectCoreBase extends ServerCoreBase
             if ( project != null && project.isAccessible() && project.exists())
             {
                 final NullProgressMonitor monitor = new NullProgressMonitor();
-                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+                try
+                {
+                    project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                }
+                catch( Exception e)
+                {
+                    //ignore
+                }
+
                 project.delete( true, true, monitor );
+
+                assertFalse( project.exists() );
             }
         }
     }
@@ -599,7 +613,9 @@ public class ProjectCoreBase extends ServerCoreBase
         {
             persistAppServerProperties();
 
-            assertEquals( true, sdk.validate( true ).isOK() );
+            IStatus validationStatus = sdk.validate( true );
+
+            assertTrue( validationStatus.getMessage().trim(), validationStatus.isOK() );
 
             SDKUtil.openAsProject( sdk );
         }

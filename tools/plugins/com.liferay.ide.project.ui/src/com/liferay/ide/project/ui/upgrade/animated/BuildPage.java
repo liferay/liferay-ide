@@ -387,9 +387,10 @@ public class BuildPage extends Page
     {
         IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
         IPath outputBundlepath = null;
+
         try
         {
-            outputBundlepath = bundleProject.getOutputBundle( true, false, monitor );
+            outputBundlepath = bundleProject.getOutputBundle( false, monitor );
         }
         catch( Exception e )
         {
