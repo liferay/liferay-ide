@@ -257,17 +257,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
                                     final ICallable<IStatus> callable,
                                     IProgressMonitor monitor ) throws CoreException
     {
-        return this.maven.execute
-        (
-            new ICallable<IStatus>()
-            {
-                public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
-                {
-                    return projectManager.execute( projectFacade, callable, monitor );
-                }
-            },
-            monitor
-        );
+        return this.maven.execute( callable, monitor );
     }
 
     public IProject getPortletProject( IMavenProjectFacade projectFacade, IProgressMonitor monitor )
