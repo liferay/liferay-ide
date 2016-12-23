@@ -757,7 +757,7 @@ public class CustomJspPage extends Page
                 {
                     String[] paths = get62FilePaths( file );
 
-                    compare( paths[0], paths[1], "6.2 original jsp", "custom jsp" );
+                    compare( paths[0], paths[1], "6.2 original JSP", "custom JSP" );
                 }
                 else
                 {
@@ -834,7 +834,7 @@ public class CustomJspPage extends Page
                 {
                     String[] paths = get70FilePaths( file );
 
-                    compare( paths[0], paths[1], "6.2 original jsp", "7.x original jsp" );
+                    compare( paths[0], paths[1], "6.2 original JSP", "New 7.x JSP in " + getProject( file ).getName() );
                 }
                 else
                 {
