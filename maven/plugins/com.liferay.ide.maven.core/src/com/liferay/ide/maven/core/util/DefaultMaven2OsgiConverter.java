@@ -90,24 +90,23 @@ public class DefaultMaven2OsgiConverter
         {
             Analyzer analyzer = new Analyzer();
 
-            try
+            try( JarFile jar = new JarFile( artifact.getFile() );
+                 Analyzer analyzser = new Analyzer() )
             {
-                JarFile jar = new JarFile( artifact.getFile(), false );
-
                 if ( jar.getManifest() != null )
                 {
                     String symbolicNameAttribute = jar.getManifest().getMainAttributes()
                         .getValue( Analyzer.BUNDLE_SYMBOLICNAME );
-                    jar.close();
+
                     Map bundleSymbolicNameHeader = analyzer.parseHeader( symbolicNameAttribute );
 
                     Iterator it = bundleSymbolicNameHeader.keySet().iterator();
+
                     if ( it.hasNext() )
                     {
                         return (String) it.next();
                     }
                 }
-                analyzer.close();
             }
             catch ( IOException e )
             {
@@ -147,11 +146,10 @@ public class DefaultMaven2OsgiConverter
 
     private String getGroupIdFromPackage( File artifactFile )
     {
-        try
+        try( JarFile jar = new JarFile( artifactFile, false ) )
         {
             /* get package names from jar */
             Set packageNames = new HashSet();
-            JarFile jar = new JarFile( artifactFile, false );
             Enumeration entries = jar.entries();
             while ( entries.hasMoreElements() )
             {
@@ -166,8 +164,6 @@ public class DefaultMaven2OsgiConverter
                     }
                 }
             }
-
-            jar.close();
 
             /* find the top package */
             String[] groupIdSections = null;
