@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.ui;
 
+import com.liferay.ide.core.ILiferayProjectImporter;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
@@ -26,6 +28,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -62,6 +65,51 @@ public class WorkspaceHelper implements WorkspaceHelperMBean
         }
         else
         {
+            for( ILiferayProjectImporter importer : LiferayCore.getImporters() )
+            {
+                try
+                {
+                    final IStatus importStatus = importer.canImport( dir.getCanonicalPath() );
+
+                    if( importStatus != null && importStatus.isOK() )
+                    {
+                        UIUtil.async( new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                try
+                                {
+                                    new ProgressMonitorDialog( UIUtil.getActiveShell() ).run(true, true, new IRunnableWithProgress()
+                                    {
+                                        @Override
+                                        public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                                        {
+                                            try
+                                            {
+                                                importer.importProject( path, monitor );
+                                            }
+                                            catch( CoreException e )
+                                            {
+                                                LiferayUIPlugin.logError( "Error opening project", e );
+                                            }
+                                        }
+                                    });
+                                }
+                                catch( InvocationTargetException | InterruptedException e )
+                                {
+                                }
+                            }
+                        });
+
+                        return retval;
+                    }
+                }
+                catch( Exception e )
+                {
+                }
+            }
+
             retval = "Directory must have a .project file to open.";
         }
 
