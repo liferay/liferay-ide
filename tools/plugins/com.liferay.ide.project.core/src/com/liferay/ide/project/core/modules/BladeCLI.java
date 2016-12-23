@@ -203,7 +203,7 @@ public class BladeCLI
                 Version cliJarVersion = new Version( cliJarJar.getVersion() );
                 Version localCopyVersion = new Version( localJar.getVersion() );
 
-                if( cliJarVersion.compareTo( localCopyVersion ) > 0 )
+                if( cliJarVersion.compareTo( localCopyVersion ) >= 0 )
                 {
                     cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
                 }
