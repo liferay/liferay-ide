@@ -98,6 +98,7 @@ public class DefaultMaven2OsgiConverter
                 {
                     String symbolicNameAttribute = jar.getManifest().getMainAttributes()
                         .getValue( Analyzer.BUNDLE_SYMBOLICNAME );
+                    jar.close();
                     Map bundleSymbolicNameHeader = analyzer.parseHeader( symbolicNameAttribute );
 
                     Iterator it = bundleSymbolicNameHeader.keySet().iterator();
@@ -106,6 +107,7 @@ public class DefaultMaven2OsgiConverter
                         return (String) it.next();
                     }
                 }
+                analyzer.close();
             }
             catch ( IOException e )
             {
@@ -164,6 +166,8 @@ public class DefaultMaven2OsgiConverter
                     }
                 }
             }
+
+            jar.close();
 
             /* find the top package */
             String[] groupIdSections = null;
