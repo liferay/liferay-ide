@@ -40,7 +40,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -156,7 +155,7 @@ public class PluginsSDKBundleProject extends FlexibleProject implements IWebProj
         return retval;
     }
 
-    protected SDK getSDK()
+    public SDK getSDK()
     {
         SDK retval = null;
 

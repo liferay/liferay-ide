@@ -52,6 +52,8 @@ public interface ILiferayMavenConstants
 
     String LIFERAY_MAVEN_PLUGIN_KEY = _LIFERAY_MAVEN_PLUGINS_GROUP_ID + ":" + LIFERAY_MAVEN_PLUGIN; //$NON-NLS-1$
 
+    String LIFERAY_THEME_BUILDER_PLUGIN_KEY = "com.liferay:com.liferay.portal.tools.theme.builder";
+
     String M2E_LIFERAY_FOLDER = "m2e-liferay";  //$NON-NLS-1$
 
     String MAVEN_BUNDLE_PLUGIN_KEY = "org.apache.felix:maven-bundle-plugin";

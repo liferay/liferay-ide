@@ -16,6 +16,7 @@
 package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
@@ -25,6 +26,7 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
+import com.liferay.ide.project.core.PluginsSDKBundleProject;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.ProjectRecord;
 import com.liferay.ide.project.core.SDKClasspathContainer;
@@ -100,6 +102,7 @@ import org.eclipse.wst.common.project.facet.core.internal.FacetedProjectWorkingC
 import org.eclipse.wst.common.project.facet.core.runtime.IRuntime;
 import org.eclipse.wst.common.project.facet.core.runtime.internal.BridgedRuntime;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Version;
 
 /**
  * @author Gregory Amerson
@@ -805,11 +808,48 @@ public class ProjectUtil
         return project;
     }
 
-    public static boolean isBundleProject( IProject project )
+    public static boolean is7xServerDeployableProject( IProject project )
     {
         final ILiferayProject liferayProject = LiferayCore.create( project );
 
-        return liferayProject instanceof IBundleProject;
+        if( liferayProject instanceof IBundleProject )
+        {
+            if( liferayProject instanceof PluginsSDKBundleProject )
+            {
+                PluginsSDKBundleProject sdkProject = (PluginsSDKBundleProject) liferayProject;
+
+                SDK sdk = sdkProject.getSDK();
+
+                if( sdk != null )
+                {
+                    Version version = new Version( sdk.getVersion() );
+                    Version sdk70 = ILiferayConstants.V700;
+                    // sdk 7.x proejct
+                    if( CoreUtil.compareVersions( version, sdk70 ) >= 0 )
+                    {
+                        return true;
+                    }
+                    // sdk 6.x project
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            // not sdk project
+            else
+            {
+                return true;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private static boolean isLiferayRuntimePluginClassPath(IClasspathEntry entry)

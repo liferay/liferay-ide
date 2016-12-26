@@ -533,7 +533,8 @@
          point="org.eclipse.wst.server.core.moduleArtifactAdapters">
       <moduleArtifactAdapter
             class="com.liferay.ide.server.ui.portal.BundleModuleArtifactAdapterDelegate"
-            id="com.liferay.ide.server.ui.bundleModuleArtifactAdapter">
+            id="com.liferay.ide.server.ui.bundleModuleArtifactAdapter"
+            priority="1">
          <enablement>
            <with variable="selection">
              <adapt type="org.eclipse.core.resources.IProject">

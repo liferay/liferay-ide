@@ -210,7 +210,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
         final IFile pomFile = project.getFile( IMavenConstants.POM_FILE_NAME );
         final IFacetedProject facetedProject = ProjectFacetsManager.create( project, false, monitor );
 
-
         removeLiferayMavenMarkers( project );
 
         monitor.worked( 25 );
@@ -353,9 +352,10 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private boolean shouldAddLiferayNature( MavenProject mavenProject, IFacetedProject facetedProject )
     {
+        // TODO need to add more condition after adding jsf maven war project
         return mavenProject.getPlugin( ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY ) != null ||
-                mavenProject.getPlugin( ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY ) != null ||
-                getLiferayProjectFacet( facetedProject ) != null;
+            mavenProject.getPlugin( ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY ) != null ||
+            mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_THEME_BUILDER_PLUGIN_KEY ) != null;
     }
 
     public static IPath getThemeTargetFolder( MavenProject mavenProject, IProject project )
