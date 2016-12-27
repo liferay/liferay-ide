@@ -584,4 +584,12 @@
         <description>%moduleProjectDecoratorDescription</description>
      </decorator>
    </extension>
+   <extension
+         point="org.eclipse.wst.server.ui.serverToolTip">
+      <serverToolTip
+            class="com.liferay.ide.server.ui.view.BundleToolTip"
+            id="com.liferay.ide.server.ui.bundleToolTip"
+            serverTypes="com.liferay.ide.server.portal">
+      </serverToolTip>
+   </extension>
 </plugin>
