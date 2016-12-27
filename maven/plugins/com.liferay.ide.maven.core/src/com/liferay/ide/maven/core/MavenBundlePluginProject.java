@@ -23,12 +23,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.remote.IRemoteServerPublisher;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.lifecycle.MavenExecutionPlan;
-import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -40,8 +35,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMaven;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
 
 /**
@@ -109,13 +102,14 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
         IPath outputJar = null;
 
         final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
+        final MavenProjectBuilder mavenProjectBuilder = new MavenProjectBuilder( this.getProject() );
 
         if( cleanBuild || !isAutoBuild() )
         {
             this.getProject().build( IncrementalProjectBuilder.CLEAN_BUILD, monitor );
             this.getProject().build( IncrementalProjectBuilder.FULL_BUILD, monitor );
 
-            execJarMojo(projectFacade, monitor);
+            mavenProjectBuilder.execJarMojo( projectFacade, monitor );
         }
 
         final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
@@ -144,25 +138,6 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
         }
 
         return outputJar;
-    }
-
-    private void execJarMojo(IMavenProjectFacade projectFacade, IProgressMonitor monitor) throws CoreException {
-        MavenProject mavenProject = projectFacade.getMavenProject();
-
-        if (mavenProject == null) {
-            mavenProject = projectFacade.getMavenProject(monitor);
-        }
-
-        final IMaven maven = MavenPlugin.getMaven();
-
-        final MavenExecutionPlan plan = maven.calculateExecutionPlan(mavenProject, Arrays.asList("jar:jar"), true, monitor);
-        final List<MojoExecution> mojoExecutions = plan.getMojoExecutions();
-
-        if (mojoExecutions != null) {
-            for (MojoExecution mojoExecution : mojoExecutions) {
-                MavenPlugin.getMaven().execute(mavenProject, mojoExecution, monitor);
-            }
-        }
     }
 
     private boolean isAutoBuild()

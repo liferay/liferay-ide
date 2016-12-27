@@ -22,11 +22,14 @@ import com.liferay.ide.project.core.AbstractProjectBuilder;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.maven.lifecycle.MavenExecutionPlan;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -213,6 +216,45 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         return retval;
     }
 
+    public IStatus execJarMojo( IMavenProjectFacade projectFacade, IProgressMonitor monitor ) throws CoreException
+    {
+
+        IStatus retval = null;
+
+        final ICallable<IStatus> callable = new ICallable<IStatus>()
+        {
+
+            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
+            {
+                MavenProject mavenProject = projectFacade.getMavenProject();
+
+                if( mavenProject == null )
+                {
+                    mavenProject = projectFacade.getMavenProject( monitor );
+                }
+
+                final IMaven maven = MavenPlugin.getMaven();
+
+                final MavenExecutionPlan plan = maven.calculateExecutionPlan( mavenProject, Arrays.asList( "jar:jar" ), true, monitor );
+                final List<MojoExecution> mojoExecutions = plan.getMojoExecutions();
+
+                if( mojoExecutions != null )
+                {
+                    for( MojoExecution mojoExecution : mojoExecutions )
+                    {
+                        MavenPlugin.getMaven().execute( mavenProject, mojoExecution, monitor );
+                    }
+                }
+
+                return Status.OK_STATUS;
+            }
+        };
+
+        retval = executeMaven( projectFacade, callable, monitor );
+
+        return retval;
+    }
+
     private boolean execMavenLaunch(
         final IProject project, final String goal, final IMavenProjectFacade facade, IProgressMonitor monitor )
         throws CoreException
@@ -257,7 +299,17 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
                                     final ICallable<IStatus> callable,
                                     IProgressMonitor monitor ) throws CoreException
     {
-        return this.maven.execute( callable, monitor );
+        return this.maven.execute
+        (
+            new ICallable<IStatus>()
+            {
+                public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
+                {
+                    return projectManager.execute( projectFacade, callable, monitor );
+                }
+            },
+            monitor
+        );
     }
 
     public IProject getPortletProject( IMavenProjectFacade projectFacade, IProgressMonitor monitor )
