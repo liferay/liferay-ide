@@ -1256,6 +1256,16 @@
          description="Start Liferay Code Upgrade..."
       />
       <command
+         id="com.liferay.ide.project.ui.developerNetwork"
+         name="Liferay Develper Network"
+         description="Liferay Develper Network"
+      />
+      <command
+         id="com.liferay.ide.project.ui.communityForums"
+         name="Liferay Community Forums"
+         description="Liferay Community Forums"
+      />
+      <command
             description="Copy Portal Settings"
             id="com.liferay.ide.project.ui.upgrade.copyPortalSettings"
             name="Liferay 7 Upgrade Copy Portal Settings">
@@ -1296,6 +1306,14 @@
          icon="icons/e16/liferay_logo_16.png"
       />
       <image
+         commandId="com.liferay.ide.project.ui.developerNetwork"
+         icon="icons/e16/liferay_logo_16.png"
+      />
+      <image
+         commandId="com.liferay.ide.project.ui.communityForums"
+         icon="icons/e16/liferay_logo_16.png"
+      />
+      <image
          commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
          icon="icons/e16/liferay_logo_16.png"
       />
@@ -1308,6 +1326,14 @@
        <handler
          commandId="com.liferay.ide.project.ui.codeUpgrade"
          class="com.liferay.ide.project.ui.upgrade.CodeUpgradeHandler">
+       </handler>
+       <handler
+         commandId="com.liferay.ide.project.ui.developerNetwork"
+         class="com.liferay.ide.project.ui.handlers.DeveloperNetwork">
+       </handler>
+       <handler
+         commandId="com.liferay.ide.project.ui.communityForums"
+         class="com.liferay.ide.project.ui.handlers.CommunityForums">
        </handler>
        <handler
          commandId="com.liferay.ide.project.ui.upgrade.openLiferay7UpgradeAssistant"
@@ -1577,6 +1603,25 @@
                label="Liferay Code Upgrade Tool..."
                style="push"
                tooltip="Liferay Code Upgrade Tool...">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:help?after=additions">
+         <command
+               commandId="com.liferay.ide.project.ui.developerNetwork"
+               label="Liferay Developer Network"
+               style="push"
+               tooltip="Liferay Developer Network">
+         </command>
+         <command
+               commandId="com.liferay.ide.project.ui.communityForums"
+               label="Liferay Community Forums"
+               style="push"
+               tooltip="Liferay Community Forums">
          </command>
       </menuContribution>
    </extension>
