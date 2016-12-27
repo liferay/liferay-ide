@@ -263,49 +263,42 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     {
         IPath outputBundlePath = getOutputBundlePath( getProject() );
 
-        if( !cleanBuild && outputBundlePath != null && outputBundlePath.toFile().exists() )
+        ProjectConnection connection = null;
+
+        try
         {
-            return outputBundlePath;
+            GradleConnector connector =
+                GradleConnector.newConnector().forProjectDirectory( getProject().getLocation().toFile() );
+
+            connection = connector.connect();
+
+            BuildLauncher launcher = connection.newBuild();
+
+            BlockingResultHandler<Object> handler = new BlockingResultHandler<>( Object.class );
+
+            if( cleanBuild )
+            {
+                launcher.forTasks( "clean", "build" ).run( handler );
+            }
+            else
+            {
+                launcher.forTasks( "build" ).run( handler );
+            }
+
+            handler.getResult();
         }
-        else
+        catch( GradleConnectionException e )
         {
-            ProjectConnection connection = null;
+            GradleCore.logError( "Unable to build output", e );
 
-            try
-            {
-                GradleConnector connector =
-                    GradleConnector.newConnector().forProjectDirectory( getProject().getLocation().toFile() );
-
-                connection = connector.connect();
-
-                BuildLauncher launcher = connection.newBuild();
-
-                BlockingResultHandler<Object> handler = new BlockingResultHandler<>( Object.class );
-
-                if( cleanBuild )
-                {
-                    launcher.forTasks( "clean", "build" ).run( handler );
-                }
-                else
-                {
-                    launcher.forTasks( "build" ).run( handler );
-                }
-
-                handler.getResult();
-            }
-            catch( GradleConnectionException e)
-            {
-                GradleCore.logError( "Unable to build output", e );
-
-                return null;
-            }
-            finally
-            {
-                connection.close();
-            }
-
-            outputBundlePath = getOutputBundlePath( getProject() );
+            return null;
         }
+        finally
+        {
+            connection.close();
+        }
+
+        outputBundlePath = getOutputBundlePath( getProject() );
 
         if( outputBundlePath.toFile().exists() )
         {
