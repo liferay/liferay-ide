@@ -207,7 +207,7 @@ public class SummaryPage extends Page implements SelectionChangedListener
         {
             Page page = UpgradeView.getPage( i );
             String pageTitle = page.getPageTitle();
-            int pageIndex = page.getIndex();
+            int pageIndex = i;
             PageAction pageAction = page.getSelectedAction();
             Image statusImage;
 

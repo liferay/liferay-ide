@@ -390,7 +390,7 @@ public class BuildPage extends Page
 
         try
         {
-            outputBundlepath = bundleProject.getOutputBundle( false, monitor );
+            outputBundlepath = bundleProject.getOutputBundle( true, monitor );
         }
         catch( Exception e )
         {
