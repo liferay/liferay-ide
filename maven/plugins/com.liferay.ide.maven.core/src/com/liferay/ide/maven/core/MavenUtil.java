@@ -57,6 +57,7 @@ import org.eclipse.m2e.core.embedder.MavenModelManager;
 import org.eclipse.m2e.core.internal.IMavenConstants;
 import org.eclipse.m2e.core.project.AbstractProjectScanner;
 import org.eclipse.m2e.core.project.IMavenProjectFacade;
+import org.eclipse.m2e.core.project.IMavenProjectImportResult;
 import org.eclipse.m2e.core.project.IMavenProjectRegistry;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.LocalProjectScanner;
@@ -546,7 +547,7 @@ public class MavenUtil
         return retval;
     }
 
-    public static void importProject( String location, IProgressMonitor monitor )
+    public static List<IMavenProjectImportResult> importProject( String location, IProgressMonitor monitor )
         throws CoreException, InterruptedException
     {
         MavenModelManager mavenModelManager = MavenPlugin.getMavenModelManager();
@@ -561,13 +562,13 @@ public class MavenUtil
 
         findChildMavenProjects( mavenProjects, projects );
 
-        mavenProjects = filterProjects(mavenProjects);
+        mavenProjects = filterProjects( mavenProjects );
 
         ProjectImportConfiguration importConfiguration = new ProjectImportConfiguration();
 
         IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
-        projectConfigurationManager.importProjects( mavenProjects, importConfiguration, monitor );
+        return projectConfigurationManager.importProjects( mavenProjects, importConfiguration, monitor );
     }
 
     public static boolean isMavenProject( IProject project ) throws CoreException

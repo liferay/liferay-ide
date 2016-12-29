@@ -48,7 +48,7 @@ public class ImportLiferayModuleProjectOpMethods
 
         try
         {
-            importer.importProject( location, monitor );
+            importer.importProjects( location, monitor );
         }
         catch( CoreException e )
         {

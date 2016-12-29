@@ -12,20 +12,27 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.core;
 
+import java.util.List;
+
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Andy Wu
+ * @author Terry Jia
  */
 public interface ILiferayProjectImporter
 {
+
     IStatus canImport( String location );
 
     String getBuildType();
 
-    void importProject( String location, IProgressMonitor monitor ) throws CoreException;
+    List<IProject> importProjects( String location, IProgressMonitor monitor ) throws CoreException;
+
 }

@@ -19,6 +19,8 @@ import com.liferay.ide.core.AbstractLiferayProjectImporter;
 import com.liferay.ide.core.util.CoreUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -123,7 +125,7 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
     }
 
     @Override
-    public void importProject( String location, IProgressMonitor monitor ) throws CoreException
+    public List<IProject> importProjects( String location, IProgressMonitor monitor ) throws CoreException
     {
         if( refreshProject != null )
         {
@@ -133,7 +135,10 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
         {
             GradleUtil.importGradleProject( new File( location ), monitor );
         }
-        
+
+        //To-Do need return the projects added
+
+        return new ArrayList<>();
     }
 
 }

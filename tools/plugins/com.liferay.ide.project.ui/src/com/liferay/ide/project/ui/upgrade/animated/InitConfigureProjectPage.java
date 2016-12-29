@@ -27,6 +27,7 @@ import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
+import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectImportUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
@@ -127,77 +128,77 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         @Override
         public void handle( Event event )
         {
-            if( event instanceof ValuePropertyContentEvent )
+            if( !(event instanceof ValuePropertyContentEvent) )
             {
-                ValuePropertyContentEvent propertyEvetn = (ValuePropertyContentEvent) event;
-                final Property property = propertyEvetn.property();
+                return;
+            }
 
-                if( property.name().equals( "SdkLocation" ) )
+            final Property property = ((ValuePropertyContentEvent) event).property();
+
+            if( !(property.name().equals( "SdkLocation" )) )
+            {
+                return;
+            }
+
+            org.eclipse.sapphire.modeling.Path path = dataModel.getSdkLocation().content();
+
+            if( path == null || !sdkValidation.compute().ok() )
+            {
+                if( !layoutComb.isDisposed() )
                 {
-                    org.eclipse.sapphire.modeling.Path sdkPath = dataModel.getSdkLocation().content();
+                    layoutComb.setEnabled( true );
+                }
 
-                    if( sdkPath != null )
+                return;
+            }
+
+            if( isMavenProject( path.toPortableString() ) )
+            {
+                disposeBundleElement();
+                disposeServerEelment();
+                disposeMigrateLayoutElement();
+            }
+            else
+            {
+                disposeMigrateLayoutElement();
+                createMigrateLayoutElement();
+
+                createBundleControl();
+
+                final String version = SDKUtil.createSDKFromLocation( PathBridge.create( path ) ).getVersion();
+
+                if( version != null && new Version( version ).compareTo( new Version( "7.0.0" ) ) >= 0 )
+                {
+                    UIUtil.async( new Runnable()
                     {
-                        Status sdkStatus = sdkValidation.compute();
 
-                        if( sdkStatus.ok() )
+                        @Override
+                        public void run()
                         {
-                            SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkPath ) );
-                            String version = sdk.getVersion();
-
-                            if( version != null )
+                            if( layoutComb.getSelectionIndex() != 0 )
                             {
-                                Version sdkVersion = new Version( version );
-                                int result = sdkVersion.compareTo( new Version( "7.0.0" ) );
-
-                                if( result >= 0 )
-                                {
-                                    UIUtil.async( new Runnable()
-                                    {
-
-                                        @Override
-                                        public void run()
-                                        {
-                                            if ( layoutComb.getSelectionIndex() != 0 )
-                                            {
-                                                layoutComb.select( 1 );
-                                                layoutComb.setEnabled( false );
-                                                dataModel.setLayout( layoutComb.getText() );
-                                                createBundleControl();
-                                            }
-                                            else
-                                            {
-                                                layoutComb.setEnabled( false );
-                                                dataModel.setLayout( layoutComb.getText() );
-                                            }
-                                        }
-                                    } );
-                                }
-                                else
-                                {
-                                    layoutComb.setEnabled( true );
-                                }
+                                layoutComb.select( 1 );
                             }
-                            else
-                            {
-                                layoutComb.setEnabled( true );
-                            }
+
+                            layoutComb.setEnabled( false );
+                            dataModel.setLayout( layoutComb.getText() );
                         }
-                        else
-                        {
-                            layoutComb.setEnabled( true );
-                        }
-                    }
-                    else
-                    {
-                        layoutComb.setEnabled( true );
-                    }
+                    } );
+                }
+                else
+                {
+                    layoutComb.setEnabled( true );
                 }
             }
+
             startCheckThread();
         }
     }
 
+    private boolean isMavenProject( String path )
+    {
+        return ImportLiferayModuleProjectOpMethods.getBuildType( path ).getMessage().equals( "maven" );
+    }
 
     public static final String defaultBundleUrl =
         "https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.2%20GA3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
@@ -275,61 +276,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         });
 
-        layoutLabel = createLabel( composite, "Select Migrate Layout:" );
-        layoutComb = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
-        layoutComb.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        layoutComb.setItems( layoutNames );
-        layoutComb.select( 0 );
-        layoutComb.addSelectionListener( new SelectionListener()
-        {
-            @Override
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-            }
-
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                int sel = layoutComb.getSelectionIndex();
-
-                if( sel == 1 )
-                {
-                    disposeBundleElement();
-
-                    disposeLayoutElement();
-
-                    disposeImportElement();
-
-                    createServerElement();
-
-                    createImportElement();
-                }
-                else
-                {
-                    disposeServerEelment();
-
-                    disposeImportElement();
-
-                    disposeBundleElement();
-
-                    disposeLayoutElement();
-
-                    createBundleElement();
-
-                    createImportElement();
-
-                }
-
-                composite.layout();
-                dataModel.setLayout( layoutComb.getText() );
-
-                startCheckThread();
-            }
-
-        } );
-        dataModel.setLayout( layoutComb.getText() );
-
         dirField.setText( getSDKDefaultValue() );
+
+        createMigrateLayoutElement();
 
         createBundleElement();
 
@@ -422,31 +371,36 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         if( ProjectUtil.isPortletProject( project ) )
         {
             dataModel.setHasPortlet( true );
-
-            List<IFile> searchFiles = new SearchFilesVisitor().searchFiles( project, "service.xml" );
-
-            if( searchFiles.size() > 0 )
-            {
-                dataModel.setHasServiceBuilder( true );
-            }
         }
-        else if( ProjectUtil.isHookProject( project ) )
+
+        if( ProjectUtil.isHookProject( project ) )
         {
             dataModel.setHasHook( true );
         }
-        else if( ProjectUtil.isLayoutTplProject( project ) )
+
+        List<IFile> searchFiles = new SearchFilesVisitor().searchFiles( project, "service.xml" );
+
+        if( searchFiles.size() > 0 )
+        {
+            dataModel.setHasServiceBuilder( true );
+        }
+
+        if( ProjectUtil.isLayoutTplProject( project ) )
         {
             dataModel.setHasLayout( true );
         }
-        else if( ProjectUtil.isThemeProject( project ) )
+
+        if( ProjectUtil.isThemeProject( project ) )
         {
             dataModel.setHasTheme( true );
         }
-        else if( ProjectUtil.isExtProject( project ) )
+
+        if( ProjectUtil.isExtProject( project ) )
         {
             dataModel.setHasExt( true );
         }
-        else if( ProjectUtil.isWebProject( project ) )
+
+        if( ProjectUtil.isWebProject( project ) )
         {
             dataModel.setHasWeb( true );
         }
@@ -593,6 +547,81 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createImportElement();
 
         composite.layout();
+    }
+
+    private void createServerControl()
+    {
+        disposeServerEelment();
+
+        disposeImportElement();
+
+        disposeBundleElement();
+
+        disposeLayoutElement();
+
+        createServerElement();
+
+        createImportElement();
+
+        composite.layout();
+    }
+
+    private void createMigrateLayoutElement()
+    {
+        layoutLabel = createLabel( composite, "Select Migrate Layout:" );
+        layoutComb = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
+        layoutComb.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+        layoutComb.setItems( layoutNames );
+        layoutComb.select( 0 );
+        layoutComb.addSelectionListener( new SelectionListener()
+        {
+
+            @Override
+            public void widgetDefaultSelected( SelectionEvent e )
+            {
+            }
+
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                int sel = layoutComb.getSelectionIndex();
+
+                if( sel == 1 )
+                {
+                    disposeBundleElement();
+
+                    disposeLayoutElement();
+
+                    disposeImportElement();
+
+                    createServerElement();
+
+                    createImportElement();
+                }
+                else
+                {
+                    disposeServerEelment();
+
+                    disposeImportElement();
+
+                    disposeBundleElement();
+
+                    disposeLayoutElement();
+
+                    createBundleElement();
+
+                    createImportElement();
+                }
+
+                composite.layout();
+                dataModel.setLayout( layoutComb.getText() );
+
+                startCheckThread();
+            }
+
+        } );
+
+        dataModel.setLayout( layoutComb.getText() );
     }
 
     private void createBundleElement()
@@ -905,9 +934,18 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         if( bundleNameField != null && bundleUrlField != null )
         {
             bundleNameField.dispose();
-            bundleUrlField.dispose();
             bundleNameLabel.dispose();
+            bundleUrlField.dispose();
             bundleUrlLabel.dispose();
+        }
+    }
+
+    private void disposeMigrateLayoutElement()
+    {
+        if( layoutLabel != null && layoutComb != null )
+        {
+            layoutLabel.dispose();
+            layoutComb.dispose();
         }
     }
 
@@ -1032,51 +1070,65 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         deleteEclipseConfigFiles( location.toFile() );
 
-                        if( layout.equals( "Upgrade to Liferay Workspace" ) )
+                        if( isMavenProject( location.toPortableString() ) )
                         {
-                            createLiferayWorkspace( location, monitor );
+                            ILiferayProjectImporter importer = LiferayCore.getImporter( "maven" );
 
-                            removeIvyPrivateSetting( location.append( "plugins-sdk" ) );
+                            List<IProject> projects = importer.importProjects( location.toPortableString(), monitor );
 
-                            newPath = renameProjectFolder( location, monitor );
-
-                            IPath sdkLocation = new Path( newPath ).append( "plugins-sdk" );
-
-                            deleteSDKLegacyProjects( sdkLocation );
-
-                            ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
-
-                            importer.importProject( newPath, monitor );
-
-                            createInitBundle( monitor );
-
-                            importSDKProject( sdkLocation, monitor );
-
-                            dataModel.setConvertLiferayWorkspace( true );
-
+                            for( IProject project : projects )
+                            {
+                                checkProjectType( project );
+                            }
                         }
                         else
                         {
-                            deleteEclipseConfigFiles( location.toFile() );
-                            copyNewSDK( location, monitor );
+                            if( layout.equals( "Upgrade to Liferay Workspace" ) )
+                            {
+                                createLiferayWorkspace( location, monitor );
 
-                            removeIvyPrivateSetting( location );
+                                removeIvyPrivateSetting( location.append( "plugins-sdk" ) );
 
-                            deleteSDKLegacyProjects( location );
+                                newPath = renameProjectFolder( location, monitor );
 
-                            String serverName = dataModel.getLiferay70ServerName().content();
+                                IPath sdkLocation = new Path( newPath ).append( "plugins-sdk" );
 
-                            IServer server = ServerUtil.getServer( serverName );
+                                deleteSDKLegacyProjects( sdkLocation );
 
-                            newPath = renameProjectFolder( location, monitor );
+                                ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
 
-                            SDK sdk = SDKUtil.createSDKFromLocation( new Path( newPath ) );
+                                importer.importProjects( newPath, monitor );
 
-                            sdk.addOrUpdateServerProperties( ServerUtil.getLiferayRuntime( server ).getLiferayHome() );
+                                createInitBundle( monitor );
 
-                            SDKUtil.openAsProject( sdk, monitor );
+                                importSDKProject( sdkLocation, monitor );
 
-                            importSDKProject( sdk.getLocation(), monitor );
+                                dataModel.setConvertLiferayWorkspace( true );
+                            }
+                            else
+                            {
+                                deleteEclipseConfigFiles( location.toFile() );
+                                copyNewSDK( location, monitor );
+
+                                removeIvyPrivateSetting( location );
+
+                                deleteSDKLegacyProjects( location );
+
+                                String serverName = dataModel.getLiferay70ServerName().content();
+
+                                IServer server = ServerUtil.getServer( serverName );
+
+                                newPath = renameProjectFolder( location, monitor );
+
+                                SDK sdk = SDKUtil.createSDKFromLocation( new Path( newPath ) );
+
+                                sdk.addOrUpdateServerProperties(
+                                    ServerUtil.getLiferayRuntime( server ).getLiferayHome() );
+
+                                SDKUtil.openAsProject( sdk, monitor );
+
+                                importSDKProject( sdk.getLocation(), monitor );
+                            }
                         }
 
                         dataModel.setImportFinished( true );
@@ -1451,56 +1503,59 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     inputValidation = true;
                 }
 
-                if( layoutComb.getSelectionIndex() == 1 )
+                if( !layoutComb.isDisposed() )
                 {
-                    final int itemCount = serverComb.getItemCount();
-
-                    if( itemCount < 1 )
+                    if( layoutComb.getSelectionIndex() == 1 )
                     {
-                        message = "You should add at least one Liferay 7 portal bundle.";
+                        final int itemCount = serverComb.getItemCount();
 
-                        layoutValidation = false;
-                    }
-                }
-                else if( layoutComb.getSelectionIndex() == 0 )
-                {
-                    boolean liferayWorksapceValidation = true;
-                    String workspaceValidationMessage = "ok";
-
-                    try
-                    {
-                        if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
+                        if( itemCount < 1 )
                         {
-                            liferayWorksapceValidation = false;
-                            workspaceValidationMessage = LiferayWorkspaceUtil.hasLiferayWorkspaceMsg;
+                            message = "You should add at least one Liferay 7 portal bundle.";
+
+                            layoutValidation = false;
                         }
                     }
-                    catch( CoreException e )
+                    else if( layoutComb.getSelectionIndex() == 0 )
                     {
-                        liferayWorksapceValidation = false;
-                        workspaceValidationMessage = e.getMessage();
-                    }
+                        boolean liferayWorksapceValidation = true;
+                        String workspaceValidationMessage = "ok";
 
-                    if( !liferayWorksapceValidation && inputValidation )
-                    {
-                        message = workspaceValidationMessage;
-                        layoutValidation = false;
-                    }
-                    else if( !bundleNameValidation.compute().ok() )
-                    {
-                        message = bundleNameValidation.compute().message();
+                        try
+                        {
+                            if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
+                            {
+                                liferayWorksapceValidation = false;
+                                workspaceValidationMessage = LiferayWorkspaceUtil.hasLiferayWorkspaceMsg;
+                            }
+                        }
+                        catch( CoreException e )
+                        {
+                            liferayWorksapceValidation = false;
+                            workspaceValidationMessage = e.getMessage();
+                        }
 
-                        layoutValidation = false;
-                    }
-                    else if( bundUrl != null && bundUrl.length() > 0 && !bundleUrlValidation.compute().ok() )
-                    {
-                        message = bundleUrlValidation.compute().message();
+                        if( !liferayWorksapceValidation && inputValidation )
+                        {
+                            message = workspaceValidationMessage;
+                            layoutValidation = false;
+                        }
+                        else if( !bundleNameValidation.compute().ok() )
+                        {
+                            message = bundleNameValidation.compute().message();
 
-                        layoutValidation = false;
-                    }
-                    else
-                    {
-                        layoutValidation = true;
+                            layoutValidation = false;
+                        }
+                        else if( bundUrl != null && bundUrl.length() > 0 && !bundleUrlValidation.compute().ok() )
+                        {
+                            message = bundleUrlValidation.compute().message();
+
+                            layoutValidation = false;
+                        }
+                        else
+                        {
+                            layoutValidation = true;
+                        }
                     }
                 }
 

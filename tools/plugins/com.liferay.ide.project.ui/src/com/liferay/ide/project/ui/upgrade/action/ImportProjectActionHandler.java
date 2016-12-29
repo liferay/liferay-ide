@@ -85,7 +85,7 @@ public class ImportProjectActionHandler extends BaseActionHandler
 
                             ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
 
-                            importer.importProject( newPath, monitor );
+                            importer.importProjects( newPath, monitor );
 
                             importSDKProject( new Path( newPath ).append( "plugins-sdk" ), monitor );
                         }

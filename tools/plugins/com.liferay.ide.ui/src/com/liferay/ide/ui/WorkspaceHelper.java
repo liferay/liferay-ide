@@ -87,7 +87,7 @@ public class WorkspaceHelper implements WorkspaceHelperMBean
                                         {
                                             try
                                             {
-                                                importer.importProject( path, monitor );
+                                                importer.importProjects( path, monitor );
                                             }
                                             catch( CoreException e )
                                             {

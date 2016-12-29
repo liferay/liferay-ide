@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 
@@ -30,6 +31,7 @@ import org.osgi.framework.Version;
 /**
  * @author Andy Wu
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class SdkLocationValidationService extends ValidationService
 {
@@ -78,9 +80,11 @@ public class SdkLocationValidationService extends ValidationService
                 }
             }
         }
-        else
+        else if( !ImportLiferayModuleProjectOpMethods.getBuildType(
+            sdkLocation.toPortableString() ).getMessage().equals( "maven" ) )
         {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "Plugins SDK location is not valid." ) );
+            return StatusBridge.create(
+                ProjectCore.createErrorStatus( "Plugins SDK or Maven location is not valid." ) );
         }
 
         return retval;

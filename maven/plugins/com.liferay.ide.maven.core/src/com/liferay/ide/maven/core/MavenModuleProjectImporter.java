@@ -18,11 +18,15 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.AbstractLiferayProjectImporter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.m2e.core.project.IMavenProjectImportResult;
 
 /**
  * @author Andy Wu
@@ -46,15 +50,24 @@ public class MavenModuleProjectImporter extends AbstractLiferayProjectImporter
     }
 
     @Override
-    public void importProject( String location, IProgressMonitor monitor ) throws CoreException
+    public List<IProject> importProjects( String location, IProgressMonitor monitor ) throws CoreException
     {
+        List<IProject> projects = new ArrayList<>();
+
         try
         {
-            MavenUtil.importProject( location, monitor );
+            List<IMavenProjectImportResult> results = MavenUtil.importProject( location, monitor );
+
+            for( IMavenProjectImportResult result : results )
+            {
+                projects.add( result.getProject() );
+            }
         }
         catch( InterruptedException e )
         {
         }
+
+        return projects;
     }
 
 }
