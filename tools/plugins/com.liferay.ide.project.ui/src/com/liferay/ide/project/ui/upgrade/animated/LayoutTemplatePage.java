@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Link;
 
 /**
- * @author Adny
+ * @author Andy Wu
  * @author Simon Jiang
  * @author Joye Luo
  */

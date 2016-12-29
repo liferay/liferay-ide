@@ -15,13 +15,13 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
+import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.action.CompileAction;
-import com.liferay.ide.sdk.core.ISDKConstants;
-import com.liferay.ide.sdk.core.SDK;
-import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -32,7 +32,6 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.internal.ui.views.console.ProcessConsole;
@@ -52,7 +51,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.console.IConsole;
 
 /**
- * @author Adny
+ * @author Andy Wu
  * @author Simon Jiang
  * @author Joye Luo
  * @author Terry Jia
@@ -72,30 +71,38 @@ public class BuildServicePage extends Page
         buildServiceButton.addSelectionListener( new SelectionAdapter()
         {
 
-            private void deleteLegacyFiles( IProject project, IProgressMonitor monitor ) throws CoreException
+            private void deleteLegacyFiles( IProject project, IProgressMonitor monitor )
             {
-                String relativePath = "/docroot/WEB-INF/src/META-INF";
-                IFile portletSpringXML = project.getFile( relativePath + "/portlet-spring.xml" );
-                IFile shardDataSourceSpringXML = project.getFile( relativePath + "/shard-data-source-spring.xml" );
-
-                if( !portletSpringXML.exists() )
+                try
                 {
-                    portletSpringXML = project.getFile( "/src/main/java/META-INF/portlet-spring.xml" );
+                    String relativePath = "/docroot/WEB-INF/src/META-INF";
+                    IFile portletSpringXML = project.getFile( relativePath + "/portlet-spring.xml" );
+                    IFile shardDataSourceSpringXML = project.getFile( relativePath + "/shard-data-source-spring.xml" );
+
+                    if( !portletSpringXML.exists() )
+                    {
+                        portletSpringXML = project.getFile( "/src/main/java/META-INF/portlet-spring.xml" );
+                    }
+
+                    if( !shardDataSourceSpringXML.exists() )
+                    {
+                        shardDataSourceSpringXML =
+                            project.getFile( "/src/main/java/META-INF/shard-data-source-spring.xml" );
+                    }
+
+                    if( portletSpringXML.exists() )
+                    {
+                        portletSpringXML.delete( true, monitor );
+                    }
+
+                    if( shardDataSourceSpringXML.exists() )
+                    {
+                        shardDataSourceSpringXML.delete( true, monitor );
+                    }
                 }
-
-                if( !shardDataSourceSpringXML.exists() )
+                catch( CoreException e )
                 {
-                    shardDataSourceSpringXML = project.getFile( "/src/main/java/META-INF/shard-data-source-spring.xml" );
-                }
-
-                if( portletSpringXML.exists() )
-                {
-                    portletSpringXML.delete( true, monitor );
-                }
-
-                if( shardDataSourceSpringXML.exists() )
-                {
-                    shardDataSourceSpringXML.delete( true, monitor );
+                    ProjectUI.logError( e );
                 }
             }
 
@@ -172,13 +179,14 @@ public class BuildServicePage extends Page
                                 {
                                     deleteLegacyFiles( project, monitor );
 
-                                    SDK sdk = SDKUtil.getSDK( project );
+                                    final ILiferayProject liferayProject = LiferayCore.create( project );
 
-                                    sdk.runCommand(
-                                        project, project.getFile( "build.xml" ), ISDKConstants.TARGET_BUILD_SERVICE,
-                                        null, monitor );
+                                    if( liferayProject != null )
+                                    {
+                                        IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
 
-                                    project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                                        builder.buildService( monitor );
+                                    }
 
                                     IConsole console = CompileAction.getConsole( "build-service" );
 

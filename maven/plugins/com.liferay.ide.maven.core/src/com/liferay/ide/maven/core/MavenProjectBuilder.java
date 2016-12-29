@@ -381,19 +381,44 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         // need to look up project configuration and refresh the *-service project associated with this project
         try
         {
-            // not doing any null checks since this is in large try/catch
-            final Plugin liferayMavenPlugin = MavenUtil.getPlugin( projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
-            final Xpp3Dom config = (Xpp3Dom) liferayMavenPlugin.getConfiguration();
-            final Xpp3Dom apiBaseDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_API_BASE_DIR );
-            // this should be the name path of a project that should be in user's workspace that we can refresh
-            final String apiBaseDirValue = apiBaseDir.getValue();
+            final Plugin plugin6x =
+                MavenUtil.getPlugin( projectFacade, ILiferayMavenConstants.LIFERAY_MAVEN_PLUGIN_KEY, monitor );
 
-            final IFile apiBasePomFile =
-                ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(
+            if( plugin6x != null )
+            {
+                final Xpp3Dom config = (Xpp3Dom) plugin6x.getConfiguration();
+                final Xpp3Dom apiBaseDir = config.getChild( ILiferayMavenConstants.PLUGIN_CONFIG_API_BASE_DIR );
+                final String apiBaseDirValue = apiBaseDir.getValue();
+
+                final IFile apiBasePomFile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(
                     new Path( apiBaseDirValue ).append( IMavenConstants.POM_FILE_NAME ) );
-            final IMavenProjectFacade apiBaseFacade = this.projectManager.create( apiBasePomFile, true, monitor );
+                final IMavenProjectFacade apiBaseFacade = this.projectManager.create( apiBasePomFile, true, monitor );
 
-            apiBaseFacade.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                apiBaseFacade.getProject().refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            }
+            else
+            {
+                Plugin plugin7x =
+                    MavenUtil.getPlugin( projectFacade, ILiferayMavenConstants.SERVICE_BUILDER_PLUGIN_KEY, monitor );
+
+                if( plugin7x != null )
+                {
+                    final Xpp3Dom config = (Xpp3Dom) plugin7x.getConfiguration();
+                    final Xpp3Dom apiDirName = config.getChild( "apiDirName" );
+                    final String apiDirNameValue = apiDirName.getValue();
+
+                    int startIndex = apiDirNameValue.indexOf( "../" );
+                    int endIndex = apiDirNameValue.indexOf( "/src/main/java" );
+                    String projectName = apiDirNameValue.substring( startIndex + 3, endIndex );
+
+                    IProject project = CoreUtil.getProject( projectName );
+
+                    if( project != null )
+                    {
+                        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                    }
+                }
+            }
         }
         catch( Exception e )
         {
