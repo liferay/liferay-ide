@@ -216,7 +216,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Label bundleUrlLabel;
     private Text bundleNameField;
     private Text bundleUrlField;
-    private Button backupSDK;
+    private Button backup;
     private boolean validationResult;
     private Button importButton;
 
@@ -224,8 +224,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private Control createHorizontalSpacer;
     private Control createSeparator;
-    private SdkLocationValidationService sdkValidation =
-        dataModel.getSdkLocation().service( SdkLocationValidationService.class );
+    private ProjectLocationValidationService sdkValidation =
+        dataModel.getSdkLocation().service( ProjectLocationValidationService.class );
     private ProjectNameValidationService projectNameValidation =
         dataModel.getProjectName().service( ProjectNameValidationService.class );
     private BundleNameValidationService bundleNameValidation =
@@ -233,9 +233,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private BundleUrlValidationService bundleUrlValidation =
         dataModel.getBundleUrl().service( BundleUrlValidationService.class );
-
-    private SdkLocationDefaultValueService sdkLocationDefaultService =
-        dataModel.getSdkLocation().service( SdkLocationDefaultValueService.class );
 
     public InitConfigureProjectPage( final Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
@@ -249,7 +246,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         createSeparator = createSeparator( this, 3 );
 
-        dirLabel = createLabel( composite, "Liferay Plugins SDK Location:" );
+        dirLabel = createLabel( composite, "Plugins SDK or Maven Location:" );
         dirField = createTextField( composite, SWT.NONE );
         dirField.addModifyListener( new ModifyListener()
         {
@@ -265,7 +262,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             public void widgetSelected( SelectionEvent e )
             {
                 final DirectoryDialog dd = new DirectoryDialog( getShell() );
-                dd.setMessage( "Select source SDK folder" );
+                dd.setMessage( "Select source SDK or Maven folder" );
 
                 final String selectedDir = dd.open();
 
@@ -275,8 +272,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 }
             }
         });
-
-        dirField.setText( getSDKDefaultValue() );
 
         createMigrateLayoutElement();
 
@@ -308,11 +303,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     }
 
-    private void backupSDK( IProgressMonitor monitor )
+    private void backup( IProgressMonitor monitor )
     {
-        Boolean backupSdk = dataModel.getBackupSdk().content();
+        Boolean backup = dataModel.getBackupSdk().content();
 
-        if ( backupSdk == false )
+        if ( backup == false )
         {
             return;
         }
@@ -320,20 +315,20 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         SubMonitor progress = SubMonitor.convert( monitor, 100 );
         try
         {
-            progress.setTaskName( "Backup sdk folder into Eclipse workspace...");
-            org.eclipse.sapphire.modeling.Path originalSDKPath = dataModel.getSdkLocation().content();
+            progress.setTaskName( "Backup origial project folder into Eclipse workspace...");
+            org.eclipse.sapphire.modeling.Path originalPath = dataModel.getSdkLocation().content();
 
-            if( originalSDKPath != null )
+            if( originalPath != null )
             {
                 IPath backupLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
                 progress.worked( 30 );
-                ZipUtil.zip( originalSDKPath.toFile(), backupLocation.append( "backup.zip" ).toFile() );
+                ZipUtil.zip( originalPath.toFile(), backupLocation.append( "backup.zip" ).toFile() );
                 progress.setWorkRemaining( 70 );
             }
         }
         catch( IOException e )
         {
-            ProjectUI.logError( "Error to backup original sdk folder.", e );
+            ProjectUI.logError( "Error to backup original project folder.", e );
         }
         finally
         {
@@ -688,14 +683,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createHorizontalSpacer = createHorizontalSpacer( this, 3 );
         createSeparator = createSeparator( this, 3 );
 
-        String backupFolderName = "Backup SDK into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
-        backupSDK = SWTUtil.createCheckButton( composite, backupFolderName, null, false, 1 );
-        backupSDK.addSelectionListener( new SelectionAdapter()
+        String backupFolderName = "Backup project into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
+        backup = SWTUtil.createCheckButton( composite, backupFolderName, null, false, 1 );
+        backup.addSelectionListener( new SelectionAdapter()
         {
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                dataModel.setBackupSdk( backupSDK.getSelection() );
+                dataModel.setBackupSdk( backup.getSelection() );
             }
         });
 
@@ -747,7 +742,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 }
             }
         } );
-        dataModel.setBackupSdk( backupSDK.getSelection() );
+        dataModel.setBackupSdk( backup.getSelection() );
     }
 
     private void createInitBundle( IProgressMonitor monitor ) throws CoreException
@@ -951,7 +946,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void disposeImportElement()
     {
-        backupSDK.dispose();
+        backup.dispose();
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
         importButton.dispose();
@@ -959,7 +954,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void disposeLayoutElement()
     {
-        if( backupSDK != null && createSeparator != null && createHorizontalSpacer != null &&
+        if( backup != null && createSeparator != null && createHorizontalSpacer != null &&
             serverLabel != null && serverComb != null && serverButton != null )
         {
             disposeImportElement();
@@ -1026,27 +1021,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         return builder;
     }
 
-    protected String getSDKDefaultValue()
-    {
-        String retVal = "";
-
-        try
-        {
-            IProject sdk = SDKUtil.getWorkspaceSDKProject();
-
-            if( sdk != null )
-            {
-                retVal = sdk.getLocation().toString();
-            }
-        }
-        catch( CoreException e )
-        {
-            ProjectUI.logError( "Get workspace default sdk value failed.", e );
-        }
-
-        return retVal;
-    }
-
     protected void importProject() throws CoreException
     {
         String layout = dataModel.getLayout().content();
@@ -1064,7 +1038,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     {
                         String newPath = "";
 
-                        backupSDK( monitor );
+                        backup( monitor );
 
                         clearWorkspaceSDKAndProjects( location, monitor );
 

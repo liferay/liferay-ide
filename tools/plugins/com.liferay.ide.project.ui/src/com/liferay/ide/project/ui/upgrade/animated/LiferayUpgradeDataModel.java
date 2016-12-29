@@ -37,7 +37,7 @@ public interface LiferayUpgradeDataModel extends Element
     ElementType TYPE = new ElementType( LiferayUpgradeDataModel.class );
 
     @Type( base = Path.class )
-    @Service( impl = SdkLocationValidationService.class )
+    @Service( impl = ProjectLocationValidationService.class )
     ValueProperty PROP_SDK_LOCATION = new ValueProperty( TYPE, "SdkLocation" );
 
     Value<Path> getSdkLocation();

@@ -33,7 +33,7 @@ import org.osgi.framework.Version;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public class SdkLocationValidationService extends ValidationService
+public class ProjectLocationValidationService extends ValidationService
 {
 
     @Override
@@ -94,4 +94,5 @@ public class SdkLocationValidationService extends ValidationService
     {
         return context( LiferayUpgradeDataModel.class );
     }
+
 }
