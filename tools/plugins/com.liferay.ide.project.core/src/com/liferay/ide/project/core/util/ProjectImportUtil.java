@@ -349,6 +349,11 @@ public class ProjectImportUtil
         File projectDir = projectRecord.getProjectLocation().toFile();
         SDK sdk = SDKUtil.getSDKFromProjectDir( projectDir );
 
+        if ( sdk == null )
+        {
+            return null;
+        }
+
         if( projectRecord.projectSystemFile != null )
         {
             try
