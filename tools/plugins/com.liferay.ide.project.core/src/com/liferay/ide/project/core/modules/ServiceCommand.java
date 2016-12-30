@@ -51,6 +51,7 @@ import org.eclipse.wst.server.core.IServer;
 /**
  * @author Lovett Li
  * @author Simon Jiang
+ * @author Terry Jia
  */
 public class ServiceCommand
 {
@@ -81,7 +82,6 @@ public class ServiceCommand
         "com.liferay.portal.service.http",
         "com.liferay.portal.service.permission",
         "com.liferay.portal.servlet",
-        "com.liferay.portal.servlet.filters.authverifier",
         "com.liferay.portal.spring.aop",
         "com.liferay.portal.spring.bean",
         "com.liferay.portal.spring.context",
@@ -91,45 +91,21 @@ public class ServiceCommand
         "com.liferay.portal.template",
         "com.liferay.portal.tools",
         "com.liferay.portal.upgrade.util",
-        "com.liferay.portal.upgrade.util.classname",
-        "com.liferay.portal.upgrade.util.classname.dependency",
         "com.liferay.portal.upgrade.v7_0_0",
         "com.liferay.portal.upload",
         "com.liferay.portal.util",
         "com.liferay.portal.xml",
         "com.liferay.portlet.asset",
-        "com.liferay.portlet.asset.model",
-        "com.liferay.portlet.asset.model.impl",
-        "com.liferay.portlet.asset.service",
-        "com.liferay.portlet.asset.service.permission",
-        "com.liferay.portlet.asset.service.persistence",
-        "com.liferay.portlet.asset.util",
         "com.liferay.portlet.documentlibrary",
-        "com.liferay.portlet.documentlibrary.action",
-        "com.liferay.portlet.documentlibrary.antivirus",
-        "com.liferay.portlet.documentlibrary.convert",
-        "com.liferay.portlet.documentlibrary.lar",
-        "com.liferay.portlet.documentlibrary.model",
-        "com.liferay.portlet.documentlibrary.service",
-        "com.liferay.portlet.documentlibrary.service.permission",
-        "com.liferay.portlet.documentlibrary.store",
-        "com.liferay.portlet.documentlibrary.util",
         "com.liferay.portlet.expando.model",
         "com.liferay.portlet.expando.service",
-        "com.liferay.portlet.expando.service.persistence",
         "com.liferay.portlet.expando.util",
         "com.liferay.portlet.layoutsadmin.display.context",
         "com.liferay.portlet.messageboards.model",
         "com.liferay.portlet.messageboards.service",
-        "com.liferay.portlet.messageboards.service.persistence",
         "com.liferay.portlet.social.model",
         "com.liferay.portlet.social.service",
-        "com.liferay.portlet.social.service.persistence",
         "com.liferay.portlet.trash",
-        "com.liferay.portlet.trash.model",
-        "com.liferay.portlet.trash.service",
-        "com.liferay.portlet.trash.service.persistence",
-        "com.liferay.portlet.trash.util",
         "com.liferay.portlet.usersadmin.search"
     };
 

@@ -48,14 +48,14 @@ public class ProjectLocationValidationService extends ValidationService
             return StatusBridge.create( ProjectCore.createErrorStatus( "This workspace has more than one SDK." ) );
         }
 
-        final Path sdkLocation = op().getSdkLocation().content( true );
+        final Path location = op().getSdkLocation().content( true );
 
-        if( sdkLocation == null || sdkLocation.isEmpty() )
+        if( location == null || location.isEmpty() )
         {
             return StatusBridge.create( ProjectCore.createErrorStatus( "Liferay Plugins SDK location is empty." ) );
         }
 
-        SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( sdkLocation ) );
+        SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( location ) );
 
         if( sdk != null )
         {
@@ -81,7 +81,7 @@ public class ProjectLocationValidationService extends ValidationService
             }
         }
         else if( !ImportLiferayModuleProjectOpMethods.getBuildType(
-            sdkLocation.toPortableString() ).getMessage().equals( "maven" ) )
+            location.toPortableString() ).getMessage().equals( "maven" ) )
         {
             return StatusBridge.create(
                 ProjectCore.createErrorStatus( "Plugins SDK or Maven location is not valid." ) );

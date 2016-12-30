@@ -194,6 +194,14 @@ public interface LiferayUpgradeDataModel extends Element
 
     void setBackupSdk( Boolean backupSdk );
 
+    @Type( base = Path.class )
+    ValueProperty PROP_BACKUP_LOCATION = new ValueProperty( TYPE, "BackupLocation" );
+    Value<Path> getBackupLocation();
+
+    void setBackupLocation( String backupLocation );
+
+    void setBackupLocation( Path backupLocation );
+
     @Type( base = Boolean.class )
     @DefaultValue( text = "false" )
     ValueProperty PROP_IMPORT_FINISHED = new ValueProperty( TYPE, "ImportFinished" );

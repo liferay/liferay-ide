@@ -219,7 +219,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Button backup;
     private boolean validationResult;
     private Button importButton;
-
+    private Label backupLocationLabel;
+    private Text backupLocationField;
+    
     private Composite composite;
 
     private Control createHorizontalSpacer;
@@ -246,7 +248,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         createSeparator = createSeparator( this, 3 );
 
-        dirLabel = createLabel( composite, "Plugins SDK or Maven Location:" );
+        dirLabel = createLabel( composite, "Plugins SDK or Maven Project Root Location:" );
         dirField = createTextField( composite, SWT.NONE );
         dirField.addModifyListener( new ModifyListener()
         {
@@ -262,7 +264,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             public void widgetSelected( SelectionEvent e )
             {
                 final DirectoryDialog dd = new DirectoryDialog( getShell() );
-                dd.setMessage( "Select source SDK or Maven folder" );
+                dd.setMessage( "Plugins SDK top-level directory or Maven project root directory" );
 
                 final String selectedDir = dd.open();
 
@@ -320,9 +322,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
             if( originalPath != null )
             {
-                IPath backupLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+                IPath backupLocation = PathBridge.create( dataModel.getBackupLocation().content() );
+
                 progress.worked( 30 );
+
                 ZipUtil.zip( originalPath.toFile(), backupLocation.append( "backup.zip" ).toFile() );
+
                 progress.setWorkRemaining( 70 );
             }
         }
@@ -401,11 +406,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
-    private void clearWorkspaceSDKAndProjects( IPath targetSDKLocation, IProgressMonitor monitor ) throws CoreException
+    private void clearExistingProjects( IPath location, IProgressMonitor monitor ) throws CoreException
     {
         IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
 
-        if( sdkProject != null && sdkProject.getLocation().equals( targetSDKLocation ) )
+        if( sdkProject != null && sdkProject.getLocation().equals( location ) )
         {
             IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
 
@@ -417,6 +422,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             sdkProject.delete( false, true, monitor );
         }
 
+        IProject[] projects = CoreUtil.getAllProjects();
+
+        for( IProject project : projects )
+        {
+            if( project.getLocation().toPortableString().startsWith( location.toPortableString() ) )
+            {
+                project.delete( false, true, monitor );
+            }
+        }
     }
 
     private void copyNewSDK( IPath targetSDKLocation, IProgressMonitor monitor ) throws CoreException
@@ -637,6 +651,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         bundleNameField.setText( bundleName != null ? bundleName : "" );
 
         bundleUrlLabel = createLabel( composite, "Bundle URL:" );
+
         bundleUrlField = createTextField( composite, SWT.NONE );
         bundleUrlField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
         bundleUrlField.setText( defaultBundleUrl );
@@ -683,14 +698,53 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createHorizontalSpacer = createHorizontalSpacer( this, 3 );
         createSeparator = createSeparator( this, 3 );
 
-        String backupFolderName = "Backup project into folder(" +  CoreUtil.getWorkspaceRoot().getLocation().toOSString() + ").";
-        backup = SWTUtil.createCheckButton( composite, backupFolderName, null, false, 1 );
+        String backupFolderName = "Backup project into folder";
+        backup = SWTUtil.createCheckButton( composite, backupFolderName, null, false, 2 );
+
+        backupLocationField = createTextField( composite, SWT.NONE );
+        backupLocationField.setEnabled( backup.getSelection() );
+        backupLocationField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
+
+        backupLocationField.addModifyListener( new ModifyListener()
+        {
+            @Override
+            public void modifyText( ModifyEvent e )
+            {
+                dataModel.setBackupLocation( backupLocationField.getText() );
+            }
+        } );
+
+        backupLocationField.setText( CoreUtil.getWorkspaceRoot().getLocation().toOSString() );
+
+        Button button = SWTUtil.createButton( this, "Browse..." );
+        button.setEnabled( backup.getSelection() );
+
         backup.addSelectionListener( new SelectionAdapter()
         {
             @Override
             public void widgetSelected( SelectionEvent e )
             {
                 dataModel.setBackupSdk( backup.getSelection() );
+
+                backupLocationField.setEnabled( backup.getSelection() );
+                button.setEnabled( backup.getSelection() );
+            }
+        });
+
+        button.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                final DirectoryDialog dd = new DirectoryDialog( getShell() );
+                dd.setMessage( "Backup Location directory" );
+
+                final String selectedDir = dd.open();
+
+                if( selectedDir != null )
+                {
+                    backupLocationField.setText( selectedDir );
+                }
             }
         });
 
@@ -742,6 +796,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 }
             }
         } );
+
         dataModel.setBackupSdk( backup.getSelection() );
     }
 
@@ -1040,7 +1095,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         backup( monitor );
 
-                        clearWorkspaceSDKAndProjects( location, monitor );
+                        clearExistingProjects( location, monitor );
 
                         deleteEclipseConfigFiles( location.toFile() );
 
