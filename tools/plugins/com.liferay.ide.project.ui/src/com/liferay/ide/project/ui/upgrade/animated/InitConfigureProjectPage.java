@@ -137,6 +137,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
             if( !(property.name().equals( "SdkLocation" )) )
             {
+                startCheckThread();
                 return;
             }
 
@@ -149,6 +150,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     layoutComb.setEnabled( true );
                 }
 
+                startCheckThread();
                 return;
             }
 
