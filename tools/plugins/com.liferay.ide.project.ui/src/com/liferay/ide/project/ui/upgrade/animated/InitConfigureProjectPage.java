@@ -221,7 +221,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Button backup;
     private boolean validationResult;
     private Button importButton;
-    private Label backupLocationLabel;
+    private Button backupButton;
     private Text backupLocationField;
     
     private Composite composite;
@@ -599,32 +599,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 if( sel == 1 )
                 {
-                    disposeBundleElement();
-
-                    disposeLayoutElement();
-
-                    disposeImportElement();
-
-                    createServerElement();
-
-                    createImportElement();
+                    createServerControl();
                 }
                 else
                 {
-                    disposeServerEelment();
-
-                    disposeImportElement();
-
-                    disposeBundleElement();
-
-                    disposeLayoutElement();
-
-                    createBundleElement();
-
-                    createImportElement();
+                    createBundleControl();
                 }
 
-                composite.layout();
                 dataModel.setLayout( layoutComb.getText() );
 
                 startCheckThread();
@@ -718,8 +699,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         backupLocationField.setText( CoreUtil.getWorkspaceRoot().getLocation().toOSString() );
 
-        Button button = SWTUtil.createButton( this, "Browse..." );
-        button.setEnabled( backup.getSelection() );
+        backupButton = SWTUtil.createButton( this, "Browse..." );
+        backupButton.setEnabled( backup.getSelection() );
 
         backup.addSelectionListener( new SelectionAdapter()
         {
@@ -729,11 +710,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 dataModel.setBackupSdk( backup.getSelection() );
 
                 backupLocationField.setEnabled( backup.getSelection() );
-                button.setEnabled( backup.getSelection() );
+                backupButton.setEnabled( backup.getSelection() );
             }
         });
 
-        button.addSelectionListener( new SelectionAdapter()
+        backupButton.addSelectionListener( new SelectionAdapter()
         {
             @Override
             public void widgetSelected( SelectionEvent e )
@@ -1006,6 +987,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         backup.dispose();
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
+        backupLocationField.dispose();
+        backupButton.dispose();
         importButton.dispose();
     }
 
