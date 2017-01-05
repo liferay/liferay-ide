@@ -438,7 +438,7 @@ public class MigrateProjectHandler extends AbstractHandler
     {
         String path = problem.getFile().getAbsolutePath().replaceAll( "\\\\", "/" );
 
-        if( path.contains( "WEB-INF/classes" ) || path.contains( "WEB-INF/service" ) )
+        if( path.contains( "WEB-INF/classes" ) || path.contains( "WEB-INF/service" ) || path.contains( "target" ) )
         {
             return false;
         }

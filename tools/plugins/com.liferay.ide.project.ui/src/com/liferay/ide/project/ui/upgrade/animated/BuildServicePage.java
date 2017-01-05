@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -79,17 +80,6 @@ public class BuildServicePage extends Page
                     IFile portletSpringXML = project.getFile( relativePath + "/portlet-spring.xml" );
                     IFile shardDataSourceSpringXML = project.getFile( relativePath + "/shard-data-source-spring.xml" );
 
-                    if( !portletSpringXML.exists() )
-                    {
-                        portletSpringXML = project.getFile( "/src/main/java/META-INF/portlet-spring.xml" );
-                    }
-
-                    if( !shardDataSourceSpringXML.exists() )
-                    {
-                        shardDataSourceSpringXML =
-                            project.getFile( "/src/main/java/META-INF/shard-data-source-spring.xml" );
-                    }
-
                     if( portletSpringXML.exists() )
                     {
                         portletSpringXML.delete( true, monitor );
@@ -99,6 +89,14 @@ public class BuildServicePage extends Page
                     {
                         shardDataSourceSpringXML.delete( true, monitor );
                     }
+
+                   // for 6.2 maven project
+                   IFolder metaInfFolder = project.getFolder( "/src/main/resources/META-INF/" );
+
+                   if( metaInfFolder.exists() )
+                   {
+                       metaInfFolder.delete( true, monitor );
+                   }
                 }
                 catch( CoreException e )
                 {
