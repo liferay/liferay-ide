@@ -108,9 +108,9 @@ public class MavenBundlePluginProject extends LiferayMavenProject implements IBu
         {
             this.getProject().build( IncrementalProjectBuilder.CLEAN_BUILD, monitor );
             this.getProject().build( IncrementalProjectBuilder.FULL_BUILD, monitor );
-
-            mavenProjectBuilder.execJarMojo( projectFacade, monitor );
         }
+
+        mavenProjectBuilder.execJarMojo( projectFacade, monitor );
 
         final MavenProject mavenProject = projectFacade.getMavenProject( monitor );
 
