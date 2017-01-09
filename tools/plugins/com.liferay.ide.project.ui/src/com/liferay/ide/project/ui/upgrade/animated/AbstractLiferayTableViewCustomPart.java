@@ -412,6 +412,16 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
             }
         }
 
+        for( int i = 0; i < tableViewElementList.size() - 1; i++ )
+        {
+            for( int j = tableViewElementList.size() - 1; j > i; j-- )
+            {
+                if( tableViewElementList.get( j ).location.equals( tableViewElementList.get( i ).location ) )
+                {
+                    tableViewElementList.remove( j );
+                }
+            }
+        }
         return tableViewElementList;
     }
 

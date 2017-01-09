@@ -52,7 +52,8 @@ public class ProjectLocationValidationService extends ValidationService
 
         if( location == null || location.isEmpty() )
         {
-            return StatusBridge.create( ProjectCore.createErrorStatus( "Liferay Plugins SDK location is empty." ) );
+            return StatusBridge.create(
+                ProjectCore.createErrorStatus( "Liferay Plugins SDK or Maven location is empty." ) );
         }
 
         SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( location ) );

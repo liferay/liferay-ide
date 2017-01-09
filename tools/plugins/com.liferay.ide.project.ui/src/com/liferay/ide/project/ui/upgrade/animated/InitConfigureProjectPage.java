@@ -731,6 +731,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         });
 
+        createHorizontalSpacer = createHorizontalSpacer( composite, 1 );
+
         importButton = SWTUtil.createButton( composite, "Import Projects" );
         importButton.addSelectionListener( new SelectionAdapter()
         {
