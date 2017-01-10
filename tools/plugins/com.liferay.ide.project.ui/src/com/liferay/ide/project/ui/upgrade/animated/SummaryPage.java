@@ -162,10 +162,10 @@ public class SummaryPage extends Page implements SelectionChangedListener
 
     public void createSpecialDescriptor( Composite parent, int style )
     {
-        final String descriptor = "Upgrade results are summarised in the following table.\n" +
-            "If there are still some steps failed or incompleted, you can go back to finish them.\n" +
+        final String descriptor = "Upgrade results are summarized in the following table.\n" +
+            "If there are still some failed or incomplete steps, you can go back to finish them.\n" +
             "If all the steps are well-done, congratulations! You have finished the whole upgrade process.\n" +
-            "Now you can try to deploy your projects to Liferay portal. " +
+            "Now you can try to deploy your projects to the Liferay Portal instance. " +
             "For more upgrade information, please see <a>From Liferay 6 to Liferay 7</a>.";
         String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";
 

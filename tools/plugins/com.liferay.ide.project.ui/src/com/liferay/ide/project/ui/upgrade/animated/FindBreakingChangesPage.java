@@ -651,10 +651,10 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor =
-            "This step will help you to find breaking changes for type of java, jsp, xml and properties files. " +
+            "This step will help you to find breaking changes for Java, JSP, XML, and properties files. " +
                 "It will not support to find the front-end codes( e.g., javascript, css).\n For service builder, you " +
                 "just need to modify the changes on xxxServiceImp.java, xxxFinder.java, xxxModel.java. " +
-                "Others will be solved in step \"Build Service\".";
+                "Others will be resovled in the Build Service step.";
         String url = "";
 
         Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );

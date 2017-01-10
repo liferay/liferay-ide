@@ -62,13 +62,13 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart
     @Override
     public String getPageTitle()
     {
-        return "Upgrade Layout Template";
+        return "Upgrade Layout Templates";
     }
 
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor = "This step will upgrade layout template files from 6.2 to 7.0.\n" +
-            "The layout template's rows and columns are affected by the new grid system syntax of Bootsrap.\n" +
+            "The layout template's rows and columns are affected by the new grid system syntax of Bootstrap.\n" +
             "For more details, please see <a>Upgrading Layout Templates</a>.";
 
         String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/upgrading-layout-templates";

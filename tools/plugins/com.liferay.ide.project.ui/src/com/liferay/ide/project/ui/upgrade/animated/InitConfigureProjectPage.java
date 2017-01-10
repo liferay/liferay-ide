@@ -479,7 +479,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         Composite fillLayoutComposite = SWTUtil.createComposite( parent, 2, 2, GridData.FILL_HORIZONTAL );
 
         final String descriptor =
-            "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to  Liferay Workspace. " +
+            "The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to  Liferay Workspace. " +
             "For more details, please see <a>dev.liferay.com</a>.";
 
         String url = "https://dev.liferay.com/develop/tutorials";
@@ -487,7 +487,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         SWTUtil.createHyperLink( fillLayoutComposite, SWT.NONE, descriptor, 1, url );
 
         final String extensionDec =
-            "The first step will help you convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n" +
+            "The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n" +
                 "We will backup your project to a zip file in your eclipse workspace directory.\n" +
                 "Click the \"import\" button to import your project into Eclipse workspace" +
                 "(this process maybe need 5-10 mins for bundle init).\n" + "Note:\n" +

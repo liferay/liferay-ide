@@ -61,7 +61,7 @@ public class WelcomePage extends Page
                 "The key functions are described below:\n" +
                 "       1. Convert Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace\n" +
                 "       2. Update Descriptor files from 6.2 to 7.0\n" +
-                "       2. Find Breaking Changes in the API sages that need to be migrated to Liferay 7\n" +
+                "       3. Find Breaking Changes in the API stages that need to be migrated to Liferay 7\n" +
                 "       4. Update Layout Template files from 6.2 to 7.0 format\n" +
                 "       5. Automatically Convert Custom JSP Hooks to OSGi modules\n\n" +
                 "Note:\n" +
@@ -71,7 +71,7 @@ public class WelcomePage extends Page
                 "How to use this tool:\n" +
                 "       In order to move through various upgrade steps,\n" +
                 "       use left, right, ✓, X and clicking on each gear to move between the upgrade steps.\n" +
-                "       When are you are finished with an upgrade step, mark it done by selecting the ✓ button,\n" +
+                "       When you are finished with an upgrade step, mark it done by selecting ✓ button,\n" +
                 "       or, if it is not complete or you want to come back to it later, mark it with an X.";
 
         String url = "https://dev.liferay.com/develop/tutorials/-/knowledge_base/7-0/from-liferay-6-to-liferay-7";

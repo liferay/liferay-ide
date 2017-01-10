@@ -78,8 +78,8 @@ public class DescriptorsPage extends AbstractLiferayTableViewCustomPart
 
     public void createSpecialDescriptor( Composite parent, int style )
     {
-        final String descriptor = "This step will upgrade descriptor xml dtd version from 6.2 to 7.0 and " +
-            "delete wap-template-path \ntag in liferay-layout-template.xml.\n" +
+        final String descriptor = "This step upgrades descriptor XML DTD versions from 6.2 to 7.0 and " +
+            "deletes the wap-template-path \ntag from liferay-layout-template.xml files.\n" +
             "Double click the file in the list. It will popup a comparison page which shows the differences\n" +
             "between your original source file and the upgrade preview file.";
         String url = "";
