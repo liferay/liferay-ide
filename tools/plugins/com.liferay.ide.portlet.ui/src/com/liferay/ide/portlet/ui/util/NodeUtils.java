@@ -55,22 +55,25 @@ public class NodeUtils
 
                 for( final IFolder src : CoreUtil.getSourceFolders( project ) )
                 {
-                    final IFile[] props = PropertiesUtil.visitPropertiesFiles( src, ".*" );
-
-                    for( final IFile prop : props )
+                    if( src.exists() )
                     {
-                        try
-                        {
-                            final KeyInfo info =
-                                new PropertiesFileLookup( prop.getContents(), key, loadValues ).getKeyInfo( key );
+                        final IFile[] props = PropertiesUtil.visitPropertiesFiles( src, ".*" );
 
-                            if( info != null && info.offset >= 0 )
-                            {
-                                keys.add( new MessageKey( prop, key, info.offset, info.length, info.value ) );
-                            }
-                        }
-                        catch( CoreException e )
+                        for( final IFile prop : props )
                         {
+                            try
+                            {
+                                final KeyInfo info =
+                                    new PropertiesFileLookup( prop.getContents(), key, loadValues ).getKeyInfo( key );
+
+                                if( info != null && info.offset >= 0 )
+                                {
+                                    keys.add( new MessageKey( prop, key, info.offset, info.length, info.value ) );
+                                }
+                            }
+                            catch( CoreException e )
+                            {
+                            }
                         }
                     }
                 }
