@@ -227,6 +227,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Composite composite;
 
     private Control createHorizontalSpacer;
+    private Control createImportHorizontalSpacer;
     private Control createSeparator;
     private ProjectLocationValidationService sdkValidation =
         dataModel.getSdkLocation().service( ProjectLocationValidationService.class );
@@ -731,7 +732,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         });
 
-        createHorizontalSpacer = createHorizontalSpacer( composite, 1 );
+        createImportHorizontalSpacer = createHorizontalSpacer( composite, 1 );
 
         importButton = SWTUtil.createButton( composite, "Import Projects" );
         importButton.addSelectionListener( new SelectionAdapter()
@@ -991,6 +992,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createHorizontalSpacer.dispose();
         backupLocationField.dispose();
         backupButton.dispose();
+        createImportHorizontalSpacer.dispose();
         importButton.dispose();
     }
 
