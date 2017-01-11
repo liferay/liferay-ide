@@ -19,6 +19,7 @@ import com.liferay.blade.api.Migration;
 import com.liferay.blade.api.MigrationConstants;
 import com.liferay.blade.api.Problem;
 import com.liferay.blade.api.ProgressMonitor;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.MarkerUtil;
 import com.liferay.ide.project.core.upgrade.FileProblems;
@@ -559,7 +560,7 @@ public class MigrateProjectHandler extends AbstractHandler
 
     private void clearFileMarkers( File file )
     {
-        IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
+        IProject[] projects = CoreUtil.getAllProjects();
 
         for( IProject project : projects )
         {

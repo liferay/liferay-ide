@@ -18,6 +18,7 @@ package com.liferay.ide.project.ui.migration;
 import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
@@ -125,7 +126,7 @@ public class AutoCorrectAction extends ProblemAction
                     MigrateProjectHandler migrateHandler = new MigrateProjectHandler();
 
                     Path path = new Path( problem.getFile().getPath() );
-                    IProject[] projects = ProjectUtil.getAllPluginsSDKProjects();
+                    IProject[] projects = CoreUtil.getAllProjects();
                     String projectName = "";
 
                     for( IProject project : projects )
