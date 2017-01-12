@@ -25,8 +25,7 @@ import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.CustomJspPage;
-import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalBundle;
+import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -429,7 +428,7 @@ public class CustomJspConverter
             File ignoreFolder = new File( location, coreJspHookResourcesPath + ".ignore/" );
             File destFolder = new File( location, coreJspHookResourcesPath );
 
-            PortalBundle portalBundle = LiferayServerCore.newPortalBundle( getLiferay70Runtime().getLocation() );
+            ILiferayRuntime liferayRuntime = ServerUtil.getLiferayRuntime( getLiferay70Runtime() );
 
             for( File dir : dirs )
             {
@@ -448,8 +447,8 @@ public class CustomJspConverter
                     {
                         File original62File = new File( get62HtmlDir() + dir.getName() + "/" + fileRelativizePath );
 
-                        File original70File = portalBundle.getAppServerDir().append(
-                            "webapps/ROOT/html/" + dir.getName() + "/" + fileRelativizePath ).toFile();
+                        File original70File = liferayRuntime.getAppServerPortalDir().removeLastSegments( 1 ).append(
+                            "ROOT/html/" + dir.getName() + "/" + fileRelativizePath ).toFile();
 
                         if( original62File.exists() && original70File.exists() )
                         {

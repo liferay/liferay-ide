@@ -20,6 +20,8 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.CustomJspConverter;
+import com.liferay.ide.server.core.LiferayRuntimeStubDelegate;
+import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -36,6 +38,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.compare.BufferedContent;
 import org.eclipse.compare.CompareConfiguration;
@@ -96,6 +99,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.ServerCore;
+import org.eclipse.wst.server.ui.ServerUIUtil;
 
 /**
  * @author Andy Wu
@@ -988,7 +993,36 @@ public class CustomJspPage extends Page
 
     private String getLiferay62ServerLocation()
     {
-        return dataModel.getLiferay62ServerLocation().content( true );
+        String liferay62ServerLocation = dataModel.getLiferay62ServerLocation().content( true );
+
+        if( liferay62ServerLocation == null )
+        {
+            Set<IRuntime> liferayRuntimes = ServerUtil.getAvailableLiferayRuntimes();
+
+            for( IRuntime liferayRuntime : liferayRuntimes )
+            {
+                String id = liferayRuntime.getRuntimeType().getId();
+                if( liferayRuntime.getRuntimeType().getId().startsWith( "com.liferay.ide.server.62." ) )
+                {
+                    liferay62ServerLocation = liferayRuntime.getLocation().removeLastSegments( 1 ).toString();
+                    return liferay62ServerLocation;
+                }
+            }
+
+            if( liferay62ServerLocation == null )
+            {
+                Boolean openAddLiferaryServerDialog = MessageDialog.openQuestion(
+                    UIUtil.getActiveShell(), "Could not convert",
+                    "Could not find Liferay 6.2 Runtime, do you want to add one?" );
+
+                if( openAddLiferaryServerDialog )
+                {
+                    ServerUIUtil.showNewRuntimeWizard( UIUtil.getActiveShell(), null, null, "com.liferay." );
+                    return getLiferay62ServerLocation();
+                }
+            }
+        }
+        return liferay62ServerLocation;
     }
 
     private String getLiferay62ServerRootDirPath( String serverLocation )
@@ -1037,8 +1071,40 @@ public class CustomJspPage extends Page
         }
         else
         {
-            return null;
+            IRuntime liferay70Runtime = getExistLiferay70Runtime();
+
+            if( liferay70Runtime != null )
+            {
+                return liferay70Runtime;
+            }
+            else
+            {
+                Boolean openAddLiferaryServerDialog = MessageDialog.openQuestion(
+                    UIUtil.getActiveShell(), "Could not convert",
+                    "Could not find Liferay 7.x Runtime, do you want to add one?" );
+
+                if( openAddLiferaryServerDialog )
+                {
+                    ServerUIUtil.showNewRuntimeWizard( UIUtil.getActiveShell(), "liferay.bundle", null, "com.liferay." );
+                    return getExistLiferay70Runtime();
+                }
+            }
         }
+        return null;
+    }
+
+    private IRuntime getExistLiferay70Runtime()
+    {
+        Set<IRuntime> liferayRuntimes = ServerUtil.getAvailableLiferayRuntimes();
+
+        for( IRuntime liferayRuntime : liferayRuntimes )
+        {
+            if( liferayRuntime.getRuntimeType().getId().equals( "com.liferay.ide.server.portal.runtime" ) )
+            {
+                return liferayRuntime;
+            }
+        }
+        return null;
     }
 
     private File[] getRightTreeInputs()
@@ -1199,7 +1265,7 @@ public class CustomJspPage extends Page
         if( liferay70Runtime == null )
         {
             MessageDialog.openError(
-                Display.getDefault().getActiveShell(), "could not convert", "countn't find liferay 7.x server" );
+                Display.getDefault().getActiveShell(), "could not convert", "couldn't find liferay 7.x Runtime" );
 
             return;
         }
