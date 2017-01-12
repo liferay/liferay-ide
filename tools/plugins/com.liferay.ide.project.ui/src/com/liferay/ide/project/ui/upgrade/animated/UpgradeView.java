@@ -151,14 +151,15 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         boolean hasExt = dataModel.getHasExt().content();*/
         boolean hasWorkspace = dataModel.getConvertLiferayWorkspace().content();
 
+        if( hasPortlet || hasHook || hasServiceBuilder || hasWorkspace )
+        {
+            addPage( Page.UPGRADE_POM_PAGE_ID );
+            addPage( Page.FINDBREACKINGCHANGES_PAGE_ID );
+        }
+
         if( hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasWorkspace )
         {
             addPage( Page.DESCRIPTORS_PAGE_ID );
-        }
-
-        if( hasPortlet || hasHook || hasServiceBuilder || hasWorkspace )
-        {
-            addPage( Page.FINDBREACKINGCHANGES_PAGE_ID );
         }
 
         if( hasServiceBuilder || hasWorkspace )
@@ -289,39 +290,46 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         containerData.grabExcessHorizontalSpace = true;
         pagesSwitchControler.setLayoutData( containerData );
 
+        int pageIndex = 0;
+
         Page welcomePage = new WelcomePage( pagesSwitchControler, SWT.NONE, dataModel );
-        welcomePage.setIndex( 0 );
+        welcomePage.setIndex( pageIndex++ );
         welcomePage.setTitle( "Welcome" );
         welcomePage.setBackPage( false );
         welcomePage.addPageNavigateListener( gear );
 
         Page initConfigureProjectPage = new InitConfigureProjectPage( pagesSwitchControler, SWT.NONE, dataModel );
-        initConfigureProjectPage.setIndex( 1 );
-        initConfigureProjectPage.setTitle( "Configure Projects" );
+        initConfigureProjectPage.setIndex( pageIndex++ );
+        initConfigureProjectPage.setTitle( "Configure the Project" );
         initConfigureProjectPage.addPageNavigateListener( gear );
         initConfigureProjectPage.addPageValidationListener( gear );
         initConfigureProjectPage.setNextPage( false );
 
+        Page upgradePomPage = new UpgradePomPage( pagesSwitchControler, SWT.NONE, dataModel );
+        upgradePomPage.setIndex( pageIndex++ );
+        upgradePomPage.setTitle( "Upgrade POM Files" );
+        upgradePomPage.addPageValidationListener( gear );
+
+        Page findBreakingChangesPage = new FindBreakingChangesPage( pagesSwitchControler, SWT.NONE, dataModel );
+        findBreakingChangesPage.setIndex( pageIndex++ );
+        findBreakingChangesPage.setTitle( "Find Breaking Changes" );
+
         Page descriptorsPage = new DescriptorsPage( pagesSwitchControler, SWT.NONE, dataModel );
-        descriptorsPage.setIndex( 2 );
+        descriptorsPage.setIndex( pageIndex++ );
         descriptorsPage.setTitle( "Update Descriptor Files" );
         descriptorsPage.addPageValidationListener( gear );
 
-        Page findBreakingChangesPage = new FindBreakingChangesPage( pagesSwitchControler, SWT.NONE, dataModel );
-        findBreakingChangesPage.setIndex( 3 );
-        findBreakingChangesPage.setTitle( "Find Breaking Changes" );
-
         Page buildServicePage = new BuildServicePage( pagesSwitchControler, SWT.NONE, dataModel );
-        buildServicePage.setIndex( 4 );
-        buildServicePage.setTitle( "Build Service" );
+        buildServicePage.setIndex( pageIndex++ );
+        buildServicePage.setTitle( "Build Services" );
 
         Page layoutTemplatePage = new LayoutTemplatePage( pagesSwitchControler, SWT.NONE, dataModel );
-        layoutTemplatePage.setIndex( 5 );
-        layoutTemplatePage.setTitle( "Layout Template" );
+        layoutTemplatePage.setIndex( pageIndex++ );
+        layoutTemplatePage.setTitle( "Layout Templates" );
         layoutTemplatePage.addPageValidationListener( gear );
 
         Page customJspPage = new CustomJspPage( pagesSwitchControler, SWT.NONE, dataModel );
-        customJspPage.setIndex( 6 );
+        customJspPage.setIndex( pageIndex++ );
         customJspPage.setTitle( "Custom Jsp" );
         customJspPage.addPageValidationListener( gear );
 
@@ -330,11 +338,11 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 //        extAndThemePage.setTitle( "Ext and Theme" );
 
         Page buildPage = new BuildPage( pagesSwitchControler, SWT.NONE, dataModel );
-        buildPage.setIndex( 7 );
+        buildPage.setIndex( pageIndex++ );
         buildPage.setTitle( "Build" );
 
         Page summaryPage = new SummaryPage( pagesSwitchControler, SWT.NONE, dataModel );
-        summaryPage.setIndex( 8 );
+        summaryPage.setIndex( pageIndex++ );
         summaryPage.setTitle( "Summary" );
         summaryPage.setNextPage( false );
         summaryPage.addPageNavigateListener( gear );
@@ -343,8 +351,9 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
 
         staticPageList.add( welcomePage );
         staticPageList.add( initConfigureProjectPage );
-        staticPageList.add( descriptorsPage );
+        staticPageList.add( upgradePomPage );
         staticPageList.add( findBreakingChangesPage );
+        staticPageList.add( descriptorsPage );
         staticPageList.add( buildServicePage );
         staticPageList.add( layoutTemplatePage );
         staticPageList.add( customJspPage );

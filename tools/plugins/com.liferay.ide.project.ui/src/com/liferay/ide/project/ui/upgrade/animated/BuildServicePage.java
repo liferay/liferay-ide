@@ -67,7 +67,7 @@ public class BuildServicePage extends Page
 
         Button buildServiceButton = new Button( this, SWT.PUSH );
 
-        buildServiceButton.setText( "Build Service" );
+        buildServiceButton.setText( "Build Services" );
 
         buildServiceButton.addSelectionListener( new SelectionAdapter()
         {
@@ -226,7 +226,7 @@ public class BuildServicePage extends Page
     @Override
     public String getPageTitle()
     {
-        return "Build Service";
+        return "Build Services";
     }
 
 }

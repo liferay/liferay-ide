@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -86,6 +87,13 @@ public class ProjectUI extends AbstractUIPlugin
     public static ProjectUI getDefault()
     {
         return plugin;
+    }
+
+    public Image getImage( String imageName )
+    {
+        Image image = ImageDescriptor.createFromURL( getBundle().getEntry( "icons/e16/" + imageName ) ).createImage();
+
+        return image;
     }
 
     public static void logError( Exception e )

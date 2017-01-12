@@ -46,6 +46,7 @@ public abstract class Page extends Composite
 
     public static String WELCOME_PAGE_ID = "welcome";
     public static String INIT_CONFIGURE_PROJECT_PAGE_ID = "initconfigureproject";
+    public static String UPGRADE_POM_PAGE_ID = "upgradepom";
     public static String DESCRIPTORS_PAGE_ID = "descriptors";
     public static String FINDBREACKINGCHANGES_PAGE_ID = "findbreackingchanges";
     public static String BUILDSERVICE_PAGE_ID = "buildservice";

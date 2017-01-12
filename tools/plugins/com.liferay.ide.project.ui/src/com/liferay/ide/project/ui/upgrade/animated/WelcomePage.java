@@ -51,7 +51,7 @@ public class WelcomePage extends Page
     @Override
     public String getPageTitle()
     {
-        return "Welcome to the Liferay code upgrade tool";
+        return "Welcome to the Liferay Code Upgrade Tool";
     }
 
     public void createSpecialDescriptor( Composite parent, int style )

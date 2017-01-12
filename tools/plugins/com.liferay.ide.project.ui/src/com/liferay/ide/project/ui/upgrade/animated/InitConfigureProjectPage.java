@@ -1044,7 +1044,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     @Override
     public String getPageTitle()
     {
-        return "Configure Project";
+        return "Configure the Project";
     }
 
     private IProjectBuilder getProjectBuilder( IProject project ) throws CoreException

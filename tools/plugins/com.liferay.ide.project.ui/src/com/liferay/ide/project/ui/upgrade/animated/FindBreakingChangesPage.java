@@ -534,10 +534,7 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
 
     private Image getImage( String imageName )
     {
-        Image image = ImageDescriptor.createFromURL(
-            ProjectUI.getDefault().getBundle().getEntry( "icons/e16/" + imageName ) ).createImage();
-
-        return image;
+        return ProjectUI.getDefault().getImage( imageName );
     }
 
     public TableViewer getProblemsViewer()
