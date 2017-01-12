@@ -813,32 +813,33 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                     projectBuilder.execInitBundle( project, "initBundle", bundleUrl, monitor );
                 }
 
-                progress.worked( 60 );
-
-                addPortalRuntimeAndServer( bundleName, sdkLocation.toPortableString(), monitor );
-
-                IServer bundleServer = ServerCore.findServer( dataModel.getBundleName().content() );
-
-                if( bundleServer != null )
+                if( sdkLocation.append( "bundles" ).toFile().exists() )
                 {
-                    org.eclipse.sapphire.modeling.Path newPath = dataModel.getSdkLocation().content();
-                    SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( newPath ).append( "plugins-sdk" ) );
+                    progress.worked( 60 );
 
-                    IPath bundleLocation = bundleServer.getRuntime().getLocation();
+                    addPortalRuntimeAndServer( bundleName, sdkLocation.toPortableString(), monitor );
 
-                    sdk.addOrUpdateServerProperties( bundleLocation );
+                    IServer bundleServer = ServerCore.findServer( dataModel.getBundleName().content() );
+
+                    if( bundleServer != null )
+                    {
+                        org.eclipse.sapphire.modeling.Path newPath = dataModel.getSdkLocation().content();
+                        SDK sdk = SDKUtil.createSDKFromLocation( PathBridge.create( newPath ).append( "plugins-sdk" ) );
+
+                        IPath bundleLocation = bundleServer.getRuntime().getLocation();
+
+                        sdk.addOrUpdateServerProperties( bundleLocation );
+                    }
+                    project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
                 }
-
-                project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-
-                progress.worked( 100 );
             }
+            progress.worked( 100 );
         }
         catch( Exception e )
         {
             ProjectUI.logError( e );
             throw new CoreException(
-                StatusBridge.create( Status.createErrorStatus( "Faild execute Liferay Workspace Bundle Init Command...", e ) ) );
+                StatusBridge.create( Status.createErrorStatus( "Failed to execute Liferay Workspace Bundle Init Command...", e ) ) );
         }
         finally
         {
