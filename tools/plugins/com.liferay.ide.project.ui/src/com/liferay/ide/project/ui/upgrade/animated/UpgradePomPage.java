@@ -32,10 +32,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
+import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -55,7 +58,7 @@ import org.eclipse.swt.widgets.Table;
 public class UpgradePomPage extends Page
 {
 
-    private class ProjectLabelProvider extends LabelProvider
+    private class ProjectLabelProvider extends LabelProvider implements IStyledLabelProvider
     {
 
         @Override
@@ -65,14 +68,36 @@ public class UpgradePomPage extends Page
         }
 
         @Override
-        public String getText( Object element )
+        public StyledString getStyledText( Object element )
         {
             IProject project = (IProject) element;
             String projectName = project.getName();
             IFile pomFile = project.getFile( "pom.xml" );
             String location = pomFile.getProjectRelativePath().toOSString();
 
-            return "pom.xml" + " (" + projectName + " - Location:" + projectName + "/" + location + ")";
+            boolean finished = true;
+
+            if( updater.isNeedUpgrade( pomFile ) )
+            {
+                finished = false;
+            }
+
+            String text = "pom.xml" + " (" + projectName + " - Location:" + projectName + "/" + location + ")";
+
+            StyledString retVal = new StyledString();
+
+            if( finished )
+            {
+                text += "(finished)";
+
+                retVal.append( text, StyledString.COUNTER_STYLER );
+            }
+            else
+            {
+                retVal.append( text );
+            }
+
+            return retVal;
         }
     }
 
@@ -98,7 +123,7 @@ public class UpgradePomPage extends Page
 
         fTableViewer = CheckboxTableViewer.newCheckList( this, SWT.BORDER );
         fTableViewer.setContentProvider( new ArrayContentProvider() );
-        fTableViewer.setLabelProvider( new ProjectLabelProvider() );
+        fTableViewer.setLabelProvider( new DelegatingStyledCellLabelProvider( new ProjectLabelProvider() ) );
 
         fTableViewer.addDoubleClickListener( new IDoubleClickListener()
         {
@@ -222,12 +247,7 @@ public class UpgradePomPage extends Page
         {
             if( ProjectUtil.isMavenProject( project ) )
             {
-                IFile pomFile = project.getFile( "pom.xml" );
-
-                if( updater.isNeedUpgrade( pomFile ) )
-                {
-                    projectList.add( project );
-                }
+                projectList.add( project );
             }
         }
 
@@ -281,6 +301,9 @@ public class UpgradePomPage extends Page
             {
                 updater.upgradePomFile( project, null );
             }
+
+            handleFindEvent();
+            fTableViewer.setAllChecked( false );
         }
         catch( Exception e )
         {

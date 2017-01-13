@@ -237,6 +237,11 @@ public class MavenLegacyPomUpdater
         IFile pomFile = project.getFile( "pom.xml" );
         IFile tempPomFile = project.getFile( ".pom-tmp.xml" );
 
+        if( !isNeedUpgrade( pomFile ) )
+        {
+            return;
+        }
+
         IDOMModel domModel = null;
 
         try
