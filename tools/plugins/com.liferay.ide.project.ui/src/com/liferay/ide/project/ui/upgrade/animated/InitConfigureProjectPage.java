@@ -159,6 +159,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 disposeBundleElement();
                 disposeServerEelment();
                 disposeMigrateLayoutElement();
+                composite.layout();
             }
             else
             {

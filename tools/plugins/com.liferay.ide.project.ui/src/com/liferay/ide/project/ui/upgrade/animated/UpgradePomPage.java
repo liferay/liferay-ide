@@ -174,7 +174,7 @@ public class UpgradePomPage extends Page
         } );
 
         final Button disSelectAllButton = new Button( buttonContainer, SWT.NONE );
-        disSelectAllButton.setText( "Disselect All" );
+        disSelectAllButton.setText( "Deselect All" );
         disSelectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
         disSelectAllButton.addSelectionListener( new SelectionAdapter()
         {
