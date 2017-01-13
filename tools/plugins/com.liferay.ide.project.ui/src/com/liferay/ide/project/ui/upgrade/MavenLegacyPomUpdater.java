@@ -16,6 +16,7 @@
 package com.liferay.ide.project.ui.upgrade;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.ui.ProjectUI;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -234,11 +235,19 @@ public class MavenLegacyPomUpdater
     public void upgradePomFile( IProject project, File outputFile )
     {
         IFile pomFile = project.getFile( "pom.xml" );
+        IFile tempPomFile = project.getFile( ".pom-tmp.xml" );
 
         IDOMModel domModel = null;
 
         try
         {
+            if( outputFile != null )
+            {
+                pomFile.copy( tempPomFile.getFullPath(), true, null );
+
+                pomFile = tempPomFile;
+            }
+
             domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( pomFile );
 
             IDOMDocument document = domModel.getDocument();
@@ -300,6 +309,11 @@ public class MavenLegacyPomUpdater
                 }
             }
 
+            if( tempPomFile.exists() )
+            {
+                tempPomFile.delete( true, null );
+            }
+
             if( outputFile != null )
             {
                 try(FileOutputStream fos = new FileOutputStream( outputFile ))
@@ -317,6 +331,7 @@ public class MavenLegacyPomUpdater
         }
         catch( Exception e )
         {
+            ProjectUI.logError( "update pom file error", e );
         }
         finally
         {
