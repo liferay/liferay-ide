@@ -391,6 +391,32 @@ public class CoreUtil
         return retval;
     }
 
+    public static IProject getProject( File file )
+    {
+        IWorkspaceRoot ws = getWorkspaceRoot();
+
+        final IResource[] containers = ws.findContainersForLocationURI( file.toURI() );
+
+        IResource resource = null;
+
+        for( IResource container : containers )
+        {
+            if( resource == null )
+            {
+                resource = container;
+            }
+            else
+            {
+                if( container.getProjectRelativePath().segmentCount() < resource.getProjectRelativePath().segmentCount() )
+                {
+                    resource = container;
+                }
+            }
+        }
+
+        return resource.getProject();
+    }
+
     public final static List<IFolder> getSourceFolders( final IJavaProject project )
     {
         final List<IFolder> folders = new ArrayList<IFolder>();

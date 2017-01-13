@@ -51,12 +51,16 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.dom.ASTNode;
@@ -560,23 +564,13 @@ public class MigrateProjectHandler extends AbstractHandler
 
     private void clearFileMarkers( File file )
     {
-        IProject[] projects = CoreUtil.getAllProjects();
+        IWorkspace ws = ResourcesPlugin.getWorkspace();
+        IPath location = Path.fromOSString( file.getAbsolutePath() );
+        IFile projectFile = ws.getRoot().getFileForLocation( location );
 
-        for( IProject project : projects )
+        if( projectFile.exists() && projectFile != null )
         {
-            String filePath = file.getPath().replaceAll( "\\\\", "/" );
-            String projectPath = project.getLocation().toString();
-            if( filePath.startsWith( projectPath ) )
-            {
-                int i = filePath.indexOf( projectPath ) + projectPath.length();
-                String projectFilePath = filePath.substring( i, filePath.length() );
-                IFile projectFile = project.getFile( projectFilePath );
-                if( projectFile.exists() )
-                {
-                    MarkerUtil.clearMarkers( projectFile, MigrationConstants.MARKER_TYPE, null );
-                }
-                break;
-            }
+			MarkerUtil.clearMarkers( projectFile, MigrationConstants.MARKER_TYPE, null );
         }
     }
 

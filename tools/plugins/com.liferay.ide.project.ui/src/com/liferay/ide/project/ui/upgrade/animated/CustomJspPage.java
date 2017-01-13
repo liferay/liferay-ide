@@ -48,8 +48,6 @@ import org.eclipse.compare.structuremergeviewer.DiffNode;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -217,7 +215,7 @@ public class CustomJspPage extends Page
 
             if( html.exists() && html.isDirectory() )
             {
-                return getProject( html ).getName();
+                return CoreUtil.getProject( html ).getName();
             }
             else
             {
@@ -834,7 +832,7 @@ public class CustomJspPage extends Page
                 {
                     String[] paths = get70FilePaths( file );
 
-                    compare( paths[0], paths[1], "6.2 original JSP", "New 7.x JSP in " + getProject( file ).getName() );
+                    compare( paths[0], paths[1], "6.2 original JSP", "New 7.x JSP in " + CoreUtil.getProject( file ).getName() );
                 }
                 else
                 {
@@ -868,7 +866,7 @@ public class CustomJspPage extends Page
     {
         String filePath = file.getAbsolutePath();
 
-        IProject project = getProject( file );
+        IProject project = CoreUtil.getProject( file );
 
         String projectPath = project.getLocation().toOSString();
 
@@ -903,7 +901,7 @@ public class CustomJspPage extends Page
 
     private String[] get70FilePaths( File file )
     {
-        IFolder resourceFolder = getProject(file).getFolder( staticPath );
+        IFolder resourceFolder = CoreUtil.getProject(file).getFolder( staticPath );
 
         java.nio.file.Path resourcePath = resourceFolder.getLocation().toFile().toPath();
 
@@ -1236,32 +1234,6 @@ public class CustomJspPage extends Page
     public String getPageTitle()
     {
         return "Convert Custom JSP Hooks";
-    }
-
-    private IProject getProject( File file )
-    {
-        IWorkspaceRoot ws = CoreUtil.getWorkspaceRoot();
-
-        final IResource[] containers = ws.findContainersForLocationURI( file.toURI() );
-
-        IResource resource = null;
-
-        for( IResource container : containers )
-        {
-            if( resource == null )
-            {
-                resource = container;
-            }
-            else
-            {
-                if( container.getProjectRelativePath().segmentCount() < resource.getProjectRelativePath().segmentCount() )
-                {
-                    resource = container;
-                }
-            }
-        }
-
-        return resource.getProject();
     }
 
 }

@@ -19,7 +19,6 @@ import com.liferay.blade.api.AutoMigrateException;
 import com.liferay.blade.api.AutoMigrator;
 import com.liferay.blade.api.Problem;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
@@ -126,17 +125,12 @@ public class AutoCorrectAction extends ProblemAction
                     MigrateProjectHandler migrateHandler = new MigrateProjectHandler();
 
                     Path path = new Path( problem.getFile().getPath() );
-                    IProject[] projects = CoreUtil.getAllProjects();
                     String projectName = "";
+                    IProject project = CoreUtil.getProject( problem.getFile() );
 
-                    for( IProject project : projects )
+                    if( project.exists() && project != null )
                     {
-                        if( problem.getFile().getPath().replaceAll( "\\\\", "/" ).startsWith(
-                            project.getLocation().toString() ) )
-                        {
-                            projectName = project.getName();
-                            break;
-                        }
+                        projectName = project.getName();
                     }
 
                     for(Problem p : problems)
