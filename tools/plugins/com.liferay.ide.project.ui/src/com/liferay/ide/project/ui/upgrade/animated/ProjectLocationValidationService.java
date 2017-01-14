@@ -82,7 +82,7 @@ public class ProjectLocationValidationService extends ValidationService
             }
         }
         else if( !ImportLiferayModuleProjectOpMethods.getBuildType(
-            location.toPortableString() ).getMessage().equals( "maven" ) )
+            location.removeFileExtension().toPortableString() ).getMessage().equals( "maven" ) )
         {
             return StatusBridge.create(
                 ProjectCore.createErrorStatus( "Plugins SDK or Maven location is not valid." ) );
