@@ -1011,9 +1011,9 @@ public class CustomJspPage extends Page
 
             if( liferay62ServerLocation == null )
             {
-                Boolean openAddLiferaryServerDialog = MessageDialog.openQuestion(
-                    UIUtil.getActiveShell(), "Could not convert",
-                    "Could not find Liferay 6.2 Runtime, do you want to add one?" );
+                Boolean openAddLiferaryServerDialog = MessageDialog.openConfirm(
+                    UIUtil.getActiveShell(), "Could not find Liferay 6.2 Runtime",
+                    "This process requires Liferay 6.2 Runtime. " + "Click OK to add Liferay 6.2 Runtime." );
 
                 if( openAddLiferaryServerDialog )
                 {
@@ -1079,9 +1079,9 @@ public class CustomJspPage extends Page
             }
             else
             {
-                Boolean openAddLiferaryServerDialog = MessageDialog.openQuestion(
-                    UIUtil.getActiveShell(), "Could not convert",
-                    "Could not find Liferay 7.x Runtime, do you want to add one?" );
+                Boolean openAddLiferaryServerDialog = MessageDialog.openConfirm(
+                    UIUtil.getActiveShell(), "Could not find Liferay 7.x Runtime",
+                    "This process requires 7.x Runtime. " + "Click OK to add Liferay 7.x Runtime." );
 
                 if( openAddLiferaryServerDialog )
                 {
@@ -1260,12 +1260,20 @@ public class CustomJspPage extends Page
 
         IRuntime liferay70Runtime = getLiferay70Runtime();
 
-        String liferay62ServerLocation = getLiferay62ServerLocation();
-
         if( liferay70Runtime == null )
         {
             MessageDialog.openError(
-                Display.getDefault().getActiveShell(), "could not convert", "couldn't find liferay 7.x Runtime" );
+                Display.getDefault().getActiveShell(), "Convert Error", "Couldn't find Liferay 7.x Runtime." );
+
+            return;
+        }
+
+        String liferay62ServerLocation = getLiferay62ServerLocation();
+
+        if( liferay62ServerLocation == null )
+        {
+            MessageDialog.openError(
+                Display.getDefault().getActiveShell(), "Convert Error", "Couldn't find Liferay 6.2 Runtime.");
 
             return;
         }
