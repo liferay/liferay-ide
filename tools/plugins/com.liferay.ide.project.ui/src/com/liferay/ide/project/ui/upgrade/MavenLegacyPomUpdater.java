@@ -169,6 +169,13 @@ public class MavenLegacyPomUpdater
         return null;
     }
 
+    public boolean isNeedUpgrade( IProject project )
+    {
+        IFile pomFile = project.getFile( "pom.xml" );
+
+        return isNeedUpgrade( pomFile );
+    }
+
     public boolean isNeedUpgrade( IFile pomFile )
     {
         String tagName = "artifactId";
@@ -237,7 +244,9 @@ public class MavenLegacyPomUpdater
         IFile pomFile = project.getFile( "pom.xml" );
         IFile tempPomFile = project.getFile( ".pom-tmp.xml" );
 
-        if( !isNeedUpgrade( pomFile ) )
+        boolean needUpgrade = isNeedUpgrade( pomFile );
+
+        if( outputFile == null && !needUpgrade )
         {
             return;
         }
@@ -255,61 +264,64 @@ public class MavenLegacyPomUpdater
 
             domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( pomFile );
 
-            IDOMDocument document = domModel.getDocument();
-
-            NodeList elements = document.getElementsByTagName( "artifactId" );
-
-            if( elements != null )
+            if( needUpgrade )
             {
-                for( int i = 0; i < elements.getLength(); i++ )
+                IDOMDocument document = domModel.getDocument();
+
+                NodeList elements = document.getElementsByTagName( "artifactId" );
+
+                if( elements != null )
                 {
-                    IDOMElement element = (IDOMElement) elements.item( i );
-
-                    String textContent = element.getTextContent();
-
-                    if( !CoreUtil.empty( textContent ) )
+                    for( int i = 0; i < elements.getLength(); i++ )
                     {
-                        textContent = textContent.trim();
+                        IDOMElement element = (IDOMElement) elements.item( i );
 
-                        domModel.aboutToChangeModel();
+                        String textContent = element.getTextContent();
 
-                        if( textContent.equals( "liferay-maven-plugin" ) )
+                        if( !CoreUtil.empty( textContent ) )
                         {
-                            IDOMElement pluginNode = (IDOMElement) element.getParentNode();
+                            textContent = textContent.trim();
 
-                            removeChildren( pluginNode );
+                            domModel.aboutToChangeModel();
 
-                            String projectName = project.getName();
-
-                            addBuildServicePlugin( pluginNode, projectName );
-
-                        }
-                        else if( textContent.equals( "portal-service" ) || textContent.equals( "util-java" ) ||
-                            textContent.equals( "util-bridges" ) || textContent.equals( "util-taglib" ) ||
-                            textContent.equals( "util-slf4j" ) )
-                        {
-                            IDOMElement dependencyElement = (IDOMElement) element.getParentNode();
-
-                            String[] fixArtifactIdandVersion = getFixedArtifactIdAndVersion( textContent );
-
-                            removeChildren( element );
-                            Text artifactIdTextContent =
-                                element.getOwnerDocument().createTextNode( fixArtifactIdandVersion[0] );
-                            element.appendChild( artifactIdTextContent );
-
-                            NodeList versionList = dependencyElement.getElementsByTagName( "version" );
-
-                            if( versionList != null && versionList.getLength() == 1 )
+                            if( textContent.equals( "liferay-maven-plugin" ) )
                             {
-                                IDOMElement versionElement = (IDOMElement) versionList.item( 0 );
-                                removeChildren( versionElement );
-                                Text versionTextContent =
-                                    element.getOwnerDocument().createTextNode( fixArtifactIdandVersion[1] );
-                                versionElement.appendChild( versionTextContent );
-                            }
-                        }
+                                IDOMElement pluginNode = (IDOMElement) element.getParentNode();
 
-                        domModel.changedModel();
+                                removeChildren( pluginNode );
+
+                                String projectName = project.getName();
+
+                                addBuildServicePlugin( pluginNode, projectName );
+
+                            }
+                            else if( textContent.equals( "portal-service" ) || textContent.equals( "util-java" ) ||
+                                textContent.equals( "util-bridges" ) || textContent.equals( "util-taglib" ) ||
+                                textContent.equals( "util-slf4j" ) )
+                            {
+                                IDOMElement dependencyElement = (IDOMElement) element.getParentNode();
+
+                                String[] fixArtifactIdandVersion = getFixedArtifactIdAndVersion( textContent );
+
+                                removeChildren( element );
+                                Text artifactIdTextContent =
+                                    element.getOwnerDocument().createTextNode( fixArtifactIdandVersion[0] );
+                                element.appendChild( artifactIdTextContent );
+
+                                NodeList versionList = dependencyElement.getElementsByTagName( "version" );
+
+                                if( versionList != null && versionList.getLength() == 1 )
+                                {
+                                    IDOMElement versionElement = (IDOMElement) versionList.item( 0 );
+                                    removeChildren( versionElement );
+                                    Text versionTextContent =
+                                        element.getOwnerDocument().createTextNode( fixArtifactIdandVersion[1] );
+                                    versionElement.appendChild( versionTextContent );
+                                }
+                            }
+
+                            domModel.changedModel();
+                        }
                     }
                 }
             }

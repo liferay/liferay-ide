@@ -107,6 +107,7 @@ public class UpgradeSettingsUtil
             dataModel.setLiferay70ServerName( liferay70ServerName );
         }
 
+        dataModel.setHasMavenProject( Boolean.parseBoolean( getProperty( "HasMavenProject", "false" ) ) );
         dataModel.setHasPortlet( Boolean.parseBoolean( getProperty( "HasPortlet", "false" ) ) );
         dataModel.setHasServiceBuilder( Boolean.parseBoolean( getProperty( "HasServiceBuilder", "false" ) ) );
         dataModel.setHasHook( Boolean.parseBoolean( getProperty( "HasHook", "false" ) ) );

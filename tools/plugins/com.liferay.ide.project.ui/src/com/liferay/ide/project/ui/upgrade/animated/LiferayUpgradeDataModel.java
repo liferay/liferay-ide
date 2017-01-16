@@ -210,4 +210,13 @@ public interface LiferayUpgradeDataModel extends Element
     void setImportFinished( String ImportFinished );
 
     void setImportFinished( Boolean ImportFinished );
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "false" )
+    ValueProperty PROP_HAS_MAVEN_PROJECT = new ValueProperty( TYPE, "HasMavenProject" );
+    Value<Boolean> getHasMavenProject();
+
+    void setHasMavenProject( String HasMavenProject );
+
+    void setHasMavenProject( Boolean HasMavenProject );
 }

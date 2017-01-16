@@ -85,7 +85,7 @@ public class SummaryPage extends Page implements SelectionChangedListener
 
         final Table table = tableViewer.getTable();
         final GridData tableData = new GridData( SWT.FILL, SWT.FILL, true, false, 1, 1 );
-        tableData.heightHint = 155;
+        tableData.heightHint = 175;
         table.setLayoutData( tableData );
         table.setLinesVisible( false );
 

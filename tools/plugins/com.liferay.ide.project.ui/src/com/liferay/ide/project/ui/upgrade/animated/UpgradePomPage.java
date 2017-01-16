@@ -30,11 +30,16 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.resource.ColorRegistry;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -42,11 +47,13 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Listener;
@@ -58,7 +65,7 @@ import org.eclipse.swt.widgets.Table;
 public class UpgradePomPage extends Page
 {
 
-    private class ProjectLabelProvider extends LabelProvider implements IStyledLabelProvider
+    private class ProjectLabelProvider extends LabelProvider implements IStyledLabelProvider, IColorProvider
     {
 
         @Override
@@ -86,11 +93,27 @@ public class UpgradePomPage extends Page
 
             StyledString retVal = new StyledString();
 
+            ColorRegistry colorReg = JFaceResources.getColorRegistry();
+
+            String UPGRADE_POM_FRONT_COLOR = "UPGRADE_POM_FRONT_COLOR";
+
+            Color frontColor = null;
+
+            if( !colorReg.hasValueFor( UPGRADE_POM_FRONT_COLOR ) )
+            {
+                frontColor = Display.getCurrent().getSystemColor( SWT.COLOR_BLUE );
+                colorReg.put( UPGRADE_POM_FRONT_COLOR, frontColor.getRGB() );
+            }
+            else
+            {
+                frontColor = colorReg.get( UPGRADE_POM_FRONT_COLOR );
+            }
+
             if( finished )
             {
                 text += "(finished)";
 
-                retVal.append( text, StyledString.COUNTER_STYLER );
+                retVal.append( text, StyledString.createColorRegistryStyler( UPGRADE_POM_FRONT_COLOR, null ) );
             }
             else
             {
@@ -99,9 +122,33 @@ public class UpgradePomPage extends Page
 
             return retVal;
         }
+
+        @Override
+        public Color getForeground( Object element )
+        {
+            if( element instanceof IProject )
+            {
+                IProject project = (IProject) element;
+
+                if( !updater.isNeedUpgrade( project ) )
+                {
+                    return Display.getCurrent().getSystemColor( SWT.COLOR_BLUE );
+                }
+            }
+
+            return Display.getCurrent().getSystemColor( SWT.COLOR_BLACK );
+        }
+
+        @Override
+        public Color getBackground( Object element )
+        {
+            return null;
+        }
     }
 
     private CheckboxTableViewer fTableViewer;
+
+    private Button upgradeButton;
 
     private MavenLegacyPomUpdater updater = new MavenLegacyPomUpdater();
 
@@ -170,6 +217,7 @@ public class UpgradePomPage extends Page
             public void widgetSelected( SelectionEvent e )
             {
                 fTableViewer.setAllChecked( true );
+                setUpgradeButtonEnable();
             }
         } );
 
@@ -183,10 +231,11 @@ public class UpgradePomPage extends Page
             public void widgetSelected( SelectionEvent e )
             {
                 fTableViewer.setAllChecked( false );
+                setUpgradeButtonEnable();
             }
         } );
 
-        final Button upgradeButton = new Button( buttonContainer, SWT.NONE );
+        upgradeButton = new Button( buttonContainer, SWT.NONE );
         upgradeButton.setText( "Upgrade Selected" );
         upgradeButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
         upgradeButton.addListener( SWT.Selection, new Listener()
@@ -198,12 +247,22 @@ public class UpgradePomPage extends Page
                 handleUpgradeEvent();
             }
         } );
+
+        fTableViewer.addCheckStateListener( new ICheckStateListener()
+        {
+
+            @Override
+            public void checkStateChanged( CheckStateChangedEvent event )
+            {
+                setUpgradeButtonEnable();
+            }
+        } );
     }
 
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor =
-            "This step will help you to upgrade maven pom.xml files. double-click items to preview fixed file content";
+            "This step will help you to upgrade maven pom.xml files, double-click items to preview fixed file content";
         String url = "";
 
         Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
@@ -214,6 +273,27 @@ public class UpgradePomPage extends Page
     public String getPageTitle()
     {
         return "Upgrade POM Files";
+    }
+
+    private List<IProject> getSelectedElements()
+    {
+        final Object[] selectedProjects = fTableViewer.getCheckedElements();
+
+        List<IProject> projects = new ArrayList<>();
+
+        if( selectedProjects != null )
+        {
+            for( Object project : selectedProjects )
+            {
+                if( project instanceof IProject )
+                {
+                    IProject p = (IProject) project;
+                    projects.add( p );
+                }
+            }
+        }
+
+        return projects;
     }
 
     private void handleCompare( IStructuredSelection selection )
@@ -281,21 +361,7 @@ public class UpgradePomPage extends Page
     {
         try
         {
-            final Object[] selectedProjects = fTableViewer.getCheckedElements();
-
-            List<IProject> projects = new ArrayList<>();
-
-            if( selectedProjects != null )
-            {
-                for( Object project : selectedProjects )
-                {
-                    if( project instanceof IProject )
-                    {
-                        IProject p = (IProject) project;
-                        projects.add( p );
-                    }
-                }
-            }
+            List<IProject> projects = getSelectedElements();
 
             for( IProject project : projects )
             {
@@ -310,4 +376,22 @@ public class UpgradePomPage extends Page
             ProjectUI.logError( e );
         }
     }
+
+    private void setUpgradeButtonEnable()
+    {
+        List<IProject> projects = getSelectedElements();
+
+        boolean isEnable = true;
+
+        for( IProject project : projects )
+        {
+            if( !updater.isNeedUpgrade( project ) )
+            {
+                isEnable = false;
+            }
+        }
+
+        upgradeButton.setEnabled( isEnable );
+    }
+
 }

@@ -224,7 +224,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Button importButton;
     private Button backupButton;
     private Text backupLocationField;
-    
+
     private Composite composite;
 
     private Control createHorizontalSpacer;
@@ -372,6 +372,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void checkProjectType( IProject project )
     {
+        if( ProjectUtil.isMavenProject( project ) )
+        {
+            dataModel.setHasMavenProject( true );
+        }
+
         if( ProjectUtil.isPortletProject( project ) )
         {
             dataModel.setHasPortlet( true );
