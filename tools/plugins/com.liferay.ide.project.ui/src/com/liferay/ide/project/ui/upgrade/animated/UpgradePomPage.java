@@ -16,10 +16,11 @@
 package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompre;
-import com.liferay.ide.project.ui.upgrade.MavenLegacyPomUpdater;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -78,8 +79,6 @@ public class UpgradePomPage extends Page
             this.finished = isFixed;
         }
     }
-
-    private UpgradePomElement[] upgradePomElementsArray = null;
 
     private class ProjectLabelProvider extends LabelProvider implements IStyledLabelProvider, IColorProvider
     {
@@ -157,7 +156,9 @@ public class UpgradePomPage extends Page
 
     private Button upgradeButton;
 
-    private MavenLegacyPomUpdater updater = new MavenLegacyPomUpdater();
+    private ILiferayLegacyProjectUpdater updater;
+
+    private UpgradePomElement[] upgradePomElementsArray = null;
 
     public UpgradePomPage( Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
@@ -303,6 +304,16 @@ public class UpgradePomPage extends Page
         return upgradePomElements;
     }
 
+    private ILiferayLegacyProjectUpdater getUpdater()
+    {
+        if( updater == null )
+        {
+            updater = ProjectCore.getDefault().getLiferayLegacyProjectUpdater();
+        }
+
+        return updater;
+    }
+
     private void handleCompare( IStructuredSelection selection )
     {
         UpgradePomElement element = (UpgradePomElement) selection.getFirstElement();
@@ -318,7 +329,7 @@ public class UpgradePomPage extends Page
 
             File tempPomFile = new File( tmpDir, "pom.xml" );
 
-            updater.upgradePomFile( project, tempPomFile );
+            getUpdater().upgradePomFile( project, tempPomFile );
 
             IFile pomfile = project.getFile( "pom.xml" );
 
@@ -341,7 +352,7 @@ public class UpgradePomPage extends Page
 
         for( IProject project : projectArrys )
         {
-            if( ProjectUtil.isMavenProject( project ) && updater.isNeedUpgrade( project ) )
+            if( ProjectUtil.isMavenProject( project ) &&  getUpdater().isNeedUpgrade( project ) )
             {
                 upgradePomElements.add( new UpgradePomElement( project, false ) );
             }
@@ -381,7 +392,7 @@ public class UpgradePomPage extends Page
 
             for( UpgradePomElement element : upgradePomElements )
             {
-                updater.upgradePomFile( element.project, null );
+                getUpdater().upgradePomFile( element.project, null );
                 element.finished = true;
             }
 

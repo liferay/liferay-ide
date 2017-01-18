@@ -36,3 +36,4 @@ Export-Package: com.liferay.ide.maven,
  com.liferay.ide.maven.core,
  com.liferay.ide.maven.core.aether,
  com.liferay.ide.maven.core.model
+Service-Component: OSGI-INF/com.liferay.ide.maven.core.LiferayMavenLegacyProjectUpdater.xml

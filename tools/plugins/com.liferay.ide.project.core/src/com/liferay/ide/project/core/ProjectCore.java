@@ -20,6 +20,7 @@ import com.liferay.ide.project.core.descriptor.IDescriptorOperation;
 import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.LiferayComponentTemplateReader;
+import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plugin life cycle
@@ -63,6 +65,8 @@ public class ProjectCore extends Plugin
     private static SDKProjectDeleteListener sdkProjectDeleteListener;
 
     private static IPortletFramework[] portletFrameworks;
+
+    private static ServiceTracker<ILiferayLegacyProjectUpdater, ILiferayLegacyProjectUpdater> _liferayLegacyProjectUpdaterTracker;
 
     public static final String PREF_CREATE_NEW_PORLET = "create-new-portlet";
 
@@ -159,6 +163,11 @@ public class ProjectCore extends Plugin
         }
 
         return retval.toArray( new LiferayDescriptorHelper[0] );
+    }
+
+    public ILiferayLegacyProjectUpdater getLiferayLegacyProjectUpdater()
+    {
+        return _liferayLegacyProjectUpdaterTracker.getService();
     }
 
     public static IPortletFramework getPortletFramework( String name )
@@ -329,6 +338,11 @@ public class ProjectCore extends Plugin
         super.start( context );
 
         plugin = this;
+
+        _liferayLegacyProjectUpdaterTracker =
+            new ServiceTracker<ILiferayLegacyProjectUpdater, ILiferayLegacyProjectUpdater>(
+                context, ILiferayLegacyProjectUpdater.class, null );
+        _liferayLegacyProjectUpdaterTracker.open();
 
         CoreUtil.getWorkspace().addResourceChangeListener(
             pluginPackageResourceListener, IResourceChangeEvent.POST_CHANGE );

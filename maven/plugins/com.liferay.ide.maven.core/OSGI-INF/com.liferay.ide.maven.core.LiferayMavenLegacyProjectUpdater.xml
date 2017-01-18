@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="com.liferay.ide.maven.core.LiferayMavenLegacyProjectUpdater" immediate="false">
+  <implementation class="com.liferay.ide.maven.core.LiferayMavenLegacyProjectUpdater"/>
+  <service>
+    <provide interface="com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater"/>
+  </service>
+</component>

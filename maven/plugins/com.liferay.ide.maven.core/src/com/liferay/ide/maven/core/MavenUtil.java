@@ -21,6 +21,7 @@ import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.FileReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -33,7 +34,10 @@ import java.util.regex.Pattern;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.cli.MavenCli;
 import org.apache.maven.lifecycle.MavenExecutionPlan;
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
@@ -545,6 +549,44 @@ public class MavenUtil
         }
 
         return retval;
+    }
+
+    public static boolean hasDependency( IProject mavenProject, String groupId, String artifactId )
+    {
+        MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+
+        IFile pomFile = mavenProject.getFile( "pom.xml" );
+
+        if( pomFile.exists() )
+        {
+            try(FileReader reader = new FileReader( pomFile.getLocation().toFile() ))
+            {
+                Model model = mavenReader.read( reader );
+
+                if( model != null )
+                {
+                    List<Dependency> dependencies = model.getDependencies();
+
+                    for( Dependency dependency : dependencies )
+                    {
+                        String tempgroutId = dependency.getGroupId();
+                        String tempartifactId = dependency.getArtifactId();
+
+                        if( groupId.equals( tempgroutId ) && artifactId.equals( tempartifactId ) )
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+            catch( Exception e )
+            {
+            }
+        }
+
+        return false;
     }
 
     public static List<IMavenProjectImportResult> importProject( String location, IProgressMonitor monitor )
