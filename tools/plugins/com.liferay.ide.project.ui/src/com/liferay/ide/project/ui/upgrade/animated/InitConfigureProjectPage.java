@@ -1059,14 +1059,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         if( liferayProject == null )
         {
-            throw new CoreException( ProjectUI.createErrorStatus( "Can't find lifeay workspace project." ) );
+            throw new CoreException( ProjectUI.createErrorStatus( "Can't find Liferay workspace project." ) );
         }
 
         final IProjectBuilder builder = liferayProject.adapt( IProjectBuilder.class );
 
         if( builder == null )
         {
-            throw new CoreException( ProjectUI.createErrorStatus( "Can't find lifeay gradel project builder." ) );
+            throw new CoreException( ProjectUI.createErrorStatus( "Can't find Liferay Gradle project builder." ) );
         }
 
         return builder;
