@@ -30,6 +30,7 @@ import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -65,6 +66,21 @@ import org.eclipse.swt.widgets.Table;
 public class UpgradePomPage extends Page
 {
 
+    public class UpgradePomElement
+    {
+
+        public IProject project;
+        public boolean finished;
+
+        public UpgradePomElement( IProject project, boolean isFixed )
+        {
+            this.project = project;
+            this.finished = isFixed;
+        }
+    }
+
+    private UpgradePomElement[] upgradePomElementsArray = null;
+
     private class ProjectLabelProvider extends LabelProvider implements IStyledLabelProvider, IColorProvider
     {
 
@@ -77,19 +93,10 @@ public class UpgradePomPage extends Page
         @Override
         public StyledString getStyledText( Object element )
         {
-            IProject project = (IProject) element;
-            String projectName = project.getName();
-            IFile pomFile = project.getFile( "pom.xml" );
-            String location = pomFile.getProjectRelativePath().toOSString();
+            UpgradePomElement upgadePomelement = (UpgradePomElement) element;
+            String projectName = upgadePomelement.project.getName();
 
-            boolean finished = true;
-
-            if( updater.isNeedUpgrade( pomFile ) )
-            {
-                finished = false;
-            }
-
-            String text = "pom.xml" + " (" + projectName + " - Location:" + projectName + "/" + location + ")";
+            String text = "pom.xml" + " (" + projectName + ")";
 
             StyledString retVal = new StyledString();
 
@@ -109,9 +116,9 @@ public class UpgradePomPage extends Page
                 frontColor = colorReg.get( UPGRADE_POM_FRONT_COLOR );
             }
 
-            if( finished )
+            if( upgadePomelement.finished )
             {
-                text += "(finished)";
+                text += "( Finished )";
 
                 retVal.append( text, StyledString.createColorRegistryStyler( UPGRADE_POM_FRONT_COLOR, null ) );
             }
@@ -126,11 +133,11 @@ public class UpgradePomPage extends Page
         @Override
         public Color getForeground( Object element )
         {
-            if( element instanceof IProject )
+            if( element instanceof UpgradePomElement )
             {
-                IProject project = (IProject) element;
+                UpgradePomElement ele = (UpgradePomElement) element;
 
-                if( !updater.isNeedUpgrade( project ) )
+                if( ele.finished )
                 {
                     return Display.getCurrent().getSystemColor( SWT.COLOR_BLUE );
                 }
@@ -275,59 +282,68 @@ public class UpgradePomPage extends Page
         return "Upgrade POM Files";
     }
 
-    private List<IProject> getSelectedElements()
+    private List<UpgradePomElement> getSelectedElements()
     {
-        final Object[] selectedProjects = fTableViewer.getCheckedElements();
+        final Object[] selectedElements = fTableViewer.getCheckedElements();
 
-        List<IProject> projects = new ArrayList<>();
+        List<UpgradePomElement> upgradePomElements = new ArrayList<>();
 
-        if( selectedProjects != null )
+        if( selectedElements != null )
         {
-            for( Object project : selectedProjects )
+            for( Object element : selectedElements )
             {
-                if( project instanceof IProject )
+                if( element instanceof UpgradePomElement )
                 {
-                    IProject p = (IProject) project;
-                    projects.add( p );
+                    UpgradePomElement ele = (UpgradePomElement) element;
+                    upgradePomElements.add( ele );
                 }
             }
         }
 
-        return projects;
+        return upgradePomElements;
     }
 
     private void handleCompare( IStructuredSelection selection )
     {
-        IProject project = (IProject) selection.getFirstElement();
+        UpgradePomElement element = (UpgradePomElement) selection.getFirstElement();
 
-        IPath tmpDirPath = ProjectUI.getDefault().getStateLocation().append( "tmp" );
+        IProject project = element.project;
 
-        File tmpDir = tmpDirPath.toFile();
-        tmpDir.mkdirs();
+        if( project.exists() )
+        {
+            IPath tmpDirPath = ProjectUI.getDefault().getStateLocation().append( "tmp" );
 
-        File tempPomFile = new File( tmpDir, "pom.xml" );
+            File tmpDir = tmpDirPath.toFile();
+            tmpDir.mkdirs();
 
-        updater.upgradePomFile( project, tempPomFile );
+            File tempPomFile = new File( tmpDir, "pom.xml" );
 
-        IFile pomfile = project.getFile( "pom.xml" );
+            updater.upgradePomFile( project, tempPomFile );
 
-        final LiferayUpgradeCompre lifeayDescriptorUpgradeCompre =
-            new LiferayUpgradeCompre( pomfile.getLocation(), tmpDirPath.append( "pom.xml" ), "pom.xml" );
+            IFile pomfile = project.getFile( "pom.xml" );
 
-        lifeayDescriptorUpgradeCompre.openCompareEditor();
+            final LiferayUpgradeCompre lifeayDescriptorUpgradeCompre =
+                new LiferayUpgradeCompre( pomfile.getLocation(), tmpDirPath.append( "pom.xml" ), "pom.xml" );
+
+            lifeayDescriptorUpgradeCompre.openCompareEditor();
+        }
+        else
+        {
+            MessageDialog.openInformation( getShell(), "Confirm", "project " + project.getName() + " doesn't exist" );
+        }
     }
 
     private void handleFindEvent()
     {
         IProject[] projectArrys = CoreUtil.getAllProjects();
 
-        List<IProject> projectList = new ArrayList<IProject>();
+        List<UpgradePomElement> upgradePomElements = new ArrayList<UpgradePomElement>();
 
         for( IProject project : projectArrys )
         {
-            if( ProjectUtil.isMavenProject( project ) )
+            if( ProjectUtil.isMavenProject( project ) && updater.isNeedUpgrade( project ) )
             {
-                projectList.add( project );
+                upgradePomElements.add( new UpgradePomElement( project, false ) );
             }
         }
 
@@ -339,11 +355,11 @@ public class UpgradePomPage extends Page
             {
                 String message = "ok";
 
-                IProject[] projectsArray = projectList.toArray( new IProject[] {} );
+                upgradePomElementsArray = upgradePomElements.toArray( new UpgradePomElement[] {} );
 
-                fTableViewer.setInput( projectsArray );
+                fTableViewer.setInput( upgradePomElementsArray );
 
-                if( projectsArray.length < 1 )
+                if( upgradePomElementsArray.length < 1 )
                 {
                     message = "No pom file needs to be upgraded";
                 }
@@ -361,14 +377,15 @@ public class UpgradePomPage extends Page
     {
         try
         {
-            List<IProject> projects = getSelectedElements();
+            List<UpgradePomElement> upgradePomElements = getSelectedElements();
 
-            for( IProject project : projects )
+            for( UpgradePomElement element : upgradePomElements )
             {
-                updater.upgradePomFile( project, null );
+                updater.upgradePomFile( element.project, null );
+                element.finished = true;
             }
 
-            handleFindEvent();
+            fTableViewer.setInput( this.upgradePomElementsArray );
             fTableViewer.setAllChecked( false );
         }
         catch( Exception e )
@@ -379,13 +396,13 @@ public class UpgradePomPage extends Page
 
     private void setUpgradeButtonEnable()
     {
-        List<IProject> projects = getSelectedElements();
+        List<UpgradePomElement> upgradePomElements = getSelectedElements();
 
         boolean isEnable = true;
 
-        for( IProject project : projects )
+        for( UpgradePomElement element : upgradePomElements )
         {
-            if( !updater.isNeedUpgrade( project ) )
+            if( element.finished )
             {
                 isEnable = false;
             }

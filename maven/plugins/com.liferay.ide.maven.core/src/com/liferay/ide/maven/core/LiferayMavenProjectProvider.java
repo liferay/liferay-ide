@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.maven.core.aether.AetherUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.descriptor.UpdateDescriptorVersionOperation;
@@ -26,6 +27,7 @@ import com.liferay.ide.project.core.util.SearchFilesVisitor;
 import com.liferay.ide.server.util.ComponentUtil;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -403,7 +405,29 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
                     final boolean hasLiferayNature = LiferayNature.hasNature( project );
                     final boolean hasLiferayFacet = ComponentUtil.hasLiferayFacet( project );
 
-                    if( hasLiferayNature && hasLiferayFacet )
+                    boolean hasPortalKernelDependency = false;
+
+                    IFile pomFile = project.getFile( "pom.xml" );
+
+                    if( pomFile.exists() )
+                    {
+                        String pomContent = null;
+
+                        try(InputStream ins = pomFile.getContents())
+                        {
+                            pomContent = FileUtil.readContents( ins );
+                        }
+                        catch( Exception e )
+                        {
+                        }
+
+                        if( pomContent != null && pomContent.contains( "com.liferay.portal.kernel" ) )
+                        {
+                            hasPortalKernelDependency = true;
+                        }
+                    }
+
+                    if( ( hasLiferayNature || hasPortalKernelDependency  ) && hasLiferayFacet  )
                     {
                         return new FacetedMavenBundleProject( project );
                     }

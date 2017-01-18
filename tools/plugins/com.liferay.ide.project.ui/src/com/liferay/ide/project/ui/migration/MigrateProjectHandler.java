@@ -92,9 +92,26 @@ public class MigrateProjectHandler extends AbstractHandler
 {
 
     private String[] ignoreSuperClasses =
-        { "com.liferay.portal.service.BaseLocalServiceImpl", "com.liferay.portal.model.CacheModel",
-            "com.liferay.portal.model.impl.BaseModelImpl", "com.liferay.portal.service.BaseServiceImpl",
-            "com.liferay.portal.service.persistence.impl.BasePersistenceImpl" };
+                    {   "com.liferay.portal.service.BaseLocalServiceImpl",
+                        "com.liferay.portal.model.CacheModel",
+                        "com.liferay.portal.model.impl.BaseModelImpl",
+                        "com.liferay.portal.service.BaseServiceImpl",
+                        "com.liferay.portal.service.persistence.impl.BasePersistenceImpl",
+                        "com.liferay.portal.NoSuchModelException",
+                        "com.liferay.portal.model.PersistedModel",
+                        "com.liferay.portal.model.BaseModel",
+                        "com.liferay.portal.model.StagedGroupedModel",
+                        "com.liferay.portal.model.ModelWrapper",
+                        "com.liferay.portal.service.BaseLocalService",
+                        "com.liferay.portal.service.InvokableLocalService",
+                        "com.liferay.portal.service.PersistedModelLocalService",
+                        "com.liferay.portal.service.ServiceWrapper",
+                        "com.liferay.portal.service.BaseService",
+                        "com.liferay.portal.service.InvokableService",
+                        "com.liferay.portal.kernel.messaging.BaseMessageListener",
+                        "com.liferay.portal.kernel.dao.orm.BaseActionableDynamicQuery",
+                        "com.liferay.portal.service.persistence.BasePersistence"
+                    };
 
     @Override
     public Object execute( ExecutionEvent event ) throws ExecutionException
