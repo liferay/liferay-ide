@@ -859,7 +859,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         try
         {
-            progress.beginTask( "Initializaing Liferway Workspace...", 100 );
+            progress.beginTask( "Initializing Liferay Workspace...", 100 );
 
             StringBuilder sb = new StringBuilder();
 

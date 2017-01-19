@@ -269,7 +269,7 @@ public class UpgradePomPage extends Page
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor =
-            "This step will help you to upgrade maven pom.xml files, double-click items to preview fixed file content";
+            "This step will help you to upgrade maven pom.xml files, double-click items to preview fixed file content.";
         String url = "";
 
         Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
