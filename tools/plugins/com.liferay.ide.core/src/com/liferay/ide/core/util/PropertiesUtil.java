@@ -695,25 +695,28 @@ public class PropertiesUtil
         {
             for( IFolder srcFolder : srcFolders )
             {
-                final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
-
-                for( String resourceBundleValue : resourceNodeInfo.getResourceBundlePatterns() )
+                if( srcFolder != null && srcFolder.exists() )
                 {
-                    final IFile[] resourceBundleFiles = visitPropertiesFiles( srcFolder, resourceBundleValue );
+                    final ResourceNodeInfo resourceNodeInfo = getResourceNodeInfo( portletXml );
 
-                    if( resourceBundleFiles != null && resourceBundleFiles.length > 0 )
+                    for( String resourceBundleValue : resourceNodeInfo.getResourceBundlePatterns() )
                     {
-                        retval.addAll( Arrays.asList( resourceBundleFiles ) );
+                        final IFile[] resourceBundleFiles = visitPropertiesFiles( srcFolder, resourceBundleValue );
+
+                        if( resourceBundleFiles != null && resourceBundleFiles.length > 0 )
+                        {
+                            retval.addAll( Arrays.asList( resourceBundleFiles ) );
+                        }
                     }
-                }
 
-                for( final String supportedLocaleValue : resourceNodeInfo.getSupportedLocalePatterns() )
-                {
-                    final IFile[] supportedLocaleFiles = visitPropertiesFiles( srcFolder, supportedLocaleValue );
-
-                    if( supportedLocaleFiles != null && supportedLocaleFiles.length > 0 )
+                    for( final String supportedLocaleValue : resourceNodeInfo.getSupportedLocalePatterns() )
                     {
-                        retval.addAll( Arrays.asList( supportedLocaleFiles ) );
+                        final IFile[] supportedLocaleFiles = visitPropertiesFiles( srcFolder, supportedLocaleValue );
+
+                        if( supportedLocaleFiles != null && supportedLocaleFiles.length > 0 )
+                        {
+                            retval.addAll( Arrays.asList( supportedLocaleFiles ) );
+                        }
                     }
                 }
             }
