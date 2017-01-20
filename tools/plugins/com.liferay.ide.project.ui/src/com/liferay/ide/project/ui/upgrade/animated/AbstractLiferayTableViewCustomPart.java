@@ -397,7 +397,8 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
             for( IFile upgradeFilePath : upgradeFiles )
             {
                 IPath filePath = upgradeFilePath.getLocation();
-                if( isNeedUpgrade( filePath.toFile() ) )
+
+                if( isNeedUpgrade( filePath.toFile() ) && !isProjectTargetDirFile( filePath ) )
                 {
                     final String projectLocation = filePath.makeRelativeTo( project.getLocation() ).toPortableString();
 
@@ -629,5 +630,23 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         {
             ProjectUI.logError( e );
         }
+    }
+
+    private boolean isProjectTargetDirFile( IPath filePath )
+    {
+        String upgradeFilePath = filePath.toString();
+
+        if( upgradeFilePath.contains( "/target/" ) )
+        {
+            String projectPath = upgradeFilePath.substring( 0, upgradeFilePath.indexOf( "/target/" ) );
+            String projectName = CoreUtil.getProject( filePath.toFile() ).getName();
+
+            if( projectPath.endsWith( projectName ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
