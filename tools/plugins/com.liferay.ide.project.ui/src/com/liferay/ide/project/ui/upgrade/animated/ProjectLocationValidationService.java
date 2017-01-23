@@ -17,8 +17,11 @@ package com.liferay.ide.project.ui.upgrade.animated;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.ImportLiferayModuleProjectOpMethods;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
+
+import java.io.File;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.Path;
@@ -67,6 +70,12 @@ public class ProjectLocationValidationService extends ValidationService
                 return StatusBridge.create( status );
             }
 
+            if( isInLiferayWorkspace( location ) )
+            {
+                return StatusBridge.create(
+                    ProjectCore.createErrorStatus( "sdk project is already in a Liferay workspace" ) );
+            }
+
             String version = sdk.getVersion();
 
             if( version != null )
@@ -94,6 +103,27 @@ public class ProjectLocationValidationService extends ValidationService
     private LiferayUpgradeDataModel op()
     {
         return context( LiferayUpgradeDataModel.class );
+    }
+
+    private boolean isInLiferayWorkspace( Path location )
+    {
+        boolean retVal = false;
+
+        File projectDir = location.toFile();
+
+        File parent = projectDir.getParentFile();
+
+        while( parent != null )
+        {
+            if( LiferayWorkspaceUtil.isValidWorkspaceLocation( parent.getAbsolutePath() ) )
+            {
+                retVal = true;
+            }
+
+            parent = parent.getParentFile();
+        }
+
+        return retVal;
     }
 
 }
