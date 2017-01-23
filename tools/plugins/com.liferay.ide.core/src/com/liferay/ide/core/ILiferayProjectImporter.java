@@ -33,6 +33,8 @@ public interface ILiferayProjectImporter
 
     String getBuildType();
 
+    int getPriority();
+
     List<IProject> importProjects( String location, IProgressMonitor monitor ) throws CoreException;
 
 }

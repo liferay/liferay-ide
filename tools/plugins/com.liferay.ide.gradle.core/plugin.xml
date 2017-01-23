@@ -21,6 +21,7 @@
    <extension
          point="com.liferay.ide.core.liferayProjectImporters">
       <liferayProjectImporter
+            priority="2"
             buildType="gradle"
             class="com.liferay.ide.gradle.core.GradleModuleProjectImporter"
             id="com.liferay.ide.gradle.core.GradleModuleProjectImporter">

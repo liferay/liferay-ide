@@ -21,6 +21,7 @@ package com.liferay.ide.core;
 public abstract class AbstractLiferayProjectImporter implements ILiferayProjectImporter
 {
     private String buildType;
+    private int priority;
 
     public AbstractLiferayProjectImporter()
     {
@@ -34,6 +35,16 @@ public abstract class AbstractLiferayProjectImporter implements ILiferayProjectI
     public void setBuildType( String buildType )
     {
         this.buildType = buildType;
+    }
+
+    public int getPriority()
+    {
+        return priority;
+    }
+
+    public void setPriority( int priority )
+    {
+        this.priority = priority;
     }
 
 }

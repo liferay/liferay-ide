@@ -14,6 +14,9 @@
  *******************************************************************************/
 package com.liferay.ide.core;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 
 /**
@@ -22,6 +25,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 public class LiferayProjectImporterReader extends ExtensionReader<ILiferayProjectImporter>
 {
     private static final String ATTRIBUTE_BUILDTYPE = "buildType";
+    private static final String ATTRIBUTE_PRIORITY = "priority";
     private static final String EXTENSION = "liferayProjectImporters";
     private static final String PROVIDER_ELEMENT = "liferayProjectImporter";
 
@@ -32,17 +36,32 @@ public class LiferayProjectImporterReader extends ExtensionReader<ILiferayProjec
 
     public ILiferayProjectImporter[] getImporters()
     {
-        return getExtensions().toArray( new ILiferayProjectImporter[0] );
+        ILiferayProjectImporter[] importers = getExtensions().toArray( new ILiferayProjectImporter[0] );
+
+        Arrays.sort( importers, new Comparator<ILiferayProjectImporter>()
+        {
+
+            @Override
+            public int compare( ILiferayProjectImporter importer1, ILiferayProjectImporter importer2 )
+            {
+                return importer1.getPriority() > importer2.getPriority() ? 1 : -1;
+            }
+
+        } );
+
+        return importers;
     }
 
     @Override
     protected ILiferayProjectImporter initElement( IConfigurationElement configElement, ILiferayProjectImporter importer )
     {
         final String buildType = configElement.getAttribute( ATTRIBUTE_BUILDTYPE );
+        final String priority = configElement.getAttribute( ATTRIBUTE_PRIORITY );
 
         final AbstractLiferayProjectImporter projectImporter = (AbstractLiferayProjectImporter) importer;
 
         projectImporter.setBuildType( buildType );
+        projectImporter.setPriority( Integer.valueOf( priority ) );
 
         return importer;
     }
