@@ -67,7 +67,7 @@ public class BladeCLIPrefsOverrideTests
 
         assertTrue( path.toFile().exists() );
 
-        assertTrue( path.toFile().getName().contains( "blade.cli_2.0.1" ) );
+        assertTrue( path.toFile().getName().contains( "blade.cli_2.0.2" ) );
     }
 
     @Test
