@@ -1,0 +1,117 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+
+    "ami_name": null,
+    "ami_description": null,
+    "ami_primary_region": "eu-central-1",
+    "ami_copy_to_regions": "",
+
+    "base_ami_id": "ami-123456",
+    "base_ami_linux_packages_format": "deb",
+    "base_ami_ssh_user_name": "ec2-user",
+
+    "instance_type": "t2.micro",
+    "vpc_id": "vpc-xxx",
+    "subnet_id": "subnet-yyy",
+
+    "liferay_bundle_ospackage_source": "../../../build/liferay-workspace.local_0.0.0-1_amd64.deb",
+    "liferay_bundle_ospackage_name": "liferay-workspace.local_0.0.0-1_amd64.deb",
+    "liferay_bundle_ospackage_size": "400-1100 MB",
+
+    "project_name": "Some Project",
+    "project_version": "1.0.0",
+    "project_environment_name": "dev",
+    "project_release_number": "15",
+
+    "liferay_user": "liferay",
+    "liferay_group": "liferay"
+  },
+
+  "builders": [
+    {
+      "name": "liferay-ami",
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "{{user `ami_primary_region`}}",
+      "source_ami": "{{user `base_ami_id`}}",
+      "instance_type": "{{user `instance_type`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "associate_public_ip_address": true,
+      "ssh_username": "{{user `base_ami_ssh_user_name`}}",
+      "ssh_pty": true,
+      "ami_name": "{{user `ami_name`}}",
+      "ami_description": "{{user `ami_description`}}",
+      "ami_regions": "{{user `ami_copy_to_regions`}}",
+      "tags": {
+        "Project": "{{user `project_name`}}",
+        "Project Version": "{{user `project_version`}}",
+        "Environment": "{{user `project_environment_name`}}",
+        "Release Number": "{{user `project_release_number`}}",
+        "Based On AMI": "{{user `base_ami_id`}} - {{user `ami_primary_region`}}"
+      },
+      "run_tags": {
+        "Project": "{{user `project_name`}}",
+        "Project Version": "{{user `project_version`}}",
+        "Environment": "{{user `project_environment_name`}}",
+        "Release Number": "{{user `project_release_number`}}"
+      }
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "pause_before": "10s",
+      "inline": [
+        "echo '==> Starting provisioning, OS should be ready after the initial wait period'",
+
+        "echo '==> File [{{user `liferay_bundle_ospackage_name`}}] ({{user `liferay_bundle_ospackage_size`}}) will be uploaded next, it may take a while'"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "{{user `liferay_bundle_ospackage_source`}}",
+      "destination": "/tmp/{{user `liferay_bundle_ospackage_name`}}"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "echo '========================================'",
+        "echo 'Installation of Liferay bundle from .{{user `base_ami_linux_packages_format`}}'",
+        "echo '========================================'",
+
+        "if [ '{{user `base_ami_linux_packages_format`}}' = 'deb' ]; then ",
+            "if command -v dpkg >/dev/null 2>&1; then",
+
+                "echo '==> using [dpkg] to install Liferay DEB archive [/tmp/{{user `liferay_bundle_ospackage_name`}}]'",
+
+                "sudo dpkg -i /tmp/{{user `liferay_bundle_ospackage_name`}}",
+
+                "echo '==> Liferay bundle was installed from DEB archive [/tmp/{{user `liferay_bundle_ospackage_name`}}]:'",
+            "else",
+                "echo '==> Cannot install DEB, command [dpkg] not found. Is the base AMI [{{user `base_ami_id`}}] a valid Debian-based Linux distribution, with .rpm packages?'",
+
+                "exit 1",
+            "fi",
+        "else",
+            "if command -v rpm >/dev/null 2>&1; then",
+
+                "echo '==> using [rpm] to install Liferay RPM archive [/tmp/{{user `liferay_bundle_ospackage_name`}}]'",
+
+                "sudo rpm -ivh /tmp/{{user `liferay_bundle_ospackage_name`}}",
+
+                "echo '==> Liferay bundle was installed from RPM archive [/tmp/{{user `liferay_bundle_ospackage_name`}}]:'",
+            "else",
+                "echo '==> Cannot install RPM, command [rpm] not found. Is the base AMI [{{user `base_ami_id`}}] a valid RedHat-based Linux distribution, with .rpm`base_ami_linux_packages_format`}} packages??'",
+
+                "exit 1",
+            "fi",
+        "fi"
+      ]
+    }
+  ]
+}

@@ -58,9 +58,9 @@ public class ImportLiferayWorkspaceOpMethods
 
             boolean isInitBundle = op.getProvisionLiferayBundle().content();
             boolean isHasBundlesDir = op.getHasBundlesDir().content();
-            String bundleUrl = op.getBundleUrl().content();
+            String bundleUrl = op.getBundleUrl().content( false );
 
-            IStatus importStatus = null;
+            final IStatus importStatus;
 
             if( isInitBundle && !isHasBundlesDir )
             {

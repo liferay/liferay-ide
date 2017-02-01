@@ -16,6 +16,7 @@
 package com.liferay.ide.gradle.core.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -23,21 +24,28 @@ import static org.junit.Assert.fail;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayNature;
+import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
+import com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.jobs.Job;
-import org.junit.BeforeClass;
+import org.eclipse.sapphire.platform.ProgressMonitorBridge;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -45,8 +53,8 @@ import org.junit.Test;
  */
 public class ImportWorkspaceProjectTests
 {
-    @BeforeClass
-    public static void clearWorkspace() throws Exception
+    @Before
+    public void clearWorkspace() throws Exception
     {
         Util.deleteAllWorkspaceProjects();
     }
@@ -70,6 +78,130 @@ public class ImportWorkspaceProjectTests
         assertSourceFolders( "sample-theme", "src" );
     }
 
+    @Test
+    public void testImportLiferayWorkspaceEE() throws Exception
+    {
+        LiferayGradleProject eeProject = GradleProjectTests.fullImportGradleProject( "projects/liferay-workspace-ee" );
+
+        assertNotNull( eeProject );
+
+        waitForBuildAndValidation();
+
+        assertNotLiferayProject("liferay-workspace-ee");
+        assertNotLiferayProject("aws");
+        assertNotLiferayProject("docker");
+        assertNotLiferayProject("jenkins");
+    }
+
+    @Test
+    public void testImportLiferayWorkspaceDontOverrideGradleProperties() throws Exception
+    {
+        IWorkspace ws = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot root = ws.getRoot();
+
+        File src = new File( "projects/testWorkspace" );
+        File dst = new File( root.getLocation().toFile(), src.getName() );
+
+        TestUtil.copyDir( src, dst );
+
+        ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
+
+        op.setWorkspaceLocation( dst.getAbsolutePath() );
+        op.setProvisionLiferayBundle( true );
+
+        op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        IProject eeProject = CoreUtil.getProject( "testWorkspace" );
+
+        assertNotNull( eeProject );
+
+        waitForBuildAndValidation();
+
+        assertNotLiferayProject("testWorkspace");
+        assertLiferayProject( "sample-portlet" );
+
+        File originalProperities = new File( "projects/testWorkspace/gradle.properties" );
+        File importedProperties = eeProject.getFile( "gradle.properties" ).getLocation().toFile();
+
+        String originalContent = CoreUtil.readStreamToString( new FileInputStream( originalProperities ) );
+        String importedContent = CoreUtil.readStreamToString( new FileInputStream( importedProperties ) );
+
+        originalContent = originalContent.replaceAll( "\r", "" );
+        importedContent = importedContent.replaceAll( "\r", "" );
+
+        assertEquals( importedContent, originalContent, importedContent );
+    }
+
+    @Test
+    public void testImportLiferayWorkspaceInitBundle() throws Exception
+    {
+        IWorkspace ws = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot root = ws.getRoot();
+
+        File src = new File( "projects/testWorkspace" );
+        File dst = new File( root.getLocation().toFile(), src.getName() );
+
+        TestUtil.copyDir( src, dst );
+
+        ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
+
+        op.setWorkspaceLocation( dst.getAbsolutePath() );
+        op.setProvisionLiferayBundle( true );
+
+        final NullProgressMonitor monitor = new NullProgressMonitor();
+
+        op.execute( ProgressMonitorBridge.create( monitor ) );
+
+        IProject eeProject = CoreUtil.getProject( "testWorkspace" );
+
+        assertNotNull( eeProject );
+
+        waitForBuildAndValidation();
+
+        eeProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
+        final IFolder bundlesFolder = eeProject.getFolder( "bundles" );
+
+        assertTrue( bundlesFolder.exists() );
+    }
+
+    @Test
+    public void testImportLiferayWorkspaceCustomBundleURL() throws Exception
+    {
+        IWorkspace ws = ResourcesPlugin.getWorkspace();
+        IWorkspaceRoot root = ws.getRoot();
+
+        File src = new File( "projects/testWorkspace" );
+        File dst = new File( root.getLocation().toFile(), src.getName() );
+
+        TestUtil.copyDir( src, dst );
+
+        String bundleUrl = "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.1-ga2/liferay-ce-portal-tomcat-7.0-ga2-20160610113014153.zip";
+
+        ImportLiferayWorkspaceOp op = ImportLiferayWorkspaceOp.TYPE.instantiate();
+
+        op.setWorkspaceLocation( dst.getAbsolutePath() );
+        op.setProvisionLiferayBundle( true );
+        op.setBundleUrl( bundleUrl );
+
+        op.execute( ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        IProject eeProject = CoreUtil.getProject( "testWorkspace" );
+
+        assertNotNull( eeProject );
+
+        waitForBuildAndValidation();
+
+        assertNotLiferayProject("testWorkspace");
+        assertLiferayProject( "sample-portlet" );
+
+        File importedProperties = eeProject.getFile( "gradle.properties" ).getLocation().toFile();
+
+        String importedContent = CoreUtil.readStreamToString( new FileInputStream( importedProperties ) );
+
+        assertTrue( importedContent, importedContent.contains( bundleUrl ) );
+    }
+
     private void assertSourceFolders( String projectName, String expectedSourceFolderName )
     {
         IProject project = CoreUtil.getProject( projectName );
@@ -88,6 +220,14 @@ public class ImportWorkspaceProjectTests
 
         assertTrue( "Project " + projectName + " doesn't exist.", project.exists() );
         assertTrue( "Project " + projectName + " doesn't haven liferay nature", LiferayNature.hasNature( project ) );
+    }
+
+    private void assertNotLiferayProject( String projectName )
+    {
+        IProject project = CoreUtil.getProject( projectName );
+
+        assertTrue( "Project " + projectName + " doesn't exist.", project.exists() );
+        assertFalse( "Project " + projectName + " has a liferay nature", LiferayNature.hasNature( project ) );
     }
 
     public void waitForBuildAndValidation() throws Exception

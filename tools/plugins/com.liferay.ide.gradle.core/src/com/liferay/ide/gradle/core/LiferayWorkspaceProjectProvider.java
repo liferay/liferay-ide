@@ -26,8 +26,10 @@ import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -47,7 +49,7 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
 {
 
     public static final String defaultBundleUrl =
-        "https://sourceforge.net/projects/lportal/files/Liferay%20Portal/7.0.2%20GA3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
+        "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
 
     public LiferayWorkspaceProjectProvider()
     {
@@ -100,17 +102,20 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
 
                 IProject project = CoreUtil.getProject( path.lastSegment() );
 
-                final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
+                if( bundleUrl != null )
+                {
+                    final IFile gradlePropertiesFile = project.getFile( "gradle.properties" );
 
-                String content = FileUtil.readContents( gradlePropertiesFile, true );
+                    String content = FileUtil.readContents( gradlePropertiesFile.getContents() );
 
-                String bundleUrlProp = "liferay.workspace.bundle.url=" + bundleUrl;
+                    String bundleUrlProp = "liferay.workspace.bundle.url=" + bundleUrl;
 
-                String separator = System.getProperty( "line.separator", "\n" );
+                    String separator = System.getProperty( "line.separator", "\n" );
 
-                String newContent = content + separator + bundleUrlProp;
+                    String newContent = content + separator + bundleUrlProp;
 
-                FileUtil.writeFile( gradlePropertiesFile, newContent, null );
+                    gradlePropertiesFile.setContents( new ByteArrayInputStream( newContent.getBytes() ), IResource.FORCE, monitor );
+                }
 
                 GradleUtil.runGradleTask( project, extraOperation, monitor );
 
@@ -118,7 +123,7 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
             }
 
         }
-        catch( CoreException e )
+        catch( Exception e )
         {
             return GradleCore.createErrorStatus( "import Liferay workspace project error" , e );
         }
