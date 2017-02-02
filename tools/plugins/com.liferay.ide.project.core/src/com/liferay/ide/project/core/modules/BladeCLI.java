@@ -194,31 +194,35 @@ public class BladeCLI
 
         try
         {
-            File[] files = repo.get( "com.liferay.blade.cli", "[2,3)" );
+            File[] files = repo.get( "com.liferay.blade.cli", "[2.0.2,3)" );
 
-            File cliJar = files[0];
-
-            try( Jar cliJarJar = new Jar( cliJar ); Jar localJar = new Jar( getLocalCopy() ) )
+            if( files != null && files.length > 0 )
             {
-                Version cliJarVersion = new Version( cliJarJar.getVersion() );
-                Version localCopyVersion = new Version( localJar.getVersion() );
+                File cliJar = files[0];
 
-                if( cliJarVersion.compareTo( localCopyVersion ) >= 0 )
+                try( Jar cliJarJar = new Jar( cliJar ); Jar localJar = new Jar( getLocalCopy() ) )
                 {
-                    cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
+                    Version cliJarVersion = new Version( cliJarJar.getVersion() );
+                    Version localCopyVersion = new Version( localJar.getVersion() );
+
+                    if( cliJarVersion.compareTo( localCopyVersion ) >= 0 )
+                    {
+                        cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
-                else
-                {
-                    return null;
-                }
+
+                return cliJar.getName();
             }
-
-            return cliJar.getName();
         }
         catch( Exception e )
         {
-            return null;
         }
+
+        return null;
     }
 
     public static synchronized String[] getProjectTemplates() throws BladeCLIException
