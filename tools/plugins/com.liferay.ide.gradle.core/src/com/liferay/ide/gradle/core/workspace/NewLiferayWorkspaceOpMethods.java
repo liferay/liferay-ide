@@ -59,7 +59,7 @@ public class NewLiferayWorkspaceOpMethods
             String location = op.getLocation().content().append( wsName ).toPortableString();
 
             boolean isInitBundle = op.getProvisionLiferayBundle().content();
-            final String bundleUrl = op.getBundleUrl().content();
+            final String bundleUrl = op.getBundleUrl().content( false );
 
             IStatus importStatus = null;
 
