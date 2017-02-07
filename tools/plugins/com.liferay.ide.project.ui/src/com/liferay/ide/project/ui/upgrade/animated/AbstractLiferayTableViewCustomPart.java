@@ -102,7 +102,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
                     for( IProject project : projectArrys )
                     {
-                        if( CoreUtil.isLiferayProject( project ) && !LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                        if( CoreUtil.isLiferayProject( project ) )
                         {
                             projectList.add( project );
                         }
