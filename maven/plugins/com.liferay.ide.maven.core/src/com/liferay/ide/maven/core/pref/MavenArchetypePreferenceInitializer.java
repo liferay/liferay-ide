@@ -100,6 +100,9 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
             LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT,
             "com.liferay:com.liferay.project.templates.fragment:1.0.1" );
         defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_FORM_FIELD,
+            "com.liferay:com.liferay.project.templates.form.field:1.0.0" );
+        defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_MVC_PORTLET,
             "com.liferay:com.liferay.project.templates.mvc.portlet:1.0.1" );
         defaultPrefs.put(

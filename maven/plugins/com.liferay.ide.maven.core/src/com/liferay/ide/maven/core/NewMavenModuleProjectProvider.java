@@ -15,6 +15,7 @@
 
 package com.liferay.ide.maven.core;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
@@ -96,6 +97,7 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
         properties.put( "serviceClass", serviceName == null ? "" : serviceName );
         properties.put( "serviceWrapperClass", serviceName == null ? "" : serviceName );
         properties.put( "contributorType", artifactId );
+        properties.put( "author", "liferay" );
 
         for( PropertyKey propertyKey : op.getPropertyKeys() )
         {
@@ -149,6 +151,11 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
             String templateName = params[0].toString();
 
             String gav = LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PREFIX + templateName, "");
+
+            if( CoreUtil.empty( gav ) )
+            {
+                gav = "com.liferay:com.liferay.project.templates." + templateName.replace( "-", "." ) + ":1.0.0";
+            }
 
             retval.add( type.cast( gav ) );
 

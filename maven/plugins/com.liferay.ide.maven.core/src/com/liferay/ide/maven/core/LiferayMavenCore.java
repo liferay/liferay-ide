@@ -69,6 +69,7 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTENT_TARGETING_TRACKING_ACTION = "archetype-project-template-content-targeting-tracking-action";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_CONTROL_MENU_ENTRY = "archetype-project-template-control-menu-entry";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT = "archetype-project-template-fragment";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_FORM_FIELD = "archetype-project-template-form-field";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_MVC_PORTLET = "archetype-project-template-mvc-portlet";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PANEL_APP = "archetype-project-template-panel-app";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_PORTLET = "archetype-project-template-portlet";
