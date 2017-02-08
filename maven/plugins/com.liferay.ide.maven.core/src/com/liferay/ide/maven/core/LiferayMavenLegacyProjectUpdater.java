@@ -16,7 +16,6 @@
 package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 
 import java.io.File;
@@ -347,9 +346,8 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
         }
         else if( buildList.getLength() > 1 )
         {
-            // TODO throw error
+            //more than one build tag , ignore
         }
-        // only one item
         else
         {
             Element buildNode = (Element) buildList.item( 0 );
@@ -515,8 +513,6 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
         try
         {
-            System.out.println( "pom---------------------------"+pomFile.exists() );
-            
             domModel = (IDOMModel) StructuredModelManager.getModelManager().getModelForRead( pomFile );
 
             IDOMDocument document = domModel.getDocument();
@@ -548,7 +544,6 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
         }
         catch( Exception e )
         {
-            e.printStackTrace();
         }
         finally
         {
@@ -754,7 +749,7 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
         }
         catch( Exception e )
         {
-            ProjectCore.logError( "update pom file error", e );
+            LiferayMavenCore.logError( "update pom file error", e );
         }
         finally
         {

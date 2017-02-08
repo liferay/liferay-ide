@@ -164,6 +164,18 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     }
 
     @Test
+    public void testProjectTemplateFormField() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "form-field-test" );
+        op.setProjectProvider( "maven-module" );
+        op.setProjectTemplateName( "form-field" );
+
+        createAndBuild(op);
+    }
+
+    @Test
     public void testProjectTemplateFragment() throws Exception
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
