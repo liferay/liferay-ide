@@ -45,7 +45,6 @@ import java.util.List;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -58,10 +57,12 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
@@ -205,15 +206,28 @@ public class FindBreakingChangesPage extends Page implements IDoubleClickListene
             @Override
             public void doubleClick( DoubleClickEvent event )
             {
-                if( event.getSelection() instanceof IStructuredSelection )
+                ISelection selection = event.getSelection();
+
+                if( selection instanceof ITreeSelection )
                 {
-                    final IStructuredSelection ss = (IStructuredSelection) event.getSelection();
+                    ITreeSelection treeSelection = (ITreeSelection) selection;
 
-                    Object element = ss.getFirstElement();
+                    Object selectedItem = treeSelection.getFirstElement();
 
-                    if( element instanceof FileProblems )
+                    if( selectedItem instanceof FileProblems )
                     {
-                        MigrationUtil.openEditor( (FileProblems) element );
+                        MigrationUtil.openEditor( (FileProblems) selectedItem );
+
+                        return;
+                    }
+                    else
+                    {
+                        TreePath[] paths = treeSelection.getPathsFor( selectedItem );
+
+                        for( int i = 0; i < paths.length; i++ )
+                        {
+                            _treeViewer.setExpandedState( paths[i], !_treeViewer.getExpandedState( paths[i] ) );
+                        }
                     }
                 }
             }
