@@ -203,8 +203,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         return ImportLiferayModuleProjectOpMethods.getBuildType( path ).getMessage().equals( "maven" );
     }
 
-    public static final String defaultBundleUrl =
-        "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
     private static Color GRAY;
     private Label dirLabel;
     private Text dirField;
@@ -644,7 +642,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         bundleUrlField = createTextField( composite, SWT.NONE );
         bundleUrlField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
-        bundleUrlField.setText( defaultBundleUrl );
+        bundleUrlField.setText( dataModel.getBundleUrl().content( true ) );
         bundleUrlField.addModifyListener( new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
@@ -661,7 +659,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             {
                 String input = ( (Text) e.getSource() ).getText();
 
-                if( input.equals( defaultBundleUrl ) )
+                if( input.equals( LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL ) )
                 {
                     bundleUrlField.setText( "" );
                 }
@@ -676,7 +674,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 if( CoreUtil.isNullOrEmpty( input ) )
                 {
                     bundleUrlField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
-                    bundleUrlField.setText( defaultBundleUrl );
+                    bundleUrlField.setText( LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL );
                 }
             }
         } );

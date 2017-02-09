@@ -20,14 +20,11 @@ import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.AbstractProjectBuilder;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -109,25 +106,23 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
     @Override
     public IStatus execInitBundle( IProject project, String taskName,  String bundleUrl, IProgressMonitor monitor ) throws CoreException
     {
+        String bundleUrlProperty = "\n\nliferay.workspace.bundle.url=" + bundleUrl;
+
         final File gradlePropertiesFile = project.getFile( "gradle.properties" ).getLocation().toFile();
 
-        try(InputStream in = new FileInputStream( gradlePropertiesFile );
-                        OutputStream out = new FileOutputStream( gradlePropertiesFile ))
+        try
         {
-            final Properties properties = new Properties();
-            properties.load( in );
-
-            properties.put( "liferay.workspace.bundle.url", bundleUrl );
-
-            properties.store( out, "" );
-
-            runGradleTask( taskName, monitor );
-
-            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+            Files.write( gradlePropertiesFile.toPath(), bundleUrlProperty.getBytes(), StandardOpenOption.APPEND );
         }
         catch( IOException e )
         {
+            GradleCore.logError( "Error append bundle url property", e );
         }
+
+        runGradleTask( taskName, monitor );
+
+        project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
         return Status.OK_STATUS;
     }
 

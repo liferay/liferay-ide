@@ -34,6 +34,8 @@ import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 public interface LiferayUpgradeDataModel extends Element
 {
 
+    String DEFAULT_BUNDLE_URL = "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
+
     ElementType TYPE = new ElementType( LiferayUpgradeDataModel.class );
 
     @Type( base = Path.class )
@@ -161,6 +163,7 @@ public interface LiferayUpgradeDataModel extends Element
     void setBundleName( String BundleName );
 
     @Service( impl = BundleUrlValidationService.class )
+    @DefaultValue( text = DEFAULT_BUNDLE_URL )
     ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, "BundleUrl" );
 
     Value<String> getBundleUrl();
