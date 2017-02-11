@@ -44,9 +44,9 @@ import org.osgi.framework.dto.BundleDTO;
 public class BundlePublishFullRemove extends BundlePublishOperation
 {
 
-    public BundlePublishFullRemove( IServer server, IModule[] modules, BundleSupervisor supervisor, BundleDTO[] existingBundles )
+    public BundlePublishFullRemove( IServer server, IModule[] modules, BundleDTO[] existingBundles )
     {
-        super( server, modules, supervisor, existingBundles );
+        super( server, modules, existingBundles );
     }
 
     @Override
@@ -131,7 +131,6 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         final List<File> moduleFiles = new ArrayList<File>();
 
-        // TODO this may not always match
         final IPath modulesPath = runtime.getPortalBundle().getModulesPath();
         findFilesInPath( modulesPath.toFile(), symbolicName, moduleFiles );
 
@@ -155,7 +154,6 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         if( moduleFiles.size() > 0 )
         {
-            // TODO convert to multi-statuses
             for( File moduleFile : moduleFiles )
             {
                 if( moduleFile.isDirectory() )
@@ -185,19 +183,21 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         boolean isFragment = (fragmentHostName != null);
 
-        if( symbolicName != null && _existingBundles != null && _supervisor != null )
+        if( symbolicName != null && _existingBundles != null )
         {
             try
             {
+                BundleSupervisor bundleSupervisor = createBundleSupervisor();
+
                 for( BundleDTO bundle : _existingBundles )
                 {
                     if( symbolicName.equals( bundle.symbolicName ) )
                     {
-                        String error = _supervisor.getAgent().uninstall( bundle.id );
+                        String error = bundleSupervisor.getAgent().uninstall( bundle.id );
 
                         if( isFragment )
                         {
-                            _supervisor.refreshHostBundle( fragmentHostName, _existingBundles );
+                            bundleSupervisor.refreshHostBundle( fragmentHostName, _existingBundles );
                         }
 
                         if( error == null )
@@ -212,6 +212,8 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                         break;
                     }
                 }
+
+                bundleSupervisor.close();
             }
             catch( Exception e )
             {

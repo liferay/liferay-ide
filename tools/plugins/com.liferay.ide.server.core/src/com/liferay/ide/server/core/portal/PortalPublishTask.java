@@ -21,6 +21,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ import org.osgi.framework.dto.BundleDTO;
 /**
  * @author Gregory Amerson
  */
+@SuppressWarnings( "restriction" )
 public class PortalPublishTask extends PublishTaskDelegate
 {
 
@@ -50,7 +52,7 @@ public class PortalPublishTask extends PublishTaskDelegate
 
     private void addOperation(
         Class<? extends BundlePublishOperation> opClass, List<BundlePublishOperation> tasks, IServer server,
-        IModule[] module, BundleSupervisor supervisor, BundleDTO[] existingBundles )
+        IModule[] module, BundleDTO[] existingBundles )
     {
         for( BundlePublishOperation task : tasks )
         {
@@ -65,8 +67,8 @@ public class PortalPublishTask extends PublishTaskDelegate
         {
             BundlePublishOperation op =
                 opClass.getConstructor(
-                    IServer.class, IModule[].class, BundleSupervisor.class, BundleDTO[].class ).newInstance(
-                        server, module, supervisor, existingBundles );
+                    IServer.class, IModule[].class, BundleDTO[].class ).newInstance(
+                        server, module, existingBundles );
             tasks.add( op );
         }
         catch( Exception e )
@@ -88,20 +90,27 @@ public class PortalPublishTask extends PublishTaskDelegate
 
         if( server.getServerState() == IServer.STATE_STARTED )
         {
-            supervisor = serverBehavior.getBundleSupervisor();
-
             try
             {
+                supervisor = serverBehavior.createBundleSupervisor();
                 existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
             }
             catch( Exception e )
             {
             }
-        }
-
-        if( supervisor == null )
-        {
-            return tasks.toArray( new PublishOperation[0] );
+            finally
+            {
+                if( supervisor != null)
+                {
+                    try
+                    {
+                        supervisor.close();
+                    }
+                    catch( IOException e )
+                    {
+                    }
+                }
+            }
         }
 
         if( !CoreUtil.isNullOrEmpty( modules ) )
@@ -137,23 +146,23 @@ public class PortalPublishTask extends PublishTaskDelegate
                         switch( deltaKind )
                         {
                             case ServerBehaviourDelegate.ADDED:
-                                addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, supervisor, existingBundles );
+                                addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, existingBundles );
                                 break;
 
                             case ServerBehaviourDelegate.CHANGED:
                                 if (needClean)
                                 {
-                                    addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, supervisor, existingBundles );
+                                    addOperation( BundlePublishFullAddCleanBuild.class, tasks, server, module, existingBundles );
                                 }
                                 else
                                 {
-                                    addOperation( BundlePublishFullAdd.class, tasks, server, module, supervisor, existingBundles );
+                                    addOperation( BundlePublishFullAdd.class, tasks, server, module, existingBundles );
                                 }
 
                                 break;
 
                             case ServerBehaviourDelegate.REMOVED:
-                                addOperation( BundlePublishFullRemove.class, tasks, server, module, supervisor, existingBundles );
+                                addOperation( BundlePublishFullRemove.class, tasks, server, module, existingBundles );
                                 break;
 
                             case ServerBehaviourDelegate.NO_CHANGE:
@@ -168,7 +177,7 @@ public class PortalPublishTask extends PublishTaskDelegate
                                             !ServerUtil.bsnExists( bundleProject.getSymbolicName(), existingBundles ) )
                                         {
                                             addOperation(
-                                                BundlePublishFullAddCleanBuild.class, tasks, server, module, supervisor, existingBundles );
+                                                BundlePublishFullAddCleanBuild.class, tasks, server, module, existingBundles );
                                         }
                                     }
                                     catch( CoreException e )
@@ -181,13 +190,11 @@ public class PortalPublishTask extends PublishTaskDelegate
                                 break;
 
                             default:
-                                System.out.println( "Unhandled deltaKind " + deltaKind );
                                 break;
                             }
                         break;
 
                     default:
-                        System.out.println( "Unhandled kind " + kind );
                         break;
                 }
             }

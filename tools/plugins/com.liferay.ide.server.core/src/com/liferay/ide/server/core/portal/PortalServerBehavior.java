@@ -82,7 +82,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     private IAdaptable info;
     private transient PingThread ping = null;
     private transient IDebugEventSetListener processListener;
-    private BundleSupervisor _bundleSupervisor;
 
     public PortalServerBehavior()
     {
@@ -549,7 +548,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     {
         try
         {
-            startBundleSupervisor();
             setServerState( IServer.STATE_STARTED );
         }
         catch( Exception e )
@@ -770,14 +768,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     @Override
     public void stop( boolean force )
     {
-        try
-        {
-            stopBundleSupervisor();
-        }
-        catch( IOException e1 )
-        {
-        }
-
         if( force )
         {
             terminate();
@@ -880,32 +870,14 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         return buf.toString();
     }
 
-    public BundleSupervisor getBundleSupervisor()
+    public BundleSupervisor createBundleSupervisor() throws Exception
     {
-        return _bundleSupervisor;
-    }
-
-    public void startBundleSupervisor() throws Exception
-    {
-        _bundleSupervisor = new BundleSupervisor();
+        BundleSupervisor bundleSupervisor = new BundleSupervisor();
         int agentPort = getServer().getAttribute( AGENT_PORT, Agent.DEFAULT_PORT );
 
-        _bundleSupervisor.connect( getServer().getHost(), agentPort );
-    }
+        bundleSupervisor.connect( getServer().getHost(), agentPort );
 
-    public void stopBundleSupervisor() throws IOException
-    {
-        if( _bundleSupervisor != null )
-        {
-            try
-            {
-                _bundleSupervisor.close();
-            }
-            catch( Exception e )
-            {
-                LiferayServerCore.logError( "Unable to close bundle supervisor", e );
-            }
-        }
+        return bundleSupervisor;
     }
 
 }

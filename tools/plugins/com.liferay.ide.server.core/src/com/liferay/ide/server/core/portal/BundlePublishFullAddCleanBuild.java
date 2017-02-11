@@ -25,10 +25,9 @@ import org.osgi.framework.dto.BundleDTO;
 public class BundlePublishFullAddCleanBuild extends BundlePublishFullAdd
 {
 
-    public BundlePublishFullAddCleanBuild(
-        IServer s, IModule[] modules, BundleSupervisor supervisor, BundleDTO[] existingBundles )
+    public BundlePublishFullAddCleanBuild( IServer s, IModule[] modules, BundleDTO[] existingBundles )
     {
-        super( s, modules, supervisor, existingBundles );
+        super( s, modules, existingBundles );
     }
 
     protected boolean cleanBuildNeeded()

@@ -17,35 +17,21 @@ package com.liferay.ide.project.core.modules;
 
 import aQute.remote.api.Agent;
 
-import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.TargetPlatformUtil;
 import com.liferay.ide.server.core.portal.BundleSupervisor;
 import com.liferay.ide.server.core.portal.PortalServerBehavior;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.wst.server.core.IServer;
 
 /**
@@ -120,20 +106,6 @@ public class ServiceCommand
         _server = server;
     }
 
-    private File checkStaticServicesFile() throws IOException
-    {
-        final URL url =
-            FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "OSGI-INF/services-static.json" ) );
-        final File servicesFile = new File( url.getFile() );
-
-        if( servicesFile.exists() )
-        {
-            return servicesFile;
-        }
-
-        throw new FileNotFoundException( "can't find static services file services-static.json" );
-    }
-
     public ServiceContainer execute() throws Exception
     {
         BundleSupervisor supervisor = null;
@@ -147,7 +119,7 @@ public class ServiceCommand
         {
             PortalServerBehavior serverBehavior =
                 (PortalServerBehavior) _server.loadAdapter( PortalServerBehavior.class, null );
-            supervisor = serverBehavior.getBundleSupervisor();
+            supervisor = serverBehavior.createBundleSupervisor();
 
             if( supervisor == null )
             {
@@ -172,7 +144,11 @@ public class ServiceCommand
         }
         finally
         {
-            supervisor.getAgent().redirect( Agent.NONE );
+            if( supervisor != null )
+            {
+                supervisor.getAgent().redirect( Agent.NONE );
+                supervisor.close();
+            }
         }
 
         return result;
@@ -249,62 +225,6 @@ public class ServiceCommand
         supervisor.getAgent().stdin( "services" );
 
         return parseService( supervisor.getOutInfo() );
-    }
-
-    private void updateServicesStaticFile( final String[] servicesList, final BundleSupervisor supervisor ) throws Exception
-    {
-        final File servicesFile = checkStaticServicesFile();
-        final ObjectMapper mapper = new ObjectMapper();
-        final Map<String, String[]> map = new LinkedHashMap<>();
-
-        final Job job = new WorkspaceJob( "Update services static file...")
-        {
-
-            @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor )
-            {
-                try
-                {
-                    for( String serviceName : servicesList )
-                    {
-                        if( monitor.isCanceled() )
-                        {
-                            return Status.CANCEL_STATUS;
-                        }
-                        String[] serviceBundle = getServiceBundle( serviceName, supervisor );
-
-                        if( serviceBundle != null )
-                        {
-                            map.put( serviceName, serviceBundle );
-                        }
-                    }
-
-                    mapper.writeValue( servicesFile, map );
-                }
-                catch( Exception e )
-                {
-                    return Status.CANCEL_STATUS;
-                }
-                finally
-                {
-                    if( supervisor != null )
-                    {
-                        try
-                        {
-                            supervisor.getAgent().redirect( Agent.NONE );
-                        }
-                        catch( Exception e )
-                        {
-                            // ignore error
-                        }
-                    }
-                }
-
-                return Status.OK_STATUS;
-            }
-        };
-
-        job.schedule();
     }
 
     private String[] parseRegisteredBundle( String serviceName )

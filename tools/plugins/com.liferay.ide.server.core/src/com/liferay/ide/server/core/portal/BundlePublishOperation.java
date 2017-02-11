@@ -14,6 +14,10 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
+import aQute.remote.api.Agent;
+
+import com.liferay.ide.server.core.ILiferayServerBehavior;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,10 +41,9 @@ public class BundlePublishOperation extends PublishOperation
     protected final PortalRuntime portalRuntime;
     protected final PortalServerBehavior portalServerBehavior;
     protected final IServer server;
-    protected final BundleSupervisor _supervisor;
     protected final BundleDTO[] _existingBundles;
 
-    public BundlePublishOperation( IServer s, IModule[] modules, BundleSupervisor supervisor, BundleDTO[] existingBundles )
+    public BundlePublishOperation( IServer s, IModule[] modules, BundleDTO[] existingBundles )
     {
         this.server = s;
         this.modules = new ArrayList<IModule>( Arrays.asList( modules ) );
@@ -58,7 +61,6 @@ public class BundlePublishOperation extends PublishOperation
             throw new IllegalArgumentException( "Could not get portal server behavior from server " + s.getName() );
         }
 
-        _supervisor = supervisor;
         _existingBundles = existingBundles;
     }
 
@@ -84,6 +86,17 @@ public class BundlePublishOperation extends PublishOperation
     public int getOrder()
     {
         return 0;
+    }
+
+    protected BundleSupervisor createBundleSupervisor() throws Exception
+    {
+        BundleSupervisor bundleSupervisor = new BundleSupervisor();
+
+        int agentPort = server.getAttribute( ILiferayServerBehavior.AGENT_PORT, Agent.DEFAULT_PORT );
+
+        bundleSupervisor.connect( server.getHost(), agentPort );
+
+        return bundleSupervisor;
     }
 
 }
