@@ -48,9 +48,6 @@
         <if>
             <isset property="createBundles" />
             <then>
-                <property name="output.win32.zip.name" value="liferay-ide-eclipse-windows-x32-QUALIFIED_VERSION.zip" />
-                <property name="output.linux.tar.name" value="liferay-ide-eclipse-linux-x32-QUALIFIED_VERSION.tar" />
-                <property name="output.linux.gz.name" value="liferay-ide-eclipse-linux-x32-QUALIFIED_VERSION.tar.gz" />
                 <property name="output.win64.zip.name" value="liferay-ide-eclipse-windows-x64-QUALIFIED_VERSION.zip" />
                 <property name="output.linux64.tar.name" value="liferay-ide-eclipse-linux-x64-QUALIFIED_VERSION.tar" />
                 <property name="output.linux64.gz.name" value="liferay-ide-eclipse-linux-x64-QUALIFIED_VERSION.tar.gz" />
@@ -69,7 +66,6 @@
             <isset property="checkParameters" />
             <then>
                 <antcall target="win64" />
-                <antcall target="win32" />
 
                 <condition property="isLinux" value="true">
                     <os family="unix" />
@@ -78,7 +74,6 @@
                 <if>
                     <isset property="isLinux" />
                     <then>
-                        <antcall target="linux" />
                         <antcall target="linux64" />
                         <antcall target="macosx64" />
                     </then>
@@ -144,18 +139,6 @@
         </if>
     </target>
 
-    <target name="win32">
-        <antcall target="create-bundle">
-            <param name="os" value="win32" />
-            <param name="ws" value="win32" />
-            <param name="arch" value="x86" />
-            <param name="eclipse.zip.name" value="${eclipse.win32.zip.name}" />
-            <param name="eclipse.zip.url" value="${eclipse.win32.zip.url}" />
-            <param name="output.zip.name" value="${output.win32.zip.name}" />
-            <param name="upload.output.file" value="${output.win32.zip.name}" />
-        </antcall>
-    </target>
-
     <target name="win64">
         <antcall target="create-bundle">
             <param name="os" value="win64" />
@@ -165,21 +148,6 @@
             <param name="eclipse.zip.url" value="${eclipse.win64.zip.url}" />
             <param name="output.zip.name" value="${output.win64.zip.name}" />
             <param name="upload.output.file" value="${output.win64.zip.name}" />
-        </antcall>
-    </target>
-
-    <target name="linux">
-        <antcall target="create-bundle">
-            <param name="os" value="linux" />
-            <param name="ws" value="gtk" />
-            <param name="arch" value="x86" />
-            <param name="isUnix" value="true" />
-            <param name="eclipse.zip.name" value="${eclipse.linux.zip.name}" />
-            <param name="eclipse.tar.name" value="${eclipse.linux.tar.name}" />
-            <param name="eclipse.zip.url" value="${eclipse.linux.zip.url}" />
-            <param name="output.tar.name" value="${output.linux.tar.name}" />
-            <param name="output.gz.name" value="${output.linux.gz.name}" />
-            <param name="upload.output.file" value="${output.linux.gz.name}" />
         </antcall>
     </target>
 
