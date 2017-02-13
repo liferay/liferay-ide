@@ -28,8 +28,8 @@
 
     <properties>
         <tycho-packaging-format>yyyyMMddHHmm'-m2'</tycho-packaging-format>
-        <tycho-version>0.23.0</tycho-version>
-        <tycho-extras-version>0.23.0</tycho-extras-version>
+        <tycho-version>1.0.0</tycho-version>
+        <tycho-extras-version>1.0.0</tycho-extras-version>
         <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository/</orbit-site>
         <osgi-bundles-site>https://dl.bintray.com/gamerson/liferay-ide-deps/</osgi-bundles-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
