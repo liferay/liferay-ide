@@ -29,6 +29,8 @@ import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 
@@ -80,6 +82,7 @@ import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
+import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.osgi.framework.Version;
 import org.osgi.framework.dto.BundleDTO;
@@ -134,6 +137,24 @@ public class ServerUtil
     public static IStatus createErrorStatus( String msg )
     {
         return new Status( IStatus.ERROR, LiferayServerCore.PLUGIN_ID, msg );
+    }
+
+    public static void addPortalRuntimeAndServer( String serverRuntimeName, IPath location, IProgressMonitor monitor )
+                    throws CoreException
+    {
+        final IRuntimeWorkingCopy runtimeWC =
+            ServerCore.findRuntimeType( PortalRuntime.ID ).createRuntime( serverRuntimeName, monitor );
+
+        runtimeWC.setName( serverRuntimeName );
+        runtimeWC.setLocation( location );
+
+        runtimeWC.save( true, monitor );
+
+        final IServerWorkingCopy serverWC =
+            ServerCore.findServerType( PortalServer.ID ).createServer( serverRuntimeName, null, runtimeWC, monitor );
+
+        serverWC.setName( serverRuntimeName );
+        serverWC.save( true, monitor );
     }
 
     public static void deleteRuntimeAndServer( String runtimeType , File portalBundle ) throws Exception

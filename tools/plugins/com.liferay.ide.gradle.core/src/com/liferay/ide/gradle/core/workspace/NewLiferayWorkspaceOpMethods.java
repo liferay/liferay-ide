@@ -18,9 +18,13 @@ package com.liferay.ide.gradle.core.workspace;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.util.ServerUtil;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -83,7 +87,9 @@ public class NewLiferayWorkspaceOpMethods
             {
                 String serverRuntimeName = op.getServerName().content();
 
-                ImportLiferayWorkspaceOpMethods.addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
+                final IPath bundlesLocation = new Path( location ).append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location )  );
+
+                ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
             }
         }
         catch( Exception e )

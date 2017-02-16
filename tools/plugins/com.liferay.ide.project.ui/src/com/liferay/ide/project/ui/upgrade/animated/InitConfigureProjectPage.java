@@ -286,26 +286,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         startCheckThread();
     }
 
-    public void addPortalRuntimeAndServer( String serverRuntimeName, String location, IProgressMonitor monitor )
-        throws CoreException
-    {
-        final IRuntimeWorkingCopy runtimeWC =
-            ServerCore.findRuntimeType( PortalRuntime.ID ).createRuntime( serverRuntimeName, monitor );
-
-        IPath runTimePath = new Path( location );
-
-        runtimeWC.setName( serverRuntimeName );
-        runtimeWC.setLocation( runTimePath.append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location ) ) );
-
-        runtimeWC.save( true, monitor );
-
-        final IServerWorkingCopy serverWC =
-            ServerCore.findServerType( PortalServer.ID ).createServer( serverRuntimeName, null, runtimeWC, monitor );
-
-        serverWC.setName( serverRuntimeName );
-        serverWC.save( true, monitor );
-
-    }
 
     private void backup( IProgressMonitor monitor )
     {
@@ -821,7 +801,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 {
                     progress.worked( 60 );
 
-                    addPortalRuntimeAndServer( bundleName, sdkLocation.toPortableString(), monitor );
+                    final IPath runtimeLocation = sdkLocation.append( LiferayWorkspaceUtil.loadConfiguredHomeDir( sdkLocation.toOSString() ) );
+
+                    ServerUtil.addPortalRuntimeAndServer( bundleName, runtimeLocation, monitor );
 
                     IServer bundleServer = ServerCore.findServer( dataModel.getBundleName().content() );
 

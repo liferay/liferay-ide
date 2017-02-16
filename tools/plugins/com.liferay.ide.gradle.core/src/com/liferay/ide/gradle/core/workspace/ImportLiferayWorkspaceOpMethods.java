@@ -18,10 +18,8 @@ package com.liferay.ide.gradle.core.workspace;
 import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.server.core.portal.PortalRuntime;
-import com.liferay.ide.server.core.portal.PortalServer;
+import com.liferay.ide.server.util.ServerUtil;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -30,9 +28,6 @@ import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
-import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
-import org.eclipse.wst.server.core.IServerWorkingCopy;
-import org.eclipse.wst.server.core.ServerCore;
 
 /**
  * @author Andy Wu
@@ -82,7 +77,9 @@ public class ImportLiferayWorkspaceOpMethods
             {
                 String serverRuntimeName = op.getServerName().content();
 
-                addPortalRuntimeAndServer( serverRuntimeName, location, monitor );
+                final IPath bundlesLocation = new Path( location ).append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location )  );
+
+                ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
             }
         }
         catch( Exception e )
@@ -95,25 +92,5 @@ public class ImportLiferayWorkspaceOpMethods
         }
 
         return retval;
-    }
-
-    public static void addPortalRuntimeAndServer( String serverRuntimeName, String location, IProgressMonitor monitor )
-        throws CoreException
-    {
-        final IRuntimeWorkingCopy runtimeWC =
-            ServerCore.findRuntimeType( PortalRuntime.ID ).createRuntime( serverRuntimeName, monitor );
-
-        IPath runTimePath = new Path( location );
-
-        runtimeWC.setName( serverRuntimeName );
-        runtimeWC.setLocation( runTimePath.append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location ) ) );
-
-        runtimeWC.save( true, monitor );
-
-        final IServerWorkingCopy serverWC =
-            ServerCore.findServerType( PortalServer.ID ).createServer( serverRuntimeName, null, runtimeWC, monitor );
-
-        serverWC.setName( serverRuntimeName );
-        serverWC.save( true, monitor );
     }
 }

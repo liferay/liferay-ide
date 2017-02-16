@@ -283,7 +283,7 @@ public class LiferayServerCore extends Plugin
 
     public static PortalBundle newPortalBundle( final IPath bundlePath )
     {
-        PortalBundleFactory[] factories = getPortalBundleFactories();
+        final PortalBundleFactory[] factories = getPortalBundleFactories();
 
         if( factories != null )
         {
@@ -299,6 +299,26 @@ public class LiferayServerCore extends Plugin
         }
 
         return null;
+    }
+
+    public static boolean isPortalBundlePath( final IPath bundlePath )
+    {
+        final PortalBundleFactory[] factories = getPortalBundleFactories();
+
+        if( factories != null )
+        {
+            for( PortalBundleFactory portalBundleFactory : factories )
+            {
+                IPath path = portalBundleFactory.canCreateFromPath( bundlePath );
+
+                if( path != null )
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public static PortalBundleFactory[] getPortalBundleFactories()
