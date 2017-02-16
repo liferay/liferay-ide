@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompre;
@@ -27,13 +28,11 @@ import com.liferay.ide.project.ui.wizard.ElementLabelProvider;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
@@ -400,7 +399,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
             {
                 IPath filePath = upgradeFilePath.getLocation();
 
-                if( isNeedUpgrade( filePath.toFile() ) && !isProjectTargetDirFile( filePath ) )
+                if( isNeedUpgrade( filePath.toFile() ) && !ValidationUtil.isProjectTargetDirFile( filePath.toFile() ) )
                 {
                     final String projectLocation = filePath.makeRelativeTo( project.getLocation() ).toPortableString();
 
@@ -634,31 +633,4 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         }
     }
 
-    private boolean isProjectTargetDirFile( IPath filePath )
-    {
-        File file = filePath.toFile();
-
-        IProject project = CoreUtil.getProject( file );
-
-        IFolder targetFolder = project.getFolder( "target" );
-
-        boolean isInTargetDir = false;
-
-        File targetDir = null;
-
-        if( targetFolder.exists() )
-        {
-            targetDir = targetFolder.getLocation().toFile();
-
-            try
-            {
-                isInTargetDir = file.getCanonicalPath().startsWith( targetDir.getCanonicalPath() );
-            }
-            catch( IOException e )
-            {
-            }
-        }
-
-        return isInTargetDir;
-    }
 }

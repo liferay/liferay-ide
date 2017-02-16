@@ -17,6 +17,10 @@ package com.liferay.ide.project.core.util;
 
 import com.liferay.ide.core.util.CoreUtil;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -38,4 +42,31 @@ public class ValidationUtil
 
         return false;
     }
+
+    public static boolean isProjectTargetDirFile( File file )
+    {
+        IProject project = CoreUtil.getProject( file );
+
+        IFolder targetFolder = project.getFolder( "target" );
+
+        boolean isInTargetDir = false;
+
+        File targetDir = null;
+
+        if( targetFolder.exists() )
+        {
+            targetDir = targetFolder.getLocation().toFile();
+
+            try
+            {
+                isInTargetDir = file.getCanonicalPath().startsWith( targetDir.getCanonicalPath() );
+            }
+            catch( IOException e )
+            {
+            }
+        }
+
+        return isInTargetDir;
+    }
+
 }

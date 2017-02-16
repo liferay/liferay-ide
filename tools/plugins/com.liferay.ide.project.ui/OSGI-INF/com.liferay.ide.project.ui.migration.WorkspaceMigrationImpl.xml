@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="com.liferay.ide.project.ui.migration.WorkspaceMigrationImpl" immediate="false">
-  <implementation class="com.liferay.ide.project.ui.migration.WorkspaceMigrationImpl"/>
-  <service>
-    <provide interface="com.liferay.blade.api.MigrationListener"/>
-  </service>
-</component>

@@ -28,7 +28,7 @@ import com.liferay.ide.project.core.upgrade.IgnoredProblemsContainer;
 import com.liferay.ide.project.core.upgrade.MigrationProblems;
 import com.liferay.ide.project.core.upgrade.UpgradeAssistantSettingsUtil;
 import com.liferay.ide.project.core.upgrade.UpgradeProblems;
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.upgrade.animated.FindBreakingChangesPage;
 import com.liferay.ide.project.ui.upgrade.animated.Page;
@@ -323,6 +323,9 @@ public class MigrateProjectHandler extends AbstractHandler
 
                         if( allProblems.size() > 0 )
                         {
+
+                            addMarkers(allProblems);
+
                             MigrationProblems migrationProblems = new MigrationProblems();
 
                             List<FileProblems> fileProblemsList =
@@ -456,11 +459,15 @@ public class MigrateProjectHandler extends AbstractHandler
         return markers != null && markers.length > 0;
     }
 
+    @SuppressWarnings( "deprecation" )
     private boolean shouldAdd( Problem problem )
     {
-        String path = problem.getFile().getAbsolutePath().replaceAll( "\\\\", "/" );
+        File file = problem.getFile();
 
-        if( path.contains( "WEB-INF/classes" ) || path.contains( "WEB-INF/service" ) || path.contains( "target" ) )
+        String path = file.getAbsolutePath().replaceAll( "\\\\", "/" );
+
+        if( path.contains( "WEB-INF/classes" ) || path.contains( "WEB-INF/service" ) ||
+            ValidationUtil.isProjectTargetDirFile( file ) )
         {
             return false;
         }
@@ -635,6 +642,107 @@ public class MigrateProjectHandler extends AbstractHandler
                 }
             }
         } );
+    }
+
+    private void addMarkers(List<Problem> problems)
+    {
+        final IWorkspaceRoot ws = ResourcesPlugin.getWorkspace().getRoot();
+
+        for( Problem problem : problems )
+        {
+            IResource workspaceResource = null;
+
+            final File file = problem.file;
+
+            final IResource[] containers = ws.findContainersForLocationURI( file.toURI() );
+
+            if( containers != null && containers.length > 0 )
+            {
+                // prefer project containers
+                for( IResource container : containers )
+                {
+                    if( container.exists() )
+                    {
+                        if( container.getType() == IResource.PROJECT )
+                        {
+                            workspaceResource = container;
+                            break;
+                        }
+                        else
+                        {
+                            final IProject project = container.getProject();
+
+                            if( CoreUtil.isLiferayProject( project ) )
+                            {
+                                workspaceResource = container;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if( workspaceResource == null )
+                {
+                    final IFile[] files = ws.findFilesForLocationURI( file.toURI() );
+
+                    for( IFile ifile : files )
+                    {
+                        if( ifile.exists() )
+                        {
+                            if( workspaceResource == null )
+                            {
+                                if( CoreUtil.isLiferayProject( ifile.getProject() ) )
+                                {
+                                    workspaceResource = ifile;
+                                }
+                            }
+                            else
+                            {
+                                // prefer the path that is shortest (to avoid a nested version)
+                                if( ifile.getFullPath().segmentCount() < workspaceResource.getFullPath().segmentCount() )
+                                {
+                                    workspaceResource = ifile;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if( workspaceResource == null )
+                {
+                    for( IResource container : containers )
+                    {
+                        if( workspaceResource == null )
+                        {
+                            workspaceResource = container;
+                        }
+                        else
+                        {
+                            // prefer the path that is shortest (to avoid a nested version)
+                            if( container.getLocation().segmentCount() < workspaceResource.getLocation().segmentCount() )
+                            {
+                                workspaceResource = container;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( workspaceResource != null && workspaceResource.exists() )
+            {
+                try
+                {
+                    final IMarker marker =
+                        workspaceResource.createMarker( MigrationConstants.MARKER_TYPE );
+
+                    problem.setMarkerId( marker.getId() );
+                    MigrationUtil.problemToMarker( problem, marker );
+                }
+                catch( CoreException e )
+                {
+                }
+            }
+        }
     }
 
 }

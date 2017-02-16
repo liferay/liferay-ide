@@ -15,7 +15,6 @@
 
 package com.liferay.ide.core.util;
 
-import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
@@ -391,6 +390,11 @@ public class CoreUtil
         return retval;
     }
 
+    /**
+     * try to get leaf child project that contains this file, cause a file also be contained in the parent project
+     * @param file
+     * @return
+     */
     public static IProject getProject( File file )
     {
         IWorkspaceRoot ws = getWorkspaceRoot();
