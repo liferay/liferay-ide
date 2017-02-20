@@ -16,13 +16,13 @@
 package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.BladeCLIException;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -32,15 +32,37 @@ import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.junit.Test;
+import org.osgi.framework.Version;
+import org.osgi.service.prefs.BackingStoreException;
 
 /**
  * @author Gregory Amerson
+ * @author Andy Wu
  */
 public class BladeCLITests
 {
 
+    private void setDBladeURLefaultPreferences( IEclipsePreferences prefs )
+    {
+        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
+
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+
+        try
+        {
+            prefs.flush();
+        }
+        catch( BackingStoreException e )
+        {
+        }
+    }
+
     @Test
-    public void testLocalJarCopyIsGreaterThan1x() throws Exception
+    public void testUpdate1xWillFail() throws Exception
     {
         IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
@@ -48,43 +70,49 @@ public class BladeCLITests
 
         prefs.flush();
 
-        assertEquals( "com.liferay.blade.cli.jar", BladeCLI.getBladeCLIPath().lastSegment() );
+        try
+        {
+            BladeCLI.fetchLatestVersion();
+        }
+        catch( BladeCLIException e )
+        {
+            assertEquals( e.getMessage(), "remote blade verion is not in the range [2.0.2,3)" );
+        }
 
-        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
-
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
-
-        prefs.flush();
+        setDBladeURLefaultPreferences( prefs );
     }
 
     @Test
-    public void testLocalJarCopyIsLessThanLatestOnCloudbees() throws Exception
+    public void testUpdateBladeToCloudbees() throws Exception
     {
         IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL,
+            "https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/" );
 
         prefs.flush();
 
-        final String cliName = BladeCLI.getBladeCLIPath().lastSegment();
+        String currentVersionStr = BladeCLI.getCurrentVersion();
 
-        assertNotEquals( "com.liferay.blade.cli.jar", cliName );
+        BladeCLI.updateBladeToLatest();
 
-        assertTrue( cliName.matches( "com.liferay.blade.cli_.*.jar" ) );
+        // not update autually
+        assertEquals( currentVersionStr, BladeCLI.getCurrentVersion() );
 
-        IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+        String remoteVersionStr = BladeCLI.fetchLatestVersion();
 
-        prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+        Version remoteVersion = new Version( remoteVersionStr );
 
-        final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
+        Version currentVersion = new Version( currentVersionStr );
 
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, defaultValue );
+        assertTrue( remoteVersion.compareTo( currentVersion ) > 0 );
 
-        prefs.flush();
+        BladeCLI.updateBladeToLatest();
+
+        // do update
+        assertEquals( remoteVersionStr, BladeCLI.getCurrentVersion() );
+
+        setDBladeURLefaultPreferences( prefs );
     }
 
     @Test

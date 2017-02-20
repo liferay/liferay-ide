@@ -12,6 +12,7 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.modules;
 
 import aQute.bnd.deployer.repository.FixedIndexedRepo;
@@ -20,23 +21,16 @@ import aQute.bnd.osgi.Processor;
 
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.StringBufferOutputStream;
-import com.liferay.ide.core.util.PropertiesUtil;
+import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Scanner;
 
 import org.apache.tools.ant.DefaultLogger;
@@ -45,10 +39,8 @@ import org.apache.tools.ant.taskdefs.Java;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 
 /**
@@ -57,15 +49,13 @@ import org.osgi.framework.Version;
  */
 public class BladeCLI
 {
-    static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
-    static final String localJarKey = "localjar";
-    static final File repoCache = new File( _settingsDir, "repoCache" );
-    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/2.x/";
-    static final String timeStampKey = "up2date.check";
-    public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
-    public static final String BLADE_CLI_REPO_UP2DATE_CHECK = "BLADE_CLI_REPO_UP2DATE_CHECK";
 
-    static IPath cachedBladeCLIPath;
+    static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
+    static final File repoCache = new File( _settingsDir, "repoCache" );
+    public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
+    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/2.x/";
+
+    static File latestBladeFile;
 
     public static String[] execute( String args ) throws BladeCLIException
     {
@@ -73,7 +63,7 @@ public class BladeCLI
 
         if( bladeCLIPath == null || !bladeCLIPath.toFile().exists() )
         {
-            throw new BladeCLIException("Could not get blade cli jar.");
+            throw new BladeCLIException( "Could not get blade cli jar." );
         }
 
         final Project project = new Project();
@@ -86,12 +76,12 @@ public class BladeCLI
         javaTask.setArgs( args );
 
         final DefaultLogger logger = new DefaultLogger();
-        project.addBuildListener(logger);
+        project.addBuildListener( logger );
 
         final StringBufferOutputStream out = new StringBufferOutputStream();
 
         logger.setOutputPrintStream( new PrintStream( out ) );
-        logger.setMessageOutputLevel(Project.MSG_INFO);
+        logger.setMessageOutputLevel( Project.MSG_INFO );
 
         int returnCode = javaTask.executeJava();
 
@@ -131,53 +121,70 @@ public class BladeCLI
 
     public static synchronized IPath getBladeCLIPath() throws BladeCLIException
     {
-        final IPath stateLocation = ProjectCore.getDefault().getStateLocation();
+        File bladeFile = new File( repoCache, "com.liferay.blade.cli.jar" );
 
-        Bundle bundle = Platform.getBundle( ProjectCore.PLUGIN_ID );
+        IPath bladeCLIPath = null;
 
-        File stateDir = stateLocation.toFile();
-
-        String filePrefix = "blade-cache";
-        String currentVersionFileName = filePrefix + "-" + bundle.getVersion().toString() + ".properties";
-
-        final File bladeCacheSettingsFile = new File( stateDir, currentVersionFileName );
-
-        // clean old version blade-cache files
-        if( stateDir.exists() )
+        if( bladeFile.exists() && bladeFile.isFile() )
         {
-            File[] children = stateDir.listFiles();
-
-            if( children.length > 0 )
+            try(Jar jarFile = new Jar( bladeFile ))
             {
-                for( File child : children )
+                if( isSupportedVersion( jarFile.getVersion() ) )
                 {
-                    if( child.isFile() && child.getName().startsWith( filePrefix ) &&
-                        !child.getName().equals( currentVersionFileName ) )
-                    {
-                        child.delete();
-                    }
+                    bladeCLIPath = new Path( bladeFile.getCanonicalPath() );
                 }
-            }
-        }
-
-        final SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmmss" );
-
-        if( shouldUpdate( sdf, bladeCacheSettingsFile) )
-        {
-            try
-            {
-                updateLocalJar( sdf, bladeCacheSettingsFile );
             }
             catch( Exception e )
             {
-                throw new BladeCLIException( "Unable to update local blade cli", e );
+                throw new BladeCLIException( "get blade error", e );
+            }
+        }
+        else
+        {
+            try
+            {
+                repoCache.mkdirs();
+
+                File embededBladeJar = new File(
+                    FileLocator.toFileURL(
+                        ProjectCore.getDefault().getBundle().getEntry( "lib/com.liferay.blade.cli.jar" ) ).getFile() );
+
+                FileUtil.copyFileToDir( embededBladeJar, repoCache );
+
+                File localBladeJar = new File( repoCache, embededBladeJar.getName() );
+
+                bladeCLIPath = new Path( localBladeJar.getCanonicalPath() );
+            }
+            catch( Exception e )
+            {
+                throw new BladeCLIException( "get blade error", e );
             }
         }
 
-        return cachedBladeCLIPath;
+        return bladeCLIPath;
     }
 
-    private static String getLatestRemoteBladeCLIJar()
+    public static String getCurrentVersion()
+    {
+        String version = "null";
+
+        try
+        {
+            IPath path = getBladeCLIPath();
+
+            try(Jar jar = new Jar( path.toFile() ))
+            {
+                version = jar.getVersion();
+            }
+        }
+        catch( Exception e )
+        {
+        }
+
+        return version;
+    }
+
+    public static String fetchLatestVersion() throws BladeCLIException
     {
         _settingsDir.mkdirs();
         repoCache.mkdirs();
@@ -192,37 +199,40 @@ public class BladeCLI
         repo.setProperties( props );
         repo.setReporter( reporter );
 
+        String latestVersion = "null";
+
+        latestBladeFile = null;
+
         try
         {
             File[] files = repo.get( "com.liferay.blade.cli", "[2.0.2,3)" );
 
             if( files != null && files.length > 0 )
             {
-                File cliJar = files[0];
+                File cliFile = files[0];
 
-                try( Jar cliJarJar = new Jar( cliJar ); Jar localJar = new Jar( getLocalCopy() ) )
+                latestBladeFile = cliFile;
+
+                try(Jar cliJar = new Jar( cliFile ))
                 {
-                    Version cliJarVersion = new Version( cliJarJar.getVersion() );
-                    Version localCopyVersion = new Version( localJar.getVersion() );
-
-                    if( cliJarVersion.compareTo( localCopyVersion ) >= 0 )
-                    {
-                        cachedBladeCLIPath = new Path( cliJar.getCanonicalPath() );
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    latestVersion = cliJar.getVersion();
                 }
-
-                return cliJar.getName();
+            }
+            else
+            {
+                throw new BladeCLIException( "remote blade verion is not in the range [2.0.2,3)" );
             }
         }
-        catch( Exception e )
+        catch( BladeCLIException e )
         {
+            throw e;
+        }
+        catch( Exception e1 )
+        {
+            throw new BladeCLIException( "get blade version error", e1 );
         }
 
-        return null;
+        return latestVersion;
     }
 
     public static synchronized String[] getProjectTemplates() throws BladeCLIException
@@ -234,15 +244,6 @@ public class BladeCLI
         Collections.addAll( templateNames, retval );
 
         return templateNames.toArray( new String[0] );
-    }
-
-    private static File getRepoCacheDir() throws Exception
-    {
-        String repoURL = getRepoURL();
-
-        String retVal = URLEncoder.encode( repoURL, "UTF-8" );
-
-        return new File( repoCache, retVal + "plugins" );
     }
 
     private static String getRepoURL()
@@ -259,163 +260,25 @@ public class BladeCLI
         return repoURL;
     }
 
-    private static String getValidTime()
+    private static boolean isSupportedVersion( String verisonString )
     {
-        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+        Version version = new Version( verisonString );
+        Version lowVersion = new Version( "2.0" );
+        Version highVersion = new Version( "2.3" );
 
-        return prefs.get( BLADE_CLI_REPO_UP2DATE_CHECK, "24h" );
-    }
-
-    private static boolean shouldUpdate( SimpleDateFormat sdf, File bladeCacheSettingsFile )
-                    throws BladeCLIException
-    {
-        boolean shouldUpdate = false;
-
-        // file doesn't exist
-        if( !bladeCacheSettingsFile.exists() )
+        if( version.compareTo( lowVersion ) >= 0 && version.compareTo( highVersion ) < 0 )
         {
             return true;
         }
 
-        Properties props = PropertiesUtil.loadProperties( bladeCacheSettingsFile );
-
-        // can't load properties
-        if( props == null )
-        {
-            return true;
-        }
-
-        String up2dateCheckTimestamp = props.getProperty( timeStampKey );
-        Date lastTime = null;
-
-        try
-        {
-            lastTime = sdf.parse( up2dateCheckTimestamp );
-        }
-        catch( ParseException e )
-        {
-        }
-
-        // can't parse time
-        if( lastTime == null )
-        {
-            return true;
-        }
-
-        String validTime = getValidTime();
-
-        if( validTime.equals( "-1" ) )
-        {
-            // do nothing
-        }
-        else if( validTime.equals( "0" ) )
-        {
-            shouldUpdate = true;
-        }
-        else
-        {
-            String scope;
-            int count;
-
-            try
-            {
-                scope = validTime.substring( validTime.length() - 1, validTime.length() );
-                String countStr = validTime.substring( 0, validTime.length() - 1 );
-                count = Integer.parseInt( countStr );
-            }
-            catch( Exception e )
-            {
-                scope = "h";
-                count = 24;
-            }
-
-            Date currentTime = new Date();
-
-            long distance = currentTime.getTime() - lastTime.getTime();
-
-            if( scope.equals( "h" ) )
-            {
-                long hours = distance / 1000 / 3600;
-
-                if( hours > count )
-                {
-                    shouldUpdate = true;
-                }
-            }
-            else if( scope.equals( "m" ) )
-            {
-                long minutes = distance / 1000 / 60;
-
-                if( minutes > count )
-                {
-                    shouldUpdate = true;
-                }
-            }
-            else if( scope.equals( "s" ) )
-            {
-                long seconds = distance / 1000;
-
-                if( seconds > count )
-                {
-                    shouldUpdate = true;
-                }
-            }
-            else
-            {
-                shouldUpdate = true;
-            }
-        }
-
-        if( !shouldUpdate )
-        {
-            try
-            {
-                File localJarFile = new File( getRepoCacheDir(), props.getProperty( localJarKey ) );
-
-                if( !localJarFile.exists() )
-                {
-                    return true;
-                }
-                else
-                {
-                    cachedBladeCLIPath = new Path( localJarFile.getCanonicalPath() );
-                }
-            }
-            catch( Exception e )
-            {
-                throw new BladeCLIException( e.getMessage() );
-            }
-        }
-
-        return shouldUpdate;
+        return false;
     }
 
-    private static void updateLocalJar(SimpleDateFormat sdf, File bladeCacheSettings )
-        throws Exception
+    public static void updateBladeToLatest() throws BladeCLIException
     {
-        String latestJar = getLatestRemoteBladeCLIJar();
-
-        if( latestJar == null )
+        if( latestBladeFile != null )
         {
-            File bundledJar = getLocalCopy();
-
-            latestJar = bundledJar.getName();
-
-            cachedBladeCLIPath = new Path( bundledJar.getCanonicalPath() );
+            FileUtil.copyFile( latestBladeFile, getBladeCLIPath().toFile() );
         }
-
-        Properties props = new Properties();
-        props.setProperty( timeStampKey, sdf.format( new Date() ) );
-        props.setProperty( localJarKey, latestJar );
-
-        PropertiesUtil.saveProperties( props, bladeCacheSettings );
-    }
-
-    private static File getLocalCopy() throws IOException
-    {
-     // use plugin copy
-        URL url = FileLocator.toFileURL( ProjectCore.getDefault().getBundle().getEntry( "lib/com.liferay.blade.cli.jar" ) );
-
-        return new File( url.getFile() );
     }
 }
