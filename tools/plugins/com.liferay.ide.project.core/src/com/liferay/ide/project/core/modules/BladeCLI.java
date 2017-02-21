@@ -50,12 +50,12 @@ import org.osgi.framework.Version;
 public class BladeCLI
 {
 
-    static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
-    static final File repoCache = new File( _settingsDir, "repoCache" );
     public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
-    private static final String defaultRepoUrl = "https://releases.liferay.com/tools/blade-cli/2.x/";
 
-    static File latestBladeFile;
+    private static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
+    private static final File repoCache = new File( _settingsDir, "repoCache" );
+    private static final String defaultRepoUrl = "https://releases.liferay.com/tools/blade-cli/2.x/";
+    private static File latestBladeFile;
 
     public static String[] execute( String args ) throws BladeCLIException
     {
@@ -119,7 +119,7 @@ public class BladeCLI
         return lines.toArray( new String[0] );
     }
 
-    public static synchronized IPath getBladeCLIPath() throws BladeCLIException
+    private static synchronized IPath getBladeCLIPath() throws BladeCLIException
     {
         File bladeFile = new File( repoCache, "com.liferay.blade.cli.jar" );
 
