@@ -260,18 +260,13 @@ public class BladeCLI
         return repoURL;
     }
 
-    private static boolean isSupportedVersion( String verisonString )
+    private static boolean isSupportedVersion( String verisonValue )
     {
-        Version version = new Version( verisonString );
-        Version lowVersion = new Version( "2.0" );
-        Version highVersion = new Version( "2.3" );
+        Version version = new Version( verisonValue );
+        Version lowVersion = new Version( "2" );
+        Version highVersion = new Version( "3" );
 
-        if( version.compareTo( lowVersion ) >= 0 && version.compareTo( highVersion ) < 0 )
-        {
-            return true;
-        }
-
-        return false;
+        return version.compareTo( lowVersion ) >= 0 && version.compareTo( highVersion ) < 0;
     }
 
     public static void updateBladeToLatest() throws BladeCLIException
