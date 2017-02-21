@@ -16,7 +16,7 @@
 package com.liferay.ide.project.core.modules;
 
 import aQute.bnd.deployer.repository.FixedIndexedRepo;
-import aQute.bnd.osgi.Jar;
+import aQute.bnd.osgi.Domain;
 import aQute.bnd.osgi.Processor;
 
 import com.liferay.ide.core.LiferayCore;
@@ -25,6 +25,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,9 +40,12 @@ import org.apache.tools.ant.taskdefs.Java;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.framework.Version;
+import org.osgi.service.prefs.Preferences;
 
 /**
  * @author Gregory Amerson
@@ -52,10 +56,19 @@ public class BladeCLI
 
     public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
 
+    private static final IEclipsePreferences defaultPrefs = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+    private static final IEclipsePreferences instancePrefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
     private static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
     private static final File repoCache = new File( _settingsDir, "repoCache" );
-    private static final String defaultRepoUrl = "https://releases.liferay.com/tools/blade-cli/2.x/";
-    private static File latestBladeFile;
+    private static final IPath bladeJarInstanceArea = ProjectCore.getDefault().getStateLocation().append( "blade-jar" );
+    private static final IPath bladeJarInstancePath = bladeJarInstanceArea.append( "com.liferay.blade.cli.jar" );
+
+    static
+    {
+        _settingsDir.mkdirs();
+        repoCache.mkdirs();
+        bladeJarInstanceArea.toFile().mkdirs();
+    }
 
     public static String[] execute( String args ) throws BladeCLIException
     {
@@ -119,76 +132,61 @@ public class BladeCLI
         return lines.toArray( new String[0] );
     }
 
-    private static synchronized IPath getBladeCLIPath() throws BladeCLIException
+    /**
+     * We need to get the correct path to the blade jar, here is the logic
+     *
+     * First see if we have a instance (workbench) copy of blade cli jar, that means
+     * that the developer has intentially updated their blade jar to a newer version than
+     * is shipped with the project.core bundle.  The local instance copy will be in the
+     * plugin state area.
+     *
+     * If there is no instance copy of blade cli jar, then fallback to use the one that
+     * is in the bundle itself.
+     *
+     * @return path to local blade jar
+     * @throws BladeCLIException
+     */
+    public static synchronized IPath getBladeCLIPath() throws BladeCLIException
     {
-        File bladeFile = new File( repoCache, "com.liferay.blade.cli.jar" );
+        final File bladeJarInstanceFile = bladeJarInstancePath.toFile();
 
-        IPath bladeCLIPath = null;
-
-        if( bladeFile.exists() && bladeFile.isFile() )
-        {
-            try(Jar jarFile = new Jar( bladeFile ))
-            {
-                if( isSupportedVersion( jarFile.getVersion() ) )
-                {
-                    bladeCLIPath = new Path( bladeFile.getCanonicalPath() );
-                }
-            }
-            catch( Exception e )
-            {
-                throw new BladeCLIException( "get blade error", e );
-            }
-        }
-        else
+        if( bladeJarInstanceFile.exists() )
         {
             try
             {
-                repoCache.mkdirs();
+                Domain jar = Domain.domain( bladeJarInstanceFile );
 
-                File embededBladeJar = new File(
-                    FileLocator.toFileURL(
-                        ProjectCore.getDefault().getBundle().getEntry( "lib/com.liferay.blade.cli.jar" ) ).getFile() );
-
-                FileUtil.copyFileToDir( embededBladeJar, repoCache );
-
-                File localBladeJar = new File( repoCache, embededBladeJar.getName() );
-
-                bladeCLIPath = new Path( localBladeJar.getCanonicalPath() );
+                if( isSupportedVersion( jar.getBundleVersion() ) )
+                {
+                    return bladeJarInstancePath;
+                }
             }
-            catch( Exception e )
+            catch( IOException e )
             {
-                throw new BladeCLIException( "get blade error", e );
             }
         }
-
-        return bladeCLIPath;
-    }
-
-    public static String getCurrentVersion()
-    {
-        String version = "null";
 
         try
         {
-            IPath path = getBladeCLIPath();
-
-            try(Jar jar = new Jar( path.toFile() ))
-            {
-                version = jar.getVersion();
-            }
+            return getBladeJarFromBundle();
         }
-        catch( Exception e )
+        catch( IOException e )
         {
+            throw new BladeCLIException( "Could not find blade cli jar", e );
         }
-
-        return version;
     }
 
-    public static String fetchLatestVersion() throws BladeCLIException
+    private static IPath getBladeJarFromBundle() throws IOException
     {
-        _settingsDir.mkdirs();
-        repoCache.mkdirs();
+        File bladeJarBundleFile = new File(
+            FileLocator.toFileURL(
+                ProjectCore.getDefault().getBundle().getEntry( "lib/com.liferay.blade.cli.jar" ) ).getFile() );
 
+        return new Path( bladeJarBundleFile.getCanonicalPath() );
+    }
+
+    public static File fetchBladeJarFromRepo() throws Exception
+    {
         Processor reporter = new Processor();
         FixedIndexedRepo repo = new FixedIndexedRepo();
         Map<String, String> props = new HashMap<String, String>();
@@ -199,40 +197,9 @@ public class BladeCLI
         repo.setProperties( props );
         repo.setReporter( reporter );
 
-        String latestVersion = "null";
+        File[] files = repo.get( "com.liferay.blade.cli", "[2.0.2,3)" );
 
-        latestBladeFile = null;
-
-        try
-        {
-            File[] files = repo.get( "com.liferay.blade.cli", "[2.0.2,3)" );
-
-            if( files != null && files.length > 0 )
-            {
-                File cliFile = files[0];
-
-                latestBladeFile = cliFile;
-
-                try(Jar cliJar = new Jar( cliFile ))
-                {
-                    latestVersion = cliJar.getVersion();
-                }
-            }
-            else
-            {
-                throw new BladeCLIException( "remote blade verion is not in the range [2.0.2,3)" );
-            }
-        }
-        catch( BladeCLIException e )
-        {
-            throw e;
-        }
-        catch( Exception e1 )
-        {
-            throw new BladeCLIException( "get blade version error", e1 );
-        }
-
-        return latestVersion;
+        return files[0];
     }
 
     public static synchronized String[] getProjectTemplates() throws BladeCLIException
@@ -248,9 +215,7 @@ public class BladeCLI
 
     private static String getRepoURL()
     {
-        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-        String repoURL = prefs.get( BLADE_CLI_REPO_URL, defaultRepoUrl );
+        String repoURL = Platform.getPreferencesService().get( BLADE_CLI_REPO_URL, null, new Preferences[] { instancePrefs, defaultPrefs } );
 
         if( !repoURL.endsWith( "/" ) )
         {
@@ -269,11 +234,9 @@ public class BladeCLI
         return version.compareTo( lowVersion ) >= 0 && version.compareTo( highVersion ) < 0;
     }
 
-    public static void updateBladeToLatest() throws BladeCLIException
+    public static synchronized void addToLocalInstance( File latestBladeJar )
     {
-        if( latestBladeFile != null )
-        {
-            FileUtil.copyFile( latestBladeFile, getBladeCLIPath().toFile() );
-        }
+        FileUtil.copyFile( latestBladeJar, bladeJarInstancePath.toFile() );
     }
+
 }

@@ -13,24 +13,28 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.tests.modules;
+package com.liferay.ide.project.core.modules;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import aQute.bnd.osgi.Domain;
+
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.BladeCLI;
-import com.liferay.ide.project.core.modules.BladeCLIException;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.junit.After;
 import org.junit.Test;
 import org.osgi.framework.Version;
 import org.osgi.service.prefs.BackingStoreException;
@@ -42,11 +46,12 @@ import org.osgi.service.prefs.BackingStoreException;
 public class BladeCLITests
 {
 
-    private void setDBladeURLefaultPreferences( IEclipsePreferences prefs )
+    @After
+    public void setBladeURLefaultPreferences()
     {
         IEclipsePreferences defaults = DefaultScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
-        prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+        IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
         final String defaultValue = defaults.get( BladeCLI.BLADE_CLI_REPO_URL, "" );
 
@@ -62,29 +67,58 @@ public class BladeCLITests
     }
 
     @Test
+    public void testBundleFileIsValid() throws Exception
+    {
+        IPath path = BladeCLI.getBladeCLIPath();
+
+        final File bladeFile = path.toFile();
+
+        assertTrue( bladeFile.exists() );
+
+        Domain domain = Domain.domain( bladeFile );
+
+        assertTrue( domain.getBundleVersion().startsWith( "2" ) );
+
+        assertFalse( domain.getBundleVersion().startsWith( "3" ) );
+    }
+
+    @Test
+    public void testBundleFileIsFromBundle() throws Exception
+    {
+        IPath path = BladeCLI.getBladeCLIPath();
+
+        IPath stateLocation = ProjectCore.getDefault().getStateLocation();
+
+        assertFalse( stateLocation.isPrefixOf( path ) );
+    }
+
+    @Test
     public void testUpdate1xWillFail() throws Exception
     {
         IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
-        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "http://releases.liferay.com/tools/blade-cli/1.x/" );
+        prefs.put( BladeCLI.BLADE_CLI_REPO_URL, "https://releases.liferay.com/tools/blade-cli/1.x/" );
 
         prefs.flush();
 
+        String latestVersion = null;
+
         try
         {
-            BladeCLI.fetchLatestVersion();
+            latestVersion = Domain.domain( BladeCLI.fetchBladeJarFromRepo() ).getBundleVersion();
         }
-        catch( BladeCLIException e )
+        catch( Exception e )
         {
-            assertEquals( e.getMessage(), "remote blade verion is not in the range [2.0.2,3)" );
         }
 
-        setDBladeURLefaultPreferences( prefs );
+        assertNull( latestVersion );
     }
 
     @Test
-    public void testUpdateBladeToCloudbees() throws Exception
+    public void testUpdateBladeFromCloudbees() throws Exception
     {
+        IPath originalPath = BladeCLI.getBladeCLIPath();
+
         IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
 
         prefs.put( BladeCLI.BLADE_CLI_REPO_URL,
@@ -92,27 +126,18 @@ public class BladeCLITests
 
         prefs.flush();
 
-        String currentVersionStr = BladeCLI.getCurrentVersion();
+        File latestBladeJar = BladeCLI.fetchBladeJarFromRepo();
 
-        BladeCLI.updateBladeToLatest();
+        Version latestVersionFromRepo = new Version( Domain.domain( latestBladeJar ).getBundleVersion() );
 
-        // not update autually
-        assertEquals( currentVersionStr, BladeCLI.getCurrentVersion() );
+        Domain bladeFromBundle = Domain.domain( originalPath.toFile() );
 
-        String remoteVersionStr = BladeCLI.fetchLatestVersion();
+        assertTrue( latestVersionFromRepo.compareTo( new Version( bladeFromBundle.getBundleVersion() ) ) > 0 );
 
-        Version remoteVersion = new Version( remoteVersionStr );
+        BladeCLI.addToLocalInstance( latestBladeJar );
 
-        Version currentVersion = new Version( currentVersionStr );
-
-        assertTrue( remoteVersion.compareTo( currentVersion ) > 0 );
-
-        BladeCLI.updateBladeToLatest();
-
-        // do update
-        assertEquals( remoteVersionStr, BladeCLI.getCurrentVersion() );
-
-        setDBladeURLefaultPreferences( prefs );
+        assertEquals( new Version( Domain.domain( BladeCLI.getBladeCLIPath().toFile() ).getBundleVersion() ),
+            new Version( Domain.domain( latestBladeJar ).getBundleVersion() ) );
     }
 
     @Test
