@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.workspace;
+package com.liferay.ide.project.core.workspace;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Type;

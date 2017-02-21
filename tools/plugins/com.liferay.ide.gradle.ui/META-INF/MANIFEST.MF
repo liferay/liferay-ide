@@ -27,6 +27,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: com.liferay.ide.gradle.ui,
- com.liferay.ide.gradle.ui.workspace
+Export-Package: com.liferay.ide.gradle.ui
 

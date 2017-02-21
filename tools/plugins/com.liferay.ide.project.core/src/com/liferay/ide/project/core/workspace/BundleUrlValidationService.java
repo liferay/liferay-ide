@@ -13,33 +13,40 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.modules;
+package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
-
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.sapphire.PossibleValuesService;
+import org.apache.xerces.util.URI;
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.services.ValidationService;
 
 /**
- * @author Simon Jiang
+ * @author Terry Jia
  */
-public class ModuleProjectProviderPossibleValuesService extends PossibleValuesService
+public class BundleUrlValidationService extends ValidationService
 {
 
     @Override
-    protected void compute( Set<String> values )
+    protected Status compute()
     {
-        List<String> possibleValues = ProjectUtil.getProjectProviderPossibleValue( "module" );
+        Status retval = Status.createOkStatus();
 
-        values.addAll( possibleValues );
+        String bundleUrl = op().getBundleUrl().content();
+
+        try
+        {
+            new URI( bundleUrl );
+        }
+        catch( Exception e )
+        {
+            retval = Status.createErrorStatus( "The bundle URL should be a vaild URL." );
+        }
+
+        return retval;
     }
 
-    @Override
-    public boolean ordered()
+    private BaseLiferayWorkspaceOp op()
     {
-        return true;
+        return context( BaseLiferayWorkspaceOp.class );
     }
 
 }

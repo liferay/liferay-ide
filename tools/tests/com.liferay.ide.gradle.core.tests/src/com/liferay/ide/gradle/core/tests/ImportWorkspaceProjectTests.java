@@ -28,7 +28,7 @@ import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
-import com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 
 import java.io.File;
 import java.io.FileInputStream;

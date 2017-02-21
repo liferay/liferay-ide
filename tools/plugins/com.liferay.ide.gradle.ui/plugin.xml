@@ -2,41 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.newWizards">
-         <wizard
-            category="com.liferay.ide.newWizards"
-            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
-            icon="icons/e16/liferay_logo_16.png"
-            id="com.liferay.ide.gradle.ui.workspace.newLiferayWorkspaceWizard"
-            name="Liferay Workspace Project"
-            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
-            project="true">
-         <class class="com.liferay.ide.gradle.ui.workspace.NewLiferayWorkspaceWizard">
-			<parameter name="liferay_project" value="true"/>
-			<parameter name="menuIndex" value="3" />
-         </class>
-         <description>
-            Create a new Liferay Workspace project for developing modules and themes for Liferay 7
-         </description>
-         <selection
-               class="org.eclipse.core.resources.IResource">
-         </selection>
-      </wizard>
-   </extension>
-   <extension
-         point="org.eclipse.ui.importWizards">
-         <wizard
-            category="com.liferay.ide.projects.import"
-            class="com.liferay.ide.gradle.ui.workspace.ImportLiferayWorkspaceWizard"
-            icon="icons/e16/liferay_logo_16.png"
-            id="com.liferay.ide.gradle.ui.workspace.workspaceImportWizard"
-            name="Liferay Workspace Project">
-         <description>
-            Import an existing Liferay Workspace
-         </description>
-      </wizard>
-   </extension>
-   <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             adaptable="true"

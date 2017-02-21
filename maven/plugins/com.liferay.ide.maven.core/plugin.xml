@@ -52,6 +52,14 @@
             shortName="maven-module"
             projectType="module">
       </liferayProjectProvider>
+      <liferayProjectProvider
+            class="com.liferay.ide.maven.core.LiferayMavenWorkspaceProjectProvider"
+            displayName="Maven"
+            id="com.liferay.ide.maven.core.LiferayMavenWorkspaceProjectProvider"
+            priority="high"
+            projectType="workspace"
+            shortName="maven-liferay-workspace">
+      </liferayProjectProvider>
    </extension>
    <extension
          id="com.liferay.ide.maven.core.configurationProblem"

@@ -17,39 +17,47 @@
  -->
 <definition>
     <import>
-        <package>org.eclipse.sapphire.ui.renderers.swt</package>
-        <package>com.liferay.ide.project.ui.action</package>
-        <package>com.liferay.ide.project.ui.wizard</package>
-        <package>org.eclipse.sapphire.ui.forms.swt</package>
+        <package>com.liferay.ide.project.ui.modules</package>
     </import>
     <wizard>
-        <id>ImportLiferayWorkspaceWizard</id>
-        <element-type>com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp</element-type>
-        <label>Import Liferay Workspace</label>
+        <id>NewLiferayWorkspaceWizard</id>
+        <label>New Liferay Workspace</label>
         <page>
-            <id>ImportLiferayWorkspacePage</id>
-            <label>Import Liferay Workspace</label>
+            <id>LiferayWorkspacePage</id>
+            <label>Liferay Workspace</label>
             <content>
-                <property-editor>WorkspaceLocation</property-editor>
+                <property-editor>WorkspaceName</property-editor>
+                <spacer/>
+                <property-editor>
+                    <property>UseDefaultLocation</property>
+                </property-editor>
+                <property-editor>
+                    <property>Location</property>
+                </property-editor>
+                <spacer/>
+                <property-editor>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                    <property>ProjectProvider</property>
+                </property-editor>
                 <spacer></spacer>
                 <property-editor>
-                    <visible-when>${ Severity(Validation(workspaceLocation)) == 'OK' &amp;&amp; hasBundlesDir == 'false' }</visible-when>
+                    <label>Download Liferay bundle</label>
                     <property>provisionLiferayBundle</property>
                 </property-editor>
                 <property-editor>
-                    <visible-when>${ hasBundlesDir == 'true' || provisionLiferayBundle == 'true' }</visible-when>
+                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
                     <property>serverName</property>
                 </property-editor>
                 <property-editor>
                     <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
                     <property>bundleUrl</property>
-                    <label>Bundle url</label>
                 </property-editor>
                 <spacer></spacer>
                 <custom>
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
-                </custom>                
+                </custom>
             </content>
+            <description>Create a new liferay workspace</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -59,9 +67,9 @@
             <margin-horizontal>0</margin-horizontal>
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
-            <description>Select location of Liferay workspace parent directory.</description>
         </page>
-        <description>Import Liferay Workspace</description>
+        <description>Create a new Liferay Workspace project for developing modules and themes for Liferay 7</description>
         <image>NewLiferayWorkspaceWizard.png</image>
+        <element-type>com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp</element-type>
     </wizard>
 </definition>

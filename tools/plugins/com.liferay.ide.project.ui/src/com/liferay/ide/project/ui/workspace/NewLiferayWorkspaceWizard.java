@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.workspace;
+package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
@@ -46,15 +46,15 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Andy Wu
  */
 @SuppressWarnings( "restriction" )
-public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWorkspaceOp>
+public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspaceOp>
     implements IWorkbenchWizard, INewWizard
 {
 
     private boolean firstErrorMessageRemoved = false;
 
-    public ImportLiferayWorkspaceWizard()
+    public NewLiferayWorkspaceWizard()
     {
-        super( createDefaultOp(), DefinitionLoader.sdef( ImportLiferayWorkspaceWizard.class ).wizard() );
+        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayWorkspaceWizard.class ).wizard() );
     }
 
     private void addToWorkingSets( IProject newProject ) throws Exception
@@ -95,11 +95,12 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
                 {
                     if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
                     {
-                        wizardPage.setMessage( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
+                        wizardPage.setMessage(
+                            LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
                     }
                     else
                     {
-                        wizardPage.setMessage( "Please select the workspace location.", SapphireWizardPage.NONE );
+                        wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE );
                     }
                 }
                 catch( CoreException e )
@@ -114,11 +115,16 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
         return wizardPages;
     }
 
+    @Override
+    public void init( IWorkbench workbench, IStructuredSelection selection )
+    {
+    }
+
     private void openLiferayPerspective( IProject newProject )
     {
         final IWorkbench workbench = PlatformUI.getWorkbench();
-        // open the "final" perspective
-        final IConfigurationElement element = new DelegateConfigurationElement( null)
+
+        final IConfigurationElement element = new DelegateConfigurationElement( null )
         {
 
             @Override
@@ -144,9 +150,9 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
     {
         super.performPostFinish();
 
-        final ImportLiferayWorkspaceOp op = element().nearest( ImportLiferayWorkspaceOp.class );
+        final NewLiferayWorkspaceOp op = element().nearest( NewLiferayWorkspaceOp.class );
 
-        final IProject newProject = CoreUtil.getProject( op.getWorkspaceLocation().content().lastSegment() );
+        final IProject newProject = CoreUtil.getProject( op.getWorkspaceName().content() );
 
         try
         {
@@ -160,16 +166,10 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
         openLiferayPerspective( newProject );
 
         ProjectExplorerLayoutUtil.setNested( true );
-
     }
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
+    private static NewLiferayWorkspaceOp createDefaultOp()
     {
-    }
-
-    private static ImportLiferayWorkspaceOp createDefaultOp()
-    {
-        return ImportLiferayWorkspaceOp.TYPE.instantiate();
+        return NewLiferayWorkspaceOp.TYPE.instantiate();
     }
 }

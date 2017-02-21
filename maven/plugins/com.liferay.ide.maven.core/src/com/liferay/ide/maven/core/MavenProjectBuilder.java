@@ -450,6 +450,8 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
     public IStatus execInitBundle( IProject project, String taskName, String bundleUrl, IProgressMonitor monitor )
         throws CoreException
     {
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
+        execMavenLaunch( project, "liferay:init-bundle", facade, monitor );
         return Status.OK_STATUS;
     }
 

@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.workspace;
+package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
@@ -46,15 +46,15 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Andy Wu
  */
 @SuppressWarnings( "restriction" )
-public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspaceOp>
+public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWorkspaceOp>
     implements IWorkbenchWizard, INewWizard
 {
 
     private boolean firstErrorMessageRemoved = false;
 
-    public NewLiferayWorkspaceWizard()
+    public ImportLiferayWorkspaceWizard()
     {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayWorkspaceWizard.class ).wizard() );
+        super( createDefaultOp(), DefinitionLoader.sdef( ImportLiferayWorkspaceWizard.class ).wizard() );
     }
 
     private void addToWorkingSets( IProject newProject ) throws Exception
@@ -95,12 +95,11 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
                 {
                     if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
                     {
-                        wizardPage.setMessage(
-                            LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
+                        wizardPage.setMessage( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
                     }
                     else
                     {
-                        wizardPage.setMessage( "Please enter the workspace name.", SapphireWizardPage.NONE );
+                        wizardPage.setMessage( "Please select the workspace location.", SapphireWizardPage.NONE );
                     }
                 }
                 catch( CoreException e )
@@ -115,16 +114,11 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
         return wizardPages;
     }
 
-    @Override
-    public void init( IWorkbench workbench, IStructuredSelection selection )
-    {
-    }
-
     private void openLiferayPerspective( IProject newProject )
     {
         final IWorkbench workbench = PlatformUI.getWorkbench();
-
-        final IConfigurationElement element = new DelegateConfigurationElement( null )
+        // open the "final" perspective
+        final IConfigurationElement element = new DelegateConfigurationElement( null)
         {
 
             @Override
@@ -150,9 +144,9 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
     {
         super.performPostFinish();
 
-        final NewLiferayWorkspaceOp op = element().nearest( NewLiferayWorkspaceOp.class );
+        final ImportLiferayWorkspaceOp op = element().nearest( ImportLiferayWorkspaceOp.class );
 
-        final IProject newProject = CoreUtil.getProject( op.getWorkspaceName().content() );
+        final IProject newProject = CoreUtil.getProject( op.getWorkspaceLocation().content().lastSegment() );
 
         try
         {
@@ -166,10 +160,16 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
         openLiferayPerspective( newProject );
 
         ProjectExplorerLayoutUtil.setNested( true );
+
     }
 
-    private static NewLiferayWorkspaceOp createDefaultOp()
+    @Override
+    public void init( IWorkbench workbench, IStructuredSelection selection )
     {
-        return NewLiferayWorkspaceOp.TYPE.instantiate();
+    }
+
+    private static ImportLiferayWorkspaceOp createDefaultOp()
+    {
+        return ImportLiferayWorkspaceOp.TYPE.instantiate();
     }
 }

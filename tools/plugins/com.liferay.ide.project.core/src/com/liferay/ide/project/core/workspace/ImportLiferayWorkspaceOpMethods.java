@@ -13,9 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.workspace;
+package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -45,7 +45,7 @@ public class ImportLiferayWorkspaceOpMethods
 
         try
         {
-            LiferayWorkspaceProjectProvider provider = new LiferayWorkspaceProjectProvider();
+            final NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = op.getProjectProvider().content( true );
 
             String location = op.getWorkspaceLocation().content().toOSString();
 
@@ -57,7 +57,7 @@ public class ImportLiferayWorkspaceOpMethods
 
             final IStatus importStatus;
 
-            if( isInitBundle && !isHasBundlesDir )
+/*            if( isInitBundle && !isHasBundlesDir )
             {
                 importStatus = provider.importProject( location, monitor, "initBundle", bundleUrl );
             }
@@ -66,7 +66,7 @@ public class ImportLiferayWorkspaceOpMethods
                 importStatus = provider.importProject( location, monitor, null, null );
             }
 
-            retval = StatusBridge.create( importStatus );
+            retval = StatusBridge.create( importStatus );*/
 
             if( !retval.ok() || retval.exception() != null )
             {

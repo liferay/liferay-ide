@@ -13,40 +13,31 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.workspace;
+package com.liferay.ide.project.core.workspace;
 
-import org.apache.xerces.util.URI;
-import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.services.ValidationService;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.sapphire.PossibleValuesService;
+
+import com.liferay.ide.project.core.util.ProjectUtil;
 
 /**
- * @author Terry Jia
+ * @author Joye Luo
  */
-public class BundleUrlValidationService extends ValidationService
+public class WorkspaceProjectProviderPossibleValuesService extends PossibleValuesService
 {
 
     @Override
-    protected Status compute()
+    protected void compute( Set<String> values )
     {
-        Status retval = Status.createOkStatus();
-
-        String bundleUrl = op().getBundleUrl().content();
-
-        try
-        {
-            new URI( bundleUrl );
-        }
-        catch( Exception e )
-        {
-            retval = Status.createErrorStatus( "The bundle URL should be a vaild URL." );
-        }
-
-        return retval;
+        List<String> possibleValues = ProjectUtil.getProjectProviderPossibleValue( "workspace" );
+        values.addAll( possibleValues );
     }
 
-    private BaseLiferayWorkspaceOp op()
+    @Override
+    public boolean ordered()
     {
-        return context( BaseLiferayWorkspaceOp.class );
+        return true;
     }
-
 }

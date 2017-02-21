@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.workspace;
+package com.liferay.ide.project.core.workspace;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -22,15 +22,19 @@ import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
-import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 /**
  * @author Gregory Amerson
  */
 public interface BaseLiferayWorkspaceOp extends ExecutableElement
 {
+    public static final String defaultBundleUrl =
+                    "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
 
     ElementType TYPE = new ElementType( BaseLiferayWorkspaceOp.class );
 
@@ -55,11 +59,23 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
 
     // *** bundleUrl ***
 
-    @DefaultValue( text = LiferayWorkspaceProjectProvider.defaultBundleUrl )
+    @DefaultValue( text = defaultBundleUrl )
     @Service( impl = BundleUrlValidationService.class )
     ValueProperty PROP_BUNDLE_URL = new ValueProperty( TYPE, "bundleUrl" );
 
     Value<String> getBundleUrl();
     void setBundleUrl( String value );
+
+ // *** ProjectProvider ***
+
+    @Type( base = ILiferayProjectProvider.class )
+    @Label( standard = "build type" )
+    @Service( impl = WorkspaceProjectProviderPossibleValuesService.class )
+    @Service( impl = WorkspaceProjectProviderDefaultValueService.class )
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
+
+    Value<NewLiferayProjectProvider<NewLiferayWorkspaceOp>> getProjectProvider();
+    void setProjectProvider( String value );
+    void setProjectProvider( NewLiferayProjectProvider<NewLiferayWorkspaceOp> value );
 
 }

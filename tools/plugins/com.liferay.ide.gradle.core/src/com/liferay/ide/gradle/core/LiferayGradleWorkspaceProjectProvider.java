@@ -19,7 +19,7 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.gradle.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
@@ -44,14 +44,14 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Terry Jia
  */
-public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvider
+public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjectProvider
     implements NewLiferayProjectProvider<NewLiferayWorkspaceOp>
 {
 
     public static final String defaultBundleUrl =
         "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
 
-    public LiferayWorkspaceProjectProvider()
+    public LiferayGradleWorkspaceProjectProvider()
     {
         super( new Class<?>[] { IProject.class } );
     }
@@ -80,6 +80,26 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
             retval = ProjectCore.createErrorStatus( e );
         }
 
+        String workspaceLocation = location.append( wsName ).toPortableString();
+        boolean isInitBundle = op.getProvisionLiferayBundle().content();
+        final String bundleUrl = op.getBundleUrl().content( false );
+
+        IStatus importStatus = null;
+
+        if( isInitBundle )
+        {
+            importStatus = importProject( workspaceLocation, monitor, "initBundle", bundleUrl );
+        }
+
+        importStatus = importProject( workspaceLocation, monitor, null, null );
+
+        retval = importStatus;
+
+        if( !retval.isOK() )
+        {
+            return retval;
+        }
+
         return retval;
     }
 
@@ -87,7 +107,7 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
     {
         try
         {
-            final IStatus importJob =  GradleUtil.importGradleProject( new File(location) , monitor );
+            final IStatus importJob = GradleUtil.importGradleProject( new File( location ), monitor );
 
             if( !importJob.isOK() || importJob.getException() != null )
             {
@@ -114,7 +134,8 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
 
                     String newContent = content + separator + bundleUrlProp;
 
-                    gradlePropertiesFile.setContents( new ByteArrayInputStream( newContent.getBytes() ), IResource.FORCE, monitor );
+                    gradlePropertiesFile.setContents(
+                        new ByteArrayInputStream( newContent.getBytes() ), IResource.FORCE, monitor );
                 }
 
                 GradleUtil.runGradleTask( project, extraOperation, monitor );
@@ -125,7 +146,7 @@ public class LiferayWorkspaceProjectProvider extends AbstractLiferayProjectProvi
         }
         catch( Exception e )
         {
-            return GradleCore.createErrorStatus( "import Liferay workspace project error" , e );
+            return GradleCore.createErrorStatus( "import Liferay workspace project error", e );
         }
 
         return Status.OK_STATUS;

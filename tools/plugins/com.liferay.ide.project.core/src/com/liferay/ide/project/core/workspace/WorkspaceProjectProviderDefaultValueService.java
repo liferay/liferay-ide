@@ -13,33 +13,35 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.modules;
+package com.liferay.ide.project.core.workspace;
 
+import org.eclipse.sapphire.DefaultValueService;
+
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
-import java.util.List;
-import java.util.Set;
-
-import org.eclipse.sapphire.PossibleValuesService;
-
 /**
- * @author Simon Jiang
+ * @author Joye Luo
  */
-public class ModuleProjectProviderPossibleValuesService extends PossibleValuesService
+public class WorkspaceProjectProviderDefaultValueService extends DefaultValueService
 {
 
     @Override
-    protected void compute( Set<String> values )
+    protected String compute()
     {
-        List<String> possibleValues = ProjectUtil.getProjectProviderPossibleValue( "module" );
+        String retval = null;
 
-        values.addAll( possibleValues );
-    }
+        retval = ProjectUtil.getSelectProjectBuildType( ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION );
 
-    @Override
-    public boolean ordered()
-    {
-        return true;
+        if( retval != null )
+        {
+            return retval;
+        }
+        else
+        {
+            retval = "gradle-liferay-workspace";
+            return retval;
+        }
     }
 
 }

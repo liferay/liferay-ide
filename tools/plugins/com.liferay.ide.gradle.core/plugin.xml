@@ -18,10 +18,10 @@
             projectType="module-fragment">
       </liferayProjectProvider>
       <liferayProjectProvider
-            class="com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider"
+            class="com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider"
             displayName="Liferay Workspace Project Provider"
-            id="com.liferay.ide.gradle.core.liferayWorkspaceProjectProvider"
-            shortName="liferay-workspace"
+            id="com.liferay.ide.gradle.core.liferayGradleWorkspaceProjectProvider"
+            shortName="gradle-liferay-workspace"
             projectType="workspace">
       </liferayProjectProvider>
    </extension>

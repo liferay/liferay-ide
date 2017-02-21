@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -13,12 +14,12 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.workspace;
+package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.IPath;
@@ -48,12 +49,11 @@ public class NewLiferayWorkspaceOpMethods
         {
             final String wsName = op.getWorkspaceName().content();
 
-            LiferayWorkspaceProjectProvider provider =
-                (LiferayWorkspaceProjectProvider) LiferayCore.getProvider( "liferay-workspace" );
+            final NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = op.getProjectProvider().content( true );
 
-            IStatus createStatus = provider.createNewProject( op, monitor );
+            final IStatus status = provider.createNewProject( op, monitor );
 
-            retval = StatusBridge.create( createStatus );
+            retval = StatusBridge.create( status );
 
             if( !retval.ok() )
             {
@@ -63,33 +63,26 @@ public class NewLiferayWorkspaceOpMethods
             String location = op.getLocation().content().append( wsName ).toPortableString();
 
             boolean isInitBundle = op.getProvisionLiferayBundle().content();
-            final String bundleUrl = op.getBundleUrl().content( false );
-
-            IStatus importStatus = null;
-
-            if( isInitBundle )
-            {
-                importStatus = provider.importProject( location, monitor, "initBundle", bundleUrl );
-            }
-            else
-            {
-                importStatus = provider.importProject( location, monitor, null, null );
-            }
-
-            retval = StatusBridge.create( importStatus );
-
-            if( !retval.ok() )
-            {
-                return retval;
-            }
 
             if( isInitBundle )
             {
                 String serverRuntimeName = op.getServerName().content();
+                IPath bundlesLocation = null;
 
-                final IPath bundlesLocation = new Path( location ).append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location )  );
+                if( op.getProjectProvider().text().equals( "gradle-liferay-workspace" ) )
+                {
+                    bundlesLocation =
+                        new Path( location ).append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location ) );
+                }
+                else
+                {
+                    bundlesLocation =  new Path( location ).append( "bundles" );
+                }
 
+                if( bundlesLocation != null && bundlesLocation.toFile().exists())
+                {
                 ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
+                }
             }
         }
         catch( Exception e )
@@ -98,9 +91,11 @@ public class NewLiferayWorkspaceOpMethods
 
             ProjectCore.logError( msg, e );
 
-            return Status.createErrorStatus( msg , e );
+            return Status.createErrorStatus( msg, e );
         }
 
+        ProjectUtil.updateProjectBuildTypePrefs(
+            op.getProjectProvider().text(), ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION );
         return retval;
     }
 }

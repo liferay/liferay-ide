@@ -18,6 +18,7 @@ package com.liferay.ide.project.core.util;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayProject;
+import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.core.IWebProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
@@ -25,6 +26,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.IPortletFramework;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.PluginClasspathContainerInitializer;
 import com.liferay.ide.project.core.PluginsSDKBundleProject;
 import com.liferay.ide.project.core.ProjectCore;
@@ -48,6 +50,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
@@ -70,6 +73,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -1114,6 +1121,23 @@ public class ProjectUtil
         return ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
     }
 
+    public static List<String> getProjectProviderPossibleValue( String projectType )
+    {
+        List<String> possibleValues = new ArrayList<String>();
+
+        for( final ILiferayProjectProvider provider : LiferayCore.getProviders( projectType ) )
+        {
+            if( provider instanceof NewLiferayProjectProvider<?> )
+            {
+                possibleValues.add( provider.getShortName() );
+            }
+        }
+
+        Collections.sort( possibleValues );
+
+        return possibleValues;
+    }
+
     public static ProjectRecord getProjectRecordForDir( String dir )
     {
         ProjectRecord projectRecord = null;
@@ -1182,6 +1206,30 @@ public class ProjectUtil
 
         return requiredSuffix;
     }
+
+    public static String getSelectProjectBuildType ( String projectBuildTypeOption )
+    {
+        String retval = null;
+
+        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+        final String selectProjectBuildType =
+            Platform.getPreferencesService().getString(
+                ProjectCore.PLUGIN_ID, projectBuildTypeOption, null,
+                    prefContexts );
+
+        if( selectProjectBuildType != null )
+        {
+            final ILiferayProjectProvider provider = LiferayCore.getProvider( selectProjectBuildType );
+
+            if (provider != null)
+            {
+                retval = selectProjectBuildType;
+            }
+        }
+
+        return retval;
+    }
+
 
     public static String getBundleSymbolicNameFromBND(IProject project)
     {
@@ -1708,6 +1756,23 @@ public class ProjectUtil
         if( ddModel != null )
         {
             ddModel.setBooleanProperty( IJ2EEFacetInstallDataModelProperties.GENERATE_DD, generateDD );
+        }
+    }
+
+    public static void updateProjectBuildTypePrefs( String projectProvider, String projectBuildTypeOption )
+    {
+        try
+        {
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+            prefs.put( projectBuildTypeOption, projectProvider );
+
+            prefs.flush();
+        }
+        catch( Exception e )
+        {
+            final String msg = "Error updating default project build type."; //$NON-NLS-1$
+            ProjectCore.logError( msg, e );
         }
     }
 
