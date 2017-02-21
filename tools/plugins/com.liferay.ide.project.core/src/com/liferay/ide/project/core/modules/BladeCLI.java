@@ -239,4 +239,9 @@ public class BladeCLI
         FileUtil.copyFile( latestBladeJar, bladeJarInstancePath.toFile() );
     }
 
+    public static synchronized void restoreOriginal()
+    {
+        bladeJarInstancePath.toFile().delete();
+    }
+
 }

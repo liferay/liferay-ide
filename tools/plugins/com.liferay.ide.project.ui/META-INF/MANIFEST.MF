@@ -67,7 +67,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swt,
  org.eclipse.sapphire.platform,
  org.eclipse.jdt.ui,
- org.eclipse.ltk.core.refactoring 
+ org.eclipse.ltk.core.refactoring,
+ biz.aQute.bndlib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.ide.project.ui,

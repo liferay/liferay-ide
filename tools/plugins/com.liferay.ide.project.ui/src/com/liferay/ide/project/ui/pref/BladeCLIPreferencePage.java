@@ -15,15 +15,17 @@
 
 package com.liferay.ide.project.ui.pref;
 
+import aQute.bnd.osgi.Domain;
+
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
-import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
+import java.io.File;
+import java.io.IOException;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -49,6 +51,7 @@ import org.osgi.framework.Version;
 
 /**
  * @author Andy Wu
+ * @author Gregory Amerson
  */
 public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
@@ -73,78 +76,121 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
 
         Label currentVersionLabel = new Label( composite, SWT.NONE );
 
-        currentVersionLabel.setText( "Current Blade Version:" );
+        currentVersionLabel.setText( "Current Embedded Blade CLI Version:" );
 
         Text currentBladeVersionText = new Text( composite, SWT.BORDER );
+        currentBladeVersionText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
 
         currentBladeVersionText.setEditable( false );
-        currentBladeVersionText.setText( " " + BladeCLI.getCurrentVersion() + " " );
+
+        try
+        {
+            currentBladeVersionText.setText( getCurrentBladeVersion() );
+        }
+        catch( Exception e )
+        {
+        }
 
         Label latestVersionLabel = new Label( composite, SWT.NONE );
 
         latestVersionLabel.setText( "Latest Blade Version:" );
 
         Text latestBladeVersionText = new Text( composite, SWT.BORDER );
+        latestBladeVersionText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
 
         latestBladeVersionText.setEditable( false );
-        latestBladeVersionText.setText( " checking...                   " );
+        latestBladeVersionText.setText( "Checking..." );
 
         Button updateBladeButton = new Button( group, SWT.PUSH );
 
-        updateBladeButton.setText( "Update Blade to Latest Version" );
+        updateBladeButton.setText( "Update Embedded Blade to Latest Version" );
         updateBladeButton.setEnabled( false );
+
+        Button restoreBladeJarButton = new Button( group, SWT.PUSH );
+
+        restoreBladeJarButton.setText( "Restore Embedded Blade CLI to Original Version" );
 
         updateBladeButton.addSelectionListener( new SelectionAdapter()
         {
-
             @Override
             public void widgetSelected( SelectionEvent event )
             {
                 try
                 {
-                    BladeCLI.updateBladeToLatest();
+                    File newBladeJar = BladeCLI.fetchBladeJarFromRepo();
 
-                    currentBladeVersionText.setText( " " + BladeCLI.getCurrentVersion() + " " );
+                    if( newBladeJar != null )
+                    {
+                        BladeCLI.addToLocalInstance( newBladeJar );
+                    }
 
-                    MessageDialog.openInformation( getShell(), "Blade", "update successful" );
+                    currentBladeVersionText.setText( getCurrentBladeVersion() );
+
+                    MessageDialog.openInformation( getShell(), "Blade CLI", "Update successful." );
+
+                    updateBladeButton.setEnabled( false );
                 }
-                catch( BladeCLIException e )
+                catch( Exception e )
                 {
-                    MessageDialog.openError( getShell(), "Blade", e.getMessage() );
+                    MessageDialog.openError( getShell(), "Blade CLI", "Could not update Blade CLI: " + e.getMessage() );
                 }
             }
         } );
 
-        Job job = new WorkspaceJob( "checking latest blade version..." )
+        restoreBladeJarButton.addSelectionListener( new SelectionAdapter()
         {
-
             @Override
-            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
+            public void widgetSelected( SelectionEvent event )
+            {
+                BladeCLI.restoreOriginal();
+
+                try
+                {
+                    currentBladeVersionText.setText( getCurrentBladeVersion() );
+
+                    restoreBladeJarButton.setEnabled( false );
+                }
+                catch( Exception e )
+                {
+                }
+            }
+        });
+
+        Job job = new Job( "Checking latest blade cli version..." )
+        {
+            @Override
+            public IStatus run( IProgressMonitor monitor )
             {
                 try
                 {
-                    String latestVersionStr = BladeCLI.fetchLatestVersion();
+                    String currentVersion = getCurrentBladeVersion();
 
-                    Version latestVersion = new Version( latestVersionStr );
-                    Version currentVersion = new Version( BladeCLI.getCurrentVersion() );
+                    File updateJar = BladeCLI.fetchBladeJarFromRepo();
 
-                    final boolean needUpdate = latestVersion.compareTo( currentVersion ) > 0 ? true : false;
+                    String newVersion = Domain.domain( updateJar ).getBundleVersion();
+
+                    boolean newAvailable = new Version( newVersion ).compareTo( new Version( currentVersion ) ) > 0;
 
                     UIUtil.async( new Runnable()
                     {
-
                         @Override
                         public void run()
                         {
-                            latestBladeVersionText.setText( " " + latestVersionStr + " " );
+                            if( newAvailable )
+                            {
+                                latestBladeVersionText.setText( newVersion );
+                            }
+                            else
+                            {
+                                latestBladeVersionText.setText( "" );
+                            }
 
-                            updateBladeButton.setEnabled( needUpdate );
+                            updateBladeButton.setEnabled( newAvailable );
                         }
-                    } );
+                    });
                 }
-                catch( BladeCLIException e )
+                catch( Exception e )
                 {
-                    return ProjectUI.createErrorStatus( "get blade version error", e );
                 }
 
                 return Status.OK_STATUS;
@@ -152,7 +198,11 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
         };
 
         job.schedule();
+    }
 
+    private String getCurrentBladeVersion() throws IOException, BladeCLIException
+    {
+        return new Version( Domain.domain( BladeCLI.getBladeCLIPath().toFile() ).getBundleVersion() ).toString();
     }
 
     @Override
