@@ -53,7 +53,7 @@ public class BladeCLI
     static final File _settingsDir = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
     static final File repoCache = new File( _settingsDir, "repoCache" );
     public static final String BLADE_CLI_REPO_URL = "BLADE_CLI_REPO_URL";
-    static final String defaultRepoUrl = "http://releases.liferay.com/tools/blade-cli/2.x/";
+    private static final String defaultRepoUrl = "https://releases.liferay.com/tools/blade-cli/2.x/";
 
     static File latestBladeFile;
 
