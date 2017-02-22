@@ -13,36 +13,35 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.server.util.ServerUtil;
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.core.util.CoreUtil;
 
-import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.services.ValidationService;
-import org.eclipse.wst.server.core.IRuntime;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.sapphire.DefaultValueService;
 
 /**
  * @author Terry Jia
  */
-public class LiferayRuntimeNameValidationService extends ValidationService
+public class NewModuleFragmentProjectNameDefaultValueService extends DefaultValueService
 {
 
     @Override
-    protected Status compute()
+    protected String compute()
     {
-        Status retval = Status.createOkStatus();
+        IProject[] allProjects = CoreUtil.getAllProjects();
 
-        final NewModuleFragmentOp op = context( NewModuleFragmentOp.class );
-
-        final String runtimeName = op.getLiferayRuntimeName().content( true );
-
-        IRuntime runtime = ServerUtil.getRuntime( runtimeName );
-
-        if( runtime == null )
+        for( IProject project : allProjects )
         {
-            retval = Status.createErrorStatus( "Liferay runtime must be configured." );
-        }
+            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
-        return retval;
+            if( bundleProject != null && bundleProject.isFragmentBundle() )
+            {
+                return project.getName();
+            }
+        }
+        return null;
     }
 }

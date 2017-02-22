@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.modules;
+package com.liferay.ide.project.ui.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
 import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;

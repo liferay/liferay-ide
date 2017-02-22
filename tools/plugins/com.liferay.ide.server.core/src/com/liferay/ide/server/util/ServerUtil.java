@@ -96,6 +96,7 @@ import org.w3c.dom.NodeList;
  * @author Tao Tao
  * @author Kuo Zhang
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @SuppressWarnings( "restriction" )
 public class ServerUtil
@@ -621,7 +622,7 @@ public class ServerUtil
                             @Override
                             public boolean accept( File dir, String name )
                             {
-                                return name.matches( ".*\\.web\\.jar" );
+                                return name.matches( ".*\\.jar" );
                             }
                         } );
 
@@ -654,7 +655,7 @@ public class ServerUtil
 
                         String name = entry.getName();
 
-                        if( name.contains( ".web" ) )
+                        if( name.endsWith( ".jar" ) )
                         {
                             bundles.add( name );
                         }

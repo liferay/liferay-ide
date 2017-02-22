@@ -15,8 +15,6 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 
 import org.eclipse.sapphire.ElementList;
@@ -29,12 +27,9 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
-import org.eclipse.sapphire.modeling.annotations.Required;
-import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
@@ -44,17 +39,6 @@ public interface BaseModuleOp extends ExecutableElement
 {
 
     ElementType TYPE = new ElementType( BaseModuleOp.class );
-
-    // *** ProjectName ***
-
-    @Label( standard = "project name" )
-    @Listeners( ModuleProjectNameListener.class )
-    @Service( impl = ModuleProjectNameValidationService.class )
-    @Required
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
-
-    Value<String> getProjectName();
-    void setProjectName( String value );
 
     // *** InitialSelectionPath ***
 
@@ -79,20 +63,6 @@ public interface BaseModuleOp extends ExecutableElement
     void setUseDefaultLocation( String value );
     void setUseDefaultLocation( Boolean value );
 
-    // *** ProjectLocation ***
-
-    @Type( base = Path.class )
-    @AbsolutePath
-    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "location" )
-    @Service( impl = ModuleProjectLocationValidationService.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
-
-    Value<Path> getLocation();
-    void setLocation( String value );
-    void setLocation( Path value );
-
     // *** FinalProjectName ***
 
     @DefaultValue( text = "${ProjectName}" )
@@ -107,18 +77,5 @@ public interface BaseModuleOp extends ExecutableElement
     ListProperty PROP_PROJECT_NAMES = new ListProperty( TYPE, "ProjectNames" );
 
     ElementList<ProjectName> getProjectNames();
-
-    // *** ProjectProvider ***
-
-    @Type( base = ILiferayProjectProvider.class )
-    @Label( standard = "build type" )
-    @Listeners( ModuleProjectNameListener.class )
-    @Service( impl = ModuleProjectProviderPossibleValuesService.class )
-    @Service( impl = ModuleProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
-
-    Value<NewLiferayProjectProvider<NewLiferayModuleProjectOp>> getProjectProvider();
-    void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider<NewLiferayModuleProjectOp> value );
 
 }

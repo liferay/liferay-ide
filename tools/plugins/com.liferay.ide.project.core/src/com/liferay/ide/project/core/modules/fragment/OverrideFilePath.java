@@ -15,7 +15,7 @@
  * 		Gregory Amerson - initial implementation and ongoing maintenance
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
 import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementType;

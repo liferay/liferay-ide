@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.action;
+package com.liferay.ide.project.ui.modules.fragment.action;
 
-import com.liferay.ide.gradle.core.GradleCore;
-import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
-import com.liferay.ide.gradle.core.modules.OverrideFilePath;
+import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
+import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -47,13 +47,14 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
 
         final String projectName = op.getProjectName().content();
 
-        final OSGiBundleFileSelectionDialog dialog = new OSGiBundleFileSelectionDialog( null, currentFiles, projectName );
+        final OSGiBundleFileSelectionDialog dialog =
+            new OSGiBundleFileSelectionDialog( null, currentFiles, projectName );
 
         final String runtimeName = op.getLiferayRuntimeName().content();
 
         final IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 
-        final IPath temp = GradleCore.getDefault().getStateLocation();
+        final IPath temp = ProjectCore.getDefault().getStateLocation();
 
         dialog.setTitle( "Add files from OSGi bundle to override" );
 
@@ -75,7 +76,7 @@ public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
 
                 if( !module.exists() )
                 {
-                    module = GradleCore.getDefault().getStateLocation().append( currentOSGiBundle ).toFile();
+                    module = ProjectCore.getDefault().getStateLocation().append( currentOSGiBundle ).toFile();
                 }
 
                 dialog.setInput( module );

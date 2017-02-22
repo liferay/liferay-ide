@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
 import java.io.File;
 
@@ -29,7 +29,7 @@ import org.eclipse.sapphire.services.ValidationService;
 /**
  * @author Simon Jiang
  */
-public class ModuleProjectLocationValidationService extends ValidationService
+public class FragmentProjectLocationValidationService extends ValidationService
 {
 
     private Listener listener;
@@ -146,9 +146,9 @@ public class ModuleProjectLocationValidationService extends ValidationService
         op().getProjectProvider().attach( this.listener );
     }
 
-    private NewLiferayModuleProjectOp op()
+    private NewModuleFragmentOp op()
     {
-        return context( NewLiferayModuleProjectOp.class );
+        return context( NewModuleFragmentOp.class );
     }
 
 }

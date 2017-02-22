@@ -12,11 +12,13 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.modules;
+
+package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.model.ProjectName;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.project.core.util.ValidationUtil;
 
 import java.io.File;
@@ -35,8 +37,9 @@ import org.eclipse.sapphire.services.ValidationService;
  * @author Simon Jiang
  * @author Andy Wu
  */
-public class ModuleProjectNameValidationService extends ValidationService
+public class FragmentProjectNameValidationService extends ValidationService
 {
+
     private static final String PROJECT_NAME_REGEX = "[A-Za-z0-9_\\-.]+";
 
     private FilteredListener<PropertyContentEvent> listener;
@@ -48,12 +51,13 @@ public class ModuleProjectNameValidationService extends ValidationService
 
         listener = new FilteredListener<PropertyContentEvent>()
         {
+
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
-                if( ! event.property().definition().equals( BaseModuleOp.PROP_FINAL_PROJECT_NAME )
-                                && ! event.property().definition().equals( BaseModuleOp.PROP_PROJECT_NAMES )
-                                && ! event.property().definition().equals( ProjectName.PROP_PROJECT_NAME ) )
+                if( !event.property().definition().equals( BaseModuleOp.PROP_FINAL_PROJECT_NAME ) &&
+                    !event.property().definition().equals( BaseModuleOp.PROP_PROJECT_NAMES ) &&
+                    !event.property().definition().equals( ProjectName.PROP_PROJECT_NAME ) )
                 {
                     refresh();
                 }
@@ -68,7 +72,7 @@ public class ModuleProjectNameValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        final NewLiferayModuleProjectOp op = op();
+        final NewModuleFragmentOp op = op();
         final String currentProjectName = op.getProjectName().content();
 
         if( !CoreUtil.empty( currentProjectName ) )
@@ -132,9 +136,9 @@ public class ModuleProjectNameValidationService extends ValidationService
         return currentProjectName.matches( PROJECT_NAME_REGEX );
     }
 
-    private NewLiferayModuleProjectOp op()
+    private NewModuleFragmentOp op()
     {
-        return context( NewLiferayModuleProjectOp.class );
+        return context( NewModuleFragmentOp.class );
     }
 
 }

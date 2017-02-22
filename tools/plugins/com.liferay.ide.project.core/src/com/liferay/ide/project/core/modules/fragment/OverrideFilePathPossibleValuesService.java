@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -80,15 +80,16 @@ public class OverrideFilePathPossibleValuesService extends PossibleValuesService
 
                 File module = portalBundle.getOSGiBundlesDir().append( "modules" ).append( hostOSGiBundle ).toFile();
 
-                if (!module.exists()) {
-                    final IPath temp = GradleCore.getDefault().getStateLocation();
+                if( !module.exists() )
+                {
+                    final IPath temp = ProjectCore.getDefault().getStateLocation();
 
                     module = new File( temp.toFile(), hostOSGiBundle );
                 }
 
                 if( module.exists() )
                 {
-                    try( JarFile jar = new JarFile( module ) )
+                    try(JarFile jar = new JarFile( module ))
                     {
                         Enumeration<JarEntry> enu = jar.entries();
 

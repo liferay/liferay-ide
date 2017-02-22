@@ -13,9 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.action;
+package com.liferay.ide.project.ui.modules.fragment.action;
 
-import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;

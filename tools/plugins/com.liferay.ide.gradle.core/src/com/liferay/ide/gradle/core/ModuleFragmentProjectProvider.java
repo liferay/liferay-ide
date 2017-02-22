@@ -19,10 +19,11 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
-import com.liferay.ide.gradle.core.modules.NewModuleFragmentOp;
-import com.liferay.ide.gradle.core.modules.OverrideFilePath;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
+import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
@@ -75,7 +76,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
         final String hostBundleName = op.getHostOsgiBundle().content();
 
-        final IPath temp = GradleCore.getDefault().getStateLocation().append(
+        final IPath temp = ProjectCore.getDefault().getStateLocation().append(
             hostBundleName.substring( 0, hostBundleName.lastIndexOf( ".jar" ) ) );
 
         if( !temp.toFile().exists() )
@@ -88,7 +89,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
 
             if( !hostBundle.exists() )
             {
-                hostBundle = GradleCore.getDefault().getStateLocation().append( hostBundleName ).toFile();
+                hostBundle = ProjectCore.getDefault().getStateLocation().append( hostBundleName ).toFile();
             }
 
             try
@@ -113,8 +114,8 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
             {
                 if( content.contains( "Bundle-SymbolicName:" ) )
                 {
-                    bundleSymbolicName =
-                        content.substring( content.indexOf( "Bundle-SymbolicName:" ) + "Bundle-SymbolicName:".length() );
+                    bundleSymbolicName = content.substring(
+                        content.indexOf( "Bundle-SymbolicName:" ) + "Bundle-SymbolicName:".length() );
                 }
 
                 if( content.contains( "Bundle-Version:" ) )
@@ -232,7 +233,7 @@ public class ModuleFragmentProjectProvider extends AbstractLiferayProjectProvide
                 projects.add( liferayWorkspaceProject );
 
                 CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
-                        NewProjectHandler.IMPORT_AND_MERGE );
+                    NewProjectHandler.IMPORT_AND_MERGE );
             }
             else
             {

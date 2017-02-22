@@ -12,9 +12,13 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.gradle.core.modules;
 
+package com.liferay.ide.project.core.modules.fragment;
+
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
+import com.liferay.ide.project.core.modules.ModuleProjectNameListener;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -22,38 +26,68 @@ import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
  * @author Terry Jia
  */
 public interface NewModuleFragmentOp extends BaseModuleOp
 {
+
     ElementType TYPE = new ElementType( NewModuleFragmentOp.class );
+
+    // *** ProjectName ***
+
+    @Label( standard = "project name" )
+    @Listeners( FragmentProjectNameListener.class )
+    @Service( impl = FragmentProjectNameValidationService.class )
+    @Required
+    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
+
+    Value<String> getProjectName();
+
+    void setProjectName( String value );
+
+    // *** ProjectLocation ***
+
+    @Type( base = Path.class )
+    @AbsolutePath
+    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
+    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+    @Label( standard = "location" )
+    @Service( impl = FragmentProjectLocationValidationService.class )
+    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
+
+    Value<Path> getLocation();
+
+    void setLocation( String value );
+
+    void setLocation( Path value );
 
     // *** Liferay Runtime ***
 
-    @Services
-    (
-        value =
-        {
-            @Service( impl = LiferayRuntimeNamePossibleValuesService.class ),
-            @Service( impl = LiferayRuntimeNameDefaultValueService.class ),
-            @Service( impl = LiferayRuntimeNameValidationService.class )
-        }
-    )
+    @Services(
+                    value = { @Service( impl = LiferayRuntimeNamePossibleValuesService.class ),
+                        @Service( impl = LiferayRuntimeNameDefaultValueService.class ),
+                        @Service( impl = LiferayRuntimeNameValidationService.class ) } )
     @Required
     ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty( TYPE, "LiferayRuntimeName" );
 
     Value<String> getLiferayRuntimeName();
+
     void setLiferayRuntimeName( String value );
 
     // *** HostOSGiBundle ***
@@ -66,14 +100,16 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty( TYPE, "HostOsgiBundle" );
 
     Value<String> getHostOsgiBundle();
-    void setHostOsgiBundle(String value);
+
+    void setHostOsgiBundle( String value );
 
     // *** HostOSGiBundle ***
 
     ValueProperty PROP_LPKG_NAME = new ValueProperty( TYPE, "LpkgName" );
 
     Value<String> getLpkgName();
-    void setLpkgName(String value);
+
+    void setLpkgName( String value );
 
     // *** OverrideFiles ***
 
@@ -88,4 +124,19 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     @Override
     @DelegateImplementation( NewModuleFragmentOpMethods.class )
     Status execute( ProgressMonitor monitor );
+
+    // *** ProjectProvider ***
+
+    @Type( base = ILiferayProjectProvider.class )
+    @Label( standard = "build type" )
+    @Listeners( ModuleProjectNameListener.class )
+    @Service( impl = FragmentProjectProviderPossibleValuesService.class )
+    @Service( impl = FragmentProjectProviderDefaultValueService.class )
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
+
+    Value<NewLiferayProjectProvider<NewModuleFragmentOp>> getProjectProvider();
+
+    void setProjectProvider( String value );
+
+    void setProjectProvider( NewLiferayProjectProvider<NewModuleFragmentOp> value );
 }

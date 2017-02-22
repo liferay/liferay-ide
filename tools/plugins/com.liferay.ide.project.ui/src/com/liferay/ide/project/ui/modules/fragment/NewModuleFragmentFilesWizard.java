@@ -13,11 +13,11 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.modules;
+package com.liferay.ide.project.ui.modules.fragment;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.gradle.core.modules.NewModuleFragmentFilesOp;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentFilesOp;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;

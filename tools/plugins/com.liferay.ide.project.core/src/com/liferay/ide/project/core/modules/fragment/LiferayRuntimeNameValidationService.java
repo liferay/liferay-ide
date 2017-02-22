@@ -13,42 +13,36 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.server.util.ServerUtil;
 
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.sapphire.FilteredListener;
-import org.eclipse.sapphire.PropertyContentEvent;
+import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.services.ValidationService;
 import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
- * @author Andy Wu
  */
-public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
+public class LiferayRuntimeNameValidationService extends ValidationService
 {
 
     @Override
-    protected void handleTypedEvent( PropertyContentEvent event )
+    protected Status compute()
     {
-        NewModuleFragmentOp op = op( event );
+        Status retval = Status.createOkStatus();
 
-        final IPath temp = GradleCore.getDefault().getStateLocation();
+        final NewModuleFragmentOp op = context( NewModuleFragmentOp.class );
 
-        final String runtimeName = op.getLiferayRuntimeName().content();
-        final String hostOsgiBundle = op.getHostOsgiBundle().content();
+        final String runtimeName = op.getLiferayRuntimeName().content( true );
 
         IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 
-        ServerUtil.getModuleFileFrom70Server( runtime, hostOsgiBundle, temp );
+        if( runtime == null )
+        {
+            retval = Status.createErrorStatus( "Liferay runtime must be configured." );
+        }
 
-        op.getOverrideFiles().clear();
-    }
-
-    protected NewModuleFragmentOp op( PropertyContentEvent event )
-    {
-        return event.property().element().nearest( NewModuleFragmentOp.class );
+        return retval;
     }
 }

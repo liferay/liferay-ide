@@ -75,6 +75,9 @@ public class ProjectCore extends Plugin
 
     public static final String PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION = "project-module-default-build-type-option";
 
+    public static final String PREF_DEFAULT_MODULE_FRAGMENT_PROJECT_BUILD_TYPE_OPTION =
+        "project-module-fragment-default-build-type-option";
+
     public static final String PREF_DEFAULT_PLUGIN_PROJECT_MAVEN_GROUPID = "default-plugin-project-maven-groupid";
     public static final String PREF_DEFAULT_MODULE_PROJECT_MAVEN_GROUPID = "default-module-project-maven-groupid";
 

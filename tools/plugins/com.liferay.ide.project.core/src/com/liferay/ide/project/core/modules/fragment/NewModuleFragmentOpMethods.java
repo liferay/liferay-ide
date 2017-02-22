@@ -13,9 +13,9 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.gradle.core.ModuleFragmentProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -41,9 +41,9 @@ public class NewModuleFragmentOpMethods
 
         try
         {
-            final ModuleFragmentProjectProvider provider = new ModuleFragmentProjectProvider();
+            final NewLiferayProjectProvider<NewModuleFragmentOp> projectProvider = op.getProjectProvider().content( true );
 
-            final IStatus status = provider.createNewProject( op, monitor );
+            final IStatus status = projectProvider.createNewProject( op, monitor );
 
             retval = StatusBridge.create( status );
         }

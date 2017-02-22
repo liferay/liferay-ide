@@ -17,15 +17,15 @@
  -->
 <definition>
     <import>
-        <package>org.eclipse.sapphire.ui.renderers.swt</package>
-        <package>com.liferay.ide.gradle.ui.action</package>
-        <package>com.liferay.ide.project.ui.wizard</package>
         <package>org.eclipse.sapphire.ui.forms.swt</package>
-        <package>com.liferay.ide.gradle.ui.modules</package>
+        <package>org.eclipse.sapphire.ui.renderers.swt</package>
+        <package>com.liferay.ide.project.ui.modules.fragment</package>
+        <package>com.liferay.ide.project.ui.modules.fragment.action</package>
+        <package>com.liferay.ide.project.ui.wizard</package>
     </import>
     <wizard>
         <id>NewModuleFragmentWizard</id>
-        <element-type>com.liferay.ide.gradle.core.modules.NewModuleFragmentOp</element-type>
+        <element-type>com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp</element-type>
         <label>New Liferay Module Project Fragment</label>
         <page>
             <id>ModuleFragmentWizardPage</id>
@@ -39,6 +39,12 @@
                 <property-editor>
                     <property>Location</property>
                 </property-editor>
+                <spacer/>
+                <property-editor>
+                    <property>ProjectProvider</property>
+                    <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>
+                </property-editor>
+                <spacer/>
                 <property-editor>
                     <property>LiferayRuntimeName</property>
                     <style>Sapphire.PropertyEditor.PopUpListField.Strict</style>

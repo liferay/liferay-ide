@@ -11,6 +11,13 @@
             projectType="module">
       </liferayProjectProvider>
       <liferayProjectProvider
+            class="com.liferay.ide.gradle.core.ModuleFragmentProjectProvider"
+            displayName="Gradle Module Fragment Project Provider"
+            id="com.liferay.ide.gradle.core.gradleModuleFragmentProjectProvider"
+            shortName="gradle-module-fragment"
+            projectType="module-fragment">
+      </liferayProjectProvider>
+      <liferayProjectProvider
             class="com.liferay.ide.gradle.core.LiferayWorkspaceProjectProvider"
             displayName="Liferay Workspace Project Provider"
             id="com.liferay.ide.gradle.core.liferayWorkspaceProjectProvider"

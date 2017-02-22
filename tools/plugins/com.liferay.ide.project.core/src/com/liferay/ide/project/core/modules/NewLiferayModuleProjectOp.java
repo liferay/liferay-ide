@@ -14,19 +14,28 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
+
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
+import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
+import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
+import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 
 /**
@@ -35,6 +44,31 @@ import org.eclipse.sapphire.modeling.annotations.Whitespace;
 public interface NewLiferayModuleProjectOp extends BaseModuleOp
 {
     ElementType TYPE = new ElementType( NewLiferayModuleProjectOp.class );
+
+    // *** ProjectName ***
+
+    @Label( standard = "project name" )
+    @Listeners( ModuleProjectNameListener.class )
+    @Service( impl = ModuleProjectNameValidationService.class )
+    @Required
+    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
+
+    Value<String> getProjectName();
+    void setProjectName( String value );
+
+    // *** ProjectLocation ***
+
+    @Type( base = Path.class )
+    @AbsolutePath
+    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
+    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+    @Label( standard = "location" )
+    @Service( impl = ModuleProjectLocationValidationService.class )
+    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
+
+    Value<Path> getLocation();
+    void setLocation( String value );
+    void setLocation( Path value );
 
     // *** Archetype ***
 
@@ -114,6 +148,20 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
     @Label( standard = "Properties" )
     ListProperty PROP_PROPERTYKEYS = new ListProperty( TYPE, "PropertyKeys" );
     ElementList<PropertyKey> getPropertyKeys();
+
+
+    // *** ProjectProvider ***
+
+    @Type( base = ILiferayProjectProvider.class )
+    @Label( standard = "build type" )
+    @Listeners( ModuleProjectNameListener.class )
+    @Service( impl = ModuleProjectProviderPossibleValuesService.class )
+    @Service( impl = ModuleProjectProviderDefaultValueService.class )
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
+
+    Value<NewLiferayProjectProvider<NewLiferayModuleProjectOp>> getProjectProvider();
+    void setProjectProvider( String value );
+    void setProjectProvider( NewLiferayProjectProvider<NewLiferayModuleProjectOp> value );
 
     // *** Method: execute ***
 

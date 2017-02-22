@@ -13,10 +13,10 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.ui.action;
+package com.liferay.ide.project.ui.modules.fragment.action;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.gradle.core.modules.OverrideFilePath;
+import com.liferay.ide.project.core.modules.fragment.OverrideFilePath;
 
 import java.io.File;
 import java.io.IOException;

@@ -13,35 +13,53 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.ProjectCore;
+
+import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.sapphire.DefaultValueService;
+import org.eclipse.sapphire.PossibleValuesService;
+import org.eclipse.sapphire.Value;
+import org.eclipse.sapphire.modeling.Status;
 
 /**
  * @author Terry Jia
  */
-public class NewModuleFragmentProjectNameDefaultValueService extends DefaultValueService
+
+public class NewModuleFragmentProjectNamePossibleService extends PossibleValuesService
 {
 
     @Override
-    protected String compute()
+    public Status problem( final Value<?> value )
     {
-        IProject[] allProjects = CoreUtil.getAllProjects();
+        return Status.createOkStatus();
+    }
 
-        for( IProject project : allProjects )
+    @Override
+    protected void compute( final Set<String> values )
+    {
+        try
         {
-            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+            IProject[] allProjects = CoreUtil.getAllProjects();
 
-            if( bundleProject != null && bundleProject.isFragmentBundle() )
+            for( IProject project : allProjects )
             {
-                return project.getName();
+                final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+
+                if( bundleProject != null && bundleProject.isFragmentBundle() )
+                {
+                    values.add( project.getName() );
+                }
             }
         }
-        return null;
+        catch( Exception e )
+        {
+            ProjectCore.logError( "Get project list error. ", e );
+        }
     }
 }

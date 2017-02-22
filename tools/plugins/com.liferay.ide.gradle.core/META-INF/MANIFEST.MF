@@ -24,7 +24,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: com.liferay.blade.gradle.model,
  com.liferay.ide.gradle.core,
- com.liferay.ide.gradle.core.modules,
  com.liferay.ide.gradle.core.parser,
  com.liferay.ide.gradle.core.workspace
 Bundle-ClassPath: .,
