@@ -133,6 +133,13 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
                 {
                     gradleFile.delete( true, monitor );
                 }
+
+                IFile settingsFile = newProject.getFile( "settings.gradle" );
+
+                if( settingsFile.exists() )
+                {
+                    settingsFile.delete( true, monitor );
+                }
             }
 
             retval = Status.OK_STATUS;
