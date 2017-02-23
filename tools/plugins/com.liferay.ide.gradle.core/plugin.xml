@@ -5,14 +5,14 @@
          point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
             class="com.liferay.ide.gradle.core.GradleProjectProvider"
-            displayName="Gradle Module Project Provider"
+            displayName="Gradle"
             id="com.liferay.ide.gradle.core.gradleModuleProjectProvider"
             shortName="gradle-module"
             projectType="module">
       </liferayProjectProvider>
       <liferayProjectProvider
             class="com.liferay.ide.gradle.core.ModuleFragmentProjectProvider"
-            displayName="Gradle Module Fragment Project Provider"
+            displayName="Gradle"
             id="com.liferay.ide.gradle.core.gradleModuleFragmentProjectProvider"
             shortName="gradle-module-fragment"
             projectType="module-fragment">
