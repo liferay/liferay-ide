@@ -15,7 +15,6 @@
 package com.liferay.ide.project.core.tests.modules;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.liferay.ide.core.util.CoreUtil;
@@ -226,45 +225,4 @@ public class NewLiferayModuleProjectOpTests
         assertTrue( actual.contains( "property-test-key=property-test-value" ) );
     }
 
-    @Test
-    public void testNewLiferayModuleProjectNoGradleFiles() throws Exception
-    {
-        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
-
-        op.setProjectName( "test-servicebuilder-no-gradlefiles" );
-        op.setProjectTemplateName( "service-builder" );
-        op.setProjectProvider( "maven-module" );
-
-        Status exStatus =
-            NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
-
-        assertEquals( "OK", exStatus.message() );
-
-        IProject parentProject = CoreUtil.getProject( op.getProjectName().content() );
-        parentProject.open( new NullProgressMonitor() );
-
-        IFile gradleFile = parentProject.getFile( "build.gradle" );
-        IFile settingsFile = parentProject.getFile( "setings.gradle" );
-
-        assertFalse( gradleFile.exists() );
-        assertFalse( settingsFile.exists() );
-
-        IProject apiProject = CoreUtil.getProject( op.getProjectName().content() + "-api" );
-        apiProject.open( new NullProgressMonitor() );
-
-        gradleFile = apiProject.getFile( "build.gradle" );
-        settingsFile = apiProject.getFile( "setings.gradle" );
-
-        assertFalse( gradleFile.exists() );
-        assertFalse( settingsFile.exists() );
-
-        IProject serviceProject = CoreUtil.getProject( op.getProjectName().content() + "-service" );
-        serviceProject.open( new NullProgressMonitor() );
-
-        gradleFile = serviceProject.getFile( "build.gradle" );
-        settingsFile = serviceProject.getFile( "setings.gradle" );
-
-        assertFalse( gradleFile.exists() );
-        assertFalse( settingsFile.exists() );
-    }
 }

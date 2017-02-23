@@ -632,6 +632,48 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     }
 
     @Test
+    public void testNewLiferayModuleProjectNoGradleFiles() throws Exception
+    {
+        NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
+
+        op.setProjectName( "test-servicebuilder-no-gradlefiles" );
+        op.setProjectTemplateName( "service-builder" );
+        op.setProjectProvider( "maven-module" );
+
+        Status exStatus =
+            NewLiferayModuleProjectOpMethods.execute( op, ProgressMonitorBridge.create( new NullProgressMonitor() ) );
+
+        assertEquals( "OK", exStatus.message() );
+
+        IProject parentProject = CoreUtil.getProject( op.getProjectName().content() );
+        parentProject.open( new NullProgressMonitor() );
+
+        IFile gradleFile = parentProject.getFile( "build.gradle" );
+        IFile settingsFile = parentProject.getFile( "settings.gradle" );
+
+        assertFalse( gradleFile.exists() );
+        assertFalse( settingsFile.exists() );
+
+        IProject apiProject = CoreUtil.getProject( op.getProjectName().content() + "-api" );
+        apiProject.open( new NullProgressMonitor() );
+
+        gradleFile = apiProject.getFile( "build.gradle" );
+        settingsFile = apiProject.getFile( "settings.gradle" );
+
+        assertFalse( gradleFile.exists() );
+        assertFalse( settingsFile.exists() );
+
+        IProject serviceProject = CoreUtil.getProject( op.getProjectName().content() + "-service" );
+        serviceProject.open( new NullProgressMonitor() );
+
+        gradleFile = serviceProject.getFile( "build.gradle" );
+        settingsFile = serviceProject.getFile( "settings.gradle" );
+
+        assertFalse( gradleFile.exists() );
+        assertFalse( settingsFile.exists() );
+    }
+
+    @Test
     public void testProjectTemplateThemeContributor() throws Exception
     {
         NewLiferayModuleProjectOp op = NewLiferayModuleProjectOp.TYPE.instantiate();
