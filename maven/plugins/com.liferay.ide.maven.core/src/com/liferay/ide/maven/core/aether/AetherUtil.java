@@ -165,4 +165,27 @@ public class AetherUtil
         return session;
     }
 
+    public static Artifact getMavenArchtype( final String groupId, final String artifactId, final String version )
+    {
+        Artifact retval = null;
+
+        final Artifact defaultArtifact = new DefaultArtifact( groupId + ":" + artifactId + ":" + version );
+        ArtifactRequest artifactRequest = new ArtifactRequest();
+        artifactRequest.setArtifact( defaultArtifact );
+        artifactRequest.addRepository( newCentralRepository() );
+        final RepositorySystem system = newRepositorySystem();
+        final RepositorySystemSession session = newRepositorySystemSession( system );
+
+        try
+        {
+            ArtifactResult artifactResult = system.resolveArtifact( session, artifactRequest );
+            retval = artifactResult.getArtifact();
+        }
+        catch( Exception e )
+        {
+            LiferayMavenCore.logError( e );
+        }
+
+        return retval;
+    }
 }

@@ -27,7 +27,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.jdt.launching,
  com.liferay.ide.server.core,
  biz.aQute.bndlib;bundle-version="3.0.0",
- com.liferay.blade.api;bundle-version="1.0.0"
+ com.liferay.blade.api;bundle-version="1.0.0",
+ org.json
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
