@@ -124,7 +124,14 @@ public class PortalRuntime extends RuntimeDelegate implements ILiferayRuntime, P
 
     public String getPortalVersion()
     {
-        return getPortalBundle().getVersion();
+        PortalBundle tempPortalBundle = getPortalBundle();
+
+        if( tempPortalBundle != null )
+        {
+            return tempPortalBundle.getVersion();
+        }
+
+        return null;
     }
 
     public Properties getPortletCategories()

@@ -19,6 +19,7 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.Set;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.sapphire.PossibleValuesService;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Status;
@@ -45,13 +46,17 @@ public class RuntimeNamePossibleValuesService extends PossibleValuesService impl
     {
         IRuntime[] runtimes = ServerCore.getRuntimes();
 
-        if( ! CoreUtil.isNullOrEmpty( runtimes ) )
+        if( !CoreUtil.isNullOrEmpty( runtimes ) )
         {
             for( IRuntime runtime : runtimes )
             {
-                if( ServerUtil.isLiferayRuntime( runtime ) )
+                if( runtime.validate( new NullProgressMonitor() ).isOK() )
                 {
-                    values.add( runtime.getName() );
+                    if( ServerUtil.isLiferayRuntime( runtime ) &&
+                        !runtime.getRuntimeType().getId().equals( "com.liferay.ide.server.portal.runtime" ) )
+                    {
+                        values.add( runtime.getName() );
+                    }
                 }
             }
         }
