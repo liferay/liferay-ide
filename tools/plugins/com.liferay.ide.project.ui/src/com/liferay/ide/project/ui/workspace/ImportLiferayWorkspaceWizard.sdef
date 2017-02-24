@@ -62,6 +62,6 @@
             <description>Select location of Liferay workspace parent directory.</description>
         </page>
         <description>Import Liferay Workspace</description>
-        <image>NewLiferayWorkspaceWizard.png</image>
+        <image>LiferayWorkspaceWizard.png</image>
     </wizard>
 </definition>

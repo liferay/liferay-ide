@@ -41,22 +41,18 @@
             shortName="maven"
             projectType="plugin">
       </liferayProjectProvider>
-   </extension>
-   <extension
-         point="com.liferay.ide.core.liferayProjectProviders">
       <liferayProjectProvider
             class="com.liferay.ide.maven.core.NewMavenModuleProjectProvider"
             displayName="Maven (liferay-maven-module)"
             id="com.liferay.ide.maven.core.mavenModuleProjectProvider"
             priority="high"
-            shortName="maven-module"
-            projectType="module">
+            projectType="module"
+            shortName="maven-module">
       </liferayProjectProvider>
       <liferayProjectProvider
             class="com.liferay.ide.maven.core.LiferayMavenWorkspaceProjectProvider"
-            displayName="Maven"
-            id="com.liferay.ide.maven.core.LiferayMavenWorkspaceProjectProvider"
-            priority="high"
+            displayName="Maven Liferay Workspace Project Provider"
+            id="com.liferay.ide.maven.core.liferayMavenWorkspaceProjectProvider"
             projectType="workspace"
             shortName="maven-liferay-workspace">
       </liferayProjectProvider>

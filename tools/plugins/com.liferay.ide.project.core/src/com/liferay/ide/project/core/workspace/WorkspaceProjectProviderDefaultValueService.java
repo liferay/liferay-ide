@@ -40,6 +40,7 @@ public class WorkspaceProjectProviderDefaultValueService extends DefaultValueSer
         else
         {
             retval = "gradle-liferay-workspace";
+
             return retval;
         }
     }

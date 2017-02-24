@@ -32,6 +32,7 @@ public class WorkspaceProjectProviderPossibleValuesService extends PossibleValue
     protected void compute( Set<String> values )
     {
         List<String> possibleValues = ProjectUtil.getProjectProviderPossibleValue( "workspace" );
+
         values.addAll( possibleValues );
     }
 

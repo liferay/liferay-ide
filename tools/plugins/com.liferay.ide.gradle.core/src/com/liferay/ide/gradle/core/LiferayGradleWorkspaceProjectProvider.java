@@ -48,9 +48,6 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
     implements NewLiferayProjectProvider<NewLiferayWorkspaceOp>
 {
 
-    public static final String defaultBundleUrl =
-        "https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.2-ga3/liferay-ce-portal-tomcat-7.0-ga3-20160804222206210.zip";
-
     public LiferayGradleWorkspaceProjectProvider()
     {
         super( new Class<?>[] { IProject.class } );
@@ -59,8 +56,6 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
     @Override
     public IStatus createNewProject( NewLiferayWorkspaceOp op, IProgressMonitor monitor ) throws CoreException
     {
-        IStatus retval = Status.OK_STATUS;
-
         IPath location = PathBridge.create( op.getLocation().content() );
         String wsName = op.getWorkspaceName().toString();
 
@@ -77,30 +72,14 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
         }
         catch( BladeCLIException e )
         {
-            retval = ProjectCore.createErrorStatus( e );
+            return ProjectCore.createErrorStatus( e );
         }
 
         String workspaceLocation = location.append( wsName ).toPortableString();
         boolean isInitBundle = op.getProvisionLiferayBundle().content();
-        final String bundleUrl = op.getBundleUrl().content( false );
+        String bundleUrl = op.getBundleUrl().content( false );
 
-        IStatus importStatus = null;
-
-        if( isInitBundle )
-        {
-            importStatus = importProject( workspaceLocation, monitor, "initBundle", bundleUrl );
-        }
-
-        importStatus = importProject( workspaceLocation, monitor, null, null );
-
-        retval = importStatus;
-
-        if( !retval.isOK() )
-        {
-            return retval;
-        }
-
-        return retval;
+        return importProject( workspaceLocation, monitor, ( isInitBundle ? "initBundle" : null ), bundleUrl );
     }
 
     public IStatus importProject( String location, IProgressMonitor monitor, String extraOperation, String bundleUrl )
@@ -142,7 +121,6 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
 
                 project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
             }
-
         }
         catch( Exception e )
         {

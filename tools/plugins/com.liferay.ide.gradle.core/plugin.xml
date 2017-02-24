@@ -19,7 +19,7 @@
       </liferayProjectProvider>
       <liferayProjectProvider
             class="com.liferay.ide.gradle.core.LiferayGradleWorkspaceProjectProvider"
-            displayName="Liferay Workspace Project Provider"
+            displayName="Gradle Liferay Workspace Project Provider"
             id="com.liferay.ide.gradle.core.liferayGradleWorkspaceProjectProvider"
             shortName="gradle-liferay-workspace"
             projectType="workspace">

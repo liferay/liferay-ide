@@ -451,8 +451,13 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
         throws CoreException
     {
         final IMavenProjectFacade facade = MavenUtil.getProjectFacade( project, monitor );
-        execMavenLaunch( project, "liferay:init-bundle", facade, monitor );
-        return Status.OK_STATUS;
+
+        if( execMavenLaunch( project, "liferay:init-bundle", facade, monitor ) )
+        {
+            return Status.OK_STATUS;
+        }
+
+        return LiferayMavenCore.createErrorStatus( "run init-bundle error" );
     }
 
     @Override

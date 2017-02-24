@@ -47,21 +47,13 @@ public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectPro
     @Override
     public IStatus createNewProject( NewLiferayWorkspaceOp op, IProgressMonitor monitor ) throws CoreException
     {
-        IStatus retval = null;
-        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
-        ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
+        IStatus retval = Status.OK_STATUS;;
 
         final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
         IPath location = PathBridge.create( op.getLocation().content() );
 
         final String projectName = op.getWorkspaceName().content();
-        // for location we should use the parent location
-        if( location.lastSegment().equals( projectName ) )
-        {
-            // use parent dir since maven archetype will generate new dir under this location
-            location = location.removeLastSegments( 1 );
-        }
 
         String groupId = "com.liferay";
         String artifactId = op.getWorkspaceName().content();
@@ -75,12 +67,15 @@ public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectPro
 
         final Properties properties = new Properties();
 
+        final ResolverConfiguration resolverConfig = new ResolverConfiguration();
+        ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
+
         final List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
             location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
 
         if( newProjects == null || newProjects.size() == 0 )
         {
-            retval = LiferayMavenCore.createErrorStatus( "Unable to create project from archetype." );
+            retval = LiferayMavenCore.createErrorStatus( "Unable to create liferay workspace project from archetype." );
         }
         else
         {
@@ -97,13 +92,11 @@ public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectPro
                         gradleFile.delete( true, monitor );
                     }
                 }
-
             }
-
-            retval = Status.OK_STATUS;
         }
 
         boolean isInitBundle = op.getProvisionLiferayBundle().content();
+
         if( retval.isOK() && isInitBundle )
         {
             IProject workspaceProject = ProjectUtil.getProject( projectName );

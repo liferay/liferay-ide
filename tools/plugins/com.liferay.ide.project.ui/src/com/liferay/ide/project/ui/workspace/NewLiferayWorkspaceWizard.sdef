@@ -24,7 +24,7 @@
         <label>New Liferay Workspace</label>
         <page>
             <id>LiferayWorkspacePage</id>
-            <label>Liferay Workspace</label>
+            <label>Liferay Workspace Project</label>
             <content>
                 <property-editor>WorkspaceName</property-editor>
                 <spacer/>
@@ -69,7 +69,7 @@
             <margin>0</margin>
         </page>
         <description>Create a new Liferay Workspace project for developing modules and themes for Liferay 7</description>
-        <image>NewLiferayWorkspaceWizard.png</image>
+        <image>LiferayWorkspaceWizard.png</image>
         <element-type>com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp</element-type>
     </wizard>
 </definition>
