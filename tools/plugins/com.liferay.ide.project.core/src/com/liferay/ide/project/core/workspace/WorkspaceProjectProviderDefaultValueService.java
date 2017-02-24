@@ -15,10 +15,15 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.DefaultScope;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.DefaultValueService;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.ProjectUtil;
 
 /**
  * @author Joye Luo
@@ -29,20 +34,23 @@ public class WorkspaceProjectProviderDefaultValueService extends DefaultValueSer
     @Override
     protected String compute()
     {
-        String retval = null;
+        String retval = "gradle-liferay-workspace";
 
-        retval = ProjectUtil.getSelectProjectBuildType( ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION );
+        final IScopeContext[] prefContexts = { DefaultScope.INSTANCE, InstanceScope.INSTANCE };
+        final String defaultProjectBuildType = Platform.getPreferencesService().getString(
+            ProjectCore.PLUGIN_ID, ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, null, prefContexts );
 
-        if( retval != null )
+        if( defaultProjectBuildType != null )
         {
-            return retval;
-        }
-        else
-        {
-            retval = "gradle-liferay-workspace";
+            final ILiferayProjectProvider provider = LiferayCore.getProvider( defaultProjectBuildType );
 
-            return retval;
+            if( provider != null )
+            {
+                retval = defaultProjectBuildType;
+            }
         }
+
+        return retval;
     }
 
 }

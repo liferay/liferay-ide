@@ -19,13 +19,14 @@ package com.liferay.ide.project.core.workspace;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.ProgressMonitorBridge;
@@ -94,8 +95,28 @@ public class NewLiferayWorkspaceOpMethods
             return Status.createErrorStatus( msg, e );
         }
 
-        ProjectUtil.updateProjectBuildTypePrefs(
-            op.getProjectProvider().text(), ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION );
+        if( retval.ok() )
+        {
+            updateBuildPrefs( op );
+        }
+
         return retval;
+    }
+
+    private static void updateBuildPrefs( final NewLiferayWorkspaceOp op )
+    {
+        try
+        {
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+            prefs.put( ProjectCore.PREF_DEFAULT_WORKSPACE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+
+            prefs.flush();
+        }
+        catch( Exception e )
+        {
+            final String msg = "Error updating default workspace build type."; //$NON-NLS-1$
+            ProjectCore.logError( msg, e );
+        }
     }
 }

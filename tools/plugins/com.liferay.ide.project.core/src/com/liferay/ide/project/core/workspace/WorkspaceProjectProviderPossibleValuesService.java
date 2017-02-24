@@ -15,12 +15,16 @@
 
 package com.liferay.ide.project.core.workspace;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.sapphire.PossibleValuesService;
 
-import com.liferay.ide.project.core.util.ProjectUtil;
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 /**
  * @author Joye Luo
@@ -28,12 +32,27 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 public class WorkspaceProjectProviderPossibleValuesService extends PossibleValuesService
 {
 
+    private List<String> possibleValues;
+
+    protected void initPossibleValuesService()
+    {
+        possibleValues = new ArrayList<String>();
+
+        for( final ILiferayProjectProvider provider : LiferayCore.getProviders( "workspace" ) )
+        {
+            if( provider instanceof NewLiferayProjectProvider<?> )
+            {
+                possibleValues.add( provider.getShortName() );
+            }
+        }
+
+        Collections.sort( possibleValues );
+    }
+
     @Override
     protected void compute( Set<String> values )
     {
-        List<String> possibleValues = ProjectUtil.getProjectProviderPossibleValue( "workspace" );
-
-        values.addAll( possibleValues );
+        values.addAll( this.possibleValues );
     }
 
     @Override

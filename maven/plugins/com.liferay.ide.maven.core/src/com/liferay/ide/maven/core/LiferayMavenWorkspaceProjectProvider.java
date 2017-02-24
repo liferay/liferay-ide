@@ -15,6 +15,7 @@
 
 package com.liferay.ide.maven.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -33,6 +34,7 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.platform.PathBridge;
 
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
@@ -55,15 +57,20 @@ public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectPro
 
         final String projectName = op.getWorkspaceName().content();
 
-        String groupId = "com.liferay";
-        String artifactId = op.getWorkspaceName().content();
-        String version = "1.0.2";
-        String javaPackage = "com.liferay";
+        final String groupId = projectName;
+        final String artifactId = projectName;
+        final String version = "1.0.0-SNAPSHOT";
+        final String javaPackage = "";
 
+        final String archetypeArtifactId = getData( "archetypeGAV", String.class, "" ).get( 0 );
         final Archetype archetype = new Archetype();
-        archetype.setGroupId( "com.liferay" );
-        archetype.setArtifactId( "com.liferay.project.templates.workspace" );
-        archetype.setVersion( "1.0.2" );
+        final String[] gav = archetypeArtifactId.split( ":" );
+
+        final String archetypeVersion = gav[gav.length - 1];
+
+        archetype.setGroupId( gav[0] );
+        archetype.setArtifactId( gav[1] );
+        archetype.setVersion( archetypeVersion );
 
         final Properties properties = new Properties();
 
@@ -108,6 +115,29 @@ public class LiferayMavenWorkspaceProjectProvider extends LiferayMavenProjectPro
         }
 
         return retval;
+    }
+
+    @Override
+    public <T> List<T> getData( String key, Class<T> type, Object... params )
+    {
+        if( "archetypeGAV".equals( key ) && type.equals( String.class ) )
+        {
+            List<T> retval = new ArrayList<>();
+
+            String gav =
+                LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE, "" );
+
+            if( CoreUtil.empty( gav ) )
+            {
+                gav = "com.liferay:com.liferay.project.templates.workspace" + ":1.0.2";
+            }
+
+            retval.add( type.cast( gav ) );
+
+            return retval;
+        }
+
+        return super.getData( key, type, params );
     }
 
     @Override

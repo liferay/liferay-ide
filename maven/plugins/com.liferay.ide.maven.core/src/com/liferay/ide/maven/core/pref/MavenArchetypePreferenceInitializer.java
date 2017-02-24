@@ -144,6 +144,9 @@ public class MavenArchetypePreferenceInitializer extends AbstractPreferenceIniti
         defaultPrefs.put(
             LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME_CONTRIBUTOR,
             "com.liferay:com.liferay.project.templates.theme.contributor:1.0.0" );
+        defaultPrefs.put(
+            LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE,
+            "com.liferay:com.liferay.project.templates.workspace:1.0.2" );
     }
 
 }

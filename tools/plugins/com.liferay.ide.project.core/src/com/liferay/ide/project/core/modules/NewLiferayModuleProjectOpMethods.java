@@ -18,8 +18,6 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.ProjectUtil;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -120,8 +118,7 @@ public class NewLiferayModuleProjectOpMethods
 
             if( retval.ok() )
             {
-                ProjectUtil.updateProjectBuildTypePrefs(
-                    op.getProjectProvider().text(), ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION );
+                updateBuildPrefs( op );
             }
         }
         catch( Exception e )
@@ -133,6 +130,23 @@ public class NewLiferayModuleProjectOpMethods
         }
 
         return retval;
+    }
+
+    private static void updateBuildPrefs( final NewLiferayModuleProjectOp op )
+    {
+        try
+        {
+            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
+
+            prefs.put( ProjectCore.PREF_DEFAULT_MODULE_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
+
+            prefs.flush();
+        }
+        catch( Exception e )
+        {
+            final String msg = "Error updating default project build type."; //$NON-NLS-1$
+            ProjectCore.logError( msg, e );
+        }
     }
 
     private static void getClassFile( File packageRoot, List<IPath> classFiles )

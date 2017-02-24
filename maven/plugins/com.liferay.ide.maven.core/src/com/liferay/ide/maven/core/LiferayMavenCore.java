@@ -84,6 +84,7 @@ public class LiferayMavenCore extends Plugin
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_TEMPLATE_CONTEXT_CONTRIBUTOR = "archetype-project-template-template-context-contributor";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME = "archetype-project-template-theme";
     public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_THEME_CONTRIBUTOR = "archetype-project-template-theme-contributor";
+    public static final String PREF_ARCHETYPE_PROJECT_TEMPLATE_WORKSPACE = "archetype-project-template-workspace";
 
     // The key of disable customJspValidation checking
     public static final String PREF_DISABLE_CUSTOM_JSP_VALIDATION = "disable-custom-jsp-validation";
