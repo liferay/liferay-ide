@@ -306,6 +306,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             {
                 IPath backupLocation = PathBridge.create( dataModel.getBackupLocation().content() );
 
+                backupLocation.toFile().mkdirs();
+
                 progress.worked( 30 );
 
                 ZipUtil.zip( originalPath.toFile(), backupLocation.append( "backup.zip" ).toFile() );
