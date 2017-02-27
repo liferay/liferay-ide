@@ -13,23 +13,29 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.gradle.core.tests;
+package com.liferay.ide.project.core.tests.workspace;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import com.liferay.ide.core.ILiferayProjectImporter;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
 
 import java.io.File;
+import java.net.URL;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,7 +43,7 @@ import org.junit.Test;
 /**
  * @author Andy Wu
  */
-public class NewLiferayWorkspaceOpTests
+public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
 {
 
     @BeforeClass
@@ -56,7 +62,14 @@ public class NewLiferayWorkspaceOpTests
     @Test
     public void testNewLiferayWorkspaceOp() throws Exception
     {
-        GradleProjectTests.fullImportGradleProject( "projects/existingProject" );
+        ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
+
+        URL projectZipUrl =
+            Platform.getBundle( "com.liferay.ide.project.core.tests" ).getEntry( "projects/existingProject" );
+
+        waitForBuildAndValidation();
+
+        importer.importProjects( FileLocator.toFileURL( projectZipUrl ).getFile(), new NullProgressMonitor() );
 
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 

@@ -18,6 +18,7 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;

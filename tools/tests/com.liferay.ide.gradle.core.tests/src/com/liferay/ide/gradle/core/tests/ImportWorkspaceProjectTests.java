@@ -11,7 +11,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  *
- *******************************************************************************/
+ *******************************************************************************//*
 
 package com.liferay.ide.gradle.core.tests;
 
@@ -48,9 +48,9 @@ import org.eclipse.sapphire.platform.ProgressMonitorBridge;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
+*//**
  * @author Gregory Amerson
- */
+ *//*
 public class ImportWorkspaceProjectTests
 {
     @Before
@@ -272,3 +272,4 @@ public class ImportWorkspaceProjectTests
         fail( s.toString() );
     }
 }
+*/
