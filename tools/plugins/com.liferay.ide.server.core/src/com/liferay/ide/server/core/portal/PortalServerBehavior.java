@@ -16,6 +16,8 @@ package com.liferay.ide.server.core.portal;
 
 import aQute.remote.api.Agent;
 
+import com.liferay.ide.core.IBundleProject;
+import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.LiferayRuntimeClasspathEntry;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
@@ -37,6 +40,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
@@ -54,11 +58,13 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.osgi.framework.dto.BundleDTO;
 
 
 /**
  * @author Gregory Amerson
  * @author Simon Jiang
+ * @author Terry Jia
  */
 @SuppressWarnings( {"restriction","rawtypes"} )
 public class PortalServerBehavior extends ServerBehaviourDelegate
@@ -110,6 +116,12 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         };
 
         DebugPlugin.getDefault().addDebugEventListener( processListener );
+    }
+
+    @Override
+    public boolean canRestartModule( IModule[] module )
+    {
+        return true;
     }
 
     public void cleanup()
@@ -740,6 +752,78 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     }
 
     @Override
+    public void startModule( IModule[] modules, IProgressMonitor monitor ) throws CoreException
+    {
+        startOrStopModules( modules, "start", monitor );
+    }
+
+    @Override
+    public void stopModule( IModule[] modules, IProgressMonitor monitor ) throws CoreException
+    {
+        startOrStopModules( modules, "stop", monitor );
+    }
+
+    private void startOrStopModules( IModule[] modules, String action, IProgressMonitor monitor )
+    {
+        for( IModule module : modules )
+        {
+            IProject project = module.getProject();
+
+            if( project == null )
+            {
+                continue;
+            }
+
+            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+
+            try
+            {
+                if( bundleProject != null )
+                {
+                    final String symbolicName = bundleProject.getSymbolicName();
+                    BundleSupervisor supervisor = getBundleSupervisor();
+
+                    BundleDTO[] existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
+
+                    for( BundleDTO bundle : existingBundles )
+                    {
+                        if( symbolicName.equals( bundle.symbolicName ) )
+                        {
+                            if( action.equals( "start" ) )
+                            {
+                                String error = supervisor.getAgent().start( bundle.id );
+
+                                if( error == null )
+                                {
+                                    setModuleState( new IModule[] { module }, IServer.STATE_STARTED );
+                                }
+                                else {
+                                    LiferayServerCore.logError( "Unable to start this bundle" );
+                                }
+                            }
+                            else if( action.equals( "stop" ) )
+                            {
+                                String error = supervisor.getAgent().stop( bundle.id );
+
+                                if( error == null )
+                                {
+                                    setModuleState( new IModule[] { module }, IServer.STATE_STOPPED );
+                                }
+                                else {
+                                    LiferayServerCore.logError( "Unable to stop this bundle" );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch( Exception e )
+            {
+            }
+        }
+    }
+
+    @Override
     public void stop( boolean force )
     {
         try
@@ -879,4 +963,5 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             }
         }
     }
+
 }
