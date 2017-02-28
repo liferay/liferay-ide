@@ -240,6 +240,25 @@ public class LiferayWorkspaceUtil
         return retval;
     }
 
+    public static String getWorkspaceType( String location )
+    {
+        if( isValidWorkspaceLocation( location ) )
+        {
+            File pomFile = new File( location, "pom.xml" );
+
+            if( pomFile.exists() )
+            {
+                return "maven-liferay-workspace";
+            }
+            else
+            {
+                return "gradle-liferay-workspace";
+            }
+        }
+
+        return null;
+    }
+
     public static String loadConfiguredHomeDir( String location )
     {
         return getLiferayWorkspaceGradleProperty( location, "liferay.workspace.home.dir", "bundles" );

@@ -16,7 +16,6 @@
 package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.ExecutableElement;
@@ -65,7 +64,7 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
     Value<String> getBundleUrl();
     void setBundleUrl( String value );
 
- // *** ProjectProvider ***
+    // *** ProjectProvider ***
 
     @Type( base = ILiferayProjectProvider.class )
     @Label( standard = "build type" )
@@ -73,8 +72,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement
     @Service( impl = WorkspaceProjectProviderDefaultValueService.class )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
 
-    Value<NewLiferayProjectProvider<NewLiferayWorkspaceOp>> getProjectProvider();
+    Value<NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>> getProjectProvider();
     void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider<NewLiferayWorkspaceOp> value );
+    void setProjectProvider( NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> value );
 
 }

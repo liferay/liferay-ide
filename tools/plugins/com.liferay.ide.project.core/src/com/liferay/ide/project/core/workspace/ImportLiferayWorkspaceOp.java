@@ -42,16 +42,25 @@ public interface ImportLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
     // *** WorkspaceLocation ***
 
     @Label( standard = "workspace location" )
-    @Type( base = Path.class )
     @AbsolutePath
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Service( impl = ImportWorkspaceLocationValidationService.class )
     @Required
+    @Type( base = Path.class )
+    @Service( impl = ImportWorkspaceLocationValidationService.class )
+    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     ValueProperty PROP_WORKSPACE_LOCATION = new ValueProperty( TYPE, "WorkspaceLocation" );
 
     Value<Path> getWorkspaceLocation();
     void setWorkspaceLocation( String value );
     void setWorkspaceLocation( Path value );
+
+    // *** Build Type ***
+
+    @Derived
+    @Service( impl = ImportWorkspaceBuildTypeDerivedValueService.class )
+    ValueProperty PROP_BUILD_TYPE = new ValueProperty( TYPE, "BuildType" );
+
+    Value<String> getBuildType();
+    void setBuildType( String value );
 
     // *** hasBundlesDir ***
 

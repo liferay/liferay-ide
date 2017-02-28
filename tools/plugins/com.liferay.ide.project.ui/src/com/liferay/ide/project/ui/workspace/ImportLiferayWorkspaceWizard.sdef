@@ -32,6 +32,8 @@
             <content>
                 <property-editor>WorkspaceLocation</property-editor>
                 <spacer></spacer>
+                <property-editor>buildType</property-editor>
+                <spacer></spacer>
                 <property-editor>
                     <visible-when>${ Severity(Validation(workspaceLocation)) == 'OK' &amp;&amp; hasBundlesDir == 'false' }</visible-when>
                     <property>provisionLiferayBundle</property>
@@ -41,7 +43,7 @@
                     <property>serverName</property>
                 </property-editor>
                 <property-editor>
-                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
+                    <visible-when>${ provisionLiferayBundle == 'true' &amp;&amp; hasBundlesDir == 'false'}</visible-when>
                     <property>bundleUrl</property>
                     <label>Bundle url</label>
                 </property-editor>

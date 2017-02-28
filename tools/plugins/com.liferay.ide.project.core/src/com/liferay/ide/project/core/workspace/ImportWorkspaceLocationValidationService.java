@@ -17,11 +17,12 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.util.ProjectImportUtil;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
@@ -39,16 +40,12 @@ public class ImportWorkspaceLocationValidationService extends ValidationService
         {
             if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
             {
-                retval = Status.createErrorStatus( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg );
-
-                return retval;
+                return Status.createErrorStatus( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg );
             }
         }
         catch( CoreException e )
         {
-            retval = Status.createErrorStatus( LiferayWorkspaceUtil.multiWorkspaceErrorMsg );
-
-            return retval;
+            return Status.createErrorStatus( LiferayWorkspaceUtil.multiWorkspaceErrorMsg );
         }
 
         final Path currentProjectLocation = op().getWorkspaceLocation().content( true );
@@ -57,18 +54,23 @@ public class ImportWorkspaceLocationValidationService extends ValidationService
         {
             final String currentPath = currentProjectLocation.toOSString();
 
-            retval = StatusBridge.create( LiferayWorkspaceUtil.validateWorkspacePath( currentPath ) );
+            IStatus validPathStatus = ProjectImportUtil.validatePath( currentPath );
 
-            if( !retval.ok() )
-                return retval;
+            if( !validPathStatus.isOK() )
+            {
+                return Status.createErrorStatus( validPathStatus.getMessage() );
+            }
+
+            if( LiferayWorkspaceUtil.getWorkspaceType( currentPath ) == null )
+            {
+                return Status.createErrorStatus( "Invalid Liferay Workspace" );
+            }
 
             String projectName = currentProjectLocation.lastSegment();
 
             if( CoreUtil.getProject( projectName ).exists() )
             {
-                retval = Status.createErrorStatus( "A project with that name already exists." );
-
-                return retval;
+                return Status.createErrorStatus( "A project with that name already exists." );
             }
         }
 

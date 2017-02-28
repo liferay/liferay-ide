@@ -17,22 +17,49 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
-import java.io.File;
-
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
 
-
 /**
- * @author Gregory Amerson
  * @author Andy Wu
  */
-public class HasBundlesDirDerivedValueService extends DerivedValueService
+public class ImportWorkspaceBuildTypeDerivedValueService extends DerivedValueService
 {
 
     private FilteredListener<PropertyContentEvent> listener;
+
+    @Override
+    protected String compute()
+    {
+        String retVal = null;
+
+        if( op().getWorkspaceLocation() != null )
+        {
+            Path path = op().getWorkspaceLocation().content();
+
+            if( path != null && !path.isEmpty() )
+            {
+                String location = path.toOSString();
+
+                retVal = LiferayWorkspaceUtil.getWorkspaceType( location );
+            }
+        }
+
+        return retVal;
+    }
+
+    @Override
+    public void dispose()
+    {
+        if( op() != null )
+        {
+            op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).detach( this.listener );
+        }
+
+        super.dispose();
+    }
 
     @Override
     protected void initDerivedValueService()
@@ -41,6 +68,7 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService
 
         this.listener = new FilteredListener<PropertyContentEvent>()
         {
+
             @Override
             protected void handleTypedEvent( PropertyContentEvent event )
             {
@@ -51,41 +79,8 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService
         op().property( ImportLiferayWorkspaceOp.PROP_WORKSPACE_LOCATION ).attach( this.listener );
     }
 
-    @Override
-    protected String compute()
-    {
-        String retval = "false";
-
-        final Path path = op().getWorkspaceLocation().content();
-
-        if( path != null )
-        {
-            String type = LiferayWorkspaceUtil.getWorkspaceType( path.toPortableString() );
-
-            if( type != null )
-            {
-                if( type.startsWith( "maven" ) )
-                {
-                    File bundlesDir = new File( path.toFile(), "bundles" );
-
-                    if( bundlesDir.exists() )
-                    {
-                        retval = "true";
-                    }
-                }
-                else if( type.startsWith( "gradle" ) && LiferayWorkspaceUtil.hasBundlesDir( path.toOSString() ) )
-                {
-                    retval = "true";
-                }
-            }
-        }
-
-        return retval;
-    }
-
     private ImportLiferayWorkspaceOp op()
     {
         return context( ImportLiferayWorkspaceOp.class );
     }
-
 }

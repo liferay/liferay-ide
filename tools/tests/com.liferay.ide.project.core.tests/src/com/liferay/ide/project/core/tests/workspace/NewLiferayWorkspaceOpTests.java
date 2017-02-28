@@ -23,6 +23,7 @@ import static org.junit.Assert.assertTrue;
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.tests.ProjectCoreBase;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
@@ -64,12 +65,20 @@ public class NewLiferayWorkspaceOpTests extends ProjectCoreBase
     {
         ILiferayProjectImporter importer = LiferayCore.getImporter( "gradle" );
 
+        File eclipseWorkspaceLocation = CoreUtil.getWorkspaceRoot().getLocation().toFile();
+
         URL projectZipUrl =
-            Platform.getBundle( "com.liferay.ide.project.core.tests" ).getEntry( "projects/existingProject" );
+            Platform.getBundle( "com.liferay.ide.project.core.tests" ).getEntry( "projects/existingProject.zip" );
+
+        final File projectZipFile = new File( FileLocator.toFileURL( projectZipUrl ).getFile() );
+
+        ZipUtil.unzip( projectZipFile, eclipseWorkspaceLocation );
+
+        File projectFolder = new File( eclipseWorkspaceLocation, "existingProject" );
 
         waitForBuildAndValidation();
 
-        importer.importProjects( FileLocator.toFileURL( projectZipUrl ).getFile(), new NullProgressMonitor() );
+        importer.importProjects( projectFolder.getAbsolutePath(), new NullProgressMonitor() );
 
         NewLiferayWorkspaceOp op = NewLiferayWorkspaceOp.TYPE.instantiate();
 

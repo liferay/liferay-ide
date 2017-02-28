@@ -15,7 +15,6 @@
 
 package com.liferay.ide.project.core.workspace;
 
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.server.util.ServerUtil;
@@ -45,7 +44,10 @@ public class ImportLiferayWorkspaceOpMethods
 
         try
         {
-            final NewLiferayProjectProvider<NewLiferayWorkspaceOp> provider = op.getProjectProvider().content( true );
+            op.setProjectProvider( op.getBuildType().content() );
+
+            final NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp> provider =
+                op.getProjectProvider().content( true );
 
             String location = op.getWorkspaceLocation().content().toOSString();
 
@@ -57,16 +59,16 @@ public class ImportLiferayWorkspaceOpMethods
 
             final IStatus importStatus;
 
-/*            if( isInitBundle && !isHasBundlesDir )
+            if( isInitBundle && !isHasBundlesDir )
             {
-                importStatus = provider.importProject( location, monitor, "initBundle", bundleUrl );
+                importStatus = provider.importProject( location, monitor, true, bundleUrl );
             }
             else
             {
-                importStatus = provider.importProject( location, monitor, null, null );
+                importStatus = provider.importProject( location, monitor, false, null );
             }
 
-            retval = StatusBridge.create( importStatus );*/
+            retval = StatusBridge.create( importStatus );
 
             if( !retval.ok() || retval.exception() != null )
             {
@@ -76,10 +78,22 @@ public class ImportLiferayWorkspaceOpMethods
             if( isInitBundle || isHasBundlesDir )
             {
                 String serverRuntimeName = op.getServerName().content();
+                IPath bundlesLocation = null;
 
-                final IPath bundlesLocation = new Path( location ).append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location )  );
+                if( op.getBuildType().content().equals( "gradle-liferay-workspace" ) )
+                {
+                    bundlesLocation =
+                        new Path( location ).append( LiferayWorkspaceUtil.loadConfiguredHomeDir( location ) );
+                }
+                else
+                {
+                    bundlesLocation = new Path( location ).append( "bundles" );
+                }
 
-                ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
+                if( bundlesLocation != null && bundlesLocation.toFile().exists() )
+                {
+                    ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
+                }
             }
         }
         catch( Exception e )

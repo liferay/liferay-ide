@@ -19,12 +19,12 @@ import com.liferay.ide.core.AbstractLiferayProjectProvider;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
-import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.modules.BladeCLI;
 import com.liferay.ide.project.core.modules.BladeCLIException;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceOp;
+import com.liferay.ide.project.core.workspace.NewLiferayWorkspaceProjectProvider;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -45,7 +45,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Terry Jia
  */
 public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjectProvider
-    implements NewLiferayProjectProvider<NewLiferayWorkspaceOp>
+    implements NewLiferayWorkspaceProjectProvider<NewLiferayWorkspaceOp>
 {
 
     public LiferayGradleWorkspaceProjectProvider()
@@ -79,10 +79,11 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
         boolean isInitBundle = op.getProvisionLiferayBundle().content();
         String bundleUrl = op.getBundleUrl().content( false );
 
-        return importProject( workspaceLocation, monitor, ( isInitBundle ? "initBundle" : null ), bundleUrl );
+        return importProject( workspaceLocation, monitor, isInitBundle, bundleUrl );
     }
 
-    public IStatus importProject( String location, IProgressMonitor monitor, String extraOperation, String bundleUrl )
+    @Override
+    public IStatus importProject( String location, IProgressMonitor monitor, boolean initBundle, String bundleUrl )
     {
         try
         {
@@ -93,7 +94,7 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
                 return importJob;
             }
 
-            if( !CoreUtil.empty( extraOperation ) )
+            if( initBundle )
             {
                 IPath path = new Path( location );
 
@@ -117,7 +118,7 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
                         new ByteArrayInputStream( newContent.getBytes() ), IResource.FORCE, monitor );
                 }
 
-                GradleUtil.runGradleTask( project, extraOperation, monitor );
+                GradleUtil.runGradleTask( project, "initBundle", monitor );
 
                 project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
             }
