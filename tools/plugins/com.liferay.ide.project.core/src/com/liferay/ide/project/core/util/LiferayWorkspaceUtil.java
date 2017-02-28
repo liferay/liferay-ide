@@ -81,6 +81,18 @@ public class LiferayWorkspaceUtil
     {
         File workspaceDir = new File( location );
 
+        File pomFile = new File( workspaceDir, "pom.xml" );
+
+        if( pomFile.exists() )
+        {
+            String content = FileUtil.readContents( pomFile );
+
+            if( content.contains( "com.liferay.portal.tools.bundle.support" ) )
+            {
+                return true;
+            }
+        }
+
         File buildGradle = new File( workspaceDir, "build.gradle" );
         File settingsGradle = new File( workspaceDir, "settings.gradle" );
         File gradleProperties = new File( workspaceDir, "gradle.properties" );
