@@ -534,7 +534,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     @Override
     protected void publishServer( int kind, IProgressMonitor monitor ) throws CoreException
     {
-        setServerPublishState(IServer.PUBLISH_STATE_NONE);
+        setServerPublishState(IServer.PUBLISH_STATE_UNKNOWN);
     }
 
     @Override
