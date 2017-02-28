@@ -18,7 +18,7 @@ package com.liferay.ide.project.core.modules.fragment;
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
-import com.liferay.ide.project.core.modules.ModuleProjectNameListener;
+import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -40,6 +40,7 @@ import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
+import org.eclipse.sapphire.modeling.annotations.Whitespace;
 
 /**
  * @author Terry Jia
@@ -58,7 +59,6 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
 
     Value<String> getProjectName();
-
     void setProjectName( String value );
 
     // *** ProjectLocation ***
@@ -69,13 +69,24 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "location" )
     @Service( impl = FragmentProjectLocationValidationService.class )
+    @Service( impl = CommonProjectLocationInitialValueService.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();
-
     void setLocation( String value );
-
     void setLocation( Path value );
+
+    // *** UseDefaultLocation ***
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
+    @Label( standard = "use default location" )
+    @Listeners( ModuleFragmentProjectUseDefaultLocationListener.class )
+    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
+
+    Value<Boolean> getUseDefaultLocation();
+    void setUseDefaultLocation( String value );
+    void setUseDefaultLocation( Boolean value );
 
     // *** Liferay Runtime ***
 
@@ -100,7 +111,6 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     ValueProperty PROP_HOST_OSGI_BUNDLE = new ValueProperty( TYPE, "HostOsgiBundle" );
 
     Value<String> getHostOsgiBundle();
-
     void setHostOsgiBundle( String value );
 
     // *** HostOSGiBundle ***
@@ -108,7 +118,6 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     ValueProperty PROP_LPKG_NAME = new ValueProperty( TYPE, "LpkgName" );
 
     Value<String> getLpkgName();
-
     void setLpkgName( String value );
 
     // *** OverrideFiles ***
@@ -119,24 +128,44 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 
     ElementList<OverrideFilePath> getOverrideFiles();
 
-    // *** Method: execute ***
-
-    @Override
-    @DelegateImplementation( NewModuleFragmentOpMethods.class )
-    Status execute( ProgressMonitor monitor );
-
     // *** ProjectProvider ***
 
     @Type( base = ILiferayProjectProvider.class )
     @Label( standard = "build type" )
-    @Listeners( ModuleProjectNameListener.class )
+    @Listeners( FragmentProjectNameListener.class )
     @Service( impl = FragmentProjectProviderPossibleValuesService.class )
     @Service( impl = FragmentProjectProviderDefaultValueService.class )
     ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
 
     Value<NewLiferayProjectProvider<NewModuleFragmentOp>> getProjectProvider();
-
     void setProjectProvider( String value );
-
     void setProjectProvider( NewLiferayProjectProvider<NewModuleFragmentOp> value );
+
+    // *** Maven settings ***
+    // *** ArtifactVersion ***
+
+    @Label( standard = "artifact version" )
+    @Service( impl = ModuleFragmentProjectArtifactVersionDefaultValueService.class )
+    ValueProperty PROP_ARTIFACT_VERSION = new ValueProperty( TYPE, "ArtifactVersion" );
+
+    Value<String> getArtifactVersion();
+    void setArtifactVersion( String value );
+
+
+    // *** GroupId ***
+
+    @Label( standard = "group id" )
+    @Service( impl = ModuleFragmentProjectGroupIdValidationService.class )
+    @Service( impl = ModuleFragmentProjectGroupIdDefaultValueService.class )
+    @Whitespace( trim = false )
+    ValueProperty PROP_GROUP_ID = new ValueProperty( TYPE, "GroupId" );
+
+    Value<String> getGroupId();
+    void setGroupId( String value );
+    
+    // *** Method: execute ***
+
+    @Override
+    @DelegateImplementation( NewModuleFragmentOpMethods.class )
+    Status execute( ProgressMonitor monitor );
 }

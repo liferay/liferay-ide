@@ -119,14 +119,15 @@ public class FragmentProjectLocationValidationService extends ValidationService
     @Override
     public void dispose()
     {
-        super.dispose();
-
-        if( this.listener != null )
+        if( this.listener != null && op() != null && !op().disposed() )
         {
             op().getProjectName().detach( this.listener );
+            op().getProjectProvider().detach( this.listener );
 
             this.listener = null;
         }
+
+        super.dispose();
     }
 
     @Override

@@ -21,7 +21,11 @@ import com.liferay.ide.project.core.descriptor.LiferayDescriptorHelper;
 import com.liferay.ide.project.core.modules.IComponentTemplate;
 import com.liferay.ide.project.core.modules.LiferayComponentTemplateReader;
 import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.server.core.portal.PortalRuntime;
+import com.liferay.ide.server.util.ServerUtil;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,9 +33,16 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
@@ -358,27 +369,94 @@ public class ProjectCore extends Plugin
         CoreUtil.getWorkspace().addResourceChangeListener(
             sdkProjectDeleteListener , IResourceChangeEvent.PRE_DELETE );
 
-        /*
-        final Job job = new Job( "Checking for the latest Blade CLI" )
+        CoreUtil.getWorkspace().addResourceChangeListener( new IResourceChangeListener()
         {
-            @Override
-            public IStatus run( IProgressMonitor monitor )
+
+            public void resourceChanged( IResourceChangeEvent event )
             {
                 try
                 {
-                    BladeCLI.getBladeCLIPath();
+                    if( event.getType() == IResourceChangeEvent.PRE_DELETE )
+                    {
+                        // for the event of delete project
+                        IProject project = (IProject) event.getResource();
+
+                        if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                        {
+                            String projectLocation = project.getLocation().toOSString();
+
+                            IFolder bundlesFolder =
+                                project.getFolder( LiferayWorkspaceUtil.getHomeDir( projectLocation ) );
+
+                            if( bundlesFolder.exists() )
+                            {
+                                File portalBundle = bundlesFolder.getLocation().toFile().getCanonicalFile();
+
+                                ServerUtil.deleteRuntimeAndServer( PortalRuntime.ID, portalBundle );
+                            }
+                        }
+
+                        return;
+                    }
+                    else
+                    {
+                        event.getDelta().accept( new IResourceDeltaVisitor()
+                        {
+
+                            public boolean visit( IResourceDelta delta ) throws CoreException
+                            {
+                                try
+                                {
+                                    // for only delete bundles dir
+                                    if( delta.getKind() == IResourceDelta.REMOVED )
+                                    {
+                                        IResource deletedRes = delta.getResource();
+
+                                        IProject project = deletedRes.getProject();
+
+                                        if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                                        {
+                                            String projectLocation = project.getLocation().toOSString();
+
+                                            IPath bundlesPath = project.getFullPath().append(
+                                                LiferayWorkspaceUtil.getHomeDir( projectLocation ) );
+
+                                            if( delta.getFullPath().equals( bundlesPath ) )
+                                            {
+                                                try
+                                                {
+                                                    File portalBundle =
+                                                        deletedRes.getLocation().toFile().getCanonicalFile();
+
+                                                    ServerUtil.deleteRuntimeAndServer( PortalRuntime.ID, portalBundle );
+                                                }
+                                                catch( Exception e )
+                                                {
+                                                    ProjectCore.logError( "delete related runtime and server error",
+                                                        e );
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                catch( Exception e )
+                                {
+                                    ProjectCore.logError( e );
+                                }
+
+                                return true;
+                            }
+                        } );
+                    }
                 }
-                catch( BladeCLIException e )
+                catch( Exception e )
                 {
-                    // ignore any errors
+                    ProjectCore.logError( "delete related runtime and server error", e );
                 }
 
-                return Status.OK_STATUS;
+                return;
             }
-        };
-
-        job.schedule();
-        */
+        }, IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_DELETE );
     }
 
     /*

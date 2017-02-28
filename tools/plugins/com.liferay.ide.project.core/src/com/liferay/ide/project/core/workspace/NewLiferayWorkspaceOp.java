@@ -14,6 +14,8 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.workspace;
 
+import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
+
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
@@ -70,7 +72,7 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "location" )
     @Service( impl = WorkspaceLocationValidationService.class )
-    @Service( impl = WorkspaceLocationInitialValueService.class )
+    @Service( impl = CommonProjectLocationInitialValueService.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();

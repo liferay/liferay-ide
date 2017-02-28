@@ -17,13 +17,10 @@ package com.liferay.ide.project.core.workspace;
 
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
-import java.io.File;
-
 import org.eclipse.sapphire.DerivedValueService;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Path;
-
 
 /**
  * @author Gregory Amerson
@@ -60,23 +57,9 @@ public class HasBundlesDirDerivedValueService extends DerivedValueService
 
         if( path != null )
         {
-            String type = LiferayWorkspaceUtil.getWorkspaceType( path.toPortableString() );
-
-            if( type != null )
+            if( LiferayWorkspaceUtil.isValidWorkspaceLocation( path.toPortableString() ) )
             {
-                if( type.startsWith( "maven" ) )
-                {
-                    File bundlesDir = new File( path.toFile(), "bundles" );
-
-                    if( bundlesDir.exists() )
-                    {
-                        retval = "true";
-                    }
-                }
-                else if( type.startsWith( "gradle" ) && LiferayWorkspaceUtil.hasBundlesDir( path.toOSString() ) )
-                {
-                    retval = "true";
-                }
+                retval = LiferayWorkspaceUtil.hasBundlesDir( path.toPortableString() ) ? "true" : "false";
             }
         }
 

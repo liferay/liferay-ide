@@ -28,8 +28,6 @@ import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
-import org.eclipse.sapphire.modeling.annotations.Label;
-import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
@@ -50,18 +48,6 @@ public interface BaseModuleOp extends ExecutableElement
     Value<Path> getInitialSelectionPath();
     void setInitialSelectionPath( String value );
     void setInitialSelectionPath( Path value );
-
-    // *** UseDefaultLocation ***
-
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "true" )
-    @Label( standard = "use default location" )
-    @Listeners( ModuleProjectUseDefaultLocationListener.class )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
-
-    Value<Boolean> getUseDefaultLocation();
-    void setUseDefaultLocation( String value );
-    void setUseDefaultLocation( Boolean value );
 
     // *** FinalProjectName ***
 

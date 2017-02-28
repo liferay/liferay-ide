@@ -26,6 +26,7 @@ import com.liferay.ide.project.core.modules.PropertyKey;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,11 +111,14 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
             properties.add( propertyKey.getName().content( true ) + "=" + propertyKey.getValue().content( true ) );
         }
 
+        File targetDir = location.toFile();
+        targetDir.mkdirs();
+
         final String projectTemplateName = op.getProjectTemplateName().content();
 
         StringBuilder sb = new StringBuilder();
         sb.append( "create " );
-        sb.append( "-d \"" + location.toFile().getAbsolutePath() + "\" " );
+        sb.append( "-d \"" + targetDir.getAbsolutePath() + "\" " );
         sb.append( "-t " + projectTemplateName + " " );
 
         if( className != null )
@@ -154,20 +158,11 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 }
             }
 
-            /*
-            IPath buildGradlePath = projecLocation.append( "build.gradle" );
-
-            if( buildGradlePath.toFile().exists() && serviceName != null )
-            {
-                NewLiferayModuleProjectOpMethods.addDependencies( buildGradlePath.toFile(), serviceName );
-            }
-            */
-
-            boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
+            boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
             boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
             boolean inWorkspacePath = false;
 
-            IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+            IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
             if( liferayWorkspaceProject != null && !useDefaultLocation )
             {
@@ -176,7 +171,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 if( workspaceLocation != null )
                 {
                     String liferayWorkspaceProjectModulesDir =
-                        LiferayWorkspaceUtil.getLiferayWorkspaceProjectModulesDir( liferayWorkspaceProject );
+                        LiferayWorkspaceUtil.getModulesDir( liferayWorkspaceProject );
 
                     if( liferayWorkspaceProjectModulesDir != null )
                     {

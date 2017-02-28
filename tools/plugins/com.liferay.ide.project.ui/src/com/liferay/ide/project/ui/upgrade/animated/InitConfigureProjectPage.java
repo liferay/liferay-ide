@@ -803,7 +803,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 {
                     progress.worked( 60 );
 
-                    final IPath runtimeLocation = sdkLocation.append( LiferayWorkspaceUtil.loadConfiguredHomeDir( sdkLocation.toOSString() ) );
+                    final IPath runtimeLocation = sdkLocation.append( LiferayWorkspaceUtil.getHomeDir( sdkLocation.toOSString() ) );
 
                     ServerUtil.addPortalRuntimeAndServer( bundleName, runtimeLocation, monitor );
 
@@ -1530,7 +1530,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         try
                         {
-                            if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
+                            if( LiferayWorkspaceUtil.hasWorkspace() )
                             {
                                 liferayWorksapceValidation = false;
                                 workspaceValidationMessage = LiferayWorkspaceUtil.hasLiferayWorkspaceMsg;
@@ -1569,7 +1569,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 if( dataModel.getImportFinished().content() )
                 {
                     message =
-                        "Import has finished. If you want to reimport, please click Restart Upgrade icon in the toolbar.";
+                        "Import has finished. If you want to reimport, please click swirling arrows in the view.";
 
                     pe.setType( PageValidateEvent.WARNING );
 

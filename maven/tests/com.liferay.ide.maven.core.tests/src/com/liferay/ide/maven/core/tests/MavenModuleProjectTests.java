@@ -305,8 +305,8 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
     @Test
     public void testNewLiferayModuleProjectDefaultLocation() throws Exception
     {
-        final URL wsZipUrl =
-            Platform.getBundle( "com.liferay.ide.maven.core.tests" ).getEntry( "projects/emptyLiferayWorkspace.zip" );
+        final URL wsZipUrl = Platform.getBundle( "com.liferay.ide.maven.core.tests" ).getEntry(
+            "projects/gradle-liferay-workspace.zip" );
 
         final File wsZipFile = new File( FileLocator.toFileURL( wsZipUrl ).getFile() );
 
@@ -314,7 +314,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
         ZipUtil.unzip( wsZipFile, eclipseWorkspaceLocation );
 
-        File wsFolder = new File( eclipseWorkspaceLocation, "emptyLiferayWorkspace" );
+        File wsFolder = new File( eclipseWorkspaceLocation, "gradle-liferay-workspace" );
 
         importExistingProject( wsFolder, new NullProgressMonitor() );
 
@@ -334,14 +334,14 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
         op.setProjectTemplateName( "theme" );
 
         // put gradle type theme project inside liferay-workspace/wars
-        assertTrue( op.getLocation().content().toPortableString().contains( "emptyLiferayWorkspace/wars" ) );
+        assertTrue( op.getLocation().content().toPortableString().contains( "gradle-liferay-workspace/wars" ) );
 
         op.setProjectTemplateName( "mvc-portlet" );
 
         // put gradle type project inside liferay-workspace/modules
-        assertTrue( op.getLocation().content().toPortableString().contains( "emptyLiferayWorkspace/modules" ) );
+        assertTrue( op.getLocation().content().toPortableString().contains( "gradle-liferay-workspace/modules" ) );
 
-        IProject project = CoreUtil.getProject( "emptyLiferayWorkspace" );
+        IProject project = CoreUtil.getProject( "gradle-liferay-workspace" );
 
         if( project != null && project.isAccessible() && project.exists() )
         {

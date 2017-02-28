@@ -26,17 +26,76 @@ import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.window.Window;
+import org.eclipse.sapphire.DisposeEvent;
+import org.eclipse.sapphire.Element;
 import org.eclipse.sapphire.ElementList;
+import org.eclipse.sapphire.Event;
+import org.eclipse.sapphire.FilteredListener;
+import org.eclipse.sapphire.Listener;
+import org.eclipse.sapphire.PropertyContentEvent;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.ui.Presentation;
-import org.eclipse.sapphire.ui.SapphireActionHandler;
+import org.eclipse.sapphire.ui.SapphireAction;
+import org.eclipse.sapphire.ui.def.ActionHandlerDef;
+import org.eclipse.sapphire.ui.forms.PropertyEditorActionHandler;
 import org.eclipse.wst.server.core.IRuntime;
 
 /**
  * @author Terry Jia
+ * @author Joye Luo
  */
-public class AddFilesFromOSGiBundleAction extends SapphireActionHandler
+public class AddFilesFromOSGiBundleAction extends PropertyEditorActionHandler
 {
+
+    @Override
+    protected boolean computeEnablementState()
+    {
+        boolean enabled = false;
+
+        NewModuleFragmentOp op = getModelElement().nearest( NewModuleFragmentOp.class );
+
+        String hostOsgiBundle = op.getHostOsgiBundle().content();
+
+        if( hostOsgiBundle != null )
+        {
+            enabled = true;
+        }
+
+        return enabled;
+    }
+
+    @Override
+    public void init( SapphireAction action, ActionHandlerDef def )
+    {
+        super.init( action, def );
+
+        final Element element = getModelElement();
+
+        final Listener listener = new FilteredListener<PropertyContentEvent>()
+        {
+
+            @Override
+            protected void handleTypedEvent( PropertyContentEvent event )
+            {
+                refreshEnablementState();
+            }
+
+        };
+
+        element.attach( listener, NewModuleFragmentOp.PROP_HOST_OSGI_BUNDLE.name() );
+        attach( new Listener()
+        {
+
+            @Override
+            public void handle( final Event event )
+            {
+                if( event instanceof DisposeEvent )
+                {
+                    element.detach( listener, NewModuleFragmentOp.PROP_HOST_OSGI_BUNDLE.name() );
+                }
+            }
+        } );
+    }
 
     @Override
     protected Object run( Presentation context )

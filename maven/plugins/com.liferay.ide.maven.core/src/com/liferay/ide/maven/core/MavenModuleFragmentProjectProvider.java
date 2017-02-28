@@ -17,8 +17,8 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
-import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
-import com.liferay.ide.project.core.modules.PropertyKey;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,7 @@ import java.util.Properties;
 import org.apache.maven.archetype.catalog.Archetype;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -39,31 +40,33 @@ import org.eclipse.m2e.core.project.ResolverConfiguration;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
- * @author Simon Jiang
+ * @author Joye Luo
  */
 @SuppressWarnings( "restriction" )
-public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
+public class MavenModuleFragmentProjectProvider extends LiferayMavenProjectProvider
+    implements NewLiferayProjectProvider<NewModuleFragmentOp>
 {
-    @Override
-    public IStatus createNewProject( NewLiferayModuleProjectOp op, IProgressMonitor monitor ) throws CoreException
-    {
-        IStatus retval = null;
 
-        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
+    @Override
+    public IStatus createNewProject( NewModuleFragmentOp op, IProgressMonitor monitor ) throws CoreException
+    {
+        IStatus retval = Status.OK_STATUS;
+
+        final String projectName = op.getProjectName().content();
 
         IPath location = PathBridge.create( op.getLocation().content() );
 
+        String[] bsnAndVersion = NewModuleFragmentOpMethods.getBsnAndVersion( op );
+        String hostBundleSymbolicName = bsnAndVersion[0];
+        String hostBundleVersion = bsnAndVersion[1];
+
         final String groupId = op.getGroupId().content();
-        final String artifactId = op.getProjectName().content();
+        final String artifactId = projectName;
         final String version = op.getArtifactVersion().content();
-        final String javaPackage = op.getPackageName().content();
-        final String className = op.getComponentName().content();
-        final String serviceName = op.getServiceName().content();
+        final String javaPackage = "";
 
-        final String archetypeArtifactId = op.getArchetype().content();
-
+        final String archetypeArtifactId = getData( "archetypeGAV", String.class, "" ).get( 0 );
         final Archetype archetype = new Archetype();
-
         final String[] gav = archetypeArtifactId.split( ":" );
 
         final String archetypeVersion = gav[gav.length - 1];
@@ -74,45 +77,24 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
 
         final Properties properties = new Properties();
 
-        if( archetype.getArtifactId().endsWith( "service.builder") )
-        {
-            String apiPath = ":" + artifactId + "-api";
-
-            properties.put( "apiPath", apiPath );
-        }
-
+        properties.put( "hostBundleSymbolicName", hostBundleSymbolicName );
+        properties.put( "hostBundleVersion", hostBundleVersion );
         properties.put( "buildType", "maven" );
-        properties.put( "package", javaPackage );
-        properties.put( "className", className == null ? "" : className );
         properties.put( "projectType", "standalone" );
-        properties.put( "serviceClass", serviceName == null ? "" : serviceName );
-        properties.put( "serviceWrapperClass", serviceName == null ? "" : serviceName );
-        properties.put( "contributorType", artifactId );
-        properties.put( "author", "liferay" );
 
-        for( PropertyKey propertyKey : op.getPropertyKeys() )
-        {
-            String key = propertyKey.getName().content();
-            String value = propertyKey.getValue().content();
-
-            properties.put( key, value );
-        }
-
-        if( serviceName != null )
-        {
-            properties.put( "service", serviceName );
-        }
+        final IProjectConfigurationManager projectConfigurationManager = MavenPlugin.getProjectConfigurationManager();
 
         final ResolverConfiguration resolverConfig = new ResolverConfiguration();
         ProjectImportConfiguration configuration = new ProjectImportConfiguration( resolverConfig );
 
-        final List<IProject> newProjects =
-            projectConfigurationManager.createArchetypeProjects(
-                location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
+        final List<IProject> newProjects = projectConfigurationManager.createArchetypeProjects(
+            location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
 
-        if (newProjects == null || newProjects.size() == 0)
+        NewModuleFragmentOpMethods.copyOverrideFiles( op );
+
+        if( newProjects == null || newProjects.size() == 0 )
         {
-            retval = LiferayMavenCore.createErrorStatus( "Unable to create project from archetype." );
+            return LiferayMavenCore.createErrorStatus( "Unable to create fragment project from archetype." );
         }
         else
         {
@@ -129,9 +111,9 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
                         gradleFile.delete( true, monitor );
                     }
                 }
-            }
 
-            retval = Status.OK_STATUS;
+                newProject.refreshLocal( IResource.DEPTH_INFINITE, null );
+            }
         }
 
         return retval;
@@ -144,13 +126,12 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
         {
             List<T> retval = new ArrayList<>();
 
-            String templateName = params[0].toString();
-
-            String gav = LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_PREFIX + templateName, "");
+            String gav =
+                LiferayMavenCore.getPreferenceString( LiferayMavenCore.PREF_ARCHETYPE_PROJECT_TEMPLATE_FRAGMENT, "" );
 
             if( CoreUtil.empty( gav ) )
             {
-                gav = "com.liferay:com.liferay.project.templates." + templateName.replace( "-", "." ) + ":1.0.0";
+                gav = "com.liferay:com.liferay.project.templates.fragment" + ":1.0.1";
             }
 
             retval.add( type.cast( gav ) );
@@ -166,5 +147,4 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
     {
         return Status.OK_STATUS;
     }
-
 }

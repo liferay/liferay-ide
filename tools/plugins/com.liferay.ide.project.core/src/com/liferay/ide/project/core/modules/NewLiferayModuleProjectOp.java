@@ -16,6 +16,7 @@ package com.liferay.ide.project.core.modules;
 
 import com.liferay.ide.core.ILiferayProjectProvider;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ElementType;
@@ -64,11 +65,24 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
     @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
     @Label( standard = "location" )
     @Service( impl = ModuleProjectLocationValidationService.class )
+    @Service( impl = CommonProjectLocationInitialValueService.class )
     ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
 
     Value<Path> getLocation();
     void setLocation( String value );
     void setLocation( Path value );
+
+    // *** UseDefaultLocation ***
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
+    @Label( standard = "use default location" )
+    @Listeners( ModuleProjectUseDefaultLocationListener.class )
+    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
+
+    Value<Boolean> getUseDefaultLocation();
+    void setUseDefaultLocation( String value );
+    void setUseDefaultLocation( Boolean value );
 
     // *** Archetype ***
 

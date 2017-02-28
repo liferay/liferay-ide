@@ -38,7 +38,7 @@ public class ImportWorkspaceLocationValidationService extends ValidationService
 
         try
         {
-            if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
+            if( LiferayWorkspaceUtil.hasWorkspace() )
             {
                 return Status.createErrorStatus( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg );
             }

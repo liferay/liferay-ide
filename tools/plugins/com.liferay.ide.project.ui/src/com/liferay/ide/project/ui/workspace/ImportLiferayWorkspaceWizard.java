@@ -93,7 +93,7 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
             {
                 try
                 {
-                    if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
+                    if( LiferayWorkspaceUtil.hasWorkspace() )
                     {
                         wizardPage.setMessage( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );
                     }

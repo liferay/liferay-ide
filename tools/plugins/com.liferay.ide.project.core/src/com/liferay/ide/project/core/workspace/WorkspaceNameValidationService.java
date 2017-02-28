@@ -47,7 +47,7 @@ public class WorkspaceNameValidationService extends ValidationService
 
         try
         {
-            if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
+            if( LiferayWorkspaceUtil.hasWorkspace() )
             {
                 retval = Status.createErrorStatus( LiferayWorkspaceUtil.hasLiferayWorkspaceMsg );
 

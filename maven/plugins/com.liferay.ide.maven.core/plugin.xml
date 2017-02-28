@@ -56,6 +56,13 @@
             projectType="workspace"
             shortName="maven-liferay-workspace">
       </liferayProjectProvider>
+      <liferayProjectProvider
+            class="com.liferay.ide.maven.core.MavenModuleFragmentProjectProvider"
+            displayName="Maven"
+            id="com.liferay.ide.maven.core.mavenModuleFragmentProjectProvider"
+            projectType="module-fragment"
+            shortName="maven-module-fragment">
+      </liferayProjectProvider>
    </extension>
    <extension
          id="com.liferay.ide.maven.core.configurationProblem"

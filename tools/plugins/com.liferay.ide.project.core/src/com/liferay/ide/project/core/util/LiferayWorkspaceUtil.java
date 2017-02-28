@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 
 /**
  * @author Andy Wu
@@ -40,20 +39,8 @@ public class LiferayWorkspaceUtil
     public static String hasLiferayWorkspaceMsg =
         "A Liferay Workspace project already exists in this Eclipse instance.";
 
-    public static IStatus validateWorkspacePath(final String currentPath)
-    {
-        IStatus retVal = ProjectImportUtil.validatePath( currentPath );
-
-        if( retVal.isOK() )
-        {
-            if( !LiferayWorkspaceUtil.isValidWorkspaceLocation( currentPath ) )
-            {
-                retVal = ProjectCore.createErrorStatus( "Invalid Liferay Workspace" );
-            }
-        }
-
-        return retVal;
-    }
+    private final static Pattern PATTERN_WORKSPACE_PLUGIN = Pattern.compile(
+        ".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL );
 
     public static void clearWorkspace( String location )
     {
@@ -77,21 +64,21 @@ public class LiferayWorkspaceUtil
         }
     }
 
-    public static boolean isValidWorkspaceLocation( String location )
+    private static boolean isValidGradleWorkspace( IProject project )
+    {
+        return project != null && project.getLocation() != null &&
+            isValidGradleWorkspaceLocation( project.getLocation().toOSString() );
+    }
+
+    private static boolean isValidMavenWorkspace( IProject project )
+    {
+        return project != null && project.getLocation() != null &&
+            isValidMavenWorkspaceLocation( project.getLocation().toOSString() );
+    }
+
+    private static boolean isValidGradleWorkspaceLocation( String location )
     {
         File workspaceDir = new File( location );
-
-        File pomFile = new File( workspaceDir, "pom.xml" );
-
-        if( pomFile.exists() )
-        {
-            String content = FileUtil.readContents( pomFile );
-
-            if( content.contains( "com.liferay.portal.tools.bundle.support" ) )
-            {
-                return true;
-            }
-        }
 
         File buildGradle = new File( workspaceDir, "build.gradle" );
         File settingsGradle = new File( workspaceDir, "settings.gradle" );
@@ -107,7 +94,34 @@ public class LiferayWorkspaceUtil
         return settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher( settingsContent ).matches();
     }
 
-    private final static Pattern PATTERN_WORKSPACE_PLUGIN = Pattern.compile(".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL );
+    private static boolean isValidMavenWorkspaceLocation( String location )
+    {
+        File workspaceDir = new File( location );
+
+        File pomFile = new File( workspaceDir, "pom.xml" );
+
+        if( pomFile.exists() )
+        {
+            String content = FileUtil.readContents( pomFile );
+
+            if( content.contains( "com.liferay.portal.tools.bundle.support" ) )
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isValidWorkspaceLocation( String location )
+    {
+        if( isValidMavenWorkspaceLocation( location ) || isValidGradleWorkspaceLocation( location ) )
+        {
+            return true;
+        }
+
+        return false;
+    }
 
     public static boolean isValidWorkspace( IProject project )
     {
@@ -118,17 +132,64 @@ public class LiferayWorkspaceUtil
 
     public static boolean hasBundlesDir( String location )
     {
-        File bundles = new File( location, loadConfiguredHomeDir( location ) );
+        File bundles = new File( location, getHomeDir( location ) );
 
-        if( bundles.exists() && bundles.isDirectory() )
+        return bundles.exists() && bundles.isDirectory();
+    }
+
+    public static boolean hasGradleWorkspace() throws CoreException
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+
+        int count = 0;
+
+        for( IProject project : projects )
+        {
+            if( isValidGradleWorkspace( project ) )
+            {
+                ++count;
+            }
+        }
+
+        if( count == 1 )
         {
             return true;
+        }
+        else if( count > 1 )
+        {
+            throw new CoreException( ProjectCore.createErrorStatus( multiWorkspaceErrorMsg ) );
         }
 
         return false;
     }
 
-    public static boolean hasLiferayWorkspace() throws CoreException
+    public static boolean hasMavenWorkspace() throws CoreException
+    {
+        IProject[] projects = CoreUtil.getAllProjects();
+
+        int count = 0;
+
+        for( IProject project : projects )
+        {
+            if( isValidMavenWorkspace( project ) )
+            {
+                ++count;
+            }
+        }
+
+        if( count == 1 )
+        {
+            return true;
+        }
+        else if( count > 1 )
+        {
+            throw new CoreException( ProjectCore.createErrorStatus( multiWorkspaceErrorMsg ) );
+        }
+
+        return false;
+    }
+
+    public static boolean hasWorkspace() throws CoreException
     {
         IProject[] projects = CoreUtil.getAllProjects();
 
@@ -154,7 +215,7 @@ public class LiferayWorkspaceUtil
         return false;
     }
 
-    public static String getLiferayWorkspaceGradleProperty( String projectLocation, String key, String defaultValue )
+    private static String getGradleProperty( String projectLocation, String key, String defaultValue )
     {
         File gradleProperties = new File( projectLocation, "gradle.properties" );
 
@@ -170,7 +231,7 @@ public class LiferayWorkspaceUtil
         return retVal;
     }
 
-    public static IProject getLiferayWorkspaceProject()
+    public static IProject getWorkspaceProject()
     {
         IProject[] projects = CoreUtil.getAllProjects();
 
@@ -184,7 +245,7 @@ public class LiferayWorkspaceUtil
         return null;
     }
 
-    public static String getLiferayWorkspaceProjectModulesDir( final IProject project )
+    public static String getModulesDir( final IProject project )
     {
         String retval = null;
 
@@ -194,15 +255,15 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                retval = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
+                retval = getGradleProperty( projectLocation.toPortableString(),
                     "liferay.workspace.modules.dir", "modules" );
             }
         }
 
-        return retval;
+        return retval == null ? "modules" : retval;
     }
 
-    public static String getLiferayWorkspaceProjectThemesDir( final IProject project )
+    public static String getThemesDir( final IProject project )
     {
         String retval = null;
 
@@ -212,15 +273,15 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                retval = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
+                retval = getGradleProperty( projectLocation.toPortableString(),
                     "liferay.workspace.themes.dir", "themes" );
             }
         }
 
-        return retval;
+        return retval == null ? "themes" : retval;
     }
 
-    public static String[] getLiferayWorkspaceProjectWarsDirs( final IProject project )
+    public static String[] getWarsDirs( final IProject project )
     {
         String[] retval = null;
 
@@ -230,8 +291,10 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                String val = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
+                String val = getGradleProperty( projectLocation.toPortableString(),
                     "liferay.workspace.wars.dir", "wars" );
+
+                val = ( val == null ? "wars" : val );
 
                 retval = val.split( "," );
             }
@@ -259,8 +322,10 @@ public class LiferayWorkspaceUtil
         return null;
     }
 
-    public static String loadConfiguredHomeDir( String location )
+    public static String getHomeDir( String location )
     {
-        return getLiferayWorkspaceGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
+        String result = getGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
+
+        return result == null ? "bundles" : result;
     }
 }

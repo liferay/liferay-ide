@@ -93,7 +93,7 @@ public class NewLiferayWorkspaceWizard extends SapphireWizard<NewLiferayWorkspac
             {
                 try
                 {
-                    if( LiferayWorkspaceUtil.hasLiferayWorkspace() )
+                    if( LiferayWorkspaceUtil.hasWorkspace() )
                     {
                         wizardPage.setMessage(
                             LiferayWorkspaceUtil.hasLiferayWorkspaceMsg, SapphireWizardPage.ERROR );

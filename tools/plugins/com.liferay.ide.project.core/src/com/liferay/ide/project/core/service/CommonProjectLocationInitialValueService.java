@@ -13,7 +13,7 @@
  *
  *******************************************************************************/
 
-package com.liferay.ide.project.core.workspace;
+package com.liferay.ide.project.core.service;
 
 import com.liferay.ide.core.util.CoreUtil;
 
@@ -22,7 +22,7 @@ import org.eclipse.sapphire.InitialValueService;
 /**
  * @author Andy Wu
  */
-public class WorkspaceLocationInitialValueService extends InitialValueService
+public class CommonProjectLocationInitialValueService extends InitialValueService
 {
     @Override
     protected String compute()

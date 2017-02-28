@@ -196,7 +196,6 @@ public class NewLiferayModuleProjectOpMethods
         return classFiles;
     }
 
-
     public static String getMavenParentPomGroupId( NewLiferayModuleProjectOp op, String projectName, IPath path )
     {
         String retval = null;

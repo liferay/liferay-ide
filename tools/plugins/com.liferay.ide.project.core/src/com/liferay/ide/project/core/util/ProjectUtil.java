@@ -1518,13 +1518,13 @@ public class ProjectUtil
     {
         try
         {
-            if( LiferayWorkspaceUtil.hasLiferayWorkspace() && project.getFolder( "src" ).exists() )
+            if( LiferayWorkspaceUtil.hasWorkspace() && project.getFolder( "src" ).exists() )
             {
-                IProject wsProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+                IProject wsProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
                 File wsRootDir = wsProject.getLocation().toFile();
 
-                String[] warsNames = LiferayWorkspaceUtil.getLiferayWorkspaceProjectWarsDirs( wsProject );
+                String[] warsNames = LiferayWorkspaceUtil.getWarsDirs( wsProject );
 
                 File[] warsDirs = new File[warsNames.length];
 

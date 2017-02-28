@@ -126,9 +126,14 @@ public class FragmentProjectNameValidationService extends ValidationService
     @Override
     public void dispose()
     {
-        super.dispose();
+        if( this.listener != null && op() != null && !op().disposed() )
+        {
+            op().detach( listener, "*" );
 
-        op().detach( listener, "*" );
+            this.listener = null;
+        }
+
+        super.dispose();
     }
 
     private boolean isValidProjectName( String currentProjectName )

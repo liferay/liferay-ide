@@ -1174,13 +1174,13 @@ public class CustomJspPage extends Page
 
         try
         {
-            hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
+            hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
 
             if( hasLiferayWorkspace )
             {
-                IProject ws = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+                IProject ws = LiferayWorkspaceUtil.getWorkspaceProject();
 
-                String modulesDir = LiferayWorkspaceUtil.getLiferayWorkspaceProjectModulesDir( ws );
+                String modulesDir = LiferayWorkspaceUtil.getModulesDir( ws );
 
                 defaultLocation = ws.getLocation().append( modulesDir ).toPortableString();
             }

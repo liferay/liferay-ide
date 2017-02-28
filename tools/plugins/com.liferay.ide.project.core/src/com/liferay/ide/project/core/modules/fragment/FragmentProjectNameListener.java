@@ -60,51 +60,59 @@ public class FragmentProjectNameListener extends FilteredListener<PropertyConten
         {
             Path newLocationBase = null;
             boolean hasLiferayWorkspace = false;
+            boolean hasGradleWorkspace = false;
+            boolean hasMavenWorkspace = false;
 
             try
             {
-                hasLiferayWorkspace = LiferayWorkspaceUtil.hasLiferayWorkspace();
+                hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
+                hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
+                hasMavenWorkspace = LiferayWorkspaceUtil.hasMavenWorkspace();
             }
             catch( Exception e )
             {
-                ProjectCore.logError( "Failed to check LiferayWorkspace project. " );
+                ProjectCore.logError( "Failed to check LiferayWorkspace project." );
             }
 
-            boolean isGradleModule = false;
-
-            ILiferayProjectProvider iProvider = op.getProjectProvider().content();
-
-            if( iProvider != null )
+            if( !hasLiferayWorkspace )
             {
-                String shortName = iProvider.getShortName();
-
-                if( !CoreUtil.empty( shortName ) && shortName.startsWith( "gradle" ) )
-                {
-                    isGradleModule = true;
-                }
+                newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
             }
-
-            if( hasLiferayWorkspace && isGradleModule )
+            else
             {
-                IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getLiferayWorkspaceProject();
+                boolean isGradleModule = false;
+                boolean isMavenModule = false;
 
-                if( liferayWorkspaceProject != null && liferayWorkspaceProject.exists() )
+                ILiferayProjectProvider iProvider = op.getProjectProvider().content();
+
+                if( iProvider != null )
                 {
-                    String folder =
-                        LiferayWorkspaceUtil.getLiferayWorkspaceProjectModulesDir( liferayWorkspaceProject );
+                    String shortName = iProvider.getShortName();
 
-                    if( folder != null )
+                    if( !CoreUtil.empty( shortName ) && shortName.startsWith( "gradle" ) )
                     {
-                        IPath appendPath = liferayWorkspaceProject.getLocation().append( folder );
+                        isGradleModule = true;
+                    }
+                    else
+                    {
+                        isMavenModule = true;
+                    }
+                }
 
-                        if( appendPath != null && appendPath.toFile().exists() )
+                if( ( isGradleModule && hasGradleWorkspace ) || ( isMavenModule && hasMavenWorkspace ) )
+                {
+                    IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
+
+                    if( liferayWorkspaceProject != null && liferayWorkspaceProject.exists() )
+                    {
+                        String folder =
+                            LiferayWorkspaceUtil.getModulesDir( liferayWorkspaceProject );
+
+                        if( folder != null )
                         {
+                            IPath appendPath = liferayWorkspaceProject.getLocation().append( folder );
+
                             newLocationBase = PathBridge.create( appendPath );
-                        }
-                        else
-                        {
-                            newLocationBase =
-                                PathBridge.create( liferayWorkspaceProject.getLocation().append( "modules" ) );
                         }
                     }
                 }
@@ -112,10 +120,6 @@ public class FragmentProjectNameListener extends FilteredListener<PropertyConten
                 {
                     newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
                 }
-            }
-            else
-            {
-                newLocationBase = PathBridge.create( CoreUtil.getWorkspaceRoot().getLocation() );
             }
 
             if( newLocationBase != null )

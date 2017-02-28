@@ -31,8 +31,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
@@ -130,11 +128,6 @@ public class NewModuleFragmentFilesOpMethods
             project.refreshLocal( IResource.DEPTH_INFINITE, null );
 
             retval = Status.createOkStatus();
-
-            if( retval.ok() )
-            {
-                updateBuildPrefs( op );
-            }
         }
         catch( Exception e )
         {
@@ -145,24 +138,6 @@ public class NewModuleFragmentFilesOpMethods
         }
 
         return retval;
-    }
-
-    private static void updateBuildPrefs( final NewModuleFragmentOp op )
-    {
-        try
-        {
-            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( ProjectCore.PLUGIN_ID );
-
-            prefs.put(
-                ProjectCore.PREF_DEFAULT_MODULE_FRAGMENT_PROJECT_BUILD_TYPE_OPTION, op.getProjectProvider().text() );
-
-            prefs.flush();
-        }
-        catch( Exception e )
-        {
-            final String msg = "Error updating default project build type.";
-            ProjectCore.logError( msg, e );
-        }
     }
 
 }

@@ -12,19 +12,19 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.modules;
+package com.liferay.ide.project.core.modules.fragment;
 
 import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
- * @author Simon Jiang
+ * @author Joye Luo
  */
-public class ModuleProjectUseDefaultLocationListener extends ModuleProjectNameListener
+public class ModuleFragmentProjectUseDefaultLocationListener extends FragmentProjectNameListener
 {
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
-        final NewLiferayModuleProjectOp op = op( event );
+        final NewModuleFragmentOp op = op( event );
 
         if( op.getUseDefaultLocation().content( true ) )
         {
