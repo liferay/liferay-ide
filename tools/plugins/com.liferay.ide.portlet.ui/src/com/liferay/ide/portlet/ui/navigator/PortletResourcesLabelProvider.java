@@ -52,7 +52,7 @@ public class PortletResourcesLabelProvider extends AbstractLabelProvider
             PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/portlet_16x16.png" ) ); //$NON-NLS-1$
         imageRegistry.put(
             MODULES,
-            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/e16/liferay_modules.png" ) ); //$NON-NLS-1$
+            PortletUIPlugin.imageDescriptorFromPlugin( PortletUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png" ) ); //$NON-NLS-1$
     }
 
     @Override

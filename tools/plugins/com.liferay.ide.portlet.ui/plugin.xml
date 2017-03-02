@@ -100,7 +100,7 @@
             id="com.liferay.ide.ui.popupmenu"
             objectClass="org.eclipse.core.resources.IFile">
          <menu
-               icon="icons/e16/liferay.png"
+               icon="icons/liferay_logo_16.png"
                id="liferayPopupMenuCategory"
                label="%menu.label">
             <separator
@@ -116,7 +116,7 @@
                class="com.liferay.ide.portlet.ui.action.BuildLanguagesAction"
                definitionId="com.liferay.ide.portlet.ui.buildLang"
                enablesFor="1"
-               icon="icons/e16/liferay.png"
+               icon="icons/liferay_logo_16.png"
                id="com.liferay.ide.portlet.ui.lang.popup.action"
                label="%portlet.action.label"
                menubarPath="liferayPopupMenuCategory/slot1"

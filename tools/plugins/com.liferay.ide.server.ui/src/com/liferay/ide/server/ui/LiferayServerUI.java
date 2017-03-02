@@ -182,7 +182,7 @@ public class LiferayServerUI extends AbstractUIPlugin
         }
 
         registerImage( registry, IMG_WIZ_RUNTIME, "wizban/liferay_wiz.png" );
-        registerImage( registry, IMG_NOTIFICATION, "e16/server.png" );
+        registerImage( registry, IMG_NOTIFICATION, "e16/liferay_logo_16.png" );
 
         return registry;
     }

@@ -84,7 +84,7 @@ public class LiferayProjectPropertyPage extends PropertyPage
         super();
 
         setImageDescriptor( ProjectUI.imageDescriptorFromPlugin(
-            ProjectUI.PLUGIN_ID, "/icons/e16/liferay.png" ) ); //$NON-NLS-1$
+            ProjectUI.PLUGIN_ID, "/icons/liferay_logo_16.png" ) ); //$NON-NLS-1$
 
         noDefaultAndApplyButton();
     }

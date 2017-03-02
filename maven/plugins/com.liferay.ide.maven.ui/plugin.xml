@@ -16,7 +16,7 @@
             id="com.liferay.ide.ui.popupmenu"
             objectClass="org.eclipse.core.resources.IResource">
          <menu
-               icon="icons/e16/liferay.png"
+               icon="icons/liferay_logo_16.png"
                id="liferayPopupMenuCategory"
                label="%liferay.menu.label">
             <separator

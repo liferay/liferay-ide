@@ -434,7 +434,7 @@ public class LiferayUIPlugin extends AbstractUIPlugin implements IStartup
     @Override
     protected void initializeImageRegistry( ImageRegistry reg )
     {
-        registerImage( reg, IMG_LIFERAY_ICON_SMALL, "/icons/e16/liferay.png" ); //$NON-NLS-1$
+        registerImage( reg, IMG_LIFERAY_ICON_SMALL, "/icons/liferay_logo_16.png" ); //$NON-NLS-1$
     }
 
     protected void registerImage( ImageRegistry registry, String key, String path )

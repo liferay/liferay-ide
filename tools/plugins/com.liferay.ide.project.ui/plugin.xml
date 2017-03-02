@@ -351,7 +351,7 @@
       </objectContribution>
       <objectContribution objectClass="org.eclipse.core.resources.IResource" adaptable="true" id="com.liferay.ide.ui.popupmenu">
          <menu
-               icon="icons/e16/liferay.png"
+               icon="icons/liferay_logo_16.png"
                id="liferayPopupMenuCategory"
                label="%liferay.menu.label">
             <separator name="slot1"/>
@@ -525,7 +525,7 @@
       </image>
       <image
             category="liferay.plugins"
-            path="icons/e16/liferay.png">
+            path="icons/liferay_logo_16.png">
       </image>
    </extension>
 
@@ -633,7 +633,7 @@
             id="com.liferay.ide.ui.popupmenu"
             objectClass="org.eclipse.core.resources.IResource">
          <menu
-               icon="icons/e16/liferay.png"
+               icon="icons/liferay_logo_16.png"
                id="liferayPopupMenuCategory"
                label="%liferay.menu.label">
             <separator
@@ -1453,7 +1453,7 @@
       <navigatorContent
             activeByDefault="true"
             contentProvider="com.liferay.ide.project.ui.migration.MigrationContentProvider"
-            icon="icons/e16/server.png"
+            icon="icons/liferay_logo_16.png"
             id="com.liferay.ide.project.ui.migration.content"
             labelProvider="com.liferay.ide.project.ui.migration.MigrationLabelProvider"
             name="Liferay Plugin Migration">
@@ -1832,7 +1832,7 @@
          id="component.properties.proposal"
          name="OSGI Component Properties Proposal Computer"
          point="org.eclipse.jdt.ui.javaCompletionProposalComputer">
-         <proposalCategory icon="icons/e16/liferay.png"/>
+         <proposalCategory icon="icons/liferay_logo_16.png"/>
    </extension>
    <extension
          id="component.properties.proposal.computer"

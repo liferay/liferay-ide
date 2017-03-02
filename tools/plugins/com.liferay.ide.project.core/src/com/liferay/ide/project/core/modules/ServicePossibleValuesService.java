@@ -106,7 +106,6 @@ public class ServicePossibleValuesService extends PossibleValuesService
                 ProjectCore.logError( "Get services list error. ", e );
             }
         }
-
     }
 
     @Override

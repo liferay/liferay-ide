@@ -40,7 +40,7 @@ public class LiferayTomcatRuntimeDecorationsProvider implements IAdapterFactory
         public ImageDescriptor getIcon()
         {
             return LiferayTomcatUIPlugin.imageDescriptorFromPlugin(
-                LiferayTomcatUIPlugin.PLUGIN_ID, "icons/e16/server.png" ); //$NON-NLS-1$
+                LiferayTomcatUIPlugin.PLUGIN_ID, "icons/liferay_logo_16.png" ); //$NON-NLS-1$
         }
 
     }
