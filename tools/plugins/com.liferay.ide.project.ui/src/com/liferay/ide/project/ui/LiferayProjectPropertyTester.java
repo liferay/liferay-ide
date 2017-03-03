@@ -18,7 +18,6 @@ package com.liferay.ide.project.ui;
 import com.liferay.ide.project.core.util.ProjectUtil;
 
 import org.eclipse.core.expressions.PropertyTester;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -32,10 +31,6 @@ public class LiferayProjectPropertyTester extends PropertyTester
         if( receiver instanceof IProject )
         {
             return ProjectUtil.isLiferayFacetedProject( (IProject) receiver );
-        }
-        else if( receiver instanceof IFolder )
-        {
-            return ProjectUtil.isLiferaySDKProject( (IFolder) receiver );
         }
 
         return false;

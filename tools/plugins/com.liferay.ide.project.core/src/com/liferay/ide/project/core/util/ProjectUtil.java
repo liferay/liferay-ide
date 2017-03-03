@@ -1418,12 +1418,6 @@ public class ProjectUtil
                 ISDKConstants.WEB_PLUGIN_PROJECT_SUFFIX.endsWith( type ) );
     }
 
-    public static boolean isLiferaySDKProject( IFolder folder )
-    {
-        return folder != null && folder.exists() && folder.getRawLocation() != null &&
-            isLiferaySDKProjectDir( folder.getRawLocation().toFile() );
-    }
-
     public static boolean isLiferaySDKProjectDir( File file )
     {
         if( file != null && file.isDirectory() && isValidLiferayProjectDir( file ) )
