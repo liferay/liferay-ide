@@ -272,16 +272,6 @@
       </wizard>
       <wizard
             category="com.liferay.ide.projects.import"
-            class="com.liferay.ide.project.ui.wizard.SDKProjectImportWizard"
-            icon="icons/e16/import.png"
-            id="com.liferay.ide.project.ui.importSDKProjectWizard.30"
-            name="Liferay Plugins SDK Project (Liferay 6.x)">
-         <description>
-            %import.projects.sdk.wizard.description
-         </description>
-      </wizard>
-      <wizard
-            category="com.liferay.ide.projects.import"
             class="com.liferay.ide.project.ui.wizard.ParentSDKProjectImportWizard"
             icon="icons/e16/liferay_logo_16.png"
             id="com.liferay.ide.project.ui.parentSDKProjectImportWizard"
@@ -453,24 +443,6 @@
            <adapt type="org.eclipse.core.resources.IProject">
              <test
           property="com.liferay.ide.project.ui.isSDKFolderProject" />
-           </adapt>
-         </enablement>
-      </objectContribution>
-      <objectContribution
-            adaptable="true"
-            id="com.liferay.ide.project.ui.existingLiferayProject"
-            objectClass="org.eclipse.core.resources.IFolder">
-         <action
-               class="com.liferay.ide.project.ui.action.ImportSDKProjectAction"
-               enablesFor="1"
-               icon="icons/e16/import.png"
-               id="com.liferay.ide.project.ui.import.liferay.project"
-               label="%import.project.action.label"
-               menubarPath="liferayPopupMenuCategory/slot1">
-         </action>
-         <enablement>
-           <adapt type="org.eclipse.core.resources.IFolder">
-             <test property="com.liferay.ide.project.ui.isLiferayProjectFolder" />
            </adapt>
          </enablement>
       </objectContribution>
