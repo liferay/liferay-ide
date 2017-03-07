@@ -122,15 +122,9 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
                         {
                             IPath appendPath = liferayWorkspaceProject.getLocation().append( folder );
 
-                            if( appendPath != null && appendPath.toFile().exists() )
-                            {
-                                newLocationBase = PathBridge.create( appendPath );
-                            }
-                            else
-                            {
-                                newLocationBase =
-                                    PathBridge.create( liferayWorkspaceProject.getLocation().append( "modules" ) );
-                            }
+                            appendPath.toFile().mkdirs();
+
+                            newLocationBase = PathBridge.create( appendPath );
                         }
                     }
                 }
