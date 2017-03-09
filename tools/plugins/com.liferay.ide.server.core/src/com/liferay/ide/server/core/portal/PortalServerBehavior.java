@@ -40,7 +40,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
@@ -316,19 +315,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
                     if( index == 0 || ( index > 0 && Character.isWhitespace( retval.charAt( index - 1 ) ) ) )
                     {
-                        // replace
-                        String s = retval.substring( 0, index );
-                        int index2 = getNextToken( retval, index + ind + 1 );
-
-                        if( index2 >= 0 )
-                        {
-                            retval = s + newArgs[i] + retval.substring( index2 );
-                        }
-                        else
-                        {
-                            retval = s + newArgs[i];
-                        }
-
                         newArgs[i] = null;
                     }
                 }
@@ -338,19 +324,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
                     if( index == 0 || ( index > 0 && Character.isWhitespace( retval.charAt( index - 1 ) ) ) )
                     {
-                        // replace
-                        String s = retval.substring( 0, index );
-                        int index2 = getNextToken( retval, index );
-
-                        if( index2 >= 0 )
-                        {
-                            retval = s + newArgs[i] + retval.substring( index2 );
-                        }
-                        else
-                        {
-                            retval = s + newArgs[i];
-                        }
-
                         newArgs[i] = null;
                     }
                 }
@@ -360,36 +333,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
                     if( index == 0 || ( index > 0 && Character.isWhitespace( retval.charAt( index - 1 ) ) ) )
                     {
-                        // replace
-                        String s = retval.substring( 0, index );
-                        int index2 = getNextToken( retval, index );
-
-                        if( !keepActionLast || i < ( size - 1 ) )
-                        {
-                            if( index2 >= 0 )
-                            {
-                                retval = s + newArgs[i] + retval.substring( index2 );
-                            }
-                            else
-                            {
-                                retval = s + newArgs[i];
-                            }
-
-                            newArgs[i] = null;
-                        }
-                        else
-                        {
-                            // The last VM argument needs to remain last,
-                            // remove original arg and append the vmArg later
-                            if( index2 >= 0 )
-                            {
-                                retval = s + retval.substring( index2 );
-                            }
-                            else
-                            {
-                                retval = s;
-                            }
-                        }
+                        newArgs[i] = null;
                     }
                 }
             }
