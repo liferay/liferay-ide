@@ -18,7 +18,6 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.ide.core.ILiferayProject;
 import com.liferay.ide.core.ILiferayProjectImporter;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.LiferayLanguagePropertiesValidator;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.IOUtil;
@@ -39,8 +38,6 @@ import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.sdk.core.SDK;
 import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.server.core.portal.PortalRuntime;
-import com.liferay.ide.server.core.portal.PortalServer;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -61,7 +58,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
@@ -101,10 +97,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.wst.server.core.IRuntimeWorkingCopy;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
-import org.eclipse.wst.server.core.IServerWorkingCopy;
 import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 import org.jdom.Document;
@@ -228,13 +222,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Control createHorizontalSpacer;
     private Control createImportHorizontalSpacer;
     private Control createSeparator;
+
     private ProjectLocationValidationService sdkValidation =
         dataModel.getSdkLocation().service( ProjectLocationValidationService.class );
-    private ProjectNameValidationService projectNameValidation =
-        dataModel.getProjectName().service( ProjectNameValidationService.class );
     private BundleNameValidationService bundleNameValidation =
         dataModel.getBundleName().service( BundleNameValidationService.class );
-
     private BundleUrlValidationService bundleUrlValidation =
         dataModel.getBundleUrl().service( BundleUrlValidationService.class );
 
@@ -245,6 +237,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         dataModel.getSdkLocation().attach( new LiferayUpgradeValidationListener() );
         dataModel.getBundleName().attach( new LiferayUpgradeValidationListener() );
         dataModel.getBundleUrl().attach( new LiferayUpgradeValidationListener() );
+        dataModel.getBackupLocation().attach( new LiferayUpgradeValidationListener() );
 
         composite = this;
 
@@ -684,7 +677,38 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         } );
 
-        backupLocationField.setText( CoreUtil.getWorkspaceRoot().getLocation().toOSString() );
+        final String defaultLocation = CoreUtil.getWorkspaceRoot().getLocation().toOSString();
+
+        backupLocationField.addFocusListener( new FocusListener()
+        {
+
+            @Override
+            public void focusGained( FocusEvent e )
+            {
+                String input = ( (Text) e.getSource() ).getText();
+
+                if( input.equals( defaultLocation ) )
+                {
+                    backupLocationField.setText( "" );
+                }
+
+                backupLocationField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
+            }
+
+            @Override
+            public void focusLost( FocusEvent e )
+            {
+                String input = ( (Text) e.getSource() ).getText();
+
+                if( CoreUtil.isNullOrEmpty( input ) )
+                {
+                    backupLocationField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
+                    backupLocationField.setText( defaultLocation );
+                }
+            }
+        } );
+
+        backupLocationField.setText( defaultLocation );
 
         backupButton = SWTUtil.createButton( this, "Browse..." );
         backupButton.setEnabled( backup.getSelection() );
@@ -1502,6 +1526,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 if( !sdkValidation.compute().ok() )
                 {
                     message = sdkValidation.compute().message();
+
+                    inputValidation = false;
+                }
+                else if( !dataModel.getBackupLocation().validation().ok() )
+                {
+                    message = dataModel.getBackupLocation().validation().message();
 
                     inputValidation = false;
                 }

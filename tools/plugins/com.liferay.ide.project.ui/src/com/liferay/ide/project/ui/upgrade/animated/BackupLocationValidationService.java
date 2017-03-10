@@ -15,14 +15,14 @@
 
 package com.liferay.ide.project.ui.upgrade.animated;
 
-import org.apache.xerces.util.URI;
+import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.services.ValidationService;
 
 /**
- * @author Terry Jia
+ * @author Andy Wu
  */
-public class BundleUrlValidationService extends ValidationService
+public class BackupLocationValidationService extends ValidationService
 {
 
     @Override
@@ -30,15 +30,18 @@ public class BundleUrlValidationService extends ValidationService
     {
         Status retval = Status.createOkStatus();
 
-        String bundleUrl = op().getBundleUrl().content();
+        Path location = op().getBackupLocation().content();
 
-        try
+        if( location != null )
         {
-            new URI( bundleUrl );
-        }
-        catch( Exception e )
-        {
-            retval = Status.createErrorStatus( "The bundle URL should be a vaild URL." );
+            if( !location.isAbsolute() )
+            {
+                return Status.createErrorStatus( "\"" + location.toPortableString() + "\" is not an absolute path." );
+            }
+            if( location.toFile().isFile() )
+            {
+                return Status.createErrorStatus( "\"" + location.toPortableString() + "\" is not a folder." );
+            }
         }
 
         return retval;
@@ -48,5 +51,4 @@ public class BundleUrlValidationService extends ValidationService
     {
         return context( LiferayUpgradeDataModel.class );
     }
-
 }
