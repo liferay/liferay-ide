@@ -265,6 +265,7 @@ public class GradleCore extends Plugin
                                 IResource resource = delta.getResource();
 
                                 if( delta.getKind() == IResourceDelta.ADDED &&
+                                    resource.getLocation().toFile().exists() &&
                                     resource.getName().equals( IProjectDescription.DESCRIPTION_FILE_NAME ) )
                                 {
                                     IProjectDescription projectDescription =

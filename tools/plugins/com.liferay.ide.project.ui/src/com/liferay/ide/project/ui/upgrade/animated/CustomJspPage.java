@@ -20,8 +20,6 @@ import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.CustomProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.CustomJspConverter;
-import com.liferay.ide.server.core.LiferayRuntimeStubDelegate;
-import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
@@ -99,7 +97,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE.SharedImages;
 import org.eclipse.wst.server.core.IRuntime;
 import org.eclipse.wst.server.core.IServer;
-import org.eclipse.wst.server.core.ServerCore;
 import org.eclipse.wst.server.ui.ServerUIUtil;
 
 /**
@@ -1099,7 +1096,8 @@ public class CustomJspPage extends Page
 
         for( IRuntime liferayRuntime : liferayRuntimes )
         {
-            if( liferayRuntime.getRuntimeType().getId().equals( "com.liferay.ide.server.portal.runtime" ) )
+            if( liferayRuntime.getRuntimeType().getId().equals( "com.liferay.ide.server.portal.runtime" ) &&
+                liferayRuntime.getLocation().toFile().exists() )
             {
                 return liferayRuntime;
             }

@@ -215,9 +215,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private boolean validationResult;
     private Button importButton;
     private Button backupButton;
+    private Button downloadBundle;
     private Text backupLocationField;
 
     private Composite composite;
+    private Composite bundleElementComposite;
+    private Composite blankComposite;
 
     private Control createHorizontalSpacer;
     private Control createImportHorizontalSpacer;
@@ -531,6 +534,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         disposeBundleElement();
 
+        disposeSubBundleElement();
+
         disposeLayoutElement();
 
         createBundleElement();
@@ -547,6 +552,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         disposeImportElement();
 
         disposeBundleElement();
+
+        disposeSubBundleElement();
 
         disposeLayoutElement();
 
@@ -580,6 +587,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 if( sel == 1 )
                 {
                     createServerControl();
+
+                    dataModel.setDownloadBundle( false );
                 }
                 else
                 {
@@ -598,11 +607,46 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void createBundleElement()
     {
-        bundleNameLabel = createLabel( composite, "Server Name:" );
-        bundleNameField = createTextField( composite, SWT.NONE );
+        blankComposite = SWTUtil.createComposite( composite, 1, 1, GridData.FILL );
+
+        bundleElementComposite = SWTUtil.createComposite( composite, 2, 1, GridData.FILL_HORIZONTAL );
+
+        downloadBundle = SWTUtil.createCheckButton( bundleElementComposite, "Download Liferay bundle", null, false, 1 );
+
+        downloadBundle.addSelectionListener( new SelectionAdapter()
+        {
+
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                dataModel.setDownloadBundle( downloadBundle.getSelection() );
+
+                if( downloadBundle.getSelection() )
+                {
+                    createSubBundleElement();
+
+                    composite.layout();
+                }
+                else
+                {
+                    disposeSubBundleElement();
+
+                    composite.layout();
+                }
+
+                startCheckThread();
+            }
+        } );
+    }
+
+    private void createSubBundleElement()
+    {
+        bundleNameLabel = createLabel( bundleElementComposite, "Server Name:" );
+        bundleNameField = createTextField( bundleElementComposite, SWT.NONE );
 
         bundleNameField.addModifyListener( new ModifyListener()
         {
+
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setBundleName( bundleNameField.getText() );
@@ -613,18 +657,19 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         bundleNameField.setText( bundleName != null ? bundleName : "" );
 
-        bundleUrlLabel = createLabel( composite, "Bundle URL:" );
+        bundleUrlLabel = createLabel( bundleElementComposite, "Bundle URL:" );
 
-        bundleUrlField = createTextField( composite, SWT.NONE );
-        bundleUrlField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
+        bundleUrlField = createTextField( bundleElementComposite, SWT.NONE );
+        bundleUrlField.setForeground( bundleElementComposite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
         bundleUrlField.setText( dataModel.getBundleUrl().content( true ) );
         bundleUrlField.addModifyListener( new ModifyListener()
         {
+
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setBundleUrl( bundleUrlField.getText() );
             }
-        });
+        } );
 
         bundleUrlField.addFocusListener( new FocusListener()
         {
@@ -818,7 +863,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 progress.worked( 30 );
 
-                if( bundleUrl != null )
+                if( bundleUrl != null && projectBuilder != null )
                 {
                     projectBuilder.execInitBundle( project, "initBundle", bundleUrl, monitor );
                 }
@@ -980,6 +1025,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void disposeBundleElement()
     {
+        if( bundleElementComposite != null && blankComposite != null )
+        {
+            bundleElementComposite.dispose();
+            blankComposite.dispose();
+        }
+    }
+
+    private void disposeSubBundleElement()
+    {
         if( bundleNameField != null && bundleUrlField != null )
         {
             bundleNameField.dispose();
@@ -1130,7 +1184,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                                 importer.importProjects( newPath, monitor );
 
-                                createInitBundle( monitor );
+                                if( dataModel.getDownloadBundle().content() )
+                                {
+                                    createInitBundle( monitor );
+                                }
 
                                 importSDKProject( sdkLocation, monitor );
 
@@ -1516,6 +1573,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             {
                 boolean inputValidation = true;
                 boolean layoutValidation = true;
+                boolean downloadBundle = dataModel.getDownloadBundle().content();
                 String bundUrl = dataModel.getBundleUrl().content();
 
                 String message = "ok";
@@ -1577,13 +1635,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                             message = workspaceValidationMessage;
                             layoutValidation = false;
                         }
-                        else if( !bundleNameValidation.compute().ok() )
+                        else if( downloadBundle && !bundleNameValidation.compute().ok() )
                         {
                             message = bundleNameValidation.compute().message();
 
                             layoutValidation = false;
                         }
-                        else if( bundUrl != null && bundUrl.length() > 0 && !bundleUrlValidation.compute().ok() )
+                        else if( downloadBundle && bundUrl != null && bundUrl.length() > 0 && !bundleUrlValidation.compute().ok() )
                         {
                             message = bundleUrlValidation.compute().message();
 

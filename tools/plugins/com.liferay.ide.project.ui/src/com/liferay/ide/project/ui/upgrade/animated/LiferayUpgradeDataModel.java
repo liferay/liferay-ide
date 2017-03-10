@@ -189,6 +189,16 @@ public interface LiferayUpgradeDataModel extends Element
     // *** BackupSdk ***
 
     @Type( base = Boolean.class )
+    @DefaultValue(text = "false")
+    ValueProperty PROP_DOWNLOAD_BUNDLE = new ValueProperty( TYPE, "downloadBundle" );
+
+    Value<Boolean> getDownloadBundle();
+
+    void setDownloadBundle( String downloadBundle );
+
+    void setDownloadBundle( Boolean downloadBundle );
+
+    @Type( base = Boolean.class )
     ValueProperty PROP_BACKUP_SDK = new ValueProperty( TYPE, "BackupSdk" );
     Value<Boolean> getBackupSdk();
 
