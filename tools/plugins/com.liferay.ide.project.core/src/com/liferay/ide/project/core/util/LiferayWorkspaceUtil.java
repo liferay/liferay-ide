@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Andy Wu
@@ -40,7 +41,7 @@ public class LiferayWorkspaceUtil
     public static String hasLiferayWorkspaceMsg =
         "A Liferay Workspace project already exists in this Eclipse instance.";
 
-    public static IStatus validateWorkspacePath(final String currentPath)
+    public static IStatus validateWorkspacePath( final String currentPath )
     {
         IStatus retVal = ProjectImportUtil.validatePath( currentPath );
 
@@ -107,12 +108,12 @@ public class LiferayWorkspaceUtil
         return settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher( settingsContent ).matches();
     }
 
-    private final static Pattern PATTERN_WORKSPACE_PLUGIN = Pattern.compile(".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL );
+    private final static Pattern PATTERN_WORKSPACE_PLUGIN = Pattern.compile(
+        ".*apply.*plugin.*:.*[\'\"]com\\.liferay\\.workspace[\'\"].*", Pattern.MULTILINE | Pattern.DOTALL );
 
     public static boolean isValidWorkspace( IProject project )
     {
-        return project != null &&
-            project.getLocation() != null &&
+        return project != null && project.getLocation() != null &&
             isValidWorkspaceLocation( project.getLocation().toOSString() );
     }
 
@@ -194,8 +195,26 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                retval = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
-                    "liferay.workspace.modules.dir", "modules" );
+                retval = getLiferayWorkspaceGradleProperty(
+                    projectLocation.toPortableString(), "liferay.workspace.modules.dir", "modules" );
+            }
+        }
+
+        return retval;
+    }
+
+    public static String getLiferayWorkspaceProjectBundlesDir( final IProject project )
+    {
+        String retval = null;
+
+        if( project != null )
+        {
+            final IPath projectLocation = project.getLocation();
+
+            if( projectLocation != null )
+            {
+                retval = getLiferayWorkspaceGradleProperty(
+                    projectLocation.toPortableString(), "#liferay.workspace.home.dir", "bundles" );
             }
         }
 
@@ -212,8 +231,8 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                retval = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
-                    "liferay.workspace.themes.dir", "themes" );
+                retval = getLiferayWorkspaceGradleProperty(
+                    projectLocation.toPortableString(), "liferay.workspace.themes.dir", "themes" );
             }
         }
 
@@ -230,8 +249,8 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                String val = getLiferayWorkspaceGradleProperty( projectLocation.toPortableString(),
-                    "liferay.workspace.wars.dir", "wars" );
+                String val = getLiferayWorkspaceGradleProperty(
+                    projectLocation.toPortableString(), "liferay.workspace.wars.dir", "wars" );
 
                 retval = val.split( "," );
             }
@@ -263,4 +282,31 @@ public class LiferayWorkspaceUtil
     {
         return getLiferayWorkspaceGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
     }
+
+    public static IPath loadConfiguredHomePath( String location )
+    {
+        String homeNameOrPath = loadConfiguredHomeDir( location );
+
+        IPath homePath = new Path( location ).append( homeNameOrPath );
+
+        if( homePath.toFile().exists() )
+        {
+            return homePath;
+        }
+
+        homePath = new Path( homeNameOrPath );
+
+        if( homePath.toFile().exists() )
+        {
+            return homePath;
+        }
+
+        return null;
+    }
+
+    public static IPath loadConfiguredHomePath( IProject project )
+    {
+        return loadConfiguredHomePath( project.getLocation().toOSString() );
+    }
+
 }

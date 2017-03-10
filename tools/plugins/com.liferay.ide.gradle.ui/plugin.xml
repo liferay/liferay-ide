@@ -26,6 +26,9 @@
             <groupMarker
                   name="merge-lang">
             </groupMarker>
+            <groupMarker
+                  name="init-bundle">
+            </groupMarker>
          </menu>
       </objectContribution>
       <objectContribution
@@ -39,6 +42,14 @@
                id="com.liferay.ide.gradle.popup.action.buildLang"
                label="build-lang"
                menubarPath="liferayPopupMenuCategory/build-lang">
+         </action>
+         <action
+               class="com.liferay.ide.gradle.action.InitBundleTaskAction"
+               enablesFor="1"
+               icon="icons/e16/liferay_logo_16.png"
+               id="com.liferay.ide.gradle.popup.action.initBundle"
+               label="Initialize Server Bundle"
+               menubarPath="liferayPopupMenuCategory/init-bundle">
          </action>
          <action
                class="com.liferay.ide.gradle.action.BuildCssTaskAction"
