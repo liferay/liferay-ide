@@ -43,7 +43,7 @@ public class SDKProjectDeleteListener implements IResourceChangeListener
                     String parentName = project.getLocation().toFile().getParentFile().getName();
                     IProject sdkProject = SDKUtil.getWorkspaceSDKProject();
 
-                    if( sdkProject != null )
+                    if( sdkProject != null && sdkProject.exists() )
                     {
                         IFolder parentFolder = sdkProject.getFolder( parentName );
 

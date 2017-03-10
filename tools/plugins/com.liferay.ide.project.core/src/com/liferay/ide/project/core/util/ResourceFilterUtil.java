@@ -36,16 +36,48 @@ public class ResourceFilterUtil
 
     public static void addResourceFilter( IFolder folder, String filteredSubFolderName, IProgressMonitor monitor )
     {
-        FileInfoMatcherDescription fmd = new FileInfoMatcherDescription(
-            "org.eclipse.ui.ide.multiFilter", "1.0-name-matches-true-false-" + filteredSubFolderName );
+        String pre = "1.0-name-matches-true-false-";
+
+        boolean shouldAdd = true;
+
+        IResourceFilterDescription[] resourceFilterDescriptions = null;
 
         try
         {
-            folder.createFilter( 10, fmd, IResource.BACKGROUND_REFRESH, monitor );
+            resourceFilterDescriptions = folder.getFilters();
         }
         catch( CoreException e )
         {
-            ProjectCore.logError( "add filter error", e );
+        }
+
+        if( resourceFilterDescriptions != null )
+        {
+            for( IResourceFilterDescription resourceFilterDescription : resourceFilterDescriptions )
+            {
+                String argument = resourceFilterDescription.getFileInfoMatcherDescription().getArguments().toString();
+                String projectName = argument.substring( argument.indexOf( pre ) + pre.length(), argument.length() );
+
+                if( projectName.equals( filteredSubFolderName ) )
+                {
+                    shouldAdd = false;
+                    break;
+                }
+            }
+        }
+
+        if( shouldAdd )
+        {
+            try
+            {
+                FileInfoMatcherDescription fmd =
+                    new FileInfoMatcherDescription( "org.eclipse.ui.ide.multiFilter", pre + filteredSubFolderName );
+
+                folder.createFilter( 10, fmd, IResource.BACKGROUND_REFRESH, monitor );
+            }
+            catch( CoreException e )
+            {
+                ProjectCore.logError( "add " + filteredSubFolderName + " filter error", e );
+            }
         }
     }
 
@@ -61,13 +93,20 @@ public class ResourceFilterUtil
 
                 if( argument.toString().contains( filteredSubFolderName ) )
                 {
+                    //need to make deleting in a job to avoid Resource Lock Exception
                     Job job = new WorkspaceJob( "delete project resource filter" )
                     {
 
                         @Override
                         public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
                         {
-                            resourceFilterDescription.delete( IResource.BACKGROUND_REFRESH, monitor );
+                            try
+                            {
+                                resourceFilterDescription.delete( IResource.BACKGROUND_REFRESH, monitor );
+                            }
+                            catch(Exception e)
+                            {
+                            }
 
                             return Status.OK_STATUS;
                         }
