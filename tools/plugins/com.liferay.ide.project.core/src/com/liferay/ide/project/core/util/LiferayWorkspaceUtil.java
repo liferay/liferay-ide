@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 /**
  * @author Andy Wu
@@ -328,4 +329,31 @@ public class LiferayWorkspaceUtil
 
         return result == null ? "bundles" : result;
     }
+
+    public static IPath getHomeLocation( String location )
+    {
+        String homeNameOrPath = getHomeDir( location );
+
+        IPath homePath = new Path( location ).append( homeNameOrPath );
+
+        if( homePath.toFile().exists() )
+        {
+            return homePath;
+        }
+
+        homePath = new Path( homeNameOrPath );
+
+        if( homePath.toFile().exists() )
+        {
+            return homePath;
+        }
+
+        return null;
+    }
+
+    public static IPath getHomeLocation( IProject project )
+    {
+        return getHomeLocation( project.getLocation().toOSString() );
+    }
+
 }

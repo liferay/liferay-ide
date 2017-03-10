@@ -80,7 +80,7 @@ public class NewLiferayWorkspaceOpMethods
                     bundlesLocation =  new Path( location ).append( "bundles" );
                 }
 
-                if( bundlesLocation != null && bundlesLocation.toFile().exists() )
+                if( bundlesLocation.toFile().exists() )
                 {
                     ServerUtil.addPortalRuntimeAndServer( serverRuntimeName, bundlesLocation, monitor );
                 }
