@@ -82,8 +82,7 @@ public class ImportLiferayWorkspaceOpMethods
 
                 if( op.getBuildType().content().equals( "gradle-liferay-workspace" ) )
                 {
-                    bundlesLocation =
-                        new Path( location ).append( LiferayWorkspaceUtil.getHomeDir( location ) );
+                    bundlesLocation = LiferayWorkspaceUtil.getHomeLocation( location );
                 }
                 else
                 {

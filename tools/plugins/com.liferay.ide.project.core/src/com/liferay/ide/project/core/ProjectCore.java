@@ -416,10 +416,7 @@ public class ProjectCore extends Plugin
 
                                         if( LiferayWorkspaceUtil.isValidWorkspace( project ) )
                                         {
-                                            String projectLocation = project.getLocation().toOSString();
-
-                                            IPath bundlesPath = project.getFullPath().append(
-                                                LiferayWorkspaceUtil.getHomeDir( projectLocation ) );
+                                            IPath bundlesPath = LiferayWorkspaceUtil.getHomeLocation( project );
 
                                             if( delta.getFullPath().equals( bundlesPath ) )
                                             {

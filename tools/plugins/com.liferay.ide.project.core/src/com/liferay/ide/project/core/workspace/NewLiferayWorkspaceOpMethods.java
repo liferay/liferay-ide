@@ -72,8 +72,7 @@ public class NewLiferayWorkspaceOpMethods
 
                 if( op.getProjectProvider().text().equals( "gradle-liferay-workspace" ) )
                 {
-                    bundlesLocation =
-                        new Path( location ).append( LiferayWorkspaceUtil.getHomeDir( location ) );
+                    bundlesLocation = LiferayWorkspaceUtil.getHomeLocation( location );
                 }
                 else
                 {

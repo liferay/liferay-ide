@@ -135,7 +135,10 @@ public class LiferayWorkspaceUtil
     {
         File bundles = new File( location, getHomeDir( location ) );
 
-        return bundles.exists() && bundles.isDirectory();
+        File outsideOfWorkspaceBundles = new File( getHomeDir( location ) );
+
+        return ( bundles.exists() && bundles.isDirectory() ) ||
+            ( outsideOfWorkspaceBundles.exists() && outsideOfWorkspaceBundles.isDirectory() );
     }
 
     public static boolean hasGradleWorkspace() throws CoreException
