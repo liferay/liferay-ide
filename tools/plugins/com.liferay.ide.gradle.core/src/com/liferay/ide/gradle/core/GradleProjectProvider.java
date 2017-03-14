@@ -158,13 +158,13 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 }
             }
 
-            boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
+            boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
             boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
             boolean inWorkspacePath = false;
 
             IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-            if( liferayWorkspaceProject != null && !useDefaultLocation )
+            if( hasGradleWorkspace && liferayWorkspaceProject != null && !useDefaultLocation )
             {
                 IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
@@ -185,7 +185,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
                 }
             }
 
-            if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
+            if( ( hasGradleWorkspace && useDefaultLocation ) || inWorkspacePath )
             {
                 GradleUtil.refreshGradleProject( liferayWorkspaceProject );
             }
@@ -211,7 +211,7 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
         if( path != null )
         {
-            if( LiferayWorkspaceUtil.isValidWorkspaceLocation( path.toOSString() ) )
+            if( LiferayWorkspaceUtil.isValidGradleWorkspaceLocation( path.toOSString() ) )
             {
                 retval =
                     GradleCore.createErrorStatus( " Can't set WorkspaceProject root folder as project directory. " );

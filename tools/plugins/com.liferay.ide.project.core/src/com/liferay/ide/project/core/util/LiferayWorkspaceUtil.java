@@ -77,7 +77,7 @@ public class LiferayWorkspaceUtil
             isValidMavenWorkspaceLocation( project.getLocation().toOSString() );
     }
 
-    private static boolean isValidGradleWorkspaceLocation( String location )
+    public static boolean isValidGradleWorkspaceLocation( String location )
     {
         File workspaceDir = new File( location );
 
@@ -95,7 +95,7 @@ public class LiferayWorkspaceUtil
         return settingsContent != null && PATTERN_WORKSPACE_PLUGIN.matcher( settingsContent ).matches();
     }
 
-    private static boolean isValidMavenWorkspaceLocation( String location )
+    public static boolean isValidMavenWorkspaceLocation( String location )
     {
         File workspaceDir = new File( location );
 
