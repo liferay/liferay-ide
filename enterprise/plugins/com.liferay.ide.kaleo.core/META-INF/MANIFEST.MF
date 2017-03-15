@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Liferay IDE Kaleo Core
+Bundle-SymbolicName: com.liferay.ide.kaleo.core;singleton:=true
+Bundle-Version: 3.1.0.qualifier
+Bundle-Activator: com.liferay.ide.kaleo.core.KaleoCore
+Bundle-Vendor: Liferay, Inc.
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.sapphire.modeling;bundle-version="[9,10)";visibility:=reexport,
+ org.eclipse.sapphire.modeling.xml;bundle-version="[9,10)";visibility:=reexport,
+ com.liferay.ide.core,
+ com.liferay.ide.project.core,
+ org.eclipse.sapphire.workspace,
+ org.eclipse.jdt.launching,
+ com.liferay.ide.scripting.core,
+ org.json;bundle-version="20131018.0.0",
+ com.liferay.ide.scripting.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: com.liferay.ide.kaleo.core,
+ com.liferay.ide.kaleo.core.model,
+ com.liferay.ide.kaleo.core.op,
+ com.liferay.ide.kaleo.core.util
+
