@@ -68,7 +68,7 @@ public class AutoCorrectAllAction extends Action
 
                 try
                 {
-                    if( _problemsContainerList != null )
+                    if( _problemsContainerList != null && _problemsContainerList.size() > 0 )
                     {
                         for( ProblemsContainer problemsContainer : _problemsContainerList )
                         {
