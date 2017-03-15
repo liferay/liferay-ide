@@ -15,6 +15,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.server.util.ServerUtil;
 
@@ -42,7 +43,10 @@ public class OSGiBundleListener extends FilteredListener<PropertyContentEvent>
 
         IRuntime runtime = ServerUtil.getRuntime( runtimeName );
 
-        ServerUtil.getModuleFileFrom70Server( runtime, hostOsgiBundle, temp );
+        if( !CoreUtil.empty( hostOsgiBundle ) )
+        {
+            ServerUtil.getModuleFileFrom70Server( runtime, hostOsgiBundle, temp );
+        }
 
         op.getOverrideFiles().clear();
     }
