@@ -132,7 +132,7 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                 }
                 catch( Exception e )
                 {
-                    retval = LiferayServerCore.error( "Deploy module project eror", e );
+                    retval = LiferayServerCore.error( "Deploy module project error", e );
                 }
             }
             else
