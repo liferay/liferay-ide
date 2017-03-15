@@ -77,6 +77,7 @@ public class MavenModuleFragmentProjectProvider extends LiferayMavenProjectProvi
 
         final Properties properties = new Properties();
 
+        properties.put( "package", artifactId );
         properties.put( "hostBundleSymbolicName", hostBundleSymbolicName );
         properties.put( "hostBundleVersion", hostBundleVersion );
         properties.put( "buildType", "maven" );

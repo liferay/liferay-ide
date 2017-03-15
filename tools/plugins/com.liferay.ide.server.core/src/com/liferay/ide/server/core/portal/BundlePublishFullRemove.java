@@ -125,7 +125,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
     private IStatus localUninstall( IBundleProject bundleProject , String symbolicName )
     {
-        IStatus retval = null;
+        IStatus retval = Status.OK_STATUS;
 
         final PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
 
@@ -164,23 +164,12 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                 }
                 else
                 {
-                    if( moduleFile.exists() && moduleFile.delete() )
-                    {
-                        retval = Status.OK_STATUS;
-                    }
-                    else
+                    if( !(moduleFile.exists() && moduleFile.delete()) )
                     {
                         retval = LiferayServerCore.error( "Could not delete module file " + moduleFile.getName() );
                     }
                 }
             }
-        }
-
-        if( retval == null )
-        {
-            LiferayServerCore.logInfo( "No module to remove " + symbolicName );
-
-            retval = Status.OK_STATUS;
         }
 
         return retval;

@@ -105,30 +105,39 @@ public class BundlePublishFullAdd extends BundlePublishOperation
 
                 monitor.subTask( "Building " + module.getName() + " output bundle..." );
 
-                final IPath outputJar = bundleProject.getOutputBundle( cleanBuildNeeded(), monitor );
+                IPath outputJar = null;
 
-                if( outputJar!= null && outputJar.toFile().exists() )
+                try
                 {
-                    if( this.server.getServerState() == IServer.STATE_STARTED )
-                    {
-                        monitor.subTask( "Remotely deploying " + module.getName() + " to Liferay module framework..." );
+                    outputJar = bundleProject.getOutputBundle( cleanBuildNeeded(), monitor );
 
-                        retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar, _existingBundles );
+                    if( outputJar != null && outputJar.toFile().exists() )
+                    {
+                        if( this.server.getServerState() == IServer.STATE_STARTED )
+                        {
+                            monitor.subTask(
+                                "Remotely deploying " + module.getName() + " to Liferay module framework..." );
+
+                            retval = remoteDeploy( bundleProject.getSymbolicName(), outputJar, _existingBundles );
+                        }
+                        else
+                        {
+                            retval = autoDeploy( outputJar );
+                        }
                     }
                     else
                     {
-                        retval = autoDeploy( outputJar );
+                        retval = LiferayServerCore.error( "Could not create output jar" );
                     }
                 }
-                else
+                catch( Exception e )
                 {
-                    retval = LiferayServerCore.error( "Could not create output jar" );
+                    retval = LiferayServerCore.error( "Deploy module project eror", e );
                 }
             }
             else
             {
-                retval =
-                    LiferayServerCore.error( "Unable to get bundle project for " + module.getProject().getName() );
+                retval = LiferayServerCore.error( "Unable to get bundle project for " + module.getProject().getName() );
             }
 
             if( retval.isOK() )
