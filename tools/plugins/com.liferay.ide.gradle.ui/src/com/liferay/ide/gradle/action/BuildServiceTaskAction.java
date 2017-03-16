@@ -12,10 +12,24 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.gradle.action;
+
+import com.liferay.ide.core.util.CoreUtil;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.eclipse.buildship.core.CorePlugin;
+import org.eclipse.buildship.core.workspace.NewProjectHandler;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
  * @author Lovett Li
+ * @author Terry Jia
  */
 public class BuildServiceTaskAction extends GradleTaskAction
 {
@@ -25,4 +39,19 @@ public class BuildServiceTaskAction extends GradleTaskAction
     {
         return "buildService";
     }
+
+    protected void afterTask()
+    {
+        List<IFolder> folders = CoreUtil.getSourceFolders( JavaCore.create( _project ) );
+
+        if( folders.size() == 0 )
+        {
+            Set<IProject> projects = new HashSet<IProject>();
+            projects.add( _project );
+
+            CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
+                NewProjectHandler.IMPORT_AND_MERGE );
+        }
+    }
+
 }

@@ -15,10 +15,13 @@
 
 package com.liferay.ide.gradle.action;
 
+import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.ui.action.AbstractObjectAction;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -28,17 +31,14 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-import com.liferay.ide.gradle.core.GradleUtil;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.ui.action.AbstractObjectAction;
-
 /**
  * @author Lovett Li
  * @author Terry Jia
  */
 public abstract class GradleTaskAction extends AbstractObjectAction
 {
+
+    IProject _project = null;
 
     public GradleTaskAction()
     {
@@ -58,26 +58,23 @@ public abstract class GradleTaskAction extends AbstractObjectAction
             Object[] elems = ( (IStructuredSelection) fSelection ).toArray();
 
             IFile gradleBuildFile = null;
-            IProject project = null;
 
             Object elem = elems[0];
 
             if( elem instanceof IFile )
             {
                 gradleBuildFile = (IFile) elem;
-                project = gradleBuildFile.getProject();
+                _project = gradleBuildFile.getProject();
             }
             else if( elem instanceof IProject )
             {
-                project = (IProject) elem;
-                gradleBuildFile = project.getFile( "build.gradle" );
+                _project = (IProject) elem;
+                gradleBuildFile = _project.getFile( "build.gradle" );
             }
 
             if( gradleBuildFile.exists() )
             {
-                final IProject p = project;
-
-                final Job job = new Job( p.getName() + " - " + getGradleTask() )
+                final Job job = new Job( _project.getName() + " - " + getGradleTask() )
                 {
 
                     @Override
@@ -87,17 +84,13 @@ public abstract class GradleTaskAction extends AbstractObjectAction
                         {
                             monitor.beginTask( getGradleTask(), 100 );
 
-                            GradleUtil.runGradleTask( p, getGradleTask(), monitor );
+                            GradleUtil.runGradleTask( _project, getGradleTask(), monitor );
 
                             monitor.worked( 80 );
 
-                            p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+                            _project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
-                            monitor.worked( 10 );
-
-                            updateProject( p, monitor );
-
-                            monitor.worked( 10 );
+                            monitor.worked( 20 );
                         }
                         catch( Exception e )
                         {
@@ -148,14 +141,4 @@ public abstract class GradleTaskAction extends AbstractObjectAction
         }
     }
 
-    protected void updateProject( IProject p, IProgressMonitor monitor )
-    {
-        try
-        {
-            p.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        }
-        catch( CoreException e )
-        {
-        }
-    }
 }
