@@ -119,47 +119,22 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
     {
         final IProject serviceProject = serviceXmlFile.getProject();
 
-        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( serviceProject , monitor );
+        final IMavenProjectFacade facade = MavenUtil.getProjectFacade( serviceProject, monitor );
 
         monitor.worked( 10 );
-
-        final ICallable<IStatus> callable = new ICallable<IStatus>()
-        {
-            public IStatus call( IMavenExecutionContext context, IProgressMonitor monitor ) throws CoreException
-            {
-                return MavenUtil.executeMojoGoal( facade, context, goal, monitor );
-            }
-        };
 
         IStatus retval = null;
 
-        final IStatus executeStatus = executeMaven( facade, callable, monitor );
-
-        if( !executeStatus.isOK() && executeStatus.getException() instanceof MojoExecutionException )
-        {
-             MojoExecutionException mojoException = (MojoExecutionException) executeStatus.getException();
-
-             if( mojoException.getCause() instanceof InvocationTargetException )
-             {
-                 InvocationTargetException ex = (InvocationTargetException) mojoException.getCause();
-
-                 retval = LiferayMavenCore.createErrorStatus( ex.getTargetException() );
-             }
-             else
-             {
-                 retval = LiferayMavenCore.createErrorStatus( mojoException );
-             }
-        }
-        else
+        if( runMavenGoal( serviceProject, goal, monitor ) )
         {
             retval = Status.OK_STATUS;
         }
-
-        monitor.worked( 70 );
+        else
+        {
+            retval = LiferayMavenCore.createErrorStatus( "run build-service error" );
+        }
 
         refreshSiblingProject( facade, monitor );
-
-        monitor.worked( 10 );
 
         serviceProject.refreshLocal( IResource.DEPTH_INFINITE, monitor );
 
