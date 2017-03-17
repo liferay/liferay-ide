@@ -184,6 +184,11 @@ public class NewPluginProjectDropDownAction extends Action implements IMenuCreat
                 projectItem.fill( fMenu, -1 );
             }
 
+            NewWizardAction importAction = new ImportLiferayProjectsWizardAction();
+            importAction.setShell( fWizardShell );
+            ActionContributionItem item = new ActionContributionItem( importAction );
+            item.fill( fMenu, -1 );
+
             NewWizardAction[] projectExtraActions = getExtraProjectActions();
 
             for( NewWizardAction extraAction : projectExtraActions )

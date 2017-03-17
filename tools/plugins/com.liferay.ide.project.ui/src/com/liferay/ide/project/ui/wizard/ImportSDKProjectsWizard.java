@@ -54,6 +54,7 @@ public class ImportSDKProjectsWizard extends SapphireWizard<SDKProjectsImportOp>
     public ImportSDKProjectsWizard( final String newTitle )
     {
         super( createDefaultOp(), DefinitionLoader.sdef( ImportSDKProjectsWizard.class ).wizard() );
+        this.title = newTitle;
     }
 
     private static SDKProjectsImportOp createDefaultOp()
