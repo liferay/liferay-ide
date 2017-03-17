@@ -23,6 +23,7 @@ import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,9 +186,11 @@ public class BundlePublishFullRemove extends BundlePublishOperation
 
         if( symbolicName != null && _existingBundles != null )
         {
+            BundleSupervisor bundleSupervisor = null;
+
             try
             {
-                BundleSupervisor bundleSupervisor = createBundleSupervisor();
+                bundleSupervisor = createBundleSupervisor();
 
                 for( BundleDTO bundle : _existingBundles )
                 {
@@ -213,11 +216,23 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                     }
                 }
 
-                bundleSupervisor.close();
             }
             catch( Exception e )
             {
                 retval = LiferayServerCore.error( "Unable to uninstall bundle " + symbolicName, e );
+            }
+            finally
+            {
+                if( bundleSupervisor != null )
+                {
+                    try
+                    {
+                        bundleSupervisor.close();
+                    }
+                    catch( IOException e )
+                    {
+                    }
+                }
             }
         }
 

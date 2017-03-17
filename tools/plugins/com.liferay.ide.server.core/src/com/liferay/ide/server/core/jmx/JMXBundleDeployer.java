@@ -1,4 +1,4 @@
-package com.liferay.ide.server.core.portal;
+package com.liferay.ide.server.core.jmx;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +12,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.management.MBeanServerConnection;
 import javax.management.MalformedObjectNameException;
@@ -41,9 +36,9 @@ import org.osgi.framework.dto.BundleDTO;
  */
 public class JMXBundleDeployer {
 
-	private final static String		OBJECTNAME		= "osgi.core";
+	private final static String		OBJECTNAME	= "osgi.core";
 
-	protected MBeanServerConnection mBeanServerConnection;
+	protected MBeanServerConnection	mBeanServerConnection;
 
 	public JMXBundleDeployer() {
 		this(getLocalConnectorAddress());
@@ -56,64 +51,24 @@ public class JMXBundleDeployer {
 	public JMXBundleDeployer(String serviceURL) {
 		try {
 			final JMXServiceURL jmxServiceUrl = new JMXServiceURL(serviceURL);
-			final JMXConnector jmxConnector = connectWithTimeout( jmxServiceUrl, 5, TimeUnit.SECONDS );
+			final JMXConnector jmxConnector = JMXConnectorFactory.connect(jmxServiceUrl, null);
 
 			mBeanServerConnection = jmxConnector.getMBeanServerConnection();
 		} catch (Exception e) {
-			throw new IllegalArgumentException(
-				"Unable to get JMX connection", e);
+			throw new IllegalArgumentException("Unable to get JMX connection", e);
 		}
 	}
-
-    JMXConnector connectWithTimeout( final JMXServiceURL url, long timeout, TimeUnit unit ) throws Exception
-    {
-        final BlockingQueue<Object> queue = new ArrayBlockingQueue<Object>( 1 );
-        final ExecutorService executor = Executors.newSingleThreadExecutor();
-
-        executor.submit( new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
-                    JMXConnector connector = JMXConnectorFactory.connect( url );
-
-                    if( !queue.offer( connector ) )
-                    {
-                        connector.close();
-                    }
-                }
-                catch( IOException e )
-                {
-                }
-            }
-        });
-
-        Object result = queue.poll( timeout, unit );
-
-        if( result == null )
-        {
-            if( !queue.offer( "" ) )
-            {
-                result = queue.take();
-            }
-        }
-
-        return (JMXConnector) result;
-    }
 
 	/**
 	 * Gets the current list of installed bsns, compares it to the bsn provided.
 	 * If bsn doesn't exist, then install it. If it does exist then update it.
 	 *
-	 * @param bsn
-	 *            Bundle-SymbolicName of bundle you are wanting to deploy
-	 * @param bundle
-	 *            the bundle
+	 * @param bsn Bundle-SymbolicName of bundle you are wanting to deploy
+	 * @param bundle the bundle
 	 * @return the id of the updated or installed bundle
 	 * @throws Exception
 	 */
-	public long deploy(String bsn, String bundleUrl) throws Exception {
+	public long deploy(String bsn, File bundle) throws Exception {
 		final ObjectName framework = getFramework(mBeanServerConnection);
 
 		long bundleId = -1;
@@ -125,43 +80,51 @@ public class JMXBundleDeployer {
 			}
 		}
 
-		// TODO serve bundle url over http so it works for non file:// urls
-
 		if (bundleId > -1) {
-			mBeanServerConnection.invoke(framework, "stopBundle",
-					new Object[] { bundleId }, new String[] { "long" });
+			mBeanServerConnection.invoke(framework, "stopBundle", new Object[] {
+					bundleId
+			}, new String[] {
+					"long"
+			});
 
-			mBeanServerConnection.invoke(framework, "updateBundleFromURL",
-					new Object[] { bundleId,
-					bundleUrl },
-					new String[] { "long", String.class.getName() });
+			mBeanServerConnection.invoke(framework, "updateBundleFromURL", new Object[] {
+					bundleId, bundle.toURI().toURL().toExternalForm()
+			}, new String[] {
+					"long", String.class.getName()
+			});
 
-			mBeanServerConnection.invoke(framework, "refreshBundle",
-					new Object[] { bundleId }, new String[] { "long" });
+			mBeanServerConnection.invoke(framework, "refreshBundle", new Object[] {
+					bundleId
+			}, new String[] {
+					"long"
+			});
 		} else {
-			Object installed = mBeanServerConnection.invoke(
-					framework,
-					"installBundleFromURL",
-					new Object[] { bundleUrl, bundleUrl },
-					new String[] { String.class.getName(),
-							String.class.getName() });
+			Object installed = mBeanServerConnection.invoke(framework, "installBundleFromURL", new Object[] {
+					bundle.getAbsolutePath(), bundle.toURI().toURL().toExternalForm()
+			}, new String[] {
+					String.class.getName(), String.class.getName()
+			});
 
 			bundleId = Long.parseLong(installed.toString());
 		}
 
-		mBeanServerConnection.invoke(framework, "startBundle",
-			new Object[] { bundleId }, new String[] { "long" });
+		mBeanServerConnection.invoke(framework, "startBundle", new Object[] {
+				bundleId
+		}, new String[] {
+				"long"
+		});
 
 		return bundleId;
 	}
 
 	private ObjectName getBundleState() throws MalformedObjectNameException, IOException {
 
-		return mBeanServerConnection.queryNames(new ObjectName(OBJECTNAME + ":type=bundleState,*"), null).iterator()
+		return mBeanServerConnection.queryNames(new ObjectName(OBJECTNAME + ":type=bundleState,*"), null)
+				.iterator()
 				.next();
 	}
 
-	private static ObjectName getFramework(MBeanServerConnection mBeanServerConnection)
+	protected static ObjectName getFramework(MBeanServerConnection mBeanServerConnection)
 			throws MalformedObjectNameException, IOException {
 
 		final ObjectName objectName = new ObjectName(OBJECTNAME + ":type=framework,*");
@@ -173,7 +136,6 @@ public class JMXBundleDeployer {
 
 		return null;
 	}
-
 
 	/**
 	 * Calls osgi.core bundleState MBean listBundles operation
@@ -187,13 +149,13 @@ public class JMXBundleDeployer {
 			final ObjectName bundleState = getBundleState();
 
 			final Object[] params = new Object[] {
-				new String[] {
-						"Identifier", "SymbolicName", "State", "Version",
-				}
+					new String[] {
+							"Identifier", "SymbolicName", "State", "Version",
+					}
 			};
 
 			final String[] signature = new String[] {
-				String[].class.getName()
+					String[].class.getName()
 			};
 
 			final TabularData data = (TabularData) mBeanServerConnection.invoke(bundleState, "listBundles", params,
@@ -204,13 +166,11 @@ public class JMXBundleDeployer {
 
 				try {
 					retval.add(newFromData(cd));
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -247,8 +207,7 @@ public class JMXBundleDeployer {
 	 * Uninstall a bundle by passing in its Bundle-SymbolicName. If bundle
 	 * doesn't exist, this is a NOP.
 	 *
-	 * @param bsn
-	 *            bundle symbolic name
+	 * @param bsn bundle symbolic name
 	 * @throws Exception
 	 */
 	public void uninstall(String bsn) throws Exception {
@@ -267,19 +226,18 @@ public class JMXBundleDeployer {
 	 * Calls through directly to the OSGi frameworks MBean uninstallBundle
 	 * operation
 	 *
-	 * @param id
-	 *            id of bundle to uninstall
+	 * @param id id of bundle to uninstall
 	 * @throws Exception
 	 */
 	public void uninstall(long id) throws Exception {
 		final ObjectName framework = getFramework(mBeanServerConnection);
 
 		Object[] objects = new Object[] {
-			id
+				id
 		};
 
 		String[] params = new String[] {
-			"long"
+				"long"
 		};
 
 		mBeanServerConnection.invoke(framework, "uninstallBundle", objects, params);
@@ -291,7 +249,6 @@ public class JMXBundleDeployer {
 	 * MBeans are found. Beware if you have multiple JVMs with osgi.core MBeans
 	 * published.
 	 *
-	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	static String getLocalConnectorAddress() {
@@ -355,25 +312,20 @@ public class JMXBundleDeployer {
 									}
 								}
 							}
-						}
-						catch (Exception e) {
+						} catch (Exception e) {
 							e.printStackTrace();
-						}
-						finally {
+						} finally {
 							Method detachMethod = vmClass.getMethod("detach");
 							detachMethod.invoke(vm);
 						}
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			Thread.currentThread().setContextClassLoader(cl);
 			// try to get custom classloader to unload native libs
 			try {
@@ -393,8 +345,7 @@ public class JMXBundleDeployer {
 						}
 					}
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -410,13 +361,12 @@ public class JMXBundleDeployer {
 
 			try {
 				toolsUrl = toolsJar.toURI().toURL();
-			}
-			catch (MalformedURLException e) {
+			} catch (MalformedURLException e) {
 				//
 			}
 
 			URL[] urls = new URL[] {
-				toolsUrl
+					toolsUrl
 			};
 
 			return new URLClassLoader(urls, parent);

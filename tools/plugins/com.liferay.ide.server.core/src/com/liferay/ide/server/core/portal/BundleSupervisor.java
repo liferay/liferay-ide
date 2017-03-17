@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.server.core.jmx.PortalBundleDeployer;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
@@ -34,6 +35,15 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 {
 
     private String lastOutput;
+    private final int jmxPort;
+    private PortalBundleDeployer bundleDeployer;
+
+    public BundleSupervisor(int jmxPort)
+    {
+        super();
+
+        this.jmxPort = jmxPort;
+    }
 
     @Override
     public boolean stderr( String out ) throws Exception
@@ -44,6 +54,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
     public void connect( String host, int port ) throws Exception
     {
         super.connect( Agent.class, this, host, port );
+        bundleDeployer = new PortalBundleDeployer( jmxPort );
     }
 
     @Override
@@ -66,7 +77,6 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
         final Agent agent = getAgent();
 
-        final String sha = addFile( bundleFile );
         long bundleId = -1;
 
         for( BundleDTO bundle : existingBundles )
@@ -79,6 +89,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
             }
         }
 
+
         if( bundleId > 0 )
         {
             if( !isFragment )
@@ -88,11 +99,12 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
             if( bundleUrl.contains( "webbundle:" ) )
             {
-                agent.updateFromURL( bundleId, bundleUrl );
+                bundleDeployer.updateBundleFromURL( bundleId, bundleUrl );
             }
             else
             {
-                agent.update( bundleId, sha );
+                String url = bundleFile.toURI().toURL().toExternalForm();
+                bundleDeployer.updateBundleFromURL( bundleId, url );
             }
 
             if( !isFragment )
@@ -104,11 +116,12 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
         {
             if( bundleUrl.contains( "webbundle:" ) )
             {
-                retval = agent.installFromURL( bundleUrl, bundleUrl );
+                retval = bundleDeployer.installBundleFromURL( bundleUrl );
             }
             else
             {
-                retval = agent.install( bundleUrl, sha );
+                String url = bundleFile.toURI().toURL().toExternalForm();
+                retval = bundleDeployer.installBundleFromURL( url );
             }
 
             if( !isFragment )

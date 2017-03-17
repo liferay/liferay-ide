@@ -718,12 +718,14 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
             final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
-            try
+            if( bundleProject != null )
             {
-                if( bundleProject != null )
+                BundleSupervisor supervisor = null;
+
+                try
                 {
                     final String symbolicName = bundleProject.getSymbolicName();
-                    BundleSupervisor supervisor = getBundleSupervisor();
+                    supervisor = createBundleSupervisor();
 
                     BundleDTO[] existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
 
@@ -758,9 +760,22 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                         }
                     }
                 }
-            }
-            catch( Exception e )
-            {
+                catch( Exception e )
+                {
+                }
+                finally
+                {
+                    if( supervisor != null )
+                    {
+                        try
+                        {
+                            supervisor.close();
+                        }
+                        catch( IOException e )
+                        {
+                        }
+                    }
+                }
             }
         }
     }
@@ -872,7 +887,9 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     public BundleSupervisor createBundleSupervisor() throws Exception
     {
-        BundleSupervisor bundleSupervisor = new BundleSupervisor();
+        BundleSupervisor bundleSupervisor =
+            new BundleSupervisor( getPortalRuntime().getPortalBundle().getJmxRemotePort() );
+
         int agentPort = getServer().getAttribute( AGENT_PORT, Agent.DEFAULT_PORT );
 
         bundleSupervisor.connect( getServer().getHost(), agentPort );

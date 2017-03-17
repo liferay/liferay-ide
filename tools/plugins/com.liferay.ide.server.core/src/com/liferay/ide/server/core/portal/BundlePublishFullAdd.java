@@ -205,7 +205,9 @@ public class BundlePublishFullAdd extends BundlePublishOperation
             {
                 retval = LiferayServerCore.error( "Unable to deploy bundle remotely " +
                     output.toPortableString(), e );
-
+            }
+            finally
+            {
                 if( bundleSupervisor != null )
                 {
                     try

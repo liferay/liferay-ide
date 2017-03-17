@@ -90,7 +90,7 @@ public class BundlePublishOperation extends PublishOperation
 
     protected BundleSupervisor createBundleSupervisor() throws Exception
     {
-        BundleSupervisor bundleSupervisor = new BundleSupervisor();
+        BundleSupervisor bundleSupervisor = new BundleSupervisor( portalRuntime.getPortalBundle().getJmxRemotePort() );
 
         int agentPort = server.getAttribute( ILiferayServerBehavior.AGENT_PORT, Agent.DEFAULT_PORT );
 

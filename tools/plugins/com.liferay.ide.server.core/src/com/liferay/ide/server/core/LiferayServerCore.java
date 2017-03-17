@@ -21,10 +21,8 @@ import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.sdk.core.ISDKListener;
 import com.liferay.ide.sdk.core.SDKManager;
 import com.liferay.ide.server.core.portal.AbstractPortalBundleFactory;
-import com.liferay.ide.server.core.portal.BundleDeployer;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
-import com.liferay.ide.server.core.portal.PortalRuntime;
 import com.liferay.ide.server.remote.IRemoteServer;
 import com.liferay.ide.server.remote.IServerManagerConnection;
 import com.liferay.ide.server.remote.ServerManagerConnection;
@@ -56,10 +54,8 @@ import org.eclipse.wst.server.core.IRuntimeLifecycleListener;
 import org.eclipse.wst.server.core.IRuntimeType;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.IServerLifecycleListener;
-import org.eclipse.wst.server.core.IServerListener;
 import org.eclipse.wst.server.core.IServerType;
 import org.eclipse.wst.server.core.ServerCore;
-import org.eclipse.wst.server.core.ServerEvent;
 import org.eclipse.wst.server.core.internal.Base;
 import org.eclipse.wst.server.core.internal.IMemento;
 import org.eclipse.wst.server.core.internal.XMLMemento;
@@ -78,8 +74,6 @@ public class LiferayServerCore extends Plugin
 {
 
     public static final String BUNDLE_OUTPUT_ERROR_MARKER_TYPE = "com.liferay.ide.server.core.BundleOutputErrorMarker";
-
-    private static Map<String, BundleDeployer> bundleDeployers;
 
     private static Map<String, IServerManagerConnection> connections = null;
 
@@ -135,74 +129,6 @@ public class LiferayServerCore extends Plugin
     public static IStatus error( String msg, Throwable t )
     {
         return new Status( IStatus.ERROR, PLUGIN_ID, msg, t );
-    }
-
-    public static BundleDeployer getBundleDeployer( final IServer server )
-    {
-        BundleDeployer retval = null;
-
-        if( bundleDeployers == null )
-        {
-            bundleDeployers = new HashMap<>();
-
-            ServerCore.addServerLifecycleListener( new IServerLifecycleListener()
-            {
-                @Override
-                public void serverAdded( IServer server )
-                {
-                }
-
-                @Override
-                public void serverChanged( IServer server )
-                {
-                }
-
-                @Override
-                public void serverRemoved( IServer s )
-                {
-                    if( server.equals( s ) )
-                    {
-                        BundleDeployer deployer = bundleDeployers.get( server.getId() );
-
-                        if( deployer != null )
-                        {
-                            deployer = null;
-                            bundleDeployers.remove( server.getId() );
-                        }
-                    }
-                }
-            });
-        }
-
-        retval = bundleDeployers.get( server.getId() );
-
-        if( retval != null )
-        {
-            if( !retval.ping() )
-            {
-                retval = null;
-            }
-        }
-
-        if( retval == null )
-        {
-            PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
-
-            retval = new BundleDeployer( runtime.getPortalBundle().getJmxRemotePort() );
-
-            bundleDeployers.put( server.getId(), retval );
-
-            server.addServerListener( new IServerListener()
-            {
-                @Override
-                public void serverChanged( ServerEvent event )
-                {
-                    bundleDeployers.remove( server.getId() );
-                }
-            });
-        }
-
-        return retval;
     }
 
     /**

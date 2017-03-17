@@ -100,7 +100,7 @@ public class PortalPublishTask extends PublishTaskDelegate
             }
             finally
             {
-                if( supervisor != null)
+                if( supervisor != null )
                 {
                     try
                     {
