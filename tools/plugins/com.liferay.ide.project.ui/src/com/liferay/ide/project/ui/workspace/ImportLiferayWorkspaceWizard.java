@@ -16,38 +16,25 @@
 package com.liferay.ide.project.ui.workspace;
 
 import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.project.core.workspace.ImportLiferayWorkspaceOp;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.wizard.WorkingSetCustomPart;
-import com.liferay.ide.ui.LiferayWorkspacePerspectiveFactory;
+import com.liferay.ide.project.ui.modules.BaseProjectWizard;
 import com.liferay.ide.ui.util.ProjectExplorerLayoutUtil;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.forms.FormComponentPart;
-import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
 import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
-import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWizard;
-import org.eclipse.ui.IWorkingSet;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
-import org.eclipse.ui.wizards.newresource.BasicNewResourceWizard;
-import org.eclipse.wst.web.internal.DelegateConfigurationElement;
 
 /**
  * @author Andy Wu
  */
-@SuppressWarnings( "restriction" )
-public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWorkspaceOp>
-    implements IWorkbenchWizard, INewWizard
+public class ImportLiferayWorkspaceWizard extends BaseProjectWizard<ImportLiferayWorkspaceOp>
 {
 
     private boolean firstErrorMessageRemoved = false;
@@ -55,26 +42,6 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
     public ImportLiferayWorkspaceWizard()
     {
         super( createDefaultOp(), DefinitionLoader.sdef( ImportLiferayWorkspaceWizard.class ).wizard() );
-    }
-
-    private void addToWorkingSets( IProject newProject ) throws Exception
-    {
-        if( newProject != null )
-        {
-            for( final FormComponentPart formPart : part().getPages().get( 0 ).children().all() )
-            {
-                if( formPart instanceof WorkingSetCustomPart )
-                {
-                    final WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart) formPart;
-                    final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
-
-                    if( !CoreUtil.isNullOrEmpty( workingSets ) )
-                    {
-                        PlatformUI.getWorkbench().getWorkingSetManager().addToWorkingSets( newProject, workingSets );
-                    }
-                }
-            }
-        }
     }
 
     @Override
@@ -112,31 +79,6 @@ public class ImportLiferayWorkspaceWizard extends SapphireWizard<ImportLiferayWo
         }
 
         return wizardPages;
-    }
-
-    private void openLiferayPerspective( IProject newProject )
-    {
-        final IWorkbench workbench = PlatformUI.getWorkbench();
-        // open the "final" perspective
-        final IConfigurationElement element = new DelegateConfigurationElement( null)
-        {
-
-            @Override
-            public String getAttribute( String aName )
-            {
-                if( aName.equals( "finalPerspective" ) )
-                {
-                    return LiferayWorkspacePerspectiveFactory.ID;
-                }
-
-                return super.getAttribute( aName );
-            }
-        };
-
-        BasicNewProjectResourceWizard.updatePerspective( element );
-
-        // select and reveal
-        BasicNewResourceWizard.selectAndReveal( newProject, workbench.getActiveWorkbenchWindow() );
     }
 
     @Override

@@ -26,20 +26,15 @@ import org.eclipse.sapphire.ListProperty;
 import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
-import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
 import org.eclipse.sapphire.modeling.Status;
-import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
 import org.eclipse.sapphire.modeling.annotations.DelegateImplementation;
-import org.eclipse.sapphire.modeling.annotations.Enablement;
-import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Listeners;
 import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.Service;
 import org.eclipse.sapphire.modeling.annotations.Services;
-import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 import org.eclipse.sapphire.modeling.annotations.Whitespace;
 
 /**
@@ -52,48 +47,30 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 
     // *** ProjectName ***
 
-    @Label( standard = "project name" )
     @Listeners( FragmentProjectNameListener.class )
     @Service( impl = FragmentProjectNameValidationService.class )
-    @Required
-    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
-
-    Value<String> getProjectName();
-    void setProjectName( String value );
+    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_NAME );
 
     // *** ProjectLocation ***
 
-    @Type( base = Path.class )
-    @AbsolutePath
-    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
-    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
-    @Label( standard = "location" )
     @Service( impl = FragmentProjectLocationValidationService.class )
     @Service( impl = CommonProjectLocationInitialValueService.class )
-    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
-
-    Value<Path> getLocation();
-    void setLocation( String value );
-    void setLocation( Path value );
+    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_LOCATION );
 
     // *** UseDefaultLocation ***
 
-    @Type( base = Boolean.class )
-    @DefaultValue( text = "true" )
-    @Label( standard = "use default location" )
     @Listeners( ModuleFragmentProjectUseDefaultLocationListener.class )
-    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
-
-    Value<Boolean> getUseDefaultLocation();
-    void setUseDefaultLocation( String value );
-    void setUseDefaultLocation( Boolean value );
+    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, BaseModuleOp.PROP_USE_DEFAULT_LOCATION );
 
     // *** Liferay Runtime ***
 
     @Services(
-                    value = { @Service( impl = LiferayRuntimeNamePossibleValuesService.class ),
-                        @Service( impl = LiferayRuntimeNameDefaultValueService.class ),
-                        @Service( impl = LiferayRuntimeNameValidationService.class ) } )
+        value = {
+            @Service( impl = LiferayRuntimeNamePossibleValuesService.class ),
+            @Service( impl = LiferayRuntimeNameDefaultValueService.class ),
+            @Service( impl = LiferayRuntimeNameValidationService.class )
+            }
+        )
     @Required
     ValueProperty PROP_LIFERAY_RUNTIME_NAME = new ValueProperty( TYPE, "LiferayRuntimeName" );
 
@@ -162,7 +139,7 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 
     Value<String> getGroupId();
     void setGroupId( String value );
-    
+
     // *** Method: execute ***
 
     @Override

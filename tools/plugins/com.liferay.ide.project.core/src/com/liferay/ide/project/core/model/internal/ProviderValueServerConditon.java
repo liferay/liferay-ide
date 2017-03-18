@@ -12,26 +12,37 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
-
-import org.eclipse.sapphire.services.ValueLabelService;
-
+import org.eclipse.sapphire.ExecutableElement;
+import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.services.ServiceCondition;
+import org.eclipse.sapphire.services.ServiceContext;
 
 /**
- * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class ProjectProviderValueLabelService extends ValueLabelService
+
+public abstract class ProviderValueServerConditon<T extends ExecutableElement> extends ServiceCondition
 {
 
     @Override
-    public String provide( String value )
+    public boolean applicable( final ServiceContext context )
     {
-        ILiferayProjectProvider provider = LiferayCore.getProvider( value );
+        boolean retval = false;
 
-        return provider != null ? provider.getDisplayName() : value;
+        final ValueProperty prop = context.find( ValueProperty.class );
+
+        ValueProperty property = getProperty( context );
+
+        if( prop != null && ( prop.equals( property ) ) )
+        {
+            retval = true;
+        }
+
+        return retval;
     }
+
+    protected abstract ValueProperty getProperty( final ServiceContext context );
 }

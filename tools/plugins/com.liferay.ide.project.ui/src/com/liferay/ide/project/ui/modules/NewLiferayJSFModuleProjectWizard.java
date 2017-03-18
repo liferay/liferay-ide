@@ -15,8 +15,8 @@
 package com.liferay.ide.project.ui.modules;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp;
 import com.liferay.ide.project.core.model.ProjectName;
-import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.ui.ProjectUI;
 
 import java.util.ArrayList;
@@ -26,14 +26,16 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
 
+
 /**
  * @author Simon Jiang
  */
-public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayModuleProjectOp>
+public class NewLiferayJSFModuleProjectWizard extends BaseProjectWizard<NewLiferayJSFModuleProjectOp>
 {
-    public NewLiferayModuleProjectWizard()
+
+    public NewLiferayJSFModuleProjectWizard()
     {
-        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayModuleProjectWizard.class ).wizard() );
+        super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayJSFModuleProjectWizard.class ).wizard() );
     }
 
     @Override
@@ -43,7 +45,7 @@ public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayM
 
         final List<IProject> projects = new ArrayList<IProject>();
 
-        final NewLiferayModuleProjectOp op = element().nearest( NewLiferayModuleProjectOp.class );
+        final NewLiferayJSFModuleProjectOp op = element().nearest( NewLiferayJSFModuleProjectOp.class );
 
         ElementList<ProjectName> projectNames = op.getProjectNames();
 
@@ -78,9 +80,9 @@ public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayM
         }
      }
 
-    private static NewLiferayModuleProjectOp createDefaultOp()
+    private static NewLiferayJSFModuleProjectOp createDefaultOp()
     {
-        return NewLiferayModuleProjectOp.TYPE.instantiate();
+        return NewLiferayJSFModuleProjectOp.TYPE.instantiate();
     }
 
 }

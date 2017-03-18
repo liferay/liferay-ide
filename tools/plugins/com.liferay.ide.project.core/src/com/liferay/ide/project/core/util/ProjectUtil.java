@@ -140,6 +140,30 @@ public class ProjectUtil
         }
     }
 
+    private static boolean checkGradleWarPlugin( final IProject project )
+    {
+        IFile buildGradleFile = project.getFile( "build.gradle" );
+
+        if( !buildGradleFile.exists() )
+        {
+            return false;
+        }
+
+        try(InputStream ins = buildGradleFile.getContents())
+        {
+            final String content = FileUtil.readContents( ins );
+
+            Pattern warPlugin =
+                Pattern.compile( ".*apply.*war.*", Pattern.MULTILINE | Pattern.DOTALL );
+
+            return content != null && warPlugin.matcher( content ).matches();
+        }
+        catch( Exception e )
+        {
+            return false;
+        }
+    }
+
     public static boolean collectSDKProjectsFromDirectory(
         Collection<File> eclipseProjectFiles, Collection<File> liferayProjectDirs, File directory,
         Set<String> directoriesVisited, boolean recurse, IProgressMonitor monitor )
@@ -1588,7 +1612,7 @@ public class ProjectUtil
 
     public static boolean isFacetedGradleBundleProject( IProject project )
     {
-        return( isWorkspaceWars( project ) || checkGradleThemePlugin( project ) );
+        return( isWorkspaceWars( project ) || checkGradleThemePlugin( project ) || checkGradleWarPlugin( project ));
     }
 
     public static boolean isFragmentProject( Object resource ) throws Exception

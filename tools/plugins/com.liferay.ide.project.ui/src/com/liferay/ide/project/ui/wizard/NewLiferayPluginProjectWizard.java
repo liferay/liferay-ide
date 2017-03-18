@@ -22,6 +22,7 @@ import com.liferay.ide.project.core.model.PluginType;
 import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.ui.IvyUtil;
 import com.liferay.ide.project.ui.ProjectUI;
+import com.liferay.ide.project.ui.modules.BaseProjectWizard;
 import com.liferay.ide.sdk.core.ISDKConstants;
 import com.liferay.ide.ui.LiferayPerspectiveFactory;
 import com.liferay.ide.ui.util.UIUtil;
@@ -44,24 +45,17 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.internal.ui.util.CoreUtility;
-import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.ui.def.DefinitionLoader;
-import org.eclipse.sapphire.ui.forms.FormComponentPart;
-import org.eclipse.sapphire.ui.forms.swt.SapphireWizard;
-import org.eclipse.sapphire.ui.forms.swt.SapphireWizardPage;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchWizard;
-import org.eclipse.ui.IWorkingSet;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonViewer;
 import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
@@ -76,69 +70,27 @@ import org.eclipse.wst.web.internal.DelegateConfigurationElement;
  * @author Eric Min
  */
 @SuppressWarnings( "restriction" )
-public class NewLiferayPluginProjectWizard extends SapphireWizard<NewLiferayPluginProjectOp>
-    implements IWorkbenchWizard, INewWizard
+public class NewLiferayPluginProjectWizard extends BaseProjectWizard<NewLiferayPluginProjectOp> 
 {
-    private boolean firstErrorMessageRemoved = false;
-
     public NewLiferayPluginProjectWizard()
     {
         super( createDefaultOp(), DefinitionLoader.sdef( NewLiferayPluginProjectWizard.class ).wizard() );
     }
 
-    private void addToWorkingSets( IProject newProject ) throws Exception
-    {
-        if (newProject != null )
-        {
-            for( final FormComponentPart formPart : part().getPages().get( 0 ).children().all() )
-            {
-                if( formPart instanceof WorkingSetCustomPart )
-                {
-                    final WorkingSetCustomPart workingSetPart = (WorkingSetCustomPart) formPart;
-                    final IWorkingSet[] workingSets = workingSetPart.getWorkingSets();
-
-                    if( ! CoreUtil.isNullOrEmpty( workingSets ) )
-                    {
-                        PlatformUI.getWorkbench().getWorkingSetManager().addToWorkingSets(newProject, workingSets);
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public IWizardPage[] getPages()
-    {
-        final IWizardPage[] wizardPages = super.getPages();
-
-        if( !firstErrorMessageRemoved && wizardPages != null )
-        {
-            final SapphireWizardPage wizardPage = (SapphireWizardPage) wizardPages[0];
-
-            final String message = wizardPage.getMessage();
-            final int messageType = wizardPage.getMessageType();
-
-            if( messageType == IMessageProvider.ERROR && ! CoreUtil.isNullOrEmpty( message ) )
-            {
-                wizardPage.setMessage( "Please enter a project name.", SapphireWizardPage.NONE ); //$NON-NLS-1$
-                firstErrorMessageRemoved = true;
-            }
-        }
-
-        return wizardPages;
-    }
 
     @Override
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
     }
 
-    private void openLiferayPerspective( IProject newProject )
+    @Override
+    protected void openLiferayPerspective( IProject newProject )
     {
         final IWorkbench workbench = PlatformUI.getWorkbench();
         // open the "final" perspective
         final IConfigurationElement element = new DelegateConfigurationElement( null )
         {
+
             @Override
             public String getAttribute( String aName )
             {

@@ -42,8 +42,30 @@
             projectType="plugin">
       </liferayProjectProvider>
       <liferayProjectProvider
+            class="com.liferay.ide.maven.core.NewMavenJSFModuleProjectProvider"
+            displayName="Maven"
+            id="com.liferay.ide.maven.core.mavenJSFModuleProjectProvider"
+            priority="high"
+            shortName="maven-jsf"
+            projectType="jsf-module">
+      </liferayProjectProvider>
+   </extension>
+   <extension
+         point="com.liferay.ide.core.liferayProjectProviders">
+      <liferayProjectProvider
+            class="com.liferay.ide.maven.core.NewGradleJSFModuleProjectProvider"
+            displayName="Gradle"
+            id="com.liferay.ide.maven.core.gradleJSFModuleProjectProvider"
+            priority="high"
+            shortName="gradle-jsf"
+            projectType="jsf-module">
+      </liferayProjectProvider>
+   </extension>
+   <extension
+         point="com.liferay.ide.core.liferayProjectProviders">
+      <liferayProjectProvider
             class="com.liferay.ide.maven.core.NewMavenModuleProjectProvider"
-            displayName="Maven (liferay-maven-module)"
+            displayName="Maven"
             id="com.liferay.ide.maven.core.mavenModuleProjectProvider"
             priority="high"
             projectType="module"
@@ -51,7 +73,7 @@
       </liferayProjectProvider>
       <liferayProjectProvider
             class="com.liferay.ide.maven.core.LiferayMavenWorkspaceProjectProvider"
-            displayName="Maven Liferay Workspace Project Provider"
+            displayName="Maven"
             id="com.liferay.ide.maven.core.liferayMavenWorkspaceProjectProvider"
             projectType="workspace"
             shortName="maven-liferay-workspace">

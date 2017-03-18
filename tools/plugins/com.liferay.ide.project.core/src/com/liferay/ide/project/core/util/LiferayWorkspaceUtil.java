@@ -21,7 +21,10 @@ import com.liferay.ide.core.util.PropertiesUtil;
 import com.liferay.ide.project.core.ProjectCore;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
@@ -34,7 +37,9 @@ import org.eclipse.core.runtime.Path;
  */
 public class LiferayWorkspaceUtil
 {
-
+    private static final String _GRADLE_PROPERTIES_FILE_NAME = "gradle.properties";
+    private static final String _SETTINGS_GRADLE_FILE_NAME = "settings.gradle";
+    private static final String _BUILD_GRADLE_FILE_NAME = "build.gradle";
     public static String multiWorkspaceErrorMsg = "More than one Liferay workspace build in current Eclipse workspace.";
 
     public static String hasLiferayWorkspaceMsg =
@@ -81,9 +86,9 @@ public class LiferayWorkspaceUtil
     {
         File workspaceDir = new File( location );
 
-        File buildGradle = new File( workspaceDir, "build.gradle" );
-        File settingsGradle = new File( workspaceDir, "settings.gradle" );
-        File gradleProperties = new File( workspaceDir, "gradle.properties" );
+        File buildGradle = new File( workspaceDir, _BUILD_GRADLE_FILE_NAME );
+        File settingsGradle = new File( workspaceDir, _SETTINGS_GRADLE_FILE_NAME );
+        File gradleProperties = new File( workspaceDir, _GRADLE_PROPERTIES_FILE_NAME );
 
         if( !( buildGradle.exists() && settingsGradle.exists() && gradleProperties.exists() ) )
         {
@@ -359,4 +364,74 @@ public class LiferayWorkspaceUtil
         return getHomeLocation( project.getLocation().toOSString() );
     }
 
+    public static File getWorkspaceDir( File dir )
+    {
+        return findParentFile( dir, new String[] { _SETTINGS_GRADLE_FILE_NAME, _GRADLE_PROPERTIES_FILE_NAME }, true );
+    }
+
+    public static String loadConfiguredHomeDir( String location )
+    {
+        return getLiferayWorkspaceGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
+    }
+
+    public static String read( File file ) throws IOException
+    {
+        return new String( Files.readAllBytes( file.toPath() ) );
+    }
+
+    public static File findParentFile( File dir, String[] fileNames, boolean checkParents )
+    {
+
+        if( dir == null )
+        {
+            return null;
+        }
+
+        for( String fileName : fileNames )
+        {
+            File file = new File( dir, fileName );
+
+            if( file.exists() )
+            {
+                return dir;
+            }
+        }
+
+        if( checkParents )
+        {
+            return findParentFile( dir.getParentFile(), fileNames, checkParents );
+        }
+
+        return null;
+    }
+
+    public static String[] getLiferayWorkspaceProjectWarsDirs( final String workspaceLocation )
+    {
+        String[] retval = null;
+
+        if( workspaceLocation != null )
+        {
+            String val = getLiferayWorkspaceGradleProperty( workspaceLocation, "liferay.workspace.wars.dir", "wars" );
+
+            retval = val.split( "," );
+        }
+
+        return retval;
+    }
+
+    public static String getLiferayWorkspaceGradleProperty( String projectLocation, String key, String defaultValue )
+    {
+        File gradleProperties = new File( projectLocation, "gradle.properties" );
+
+        String retVal = null;
+
+        if( gradleProperties.exists() )
+        {
+            Properties properties = PropertiesUtil.loadProperties( gradleProperties );
+
+            retVal = properties.getProperty( key, defaultValue );
+        }
+
+        return retVal;
+    }
 }

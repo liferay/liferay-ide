@@ -27,7 +27,10 @@ import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.annotations.AbsolutePath;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.FileSystemResourceType;
+import org.eclipse.sapphire.modeling.annotations.Label;
+import org.eclipse.sapphire.modeling.annotations.Required;
 import org.eclipse.sapphire.modeling.annotations.ValidFileSystemResourceType;
 
 /**
@@ -48,6 +51,39 @@ public interface BaseModuleOp extends ExecutableElement
     Value<Path> getInitialSelectionPath();
     void setInitialSelectionPath( String value );
     void setInitialSelectionPath( Path value );
+
+    @Label( standard = "project name" )
+    @Required
+    ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, "ProjectName" );
+
+    Value<String> getProjectName();
+
+    void setProjectName( String value );
+
+    @Type( base = Path.class )
+    @AbsolutePath
+    @Enablement( expr = "${ UseDefaultLocation == 'false' }" )
+    @ValidFileSystemResourceType( FileSystemResourceType.FOLDER )
+    @Label( standard = "location" )
+    ValueProperty PROP_LOCATION = new ValueProperty( TYPE, "Location" );
+
+    Value<Path> getLocation();
+
+    void setLocation( String value );
+
+    void setLocation( Path value );
+
+
+    @Type( base = Boolean.class )
+    @DefaultValue( text = "true" )
+    @Label( standard = "use default location" )
+    ValueProperty PROP_USE_DEFAULT_LOCATION = new ValueProperty( TYPE, "UseDefaultLocation" );
+
+    Value<Boolean> getUseDefaultLocation();
+
+    void setUseDefaultLocation( String value );
+
+    void setUseDefaultLocation( Boolean value );
 
     // *** FinalProjectName ***
 

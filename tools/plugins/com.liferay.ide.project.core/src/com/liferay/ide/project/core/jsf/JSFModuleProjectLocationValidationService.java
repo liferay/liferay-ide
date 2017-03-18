@@ -12,33 +12,38 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.modules;
+
+package com.liferay.ide.project.core.jsf;
 
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.modules.AbstractProjectLocationValidationService;
 
-import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.Listener;
 
 /**
  * @author Simon Jiang
- * @author Andy Wu
  */
-public class ModuleProjectNameValidationService extends AbstractModuleProjectNameValidationService<NewLiferayModuleProjectOp>
+public class JSFModuleProjectLocationValidationService
+    extends AbstractProjectLocationValidationService<NewLiferayJSFModuleProjectOp>
 {
-    @Override
-    protected NewLiferayModuleProjectOp op()
-    {
-        return context(NewLiferayModuleProjectOp.class);
-    }
 
     @Override
-    protected NewLiferayProjectProvider<NewLiferayModuleProjectOp> getProjectProvider()
+    protected NewLiferayProjectProvider<NewLiferayJSFModuleProjectOp> getProjectProvider()
     {
         return op().getProjectProvider().content();
     }
 
     @Override
-    protected ValueProperty getProjectNameValueProperty()
+    protected void attachListener( final Listener listener )
     {
-        return NewLiferayModuleProjectOp.PROP_PROJECT_NAME;
+        op().getProjectName().attach( listener );
+        op().getProjectProvider().attach( listener );
     }
+
+    @Override
+    protected NewLiferayJSFModuleProjectOp op()
+    {
+        return context( NewLiferayJSFModuleProjectOp.class );
+    }
+
 }

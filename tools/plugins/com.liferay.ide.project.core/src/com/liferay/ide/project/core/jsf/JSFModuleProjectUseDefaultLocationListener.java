@@ -12,26 +12,25 @@
  * details.
  *
  *******************************************************************************/
-package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
+package com.liferay.ide.project.core.jsf;
 
-import org.eclipse.sapphire.services.ValueLabelService;
-
+import org.eclipse.sapphire.PropertyContentEvent;
 
 /**
- * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class ProjectProviderValueLabelService extends ValueLabelService
+public class JSFModuleProjectUseDefaultLocationListener extends JSFModuleProjectNameListener
 {
 
     @Override
-    public String provide( String value )
+    protected void handleTypedEvent( PropertyContentEvent event )
     {
-        ILiferayProjectProvider provider = LiferayCore.getProvider( value );
+        final NewLiferayJSFModuleProjectOp op = op( event );
 
-        return provider != null ? provider.getDisplayName() : value;
+        if( op.getUseDefaultLocation().content( true ) )
+        {
+            super.handleTypedEvent( event );
+        }
     }
 }

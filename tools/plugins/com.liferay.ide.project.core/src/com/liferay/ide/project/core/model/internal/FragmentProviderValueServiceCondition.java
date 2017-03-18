@@ -12,26 +12,25 @@
  * details.
  *
  *******************************************************************************/
+
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.core.LiferayCore;
+import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 
-import org.eclipse.sapphire.services.ValueLabelService;
-
+import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.services.ServiceContext;
 
 /**
- * @author Gregory Amerson
  * @author Simon Jiang
  */
-public class ProjectProviderValueLabelService extends ValueLabelService
+
+public class FragmentProviderValueServiceCondition extends ProviderValueServerConditon<NewModuleFragmentOp>
 {
 
     @Override
-    public String provide( String value )
+    protected ValueProperty getProperty( final ServiceContext context )
     {
-        ILiferayProjectProvider provider = LiferayCore.getProvider( value );
-
-        return provider != null ? provider.getDisplayName() : value;
+        return NewModuleFragmentOp.PROP_PROJECT_PROVIDER;
     }
+
 }

@@ -138,6 +138,26 @@
                class="org.eclipse.core.resources.IResource">
          </selection>
       </wizard>
+      <wizard
+            category="com.liferay.ide.newWizards"
+            finalPerspective="com.liferay.ide.eclipse.ui.perspective.liferay"
+            icon="icons/n16/liferay_faces_new.png"
+            id="com.liferay.ide.project.ui.newJsfModuleProjectWizard"
+            name="Liferay JSF War Project"
+            preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferayworkspace"
+            project="true">
+         <class class="com.liferay.ide.project.ui.modules.NewLiferayJSFModuleProjectWizard">
+            <parameter name="liferay_project" value="true"/>
+            <parameter name="menuIndex" value="1" />
+         </class>
+
+         <description>
+            %new.project.wizard.description
+         </description>
+         <selection
+               class="org.eclipse.core.resources.IResource">
+         </selection>
+      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.importWizards">
