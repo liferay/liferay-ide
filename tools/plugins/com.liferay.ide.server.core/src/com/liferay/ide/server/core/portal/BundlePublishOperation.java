@@ -14,9 +14,7 @@
  *******************************************************************************/
 package com.liferay.ide.server.core.portal;
 
-import aQute.remote.api.Agent;
-
-import com.liferay.ide.server.core.ILiferayServerBehavior;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,13 +88,7 @@ public class BundlePublishOperation extends PublishOperation
 
     protected BundleSupervisor createBundleSupervisor() throws Exception
     {
-        BundleSupervisor bundleSupervisor = new BundleSupervisor( portalRuntime.getPortalBundle().getJmxRemotePort() );
-
-        int agentPort = server.getAttribute( ILiferayServerBehavior.AGENT_PORT, Agent.DEFAULT_PORT );
-
-        bundleSupervisor.connect( server.getHost(), agentPort );
-
-        return bundleSupervisor;
+        return ServerUtil.createBundleSupervisor( portalRuntime, server );
     }
 
 }

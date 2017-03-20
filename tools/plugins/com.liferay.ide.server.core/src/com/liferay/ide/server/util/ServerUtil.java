@@ -15,6 +15,8 @@
 
 package com.liferay.ide.server.util;
 
+import aQute.remote.api.Agent;
+
 import com.liferay.ide.core.ILiferayConstants;
 import com.liferay.ide.core.ILiferayPortal;
 import com.liferay.ide.core.ILiferayProject;
@@ -27,6 +29,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.core.ILiferayRuntime;
 import com.liferay.ide.server.core.ILiferayServer;
 import com.liferay.ide.server.core.LiferayServerCore;
+import com.liferay.ide.server.core.portal.BundleSupervisor;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.core.portal.PortalBundleFactory;
 import com.liferay.ide.server.core.portal.PortalRuntime;
@@ -51,6 +54,8 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -68,6 +73,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.internal.launching.StandardVMType;
+import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.wst.common.componentcore.ComponentCore;
@@ -102,6 +108,9 @@ import org.w3c.dom.NodeList;
 public class ServerUtil
 {
 
+    private static Pattern aQuteAgentPortPattern = Pattern.compile( "-DaQute.agent.server.port=([0-9]+)" );
+    private static Pattern jmxRemotePortPattern = Pattern.compile( "-Dcom.sun.management.jmxremote.port=([0-9]+)" );
+
     public static boolean bsnExists( String bsn, BundleDTO[] bundles )
     {
         if( bsn != null )
@@ -133,6 +142,56 @@ public class ServerUtil
         {
             throw new CoreException( LiferayServerCore.createErrorStatus( e1 ) );
         }
+    }
+
+    public static BundleSupervisor createBundleSupervisor( PortalRuntime portalRuntime, IServer server )
+        throws Exception
+    {
+        int aQuteAgentPort = Agent.DEFAULT_PORT;
+        int jmxPort = portalRuntime.getPortalBundle().getJmxRemotePort();
+
+        try
+        {
+            String launchVmArguments = server.getLaunchConfiguration( true, null ).getWorkingCopy().getAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "" );
+
+            Matcher aQutematcher = aQuteAgentPortPattern.matcher( launchVmArguments );
+            Matcher jmxMatcher = jmxRemotePortPattern.matcher( launchVmArguments );
+
+            String agentPortStr = null;
+
+            if( aQutematcher.find() )
+            {
+                agentPortStr = aQutematcher.group( 1 );
+            }
+
+            if( !CoreUtil.empty( agentPortStr ) )
+            {
+                aQuteAgentPort = Integer.parseInt( agentPortStr );
+            }
+
+            String jmxPortStr = null;
+
+            if( jmxMatcher.find() )
+            {
+                jmxPortStr = jmxMatcher.group( 1 );
+            }
+
+            if( !CoreUtil.empty( jmxPortStr ) )
+            {
+                jmxPort = Integer.parseInt( jmxPortStr );
+            }
+        }
+        catch( Exception e )
+        {
+            LiferayServerCore.logError( "can't get agent or jmx port from server launch configuration ", e );
+        }
+
+        BundleSupervisor bundleSupervisor = new BundleSupervisor( jmxPort );
+
+        bundleSupervisor.connect( server.getHost(), aQuteAgentPort );
+
+        return bundleSupervisor;
     }
 
     public static IStatus createErrorStatus( String msg )

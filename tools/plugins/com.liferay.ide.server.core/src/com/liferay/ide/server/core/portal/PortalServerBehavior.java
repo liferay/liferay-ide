@@ -24,6 +24,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.PingThread;
+import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -887,14 +888,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     public BundleSupervisor createBundleSupervisor() throws Exception
     {
-        BundleSupervisor bundleSupervisor =
-            new BundleSupervisor( getPortalRuntime().getPortalBundle().getJmxRemotePort() );
-
-        int agentPort = getServer().getAttribute( AGENT_PORT, Agent.DEFAULT_PORT );
-
-        bundleSupervisor.connect( getServer().getHost(), agentPort );
-
-        return bundleSupervisor;
+        return ServerUtil.createBundleSupervisor( getPortalRuntime(), getServer() );
     }
 
 }
