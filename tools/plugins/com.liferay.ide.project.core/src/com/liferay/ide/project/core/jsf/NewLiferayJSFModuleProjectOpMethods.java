@@ -17,6 +17,7 @@ package com.liferay.ide.project.core.jsf;
 
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -43,7 +44,7 @@ public class NewLiferayJSFModuleProjectOpMethods
 
         try
         {
-            final NewLiferayProjectProvider<NewLiferayJSFModuleProjectOp> projectProvider =
+            final NewLiferayProjectProvider<BaseModuleOp> projectProvider =
                 op.getProjectProvider().content();
 
             final IStatus status = projectProvider.createNewProject( op, monitor );

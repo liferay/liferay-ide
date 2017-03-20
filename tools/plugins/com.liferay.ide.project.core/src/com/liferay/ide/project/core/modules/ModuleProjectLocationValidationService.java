@@ -15,29 +15,12 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
-
-import org.eclipse.sapphire.Listener;
-
 /**
  * @author Simon Jiang
  */
 public class ModuleProjectLocationValidationService
     extends AbstractProjectLocationValidationService<NewLiferayModuleProjectOp>
 {
-
-    @Override
-    protected NewLiferayProjectProvider<NewLiferayModuleProjectOp> getProjectProvider()
-    {
-        return op().getProjectProvider().content();
-    }
-
-    @Override
-    protected void attachListener( final Listener listener )
-    {
-        op().getProjectName().attach( listener );
-        op().getProjectProvider().attach( listener );
-    }
 
     @Override
     protected NewLiferayModuleProjectOp op()

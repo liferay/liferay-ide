@@ -15,13 +15,11 @@
 
 package com.liferay.ide.project.core.jsf;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
+import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 
 import org.eclipse.sapphire.ElementType;
 import org.eclipse.sapphire.PossibleValues;
-import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.ProgressMonitor;
@@ -43,8 +41,7 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp
     // *** ProjectName ***
 
     @Listeners( JSFModuleProjectNameListener.class )
-    @Service( impl = JSFModuleProjectNameValidationService.class )
-
+    @Service( impl = ModuleProjectNameValidationService.class )
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_NAME );
 
     // *** ProjectLocation ***
@@ -77,17 +74,11 @@ public interface NewLiferayJSFModuleProjectOp extends BaseModuleOp
     void setTemplateName( String value );
     // *** ProjectProvider ***
 
-    @Type( base = ILiferayProjectProvider.class )
     @Label( standard = "Build Framework" )
     @Listeners( JSFModuleProjectNameListener.class )
     @Service( impl = JSFModuleProjectProviderPossibleValuesService.class )
     @Service( impl = JSFModuleProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
-
-    Value<NewLiferayProjectProvider<NewLiferayJSFModuleProjectOp>> getProjectProvider();
-
-    void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider<NewLiferayJSFModuleProjectOp> value );
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER );
 
     // *** Method: execute ***
 

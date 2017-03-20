@@ -20,6 +20,7 @@ import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.core.util.ZipUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.core.portal.PortalBundle;
 import com.liferay.ide.server.util.ServerUtil;
@@ -58,7 +59,7 @@ public class NewModuleFragmentOpMethods
 
         try
         {
-            final NewLiferayProjectProvider<NewModuleFragmentOp> projectProvider =
+            final NewLiferayProjectProvider<BaseModuleOp> projectProvider =
                 op.getProjectProvider().content( true );
 
             final IStatus status = projectProvider.createNewProject( op, monitor );

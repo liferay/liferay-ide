@@ -15,6 +15,8 @@
 
 package com.liferay.ide.project.core.modules;
 
+import com.liferay.ide.core.ILiferayProjectProvider;
+import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.model.ProjectName;
 
 import org.eclipse.sapphire.ElementList;
@@ -99,5 +101,13 @@ public interface BaseModuleOp extends ExecutableElement
     ListProperty PROP_PROJECT_NAMES = new ListProperty( TYPE, "ProjectNames" );
 
     ElementList<ProjectName> getProjectNames();
+
+    @Type( base = ILiferayProjectProvider.class )
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
+
+    Value<NewLiferayProjectProvider<BaseModuleOp>> getProjectProvider();
+
+    void setProjectProvider( String value );
+    void setProjectProvider( NewLiferayProjectProvider<BaseModuleOp> value );
 
 }

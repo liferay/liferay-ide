@@ -14,8 +14,6 @@
  *******************************************************************************/
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 
 import org.eclipse.sapphire.ElementList;
@@ -139,16 +137,11 @@ public interface NewLiferayModuleProjectOp extends BaseModuleOp
 
     // *** ProjectProvider ***
 
-    @Type( base = ILiferayProjectProvider.class )
     @Label( standard = "build type" )
     @Listeners( ModuleProjectNameListener.class )
     @Service( impl = ModuleProjectProviderPossibleValuesService.class )
     @Service( impl = ModuleProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
-
-    Value<NewLiferayProjectProvider<NewLiferayModuleProjectOp>> getProjectProvider();
-    void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider<NewLiferayModuleProjectOp> value );
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER );
 
     // *** Method: execute ***
 

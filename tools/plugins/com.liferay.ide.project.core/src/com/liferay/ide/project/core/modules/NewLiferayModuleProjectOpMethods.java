@@ -69,7 +69,7 @@ public class NewLiferayModuleProjectOpMethods
 
         try
         {
-            final NewLiferayProjectProvider<NewLiferayModuleProjectOp> projectProvider = op.getProjectProvider().content( true );
+            final NewLiferayProjectProvider<BaseModuleOp> projectProvider = op.getProjectProvider().content( true );
 
             final IStatus status = projectProvider.createNewProject( op, monitor );
 

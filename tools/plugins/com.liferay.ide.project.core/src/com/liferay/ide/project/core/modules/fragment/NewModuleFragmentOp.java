@@ -15,9 +15,8 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.core.ILiferayProjectProvider;
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.BaseModuleOp;
+import com.liferay.ide.project.core.modules.ModuleProjectNameValidationService;
 import com.liferay.ide.project.core.service.CommonProjectLocationInitialValueService;
 
 import org.eclipse.sapphire.ElementList;
@@ -48,7 +47,7 @@ public interface NewModuleFragmentOp extends BaseModuleOp
     // *** ProjectName ***
 
     @Listeners( FragmentProjectNameListener.class )
-    @Service( impl = FragmentProjectNameValidationService.class )
+    @Service( impl = ModuleProjectNameValidationService.class )
     ValueProperty PROP_PROJECT_NAME = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_NAME );
 
     // *** ProjectLocation ***
@@ -107,16 +106,11 @@ public interface NewModuleFragmentOp extends BaseModuleOp
 
     // *** ProjectProvider ***
 
-    @Type( base = ILiferayProjectProvider.class )
     @Label( standard = "build type" )
     @Listeners( FragmentProjectNameListener.class )
     @Service( impl = FragmentProjectProviderPossibleValuesService.class )
     @Service( impl = FragmentProjectProviderDefaultValueService.class )
-    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, "ProjectProvider" );
-
-    Value<NewLiferayProjectProvider<NewModuleFragmentOp>> getProjectProvider();
-    void setProjectProvider( String value );
-    void setProjectProvider( NewLiferayProjectProvider<NewModuleFragmentOp> value );
+    ValueProperty PROP_PROJECT_PROVIDER = new ValueProperty( TYPE, BaseModuleOp.PROP_PROJECT_PROVIDER );
 
     // *** Maven settings ***
     // *** ArtifactVersion ***

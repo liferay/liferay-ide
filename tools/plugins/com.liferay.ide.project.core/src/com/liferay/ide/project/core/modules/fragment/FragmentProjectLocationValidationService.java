@@ -15,10 +15,7 @@
 
 package com.liferay.ide.project.core.modules.fragment;
 
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
 import com.liferay.ide.project.core.modules.AbstractProjectLocationValidationService;
-
-import org.eclipse.sapphire.Listener;
 
 /**
  * @author Simon Jiang
@@ -26,19 +23,6 @@ import org.eclipse.sapphire.Listener;
 public class FragmentProjectLocationValidationService
     extends AbstractProjectLocationValidationService<NewModuleFragmentOp>
 {
-
-    @Override
-    protected NewLiferayProjectProvider<NewModuleFragmentOp> getProjectProvider()
-    {
-        return op().getProjectProvider().content();
-    }
-
-    @Override
-    protected void attachListener( final Listener listener )
-    {
-        op().getProjectName().attach( listener );
-        op().getProjectProvider().attach( listener );
-    }
 
     @Override
     protected NewModuleFragmentOp op()

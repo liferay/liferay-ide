@@ -15,8 +15,6 @@
 
 package com.liferay.ide.project.core.modules;
 
-import com.liferay.ide.project.core.NewLiferayProjectProvider;
-
 import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
@@ -101,7 +99,7 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
                             }
 
                             final IStatus locationStatus =
-                                getProjectProvider().validateProjectLocation( currentProjectName, osPath );
+                                op().getProjectProvider().content().validateProjectLocation( currentProjectName, osPath );
 
                             if( !locationStatus.isOK() )
                             {
@@ -145,12 +143,9 @@ public abstract class AbstractProjectLocationValidationService<T extends Executa
             }
         };
 
-        attachListener( listener );
+        op().getProjectName().attach( listener );
+        op().getProjectProvider().attach( listener );
     }
-
-    protected abstract NewLiferayProjectProvider<T> getProjectProvider();
-
-    protected abstract void attachListener( final Listener listener );
 
     protected abstract BaseModuleOp op();
 }

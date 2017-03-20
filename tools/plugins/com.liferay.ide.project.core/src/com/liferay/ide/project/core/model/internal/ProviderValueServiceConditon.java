@@ -15,22 +15,34 @@
 
 package com.liferay.ide.project.core.model.internal;
 
-import com.liferay.ide.project.core.model.NewLiferayPluginProjectOp;
+import com.liferay.ide.project.core.modules.BaseModuleOp;
 
 import org.eclipse.sapphire.ValueProperty;
+import org.eclipse.sapphire.services.ServiceCondition;
 import org.eclipse.sapphire.services.ServiceContext;
 
 /**
  * @author Simon Jiang
  */
 
-public class PluginProviderValueServiceCondition extends ProviderValueServerConditon<NewLiferayPluginProjectOp>
+public class ProviderValueServiceConditon extends ServiceCondition
 {
 
     @Override
-    protected ValueProperty getProperty( final ServiceContext context )
+    public boolean applicable( final ServiceContext context )
     {
-        return NewLiferayPluginProjectOp.PROP_PROJECT_PROVIDER;
+        boolean retval = false;
+
+        final ValueProperty prop = context.find( ValueProperty.class );
+
+        ValueProperty property = BaseModuleOp.PROP_PROJECT_PROVIDER;
+
+        if( prop != null && ( prop.equals( property ) ) )
+        {
+            retval = true;
+        }
+
+        return retval;
     }
 
 }
