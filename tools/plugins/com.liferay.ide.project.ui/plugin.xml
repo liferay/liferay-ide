@@ -129,7 +129,7 @@
             name="%import.projects.sdk.wizard.name"
             preferredPerspectives="com.liferay.ide.eclipse.ui.perspective.liferay,org.eclipse.jst.j2ee.J2EEPerspective"
             project="true">
-         <class class="com.liferay.ide.project.ui.wizard.SDKProjectsImportWizard">
+         <class class="com.liferay.ide.project.ui.wizard.ImportSDKProjectsWizard">
          </class>
          <description>
             %import.projects.sdk.wizard.description
