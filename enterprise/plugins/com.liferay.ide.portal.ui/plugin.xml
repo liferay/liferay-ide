@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <!--extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            activeByDefault="true"
+            contentProvider="com.liferay.ide.portal.ui.navigator.PortalResourcesContentProvider"
+            icon="icons/e16/portal.png"
+            id="com.liferay.ide.portal.ui.navigator.portalResources"
+            labelProvider="com.liferay.ide.portal.ui.navigator.PortalResourcesLabelProvider"
+            name="%portal.resource.name"
+            priority="lowest">
+         <triggerPoints>
+            <or>
+               <instanceof
+                     value="org.eclipse.core.resources.IWorkspaceRoot">
+               </instanceof>
+               <instanceof
+                     value="com.liferay.ide.portal.ui.navigator.PortalResourcesRootNode">
+               </instanceof>
+            </or>
+         </triggerPoints>
+         <possibleChildren>
+            <or>
+               <instanceof
+                     value="com.liferay.ide.portal.ui.navigator.PortalResourcesRootNode">
+               </instanceof>
+            </or>
+         </possibleChildren>
+      </navigatorContent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension
+                  pattern="com.liferay.ide.portal.ui.navigator.*">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+   </extension-->
+   <extension
+         point="org.eclipse.ui.editors.templates">
+      <include
+            file="templates/structures/templates.xml"
+            translations="templates/structures/templates.properties">
+      </include>
+      <contextType
+            class="com.liferay.ide.portal.ui.templates.StructuresTemplateContextType"
+            id="com.liferay.ide.portal.ui.templates.structures.contextType.#document"
+            name="Structures Document">
+      </contextType>
+      <contextType
+            class="com.liferay.ide.portal.ui.templates.StructuresTemplateContextType"
+            id="com.liferay.ide.portal.ui.templates.structures.contextType.structures"
+            name="Structures Element">
+      </contextType>
+      <contextType
+            class="com.liferay.ide.portal.ui.templates.StructuresTemplateContextType"
+            id="com.liferay.ide.portal.ui.templates.structures.contextType.root"
+            name="Root Element">
+      </contextType>
+      <contextType
+            class="com.liferay.ide.portal.ui.templates.StructuresTemplateContextType"
+            id="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element"
+            name="Dynamic Element">
+      </contextType>
+   </extension>
+   <extension
+         point="org.eclipse.wst.sse.ui.editorConfiguration">
+      <sourceViewerConfiguration
+            class="com.liferay.ide.portal.ui.templates.StructuresTextViewerConfiguration"
+            target="com.liferay.ide.portal.core.structuresFile">
+      </sourceViewerConfiguration>
+   </extension>
+
+   <extension
+         point="org.eclipse.debug.ui.debugModelPresentations">
+      <debugModelPresentation
+            class="com.liferay.ide.portal.ui.debug.fm.FMModelPresentation"
+            id="com.liferay.ide.debug.freemarker">
+      </debugModelPresentation>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            class="com.liferay.ide.portal.ui.debug.fm.FMBreakpointAdapterFactory"
+            adaptableType="org.eclipse.ui.texteditor.ITextEditor">
+         <adapter
+               type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
+         </adapter>
+      </factory>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.contexts">
+      <context
+            name="Debugging Freemarker"
+            description="Debugging Freemarker"
+            id="com.liferay.ide.debug.ui.fm.debugging"
+            parentId="org.eclipse.debug.ui.debugging">
+      </context>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.debugModelContextBindings">
+      <modelContextBinding
+            debugModelId="com.liferay.ide.debug.freemarker"
+            contextId="com.liferay.ide.debug.ui.fm.debugging">
+      </modelContextBinding>
+   </extension>
+
+   <extension
+         point="org.eclipse.wst.sse.ui.breakpoint">
+      <breakpointContribution>
+         <provider
+               class="com.liferay.ide.portal.ui.debug.fm.FMBreakpointProvider"
+               contentTypes="com.liferay.ide.freemarker.contentType">
+         </provider>
+      </breakpointContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="com.liferay.ide.debug.ui.freemarker"
+            description="Suspend the related freemarker engine thread that is currently waiting for debug client to send resume."
+            id="com.liferay.ide.debug.ui.freemarker.suspendRelatedThread"
+            name="Suspend Freemarker Thread">
+      </command>
+      <category
+            description="Freemarker Debugger Commands"
+            id="com.liferay.ide.debug.ui.freemarker"
+            name="Freemarker Debugger Commands">
+      </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="com.liferay.ide.portal.ui.debug.fm.SuspendFreemarkerThreadHandler"
+            commandId="com.liferay.ide.debug.ui.freemarker.suspendRelatedThread">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.debug.ui.DebugView?after=org.eclipse.debug.ui.commands.Suspend">
+         <command
+               commandId="com.liferay.ide.debug.ui.freemarker.suspendRelatedThread"
+               icon="icons/fm_suspend.png"
+               label="Suspend Freemarker Thread"
+               style="push"
+               tooltip="Suspend the related freemarker engine thread that is currently waiting for debug client to send resume.">
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="com.liferay.ide.portal.ui.FreemarkerVariableViewActions"
+            targetID="org.eclipse.debug.ui.VariableView">
+         <action
+               class="com.liferay.ide.portal.ui.debug.fm.ShowAdvancedVariablesViewActionDelegate"
+               icon="icons/advanced.gif"
+               id="com.liferay.ide.debug.ui.variablesViewActions.FreemarkerAdvancedView"
+               label="Show Advanced Variables View"
+               menubarPath="com.liferay.ide.debug.ui.VariableView.freemarkerSubmenu/freemakerPart"
+               style="toggle"
+               tooltip="Toggle the display all of freemarker variables available debug model (advanced use only).">
+         </action>
+         <menu
+               icon="icons/freemarker.gif"
+               id="com.liferay.ide.debug.ui.VariableView.freemarkerSubmenu"
+               label="Freemarker"
+               path="freemarkerActions">
+            <groupMarker
+                  name="com.liferay.ide.debug.ui.freemarkerPart">
+            </groupMarker>
+         </menu>
+      </viewContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="com.liferay.ide.ui.preferences.liferay"
+            class="com.liferay.ide.portal.ui.debug.DebugPreferencePage"
+            id="com.liferay.ide.portal.ui.DebugPreferencePage"
+            name="Debug">
+      </page>
+   </extension>
+</plugin>

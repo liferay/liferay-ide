@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ /*******************************************************************************
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************/
+-->
+
+<templates>
+    <template name="boolean-field" description="Boolean Field" id="field.boolean.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;boolean&quot; indexType=&quot;keyword&quot; name=&quot;boolean${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;checkbox&quot; width=&quot;&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${BooleanLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[${false}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="date-field" description="Date Field" id="field.date.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;date&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;date${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-date&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${DateLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="decimal-field" description="Decimal Field" id="field.decimal.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;double&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;decimal${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-decimal&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${DecimalLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="documents-and-media-field" description="Documents and Media Field" id="field.documents-and-media.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;document-library&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;documents_and_media${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-documentlibrary&quot; width=&quot;&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${DocumentsAndMediaLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="html-field" description="HTML Field" id="field.html.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;html&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;html${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-text-html&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${HTMLLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="image-field" description="Image Field" id="field.image.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;image&quot; fieldNamespace=&quot;wcm&quot; indexType=&quot;keyword&quot; name=&quot;image${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;wcm-image&quot; width=&quot;&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${ImageLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="integer-field" description="Integer Field" id="field.integer.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;integer&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;integer${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-integer&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${IntegerLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="integer-field" description="Integer Field" id="field.integer.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;link-to-page&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;link_to_page${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-link-to-page&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${LinkToPageLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;    
+    </template>
+
+    <template name="number-field" description="Number Field" id="field.number.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;number&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;number${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-number&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${NumberLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="radio-field" description="Radio Field" id="field.radio.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; name=&quot;radio${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;radio&quot; width=&quot;&quot;&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value1}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option1Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value2}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option2Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value3}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option3Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${RadioLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[[&quot;&quot;]]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="select-field" description="Select Field" id="field.select.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; multiple=&quot;false&quot; name=&quot;select${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;select&quot; width=&quot;&quot;&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value1}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option1Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value2}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option2Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value3}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option3Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${SelectLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[[&quot;&quot;]]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="text-field" description="Text Field" id="field.text.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; name=&quot;text${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;text&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${TextLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="text-field" description="Text Field" id="field.text.root" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.root" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; name=&quot;text_box${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;textarea&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${TextBoxLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+
+    <!-- dynamic element templates -->
+
+
+    <template name="boolean-field" description="Boolean Field" id="field.boolean.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;boolean&quot; indexType=&quot;keyword&quot; name=&quot;boolean${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;checkbox&quot; width=&quot;&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${BooleanLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[${false}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="date-field" description="Date Field" id="field.date.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;date&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;date${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-date&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${DateLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="decimal-field" description="Decimal Field" id="field.decimal.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;double&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;decimal${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-decimal&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${DecimalLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="documents-and-media-field" description="Documents and Media Field" id="field.documents-and-media.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;document-library&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;documents_and_media${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-documentlibrary&quot; width=&quot;&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${DocumentsAndMediaLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="html-field" description="HTML Field" id="field.html.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;html&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;html${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-text-html&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${HTMLLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="image-field" description="Image Field" id="field.image.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;image&quot; fieldNamespace=&quot;wcm&quot; indexType=&quot;keyword&quot; name=&quot;image${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;wcm-image&quot; width=&quot;&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${ImageLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="integer-field" description="Integer Field" id="field.integer.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;integer&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;integer${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-integer&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${IntegerLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="integer-field" description="Integer Field" id="field.integer.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;link-to-page&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;link_to_page${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-link-to-page&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${LinkToPageLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="number-field" description="Number Field" id="field.number.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;number&quot; fieldNamespace=&quot;ddm&quot; indexType=&quot;keyword&quot; name=&quot;number${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;ddm-number&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${NumberLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="radio-field" description="Radio Field" id="field.radio.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; name=&quot;radio${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;radio&quot; width=&quot;&quot;&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value1}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option1Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value2}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option2Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value3}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option3Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${RadioLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[[&quot;&quot;]]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="select-field" description="Select Field" id="field.select.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; multiple=&quot;false&quot; name=&quot;select${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;select&quot; width=&quot;&quot;&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value1}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option1Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value2}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option2Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;dynamic-element name=&quot;option${nameSuffix}&quot; type=&quot;option&quot; value=&quot;${Value3}&quot;&gt;
+            &lt;meta-data locale=&quot;en_US&quot;&gt;
+                &lt;entry name=&quot;label&quot;&gt;
+                    &lt;![CDATA[${Option3Label}]]&gt;
+                &lt;/entry&gt;
+            &lt;/meta-data&gt;
+        &lt;/dynamic-element&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${SelectLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[[&quot;&quot;]]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="text-field" description="Text Field" id="field.text.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; name=&quot;text${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;text&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${TextLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+    <template name="text-field" description="Text Field" id="field.text.dynamic-element" 
+              context="com.liferay.ide.portal.ui.templates.structures.contextType.dynamic-element" enabled="true">
+    &lt;dynamic-element dataType=&quot;string&quot; indexType=&quot;keyword&quot; name=&quot;text_box${nameSuffix}&quot; readOnly=&quot;false&quot; repeatable=&quot;false&quot; required=&quot;false&quot; showLabel=&quot;true&quot; type=&quot;textarea&quot; width=&quot;small&quot;&gt;
+        &lt;meta-data locale=&quot;en_US&quot;&gt;
+            &lt;entry name=&quot;label&quot;&gt;
+                &lt;![CDATA[${TextBoxLabel}]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;predefinedValue&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+            &lt;entry name=&quot;tip&quot;&gt;
+                &lt;![CDATA[]]&gt;
+            &lt;/entry&gt;
+        &lt;/meta-data&gt;
+    &lt;/dynamic-element&gt;
+    </template>
+
+</templates>
