@@ -37,7 +37,7 @@ public class ProviderValueServiceConditon extends ServiceCondition
 
         ValueProperty property = BaseModuleOp.PROP_PROJECT_PROVIDER;
 
-        if( prop != null && ( prop.equals( property ) ) )
+        if( prop != null && ( prop.name().equals( property.name() ) ) )
         {
             retval = true;
         }
