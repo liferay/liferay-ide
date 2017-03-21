@@ -648,7 +648,7 @@ public class CustomJspPage extends Page
     }
 
     public void compare(
-        final String originalFile, final String changedFile, final String leftLabel, final String rightLabel )
+        final String originalFilePath, final String changedFilePath, final String leftLabel, final String rightLabel )
     {
         CompareConfiguration config = new CompareConfiguration();
 
@@ -661,8 +661,8 @@ public class CustomJspPage extends Page
         CompareEditorInput editorInput = new CompareEditorInput( config )
         {
 
-            CompareItem originalItem = new CompareItem( originalFile );
-            CompareItem changedItem = new CompareItem( changedFile );
+            CompareItem originalItem = new CompareItem( originalFilePath );
+            CompareItem changedItem = new CompareItem( changedFilePath );
 
             @Override
             protected Object prepareInput( IProgressMonitor monitor )
@@ -680,7 +680,7 @@ public class CustomJspPage extends Page
             }
         };
 
-        editorInput.setTitle( "Jsp File Compare" );
+        editorInput.setTitle( "Compare ('" + originalFilePath + "'-'" + changedFilePath + "')" );
 
         CompareUI.openCompareEditor( editorInput );
     }

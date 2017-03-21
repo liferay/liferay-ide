@@ -250,6 +250,13 @@ public class UpgradePomPage extends Page
             @Override
             public void checkStateChanged( CheckStateChangedEvent event )
             {
+                UpgradePomElement element = (UpgradePomElement)event.getElement();
+
+                if( element.finished && event.getChecked() )
+                {
+                    fTableViewer.setChecked( element, false );
+                }
+
                 setUpgradeButtonEnable();
             }
         } );
@@ -259,11 +266,11 @@ public class UpgradePomPage extends Page
     {
         final String descriptor =
             "This step will guide you to upgrade maven pom.xml files for the following aspects.\n" +
-                "  1. Add dependencies for 7.x\n" +
-                "  2. Remove the legacy plugins in 6.2 and upgrade others to 7.x plugins.\n" +
-                "  3. Add new plugins for projects of portlet, theme and service-builder:\n" +
-                "  com.liferay.css.builder, com.liferay.portal.tools.theme.builder, com.liferay.portal.tools.service.builder\n" +
-                "Double clicking a file will bring up the compare editor of the original file and the upgrade file.";
+                "  1. Convert and add dependencies for 7.x.\n" +
+                "  2. Remove the legacy 6.2 plugins.\n" +
+                "  3. Add 7.x maven plugins accroding to project type:\n" +
+                "  com.liferay.css.builder -> portlet, com.liferay.portal.tools.theme.builder -> theme, com.liferay.portal.tools.service.builder -> service-builder\n" +
+                "Double clicking a file will bring up the compare editor of the original file and the upgraded file.";
 
         String url = "";
 

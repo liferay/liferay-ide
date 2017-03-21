@@ -33,11 +33,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
-
-
 
 /**
  * @author Simon Jiang
@@ -47,13 +42,11 @@ public class LiferayUpgradeCompre
     
     private final IPath soruceFile;
     private final IPath targetFile;
-    private IWorkbenchWindow window;
     private String fileName;
     
     public LiferayUpgradeCompre( final IPath soruceFile, final IPath targetFile, String fileName )
     {
         this.fileName = fileName;
-        this.window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
         this.soruceFile = soruceFile;
         this.targetFile = targetFile;
     }
@@ -70,41 +63,36 @@ public class LiferayUpgradeCompre
 
     public void openCompareEditor()
     {
-        final IWorkbenchPage workBenchPage = window.getActivePage();
-
-        ITypedElement left = null;
-        ITypedElement right = null;
-
         try
         {
-            left = new CompareItem( getSourceFile(), this.fileName  );
-            right = new CompareItem( getTargetFile(), this.fileName + "_preview"   );
-            openInCompare( left, right, workBenchPage );
+            final ITypedElement left = new CompareItem( getSourceFile(), this.fileName );
+            final ITypedElement right = new CompareItem( getTargetFile(), this.fileName + "_preview" );
+
+            final CompareConfiguration configuration = new CompareConfiguration();
+            configuration.setLeftLabel( "Original File" );
+            configuration.setRightLabel( "Upgraded File" );
+
+            CompareEditorInput editorInput = new CompareEditorInput( configuration )
+            {
+
+                @Override
+                protected Object prepareInput( final IProgressMonitor monitor )
+                    throws InvocationTargetException, InterruptedException
+                {
+                    DiffNode diffNode = new DiffNode( left, right );
+                    return diffNode;
+                }
+            };
+
+            editorInput.setTitle(
+                "Compare ('" + soruceFile.toPortableString() + "'-'" + targetFile.toPortableString() + "')" );
+
+            CompareUI.openCompareEditor( editorInput );
         }
-        
         catch( Exception e )
         {
             ProjectUI.logError( e );
         }
-
-    }
-
-    private void openInCompare( final ITypedElement left, final ITypedElement right, IWorkbenchPage workBenchPage )
-    {
-        final CompareConfiguration configuration = new CompareConfiguration();
-        configuration.setLeftLabel( "Original File" );
-        configuration.setRightLabel( "Upgraded File" );
-
-        CompareUI.openCompareEditor( new CompareEditorInput( configuration)
-        {
-            @Override
-            protected Object prepareInput( final IProgressMonitor monitor )
-                throws InvocationTargetException, InterruptedException
-            {
-                DiffNode diffNode = new DiffNode( left, right );
-                return diffNode;
-            }
-        });
     }
 
     private class CompareItem implements ITypedElement,IStreamContentAccessor,IModificationDate,IEditableContent//,IResourceProvider

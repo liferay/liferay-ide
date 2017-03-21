@@ -19,8 +19,16 @@ import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.wst.sse.core.StructuredModelManager;
@@ -500,6 +508,45 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
         return propertiesListNode;
     }
 
+    private boolean hasDependency( IProject project, String groupId, String artifactId )
+    {
+        boolean retVal = false;
+
+        IFile iFile = project.getFile( "pom.xml" );
+
+        File pomFile = iFile.getLocation().toFile();
+
+        MavenXpp3Reader mavenReader = new MavenXpp3Reader();
+
+        try(FileReader reader = new FileReader( pomFile.getAbsolutePath() ))
+        {
+            Model model = mavenReader.read( reader );
+
+            List<Dependency> dependencies = model.getDependencies();
+
+            for( Dependency dependency : dependencies )
+            {
+                if( groupId.equals( dependency.getGroupId() ) && artifactId.equals( dependency.getArtifactId() ) )
+                {
+                    retVal = true;
+
+                    break;
+                }
+            }
+        }
+        catch( FileNotFoundException e )
+        {
+        }
+        catch( IOException e )
+        {
+        }
+        catch( XmlPullParserException e1 )
+        {
+        }
+
+        return retVal;
+    }
+
     @Override
     public boolean isNeedUpgrade( IFile pomFile )
     {
@@ -591,7 +638,8 @@ public class LiferayMavenLegacyProjectUpdater implements ILiferayLegacyProjectUp
 
     private boolean isServiceBuilderSubProject( IProject project )
     {
-        return project.getName().endsWith( "-service" );
+        return project.getName().endsWith( "-service" ) &&
+            hasDependency( project, "com.liferay.portal", "portal-service" );
     }
 
     private boolean isThemeProject( IProject project )

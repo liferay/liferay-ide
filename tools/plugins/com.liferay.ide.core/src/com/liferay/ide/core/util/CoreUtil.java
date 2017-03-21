@@ -418,7 +418,14 @@ public class CoreUtil
             }
         }
 
-        return resource.getProject();
+        if( resource != null )
+        {
+            return resource.getProject();
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public final static List<IFolder> getSourceFolders( final IJavaProject project )
