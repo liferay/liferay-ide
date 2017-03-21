@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Text;
  * @author Simon Jiang
  * @author Terry Jia
  */
-public abstract class Page extends Composite
+public abstract class Page extends Composite implements SelectionChangedListener
 {
 
     public static String WELCOME_PAGE_ID = "welcome";
@@ -287,5 +287,10 @@ public abstract class Page extends Composite
         {
             listener.onValidation( pageValidationEvent );
         }
+    }
+
+    @Override
+    public void onSelectionChanged( int targetSelection )
+    {
     }
 }

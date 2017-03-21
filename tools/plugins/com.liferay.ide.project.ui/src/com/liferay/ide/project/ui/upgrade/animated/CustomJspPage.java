@@ -998,7 +998,6 @@ public class CustomJspPage extends Page
 
             for( IRuntime liferayRuntime : liferayRuntimes )
             {
-                String id = liferayRuntime.getRuntimeType().getId();
                 if( liferayRuntime.getRuntimeType().getId().startsWith( "com.liferay.ide.server.62." ) )
                 {
                     liferay62ServerLocation = liferayRuntime.getLocation().removeLastSegments( 1 ).toString();

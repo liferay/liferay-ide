@@ -181,6 +181,7 @@ public class NewMavenPluginProjectProvider extends LiferayMavenProjectProvider i
 
         if( !CoreUtil.isNullOrEmpty( newProjects ) )
         {
+            op.setImportProjectStatus( true );
             for( IProject project : newProjects )
             {
                 projectNames.insert().setName( project.getName() );

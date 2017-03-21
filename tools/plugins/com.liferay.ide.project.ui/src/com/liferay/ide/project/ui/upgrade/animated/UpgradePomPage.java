@@ -63,6 +63,7 @@ import org.eclipse.swt.widgets.Table;
 
 /**
  * @author Andy Wu
+ * @author Simon Jiang
  */
 public class UpgradePomPage extends Page
 {
@@ -201,19 +202,6 @@ public class UpgradePomPage extends Page
         Composite buttonContainer = new Composite( this, SWT.NONE );
         buttonContainer.setLayout( new GridLayout( 1, false ) );
         buttonContainer.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
-
-        final Button findButton = new Button( buttonContainer, SWT.NONE );
-        findButton.setText( "Find..." );
-        findButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
-        findButton.addListener( SWT.Selection, new Listener()
-        {
-
-            @Override
-            public void handleEvent( Event event )
-            {
-                handleFindEvent();
-            }
-        } );
 
         final Button selectAllButton = new Button( buttonContainer, SWT.NONE );
         selectAllButton.setText( "Select All" );
@@ -420,6 +408,21 @@ public class UpgradePomPage extends Page
         }
 
         upgradeButton.setEnabled( isEnable );
+    }
+
+    @Override
+    public void onSelectionChanged( int targetSelection )
+    {
+        Page selectedPage = UpgradeView.getPage(targetSelection);
+
+        String selectedPageId = selectedPage.getPageId();
+
+        if ( !selectedPageId.equals( getPageId() ) )
+        {
+            return;
+        }
+
+        handleFindEvent();
     }
 
 }

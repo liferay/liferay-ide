@@ -18,7 +18,6 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.project.ui.ProjectUI;
@@ -202,19 +201,6 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         Composite buttonContainer = new Composite( this, SWT.NONE );
         buttonContainer.setLayout( new GridLayout( 1, false ) );
         buttonContainer.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
-
-        final Button selectAllButton = new Button( buttonContainer, SWT.NONE );
-        selectAllButton.setText( "Find..." );
-        selectAllButton.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false, 1, 1 ) );
-        selectAllButton.addListener( SWT.Selection, new Listener()
-        {
-
-            @Override
-            public void handleEvent( Event event )
-            {
-                handleFindEvent();
-            }
-        } );
 
         final Button upgradeButton = new Button( buttonContainer, SWT.NONE );
         upgradeButton.setText( "Upgrade..." );
@@ -633,4 +619,20 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         }
     }
 
+    @Override
+    public void onSelectionChanged( int targetSelection )
+    {
+        Page selectedPage = UpgradeView.getPage(targetSelection);
+        
+        String selectedPageId = selectedPage.getPageId();
+
+        if ( !selectedPageId.equals( getPageId() ) )
+        {
+            return;
+        }
+
+        handleFindEvent();
+    }
+
+    
 }

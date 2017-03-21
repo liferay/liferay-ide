@@ -272,5 +272,4 @@ public class LayoutTemplatePage extends AbstractLiferayTableViewCustomPart
 
         return content;
     }
-    
 }
