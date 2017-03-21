@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.jboss.ide.eclipse.freemarker.editor.FreemarkerMultiPageEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            icon="icons/icon.gif"
+            id="com.liferay.ide.freemarker.editor.FreemarkerEditor"
+            name="Liferay Freemarker Editor">
+         <contentTypeBinding
+               contentTypeId="com.liferay.ide.freemarker.contentType">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="org.jboss.ide.eclipse.freemarker.preferences.PreferencePage"
+            id="com.liferay.ide.freemarker.preferences.OutlinePreferencePage"
+            name="FreeMarker Editor"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="com.liferay.ide.freemarker.objectContribution1"
+            nameFilter="*"
+            objectClass="org.eclipse.jdt.internal.core.JarEntryFile">
+         <action
+               class="org.jboss.ide.eclipse.freemarker.editor.actions.AddMacroLibrary"
+               icon="icons/include.png"
+               id="com.liferay.ide.freemarker.AddMacroLibrary1"
+               label="Use as FreeMarker library"/>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="com.liferay.ide.freemarker.objectContribution2"
+            nameFilter="*.ftl"
+            objectClass="org.eclipse.core.resources.IFile">
+         <action
+               class="org.jboss.ide.eclipse.freemarker.editor.actions.AddMacroLibrary"
+               icon="icons/include.png"
+               id="com.liferay.AddMacroLibrary2"
+               label="Use as FreeMarker library"/>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            adaptable="true"
+            class="org.jboss.ide.eclipse.freemarker.preferences.ContextProperties"
+            id="com.liferay.ide.freemarker.contextPage"
+            name="FreeMarker Context"
+            objectClass="org.eclipse.core.resources.IResource"/>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.consoleLineTrackers">
+      <consoleLineTracker
+            class="org.jboss.ide.eclipse.freemarker.linetracker.ConsoleLineTracker"
+            id="com.liferay.ide.freemarker.linetracker.ConsoleLineTracker"
+            processType="java"/>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            file-extensions="ftl"
+            id="com.liferay.ide.freemarker.contentType"
+            name="Freemarker Content Type"
+            priority="normal">
+      </content-type>
+   </extension>
+
+</plugin>
