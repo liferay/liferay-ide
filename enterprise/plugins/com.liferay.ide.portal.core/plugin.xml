@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!--
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.xml"
+            default-charset="UTF-8"
+            file-extensions="xml"
+            id="structuresFile"
+            name="Liferay Structure XML"
+            priority="high">
+         <describer
+               class="com.liferay.ide.portal.core.structures.StructuresContentDescriber">
+         </describer>
+      </content-type>
+   </extension>
+-->
+
+   <extension
+         point="org.eclipse.debug.core.breakpoints">
+      <breakpoint
+            class="com.liferay.ide.portal.core.debug.fm.FMLineBreakpoint"
+            id="com.liferay.ide.debug.core.fmLineBreakpoint"
+            markerType="com.liferay.ide.portal.core.fmLineBreakpointMarker"
+            name="Freemarker Line Breakpoint">
+      </breakpoint>
+   </extension>
+   <extension
+         id="fmLineBreakpointMarker"
+         name="Liferay Freemarker Line Breakpoint"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.debug.core.lineBreakpointMarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.liferay.ide.portal.core.debug.LiferayDebugPreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="com.liferay.ide.server.core.portalLaunchParticipants">
+      <portalLaunchParticipant
+            class="com.liferay.ide.portal.core.debug.DebugPortalLaunchParticipant">
+      </portalLaunchParticipant>
+   </extension>
+
+</plugin>
