@@ -186,10 +186,10 @@ public interface LiferayUpgradeDataModel extends Element
     void setConvertLiferayWorkspace(String convertLiferayWorkspace);
     void setConvertLiferayWorkspace(Boolean convertLiferayWorkspace);
 
-    // *** BackupSdk ***
+    // *** DownloadBundle ***
 
     @Type( base = Boolean.class )
-    @DefaultValue(text = "false")
+    @DefaultValue(text = "true")
     ValueProperty PROP_DOWNLOAD_BUNDLE = new ValueProperty( TYPE, "downloadBundle" );
 
     Value<Boolean> getDownloadBundle();
@@ -198,7 +198,10 @@ public interface LiferayUpgradeDataModel extends Element
 
     void setDownloadBundle( Boolean downloadBundle );
 
+    // *** BackupSdk ***
+
     @Type( base = Boolean.class )
+    @DefaultValue(text = "true")
     ValueProperty PROP_BACKUP_SDK = new ValueProperty( TYPE, "BackupSdk" );
     Value<Boolean> getBackupSdk();
 

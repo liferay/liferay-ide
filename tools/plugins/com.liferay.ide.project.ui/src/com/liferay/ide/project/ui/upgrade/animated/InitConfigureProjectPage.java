@@ -235,7 +235,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     public InitConfigureProjectPage( final Composite parent, int style, LiferayUpgradeDataModel dataModel )
     {
-        super( parent, style, dataModel, INIT_CONFIGURE_PROJECT_PAGE_ID, true );
+        super( parent, style, dataModel, INIT_CONFIGURE_PROJECT_PAGE_ID, false );
 
         dataModel.getSdkLocation().attach( new LiferayUpgradeValidationListener() );
         dataModel.getBundleName().attach( new LiferayUpgradeValidationListener() );
@@ -611,7 +611,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         bundleElementComposite = SWTUtil.createComposite( composite, 2, 1, GridData.FILL_HORIZONTAL );
 
-        downloadBundle = SWTUtil.createCheckButton( bundleElementComposite, "Download Liferay bundle", null, false, 1 );
+        downloadBundle = SWTUtil.createCheckButton( bundleElementComposite, "Download Liferay bundle (Recommend)", null, true, 1 );
+
+        createSubBundleElement();
 
         downloadBundle.addSelectionListener( new SelectionAdapter()
         {
@@ -621,7 +623,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             {
                 dataModel.setDownloadBundle( downloadBundle.getSelection() );
 
-                if( downloadBundle.getSelection() )
+                if( dataModel.getDownloadBundle().content() )
                 {
                     createSubBundleElement();
 
@@ -707,7 +709,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createSeparator = createSeparator( this, 3 );
 
         String backupFolderName = "Backup project into folder";
-        backup = SWTUtil.createCheckButton( composite, backupFolderName, null, false, 2 );
+        backup = SWTUtil.createCheckButton( composite, backupFolderName, null, true, 2 );
 
         backupLocationField = createTextField( composite, SWT.NONE );
         backupLocationField.setEnabled( backup.getSelection() );

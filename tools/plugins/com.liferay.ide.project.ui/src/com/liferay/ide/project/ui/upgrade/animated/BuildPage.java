@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -383,7 +384,7 @@ public class BuildPage extends Page
 
     }
 
-    private boolean getBuildStatus( IProgressMonitor monitor, IProject project )
+    private boolean getBuildStatus( IProgressMonitor monitor, IProject project ) throws CoreException
     {
         IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
         IPath outputBundlepath = null;
@@ -397,6 +398,8 @@ public class BuildPage extends Page
         }
         if( outputBundlepath != null && !outputBundlepath.isEmpty() )
         {
+            project.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+
             return true;
         }
 
