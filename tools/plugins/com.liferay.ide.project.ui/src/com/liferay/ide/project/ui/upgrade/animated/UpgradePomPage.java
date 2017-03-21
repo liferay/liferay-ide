@@ -258,7 +258,13 @@ public class UpgradePomPage extends Page
     public void createSpecialDescriptor( Composite parent, int style )
     {
         final String descriptor =
-            "This step will help you to upgrade maven pom.xml files, double-click items to preview fixed file content.";
+            "This step will guide you to upgrade maven pom.xml files for the following aspects.\n" +
+                "  1. Add dependencies for 7.x\n" +
+                "  2. Remove the legacy plugins in 6.2 and upgrade others to 7.x plugins.\n" +
+                "  3. Add new plugins for projects of portlet, theme and service-builder:\n" +
+                "  com.liferay.css.builder, com.liferay.portal.tools.theme.builder, com.liferay.portal.tools.service.builder\n" +
+                "Double clicking a file will bring up the compare editor of the original file and the upgrade file.";
+
         String url = "";
 
         Link link = SWTUtil.createHyperLink( this, style, descriptor, 1, url );
@@ -340,7 +346,7 @@ public class UpgradePomPage extends Page
 
         for( IProject project : projectArrys )
         {
-            if( ProjectUtil.isMavenProject( project ) &&  getUpdater().isNeedUpgrade( project ) )
+            if( ProjectUtil.isMavenProject( project ) && getUpdater().isNeedUpgrade( project ) )
             {
                 upgradePomElements.add( new UpgradePomElement( project, false ) );
             }

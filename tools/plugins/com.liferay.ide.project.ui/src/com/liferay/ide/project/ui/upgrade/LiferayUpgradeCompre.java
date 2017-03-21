@@ -92,8 +92,8 @@ public class LiferayUpgradeCompre
     private void openInCompare( final ITypedElement left, final ITypedElement right, IWorkbenchPage workBenchPage )
     {
         final CompareConfiguration configuration = new CompareConfiguration();
-        configuration.setLeftLabel( "Source File" );
-        configuration.setRightLabel( "Upgrade File" );
+        configuration.setLeftLabel( "Original File" );
+        configuration.setRightLabel( "Upgraded File" );
 
         CompareUI.openCompareEditor( new CompareEditorInput( configuration)
         {
