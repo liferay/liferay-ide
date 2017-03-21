@@ -130,6 +130,7 @@ public class GradleModuleProjectImporter extends AbstractLiferayProjectImporter
         if( refreshProject != null )
         {
             GradleUtil.refreshGradleProject( refreshProject );
+            refreshProject = null;
         }
         else
         {
