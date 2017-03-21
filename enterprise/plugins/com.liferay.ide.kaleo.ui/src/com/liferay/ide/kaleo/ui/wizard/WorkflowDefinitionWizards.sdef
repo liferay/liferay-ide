@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definition>
+    <import>
+        <package>org.eclipse.sapphire.workspace.ui</package>
+        <package>com.liferay.ide.kaleo.ui</package>
+        <package>com.liferay.ide.kaleo.ui.action</package>
+        <package>com.liferay.ide.kaleo.ui.diagram</package>
+        <package>com.liferay.ide.kaleo.ui.wizard</package>
+    </import>
+    <wizard>
+        <id>newWorkflowDefinitionWizard</id>
+        <label>Create New Kaleo Workflow File</label>
+        <page>
+            <id>create-workflow-definition</id>
+            <label>Create Kaleo Workflow</label>
+            <description>Create a new kaleo workflow xml file and specify initial values for states and task assignments.</description>
+            <initial-focus>Project</initial-focus>
+            <scale-vertically>true</scale-vertically>
+            <content>
+                <property-editor>
+                    <property>Project</property>
+                    <hint>
+                        <name>browse.only</name>
+                        <value>true</value>
+                    </hint>
+                </property-editor>
+                <property-editor>
+                    <property>Folder</property>
+                    <hint>
+                        <name>browse.only</name>
+                        <value>true</value>
+                    </hint>
+                    <action-handler>
+                        <action>Sapphire.Browse</action>
+                        <id>Sapphire.Browse.Folder</id>
+                        <impl>ProjectRelativePathBrowseActionHandler</impl>
+                        <param>
+                            <name>type</name>
+                            <value>folder</value>
+                        </param>
+                    </action-handler>
+                    <action-handler-filter>
+                        <context>Sapphire.ValuePropertyEditor</context>
+                        <impl>RelativePathSapphireActionHandlerFilter</impl>
+                    </action-handler-filter>
+                </property-editor>
+                <separator></separator>
+                <property-editor>Name</property-editor>
+                <property-editor>InitialStateName</property-editor>
+                <property-editor>FinalStateName</property-editor>
+                <property-editor>
+                    <property>DefaultScriptLanguage</property>
+                    <hint>
+                        <name>prefer.combo</name>
+                        <value>true</value>
+                    </hint>
+                </property-editor>
+                <property-editor>
+                    <property>DefaultTemplateLanguage</property>
+                    <hint>
+                        <name>prefer.combo</name>
+                        <value>true</value>
+                    </hint>
+                </property-editor>
+            </content>
+            <image>icons/wizban/workflow_definition_16x16.png</image>
+            <width>525</width>
+        </page>
+        <page>
+            <id>choose-assignment-type</id>
+            <label>Choose Assignment Type</label>
+            <content>
+                <property-editor>InitialTaskName</property-editor>
+                <label>How should the task be assigned?</label>
+                <composite>
+                    <indent>true</indent>
+                    <content>
+                        <property-editor>
+                            <property>AssignmentType</property>
+                            <show-label>false</show-label>
+                            <width>525</width>
+                            <style>Sapphire.PropertyEditor.RadioButtonGroup.Vertical</style>
+                        </property-editor>
+                    </content>
+                    <width>525</width>
+                </composite>
+            </content>
+            <width>525</width>
+            <image>icons/wizban/workflow_definition_16x16.png</image>
+            <description>Decide how the initial task for this workflow should be assigned.</description>
+        </page>
+        <page>
+            <id>make-task-assignments</id>
+            <label>Make Task Assignments</label>
+            <content>
+                <form>
+                    <visible-when>${AssignmentType == 'CREATOR'}</visible-when>
+                    <content>
+                        <label>This task will be assigned to the creator of the asset.</label>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'USER'}</visible-when>
+                    <content>
+                        <label>Specify the user that will be assigned this task. Only set a value on one of the following fields, either userId, screenName, or emailAddress.</label>
+                        <with>
+                            <path>ImpliedUser</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.User</element-type>
+                                <content>
+                                    <property-editor>UserId</property-editor>
+                                    <property-editor>ScreenName</property-editor>
+                                    <property-editor>EmailAddress</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'ROLE'}</visible-when>
+                    <content>
+                        <with>
+                            <path>ImpliedRole</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.Role</element-type>
+                                <content>
+                                    <property-editor>RoleId</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+               <form>
+                    <visible-when>${AssignmentType == 'ROLE_TYPE'}</visible-when>
+                    <content>
+                        <property-editor>
+                            <property>Roles</property>
+                            <child-property>Name</child-property>
+                            <child-property>RoleType</child-property>
+                            <child-property>AutoCreate</child-property>
+                        </property-editor>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'SCRIPTED_ASSIGNMENT'}</visible-when>
+                    <content>
+                        <label>Task assignment will be made using a script. Once the workflow is created, click on the ${InitialTaskName} task node and edit the script.</label>
+                        <with>
+                            <path>ImpliedScriptable</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.Scriptable</element-type>
+                                <content>
+                                    <property-editor>ScriptLanguage</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'RESOURCE_ACTIONS'}</visible-when>
+                    <content>
+                        <property-editor>
+                            <property>ResourceActions</property>
+                            <child-property>ResourceAction</child-property>
+                        </property-editor>
+                    </content>
+                </form>
+            </content>
+            <width>525</width>
+            <image>icons/wizban/workflow_definition_16x16.png</image>
+            <description>Make the task assignments depending on the assignment type specified.</description>
+        </page>
+        <element-type>com.liferay.ide.kaleo.core.op.NewWorkflowDefinitionOp</element-type>
+    </wizard>
+    <wizard>
+        <id>newConditionNodeWizard</id>
+        <label>Create New Condition Node</label>
+        <page>
+            <id>first.page</id>
+            <label>Create New Condition Node</label>
+            <description>Create a new condition node and its transitions.</description>
+            <scale-vertically>true</scale-vertically>
+            <content>
+                <with>
+                    <path>NewConditionNode</path>
+                    <case>
+                        <content>
+                            <property-editor>Name</property-editor>
+                            <property-editor>ScriptLanguage</property-editor>
+                        </content>
+                    </case>
+                </with>
+                <property-editor>
+                    <property>ConnectedNodes</property>
+                    <child-property>Name</child-property>
+                </property-editor>
+                <separator></separator>
+                <property-editor>
+                    <property>UseNodeWizards</property>
+                    <hint>
+                        <name>checkbox.layout</name>
+                        <value>trailing.label.idented</value>
+                    </hint>
+                </property-editor>
+            </content>
+        </page>
+        <image>icons/wizban/new_condition_node_wizban.png</image>
+        <element-type>com.liferay.ide.kaleo.core.op.NewNodeOp</element-type>
+    </wizard>
+    <wizard>
+        <id>newForkNodeWizard</id>
+        <label>Create New Fork Node</label>
+        <page>
+            <id>first.page</id>
+            <label>Create New Fork Node</label>
+            <description>Create a new fork node and its transitions.</description>
+            <scale-vertically>true</scale-vertically>
+            <content>
+                <with>
+                    <path>NewForkNode</path>
+                    <case>
+                        <content>
+                            <property-editor>Name</property-editor>
+                        </content>
+                    </case>
+                </with>
+                <property-editor>
+                    <property>ConnectedNodes</property>
+                    <child-property>Name</child-property>
+                </property-editor>
+                <property-editor>
+                    <property>AddJoin</property>
+                    <hint>
+                        <name>checkbox.layout</name>
+                        <value>trailing.label.idented</value>
+                    </hint>
+                </property-editor>
+                <separator></separator>
+                <property-editor>
+                    <property>UseNodeWizards</property>
+                    <hint>
+                        <name>checkbox.layout</name>
+                        <value>trailing.label.idented</value>
+                    </hint>
+                </property-editor>
+            </content>
+        </page>
+        <image>icons/wizban/new_fork_node_wizban.png</image>
+        <element-type>com.liferay.ide.kaleo.core.op.NewForkNodeOp</element-type>
+    </wizard>
+    <wizard>
+        <id>newJoinNodeWizard</id>
+        <label>Create New Join Node</label>
+        <page>
+            <id>first.page</id>
+            <label>Create New Join Node</label>
+            <description>Create a new join node and its transitions.</description>
+            <scale-vertically>true</scale-vertically>
+            <content>
+                <with>
+                    <path>NewJoinNode</path>
+                    <case>
+                        <content>
+                            <property-editor>Name</property-editor>
+                        </content>
+                    </case>
+                </with>
+                <property-editor>
+                    <property>ConnectedNodes</property>
+                    <child-property>Name</child-property>
+                </property-editor>
+                <property-editor>ExitTransitionName</property-editor>
+                <separator></separator>
+                <property-editor>
+                    <property>UseNodeWizards</property>
+                    <hint>
+                        <name>checkbox.layout</name>
+                        <value>trailing.label.idented</value>
+                    </hint>
+                </property-editor>
+            </content>
+        </page>
+        <image>icons/wizban/new_join_node_wizban.png</image>
+        <element-type>com.liferay.ide.kaleo.core.op.NewJoinNodeOp</element-type>
+    </wizard>
+    <wizard>
+        <id>newJoinXorNodeWizard</id>
+        <label>Create New Join XOR Node</label>
+        <page>
+            <id>first.page</id>
+            <label>Create New Join XOR Node</label>
+            <description>Create a new join XOR node and its transitions.</description>
+            <scale-vertically>true</scale-vertically>
+            <content>
+                <with>
+                    <path>NewJoinXorNode</path>
+                    <case>
+                        <content>
+                            <property-editor>Name</property-editor>
+                        </content>
+                    </case>
+                </with>
+                <property-editor>
+                    <property>ConnectedNodes</property>
+                    <child-property>Name</child-property>
+                </property-editor>
+                <property-editor>ExitTransitionName</property-editor>
+                <separator></separator>
+                <property-editor>
+                    <property>UseNodeWizards</property>
+                    <hint>
+                        <name>checkbox.layout</name>
+                        <value>trailing.label.idented</value>
+                    </hint>
+                </property-editor>
+            </content>
+        </page>
+        <image>icons/wizban/new_join_xor_node_wizban.png</image>
+        <element-type>com.liferay.ide.kaleo.core.op.NewJoinXorNodeOp</element-type>
+    </wizard>
+    <wizard>
+        <id>newStateNodeWizard</id>
+        <label>Create New State Node</label>
+        <page>
+            <id>first.page</id>
+            <label>Create New State Node</label>
+            <description>Create a new state node, specify its name, type and exit transition name.</description>
+            <scale-vertically>true</scale-vertically>
+            <content>
+                <with>
+                    <path>NewStateNode</path>
+                    <case>
+                        <content>
+                            <property-editor>Name</property-editor>
+                        </content>
+                    </case>
+                </with>
+                <property-editor>Type</property-editor>
+                <property-editor>WorkflowStatus</property-editor>
+                <property-editor>ExitTransitionName</property-editor>
+                <separator></separator>
+                <property-editor>
+                    <property>UseNodeWizards</property>
+                    <hint>
+                        <name>checkbox.layout</name>
+                        <value>trailing.label.idented</value>
+                    </hint>
+                </property-editor>
+            </content>
+        </page>
+        <image>icons/wizban/new_state_node_wizban.png</image>
+        <element-type>com.liferay.ide.kaleo.core.op.NewStateNodeOp</element-type>
+    </wizard>
+    <wizard>
+        <id>newTaskNodeWizard</id>
+        <label>Create New Task Node</label>
+        <page>
+            <id>create-new-task-node</id>
+            <label>Create New Task Node</label>
+            <description>Create a new task node, specify its assignments, actions, notifications and transitions.</description>
+            <scale-vertically>true</scale-vertically>
+            <content>
+                <with>
+                    <path>NewTaskNode</path>
+                    <case>
+                        <content>
+                            <property-editor>Name</property-editor>
+                        </content>
+                    </case>
+                </with>
+                <label>How should the task be assigned?</label>
+                <composite>
+                    <indent>true</indent>
+                    <content>
+                        <property-editor>
+                            <property>AssignmentType</property>
+                            <style>Sapphire.PropertyEditor.RadioButtonGroup.Vertical</style>
+                            <show-label>false</show-label>
+                        </property-editor>
+                    </content>
+                </composite>
+                <separator></separator>
+                <property-editor>
+                    <property>UseNodeWizards</property>
+                    <hint>
+                        <name>checkbox.layout</name>
+                        <value>trailing.label.idented</value>
+                    </hint>
+                </property-editor>
+            </content>
+            <width>525</width>
+            <image>icons/wizban/new_task_node_wizban.png</image>
+        </page>
+        <page>
+            <id>make-task-assignments</id>
+            <label>Make Task Assignments</label>
+            <content>
+                <form>
+                    <visible-when>${AssignmentType == 'CREATOR'}</visible-when>
+                    <content>
+                        <label>This task will be assigned to the creator of the asset.</label>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'USER'}</visible-when>
+                    <content>
+                        <label>Specify the user that will be assigned this task. Only set a value on one of the following fields, either userId, screenName, or emailAddress.</label>
+                        <with>
+                            <path>ImpliedUser</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.User</element-type>
+                                <content>
+                                    <property-editor>UserId</property-editor>
+                                    <property-editor>ScreenName</property-editor>
+                                    <property-editor>EmailAddress</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'ROLE'}</visible-when>
+                    <content>
+                        <with>
+                            <path>ImpliedRole</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.Role</element-type>
+                                <content>
+                                    <property-editor>RoleId</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'ROLE_TYPE'}</visible-when>
+                    <content>
+                        <property-editor>
+                            <property>Roles</property>
+                            <child-property>Name</child-property>
+                            <child-property>RoleType</child-property>
+                            <child-property>AutoCreate</child-property>
+                        </property-editor>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'SCRIPTED_ASSIGNMENT'}</visible-when>
+                    <content>
+                        <label>Task assignment will be made using a script.</label>
+                        <with>
+                            <path>ImpliedScriptable</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.Scriptable</element-type>
+                                <content>
+                                    <property-editor>ScriptLanguage</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'RESOURCE_ACTIONS'}</visible-when>
+                    <content>
+                        <property-editor>
+                            <property>ResourceActions</property>
+                            <child-property>ResourceAction</child-property>
+                        </property-editor>
+                    </content>
+                </form>
+            </content>
+            <width>525</width>
+            <image>icons/wizban/new_task_node_wizban.png</image>
+            <description>Make the task assignments depending on the assignment type specified.</description>
+        </page>
+        <page>
+            <id>transitions</id>
+            <label>Transitions</label>
+            <content>
+                <label>Task transitions</label>
+                <property-editor>
+                    <property>ConnectedNodes</property>
+                    <show-label>false</show-label>
+                    <child-property>Name</child-property>
+                </property-editor>
+            </content>
+            <image>icons/wizban/new_task_node_wizban.png</image>
+            <description>Specify target nodes to transition after task is completed.</description>
+        </page>
+        <image>icons/wizban/new_task_node_wizban.png</image>
+        <element-type>com.liferay.ide.kaleo.core.op.NewTaskNodeOp</element-type>
+    </wizard>
+    <wizard>
+        <id>changeTaskAssignmentsWizard</id>
+        <image>icons/wizban/new_task_node_wizban.png</image>
+        <label>Change Task Assignments</label>
+        <page>
+            <id>choose-assignment-type</id>
+            <label>Choose Assignment Type</label>
+            <content>
+                <label>How should the task be assigned?</label>
+                <composite>
+                    <indent>true</indent>
+                    <content>
+                        <property-editor>
+                            <property>AssignmentType</property>
+                            <show-label>false</show-label>
+                            <width>525</width>
+                            <style>Sapphire.PropertyEditor.RadioButtonGroup.Vertical</style>
+                        </property-editor>
+                    </content>
+                    <width>525</width>
+                </composite>
+            </content>
+            <width>525</width>
+            <image>icons/wizban/new_task_node_wizban.png</image>
+            <description>Decide how the initial task for this workflow should be assigned.</description>
+        </page>
+        <page>
+            <id>make-task-assignments</id>
+            <label>Make Task Assignments</label>
+            <content>
+                <form>
+                    <visible-when>${AssignmentType == 'CREATOR'}</visible-when>
+                    <content>
+                        <label>This task will be assigned to the creator of the asset.</label>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'USER'}</visible-when>
+                    <content>
+                        <label>Specify the user that will be assigned this task. Only set a value on one of the following fields, either userId, screenName, or emailAddress.</label>
+                        <with>
+                            <path>ImpliedUser</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.User</element-type>
+                                <content>
+                                    <property-editor>UserId</property-editor>
+                                    <property-editor>ScreenName</property-editor>
+                                    <property-editor>EmailAddress</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'ROLE'}</visible-when>
+                    <content>
+                        <with>
+                            <path>ImpliedRole</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.Role</element-type>
+                                <content>
+                                    <property-editor>RoleId</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'ROLE_TYPE'}</visible-when>
+                    <content>
+                        <property-editor>
+                            <property>Roles</property>
+                            <child-property>Name</child-property>
+                            <child-property>RoleType</child-property>
+                            <child-property>AutoCreate</child-property>
+                        </property-editor>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'SCRIPTED_ASSIGNMENT'}</visible-when>
+                    <content>
+                        <label>Task assignment will be made using a script.</label>
+                        <with>
+                            <path>ImpliedScriptable</path>
+                            <case>
+                                <element-type>com.liferay.ide.kaleo.core.model.Scriptable</element-type>
+                                <content>
+                                    <property-editor>ScriptLanguage</property-editor>
+                                </content>
+                            </case>
+                        </with>
+                    </content>
+                </form>
+                <form>
+                    <visible-when>${AssignmentType == 'RESOURCE_ACTIONS'}</visible-when>
+                    <content>
+                        <property-editor>
+                            <property>ResourceActions</property>
+                            <child-property>ResourceAction</child-property>
+                        </property-editor>
+                    </content>
+                </form>
+            </content>
+            <width>525</width>
+            <image>icons/wizban/new_task_node_wizban.png</image>
+            <description>Make the task assignments depending on the assignment type specified.</description>
+        </page>
+        <element-type>com.liferay.ide.kaleo.core.op.ChangeTaskAssignmentsOp</element-type>
+    </wizard>
+</definition>

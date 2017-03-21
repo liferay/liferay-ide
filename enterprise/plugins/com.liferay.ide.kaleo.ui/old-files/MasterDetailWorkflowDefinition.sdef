@@ -1,0 +1,882 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definition>
+    <import>
+        <bundle>com.liferay.ide.kaleo.core</bundle>
+        <package>com.liferay.ide.kaleo.core</package>
+        <package>com.liferay.ide.kaleo.core.model</package>
+        <package>com.liferay.ide.kaleo.ui.internal</package>
+        <package>com.liferay.ide.kaleo.ui.editor</package>
+        <package>com.liferay.ide.kaleo.ui.action</package>
+    </import>
+    <editor></editor>
+    
+    <import>
+        <bundle>com.liferay.ide.kaleo.ui</bundle>
+        <package>com.liferay.ide.kaleo.ui</package>
+    </import>
+    <editor-page>
+        <id>WorkflowDefinitionPage</id>
+        <page-header-text>Workflow Definition</page-header-text>
+        <image>icons/e16/workflow_16x16.png</image>
+        <root-node>
+            <node>
+                <label>Workflow Definition</label>
+                <image>icons/e16/workflow_16x16.png</image>
+                <documentation>
+                </documentation>
+                <section>
+                    <label>Workflow Definition</label>
+                    <content>
+                        <property-editor>Name</property-editor>
+                        <property-editor>Description</property-editor>
+                        <property-editor>Version</property-editor>
+                    </content>
+                </section>
+                <node-include>StatesNode</node-include>
+                <node-include>TasksNode</node-include>
+                <node-include>ConditionsNode</node-include>
+                <node-include>ForksNode</node-include>
+                <node-include>JoinsNode</node-include>
+            </node>
+        </root-node>
+    </editor-page>
+    
+    <node>
+		<id>ConditionsNode</id>
+	    <label>Conditions</label>
+	    <section>
+	        <content>
+	            <action-link>
+	                <label>Add a Condition</label>
+	                <show-image></show-image>
+	                <action-id>Sapphire.ADD</action-id>
+	            </action-link>
+	            <separator></separator>
+	            <property-editor>
+	                <property>Conditions</property>
+	                <child-property>Name</child-property>
+	                <child-property>Description</child-property>
+	                <child-property>ScriptLanguage</child-property>
+                    <show-label>false</show-label>
+	            </property-editor>
+	        </content>
+	    </section>
+        <node-include>ConditionsNodeFactory</node-include>
+	</node>
+	
+	<node>
+	    <id>ForksNode</id>
+	    <label>Forks</label>
+	    <section>
+	        <content>
+	            <action-link>
+	                <label>Add a Fork</label>
+	                <show-image></show-image>
+	                <action-id>Sapphire.ADD</action-id>
+	            </action-link>
+	            <separator></separator>
+	            <property-editor>
+	                <property>Forks</property>
+	                <child-property>Name</child-property>
+	                <child-property>Description</child-property>
+                    <show-label>false</show-label>
+	            </property-editor>
+	        </content>
+	    </section>
+        <node-include>ForksNodeFactory</node-include>
+	</node>
+	
+	<node>
+		<id>JoinsNode</id>
+	    <label>Joins</label>
+	    <section>
+	        <content>
+	            <action-link>
+	                <label>Add a Join</label>
+	                <show-image></show-image>
+	                <action-id>Sapphire.ADD</action-id>
+	            </action-link>
+	            <separator></separator>
+	            <property-editor>
+	                <property>Joins</property>
+	                <child-property>Name</child-property>
+	                <child-property>Description</child-property>
+                    <show-label>false</show-label>
+	            </property-editor>
+	        </content>
+	    </section>
+        <node-include>JoinsNodeFactory</node-include>
+	</node>
+	
+    <node>
+		<id>StatesNode</id>
+	    <label>States</label>
+	    <image>icons/e16/states_16x16.gif</image>
+        <section>
+	        <content>
+	            <action-link>
+	                <label>Add a State</label>
+	                <show-image></show-image>
+	                <action-id>Sapphire.ADD</action-id>
+	            </action-link>
+	            <separator></separator>
+	            <property-editor>
+	                <property>States</property>
+	                <show-label>false</show-label>
+	                <span>true</span>
+	                <child-property>Name</child-property>
+	                <child-property>Description</child-property>
+	                <child-property>Initial</child-property>
+	            </property-editor>
+	        </content>
+	        <label>States</label>
+	    </section>
+	    <node-include>StatesNodeFactory</node-include>
+	</node>
+	
+	
+	<node>
+		<id>TasksNode</id>
+	    <label>Tasks</label>
+	    <section>
+	        <content>
+	        	<action-link>
+	                <label>Add a Task</label>
+	                <show-image></show-image>
+	                <action-id>Sapphire.ADD</action-id>
+	            </action-link>
+	            <separator></separator>
+                <property-editor>
+                    <property>Tasks</property>
+                    <show-label>false</show-label>
+                    <child-property>Name</child-property>
+                    <child-property>Description</child-property>
+                </property-editor>
+	        </content>
+	    </section>
+	    <image>icons/e16/tasks_tsk_16x16.gif</image>
+	    
+        <node-include>TasksNodeFactory</node-include>
+	</node>
+    
+	<node>
+		<id>TaskActionsNode</id>
+	    <label>Task Actions</label>
+	    <section>
+	        <content>
+	            <action-link>
+	                <label>Add a Task Action</label>
+	                <show-image></show-image>
+	                <action-id>Sapphire.ADD</action-id>
+	            </action-link>
+	            <separator></separator>
+	            <property-editor>
+	                <property>TaskActions</property>
+	                <show-label>false</show-label>
+	                <span>true</span>
+                    <child-property>Name</child-property>
+                    <child-property>Description</child-property>
+                    <child-property>Priority</child-property>
+                    <child-property>ExecutionType</child-property>
+	            </property-editor>
+	        </content>
+	    </section>
+	    <image>icons/e16/actions_16x16.gif</image>
+        <node-include>TaskActionsNodeFactory</node-include>
+	</node>
+	
+	<node>
+        <id>TaskNotificationsNode</id>
+        <label>Task Notifications</label>
+        <node-include>TaskNotificationsNodeFactory</node-include>
+        <section>
+            <content>
+                <action-link>
+                    <label>Add a Task Notification</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.ADD</action-id>
+                </action-link>
+                <separator>
+                </separator>
+                
+                <property-editor>
+                    <property>TaskNotifications</property>
+                    <child-property>Name</child-property>
+                    <child-property>Description</child-property>
+                    <child-property>TemplateLanguage</child-property>
+                    <child-property>ExecutionType</child-property>
+                    <show-label>false</show-label>
+                </property-editor>
+                
+            </content>
+        </section>
+    </node>
+    
+    <node>
+        <id>AssignmentsNode</id>
+        <section>
+            <scale-vertically>true</scale-vertically>
+            <collapsible>false</collapsible>
+            <collapsed-initially>false</collapsed-initially>
+            <scroll-vertically>false</scroll-vertically>
+            <height>500</height>
+            <content>
+                <property-editor>AssignmentsEditMode</property-editor>
+            </content>
+        </section>
+        <label>Assignments</label>
+        <node>
+            <label>Script</label>
+            <section>
+                <content>
+                    <property-editor>ScriptLanguage</property-editor>
+                    <property-editor>
+                        <property>Script</property>
+                        <scale-vertically>true</scale-vertically>
+                        <hint>
+                            <name>factory</name>
+                            <value>ScriptPropertyEditorRenderer$Factory</value>
+                        </hint>
+                        <action>
+                            <id>Open.Editor.Part</id>
+                            <label>Open in Editor</label>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                            <hint>
+                                <name>style</name>
+                                <value>text</value>
+                            </hint>
+                        </action>
+                        <action-handler>
+                            <action>Open.Editor.Part</action>
+                            <id>Open.Editor.Part</id>
+                            <label>Open in Editor</label>
+                            <impl>OpenInEditorActionHandler</impl>
+                            <context>Sapphire.ValuePropertyEditor</context>
+                        </action-handler>
+                    </property-editor>
+                </content>
+            </section>
+            <property>ScriptedAssignment</property>
+            <visible-when>
+                <condition>
+                    <class>AssignmentsNodeCondition</class>
+                    <parameter>script</parameter>
+                </condition>
+            </visible-when>
+        </node>
+        <node>
+            <label>Roles</label>
+            <section>
+                <content>
+                    <property-editor>Roles</property-editor>
+                </content>
+            </section>
+            <node-include>RolesNodeFactory</node-include>
+            <visible-when>
+                <condition>
+                    <class>AssignmentsNodeCondition</class>
+                    <parameter>roles</parameter>
+                </condition>
+            </visible-when>
+        </node>
+        <node>
+            <label>User</label>
+            <property>User</property>
+            <visible-when>
+                <condition>
+                    <class>AssignmentsNodeCondition</class>
+                    <parameter>user</parameter>
+                </condition>
+            </visible-when>
+            <section>
+                <content>
+                    <property-editor>UserId</property-editor>
+                    <property-editor>ScreenName</property-editor>
+                    <property-editor>EmailAddress</property-editor>
+                </content>
+            </section>
+        </node>
+        <node>
+            <label>ResourceActions</label>
+            <section>
+                <content>
+                    <property-editor>ResourceActions</property-editor>
+                </content>
+            </section>
+            <visible-when>
+                <condition>
+                    <class>AssignmentsNodeCondition</class>
+                    <parameter>resourceActions</parameter>
+                </condition>
+            </visible-when>
+        </node>
+    </node>
+	<node>
+        <id>ActionsNotificationsNode</id>
+        <label>Actions and Notifications</label>
+        <section>
+            <content>
+                <action-link>
+                    <label>Add an Action</label>
+                    <show-image></show-image>
+                    <action-handler-id>Sapphire.ADD.IAction</action-handler-id>
+                    <action-id>Sapphire.ADD</action-id>
+                </action-link>
+                <action-link>
+                    <label>Add a Notification</label>
+                    <show-image></show-image>
+                    <action-id>Sapphire.ADD</action-id>
+                    <action-handler-id>Sapphire.ADD.INotification</action-handler-id>
+                </action-link>
+            </content>
+        </section>
+        <image>icons/e16/actions_16x16.gif</image>
+        <node-include>ActionsNodeFactory</node-include>
+        <node-include>NotificationsNodeFactory</node-include>
+        <section>
+            <label>Actions</label>
+            <content>
+                <property-editor>
+                    <property>Actions</property>
+                    <show-label>false</show-label>
+                    <child-property>Name</child-property>
+                    <child-property>Description</child-property>
+                    <child-property>Priority</child-property>
+                </property-editor>
+            </content>
+        </section>
+        <section>
+            <label>Notifications</label>
+            <content>
+                <property-editor>
+                    <property>Notifications</property>
+                    <child-property>Name</child-property>
+                    <child-property>Description</child-property>
+                    <show-label>false</show-label>
+                </property-editor>
+            </content>
+        </section>
+    </node>
+	<node>
+		<id>TransitionsNode</id>
+	    <label>Transitions</label>
+	    <section>
+	        <content>
+	            <action-link>
+	                <label>Add a Transition</label>
+	                <show-image></show-image>
+	                <action-id>Sapphire.ADD</action-id>
+	            </action-link>
+	            <separator></separator>
+	            <property-editor>
+	                <property>Transitions</property>
+	                <show-label>false</show-label>
+	                <span>true</span>
+                    <child-property>Name</child-property>
+                    <child-property>Target</child-property>
+                    <child-property>DefaultTransition</child-property>
+	            </property-editor>
+	        </content>
+	    </section>
+	    
+	    <image>icons/e16/transitions_16x16.gif</image>
+        <node-include>TransitionsNodeFactory</node-include>
+	</node>
+    <node>
+        <id>TimersNode</id>
+        <label>Timers</label>
+        <node-include>TimersNodeFactory</node-include>
+        <section>
+            <content>
+                <action-link>
+                    <label>Add a timer</label>
+                    <action-id>Sapphire.ADD</action-id>
+                    <show-image></show-image>
+                </action-link>
+                <separator></separator>
+                <property-editor>
+                    <property>Timers</property>
+                    <show-label>false</show-label>
+                    <child-property>Name</child-property>
+                    <child-property>Description</child-property>
+                </property-editor>
+            </content>
+        </section>
+    </node>
+    <node>
+        <id>TaskTimersNode</id>
+        <label>Task Timers</label>
+        <node-include>TaskTimersNodeFactory</node-include>
+        <section>
+            <content>
+                <property-editor>
+                    <property>TaskTimers</property>
+                    <child-property>Name</child-property>
+                    <child-property>Description</child-property>
+                    <child-property>Blocking</child-property>
+                </property-editor>
+            </content>
+        </section>
+    </node>
+    
+    <node-factory>
+        <id>ConditionsNodeFactory</id>
+        <property>Conditions</property>
+        <case>
+            <label>${name == null ? &quot;&lt;condition&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <node-include>ActionsNotificationsNode</node-include>
+            <node-include>TimersNode</node-include>
+            <node-include>TransitionsNode</node-include>
+            <section>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                    <property-editor>ScriptLanguage</property-editor>
+                    <if>
+                        <then>
+                            <property-editor>
+		                        <property>Script</property>
+		                        <hint>
+		                            <name>factory</name>
+		                            <value>ScriptPropertyEditorRenderer$Groovy</value>
+		                        </hint>
+		                        <scale-vertically>true</scale-vertically>
+		                        <height>300</height>
+		                    </property-editor>
+                        </then>
+                        <condition>
+                            <class>ScriptPropertyEditorCondition</class>
+                            <parameter>GROOVY</parameter>
+                        </condition>
+                    </if>
+                </content>
+                <scale-vertically>true</scale-vertically>
+            </section>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+        <id>ForksNodeFactory</id>
+        <property>Forks</property>
+        <case>
+            <label>${name == null ? &quot;&lt;fork&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <node-include>ActionsNotificationsNode</node-include>
+            <node-include>TimersNode</node-include>
+            <node-include>TransitionsNode</node-include>
+            <section>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+        <id>JoinsNodeFactory</id>
+        <property>Joins</property>
+        <case>
+            <label>${name == null ? &quot;&lt;join&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <node-include>ActionsNotificationsNode</node-include>
+            <node-include>TimersNode</node-include>
+            <node-include>TransitionsNode</node-include>
+            <section>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                </content>
+            </section>
+        </case>
+    </node-factory>
+   
+    <node-factory>
+        <id>StatesNodeFactory</id>
+        <property>States</property>
+        <case>
+            <label>${name == null ? &quot;&lt;state&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+                <label>State</label>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                    <property-editor>
+                        <property>Initial</property>
+                        <hint>
+                            <name>checkbox.layout</name>
+                            <value>leading.label</value>
+                        </hint>
+                    </property-editor>
+                    <property-editor>
+                        <property>End</property>
+                        <hint>
+                            <name>checkbox.layout</name>
+                            <value>leading.label</value>
+                        </hint>
+                    </property-editor>
+                </content>
+            </section>
+            
+            <node-include>ActionsNotificationsNode</node-include>
+            <node-include>TimersNode</node-include>
+            <node-include>TransitionsNode</node-include>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+        <id>TasksNodeFactory</id>
+	    <property>Tasks</property>
+	    <case>
+	        <image>${ Image() }</image>
+	        <label>${name == null ? &quot;&lt;task&gt;&quot; : name}</label>
+	        <section>
+	            <label>Task</label>
+	            <content>
+	                <property-editor>Name</property-editor>
+	                <property-editor>Description</property-editor>
+	            </content>
+	        </section>
+	        <node-include>TaskActionsNode</node-include>
+	        <node-include>TaskNotificationsNode</node-include>
+            <node-include>
+                <part>AssignmentsNode</part>
+                <param>
+                    <name>nodeLabel</name>
+                    <value>Assignments</value>
+                </param>
+            </node-include>
+            <node-include>TaskTimersNode</node-include>
+            <node-include>TransitionsNode</node-include>
+	    </case>
+	</node-factory>
+    
+    <node-factory>
+    	<id>TaskActionsNodeFactory</id>
+        <property>TaskActions</property>
+        <case>
+            <label>${name == null ? &quot;&lt;action&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+            	<content>
+            		<property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                    <property-editor>
+                        <property>ExecutionType</property>
+                        <hint>
+                            <name>prefer.combo</name>
+                            <value>true</value>
+                        </hint>
+                    </property-editor>
+                    <property-editor>Priority</property-editor>
+                    <property-editor>ScriptLanguage</property-editor>
+                    <property-editor>Script</property-editor>
+            	</content>
+            </section>
+        </case>
+    </node-factory>
+    
+    
+    <node-factory>
+    	<id>TaskNotificationsNodeFactory</id>
+        <property>TaskNotifications</property>
+        <case>
+            <label>${name == null ? &quot;&lt;notification&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+	        	<content>
+	         		<property-editor>Name</property-editor>
+					<property-editor>Description</property-editor>
+                    <property-editor>
+                        <property>ExecutionType</property>
+                        <hint>
+                            <name>prefer.combo</name>
+                            <value>false</value>
+                        </hint>
+                    </property-editor>
+					<property-editor>NotificationTransports</property-editor>
+					<property-editor>TemplateLanguage</property-editor>
+					<property-editor>Template</property-editor>
+	         	</content>
+	         </section>
+            <node-include>AddressesNode</node-include>
+            <node-include>RolesNodeFactory</node-include>
+            <node-include>UsersNodeFactory</node-include>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+    	<id>TaskTimersNodeFactory</id>
+        <property>TaskTimers</property>
+        <case>
+            <label>${name == null ? &quot;&lt;task-timer&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+	        	<content>
+	         		<property-editor>Name</property-editor>
+					<property-editor>Description</property-editor>
+					<property-editor>Blocking</property-editor>
+	         	</content>
+	         </section>
+            <node-include>
+                <part>AssignmentsNode</part>
+                <param>
+                    <name>nodeLabel</name>
+                    <value>Reassignments</value>
+                </param>
+            </node-include>
+            <node-include>TimerActionsNodeFactory</node-include>
+            <node-include>TimerNotificationsNodeFactory</node-include>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+    	<id>ActionsNodeFactory</id>
+        <property>Actions</property>
+        <case>
+            <label>${name == null ? &quot;&lt;action&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                    <property-editor>Priority</property-editor>
+                    <property-editor>
+                        <property>ExecutionType</property>
+                        <hint>
+                            <name>prefer.combo</name>
+                            <value>true</value>
+                        </hint>
+                    </property-editor>
+                    <property-editor>ScriptLanguage</property-editor>
+                    <property-editor>Script</property-editor>
+                </content>
+            </section>
+            <model-element-type>IAction</model-element-type>
+        </case>
+    </node-factory>
+    <node-factory>
+        <id>TimerActionsNodeFactory</id>
+        <property>TimerActions</property>
+        <case>
+            <label>${name == null ? &quot;&lt;timer-action&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                    <property-editor>Priority</property-editor>
+                    <property-editor>
+                        <property>ExecutionType</property>
+                        <hint>
+                            <name>prefer.combo</name>
+                            <value>false</value>
+                        </hint>
+                    </property-editor>
+                    <property-editor>ScriptLanguage</property-editor>
+                    <property-editor>Script</property-editor>
+                </content>
+            </section>
+            <model-element-type>IAction</model-element-type>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+    	<id>TransitionsNodeFactory</id>
+        <property>Transitions</property>
+        <case>
+            <label>${name == null ? &quot;&lt;transition&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+	        	<content>
+	         		<property-editor>Name</property-editor>
+					<property-editor>Target</property-editor>
+                    <property-editor>
+                        <property>DefaultTransition</property>
+                        <hint>
+                            <name>checkbox.layout</name>
+                            <value>leading.label</value>
+                        </hint>
+                    </property-editor>
+	         	</content>
+	         </section>
+        </case>
+    </node-factory>
+    <node-factory>
+    	<id>NotificationsNodeFactory</id>
+        <property>Notifications</property>
+        <case>
+            <label>${name == null ? &quot;&lt;notification&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+	        	<content>
+	         		<property-editor>Name</property-editor>
+					<property-editor>Description</property-editor>
+					<property-editor>TemplateLanguage</property-editor>
+					<property-editor>Template</property-editor>
+                    <property-editor>
+                        <property>ExecutionType</property>
+                        <hint>
+                            <name>prefer.combo</name>
+                            <value>false</value>
+                        </hint>
+                    </property-editor>
+					<property-editor>NotificationTransports</property-editor>
+	         	</content>
+	         </section>
+            <node-include>AddressesNode</node-include>
+            <node-include>RolesNodeFactory</node-include>
+            <node-include>UsersNodeFactory</node-include>
+        </case>        
+    </node-factory>
+    <node-factory>
+        <id>TimerNotificationsNodeFactory</id>
+        <property>TimerNotifications</property>
+        <case>
+            <label>${name == null ? &quot;&lt;timer-notification&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+                <content>
+                    <property-editor>Name</property-editor>
+                    <property-editor>Description</property-editor>
+                    <property-editor>TemplateLanguage</property-editor>
+                    <property-editor>Template</property-editor>
+                    <property-editor>
+                        <property>ExecutionType</property>
+                        <hint>
+                            <name>prefer.combo</name>
+                            <value>false</value>
+                        </hint>
+                    </property-editor>
+                    <property-editor>NotificationTransports</property-editor>
+                </content>
+             </section>
+            <node-include>AddressesNode</node-include>
+            <node-include>RolesNodeFactory</node-include>
+            <node-include>UsersNodeFactory</node-include>
+        </case>        
+    </node-factory>
+    <node-factory>
+    	<id>TimersNodeFactory</id>
+        <property>Timers</property>
+        <case>
+            <label>${name == null ? &quot;&lt;timer&gt;&quot; : name}</label>
+            <image>${ Image() }</image>
+            <section>
+	        	<content>
+	         		<property-editor>Name</property-editor>
+					<property-editor>Description</property-editor>
+                    <separator></separator>
+                    <with>
+                        <path>Delay</path>
+                        <label>Specify Delay</label>
+                        <panel>
+                            <key>ITimeDelay</key>
+                            <content>
+                                <property-editor>Duration</property-editor>
+                                <property-editor>Scale</property-editor>
+                            </content>
+                        </panel>
+                    </with>
+                    <separator></separator>
+                    <with>
+                        <path>Recurrence</path>
+                        <label>Specify Recurrence</label>
+                        <panel>
+                            <key>ITimeDelay</key>
+                            <content>
+                                <property-editor>Duration</property-editor>
+                                <property-editor>Scale</property-editor>
+                            </content>
+                        </panel>
+                    </with>
+	         	</content>
+	         </section>
+        </case>
+    </node-factory>
+    
+    
+    <node-factory>
+    	<id>AddressesNodeFactory</id>
+        <property>Addresses</property>
+        <case>
+            <label>${Address == null ? &quot;&lt;address&gt;&quot; : Address}</label>
+            <image>${ Image() }</image>
+            <section>
+	        	<content>
+	         		<property-editor>Address</property-editor>
+	         	</content>
+	         </section>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+        <id>RolesNodeFactory</id>
+        <property>Roles</property>
+        <case>
+            <label>Role [${RoleId == null ? ( Name == null ? &quot;&lt;role&gt;&quot; :  Name )  : RoleId}]</label>
+            <image>${ Image() }</image>
+            <section>
+                <content>
+                    <property-editor>EditMode</property-editor>
+                    <separator></separator>
+                    <switching-panel>
+                        <panel>
+                            <key>RoleEditMode.BY_ROLE_ID</key>
+                            <content>
+                                <property-editor>RoleId</property-editor>
+                            </content>
+                        </panel>
+                        <enum-controller>
+                            <property>EditMode</property>
+                        </enum-controller>
+                        <panel>
+                            <key>RoleEditMode.BY_NAME</key>
+                            <content>
+                                <property-editor>Name</property-editor>
+                                <property-editor>RoleType</property-editor>
+                                <property-editor>
+                                    <property>AutoCreate</property>
+                                    <hint>
+                                        <name>checkbox.layout</name>
+                                        <value>leading.label</value>
+                                    </hint>
+                                </property-editor>
+                            </content>
+                        </panel>
+                    </switching-panel>
+                </content>
+             </section>
+        </case>
+    </node-factory>
+    
+    <node-factory>
+        <id>UsersNodeFactory</id>
+        <property>Users</property>
+        <case>
+            <label>User [${ScreenName == null ? &quot;&lt;user&gt;&quot; :  ScreenName}]</label>
+            <image>${ Image() }</image>
+            <section>
+                <content>
+                    <property-editor>UserId</property-editor>
+                    <property-editor>ScreenName</property-editor>
+                    <property-editor>EmailAddress</property-editor>
+                </content>
+             </section>
+        </case>
+    </node-factory>
+    <node>
+        <id>AddressesNode</id>
+        <label>Addresses</label>
+        <section>
+            <content>
+                <property-editor>
+                    <property>Addresses</property>
+                    <show-label>false</show-label>
+                </property-editor>
+            </content>
+        </section>
+    </node>
+</definition>
