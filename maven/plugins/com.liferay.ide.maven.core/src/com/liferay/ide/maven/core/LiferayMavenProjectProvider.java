@@ -404,7 +404,8 @@ public class LiferayMavenProjectProvider extends AbstractLiferayProjectProvider
                     final boolean hasLiferayFacet = ComponentUtil.hasLiferayFacet( project );
 
                     if( ( hasLiferayNature ||
-                        MavenUtil.hasDependency( project, "com.liferay.portal", "com.liferay.portal.kernel" ) ) &&
+                        MavenUtil.hasDependency( project, "com.liferay.portal", "com.liferay.portal.kernel" ) ||
+                        MavenUtil.hasDependency( project, "com.liferay.faces", "com.liferay.faces.bridge.ext" ) ) &&
                         hasLiferayFacet )
                     {
                         return new FacetedMavenBundleProject( project );
