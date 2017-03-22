@@ -372,8 +372,8 @@ public abstract class AbstractLiferayTableViewCustomPart extends FormComponentPa
         final IPath srcFileIPath = PathBridge.create( new Path( srcFileLocation ) );
         final IPath createPreviewerFile = createPreviewerFile( projectName, srcFileIPath, srcFileLocation );
 
-        final LiferayUpgradeCompre lifeayDescriptorUpgradeCompre =
-            new LiferayUpgradeCompre( srcFileIPath, createPreviewerFile, itemName );
+        final LiferayUpgradeCompare lifeayDescriptorUpgradeCompre =
+            new LiferayUpgradeCompare( srcFileIPath, createPreviewerFile, itemName );
 
         lifeayDescriptorUpgradeCompre.openCompareEditor();
     }

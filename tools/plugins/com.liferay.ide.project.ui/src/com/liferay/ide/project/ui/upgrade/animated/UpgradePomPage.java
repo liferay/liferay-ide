@@ -20,7 +20,7 @@ import com.liferay.ide.project.core.ProjectCore;
 import com.liferay.ide.project.core.upgrade.ILiferayLegacyProjectUpdater;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompre;
+import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompare;
 import com.liferay.ide.ui.util.SWTUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -334,8 +334,8 @@ public class UpgradePomPage extends Page
 
             IFile pomfile = project.getFile( "pom.xml" );
 
-            final LiferayUpgradeCompre lifeayDescriptorUpgradeCompre =
-                new LiferayUpgradeCompre( pomfile.getLocation(), tmpDirPath.append( "pom.xml" ), "pom.xml" );
+            final LiferayUpgradeCompare lifeayDescriptorUpgradeCompre =
+                new LiferayUpgradeCompare( pomfile.getLocation(), tmpDirPath.append( "pom.xml" ), "pom.xml" );
 
             lifeayDescriptorUpgradeCompre.openCompareEditor();
         }

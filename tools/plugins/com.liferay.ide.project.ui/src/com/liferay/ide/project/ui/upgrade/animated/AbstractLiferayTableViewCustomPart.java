@@ -22,7 +22,7 @@ import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
-import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompre;
+import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompare;
 import com.liferay.ide.project.ui.wizard.ElementLabelProvider;
 import com.liferay.ide.ui.util.UIUtil;
 
@@ -449,8 +449,8 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         final IPath srcFileIPath = PathBridge.create( new Path( srcFileLocation ) );
         final IPath createPreviewerFile = createPreviewerFile( projectName, srcFileIPath, srcFileLocation );
 
-        final LiferayUpgradeCompre lifeayDescriptorUpgradeCompre =
-            new LiferayUpgradeCompre( srcFileIPath, createPreviewerFile, itemName );
+        final LiferayUpgradeCompare lifeayDescriptorUpgradeCompre =
+            new LiferayUpgradeCompare( srcFileIPath, createPreviewerFile, itemName );
 
         lifeayDescriptorUpgradeCompre.openCompareEditor();
     }

@@ -37,14 +37,14 @@ import org.eclipse.swt.graphics.Image;
 /**
  * @author Simon Jiang
  */
-public class LiferayUpgradeCompre
+public class LiferayUpgradeCompare
 {
     
     private final IPath soruceFile;
     private final IPath targetFile;
     private String fileName;
     
-    public LiferayUpgradeCompre( final IPath soruceFile, final IPath targetFile, String fileName )
+    public LiferayUpgradeCompare( final IPath soruceFile, final IPath targetFile, String fileName )
     {
         this.fileName = fileName;
         this.soruceFile = soruceFile;
