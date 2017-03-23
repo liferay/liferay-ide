@@ -70,7 +70,10 @@ public class FacetedMavenBundleProject extends FacetedMavenProject implements IB
 
         goals.add( "package" );
 
-        mavenProjectBuilder.execGoals( goals, monitor );
+        for( String goal : goals )
+        {
+            mavenProjectBuilder.runMavenGoal( this.getProject(), goal, monitor );
+        }
 
         // we are going to try to get the output jar even if the package failed.
         final IMavenProjectFacade projectFacade = MavenUtil.getProjectFacade( getProject(), monitor );
