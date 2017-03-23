@@ -17,6 +17,7 @@ package com.liferay.ide.maven.core;
 
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.project.core.NewLiferayProjectProvider;
+import com.liferay.ide.project.core.model.ProjectName;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 import com.liferay.ide.project.core.modules.PropertyKey;
 
@@ -36,6 +37,7 @@ import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.platform.PathBridge;
 
 /**
@@ -110,7 +112,9 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
             projectConfigurationManager.createArchetypeProjects(
                 location, archetype, groupId, artifactId, version, javaPackage, properties, configuration, monitor );
 
-        if (newProjects == null || newProjects.size() == 0)
+        ElementList<ProjectName> projectNames = op.getProjectNames();
+
+        if( newProjects == null || newProjects.size() == 0 )
         {
             retval = LiferayMavenCore.createErrorStatus( "Unable to create project from archetype." );
         }
@@ -118,6 +122,8 @@ public class NewMavenModuleProjectProvider extends LiferayMavenProjectProvider i
         {
             for( IProject newProject : newProjects )
             {
+                projectNames.insert().setName( newProject.getName() );
+
                 String[] gradleFiles = new String[] { "build.gradle", "settings.gradle" };
 
                 for( String path : gradleFiles )

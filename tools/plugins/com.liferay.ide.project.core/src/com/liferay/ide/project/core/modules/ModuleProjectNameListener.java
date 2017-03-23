@@ -38,9 +38,7 @@ public class ModuleProjectNameListener extends FilteredListener<PropertyContentE
     @Override
     protected void handleTypedEvent( PropertyContentEvent event )
     {
-
         updateLocation( op( event ) );
-
     }
 
     protected NewLiferayModuleProjectOp op( PropertyContentEvent event )

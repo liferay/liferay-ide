@@ -62,7 +62,6 @@ public class NewLiferayModuleProjectWizard extends BaseProjectWizard<NewLiferayM
             try
             {
                 addToWorkingSets( project );
-
             }
             catch( Exception ex )
             {

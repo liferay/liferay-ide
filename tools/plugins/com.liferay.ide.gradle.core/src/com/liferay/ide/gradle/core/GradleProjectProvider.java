@@ -146,6 +146,12 @@ public class GradleProjectProvider extends AbstractLiferayProjectProvider
 
             projectNames.insert().setName( projectName );
 
+            if( projectTemplateName.equals( "service-builder" ) )
+            {
+                projectNames.insert().setName( projectName + "-api" );
+                projectNames.insert().setName( projectName + "-service" );
+            }
+
             IPath projectLocation = location;
 
             final String lastSegment = location.lastSegment();
