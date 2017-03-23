@@ -46,7 +46,7 @@
         <tm-site>http://download.eclipse.org/tm/terminal/updates/4.0</tm-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot-site>
         <sapphire-site>http://download.eclipse.org/sapphire/9.0.5/repository/</sapphire-site>
-	<maven-deps-plugin-site>http://ianbrandt.github.io/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
+		<maven-deps-plugin-site>http://ianbrandt.github.io/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
         <gmaven.runtime>1.8</gmaven.runtime>
     </properties>
 

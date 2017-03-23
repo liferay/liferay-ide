@@ -1609,6 +1609,24 @@
                </or></enablement>
          </commonWizard>
          <commonWizard
+               type="new"
+               wizardId="com.liferay.ide.project.ui.newJsfModuleProjectWizard">
+            <enablement>
+               <or>
+                  <instanceof
+                        value="org.eclipse.core.resources.IResource">
+                  </instanceof>
+                  <and>
+                     <instanceof
+                           value="java.util.Collection">
+                     </instanceof>
+                     <count
+                           value="0">
+                     </count>
+                  </and>
+               </or></enablement>
+         </commonWizard>
+         <commonWizard
                type="import"
                wizardId="com.liferay.ide.project.ui.modules.ImportLiferayModuleProjectWizard">
             <enablement>
