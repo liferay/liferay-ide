@@ -212,8 +212,20 @@ public class UpgradePomPage extends Page
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                fTableViewer.setAllChecked( true );
-                setUpgradeButtonEnable();
+                int i = 0;
+                Object object = fTableViewer.getElementAt( i++ );
+
+                while( object != null )
+                {
+                    UpgradePomElement element = (UpgradePomElement) object;
+
+                    if( !element.finished )
+                    {
+                        fTableViewer.setChecked( element, true );
+                    }
+
+                    object = fTableViewer.getElementAt( i++ );
+                }
             }
         } );
 
@@ -227,7 +239,6 @@ public class UpgradePomPage extends Page
             public void widgetSelected( SelectionEvent e )
             {
                 fTableViewer.setAllChecked( false );
-                setUpgradeButtonEnable();
             }
         } );
 
@@ -256,8 +267,6 @@ public class UpgradePomPage extends Page
                 {
                     fTableViewer.setChecked( element, false );
                 }
-
-                setUpgradeButtonEnable();
             }
         } );
     }
@@ -404,23 +413,6 @@ public class UpgradePomPage extends Page
         {
             ProjectUI.logError( e );
         }
-    }
-
-    private void setUpgradeButtonEnable()
-    {
-        List<UpgradePomElement> upgradePomElements = getSelectedElements();
-
-        boolean isEnable = true;
-
-        for( UpgradePomElement element : upgradePomElements )
-        {
-            if( element.finished )
-            {
-                isEnable = false;
-            }
-        }
-
-        upgradeButton.setEnabled( isEnable );
     }
 
     @Override
