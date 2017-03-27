@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Text;
 public abstract class Page extends Composite implements SelectionChangedListener
 {
 
+    public static final int DEFAULT_PAGE_WIDTH = 500;
     public static String WELCOME_PAGE_ID = "welcome";
     public static String INIT_CONFIGURE_PROJECT_PAGE_ID = "initconfigureproject";
     public static String UPGRADE_POM_PAGE_ID = "upgradepom";

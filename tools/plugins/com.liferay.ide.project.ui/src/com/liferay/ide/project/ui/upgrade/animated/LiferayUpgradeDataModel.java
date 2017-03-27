@@ -201,7 +201,7 @@ public interface LiferayUpgradeDataModel extends Element
     // *** BackupSdk ***
 
     @Type( base = Boolean.class )
-    @DefaultValue(text = "true")
+    @DefaultValue(text = "false")
     ValueProperty PROP_BACKUP_SDK = new ValueProperty( TYPE, "BackupSdk" );
     Value<Boolean> getBackupSdk();
 

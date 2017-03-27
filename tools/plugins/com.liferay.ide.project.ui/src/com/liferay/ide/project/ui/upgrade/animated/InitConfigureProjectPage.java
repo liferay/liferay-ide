@@ -77,6 +77,7 @@ import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
 import org.eclipse.sapphire.platform.StatusBridge;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
@@ -153,7 +154,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 disposeBundleElement();
                 disposeServerEelment();
                 disposeMigrateLayoutElement();
-                composite.layout();
+                pageParent.layout();
             }
             else
             {
@@ -211,19 +212,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Label bundleUrlLabel;
     private Text bundleNameField;
     private Text bundleUrlField;
-    private Button backup;
     private boolean validationResult;
     private Button importButton;
-    private Button backupButton;
     private Button downloadBundle;
-    private Text backupLocationField;
 
-    private Composite composite;
+    private Composite pageParent;
     private Composite bundleElementComposite;
     private Composite blankComposite;
 
     private Control createHorizontalSpacer;
-    private Control createImportHorizontalSpacer;
     private Control createSeparator;
 
     private ProjectLocationValidationService sdkValidation =
@@ -242,12 +239,18 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         dataModel.getBundleUrl().attach( new LiferayUpgradeValidationListener() );
         dataModel.getBackupLocation().attach( new LiferayUpgradeValidationListener() );
 
-        composite = this;
+        ScrolledComposite scrolledComposite = new ScrolledComposite( this, SWT.V_SCROLL );
+        GridData scrolledData = new GridData( SWT.FILL, SWT.FILL, true, true );
+        scrolledData.widthHint = DEFAULT_PAGE_WIDTH;
+        scrolledComposite.setLayoutData( scrolledData );
+        pageParent = SWTUtil.createComposite( scrolledComposite, getGridLayoutCount(), 1, GridData.FILL_BOTH );
+        scrolledComposite.setMinHeight( 300 );
+        scrolledComposite.setExpandHorizontal( true );
+        scrolledComposite.setExpandVertical( true );
+        scrolledComposite.setContent( pageParent );
 
-        createSeparator = createSeparator( this, 3 );
-
-        dirLabel = createLabel( composite, "Plugins SDK or Maven Project Root Location:" );
-        dirField = createTextField( composite, SWT.NONE );
+        dirLabel = createLabel( pageParent, "Plugins SDK or Maven Project Root Location:" );
+        dirField = createTextField( pageParent, SWT.NONE );
         dirField.addModifyListener( new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
@@ -256,7 +259,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             }
         });
 
-        SWTUtil.createButton( this, "Browse..." ).addSelectionListener( new SelectionAdapter()
+        SWTUtil.createButton( pageParent, "Browse..." ).addSelectionListener( new SelectionAdapter()
         {
             @Override
             public void widgetSelected( SelectionEvent e )
@@ -462,22 +465,21 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         Composite fillLayoutComposite = SWTUtil.createComposite( parent, 2, 2, GridData.FILL_HORIZONTAL );
 
         final String descriptor =
-            "The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to  Liferay Workspace. " +
+            "The initial step will be to upgrade to Liferay Workspace or Liferay Plugins SDK 7.0. " +
             "For more details, please see <a>dev.liferay.com</a>.";
 
         String url = "https://dev.liferay.com/develop/tutorials";
 
-        SWTUtil.createHyperLink( fillLayoutComposite, SWT.NONE, descriptor, 1, url );
+        SWTUtil.createHyperLink( fillLayoutComposite, SWT.WRAP, descriptor, 1, url );
 
         final String extensionDec =
             "The first step will help you convert a Liferay Plugins SDK 6.2 to Liferay Plugins SDK 7.0 or to Liferay Workspace.\n" +
-                "We will backup your project to a zip file in your eclipse workspace directory.\n" +
                 "Click the \"import\" button to import your project into Eclipse workspace" +
                 "(this process maybe need 5-10 mins for bundle init).\n" + "Note:\n" +
                 "       In order to save time, downloading 7.0 ivy cache locally could be a good choice to upgrade to liferay plugins sdk 7. \n" +
                 "       Theme and ext projects will be ignored for that we do not support to upgrade them in this tool currently. \n";
 
-        Label image = new Label( fillLayoutComposite, SWT.NONE);
+        Label image = new Label( fillLayoutComposite, SWT.WRAP);
         image.setImage( loadImage("question.png")  );
 
         PopupDialog popupDialog = new PopupDialog( fillLayoutComposite.getShell(),
@@ -542,7 +544,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         createImportElement();
 
-        composite.layout();
+        pageParent.layout();
     }
 
     private void createServerControl()
@@ -561,13 +563,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         createImportElement();
 
-        composite.layout();
+        pageParent.layout();
     }
 
     private void createMigrateLayoutElement()
     {
-        layoutLabel = createLabel( composite, "Select Migrate Layout:" );
-        layoutComb = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
+        layoutLabel = createLabel( pageParent, "Select Migrate Layout:" );
+        layoutComb = new Combo( pageParent, SWT.DROP_DOWN | SWT.READ_ONLY );
         layoutComb.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         layoutComb.setItems( layoutNames );
         layoutComb.select( 0 );
@@ -607,11 +609,11 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void createBundleElement()
     {
-        blankComposite = SWTUtil.createComposite( composite, 1, 1, GridData.FILL );
+        blankComposite = SWTUtil.createComposite( pageParent, 1, 1, GridData.FILL );
 
-        bundleElementComposite = SWTUtil.createComposite( composite, 2, 1, GridData.FILL_HORIZONTAL );
+        bundleElementComposite = SWTUtil.createComposite( pageParent, 2, 1, GridData.FILL_HORIZONTAL );
 
-        downloadBundle = SWTUtil.createCheckButton( bundleElementComposite, "Download Liferay bundle (Recommend)", null, true, 1 );
+        downloadBundle = SWTUtil.createCheckButton( bundleElementComposite, "Download Liferay bundle (recommended)", null, true, 1 );
 
         createSubBundleElement();
 
@@ -627,13 +629,13 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 {
                     createSubBundleElement();
 
-                    composite.layout();
+                    pageParent.layout();
                 }
                 else
                 {
                     disposeSubBundleElement();
 
-                    composite.layout();
+                    pageParent.layout();
                 }
 
                 startCheckThread();
@@ -685,7 +687,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 {
                     bundleUrlField.setText( "" );
                 }
-                bundleUrlField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
+                bundleUrlField.setForeground( pageParent.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
             }
 
             @Override
@@ -695,7 +697,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                 if( CoreUtil.isNullOrEmpty( input ) )
                 {
-                    bundleUrlField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
+                    bundleUrlField.setForeground( pageParent.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
                     bundleUrlField.setText( LiferayUpgradeDataModel.DEFAULT_BUNDLE_URL );
                 }
             }
@@ -705,93 +707,12 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void createImportElement()
     {
-        createHorizontalSpacer = createHorizontalSpacer( this, 3 );
-        createSeparator = createSeparator( this, 3 );
+        createHorizontalSpacer = createHorizontalSpacer( pageParent, 3 );
+        createSeparator = createSeparator( pageParent, 3 );
 
         String backupFolderName = "Backup project into folder";
-        backup = SWTUtil.createCheckButton( composite, backupFolderName, null, true, 2 );
 
-        backupLocationField = createTextField( composite, SWT.NONE );
-        backupLocationField.setEnabled( backup.getSelection() );
-        backupLocationField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
-
-        backupLocationField.addModifyListener( new ModifyListener()
-        {
-            @Override
-            public void modifyText( ModifyEvent e )
-            {
-                dataModel.setBackupLocation( backupLocationField.getText() );
-            }
-        } );
-
-        final String defaultLocation = CoreUtil.getWorkspaceRoot().getLocation().toOSString();
-
-        backupLocationField.addFocusListener( new FocusListener()
-        {
-
-            @Override
-            public void focusGained( FocusEvent e )
-            {
-                String input = ( (Text) e.getSource() ).getText();
-
-                if( input.equals( defaultLocation ) )
-                {
-                    backupLocationField.setText( "" );
-                }
-
-                backupLocationField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_BLACK ) );
-            }
-
-            @Override
-            public void focusLost( FocusEvent e )
-            {
-                String input = ( (Text) e.getSource() ).getText();
-
-                if( CoreUtil.isNullOrEmpty( input ) )
-                {
-                    backupLocationField.setForeground( composite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
-                    backupLocationField.setText( defaultLocation );
-                }
-            }
-        } );
-
-        backupLocationField.setText( defaultLocation );
-
-        backupButton = SWTUtil.createButton( this, "Browse..." );
-        backupButton.setEnabled( backup.getSelection() );
-
-        backup.addSelectionListener( new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                dataModel.setBackupSdk( backup.getSelection() );
-
-                backupLocationField.setEnabled( backup.getSelection() );
-                backupButton.setEnabled( backup.getSelection() );
-            }
-        });
-
-        backupButton.addSelectionListener( new SelectionAdapter()
-        {
-            @Override
-            public void widgetSelected( SelectionEvent e )
-            {
-                final DirectoryDialog dd = new DirectoryDialog( getShell() );
-                dd.setMessage( "Backup Location directory" );
-
-                final String selectedDir = dd.open();
-
-                if( selectedDir != null )
-                {
-                    backupLocationField.setText( selectedDir );
-                }
-            }
-        });
-
-        createImportHorizontalSpacer = createHorizontalSpacer( composite, 1 );
-
-        importButton = SWTUtil.createButton( composite, "Import Projects" );
+        importButton = SWTUtil.createButton( pageParent, "Import Projects" );
         importButton.addSelectionListener( new SelectionAdapter()
         {
             @Override
@@ -839,8 +760,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 }
             }
         } );
-
-        dataModel.setBackupSdk( backup.getSelection() );
     }
 
     private void createInitBundle( IProgressMonitor monitor ) throws CoreException
@@ -938,17 +857,17 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void createServerElement()
     {
-        serverLabel = createLabel( composite, "Liferay Server Name:" );
-        serverComb = new Combo( composite, SWT.DROP_DOWN | SWT.READ_ONLY );
+        serverLabel = createLabel( pageParent, "Liferay Server Name:" );
+        serverComb = new Combo( pageParent, SWT.DROP_DOWN | SWT.READ_ONLY );
         serverComb.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
 
-        serverButton = SWTUtil.createButton( composite, "Add Server..." );
+        serverButton = SWTUtil.createButton( pageParent, "Add Server..." );
         serverButton.addSelectionListener( new SelectionAdapter()
         {
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                ServerUIUtil.showNewServerWizard( composite.getShell(), "liferay.bundle", null, "com.liferay." );
+                ServerUIUtil.showNewServerWizard( pageParent.getShell(), "liferay.bundle", null, "com.liferay." );
             }
         } );
 
@@ -1056,18 +975,14 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
     private void disposeImportElement()
     {
-        backup.dispose();
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
-        backupLocationField.dispose();
-        backupButton.dispose();
-        createImportHorizontalSpacer.dispose();
         importButton.dispose();
     }
 
     private void disposeLayoutElement()
     {
-        if( backup != null && createSeparator != null && createHorizontalSpacer != null &&
+        if( createSeparator != null && createHorizontalSpacer != null &&
             serverLabel != null && serverComb != null && serverButton != null )
         {
             disposeImportElement();
