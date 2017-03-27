@@ -216,43 +216,65 @@ public class MigrationUtil
         return problems;
     }
 
+    @SuppressWarnings( "rawtypes" )
     public static List<Problem> getProblemsFromTreeNode( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
         {
             final IStructuredSelection ss = (IStructuredSelection) selection;
 
-            final Object element = ss.getFirstElement();
-            if( element instanceof FileProblems )
+            Iterator iterator = ss.iterator();
+
+            List<Problem> allProblems = new ArrayList<>();
+
+            while( iterator.hasNext() )
             {
-                FileProblems fp = (FileProblems) element;
-                return fp.getProblems();
+                Object element = iterator.next();
+
+                if( element instanceof FileProblems )
+                {
+                    FileProblems fp = (FileProblems) element;
+
+                    allProblems.addAll( fp.getProblems() );
+                }
             }
+
+            return allProblems;
         }
 
         return null;
     }
 
+    @SuppressWarnings( "rawtypes" )
     public static List<Problem> getCurrentProblemsFromTreeNode( ISelection selection )
     {
         if( selection instanceof IStructuredSelection )
         {
             final IStructuredSelection ss = (IStructuredSelection) selection;
 
-            final Object element = ss.getFirstElement();
-            if( element instanceof FileProblems )
-            {
-                FileProblems fp = (FileProblems) element;
-                List<Problem> notIgnoreProblems = new ArrayList<>();
+            Iterator iterator = ss.iterator();
 
-                for (Problem problem : fp.getProblems()) {
-                    if (problem.getStatus() != Problem.STATUS_IGNORE) {
-                        notIgnoreProblems.add( problem );
+            List<Problem> notIgnoreProblems = new ArrayList<>();
+
+            while( iterator.hasNext() )
+            {
+                Object element = iterator.next();
+
+                if( element instanceof FileProblems )
+                {
+                    FileProblems fp = (FileProblems) element;
+
+                    for( Problem problem : fp.getProblems() )
+                    {
+                        if( problem.getStatus() != Problem.STATUS_IGNORE )
+                        {
+                            notIgnoreProblems.add( problem );
+                        }
                     }
                 }
-
-                return notIgnoreProblems;
             }
+
+            return notIgnoreProblems;
         }
 
         return null;
