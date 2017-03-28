@@ -593,7 +593,7 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
 
        final String deployedName = projectComponent.getDeployedName();
 
-       assertEquals( "maven-theme-component-test", deployedName );
+       assertEquals( "maven-theme-component-test-1.0.0-SNAPSHOT", deployedName );
     }
 
     @Test

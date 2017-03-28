@@ -367,7 +367,6 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
     private boolean shouldAddLiferayNature( MavenProject mavenProject, IFacetedProject facetedProject )
     {
-        // TODO need to add more condition after adding jsf maven war project
         return mavenProject.getPlugin( ILiferayMavenConstants.BND_MAVEN_PLUGIN_KEY ) != null ||
             mavenProject.getPlugin( ILiferayMavenConstants.MAVEN_BUNDLE_PLUGIN_KEY ) != null ||
             mavenProject.getPlugin( ILiferayMavenConstants.LIFERAY_THEME_BUILDER_PLUGIN_KEY ) != null;

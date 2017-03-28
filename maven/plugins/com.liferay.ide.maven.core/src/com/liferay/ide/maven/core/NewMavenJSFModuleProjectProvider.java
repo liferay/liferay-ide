@@ -366,7 +366,7 @@ public class NewMavenJSFModuleProjectProvider extends LiferayMavenProjectProvide
                 if( appendWarFolder == false )
                 {
                     return LiferayMavenCore.createErrorStatus(
-                        "The project location should be set point to wars folder of Liferay workspace." );
+                        "The project location should be wars folder of Liferay workspace." );
                 }
             }
             else

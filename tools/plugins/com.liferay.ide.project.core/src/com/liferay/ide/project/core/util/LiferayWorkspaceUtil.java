@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Properties;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IProject;
@@ -357,6 +356,13 @@ public class LiferayWorkspaceUtil
         }
 
         return null;
+    }
+
+    public static String getPluginsSDKDir( String location )
+    {
+        String result = getGradleProperty( location, "liferay.workspace.plugins.sdk.dir", "plugins-sdk" );
+
+        return result == null ? "bundles" : result;
     }
 
     public static IPath getHomeLocation( IProject project )

@@ -15,12 +15,14 @@
 
 package com.liferay.ide.gradle.action;
 
+import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
+import com.liferay.ide.sdk.core.SDK;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -43,9 +45,20 @@ public class InitBundleTaskAction extends GradleTaskAction
             if( bundlesLocation.toFile().exists() )
             {
                 ServerUtil.addPortalRuntimeAndServer( serverName, bundlesLocation, new NullProgressMonitor() );
+
+                IProject pluginsSDK = CoreUtil.getProject(
+                    LiferayWorkspaceUtil.getPluginsSDKDir( project.getLocation().toPortableString() ) );
+
+                if( pluginsSDK != null && pluginsSDK.exists() )
+                {
+                    SDK sdk = SDKUtil.createSDKFromLocation( pluginsSDK.getLocation() );
+
+                    sdk.addOrUpdateServerProperties(
+                        ServerUtil.getLiferayRuntime( ServerUtil.getServer( serverName ) ).getLiferayHome() );
+                }
             }
         }
-        catch( CoreException e )
+        catch( Exception e )
         {
             GradleCore.logError( "Adding server failed", e );
         }
