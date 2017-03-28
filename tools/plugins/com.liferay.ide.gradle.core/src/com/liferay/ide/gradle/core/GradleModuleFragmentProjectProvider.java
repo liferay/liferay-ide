@@ -98,13 +98,13 @@ public class GradleModuleFragmentProjectProvider extends AbstractLiferayProjectP
 
         IPath projecLocation = location.append( projectName );
 
-        final boolean hasLiferayWorkspace = LiferayWorkspaceUtil.hasWorkspace();
+        final boolean hasGradleWorkspace = LiferayWorkspaceUtil.hasGradleWorkspace();
         final boolean useDefaultLocation = op.getUseDefaultLocation().content( true );
         boolean inWorkspacePath = false;
 
         final IProject liferayWorkspaceProject = LiferayWorkspaceUtil.getWorkspaceProject();
 
-        if( liferayWorkspaceProject != null && !useDefaultLocation )
+        if( hasGradleWorkspace && liferayWorkspaceProject != null && !useDefaultLocation )
         {
             IPath workspaceLocation = liferayWorkspaceProject.getLocation();
 
@@ -125,7 +125,7 @@ public class GradleModuleFragmentProjectProvider extends AbstractLiferayProjectP
             }
         }
 
-        if( ( hasLiferayWorkspace && useDefaultLocation ) || inWorkspacePath )
+        if( ( hasGradleWorkspace && useDefaultLocation ) || inWorkspacePath )
         {
             Set<IProject> projects = new HashSet<>();
 
@@ -145,6 +145,17 @@ public class GradleModuleFragmentProjectProvider extends AbstractLiferayProjectP
     @Override
     public IStatus validateProjectLocation( String projectName, IPath path )
     {
-        return Status.OK_STATUS;
+        IStatus retval = Status.OK_STATUS;
+
+        if( path != null )
+        {
+            if( LiferayWorkspaceUtil.isValidGradleWorkspaceLocation( path.toOSString() ) )
+            {
+                retval =
+                    GradleCore.createErrorStatus( " Can't set WorkspaceProject root folder as project directory. " );
+            }
+        }
+
+        return retval;
     }
 }
