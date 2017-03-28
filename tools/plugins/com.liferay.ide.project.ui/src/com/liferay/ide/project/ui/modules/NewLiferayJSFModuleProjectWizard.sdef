@@ -22,10 +22,10 @@
     <wizard>
         <id>NewLiferayJSFModuleProjectWizard</id>
         <element-type>com.liferay.ide.project.core.jsf.NewLiferayJSFModuleProjectOp</element-type>
-        <label>New Liferay JSF War Project</label>
+        <label>New Liferay JSF Project</label>
         <page>
             <id>LiferayJSFModuleProjectWizardPage</id>
-            <label>Liferay JSF War Project</label>
+            <label>Liferay JSF Project</label>
             <content>
                 <property-editor>ProjectName</property-editor>
                 <spacer/>
@@ -49,7 +49,7 @@
                     <class>com.liferay.ide.project.ui.wizard.WorkingSetCustomPart</class>
                 </custom>
             </content>
-            <description>Enter a name and choose a template to use for a new Liferay JSF War project.</description>
+            <description>Enter a name and choose a template to use for a new Liferay JSF project.</description>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
             <scroll-vertically>true</scroll-vertically>
@@ -61,6 +61,6 @@
             <margin>0</margin>
             <image>NewLiferayJSFProjectWizard.png</image>
         </page>
-        <description>Create a new project configured as a Liferay JSF War</description>
+        <description>Create a new project configured as a Liferay JSF Project</description>
     </wizard>
 </definition>

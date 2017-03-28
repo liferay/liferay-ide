@@ -38,7 +38,7 @@ public class NewLiferayJSFModuleProjectOpMethods
     {
         final IProgressMonitor monitor = ProgressMonitorBridge.create( pm );
 
-        monitor.beginTask( "Creating Liferay JSF War project (this process may take several minutes)", 100 );
+        monitor.beginTask( "Creating Liferay JSF project (this process may take several minutes)", 100 );
 
         Status retval = null;
 
