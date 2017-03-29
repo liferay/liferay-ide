@@ -29,7 +29,6 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.core.resources.IFile;
@@ -44,7 +43,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -86,7 +85,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
 
     public IStatus buildLang( IFile langFile, IProgressMonitor monitor ) throws CoreException
     {
-        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+        final IProgressMonitor sub = SubMonitor.convert( monitor, 100 );
 
         sub.beginTask( Msgs.buildingLanguages, 100 );
 
@@ -148,7 +147,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
     {
         final IFile serviceFile = preBuildService( monitor );
 
-        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+        final IProgressMonitor sub = SubMonitor.convert( monitor, 100 );
 
         sub.beginTask( Msgs.buildingServices, 100 );
 
@@ -160,7 +159,7 @@ public class MavenProjectBuilder extends AbstractProjectBuilder
     {
         final IFile serviceFile = preBuildService( monitor );
 
-        final IProgressMonitor sub = new SubProgressMonitor( monitor, 100 );
+        final IProgressMonitor sub = SubMonitor.convert( monitor, 100 );
 
         sub.beginTask( Msgs.buildingServices, 100 );
 
