@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -237,7 +238,33 @@ public class MigrationUtil
 
                     allProblems.addAll( fp.getProblems() );
                 }
+                else if( element instanceof MigrationProblems )
+                {
+                    MigrationProblems migrationProblems = (MigrationProblems) element;
+
+                    for( FileProblems fProblems : migrationProblems.getProblems() )
+                    {
+                        allProblems.addAll( fProblems.getProblems() );
+                    }
+                }
+                else if( element instanceof MigrationProblemsContainer )
+                {
+                    MigrationProblemsContainer migrationProblemsContainer = (MigrationProblemsContainer) element;
+
+                    for( MigrationProblems migrationProblems : migrationProblemsContainer.getProblemsArray() )
+                    {
+                        for( FileProblems fProblems : migrationProblems.getProblems() )
+                        {
+                            allProblems.addAll( fProblems.getProblems() );
+                        }
+                    }
+                }
             }
+
+            // remove duplicate problem
+            HashSet<Problem> hashSet = new HashSet<Problem>( allProblems );
+            allProblems.clear();
+            allProblems.addAll( hashSet );
 
             return allProblems;
         }
@@ -272,7 +299,45 @@ public class MigrationUtil
                         }
                     }
                 }
+                else if( element instanceof MigrationProblems )
+                {
+                    MigrationProblems migrationProblems = (MigrationProblems) element;
+
+                    for( FileProblems fProblems : migrationProblems.getProblems() )
+                    {
+                        for( Problem problem : fProblems.getProblems() )
+                        {
+                            if( problem.getStatus() != Problem.STATUS_IGNORE )
+                            {
+                                notIgnoreProblems.add( problem );
+                            }
+                        }
+                    }
+                }
+                else if( element instanceof MigrationProblemsContainer )
+                {
+                    MigrationProblemsContainer migrationProblemsContainer = (MigrationProblemsContainer) element;
+
+                    for( MigrationProblems migrationProblems : migrationProblemsContainer.getProblemsArray() )
+                    {
+                        for( FileProblems fProblems : migrationProblems.getProblems() )
+                        {
+                            for( Problem problem : fProblems.getProblems() )
+                            {
+                                if( problem.getStatus() != Problem.STATUS_IGNORE )
+                                {
+                                    notIgnoreProblems.add( problem );
+                                }
+                            }
+                        }
+                    }
+                }
             }
+
+            // remove duplicate problem
+            HashSet<Problem> hashSet = new HashSet<Problem>( notIgnoreProblems );
+            notIgnoreProblems.clear();
+            notIgnoreProblems.addAll( hashSet );
 
             return notIgnoreProblems;
         }
