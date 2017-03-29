@@ -68,6 +68,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.dialogs.PopupDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.sapphire.Event;
 import org.eclipse.sapphire.Listener;
@@ -151,6 +152,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
             if( isMavenProject( path.toPortableString() ) )
             {
+                disposeBundleCheckboxElement();
                 disposeBundleElement();
                 disposeServerEelment();
                 disposeMigrateLayoutElement();
@@ -162,7 +164,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
                 createMigrateLayoutElement();
 
                 createBundleControl();
-
+                pageParent.layout();
                 final String version = SDKUtil.createSDKFromLocation( PathBridge.create( path ) ).getVersion();
 
                 if( version != null && new Version( version ).compareTo( new Version( "7.0.0" ) ) >= 0 )
@@ -214,10 +216,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
     private Text bundleUrlField;
     private boolean validationResult;
     private Button importButton;
-    private Button downloadBundle;
+    private Button downloadBundleCheckbox;
 
     private Composite pageParent;
-    private Composite bundleElementComposite;
     private Composite blankComposite;
 
     private Control createHorizontalSpacer;
@@ -256,6 +257,31 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
             public void modifyText( ModifyEvent e )
             {
                 dataModel.setSdkLocation( dirField.getText() );
+
+                if ( dirField.getText().isEmpty() )
+                {
+                    disposeMigrateLayoutElement();
+
+                    disposeBundleCheckboxElement();
+
+                    disposeBundleElement();
+
+                    disposeServerEelment();
+
+                    disposeImportElement();
+
+                    createMigrateLayoutElement();
+
+                    createDownloaBundleCheckboxElement();
+
+                    createBundleElement();
+
+                    createImportElement();
+
+                    pageParent.layout();
+
+                    startCheckThread();
+                }
             }
         });
 
@@ -277,6 +303,8 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         });
 
         createMigrateLayoutElement();
+
+        createDownloaBundleCheckboxElement();
 
         createBundleElement();
 
@@ -536,9 +564,7 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         disposeBundleElement();
 
-        disposeSubBundleElement();
-
-        disposeLayoutElement();
+        createDownloaBundleCheckboxElement();
 
         createBundleElement();
 
@@ -553,11 +579,9 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         disposeImportElement();
 
+        disposeBundleCheckboxElement();
+
         disposeBundleElement();
-
-        disposeSubBundleElement();
-
-        disposeLayoutElement();
 
         createServerElement();
 
@@ -607,34 +631,31 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         dataModel.setLayout( layoutComb.getText() );
     }
 
-    private void createBundleElement()
+    private void createDownloaBundleCheckboxElement()
     {
-        blankComposite = SWTUtil.createComposite( pageParent, 1, 1, GridData.FILL );
-
-        bundleElementComposite = SWTUtil.createComposite( pageParent, 2, 1, GridData.FILL_HORIZONTAL );
-
-        downloadBundle = SWTUtil.createCheckButton( bundleElementComposite, "Download Liferay bundle (recommended)", null, true, 1 );
-
-        createSubBundleElement();
-
-        downloadBundle.addSelectionListener( new SelectionAdapter()
+        disposeBundleCheckboxElement();
+        downloadBundleCheckbox = SWTUtil.createCheckButton( pageParent, "Download Liferay bundle (recommended)", null, true, 1 );
+        GridDataFactory.generate( downloadBundleCheckbox, 2, 1 );
+        downloadBundleCheckbox.addSelectionListener( new SelectionAdapter()
         {
 
             @Override
             public void widgetSelected( SelectionEvent e )
             {
-                dataModel.setDownloadBundle( downloadBundle.getSelection() );
+                dataModel.setDownloadBundle( downloadBundleCheckbox.getSelection() );
 
                 if( dataModel.getDownloadBundle().content() )
                 {
-                    createSubBundleElement();
-
+                    disposeImportElement();
+                    createBundleElement();
+                    createImportElement();
                     pageParent.layout();
                 }
                 else
                 {
-                    disposeSubBundleElement();
-
+                    disposeBundleElement();
+                    disposeImportElement();
+                    createImportElement();
                     pageParent.layout();
                 }
 
@@ -643,10 +664,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         } );
     }
 
-    private void createSubBundleElement()
+    private void createBundleElement()
     {
-        bundleNameLabel = createLabel( bundleElementComposite, "Server Name:" );
-        bundleNameField = createTextField( bundleElementComposite, SWT.NONE );
+        bundleNameLabel = createLabel( pageParent, "Server Name:" );
+        bundleNameField = createTextField( pageParent, SWT.NONE );
 
         bundleNameField.addModifyListener( new ModifyListener()
         {
@@ -661,10 +682,10 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
         bundleNameField.setText( bundleName != null ? bundleName : "" );
 
-        bundleUrlLabel = createLabel( bundleElementComposite, "Bundle URL:" );
+        bundleUrlLabel = createLabel( pageParent, "Bundle URL:" );
 
-        bundleUrlField = createTextField( bundleElementComposite, SWT.NONE );
-        bundleUrlField.setForeground( bundleElementComposite.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
+        bundleUrlField = createTextField( pageParent, SWT.NONE );
+        bundleUrlField.setForeground( pageParent.getDisplay().getSystemColor( SWT.COLOR_DARK_GRAY ) );
         bundleUrlField.setText( dataModel.getBundleUrl().content( true ) );
         bundleUrlField.addModifyListener( new ModifyListener()
         {
@@ -944,16 +965,15 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         }
     }
 
-    private void disposeBundleElement()
+    private void disposeBundleCheckboxElement()
     {
-        if( bundleElementComposite != null && blankComposite != null )
+        if( downloadBundleCheckbox != null && downloadBundleCheckbox != null )
         {
-            bundleElementComposite.dispose();
-            blankComposite.dispose();
+            downloadBundleCheckbox.dispose();
         }
     }
 
-    private void disposeSubBundleElement()
+    private void disposeBundleElement()
     {
         if( bundleNameField != null && bundleUrlField != null )
         {
@@ -978,18 +998,6 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
         createSeparator.dispose();
         createHorizontalSpacer.dispose();
         importButton.dispose();
-    }
-
-    private void disposeLayoutElement()
-    {
-        if( createSeparator != null && createHorizontalSpacer != null &&
-            serverLabel != null && serverComb != null && serverButton != null )
-        {
-            disposeImportElement();
-            serverLabel.dispose();
-            serverComb.dispose();
-            serverButton.dispose();
-        }
     }
 
     private void disposeServerEelment()
