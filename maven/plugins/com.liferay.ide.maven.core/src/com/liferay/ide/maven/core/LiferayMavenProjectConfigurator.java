@@ -28,6 +28,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.model.Plugin;
 import org.apache.maven.project.MavenProject;
@@ -264,32 +266,45 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
 
             try
             {
-                if( pluginType != null && projectComponent != null )
+                if( projectComponent != null )
                 {
-                    final String deployedName = projectComponent.getDeployedName();
+                    String deployedName = projectComponent.getDeployedName();
 
-                    final String pluginTypeSuffix = "-" + pluginType;
+                    Pattern VERSION_PATTERN = Pattern.compile( "^(.*)-([0-9]\\.[0-9]\\.[0-9])(?:-SNAPSHOT)?$" );
 
-                    final String deployedFileName = project.getName() + pluginTypeSuffix;
+                    Matcher m = VERSION_PATTERN.matcher( deployedName );
 
-                    if( deployedName == null || ( deployedName != null && ! deployedName.endsWith( pluginTypeSuffix ) ) )
+                    if ( m.matches() )
                     {
-                        configureDeployedName( project, deployedFileName );
+                        deployedName = m.group( 1 );
+                        configureDeployedName( project, deployedName );
                     }
 
-                    final String oldContextRoot = ComponentUtilities.getServerContextRoot( project );
-
-                    if( oldContextRoot == null || ( oldContextRoot != null && ! oldContextRoot.endsWith( pluginTypeSuffix ) ) )
+                    if( pluginType != null )
                     {
+                        final String pluginTypeSuffix = "-" + pluginType;
 
-                        final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );
+                        final String deployedFileName = project.getName() + pluginTypeSuffix;
 
-                        boolean setMavenPluginSuffix =
-                            prefs.getBoolean( LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX, false );
-
-                        if( setMavenPluginSuffix )
+                        if( deployedName == null || ( deployedName != null && ! deployedName.endsWith( pluginTypeSuffix ) ) )
                         {
-                            ComponentUtilities.setServerContextRoot( project, deployedFileName );
+                            configureDeployedName( project, deployedFileName );
+                        }
+
+                        final String oldContextRoot = ComponentUtilities.getServerContextRoot( project );
+
+                        if( oldContextRoot == null || ( oldContextRoot != null && ! oldContextRoot.endsWith( pluginTypeSuffix ) ) )
+                        {
+
+                            final IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode( LiferayMavenCore.PLUGIN_ID );
+
+                            boolean setMavenPluginSuffix =
+                                prefs.getBoolean( LiferayMavenCore.PREF_ADD_MAVEN_PLUGIN_SUFFIX, false );
+
+                            if( setMavenPluginSuffix )
+                            {
+                                ComponentUtilities.setServerContextRoot( project, deployedFileName );
+                            }
                         }
                     }
                 }
@@ -405,7 +420,7 @@ public class LiferayMavenProjectConfigurator extends AbstractProjectConfigurator
                                                                    ProjectConfigurationRequest request,
                                                                    IProgressMonitor monitor ) throws CoreException
     {
-        final List<MavenProblemInfo> warnings = new ArrayList<MavenProblemInfo>();
+        final List<MavenProblemInfo> warnings = new ArrayList<>();
 
         // first check to make sure that the AppServer* properties are available and pointed to valid location
         final Plugin liferayMavenPlugin =

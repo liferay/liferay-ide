@@ -21,7 +21,6 @@ import com.liferay.ide.project.core.AbstractProjectBuilder;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
