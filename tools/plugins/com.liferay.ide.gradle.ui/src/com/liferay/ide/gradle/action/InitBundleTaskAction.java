@@ -23,6 +23,7 @@ import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.server.util.ServerUtil;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -55,6 +56,8 @@ public class InitBundleTaskAction extends GradleTaskAction
 
                     sdk.addOrUpdateServerProperties(
                         ServerUtil.getLiferayRuntime( ServerUtil.getServer( serverName ) ).getLiferayHome() );
+
+                    pluginsSDK.refreshLocal( IResource.DEPTH_INFINITE, null );
                 }
             }
         }
