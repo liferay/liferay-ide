@@ -588,12 +588,6 @@ public class MavenModuleProjectTests extends AbstractMavenProjectTestCase
        IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
 
        assertNotNull( bundleProject );
-
-       final IVirtualComponent projectComponent = ComponentCore.createComponent( project );
-
-       final String deployedName = projectComponent.getDeployedName();
-
-       assertEquals( "maven-theme-component-test", deployedName );
     }
 
     @Test
