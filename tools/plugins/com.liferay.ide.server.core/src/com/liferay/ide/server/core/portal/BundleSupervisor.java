@@ -19,6 +19,7 @@ import com.liferay.ide.server.core.jmx.PortalBundleDeployer;
 import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.osgi.framework.dto.BundleDTO;
 
@@ -55,6 +56,13 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
     {
         super.connect( Agent.class, this, host, port );
         bundleDeployer = new PortalBundleDeployer( jmxPort );
+    }
+
+    public void close() throws IOException
+    {
+        super.close();
+
+        bundleDeployer.close();
     }
 
     @Override

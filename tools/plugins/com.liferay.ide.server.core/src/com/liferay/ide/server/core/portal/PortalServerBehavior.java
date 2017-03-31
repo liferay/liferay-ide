@@ -243,6 +243,70 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         return retval.toArray( new String[0] );
     }
 
+    private boolean hasAriesJmxBundlesInstalled()
+    {
+        boolean retVal = false;
+
+        BundleSupervisor supervisor = null;
+
+        boolean hasAriesJmxApiBundle = false;
+        boolean hasAriesJmxCoreBundle = false;
+        boolean hasAriesJmxUtilBundle = false;
+
+        try
+        {
+            supervisor = createBundleSupervisor();
+
+            BundleDTO[] existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
+
+            for( BundleDTO bundle : existingBundles )
+            {
+                if( "org.apache.aries.jmx.api".equals( bundle.symbolicName ) )
+                {
+                    hasAriesJmxApiBundle = true;
+                }
+
+                if( "org.apache.aries.jmx.core".equals( bundle.symbolicName ) )
+                {
+                    hasAriesJmxCoreBundle = true;
+                }
+
+                if( "org.apache.aries.util".equals( bundle.symbolicName ) )
+                {
+                    hasAriesJmxUtilBundle = true;
+                }
+
+                if( hasAriesJmxApiBundle && hasAriesJmxCoreBundle && hasAriesJmxUtilBundle )
+                {
+                    break;
+                }
+            }
+
+            if( hasAriesJmxApiBundle && hasAriesJmxCoreBundle && hasAriesJmxUtilBundle )
+            {
+                retVal = true;
+            }
+        }
+        catch( Exception e )
+        {
+        }
+        finally
+        {
+            if( supervisor != null )
+            {
+                try
+                {
+                    supervisor.close();
+                }
+                catch( IOException e )
+                {
+                }
+            }
+        }
+
+        return retVal;
+    }
+
     public void launchServer( ILaunch launch, String mode, IProgressMonitor monitor ) throws CoreException
     {
         if( "true".equals( launch.getLaunchConfiguration().getAttribute( ATTR_STOP, "false" ) ) )
@@ -549,6 +613,11 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     {
         try
         {
+            if( !hasAriesJmxBundlesInstalled() )
+            {
+                setupAriesJmxBundles();
+            }
+
             setServerState( IServer.STATE_STARTED );
         }
         catch( Exception e )
@@ -690,6 +759,47 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             }
             catch( IOException e )
             {
+            }
+        }
+    }
+
+    private void setupAriesJmxBundles()
+    {
+        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/portal" );
+
+        File modulesDir = modulesPath.toFile();
+
+        if( !modulesDir.exists() )
+        {
+            modulesDir.mkdirs();
+        }
+
+        String[] ariesJmxBundleNames = new String[]
+                        { "org.apache.aries.jmx.api.jar", "org.apache.aries.jmx.core.jar", "org.apache.aries.util.jar" };
+
+        String[] ariesJxmBundleFullNames = new String[]
+                        { "org.apache.aries.jmx.api-1.1.5.jar", "org.apache.aries.jmx.core-1.1.7.jar",
+                            "org.apache.aries.util-1.1.3.jar" };
+
+        for( int i = 0; i < 3; i++ )
+        {
+            final IPath agentInstalledPath = modulesPath.append( ariesJmxBundleNames[i] );
+
+            File bundleFile = agentInstalledPath.toFile();
+
+            if( !bundleFile.exists() )
+            {
+                try
+                {
+                    final File file = new File(
+                        FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
+                            "bundles/" + ariesJxmBundleFullNames[i] ) ).getFile() );
+
+                    FileUtil.copyFile( file, bundleFile );
+                }
+                catch( IOException e )
+                {
+                }
             }
         }
     }

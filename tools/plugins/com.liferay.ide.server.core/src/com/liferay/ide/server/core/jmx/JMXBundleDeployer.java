@@ -36,9 +36,11 @@ import org.osgi.framework.dto.BundleDTO;
  */
 public class JMXBundleDeployer {
 
-	private final static String		OBJECTNAME	= "osgi.core";
+	private final static String OBJECTNAME = "osgi.core";
 
-	protected MBeanServerConnection	mBeanServerConnection;
+	protected MBeanServerConnection mBeanServerConnection;
+
+	private JMXConnector jmxConnector;
 
 	public JMXBundleDeployer() {
 		this(getLocalConnectorAddress());
@@ -51,13 +53,21 @@ public class JMXBundleDeployer {
 	public JMXBundleDeployer(String serviceURL) {
 		try {
 			final JMXServiceURL jmxServiceUrl = new JMXServiceURL(serviceURL);
-			final JMXConnector jmxConnector = JMXConnectorFactory.connect(jmxServiceUrl, null);
+			jmxConnector = JMXConnectorFactory.connect(jmxServiceUrl, null);
 
 			mBeanServerConnection = jmxConnector.getMBeanServerConnection();
 		} catch (Exception e) {
 			throw new IllegalArgumentException("Unable to get JMX connection", e);
 		}
 	}
+
+    public void close() throws IOException
+    {
+        if( jmxConnector != null )
+        {
+            jmxConnector.close();
+        }
+    }
 
 	/**
 	 * Gets the current list of installed bsns, compares it to the bsn provided.

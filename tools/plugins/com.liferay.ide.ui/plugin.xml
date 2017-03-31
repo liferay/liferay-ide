@@ -114,7 +114,7 @@
       <editor
             class="com.liferay.ide.ui.editor.LiferayPropertiesEditor"
             default="true"
-            icon="icons/e16/server.png"
+            icon="icons/liferay_logo_16.png"
             id="com.liferay.ide.ui.editor.LiferayPortalPropertiesEditor"
             name="Liferay Portal Properties Editor"
             symbolicFontName="org.eclipse.wst.sse.ui.textfont">
