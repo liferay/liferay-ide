@@ -35,12 +35,6 @@ public class PortalBundleDeployer extends JMXBundleDeployer
     {
         final ObjectName framework = getFramework(mBeanServerConnection);
 
-        mBeanServerConnection.invoke(framework, "stopBundle", new Object[] {
-            bundleId
-        }, new String[] {
-                "long"
-        });
-
         mBeanServerConnection.invoke(framework, "updateBundleFromURL", new Object[] {
                 bundleId, bundleUrl
         }, new String[] {

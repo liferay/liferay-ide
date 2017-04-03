@@ -118,9 +118,26 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     }
 
     @Override
-    public boolean canRestartModule( IModule[] module )
+    public boolean canRestartModule( IModule[] modules )
     {
-        return true;
+        for( IModule module : modules )
+        {
+            IProject project = module.getProject();
+
+            if( project == null )
+            {
+                return false;
+            }
+
+            final IBundleProject bundleProject = LiferayCore.create( IBundleProject.class, project );
+
+            if( bundleProject != null && !bundleProject.isFragmentBundle() )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void cleanup()
@@ -607,6 +624,11 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     public void setModulePublishState2( IModule[] module, int state  )
     {
         super.setModulePublishState( module, state );
+    }
+
+    public void setModuleState2( IModule[] modules, int state )
+    {
+        super.setModuleState( modules, state );
     }
 
     public void setServerStarted()

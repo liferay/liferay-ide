@@ -124,6 +124,8 @@ public class BundlePublishFullAdd extends BundlePublishOperation
                         {
                             retval = autoDeploy( outputJar );
                         }
+
+                        portalServerBehavior.setModuleState2( new IModule[] { module }, IServer.STATE_STARTED );
                     }
                     else
                     {
