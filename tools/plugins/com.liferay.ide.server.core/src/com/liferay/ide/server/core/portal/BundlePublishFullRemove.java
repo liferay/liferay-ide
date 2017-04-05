@@ -17,15 +17,10 @@ package com.liferay.ide.server.core.portal;
 
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.core.util.FileUtil;
 import com.liferay.ide.server.core.LiferayServerCore;
 import com.liferay.ide.server.util.ServerUtil;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -77,12 +72,7 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                     status = remoteUninstall( bundleProject, symbolicName , monitor);
                 }
 
-                if( status == null || status.isOK() ) // remote uninstall succeedded
-                {
-                    status = localUninstall( bundleProject, symbolicName );
-                }
-
-                if( status.isOK() )
+                if( status != null && status.isOK() )
                 {
                     this.portalServerBehavior.setModulePublishState2(
                         new IModule[] { module }, IServer.PUBLISH_STATE_NONE );
@@ -102,76 +92,6 @@ public class BundlePublishFullRemove extends BundlePublishOperation
                 throw new CoreException( status );
             }
         }
-    }
-
-    private void findFilesInPath( final File dir, final String pattern, List<File> retval  )
-    {
-        if( dir.exists() && dir.isDirectory() && !CoreUtil.empty( pattern ) )
-        {
-            final File[] files = dir.listFiles();
-
-            for( File f : files )
-            {
-                if( f.getName().contains( pattern ) && !retval.contains( f ) )
-                {
-                    retval.add( f );
-                }
-                else if( f.isDirectory() )
-                {
-                    findFilesInPath( f, pattern, retval );
-                }
-            }
-        }
-    }
-
-    private IStatus localUninstall( IBundleProject bundleProject , String symbolicName )
-    {
-        IStatus retval = Status.OK_STATUS;
-
-        final PortalRuntime runtime = (PortalRuntime) server.getRuntime().loadAdapter( PortalRuntime.class, null );
-
-        final List<File> moduleFiles = new ArrayList<File>();
-
-        final IPath modulesPath = runtime.getPortalBundle().getModulesPath();
-        findFilesInPath( modulesPath.toFile(), symbolicName, moduleFiles );
-
-        final IPath deployPath = runtime.getPortalBundle().getAutoDeployPath();
-        findFilesInPath( deployPath.toFile(), symbolicName, moduleFiles );
-
-        final IPath appServerDeployPath = runtime.getPortalBundle().getAppServerDeployDir();
-        findFilesInPath( appServerDeployPath.toFile(), symbolicName, moduleFiles );
-
-        try
-        {
-            IPath outputFile = bundleProject.getOutputBundle( false, null );
-
-            findFilesInPath( modulesPath.toFile(), outputFile.lastSegment(), moduleFiles );
-            findFilesInPath( deployPath.toFile(), outputFile.lastSegment(), moduleFiles );
-            findFilesInPath( appServerDeployPath.toFile(), outputFile.lastSegment(), moduleFiles );
-        }
-        catch( CoreException e )
-        {
-        }
-
-        if( moduleFiles.size() > 0 )
-        {
-            for( File moduleFile : moduleFiles )
-            {
-                if( moduleFile.isDirectory() )
-                {
-                    FileUtil.deleteDir( moduleFile, true );
-                }
-                else
-                {
-                    if( !(moduleFile.exists() && moduleFile.delete()) )
-                    {
-                        retval = LiferayServerCore.error( "Could not delete module file " + moduleFile.getName() );
-                    }
-                }
-            }
-        }
-
-        return retval;
     }
 
     private IStatus remoteUninstall( IBundleProject bundleProject , String symbolicName, IProgressMonitor monitor ) throws CoreException
