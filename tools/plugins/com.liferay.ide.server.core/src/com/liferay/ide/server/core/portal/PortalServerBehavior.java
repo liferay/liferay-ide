@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.jar.JarFile;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -258,70 +259,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         Collections.addAll( retval, getPortalRuntime().getPortalBundle().getRuntimeStopVMArgs() );
 
         return retval.toArray( new String[0] );
-    }
-
-    private boolean hasAriesJmxBundlesInstalled()
-    {
-        boolean retVal = false;
-
-        BundleSupervisor supervisor = null;
-
-        boolean hasAriesJmxApiBundle = false;
-        boolean hasAriesJmxCoreBundle = false;
-        boolean hasAriesJmxUtilBundle = false;
-
-        try
-        {
-            supervisor = createBundleSupervisor();
-
-            BundleDTO[] existingBundles = supervisor.getAgent().getBundles().toArray( new BundleDTO[0] );
-
-            for( BundleDTO bundle : existingBundles )
-            {
-                if( "org.apache.aries.jmx.api".equals( bundle.symbolicName ) )
-                {
-                    hasAriesJmxApiBundle = true;
-                }
-
-                if( "org.apache.aries.jmx.core".equals( bundle.symbolicName ) )
-                {
-                    hasAriesJmxCoreBundle = true;
-                }
-
-                if( "org.apache.aries.util".equals( bundle.symbolicName ) )
-                {
-                    hasAriesJmxUtilBundle = true;
-                }
-
-                if( hasAriesJmxApiBundle && hasAriesJmxCoreBundle && hasAriesJmxUtilBundle )
-                {
-                    break;
-                }
-            }
-
-            if( hasAriesJmxApiBundle && hasAriesJmxCoreBundle && hasAriesJmxUtilBundle )
-            {
-                retVal = true;
-            }
-        }
-        catch( Exception e )
-        {
-        }
-        finally
-        {
-            if( supervisor != null )
-            {
-                try
-                {
-                    supervisor.close();
-                }
-                catch( IOException e )
-                {
-                }
-            }
-        }
-
-        return retVal;
     }
 
     public void launchServer( ILaunch launch, String mode, IProgressMonitor monitor ) throws CoreException
@@ -633,19 +570,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     public void setServerStarted()
     {
-        try
-        {
-            if( !hasAriesJmxBundlesInstalled() )
-            {
-                setupAriesJmxBundles();
-            }
-
-            setServerState( IServer.STATE_STARTED );
-        }
-        catch( Exception e )
-        {
-            LiferayServerCore.logError( "Error starting bundle supervisor", e );
-        }
+        setServerState( IServer.STATE_STARTED );
     }
 
     @Override
@@ -755,6 +680,8 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         launch.setAttribute( ATTR_DEFAULT_CLASSPATH, false );
 
         setupAgent();
+
+        setupAriesJmxBundles();
     }
 
     private void setupAgent()
@@ -787,7 +714,12 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     private void setupAriesJmxBundles()
     {
-        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/portal" );
+        if( !shouldSetUpAriesJmxBundles() )
+        {
+            return;
+        }
+
+        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
 
         File modulesDir = modulesPath.toFile();
 
@@ -824,6 +756,46 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                 }
             }
         }
+    }
+
+    private boolean shouldSetUpAriesJmxBundles()
+    {
+        boolean retVal = false;
+
+        File portalImplFile =
+            getPortalRuntime().getAppServerPortalDir().append( "WEB-INF/lib/portal-impl.jar" ).toFile();
+
+        if( !portalImplFile.exists() )
+        {
+            return false;
+        }
+
+        try(JarFile jarFile = new JarFile( portalImplFile ))
+        {
+            String pacthAttr = jarFile.getManifest().getMainAttributes().getValue( "Liferay-Portal-Installed-Patches" );
+
+            if( CoreUtil.empty( pacthAttr ) )
+            {
+                return false;
+            }
+
+            String[] result = pacthAttr.trim().split( "-" );
+
+            if( result == null || result.length < 3 )
+            {
+                return false;
+            }
+
+            int patchVersion = Integer.parseInt( result[1] );
+
+            // from dxp fix pack 9 (de-9-7010) , the aries jmx bundle is removed
+            return patchVersion >= 9;
+        }
+        catch( Exception e )
+        {
+        }
+
+        return retVal;
     }
 
     @Override
