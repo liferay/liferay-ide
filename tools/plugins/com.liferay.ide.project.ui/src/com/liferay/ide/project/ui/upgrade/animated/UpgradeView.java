@@ -149,36 +149,36 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         boolean hasServiceBuilder = dataModel.getHasServiceBuilder().content();
         boolean hasHook = dataModel.getHasHook().content();
         boolean hasLayout = dataModel.getHasLayout().content();
-/*        boolean hasTheme = dataModel.getHasTheme().content();
-        boolean hasExt = dataModel.getHasExt().content();*/
-        boolean hasWorkspace = dataModel.getConvertLiferayWorkspace().content();
+/*      boolean hasTheme = dataModel.getHasTheme().content();
+        boolean hasExt = dataModel.getHasExt().content();
+        boolean hasWorkspace = dataModel.getConvertLiferayWorkspace().content();*/
 
         if( hasMavenProject )
         {
             addPage( Page.UPGRADE_POM_PAGE_ID );
         }
 
-        if( hasPortlet || hasHook || hasServiceBuilder || hasWorkspace )
+        if( hasPortlet || hasHook || hasServiceBuilder )
         {
             addPage( Page.FINDBREACKINGCHANGES_PAGE_ID );
         }
 
-        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasWorkspace )
+        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
         {
             addPage( Page.DESCRIPTORS_PAGE_ID );
         }
 
-        if( hasServiceBuilder || hasWorkspace )
+        if( hasServiceBuilder )
         {
             addPage( Page.BUILDSERVICE_PAGE_ID );
         }
 
-        if( hasLayout || hasWorkspace )
+        if( hasLayout )
         {
             addPage( Page.LAYOUTTEMPLATE_PAGE_ID );
         }
 
-        if( hasHook || hasWorkspace )
+        if( hasHook )
         {
             addPage( Page.CUSTOMJSP_PAGE_ID );
         }
@@ -188,7 +188,7 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
             addPage( Page.EXTANDTHEME_PAGE_ID );
         }*/
 
-        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout || hasWorkspace )
+        if( hasPortlet || hasHook || hasServiceBuilder || hasLayout )
         {
             addPage( Page.BUILD_PAGE_ID );
             addPage( Page.SUMMARY_PAGE_ID );
@@ -436,10 +436,21 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         final IAction showAllPages = new Action(
             "Show All Pages", ImageDescriptor.createFromURL( ProjectUI.getDefault().getBundle().getEntry( "icons/e16/showall.gif" ) ))
         {
+
             @Override
             public void run()
             {
-                showAllPages();
+                Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
+                    UIUtil.getActiveShell(), "Show All Pages",
+                    "If you fail to import projects, you can skip step 2 by " + "doing following steps:\n" +
+                        "   1.upgrade SDK 6.2 to SDK 7.0 manually\n" +
+                        "   or use blade cli to create a Liferay workspace for your SDK\n" +
+                        "   2.import projects you want to upgrade into Eclipse workspace\n" +
+                        "   3.click \"yes\" to show all the steps" );
+                if( openNewLiferayProjectWizard )
+                {
+                    showAllPages();
+                }
             }
         };
 
@@ -447,40 +458,28 @@ public class UpgradeView extends ViewPart implements SelectionChangedListener
         mgr.add( showAllPages );
     }
 
-    private void showAllPages()
+    public static void showAllPages()
     {
-        Boolean openNewLiferayProjectWizard = MessageDialog.openQuestion(
-            UIUtil.getActiveShell(), "Show All Pages",
-            "If you fail to import projects, you can skip step 2 by "+
-            "doing following steps:\n" +
-            "   1.upgrade SDK 6.2 to SDK 7.0 manually\n" +
-            "   or use blade cli to create a Liferay workspace for your SDK\n" +
-            "   2.import projects you want to upgrade into Eclipse workspace\n" +
-            "   3.click \"yes\" to show all the steps");
+        UpgradeView.resumePages();
 
-        if( openNewLiferayProjectWizard )
+        PageNavigateEvent event = new PageNavigateEvent();
+
+        event.setTargetPage( 2 );
+
+        StackLayout stackLayout = (StackLayout) pagesSwitchControler.getLayout();
+
+        Page currentPage = (Page) stackLayout.topControl;
+
+        for( PageNavigatorListener listener : currentPage.naviListeners )
         {
-            UpgradeView.resumePages();
-
-            PageNavigateEvent event = new PageNavigateEvent();
-
-            event.setTargetPage( 2 );
-
-            StackLayout stackLayout = (StackLayout) pagesSwitchControler.getLayout();
-
-            Page currentPage = (Page) stackLayout.topControl;
-
-            for( PageNavigatorListener listener : currentPage.naviListeners )
-            {
-                listener.onPageNavigate( event );
-            }
-
-            InitConfigureProjectPage importPage = UpgradeView.getPage( Page.INIT_CONFIGURE_PROJECT_PAGE_ID,  InitConfigureProjectPage.class );
-            importPage.setNextPage( true );
-
-            dataModel.setImportFinished( true );
-
+            listener.onPageNavigate( event );
         }
+
+        InitConfigureProjectPage importPage =
+            UpgradeView.getPage( Page.INIT_CONFIGURE_PROJECT_PAGE_ID, InitConfigureProjectPage.class );
+        importPage.setNextPage( true );
+
+        dataModel.setImportFinished( true );
     }
 
     private void restartUpgradeTool()

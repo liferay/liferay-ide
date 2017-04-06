@@ -67,6 +67,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -755,7 +756,26 @@ public class InitConfigureProjectPage extends Page implements IServerLifecycleLi
 
                         PageNavigateEvent event = new PageNavigateEvent();
 
-                        event.setTargetPage( 2 );
+                        if( UpgradeView.getPageNumber() < 3 )
+                        {
+                            Boolean showAllPages = MessageDialog.openQuestion(
+                                UIUtil.getActiveShell(), "Show All Pages",
+                                "There is no project need to be upgraded.\n" +
+                                    "Do you want to show all the following steps?" );
+
+                            if( showAllPages )
+                            {
+                                UpgradeView.showAllPages();
+                            }
+                            else
+                            {
+                                event.setTargetPage( 1 );
+                            }
+                        }
+                        else
+                        {
+                            event.setTargetPage( 2 );
+                        }
 
                         for( PageNavigatorListener listener : naviListeners )
                         {
