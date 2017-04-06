@@ -73,7 +73,10 @@ public class MigratorComparator extends ViewerComparator
             break;
 
         case 2:
-            flag = t1.getTitle().compareTo( t2.getTitle() ) >= 0 ? 1 : -1;
+            if ( t1.getTitle().compareTo( t2.getTitle() ) != 0 )
+            {
+                flag = t1.getTitle().compareTo( t2.getTitle() ) > 0 ? 1 : -1;
+            }
             break;
 
         default:
