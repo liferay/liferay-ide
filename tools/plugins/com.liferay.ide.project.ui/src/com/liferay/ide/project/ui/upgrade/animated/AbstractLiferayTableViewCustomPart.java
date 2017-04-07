@@ -18,15 +18,18 @@ package com.liferay.ide.project.ui.upgrade.animated;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.project.core.ProjectCore;
+import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 import com.liferay.ide.project.core.util.ProjectUtil;
 import com.liferay.ide.project.core.util.ValidationUtil;
 import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompare;
 import com.liferay.ide.project.ui.wizard.ElementLabelProvider;
+import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,11 +77,18 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author Simon Jiang
  * @author Joye Luo
  */
+@SuppressWarnings( "restriction" )
 public abstract class AbstractLiferayTableViewCustomPart extends Page
 {
 
@@ -95,66 +105,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
                 if( property.name().equals( "ImportFinished" ) )
                 {
-                    IProject[] projectArrys = CoreUtil.getAllProjects();
-
-                    List<IProject> projectList = new ArrayList<IProject>();
-
-                    for( IProject project : projectArrys )
-                    {
-                        if( CoreUtil.isLiferayProject( project ) )
-                        {
-                            projectList.add( project );
-                        }
-                    }
-
-                    try
-                    {
-                        final WorkspaceJob workspaceJob = new WorkspaceJob( "Find needed upgrade files......")
-                        {
-
-                            @Override
-                            public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                            {
-                                final List<LiferayUpgradeElement> tableViewElementList =
-                                    getInitItemsList( projectList, monitor );
-
-                                tableViewElements = tableViewElementList.toArray(
-                                    new LiferayUpgradeElement[tableViewElementList.size()] );
-
-                                UIUtil.async( new Runnable()
-                                {
-
-                                    @Override
-                                    public void run()
-                                    {
-                                        String message = "ok";
-
-                                        tableViewer.setInput( tableViewElements );
-
-                                        if( tableViewElements.length < 1 )
-                                        {
-                                            message = "No file needs to be upgraded";
-                                        }
-
-                                        PageValidateEvent pe = new PageValidateEvent();
-                                        pe.setMessage( message );
-                                        pe.setType( PageValidateEvent.WARNING );
-
-                                        triggerValidationEvent( pe );
-                                    }
-                                } );
-
-                                return StatusBridge.create( Status.createOkStatus() );
-                            }
-                        };
-
-                        workspaceJob.setUser( true );
-                        workspaceJob.schedule();
-                    }
-                    catch( Exception e )
-                    {
-                        ProjectUI.logError( e );
-                    }
+                    handleFindEvent();
                 }
             }
         }
@@ -455,19 +406,33 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         lifeayDescriptorUpgradeCompre.openCompareEditor();
     }
 
-    private void handleFindEvent()
+    private List<IProject> getAvaiableProject( IProject[] projectArrys )
     {
-        IProject[] projectArrys = CoreUtil.getAllProjects();
-
         List<IProject> projectList = new ArrayList<IProject>();
 
         for( IProject project : projectArrys )
         {
             if( CoreUtil.isLiferayProject( project ) )
             {
-                projectList.add( project );
+                if ( !LiferayWorkspaceUtil.isValidWorkspace( project ) )
+                {
+                    if( ProjectUtil.isHookProject( project ) || ProjectUtil.isLayoutTplProject( project ) ||
+                        ProjectUtil.isWebProject( project ) && ProjectUtil.isPortletProject( project ) )
+                    {
+                        projectList.add( project );
+                    }
+                }
             }
         }
+
+        return projectList;
+    }
+
+    private void handleFindEvent()
+    {
+        IProject[] projectArrys = CoreUtil.getAllProjects();
+
+        List<IProject> projectList = getAvaiableProject( projectArrys );
 
         try
         {
@@ -516,7 +481,6 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
         {
             ProjectUI.logError( e );
         }
-
     }
 
     private void handleUpgradeEvent()
@@ -633,6 +597,4 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
 
         handleFindEvent();
     }
-
-    
 }
