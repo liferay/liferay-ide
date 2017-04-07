@@ -132,12 +132,13 @@ public class BladeCLITests
 
         Domain bladeFromBundle = Domain.domain( originalPath.toFile() );
 
-        assertTrue( latestVersionFromRepo.compareTo( new Version( bladeFromBundle.getBundleVersion() ) ) > 0 );
+        if( latestVersionFromRepo.compareTo( new Version( bladeFromBundle.getBundleVersion() ) ) > 0 )
+        {
+            BladeCLI.addToLocalInstance( latestBladeJar );
 
-        BladeCLI.addToLocalInstance( latestBladeJar );
-
-        assertEquals( new Version( Domain.domain( BladeCLI.getBladeCLIPath().toFile() ).getBundleVersion() ),
-            new Version( Domain.domain( latestBladeJar ).getBundleVersion() ) );
+            assertEquals( new Version( Domain.domain( BladeCLI.getBladeCLIPath().toFile() ).getBundleVersion() ),
+                new Version( Domain.domain( latestBladeJar ).getBundleVersion() ) );
+        }
     }
 
     @Test
