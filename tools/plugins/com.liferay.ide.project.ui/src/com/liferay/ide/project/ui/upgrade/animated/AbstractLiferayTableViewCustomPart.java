@@ -25,11 +25,9 @@ import com.liferay.ide.project.ui.ProjectUI;
 import com.liferay.ide.project.ui.dialog.JavaProjectSelectionDialog;
 import com.liferay.ide.project.ui.upgrade.LiferayUpgradeCompare;
 import com.liferay.ide.project.ui.wizard.ElementLabelProvider;
-import com.liferay.ide.sdk.core.SDKUtil;
 import com.liferay.ide.ui.util.UIUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,18 +75,11 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.wst.sse.core.StructuredModelManager;
-import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMDocument;
-import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author Simon Jiang
  * @author Joye Luo
  */
-@SuppressWarnings( "restriction" )
 public abstract class AbstractLiferayTableViewCustomPart extends Page
 {
 
