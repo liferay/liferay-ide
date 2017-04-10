@@ -290,16 +290,16 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
 
                 if ( status.isOK() )
                 {
-                    final Object[] projects = checkBoxViewer.getCheckedElements();
+                    final int projectsCount = checkBoxViewer.getTable().getItemCount();
+                    final int selectedProjectsCount = checkBoxViewer.getCheckedElements().length;
 
-                    if ( projects.length == 0 )
+                    if( projectsCount == 0 )
                     {
-                        retval = Status.createErrorStatus( "No avaliable projects can be imported " );
+                        retval = Status.createErrorStatus( "No available projects can be imported." );
                     }
-
-                    if( projects.length > 0 && op().getSelectedProjects().size() < 1 )
+                    if( projectsCount > 0 && selectedProjectsCount == 0 )
                     {
-                        retval = Status.createErrorStatus( "At least one project must be specified " );
+                        retval = Status.createErrorStatus( "At least one project must be specified." );
                     }
                 }
             }
