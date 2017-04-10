@@ -417,7 +417,7 @@ public abstract class AbstractLiferayTableViewCustomPart extends Page
                 if ( !LiferayWorkspaceUtil.isValidWorkspace( project ) )
                 {
                     if( ProjectUtil.isHookProject( project ) || ProjectUtil.isLayoutTplProject( project ) ||
-                        ProjectUtil.isWebProject( project ) && ProjectUtil.isPortletProject( project ) )
+                        ProjectUtil.isWebProject( project ) || ProjectUtil.isPortletProject( project ) )
                     {
                         projectList.add( project );
                     }
