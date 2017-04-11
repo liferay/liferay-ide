@@ -33,7 +33,6 @@ import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelP
 import org.eclipse.sapphire.ElementList;
 import org.eclipse.sapphire.FilteredListener;
 import org.eclipse.sapphire.PropertyContentEvent;
-import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.modeling.Path;
 import org.eclipse.sapphire.modeling.Status;
 import org.eclipse.sapphire.platform.PathBridge;
@@ -278,31 +277,30 @@ public class ImportSDKProjectsCheckboxCustomPart extends ProjectsCheckboxCustomP
     {
         retval = Status.createOkStatus();
 
-        Value<Path> sdkPath = op().getSdkLocation();
+        Path sdkLocation = op().getSdkLocation().content();
 
-        if ( sdkPath != null )
+        if( sdkLocation != null )
         {
-            Path sdkLocation = op().getSdkLocation().content();
+            IStatus status = ProjectImportUtil.validateSDKPath( sdkLocation.toPortableString() );
 
-            if ( sdkLocation != null )
+            if( status.isOK() )
             {
-                IStatus status = ProjectImportUtil.validateSDKPath( sdkLocation.toPortableString() );
+                final int projectsCount = checkBoxViewer.getTable().getItemCount();
+                final int selectedProjectsCount = checkBoxViewer.getCheckedElements().length;
 
-                if ( status.isOK() )
+                if( projectsCount == 0 )
                 {
-                    final int projectsCount = checkBoxViewer.getTable().getItemCount();
-                    final int selectedProjectsCount = checkBoxViewer.getCheckedElements().length;
-
-                    if( projectsCount == 0 )
-                    {
-                        retval = Status.createErrorStatus( "No available projects can be imported." );
-                    }
-                    if( projectsCount > 0 && selectedProjectsCount == 0 )
-                    {
-                        retval = Status.createErrorStatus( "At least one project must be specified." );
-                    }
+                    retval = Status.createErrorStatus( "No available projects can be imported." );
+                }
+                if( projectsCount > 0 && selectedProjectsCount == 0 )
+                {
+                    retval = Status.createErrorStatus( "At least one project must be specified." );
                 }
             }
+        }
+        else
+        {
+            retval = Status.createErrorStatus( "SDK path cannot be empty" );
         }
 
         refreshValidation();
