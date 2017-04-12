@@ -54,7 +54,7 @@ public class BundleSupervisor extends AgentSupervisor<Supervisor, Agent> impleme
 
     public void connect( String host, int port ) throws Exception
     {
-        super.connect( Agent.class, this, host, port );
+        super.connect( Agent.class, this, host, port, 2500 );
         bundleDeployer = new PortalBundleDeployer( jmxPort );
     }
 

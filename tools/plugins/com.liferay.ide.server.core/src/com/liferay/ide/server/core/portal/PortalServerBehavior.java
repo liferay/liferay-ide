@@ -28,6 +28,8 @@ import com.liferay.ide.server.util.ServerUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -232,7 +234,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     private String[] getRuntimeStartVMArguments()
     {
-        final List<String> retval = new ArrayList<String>();
+        final List<String> retval = new ArrayList<>();
 
         Collections.addAll( retval, getPortalServer().getMemoryArgs() );
 
@@ -252,7 +254,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     private String[] getRuntimeStopVMArguments()
     {
-        final List<String> retval = new ArrayList<String>();
+        final List<String> retval = new ArrayList<>();
 
         Collections.addAll( retval, getPortalServer().getMemoryArgs() );
 
@@ -534,7 +536,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             }
         };
 
-        final List<IModule[]> modules = new ArrayList<IModule[]>();
+        final List<IModule[]> modules = new ArrayList<>();
         modules.add( module );
 
         publish( IServer.PUBLISH_FULL, modules, null, info );
@@ -596,7 +598,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         final IRuntimeClasspathEntry[] orgClasspath = JavaRuntime.computeUnresolvedRuntimeClasspath( launch );
         final int orgClasspathSize = orgClasspath.length;
 
-        final List<IRuntimeClasspathEntry> oldCp = new ArrayList<IRuntimeClasspathEntry>( orgClasspathSize );
+        final List<IRuntimeClasspathEntry> oldCp = new ArrayList<>( orgClasspathSize );
         Collections.addAll( oldCp, orgClasspath );
 
         final List<IRuntimeClasspathEntry> runCpEntries = portalRuntime.getRuntimeClasspathEntries();
@@ -658,7 +660,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             }
         }
 
-        final List<String> cp = new ArrayList<String>();
+        final List<String> cp = new ArrayList<>();
 
         for( IRuntimeClasspathEntry entry : oldCp )
         {
@@ -688,9 +690,23 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
     {
         // make sure that agent is either installed or will be installed
         final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
-        final IPath agentInstalledPath = modulesPath.append( "biz.aQute.remote.agent.jar" );
 
-        File modulesDir = modulesPath.toFile();
+        if( modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile().exists() )
+        {
+            try
+            {
+                Files.delete( Paths.get( modulesPath.append( "biz.aQute.remote.agent.jar" ).toOSString() ) );
+            }
+            catch( IOException e )
+            {
+                LiferayServerCore.logError( "Unable to remove old remote agent bundle", e );
+            }
+        }
+
+        final IPath staticPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
+        final IPath agentInstalledPath = staticPath.append( "biz.aQute.remote.agent.jar" );
+
+        File modulesDir = staticPath.toFile();
 
         if( !modulesDir.exists() )
         {
@@ -702,12 +718,13 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             try
             {
                 final File file = new File ( FileLocator.toFileURL(
-                    LiferayServerCore.getDefault().getBundle().getEntry( "bundles/biz.aQute.remote.agent-3.3.0.jar" ) ).getFile() );
+                    LiferayServerCore.getDefault().getBundle().getEntry( "bundles/biz.aQute.remote.agent.jar" ) ).getFile() );
 
-                FileUtil.copyFile( file, modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
+                FileUtil.copyFile( file, staticPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
             }
             catch( IOException e )
             {
+                LiferayServerCore.logError( "Unable to install remote agent into liferay home osgi/static", e );
             }
         }
     }
