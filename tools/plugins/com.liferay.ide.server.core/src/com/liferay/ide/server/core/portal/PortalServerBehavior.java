@@ -884,6 +884,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                 }
                 catch( Exception e )
                 {
+                    LiferayServerCore.logError( "Unable to " + action + " module", e );
                 }
                 finally
                 {
