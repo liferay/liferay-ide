@@ -61,6 +61,7 @@ import org.eclipse.wst.server.core.IModule;
 import org.eclipse.wst.server.core.IServer;
 import org.eclipse.wst.server.core.internal.Server;
 import org.eclipse.wst.server.core.model.ServerBehaviourDelegate;
+import org.osgi.framework.Version;
 import org.osgi.framework.dto.BundleDTO;
 
 
@@ -688,14 +689,16 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     private void setupAgent()
     {
-        // make sure that agent is either installed or will be installed
-        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
+        // make sure that agent is either installed or will be installed in modules folder
 
-        if( modulesPath.append( "biz.aQute.remote.agent.jar" ).toFile().exists() )
+        // delete legacy jar in static folder cause update the same jar in static will cause portal fail to start
+        final IPath staticPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
+
+        if( staticPath.append( "biz.aQute.remote.agent.jar" ).toFile().exists() )
         {
             try
             {
-                Files.delete( Paths.get( modulesPath.append( "biz.aQute.remote.agent.jar" ).toOSString() ) );
+                Files.delete( Paths.get( staticPath.append( "biz.aQute.remote.agent.jar" ).toOSString() ) );
             }
             catch( IOException e )
             {
@@ -703,28 +706,68 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             }
         }
 
-        final IPath staticPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
-        final IPath agentInstalledPath = staticPath.append( "biz.aQute.remote.agent.jar" );
+        // check current version of agent and delete old jar and copy latest
+        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
+        final IPath agentInstalledPath = modulesPath.append( "biz.aQute.remote.agent.jar" );
 
-        File modulesDir = staticPath.toFile();
+        File modulesDir = modulesPath.toFile();
 
         if( !modulesDir.exists() )
         {
             modulesDir.mkdirs();
         }
 
-        if( !agentInstalledPath.toFile().exists() )
-        {
-            try
-            {
-                final File file = new File ( FileLocator.toFileURL(
-                    LiferayServerCore.getDefault().getBundle().getEntry( "bundles/biz.aQute.remote.agent.jar" ) ).getFile() );
+        File agentFile = agentInstalledPath.toFile();
 
-                FileUtil.copyFile( file, staticPath.append( "biz.aQute.remote.agent.jar" ).toFile() );
+        if( agentFile.exists() )
+        {
+            boolean shouldDelete = true;
+
+            try(JarFile jarFile = new JarFile( agentFile ))
+            {
+                String bundleVersion = jarFile.getManifest().getMainAttributes().getValue( "Bundle-Version" );
+
+                if( !CoreUtil.empty( bundleVersion ) )
+                {
+                    Version atLeastVersion = new Version( "3.4.0.201704130550-SNAPSHOT" );
+                    Version version = new Version( bundleVersion );
+
+                    if( version.compareTo( atLeastVersion ) >= 0 )
+                    {
+                        shouldDelete = false;
+                    }
+                }
             }
             catch( IOException e )
             {
-                LiferayServerCore.logError( "Unable to install remote agent into liferay home osgi/static", e );
+            }
+
+            if( shouldDelete )
+            {
+                try
+                {
+                    Files.delete( agentFile.toPath() );
+                }
+                catch( IOException e )
+                {
+                    LiferayServerCore.logError( "Unable to remove old remote agent bundle", e );
+                }
+            }
+        }
+
+        if( !agentFile.exists() )
+        {
+            try
+            {
+                final File file = new File(
+                    FileLocator.toFileURL( LiferayServerCore.getDefault().getBundle().getEntry(
+                        "bundles/biz.aQute.remote.agent.jar" ) ).getFile() );
+
+                FileUtil.copyFile( file, agentFile );
+            }
+            catch( IOException e )
+            {
+                LiferayServerCore.logError( "Unable to install remote agent into liferay home osgi/modules", e );
             }
         }
     }
