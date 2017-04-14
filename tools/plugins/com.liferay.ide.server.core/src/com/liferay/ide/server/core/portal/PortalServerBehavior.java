@@ -814,7 +814,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
             modulesDir.mkdirs();
         }
 
-        for( int i = 0; i < 3; i++ )
+        for( int i = 0; i < ariesJmxBundleNames.length; i++ )
         {
             final IPath agentInstalledPath = modulesPath.append( ariesJmxBundleNames[i] );
 
