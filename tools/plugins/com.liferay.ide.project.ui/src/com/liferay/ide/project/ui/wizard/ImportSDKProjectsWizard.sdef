@@ -25,10 +25,10 @@
     <wizard>
         <id>ImportSDKProjectsWizard</id>
         <element-type>com.liferay.ide.project.core.model.SDKProjectsImportOp</element-type>
-        <label>Import Liferay Plugins SDK Projects (Liferay 6.x)</label>
+        <label>Import Liferay Plugins SDK Projects</label>
         <page>
             <id>ImportLiferaySDKProjectsPage</id>
-            <label>Import Liferay Plugins SDK Projects (Liferay 6.x)</label>
+            <label>Import Liferay Plugins SDK Projects</label>
             <content>
                 <property-editor>SdkLocation</property-editor>
                 <property-editor>SdkVersion</property-editor>
@@ -36,7 +36,7 @@
                 <custom>
                 	<scale-vertically>true</scale-vertically>
                     <class>com.liferay.ide.project.ui.wizard.ImportSDKProjectsCheckboxCustomPart</class>
-                </custom>                
+                </custom>
             </content>
             <scale-vertically>true</scale-vertically>
             <margin-right>10</margin-right>
@@ -48,6 +48,6 @@
             <margin-vertical>0</margin-vertical>
             <margin>0</margin>
         </page>
-        <description>Import Liferay Plugin SDK Projects (Liferay 6.x)</description>
+        <description>Import Liferay Plugin SDK Projects</description>
     </wizard>
 </definition>

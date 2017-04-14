@@ -123,15 +123,6 @@ public class SDKLocationValidationService extends ValidationService
                             "Please configure version 7.0 or greater." );
                 }
             }
-            else if( op().getPluginType().content().equals( PluginType.ext ) )
-            {
-                if( !supportsTypePlugin( op(), "ext" ) )
-                {
-                    retval = Status.createErrorStatus(
-                        "The selected Plugins SDK does not support creating ext type plugins.  " +
-                            "Please configure version 6.2 or less." );
-                }
-            }
             else if( op().getPluginType().content().equals( PluginType.theme ) )
             {
                 if( !supportsTypePlugin( op(), "theme" ) )

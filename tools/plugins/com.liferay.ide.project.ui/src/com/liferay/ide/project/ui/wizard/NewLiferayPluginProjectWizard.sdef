@@ -25,10 +25,10 @@
     <wizard>
         <id>NewLiferayPluginProjectWizard</id>
         <element-type>com.liferay.ide.project.core.model.NewLiferayPluginProjectOp</element-type>
-        <label>New Liferay Plugin Project (Liferay 6.x)</label>
+        <label>New Liferay Plugin Project</label>
         <page>
             <id>LiferayPluginProjectWizardPage</id>
-            <label>Liferay Plugin Project (Liferay 6.x)</label>
+            <label>Liferay Plugin Project</label>
             <content>
                 <property-editor>ProjectName</property-editor>
                 <property-editor>DisplayName</property-editor>
@@ -78,8 +78,8 @@
                 <property-editor>
                     <visible-when>${ ProjectProvider == 'maven' }</visible-when>
                     <property>Location</property>
-                </property-editor>   
-                <spacer/>               
+                </property-editor>
+                <spacer/>
                 <property-editor>
                     <action-handler>
                         <action>OpenPluginTypeDescriptionDialog</action>
@@ -231,8 +231,8 @@
             <description>Choose Plugins SDK and Open in Workspace</description>
             <margin-right>10</margin-right>
             <margin-left>0</margin-left>
-        </page>        
-        
+        </page>
+
         <image>NewLiferayPluginProjectWizard.png</image>
     </wizard>
     <dialog>

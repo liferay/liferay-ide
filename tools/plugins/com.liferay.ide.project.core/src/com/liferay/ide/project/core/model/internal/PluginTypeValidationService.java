@@ -72,12 +72,6 @@ public class PluginTypeValidationService extends ValidationService
                         "The selected Plugins SDK does not support creating new web type plugins.  " +
                             "Please configure version 7.0 or greater." );
                 }
-                else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsTypePlugin( op, "ext" ) )
-                {
-                    retval = Status.createErrorStatus(
-                        "The selected Plugins SDK does not support creating ext type plugins.  " +
-                            "Please configure version 6.2 or less." );
-                }
                 else if( op.getPluginType().content().equals( PluginType.theme ) && !supportsTypePlugin( op, "theme" ) )
                 {
                     retval = Status.createErrorStatus(
@@ -87,7 +81,7 @@ public class PluginTypeValidationService extends ValidationService
             }
             else if( op.getPluginType().content().equals( PluginType.ext ) && !supportsTypePlugin( op, "ext" ) )
             {
-                retval = Status.createErrorStatus( "The Maven does not support creating ext type plugins." );
+                retval = Status.createErrorStatus( "New ext plugins with maven build type are no longer supported." );
             }
         }
         catch( CoreException e )
