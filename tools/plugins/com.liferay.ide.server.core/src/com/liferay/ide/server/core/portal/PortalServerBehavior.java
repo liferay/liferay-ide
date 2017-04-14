@@ -795,7 +795,7 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
                 }
                 catch( IOException e )
                 {
-                    LiferayServerCore.logError( "Unable to remove " + bundleName + " in liferay home osgi/modules", e );
+                    LiferayServerCore.logError( "Unable to remove " + bundleName + " in liferay home osgi/static", e );
                 }
             }
         }
