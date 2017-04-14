@@ -774,12 +774,38 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
 
     private void setupAriesJmxBundles()
     {
+        String[] ariesJmxBundleNames = new String[] { "org.apache.aries.jmx.api.jar", "org.apache.aries.jmx.core.jar",
+            "org.apache.aries.util.jar" };
+
+        String[] ariesJxmBundleFullNames = new String[] { "org.apache.aries.jmx.api-1.1.5.jar",
+            "org.apache.aries.jmx.core-1.1.7.jar", "org.apache.aries.util-1.1.3.jar" };
+
+        // delelte legacy jmx bundles in osgi/static
+        final IPath staticPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
+
+        for( String bundleName : ariesJmxBundleNames )
+        {
+            File bundleFile = staticPath.append( bundleName ).toFile();
+
+            if( bundleFile.exists() )
+            {
+                try
+                {
+                    Files.delete( bundleFile.toPath() );
+                }
+                catch( IOException e )
+                {
+                    LiferayServerCore.logError( "Unable to remove " + bundleName + " in liferay home osgi/modules", e );
+                }
+            }
+        }
+
         if( !shouldSetUpAriesJmxBundles() )
         {
             return;
         }
 
-        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/static" );
+        final IPath modulesPath = getPortalRuntime().getPortalBundle().getLiferayHome().append( "osgi/modules" );
 
         File modulesDir = modulesPath.toFile();
 
@@ -787,13 +813,6 @@ public class PortalServerBehavior extends ServerBehaviourDelegate
         {
             modulesDir.mkdirs();
         }
-
-        String[] ariesJmxBundleNames = new String[]
-                        { "org.apache.aries.jmx.api.jar", "org.apache.aries.jmx.core.jar", "org.apache.aries.util.jar" };
-
-        String[] ariesJxmBundleFullNames = new String[]
-                        { "org.apache.aries.jmx.api-1.1.5.jar", "org.apache.aries.jmx.core-1.1.7.jar",
-                            "org.apache.aries.util-1.1.3.jar" };
 
         for( int i = 0; i < 3; i++ )
         {
