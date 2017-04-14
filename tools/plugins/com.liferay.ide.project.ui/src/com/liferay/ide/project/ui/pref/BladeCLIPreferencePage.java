@@ -176,16 +176,19 @@ public class BladeCLIPreferencePage extends FieldEditorPreferencePage implements
                         @Override
                         public void run()
                         {
-                            if( newAvailable )
+                            if( !latestBladeVersionText.isDisposed() && !updateBladeButton.isDisposed() )
                             {
-                                latestBladeVersionText.setText( newVersion );
-                            }
-                            else
-                            {
-                                latestBladeVersionText.setText( "" );
-                            }
+                                if( newAvailable )
+                                {
+                                    latestBladeVersionText.setText( newVersion );
+                                }
+                                else
+                                {
+                                    latestBladeVersionText.setText( "" );
+                                }
 
-                            updateBladeButton.setEnabled( newAvailable );
+                                updateBladeButton.setEnabled( newAvailable );
+                            }
                         }
                     });
                 }
