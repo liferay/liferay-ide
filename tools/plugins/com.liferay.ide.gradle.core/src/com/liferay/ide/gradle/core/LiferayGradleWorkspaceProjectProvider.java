@@ -98,8 +98,6 @@ public class LiferayGradleWorkspaceProjectProvider extends AbstractLiferayProjec
             {
                 IPath path = new Path( location );
 
-                path.lastSegment();
-
                 IProject project = CoreUtil.getProject( path.lastSegment() );
 
                 if( bundleUrl != null )

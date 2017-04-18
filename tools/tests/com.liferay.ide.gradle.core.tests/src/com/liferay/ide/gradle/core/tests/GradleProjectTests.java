@@ -23,25 +23,19 @@ import static org.junit.Assert.assertTrue;
 import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.IBundleProject;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.tests.TestUtil;
 import com.liferay.ide.core.util.CoreUtil;
 import com.liferay.ide.gradle.core.GradleCore;
-import com.liferay.ide.gradle.core.GradleUtil;
 import com.liferay.ide.gradle.core.LiferayGradleProject;
 import com.liferay.ide.gradle.core.parser.GradleDependency;
 import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
 import com.liferay.ide.project.core.IProjectBuilder;
 import com.liferay.ide.project.core.modules.NewLiferayModuleProjectOp;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -66,36 +60,10 @@ public class GradleProjectTests
         Util.deleteAllWorkspaceProjects();
     }
 
-    public static LiferayGradleProject fullImportGradleProject( String projectPath ) throws Exception
-    {
-        IWorkspace ws = ResourcesPlugin.getWorkspace();
-        IWorkspaceRoot root = ws.getRoot();
-
-        File src = new File( projectPath );
-        File dst = new File( root.getLocation().toFile(), src.getName() );
-
-        TestUtil.copyDir( src, dst );
-
-        IProgressMonitor monitor = new NullProgressMonitor();
-
-        IStatus status = GradleUtil.importGradleProject( dst, monitor );
-
-        if( status.isOK() )
-        {
-            IProject project = CoreUtil.getProject( dst.getName() );
-
-            return new LiferayGradleProject( project );
-        }
-        else
-        {
-            throw new Exception( status.getException() );
-        }
-    }
-
     @Test
     public void getSymbolicName() throws Exception
     {
-        LiferayGradleProject gradleProject = fullImportGradleProject( "projects/getSymbolicName" );
+        LiferayGradleProject gradleProject = Util.fullImportGradleProject( "projects/getSymbolicName" );
 
         assertNotNull( gradleProject );
 
@@ -116,7 +84,7 @@ public class GradleProjectTests
     @Test
     public void getOutputJar() throws Exception
     {
-        LiferayGradleProject gradleProject = fullImportGradleProject( "projects/getOutputJar" );
+        LiferayGradleProject gradleProject = Util.fullImportGradleProject( "projects/getOutputJar" );
 
         assertNotNull( gradleProject );
 
@@ -236,7 +204,7 @@ public class GradleProjectTests
     @Test
     public void hasGradleBundlePluginDetection() throws Exception
     {
-        final LiferayGradleProject gradleProject = fullImportGradleProject( "projects/biz.aQute.bundle" );
+        final LiferayGradleProject gradleProject = Util.fullImportGradleProject( "projects/biz.aQute.bundle" );
 
         assertNotNull( gradleProject );
 
@@ -285,12 +253,11 @@ public class GradleProjectTests
     @Test
     public void toolingApiCustomModel() throws Exception
     {
-        LiferayGradleProject gradleProject = fullImportGradleProject( "projects/customModel" );
+        LiferayGradleProject gradleProject = Util.fullImportGradleProject( "projects/customModel" );
 
         assertNotNull( gradleProject );
 
-        CustomModel customModel = GradleCore.getToolingModel(
-            GradleCore.getDefault(), CustomModel.class, gradleProject.getProject() );
+        CustomModel customModel = GradleCore.getToolingModel( CustomModel.class, gradleProject.getProject() );
 
         assertNotNull( customModel );
 
@@ -302,7 +269,7 @@ public class GradleProjectTests
     @Test
     public void testAddGradleDependency() throws Exception
     {
-        LiferayGradleProject gradleProject = fullImportGradleProject( "projects/GradleDependencyTestProject" );
+        LiferayGradleProject gradleProject = Util.fullImportGradleProject( "projects/GradleDependencyTestProject" );
         String[][] gradleDependencies =
             new String[][] { { "com.liferay.portal", "com.liferay.portal.kernel", "2.6.0" } };
 

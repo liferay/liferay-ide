@@ -16,15 +16,11 @@
 package com.liferay.ide.gradle.action;
 
 import com.liferay.ide.core.util.CoreUtil;
+import com.liferay.ide.gradle.core.GradleUtil;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.JavaCore;
 
 /**
@@ -46,11 +42,7 @@ public class BuildServiceTaskAction extends GradleTaskAction
 
         if( folders.size() == 0 )
         {
-            Set<IProject> projects = new HashSet<IProject>();
-            projects.add( _project );
-
-            CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
-                NewProjectHandler.IMPORT_AND_MERGE );
+            GradleUtil.refreshGradleProject( _project );
         }
     }
 

@@ -23,11 +23,6 @@ import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOp;
 import com.liferay.ide.project.core.modules.fragment.NewModuleFragmentOpMethods;
 import com.liferay.ide.project.core.util.LiferayWorkspaceUtil;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -55,7 +50,8 @@ public class GradleModuleFragmentProjectProvider extends AbstractLiferayProjectP
         return null; // this only provides new projects
     }
 
-    @Override
+
+	@Override
     public IStatus createNewProject( NewModuleFragmentOp op, IProgressMonitor monitor ) throws CoreException
     {
         IStatus retval = Status.OK_STATUS;
@@ -127,12 +123,7 @@ public class GradleModuleFragmentProjectProvider extends AbstractLiferayProjectP
 
         if( ( hasGradleWorkspace && useDefaultLocation ) || inWorkspacePath )
         {
-            Set<IProject> projects = new HashSet<>();
-
-            projects.add( liferayWorkspaceProject );
-
-            CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
-                NewProjectHandler.IMPORT_AND_MERGE );
+            GradleUtil.refreshGradleProject( liferayWorkspaceProject );
         }
         else
         {

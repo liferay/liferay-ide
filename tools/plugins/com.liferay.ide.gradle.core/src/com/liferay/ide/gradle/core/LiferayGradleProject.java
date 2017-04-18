@@ -47,7 +47,6 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.gradle.tooling.BuildLauncher;
-import org.gradle.tooling.GradleConnectionException;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
 
@@ -84,8 +83,7 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     {
         IPath retval = null;
 
-        final CustomModel model = GradleCore.getToolingModel(
-            GradleCore.getDefault(), CustomModel.class, gradleProject );
+        final CustomModel model = GradleCore.getToolingModel( CustomModel.class, gradleProject );
 
         Set<File> outputFiles = model.getOutputFiles();
 
@@ -270,8 +268,6 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
     @Override
     public IPath getOutputBundle( boolean cleanBuild, IProgressMonitor monitor ) throws CoreException
     {
-        IPath outputBundlePath = getOutputBundlePath( getProject() );
-
         ProjectConnection connection = null;
 
         try
@@ -296,18 +292,19 @@ public class LiferayGradleProject extends BaseLiferayProject implements IBundleP
 
             handler.getResult();
         }
-        catch( GradleConnectionException e )
+        catch( Exception e )
         {
-            GradleCore.logError( "Unable to build output", e );
-
-            return null;
+            GradleCore.logError( "Build output error", e );
         }
         finally
         {
-            connection.close();
+            if( connection != null )
+            {
+                connection.close();
+            }
         }
 
-        outputBundlePath = getOutputBundlePath( getProject() );
+        IPath outputBundlePath = getOutputBundlePath( getProject() );
 
         if( outputBundlePath.toFile().exists() )
         {

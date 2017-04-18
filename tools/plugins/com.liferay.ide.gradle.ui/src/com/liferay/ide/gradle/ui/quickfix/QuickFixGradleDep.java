@@ -14,21 +14,22 @@
  *******************************************************************************/
 package com.liferay.ide.gradle.ui.quickfix;
 
-import java.io.File;
+import com.liferay.ide.gradle.core.GradleCore;
+import com.liferay.ide.gradle.core.GradleUtil;
+import com.liferay.ide.gradle.core.parser.GradleDependency;
+import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
+import com.liferay.ide.gradle.ui.GradleUI;
+import com.liferay.ide.project.core.modules.ServiceContainer;
+import com.liferay.ide.project.core.util.TargetPlatformUtil;
+import com.liferay.ide.ui.util.UIUtil;
+
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import javax.imageio.ImageIO;
-
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.FileLocator;
@@ -48,19 +49,10 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
-import com.liferay.ide.gradle.core.GradleCore;
-import com.liferay.ide.gradle.core.parser.GradleDependency;
-import com.liferay.ide.gradle.core.parser.GradleDependencyUpdater;
-import com.liferay.ide.gradle.ui.GradleUI;
-import com.liferay.ide.project.core.ProjectCore;
-import com.liferay.ide.project.core.modules.ServiceContainer;
-import com.liferay.ide.project.core.util.TargetPlatformUtil;
-import com.liferay.ide.project.ui.ProjectUI;
-import com.liferay.ide.ui.util.UIUtil;
-
 /**
  * @author Lovett Li
  */
+@SuppressWarnings( "restriction" )
 public class QuickFixGradleDep implements IQuickFixProcessor
 {
 
@@ -257,10 +249,7 @@ public class QuickFixGradleDep implements IQuickFixProcessor
                                 gradleFile.getLocation().toFile().toPath(), updater.getGradleFileContents(),
                                 StandardCharsets.UTF_8 );
                             IProject project = context.getCompilationUnit().getResource().getProject();
-                            Set<IProject> set = new HashSet<>();
-                            set.add( project );
-                            CorePlugin.gradleWorkspaceManager().getCompositeBuild( set ).synchronize(
-                                NewProjectHandler.IMPORT_AND_MERGE );
+                            GradleUtil.refreshGradleProject( project );
                         }
                     }
                     catch( Exception e )

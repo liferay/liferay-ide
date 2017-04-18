@@ -85,11 +85,17 @@ public class GradleTooling
             final String initScriptContents = initScriptTemplate.replaceFirst(
                 "%deps%", path);
 
+            
+            //TODO should not create temp file and just use one file
             final File scriptFile = Files.createTempFile( "ide", "init.gradle" ).toFile();
 
             FileUtil.writeFileFromStream( scriptFile, new ByteArrayInputStream( initScriptContents.getBytes() ) );
 
             retval = modelBuilder.withArguments( "--init-script", scriptFile.getAbsolutePath() ).get();
+        }
+        catch(Exception e)
+        {
+            GradleCore.logError( "get gradle custom model error", e );
         }
         finally
         {

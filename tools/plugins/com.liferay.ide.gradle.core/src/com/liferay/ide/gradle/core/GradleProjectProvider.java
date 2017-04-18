@@ -46,6 +46,7 @@ import org.eclipse.sapphire.platform.PathBridge;
  * @author Andy Wu
  * @author Simon Jiang
  */
+@SuppressWarnings( "restriction" )
 public class GradleProjectProvider extends AbstractLiferayProjectProvider
     implements NewLiferayProjectProvider<NewLiferayModuleProjectOp>
 {

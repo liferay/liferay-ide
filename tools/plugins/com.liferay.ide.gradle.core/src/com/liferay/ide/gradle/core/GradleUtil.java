@@ -16,32 +16,40 @@
 package com.liferay.ide.gradle.core;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableList;
-import com.gradleware.tooling.toolingclient.GradleDistribution;
-import com.gradleware.tooling.toolingmodel.repository.FixedRequestAttributes;
+import com.gradleware.tooling.toolingutils.binding.Validator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.eclipse.buildship.core.CorePlugin;
+import org.eclipse.buildship.core.configuration.BuildConfiguration;
 import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.buildship.core.configuration.ProjectConfiguration;
+import org.eclipse.buildship.core.configuration.WorkspaceConfiguration;
 import org.eclipse.buildship.core.launch.GradleRunConfigurationAttributes;
 import org.eclipse.buildship.core.projectimport.ProjectImportConfiguration;
-import org.eclipse.buildship.core.util.file.FileUtils;
+import org.eclipse.buildship.core.util.binding.Validators;
+import org.eclipse.buildship.core.util.gradle.GradleDistributionSerializer;
+import org.eclipse.buildship.core.util.gradle.GradleDistributionValidator;
 import org.eclipse.buildship.core.util.gradle.GradleDistributionWrapper;
 import org.eclipse.buildship.core.util.progress.AsyncHandler;
 import org.eclipse.buildship.core.util.variable.ExpressionUtils;
+import org.eclipse.buildship.core.workspace.GradleBuild;
 import org.eclipse.buildship.core.workspace.NewProjectHandler;
-import org.eclipse.buildship.core.workspace.SynchronizeGradleProjectJob;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
@@ -50,62 +58,83 @@ import org.eclipse.debug.core.ILaunchManager;
  * @author Andy Wu
  * @author Lovett Li
  */
+@SuppressWarnings("restriction")
 public class GradleUtil
 {
 
-    private static GradleRunConfigurationAttributes getRunConfigurationAttributes( IProject project, String task )
+    private static GradleRunConfigurationAttributes getRunConfigurationAttributes( IProject project, String[] tasks )
     {
-        ProjectConfiguration projectConfiguration =
-            CorePlugin.projectConfigurationManager().readProjectConfiguration( project );
+        File rootDir = project.getLocation().toFile();
 
-        FixedRequestAttributes attrs = projectConfiguration.getRequestAttributes();
+        BuildConfiguration buildConfig = CorePlugin.configurationManager().loadBuildConfiguration( rootDir );
 
-        Optional<FixedRequestAttributes> requestAttributes = Optional.of( attrs );
+        String projectDirectoryExpression = null;
 
-        List<String> tasks = new ArrayList<String>();
-        tasks.add( task );
+        Optional<IProject> gradleProject = CorePlugin.workspaceOperations().findProjectByLocation( rootDir );
 
-        String projectDirectoryExpression = ExpressionUtils.encodeWorkspaceLocation( project );
+        if( gradleProject.isPresent() )
+        {
+            projectDirectoryExpression = ExpressionUtils.encodeWorkspaceLocation( gradleProject.get() );
+        }
+        else
+        {
+            projectDirectoryExpression = rootDir.getAbsolutePath();
+        }
 
-        boolean isPresent = requestAttributes.isPresent();
+        String gradleUserHome =
+            buildConfig.getGradleUserHome() == null ? "" : buildConfig.getGradleUserHome().getAbsolutePath();
 
-        GradleDistribution gradleDistribution =
-            isPresent ? requestAttributes.get().getGradleDistribution() : GradleDistribution.fromBuild();
+        List<String> taskList = new ArrayList<String>();
 
-        //String gradleUserHome =
-        //    isPresent ? FileUtils.getAbsolutePath( requestAttributes.get().getGradleUserHome() ).orNull() : null;
-
-        String javaHome =
-            isPresent ? FileUtils.getAbsolutePath( requestAttributes.get().getJavaHome() ).orNull() : null;
-
-        List<String> jvmArguments = isPresent ? requestAttributes.get().getJvmArguments() : ImmutableList.<String> of();
-        List<String> arguments = isPresent ? requestAttributes.get().getArguments() : ImmutableList.<String> of();
-
-        boolean showExecutionView = true;
-        boolean showConsoleView = true;
-
-        return GradleRunConfigurationAttributes.with(
-            tasks, projectDirectoryExpression, gradleDistribution, javaHome, jvmArguments, arguments,
-            showExecutionView, showConsoleView, true );
+        for( String task : tasks )
+        {
+            taskList.add( task );
+        }
+        
+        return new GradleRunConfigurationAttributes(
+            taskList, projectDirectoryExpression,
+            GradleDistributionSerializer.INSTANCE.serializeToString( buildConfig.getGradleDistribution() ),
+            gradleUserHome, null, Collections.<String> emptyList(), Collections.<String> emptyList(), true, true,
+            buildConfig.isOverrideWorkspaceSettings(), buildConfig.isOfflineMode(), buildConfig.isBuildScansEnabled() );
     }
 
-    public static IStatus importGradleProject( File dir, IProgressMonitor monitor ) throws CoreException
+	public static IStatus importGradleProject( File dir, IProgressMonitor monitor ) throws CoreException
     {
-        ProjectImportConfiguration configuration = new ProjectImportConfiguration();
-        GradleDistributionWrapper from = GradleDistributionWrapper.from( GradleDistribution.fromBuild() );
+        Validator<File> projectDirValidator = Validators.and(
+            Validators.requiredDirectoryValidator( "Project root directory" ),
+            Validators.nonWorkspaceFolderValidator( "Project root directory" ) );
+        Validator<GradleDistributionWrapper> gradleDistributionValidator =
+            GradleDistributionValidator.gradleDistributionValidator();
+        Validator<Boolean> applyWorkingSetsValidator = Validators.nullValidator();
+        Validator<List<String>> workingSetsValidator = Validators.nullValidator();
+        Validator<File> gradleUserHomeValidator = Validators.optionalDirectoryValidator( "Gradle user home" );
 
-        configuration.setGradleDistribution( from );
+        ProjectImportConfiguration configuration = new ProjectImportConfiguration(
+            projectDirValidator, gradleDistributionValidator, gradleUserHomeValidator, applyWorkingSetsValidator,
+            workingSetsValidator );
+
+        // read configuration from gradle preference
+        WorkspaceConfiguration gradleConfig = CorePlugin.configurationManager().loadWorkspaceConfiguration();
+
         configuration.setProjectDir( dir );
+        configuration.setOverwriteWorkspaceSettings( false );
+        configuration.setGradleDistribution( GradleDistributionWrapper.from( gradleConfig.getGradleDistribution() ) );
+        configuration.setGradleUserHome( gradleConfig.getGradleUserHome() );
         configuration.setApplyWorkingSets( false );
+        configuration.setBuildScansEnabled( gradleConfig.isBuildScansEnabled() );
+        configuration.setOfflineMode( gradleConfig.isOffline() );
 
-        SynchronizeGradleProjectJob synchronizeGradleProjectJob = new SynchronizeGradleProjectJob(
-            configuration.toFixedAttributes(), null, AsyncHandler.NO_OP );
+        BuildConfiguration buildConfig = configuration.toBuildConfig();
 
-        synchronizeGradleProjectJob.setUser( true );
+        GradleBuild build = CorePlugin.gradleWorkspaceManager().getGradleBuild( buildConfig );
 
-        return synchronizeGradleProjectJob.run( monitor );
+        build.synchronize( NewProjectHandler.IMPORT_AND_MERGE, AsyncHandler.NO_OP );
+
+        waitImport();
+
+        return Status.OK_STATUS;
     }
-
+	
     public static boolean isBuildFile( IFile buildFile )
     {
         return buildFile != null && buildFile.exists() && "build.gradle".equals( buildFile.getName() ) &&
@@ -125,8 +154,8 @@ public class GradleUtil
         {
             project = (IProject) resource;
         }
-        return project != null && project.exists() && project.isAccessible() &&
-            ( project.hasNature( GradleProjectNature.ID ) );
+
+        return GradleProjectNature.isPresentOn( project );
     }
 
     public static void refreshGradleProject( IProject project )
@@ -134,16 +163,15 @@ public class GradleUtil
         Set<IProject> projects = new HashSet<>();
 
         projects.add( project );
-
-        CorePlugin.gradleWorkspaceManager().getCompositeBuild( projects ).synchronize(
-            NewProjectHandler.IMPORT_AND_MERGE );
+        
+		CorePlugin.gradleWorkspaceManager().getGradleBuilds(projects).synchronize(NewProjectHandler.IMPORT_AND_MERGE);
     }
 
-    public static void runGradleTask( IProject project, String task, IProgressMonitor monitor ) throws CoreException
+    public static void runGradleTask( IProject project, String[] tasks, IProgressMonitor monitor ) throws CoreException
     {
         ILaunchConfiguration launchConfiguration =
             CorePlugin.gradleLaunchConfigurationManager().getOrCreateRunConfiguration(
-                getRunConfigurationAttributes( project, task ) );
+                getRunConfigurationAttributes( project, tasks ) );
 
         final ILaunchConfigurationWorkingCopy launchConfigurationWC = launchConfiguration.getWorkingCopy();
 
@@ -155,4 +183,40 @@ public class GradleUtil
 
         launchConfigurationWC.launch( ILaunchManager.RUN_MODE, monitor );
     }
+
+    public static void runGradleTask( IProject project, String task, IProgressMonitor monitor ) throws CoreException
+    {
+        runGradleTask( project, new String[] { task }, monitor );
+    }
+
+    public static void waitImport()
+    {
+        IWorkspaceRoot root = null;
+
+        try
+        {
+            ResourcesPlugin.getWorkspace().checkpoint( true );
+            Job.getJobManager().join( CorePlugin.GRADLE_JOB_FAMILY, new NullProgressMonitor() );
+            Job.getJobManager().join( GradleCore.JobFamilyId, new NullProgressMonitor() );
+            Thread.sleep( 200 );
+            Job.getJobManager().beginRule( root = ResourcesPlugin.getWorkspace().getRoot(), null );
+        }
+        catch( InterruptedException e )
+        {
+        }
+        catch( IllegalArgumentException e )
+        {
+        }
+        catch( OperationCanceledException e )
+        {
+        }
+        finally
+        {
+            if( root != null )
+            {
+                Job.getJobManager().endRule( root );
+            }
+        }
+    }
+
 }

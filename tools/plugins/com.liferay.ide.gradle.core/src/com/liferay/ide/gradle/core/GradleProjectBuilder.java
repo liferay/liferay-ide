@@ -23,13 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.buildship.core.CorePlugin;
-import org.eclipse.buildship.core.workspace.NewProjectHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -127,7 +123,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
     }
 
     @Override
-    public IStatus  updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
+    public IStatus updateProjectDependency( IProject project, List<String[]> dependencies ) throws CoreException
     {
         try
         {
@@ -146,10 +142,7 @@ public class GradleProjectBuilder extends AbstractProjectBuilder
 
                         FileUtils.writeLines( gradleBuildFile.getLocation().toFile(), updater.getGradleFileContents() );
 
-                        Set<IProject> set = new HashSet<>();
-                        set.add( project );
-                        CorePlugin.gradleWorkspaceManager().getCompositeBuild( set ).synchronize(
-                            NewProjectHandler.IMPORT_AND_MERGE );
+                        GradleUtil.refreshGradleProject( project );
                     }
                 }
             }

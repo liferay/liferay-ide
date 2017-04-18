@@ -120,7 +120,7 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
             {
                 overlay = getLiferay();
             }
-            else if ( hasNature( project, LiferayNature.NATURE_ID ) )
+            else if( LiferayNature.hasNature( project ) )
             {
                 overlay = getLiferay();
             }
@@ -133,18 +133,6 @@ public class LiferayPluginProjectDecorator extends LabelProvider implements ILig
 
                 decoration.addOverlay( overlay, IDecoration.TOP_RIGHT );
             }
-        }
-    }
-
-    private boolean hasNature( IProject project, String id )
-    {
-        try
-        {
-            return project.hasNature( id );
-        }
-        catch( CoreException e )
-        {
-            return false;
         }
     }
 

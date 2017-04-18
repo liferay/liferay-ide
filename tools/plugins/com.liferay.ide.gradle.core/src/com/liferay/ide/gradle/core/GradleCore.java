@@ -15,33 +15,15 @@
 
 package com.liferay.ide.gradle.core;
 
-import com.liferay.blade.gradle.model.CustomModel;
 import com.liferay.ide.core.LiferayCore;
-import com.liferay.ide.core.LiferayNature;
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.core.util.ProjectUtil;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
-import org.eclipse.buildship.core.configuration.GradleProjectNature;
-import org.eclipse.core.resources.IFile;
+import java.io.File;
+
+import org.eclipse.buildship.core.CorePlugin;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -51,6 +33,7 @@ import org.osgi.framework.BundleContext;
  * @author Terry Jia
  * @author Andy Wu
  */
+@SuppressWarnings( "restriction" )
 public class GradleCore extends Plugin
 {
 
@@ -63,6 +46,8 @@ public class GradleCore extends Plugin
     public static final String JobFamilyId = "CheckingGradleConfiguration";
 
     public static final File customModelCache = LiferayCore.GLOBAL_SETTINGS_PATH.toFile();
+    
+    private final GradleProjectCreatedListener gradleProjectCreatedListener;
 
     public static IStatus createErrorStatus( Exception ex )
     {
@@ -94,7 +79,7 @@ public class GradleCore extends Plugin
         return plugin;
     }
 
-    public static <T> T getToolingModel( GradleCore gradleCore, Class<T> modelClass, File projectDir )
+    public static <T> T getToolingModel( Class<T> modelClass, File projectDir )
     {
         T retval = null;
 
@@ -111,9 +96,9 @@ public class GradleCore extends Plugin
         return retval;
     }
 
-    public static <T> T getToolingModel( GradleCore gradleCore, Class<T> modelClass, IProject gradleProject )
+    public static <T> T getToolingModel( Class<T> modelClass, IProject gradleProject )
     {
-        return getToolingModel( gradleCore, modelClass, gradleProject.getLocation().toFile() );
+        return getToolingModel( modelClass, gradleProject.getLocation().toFile() );
     }
 
     public static void logError( Exception ex )
@@ -136,106 +121,9 @@ public class GradleCore extends Plugin
      */
     public GradleCore()
     {
-    }
+        super();
 
-    private static void configureIfLiferayProject( final IProject project, final GradleCore gradleCore ) throws CoreException
-    {
-        if( project.hasNature( GradleProjectNature.ID ) && !LiferayNature.hasNature( project ) )
-        {
-            final boolean[] needAddNature = new boolean[1];
-
-            needAddNature[0] = false;
-
-            IFile bndFile = project.getFile( "bnd.bnd" );
-
-            // case 1: has bnd file
-            if( bndFile != null && bndFile.exists() )
-            {
-                needAddNature[0] = true;
-            }
-            else if( ProjectUtil.isWorkspaceWars( project ) )
-            {
-                needAddNature[0] = true;
-            }
-            else
-            {
-                IFile gulpFile = project.getFile( "gulpfile.js" );
-
-                if( gulpFile != null && gulpFile.exists() )
-                {
-                    String gulpFileContent;
-
-                    try
-                    {
-                        gulpFileContent = new String(
-                            Files.readAllBytes( gulpFile.getLocation().toFile().toPath() ), StandardCharsets.UTF_8 );
-
-                        // case 2: has gulpfile.js with some content
-                        if( gulpFileContent.contains( "require('liferay-theme-tasks')" ) )
-                        {
-                            needAddNature[0] = true;
-                        }
-                    }
-                    catch( IOException e )
-                    {
-                        logError( "read gulpfile.js file fail", e );
-                    }
-                }
-            }
-
-            Job job = new WorkspaceJob( "Checking gradle configuration" )
-            {
-                @Override
-                public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
-                {
-
-                    try
-                    {
-                        if( needAddNature[0] )
-                        {
-                            LiferayNature.addLiferayNature( project, monitor );
-
-                            return Status.OK_STATUS;
-                        }
-
-                        final CustomModel customModel = getToolingModel( gradleCore, CustomModel.class, project );
-
-                        if( customModel == null )
-                        {
-                            throw new CoreException(
-                                GradleCore.createErrorStatus( "Unable to get read gradle configuration" ) );
-                        }
-
-                        if( customModel.isLiferayModule() ||
-                                customModel.hasPlugin( "org.gradle.api.plugins.WarPlugin" ) ||
-                                customModel.hasPlugin( "com.liferay.gradle.plugins.theme.builder.ThemeBuilderPlugin" ) )
-                        {
-                            LiferayNature.addLiferayNature( project, monitor );
-                        }
-                    }
-                    catch( Exception e )
-                    {
-                        logError( "Unable to get tooling model", e );
-                    }
-
-                    return Status.OK_STATUS;
-                }
-
-                @Override
-                public boolean belongsTo( Object family )
-                {
-                    if( family != null && family.toString().equals( JobFamilyId ) )
-                    {
-                        return true;
-                    }
-
-                    return false;
-                }
-            };
-
-            job.setRule( CoreUtil.getWorkspaceRoot() );
-            job.schedule();
-        }
+        gradleProjectCreatedListener = new GradleProjectCreatedListener();
     }
 
     /*
@@ -245,58 +133,10 @@ public class GradleCore extends Plugin
     public void start( BundleContext context ) throws Exception
     {
         super.start( context );
+
         plugin = this;
 
-        CoreUtil.getWorkspace().addResourceChangeListener( new IResourceChangeListener()
-        {
-            @Override
-            public void resourceChanged( IResourceChangeEvent event )
-            {
-                try
-                {
-                    event.getDelta().accept( new IResourceDeltaVisitor()
-                    {
-
-                        @Override
-                        public boolean visit( IResourceDelta delta ) throws CoreException
-                        {
-                            try
-                            {
-                                IResource resource = delta.getResource();
-
-                                if( delta.getKind() == IResourceDelta.ADDED &&
-                                    resource.getLocation().toFile().exists() &&
-                                    resource.getName().equals( IProjectDescription.DESCRIPTION_FILE_NAME ) )
-                                {
-                                    IProjectDescription projectDescription =
-                                        ResourcesPlugin.getWorkspace().loadProjectDescription( resource.getLocation() );
-
-                                    String projectName = projectDescription.getName();
-
-                                    IProject project = CoreUtil.getProject( projectName );
-
-                                    if( project != null && project.isAccessible() )
-                                    {
-                                        configureIfLiferayProject( CoreUtil.getProject( projectName ),
-                                            GradleCore.this );
-                                    }
-                                }
-                            }
-                            catch( Exception e )
-                            {
-                                GradleCore.logError( e );
-                            }
-
-                            return true;
-                        }
-                    } );
-                }
-                catch( CoreException e )
-                {
-                    GradleCore.logError( e );
-                }
-            }
-        }, IResourceChangeEvent.POST_CHANGE );
+        CorePlugin.listenerRegistry().addEventListener( gradleProjectCreatedListener );
     }
 
     /*
@@ -305,7 +145,10 @@ public class GradleCore extends Plugin
      */
     public void stop( BundleContext context ) throws Exception
     {
+        CorePlugin.listenerRegistry().removeEventListener( gradleProjectCreatedListener );
+
         plugin = null;
+
         super.stop( context );
     }
 }
