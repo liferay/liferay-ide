@@ -1273,15 +1273,6 @@
             id="com.liferay.ide.project.ui.liferay"
             name="Liferay">
       </category>
-       <view
-             allowMultiple="false"
-             category="com.liferay.ide.project.ui.liferay"
-             class="com.liferay.ide.project.ui.migration.MigrationView"
-             icon="icons/e16/migration-tasks.png"
-             id="com.liferay.ide.project.ui.migrationView"
-             name="Liferay 7 Migration Problems"
-             restorable="true">
-      </view>
       <view
              allowMultiple="false"
              category="com.liferay.ide.project.ui.liferay"
@@ -1291,7 +1282,6 @@
              name="Liferay Code Upgrade"
              restorable="true">
       </view>
-
    </extension>
 
    <extension point="org.eclipse.ui.commands">
@@ -1434,73 +1424,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
-      <navigatorContent
-            activeByDefault="true"
-            contentProvider="com.liferay.ide.project.ui.migration.MigrationContentProvider"
-            icon="icons/liferay_logo_16.png"
-            id="com.liferay.ide.project.ui.migration.content"
-            labelProvider="com.liferay.ide.project.ui.migration.MigrationLabelProvider"
-            name="Liferay Plugin Migration">
-         <triggerPoints>
-            <or>
-               <instanceof
-                     value="com.liferay.ide.project.core.upgrade.FileProblems">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.ide.project.core.upgrade.UpgradeProblems">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.ide.project.ui.migration.ProblemsContainer">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.ide.project.core.upgrade.MigrationProblems">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.blade.api.Problem">
-               </instanceof>
-               <instanceof
-                     value="org.eclipse.core.resources.IFile">
-               </instanceof>
-               <instanceof
-                     value="org.eclipse.core.resources.IFolder">
-               </instanceof>
-            </or>
-         </triggerPoints>
-         <possibleChildren>
-             <or>
-               <instanceof
-                     value="com.liferay.ide.project.core.upgrade.FileProblems">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.ide.project.core.upgrade.UpgradeProblems">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.ide.project.ui.migration.ProblemsContainer">
-               </instanceof>
-                <instanceof
-                     value="com.liferay.ide.project.core.upgrade.MigrationProblems">
-               </instanceof>
-               <instanceof
-                     value="com.liferay.blade.api.Problem">
-               </instanceof>
-               <instanceof
-                     value="org.eclipse.core.resources.IFile">
-               </instanceof>
-               <instanceof
-                     value="org.eclipse.core.resources.IFolder">
-               </instanceof>
-            </or>
-         </possibleChildren>
-         <actionProvider
-               class="com.liferay.ide.project.ui.migration.MigrationActionProvider"
-               id="com.liferay.ide.project.ui.migration.MigrationActionProvider"
-               priority="highest">
-         </actionProvider>
-         <commonSorter
-               class="com.liferay.ide.project.ui.migration.MigrationViewSorter"
-               id="com.liferay.ide.project.ui.migration.MigrationViewSorter">
-         </commonSorter>
-      </navigatorContent>
       <navigatorContent
             activeByDefault="true"
             contentProvider="org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionContentProvider"
@@ -1667,15 +1590,6 @@
    </extension>
    <extension
          point="org.eclipse.ui.navigator.viewer">
-      <viewerContentBinding
-            viewerId="com.liferay.ide.project.ui.migrationView">
-         <includes>
-            <contentExtension
-                  isRoot="true"
-                  pattern="com.liferay.ide.project.ui.migration.content">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
       <viewerContentBinding
             viewerId="org.eclipse.ui.navigator.ProjectExplorer">
          <includes>

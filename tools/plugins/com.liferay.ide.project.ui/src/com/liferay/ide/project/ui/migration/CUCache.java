@@ -64,9 +64,11 @@ public class CUCache
         }
     }
 
+    @SuppressWarnings( "unchecked" )
     private static CompilationUnit createCompilationUnit( String unitName, char[] javaSource )
     {
         ASTParser parser = ASTParser.newParser( AST.JLS2 );
+
 
         Map<String, String> options = JavaCore.getOptions();
 

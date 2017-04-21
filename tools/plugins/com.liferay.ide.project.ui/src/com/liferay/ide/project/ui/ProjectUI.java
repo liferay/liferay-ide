@@ -15,16 +15,8 @@
 
 package com.liferay.ide.project.ui;
 
-import com.liferay.ide.core.util.CoreUtil;
-import com.liferay.ide.project.ui.migration.MigrationUtil;
-import com.liferay.ide.project.ui.migration.MigrationView;
-import com.liferay.ide.ui.util.UIUtil;
-
 import java.net.URL;
 
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
@@ -53,7 +45,6 @@ public class ProjectUI extends AbstractUIPlugin
     public static final String CHECKED_IMAGE_ID = "checked.image"; //$NON-NLS-1$
     public static final String MIGRATION_TASKS_IMAGE_ID = "migration.tasks.image"; //$NON-NLS-1$
     public static final String UNCHECKED_IMAGE_ID = "unchecked.image"; //$NON-NLS-1$
-    public static final String EXPANDALL_IMAGE_ID = "expandall.image"; //$NON-NLS-1$
     public static final String MODULE_DEPENDENCY_IAMGE_ID = "module.dependency.image";
 
     public static final String LAST_SDK_IMPORT_LOCATION_PREF = "last.sdk.import.location"; //$NON-NLS-1$
@@ -176,11 +167,6 @@ public class ProjectUI extends AbstractUIPlugin
         ImageDescriptor migrationtasksdesc = ImageDescriptor.createFromURL( migrationtasksurl );
         registry.put( MIGRATION_TASKS_IMAGE_ID, migrationtasksdesc );
 
-        IPath expandall = new Path( "icons/e16/expandall.gif" ); //$NON-NLS-1$
-        URL expandallurl = FileLocator.find( bundle, expandall, null );
-        ImageDescriptor expandalldesc = ImageDescriptor.createFromURL( expandallurl );
-        registry.put( EXPANDALL_IMAGE_ID, expandalldesc );
-
         registry.put(
             WAR_IMAGE_ID,
             ImageDescriptor.createFromURL( FileLocator.find( bundle, new Path( "icons/e16/war.gif" ), null ) ) );
@@ -204,7 +190,6 @@ public class ProjectUI extends AbstractUIPlugin
         super.start( context );
 
         plugin = this;
-        addWorkspaceResourceListener();
     }
 
     /*
@@ -217,33 +202,6 @@ public class ProjectUI extends AbstractUIPlugin
         plugin = null;
 
         super.stop( context );
-    }
-
-    private void addWorkspaceResourceListener()
-    {
-        ResourcesPlugin.getWorkspace().addResourceChangeListener( new IResourceChangeListener()
-        {
-
-            @Override
-            public void resourceChanged( IResourceChangeEvent events )
-            {
-                final MigrationView mv = (MigrationView) UIUtil.findView( MigrationView.ID );
-                boolean isRemoved = MigrationUtil.removeMigrationProblemsFromResource( events.getResource() );
-
-                if( isRemoved && mv != null )
-                {
-                    UIUtil.async( new Runnable()
-                    {
-
-                        @Override
-                        public void run()
-                        {
-                            mv.getCommonViewer().setInput( CoreUtil.getWorkspaceRoot() );
-                        }
-                    });
-                }
-            }
-        }, IResourceChangeEvent.PRE_DELETE );
     }
 
 }
