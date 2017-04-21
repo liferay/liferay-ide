@@ -17,7 +17,6 @@ package com.liferay.ide.server.ui.action;
 
 import com.liferay.ide.server.core.ILiferayServerBehavior;
 import com.liferay.ide.server.core.LiferayServerCore;
-import com.liferay.ide.ui.util.UIUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;

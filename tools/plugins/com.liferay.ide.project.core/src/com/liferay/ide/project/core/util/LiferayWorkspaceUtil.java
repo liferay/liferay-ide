@@ -255,7 +255,12 @@ public class LiferayWorkspaceUtil
 
     public static String getModulesDir( final IProject project )
     {
-        String retval = null;
+        return getModulesDirArray( project )[0];
+    }
+
+    public static String[] getModulesDirArray( final IProject project )
+    {
+        String[] retval = null;
 
         if( project != null )
         {
@@ -263,12 +268,16 @@ public class LiferayWorkspaceUtil
 
             if( projectLocation != null )
             {
-                retval = getGradleProperty( projectLocation.toPortableString(),
-                    "liferay.workspace.modules.dir", "modules" );
+                String val =
+                    getGradleProperty( projectLocation.toPortableString(), "liferay.workspace.modules.dir", "modules" );
+
+                val = ( CoreUtil.empty( val ) ? "modules" : val );
+
+                retval = val.split( "," );
             }
         }
 
-        return retval == null ? "modules" : retval;
+        return retval;
     }
 
     public static String getThemesDir( final IProject project )
@@ -286,7 +295,7 @@ public class LiferayWorkspaceUtil
             }
         }
 
-        return retval == null ? "themes" : retval;
+        return CoreUtil.empty( retval ) ? "themes" : retval;
     }
 
     public static String[] getWarsDirs( final IProject project )
@@ -302,7 +311,7 @@ public class LiferayWorkspaceUtil
                 String val = getGradleProperty( projectLocation.toPortableString(),
                     "liferay.workspace.wars.dir", "wars" );
 
-                val = ( val == null ? "wars" : val );
+                val = ( CoreUtil.empty( val ) ? "wars" : val );
 
                 retval = val.split( "," );
             }
@@ -334,7 +343,7 @@ public class LiferayWorkspaceUtil
     {
         String result = getGradleProperty( location, "liferay.workspace.home.dir", "bundles" );
 
-        return result == null ? "bundles" : result;
+        return CoreUtil.empty( result ) ? "bundles" : result;
     }
 
     public static IPath getHomeLocation( String location )
@@ -362,7 +371,7 @@ public class LiferayWorkspaceUtil
     {
         String result = getGradleProperty( location, "liferay.workspace.plugins.sdk.dir", "plugins-sdk" );
 
-        return result == null ? "bundles" : result;
+        return CoreUtil.empty( result ) ? "bundles" : result;
     }
 
     public static IPath getHomeLocation( IProject project )

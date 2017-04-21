@@ -1011,15 +1011,15 @@ public class PropertiesUtil
         }
     }
 
-    public static void saveProperties( Properties props, File bladeSettings )
+    public static void saveProperties( Properties props, File resultFile )
     {
-        try(FileOutputStream fos = new FileOutputStream( bladeSettings );)
+        try(FileOutputStream fos = new FileOutputStream( resultFile );)
         {
             props.store( fos, "" );
         }
         catch( Exception e )
         {
-            LiferayCore.logError( "Could not save file " + bladeSettings.getName() );
+            LiferayCore.logError( "Could not save file " + resultFile.getName() );
         }
     }
 
