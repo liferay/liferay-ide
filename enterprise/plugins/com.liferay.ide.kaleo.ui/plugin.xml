@@ -16,6 +16,7 @@
                contentTypeId="com.liferay.ide.kaleo.core.workflowdefinitioncontent">
          </contentTypeBinding>
       </editor>
+      <!--
       <editor
             class="com.liferay.ide.kaleo.ui.editor.KaleoFreemarkerEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
@@ -24,6 +25,7 @@
             id="com.liferay.ide.kaleo.ui.editor.freemarker"
             name="Workflow Freemarker Editor">
       </editor>
+      -->
       <editor
             class="com.liferay.ide.kaleo.ui.editor.WorkflowTextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
@@ -210,12 +212,14 @@
             fileExtension="rb"
             languageType="ruby">
       </editorHelper>
+      <!--
       <editorHelper
             class="com.liferay.ide.kaleo.ui.helpers.FreemarkerEditorHelper"
             editorId="com.liferay.ide.kaleo.ui.editor.freemarker"
             fileExtension="ftl"
             languageType="freemarker">
       </editorHelper>
+      -->
       <editorHelper
             class="com.liferay.ide.kaleo.ui.helpers.TextEditorHelper"
             editorId="com.liferay.ide.kaleo.ui.editor.text"
