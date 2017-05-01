@@ -331,5 +331,32 @@
                 </repository>
             </repositories>
         </profile>
+        <profile>
+            <id>neon</id>
+            <properties>
+                <eclipse-site>http://download.eclipse.org/releases/neon/201703231000/</eclipse-site>
+                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/</eclipse-project-update-site>
+                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.8.2/R-3.8.2-20170308000057/repository/</wtp-site>
+                <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20170307180635/repository/</orbit-site>
+                <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>
+            </properties>
+            <repositories>
+                <repository>
+                    <id>eclipse-site</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-site}</url>
+                </repository>
+                <repository>
+                    <id>eclipse-project</id>
+                    <layout>p2</layout>
+                    <url>${eclipse-project-update-site}</url>
+                </repository>
+                <repository>
+                    <id>wtp</id>
+                    <layout>p2</layout>
+                    <url>${wtp-site}</url>
+                </repository>
+            </repositories>
+        </profile>
     </profiles>
 </project>

@@ -24,7 +24,7 @@
     <artifactId>com.liferay.ide.studio.ui</artifactId>
     <packaging>eclipse-plugin</packaging>
 
-    <name>Liferay IDE STudio UI</name>
+    <name>Liferay IDE Studio UI</name>
 
     <build>
         <plugins>
