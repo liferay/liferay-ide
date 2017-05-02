@@ -58,7 +58,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${installer-builder-home}/builder</executable>
+                            <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-workspace.xml</argument>
@@ -73,7 +73,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${installer-builder-home}/builder</executable>
+                            <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-workspace.xml</argument>
@@ -88,7 +88,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${installer-builder-home}/builder</executable>
+                            <executable>${install-builder-exectuable}</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-workspace.xml</argument>

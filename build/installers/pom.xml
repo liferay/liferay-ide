@@ -31,16 +31,42 @@
 
     <name>Liferay IDE Installers</name>
 
-    <properties>
-        <installer-builder-home>/home/terry/software/installbuilder-17.3.0/bin</installer-builder-home>
-    </properties>
-
     <packaging>pom</packaging>
+
+    <properties>
+        <install-builder-executable>${install-builder-home}/bin/builder</install-builder-executable>
+    </properties>
 
     <modules>
         <module>liferay-workspace</module>
         <module>liferay-developer-studio</module>
     </modules>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-install-builder-home-property</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireProperty>
+                                    <property>install-builder-home</property>
+                                    <message>You must set a install-builder-home property!</message>
+                                </requireProperty>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
 

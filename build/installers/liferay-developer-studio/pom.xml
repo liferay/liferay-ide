@@ -97,7 +97,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${installer-builder-home}/builder</executable>
+                            <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-developer-studio.xml</argument>
@@ -112,7 +112,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${installer-builder-home}/builder</executable>
+                            <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-developer-studio.xml</argument>
@@ -127,7 +127,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${installer-builder-home}/builder</executable>
+                            <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-developer-studio.xml</argument>
