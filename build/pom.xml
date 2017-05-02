@@ -34,6 +34,12 @@
             </modules>
         </profile>
         <profile>
+          <id>installers</id>
+          <modules>
+            <module>installers</module>
+          </modules>
+        </profile>
+        <profile>
             <id>skipTests</id>
             <modules>
                 <module>../tools/plugins</module>
