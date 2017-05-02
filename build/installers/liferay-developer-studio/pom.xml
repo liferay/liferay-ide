@@ -37,6 +37,7 @@
         <plugin-sdk-download-base>https://cdn.lfrs.sl/repository.liferay.com/nexus/content/groups/public/com/liferay/portal/com.liferay.portal.plugins.sdk</plugin-sdk-download-base>
         <plugin-sdk-zip-name>com.liferay.portal.plugins.sdk-1.0.7-withdependencies.zip</plugin-sdk-zip-name>
         <plugin-sdk-version>1.0.7</plugin-sdk-version>
+        <blade-latest-download-url>https://releases.liferay.com/tools/blade-cli/latest/blade.jar</blade-latest-download-url>
     </properties>
 
     <build>
@@ -48,7 +49,7 @@
                 <executions>
                     <execution>
                         <id>download-dxp-bundle</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>wget</goal>
                         </goals>
@@ -59,12 +60,23 @@
                     </execution>
                     <execution>
                         <id>download-plugin-sdk</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>wget</goal>
                         </goals>
                         <configuration>
                             <url>${plugin-sdk-download-base}/${plugin-sdk-version}/${plugin-sdk-zip-name}</url>
+                            <outputDirectory>../shared/download/</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>download-blade</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${blade-latest-download-url}</url>
                             <outputDirectory>../shared/download/</outputDirectory>
                         </configuration>
                     </execution>
@@ -77,22 +89,8 @@
                 <version>1.6.0</version>
                 <executions>
                     <execution>
-                        <id>blade</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>cp</executable>
-                            <arguments>
-                                <argument>../../tools/plugins/com.liferay.ide.project.core/lib/com.liferay.blade.cli.jar</argument>
-                                <argument>../shared/libs/blade.jar</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>linux64</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -107,7 +105,7 @@
                     </execution>
                     <execution>
                         <id>windows</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -122,7 +120,7 @@
                     </execution>
                     <execution>
                         <id>osx</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>

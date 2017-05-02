@@ -30,30 +30,38 @@
 
     <name>Liferay IDE Workspace Installer</name>
 
+    <properties>
+        <blade-latest-download-url>https://releases.liferay.com/tools/blade-cli/latest/blade.jar</blade-latest-download-url>
+    </properties>
+
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <executions>
+                    <execution>
+                        <id>download-blade</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <url>${blade-latest-download-url}</url>
+                            <outputDirectory>../shared/download/</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <executions>
                     <execution>
-                        <id>blade</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>cp</executable>
-                            <arguments>
-                                <argument>../../tools/plugins/com.liferay.ide.project.core/lib/com.liferay.blade.cli.jar</argument>
-                                <argument>../shared/libs/blade.jar</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>linux64</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -68,7 +76,7 @@
                     </execution>
                     <execution>
                         <id>windows</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -83,12 +91,12 @@
                     </execution>
                     <execution>
                         <id>osx</id>
-                        <phase>verify</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>${install-builder-exectuable}</executable>
+                            <executable>${install-builder-executable}</executable>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>./liferay-workspace.xml</argument>
