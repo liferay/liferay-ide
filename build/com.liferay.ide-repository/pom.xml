@@ -42,31 +42,7 @@
                     <finalName>liferay-ide-${unqualifiedVersion}.${buildQualifier}-updatesite</finalName>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-p2-director-plugin</artifactId>
-                <version>${tycho-version}</version>
-                <executions>
-                    <execution>
-                        <id>create-product-distributions</id>
-                        <goals>
-                            <goal>materialize-products</goal>
-                            <goal>archive-products</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <products>
-                        <product>
-                            <id>com.liferay.ide.studio</id>
-                            <rootFolder>liferay-developer-studio</rootFolder>
-                            <rootFolders>
-                                <macosx>DeveloperStudio.app</macosx>
-                            </rootFolders>
-                        </product>
-                    </products>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.gmaven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
@@ -130,8 +106,42 @@
                     </dependency>
                 </dependencies>
             </plugin>
-
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>installers</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.tycho</groupId>
+                        <artifactId>tycho-p2-director-plugin</artifactId>
+                        <version>${tycho-version}</version>
+                        <executions>
+                            <execution>
+                                <id>create-product-distributions</id>
+                                <goals>
+                                    <goal>materialize-products</goal>
+                                    <goal>archive-products</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <products>
+                                <product>
+                                    <id>com.liferay.ide.studio</id>
+                                    <rootFolder>liferay-developer-studio</rootFolder>
+                                    <rootFolders>
+                                        <macosx>DeveloperStudio.app</macosx>
+                                    </rootFolders>
+                                </product>
+                            </products>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
