@@ -30,7 +30,11 @@
         <tycho-packaging-format>yyyyMMddHHmm'-b1'</tycho-packaging-format>
         <tycho-version>1.0.0</tycho-version>
         <tycho-extras-version>1.0.0</tycho-extras-version>
-        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository/</orbit-site>
+        <eclipse-site>http://download.eclipse.org/releases/neon/201703231000/</eclipse-site>
+        <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/</eclipse-project-update-site>
+        <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.8.2/R-3.8.2-20170308000057/repository/</wtp-site>
+        <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20170307180635/repository/</orbit-site>
+        <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>
         <osgi-bundles-site>https://dl.bintray.com/gamerson/liferay-ide-deps/</osgi-bundles-site>
         <ivy-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivy-2.4.0.final_20141213170938/</ivy-site>
         <ivyde-site>https://dist.apache.org/repos/dist/release/ant/ivyde/updatesite/ivyde-2.2.0.final-201311091524-RELEASE/</ivyde-site>
@@ -43,7 +47,6 @@
         <gradle-site>http://download.eclipse.org/buildship/updates/e46/releases/1.0/1.0.21.v20161010-1640</gradle-site>
         <tycho-m2e-site>http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.9.0/N/0.9.0.201412222151/</tycho-m2e-site>
         <blade-site>https://liferay-test-01.ci.cloudbees.com/job/liferay-blade-cli/lastSuccessfulBuild/artifact/build/generated/p2/</blade-site>
-        <tm-site>http://download.eclipse.org/tm/terminal/updates/4.0</tm-site>
         <swtbot-site>http://download.eclipse.org/technology/swtbot/releases/latest</swtbot-site>
         <sapphire-site>http://download.eclipse.org/sapphire/9.0.5/repository/</sapphire-site>
         <maven-deps-plugin-site>http://ianbrandt.github.io/m2e-maven-dependency-plugin/0.0.4/</maven-deps-plugin-site>
@@ -51,6 +54,21 @@
     </properties>
 
     <repositories>
+        <repository>
+            <id>eclipse</id>
+            <layout>p2</layout>
+            <url>${eclipse-site}</url>
+        </repository>
+        <repository>
+            <id>eclipse-project-update</id>
+            <layout>p2</layout>
+            <url>${eclipse-project-update-site}</url>
+        </repository>
+        <repository>
+            <id>wtp</id>
+            <layout>p2</layout>
+            <url>${wtp-site}</url>
+        </repository>
         <repository>
             <id>orbit</id>
             <layout>p2</layout>
@@ -299,64 +317,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <profiles>
-        <profile>
-            <id>mars</id>
-            <activation>
-                <property>
-                    <name>!skipLuna</name>
-                </property>
-            </activation>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/mars/201602261000/</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.5/R-4.5.2-201602121500/</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.7.2/R-3.7.2-20160217020110/repository/</wtp-site>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>eclipse-site</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-site}</url>
-                </repository>
-                <repository>
-                    <id>eclipse-project</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-project-update-site}</url>
-                </repository>
-                <repository>
-                    <id>wtp</id>
-                    <layout>p2</layout>
-                    <url>${wtp-site}</url>
-                </repository>
-            </repositories>
-        </profile>
-        <profile>
-            <id>neon</id>
-            <properties>
-                <eclipse-site>http://download.eclipse.org/releases/neon/201703231000/</eclipse-site>
-                <eclipse-project-update-site>http://download.eclipse.org/eclipse/updates/4.6/R-4.6.3-201703010400/</eclipse-project-update-site>
-                <wtp-site>http://download.eclipse.org/webtools/downloads/drops/R3.8.2/R-3.8.2-20170308000057/repository/</wtp-site>
-                <orbit-site>http://download.eclipse.org/tools/orbit/downloads/drops/R20170307180635/repository/</orbit-site>
-                <tm-site>http://download.eclipse.org/tm/terminal/updates/4.2/</tm-site>
-            </properties>
-            <repositories>
-                <repository>
-                    <id>eclipse-site</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-site}</url>
-                </repository>
-                <repository>
-                    <id>eclipse-project</id>
-                    <layout>p2</layout>
-                    <url>${eclipse-project-update-site}</url>
-                </repository>
-                <repository>
-                    <id>wtp</id>
-                    <layout>p2</layout>
-                    <url>${wtp-site}</url>
-                </repository>
-            </repositories>
-        </profile>
-    </profiles>
 </project>
