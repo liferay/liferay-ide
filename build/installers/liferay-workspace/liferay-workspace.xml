@@ -201,11 +201,23 @@
                         </isTrue>
                     </ruleList>
                 </copyFile>
+                <propertiesFileSet>
+                    <file>${lrws}${platform_path_separator}gradle.properties</file>
+                    <key>liferay.workspace.bundle.url</key>
+                    <value>https://api.liferay.com/downloads/portal/7.0.10/liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</value>
+                    <ruleList>
+                        <isTrue>
+                            <value>${isDXPCustomer}</value>
+                        </isTrue>
+                    </ruleList>
+                </propertiesFileSet>
             </actionList>
             <conditionRuleList>
-                <isTrue>
-                    <value>${initLiferayWorkspace}</value>
-                </isTrue>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${initlrws}</value1>
+                    <value2>lrws</value2>
+                </compareValues>
             </conditionRuleList>
         </if>
         <deleteFile>
@@ -247,9 +259,9 @@
             <mustExist>0</mustExist>
             <width>30</width>
         </directoryParameter>
-        <booleanParameterGroup>
-            <name>initLiferayWorkspace</name>
-            <title>Initilalize Liferay Workspace directory</title>
+        <choiceParameterGroup>
+            <name>initlrws</name>
+            <title>Select directory to initialize a Liferay Workspace</title>
             <description>Initilalize Liferay Workspace directory</description>
             <explanation></explanation>
             <value></value>
@@ -267,13 +279,44 @@
                     <mustExist>0</mustExist>
                     <width>30</width>
                 </directoryParameter>
+                <labelParameter>
+                    <name>skiplsws</name>
+                    <title>skipLrws</title>
+                    <description>Skip initializing Liferay workspace directory</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
             </parameterList>
-        </booleanParameterGroup>
+            <validationActionList>
+                <if>
+                    <explanation>lrws path is empty</explanation>
+                    <actionList>
+                        <throwError>
+                            <text>the folder must to be empty</text>
+                        </throwError>
+                    </actionList>
+                    <conditionRuleList>
+                        <fileTest>
+                            <condition>is_not_empty</condition>
+                            <path>${lrws}</path>
+                        </fileTest>
+                    </conditionRuleList>
+                    <ruleList>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${initlrws}</value1>
+                            <value2>lrws</value2>
+                        </compareValues>
+                    </ruleList>
+                </if>
+            </validationActionList>
+        </choiceParameterGroup>
         <booleanParameterGroup>
             <name>isDXPCustomer</name>
             <title>DXP Customer</title>
             <description>DXP Customer</description>
-            <explanation></explanation>
+            <explanation>Are you a DXP customer? If so specify the following details and Liferay Workspace will be setup to point to DXP bundle instead of Community Edition
+if you aren't a customer, continue to use community edition.</explanation>
             <value></value>
             <default></default>
             <parameterList>
@@ -287,7 +330,7 @@
                     <allowEmptyValue>1</allowEmptyValue>
                     <width>30</width>
                 </stringParameter>
-                <stringParameter>
+                <passwordParameter>
                     <name>password</name>
                     <title>Password</title>
                     <description>Password:</description>
@@ -295,13 +338,17 @@
                     <value></value>
                     <default></default>
                     <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
+                    <askForConfirmation>0</askForConfirmation>
+                    <descriptionRetype></descriptionRetype>
+                    <width>20</width>
+                </passwordParameter>
             </parameterList>
             <ruleList>
-                <isTrue>
-                    <value>${initLiferayWorkspace}</value>
-                </isTrue>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${initlrws}</value1>
+                    <value2>lrws</value2>
+                </compareValues>
             </ruleList>
         </booleanParameterGroup>
     </parameterList>
