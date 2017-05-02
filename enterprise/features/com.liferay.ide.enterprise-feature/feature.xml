@@ -38,7 +38,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.liferay.ide.kaleo.core"
+         id="com.liferay.ide.kaleo.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
