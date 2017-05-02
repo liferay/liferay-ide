@@ -20,15 +20,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide.installer</groupId>
-        <artifactId>installer</artifactId>
+        <groupId>com.liferay.ide.build</groupId>
+        <artifactId>installers</artifactId>
         <version>3.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>liferay.workspace.installer</artifactId>
     <packaging>pom</packaging>
 
-    <name>Liferay Workspace Installer</name>
+    <name>Liferay IDE Workspace Installer</name>
 
     <build>
         <plugins>

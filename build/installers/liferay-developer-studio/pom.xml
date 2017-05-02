@@ -20,15 +20,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.liferay.ide.installer</groupId>
-        <artifactId>installer</artifactId>
+        <groupId>com.liferay.ide.build</groupId>
+        <artifactId>installers</artifactId>
         <version>3.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>liferay.developer.studio.installer</artifactId>
     <packaging>pom</packaging>
 
-    <name>Liferay Developer Studio Installer</name>
+    <name>Liferay IDE Developer Studio Installer</name>
 
     <properties>
         <portal-download-base>http://mirrors/files.liferay.com/private/ee/portal</portal-download-base>
