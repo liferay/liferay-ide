@@ -1,5 +1,5 @@
 <project>
-    <shortName>liferaydeveloperstudio</shortName>
+    <shortName>LiferayDeveloperStudio</shortName>
     <fullName>Liferay Developer Studio</fullName>
     <version>1.0</version>
     <logoImage>../shared/images/studio_logo.png</logoImage>
@@ -250,7 +250,7 @@
         </setInstallerVariable>
         <runProgram>
             <program>${jpmFilePath}</program>
-            <programArguments>install -f "${bladeFilePath}"</programArguments>
+            <programArguments>install -fl "${bladeFilePath}"</programArguments>
         </runProgram>
         <runProgram>
             <program>chown</program>
