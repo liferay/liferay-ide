@@ -21,7 +21,7 @@
                             <origin>../shared/libs/biz.aQute.jpm.run.jar</origin>
                         </distributionFile>
                         <distributionFile>
-                            <origin>../shared/libs/blade.jar</origin>
+                            <origin>../shared/download/blade.jar</origin>
                         </distributionFile>
                         <distributionFile>
                             <origin>../shared/libs/build.gradle</origin>
