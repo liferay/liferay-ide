@@ -304,7 +304,7 @@
                     <explanation>lrws path is empty</explanation>
                     <actionList>
                         <throwError>
-                            <text>the folder must to be empty</text>
+                            <text>the folder must be empty</text>
                         </throwError>
                     </actionList>
                     <conditionRuleList>
