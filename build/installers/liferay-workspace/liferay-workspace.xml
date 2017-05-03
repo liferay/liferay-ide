@@ -183,8 +183,8 @@
                 </runProgram>
                 <propertiesFileSet>
                     <file>${user_home_directory}${platform_path_separator}.gradle${platform_path_separator}gradle.properties</file>
-                    <key>dxpCustomerUsername</key>
-                    <value>${username}</value>
+                    <key>dxpCustomerEmail</key>
+                    <value>${email}</value>
                     <ruleList>
                         <isTrue>
                             <value>${isDXPCustomer}</value>
@@ -336,9 +336,9 @@
             <default></default>
             <parameterList>
                 <stringParameter>
-                    <name>username</name>
-                    <title>Username</title>
-                    <description>Username:</description>
+                    <name>email</name>
+                    <title>liferay.com email address</title>
+                    <description>liferay.com Email Address</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
