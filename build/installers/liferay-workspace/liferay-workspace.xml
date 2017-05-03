@@ -1,7 +1,7 @@
 <project>
     <shortName>LiferayWorkspace</shortName>
     <fullName>Liferay Workspace</fullName>
-    <version>1.0</version>
+    <version>1.2.4</version>
     <logoImage>../shared/images/liferay_logo_large.png</logoImage>
     <componentList>
         <component>
