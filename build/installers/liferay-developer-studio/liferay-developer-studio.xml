@@ -417,7 +417,9 @@
             <name>isDXPCustomer</name>
             <title>DXP Customer</title>
             <description>DXP Customer</description>
-            <explanation></explanation>
+            <explanation>Are you a DXP customer? If so specify the following details and Liferay Workspace will be setup to point to DXP bundle instead of Community Edition
+if you aren't a customer, continue to use community edition.
+</explanation>
             <value></value>
             <default></default>
             <parameterList>
@@ -431,16 +433,17 @@
                     <allowEmptyValue>1</allowEmptyValue>
                     <width>30</width>
                 </stringParameter>
-                <stringParameter>
+                <passwordParameter>
                     <name>password</name>
-                    <title>Password</title>
-                    <description>Password:</description>
+                    <description></description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
                     <allowEmptyValue>1</allowEmptyValue>
-                    <width>30</width>
-                </stringParameter>
+                    <askForConfirmation>0</askForConfirmation>
+                    <descriptionRetype></descriptionRetype>
+                    <width>20</width>
+                </passwordParameter>
             </parameterList>
         </booleanParameterGroup>
     </parameterList>
