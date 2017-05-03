@@ -118,6 +118,9 @@
                     <text>${platform_name}</text>
                     <value>win</value>
                 </compareText>
+                <fileExists>
+                    <path>${user_home_directory}/jpm</path>
+                </fileExists>
             </ruleList>
         </runProgram>
         <runProgram>
@@ -133,6 +136,9 @@
                     <text>${platform_name}</text>
                     <value>win</value>
                 </compareText>
+                <fileExists>
+                    <path>${jpmSettingPath}</path>
+                </fileExists>
             </ruleList>
         </runProgram>
         <if>
@@ -170,6 +176,9 @@
                         <isTrue>
                             <value>${isDXPCustomer}</value>
                         </isTrue>
+                        <fileExists>
+                            <path>${user_home_directory}/.gradle</path>
+                        </fileExists>
                     </ruleList>
                 </runProgram>
                 <propertiesFileSet>
@@ -236,6 +245,9 @@
                     <text>${platform_name}</text>
                     <value>win</value>
                 </compareText>
+                <fileExists>
+                    <path>${lrws}</path>
+                </fileExists>
             </ruleList>
         </runProgram>
     </postInstallationActionList>
