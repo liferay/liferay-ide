@@ -163,7 +163,7 @@ public class KaleoCore extends Plugin
     public static void updateKaleoConnectionSettings( ILiferayServer server, IKaleoConnection connection )
     {
         connection.setHost( server.getHost() );
-        //connection.setHttpPort( server.getHttpPort() );
+        connection.setHttpPort( server.getHttpPort() );
         connection.setPortalHtmlUrl( server.getPortalHomeUrl() );
         connection.setPortalContextPath( "/" );
         connection.setUsername( server.getUsername() );

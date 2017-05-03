@@ -15,6 +15,7 @@
 
 package com.liferay.ide.server.core.portal;
 
+import com.liferay.ide.core.util.StringPool;
 import com.liferay.ide.server.core.ILiferayServer;
 
 /**
@@ -32,6 +33,8 @@ public interface PortalServer extends ILiferayServer
 
     String PROPERTY_EXTERNAL_PROPERTIES = "externalProperties";
 
+    String PROPERTY_HTTP_PORT = "http-port";
+
     String PROPERTY_MEMORY_ARGS = "memoryArgs";
 
     String PROPERTY_SERVER_MODE = "serverMode";
@@ -39,6 +42,8 @@ public interface PortalServer extends ILiferayServer
     String PROPERTY_LAUNCH_SETTINGS = "launchSettings";
 
     String PROPERTY_DEVELOPER_MODE = "developerMode";
+
+    String DEFAULT_HTTP_PORT = defaultPrefs.get( "default.http.port", StringPool.EMPTY );
 
     int getAutoPublishTime();
 

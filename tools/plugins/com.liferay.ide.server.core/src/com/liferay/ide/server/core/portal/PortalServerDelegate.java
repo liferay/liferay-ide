@@ -78,6 +78,12 @@ public class PortalServerDelegate extends ServerDelegate implements PortalServer
     }
 
     @Override
+    public String getHttpPort()
+    {
+        return getAttribute( PROPERTY_HTTP_PORT, DEFAULT_HTTP_PORT );
+    }
+
+    @Override
     public IModule[] getChildModules( IModule[] module )
     {
         IModule[] retval = null;

@@ -49,6 +49,8 @@ public interface ILiferayServer
 
     String getUsername();
 
+    String getHttpPort();
+
     String getId();
 
     String getHost();
