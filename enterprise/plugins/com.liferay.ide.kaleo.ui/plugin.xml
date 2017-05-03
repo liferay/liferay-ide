@@ -185,18 +185,19 @@
    
    <extension
          point="com.liferay.ide.kaleo.ui.editorHelpers">
-      <editorHelper
-            class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
-            editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
-            fileExtension="bsh"
-            languageType="beanshell">
-      </editorHelper>
       
       <editorHelper
             class="com.liferay.ide.kaleo.ui.helpers.DrlScriptEditorHelper"
             editorId="org.eclipse.ui.DefaultTextEditor"
             fileExtension="drl"
             languageType="drl">
+      </editorHelper>
+      <!--
+      <editorHelper
+            class="com.liferay.ide.kaleo.ui.helpers.ColorScriptEditorHelper"
+            editorId="com.liferay.ide.core.editor.ui.ColoringEditor"
+            fileExtension="bsh"
+            languageType="beanshell">
       </editorHelper>
       
       <editorHelper
@@ -212,7 +213,7 @@
             fileExtension="rb"
             languageType="ruby">
       </editorHelper>
-      <!--
+      
       <editorHelper
             class="com.liferay.ide.kaleo.ui.helpers.FreemarkerEditorHelper"
             editorId="com.liferay.ide.kaleo.ui.editor.freemarker"
