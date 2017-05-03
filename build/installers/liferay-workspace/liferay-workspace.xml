@@ -285,7 +285,7 @@
                     <description>Directory:</description>
                     <explanation></explanation>
                     <value></value>
-                    <default>${user_home_directory}</default>
+                    <default>${user_home_directory}${platform_path_separator}/liferay-workspace</default>
                     <allowEmptyValue>0</allowEmptyValue>
                     <mustBeWritable>1</mustBeWritable>
                     <mustExist>0</mustExist>
@@ -294,7 +294,7 @@
                 <labelParameter>
                     <name>skiplsws</name>
                     <title>skipLrws</title>
-                    <description>Skip initializing Liferay workspace directory</description>
+                    <description>Don't initialize Liferay Workspace directory</description>
                     <explanation></explanation>
                     <image></image>
                 </labelParameter>
@@ -325,10 +325,13 @@
         </choiceParameterGroup>
         <booleanParameterGroup>
             <name>isDXPCustomer</name>
-            <title>DXP Customer</title>
+            <title>Liferay DXP</title>
             <description>DXP Customer</description>
-            <explanation>Are you a DXP customer? If so specify the following details and Liferay Workspace will be setup to point to DXP bundle instead of Community Edition
-if you aren't a customer, continue to use community edition.</explanation>
+            <explanation>
+                If you are a DXP customer, you can specify the following details and Liferay Workspace will be
+                configured with the latest DXP bundle instead of Liferay Portal Community Edition.
+                If you aren't currently a customer, select Next to use Community Edition.
+            </explanation>
             <value></value>
             <default></default>
             <parameterList>
@@ -365,4 +368,3 @@ if you aren't a customer, continue to use community edition.</explanation>
         </booleanParameterGroup>
     </parameterList>
 </project>
-
