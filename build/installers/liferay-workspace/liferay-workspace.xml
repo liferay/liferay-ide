@@ -95,7 +95,122 @@
         <addDirectoryToPath>
             <insertAt>end</insertAt>
             <path>${jpmSystemPath}</path>
+            <scope>user</scope>
         </addDirectoryToPath>
+        <if>
+            <explanation>is Mac</explanation>
+            <actionList>
+                <if>
+                    <explanation>has zshrc file</explanation>
+                    <actionList>
+                        <addTextToFile>
+                            <file>${user_home_directory}/.zshrc</file>
+                            <text>export PATH="$PATH:${user_home_directory}/Library/PackageManager/bin"</text>
+                        </addTextToFile>
+                    </actionList>
+                    <conditionRuleList>
+                        <fileTest>
+                            <condition>not_exists</condition>
+                            <path>${user_home_directory}/.zshrc</path>
+                        </fileTest>
+                    </conditionRuleList>
+                    <elseActionList>
+                        <readFile>
+                            <name>zshrcContent</name>
+                            <path>${user_home_directory}/.zshrc</path>
+                        </readFile>
+                        <if>
+                            <explanation>has jpm path</explanation>
+                            <actionList>
+                                <addTextToFile>
+                                    <file>${user_home_directory}/.zshrc</file>
+                                    <text>export PATH="$PATH:${user_home_directory}/Library/PackageManager/bin"</text>
+                                </addTextToFile>
+                            </actionList>
+                            <conditionRuleList>
+                                <compareText>
+                                    <logic>does_not_contain</logic>
+                                    <text>${zshrcContent}</text>
+                                    <value>${user_home_directory}/Library/PackageManager/bin</value>
+                                </compareText>
+                            </conditionRuleList>
+                        </if>
+                    </elseActionList>
+                </if>
+            </actionList>
+            <conditionRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <text>${env(SHELL)}</text>
+                    <value>zsh</value>
+                </compareText>
+            </conditionRuleList>
+            <ruleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>osx</value>
+                </compareText>
+            </ruleList>
+        </if>
+        <if>
+            <explanation>is Mac</explanation>
+            <actionList>
+                <if>
+                    <explanation>has cshrc file</explanation>
+                    <actionList>
+                        <addTextToFile>
+                            <file>${user_home_directory}/.cshrc</file>
+                            <text>set path=( $path "${user_home_directory}/Library/PackageManager/bin" )</text>
+                        </addTextToFile>
+                    </actionList>
+                    <conditionRuleList>
+                        <fileTest>
+                            <condition>not_exists</condition>
+                            <path>${user_home_directory}/.cshrc</path>
+                        </fileTest>
+                    </conditionRuleList>
+                    <elseActionList>
+                        <readFile>
+                            <name>cshrcContent</name>
+                            <path>${user_home_directory}/.cshrc</path>
+                        </readFile>
+                        <if>
+                            <explanation>has jpm path</explanation>
+                            <actionList>
+                                <addTextToFile>
+                                    <file>${user_home_directory}/.cshrc</file>
+                                    <text>set path=( $path "${user_home_directory}/Library/PackageManager/bin" )</text>
+                                </addTextToFile>
+                            </actionList>
+                            <conditionRuleList>
+                                <compareText>
+                                    <logic>does_not_contain</logic>
+                                    <text>${cshrcContent}</text>
+                                    <value>${user_home_directory}/Library/PackageManager/bin</value>
+                                </compareText>
+                            </conditionRuleList>
+                        </if>
+                    </elseActionList>
+                </if>
+            </actionList>
+            <conditionRuleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <text>${env(SHELL)}</text>
+                    <value>csh</value>
+                </compareText>
+            </conditionRuleList>
+            <ruleList>
+                <compareText>
+                    <logic>contains</logic>
+                    <nocase>1</nocase>
+                    <text>${platform_name}</text>
+                    <value>osx</value>
+                </compareText>
+            </ruleList>
+        </if>
         <setInstallerVariable name="jpmFilePath" value="${jpmSystemPath}${platform_path_separator}jpm"/>
         <setInstallerVariable>
             <name>bladeFilePath</name>
@@ -155,9 +270,11 @@
                 <createDirectory>
                     <path>${user_home_directory}${platform_path_separator}.gradle</path>
                     <ruleList>
-                        <isTrue>
-                            <value>${isDXPCustomer}</value>
-                        </isTrue>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
                     </ruleList>
                 </createDirectory>
                 <runProgram>
@@ -173,9 +290,11 @@
                             <text>${platform_name}</text>
                             <value>win</value>
                         </compareText>
-                        <isTrue>
-                            <value>${isDXPCustomer}</value>
-                        </isTrue>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
                         <fileExists>
                             <path>${user_home_directory}/.gradle</path>
                         </fileExists>
@@ -186,9 +305,11 @@
                     <key>dxpCustomerEmail</key>
                     <value>${email}</value>
                     <ruleList>
-                        <isTrue>
-                            <value>${isDXPCustomer}</value>
-                        </isTrue>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
                     </ruleList>
                 </propertiesFileSet>
                 <propertiesFileSet>
@@ -196,18 +317,22 @@
                     <key>dxpCustomerPassword</key>
                     <value>${password}</value>
                     <ruleList>
-                        <isTrue>
-                            <value>${isDXPCustomer}</value>
-                        </isTrue>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
                     </ruleList>
                 </propertiesFileSet>
                 <copyFile>
                     <destination>${lrws}${platform_path_separator}build.gradle</destination>
                     <origin>${installdir}${platform_path_separator}build.gradle</origin>
                     <ruleList>
-                        <isTrue>
-                            <value>${isDXPCustomer}</value>
-                        </isTrue>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
                     </ruleList>
                 </copyFile>
                 <propertiesFileSet>
@@ -215,9 +340,11 @@
                     <key>liferay.workspace.bundle.url</key>
                     <value>https://api.liferay.com/downloads/portal/7.0.10/liferay-dxp-digital-enterprise-tomcat-7.0-sp2-20170317165321327.zip</value>
                     <ruleList>
-                        <isTrue>
-                            <value>${isDXPCustomer}</value>
-                        </isTrue>
+                        <compareValues>
+                            <logic>equals</logic>
+                            <value1>${isdxp}</value1>
+                            <value2>dxp</value2>
+                        </compareValues>
                     </ruleList>
                 </propertiesFileSet>
             </actionList>
@@ -323,22 +450,49 @@
                 </if>
             </validationActionList>
         </choiceParameterGroup>
-        <booleanParameterGroup>
-            <name>isDXPCustomer</name>
-            <title>Liferay DXP</title>
-            <description>DXP Customer</description>
-            <explanation>
-                If you are a DXP customer, you can specify the following details and Liferay Workspace will be
-                configured with the latest DXP bundle instead of Liferay Portal Community Edition.
-                If you aren't currently a customer, select Next to use Community Edition.
-            </explanation>
+        <choiceParameterGroup>
+            <name>isdxp</name>
+            <title>Liferay DXP Customer?</title>
+            <description></description>
+            <explanation>If you are a DXP customer, you can specify the following details and Liferay Workspace will be configured with the latest DXP bundle instead of Liferay Portal Community Edition.
+If you aren't currently a customer, select the Community Edition.</explanation>
+            <value></value>
+            <default></default>
+            <parameterList>
+                <labelParameter>
+                    <name>dxp</name>
+                    <title>dxp</title>
+                    <description>Liferay DXP Bundle</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+                <labelParameter>
+                    <name>ce</name>
+                    <title>ce</title>
+                    <description>Community Edition Bundle</description>
+                    <explanation></explanation>
+                    <image></image>
+                </labelParameter>
+            </parameterList>
+            <ruleList>
+                <compareValues>
+                    <logic>equals</logic>
+                    <value1>${initlrws}</value1>
+                    <value2>lrws</value2>
+                </compareValues>
+            </ruleList>
+        </choiceParameterGroup>
+        <parameterGroup>
+            <name>dxpinfo</name>
+            <title>DXP Customer Info</title>
+            <explanation></explanation>
             <value></value>
             <default></default>
             <parameterList>
                 <stringParameter>
                     <name>email</name>
                     <title>liferay.com email address</title>
-                    <description>liferay.com Email Address</description>
+                    <description>liferay.com Email Address:</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -348,7 +502,7 @@
                 <passwordParameter>
                     <name>password</name>
                     <title>Password</title>
-                    <description>Password:</description>
+                    <description>liferay.com Email Password:</description>
                     <explanation></explanation>
                     <value></value>
                     <default></default>
@@ -361,10 +515,10 @@
             <ruleList>
                 <compareValues>
                     <logic>equals</logic>
-                    <value1>${initlrws}</value1>
-                    <value2>lrws</value2>
+                    <value1>${isdxp}</value1>
+                    <value2>dxp</value2>
                 </compareValues>
             </ruleList>
-        </booleanParameterGroup>
+        </parameterGroup>
     </parameterList>
 </project>
