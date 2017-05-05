@@ -63,6 +63,7 @@
          </includes>
       </viewerContentBinding>
    </extension>
+   <!--
    <extension
          point="org.eclipse.ui.navigator.navigatorContent">
       <navigatorContent
@@ -141,8 +142,8 @@
                 </test>
         </filterExpression>
       </commonFilter>
-      
    </extension>
+   -->
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
