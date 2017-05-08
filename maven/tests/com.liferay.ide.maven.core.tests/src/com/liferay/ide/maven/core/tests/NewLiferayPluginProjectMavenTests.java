@@ -115,6 +115,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
     }
 
     @Test
+    @Ignore
     public void testLocationValidation() throws Exception
     {
         final NewLiferayPluginProjectOp op = newProjectOp( "test-location-validation-service" );
@@ -335,7 +336,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         assertNotNull( acturalValues );
 
-        Set<String> exceptedValues = new HashSet<String>();
+        Set<String> exceptedValues = new HashSet<>();
         exceptedValues.add( "ant" );
         exceptedValues.add( "maven" );
 
@@ -358,7 +359,7 @@ public class NewLiferayPluginProjectMavenTests extends ProjectCoreBase
 
         ElementList<ProjectName> projectNames = op.getProjectNames();
 
-        List<String> finalProjectnames = new ArrayList<String>();
+        List<String> finalProjectnames = new ArrayList<>();
 
         for( ProjectName expectedProjectName : projectNames )
         {
