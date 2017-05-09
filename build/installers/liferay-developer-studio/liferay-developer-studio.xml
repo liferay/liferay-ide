@@ -491,17 +491,6 @@
         <deleteFile>
             <path>${studioZipPath}</path>
         </deleteFile>
-        <deleteFile>
-            <path>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Liferay Developer Studio</path>
-            <ruleList>
-                <compareText>
-                    <logic>contains</logic>
-                    <nocase>1</nocase>
-                    <text>${platform_name}</text>
-                    <value>win</value>
-                </compareText>
-            </ruleList>
-        </deleteFile>
     </postInstallationActionList>
     <createUninstaller>0</createUninstaller>
     <disableSplashScreen>1</disableSplashScreen>
